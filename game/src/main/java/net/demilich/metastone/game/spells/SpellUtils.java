@@ -405,22 +405,22 @@ public class SpellUtils {
 			final String name = spell.getString(SpellArg.NAME);
 			final String description = spell.getString(SpellArg.DESCRIPTION);
 			// TODO: Parse the parenthesized part of a name in a spell as a description
-			spellCardDesc.id = context.getLogic().generateCardId();
-			spellCardDesc.name = name;
+			spellCardDesc.setId(context.getLogic().generateCardId());
+			spellCardDesc.setName(name);
 			List<Entity> entities = context.resolveTarget(player, source, desc.getTarget());
 			int baseManaCost = 0;
 			if (entities != null
 					&& entities.size() > 0) {
 				baseManaCost = desc.getValue(SpellArg.MANA, context, player, entities.get(0), source, 0);
 			}
-			spellCardDesc.baseManaCost = baseManaCost;
-			spellCardDesc.description = description;
-			spellCardDesc.heroClass = HeroClass.ANY;
-			spellCardDesc.type = CardType.SPELL;
-			spellCardDesc.rarity = Rarity.FREE;
-			spellCardDesc.targetSelection = (TargetSelection) spell.getOrDefault(SpellArg.TARGET_SELECTION, desc.getOrDefault(SpellArg.TARGET_SELECTION, TargetSelection.NONE));
-			spellCardDesc.spell = spell;
-			spellCardDesc.collectible = false;
+			spellCardDesc.setBaseManaCost(baseManaCost);
+			spellCardDesc.setDescription(description);
+			spellCardDesc.setHeroClass(HeroClass.ANY);
+			spellCardDesc.setType(CardType.SPELL);
+			spellCardDesc.setRarity(Rarity.FREE);
+			spellCardDesc.setTargetSelection((TargetSelection) spell.getOrDefault(SpellArg.TARGET_SELECTION, desc.getOrDefault(SpellArg.TARGET_SELECTION, TargetSelection.NONE)));
+			spellCardDesc.setSpell(spell);
+			spellCardDesc.setCollectible(false);
 
 			Card card = spellCardDesc.create();
 			card.setId(context.getLogic().generateId());

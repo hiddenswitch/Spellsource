@@ -26,7 +26,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
 
@@ -87,9 +86,9 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_a_new_challenger");
 			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
 			final String[] nefarianCards = (String[]) CardCatalogue.getCardById("hero_nefarian").getDesc()
-					.battlecry.spell.subSpells(0).get(1).get(SpellArg.CARDS);
+							.getBattlecry().getSpell().subSpells(0).get(1).get(SpellArg.CARDS);
 			final int drawnCards = (int) CardCatalogue.getCardById("hero_nefarian").getDesc()
-					.battlecry.spell.subSpells(0).get(2).get(SpellArg.VALUE);
+							.getBattlecry().getSpell().subSpells(0).get(2).get(SpellArg.VALUE);
 			// Draws a card
 			assertEquals(player.getDeck().size(), nefarianCards.length - drawnCards);
 		});

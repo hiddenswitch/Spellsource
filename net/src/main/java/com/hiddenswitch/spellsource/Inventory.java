@@ -129,7 +129,7 @@ public interface Inventory {
 		List<JsonObject> documents = Collections.nCopies(copies, cardsToAdd)
 				.stream()
 				.flatMap(Collection::stream)
-				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.id))
+				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.getId()))
 						.withUserId(userId)
 						.withCollectionIds(userIdCollection))
 				.map(QuickJson::toJson)

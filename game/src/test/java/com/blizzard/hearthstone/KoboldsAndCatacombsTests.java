@@ -446,8 +446,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testCollectibilityOfSpellstoneCards() {
 		CardCatalogue.getRecords().values().forEach(ccr -> {
-			if (ccr.getDesc().name.contains("Spellstone")) {
-				Assert.assertEquals(ccr.getDesc().collectible, ccr.getDesc().name.contains("Lesser"), "Invalid collectibility for spellstone " + ccr.getDesc().name);
+			if (ccr.getDesc().getName().contains("Spellstone")) {
+				Assert.assertEquals(ccr.getDesc().isCollectible(), ccr.getDesc().getName().contains("Lesser"), "Invalid collectibility for spellstone " + ccr.getDesc().getName());
 			}
 		});
 	}

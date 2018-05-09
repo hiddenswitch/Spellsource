@@ -45,7 +45,7 @@ public class AdvancedMechanicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_shuffle_to_deck");
 			Assert.assertEquals(player.getDeck().size(), 9);
-			String[] cards = (String[]) CardCatalogue.getCardById("spell_shuffle_to_deck").getDesc().spell.get(SpellArg.CARDS);
+			String[] cards = (String[]) CardCatalogue.getCardById("spell_shuffle_to_deck").getDesc().getSpell().get(SpellArg.CARDS);
 
 			for (int i = 0; i < cards.length; i++) {
 				if (!player.getDeck().get(i).getCardId().equals(cards[i])) {

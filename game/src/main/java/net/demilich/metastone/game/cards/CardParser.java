@@ -19,8 +19,8 @@ public class CardParser {
 	public static CardCatalogueRecord parseCard(JsonObject card) throws IOException {
 		final String id = card.getString("id");
 		CardDesc desc = card.mapTo(CardDesc.class);
-		if (desc.id == null) {
-			desc.id = id;
+		if (desc.getId() == null) {
+			desc.setId(id);
 		}
 		return new CardCatalogueRecord(id, desc);
 	}
@@ -33,8 +33,8 @@ public class CardParser {
 		final String fileName = resourceInputStream.fileName;
 		String id = fileName.split("(\\.json)")[0];
 
-		if (desc.id == null) {
-			desc.id = id;
+		if (desc.getId() == null) {
+			desc.setId(id);
 		}
 
 		return new CardCatalogueRecord(id, desc);

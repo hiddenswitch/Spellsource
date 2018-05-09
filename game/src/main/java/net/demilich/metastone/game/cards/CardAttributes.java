@@ -3,12 +3,10 @@ package net.demilich.metastone.game.cards;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializable;
-import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import io.vertx.core.impl.ConcurrentHashSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.utils.Attribute;
@@ -16,7 +14,6 @@ import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.Map;
 import java.util.Set;
 
 /**
@@ -40,33 +37,33 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 		Set<Attribute> keys = new ConcurrentHashSet<>();
 		keys.addAll(super.keySet());
 		CardDesc desc = getCard().getDesc();
-		AttributeMap attributes = desc.attributes;
+		AttributeMap attributes = desc.getAttributes();
 		if (attributes != null) {
 			keys.addAll(attributes.keySet());
 		}
 		keys.add(Attribute.BASE_MANA_COST);
-		if (desc.manaCostModifier != null) {
+		if (desc.getManaCostModifier() != null) {
 			keys.add(Attribute.MANA_COST_MODIFIER);
 		}
-		if (desc.passiveTrigger != null || (desc.passiveTriggers != null && desc.passiveTriggers.length > 0)) {
+		if (desc.getPassiveTrigger() != null || (desc.getPassiveTriggers() != null && desc.getPassiveTriggers().length > 0)) {
 			keys.add(Attribute.PASSIVE_TRIGGERS);
 		}
-		if (desc.deckTrigger != null) {
+		if (desc.getDeckTrigger() != null) {
 			keys.add(Attribute.DECK_TRIGGER);
 		}
-		if (desc.gameTriggers != null) {
+		if (desc.getGameTriggers() != null) {
 			keys.add(Attribute.GAME_TRIGGERS);
 		}
-		if (desc.race != null) {
+		if (desc.getRace() != null) {
 			keys.add(Attribute.RACE);
 		}
-		if (desc.secret != null) {
+		if (desc.getSecret() != null) {
 			keys.add(Attribute.SECRET);
 		}
-		if (desc.quest != null) {
+		if (desc.getQuest() != null) {
 			keys.add(Attribute.QUEST);
 		}
-		if (desc.heroClass != null) {
+		if (desc.getHeroClass() != null) {
 			keys.add(Attribute.HERO_CLASS);
 		}
 		final boolean weaponOrMinion = getCard().getCardType() == CardType.MINION
@@ -100,36 +97,36 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 				return super.get(key);
 			}
 
-			if (desc.attributes != null
-					&& desc.attributes.containsKey(attr)) {
-				return desc.attributes.get(attr);
+			if (desc.getAttributes() != null
+					&& desc.getAttributes().containsKey(attr)) {
+				return desc.getAttributes().get(attr);
 			}
 
 			switch (attr) {
 				case BASE_MANA_COST:
-					return desc.baseManaCost;
+					return desc.getBaseManaCost();
 				case HERO_CLASS:
-					return desc.heroClass;
+					return desc.getHeroClass();
 				case MANA_COST_MODIFIER:
-					return desc.manaCostModifier == null ? null : desc.manaCostModifier.create();
+					return desc.getManaCostModifier() == null ? null : desc.getManaCostModifier().create();
 				case PASSIVE_TRIGGERS:
-					if (desc.passiveTrigger == null && (desc.passiveTriggers == null || desc.passiveTriggers.length == 0)) {
+					if (desc.getPassiveTrigger() == null && (desc.getPassiveTriggers() == null || desc.getPassiveTriggers().length == 0)) {
 						return new EnchantmentDesc[0];
 					}
-					if (desc.passiveTrigger != null && (desc.passiveTriggers == null || desc.passiveTriggers.length == 0)) {
-						return new EnchantmentDesc[]{desc.passiveTrigger};
+					if (desc.getPassiveTrigger() != null && (desc.getPassiveTriggers() == null || desc.getPassiveTriggers().length == 0)) {
+						return new EnchantmentDesc[]{desc.getPassiveTrigger()};
 					}
-					return desc.passiveTriggers;
+					return desc.getPassiveTriggers();
 				case DECK_TRIGGER:
-					return desc.deckTrigger;
+					return desc.getDeckTrigger();
 				case GAME_TRIGGERS:
-					return desc.gameTriggers;
+					return desc.getGameTriggers();
 				case RACE:
-					return desc.race == null ? Race.NONE : desc.race;
+					return desc.getRace() == null ? Race.NONE : desc.getRace();
 				case SECRET:
-					return desc.secret != null;
+					return desc.getSecret() != null;
 				case QUEST:
-					return desc.quest != null;
+					return desc.getQuest() != null;
 			}
 
 			CardType cardType = getCard().getCardType();
@@ -138,28 +135,28 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 					switch (attr) {
 						case BASE_ATTACK:
 						case ATTACK:
-							return desc.damage;
+							return desc.getDamage();
 						case BASE_HP:
 						case HP:
 						case MAX_HP:
-							return desc.durability;
+							return desc.getDurability();
 					}
 					break;
 				case MINION:
 					switch (attr) {
 						case BASE_ATTACK:
 						case ATTACK:
-							return desc.baseAttack;
+							return desc.getBaseAttack();
 						case BASE_HP:
 						case HP:
 						case MAX_HP:
-							return desc.baseHp;
+							return desc.getBaseHp();
 					}
 					break;
 				case HERO:
 					switch (attr) {
 						case BASE_HP:
-							return desc.attributes.get(Attribute.MAX_HP);
+							return desc.getAttributes().get(Attribute.MAX_HP);
 					}
 			}
 		}
@@ -177,19 +174,19 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 			case HERO_CLASS:
 				return true;
 			case MANA_COST_MODIFIER:
-				return desc.manaCostModifier != null;
+				return desc.getManaCostModifier() != null;
 			case PASSIVE_TRIGGERS:
-				return desc.passiveTrigger != null || (desc.passiveTriggers != null && desc.passiveTriggers.length > 0);
+				return desc.getPassiveTrigger() != null || (desc.getPassiveTriggers() != null && desc.getPassiveTriggers().length > 0);
 			case DECK_TRIGGER:
-				return desc.deckTrigger != null;
+				return desc.getDeckTrigger() != null;
 			case GAME_TRIGGERS:
-				return desc.gameTriggers != null;
+				return desc.getGameTriggers() != null;
 			case RACE:
-				return desc.race != null;
+				return desc.getRace() != null;
 			case SECRET:
-				return desc.secret != null;
+				return desc.getSecret() != null;
 			case QUEST:
-				return desc.quest != null;
+				return desc.getQuest() != null;
 			case BASE_ATTACK:
 			case ATTACK:
 			case HP:
@@ -202,8 +199,8 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 						|| cardType == CardType.HERO;
 		}
 
-		boolean containsDescAttributes = desc.attributes != null
-				&& desc.attributes.containsKey(key);
+		boolean containsDescAttributes = desc.getAttributes() != null
+				&& desc.getAttributes().containsKey(key);
 
 		return containsDescAttributes || (super.get(key) != null);
 	}

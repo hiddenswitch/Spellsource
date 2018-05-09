@@ -60,10 +60,10 @@ public class CardValidationTests {
 	public void validateCard(File cardFile) throws FileNotFoundException {
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
-			Assert.assertFalse(record.getDesc().heroClass == null && (record.getDesc().heroClasses == null || record.getDesc().heroClasses.length == 0));
-			String description = record.getDesc().description;
+			Assert.assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
+			String description = record.getDesc().getDescription();
 			if (description != null) {
-				AttributeMap attributes = record.getDesc().attributes;
+				AttributeMap attributes = record.getDesc().getAttributes();
 				if (description.startsWith("Battlecry:")) {
 					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY), "A Battlecry card is missing a battlecry attribute.");
 				}

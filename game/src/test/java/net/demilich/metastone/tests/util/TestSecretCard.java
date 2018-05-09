@@ -18,7 +18,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.RandomStringUtils;
 
 public class TestSecretCard extends Card {
 
@@ -26,13 +25,13 @@ public class TestSecretCard extends Card {
 
 	private static CardDesc toDesc() {
 		CardDesc desc = new CardDesc();
-		desc.id = "secret_test_card";
-		desc.name = "Trap";
-		desc.rarity = Rarity.FREE;
-		desc.type = CardType.SPELL;
-		desc.heroClass = HeroClass.ANY;
-		desc.attributes = new AttributeMap();
-		desc.secret = new EventTriggerDesc(TurnEndTrigger.class);
+		desc.setId("secret_test_card");
+		desc.setName("Trap");
+		desc.setRarity(Rarity.FREE);
+		desc.setType(CardType.SPELL);
+		desc.setHeroClass(HeroClass.ANY);
+		desc.setAttributes(new AttributeMap());
+		desc.setSecret(new EventTriggerDesc(TurnEndTrigger.class));
 		return desc;
 	}
 

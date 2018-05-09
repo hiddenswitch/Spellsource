@@ -7,7 +7,6 @@ import java.util.List;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
@@ -80,9 +79,9 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		boolean isPoisonous = card.hasAttribute(Attribute.POISONOUS)
 				|| card.hasAttribute(Attribute.AURA_POISONOUS);
 		boolean destroySpell = false;
-		if (card.getDesc().battlecry != null
-				&& card.getDesc().battlecry.spell != null) {
-			SpellDesc spell = card.getDesc().battlecry.spell;
+		if (card.getDesc().getBattlecry() != null
+				&& card.getDesc().getBattlecry().getSpell() != null) {
+			SpellDesc spell = card.getDesc().getBattlecry().getSpell();
 			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
 					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
 		}
@@ -108,7 +107,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 				* (minion.getAttack() - minion.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS));
 		minionScore += weights.get(WeightedFeature.MINION_HP_FACTOR) * minion.getHp();
 
-		if (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.TAUNT)) {
+		if (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT)) {
 			switch (threatLevel) {
 				case RED:
 					minionScore += weights.get(WeightedFeature.MINION_RED_TAUNT_MODIFIER);

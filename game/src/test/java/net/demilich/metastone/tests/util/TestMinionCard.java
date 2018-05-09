@@ -9,7 +9,6 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.RandomStringUtils;
 
 public class TestMinionCard extends Card {
 
@@ -17,16 +16,16 @@ public class TestMinionCard extends Card {
 
 	private static CardDesc getDesc(int attack, int hp, Attribute... attributes) {
 		CardDesc desc = new CardDesc();
-		desc.id = "test_minion_card";
-		desc.name = "Test monster " + ++id;
-		desc.rarity = Rarity.FREE;
-		desc.baseAttack = attack;
-		desc.baseHp = hp;
-		desc.type = CardType.MINION;
-		desc.heroClass = HeroClass.ANY;
-		desc.attributes = new AttributeMap();
+		desc.setId("test_minion_card");
+		desc.setName("Test monster " + ++id);
+		desc.setRarity(Rarity.FREE);
+		desc.setBaseAttack(attack);
+		desc.setBaseHp(hp);
+		desc.setType(CardType.MINION);
+		desc.setHeroClass(HeroClass.ANY);
+		desc.setAttributes(new AttributeMap());
 		for (Attribute gameTag : attributes) {
-			desc.attributes.put(gameTag, true);
+			desc.getAttributes().put(gameTag, true);
 		}
 		return desc;
 	}

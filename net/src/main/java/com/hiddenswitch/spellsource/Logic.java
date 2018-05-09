@@ -248,7 +248,7 @@ public interface Logic {
 	static CardDesc getDescriptionFromRecord(InventoryRecord cardRecord, String userId, String deckId) {
 		try {
 			// Set up the attributes
-			String cardId = cardRecord.getCardDesc().id;
+			String cardId = cardRecord.getCardDesc().getId();
 			final Card cardById = CardCatalogue.getCardById(cardId);
 			if (cardById == null) {
 				logger.error("getDescriptionFromRecord: Card with desc.id={} was not found", cardId);
@@ -257,21 +257,21 @@ public interface Logic {
 
 			CardDesc desc = cardById.getDesc().clone();
 
-			if (desc.attributes == null) {
-				desc.attributes = new AttributeMap();
+			if (desc.getAttributes() == null) {
+				desc.setAttributes(new AttributeMap());
 			}
 
-			desc.attributes.put(Attribute.USER_ID, userId);
-			desc.attributes.put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
-			desc.attributes.put(Attribute.DECK_ID, deckId);
-			desc.attributes.put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
-			desc.attributes.put(Attribute.CHAMPION_ID, userId);
-			desc.attributes.put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
-			desc.attributes.put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
-			desc.attributes.put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
+			desc.getAttributes().put(Attribute.USER_ID, userId);
+			desc.getAttributes().put(Attribute.CARD_INVENTORY_ID, cardRecord.getId());
+			desc.getAttributes().put(Attribute.DECK_ID, deckId);
+			desc.getAttributes().put(Attribute.DONOR_ID, cardRecord.getDonorUserId());
+			desc.getAttributes().put(Attribute.CHAMPION_ID, userId);
+			desc.getAttributes().put(Attribute.COLLECTION_IDS, cardRecord.getCollectionIds());
+			desc.getAttributes().put(Attribute.ALLIANCE_ID, cardRecord.getAllianceId());
+			desc.getAttributes().put(Attribute.ENTITY_INSTANCE_ID, RandomStringUtils.randomAlphanumeric(20).toLowerCase());
 
 			// Collect the persistent attributes
-			desc.attributes.putAll(cardRecord.getPersistentAttributes());
+			desc.getAttributes().putAll(cardRecord.getPersistentAttributes());
 
 			return desc;
 		} catch (Exception ex) {

@@ -70,11 +70,12 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class BattlecryDesc implements Serializable {
-	/**
-	 * The spell to cast when this battlecry's {@link #condition} is true (or always cast if no condition is specified
-	 * and a valid target is available).
-	 */
 	public SpellDesc spell;
+	public TargetSelection targetSelection;
+	public ConditionDesc condition;
+	public String name;
+	public String description;
+
 	/**
 	 * The targets the battlecry can choose from.
 	 * <p>
@@ -82,7 +83,31 @@ public final class BattlecryDesc implements Serializable {
 	 * <p>
 	 * If target selection is specified and no valid targets are available, the battlecry is not cast.
 	 */
-	public TargetSelection targetSelection;
+	public TargetSelection getTargetSelection() {
+		return targetSelection != null ? targetSelection : TargetSelection.NONE;
+	}
+
+	@JsonIgnore
+	public BattlecryAction toBattlecryAction() {
+		return BattlecryAction.createBattlecry(getSpell(), getTargetSelection());
+	}
+
+	/**
+	 * The spell to cast when this battlecry's {@link #condition} is true (or always cast if no condition is specified
+	 * and a valid target is available).
+	 */
+	public SpellDesc getSpell() {
+		return spell;
+	}
+
+	public void setSpell(SpellDesc spell) {
+		this.spell = spell;
+	}
+
+	public void setTargetSelection(TargetSelection targetSelection) {
+		this.targetSelection = targetSelection;
+	}
+
 	/**
 	 * The condition to evaluate if the player will be prompted to make a battlecry action.
 	 * <p>
@@ -92,7 +117,14 @@ public final class BattlecryDesc implements Serializable {
 	 * In order to implement this glow, it is preferred to specify a condition here rather than using a {@link
 	 * net.demilich.metastone.game.spells.ConditionalSpell} in the {@link #spell} field.
 	 */
-	public ConditionDesc condition;
+	public ConditionDesc getCondition() {
+		return condition;
+	}
+
+	public void setCondition(ConditionDesc condition) {
+		this.condition = condition;
+	}
+
 	/**
 	 * A name used to render a card representing the battlecry. When not specified, the description is used instead.
 	 * Used for choose-one battlecries.
@@ -101,7 +133,14 @@ public final class BattlecryDesc implements Serializable {
 	 * SpellArg#CARD} of that spell (the minion the choose-one minion will be transformed into) will be used to render
 	 * the choice instead, regardless of your specification of name.
 	 */
-	public String name;
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
 	/**
 	 * A description used to render a card representing the battlecry. Used for choose-one battlecries.
 	 * <p>
@@ -109,14 +148,11 @@ public final class BattlecryDesc implements Serializable {
 	 * SpellArg#CARD} of that spell (the minion the choose-one minion will be transformed into) will be used to render
 	 * the choice instead, regardless of your specification of description.
 	 */
-	public String description;
-
-	public TargetSelection getTargetSelection() {
-		return targetSelection != null ? targetSelection : TargetSelection.NONE;
+	public String getDescription() {
+		return description;
 	}
 
-	@JsonIgnore
-	public BattlecryAction toBattlecryAction() {
-		return BattlecryAction.createBattlecry(spell, getTargetSelection());
+	public void setDescription(String description) {
+		this.description = description;
 	}
 }

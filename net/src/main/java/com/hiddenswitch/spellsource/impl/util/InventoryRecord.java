@@ -139,8 +139,8 @@ public class InventoryRecord extends MongoRecord {
 
 	@JsonIgnore
 	public String getCardId() {
-		return cardDesc != null && cardDesc.id != null
-				? cardDesc.id
+		return cardDesc != null && cardDesc.getId() != null
+				? cardDesc.getId()
 				: null;
 	}
 

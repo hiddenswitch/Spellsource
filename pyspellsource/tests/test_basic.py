@@ -1,6 +1,7 @@
 import unittest
 from pyspellsource.context import Context
 from pyspellsource.playrandombehaviour import PlayRandomBehaviour
+from pyspellsource.gamestatevaluebehaviour import GameStateValueBehaviour
 
 
 class BasicTest(unittest.TestCase):
@@ -21,6 +22,16 @@ class BasicTest(unittest.TestCase):
         with Context() as ctx:
             gc = ctx.game.GameContext.fromTwoRandomDecks()
             behaviour1 = PlayRandomBehaviour()
+            behaviour2 = PlayRandomBehaviour()
+            gc.getPlayer1().setBehaviour(behaviour1.wrap(ctx))
+            gc.getPlayer2().setBehaviour(behaviour2.wrap(ctx))
+            gc.play()
+            self.assertTrue(gc.updateAndGetGameOver())
+    
+    def test_advanced_behaviour(self):
+        with Context() as ctx:
+            gc = ctx.game.GameContext.fromTwoRandomDecks()
+            behaviour1 = GameStateValueBehaviour(ctx)
             behaviour2 = PlayRandomBehaviour()
             gc.getPlayer1().setBehaviour(behaviour1.wrap(ctx))
             gc.getPlayer2().setBehaviour(behaviour2.wrap(ctx))

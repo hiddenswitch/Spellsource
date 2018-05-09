@@ -232,19 +232,19 @@ public class TheOldGodsTests extends TestBase {
 			}
 			// Modify yogg to only cast the coin
 			Card yoggCard = CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
-			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).battlecry;
-			final SpellDesc originalSpell = battlecry.spell;
+			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).getBattlecry();
+			final SpellDesc originalSpell = battlecry.getSpell();
 			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
 			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
-			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
+			battlecry.setSpell(originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
 				@Override
 				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_the_coin"));
 				}
-			});
+			}));
 			playMinionCard(context, player, "minion_yogg_saron_hopes_end");
 			Assert.assertEquals(YoggTestSpell1.counter.getCount(), 0, "The number of spells left to cast should be zero.");
-			battlecry.spell = originalSpell;
+			battlecry.setSpell(originalSpell);
 		});
 
 		// Test that if yogg destroys itself, the spell casting ends.
@@ -275,19 +275,19 @@ public class TheOldGodsTests extends TestBase {
 			}
 			// Modify yogg to only cast the coin
 			Card yoggCard = CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
-			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).battlecry;
-			final SpellDesc originalSpell = battlecry.spell;
+			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).getBattlecry();
+			final SpellDesc originalSpell = battlecry.getSpell();
 			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
 			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
-			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
+			battlecry.setSpell(originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
 				@Override
 				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_fireball"));
 				}
-			});
+			}));
 			playCard(context, player, "minion_yogg_saron_hopes_end");
 			Assert.assertEquals(YoggTestSpell2.counter.getCount(), 2, "Since yogg fireballed itself, we expect two spells left uncasted.");
-			battlecry.spell = originalSpell;
+			battlecry.setSpell(originalSpell);
 		});
 	}
 
@@ -390,8 +390,8 @@ public class TheOldGodsTests extends TestBase {
 
 		boolean buffsSelf = false;
 		// LISP to the rescue
-		if (sourceCard.getDesc().battlecry != null) {
-			buffsSelf = Stream.concat(Stream.of(sourceCard.getDesc().battlecry.spell), sourceCard.getDesc().battlecry.spell.subSpells().stream())
+		if (sourceCard.getDesc().getBattlecry() != null) {
+			buffsSelf = Stream.concat(Stream.of(sourceCard.getDesc().getBattlecry().getSpell()), sourceCard.getDesc().getBattlecry().getSpell().subSpells().stream())
 					.anyMatch(spellDesc -> (BuffSpell.class.isAssignableFrom(spellDesc.getDescClass())
 							|| CastFromGroupSpell.class.isAssignableFrom(spellDesc.getDescClass())) && spellDesc.getTarget() != null
 							&& spellDesc.getTarget().equals(EntityReference.SELF));

@@ -38,8 +38,8 @@ public class CopyDeathrattleSpell extends Spell {
 		// Only actors have copyable deathrattles
 		if (target instanceof Card) {
 			final CardDesc actorCardDesc = ((Card) target).getDesc();
-			if (actorCardDesc.deathrattle != null) {
-				deathrattles.add(actorCardDesc.deathrattle);
+			if (actorCardDesc.getDeathrattle() != null) {
+				deathrattles.add(actorCardDesc.getDeathrattle());
 			}
 		} else if (target instanceof Actor) {
 			deathrattles.addAll(((Actor) target).getDeathrattles());

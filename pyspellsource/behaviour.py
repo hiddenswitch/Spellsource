@@ -1,5 +1,5 @@
 import abc
-from typing import List
+from typing import List, Sized
 from .context import Context
 
 
@@ -16,17 +16,71 @@ class GameAction:
     pass
 
 
+class Card:
+    pass
+
+
 class Entity():
+    def getId(self) -> int:
+        pass
+    
     def getAttributeValue(self, attribute) -> int:
+        pass
+    
+    def hasAttribute(self, attribute) -> bool:
+        pass
+    
+    def getEntityType(self):
+        pass
+    
+    def getSourceCard(self) -> Card:
+        pass
+
+
+class SpellDesc:
+    pass
+
+
+class SpellDesc:
+    def getDescClass(self):
+        pass
+    
+    def subSpells(self) -> List[SpellDesc]:
+        pass
+
+
+class BattlecryDesc:
+    def getSpell(self) -> SpellDesc:
+        pass
+
+
+class CardDesc:
+    def getBattlecry(self) -> BattlecryDesc:
         pass
 
 
 class Card(Entity):
-    pass
+    def getDesc(self) -> CardDesc:
+        pass
+    
+    def getSpell(self) -> SpellDesc:
+        pass
+    
+    def getCardId(self) -> str:
+        pass
+    
+    def getBaseManaCost(self) -> int:
+        pass
 
 
 class Actor(Entity):
     def getAttack(self) -> int:
+        pass
+    
+    def getHp(self) -> int:
+        pass
+    
+    def isDestroyed(self) -> bool:
         pass
 
 
@@ -50,7 +104,18 @@ class Hero(Actor):
         pass
 
 
-class Player:
+class Quest(Entity):
+    def getFires(self) -> int:
+        pass
+    
+    def isExpired(self) -> bool:
+        pass
+    
+    def getCountUntilCast(self) -> int:
+        pass
+
+
+class Player(Entity):
     def getBehaviour(self) -> _JavaBehaviour:
         pass
     
@@ -62,6 +127,38 @@ class Player:
     
     def getHero(self) -> Hero:
         pass
+    
+    def getHand(self) -> List[Card]:
+        pass
+    
+    def getQuests(self) -> List[Quest]:
+        pass
+    
+    def getRemovedFromPlay(self) -> List[Entity]:
+        pass
+
+
+class GameAction:
+    def getActionType(self):
+        pass
+
+
+class GameLogic:
+    def removeSecrets(self, player: Player):
+        pass
+    
+    def endOfSequence(self):
+        pass
+    
+    def performGameAction(self, playerId: int, action: GameAction):
+        pass
+
+    def markAsDestroyed(self, minion: Minion):
+        pass
+
+
+class GameContext:
+    pass
 
 
 class GameContext:
@@ -78,6 +175,24 @@ class GameContext:
         pass
     
     def getOpponent(self, player: Player) -> Player:
+        pass
+    
+    def getLogic(self) -> GameLogic:
+        pass
+    
+    def isDisposed(self) -> bool:
+        pass
+    
+    def clone(self) -> GameContext:
+        pass
+    
+    def updateAndGetGameOver(self) -> bool:
+        pass
+    
+    def getActivePlayerId(self) -> int:
+        pass
+    
+    def getValidActions(self) -> List[GameAction]:
         pass
 
 

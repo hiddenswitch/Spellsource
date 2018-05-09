@@ -79,9 +79,9 @@ public class Generator {
 
 	private Record getBaseRecord(CardDesc cardDesc) {
 		Record record = new Record();
-		record.baseManaCost = cardDesc.baseManaCost;
-		record.heroClass = cardDesc.heroClass.toString();
-		record.rarity = cardDesc.rarity.ordinal();
+		record.baseManaCost = cardDesc.getBaseManaCost();
+		record.heroClass = cardDesc.getHeroClass().toString();
+		record.rarity = cardDesc.getRarity().ordinal();
 		return record;
 	}
 
@@ -91,52 +91,52 @@ public class Generator {
 		record.rank = rank;
 		// Represent this as a summon spell
 		record.args.put(SpellArg.CLASS.toString(), SummonSpell.class.getSimpleName());
-		record.args.put(SpellArg.SUMMON_BASE_HP.toString(), cardDesc.baseHp);
-		record.args.put(SpellArg.SUMMON_BASE_ATTACK.toString(), cardDesc.baseAttack);
-		if (cardDesc.race != null) {
-			record.args.put(SpellArg.RACE.toString(), cardDesc.race.toString());
+		record.args.put(SpellArg.SUMMON_BASE_HP.toString(), cardDesc.getBaseHp());
+		record.args.put(SpellArg.SUMMON_BASE_ATTACK.toString(), cardDesc.getBaseAttack());
+		if (cardDesc.getRace() != null) {
+			record.args.put(SpellArg.RACE.toString(), cardDesc.getRace().toString());
 		}
-		if (cardDesc.attributes != null) {
+		if (cardDesc.getAttributes() != null) {
 			record.args.putAll(EnumSet.of(Attribute.WINDFURY, Attribute.TAUNT, Attribute.CHARGE, Attribute.DIVINE_SHIELD, Attribute.STEALTH)
-					.stream().collect(Collectors.toMap(k -> "SUMMON_" + k, k -> cardDesc.attributes.containsKey(k))));
+					.stream().collect(Collectors.toMap(k -> "SUMMON_" + k, k -> cardDesc.getAttributes().containsKey(k))));
 		}
 
 		// TODO: Put together the battlecry, deathrattle, aura and trigger stuff
 		List<EnchantmentDesc> enchantmentDescs = new ArrayList<>();
-		if (cardDesc.battlecry != null) {
+		if (cardDesc.getBattlecry() != null) {
 			EnchantmentDesc battlecryTrigger = new EnchantmentDesc();
 			battlecryTrigger.oneTurn = true;
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, BATTLECRY);
 			battlecryTrigger.eventTrigger = new EventTriggerDesc(args);
 			// TODO: When reconstructing the card, create the appropriate actions.
-			if (cardDesc.battlecry.condition != null) {
+			if (cardDesc.getBattlecry().getCondition() != null) {
 				Map<SpellArg, Object> conditionalSpell = new SpellDesc(ConditionalSpell.class);
-				conditionalSpell.put(SpellArg.CONDITION, cardDesc.battlecry.condition.create());
-				conditionalSpell.put(SpellArg.SPELL, cardDesc.battlecry.spell);
+				conditionalSpell.put(SpellArg.CONDITION, cardDesc.getBattlecry().getCondition().create());
+				conditionalSpell.put(SpellArg.SPELL, cardDesc.getBattlecry().getSpell());
 				battlecryTrigger.spell = new SpellDesc(conditionalSpell);
 			} else {
-				battlecryTrigger.spell = cardDesc.battlecry.spell;
+				battlecryTrigger.spell = cardDesc.getBattlecry().getSpell();
 			}
-			battlecryTrigger.spell.put(SpellArg.TARGET_SELECTION, cardDesc.battlecry.getTargetSelection());
+			battlecryTrigger.spell.put(SpellArg.TARGET_SELECTION, cardDesc.getBattlecry().getTargetSelection());
 			enchantmentDescs.add(battlecryTrigger);
 		}
 
-		if (cardDesc.deathrattle != null) {
+		if (cardDesc.getDeathrattle() != null) {
 			EnchantmentDesc deathrattleTrigger = new EnchantmentDesc();
 			deathrattleTrigger.oneTurn = true;
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, DEATHRATTLE);
-			deathrattleTrigger.spell = cardDesc.deathrattle;
+			deathrattleTrigger.spell = cardDesc.getDeathrattle();
 			enchantmentDescs.add(deathrattleTrigger);
 		}
 
-		if (cardDesc.trigger != null) {
-			enchantmentDescs.add(cardDesc.trigger);
+		if (cardDesc.getTrigger() != null) {
+			enchantmentDescs.add(cardDesc.getTrigger());
 		}
 
-		if (cardDesc.triggers != null) {
-			enchantmentDescs.addAll(Arrays.asList(cardDesc.triggers));
+		if (cardDesc.getTriggers() != null) {
+			enchantmentDescs.addAll(Arrays.asList(cardDesc.getTriggers()));
 		}
 
 		record.args.put("SUB_TRIGGER_COUNT", enchantmentDescs.size());
