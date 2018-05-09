@@ -6,7 +6,7 @@ from py4j.java_gateway import JavaGateway, java_import, CallbackServerParameters
 
 
 class Context(contextlib.AbstractContextManager):
-    JAR_PATH = '/Users/bberman/Documents/Spellsource-Server/net/build/libs/net-1.3.0-all.jar'
+    JAR_PATH = '../../net/build/libs/net-1.3.0-all.jar'
     APPLICATION_NAME = 'com.hiddenswitch.spellsource.applications.PythonBridge'
     STATUS_READY = 1
     STATUS_ADDRESS_IN_USE = 2
