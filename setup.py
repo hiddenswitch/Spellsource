@@ -76,7 +76,7 @@ overhead between Java and Python.
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='GPLv3',
-      install_requires=['py4j'],
+      install_requires=['py4j', 'pandas'],
       packages=['spellsource'],
       keywords=[''],
       classifiers=['Development Status :: 3 - Alpha',

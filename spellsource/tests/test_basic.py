@@ -37,3 +37,60 @@ class BasicTest(unittest.TestCase):
             gc.getPlayer2().setBehaviour(behaviour2.wrap(ctx))
             gc.play()
             self.assertTrue(gc.updateAndGetGameOver())
+    
+    def test_simulation(self):
+        with Context() as ctx:
+            # Simulation function
+            from spellsource.utils import simulate
+            
+            DECK_1 = '''### Control Warlock First
+            # Class: VIOLET
+            # Format: Standard
+            #
+            # 2x (1) Dark Pact
+            # 2x (1) Kobold Librarian
+            # 2x (1) Mortal Coil
+            # 1x (2) Acidic Swamp Ooze
+            # 2x (2) Defile
+            # 2x (2) Doomsayer
+            # 2x (2) Plated Beetle
+            # 1x (3) Ironbeak Owl
+            # 2x (3) Stonehill Defender
+            # 1x (3) Voodoo Doll
+            # 2x (4) Hellfire
+            # 2x (4) Lesser Amethyst Spellstone
+            # 2x (5) Possessed Lackey
+            # 1x (6) Rin, the First Disciple
+            # 1x (6) Siphon Soul
+            # 1x (7) Lord Godfrey
+            # 1x (8) Twisting Nether
+            # 2x (9) Voidlord
+            # 1x (10) Bloodreaver Gul'dan'''
+            # Supports a deck list written in this format below:
+            DECK_2 = '''### Control Warlock Second
+            # Class: VIOLET
+            # Format: Standard
+            #
+            # 2x (1) Dark Pact
+            # 2x (1) Kobold Librarian
+            # 2x (1) Mortal Coil
+            # 1x (2) Acidic Swamp Ooze
+            # 2x (2) Defile
+            # 2x (2) Doomsayer
+            # 2x (2) Plated Beetle
+            # 1x (3) Ironbeak Owl
+            # 2x (3) Stonehill Defender
+            # 1x (3) Voodoo Doll
+            # 2x (4) Hellfire
+            # 2x (4) Lesser Amethyst Spellstone
+            # 2x (5) Possessed Lackey
+            # 1x (6) Rin, the First Disciple
+            # 1x (6) Siphon Soul
+            # 1x (7) Lord Godfrey
+            # 1x (8) Twisting Nether
+            # 2x (9) Voidlord
+            # 1x (10) Bloodreaver Gul'dan'''
+            
+            per_game_stats = list(simulate(context=ctx, decks=(DECK_1, DECK_2), number=10,
+                                           behaviours=('PlayRandomBehaviour', 'PlayRandomBehaviour')))
+            self.assertTrue(len(per_game_stats) > 0)
