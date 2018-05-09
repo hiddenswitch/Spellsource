@@ -1,12 +1,14 @@
 import contextlib
 import json
 import subprocess
+import pkg_resources
+import sys
+import os
 
 from py4j.java_gateway import JavaGateway, java_import, CallbackServerParameters
 
 
 class Context(contextlib.AbstractContextManager):
-    JAR_PATH = '../../net/build/libs/net-1.3.0-all.jar'
     APPLICATION_NAME = 'com.hiddenswitch.spellsource.applications.PythonBridge'
     STATUS_READY = 1
     STATUS_ADDRESS_IN_USE = 2
@@ -84,7 +86,37 @@ class Context(contextlib.AbstractContextManager):
         self.close()
     
     @staticmethod
+    def _find_jar_path():
+        """
+        Tries to find the path where the Spellsource jar is located.
+        """
+        paths = []
+        jar_file = "net-1.3.0-all.jar"
+        paths.append(jar_file)
+        # local
+        paths.append(os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "../net/build/libs/" + jar_file))
+        paths.append(os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "../share/pyspellsource/" + jar_file))
+        paths.append(os.path.join(sys.prefix, "share/pyspellsource/" + jar_file))
+        # pip install py4j # On Ubuntu 16.04, where virtualenvepath=/usr/local
+        #   this file is here:
+        #     virtualenvpath/lib/pythonX/dist-packages/py4j/java_gateway.py
+        #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
+        # pip install --user py4j # On Ubuntu 16.04, where virtualenvepath=~/.local
+        #   this file is here:
+        #     virtualenvpath/lib/pythonX/site-packages/py4j/java_gateway.py
+        #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
+        paths.append(os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "../../../../share/pyspellsource/" + jar_file))
+        
+        for path in paths:
+            if os.path.exists(path):
+                return path
+        return ""
+    
+    @staticmethod
     def _start_jvm_process():
         return subprocess.Popen(
-            ['java', '-Xmx512m', '-cp', Context.JAR_PATH, Context.APPLICATION_NAME],
+            ['java', '-Xmx512m', '-cp', Context._find_jar_path(), Context.APPLICATION_NAME],
             stdout=subprocess.PIPE, bufsize=Context._LINE_BUFFERED, universal_newlines=True)
