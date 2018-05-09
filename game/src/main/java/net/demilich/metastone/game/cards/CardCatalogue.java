@@ -46,7 +46,7 @@ public class CardCatalogue {
 		} else {
 			return null;
 		}
-		if (card.getDesc().fileFormatVersion > version) {
+		if (card.getDesc().getFileFormatVersion() > version) {
 			return null;
 		}
 		return card;
@@ -57,7 +57,7 @@ public class CardCatalogue {
 	}
 
 	public static Card getCardByName(String name) {
-		CardCatalogueRecord namedCard = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().collectible).findFirst().orElse(recordsByName.get(name).get(0));
+		CardCatalogueRecord namedCard = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(recordsByName.get(name).get(0));
 		if (namedCard != null) {
 			return getCardById(namedCard.getId());
 		}
@@ -99,7 +99,7 @@ public class CardCatalogue {
 	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
-			if (card.getDesc().fileFormatVersion > version) {
+			if (card.getDesc().getFileFormatVersion() > version) {
 				continue;
 			}
 
@@ -152,7 +152,7 @@ public class CardCatalogue {
 	public static CardList query(DeckFormat deckFormat, Predicate<Card> filter) {
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
-			if (card.getDesc().fileFormatVersion > version) {
+			if (card.getDesc().getFileFormatVersion() > version) {
 				continue;
 			}
 
@@ -177,13 +177,13 @@ public class CardCatalogue {
 			try {
 				final CardCatalogueRecord record = cardParser.parseCard(resourceInputStream);
 				CardDesc desc = record.getDesc();
-				if (cardDesc.containsKey(desc.id)) {
-					logger.error("loadCards: Card id {} is duplicated!", desc.id);
+				if (cardDesc.containsKey(desc.getId())) {
+					logger.error("loadCards: Card id {} is duplicated!", desc.getId());
 				}
-				cardDesc.put(desc.id, desc);
-				records.put(desc.id, record);
-				recordsByName.putIfAbsent(desc.name, new ArrayList<>());
-				recordsByName.get(desc.name).add(record);
+				cardDesc.put(desc.getId(), desc);
+				records.put(desc.getId(), record);
+				recordsByName.putIfAbsent(desc.getName(), new ArrayList<>());
+				recordsByName.get(desc.getName()).add(record);
 			} catch (Exception e) {
 				logger.error("loadCards: An error occurred while processing {}: {}", resourceInputStream.fileName, e.toString());
 				badCards.add(resourceInputStream.fileName);
@@ -199,7 +199,7 @@ public class CardCatalogue {
 	}
 
 	public static Stream<Card> stream() {
-		return cards.values().stream().filter(card -> card.getDesc().fileFormatVersion <= version);
+		return cards.values().stream().filter(card -> card.getDesc().getFileFormatVersion() <= version);
 	}
 
 	public static int getVersion() {

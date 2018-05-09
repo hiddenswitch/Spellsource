@@ -100,7 +100,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public Hero createHero() {
-		Card heroPower = CardCatalogue.getCardById(getDesc().heroPower);
+		Card heroPower = CardCatalogue.getCardById(getDesc().getHeroPower());
 		Hero hero = new Hero(this, heroPower);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
 			if (inheritedAttributes.contains(gameTag)) {
@@ -148,7 +148,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	public String getCardId() {
 		String cardId = getAttributes().getOverrideCardId();
 		if (cardId == null) {
-			return desc.id;
+			return desc.getId();
 		} else {
 			return cardId;
 		}
@@ -160,7 +160,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public CardSet getCardSet() {
-		return getDesc().set;
+		return getDesc().getSet();
 	}
 
 	/**
@@ -169,7 +169,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public CardType getCardType() {
-		return getDesc().type;
+		return getDesc().getType();
 	}
 
 	/**
@@ -178,7 +178,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public HeroClass getHeroClass() {
-		return (HeroClass) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().heroClass);
+		return (HeroClass) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
 	}
 
 	public void setHeroClass(HeroClass heroClass) {
@@ -191,7 +191,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public HeroClass[] getHeroClasses() {
-		return getDesc().heroClasses;
+		return getDesc().getHeroClasses();
 	}
 
 	/**
@@ -237,7 +237,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
-		final String description = hasAttribute(Attribute.DESCRIPTION) ? (String) getAttribute(Attribute.DESCRIPTION) : getDesc().description;
+		final String description = hasAttribute(Attribute.DESCRIPTION) ? (String) getAttribute(Attribute.DESCRIPTION) : getDesc().getDescription();
 		if (description == null || description.isEmpty()) {
 			return description;
 		}
@@ -283,7 +283,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return A {@link Rarity}
 	 */
 	public Rarity getRarity() {
-		return getDesc().rarity;
+		return getDesc().getRarity();
 	}
 
 	/**
@@ -293,7 +293,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 */
 	@Override
 	public Race getRace() {
-		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().race == null ? Race.NONE : getDesc().race);
+		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
 	}
 
 	/**
@@ -327,7 +327,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return <code>True</code> if the card is collectible.
 	 */
 	public boolean isCollectible() {
-		return getDesc().collectible;
+		return getDesc().isCollectible();
 	}
 
 	/**
@@ -395,7 +395,7 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	@Override
 	public boolean hasPersistentEffects() {
-		return getDesc().legacy == null ? false : getDesc().legacy;
+		return getDesc().getLegacy() == null ? false : getDesc().getLegacy();
 	}
 
 	/**
@@ -417,16 +417,16 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	public SpellDesc getSpell() {
 		if (isSecret()) {
-			return AddSecretSpell.create(new Secret(getDesc().secret.create(), getDesc().spell, this));
+			return AddSecretSpell.create(new Secret(getDesc().getSecret().create(), getDesc().getSpell(), this));
 		} else if (isQuest()) {
-			return AddQuestSpell.create(new Quest(getDesc().quest.create(), getDesc().spell, this, getDesc().countUntilCast));
+			return AddQuestSpell.create(new Quest(getDesc().getQuest().create(), getDesc().getSpell(), this, getDesc().getCountUntilCast()));
 		} else {
-			return getDesc().spell;
+			return getDesc().getSpell();
 		}
 	}
 
 	public TargetSelection getTargetSelection() {
-		return (TargetSelection) getAttributes().getOrDefault(Attribute.TARGET_SELECTION, getDesc().targetSelection == null ? TargetSelection.NONE : getDesc().targetSelection);
+		return (TargetSelection) getAttributes().getOrDefault(Attribute.TARGET_SELECTION, getDesc().getTargetSelection() == null ? TargetSelection.NONE : getDesc().getTargetSelection());
 	}
 
 	public boolean isActor() {
@@ -509,17 +509,17 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public String[] getChooseOneCardIds() {
-		return getDesc().chooseOneCardIds;
+		return getDesc().getChooseOneCardIds();
 	}
 
 	public BattlecryDesc[] getChooseOneBattlecries() {
-		return getDesc().chooseOneBattlecries;
+		return getDesc().getChooseOneBattlecries();
 	}
 
 	@Override
 	public PlayCardAction playBothOptions() {
 		if (getChooseBothCardId() == null &&
-				getDesc().chooseBothBattlecry == null) {
+				getDesc().getChooseBothBattlecry() == null) {
 			return null;
 		}
 
@@ -534,14 +534,14 @@ public class Card extends Entity implements HasChooseOneActions {
 				action = new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
 				break;
 			case WEAPON:
-				action = new PlayWeaponCardAction(getReference(), getDesc().chooseBothBattlecry.toBattlecryAction());
+				action = new PlayWeaponCardAction(getReference(), getDesc().getChooseBothBattlecry().toBattlecryAction());
 				break;
 			case HERO:
-				action = new PlayHeroCardAction(getReference(), getDesc().chooseBothBattlecry.toBattlecryAction());
+				action = new PlayHeroCardAction(getReference(), getDesc().getChooseBothBattlecry().toBattlecryAction());
 				break;
 			case MINION:
-				BattlecryDesc battlecryOption = getDesc().chooseBothBattlecry;
-				BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.spell, battlecryOption.getTargetSelection());
+				BattlecryDesc battlecryOption = getDesc().getChooseBothBattlecry();
+				BattlecryAction battlecry = BattlecryAction.createBattlecry(battlecryOption.getSpell(), battlecryOption.getTargetSelection());
 				action = new PlayMinionCardAction(getReference(), battlecry);
 				break;
 			case GROUP:
@@ -552,12 +552,12 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public String getChooseBothCardId() {
-		return getDesc().chooseBothCardId;
+		return getDesc().getChooseBothCardId();
 	}
 
 	@Override
 	public boolean hasBothOptions() {
-		return getDesc().chooseBothBattlecry != null;
+		return getDesc().getChooseBothBattlecry() != null;
 	}
 
 
@@ -585,23 +585,23 @@ public class Card extends Entity implements HasChooseOneActions {
 
 		applyText(weapon);
 
-		weapon.setOnEquip(getDesc().onEquip);
-		weapon.setOnUnequip(getDesc().onUnequip);
+		weapon.setOnEquip(getDesc().getOnEquip());
+		weapon.setOnUnequip(getDesc().getOnUnequip());
 		return weapon;
 
 	}
 
 	public Card getWeapon() {
-		if (getDesc().battlecry == null) {
+		if (getDesc().getBattlecry() == null) {
 			return null;
 		}
 
-		if (getDesc().battlecry.spell == null) {
+		if (getDesc().getBattlecry().getSpell() == null) {
 			return null;
 		}
 
 		// Return the first weapon we find equipped by the battlecry
-		SpellDesc spell = getDesc().battlecry.spell;
+		SpellDesc spell = getDesc().getBattlecry().getSpell();
 		SpellDesc equipWeaponSpell = spell.subSpells()
 				.stream()
 				.filter(p -> p.getDescClass().equals(EquipWeaponSpell.class))
@@ -649,7 +649,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public boolean isQuest() {
-		return getDesc().quest != null;
+		return getDesc().getQuest() != null;
 	}
 
 	public boolean canBeCastOn(GameContext context, Player player, Entity target) {
@@ -661,7 +661,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public ConditionDesc getCondition() {
-		return getDesc().condition;
+		return getDesc().getCondition();
 	}
 
 	public int hasBeenUsed() {
@@ -688,40 +688,40 @@ public class Card extends Entity implements HasChooseOneActions {
 		instance.setBattlecry(getDesc().getBattlecryAction());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
 				(Race) getAttribute(Attribute.RACE) :
-				getDesc().race);
+						getDesc().getRace());
 
-		if (getDesc().deathrattle != null) {
+		if (getDesc().getDeathrattle() != null) {
 			instance.getAttributes().remove(Attribute.DEATHRATTLES);
-			instance.addDeathrattle(getDesc().deathrattle);
+			instance.addDeathrattle(getDesc().getDeathrattle());
 		}
 
 		if (deathrattleEnchantments.size() > 0) {
 			deathrattleEnchantments.forEach(instance::addDeathrattle);
 		}
 
-		if (getDesc().trigger != null) {
-			instance.addEnchantment(getDesc().trigger.create());
+		if (getDesc().getTrigger() != null) {
+			instance.addEnchantment(getDesc().getTrigger().create());
 		}
 
-		if (getDesc().triggers != null) {
-			for (EnchantmentDesc trigger : getDesc().triggers) {
+		if (getDesc().getTriggers() != null) {
+			for (EnchantmentDesc trigger : getDesc().getTriggers()) {
 				instance.addEnchantment(trigger.create());
 			}
 		}
 
-		if (getDesc().aura != null) {
-			final Aura enchantment = getDesc().aura.create();
+		if (getDesc().getAura() != null) {
+			final Aura enchantment = getDesc().getAura().create();
 			instance.addEnchantment(enchantment);
 		}
 
-		if (getDesc().auras != null) {
-			for (AuraDesc auraDesc : getDesc().auras) {
+		if (getDesc().getAuras() != null) {
+			for (AuraDesc auraDesc : getDesc().getAuras()) {
 				instance.addEnchantment(auraDesc.create());
 			}
 		}
 
-		if (getDesc().cardCostModifier != null) {
-			instance.setCardCostModifier(getDesc().cardCostModifier.create());
+		if (getDesc().getCardCostModifier() != null) {
+			instance.setCardCostModifier(getDesc().getCardCostModifier().create());
 		}
 
 		return instance;
@@ -757,20 +757,20 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public boolean hasTrigger() {
-		return getDesc().trigger != null || (getDesc().triggers != null && getDesc().triggers.length > 0);
+		return getDesc().getTrigger() != null || (getDesc().getTriggers() != null && getDesc().getTriggers().length > 0);
 	}
 
 	public boolean hasAura() {
-		return getDesc().aura != null
-				|| getDesc().auras != null && getDesc().auras.length > 0;
+		return getDesc().getAura() != null
+				|| getDesc().getAuras() != null && getDesc().getAuras().length > 0;
 	}
 
 	public boolean hasCardCostModifier() {
-		return getDesc().cardCostModifier != null;
+		return getDesc().getCardCostModifier() != null;
 	}
 
 	public boolean hasBattlecry() {
-		return getDesc().battlecry != null;
+		return getDesc().getBattlecry() != null;
 	}
 
 	public String getBattlecryDescription(int index) {
@@ -780,7 +780,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		if (getChooseOneBattlecries()[index] == null) {
 			return null;
 		}
-		return getChooseOneBattlecries()[index].description;
+		return getChooseOneBattlecries()[index].getDescription();
 	}
 
 	public String getBattlecryName(int index) {
@@ -790,7 +790,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		if (getChooseOneBattlecries()[index] == null) {
 			return getBattlecryDescription(index);
 		}
-		final String name = getChooseOneBattlecries()[index].name;
+		final String name = getChooseOneBattlecries()[index].getName();
 		return name == null ? getBattlecryDescription(index) : name;
 	}
 
@@ -800,7 +800,7 @@ public class Card extends Entity implements HasChooseOneActions {
 			return null;
 		}
 
-		SpellDesc spell = battlecryOption.spell;
+		SpellDesc spell = battlecryOption.getSpell();
 		if (spell == null) {
 			return null;
 		}
@@ -841,7 +841,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public SpellDesc[] getGroup() {
-		return getDesc().group;
+		return getDesc().getGroup();
 	}
 
 	public void setTargetRequirement(TargetSelection targetRequirement) {
@@ -849,7 +849,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public boolean isSecret() {
-		return getDesc().secret != null;
+		return getDesc().getSecret() != null;
 	}
 
 	public boolean isSpell() {
@@ -857,7 +857,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public boolean hasDeathrattle() {
-		return getDesc().deathrattle != null
+		return getDesc().getDeathrattle() != null
 				|| deathrattleEnchantments.size() > 0;
 	}
 
@@ -872,7 +872,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 */
 	@Override
 	public String getName() {
-		return (String) getAttributes().getOrDefault(Attribute.NAME, getDesc().name);
+		return (String) getAttributes().getOrDefault(Attribute.NAME, getDesc().getName());
 	}
 
 	@Override

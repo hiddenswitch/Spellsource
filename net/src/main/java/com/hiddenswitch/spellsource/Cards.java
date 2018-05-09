@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.models.*;
@@ -55,11 +54,11 @@ public interface Cards {
 
 				final CardDesc desc = r.getDesc();
 
-				passes &= desc.collectible;
-				passes &= sets.contains(desc.set);
+				passes &= desc.isCollectible();
+				passes &= sets.contains(desc.getSet());
 
 				if (request.getRarity() != null) {
-					passes &= desc.rarity.isRarity(request.getRarity());
+					passes &= desc.getRarity().isRarity(request.getRarity());
 				}
 
 				return passes;
@@ -98,8 +97,8 @@ public interface Cards {
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)
-				.filter(cd -> cd.collectible
-						&& DeckFormat.CUSTOM.isInFormat(cd.set))
+				.filter(cd -> cd.isCollectible()
+						&& DeckFormat.CUSTOM.isInFormat(cd.getSet()))
 				.map(CardDesc::create)
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> new CardRecord().entity(entity))

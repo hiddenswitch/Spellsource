@@ -4,15 +4,12 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.CastRandomSpellSpell;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -21,7 +18,6 @@ import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Comparator;
 import java.util.List;
 
 import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
@@ -54,9 +50,9 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			}
 
 			Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-			BattlecryDesc battlecryDesc = card.getDesc().battlecry;
+			BattlecryDesc battlecryDesc = card.getDesc().getBattlecry();
 			// Skip calls to this specific battlecry
-			if (battlecryDesc.spell != null && battlecryDesc.spell.getDescClass().equals(RepeatAllOtherBattlecriesSpell.class)) {
+			if (battlecryDesc.getSpell() != null && battlecryDesc.getSpell().getDescClass().equals(RepeatAllOtherBattlecriesSpell.class)) {
 				logger.debug("onCast {} {}: Matched a card {} that has RepeatAllOtherBattlecriesSpell, so it was skipped.", context.getGameId(), source, card);
 				continue;
 			}
@@ -66,9 +62,9 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			if (card.getAttributes().containsKey(Attribute.CHOICE)) {
 				int choice = card.getAttributeValue(Attribute.CHOICE);
 				if (choice == -1) {
-					action = card.getDesc().chooseBothBattlecry.toBattlecryAction();
+					action = card.getDesc().getChooseBothBattlecry().toBattlecryAction();
 				} else {
-					action = card.getDesc().chooseOneBattlecries[choice].toBattlecryAction();
+					action = card.getDesc().getChooseOneBattlecries()[choice].toBattlecryAction();
 				}
 			} else {
 				action = card.getDesc().getBattlecryAction();

@@ -19,8 +19,6 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toSet;
 import static org.junit.Assert.assertNotNull;
@@ -78,7 +76,7 @@ public class LogicTest extends SpellsourceTestBase {
 
 			GetCollectionResponse response = Inventory.getCollection(GetCollectionRequest.user(userId));
 
-			Set<String> cardIds = response.getInventoryRecords().stream().map(r -> r.getCardDesc().id).collect(
+			Set<String> cardIds = response.getInventoryRecords().stream().map(r -> r.getCardDesc().getId()).collect(
 					toSet());
 
 			// Get the starting decks distinct card IDs

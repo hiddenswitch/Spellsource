@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
@@ -8,7 +7,6 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.CreateGameSessionRequest;
@@ -311,8 +309,8 @@ public class GatewayTest extends SpellsourceTestBase {
 		DefaultApi defaultApi = getApi();
 
 		GetCardsResponse response1 = defaultApi.getCards(null);
-		final long count = CardCatalogue.getRecords().values().stream().filter(c -> c.getDesc().collectible
-				&& DeckFormat.CUSTOM.isInFormat(c.getDesc().set)).count();
+		final long count = CardCatalogue.getRecords().values().stream().filter(c -> c.getDesc().isCollectible()
+				&& DeckFormat.CUSTOM.isInFormat(c.getDesc().getSet())).count();
 		context.assertEquals((long) response1.getCards().size(), count);
 		try {
 			GetCardsResponse response2 = defaultApi.getCards(response1.getVersion());

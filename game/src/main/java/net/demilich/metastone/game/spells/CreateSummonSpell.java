@@ -30,21 +30,21 @@ public class CreateSummonSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String description = "";
 		CardDesc cardDesc = new CardDesc();
-		cardDesc.id = context.getLogic().generateCardId();
-		cardDesc.name = desc.getString(SpellArg.NAME);
-		cardDesc.baseAttack = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
-		cardDesc.baseHp = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		cardDesc.heroClass = HeroClass.ANY;
-		cardDesc.type = CardType.MINION;
-		cardDesc.rarity = Rarity.FREE;
-		cardDesc.description = description;
+		cardDesc.setId(context.getLogic().generateCardId());
+		cardDesc.setName(desc.getString(SpellArg.NAME));
+		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
+		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
+		cardDesc.setHeroClass(HeroClass.ANY);
+		cardDesc.setType(CardType.MINION);
+		cardDesc.setRarity(Rarity.FREE);
+		cardDesc.setDescription(description);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		if (attribute != null) {
-			cardDesc.attributes.put(attribute, true);
+			cardDesc.getAttributes().put(attribute, true);
 		}
-		cardDesc.set = CardSet.BASIC;
-		cardDesc.collectible = false;
-		cardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, target, source, 0);
+		cardDesc.setSet(CardSet.BASIC);
+		cardDesc.setCollectible(false);
+		cardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
 		Card newCard = cardDesc.create();
 		context.addTempCard(newCard);
 

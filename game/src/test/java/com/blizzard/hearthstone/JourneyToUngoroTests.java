@@ -465,7 +465,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion raptor = playMinionCard(c, p, "minion_bloodfen_raptor");
 			c.endTurn();
 			CardDesc custom = (CardDesc) CardCatalogue.getRecords().get("minion_mind_control_tech").getDesc();
-			custom.battlecry.condition = null;
+			custom.getBattlecry().setCondition(null);
 			Card customControl = new Card(custom);
 			playCard(c, o, customControl);
 			Assert.assertEquals(o.getMinions().size(), 2, "Raptor + Mind Control Tech");

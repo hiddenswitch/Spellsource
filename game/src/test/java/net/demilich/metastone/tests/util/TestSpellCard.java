@@ -12,7 +12,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 
 public class TestSpellCard extends Card {
 
@@ -20,12 +19,12 @@ public class TestSpellCard extends Card {
 
 	private static CardDesc toDesc() {
 		CardDesc desc = new CardDesc();
-		desc.id = RandomStringUtils.randomAlphanumeric(15);
-		desc.name = "Unit Test Spell";
-		desc.rarity = Rarity.FREE;
-		desc.type = CardType.SPELL;
-		desc.heroClass = HeroClass.ANY;
-		desc.attributes = new AttributeMap();
+		desc.setId(RandomStringUtils.randomAlphanumeric(15));
+		desc.setName("Unit Test Spell");
+		desc.setRarity(Rarity.FREE);
+		desc.setType(CardType.SPELL);
+		desc.setHeroClass(HeroClass.ANY);
+		desc.setAttributes(new AttributeMap());
 		return desc;
 	}
 

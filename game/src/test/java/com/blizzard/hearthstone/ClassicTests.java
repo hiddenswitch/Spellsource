@@ -8,7 +8,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -177,7 +176,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_ysera");
 			Stream<String> yseraCards = Arrays.stream((String[]) ((CardDesc) CardCatalogue.getRecords().get("minion_ysera")
-					.getDesc()).trigger.spell.get(SpellArg.CARDS));
+							.getDesc()).getTrigger().spell.get(SpellArg.CARDS));
 			context.endTurn();
 			Assert.assertTrue(yseraCards.anyMatch(c -> c.equals(player.getHand().get(0).getCardId())));
 			Assert.assertEquals(player.getHand().size(), 1);
