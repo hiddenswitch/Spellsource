@@ -80,7 +80,12 @@ public interface Behaviour extends Cloneable {
 	 * @see #mulligan(GameContext, Player, List) for a complete description of this method.
 	 */
 	@Suspendable
-	void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler);
+	default void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
+		final List<Card> mulligan = mulligan(context, player, cards);
+		if (handler != null) {
+			handler.handle(mulligan);
+		}
+	}
 
 	/**
 	 * Requests an action from a player asynchronously.
@@ -92,7 +97,12 @@ public interface Behaviour extends Cloneable {
 	 *                     player's choice.
 	 */
 	@Suspendable
-	void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler);
+	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
+		GameAction action = requestAction(context, player, validActions);
+		if (handler != null) {
+			handler.handle(action);
+		}
+	}
 
 	/**
 	 * A networked version of sending a game over message.
@@ -102,12 +112,15 @@ public interface Behaviour extends Cloneable {
 	 * @param winningPlayerId The winning player.
 	 */
 	@Suspendable
-	void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId);
+	default void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId) {
+	}
 
 	/**
 	 * Determines whether this behaviour's actions were determined by a human.
 	 *
 	 * @return {@code true} if the actions are determined by a human, {@code false} otherwise.
 	 */
-	boolean isHuman();
+	default boolean isHuman() {
+		return false;
+	}
 }

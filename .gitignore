@@ -28,5 +28,7 @@ cards/out
 !.elasticbeanstalk/*.global.yml
 
 .vagrant/
-cards/src/main/resources/cards/hearthstone/classic/rogue/spell_shadowstep.json
 .venv/
+
+*.egg-info
+__pycache__/

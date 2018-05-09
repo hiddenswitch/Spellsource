@@ -19,7 +19,7 @@ info:
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: api-3.hiddenswitch.com
 schemes:
-  - https
+  - http
 consumes:
   - application/json
 produces:
