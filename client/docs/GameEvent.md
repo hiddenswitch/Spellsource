@@ -39,6 +39,7 @@ Name | Type | Description | Notes
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
+**fatigue** | [**GameEventFatigue**](GameEventFatigue.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
 
 
@@ -60,6 +61,7 @@ DRAW_CARD | &quot;DRAW_CARD&quot;
 ENRAGE_CHANGED | &quot;ENRAGE_CHANGED&quot;
 ENTITY_TOUCHED | &quot;ENTITY_TOUCHED&quot;
 ENTITY_UNTOUCHED | &quot;ENTITY_UNTOUCHED&quot;
+FATIGUE | &quot;FATIGUE&quot;
 GAME_START | &quot;GAME_START&quot;
 HEAL | &quot;HEAL&quot;
 HERO_POWER_USED | &quot;HERO_POWER_USED&quot;

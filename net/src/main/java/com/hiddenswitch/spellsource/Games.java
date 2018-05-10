@@ -581,6 +581,11 @@ public interface Games extends Verticle {
 					.ownCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId))
 					.opponentCard(getEntity(workingContext, joustEvent.getOpponentCard(), playerId))
 					.won(joustEvent.isWon()));
+		} else if (event instanceof FatigueEvent) {
+			final FatigueEvent fatigueEvent = (FatigueEvent) event;
+			clientEvent.fatigue(new GameEventFatigue()
+					.damage(fatigueEvent.getValue())
+					.playerId(fatigueEvent.getTargetPlayerId()));
 		}
 
 		return clientEvent;
