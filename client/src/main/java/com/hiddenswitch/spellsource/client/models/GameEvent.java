@@ -22,6 +22,7 @@ import com.hiddenswitch.spellsource.client.models.GameEventAfterSpellCasted;
 import com.hiddenswitch.spellsource.client.models.GameEventArmorGained;
 import com.hiddenswitch.spellsource.client.models.GameEventBeforeSummon;
 import com.hiddenswitch.spellsource.client.models.GameEventDamage;
+import com.hiddenswitch.spellsource.client.models.GameEventFatigue;
 import com.hiddenswitch.spellsource.client.models.GameEventHeal;
 import com.hiddenswitch.spellsource.client.models.GameEventHeroPowerUsed;
 import com.hiddenswitch.spellsource.client.models.GameEventJoust;
@@ -88,6 +89,8 @@ public class GameEvent implements Serializable {
     ENTITY_TOUCHED("ENTITY_TOUCHED"),
     
     ENTITY_UNTOUCHED("ENTITY_UNTOUCHED"),
+    
+    FATIGUE("FATIGUE"),
     
     GAME_START("GAME_START"),
     
@@ -267,6 +270,9 @@ public class GameEvent implements Serializable {
 
   @JsonProperty("kill")
   private GameEventKill kill = null;
+
+  @JsonProperty("fatigue")
+  private GameEventFatigue fatigue = null;
 
   @JsonProperty("triggerFired")
   private GameEventTriggerFired triggerFired = null;
@@ -901,6 +907,24 @@ public class GameEvent implements Serializable {
     this.kill = kill;
   }
 
+  public GameEvent fatigue(GameEventFatigue fatigue) {
+    this.fatigue = fatigue;
+    return this;
+  }
+
+   /**
+   * Get fatigue
+   * @return fatigue
+  **/
+  @ApiModelProperty(value = "")
+  public GameEventFatigue getFatigue() {
+    return fatigue;
+  }
+
+  public void setFatigue(GameEventFatigue fatigue) {
+    this.fatigue = fatigue;
+  }
+
   public GameEvent triggerFired(GameEventTriggerFired triggerFired) {
     this.triggerFired = triggerFired;
     return this;
@@ -964,12 +988,13 @@ public class GameEvent implements Serializable {
         Objects.equals(this.discard, gameEvent.discard) &&
         Objects.equals(this.mill, gameEvent.mill) &&
         Objects.equals(this.kill, gameEvent.kill) &&
+        Objects.equals(this.fatigue, gameEvent.fatigue) &&
         Objects.equals(this.triggerFired, gameEvent.triggerFired);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, questSuccessful, questPlayed, summon, afterSpellCasted, discard, mill, kill, triggerFired);
+    return Objects.hash(id, description, isPowerHistory, eventType, afterPhysicalAttack, drawCard, entityTouched, entityUntouched, preDamage, silence, secretPlayed, beforeSummon, cardPlayed, armorGained, afterSummon, spellCasted, joust, weaponDestroyed, heroPowerUsed, enrageChanged, targetAcquisition, damage, weaponEquipped, performedGameAction, physicalAttack, overload, heal, secretRevealed, questSuccessful, questPlayed, summon, afterSpellCasted, discard, mill, kill, fatigue, triggerFired);
   }
 
 
@@ -1013,6 +1038,7 @@ public class GameEvent implements Serializable {
     sb.append("    discard: ").append(toIndentedString(discard)).append("\n");
     sb.append("    mill: ").append(toIndentedString(mill)).append("\n");
     sb.append("    kill: ").append(toIndentedString(kill)).append("\n");
+    sb.append("    fatigue: ").append(toIndentedString(fatigue)).append("\n");
     sb.append("    triggerFired: ").append(toIndentedString(triggerFired)).append("\n");
     sb.append("}");
     return sb.toString();

@@ -792,6 +792,7 @@ definitions:
           - 'ENRAGE_CHANGED'
           - 'ENTITY_TOUCHED'
           - 'ENTITY_UNTOUCHED'
+          - 'FATIGUE'
           - 'GAME_START'
           - 'HEAL'
           - 'HERO_POWER_USED'
@@ -976,6 +977,13 @@ definitions:
         properties:
           victim:
             $ref: '#/definitions/Entity'
+      fatigue:
+        type: 'object'
+        properties:
+          playerId:
+            type: 'integer'
+          damage:
+            type: 'integer'
       triggerFired:
         type: 'object'
         properties:

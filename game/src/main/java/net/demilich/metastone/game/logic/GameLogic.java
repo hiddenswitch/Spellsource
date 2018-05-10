@@ -1293,6 +1293,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			fatigue++;
 			player.setAttribute(Attribute.FATIGUE, fatigue);
 			damage(player, hero, fatigue, hero);
+			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 			player.getStatistics().fatigueDamage(fatigue);
 			return true;
 		}
