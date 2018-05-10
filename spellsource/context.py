@@ -67,6 +67,8 @@ class Context(contextlib.AbstractContextManager):
         self.Zones = self.targeting.Zones
         self.HeroClass = self.entities.heroes.HeroClass
         self.CardCatalogue = self.cards.CardCatalogue
+        self.PythonBridge = self._gateway.jvm.com.hiddenswitch.spellsource.applications.PythonBridge
+        self.ArrayList = self._gateway.jvm.java.util.ArrayList
         
         self.CardCatalogue.loadCardsFromPackage()
     
@@ -120,3 +122,6 @@ class Context(contextlib.AbstractContextManager):
         return subprocess.Popen(
             ['java', '-Xmx512m', '-cp', Context._find_jar_path(), Context.APPLICATION_NAME],
             stdout=subprocess.PIPE, bufsize=Context._LINE_BUFFERED, universal_newlines=True)
+    
+    def is_open(self):
+        return self._gateway._gateway_client.is_connected

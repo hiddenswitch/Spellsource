@@ -49,7 +49,36 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			}
 
 			if (matcher.group("heroClass") != null) {
-				final String heroClass = matcher.group("heroClass").toUpperCase();
+				String heroClass = matcher.group("heroClass").toUpperCase();
+				switch (heroClass.toLowerCase()) {
+					case "warlock":
+						heroClass = "VIOLET";
+						break;
+					case "warrior":
+						heroClass = "RED";
+						break;
+					case "priest":
+						heroClass = "WHITE";
+						break;
+					case "rogue":
+						heroClass = "BLACK";
+						break;
+					case "mage":
+						heroClass = "BLUE";
+						break;
+					case "paladin":
+						heroClass = "GOLD";
+						break;
+					case "shaman":
+						heroClass = "SILVER";
+						break;
+					case "druid":
+						heroClass = "BROWN";
+						break;
+					case "hunter":
+						heroClass = "GREEN";
+						break;
+				}
 				try {
 					request.setHeroClass(HeroClass.valueOf(heroClass));
 				} catch (IllegalArgumentException ex) {

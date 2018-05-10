@@ -22,7 +22,7 @@ except Exception as ex:
     raise ex
 
 setup(name='spellsource',
-      version='0.2.1',
+      version='0.2.2',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a
@@ -59,8 +59,12 @@ the Java API.
           game_context.play()
           assert game_context.updateAndGetGameOver()
 
+
+This package also supports simulators. Visit
+`the example notebook <https://github.com/hiddenswitch/Spellsource-Server/blob/master/spellsource/docs/simulation_example.ipynb>`__.
+
 Visit
-```GameStateValueBehaviour`` <spellsource/gamestatevaluebehaviour.py>`__
+`GameStateValueBehaviour <https://github.com/hiddenswitch/Spellsource-Server/blob/master/spellsource/gamestatevaluebehaviour.py>`__
 to see an implementation of a complex AI bot in Python. This is a direct
 port of the Java code. Unfortunately, on the Python platform, remoting
 (accessing the Java engine) in the particular way this bot does is slow.
@@ -76,9 +80,10 @@ overhead between Java and Python.
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='GPLv3',
-      install_requires=['py4j', 'pandas'],
+      install_requires=['py4j'],
       packages=['spellsource'],
-      keywords=[''],
+      keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
+                'ml'],
       classifiers=['Development Status :: 3 - Alpha',
                    # Indicate who your project is intended for
                    'Intended Audience :: Developers',
