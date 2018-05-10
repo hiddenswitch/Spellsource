@@ -1453,11 +1453,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
 	}
 
-	public static void simulate(List<Deck> deckPair, List<Supplier<Behaviour>> behaviours, int numberOfGamesInBatch, Consumer<SimulationResult> computed) throws InterruptedException {
+	public static void simulate(List<Deck> deckPair, List<Supplier<Behaviour>> behaviours, int numberOfGamesInBatch, boolean reduce, Consumer<SimulationResult> computed) throws InterruptedException {
 		// Actually run the computation
-		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel();
+		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel().unordered();
 
-		stream.forEach(i -> {
+		Stream<SimulationResult> result = stream.map(i -> {
 			final GameConfig config;
 			if (behaviours.size() == 0) {
 				config = GameConfig.fromDecks(deckPair, PlayRandomBehaviour::new, PlayRandomBehaviour::new);
@@ -1474,16 +1474,24 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 			try {
 				newGame.play();
-
-				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
-				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
-				innerResult.calculateMetaStatistics();
-			} finally {
-				newGame.dispose();
+			} catch (Throwable t) {
+				return null;
 			}
 
-			computed.accept(innerResult);
-		});
+			innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
+			innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
+			innerResult.calculateMetaStatistics();
+
+			newGame.dispose();
+
+			return innerResult;
+		}).filter(Objects::nonNull);
+
+		if (reduce) {
+			computed.accept(result.reduce(SimulationResult::merge).orElseThrow(NullPointerException::new));
+		} else {
+			result.forEach(computed);
+		}
 	}
 
 	/**

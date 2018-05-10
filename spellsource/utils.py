@@ -1,19 +1,20 @@
 import abc
 import json
+from collections import deque
+from math import factorial
+from multiprocessing import Queue
+from typing import Callable, Sequence, Union
 
 from spellsource.behaviour import Behaviour
 from spellsource.context import Context
-from typing import Callable, Sequence, Union
-from math import factorial
-from multiprocessing import Process, Queue
-from collections import deque
 
 
 def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
-             behaviours: Sequence[Union[str, Behaviour, Callable[[], Behaviour]]] = (), mirrors: bool = False):
+             behaviours: Sequence[Union[str, Behaviour, Callable[[], Behaviour]]] = (), mirrors: bool = False,
+             reduce: bool = True):
     ctx = context
-    PythonBridge = ctx._gateway.jvm.com.hiddenswitch.spellsource.applications.PythonBridge
-    ArrayList = ctx._gateway.jvm.java.util.ArrayList
+    PythonBridge = ctx.PythonBridge
+    ArrayList = ctx.ArrayList
     
     behaviours = list(behaviours)
     for i, behaviour in enumerate(behaviours):
@@ -28,6 +29,8 @@ def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
     estimated_length = f(len(decks)) // f(2) // f(len(decks) - 2)
     if mirrors:
         estimated_length += len(decks)
+    if not reduce:
+        estimated_length *= number
     
     behaviours_java = ArrayList()
     for b in behaviours:
@@ -36,8 +39,8 @@ def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
     decks_java = ArrayList()
     for d in decks:
         decks_java.add(d)
-    generator = SimulationGenerator(estimated_length, PythonBridge)
-    generator.job_id = PythonBridge.simulate(generator, decks_java, number, behaviours_java, mirrors)
+    generator = SimulationGenerator(estimated_length, ctx)
+    generator.job_id = PythonBridge.simulate(generator, decks_java, number, behaviours_java, mirrors, reduce)
     
     return generator
 
@@ -73,11 +76,11 @@ class _JavaSimulationResultGenerator(abc.ABC):
 
 
 class SimulationGenerator(_JavaSimulationResultGenerator):
-    def __init__(self, estimated_length: int, python_bridge):
+    def __init__(self, estimated_length: int, context: Context):
         self._length = estimated_length
         self._queue = Queue()
         self._retrieved = deque()
-        self._python_bridge = python_bridge
+        self._ctx = context
         self.job_id = 0
     
     def offer(self, obj: str):
@@ -98,6 +101,7 @@ class SimulationGenerator(_JavaSimulationResultGenerator):
             while True:
                 obj = self._queue.get()
                 if isinstance(obj, StopIteration):
+                    self.job_id = 0
                     return
                 if isinstance(obj, str):
                     # Parse as json
@@ -112,8 +116,9 @@ class SimulationGenerator(_JavaSimulationResultGenerator):
             return
     
     def _kill(self):
-        if self._python_bridge is not None and self.job_id != 0:
-            self._python_bridge.terminate(self.job_id)
+        if self._ctx is not None and self._ctx.is_open() and self.job_id != 0:
+            self._ctx.PythonBridge.terminate(self.job_id)
+        self.job_id = 0
     
     def __del__(self):
         self._kill()

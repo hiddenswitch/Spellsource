@@ -28,6 +28,7 @@ import java.util.stream.Collectors;
 public class PythonBridge {
 	private static final Map<String, Class<? extends Behaviour>> BEHAVIOURS = Simulation.getAllBehaviours();
 	private static final Map<Long, Thread> JOBS = new ConcurrentHashMap<>();
+
 	public static void main(String[] args) {
 		Logging.setLoggingLevel(Level.OFF);
 		GatewayServer gatewayServer = new GatewayServer();
@@ -48,9 +49,10 @@ public class PythonBridge {
 		return behaviours.get(0);
 	}
 
-	public static long simulate(SimulationResultGenerator generator, List<String> deckLists, int gamesPerBatch, List<Supplier<Behaviour>> behaviours, boolean mirrors) {
+	public static long simulate(SimulationResultGenerator generator, List<String> deckLists, int gamesPerBatch, List<Supplier<Behaviour>> behaviours, boolean mirrors, boolean reduce) {
 		final Map<String, Deck> decks = Simulation.getDecks(deckLists);
-		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() > 2);
+		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() > 2
+				&& !behaviours.get(0).get().getClass().equals(behaviours.get(1).get().getClass()));
 
 		Thread job = Executors.defaultThreadFactory().newThread(() -> {
 			try {
@@ -60,7 +62,7 @@ public class PythonBridge {
 					// Run a single simulation on the decks
 
 					try {
-						GameContext.simulate(deckPair, behaviours, gamesPerBatch, simulationResult -> {
+						GameContext.simulate(deckPair, behaviours, gamesPerBatch, reduce, simulationResult -> {
 							generator.offer(new JsonObject()
 									.put("decks", new JsonArray(Arrays.asList(
 											simulationResult.getConfig().getPlayerConfig1().getDeck().getName(),
@@ -82,7 +84,7 @@ public class PythonBridge {
 		});
 
 		JOBS.put(job.getId(), job);
-		job.run();
+		job.start();
 
 		return job.getId();
 	}
