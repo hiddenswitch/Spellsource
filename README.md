@@ -46,6 +46,8 @@ The `spellsource` package creates a bridge with the Java-based `Spellsource-Serv
 
 Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see an implementation of a complex AI bot in Python. This is a direct port of the Java code. Unfortunately, on the Python platform, remoting (accessing the Java engine) in the particular way this bot does is slow. To implement more sophisticated bots, consider adding a method to `GameContext` that will extract the exact data, in a binary format, that you need in your Python implementation, to reduce the communication overhead between Java and Python.
 
+Alternatively, [this example notebook](docs/simulation_example.ipynb) to see an example of simulating games.
+
 ### Quick Start Contributing Cards
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
