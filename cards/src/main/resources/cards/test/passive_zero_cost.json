@@ -1,0 +1,49 @@
+{
+  "name": "Cheat Cost Zero",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Passive: All cards in your hand cost zero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF"
+          },
+          {
+            "class": "CardCostModifierSpell",
+            "target": "FRIENDLY_PLAYER",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "value": 0,
+              "operation": "SET",
+              "targetPlayer": "SELF"
+            }
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
