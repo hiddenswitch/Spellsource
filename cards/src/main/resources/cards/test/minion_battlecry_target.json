@@ -7,10 +7,10 @@
   "baseHp": 2,
   "rarity": "FREE",
   "description": "",
-  "collectible": false,
   "attributes": {
     "RESERVED_BOOLEAN_1": true
   },
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }

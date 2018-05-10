@@ -5,7 +5,7 @@
   "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "",
-  "collectible": false,
+  "targetSelection": "ANY",
   "spell": {
     "class": "AddAttributeSpell",
     "attribute": "RESERVED_BOOLEAN_3",
@@ -13,7 +13,7 @@
       "class": "OrFilter"
     }
   },
-  "targetSelection": "ANY",
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }
