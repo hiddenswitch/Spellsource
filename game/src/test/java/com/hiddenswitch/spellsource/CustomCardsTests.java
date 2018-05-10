@@ -37,6 +37,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testInstantEvolution() {
+		runGym((context, player, opponent) -> {
+			// Adds up to more than 12
+			Minion target = playMinionCard(context, player, "minion_arcane_giant");
+			playCardWithTarget(context, player, "spell_instant_evolution", target);
+			assertEquals(target.transformResolved(context).getSourceCard().getBaseManaCost(), 12);
+		});
+	}
+
+	@Test
 	public void testShadowhornStag() {
 		runGym((context, player, opponent) -> {
 			Minion stag = playMinionCard(context, player, "minion_shadowhorn_stag");
@@ -86,9 +96,9 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_a_new_challenger");
 			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_nefarian");
 			final String[] nefarianCards = (String[]) CardCatalogue.getCardById("hero_nefarian").getDesc()
-							.getBattlecry().getSpell().subSpells(0).get(1).get(SpellArg.CARDS);
+					.getBattlecry().getSpell().subSpells(0).get(1).get(SpellArg.CARDS);
 			final int drawnCards = (int) CardCatalogue.getCardById("hero_nefarian").getDesc()
-							.getBattlecry().getSpell().subSpells(0).get(2).get(SpellArg.VALUE);
+					.getBattlecry().getSpell().subSpells(0).get(2).get(SpellArg.VALUE);
 			// Draws a card
 			assertEquals(player.getDeck().size(), nefarianCards.length - drawnCards);
 		});

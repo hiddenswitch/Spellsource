@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
+  "description": "",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
@@ -18,11 +19,10 @@
       }
     }
   },
-  "description": "",
-  "collectible": false,
-  "set": "TEST",
   "attributes": {
     "BATTLECRY": true
   },
+  "collectible": false,
+  "set": "TEST",
   "fileFormatVersion": 1
 }

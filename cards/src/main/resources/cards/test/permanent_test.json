@@ -7,10 +7,10 @@
   "baseHp": 1,
   "rarity": "FREE",
   "description": "",
-  "collectible": false,
   "attributes": {
     "PERMANENT": true
   },
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }

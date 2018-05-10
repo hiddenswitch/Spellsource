@@ -5,11 +5,11 @@
   "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "",
-  "collectible": false,
+  "targetSelection": "ANY",
   "spell": {
     "class": "NullSpell"
   },
-  "targetSelection": "ANY",
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }

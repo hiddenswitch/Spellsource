@@ -11,9 +11,6 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReplayCardsSpell",
-      "cardSource": {
-        "class": "GraveyardCardsSource"
-      },
       "cardFilter": {
         "class": "AndFilter",
         "filters": [
@@ -33,10 +30,13 @@
           },
           {
             "class": "EntityEqualsFilter",
-            "secondaryTarget": "PENDING_CARD",
-            "invert": true
+            "invert": true,
+            "secondaryTarget": "PENDING_CARD"
           }
         ]
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource"
       }
     }
   },
