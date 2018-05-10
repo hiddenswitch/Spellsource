@@ -22,7 +22,7 @@ except Exception as ex:
     raise ex
 
 setup(name='spellsource',
-      version='0.2.2',
+      version='0.3.0',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a
@@ -61,7 +61,7 @@ the Java API.
 
 
 This package also supports simulators. Visit
-`the example notebook <https://github.com/hiddenswitch/Spellsource-Server/blob/master/spellsource/docs/simulation_example.ipynb>`__.
+`the example notebook <https://github.com/hiddenswitch/Spellsource-Server/blob/master/docs/simulation_example.ipynb>`__.
 
 Visit
 `GameStateValueBehaviour <https://github.com/hiddenswitch/Spellsource-Server/blob/master/spellsource/gamestatevaluebehaviour.py>`__
