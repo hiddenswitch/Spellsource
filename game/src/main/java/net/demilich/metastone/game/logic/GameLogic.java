@@ -2667,6 +2667,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		CardZone hand = player.getHand();
 
 		if (hand.getCount() < MAX_HAND_CARDS) {
+			// Cards that are received this way should never keep an ephemeral state like choices
+			card.getAttributes().remove(Attribute.CHOICES);
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
 			card.getAttributes().put(Attribute.RECEIVED_ON_TURN, context.getTurn());
