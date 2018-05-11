@@ -312,10 +312,15 @@ public enum Attribute {
 	CHOOSE_ONE,
 	/**
 	 * An integer attribute indicating which choice was taken on a choose one card.
-	 *
+	 * <p>
 	 * {@code -1} indicates that the choose-both option occurred.
 	 */
 	CHOICE,
+	/**
+	 * An array of integer choices, for {@link net.demilich.metastone.game.spells.CastFromGroupSpell}, to allow
+	 * adaptation choices to replay correctly.
+	 */
+	CHOICES,
 	/**
 	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with {@link #CHOOSE_ONE} to
 	 * be played.
