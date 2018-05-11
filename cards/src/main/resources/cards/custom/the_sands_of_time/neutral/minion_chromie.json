@@ -36,11 +36,8 @@
           }
         },
         {
-          "class": "DiscardSpell",
-          "value": -1,
-          "cardSource": {
-            "class": "DeckSource"
-          }
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_DECK"
         },
         {
           "class": "StealCardSpell",
