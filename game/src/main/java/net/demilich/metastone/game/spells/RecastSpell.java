@@ -29,20 +29,8 @@ public class RecastSpell extends Spell {
 			return;
 		}
 
-		if (card.getId() == IdFactory.UNASSIGNED
-				&& card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-			card = card.getCopy();
-			card.setId(context.getLogic().generateId());
-			card.setOwner(player.getId());
-			player.getSetAsideZone().add(card);
-		}
-
 		if (card.isSpell()) {
-			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER), card, target);
-		}
-
-		if (card.getZone().equals(Zones.SET_ASIDE_ZONE)) {
-			card.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER), card.getId() == IdFactory.UNASSIGNED ? source : card, target);
 		}
 	}
 
