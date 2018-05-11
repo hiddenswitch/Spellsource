@@ -553,7 +553,8 @@ public interface Games extends Verticle {
 			clientEvent.damage(new GameEventDamage()
 					.damage(damageEvent.getDamage())
 					.source(getEntity(workingContext, damageEvent.getSource(), playerId))
-					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId)));
+					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId))
+					.damageType(DamageTypeEnum.fromValue(damageEvent.getDamageType().name())));
 		} else if (event instanceof AfterSpellCastedEvent) {
 			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
 			final Card card = afterSpellCastedEvent.getCard();
