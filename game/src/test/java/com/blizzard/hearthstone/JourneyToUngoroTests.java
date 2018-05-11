@@ -22,6 +22,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.IntStream;
@@ -663,8 +664,7 @@ public class JourneyToUngoroTests extends TestBase {
 
 	}
 
-	@Test
-	@Ignore
+	@Test(invocationCount = 16)
 	public void testTheVoraxx() {
 		runGym((context, player, opponent) -> {
 			Minion voraxx = playMinionCard(context, player, "minion_the_voraxx");
@@ -677,14 +677,17 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion voraxx = playMinionCard(context, player, "minion_the_voraxx");
 			DiscoverAction[] discoverAction = new DiscoverAction[1];
+			AtomicInteger count = new AtomicInteger(0);
 			OverrideDiscoverBehaviour behaviour = overrideDiscoverChoice(discoverActions -> {
 				discoverAction[0] = discoverActions.get(0);
+				count.incrementAndGet();
 				return discoverActions.get(0);
 			});
 			player.setBehaviour(behaviour);
 			playCardWithTarget(context, player, "spell_adaptation", voraxx);
 			Card card = discoverAction[0].getCard();
 			Assert.assertEquals(player.getMinions().size(), 2);
+			Assert.assertEquals(count.get(), 1, "Should only prompt for an Adaptation once");
 			String name = card.getName();
 			Minion plant = player.getMinions().get(1);
 			Stream.of(voraxx, plant).forEach(minion -> {

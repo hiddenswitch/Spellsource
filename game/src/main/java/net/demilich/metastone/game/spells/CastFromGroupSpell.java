@@ -1,9 +1,7 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.Array;
+import java.util.*;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -17,6 +15,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @see CardDesc#group for the choices.
@@ -80,6 +81,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 @Deprecated
 public class CastFromGroupSpell extends Spell {
 
+	private static Logger logger = LoggerFactory.getLogger(CastFromGroupSpell.class);
+
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(CastFromGroupSpell.class);
 		arguments.put(SpellArg.TARGET, target);
@@ -101,45 +104,76 @@ public class CastFromGroupSpell extends Spell {
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
 			randomTarget = context.getLogic().getRandom(validTargets);
 		}
-		SpellDesc[] group = SpellUtils.getGroup(context, desc);
+
+		List<SpellDesc> group = Arrays.asList(SpellUtils.getGroup(context, desc));
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 3);
 		int count = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 		boolean exclusive = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, false);
 		List<SpellDesc> allChoices = new ArrayList<SpellDesc>();
-		Collections.addAll(allChoices, group);
+		allChoices.addAll(group);
 
-		for (int j = 0; j < count; j++) {
-			List<SpellDesc> thisRoundsPossibleChoices = new ArrayList<SpellDesc>(allChoices);
-			List<SpellDesc> thisRoundsChoices = new ArrayList<SpellDesc>();
-			for (int i = 0; i < howMany; i++) {
-				SpellDesc spell;
-				spell = context.getLogic().removeRandom(thisRoundsPossibleChoices);
-				thisRoundsChoices.add(spell);
+		if (source.getAttributes().containsKey(Attribute.CHOICES)) {
+			int[] choices = (int[]) source.getAttributes().get(Attribute.CHOICES);
+
+			for (int i = 0; i < choices.length; i++) {
+				SpellDesc chosen = allChoices.get(choices[i]);
+				subCast(context, player, desc, source, originalTargets, validTargets, randomTarget, chosen);
 			}
+		} else {
+			int[] choices = new int[count];
 
-			if (thisRoundsChoices.isEmpty()) {
-				return;
-			}
-
-			DiscoverAction discover = SpellUtils.getSpellDiscover(context, player, desc, thisRoundsChoices, source);
-			SpellDesc chosen = discover.getSpell();
-
-			if (exclusive) {
-				allChoices.remove(chosen);
-			}
-
-			if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
-				onCast(context, player, chosen, source, randomTarget);
-			} else if (validTargets.size() == 0 && originalTargets == null) {
-				onCast(context, player, chosen, source, null);
-			} else {
-				// there is at least one target and RANDOM_TARGET flag is not set,
-				// cast in on all targets
-				for (Entity target : validTargets) {
-					context.getSpellTargetStack().push(target.getReference());
-					onCast(context, player, chosen, source, target);
-					context.getSpellTargetStack().pop();
+			for (int j = 0; j < count; j++) {
+				List<SpellDesc> thisRoundsPossibleChoices = new ArrayList<SpellDesc>(allChoices);
+				List<SpellDesc> thisRoundsChoices = new ArrayList<SpellDesc>();
+				for (int i = 0; i < howMany; i++) {
+					SpellDesc spell;
+					spell = context.getLogic().removeRandom(thisRoundsPossibleChoices);
+					thisRoundsChoices.add(spell);
 				}
+
+				if (thisRoundsChoices.isEmpty()) {
+					return;
+				}
+
+				DiscoverAction discover = SpellUtils.getSpellDiscover(context, player, desc, thisRoundsChoices, source);
+				SpellDesc chosen = discover.getSpell();
+
+				int chosenIndex = -1;
+				for (int k = 0; k < allChoices.size(); k++) {
+					if (allChoices.get(k) == chosen) {
+						chosenIndex = k;
+						break;
+					}
+				}
+				if (chosenIndex == -1) {
+					logger.warn("cast {} {}: Could not find SpellDesc {} in choices", context.getGameId(), source, chosen);
+				}
+				choices[j] = chosenIndex;
+
+				if (exclusive) {
+					allChoices.remove(chosen);
+				}
+
+				subCast(context, player, desc, source, originalTargets, validTargets, randomTarget, chosen);
+			}
+			source.getAttributes().put(Attribute.CHOICES, choices);
+		}
+
+	}
+
+	@Suspendable
+	protected void subCast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> originalTargets, List<Entity> validTargets, Entity randomTarget, SpellDesc chosen) {
+		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
+			onCast(context, player, chosen, source, randomTarget);
+		} else if (validTargets.size() == 0 && originalTargets == null) {
+			onCast(context, player, chosen, source, null);
+		} else {
+			// there is at least one target and RANDOM_TARGET flag is not set,
+			// cast in on all targets
+			for (Entity target : validTargets) {
+				context.getSpellTargetStack().push(target.getReference());
+				onCast(context, player, chosen, source, target);
+				context.getSpellTargetStack().pop();
 			}
 		}
 	}
