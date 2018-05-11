@@ -1468,6 +1468,10 @@ definitions:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+      rush:
+        description: |
+          When true, the entity can attack a minion the same turn it is summoned.
+        type: 'boolean'
       lifesteal:
         description: |
           When true, the entity heals its owner when it deals damage.

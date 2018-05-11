@@ -966,7 +966,9 @@ public interface Games extends Verticle {
 		entityState.lifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.LIFESTEAL));
 		entityState.poisonous(actor.hasAttribute(Attribute.POISONOUS) || actor.hasAttribute(Attribute.AURA_POISONOUS));
 		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
-		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+		entityState.permanent(actor.hasAttribute(Attribute.PERMANENT));
+		entityState.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entityState.tribe(actor.getRace() != null ? actor.getRace().name() : null);
 		final List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
 		entityState.hostsTrigger(triggers.size() > 0);
@@ -1064,6 +1066,7 @@ public interface Games extends Verticle {
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
+		entityState.permanent(card.hasAttribute(Attribute.PERMANENT));
 		HeroClass heroClass = card.getHeroClass();
 
 		// Handles tri-class cards correctly

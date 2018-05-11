@@ -105,6 +105,9 @@ public class EntityState implements Serializable {
   @JsonProperty("charge")
   private Boolean charge = null;
 
+  @JsonProperty("rush")
+  private Boolean rush = null;
+
   @JsonProperty("lifesteal")
   private Boolean lifesteal = null;
 
@@ -728,6 +731,24 @@ public class EntityState implements Serializable {
     this.charge = charge;
   }
 
+  public EntityState rush(Boolean rush) {
+    this.rush = rush;
+    return this;
+  }
+
+   /**
+   * When true, the entity can attack a minion the same turn it is summoned. 
+   * @return rush
+  **/
+  @ApiModelProperty(value = "When true, the entity can attack a minion the same turn it is summoned. ")
+  public Boolean isRush() {
+    return rush;
+  }
+
+  public void setRush(Boolean rush) {
+    this.rush = rush;
+  }
+
   public EntityState lifesteal(Boolean lifesteal) {
     this.lifesteal = lifesteal;
     return this;
@@ -1285,6 +1306,7 @@ public class EntityState implements Serializable {
         Objects.equals(this.taunt, entityState.taunt) &&
         Objects.equals(this.spellDamage, entityState.spellDamage) &&
         Objects.equals(this.charge, entityState.charge) &&
+        Objects.equals(this.rush, entityState.rush) &&
         Objects.equals(this.lifesteal, entityState.lifesteal) &&
         Objects.equals(this.poisonous, entityState.poisonous) &&
         Objects.equals(this.enraged, entityState.enraged) &&
@@ -1318,7 +1340,7 @@ public class EntityState implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
   }
 
 
@@ -1352,6 +1374,7 @@ public class EntityState implements Serializable {
     sb.append("    taunt: ").append(toIndentedString(taunt)).append("\n");
     sb.append("    spellDamage: ").append(toIndentedString(spellDamage)).append("\n");
     sb.append("    charge: ").append(toIndentedString(charge)).append("\n");
+    sb.append("    rush: ").append(toIndentedString(rush)).append("\n");
     sb.append("    lifesteal: ").append(toIndentedString(lifesteal)).append("\n");
     sb.append("    poisonous: ").append(toIndentedString(poisonous)).append("\n");
     sb.append("    enraged: ").append(toIndentedString(enraged)).append("\n");
