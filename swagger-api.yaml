@@ -758,6 +758,11 @@ definitions:
           Forces this card event to be shown locally
       card:
         $ref: '#/definitions/Entity'
+  DamageTypeEnum:
+    type: 'string'
+    enum:
+      - 'PHYSICAL'
+      - 'MAGICAL'
   GameEvent:
     type: 'object'
     properties:
@@ -909,6 +914,8 @@ definitions:
             type: 'integer'
           source:
             $ref: '#/definitions/Entity'
+          damageType:
+            $ref: '#/definitions/DamageTypeEnum'
       weaponEquipped:
         type: 'object'
         properties:

@@ -2,7 +2,6 @@ package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -1010,6 +1009,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt) {
+		resolveDamageEvent(player, target, source, damageDealt, DamageType.MAGICAL);
+	}
+
+	@Suspendable
+	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt, DamageType damageType) {
 		if (damageDealt > 0) {
 			// Keyword effects for lifesteal and poisonous will come BEFORE all other events
 			// Poisonous resolves in a queue with higher priority, and it stops Grim Patron spawning regardless of
@@ -1037,7 +1041,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			target.modifyAttribute(Attribute.DAMAGE_THIS_TURN, damageDealt);
 
 			player.getStatistics().damageDealt(damageDealt);
-			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt);
+			DamageEvent damageEvent = new DamageEvent(context, target, source, damageDealt, damageType);
 			context.fireGameEvent(damageEvent);
 		}
 	}
@@ -1501,8 +1505,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true);
 		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true);
 		// Defender queues first
-		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender);
-		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker);
+		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageType.PHYSICAL);
+		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageType.PHYSICAL);
 
 		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
 			attacker.getAttributes().remove(Attribute.IMMUNE);
@@ -3640,7 +3644,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
 
 			for (int j = starterCards.size(); j < numberOfStarterCards; j++) {
-				Card randomCard = getRandom(player.getDeck());
+				Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
 				if (randomCard != null) {
 					player.getDeck().move(randomCard, player.getSetAsideZone());
 					starterCards.add(randomCard);
