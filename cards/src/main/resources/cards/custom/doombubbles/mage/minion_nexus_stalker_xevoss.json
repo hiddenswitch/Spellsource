@@ -9,7 +9,7 @@
   "description": "If you control a Secret at the start of your turn, summon a copy of this minion.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
+      "class": "TurnStartTrigger",
       "queueCondition": {
         "class": "ControlsSecretCondition"
       },
