@@ -76,7 +76,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	protected Heuristic heuristic;
 	protected FeatureVector featureVector;
 	protected String nameSuffix = "";
-	protected long timeout = 3500;
+	protected long timeout = 7200;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -101,6 +101,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 *                    return the current score.
 	 * @return A score corresponding to this action's best chain of actions.
 	 */
+	@Suspendable
 	protected double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
 		GameContext simulation = getClone(context);
 		double score = Float.NEGATIVE_INFINITY;
@@ -288,6 +289,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * @see ThreatBasedHeuristic for an overview of the scoring function.
 	 */
 	@Override
+	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		long startMillis = System.currentTimeMillis();
 		if (validActions.size() == 1) {
