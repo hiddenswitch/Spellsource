@@ -101,8 +101,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 *                    return the current score.
 	 * @return A score corresponding to this action's best chain of actions.
 	 */
-	@Suspendable
-	private double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
+	protected double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
 		GameContext simulation = getClone(context);
 		double score = Float.NEGATIVE_INFINITY;
 		final boolean timedOut = System.currentTimeMillis() - startMillis > timeout;
@@ -289,7 +288,6 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * @see ThreatBasedHeuristic for an overview of the scoring function.
 	 */
 	@Override
-	@Suspendable
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		long startMillis = System.currentTimeMillis();
 		if (validActions.size() == 1) {
