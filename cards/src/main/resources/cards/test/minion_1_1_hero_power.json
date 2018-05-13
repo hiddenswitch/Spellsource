@@ -1,0 +1,21 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Your hero power is, \"Equip a 1/1 Weapon\"",
+  "collectible": false,
+  "aura": {
+    "class": "CardAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "cardId": "hero_power_1_1_weapon"
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

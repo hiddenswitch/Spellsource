@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -11,9 +13,62 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameStateValueBehaviourTest extends TestBase {
+	@Test
+	public void test6CardTurn() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 6; i++) {
+				receiveCard(context, player, "minion_wisp");
+			}
+			AtomicInteger count = new AtomicInteger();
+			Behaviour behaviour = new GameStateValueBehaviour() {
+				@Override
+				protected double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
+					count.incrementAndGet();
+					return super.alphaBeta(context, playerId, action, depth, startMillis);
+				}
+			};
+			GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
+			Assert.assertTrue(count.get() < 1000);
+		});
+	}
+
+	@Test
+	public void testCorrectOrder() {
+		runGym((context, player, opponent) -> {
+			opponent.getHero().setHp(4);
+			// Your hero power is, Equip a 1/1 Weapon (costs 2)
+			Minion cannotAttack = playMinionCard(context, player, "minion_1_1_hero_power");
+			// Whenever this minion is targeted by a battlecry, gain 10,000 HP
+			Minion gains = playMinionCard(context, player, "minion_gains_huge_hp");
+			player.setMana(6);
+			// Cost 1, Has Charge while you have a weapon equipped
+			receiveCard(context, player, "minion_southsea_deckhand");
+			// Cost 3, Give a minion +1/+1
+			receiveCard(context, player, "minion_shattered_sun_cleric");
+			Behaviour behaviour = new GameStateValueBehaviour();
+			List<GameAction> actions = new ArrayList<>();
+			for (int i = 0; i < 7; i++) {
+				if (context.updateAndGetGameOver()) {
+					break;
+				}
+				GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
+				actions.add(chosen);
+				context.getLogic().performGameAction(player.getId(), chosen);
+			}
+			// Should equip weapon, play Southsea, then play Shattered Sun Cleric, battlecry target Southsea, then attack with southsea, then attack with hero
+			// Southsea MUST attack before weapon attacks
+			// Sun cleric MUST be played before southsea and should NOT buff a minion that gains a huge amount of hp
+			Assert.assertEquals(actions.size(), 6);
+			Assert.assertNull(player.getHero().getWeapon());
+			Assert.assertTrue(context.updateAndGetGameOver());
+		}, HeroClass.BLACK, HeroClass.BLACK);
+	}
+
 	@Test
 	public void testDestroyAt2HP() {
 		runGym((context, player, opponent) -> {
