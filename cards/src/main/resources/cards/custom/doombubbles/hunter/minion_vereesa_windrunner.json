@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "(Disabled) Hunter Secrets you play trigger instantly.",
+  "description": "Hunter Secrets you play trigger instantly.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
@@ -35,7 +35,7 @@
       ]
     }
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
