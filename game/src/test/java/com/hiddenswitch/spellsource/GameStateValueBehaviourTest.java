@@ -18,6 +18,26 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class GameStateValueBehaviourTest extends TestBase {
+
+	@Test
+	public void testBrannSpiteful() {
+		runGym((context, player, opponent) -> {
+			Card brann = receiveCard(context, player, "minion_brann_bronzebeard");
+			Card spiteful = receiveCard(context, player, "minion_spiteful_summoner");
+			putOnTopOfDeck(context, player, "spell_ultimate_infestation");
+			player.setMana(9);
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			List<GameAction> actions = new ArrayList<>();
+			for (int i = 0; i < 2; i++) {
+				GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
+				actions.add(chosen);
+				context.getLogic().performGameAction(player.getId(), chosen);
+			}
+			Assert.assertEquals(actions.get(0).getSourceReference(), brann.getReference());
+			Assert.assertEquals(actions.get(1).getSourceReference(), spiteful.getReference());
+		});
+	}
+
 	@Test
 	public void test6CardTurn() {
 		runGym((context, player, opponent) -> {
@@ -33,23 +53,24 @@ public class GameStateValueBehaviourTest extends TestBase {
 				}
 			};
 			GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
-			Assert.assertTrue(count.get() < 1000);
+			Assert.assertEquals(count.get(), 10213);
 		});
 	}
 
 	@Test
 	public void testCorrectOrder() {
 		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, opponent, "minion_bloodfen_raptor");
 			opponent.getHero().setHp(4);
 			// Your hero power is, Equip a 1/1 Weapon (costs 2)
 			Minion cannotAttack = playMinionCard(context, player, "minion_1_1_hero_power");
 			// Whenever this minion is targeted by a battlecry, gain 10,000 HP
 			Minion gains = playMinionCard(context, player, "minion_gains_huge_hp");
 			player.setMana(6);
-			// Cost 1, Has Charge while you have a weapon equipped
-			receiveCard(context, player, "minion_southsea_deckhand");
 			// Cost 3, Give a minion +1/+1
 			receiveCard(context, player, "minion_shattered_sun_cleric");
+			// Cost 1, Has Charge while you have a weapon equipped
+			receiveCard(context, player, "minion_southsea_deckhand");
 			Behaviour behaviour = new GameStateValueBehaviour();
 			List<GameAction> actions = new ArrayList<>();
 			for (int i = 0; i < 7; i++) {
@@ -60,10 +81,10 @@ public class GameStateValueBehaviourTest extends TestBase {
 				actions.add(chosen);
 				context.getLogic().performGameAction(player.getId(), chosen);
 			}
-			// Should equip weapon, play Southsea, then play Shattered Sun Cleric, battlecry target Southsea, then attack with southsea, then attack with hero
+			// Should equip weapon, play Southsea, then play Shattered Sun Cleric + battlecry target Southsea, then attack with southsea, then attack with hero
 			// Southsea MUST attack before weapon attacks
-			// Sun cleric MUST be played before southsea and should NOT buff a minion that gains a huge amount of hp
-			Assert.assertEquals(actions.size(), 6);
+			// Sun cleric MUST be played after southsea and should NOT buff a minion that gains a huge amount of hp
+			Assert.assertEquals(actions.size(), 5);
 			Assert.assertNull(player.getHero().getWeapon());
 			Assert.assertTrue(context.updateAndGetGameOver());
 		}, HeroClass.BLACK, HeroClass.BLACK);

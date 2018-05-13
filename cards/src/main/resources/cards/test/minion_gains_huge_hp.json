@@ -20,7 +20,8 @@
     }
   },
   "attributes": {
-    "TAUNT": true
+    "TAUNT": true,
+    "CANNOT_ATTACK": true
   },
   "collectible": false,
   "set": "TEST",

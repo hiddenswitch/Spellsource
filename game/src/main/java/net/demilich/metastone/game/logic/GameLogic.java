@@ -952,7 +952,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Override
 	public GameLogic clone() {
-		GameLogic clone = new GameLogic(idFactory.clone());
+		GameLogic clone = new GameLogic(idFactory.clone(), getSeed());
 		clone.context = context;
 		return clone;
 	}

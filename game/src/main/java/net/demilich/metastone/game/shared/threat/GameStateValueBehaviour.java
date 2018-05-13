@@ -209,7 +209,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * Requests an action from the GameStateValueBehaviour using a scoring function.
 	 * <p>
 	 * Suppose the board looked like this:
-	 * <p>
+	 *
 	 * <pre>
 	 *     Opponent: Warrior, 7 HP, no cards in hand, no minions on the board.
 	 *     This Player: Mage, 30 HP, a Fireball in the hand, 6 mana.
@@ -221,7 +221,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * <p>
 	 * First, at the beginning of the turn, the request action function receives the above game state, followed by the
 	 * possible actions:
-	 * <p>
+	 *
 	 * <pre>
 	 * 1. Fireball opponent.
 	 * 2. Fireball yourself.
@@ -231,7 +231,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * </pre>
 	 * <p>
 	 * Suppose we scored each action with a simple function: "1 point if the enemy hero is destroyed, otherwise 0."
-	 * <p>
+	 *
 	 * <pre>
 	 * 1. Fireball opponent = 0 points.
 	 * 2. Fireball yourself = 0 points.
@@ -245,7 +245,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * <p>
 	 * What if instead we chose an action based on the score of the state at the end of the SEQUENCE of actions that
 	 * particular action can enable? If we expand all the possible actions given our choices, we get:
-	 * <p>
+	 *
 	 * <pre>
 	 * 1. Fireball opponent = 0 points.
 	 *  1. Fireblast opponent = 1 point.
@@ -294,12 +294,10 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return validActions.get(0);
 		}
 
-		int depth = 2;
-		// when evaluating battlecry and discover actions, only optimize the immediate value
-		if (validActions.get(0).getActionType() == ActionType.BATTLECRY) {
-			depth = 0;
-		} else if (validActions.get(0).getActionType() == ActionType.DISCOVER) {
-			return validActions.get(0);
+		int depth = 3;
+		if (validActions.get(0).getActionType() == ActionType.BATTLECRY
+				|| validActions.get(0).getActionType() == ActionType.DISCOVER) {
+			depth = 2;
 		}
 
 		GameAction bestAction = validActions.get(0);

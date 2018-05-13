@@ -29,7 +29,8 @@ public class RecastSpell extends Spell {
 			return;
 		}
 
-		if (card.isSpell()) {
+		if (card.isSpell()
+				&& card.getSpell() != null) {
 			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER), card.getId() == IdFactory.UNASSIGNED ? source : card, target);
 		}
 	}
