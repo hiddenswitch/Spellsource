@@ -26,8 +26,10 @@ The project also contains adapters for Amazon Elastic MapReduce for processor-in
 
 The `spellsource` package creates a bridge with the Java-based `Spellsource-Server` engine. It provides a direct 1-to-1 mapping with the Java API.
 
+This requires **Python 3** and **Java 8**. To get started:
+
  1. Install the Java 8 SDK (JDK) from Oracle's website.
- 2. `pip install spellsource` to install the latest version of the package.
+ 2. `pip3 install spellsource` to install the latest version of the package.
  3. Start a game and play it with the specified bots:
  
     ```python
