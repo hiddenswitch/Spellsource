@@ -148,7 +148,7 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
        "baseHp": 4,
        "rarity": "EPIC",
        "description": "Battlecry: Summon a 5/5 Skeleton for your opponent",
-       "overrideBattlecry": {
+       "battlecry": {
          "targetSelection": "NONE",
          "spell": {
            "class": "SummonSpell",
@@ -165,7 +165,7 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
      }
      ```
 
-     A more detailed documentation of what all these fields mean is forthcoming. You're strongly encouraged to look at existing cards to see how various fields, like `overrideBattlecry`, `trigger`, and `attributes` work. The various enumerations can be found in the code, but most surprisingly hero classes have been renamed to colors.
+     A more detailed documentation of what all these fields mean is forthcoming. You're strongly encouraged to look at existing cards to see how various fields, like `battlecry`, `trigger`, and `attributes` work. The various enumerations can be found in the code, but most surprisingly hero classes have been renamed to colors.
 
  5. Write a test that verifies that the card works. We'll create a new file, [ExampleCardTests](game/src/test/java/com/hiddenswitch/spellsource/ExampleCardTests.java), that uses a "gym" to test that the card does what it is supposed to do. Here's an example test for Exampler:
 
