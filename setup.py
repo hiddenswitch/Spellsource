@@ -22,7 +22,7 @@ except Exception as ex:
     raise ex
 
 setup(name='spellsource',
-      version='0.3.0',
+      version='0.3.1',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a
