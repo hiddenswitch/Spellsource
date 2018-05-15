@@ -16,9 +16,45 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
+
+	@Test
+	public void testPlaysWildGrowth() {
+		runGym((context, player, opponent) -> {
+			// Should play wild growth
+			receiveCard(context, player, "spell_wild_growth");
+			receiveCard(context, player, "minion_pompous_thespian");
+			player.setMana(2);
+			player.setBehaviour(new GameStateValueBehaviour());
+
+			while (context.takeActionInTurn()) {
+			}
+
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(player.getMaxMana(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			// should not play wild growth
+			context.endTurn();
+			// Set hp to yellow threat
+			player.getHero().setHp(17);
+			receiveCard(context, player, "spell_wild_growth");
+			receiveCard(context, player, "minion_pompous_thespian");
+			player.setBehaviour(new GameStateValueBehaviour());
+
+			while (context.takeActionInTurn()) {
+			}
+
+			// Note: this is turn 2 for the player
+			assertEquals(player.getMaxMana(), 2);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_pompous_thespian");
+		});
+	}
 
 	@Test
 	public void testBrannSpiteful() {
