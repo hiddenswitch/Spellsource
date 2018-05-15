@@ -474,7 +474,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return;
 		}
 
-		// Check if their are intermediates pending
+		// Check if there are intermediates pending
 		if (intermediateNodes.isEmpty()) {
 			// Push the new node
 			contextStack.add(new Node(mutateContext, node, depth + 1, action));
