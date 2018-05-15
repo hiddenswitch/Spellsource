@@ -10,6 +10,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.RequestActionFunction;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.shared.threat.cuckoo.CuckooLearner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -67,12 +68,12 @@ import java.util.stream.Stream;
  * context.
  * <p>
  * The {@link ThreatBasedHeuristic} tries to maximize the chance of winning by somehow relating its scoring mechanism to
- * the actual outcome of a match. The {@link CuckooLearner} is the
- * system that tweaks the scoring function in order to choose tweaks that corresponded to greater wins in the game. This
- * approach makes GameStateValueBehaviour the best delivered AI in the Hearthstone community.
+ * the actual outcome of a match. The {@link CuckooLearner} is the system that tweaks the scoring function in order to
+ * choose tweaks that corresponded to greater wins in the game. This approach makes GameStateValueBehaviour the best
+ * delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
- * with the highest score.
+ * 		with the highest score.
  */
 public class GameStateValueBehaviour extends AbstractBehaviour {
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
@@ -160,7 +161,8 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	}
 
 	/**
-	 * Requests an action from the GameStateValueBehaviour using a scoring function.
+	 * Requests an action from the GameStateValueBehaviour using a scoring function. This method uses a cache of what it
+	 * has computed before if it is provided with {@link #setIndexPlan(Deque)} or {@link #setStrictPlan(Deque)}.
 	 * <p>
 	 * Suppose the board looked like this:
 	 *
@@ -194,8 +196,8 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * 5. End the turn = 0 points.
 	 * </pre>
 	 * <p>
-	 * By just looking at the current actions, it's impossible to see that fireballing or fireblasting your opponent
-	 * will lead to victory, even though the scoring function ought to work fine in this particular case.
+	 * By just looking at the current actions, it's impossible to see that fireballing or fireblasting your opponent will
+	 * lead to victory, even though the scoring function ought to work fine in this particular case.
 	 * <p>
 	 * What if instead we chose an action based on the score of the state at the end of the SEQUENCE of actions that
 	 * particular action can enable? If we expand all the possible actions given our choices, we get:
@@ -230,8 +232,8 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 * <p>
 	 * When expanding all the possible actions, there are now two sequences of actions that end with 1 point.
 	 * <p>
-	 * This function will return the FIRST action in the sequence that terminates with the highest score at the end of
-	 * the turn. In this example, it will return either action 1 (Fireball opponent) or action 3 (Fireblast opponent).
+	 * This function will return the FIRST action in the sequence that terminates with the highest score at the end of the
+	 * turn. In this example, it will return either action 1 (Fireball opponent) or action 3 (Fireblast opponent).
 	 * <p>
 	 * The scoring function is much more complicated, but in broad strokes it works the way as described above.
 	 *
@@ -354,27 +356,18 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 				continue;
 			}
 
-			// Set Indices
-			for (int i = 0; i < edges.size(); i++) {
-				if (edges.get(i).getId() == -1) {
-					edges.get(i).setId(i);
-				}
-				if (edges.get(i).getId() != i) {
-					logger.error("requestAction {} {}: Unexpectedly, the edges have the wrong indices. Only strict caching will work.", gameId, playerId);
-					break;
-				}
-			}
-
 			// Parallelize the expansion of nodes.
-			/*
 			edges
 					.parallelStream()
 					.unordered()
-					.forEach(edge -> expandAndAppend(contextStack, gameId, playerId, v, edge, depth));
-					*/
+					.forEach(edge -> rollout(contextStack, playerId, v, edge, depth));
+
+			/*
+			// Non-parallel expansion of nodes
 			for (GameAction edge : edges) {
-				expandAndAppend(contextStack, gameId, playerId, v, edge, depth);
+				rollout(contextStack, playerId, v, edge, depth);
 			}
+			*/
 		}
 
 		// Score the terminal nodes, find the highest score
@@ -409,26 +402,54 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	}
 
 	/**
-	 * Expands the provided node, appending its children to the context stack
+	 * Expands the provided game state with the provided action, then appends a new game state with potential actions to
+	 * the {@code contextStack}. This expands the game tree by one unit of depth.
+	 * <p>
+	 * If rolling out the specified action leads to calls to {@link GameLogic#requestAction(Player, List)}, like a
+	 * discover or a battlecry request, this method will breadth-first-search those intermediate actions until it gets to
+	 * a non-intermediate game state (i.e., one with all of the intermediate action requests answered).
+	 * <p>
+	 * For example, consider the card: "Choose between two: 'Do nothing', and: 'Choose between do nothing and win the
+	 * game.'" The action is to play this card. The following additional combinations of intermediate actions are
+	 * created:
 	 *
-	 * @param contextStack
-	 * @param gameId
-	 * @param playerId
-	 * @param node
-	 * @param edge
-	 * @param depth
+	 * <pre>
+	 * 1. Discover and cast do nothing.
+	 * 2. Discover and cast 'Choose between do nothing and win the game.'
+	 *   1. Discover and cast 'Do nothing.'
+	 *   2. Discover and cast 'Win the game.'
+	 * </pre>
+	 * Clearly, we want the bot to perform the following sequence of actions: Play this card, then make choices #2, #2,
+	 * because that will win the game.
+	 * <p>
+	 * In order to choose that path without emitting intermediate nodes onto the {@code contextStack}, this function
+	 * queues these intermediate actions and restarts from the beginning, evaluating a particular sequence it queued.
+	 * Eventually, there is a sequence of actions queued that includes "play this card, make choice #2, then make choice
+	 * #2," and since that sequence terminates into a non-intermediate game state, that sequence and the resulting game
+	 * state are queued as a node onto the {@code contextStack}.
+	 * <p>
+	 * This optimization only applies to the particular architecture of Spellsource.
+	 *
+	 * @param contextStack The stack of contexts onto which this function should append rolled-out game states.
+	 * @param playerId     The player ID of the player whose point of view we're computing this rollout.
+	 * @param node         The node (i.e., game state) from which the specified action should be rolled out.
+	 * @param action       The action to roll out.
+	 * @param depth        The current depth of this rollout. This is the count of non-intermediate actions from the game
+	 *                     state that {@link #requestAction(GameContext, Player, List)} was called with.
 	 */
 	@Suspendable
-	protected void expandAndAppend(Deque<Node> contextStack, String gameId, int playerId, Node node, GameAction edge, int depth) {
+	protected void rollout(Deque<Node> contextStack, int playerId, Node node, GameAction action, int depth) {
+		// Clone out the context because we're not going to mutate the node's context.
 		GameContext mutateContext = getClone(node.context);
 
-		preprocess(playerId, mutateContext);
-		Player thisPlayer = mutateContext.getPlayer(playerId);
+		preProcess(playerId, mutateContext);
 
+		// Start: Infrastructure to support intermediate called to requestAction that come as a consequence of calling
+		// action.
 		Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
 		AtomicBoolean guard = new AtomicBoolean();
 
-		thisPlayer.setBehaviour(new RequestActionFunction((context1, player1, validActions1) -> {
+		mutateContext.getPlayer(playerId).setBehaviour(new RequestActionFunction((context1, player1, validActions1) -> {
 			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
 			// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
 			// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
@@ -444,14 +465,19 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return validActions1.get(0);
 		}));
 
-//		Fiber<Void> initial = new Fiber<>(() -> {
-//			try {
 		// Perform action
-		mutateContext.getLogic().performGameAction(playerId, edge);
+		try {
+			mutateContext.getLogic().performGameAction(playerId, action);
+		} catch (Throwable simulationError) {
+			logger.error("requestAction (unknown) {}: There was a simulation error for action {}: {}", playerId, action, simulationError);
+			// Do not queue a busted node onto the contextStack
+			return;
+		}
+
 		// Check if their are intermediates pending
 		if (intermediateNodes.isEmpty()) {
 			// Push the new node
-			contextStack.add(new Node(mutateContext, node, depth + 1, edge));
+			contextStack.add(new Node(mutateContext, node, depth + 1, action));
 			return;
 		}
 
@@ -465,7 +491,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			// Process each intermediate, which may queue more of them. Create a request action function that returns the
 			// specified intermediate game action and also queues more intermediates if they are made.
 			GameContext intermediateMutateContext = getClone(node.context);
-			preprocess(playerId, intermediateMutateContext);
+			preProcess(playerId, intermediateMutateContext);
 
 			int queueSize = intermediateNodes.size();
 			int[] choices = intermediateNode.choices;
@@ -491,7 +517,12 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 				}
 			}));
 
-			intermediateMutateContext.getLogic().performGameAction(playerId, edge);
+			try {
+				intermediateMutateContext.getLogic().performGameAction(playerId, action);
+			} catch (Throwable simulationError) {
+				logger.error("requestAction (unknown) {}: There was a simulation error for action {} when considering intermediates {}: {}", playerId, action, choices, simulationError);
+				continue;
+			}
 			// Check if processing this intermediate queued more intermediates.
 			if (intermediateNodes.size() > queueSize) {
 				// We can toss this result away, we'll have to process again.
@@ -501,23 +532,21 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			// real node onto the context stack. Reconstruct the path by following the predecessors of the intermediates until
 			// we reach a real node.
 			GameAction[] actions = new GameAction[1 + choices.length];
-			actions[0] = edge;
+			actions[0] = action;
 			for (int i = 0; i < choices.length; i++) {
 				actions[i + 1] = new IntermediateAction(choices[i]);
 			}
 			contextStack.add(new Node(intermediateMutateContext, node, depth + 1, actions));
 		}
-//			} catch (Throwable simulationError) {
-//				logger.error("requestAction {} {}: There was a simulation error for action {}: {}", gameId, playerId, edge, simulationError);
-//				return;
-//			}
-
-//		});
-
-
 	}
 
-	private static void preprocess(int playerId, GameContext thisContext) {
+	/**
+	 * Pre-processes a game state before running a simulation.
+	 *
+	 * @param playerId
+	 * @param thisContext
+	 */
+	private static void preProcess(int playerId, GameContext thisContext) {
 		// Preprocess: Don't simulate the opposing player's secrets
 		Player opponent = thisContext.getOpponent(thisContext.getPlayer(playerId));
 		thisContext.getLogic().removeSecrets(opponent);
