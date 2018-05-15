@@ -5,6 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.GameAction;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -15,7 +16,7 @@ public class StartOfNextTurnValueBehaviour extends GameStateValueBehaviour {
 	}
 
 	@Override
-	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
+	public GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
 		long startMillis = System.currentTimeMillis();
 		if (validActions.size() == 1) {
 			return validActions.get(0);

@@ -4,15 +4,10 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Bots;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.Writer;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.RpcClient;
-import com.hiddenswitch.spellsource.util.Sync;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Context;
-import io.vertx.core.Future;
-import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -74,29 +69,23 @@ public class AIServiceConnection implements Writer {
 		if (gc == null) {
 			throw new NullPointerException();
 		}
+		RequestActionRequest request = new RequestActionRequest(new GameId(gc.getGameId()), playerId, actions, gc.getDeckFormat(), state);
 
-		final Context context = Vertx.currentContext();
-		context.executeBlocking(fut -> {
-			RequestActionRequest request = new RequestActionRequest(state, playerId, actions, gc.getDeckFormat());
-			try {
-				fut.complete(Bots.requestAction(request));
-			} catch (Throwable t) {
-				fut.fail(t);
+		try {
+			RequestActionResponse response = Bots.requestAction(request);
+			gc.onActionReceived(messageId, response.gameAction);
+		} catch (RuntimeException cause) {
+			logger.error("onRequestAction: The AI threw an exception while trying to get an action: ", cause);
+			GameAction endTurn;
+			for (int i = actions.size() - 1; i >= 0; i--) {
+				GameAction action = actions.get(i);
+				if (action.getActionType() == ActionType.END_TURN) {
+					gc.onActionReceived(messageId, action);
+					return;
+				}
 			}
-		}, false, (AsyncResult<RequestActionResponse> result) -> {
-			if (result.failed()) {
-				// End the turn, if possible, or pick the first action, if the AI glitched out.
-				GameAction action = actions.stream()
-						.filter(ga -> ga.getActionType() == ActionType.END_TURN)
-						.findFirst()
-						.orElse(actions.get(0));
-				gc.onActionReceived(messageId, action);
-				logger.error("onRequestAction: The AI threw an exception while trying to get an action: ", result.cause());
-				return;
-			}
-
-			gc.onActionReceived(messageId, result.result().gameAction);
-		});
+			gc.onActionReceived(messageId, actions.get(0));
+		}
 	}
 
 	@Override

@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
@@ -13,11 +12,13 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
-public class GameStateValueBehaviourTest extends TestBase {
+import static org.testng.Assert.assertTrue;
+
+public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test
 	public void testBrannSpiteful() {
@@ -39,21 +40,18 @@ public class GameStateValueBehaviourTest extends TestBase {
 	}
 
 	@Test
-	public void test6CardTurn() {
+	public void testAIExploresDiscoversForWinning() {
 		runGym((context, player, opponent) -> {
-			for (int i = 0; i < 6; i++) {
-				receiveCard(context, player, "minion_wisp");
+			Behaviour behaviour = new GameStateValueBehaviour();
+
+			// There is a branch of discover actions that wins the bot the game.
+			player.setBehaviour(behaviour);
+			receiveCard(context, player, "spell_cascading_discovers");
+
+			while (context.takeActionInTurn()) {
 			}
-			AtomicInteger count = new AtomicInteger();
-			Behaviour behaviour = new GameStateValueBehaviour() {
-				@Override
-				protected double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
-					count.incrementAndGet();
-					return super.alphaBeta(context, playerId, action, depth, startMillis);
-				}
-			};
-			GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
-			Assert.assertEquals(count.get(), 10213);
+
+			assertTrue(context.updateAndGetGameOver());
 		});
 	}
 
@@ -72,21 +70,18 @@ public class GameStateValueBehaviourTest extends TestBase {
 			// Cost 1, Has Charge while you have a weapon equipped
 			receiveCard(context, player, "minion_southsea_deckhand");
 			Behaviour behaviour = new GameStateValueBehaviour();
-			List<GameAction> actions = new ArrayList<>();
-			for (int i = 0; i < 7; i++) {
-				if (context.updateAndGetGameOver()) {
-					break;
-				}
-				GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
-				actions.add(chosen);
-				context.getLogic().performGameAction(player.getId(), chosen);
+			player.setBehaviour(behaviour);
+
+			while (context.takeActionInTurn()) {
 			}
-			// Should equip weapon, play Southsea, then play Shattered Sun Cleric + battlecry target Southsea, then attack with southsea, then attack with hero
+
+			// Should equip weapon, play Southsea, then play Shattered Sun Cleric, battlecry target Southsea, then attack with
+			// southsea, then attack with hero
 			// Southsea MUST attack before weapon attacks
 			// Sun cleric MUST be played after southsea and should NOT buff a minion that gains a huge amount of hp
-			Assert.assertEquals(actions.size(), 5);
+			// This is a depth 5 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
-			Assert.assertTrue(context.updateAndGetGameOver());
+			assertTrue(context.updateAndGetGameOver());
 		}, HeroClass.BLACK, HeroClass.BLACK);
 	}
 
@@ -98,9 +93,9 @@ public class GameStateValueBehaviourTest extends TestBase {
 			player.setMaxMana(4);
 			opponent.getHero().setHp(2);
 			List<GameAction> actions = context.getValidActions();
-			Assert.assertTrue(actions.stream().anyMatch(ga -> fireball.getReference().equals(ga.getSourceReference())
+			assertTrue(actions.stream().anyMatch(ga -> fireball.getReference().equals(ga.getSourceReference())
 					&& opponent.getHero().getReference().equals(ga.getTargetReference())), "The player should be able to cast the Fireball on the opponent's hero");
-			Assert.assertTrue(actions.stream().anyMatch(ga -> player.getHero().getHeroPower().getReference().equals(ga.getSourceReference())
+			assertTrue(actions.stream().anyMatch(ga -> player.getHero().getHeroPower().getReference().equals(ga.getSourceReference())
 					&& opponent.getHero().getReference().equals(ga.getTargetReference())), "The player should be able to Fireblast on the opponent's hero");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction chosen = behaviour.requestAction(context, player, actions);
@@ -125,7 +120,7 @@ public class GameStateValueBehaviourTest extends TestBase {
 	}
 
 	@Test
-	public void testAIWillNeverPlayCursed() {
+	public void testAIWillPlayCursed() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
 			opponent.setMana(2);
@@ -152,7 +147,7 @@ public class GameStateValueBehaviourTest extends TestBase {
 	}
 
 	@Test
-	public void testAIWillPlayIntoDoomsayer() {
+	public void testAIWillNotPlayIntoDoomsayer() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_doomsayer");
 			context.endTurn();

@@ -1,0 +1,23 @@
+{
+  "name": "Cascades into Choices",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "cards": [
+      "spell_empty_card_1",
+      "spell_empty_card_2",
+      "spell_win_the_game"
+    ],
+    "spell": {
+      "class": "RecastSpell"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

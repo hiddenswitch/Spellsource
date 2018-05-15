@@ -2,12 +2,17 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
+import com.hiddenswitch.spellsource.util.SharedData;
 import com.hiddenswitch.spellsource.util.SuspendableMap;
+import io.vertx.core.Vertx;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.Json;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
@@ -19,13 +24,13 @@ import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * A service that processes bot actions, mulligans and conveniently creates bot games.
@@ -33,6 +38,7 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 public interface Bots {
 	Logger LOGGER = LoggerFactory.getLogger(Bots.class);
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
+
 	/**
 	 * Decide which cards to mulligan given a starting hand.
 	 *
@@ -54,12 +60,41 @@ public interface Bots {
 	 * @return The selected action.
 	 */
 	@Suspendable
-	static RequestActionResponse requestAction(RequestActionRequest request) throws InterruptedException {
+	static RequestActionResponse requestAction(RequestActionRequest request) {
 		RequestActionResponse response = new RequestActionResponse();
 		// Use execute blocking to yield here
 		LOGGER.debug("requestAction: Requesting action from behaviour.");
 		final Behaviour behaviour = getBehaviour().get();
+		// See if there's a cache of bot plans for this action
+		if (behaviour instanceof GameStateValueBehaviour) {
+			GameStateValueBehaviour gsvb = (GameStateValueBehaviour) behaviour;
+			SuspendableMap<GameId, Buffer> map = SharedData.getClusterWideMapUnchecked("Bots::indexPlans");
+			GameId gameId = request.gameId;
+			Buffer buf = map.get(gameId);
+			if (buf != null) {
+				List<Integer> indexPlan = Json.decodeValue(buf, new TypeReference<List<Integer>>() {
+				});
+				gsvb.setIndexPlan(new ArrayDeque<>(indexPlan));
+			}
 
+			delegateRequestAction(request, response, gsvb);
+
+			// Save the new index plan
+			Deque<Integer> indexPlan = gsvb.getIndexPlan();
+			if (indexPlan != null) {
+				map.put(gameId, Json.encodeToBuffer(new ArrayList<>(indexPlan)));
+			} else {
+				map.remove(gameId);
+			}
+		} else {
+			delegateRequestAction(request, response, behaviour);
+		}
+
+		return response;
+	}
+
+	@Suspendable
+	static void delegateRequestAction(RequestActionRequest request, RequestActionResponse response, Behaviour behaviour) {
 		final GameContext context = new GameContext();
 		context.setLogic(new GameLogic());
 		context.setDeckFormat(request.format);
@@ -67,7 +102,15 @@ public interface Bots {
 		context.setActivePlayerId(request.playerId);
 
 		try {
-			final GameAction result = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+			GameAction result = awaitResult(res -> Vertx.currentContext().executeBlocking(fut -> {
+				try {
+					final GameAction res1 = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+					fut.complete(res1);
+				} catch (Throwable t) {
+					fut.fail(t);
+				}
+			}, false, res));
+
 			LOGGER.debug("requestAction: Bot successfully chose action");
 			response.gameAction = result;
 
@@ -75,8 +118,6 @@ public interface Bots {
 			LOGGER.error("requestAction: Bot failed to choose an action due to an exception", t);
 			throw t;
 		}
-
-		return response;
 	}
 
 	static String pollBotId() throws SuspendExecution, InterruptedException {

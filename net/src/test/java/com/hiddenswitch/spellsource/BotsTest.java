@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.MulliganRequest;
 import com.hiddenswitch.spellsource.models.MulliganResponse;
@@ -47,11 +48,10 @@ public class BotsTest extends SpellsourceTestBase {
 			GameAction gameAction = null;
 			while (gameAction == null
 					|| gameAction.getActionType() != ActionType.END_TURN) {
-				RequestActionRequest requestActionRequest = new RequestActionRequest(
-						context1.getGameStateCopy(),
+				RequestActionRequest requestActionRequest = new RequestActionRequest(new GameId(context1.getGameId()),
 						context1.getActivePlayerId(),
 						context1.getValidActions(),
-						context1.getDeckFormat());
+						context1.getDeckFormat(), context1.getGameStateCopy());
 
 				RequestActionResponse response = Bots.requestAction(requestActionRequest);
 				gameAction = response.gameAction;

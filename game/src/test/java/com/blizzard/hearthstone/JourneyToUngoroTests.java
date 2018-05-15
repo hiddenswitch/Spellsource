@@ -785,7 +785,11 @@ public class JourneyToUngoroTests extends TestBase {
 				int oldId2 = player.getHand().get(0).getId();
 				Assert.assertNotEquals(oldId2, oldId1);
 				Card card = player.getHand().get(0);
-				context.getLogic().performGameAction(player.getId(), card.play());
+				if (card.isChooseOne()) {
+					context.getLogic().performGameAction(player.getId(), card.playOptions()[0]);
+				} else {
+					context.getLogic().performGameAction(player.getId(), card.play());
+				}
 				// I suppose there might be a situation where a card gets shuffled into a deck and things glitch out,
 				// or the battlecry puts a card into the hand. So we're just testing to see there was no exception for
 				// now.

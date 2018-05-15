@@ -92,23 +92,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Conc
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (!Desc.class.isAssignableFrom(other.getClass())) {
-			return false;
-		}
-		Desc rhs = (Desc) other;
-		if (rhs.size() != this.size()) {
-			return false;
-		}
-		EqualsBuilder eq = new EqualsBuilder();
-		for (Map.Entry entry : this.entrySet()) {
-			final Object left = entry.getValue();
-			final Object right = this.get(entry.getKey());
-			eq.append(left, right);
-		}
-		return eq.isEquals();
+		return super.equals(other);
 	}
 
 	@Override

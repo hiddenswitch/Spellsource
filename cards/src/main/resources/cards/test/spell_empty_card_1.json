@@ -1,16 +1,15 @@
 {
-  "name": "Win the Game",
+  "name": "Empty Card 1",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "ANY",
+  "heroClass": "BLUE",
   "rarity": "FREE",
   "description": "",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DestroySpell",
-    "target": "ENEMY_HERO"
+    "class": "NullSpell"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }

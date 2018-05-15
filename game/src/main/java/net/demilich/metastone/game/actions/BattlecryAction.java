@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Collections;
@@ -111,6 +113,28 @@ public class BattlecryAction extends GameAction {
 			return Collections.emptyList();
 		}
 		return entities;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (!(other instanceof BattlecryAction)) {
+			return false;
+		}
+		BattlecryAction rhs = (BattlecryAction) other;
+		return new EqualsBuilder()
+				.appendSuper(super.equals(other))
+				.append(spell, rhs.spell)
+				.append(condition, rhs.condition)
+				.build();
+	}
+
+	@Override
+	public int hashCode() {
+		return new HashCodeBuilder()
+				.appendSuper(super.hashCode())
+				.append(spell)
+				.append(condition)
+				.build();
 	}
 
 	@Override

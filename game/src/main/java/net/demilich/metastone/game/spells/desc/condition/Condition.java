@@ -27,11 +27,25 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
-		this.desc = (ConditionDesc)desc;
+		this.desc = (ConditionDesc) desc;
 	}
 
 	@Override
 	public ConditionDesc getDesc() {
 		return desc;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Condition)) {
+			return false;
+		}
+		Condition rhs = (Condition) obj;
+		return desc.equals(rhs.desc);
+	}
+
+	@Override
+	public int hashCode() {
+		return desc.hashCode();
 	}
 }

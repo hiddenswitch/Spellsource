@@ -26,6 +26,16 @@ public class SharedData {
 	}
 
 	@Suspendable
+	public static <K, V> SuspendableMap<K, V> getClusterWideMapUnchecked(String name) {
+		try {
+			return getClusterWideMap(name);
+		} catch (SuspendExecution execution) {
+			// Unreachable
+			return null;
+		}
+	}
+
+	@Suspendable
 	public static <K, V> SuspendableMap<K, V> getClusterWideMap(String name, final Vertx vertx) throws SuspendExecution {
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {
