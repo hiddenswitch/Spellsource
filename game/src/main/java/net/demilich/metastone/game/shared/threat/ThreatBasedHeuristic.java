@@ -210,6 +210,9 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		score += questCount * weights.get(WeightedFeature.QUEST_COUNTER_VALUE);
 		score += questRewards * weights.get(WeightedFeature.QUEST_REWARD_VALUE);
 
+		score += player.getMaxMana() * weights.get(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE);
+		score += opponent.getMaxMana() * weights.get(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE);
+
 		return score;
 	}
 
