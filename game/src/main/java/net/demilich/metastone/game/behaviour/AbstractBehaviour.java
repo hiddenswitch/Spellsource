@@ -56,3 +56,4 @@ public abstract class AbstractBehaviour implements Behaviour, Serializable {
 		return false;
 	}
 }
+

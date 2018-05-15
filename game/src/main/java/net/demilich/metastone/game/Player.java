@@ -113,7 +113,7 @@ public class Player extends Entity implements Serializable {
 		this.mana = otherPlayer.mana;
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
-		this.behaviour = otherPlayer.behaviour;
+		this.behaviour = otherPlayer.behaviour.clone();
 		this.getStatistics().merge(otherPlayer.getStatistics());
 
 	}

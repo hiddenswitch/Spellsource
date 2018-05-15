@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
@@ -126,11 +127,22 @@ public class DiscoverAction extends GameAction {
 	}
 
 	@Override
+	public boolean equals(Object other) {
+		boolean base = super.equals(other);
+		if (!(other instanceof DiscoverAction)) {
+			return false;
+		}
+		DiscoverAction rhs = (DiscoverAction) other;
+		return new EqualsBuilder().appendSuper(base)
+				.append(spell, rhs.spell)
+				.build();
+	}
+
+	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.appendSuper(super.hashCode())
 				.append(spell)
-				.append(card)
-				.toHashCode();
+				.build();
 	}
 }

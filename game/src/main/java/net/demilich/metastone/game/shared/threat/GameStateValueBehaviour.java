@@ -4,18 +4,24 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.RequestActionFunction;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.shared.trainingmode.TrainingData;
+import net.demilich.metastone.game.shared.threat.cuckoo.CuckooLearner;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Stream;
 
 /**
  * GameStateValueBehaviour is an implementation of a decent AI with the best-in-class performance among bots in the
@@ -61,14 +67,12 @@ import java.util.List;
  * context.
  * <p>
  * The {@link ThreatBasedHeuristic} tries to maximize the chance of winning by somehow relating its scoring mechanism to
- * the actual outcome of a match. The {@link net.demilich.metastone.game.shared.threat.cuckoo.CuckooLearner} is the
+ * the actual outcome of a match. The {@link CuckooLearner} is the
  * system that tweaks the scoring function in order to choose tweaks that corresponded to greater wins in the game. This
  * approach makes GameStateValueBehaviour the best delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
  * with the highest score.
- * @see #alphaBeta(GameContext, int, GameAction, int, long) for the function that tries all actions, until the end of
- * the AI's turn, in order to find the first action in the best sequence of actions.
  */
 public class GameStateValueBehaviour extends AbstractBehaviour {
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
@@ -77,6 +81,8 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	protected FeatureVector featureVector;
 	protected String nameSuffix = "";
 	protected long timeout = 7200;
+	protected Deque<GameAction> strictPlan;
+	protected Deque<Integer> indexPlan;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -89,57 +95,6 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	}
 
 	/**
-	 * Starting with the given action, try all possible actions up to a certain depth, and return the score of the state
-	 * at the end of that sequence.
-	 *
-	 * @param context     The starting game state to use for this simulation.
-	 * @param playerId    The player ID corresponding to this AI.
-	 * @param action      The action to test.
-	 * @param depth       When greater than zero, visit the next possible action after {@code action}. Otherwise, return
-	 *                    the score for the state after executing {@code action}.
-	 * @param startMillis The time when this evaluation began. If we've spent too long executing this function, we will
-	 *                    return the current score.
-	 * @return A score corresponding to this action's best chain of actions.
-	 */
-	@Suspendable
-	protected double alphaBeta(GameContext context, int playerId, GameAction action, int depth, long startMillis) {
-		GameContext simulation = getClone(context);
-		double score = Float.NEGATIVE_INFINITY;
-		final boolean timedOut = System.currentTimeMillis() - startMillis > timeout;
-
-		// Don't simulate the opposing player's secrets
-		Player opponent = simulation.getOpponent(simulation.getPlayer(playerId));
-		simulation.getLogic().removeSecrets(opponent);
-
-		if (simulation.isDisposed()) {
-			return Float.NEGATIVE_INFINITY;
-		}
-		simulation.getLogic().performGameAction(playerId, action);
-
-		// If a Doomsayer is on the board (i.e., not destroyed), don't count friendly minions
-		if (simulation.getPlayers().stream().flatMap(p -> p.getMinions().stream()).anyMatch(c -> c.getSourceCard().getCardId().equals("minion_doomsayer"))) {
-			simulation.getPlayer(playerId).getMinions().forEach(m -> simulation.getLogic().markAsDestroyed(m));
-			simulation.getLogic().endOfSequence();
-		}
-
-		if (timedOut || depth == 0 || simulation.getActivePlayerId() != playerId || simulation.updateAndGetGameOver()) {
-			return heuristic.getScore(simulation, playerId);
-		}
-
-		List<GameAction> validActions = simulation.getValidActions();
-
-
-		for (GameAction gameAction : validActions) {
-			score = Math.max(score, alphaBeta(simulation, playerId, gameAction, depth - 1, startMillis));
-			if (score >= 100000) {
-				break;
-			}
-		}
-
-		return score;
-	}
-
-	/**
 	 * Returns a clone of the game context, assuming the opponent is a {@link GameStateValueBehaviour} too.
 	 *
 	 * @param original The original game context to use.
@@ -148,16 +103,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	protected GameContext getClone(GameContext original) {
 		GameContext context = original.clone();
 		context.setLoggingLevel(Level.ERROR);
-		// Assume that the players are GameStateValueBehaviour players
-		context.getPlayer1().setBehaviour(new GameStateValueBehaviour(featureVector, nameSuffix));
-		context.getPlayer2().setBehaviour(new GameStateValueBehaviour(featureVector, nameSuffix));
 		return context;
-	}
-
-	private void answerTrainingData(TrainingData trainingData) {
-		featureVector = trainingData != null ? trainingData.getFeatureVector() : FeatureVector.getFittest();
-		heuristic = new ThreatBasedHeuristic(featureVector);
-		nameSuffix = trainingData != null ? "(trained)" : "(untrained)";
 	}
 
 	@Override
@@ -173,6 +119,14 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		return "Game state value " + nameSuffix;
 	}
 
+	public Deque<GameAction> getStrictPlan() {
+		return strictPlan;
+	}
+
+	public void setStrictPlan(Deque<GameAction> strictPlan) {
+		this.strictPlan = strictPlan;
+	}
+
 	/**
 	 * Mulligans for cards, preferring to create an on-curve starting hand.
 	 *
@@ -183,7 +137,6 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 */
 	@Override
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		requestTrainingData(player);
 		List<Card> discardedCards = new ArrayList<Card>();
 		for (Card card : cards) {
 			if (card.getBaseManaCost() > 3) {
@@ -290,39 +243,381 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	 */
 	@Override
 	@Suspendable
-	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
-		long startMillis = System.currentTimeMillis();
-		if (validActions.size() == 1) {
-			return validActions.get(0);
+	public @Nullable
+	GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
+		// Isolate this context
+		context = context.clone();
+		player = context.getPlayer(player.getId());
+
+		// Consistency checks
+		String gameId = context.getGameId();
+		if (validActions.size() == 0) {
+			logger.error("requestAction {} {}: Empty valid actions given", gameId, player);
+			return null;
 		}
 
-		int depth = 3;
-		if (validActions.get(0).getActionType() == ActionType.BATTLECRY
-				|| validActions.get(0).getActionType() == ActionType.DISCOVER) {
-			depth = 2;
-		}
+		// First, check if a plan is already cached and ready to be executed
+		// The actual process of persisting the plan beyond the lifetime of this GameStateValueBehaviour instance is the
+		// responsibility of the caller, and should typically use #getIndexPlan()
+		// A strict plan refers to a collection of GameAction objects. A plan is "strictly" followed if the next action
+		// proposed in the strict plan is exactly present in the list of valid actions. Otherwise, the index plan is used,
+		// where the valid actions are assumed to be in the correct order.
+		if (strictPlan != null) {
+			if (strictPlan.size() == 0) {
+				strictPlan = null;
+			} else {
+				// Check that the plan action is valid considering these valid actions. If it is, choose it
+				GameAction planAction = strictPlan.peekFirst();
+				if (validActions.contains(planAction)) {
+					logger.debug("requestAction {} {}: Used action from plan with {} actions remaining", gameId, player, strictPlan.size() - 1);
+					// Reduce the size of the corresponding index plan too
+					if (!indexPlan.isEmpty()) {
+						indexPlan.pollFirst();
+					}
 
-		GameAction bestAction = validActions.get(0);
-		double bestScore = Double.NEGATIVE_INFINITY;
-
-		for (GameAction gameAction : validActions) {
-			double score = alphaBeta(context, player.getId(), gameAction, depth, startMillis);
-			if (score > bestScore) {
-				bestAction = gameAction;
-				bestScore = score;
+					final GameAction gameAction = strictPlan.pollFirst();
+					if (gameAction instanceof IntermediateAction) {
+						// Just choose directly from the valid actions
+						return validActions.get(gameAction.getId());
+					}
+					return gameAction;
+				} else {
+					// The plan is invalid, set it to null and continue.
+					logger.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
+					strictPlan = null;
+					indexPlan = null;
+				}
+			}
+		} else if (indexPlan != null) {
+			if (indexPlan.size() == 0) {
+				indexPlan = null;
+			} else {
+				// Check that the plan action is valid considering these valid actions. If it is, choose it
+				int planAction = indexPlan.peekFirst();
+				if (validActions.size() > planAction) {
+					logger.debug("requestAction {} {}: Used action from plan with {} actions remaining", gameId, player, indexPlan.size() - 1);
+					return validActions.get(indexPlan.pollFirst());
+				} else {
+					// The plan is invalid, set it to null and continue.
+					logger.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
+					indexPlan = null;
+				}
 			}
 		}
 
-		logger.debug("Selecting best action {} with score {}", bestAction, bestScore);
+		if (validActions.size() == 1) {
+			logger.debug("requestAction {} {}: Selecting only action {}", gameId, player, validActions.get(0));
+			return validActions.get(0);
+		}
 
-		return bestAction;
+		// Depth-first search for the branch which terminates with the highest score, where the DAG has game states as
+		// nodes and game actions as edges
+
+		// Max depth indicates that we will expand at most 5 non-intermediate (non-Battlecry and non-Discover) actions
+		// away from the game context given to this function.
+		int maxDepth = 5;
+		int playerId = player.getId();
+		Deque<Node> contextStack = new ConcurrentLinkedDeque<>();
+		// We're only going to compute scores on the terminal nodes, so we're going to save them separately. Then, we walk
+		// the list of predecessors to build a plan.
+		List<Node> terminalNodes = new ArrayList<>();
+
+		contextStack.push(new Node(context, null, 0));
+		long start = System.currentTimeMillis();
+		while (contextStack.size() > 0) {
+			Node v = contextStack.pop();
+
+			// Is this node terminal?
+			if (v.depth >= maxDepth
+					|| v.context.updateAndGetGameOver()
+					|| (System.currentTimeMillis() - start > timeout)
+					// Technically allows the bot to play through its extra turns
+					|| v.context.getActivePlayerId() != playerId
+					|| v.context.isDisposed()) {
+				terminalNodes.add(v);
+				continue;
+			}
+
+			final int depth = v.depth;
+
+			List<GameAction> edges;
+			if (v.predecessor == null) {
+				// Initial node
+				edges = validActions;
+			} else {
+				// Expand and compute scores
+				edges = v.context.getValidActions();
+			}
+
+			if (edges == null || edges.isEmpty()) {
+				logger.error("requestAction {} {}: Unexpectedly, an expansion of a game state produced no actions.", gameId, playerId);
+				continue;
+			}
+
+			// Set Indices
+			for (int i = 0; i < edges.size(); i++) {
+				if (edges.get(i).getId() == -1) {
+					edges.get(i).setId(i);
+				}
+				if (edges.get(i).getId() != i) {
+					logger.error("requestAction {} {}: Unexpectedly, the edges have the wrong indices. Only strict caching will work.", gameId, playerId);
+					break;
+				}
+			}
+
+			// Parallelize the expansion of nodes.
+			/*
+			edges
+					.parallelStream()
+					.unordered()
+					.forEach(edge -> expandAndAppend(contextStack, gameId, playerId, v, edge, depth));
+					*/
+			for (GameAction edge : edges) {
+				expandAndAppend(contextStack, gameId, playerId, v, edge, depth);
+			}
+		}
+
+		// Score the terminal nodes, find the highest score
+		Optional<Node> maxScore = terminalNodes
+				.parallelStream()
+				.peek(bc -> postProcess(playerId, bc.context))
+				.peek(bc -> bc.setScore(heuristic.getScore(bc.context, playerId)))
+				.max(Comparator.comparingDouble(Node::getScore));
+
+		if (!maxScore.isPresent()) {
+			logger.error("requestAction {} {}: A problem occurred while trying to find the max score in the terminal nodes {}", gameId, player, terminalNodes);
+			return null;
+		}
+
+		// Save the action plan, iterating backwards from the highest scoring node.
+		Deque<GameAction> strictPlan = new ArrayDeque<>();
+		Deque<Integer> indexPlan = new ArrayDeque<>();
+		Node node = maxScore.get();
+		while (node != null && node.getPredecessor() != null) {
+			for (int i = node.getActions().length - 1; i >= 0; i--) {
+				strictPlan.addFirst(node.getActions()[i]);
+				indexPlan.addFirst(node.getActionIndices()[i]);
+			}
+			node = node.getPredecessor();
+		}
+
+		this.strictPlan = strictPlan;
+		this.indexPlan = indexPlan;
+		// Pop off the last element of the plan
+		this.indexPlan.pollFirst();
+		return strictPlan.pollFirst();
 	}
 
-	private void requestTrainingData(Player player) {
-		if (heuristic != null) {
+	/**
+	 * Expands the provided node, appending its children to the context stack
+	 *
+	 * @param contextStack
+	 * @param gameId
+	 * @param playerId
+	 * @param node
+	 * @param edge
+	 * @param depth
+	 */
+	@Suspendable
+	protected void expandAndAppend(Deque<Node> contextStack, String gameId, int playerId, Node node, GameAction edge, int depth) {
+		GameContext mutateContext = getClone(node.context);
+
+		preprocess(playerId, mutateContext);
+		Player thisPlayer = mutateContext.getPlayer(playerId);
+
+		Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
+		AtomicBoolean guard = new AtomicBoolean();
+
+		thisPlayer.setBehaviour(new RequestActionFunction((context1, player1, validActions1) -> {
+			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
+			// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
+			// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
+			// of the actual action we choose. We must use the guard, because a single performGameAction could call this
+			// RequestActionFunction multiple times, but we only want to queue up the first intermediate actions.
+			if (guard.compareAndSet(false, true)) {
+				for (int i = 0; i < validActions1.size(); i++) {
+					intermediateNodes.add(new IntermediateNode(i));
+				}
+			}
+
+			// Will now mutate the context in an unneeded branch.
+			return validActions1.get(0);
+		}));
+
+//		Fiber<Void> initial = new Fiber<>(() -> {
+//			try {
+		// Perform action
+		mutateContext.getLogic().performGameAction(playerId, edge);
+		// Check if their are intermediates pending
+		if (intermediateNodes.isEmpty()) {
+			// Push the new node
+			contextStack.add(new Node(mutateContext, node, depth + 1, edge));
 			return;
 		}
 
+		// The intermediate node processing branch
+		while (intermediateNodes.size() > 0) {
+			IntermediateNode intermediateNode = intermediateNodes.pollFirst();
+			if (intermediateNode == null) {
+				throw new UnsupportedOperationException("Should not queue null nodes.");
+			}
+
+			// Process each intermediate, which may queue more of them. Create a request action function that returns the
+			// specified intermediate game action and also queues more intermediates if they are made.
+			GameContext intermediateMutateContext = getClone(node.context);
+			preprocess(playerId, intermediateMutateContext);
+
+			int queueSize = intermediateNodes.size();
+			int[] choices = intermediateNode.choices;
+			AtomicInteger counter = new AtomicInteger(0);
+			AtomicBoolean intermediateGuard = new AtomicBoolean();
+			intermediateMutateContext.getPlayer(playerId).setBehaviour(new RequestActionFunction((context, player, validActions) -> {
+				// Make choices until we've exhausted the actions that were specified by this intermediate node.
+				int choiceIndex = counter.getAndIncrement();
+				if (choiceIndex >= choices.length) {
+					// We are queuing more intermediate nodes, mark this intermediate node as having queued more intermediates and
+					// this evaluation as having expanded.
+					if (intermediateGuard.compareAndSet(false, true)) {
+						for (int i = 0; i < validActions.size(); i++) {
+							int[] newChoices = Arrays.copyOf(choices, choices.length + 1);
+							newChoices[newChoices.length - 1] = i;
+							intermediateNodes.add(new IntermediateNode(newChoices));
+						}
+					}
+					// We can throw this route away.
+					return validActions.get(0);
+				} else {
+					return validActions.get(choices[choiceIndex]);
+				}
+			}));
+
+			intermediateMutateContext.getLogic().performGameAction(playerId, edge);
+			// Check if processing this intermediate queued more intermediates.
+			if (intermediateNodes.size() > queueSize) {
+				// We can toss this result away, we'll have to process again.
+				continue;
+			}
+			// If it didn't, then the intermediate is the last intermediate on a path from real node to real node. Queue a
+			// real node onto the context stack. Reconstruct the path by following the predecessors of the intermediates until
+			// we reach a real node.
+			GameAction[] actions = new GameAction[1 + choices.length];
+			actions[0] = edge;
+			for (int i = 0; i < choices.length; i++) {
+				actions[i + 1] = new IntermediateAction(choices[i]);
+			}
+			contextStack.add(new Node(intermediateMutateContext, node, depth + 1, actions));
+		}
+//			} catch (Throwable simulationError) {
+//				logger.error("requestAction {} {}: There was a simulation error for action {}: {}", gameId, playerId, edge, simulationError);
+//				return;
+//			}
+
+//		});
+
+
 	}
 
+	private static void preprocess(int playerId, GameContext thisContext) {
+		// Preprocess: Don't simulate the opposing player's secrets
+		Player opponent = thisContext.getOpponent(thisContext.getPlayer(playerId));
+		thisContext.getLogic().removeSecrets(opponent);
+	}
+
+	/**
+	 * Post-processes a game state for scoring.
+	 *
+	 * @param playerId
+	 * @param thisContext
+	 */
+	protected void postProcess(int playerId, GameContext thisContext) {
+		// If a Doomsayer is on the board (i.e., not destroyed), don't count friendly minions
+		if (thisContext.getPlayers().stream().flatMap(p -> p.getMinions().stream()).anyMatch(c -> c.getSourceCard().getCardId().equals("minion_doomsayer"))) {
+			thisContext.getPlayer(playerId).getMinions().forEach(m -> thisContext.getLogic().markAsDestroyed(m));
+			thisContext.getLogic().endOfSequence();
+		}
+	}
+
+	public void setIndexPlan(Deque<Integer> indexPlan) {
+		this.indexPlan = indexPlan;
+	}
+
+	public Deque<Integer> getIndexPlan() {
+		return indexPlan;
+	}
+
+	static class IntermediateAction extends GameAction implements Serializable {
+
+		public IntermediateAction(int index) {
+			this.setId(index);
+		}
+
+		@Override
+		public void execute(GameContext context, int playerId) {
+			throw new UnsupportedOperationException("This is an internal game action used by the game state value behaviour.");
+		}
+
+		@Override
+		public boolean equals(Object obj) {
+			if (!(obj instanceof GameAction)) {
+				return false;
+			}
+
+			GameAction rhs = (GameAction) obj;
+			return rhs.getId() == this.getId();
+		}
+
+		@Override
+		public int hashCode() {
+			return Integer.hashCode(getId());
+		}
+	}
+
+	static class IntermediateNode {
+		final int choices[];
+
+		IntermediateNode(int... choices) {
+			this.choices = choices;
+		}
+	}
+
+	static class Node {
+		private final GameContext context;
+		private final int depth;
+		private final Node predecessor;
+		private final GameAction[] actions;
+		private final int[] actionIndices;
+		private double score;
+
+		Node(GameContext context, Node predecessor, int depth, GameAction... actions) {
+			this.context = context;
+			this.predecessor = predecessor;
+			this.actions = actions;
+			this.depth = depth;
+			if (actions != null && actions.length > 0) {
+				actionIndices = Stream.of(actions).mapToInt(GameAction::getId).toArray();
+			} else {
+				actionIndices = new int[0];
+			}
+		}
+
+		public Node getPredecessor() {
+			return predecessor;
+		}
+
+		public GameAction[] getActions() {
+			return actions;
+		}
+
+		public double getScore() {
+			return score;
+		}
+
+		public void setScore(double score) {
+			this.score = score;
+		}
+
+		public int[] getActionIndices() {
+			return actionIndices;
+		}
+	}
 }

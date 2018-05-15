@@ -7,6 +7,7 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -234,8 +235,10 @@ public class TestBase {
 
 	@FunctionalInterface
 	public interface GymConsumer {
+		@Suspendable
 		void run(GameContext context, Player player, Player opponent);
 
+		@Suspendable
 		default GymConsumer andThen(GymConsumer after) {
 			Objects.requireNonNull(after);
 			return (c, p, o) -> {
@@ -267,6 +270,7 @@ public class TestBase {
 		return factory;
 	}
 
+	@Suspendable
 	public static void runGym(GymConsumer consumer, HeroClass heroClass1, HeroClass heroClass2) {
 		GameContext context = createContext(heroClass1, heroClass2);
 		Player player = context.getActivePlayer();
@@ -281,6 +285,7 @@ public class TestBase {
 		consumer.run(context, player, opponent);
 	}
 
+	@Suspendable
 	public static void runGym(GymConsumer consumer) {
 		runGym(consumer, HeroClass.BLUE, HeroClass.BLUE);
 	}
@@ -473,10 +478,12 @@ public class TestBase {
 		return minionList.get(minionList.size() - 1);
 	}
 
+	@Suspendable
 	protected static void playCard(GameContext context, Player player, String cardId) {
 		playCard(context, player, CardCatalogue.getCardById(cardId));
 	}
 
+	@Suspendable
 	protected static void playCard(GameContext context, Player player, Card card) {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);

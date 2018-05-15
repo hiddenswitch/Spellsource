@@ -33,6 +33,9 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
@@ -688,7 +691,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		instance.setBattlecry(getDesc().getBattlecryAction());
 		instance.setRace((getAttributes() != null && getAttributes().containsKey(Attribute.RACE)) ?
 				(Race) getAttribute(Attribute.RACE) :
-						getDesc().getRace());
+				getDesc().getRace());
 
 		if (getDesc().getDeathrattle() != null) {
 			instance.getAttributes().remove(Attribute.DEATHRATTLES);
@@ -888,5 +891,23 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	public boolean isHeroPower() {
 		return getCardType().isCardType(CardType.HERO_POWER);
+	}
+
+
+	@Override
+	public int compareTo(@NotNull Entity o) {
+		if (o instanceof Card) {
+			Card rhs = (Card) o;
+			boolean equals = new EqualsBuilder()
+					.append(getCardId(), rhs.getCardId())
+					.append(getAttributes(), rhs.getAttributes())
+					.build();
+
+			if (equals) {
+				return 0;
+			}
+		}
+
+		return super.compareTo(o);
 	}
 }
