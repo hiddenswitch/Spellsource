@@ -574,6 +574,10 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		return indexPlan;
 	}
 
+	/**
+	 * This helper class represents an action with an index. Useful for referencing discover and battlecry actions without
+	 * holding onto references to state like cards and spells.
+	 */
 	static class IntermediateAction extends GameAction implements Serializable {
 
 		public IntermediateAction(int index) {
@@ -601,6 +605,9 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		}
 	}
 
+	/**
+	 * This helper class stores a list of choices from an intermediate node expansion.
+	 */
 	static class IntermediateNode {
 		final int choices[];
 
@@ -609,6 +616,10 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 		}
 	}
 
+	/**
+	 * This helper class represents a node in a rollout. The actions field stores which sequence of actions, relative to
+	 * the predecessor, led to this node.
+	 */
 	static class Node {
 		private final GameContext context;
 		private final int depth;
