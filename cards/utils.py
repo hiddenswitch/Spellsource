@@ -20,7 +20,7 @@ def iter_cards(start_path=None):
                     card = load(fp, object_pairs_hook=OrderedDict)
                     yield (card, filepath)
                 except ValueError as ex:
-                    print 'Parsing error in ', filepath
+                    print('Parsing error in %s' % (filepath))
                     continue
 
 
