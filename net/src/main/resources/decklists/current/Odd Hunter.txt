@@ -1,0 +1,19 @@
+Name: Odd Hunter
+Class: Hunter
+Format: Standard
+2x Acherus Veteran
+2x Arcane Shot
+2x Argent Squire
+2x Candleshot
+2x Dire Mole
+2x Fire Fly
+2x Glacial Shard
+2x Tracking
+2x Animal Companion
+2x Eaglehorn Bow
+2x Ironbeak Owl
+2x Kill Command
+2x Unleash the Hounds
+2x Wolfrider
+1x Leeroy Jenkins
+1x Baku the Mooneater

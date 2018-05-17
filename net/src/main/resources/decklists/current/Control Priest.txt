@@ -1,0 +1,20 @@
+Name: Control Priest
+Class: Priest
+Format: Standard
+2x Northshire Cleric
+2x Power Word: Shield
+2x Divine Hymn
+2x Mind Blast
+2x Shadow Visions
+2x Wild Pyromancer
+2x Acolyte of Pain
+1x Gluttonous Ooze
+2x Duskbreaker
+2x Mass Dispel
+2x Scaleworm
+2x Twilight Drake
+1x Skulking Geist
+2x Psychic Scream
+2x Primordial Drake
+1x Shadowreaper Anduin
+1x Alexstrasza

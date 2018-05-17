@@ -1,0 +1,24 @@
+Name: Odd Fatigue Warrior
+Class: Warrior
+Format: Standard
+2x Shield Slam
+2x Town Crier
+2x Whirlwind
+1x Gluttonous Ooze
+2x Ironbeak Owl
+1x Mind Control Tech
+2x Rabid Worgen
+2x Reckless Flurry
+2x Shield Block
+2x Stonehill Defender
+1x Big Game Hunter
+2x Brawl
+1x Darius Crowley
+1x Direhorn Hatchling
+1x Elise the Trailblazer
+1x Faceless Manipulator
+1x Harrison Jones
+1x Baron Geddon
+1x Gorehowl
+1x Baku the Mooneater
+1x King Mosh

@@ -1,0 +1,22 @@
+Name: Spiteful Druid
+Class: Druid
+Format: Standard
+1x Dire Mole
+2x Fire Fly
+2x Glacial Shard
+1x Prince Keleseth
+2x Crypt Lord
+2x Greedy Sprite
+2x Mind Control Tech
+2x Tar Creeper
+1x Vicious Fledgling
+2x Saronite Chain Gang
+2x Spellbreaker
+1x Cobalt Scalebane
+2x Fungalmancer
+1x Leeroy Jenkins
+2x Spiteful Summoner
+1x Malfurion the Pestilent
+1x Grand Archivist
+1x The Lich King
+2x Ultimate Infestation

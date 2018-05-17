@@ -36,7 +36,7 @@ configurations.all {
 }
 
 dependencies {
-    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.0.2'
+    compile group: 'org.apache.spark', name: 'spark-core_2.11', version: '2.3.0'
     compile group: 'commons-cli', name: 'commons-cli', version: '1.4'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'com.amazonaws', name: 'aws-java-sdk', version: '1.11.52'
@@ -44,6 +44,8 @@ dependencies {
     compile group: 'com.amazonaws', name: 'aws-java-sdk-s3', version: '1.11.52'
     compile group: 'com.amazonaws', name: 'aws-java-sdk-emr', version: '1.11.52'
     compile group: 'org.apache.hadoop', name: 'hadoop-aws', version: '2.7.3'
+    compile group: 'io.jenetics', name: 'jenetics', version: '4.1.0'
+    compile group: 'io.jenetics', name: 'jenetics.ext', version: '4.1.0'
     compile project(':net')
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
 }

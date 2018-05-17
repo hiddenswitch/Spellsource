@@ -1,0 +1,21 @@
+Name: Taunt Druid
+Class: Druid
+Format: Standard
+2x Lesser Jasper Spellstone
+2x Naturalize
+2x Wild Growth
+1x Tar Creeper
+2x Witching Hour
+2x Branching Paths
+2x Ironwood Golem
+2x Oaken Summons
+2x Swipe
+2x Carnivorous Cube
+1x Harrison Jones
+2x Nourish
+2x Rotten Applebaum
+2x Primordial Drake
+1x The Lich King
+1x Hadronox
+1x Master Oakheart
+1x Ultimate Infestation

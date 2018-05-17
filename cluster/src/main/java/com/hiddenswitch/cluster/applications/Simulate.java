@@ -100,20 +100,7 @@ public class Simulate {
 
 		// Printing progress thread
 		if (!quiet) {
-			progressThread = new Thread(() -> {
-
-				try {
-					while (matchesComplete.get() <= totalMatches) {
-						Thread.sleep(5000);
-						int matchesNow = matchesComplete.get();
-						System.err.println(String.format("Progress: %.2f%% (%d/%d matches completed)", (float) matchesNow / (float) totalMatches * 100.0f, matchesNow, totalMatches));
-					}
-				} catch (InterruptedException e) {
-					int matchesNow = matchesComplete.get();
-					System.err.println(String.format("Progress: %.2f%% (%d/%d matches completed)", (float) matchesNow / (float) totalMatches * 100.0f, matchesNow, totalMatches));
-				}
-			});
-
+			progressThread = Simulation.getMonitor(matchesComplete, totalMatches);
 			progressThread.start();
 		}
 

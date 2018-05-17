@@ -7,6 +7,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
+import org.jetbrains.annotations.NotNull;
 import org.reflections.Reflections;
 
 import java.io.PrintStream;
@@ -130,5 +131,21 @@ public class Simulation {
 
 		out.flush();
 		out.close();
+	}
+
+	@NotNull
+	public static Thread getMonitor(AtomicInteger counter, int total) {
+		return new Thread(() -> {
+			try {
+				while (counter.get() <= total) {
+					Thread.sleep(5000);
+					int matchesNow = counter.get();
+					System.err.println(String.format("Progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
+				}
+			} catch (InterruptedException e) {
+				int matchesNow = counter.get();
+				System.err.println(String.format("Progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
+			}
+		});
 	}
 }

@@ -31,7 +31,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
 	private static final Set<SpellArg> COMMON_ARGS = Sets.newEnumSet(
-			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE), SpellArg.class);
+			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE), SpellArg.class);
 
 	/**
 	 * Casts a spell for the given arguments.

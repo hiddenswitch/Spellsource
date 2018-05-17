@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.statistics;
 
-import net.demilich.metastone.game.statistics.GameStatistics;
-import net.demilich.metastone.game.statistics.Statistic;
 import net.demilich.metastone.game.gameconfig.GameConfig;
 
 import java.io.Serializable;
@@ -27,16 +25,6 @@ public class SimulationResult implements Cloneable, Serializable {
 	}
 
 	public void calculateMetaStatistics() {
-		calculateMetaStatistics(player1Stats);
-		calculateMetaStatistics(player2Stats);
-	}
-
-	private void calculateMetaStatistics(GameStatistics statistics) {
-		double gamesPlayed = getNumberOfGames();
-		double winRate = statistics.getLong(Statistic.GAMES_WON) / gamesPlayed * 100;
-		String winRateString = String.format("%.2f", winRate) + "%";
-		statistics.set(Statistic.WIN_RATE, winRateString);
-
 		long endTimestamp = System.currentTimeMillis();
 		duration = endTimestamp - startTimestamp;
 	}

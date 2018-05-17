@@ -1,0 +1,22 @@
+Name: Combo Shudderwock Shaman
+Class: Shaman
+Format: Standard
+2x Earth Shock
+2x Unstable Evolution
+1x Bloodmage Thalnos
+2x Doomsayer
+1x Fire Plume Harbinger
+1x Murmuring Elemental
+2x Far Sight
+2x Healing Rain
+2x Lightning Storm
+2x Mana Tide Totem
+1x Defender of Argus
+2x Hex
+2x Lifedrinker
+2x Saronite Chain Gang
+1x Harrison Jones
+2x Volcano
+1x Grumble, Worldshaker
+1x Bogshaper
+1x Shudderwock

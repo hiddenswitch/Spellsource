@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
@@ -346,7 +347,14 @@ public class Spellsource {
 							// Create an index for the username
 							mongo().createIndex(Accounts.USERS, json("username", 1));
 						}))
-				.migrateTo(12, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(13)
+						.withUp(thisVertx -> {
+							// Remove all bot accounts.
+							long botsRemoved = Accounts.removeAccounts(mongo().find(Accounts.USERS, json("bot", true)).stream().map(jo -> new UserId(jo.getString("_id"))).collect(toList()));
+							logger.info("add MigrationRequest 13: Removed {} bot accounts", botsRemoved);
+						}))
+				.migrateTo(13, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

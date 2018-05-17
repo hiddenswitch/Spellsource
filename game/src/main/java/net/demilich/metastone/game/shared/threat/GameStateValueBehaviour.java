@@ -84,6 +84,7 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 	protected long timeout = 7200;
 	protected Deque<GameAction> strictPlan;
 	protected Deque<Integer> indexPlan;
+	protected int maxDepth = 5;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -113,6 +114,14 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			return new GameStateValueBehaviour(featureVector.clone(), nameSuffix);
 		}
 		return new GameStateValueBehaviour();
+	}
+
+	public int getMaxDepth() {
+		return maxDepth;
+	}
+
+	public void setMaxDepth(int maxDepth) {
+		this.maxDepth = maxDepth;
 	}
 
 	@Override
@@ -317,7 +326,6 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 
 		// Max depth indicates that we will expand at most 5 non-intermediate (non-Battlecry and non-Discover) actions
 		// away from the game context given to this function.
-		int maxDepth = 5;
 		int playerId = player.getId();
 		Deque<Node> contextStack = new ConcurrentLinkedDeque<>();
 		// We're only going to compute scores on the terminal nodes, so we're going to save them separately. Then, we walk
@@ -330,12 +338,13 @@ public class GameStateValueBehaviour extends AbstractBehaviour {
 			Node v = contextStack.pop();
 
 			// Is this node terminal?
-			if (v.depth >= maxDepth
-					|| v.context.updateAndGetGameOver()
-					|| (System.currentTimeMillis() - start > timeout)
-					// Technically allows the bot to play through its extra turns
-					|| v.context.getActivePlayerId() != playerId
-					|| v.context.isDisposed()) {
+			if (v.predecessor != null && (
+					v.depth >= maxDepth
+							|| v.context.updateAndGetGameOver()
+							|| (System.currentTimeMillis() - start > timeout)
+							// Technically allows the bot to play through its extra turns
+							|| v.context.getActivePlayerId() != playerId
+							|| v.context.isDisposed())) {
 				terminalNodes.add(v);
 				continue;
 			}

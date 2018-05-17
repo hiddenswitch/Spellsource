@@ -7,11 +7,9 @@ import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import com.lambdaworks.crypto.SCryptUtil;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.MongoClient;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.mongo.*;
 import io.vertx.ext.web.RoutingContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -29,6 +27,7 @@ import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.*;
@@ -164,9 +163,9 @@ public interface Accounts {
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
-	 * set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
-	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests. The
-	 * token and user ID should be saved.
+	 * 		set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
+	 * 		that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests.
+	 * 		The token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
@@ -319,7 +318,7 @@ public interface Accounts {
 	 *
 	 * @param request An email and password combination.
 	 * @return The result of logging in, or information about why the login failed if it was for a handled reason (bad
-	 * email or password).
+	 * 		email or password).
 	 */
 	@Suspendable
 	static LoginResponse login(LoginRequest request) {
@@ -412,5 +411,32 @@ public interface Accounts {
 		}
 
 		return new ChangePasswordResponse();
+	}
+
+	static boolean removeAccount(UserId id) throws SuspendExecution {
+		UserRecord record = get(id.toString());
+		if (record == null) {
+			return false;
+		}
+
+		// Remove all collections
+		mongo().removeDocuments(Inventory.COLLECTIONS, json("userId", record.getId()));
+		// Remove all inventory records
+		mongo().removeDocuments(Inventory.INVENTORY, json("userId", record.getId()));
+		// Remove the user document
+		mongo().removeDocument(Accounts.USERS, json("_id", record.getId()));
+
+		return true;
+	}
+
+	static long removeAccounts(List<UserId> ids) throws SuspendExecution {
+		JsonArray userIds = new JsonArray(ids.stream().map(UserId::toString).collect(Collectors.toList()));
+		// Remove all collections
+		mongo().removeDocuments(Inventory.COLLECTIONS, json("userId", json("$in", userIds)));
+		// Remove all inventory records
+		mongo().removeDocuments(Inventory.INVENTORY, json("userId", json("$in", userIds)));
+		// Remove the user document
+		MongoClientDeleteResult result = mongo().removeDocuments(Accounts.USERS, json("_id", json("$in", userIds)));
+		return result.getRemovedCount();
 	}
 }

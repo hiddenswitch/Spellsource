@@ -1,0 +1,21 @@
+Name: Aggro Mage
+Class: Mage
+Format: Standard
+2x Arcane Missiles
+2x Mana Wyrm
+1x Mirror Image
+1x Amani Berserker
+2x Arcanologist
+1x Bloodmage Thalnos
+2x Frostbolt
+2x Primordial Glyph
+2x Sorcerer's Apprentice
+2x Arcane Intellect
+2x Counterspell
+2x Explosive Runes
+2x Kirin Tor Mage
+2x Fireball
+1x Lifedrinker
+2x Cinderstorm
+1x Aluneth
+1x Pyroblast
