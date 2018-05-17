@@ -1,0 +1,24 @@
+Name: Control Mage
+Class: Mage
+Format: Standard
+2x Arcane Artificer
+2x Doomsayer
+1x Raven Familiar
+2x Stonehill Defender
+2x Voodoo Doll
+1x Arcane Keysmith
+1x Bright-Eyed Scout
+2x Polymorph
+1x Witchwood Piper
+2x Dragon's Fury
+1x Harrison Jones
+2x Blizzard
+2x Meteor
+1x Skulking Geist
+1x Toki, Time-Tinker
+1x Baron Geddon
+2x Flamestrike
+1x The Lich King
+1x Alexstrasza
+1x Dragoncaller Alanna
+1x Frost Lich Jaina

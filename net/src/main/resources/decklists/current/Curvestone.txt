@@ -1,7 +1,0 @@
-### Curvestone (Scenario)
-# Class: Violet
-# Format: Custom
-#
-# 10x (0) Minion on Curve
-# 10x (0) Spell on Curve
-# 10x (0) Two Cards on Curve

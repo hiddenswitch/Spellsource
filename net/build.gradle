@@ -48,7 +48,6 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.5.1'
     compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.5.1'
     compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.7'
-    compile group: 'com.github.hiddenswitch', name: 'vertx-sync', version: '3cd9d1a857'
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
     compile group: 'ca.pjer', name: 'logback-awslogs-appender', version: '1.0.0'

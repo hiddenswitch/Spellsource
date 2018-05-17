@@ -1,22 +1,21 @@
-### Murloc Paladin
-# Class: Gold
-# Format: Standard
-# Year of the Mammoth
-#
-# 2x (1) Vilefin Inquisitor
-# 2x (1) Righteous Protector
-# 1x (1) Patches the Pirate
-# 2x (1) Murloc Tidecaller
-# 2x (1) Grimscale Chum
-# 2x (2) Rockpool Hunter
-# 2x (2) Knife Juggler
-# 2x (2) Hydrologist
-# 2x (3) Southsea Captain
-# 2x (3) Rallying Blade
-# 2x (3) Murloc Warleader
-# 2x (3) Divine Favor
-# 2x (4) Gentle Megasaur
-# 2x (4) Call to Arms
-# 1x (6) Sunkeeper Tarim
-# 2x (7) Corridor Creeper
-#
+Name: Murloc Paladin
+Class: Paladin
+Format: Standard
+2x Lost in the Jungle
+2x Murloc Tidecaller
+2x Righteous Protector
+2x Hydrologist
+2x Knife Juggler
+2x Rockpool Hunter
+1x Coldlight Seer
+2x Divine Favor
+2x Murloc Warleader
+2x Nightmare Amalgam
+2x Unidentified Maul
+1x Blessing of Kings
+2x Call to Arms
+2x Gentle Megasaur
+1x Spellbreaker
+1x Fungalmancer
+1x Sunkeeper Tarim
+1x Vinecleaver

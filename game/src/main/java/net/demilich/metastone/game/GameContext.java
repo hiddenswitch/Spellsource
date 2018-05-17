@@ -51,8 +51,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
@@ -131,14 +129,14 @@ import java.util.stream.Stream;
  *
  * @see #play() for more about how a game is "played."
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
- * both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
- * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- * {@link Behaviour#requestAction(GameContext, Player, List)}.
+ * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
+ * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
+ * 		{@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
- * decisions when requested.
+ * 		decisions when requested.
  * @see NetworkBehaviour for the class that turns requests to the {@link Behaviour} into calls over the network.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- * GameContext} because it manipulates the state stored in it.
+ * 		GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -313,7 +311,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 		gameEnded = true;
 		getTriggerManager().expireAll();
-		logger.debug("{} endGame: Game is now ending", getGameId());
+		logger.debug("endGame {}: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		notifyPlayersGameOver();
 		calculateStatistics();
@@ -343,12 +341,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	protected void calculateStatistics() {
 		if (getWinner() != null) {
-			logger.debug("{} calculateStatistics: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
+			logger.debug("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
 			getWinner().getStatistics().gameWon();
 			Player loser = getOpponent(getWinner());
 			loser.getStatistics().gameLost();
 		} else {
-			logger.debug("{} calculateStatistics: Game finished after {} turns in a draw", getGameId(), getTurn());
+			logger.debug("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
 			getPlayer1().getStatistics().gameLost();
 			getPlayer2().getStatistics().gameLost();
 		}
@@ -392,11 +390,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * and then fired by the {@link GameLogic} using this function.
 	 *
 	 * @param gameEvent     The {@link GameEvent} to fire.
-	 * @param otherTriggers Other triggers to consider besides the ones inside this game context's {@link
-	 *                      TriggerManager}. This may be synthetic triggers that implement analytics, networked game
-	 *                      logic, newsfeed reports, spectating features, etc.
+	 * @param otherTriggers Other triggers to consider besides the ones inside this game context's {@link TriggerManager}.
+	 *                      This may be synthetic triggers that implement analytics, networked game logic, newsfeed
+	 *                      reports, spectating features, etc.
 	 * @see net.demilich.metastone.game.spells.trigger.HealingTrigger for an example of a trigger that listens to a
-	 * specific event.
+	 * 		specific event.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
 	 * @see #addTrigger(Trigger) for the place to add triggers that react to game events.
 	 */
@@ -413,7 +411,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
 	 *
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
-	 * destroyed.
+	 * 		destroyed.
 	 */
 	@Suspendable
 	public boolean updateAndGetGameOver() {
@@ -617,8 +615,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * Zones#BATTLEFIELD}.
 	 *
 	 * @param minionReference The minion from whose perspective we will consider "opposite."
-	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion
-	 * referenced by {@code minionReference}.
+	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced
+	 * 		by {@code minionReference}.
 	 */
 	public List<Actor> getOppositeMinions(EntityReference minionReference) {
 		List<Actor> oppositeMinions = new ArrayList<>();
@@ -708,13 +706,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
-	 * Gets minions geometrically right of the given {@code minionReference} on the {@link Zones#BATTLEFIELD} that
-	 * belongs to the specified player.
+	 * Gets minions geometrically right of the given {@code minionReference} on the {@link Zones#BATTLEFIELD} that belongs
+	 * to the specified player.
 	 *
 	 * @param player          The player to query.
 	 * @param minionReference The minion reference.
-	 * @return A list of {@link Actor} (sometimes empty) of minions to the geometric right of the {@code
-	 * minionReference}.
+	 * @return A list of {@link Actor} (sometimes empty) of minions to the geometric right of the {@code minionReference}.
 	 */
 	public List<Actor> getRightMinions(Player player, EntityReference minionReference) {
 		List<Actor> rightMinions = new ArrayList<>();
@@ -871,8 +868,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * the player can't take any.
 	 * <p>
 	 * Play relies on the {@link Behaviour} delegates to determine what a player's chosen action is. It takes the chosen
-	 * action and feeds it to the {@link GameLogic}, which executes the effects of that action until the next action
-	 * needs to be requested.
+	 * action and feeds it to the {@link GameLogic}, which executes the effects of that action until the next action needs
+	 * to be requested.
 	 *
 	 * @see #takeActionInTurn() for a breakdown of a specific turn.
 	 */
@@ -891,7 +888,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * GameAction}.
 	 *
 	 * @return {@code false} if the player selected an {@link net.demilich.metastone.game.actions.EndTurnAction},
-	 * indicating the player would like to end their turn.
+	 * 		indicating the player would like to end their turn.
 	 */
 	@Suspendable
 	public boolean takeActionInTurn() {
@@ -939,8 +936,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * destroyed,
 	 *
 	 * @param entityReference The entity whose triggers should be removed.
-	 * @param removeAuras     {@code true} if the entity has {@link net.demilich.metastone.game.spells.aura.Aura}
-	 *                        triggers that should be removed.
+	 * @param removeAuras     {@code true} if the entity has {@link net.demilich.metastone.game.spells.aura.Aura} triggers
+	 *                        that should be removed.
 	 */
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
 		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras);
@@ -951,7 +948,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 *
 	 * @param targetKey The reference to find.
 	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
-	 * reference was {@code null} or {@link EntityReference#NONE}
+	 * 		reference was {@code null} or {@link EntityReference#NONE}
 	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
 	 *                              that cannot be found.
 	 */
@@ -979,7 +976,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param targetKey The {@link EntityReference}.
 	 * @return A potentially empty list of entities.
 	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target
-	 * resolution works.
+	 * 		resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
 		final List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
@@ -1013,9 +1010,9 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	/**
 	 * Retrieves the current target override specified in the environment.
 	 * <p>
-	 * A target override can be a specific {@link EntityReference} or a "group reference" (logical entity reference)
-	 * that returns exactly zero or one targets. The override should almost always succeed, and it would be surprising
-	 * if there were overrides that resulted in no targets being found.
+	 * A target override can be a specific {@link EntityReference} or a "group reference" (logical entity reference) that
+	 * returns exactly zero or one targets. The override should almost always succeed, and it would be surprising if there
+	 * were overrides that resulted in no targets being found.
 	 *
 	 * @param player The player for whom the override should be evaluated.
 	 * @param source The source entity of this override.
@@ -1410,29 +1407,58 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
 	 *                        <p>
-	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the
-	 *                        first player's AI should be a game state value behaviour.
+	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first
+	 *                        player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
-	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this
-	 *                        computation on this JVM instance.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
+	 *                        on this JVM instance.
 	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
 	 *                        completed. This can be used to implement progress on a different thread.
 	 */
 	public static SimulationResult simulate(List<Deck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
-		// Actually run the computation
-		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed();
+		return simulate(deckPair, player1, player2, numberOfGamesInBatch, useJavaParallel, matchCounter, null);
+	}
 
+	/**
+	 * Runs a simulation of the decks with the specified AIs.
+	 * <p>
+	 * This call will be blocking regardless of using it in a parallel fashion.
+	 * <p>
+	 * When more than two decks are specified, the players will have their statistics merged with multiple decks.
+	 *
+	 * @param decks           Decks to run the match with. At least two are required.
+	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
+	 *                        corresponds to an AI to use for this player.
+	 *                        <p>
+	 *                        For example, use the argument {@code GameStateValueBehaviour::new} to specify that the first
+	 *                        player's AI should be a game state value behaviour.
+	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
+	 *                        corresponds to an AI to use for this player.
+	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
+	 *                        on this JVM instance.
+	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
+	 * @param contextHandler  A handler that can modify the game context for customization after it was initialized with
+	 *                        the specified decks but before mulligans. For example, the {@link GameLogic#seed} can be
+	 *                        changed here.
+	 */
+	public static SimulationResult simulate(List<Deck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
+		// Actually run the computation
+		List<Deck[]> combinations = getDeckCombinations(decks, false);
+		Stream<Deck[]> deckStream = IntStream.range(0, numberOfGamesInBatch).boxed().flatMap(i -> combinations.stream());
 		if (useJavaParallel) {
-			stream = stream.parallel();
+			deckStream = deckStream.parallel();
 		}
 
-		return stream.map(i -> {
-			final GameConfig config = GameConfig.fromDecks(deckPair, player1, player2);
+		return deckStream.map(decksPair -> {
+			final GameConfig config = GameConfig.fromDecks(Arrays.asList(decksPair), player1, player2);
 
 			Player playerContext1 = new Player(config.getPlayerConfig1());
 			Player playerContext2 = new Player(config.getPlayerConfig2());
 			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
+			if (contextHandler != null) {
+				contextHandler.accept(newGame);
+			}
 			SimulationResult innerResult = new SimulationResult(config);
 
 			try {
@@ -1453,6 +1479,16 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
 	}
 
+	/**
+	 * A generator of simulation results. Blocks until all simulations are complete.
+	 *
+	 * @param deckPair
+	 * @param behaviours
+	 * @param numberOfGamesInBatch
+	 * @param reduce               When {@code true}, merges matches that have the same behaviour and decks.
+	 * @param computed             The callback that will be fed a simulation result whenever it is computed.
+	 * @throws InterruptedException
+	 */
 	public static void simulate(List<Deck> deckPair, List<Supplier<Behaviour>> behaviours, int numberOfGamesInBatch, boolean reduce, Consumer<SimulationResult> computed) throws InterruptedException {
 		// Actually run the computation
 		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel().unordered();
@@ -1569,11 +1605,26 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		return deckPairs;
 	}
 
+	public static List<Deck[]> getDeckCombinations(List<Deck> decks, boolean includeMirrors) {
+		// Create deck combinations
+		Combinations combinations = new Combinations(decks.size(), 2);
+		List<Deck[]> deckPairs = new ArrayList<>();
+		for (int[] combination : combinations) {
+			deckPairs.add(new Deck[]{decks.get(combination[0]), decks.get(combination[1])});
+		}
+		// Include same deck matchups
+		if (includeMirrors) {
+			for (Deck deck : decks) {
+				deckPairs.add(new Deck[]{deck, deck});
+			}
+		}
+		return deckPairs;
+	}
+
 	/**
 	 * The number of milliseconds remaining until the active player is automatically changed.
 	 *
-	 * @return {@code null} if there are no turn/mulligan timers, otherwise the amount of time remaining in
-	 * milliseconds.
+	 * @return {@code null} if there are no turn/mulligan timers, otherwise the amount of time remaining in milliseconds.
 	 */
 	public Long getMillisRemaining() {
 		return null;
@@ -1638,8 +1689,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
-	 * Resolves a single target that could be a {@link EntityReference#isTargetGroup()} that points to exactly one
-	 * entity, like {@link EntityReference#FRIENDLY_HERO}.
+	 * Resolves a single target that could be a {@link EntityReference#isTargetGroup()} that points to exactly one entity,
+	 * like {@link EntityReference#FRIENDLY_HERO}.
 	 *
 	 * @param player The source player.
 	 * @param source The entity from whose point of view this target should be evaluated.

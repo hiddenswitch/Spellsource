@@ -1,0 +1,20 @@
+Name: Odd Rogue
+Class: Rogue
+Format: Standard
+2x Argent Squire
+2x Cold Blood
+2x Deadly Poison
+2x Dire Mole
+2x Fire Fly
+2x Southsea Deckhand
+2x Fan of Knives
+2x Hench-Clan Thug
+1x Ironbeak Owl
+2x SI:7 Agent
+2x Tar Creeper
+2x Vicious Fledgling
+1x Cobalt Scalebane
+2x Fungalmancer
+1x Leeroy Jenkins
+2x Vilespine Slayer
+1x Baku the Mooneater
