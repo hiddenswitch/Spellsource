@@ -5,6 +5,8 @@ import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.util.Logging;
 import io.vertx.core.Vertx;
 import org.apache.commons.lang3.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 
@@ -16,6 +18,7 @@ public class Embedded {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("vertx.disableDnsResolver", "true");
 		Logging.setLoggingLevel();
+		Logger logger = LoggerFactory.getLogger(Embedded.class);
 
 		final Vertx vertx = Vertx.vertx();
 		mongo().connectWithEnvironment(vertx);
@@ -30,15 +33,15 @@ public class Embedded {
 						// Deploy the broadcaster so that the client knows we're running local.
 						vertx.deployVerticle(Broadcaster.create(), thenFinally -> {
 							if (thenFinally.succeeded()) {
-								System.out.println("Server is ready.");
+								logger.info("main: Server is ready.");
 							} else {
-								System.err.println("The broadcasting agent failed to start. You will not be able to connect with a local client.");
+								logger.info("main: The broadcasting agent failed to start. You will not be able to connect with a local client.");
 							}
 						});
 					}
 				});
 			} else {
-				System.err.println("Failed to migrate, deployment aborted.");
+				logger.error("main: Failed to migrate, deployment aborted.");
 				ExceptionUtils.printRootCauseStackTrace(then.cause());
 			}
 		});

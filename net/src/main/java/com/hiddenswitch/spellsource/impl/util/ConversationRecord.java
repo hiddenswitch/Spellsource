@@ -41,7 +41,4 @@ public class ConversationRecord extends MongoRecord implements Serializable{
         return Objects.hashCode(super.hashCode(), messages);
     }
 
-    public Conversation toConversationDto() {
-        return null;
-    }
 }

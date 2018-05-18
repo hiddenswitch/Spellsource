@@ -28,7 +28,6 @@ public class Logging {
 		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger) org.slf4j.LoggerFactory
 				.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
 		root.setLevel(level);
-
 		setLoggingLevelForClass(WebSocket08FrameEncoder.class, Level.ERROR);
 		setLoggingLevelForClass(WebSocket08FrameDecoder.class, Level.ERROR);
 		setLoggingLevelForClass(WebSocketServerHandshaker.class, Level.ERROR);

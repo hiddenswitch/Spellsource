@@ -47,17 +47,17 @@ public class Mongo {
 
 	public synchronized Mongo startEmbedded() {
 		if (localMongoServer == null) {
-			logger.info("Starting Mongod embedded...");
+			logger.info("startEmbedded: Starting Mongod embedded.");
 			localMongoServer = new LocalMongo();
 			try {
 				localMongoServer.start();
 			} catch (Throwable e) {
-				logger.error("Mongo failed to start.", e);
+				logger.error("startEmbedded: Mongo failed to start: {}", e);
 				return this;
 			}
-			logger.info("Started Mongod embedded.");
+			logger.info("startEmbedded: Started Mongod embedded.");
 		} else {
-			logger.info("Mongod already started.");
+			logger.info("startEmbedded: Mongod already started.");
 		}
 		return this;
 	}
@@ -85,7 +85,13 @@ public class Mongo {
 
 	public Mongo connect(Vertx vertx) {
 		// Gets the connection string from the static field.
-		return connect(vertx, "mongodb://localhost:27017/production?replicaSet=localReplSet");
+		String connectionString;
+		if (localMongoServer != null) {
+			connectionString = localMongoServer.getUrl();
+		} else {
+			connectionString = "mongodb://localhost:27017/metastone";
+		}
+		return connect(vertx, connectionString);
 	}
 
 	/**
@@ -379,14 +385,11 @@ public class Mongo {
 	 * Reportedly, there is a limit of <a href="https://github.com/meteor/meteor-feature-requests/issues/158#issuecomment-339376181">
 	 * 1,000 change stream watches</a> in Mongo 3.6. This will exceed the default max connections in any case.
 	 *
-	 * @param collection the collection
-	 * @param pipeline   the Mongo aggregation pipeline
-	 * @param watchOptions    the options
-
-	@Suspendable
-	public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline, WatchOptions watchOptions) {
-		return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h));
-	}
+	 * @param collection   the collection
+	 * @param pipeline     the Mongo aggregation pipeline
+	 * @param watchOptions the options
+	 * @Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
+	 * 		WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
 	 */
 
 	public void close() {
