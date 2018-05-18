@@ -1067,6 +1067,7 @@ public interface Games extends Verticle {
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
 		entityState.permanent(card.hasAttribute(Attribute.PERMANENT));
+		entityState.collectible(card.isCollectible());
 		HeroClass heroClass = card.getHeroClass();
 
 		// Handles tri-class cards correctly
