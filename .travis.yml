@@ -8,10 +8,8 @@ cache:
     - $HOME/.gradle/wrapper/
 jdk:
   - oraclejdk8
-services:
-  - mongodb
 script:
-  - ./gradlew check
+  - ./gradlew game:check
 dist: trusty
 sudo: false
 addons:
