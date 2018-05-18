@@ -27,6 +27,23 @@ import static org.mockito.Mockito.spy;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testShudderwockYoggInteraction() {
+		runGym((context, player, opponent) -> {
+			// 2 spells
+			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_the_coin");
+			// This only casts Coins
+			destroy(context, playMinionCard(context, player, "minion_yogg_one_kind"));
+			Card shudderwock = receiveCard(context, player, "minion_shudderwock");
+			player.setMana(shudderwock.getBaseManaCost());
+			// Mana now at base mana cost
+			playCard(context, player, shudderwock);
+			// Mana goes from zero to two coins cast worth of mana
+			Assert.assertEquals(player.getMana(), 2);
+		});
+	}
+
+	@Test
 	public void testTessGreymane() {
 		runGym((context, player, opponent) -> {
 			Set<String> willReplay = Sets.newHashSet("spell_never_valid_targets_black_test", "minion_black_test", "minion_play_randomly_battlecry");
