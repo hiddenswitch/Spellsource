@@ -14,11 +14,13 @@ public class ConversationId extends StringEx {
 		super();
 	}
 
+	@SuppressWarnings("deprecation")
 	public ConversationId(List<UserId> userIds) {
 		userIds.sort(Comparator.comparing(StringEx::toString));
 		id = Joiner.on("-").join(userIds);
 	}
 
+	@SuppressWarnings("deprecation")
 	public ConversationId(String id) {
 		super(id);
 	}

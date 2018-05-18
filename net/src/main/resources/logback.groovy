@@ -14,11 +14,8 @@ import ca.pjer.logback.AwsLogsAppender
 import ch.qos.logback.classic.PatternLayout
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.filter.ThresholdFilter
-import ch.qos.logback.core.ConsoleAppender
-import ch.qos.logback.classic.Level
 
-import static ch.qos.logback.classic.Level.DEBUG
-import static ch.qos.logback.classic.Level.ERROR
+import static ch.qos.logback.classic.Level.*
 
 def date = timestamp("yyyyMMdd")
 def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
@@ -48,7 +45,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 
     filter(ThresholdFilter) {
-        level = isAWS ? WARN : DEBUG
+        level = isAWS ? WARN : INFO
     }
 }
 
@@ -56,3 +53,5 @@ root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 
 logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
+logger("org.reflections", ERROR)
+logger("co.paralleluniverse", ERROR)
