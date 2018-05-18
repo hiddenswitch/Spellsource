@@ -1455,6 +1455,10 @@ definitions:
         description: |
           Indicates the entity is an on-battlefield permanent.
         type: 'boolean'
+      collectible:
+        description: |
+          Indicates the card is collectible - valid for putting into decks.
+        type: 'boolean'
       taunt:
         description: |
           Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's

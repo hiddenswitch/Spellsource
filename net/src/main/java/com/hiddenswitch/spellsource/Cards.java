@@ -7,6 +7,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 
@@ -97,8 +98,7 @@ public interface Cards {
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)
-				.filter(cd -> cd.isCollectible()
-						&& DeckFormat.CUSTOM.isInFormat(cd.getSet()))
+				.filter(cd -> DeckFormat.CUSTOM.isInFormat(cd.getSet()) && cd.type != CardType.GROUP && cd.type != CardType.HERO_POWER)
 				.map(CardDesc::create)
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> new CardRecord().entity(entity))
