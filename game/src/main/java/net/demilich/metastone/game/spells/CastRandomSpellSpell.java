@@ -70,12 +70,10 @@ public class CastRandomSpellSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD, SpellArg.CARDS, SpellArg.CARD_SOURCE, SpellArg.CARD_FILTER);
-		CardList spells = desc.getFilteredCards(context, player, source);
 		TargetPlayer castingTargetPlayer = desc.getTargetPlayer() == null ? TargetPlayer.OWNER : desc.getTargetPlayer();
-
 		player.setAttribute(Attribute.RANDOM_CHOICES);
-
 		int numberOfSpellsToCast = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		CardList spells = SpellUtils.getCards(context, player, target, source, desc, numberOfSpellsToCast);
 		for (int i = 0; i < numberOfSpellsToCast; i++) {
 			if (spells.isEmpty()) {
 				logger.warn("onCast {} {}: An empty number of spells were found with the filter {} and source {}", context.getGameId(), source, desc.getCardFilter(), desc.getCardSource());

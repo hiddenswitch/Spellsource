@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -76,7 +77,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			action = action.clone();
 			action.setSource(source.getReference());
 			EntityReference battlecryTarget;
-			if (action.getPredefinedSpellTargetOrUserTarget() == null) {
+			if (action.getTargetRequirement() != TargetSelection.NONE) {
 				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
 				if (targets.isEmpty()) {
 					context.getLogic().revealCard(player, card);
@@ -85,12 +86,13 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				}
 				battlecryTarget = context.getLogic().getRandom(targets).getReference();
 				action.setTargetReference(battlecryTarget);
+				context.getEnvironment().put(Environment.TARGET, battlecryTarget);
 			} else {
-				battlecryTarget = action.getPredefinedSpellTargetOrUserTarget();
+				battlecryTarget = EntityReference.NONE;
 			}
 			// Actually execute the battlecry
 			context.getLogic().revealCard(player, card);
-			context.getEnvironment().put(Environment.TARGET, battlecryTarget);
+
 			context.getLogic().castSpell(castingPlayer.getId(), action.getSpell(), source.getReference(), battlecryTarget, action.getTargetRequirement(), false, action);
 			context.getEnvironment().remove(Environment.TARGET);
 			context.getLogic().endOfSequence();
