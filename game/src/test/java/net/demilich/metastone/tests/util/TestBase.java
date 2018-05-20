@@ -513,7 +513,8 @@ public class TestBase {
 			context.getLogic().receiveCard(player.getId(), card);
 		}
 
-		context.getLogic().performGameAction(player.getId(), card.play());
+		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
+		context.getLogic().performGameAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
 	}
 

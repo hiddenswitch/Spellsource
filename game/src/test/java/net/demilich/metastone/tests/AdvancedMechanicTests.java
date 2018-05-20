@@ -5,11 +5,13 @@ import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -39,6 +41,35 @@ import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testCardFilter() {
+		runGym((context, player, opponent) -> {
+			Card hasTaunt = CardCatalogue.getCardById("minion_test_taunts");
+			EntityFilterDesc desc = new EntityFilterDesc(CardFilter.class);
+			desc.put(FilterArg.CARD_TYPE, CardType.MINION);
+			desc.put(FilterArg.ATTRIBUTE, Attribute.TAUNT);
+			desc.put(FilterArg.OPERATION, Operation.HAS);
+			EntityFilter filter = desc.create();
+			Assert.assertTrue(filter.matches(context, player, hasTaunt, player.getHero()));
+		});
+
+	}
+
+	@Test
+	public void testCreateCardFromChoices() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_test_taunt_first_choices");
+			Minion target = playMinionCard(context, player, player.getHand().get(0));
+			Assert.assertTrue(target.hasAttribute(Attribute.TAUNT));
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_test_taunt_second_choices");
+			Minion target = playMinionCard(context, player, player.getHand().get(0));
+			Assert.assertTrue(target.hasAttribute(Attribute.TAUNT));
+		});
+	}
 
 	@Test
 	public void testShuffleToDeck() {

@@ -8,14 +8,14 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
+    "spell": {
+      "class": "RecastSpell"
+    },
     "cards": [
       "spell_empty_card_1",
       "spell_empty_card_2",
       "spell_win_the_game"
-    ],
-    "spell": {
-      "class": "RecastSpell"
-    }
+    ]
   },
   "collectible": false,
   "set": "TEST",

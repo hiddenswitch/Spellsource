@@ -1,0 +1,50 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.CreateCardFromChoicesSpell",
+    "name": "No Name",
+    "cardFilters": [
+      {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "HasTextFilter",
+            "invert": true
+          }
+        ]
+      },
+      {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "attribute": "TAUNT",
+            "cardType": "MINION",
+            "operation": "HAS"
+          },
+          {
+            "class": "HasEffectsFilter",
+            "invert": true
+          }
+        ]
+      }
+    ],
+    "cardSource": {
+      "class": "CatalogueSource"
+    },
+    "howMany": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

@@ -68,10 +68,10 @@
     },
     {
       "class": "BuffSpell",
-      "attackBonus": 1,
-      "hpBonus": 1,
       "name": "Volcanic Might",
-      "description": "Give a minion +1/+1"
+      "description": "Give a minion +1/+1",
+      "attackBonus": 1,
+      "hpBonus": 1
     }
   ],
   "rarity": "FREE",
