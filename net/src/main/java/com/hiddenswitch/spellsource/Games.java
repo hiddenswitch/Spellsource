@@ -373,8 +373,8 @@ public interface Games extends Verticle {
 	}
 
 	/**
-	 * Builds choose one options from a choice card, incrementing the {@code chooseOneVirtualEntitiesId} for every
-	 * virtual entity it has added using {@code adder}.
+	 * Builds choose one options from a choice card, incrementing the {@code chooseOneVirtualEntitiesId} for every virtual
+	 * entity it has added using {@code adder}.
 	 *
 	 * @param workingContext             A {@link GameContext} to query for state.
 	 * @param playerId                   The point of view whom we should build the choices from.
@@ -628,8 +628,8 @@ public interface Games extends Verticle {
 	CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException;
 
 	/**
-	 * Gets the current game state of a requested game ID. In the future, this method should punt the request to the
-	 * next Games service instance if it can't find the given session.
+	 * Gets the current game state of a requested game ID. In the future, this method should punt the request to the next
+	 * Games service instance if it can't find the given session.
 	 *
 	 * @param request The game ID to describe.
 	 * @return The game state of the requested game.
@@ -649,9 +649,9 @@ public interface Games extends Verticle {
 	EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution;
 
 	/**
-	 * Updates an entity specified inside the game with specific attributes. Currently unsupported. This allows
-	 * real-time manipulation of a game in progress. This call should punt the request to the next instance in the
-	 * cluster if it does not have the specified game.
+	 * Updates an entity specified inside the game with specific attributes. Currently unsupported. This allows real-time
+	 * manipulation of a game in progress. This call should punt the request to the next instance in the cluster if it
+	 * does not have the specified game.
 	 *
 	 * @param request Information about the game and the updates to the entity this service should do.
 	 * @return Information about the entity update.
@@ -860,8 +860,8 @@ public interface Games extends Verticle {
 	}
 
 	/**
-	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the
-	 * specified user.
+	 * Gets a client view of the specified game engine entity. Tries its best to not leak information given the specified
+	 * user.
 	 *
 	 * @param workingContext A context to generate the entity view for.
 	 * @param entity         The entity.
@@ -1051,6 +1051,9 @@ public interface Games extends Verticle {
 						&& localPlayerId == card.getOwner();
 				entityState.playable(playable);
 				entityState.manaCost(workingContext.getLogic().getModifiedManaCost(workingContext.getPlayer(owner), card));
+			} else {
+				entityState.playable(false);
+				entityState.manaCost(card.getBaseManaCost());
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 		} else {
@@ -1159,7 +1162,7 @@ public interface Games extends Verticle {
 	 * end games that have received no actions from either client connected to them.
 	 *
 	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over due
-	 * to disconnection.
+	 * 		to disconnection.
 	 */
 	static long getDefaultNoActivityTimeout() {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
