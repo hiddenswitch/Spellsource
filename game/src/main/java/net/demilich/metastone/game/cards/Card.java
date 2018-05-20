@@ -34,7 +34,6 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -46,9 +45,9 @@ import java.util.*;
  * created by other cards. Like all entities, they have attributes and are mutable.
  *
  * @see Entity#getSourceCard() for a way to retrieve the card that backs an entity. For a {@link
- * net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
- * Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
- * casts for {@link net.demilich.metastone.game.entities.Actor} objects.
+ * 		net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
+ * 		Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
+ * 		casts for {@link net.demilich.metastone.game.entities.Actor} objects.
  * @see CardDesc for the class that is the base of the serialized representation of cards.
  */
 public class Card extends Entity implements HasChooseOneActions {
@@ -64,7 +63,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
 
 	protected Card() {
-		attributes = new CardAttributes(this);
+		attributes = new CardAttributeMap(this);
 	}
 
 	/**
@@ -126,7 +125,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public Card clone() {
 		Card clone = (Card) super.clone();
-		clone.attributes = this.attributes.clone();
+		clone.attributes = ((CardAttributeMap) this.attributes).clone();
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
@@ -236,7 +235,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
 	 *
 	 * @return The value of the {@link Attribute#DESCRIPTION} on this {@link Card}, if it is not null. Otherwise, the
-	 * {@link CardDesc#description} field.
+	 * 		{@link CardDesc#description} field.
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
@@ -264,7 +263,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *                owner.
 	 * @return The cost.
 	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
-	 * cost of a card.
+	 * 		cost of a card.
 	 */
 	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
@@ -337,7 +336,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Create an action representing playing the card.
 	 *
 	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int,
-	 * GameAction)}.
+	 *    GameAction)}.
 	 */
 	@Suspendable
 	public PlayCardAction play() {
@@ -879,8 +878,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	@Override
-	public CardAttributes getAttributes() {
-		return (CardAttributes) attributes;
+	public CardAttributeMap getAttributes() {
+		return (CardAttributeMap) attributes;
 	}
 
 	@Override

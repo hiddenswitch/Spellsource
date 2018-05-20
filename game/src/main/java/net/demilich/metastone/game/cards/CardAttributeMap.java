@@ -20,16 +20,16 @@ import java.util.Set;
  * A hashmap that can contain "overrides" to a {@link CardDesc}. This allows cards to assume other identities while
  * retaining their enchantments by changing their {@link Attribute#CARD_ID} or {@link Attribute#AURA_CARD_ID}.
  */
-public final class CardAttributes extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
+public final class CardAttributeMap extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
 	@JsonIgnore
 	private Card card;
 
-	public CardAttributes(Card card) {
+	public CardAttributeMap(Card card) {
 		super();
 		this.card = card;
 	}
 
-	public CardAttributes() {
+	public CardAttributeMap() {
 		super();
 	}
 
@@ -214,8 +214,8 @@ public final class CardAttributes extends AttributeMap implements Cloneable, Jso
 	}
 
 	@Override
-	public CardAttributes clone() {
-		CardAttributes clone = new CardAttributes(getCard());
+	public CardAttributeMap clone() {
+		CardAttributeMap clone = new CardAttributeMap(getCard());
 		synchronized (this) {
 			clone.putAll(this);
 		}

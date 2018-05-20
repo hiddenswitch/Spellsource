@@ -10,18 +10,18 @@
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS",
-      "actionType": "BATTLECRY"
+      "actionType": "BATTLECRY",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "BuffSpell",
-      "hpBonus": 10000,
-      "target": "TRIGGER_HOST"
+      "target": "TRIGGER_HOST",
+      "hpBonus": 10000
     }
   },
   "attributes": {
-    "TAUNT": true,
-    "CANNOT_ATTACK": true
+    "CANNOT_ATTACK": true,
+    "TAUNT": true
   },
   "collectible": false,
   "set": "TEST",

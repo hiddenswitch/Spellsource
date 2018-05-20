@@ -7,7 +7,6 @@
   "baseHp": 1,
   "rarity": "FREE",
   "description": "Your hero power is, \"Equip a 1/1 Weapon\"",
-  "collectible": false,
   "aura": {
     "class": "CardAura",
     "target": "FRIENDLY_HERO_POWER",
@@ -16,6 +15,7 @@
   "attributes": {
     "CANNOT_ATTACK": true
   },
+  "collectible": false,
   "set": "TEST",
   "fileFormatVersion": 1
 }

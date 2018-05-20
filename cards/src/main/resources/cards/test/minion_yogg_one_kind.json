@@ -14,12 +14,12 @@
         "class": "PlayerAttributeValueProvider",
         "playerAttribute": "SPELLS_CAST"
       },
-      "cardSource": {
-        "class": "UncollectibleCatalogueSource"
-      },
       "cardFilter": {
         "class": "SpecificCardFilter",
         "cardId": "spell_the_coin"
+      },
+      "cardSource": {
+        "class": "UncollectibleCatalogueSource"
       }
     }
   },

@@ -9,6 +9,12 @@
   "spell": {
     "class": "NullSpell"
   },
+  "attributes": {
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1,
   "gameTriggers": [
     {
       "eventTrigger": {
@@ -39,11 +45,5 @@
         ]
       }
     }
-  ],
-  "attributes": {
-    "NEVER_MULLIGANS": true
-  },
-  "collectible": false,
-  "set": "TEST",
-  "fileFormatVersion": 1
+  ]
 }
