@@ -354,7 +354,12 @@ public class Spellsource {
 							long botsRemoved = Accounts.removeAccounts(mongo().find(Accounts.USERS, json("bot", true)).stream().map(jo -> new UserId(jo.getString("_id"))).collect(toList()));
 							logger.info("add MigrationRequest 13: Removed {} bot accounts", botsRemoved);
 						}))
-				.migrateTo(13, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(14)
+						.withUp(thisVertx -> {
+							changeCardId("minion_diabologist", "minion_frenzied_diabolist");
+						}))
+				.migrateTo(14, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

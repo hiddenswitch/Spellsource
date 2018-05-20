@@ -240,7 +240,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testDiabologist() {
+	public void testFrenziedDiabolist() {
 		runGym((context, player, opponent) -> {
 			Card card1 = receiveCard(context, player, "minion_bloodfen_raptor");
 			Card card2 = receiveCard(context, player, "minion_bloodfen_raptor");
@@ -254,7 +254,7 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(discoverActions.get(0).getCard().getCardId(), "minion_bloodfen_raptor");
 				return discoverActions.get(0);
 			});
-			playCard(context, player, "minion_diabologist");
+			playCard(context, player, "minion_frenzied_diabolist");
 			assertEquals(latch.getCount(), 0);
 		});
 	}
