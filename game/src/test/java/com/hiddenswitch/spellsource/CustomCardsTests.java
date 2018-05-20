@@ -37,6 +37,29 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testEmeraldDreamEscapeFromDurnholdeDesolationOfKareshInSameGame() {
+		runGym((context, player, opponent) -> {
+			Minion emeraldDream = playMinionCard(context, player, "permanent_the_emerald_dream");
+			Minion escapeFromDurnholde = playMinionCard(context, player, "permanent_escape_from_durnholde");
+			Minion desolationOfKaresh = playMinionCard(context, player, "permanent_desolation_of_karesh");
+			Minion twoTwoWisp = playMinionCard(context, player, "minion_wisp");
+			Minion threeThreeWisp = playMinionCard(context, player, "minion_wisp");
+			playMinionCardWithBattlecry(context, player, "minion_undercity_valiant", opponent.getHero());
+			assertEquals(twoTwoWisp.getAttack(), twoTwoWisp.getBaseAttack() + 1);
+			assertEquals(twoTwoWisp.getHp(), twoTwoWisp.getBaseHp() + 1);
+			assertEquals(threeThreeWisp.getAttack(), threeThreeWisp.getBaseAttack() + 2);
+			assertEquals(threeThreeWisp.getHp(), threeThreeWisp.getBaseHp() + 2);
+			assertEquals(desolationOfKaresh.getAttributeValue(Attribute.RESERVED_INTEGER_1), 2);
+			for (int i = 0; i < 3; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHand().size(), 3);
+		});
+	}
+
+	@Test
 	public void testEndOfTheLineSapInteraction() {
 		// Ensure minion without taunt no longer has taunt after End of the Line 'd + Sap'ped
 		runGym((context, player, opponent) -> {
