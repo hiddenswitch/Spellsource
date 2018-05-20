@@ -193,6 +193,7 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 	@Test
+	@Ignore
 	@SuppressWarnings("unchecked")
 	public void testScenario(TestContext context) throws InterruptedException, SuspendExecution {
 		final Async async = context.async();
