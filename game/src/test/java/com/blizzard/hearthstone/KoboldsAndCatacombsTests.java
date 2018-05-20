@@ -849,6 +849,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "spell_flamestrike");
 			playCard(context, player, "spell_flamestrike");
 			playCard(context, player, "spell_flamestrike");
+			player.getMinions().forEach(m -> m.setAttribute(Attribute.DESTROYED));
+			context.getLogic().endOfSequence();
 			playCard(context, player, "minion_dragoncaller_alanna");
 			assertEquals(player.getMinions()
 					.stream()
