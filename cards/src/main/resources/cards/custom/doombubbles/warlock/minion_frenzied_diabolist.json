@@ -16,19 +16,9 @@
         "targetPlayer": "SELF"
       },
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "SpecificCardFilter",
-            "cardId": "minion_diabologist",
-            "invert": true
-          },
-          {
-            "class": "AttributeFilter",
-            "attribute": "DISCARDED",
-            "operation": "HAS"
-          }
-        ]
+        "class": "AttributeFilter",
+        "attribute": "DISCARDED",
+        "operation": "HAS"
       },
       "cardSource": {
         "class": "GraveyardCardsSource",
