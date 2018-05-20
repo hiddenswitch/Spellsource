@@ -20,6 +20,7 @@ import io.vertx.core.eventbus.SendContext;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
@@ -310,8 +311,8 @@ public class GatewayTest extends SpellsourceTestBase {
 		DefaultApi defaultApi = getApi();
 
 		GetCardsResponse response1 = defaultApi.getCards(null);
-		final long count = CardCatalogue.getRecords().values().stream().filter(c -> c.getDesc().isCollectible()
-				&& DeckFormat.CUSTOM.isInFormat(c.getDesc().getSet())).count();
+		final long count = CardCatalogue.getRecords().values().stream().filter(
+				cd -> DeckFormat.CUSTOM.isInFormat(cd.getDesc().getSet()) && cd.getDesc().type != CardType.GROUP && cd.getDesc().type != CardType.HERO_POWER).count();
 		context.assertEquals((long) response1.getCards().size(), count);
 		try {
 			GetCardsResponse response2 = defaultApi.getCards(response1.getVersion());
