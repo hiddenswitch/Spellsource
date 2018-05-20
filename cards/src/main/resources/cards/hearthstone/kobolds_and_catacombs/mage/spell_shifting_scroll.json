@@ -27,7 +27,8 @@
             "invert": true
           }
         ]
-      }
+      },
+      "exclusive": false
     },
     "keepAfterTransform": true
   },
