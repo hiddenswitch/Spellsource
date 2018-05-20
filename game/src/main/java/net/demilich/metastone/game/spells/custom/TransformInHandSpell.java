@@ -43,7 +43,8 @@ public class TransformInHandSpell extends Spell {
 			newCard = retrievedOneCard.get(0);
 		}
 
-		Card replaced = context.getLogic().replaceCard(player.getId(), card, newCard.getCopy());
+		boolean keepsManaCostModifiers = (boolean) desc.getOrDefault(SpellArg.EXCLUSIVE, true);
+		Card replaced = context.getLogic().replaceCard(player.getId(), card, newCard.getCopy(), keepsManaCostModifiers);
 
 		// Cards that are transformed in the hand started in the deck if the originating card started in the deck
 		// See https://www.reddit.com/r/hearthstone/comments/7ia60v/shifting_scroll_does_not_work_with_leyline/

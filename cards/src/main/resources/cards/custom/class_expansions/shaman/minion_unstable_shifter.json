@@ -24,7 +24,8 @@
           "attribute": "BASE_MANA_COST",
           "offset": 1
         }
-      }
+      },
+      "exclusive": false
     },
     "keepAfterTransform": true
   },

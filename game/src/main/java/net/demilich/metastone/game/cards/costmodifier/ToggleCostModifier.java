@@ -11,7 +11,7 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
-public class ToggleCostModifier extends CardCostModifier {
+public final class ToggleCostModifier extends CardCostModifier {
 
 	private EventTrigger toggleOnTrigger;
 	private EventTrigger toggleOffTrigger;

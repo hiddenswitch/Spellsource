@@ -19,7 +19,8 @@
       "cardSource": {
         "class": "HandSource",
         "targetPlayer": "OPPONENT"
-      }
+      },
+      "exclusive": false
     },
     "keepAfterTransform": true
   },

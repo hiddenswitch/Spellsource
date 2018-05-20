@@ -26,6 +26,7 @@
       "spell": {
         "class": "custom.TransformInHandSpell",
         "target": "SELF",
+        "exclusive": false,
         "secondaryTarget": "EVENT_TARGET"
       },
       "keepAfterTransform": true

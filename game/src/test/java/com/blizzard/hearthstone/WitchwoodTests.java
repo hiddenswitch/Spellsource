@@ -23,8 +23,34 @@ import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.spy;
+import static org.testng.Assert.*;
 
 public class WitchwoodTests extends TestBase {
+
+	@Test
+	public void testChamelosDoesntKeepCost() {
+		runGym((context, player, opponent) -> {
+			Card corridorCreeper = receiveCard(context, opponent, "minion_corridor_creeper");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			destroy(context, wisp);
+			assertEquals(costOf(context, opponent, corridorCreeper), corridorCreeper.getBaseManaCost() - 1);
+			Card chameleos = receiveCard(context, player, "minion_chameleos");
+			context.endTurn();
+			context.endTurn();
+			chameleos = (Card) chameleos.transformResolved(context);
+			assertEquals(chameleos.getCardId(), "minion_corridor_creeper");
+			assertEquals(costOf(context, player, chameleos), chameleos.getBaseManaCost() - 1, "Chameleos should be Corridor Creeper cost minus 1");
+			assertEquals(costOf(context, opponent, corridorCreeper), corridorCreeper.getBaseManaCost() - 1, "Corridor Creeper should still have minus 1 cost");
+			context.getLogic().removeCard(corridorCreeper);
+			Card bloodfenRaptor = receiveCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			context.endTurn();
+			chameleos = (Card) chameleos.transformResolved(context);
+			assertEquals(chameleos.getCardId(), "minion_bloodfen_raptor");
+			assertEquals(costOf(context, player, chameleos), bloodfenRaptor.getBaseManaCost(), "Chameleos should have Bloodfen Raptor base cost.");
+			assertEquals(costOf(context, opponent, corridorCreeper), corridorCreeper.getBaseManaCost() - 1, "Corridor Creeper should still have minus 1 cost");
+		});
+	}
 
 	@Test
 	public void testShudderwockYoggInteraction() {
@@ -39,7 +65,7 @@ public class WitchwoodTests extends TestBase {
 			// Mana now at base mana cost
 			playCard(context, player, shudderwock);
 			// Mana goes from zero to two coins cast worth of mana
-			Assert.assertEquals(player.getMana(), 2);
+			assertEquals(player.getMana(), 2);
 		});
 	}
 
@@ -69,7 +95,7 @@ public class WitchwoodTests extends TestBase {
 				return invocation.callRealMethod();
 			}).when(spyLogic).revealCard(any(), any());
 			playMinionCard(context, player, "minion_tess_greymane");
-			Assert.assertEquals(willReplay.size(), 0);
+			assertEquals(willReplay.size(), 0);
 			Assert.assertFalse(battlecryTarget.hasAttribute(Attribute.RESERVED_BOOLEAN_2), "The battlecries should not have been resolved.");
 			Assert.assertFalse(context.getEntities().anyMatch(e -> e.hasAttribute(Attribute.RESERVED_BOOLEAN_3)), "There should have never been a valid target for the spell that adds this attribute.");
 		}, HeroClass.BLUE, HeroClass.BLUE);
@@ -91,7 +117,7 @@ public class WitchwoodTests extends TestBase {
 			context.init();
 			Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
 			// Both player's hero powers should cost one
-			Assert.assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
+			assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
 					.map(c -> (Card) c)
 					.filter(c -> c.getCardType() == CardType.HERO_POWER)
 					.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 1)
@@ -113,7 +139,7 @@ public class WitchwoodTests extends TestBase {
 			// Someone should have the coin
 			Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
 			// Both player's hero powers should cost one
-			Assert.assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
+			assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
 					.map(c -> (Card) c)
 					.filter(c -> c.getCardType() == CardType.HERO_POWER)
 					.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 2)
@@ -127,7 +153,7 @@ public class WitchwoodTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card nightmare = receiveCard(context, player, "minion_nightmare_amalgam");
 			playCard(context, player, "minion_mechwarper");
-			Assert.assertEquals(costOf(context, player, nightmare), nightmare.getBaseManaCost() - 1);
+			assertEquals(costOf(context, player, nightmare), nightmare.getBaseManaCost() - 1);
 		});
 
 		// Test Murlocs cost health
@@ -135,14 +161,14 @@ public class WitchwoodTests extends TestBase {
 			playCard(context, player, "minion_seadevil_stinger");
 			int hp = player.getHero().getHp();
 			playCard(context, player, "minion_nightmare_amalgam");
-			Assert.assertEquals(player.getHero().getHp(), hp - CardCatalogue.getCardById("minion_nightmare_amalgam").getBaseManaCost());
+			assertEquals(player.getHero().getHp(), hp - CardCatalogue.getCardById("minion_nightmare_amalgam").getBaseManaCost());
 		});
 
 		// Test RaceCondition
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_patches_the_pirate");
 			playCard(context, player, "minion_nightmare_amalgam");
-			Assert.assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_patches_the_pirate");
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_patches_the_pirate");
 		});
 
 		// Test CardFilter
@@ -151,7 +177,7 @@ public class WitchwoodTests extends TestBase {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_bloodfen_raptor");
 			Card thing = receiveCard(context, player, "minion_thing_from_below");
-			Assert.assertEquals(costOf(context, player, thing), thing.getBaseManaCost() - 1);
+			assertEquals(costOf(context, player, thing), thing.getBaseManaCost() - 1);
 		});
 
 		// Test RaceFilter
@@ -160,7 +186,7 @@ public class WitchwoodTests extends TestBase {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_bloodfen_raptor");
 			Minion murkEye = playMinionCard(context, player, "minion_old_murk-eye");
-			Assert.assertEquals(murkEye.getAttack(), murkEye.getBaseAttack() + 1);
+			assertEquals(murkEye.getAttack(), murkEye.getBaseAttack() + 1);
 		});
 	}
 
@@ -169,13 +195,13 @@ public class WitchwoodTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card stillInDeck = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_black_cat");
-			Assert.assertEquals(stillInDeck.getZone(), Zones.DECK);
+			assertEquals(stillInDeck.getZone(), Zones.DECK);
 		});
 
 		runGym((context, player, opponent) -> {
 			Card stillInDeck = putOnTopOfDeck(context, player, "minion_argent_squire");
 			playCard(context, player, "minion_black_cat");
-			Assert.assertEquals(stillInDeck.getZone(), Zones.HAND);
+			assertEquals(stillInDeck.getZone(), Zones.HAND);
 		});
 	}
 
@@ -187,7 +213,7 @@ public class WitchwoodTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			Minion summonedPumpkin = playMinionCard(context, player, pumpkin);
-			Assert.assertEquals(summonedPumpkin.getAttack(), pumpkin.getBaseHp() + 1);
+			assertEquals(summonedPumpkin.getAttack(), pumpkin.getBaseHp() + 1);
 		});
 	}
 }
