@@ -37,6 +37,25 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testEndOfTheLineSapInteraction() {
+		// Ensure minion without taunt no longer has taunt after End of the Line 'd + Sap'ped
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			shuffleToDeck(context, opponent, "minion_bloodfen_raptor");
+			playCard(context, opponent, "spell_end_of_the_line");
+			Minion bloodfen = playMinionCard(context, opponent, opponent.getHand().get(0));
+			assertTrue(bloodfen.hasAttribute(Attribute.TAUNT));
+			assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 5);
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_sap", bloodfen);
+			context.endTurn();
+			bloodfen = playMinionCard(context, opponent, opponent.getHand().get(0));
+			assertFalse(bloodfen.hasAttribute(Attribute.TAUNT));
+			assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack());
+		});
+	}
+
+	@Test
 	public void testInstantEvolution() {
 		runGym((context, player, opponent) -> {
 			// Adds up to more than 12

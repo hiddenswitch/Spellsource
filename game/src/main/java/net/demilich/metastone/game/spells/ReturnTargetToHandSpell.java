@@ -64,15 +64,11 @@ public class ReturnTargetToHandSpell extends Spell {
 			if (target instanceof Card) {
 				returnedCard = (Card) target;
 			} else {
-				returnedCard = target.getSourceCard();
-
-				if (returnedCard.getZone() != Zones.GRAVEYARD
-						|| returnedCard.getZone() != Zones.REMOVED_FROM_PLAY
-						|| !returnedCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-					returnedCard = returnedCard.getCopy();
-				}
+				// Don't get a copy of the source card, get a copy of the BASE card.
+				returnedCard = context.getCardById(target.getSourceCard().getCardId());
 			}
 
+			// Transferred enchantments
 			returnedCard.getAttributes().putAll(map);
 			// Prevents cards from being discarded
 			if (returnedCard.getZone() == Zones.HAND
