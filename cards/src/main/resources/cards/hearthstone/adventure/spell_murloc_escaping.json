@@ -1,0 +1,23 @@
+{
+  "name": "Murloc Escaping!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Summon a random Murloc.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "MURLOC",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}

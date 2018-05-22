@@ -1,0 +1,23 @@
+{
+  "name": "Demons Loose!",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Summon a random Demon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DEMON",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}

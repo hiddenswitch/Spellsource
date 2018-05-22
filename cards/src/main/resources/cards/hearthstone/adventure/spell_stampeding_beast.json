@@ -1,0 +1,20 @@
+{
+  "name": "Stampeding Beast!",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Summon a random Beast.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}

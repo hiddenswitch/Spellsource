@@ -147,6 +147,7 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Conc
 	}
 
 	@Override
+	@SuppressWarnings("unchecked")
 	public void setDesc(Desc<?, ?> desc) {
 		this.clear();
 		this.putAll((Map) desc);

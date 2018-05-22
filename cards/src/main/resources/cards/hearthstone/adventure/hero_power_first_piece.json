@@ -1,0 +1,32 @@
+{
+  "name": "Staff, First Piece",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Hero Power: Add a random rare card to your hand. It costs (2) less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "rarity": "RARE"
+    }
+  },
+  "collectible": false,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}

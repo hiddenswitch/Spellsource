@@ -2,12 +2,26 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class AdventureTests extends TestBase {
+
+	@Test
+	public void testMagmatron() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				shuffleToDeck(context, player, "minion_bloodfen_raptor");
+				shuffleToDeck(context, opponent, "minion_bloodfen_raptor");
+			}
+			Minion magmatron = playMinionCard(context, player, "minion_magmatron");
+			context.endTurn();
+			Assert.assertEquals(opponent.getHero().getHp(), 28);
+		});
+	}
 
 	@Test
 	@Ignore

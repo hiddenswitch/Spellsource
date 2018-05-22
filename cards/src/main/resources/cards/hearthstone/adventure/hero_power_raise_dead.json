@@ -1,0 +1,29 @@
+{
+  "name": "Raise Dead",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Whenever an enemy minion dies, summon a 1/1 skeleton.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_skeleton"
+    }
+  },
+  "spell": {
+    "class": "NullSpell"
+  },
+  "condition": {
+    "class": "OrCondition"
+  },
+  "targetSelection": "NONE",
+  "collectible": false,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}
