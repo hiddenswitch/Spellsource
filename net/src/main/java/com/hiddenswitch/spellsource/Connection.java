@@ -65,8 +65,9 @@ public interface Connection extends ReadStream<JsonObject>, WriteStream<JsonObje
 		final ConnectionImpl connection = new ConnectionImpl(socket, userId);
 		final SuspendableMap<UserId, String> connections = getConnections();
 		final UserId key = new UserId(userId);
-		connections.put(key, socket.binaryHandlerID());
-		connection.endHandler(Sync.suspendableHandler(v -> connections.remove(key)));
+		String id = socket.binaryHandlerID();
+		connections.put(key, id);
+		connection.endHandler(Sync.suspendableHandler(v -> connections.remove(key, id)));
 		return connection;
 	}
 

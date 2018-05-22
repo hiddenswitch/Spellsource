@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.impl.util.LoginToken;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
 
 import java.io.Serializable;
 
@@ -15,6 +16,7 @@ public final class CreateAccountResponse implements Serializable {
 	private boolean invalidName;
 	private boolean invalidEmailAddress;
 	private boolean invalidPassword;
+	private UserRecord record;
 
 	public CreateAccountResponse() {
 	}
@@ -94,5 +96,13 @@ public final class CreateAccountResponse implements Serializable {
 	public boolean succeeded() {
 		return getLoginToken() != null
 				&& getUserId() != null;
+	}
+
+	public void setRecord(UserRecord record) {
+		this.record = record;
+	}
+
+	public UserRecord getRecord() {
+		return record;
 	}
 }
