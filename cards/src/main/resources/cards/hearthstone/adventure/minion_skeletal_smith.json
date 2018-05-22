@@ -1,0 +1,20 @@
+{
+  "name": "Skeletal smith",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Destroy your opponent's weapon.",
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ENEMY_WEAPON"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BLIZZARD_ADVENTURE",
+  "fileFormatVersion": 1
+}

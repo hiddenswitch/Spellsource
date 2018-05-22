@@ -12,7 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * <p>
  * If a {@link SpellArg#VALUE} is provided, only refreshes that many mana crystals.
  * <p>
- * To use this, simple put {@code "RefreshManaSpell"} into the {@link SpellArg#CLASS} argument:
+ * To use this, simply put {@code "RefreshManaSpell"} into the {@link SpellArg#CLASS} argument:
  * <pre>
  *     "spell": {
  *         "class": "RefreshManaSpell"
