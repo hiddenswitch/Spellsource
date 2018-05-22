@@ -734,7 +734,7 @@ Name | Type | Description  | Notes
 
 
 
-unfriend a user 
+Removes the friend relationship between two users. 
 
 ### Example
 ```java
@@ -789,7 +789,7 @@ Name | Type | Description  | Notes
 
 
 
-connect with a friend 
+Adds a specified user to your friend list. 
 
 ### Example
 ```java
@@ -809,7 +809,7 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
-FriendPutRequest request = new FriendPutRequest(); // FriendPutRequest | Friend put request 
+FriendPutRequest request = new FriendPutRequest(); // FriendPutRequest | 
 try {
     FriendPutResponse result = apiInstance.friendPut(request);
     System.out.println(result);
@@ -823,7 +823,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
- **request** | [**FriendPutRequest**](FriendPutRequest.md)| Friend put request  |
+ **request** | [**FriendPutRequest**](FriendPutRequest.md)|  |
 
 ### Return type
 
@@ -1455,7 +1455,7 @@ This endpoint does not need any parameter.
 
 
 
-Send an invite 
+Send an invite. 
 
 ### Example
 ```java
