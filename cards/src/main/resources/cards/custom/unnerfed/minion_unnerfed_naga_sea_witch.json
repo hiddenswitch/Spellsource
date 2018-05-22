@@ -1,6 +1,6 @@
 {
-  "name": "Naga Sea Witch",
-  "baseManaCost": 8,
+  "name": "Unnerfed Naga Sea Witch",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 5,
@@ -21,7 +21,7 @@
     },
     "operation": "SUBTRACT"
   },
-  "collectible": true,
-  "set": "LEAGUE_OF_EXPLORERS",
+  "collectible": false,
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

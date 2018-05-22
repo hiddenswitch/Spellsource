@@ -1,6 +1,6 @@
 {
-  "name": "Call to Arms",
-  "baseManaCost": 5,
+  "name": "Unnerfed Call to Arms",
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",
@@ -26,7 +26,7 @@
     "cardLocation": "DECK",
     "targetPlayer": "SELF"
   },
-  "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "collectible": false,
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

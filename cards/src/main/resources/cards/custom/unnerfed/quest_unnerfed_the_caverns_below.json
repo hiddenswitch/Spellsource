@@ -1,0 +1,20 @@
+{
+  "name": "Unnerfed The Caverns Below",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play five minions with the same name. Reward: Unnerfed Crystal Core.",
+  "quest": {
+    "class": "CavernsBelowTrigger"
+  },
+  "countUntilCast": 5,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_unnerfed_crystal_core"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,10 +1,10 @@
 {
-  "name": "Dark Pact",
+  "name": "Unnerfed Dark Pact",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Destroy a friendly minion. Restore 4 Health to your hero.",
+  "description": "Destroy a friendly minion. Restore 8 Health to your hero.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
@@ -21,11 +21,11 @@
       {
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
-        "value": 4
+        "value": 8
       }
     ]
   },
-  "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "collectible": false,
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

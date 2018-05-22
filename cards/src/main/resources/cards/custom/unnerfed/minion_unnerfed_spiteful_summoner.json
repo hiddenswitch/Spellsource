@@ -1,6 +1,6 @@
 {
-  "name": "Spiteful Summoner",
-  "baseManaCost": 7,
+  "name": "Unnerfed Spiteful Summoner",
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,
@@ -34,7 +34,7 @@
   "attributes": {
     "BATTLECRY": true
   },
-  "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "collectible": false,
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
