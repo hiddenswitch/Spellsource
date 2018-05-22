@@ -7,7 +7,7 @@
   "description": "Restore 6 Health to all friendly characters.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
+    "class": "HealSpell",
     "target": "FRIENDLY_CHARACTERS",
     "value": 6
   },
