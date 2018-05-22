@@ -119,6 +119,16 @@ public class JourneyToUngoroTests extends TestBase {
 
 	@Test
 	public void testMeteor() {
+		runGym((context, player, opponent) -> {
+			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion minion2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion minion3 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_meteor", minion2);
+			Assert.assertTrue(minion1.isDestroyed());
+			Assert.assertTrue(minion2.isDestroyed());
+			Assert.assertTrue(minion3.isDestroyed());
+		});
+
 		for (int j0 = 0; j0 < 3; j0++) {
 			final int j = j0;
 			runGym((context, player, opponent) -> {
