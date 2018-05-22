@@ -601,7 +601,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see #castSpell(int, SpellDesc, EntityReference, EntityReference, TargetSelection, boolean) for complete documentation.
 	 */
 	@Suspendable
-	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
+	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, @NotNull EntityReference sourceReference, @NotNull EntityReference targetReference,
 	                      boolean childSpell) {
 		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell, null);
 	}
@@ -610,9 +610,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Casts a spell.
 	 * <p>
 	 * This method uses the {@link SpellDesc} (a {@link Map} of {@link SpellArg}, {@link Object}) to figure out what the
-	 * spell should do. The {@link SpellFactory#getSpell(SpellDesc)} method creates an instance of the {@link Spell} class
-	 * returned by {@code spellDesc.getSpellClass()}, then calls its {@link Spell#onCast(GameContext, Player, SpellDesc,
-	 * Entity, Entity)} method to actually execute the code of the spell.
+	 * spell should do. The {@link SpellDesc#create()} method creates an instance of the {@link Spell} class returned by
+	 * {@code spellDesc.getSpellClass()}, then calls its {@link Spell#onCast(GameContext, Player, SpellDesc, Entity,
+	 * Entity)} method to actually execute the code of the spell.
 	 * <p>
 	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
@@ -653,8 +653,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * 		Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
 	 */
 	@Suspendable
-	public void castSpell(int playerId, SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
-	                      TargetSelection targetSelection, boolean childSpell, GameAction sourceAction) {
+	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, @NotNull EntityReference sourceReference, @NotNull EntityReference targetReference,
+	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
 		if (sourceReference != null) {

@@ -58,6 +58,12 @@ public class SpellUtils {
 		if (targetReference == null && target != null) {
 			targetReference = target.getReference();
 		}
+		if (sourceReference == null) {
+			sourceReference = EntityReference.NONE;
+		}
+		if (targetReference == null) {
+			targetReference = EntityReference.NONE;
+		}
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
 

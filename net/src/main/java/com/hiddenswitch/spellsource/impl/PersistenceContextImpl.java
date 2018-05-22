@@ -90,7 +90,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 			SpellDesc spell = SetAttributeSpell.create(entity.getReference(), attribute, newValue);
 			// By setting childSpell to true, additional spell casting triggers don't get called
 			// But target overriding effects apply, as they should.
-			gameContext.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), null, true);
+			gameContext.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), entity.getReference(), true);
 		}
 
 		return response.getUpdated();

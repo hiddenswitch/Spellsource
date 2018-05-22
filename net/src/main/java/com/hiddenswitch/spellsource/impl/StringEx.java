@@ -28,6 +28,9 @@ public abstract class StringEx implements Serializable,
 
 	@SuppressWarnings("deprecation")
 	public StringEx(String id) {
+		if (id == null) {
+			throw new NullPointerException("id");
+		}
 		this.id = id;
 	}
 
@@ -83,6 +86,10 @@ public abstract class StringEx implements Serializable,
 	@Override
 	@SuppressWarnings("deprecation")
 	public void writeToBuffer(Buffer buffer) {
+		if (id == null) {
+			buffer.appendInt(0);
+			return;
+		}
 		byte[] bytes = id.getBytes();
 		buffer.appendInt(bytes.length);
 		buffer.appendBytes(bytes);
@@ -92,6 +99,10 @@ public abstract class StringEx implements Serializable,
 	@SuppressWarnings("deprecation")
 	public int readFromBuffer(int pos, Buffer buffer) {
 		int length = buffer.getInt(pos);
+		if (length == 0) {
+			id = null;
+			return pos + 4;
+		}
 		final int start = pos + 4;
 		id = buffer.getString(start, start + length);
 		return start + length;

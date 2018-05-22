@@ -15,7 +15,6 @@ import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.util.*;
-import io.vertx.core.Future;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -27,6 +26,7 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import org.jetbrains.annotations.NotNull;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -253,7 +253,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(authHandler);
 		router.route("/friends")
 				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(FriendPutRequest.class, this::putFriend));
+				.handler(HandlerFactory.handler(FriendPutRequest.class, this::friendPut));
 
 		router.route("/friends/:friendId")
 				.handler(bodyHandler);
@@ -305,13 +305,24 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	}
 
 	@Override
-	public WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException {
-		// TODO: If it's an ally, send all the information
+	public WebResult<GetAccountsResponse> getAccount(@NotNull RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException {
+		if (targetUserId == null) {
+			return WebResult.notFound("A null targetUserId was given.");
+		}
+
 		if (userId.equals(targetUserId)) {
 			final Account account = getAccount(userId);
+			if (account == null) {
+				return WebResult.notFound("Unexpectedly, an account with your userId %s was not found", userId);
+			}
+
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(account)));
 		} else {
 			UserRecord record = Accounts.get(targetUserId);
+			if (record == null) {
+				return WebResult.notFound("An account with userId %s was not found", userId);
+			}
+
 			return WebResult.succeeded(new GetAccountsResponse().accounts(Collections.singletonList(new Account()
 					.name(record.getUsername())
 					.id(targetUserId))));
@@ -321,7 +332,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetAccountsResponse> getAccounts(RoutingContext context, String userId, GetAccountsRequest request) throws SuspendExecution, InterruptedException {
-		return WebResult.failed(404, new UnsupportedOperationException("Cannot retrieve multiple accounts through this interface."));
+		return WebResult.unsupported("Cannot retrieve multiple accounts through this interface.");
 	}
 
 	@Override
@@ -333,13 +344,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 						.withName(request.getName()));
 
 		if (internalResponse.isInvalidEmailAddress()) {
-			return WebResult.failed(new RuntimeException("Invalid email address."));
+			return WebResult.invalidArgument("E-mail address already exists");
 		} else if (internalResponse.isInvalidPassword()) {
-			return WebResult.failed(new RuntimeException("Invalid password."));
+			return WebResult.invalidArgument("Password is too short (at least 6 characters)");
 		} else if (internalResponse.isInvalidName()) {
-			return WebResult.failed(new RuntimeException("Invalid name."));
+			return WebResult.invalidArgument("Username invalid (only alphanumerics, starts with letter)");
 		} else if (internalResponse.getUserId() == null) {
-			throw new RuntimeException();
+			return WebResult.notFound("Account was not successfully created, try again later");
 		}
 
 		// Initialize the collection
@@ -354,19 +365,15 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	public WebResult<LoginResponse> login(RoutingContext context, LoginRequest request) throws SuspendExecution, InterruptedException {
 		com.hiddenswitch.spellsource.models.LoginResponse internalResponse;
-		try {
-			internalResponse = Accounts.login(
-					new com.hiddenswitch.spellsource.models.LoginRequest().withEmail(request.getEmail())
-							.withPassword(request.getPassword()));
-		} catch (Throwable ex) {
-			return WebResult.failed(403, ex);
-		}
+		internalResponse = Accounts.login(
+				new com.hiddenswitch.spellsource.models.LoginRequest().withEmail(request.getEmail())
+						.withPassword(request.getPassword()));
 
 
 		if (internalResponse.isBadPassword()) {
-			return WebResult.failed(403, new RuntimeException("Invalid password."));
+			return WebResult.invalidArgument("Bad password");
 		} else if (internalResponse.isBadEmail()) {
-			return WebResult.failed(403, new RuntimeException("Invalid email address."));
+			return WebResult.invalidArgument("Bad email address");
 		}
 
 		return WebResult.succeeded(new LoginResponse()
@@ -387,11 +394,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 					.withInventoryIds(request.getInventoryIds())
 					.withHeroClass(heroClass);
 		} else {
-			try {
-				createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
-			} catch (Exception e) {
-				return WebResult.failed(e);
-			}
+			createRequest = DeckCreateRequest.fromDeckList(request.getDeckList());
 		}
 
 		DeckCreateResponse internalResponse = Decks.createDeck(createRequest
@@ -403,17 +406,26 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	}
 
 	private WebResult<DecksGetResponse> getDeck(String userId, String deckId) throws SuspendExecution, InterruptedException {
-		GetCollectionResponse updatedCollection = Inventory.getCollection(new GetCollectionRequest()
+		if (!Inventory.isOwner(deckId, new UserId(userId))) {
+			return WebResult.forbidden("Cannot access a different user's deck, until you are an ally.");
+		}
+
+		GetCollectionResponse collection = Inventory.getCollection(new GetCollectionRequest()
 				.withUserId(userId)
 				.withDeckId(deckId));
 
 		return WebResult.succeeded(new DecksGetResponse()
-				.inventoryIdsSize(updatedCollection.getInventoryRecords().size())
-				.collection(updatedCollection.asInventoryCollection()));
+				.inventoryIdsSize(collection.getInventoryRecords().size())
+				.collection(collection.asInventoryCollection()));
 	}
 
 	@Override
 	public WebResult<DecksGetResponse> decksUpdate(RoutingContext context, String userId, String deckId, DecksUpdateCommand updateCommand) throws SuspendExecution, InterruptedException {
+		// Checks if the user can modify this deck
+		if (!Inventory.isOwner(deckId, new UserId(userId))) {
+			return WebResult.forbidden("You cannot modify this deck, you are not its owner");
+		}
+
 		Decks.updateDeck(DeckUpdateRequest.create(userId, deckId, updateCommand));
 
 		// Get the updated collection
@@ -422,6 +434,10 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<DecksGetResponse> decksGet(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
+		if (!Inventory.isOwner(deckId, new UserId(userId))) {
+			return WebResult.forbidden("You cannot read this deck, you are not its owner");
+		}
+
 		return getDeck(userId, deckId);
 	}
 
@@ -439,10 +455,10 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException {
-		GetCollectionResponse collection = Inventory.getCollection(GetCollectionRequest.deck(deckId));
-		if (!collection.getUserId().equals(userId)) {
-			return WebResult.failed(new SecurityException("You can't delete someone else's deck!"));
+		if (!Inventory.isOwner(deckId, new UserId(userId))) {
+			return WebResult.forbidden("You cannot delete this deck, you are not its owner");
 		}
+
 		return WebResult.succeeded(Decks.deleteDeck(DeckDeleteRequest.create(deckId)));
 	}
 
@@ -488,20 +504,14 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		try {
-			UserId key = new UserId(userId);
-			GameId gameId = Games.getGames().get(key);
-			if (gameId == null) {
-				Matchmaking.cancel(key);
-				return WebResult.succeeded(new MatchConcedeResponse().isConceded(false));
-			} else {
-
-				getGames().concedeGameSession(ConcedeGameSessionRequest.request(gameId, key));
-				return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
-
-			}
-		} catch (Throwable t) {
-			return WebResult.failed(t);
+		UserId key = new UserId(userId);
+		GameId gameId = Games.getGames().get(key);
+		if (gameId == null) {
+			Matchmaking.cancel(key);
+			return WebResult.succeeded(new MatchConcedeResponse().isConceded(false));
+		} else {
+			getGames().concedeGameSession(ConcedeGameSessionRequest.request(gameId, key));
+			return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
 		}
 	}
 
@@ -533,7 +543,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	}
 
 	@Override
-	public WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId, FriendPutRequest req)
+	public WebResult<FriendPutResponse> friendPut(RoutingContext context, String userId, FriendPutRequest req)
 			throws SuspendExecution, InterruptedException {
 		// lookup own user account
 		UserRecord myAccount = (UserRecord) context.user();
@@ -643,12 +653,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<ChangePasswordResponse> changePassword(RoutingContext context, String userId, com.hiddenswitch.spellsource.client.models.ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
-		try {
-			Accounts.changePassword(ChangePasswordRequest.request(new UserId(userId), request.getPassword()));
-		} catch (RuntimeException ex) {
-			return WebResult.failed(ex);
-		}
-
+		Accounts.changePassword(ChangePasswordRequest.request(new UserId(userId), request.getPassword()));
 		return WebResult.succeeded(200, new ChangePasswordResponse());
 	}
 

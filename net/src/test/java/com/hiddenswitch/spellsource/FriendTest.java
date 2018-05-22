@@ -55,8 +55,8 @@ public class FriendTest extends SpellsourceTestBase {
 				} catch (ApiException e) {
 					testContext.assertEquals(200, e.getCode(), "Adding new friend. Should return 200");
 				}
-				testContext.assertEquals(
-						friendPutResponse.getFriend().getFriendId(), createAccount2Response.getUserId());
+
+				testContext.assertEquals(createAccount2Response.getUserId(), friendPutResponse.getFriend().getFriendId());
 
 				// test putting friend that already exists
 				try {
