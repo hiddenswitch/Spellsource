@@ -882,12 +882,6 @@ public class Card extends Entity implements HasChooseOneActions {
 		return (CardAttributeMap) attributes;
 	}
 
-	@Override
-	public void setAttributes(AttributeMap attributes) {
-		this.attributes.clear();
-		this.attributes.putAll(attributes);
-	}
-
 	public boolean isHeroPower() {
 		return getCardType().isCardType(CardType.HERO_POWER);
 	}

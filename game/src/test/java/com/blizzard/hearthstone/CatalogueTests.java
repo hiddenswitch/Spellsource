@@ -11,6 +11,7 @@ import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
@@ -67,6 +68,7 @@ public class CatalogueTests {
 	}
 
 	@Test(dataProvider = "HearthstoneCards")
+	@Ignore("awaiting update from Hearthstone")
 	public void testAttributes(JsonObject cardObject) {
 		final Card card = CardCatalogue.getCardByName(cardObject.getString("name"));
 		String name = cardObject.getString("name");

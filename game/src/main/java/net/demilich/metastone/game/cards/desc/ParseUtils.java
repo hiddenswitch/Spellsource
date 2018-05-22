@@ -52,6 +52,7 @@ public class ParseUtils {
 	private static DescDeserializer<EventTriggerDesc, ?, ?> triggerParser = new EventTriggerDescDeserializer();
 	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
+	@SuppressWarnings("deprecation")
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
 		try {
