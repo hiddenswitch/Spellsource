@@ -1,5 +1,4 @@
 {
-  "id": "minion_solo_resummon",
   "name": "Solo Resummon",
   "baseManaCost": 6,
   "type": "MINION",

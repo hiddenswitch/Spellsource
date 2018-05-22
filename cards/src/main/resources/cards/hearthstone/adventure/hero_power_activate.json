@@ -11,13 +11,13 @@
     "spells": [
       {
         "class": "SummonSpell",
-        "randomTarget": true,
         "cards": [
           "minion_magmatron",
           "minion_toxitron",
           "minion_electron",
           "minion_arcanotron"
-        ]
+        ],
+        "randomTarget": true
       },
       {
         "class": "DrawCardSpell",

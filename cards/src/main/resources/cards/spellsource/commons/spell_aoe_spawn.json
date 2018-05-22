@@ -1,5 +1,4 @@
 {
-  "id": "spell_aoe_spawn",
   "name": "AOE Spawn",
   "baseManaCost": 3,
   "type": "SPELL",

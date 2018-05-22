@@ -1,5 +1,4 @@
 {
-  "id": "minion_swapmaster",
   "name": "Swapmaster",
   "baseManaCost": 3,
   "type": "MINION",

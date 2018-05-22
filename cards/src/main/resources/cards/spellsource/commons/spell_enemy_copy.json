@@ -1,5 +1,4 @@
 {
-  "id": "spell_enemy_copy",
   "name": "Enemy Copy",
   "baseManaCost": 1,
   "type": "SPELL",

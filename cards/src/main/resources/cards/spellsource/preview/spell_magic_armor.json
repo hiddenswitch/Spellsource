@@ -1,5 +1,4 @@
 {
-  "id": "spell_magic_armor",
   "name": "Magic Armor",
   "baseManaCost": 1,
   "type": "SPELL",

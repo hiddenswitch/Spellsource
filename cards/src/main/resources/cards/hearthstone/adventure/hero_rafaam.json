@@ -3,9 +3,9 @@
   "heroPower": "hero_power_first_piece",
   "baseManaCost": 0,
   "type": "HERO",
-  "description": "Battlecry: Replace your deck with Rafaam's",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
+  "description": "Battlecry: Replace your deck with Rafaam's",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -59,8 +59,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
     "ARMOR": 5,
+    "BATTLECRY": true,
     "MAX_HP": 30
   },
   "collectible": false,

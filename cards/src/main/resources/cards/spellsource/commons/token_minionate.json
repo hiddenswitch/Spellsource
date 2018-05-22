@@ -1,5 +1,4 @@
 {
-  "id": "token_minionate",
   "name": "Temp Token",
   "baseManaCost": 1,
   "type": "MINION",

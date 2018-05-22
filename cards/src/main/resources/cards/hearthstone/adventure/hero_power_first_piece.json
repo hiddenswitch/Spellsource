@@ -18,12 +18,12 @@
         "operation": "SUBTRACT"
       }
     },
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
-    },
     "cardFilter": {
       "class": "CardFilter",
       "rarity": "RARE"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": false,

@@ -1,5 +1,4 @@
 {
-  "id": "minion_self_cost_reduce",
   "name": "Self Cost Reduce",
   "baseManaCost": 2,
   "type": "MINION",
