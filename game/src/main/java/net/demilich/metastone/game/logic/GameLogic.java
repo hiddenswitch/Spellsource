@@ -1821,6 +1821,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (player.getHero().hasAttribute(attr)) {
 			return true;
 		}
+
+		if (player.getHero().getHeroPower() != null
+				&& player.getHero().getHeroPower().hasAttribute(attr)) {
+			return true;
+		}
+
 		for (Entity minion : player.getMinions()) {
 			if (minion.hasAttribute(attr)) {
 				return true;
@@ -2381,11 +2387,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public boolean doesCardCostHealth(Player player, Card card) {
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
-				&& player.hasAttribute(Attribute.SPELLS_COST_HEALTH);
+				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
 		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
-				&& player.hasAttribute(Attribute.MURLOCS_COST_HEALTH);
+				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
-				&& player.hasAttribute(Attribute.MINIONS_COST_HEALTH);
+				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
 		return spellsCostHealthCondition
 				|| murlocsCostHealthCondition
 				|| minionsCostHealthCondition;
