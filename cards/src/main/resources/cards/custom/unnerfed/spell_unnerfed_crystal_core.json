@@ -1,10 +1,10 @@
 {
-  "name": "Crystal Core",
+  "name": "Unnerfed Crystal Core",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "LEGENDARY",
-  "description": "For the rest of the game, your minions are 4/4.",
+  "description": "For the rest of the game, your minions are 5/5.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
@@ -17,12 +17,12 @@
         "spells": [
           {
             "class": "SetAttackSpell",
-            "value": 4,
+            "value": 5,
             "exclusive": false
           },
           {
             "class": "SetHpSpell",
-            "value": 4,
+            "value": 5,
             "exclusive": false
           }
         ]
@@ -33,6 +33,6 @@
     }
   },
   "collectible": false,
-  "set": "JOURNEY_TO_UNGORO",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

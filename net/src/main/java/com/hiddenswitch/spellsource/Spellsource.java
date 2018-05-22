@@ -359,7 +359,12 @@ public class Spellsource {
 						.withUp(thisVertx -> {
 							changeCardId("minion_diabologist", "minion_frenzied_diabolist");
 						}))
-				.migrateTo(14, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(15)
+						.withUp(thisVertx -> {
+							changeCardId("token_pumpkin_peasant", "minion_pumpkin_peasant");
+						}))
+				.migrateTo(15, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

@@ -1,6 +1,6 @@
 {
-  "name": "Possessed Lackey",
-  "baseManaCost": 6,
+  "name": "Unnerfed Possessed Lackey",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "VIOLET",
   "baseAttack": 2,
@@ -20,7 +20,7 @@
   "attributes": {
     "DEATHRATTLES": true
   },
-  "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "collectible": false,
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
