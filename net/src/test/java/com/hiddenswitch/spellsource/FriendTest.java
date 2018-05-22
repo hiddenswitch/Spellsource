@@ -35,21 +35,23 @@ public class FriendTest extends SpellsourceTestBase {
 				testContext.assertNotNull(token, "auth token is null");
 				defaultApi.getApiClient().setApiKey(token);
 
-				// test putting friend that does not exist
+				// Test putting a friend by user id is illegal
 				FriendPutResponse friendPutResponseDoesNotExist = null;
 				try {
-					friendPutResponseDoesNotExist = defaultApi.friendPut(new FriendPutRequest().friendId("idontexist"));
+					friendPutResponseDoesNotExist = defaultApi.friendPut(new FriendPutRequest().friendId("illegal"));
 				} catch (ApiException e) {
-					testContext.assertEquals(404, e.getCode(), "Friend doesn't exist. Should return 404");
+					testContext.assertEquals(409, e.getCode(), "Cannot use friendId. Should return 409");
 				}
 				testContext.assertNull(friendPutResponseDoesNotExist);
+				String usernameWithToken1 = createAccount1Response.getRecord().getUsername() + "#" + createAccount1Response.getRecord().getPrivacyToken();
+				String usernameWithToken2 = createAccount2Response.getRecord().getUsername() + "#" + createAccount2Response.getRecord().getPrivacyToken();
 
 
 				// add second account as friend
 				FriendPutResponse friendPutResponse = null;
 				try {
 					friendPutResponse = defaultApi.friendPut(
-							new FriendPutRequest().friendId(createAccount2Response.getUserId()));
+							new FriendPutRequest().usernameWithToken(usernameWithToken2));
 				} catch (ApiException e) {
 					testContext.assertEquals(200, e.getCode(), "Adding new friend. Should return 200");
 				}
@@ -58,7 +60,7 @@ public class FriendTest extends SpellsourceTestBase {
 
 				// test putting friend that already exists
 				try {
-					defaultApi.friendPut(new FriendPutRequest().friendId(createAccount2Response.getUserId()));
+					defaultApi.friendPut(new FriendPutRequest().usernameWithToken(usernameWithToken2));
 				} catch (ApiException e) {
 					testContext.assertEquals(409, e.getCode(), "Adding existing friend. Should return 409");
 				}
@@ -66,7 +68,7 @@ public class FriendTest extends SpellsourceTestBase {
 				// test putting friend that already exists - second direction
 				defaultApi.getApiClient().setApiKey(createAccount2Response.getLoginToken().getToken()); //reauth as friend
 				try {
-					defaultApi.friendPut(new FriendPutRequest().friendId(createAccount1Response.getUserId()));
+					defaultApi.friendPut(new FriendPutRequest().usernameWithToken(usernameWithToken1));
 				} catch (ApiException e) {
 					testContext.assertEquals(409, e.getCode(),
 							"Adding existing friend (second direction). Should return 409");
@@ -143,7 +145,7 @@ public class FriendTest extends SpellsourceTestBase {
 				}
 			});
 
-			Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().friendId(account2.getUserId()));
+			Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
 			Long tick = awaitEvent(t -> vertx.setTimer(5001L, t));
 			ws1.close();
 		});

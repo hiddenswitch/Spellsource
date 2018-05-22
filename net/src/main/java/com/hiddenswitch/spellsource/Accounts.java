@@ -200,6 +200,7 @@ public interface Accounts {
 		record.setUsername(request.getName());
 		record.setBot(request.isBot());
 		record.setCreatedAt(Date.from(Instant.now()));
+		record.setPrivacyToken(RandomStringUtils.randomNumeric(4));
 
 		final String scrypt = securedPassword(password);
 		LoginToken forUser = LoginToken.createSecure(userId);
@@ -217,6 +218,7 @@ public interface Accounts {
 
 		response.setUserId(userId);
 		response.setLoginToken(forUser);
+		response.setRecord(record);
 
 		return response;
 	}
