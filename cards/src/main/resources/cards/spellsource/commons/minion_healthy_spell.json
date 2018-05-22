@@ -1,5 +1,4 @@
 {
-  "id": "minion_healthy_spell",
   "name": "Healthy Spell",
   "baseManaCost": 6,
   "type": "MINION",

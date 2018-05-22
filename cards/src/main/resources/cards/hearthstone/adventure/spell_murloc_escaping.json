@@ -8,13 +8,13 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
-    },
     "cardFilter": {
       "class": "CardFilter",
       "race": "MURLOC",
       "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": true,

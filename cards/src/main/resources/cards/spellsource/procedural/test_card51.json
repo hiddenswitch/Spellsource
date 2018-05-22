@@ -1,5 +1,4 @@
 {
-  "id": "Snake",
   "name": "Snake",
   "baseManaCost": 5.0,
   "type": "MINION",

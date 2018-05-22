@@ -1,5 +1,4 @@
 {
-  "id": "spell_draw_discard",
   "name": "Draw Discard",
   "baseManaCost": 2,
   "type": "SPELL",

@@ -1,5 +1,4 @@
 {
-  "id": "minion_hand_heal",
   "name": "Hand Heal",
   "baseManaCost": 6,
   "type": "MINION",

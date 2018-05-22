@@ -1,5 +1,4 @@
 {
-  "id": "minion_failing_printer",
   "name": "Failing Printer",
   "baseManaCost": 2,
   "type": "MINION",

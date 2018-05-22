@@ -1,5 +1,4 @@
 {
-  "id": "minion_draw_banana",
   "name": "Draw Banana",
   "baseManaCost": 2,
   "type": "MINION",

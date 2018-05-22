@@ -16,13 +16,13 @@
       "card": "token_skeleton"
     }
   },
-  "spell": {
-    "class": "NullSpell"
-  },
   "condition": {
     "class": "OrCondition"
   },
   "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
   "collectible": false,
   "set": "BLIZZARD_ADVENTURE",
   "fileFormatVersion": 1
