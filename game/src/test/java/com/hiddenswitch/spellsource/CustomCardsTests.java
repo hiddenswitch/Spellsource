@@ -37,6 +37,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testEchoOfGuldan() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "token_echo_of_guldan");
+			int hp = player.getHero().getHp();
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			assertEquals(player.getHero().getHp(), hp - 2);
+		});
+	}
+
+	@Test
 	public void testEmeraldDreamEscapeFromDurnholdeDesolationOfKareshInSameGame() {
 		runGym((context, player, opponent) -> {
 			Minion emeraldDream = playMinionCard(context, player, "permanent_the_emerald_dream");
