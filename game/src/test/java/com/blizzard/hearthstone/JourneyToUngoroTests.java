@@ -147,8 +147,8 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testCrystalCore() {
 		Consumer<Minion> checkMinion = (Minion minion) -> {
-			Assert.assertEquals(minion.getAttack(), 5);
-			Assert.assertEquals(minion.getHp(), 5);
+			Assert.assertEquals(minion.getAttack(), 4);
+			Assert.assertEquals(minion.getHp(), 4);
 		};
 
 		// Check regular summoning from hand and mind control
@@ -189,8 +189,8 @@ public class JourneyToUngoroTests extends TestBase {
 	@Test
 	public void testCrystalCoreExistingMinionsInteraction() {
 		Consumer<Minion> checkMinion = (Minion minion) -> {
-			Assert.assertEquals(minion.getAttack(), 5);
-			Assert.assertEquals(minion.getHp(), 5);
+			Assert.assertEquals(minion.getAttack(), 4);
+			Assert.assertEquals(minion.getHp(), 4);
 		};
 
 		// Check that existing minions on the board get buffed

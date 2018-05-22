@@ -62,7 +62,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Card brann = receiveCard(context, player, "minion_brann_bronzebeard");
 			Card spiteful = receiveCard(context, player, "minion_spiteful_summoner");
 			putOnTopOfDeck(context, player, "spell_ultimate_infestation");
-			player.setMana(9);
+			player.setMana(10);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			List<GameAction> actions = new ArrayList<>();
 			for (int i = 0; i < 2; i++) {
