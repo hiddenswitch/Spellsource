@@ -19,6 +19,7 @@ import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Lock;
 import net.demilich.metastone.game.decks.Deck;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,6 +28,7 @@ import java.io.Serializable;
 import java.util.ConcurrentModificationException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 
 /**
  * The matchmaking service is the primary entry point into ranked games for clients.
@@ -50,7 +52,7 @@ public interface Matchmaking extends Verticle {
 	 * @throws InterruptedException
 	 */
 	static GameId bot(UserId userId, DeckId deckId, DeckId botDeckId) throws SuspendExecution, InterruptedException {
-		LOGGER.debug("matchmakeAndJoin: Matchmaker is creating an AI game for " + userId);
+		LOGGER.debug("bot: Matchmaker is creating an AI game for " + userId);
 		Lock botLock = null;
 		GameId gameId = GameId.create();
 
@@ -62,7 +64,7 @@ public interface Matchmaking extends Verticle {
 			// Retrieve a bot and use it to play against the opponent
 			UserRecord bot = Accounts.get(Bots.pollBotId());
 			if (botDeckId != null) {
-				LOGGER.info("matchmakeAndJoin: UserId {} requested bot to play deckId {}", userId, botDeckId);
+				LOGGER.info("bot: UserId {} requested bot to play deckId {}", userId, botDeckId);
 			}
 
 			if (botDeckId == null) {
@@ -73,7 +75,7 @@ public interface Matchmaking extends Verticle {
 					Matchmaking.createMatch(
 							MatchCreateRequest.botMatch(gameId, userId, new UserId(bot.getId()), deckId, botDeckId));
 
-			LOGGER.debug("matchmakeAndJoin: User " + userId + " is unlocked by the AI bot creation path.");
+			LOGGER.debug("bot: User " + userId + " is unlocked by the AI bot creation path.");
 			botLock.release();
 			return gameId;
 		} finally {
@@ -107,14 +109,14 @@ public interface Matchmaking extends Verticle {
 		CreateGameSessionResponse createGameSessionResponse = createMatchResponse.getCreateGameSessionResponse();
 
 		if (createGameSessionResponse.pending) {
-			LOGGER.debug("matchmakeAndJoin: Retrying createMatch... ");
+			LOGGER.debug("vs: Retrying createMatch... ");
 			int i = 0;
 			final int retries = 4;
 			final int retryDelay = 500;
 			for (; i < retries; i++) {
 				Strand.sleep(retryDelay);
 
-				LOGGER.debug("matchmakeAndJoin: Checking if the Games service has created a game for gameId " + gameId);
+				LOGGER.debug("vs: Checking if the Games service has created a game for gameId " + gameId);
 				createGameSessionResponse = Games.getConnections().get(gameId);
 				if (!createGameSessionResponse.pending) {
 					break;
@@ -242,10 +244,24 @@ public interface Matchmaking extends Verticle {
 		return new MatchCreateResponse(createGameSessionResponse);
 	}
 
+	/**
+	 * Retrieves the strands (fibers) that are running on this instance of the JVM.
+	 *
+	 * @return A map of strands.
+	 */
 	static Map<UserId, Strand> getLocalStrands() {
 		return LOCAL_STRANDS;
 	}
 
+	/**
+	 * Retrieves a reference to a suspendable queue.
+	 *
+	 * @param queueId The kind of queue (e.g., {@code "constructed"}
+	 * @param key     The component of the queue (e.g., the {@code "first user"} queue.
+	 * @return A suspendable queue reference.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static SuspendableQueue<QueueEntry> getQueue(String queueId, String key) throws SuspendExecution, InterruptedException {
 		String queueKey = key + "[" + queueId + "]";
 		try {
@@ -279,6 +295,11 @@ public interface Matchmaking extends Verticle {
 		}
 	}
 
+	/**
+	 * Initializes a cancellation handler on this {@link Vertx} instance.
+	 *
+	 * @return A way to close this handler, if necessary.
+	 */
 	static Closeable cancellation() {
 		EventBus eb = Vertx.currentContext().owner().eventBus();
 		MessageConsumer<JsonObject> consumer = eb.<JsonObject>consumer("Matchmaking::cancel", Sync.suspendableHandler(message -> {
@@ -291,16 +312,31 @@ public interface Matchmaking extends Verticle {
 		return consumer::unregister;
 	}
 
+	/**
+	 * Cancels the user's matchmaking, wherever the user may be connected.
+	 *
+	 * @param userId The user whose matchmaking should be canceled.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static void cancel(UserId userId) throws SuspendExecution, InterruptedException {
 		Vertx.currentContext().owner().eventBus().publish("Matchmaking::cancel", new JsonObject().put("userId", userId.toString()));
 	}
 
 	/**
-	 * @param request
+	 * Awaits this user for matchmaking in the queue with {@link MatchmakingRequest#getQueueId()}.
+	 * <p>
+	 * Behaves like {@link java.util.concurrent.BlockingQueue#poll(long, TimeUnit)} but does <b>not</b> throw {@link
+	 * InterruptedException} if the user cancels; instead, this method will block and return null for either a timeout or
+	 * a cancellation.
+	 *
+	 * @param request The matchmaking request.
+	 * @return The {@link GameId} of the matched game, or {@code null} if the user timed out waiting or canceled using
+	 * {@link #cancel(UserId)}.
 	 * @throws SuspendExecution
 	 */
 	@Nullable
-	static GameId matchmake(MatchmakingRequest request) throws SuspendExecution, InterruptedException {
+	static GameId matchmake(@NotNull MatchmakingRequest request) throws SuspendExecution {
 		Lock lock = null;
 		final UserId userId = new UserId(request.getUserId());
 		try {

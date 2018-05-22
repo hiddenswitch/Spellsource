@@ -1116,9 +1116,17 @@ definitions:
         type: 'string'
   FriendPutRequest:
     type: 'object'
+    description: |
+      Adds two users to each other's friends list.
     properties:
+      usernameWithToken:
+        type: 'string'
+        description: |
+          The username with the privacy token, like "username#1234".
       friendId:
         type: 'string'
+        description: |
+          Not supported. Throws an error if this is specified on the client.
     required:
       - friendId
   FriendPutResponse:
@@ -2136,37 +2144,35 @@ paths:
   /friends:
     put:
       description: |
-        connect with a friend
+        Adds a specified user to your friend list.
       operationId: friendPut
       security:
         - TokenSecurity: []
       parameters:
         - name: request
           in: body
-          description: |
-            Friend put request
           required: true
           schema:
             $ref: '#/definitions/FriendPutRequest'
       responses:
         "200":
           description: |
-            Connection has been made
+            Users were friended.
           schema:
             $ref: '#/definitions/FriendPutResponse'
         "404":
           description: |
-            friendId does not belong to a user
+            An invalid username and token were provided.
         "409":
           description: |
-            already friends
+            Either you are already friends, or you attempted to set a friend ID directly.
         default:
           $ref: '#/responses/InternalServerError'
 
   /friends/{friendId}:
     delete:
       description: |
-        unfriend a user
+        Removes the friend relationship between two users.
       operationId: friendDelete
       security:
         - TokenSecurity: []
@@ -2297,7 +2303,7 @@ paths:
           $ref: '#/definitions/InternalServerError'
     post:
       description: |
-        Send an invite
+        Send an invite.
       operationId: postInvite
       security:
         - TokenSecurity: []
@@ -2349,7 +2355,7 @@ paths:
         "404":
           description: |
             The invite was not found.
-        "409":
+        "418":
           description: |
             The invite is already in an expired state.
         default:
@@ -2388,6 +2394,6 @@ paths:
         "404":
           description: |
             The invite was not found.
-        "409":
+        "418":
           description: |
             The invite is already in an expired state.
