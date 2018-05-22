@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.CollectionRecord;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
@@ -346,11 +347,12 @@ public interface Inventory {
 			return GetCollectionResponse.batch(responses);
 		}
 
-		final String collectionId;
-		final CollectionTypes type;
-		if (request.getUserId() != null
+		String collectionId;
+		CollectionTypes type;
+		String userId = request.getUserId();
+		if (userId != null
 				&& request.getDeckId() == null) {
-			collectionId = request.getUserId();
+			collectionId = userId;
 			type = CollectionTypes.USER;
 		} else if (request.getDeckId() != null) {
 			collectionId = request.getDeckId();
@@ -361,7 +363,7 @@ public interface Inventory {
 		}
 
 		if (collectionId == null) {
-			throw new RuntimeException();
+			throw new NullPointerException("No collection was specified");
 		}
 
 		List<JsonObject> results = awaitResult(h -> mongo().client().find(INVENTORY, json("collectionIds", collectionId), h));
@@ -371,7 +373,7 @@ public interface Inventory {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
 			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed());
 		} else /* if (type == CollectionTypes.USER) */ {
-			return GetCollectionResponse.user(request.getUserId(), inventoryRecords);
+			return GetCollectionResponse.user(userId, inventoryRecords);
 		} /*  else {
 			return new GetCollectionResponse()
 					.withCardRecords(cardRecords);
@@ -425,5 +427,10 @@ public interface Inventory {
 	@Suspendable
 	static MongoClientUpdateResult update(MongoClient client, List<String> inventoryIds, JsonObject update) {
 		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, json("_id", json("$in", inventoryIds)), update, new UpdateOptions().setMulti(true), h));
+	}
+
+	@Suspendable
+	static boolean isOwner(String collectionId, UserId userId) {
+		return mongo().count(Inventory.COLLECTIONS, json("_id", collectionId, "userId", userId.toString())) != 0L;
 	}
 }

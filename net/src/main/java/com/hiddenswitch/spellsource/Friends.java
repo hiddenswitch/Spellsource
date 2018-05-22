@@ -42,6 +42,8 @@ public interface Friends {
 			throw new NullPointerException("Friend account not found, or an invalid username and token were provided.");
 		}
 
+		friendId = friendAccount.getId();
+
 		//check if already friends
 		if (thisAccount.isFriend(friendId)) {
 			throw new IllegalArgumentException("Friend already friend");

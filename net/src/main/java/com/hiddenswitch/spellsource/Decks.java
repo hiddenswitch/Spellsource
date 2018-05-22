@@ -32,6 +32,7 @@ public interface Decks {
 	static int getMaxDeckSize() {
 		return 30;
 	}
+
 	/**
 	 * Creates a deck with convenient arguments.
 	 *
@@ -125,9 +126,7 @@ public interface Decks {
 		}
 
 		if (!collectionUpdate.isEmpty()) {
-			MongoClientUpdateResult result = mongo().updateCollection(Inventory.COLLECTIONS,
-					json("_id", deckId, "userId", userId),
-					collectionUpdate);
+			MongoClientUpdateResult result = mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckId), collectionUpdate);
 		}
 
 		if (updateCommand.getPullAllInventoryIds() != null
@@ -166,8 +165,8 @@ public interface Decks {
 	}
 
 	/**
-	 * Trashes a deck. When a deck is in the trash, it will not appear in the user's account but it will still
-	 * exist for analytics purposes.
+	 * Trashes a deck. When a deck is in the trash, it will not appear in the user's account but it will still exist for
+	 * analytics purposes.
 	 *
 	 * @param request The deck to delete.
 	 * @return The result of trashing the deck.

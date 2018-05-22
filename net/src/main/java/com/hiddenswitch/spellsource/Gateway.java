@@ -145,7 +145,7 @@ public interface Gateway extends Verticle {
 
 	WebResult<MatchmakingQueuesResponse> matchmakingGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 
-	WebResult<FriendPutResponse> putFriend(RoutingContext context, String userId, FriendPutRequest req) throws SuspendExecution, InterruptedException;
+	WebResult<FriendPutResponse> friendPut(RoutingContext context, String userId, FriendPutRequest req) throws SuspendExecution, InterruptedException;
 
 	WebResult<UnfriendResponse> unFriend(RoutingContext context, String userId, String friendId) throws SuspendExecution, InterruptedException;
 
