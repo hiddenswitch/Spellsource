@@ -12,10 +12,7 @@ import io.vertx.core.*;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.mongo.UpdateOptions;
-import io.vertx.ext.mongo.WriteOption;
+import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.Router;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -40,6 +37,7 @@ import static com.hiddenswitch.spellsource.Draft.DRAFTS;
 import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
 import static com.hiddenswitch.spellsource.Inventory.INVENTORY;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -364,7 +362,13 @@ public class Spellsource {
 						.withUp(thisVertx -> {
 							changeCardId("token_pumpkin_peasant", "minion_pumpkin_peasant");
 						}))
-				.migrateTo(15, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(16)
+						.withUp(thisVertx -> {
+							removeCards("spell_forbidden_evolution", "minion_seadevil_totem", "minion_tactician",
+									"spell_last_stand", "spell_starsurge", "minion_dranghul");
+						}))
+				.migrateTo(16, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -507,7 +511,7 @@ public class Spellsource {
 	}
 
 	@Suspendable
-	public static MongoClientUpdateResult changeCardId(String oldId, String newId) {
+	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
 		if (CardCatalogue.getCardById(newId) == null) {
 			logger.error("changeCardId: Cannot change {} to {} because the new ID does not exist", oldId, newId);
 			return new MongoClientUpdateResult();
@@ -515,5 +519,11 @@ public class Spellsource {
 
 		return Mongo.mongo().updateCollectionWithOptions(INVENTORY,
 				json("cardDesc.id", oldId), json("$set", json("cardDesc.id", newId)), new UpdateOptions().setMulti(true));
+	}
+
+	@Suspendable
+	protected static MongoClientDeleteResult removeCards(String... ids) {
+		return Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+				json("$in", array(ids))));
 	}
 }
