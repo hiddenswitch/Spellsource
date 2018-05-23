@@ -1,0 +1,17 @@
+{
+  "name": "Unnerfed Bite",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Give your hero +6 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": 6
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

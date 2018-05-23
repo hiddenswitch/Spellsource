@@ -1,0 +1,31 @@
+{
+  "name": "Unnerfed Tuskarr Totemic",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon a random Totem.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "TOTEM",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "COMMON",
-  "description": "For each enemy minion, summon a 1/1 Wolf with Charge.",
+  "description": "For each enemy minion, summon a 1/1 Hound with Charge.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

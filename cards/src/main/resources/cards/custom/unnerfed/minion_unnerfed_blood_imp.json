@@ -1,0 +1,23 @@
+{
+  "name": "Unnerfed Blood Imp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Stealth. All other friendly minions have +1 Health.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 1
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Unnerfed Wrath",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "Deal 4 damage and draw a card.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 4
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1,
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
