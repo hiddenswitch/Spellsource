@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 
 public class CardCountCondition extends Condition {
 
@@ -17,7 +18,6 @@ public class CardCountCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = desc.containsKey(ConditionArg.TARGET_PLAYER) ? (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)
 				: TargetPlayer.SELF;
-
 		int cardCount = 0;
 		switch (targetPlayer) {
 			case BOTH:

@@ -7,8 +7,23 @@
   "description": "Give your minions +4/+4, <b>Taunt</b>, and <b>Divine Shield</b>.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 4,
+        "hpBonus": 4
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DIVINE_SHIELD"
+      }
+    ]
   },
   "attributes": {},
   "collectible": false,

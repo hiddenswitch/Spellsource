@@ -7,8 +7,14 @@
   "description": "Summon three 3/3 Ghosts with <b>Lifesteal</b>.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "value": 3,
+        "card": "token_weeping_ghost"
+      }
+    ]
   },
   "attributes": {},
   "collectible": false,

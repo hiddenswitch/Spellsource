@@ -7,6 +7,22 @@
   "baseHp": 3,
   "rarity": "FREE",
   "description": "Whenever you play a card, deal damage equal to its Cost to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_MINIONS",
+      "value": {
+        "class": "ManaCostProvider",
+        "target": "EVENT_TARGET"
+      },
+      "howMany": 1,
+      "randomTarget": true
+    }
+  },
   "attributes": {},
   "collectible": false,
   "set": "WITCHWOOD",

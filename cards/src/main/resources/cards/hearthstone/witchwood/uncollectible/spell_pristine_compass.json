@@ -7,8 +7,23 @@
   "description": "Draw a card and add 2 extra copies of it to your hand. They cost (0).",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "DrawCardSpell",
+    "value": 1,
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "OUTPUT",
+      "value": 2,
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 0,
+          "operation": "SET"
+        }
+      }
+    }
   },
   "attributes": {},
   "collectible": false,

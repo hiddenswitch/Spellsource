@@ -9,6 +9,12 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 
+/**
+ * Recasts the {@link SpellArg#SPELL} {@link SpellArg#HOW_MANY} times or up to 60 (14 if this is Grim Patron) by
+ * default.
+ * <p>
+ * Stops casting if the {@link SpellArg#CONDITION} is not met.
+ */
 public class RecastWhileSpell extends Spell {
 	@Override
 	@Suspendable
@@ -19,11 +25,14 @@ public class RecastWhileSpell extends Spell {
 				.flatMap(EntityZone::stream)
 				.anyMatch(c -> c.getSourceCard().getCardId().equals("minion_grim_patron"))
 				? 14 : 60;
-		// case 1 - only one condition
+		limit = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, limit);
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-		// Cast the spell at least once
 		do {
+			if (limit == 0) {
+				break;
+			}
+			// Cast the spell at least once before evaluating the condition
 			beforeCast(context, desc);
 			SpellUtils.castChildSpell(context, player, spell, source, target);
 			afterCast(context, desc);
@@ -43,6 +52,6 @@ public class RecastWhileSpell extends Spell {
 
 	@Suspendable
 	protected boolean isFulfilled(GameContext context, Player player, Entity source, Entity target, Condition condition, SpellDesc desc) {
-		return condition.isFulfilled(context, player, source, target);
+		return condition == null || condition.isFulfilled(context, player, source, target);
 	}
 }

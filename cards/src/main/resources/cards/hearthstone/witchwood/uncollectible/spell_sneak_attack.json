@@ -7,8 +7,15 @@
   "description": "Put 2 random minions from your hand into the battlefield and give them <b>Charge</b>.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "RecruitSpell",
+    "value": 2,
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "CHARGE"
+    },
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
   },
   "attributes": {},
   "collectible": false,
