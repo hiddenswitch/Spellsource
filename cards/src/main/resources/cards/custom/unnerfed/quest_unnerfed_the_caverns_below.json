@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "LEGENDARY",
-  "description": "Quest: Play four minions with the same name. Reward: Unnerfed Crystal Core.",
+  "description": "Quest: Play four minions with the same name. Reward: Crystal Core.",
   "quest": {
     "class": "CavernsBelowTrigger"
   },

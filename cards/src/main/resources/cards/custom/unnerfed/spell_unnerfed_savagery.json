@@ -1,0 +1,20 @@
+{
+  "name": "Unnerfed Savagery",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Deal damage equal to your hero's Attack to all enemy minions.",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_HERO",
+      "attribute": "ATTACK"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
