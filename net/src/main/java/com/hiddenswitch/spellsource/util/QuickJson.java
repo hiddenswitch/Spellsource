@@ -13,10 +13,17 @@ import java.util.stream.Collectors;
  * Created by bberman on 2/6/17.
  */
 public class QuickJson {
-	public static JsonArray array(final Object... args) {
+	@SafeVarargs
+	public static <T> JsonArray array(final T... args) {
 		JsonArray arr = new JsonArray();
-		for (int i = 0; i < args.length; i++) {
-			arr.add(json(args[i]));
+		for (T arg : args) {
+			// Insert photo of Pink Wojack here going "aaaaaaAAAAAAAHHHHH"
+			if (arg.getClass().isPrimitive()
+					|| arg.getClass().isAssignableFrom(String.class)) {
+				arr.add(arg);
+			} else {
+				arr.add(json(arg));
+			}
 		}
 		return arr;
 	}
@@ -33,7 +40,7 @@ public class QuickJson {
 
 		if (args.length == 1) {
 			if (args[0] instanceof JsonObject) {
-				return (JsonObject)args[0];
+				return (JsonObject) args[0];
 			}
 			return toJson(args[0]);
 		}
