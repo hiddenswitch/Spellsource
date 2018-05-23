@@ -38,28 +38,20 @@ public class PutRandomSecretIntoPlaySpell extends Spell {
 		}
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
+
+		CardList secretCards = findSecretCards(cardSource.getCards(context, source, player));
+		if (filter != null) {
+			secretCards = secretCards.filtered(filter.matcher(context, player, source));
+		}
+
 		for (int i = 0; i < howMany; i++) {
-			CardList secretCards = findSecretCards(cardSource.getCards(context, source, player));
+			secretCards = secretCards.filtered(secretCard -> context.getLogic().canPlaySecret(player, secretCard));
 
 			if (secretCards.isEmpty()) {
 				return;
 			}
 
-			secretCards.shuffle(context.getLogic().getRandom());
-
-			Card secretCard = secretCards.removeFirst();
-
-			while (!secretCards.isEmpty()) {
-				if (!context.getLogic().canPlaySecret(player, secretCard)
-						&& (filter == null || filter.matches(context, player, secretCard, source))) {
-					secretCard = secretCards.removeFirst();
-				} else {
-					break;
-				}
-			}
-			if (secretCards.isEmpty() && !context.getLogic().canPlaySecret(player, secretCard)) {
-				return;
-			}
+			Card secretCard = context.getLogic().removeRandom(secretCards);
 
 			if (secretCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
 				secretCard.setId(context.getLogic().generateId());
