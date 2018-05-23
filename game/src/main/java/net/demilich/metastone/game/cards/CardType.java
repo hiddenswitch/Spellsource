@@ -45,7 +45,12 @@ public enum CardType {
 	 * your graveyard and returned to your hand by return hand effects. The chosen card is cast, and therefore is the card
 	 * that interacts with spell casting effects and triggers.
 	 */
-	CHOOSE_ONE;
+	CHOOSE_ONE,
+	/**
+	 * An enchantment card stores data used by effects like {@link net.demilich.metastone.game.spells.AddDeathrattleSpell}
+	 * and {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}, copying the values from it to the target.
+	 */
+	ENCHANTMENT;
 
 	/**
 	 * Indicates whether or not the instance is of the specified card type.

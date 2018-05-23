@@ -7,8 +7,23 @@
   "description": "Give your minions +2/+2 and <b>Taunt</b>. Upgrade this and shuffle it into your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_veteran_s_militia_horn"
+      }
+    ]
   },
   "attributes": {},
   "collectible": false,

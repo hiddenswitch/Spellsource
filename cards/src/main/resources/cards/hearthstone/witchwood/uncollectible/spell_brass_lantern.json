@@ -7,8 +7,20 @@
   "description": "<b>Discover</b> a copy of a card in your deck. Repeat this 2 more times.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "RecastWhileSpell",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "distinct": true,
+        "targetPlayer": "SELF"
+      }
+    },
+    "howMany": 3
   },
   "attributes": {},
   "collectible": false,

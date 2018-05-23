@@ -4,11 +4,21 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Deal $3 damage to a random character. Repeat this 12 times.",
+  "description": "Deal 3 damage to a random character. Repeat this 12 times.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "RecastWhileSpell",
+    "target": "ALL_CHARACTERS",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "howMany": 12,
+    "randomTarget": true
   },
   "attributes": {},
   "collectible": false,

@@ -16,6 +16,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -77,13 +78,17 @@ public class CopyCardSpell extends Spell {
 			sourceCollection = sourceCollection.filtered(filter.matcher(context, player, source));
 		}
 
+		List<SpellDesc> subSpells = desc.subSpells(0);
 		for (int i = 0; i < numberOfCardsToCopy; i++) {
 			if (sourceCollection.isEmpty()) {
 				return;
 			}
 			Card random = context.getLogic().getRandom(sourceCollection);
 			peek(random, context, player);
-			copyAndReceiveCard(context, player, random);
+			Card output = copyAndReceiveCard(context, player, random);
+			for (SpellDesc subSpell : subSpells) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
+			}
 		}
 	}
 

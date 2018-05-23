@@ -98,7 +98,10 @@ public interface Cards {
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)
-				.filter(cd -> DeckFormat.CUSTOM.isInFormat(cd.getSet()) && cd.type != CardType.GROUP && cd.type != CardType.HERO_POWER)
+				.filter(cd -> DeckFormat.CUSTOM.isInFormat(cd.getSet())
+						&& cd.type != CardType.GROUP
+						&& cd.type != CardType.HERO_POWER
+						&& cd.type != CardType.ENCHANTMENT)
 				.map(CardDesc::create)
 				.map(card -> Games.getEntity(workingContext, card, 0))
 				.map(entity -> new CardRecord().entity(entity))

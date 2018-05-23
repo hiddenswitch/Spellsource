@@ -1,11 +1,13 @@
 package net.demilich.metastone.game.spells;
 
+import java.util.List;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -81,13 +83,28 @@ public class AddDeathrattleSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.SPELL);
-		SpellDesc deathrattle = (SpellDesc) desc.get(SpellArg.SPELL);
+		List<SpellDesc> deathrattles = desc.subSpells(0);
+		Card[] cards = SpellUtils.getCards(context, desc);
+		if (cards.length != 0) {
+			for (Card card : cards) {
+				if (card.getDesc().deathrattle == null) {
+					logger.warn("onCast {} {}: Trying to add a deathrattle from a card that doesn't contain a deathrattle {}", context.getGameId(), source, card);
+					continue;
+				}
+				deathrattles.add(card.getDesc().deathrattle);
+			}
+		}
 		if (target instanceof Actor) {
 			Actor actor = (Actor) target;
-			actor.addDeathrattle(deathrattle.clone());
+			for (SpellDesc deathrattle : deathrattles) {
+				actor.addDeathrattle(deathrattle.clone());
+			}
 		} else if (target instanceof Card) {
 			Card card = (Card) target;
-			card.addDeathrattle(deathrattle.clone());
+			for (SpellDesc deathrattle : deathrattles) {
+
+				card.addDeathrattle(deathrattle.clone());
+			}
 		}
 	}
 

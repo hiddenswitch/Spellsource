@@ -7,8 +7,24 @@
   "description": "Summon a random 3-Cost minion. Upgrade this and shuffle it into your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 3
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_sack_of_coins"
+      }
+    ]
   },
   "attributes": {},
   "collectible": false,

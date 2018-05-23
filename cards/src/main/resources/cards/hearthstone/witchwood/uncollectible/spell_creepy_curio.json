@@ -7,8 +7,18 @@
   "description": "Summon three 1/1 Ghosts. Upgrade this and shuffle it into your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "value": 3,
+        "card": "minion_wisp"
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_haunted_curio"
+      }
+    ]
   },
   "attributes": {},
   "collectible": false,

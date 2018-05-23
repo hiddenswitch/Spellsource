@@ -1,13 +1,13 @@
 {
-  "name": "Gentleman's Top Hat",
-  "baseManaCost": 1,
-  "type": "SPELL",
+  "name": "Top Hat",
+  "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Give a minion +2/+2 and \"<b>Deathrattle:</b> Give your Top Hat to another random friendly minion.\"",
-  "targetSelection": "MINIONS",
-  "spell": {
+  "description": "+2/+2 and \"<b>Deathrattle:</b> Give your Top Hat to another random friendly minion.\"",
+  "deathrattle": {
     "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true,
     "spells": [
       {
         "class": "BuffSpell",
@@ -16,7 +16,9 @@
       },
       {
         "class": "AddDeathrattleSpell",
-        "card": "enchantment_top_hat"
+        "target": "FRIENDLY_MINIONS",
+        "card": "enchantment_top_hat",
+        "randomTarget": true
       }
     ]
   },

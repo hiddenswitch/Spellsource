@@ -7,10 +7,23 @@
   "description": "<b>Echo</b> Put a copy of a random card in your opponent's hand into yours. It costs (3) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "CopyCardSpell",
+    "target": "ENEMY_HAND",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 3,
+        "operation": "SUBTRACT"
+      }
+    },
+    "randomTarget": true
   },
-  "attributes": {},
+  "attributes": {
+    "ECHO": true
+  },
   "collectible": false,
   "set": "WITCHWOOD",
   "fileFormatVersion": 1

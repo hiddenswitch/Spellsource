@@ -7,8 +7,17 @@
   "description": "Transform all minions into random ones that cost (3) more.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF"
+    "class": "TransformToRandomMinionSpell",
+    "target": "ALL_MINIONS",
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": {
+        "class": "AttributeValueProvider",
+        "target": "SPELL_TARGET",
+        "attribute": "BASE_MANA_COST",
+        "offset": 3
+      }
+    }
   },
   "attributes": {},
   "collectible": false,
