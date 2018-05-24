@@ -16,6 +16,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.*;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,6 +32,10 @@ import static java.util.stream.Collectors.toList;
  * <p>
  * Discover actions prompt the user to select from {@code count=}{@link SpellArg#HOW_MANY} cards, with a default of 3.
  * <p>
+ * If an {@link SpellArg#ATTRIBUTE} is specified, it is added to the cards in the {@link Zones#DISCOVER}, and removed
+ * when they leave. This is used with the {@link net.demilich.metastone.game.utils.Attribute#UNCENSORED} attribute to
+ * indicate that these cards should be visible to the opponent.
+ * <p>
  * The cards to prompt the user with are gathered from the {@link SpellArg#CARDS} attribute and the specified {@link
  * CardSource} and {@link CardFilter} in {@link SpellArg#CARD_SOURCE} and {@link SpellArg#CARD_FILTER}. When the number
  * of cards to discover from is greater than {@code count}, cards are chosen at random from the possible options without
@@ -41,15 +46,16 @@ import static java.util.stream.Collectors.toList;
  * <p>
  * Some card sources generate new cards; these card sources implement the {@link HasCardCreationSideEffects} interface.
  * Other card sources, like {@link DeckSource}, will reference the actual cards in the player's deck. Discovers
- * <b>always</b> present copies of cards to users, regardless of their origin. To perform the spell on the <b>actual</b>
+ * <b>always</b> present copies of cards to users, regardless of their origin. To perform the spell on the
+ * <b>actual</b>
  * card, set {@link SpellArg#EXCLUSIVE} to {@code true}. Trying to use an "exclusive" discover on cards that are always
  * generated will throw an exception.
  * <p>
  * When the user makes a discover choice, the spell arguments are interpreted to determine what spell is "cast" with the
  * chosen and unchosen cards:
- * <p>
- * <ul> <li>When {@link SpellArg#SPELL} or {@link SpellArg#SPELL1} is specified and {@link SpellArg#EXCLUSIVE} is {@code
- * false} (the default): The spell is cast with the chosen card placed into the spell's {@link SpellArg#CARD}
+ *
+ * <ul> <li>When {@link SpellArg#SPELL} or {@link SpellArg#SPELL1} is specified and {@link SpellArg#EXCLUSIVE} is
+ * {@code false} (the default): The spell is cast with the chosen card placed into the spell's {@link SpellArg#CARD}
  * argument.</li> <li>When {@link SpellArg#SPELL} or {@link SpellArg#SPELL1} is specified and {@link SpellArg#EXCLUSIVE}
  * is {@code true}: The spell is cast with the {@link Card} entity as its {@code target}.</li> <li>When {@link
  * SpellArg#SPELL2} is specified: This spell is cast on the cards that were <b>not</b> chosen, using the same rules of
@@ -395,8 +401,21 @@ public class DiscoverSpell extends Spell {
 			discoverActions.add(discover);
 		}
 
+		Attribute attribute = desc.getAttribute();
+		if (attribute != null) {
+			for (Card choice : choices) {
+				choice.setAttribute(attribute);
+			}
+		}
+
 		// Execute the discovery (the target is the both the output and the discovery)
 		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, choices, discoverActions);
 		SpellUtils.castChildSpell(context, player, chosenAction.getSpell(), source, target);
+		// Remove the attribute that was set on all the cards
+		if (attribute != null) {
+			for (Card choice : choices) {
+				choice.getAttributes().remove(attribute);
+			}
+		}
 	}
 }
