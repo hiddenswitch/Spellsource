@@ -125,8 +125,7 @@ task(localCluster, dependsOn: 'classes', type: JavaExec) {
     }
 
     systemProperty "spellsource.port", "8080"
-    systemProperty "mongo.url", "mongodb://localhost:27017"
-    main = 'com.hiddenswitch.spellsource.applications.TestClustered'
+    main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     classpath = sourceSets.main.runtimeClasspath
 }

@@ -6,11 +6,12 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Discover a Secret. Your opponent can see your options. (Work in progress)",
+  "description": "Battlecry: Discover a Secret. Your opponent can see your options.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
+      "attribute": "UNCENSORED",
       "spell": {
         "class": "ReceiveCardSpell"
       },

@@ -23,6 +23,7 @@ Name | Type | Description | Notes
 **destroyed** | **Boolean** | When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but still in a zone other than the graveyard; render a death icon over the entity when it is so marked.  |  [optional]
 **summoningSickness** | **Boolean** | When true, the entity cannot attack this turn because it has \&quot;summoning sickness,\&quot; or a disability related to the first turn the entity came into play. Typically rendered with snooze icons.  |  [optional]
 **frozen** | **Boolean** | When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack.  |  [optional]
+**uncensored** | **Boolean** | When true, indicates that this entity that is ordinarily censored to this user is not. It can be \&quot;flipped\&quot; and shown to the opponent.  |  [optional]
 **silenced** | **Boolean** | Indicates that the entity was silenced.  |  [optional]
 **windfury** | **Boolean** | Indicates the entity can attack twice a turn.  |  [optional]
 **permanent** | **Boolean** | Indicates the entity is an on-battlefield permanent.  |  [optional]

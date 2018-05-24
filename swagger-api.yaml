@@ -1451,6 +1451,11 @@ definitions:
           When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
           it would normally be able to attack.
         type: 'boolean'
+      uncensored:
+        description: |
+          When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
+          shown to the opponent.
+        type: 'boolean'
       silenced:
         description: |
           Indicates that the entity was silenced.

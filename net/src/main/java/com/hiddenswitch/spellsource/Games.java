@@ -821,6 +821,12 @@ public interface Games extends Verticle {
 				.map(c -> getEntity(workingContext, c, localPlayerId))
 				.collect(toList()));
 
+		// If the opponent's discovers are uncensored, add them
+		entities.addAll(opponent.getDiscoverZone().stream()
+				.filter(c -> c.hasAttribute(Attribute.UNCENSORED))
+				.map(c -> getEntity(workingContext, c, localPlayerId))
+				.collect(toList()));
+
 		// Get the heroes that may have wound up in the graveyard
 		final List<Entity> graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
 				.filter(e -> e.getEntityType() == EntityType.HERO)
@@ -1045,7 +1051,8 @@ public interface Games extends Verticle {
 			if (card.getZone() == Zones.HAND
 					|| card.getZone() == Zones.DECK
 					|| card.getZone() == Zones.SET_ASIDE_ZONE
-					|| card.getZone() == Zones.HERO_POWER) {
+					|| card.getZone() == Zones.HERO_POWER
+					&& owner == localPlayerId) {
 				final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
@@ -1067,6 +1074,7 @@ public interface Games extends Verticle {
 		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
 		entityState.location(Games.toClientLocation(card.getEntityLocation()));
 		entityState.baseManaCost(card.getBaseManaCost());
+		entityState.uncensored(card.hasAttribute(Attribute.UNCENSORED));
 		entityState.battlecry(card.hasAttribute(Attribute.BATTLECRY));
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
 		entityState.permanent(card.hasAttribute(Attribute.PERMANENT));
@@ -1162,7 +1170,7 @@ public interface Games extends Verticle {
 	 * end games that have received no actions from either client connected to them.
 	 *
 	 * @return A value in milliseconds of how long to wait for an action from a client before marking a game as over due
-	 * 		to disconnection.
+	 * to disconnection.
 	 */
 	static long getDefaultNoActivityTimeout() {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));

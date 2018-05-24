@@ -355,20 +355,29 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(14)
 						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
 							changeCardId("minion_diabologist", "minion_frenzied_diabolist");
 						}))
 				.add(new MigrationRequest()
 						.withVersion(15)
 						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
 							changeCardId("token_pumpkin_peasant", "minion_pumpkin_peasant");
 						}))
 				.add(new MigrationRequest()
 						.withVersion(16)
 						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
 							removeCards("spell_forbidden_evolution", "minion_seadevil_totem", "minion_tactician",
 									"spell_last_stand", "spell_starsurge", "minion_dranghul");
 						}))
-				.migrateTo(16, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(17)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							removeCards("minion_shadowglen_vagrant", "minion_lone_wolf", "spell_bag_of_tricks" );
+						}))
+				.migrateTo(17, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -518,12 +527,12 @@ public class Spellsource {
 		}
 
 		return Mongo.mongo().updateCollectionWithOptions(INVENTORY,
-				json("cardDesc.id", oldId), json("$set", json("cardDesc.id", newId)), new UpdateOptions().setMulti(true));
+				json("desc.id", oldId), json("$set", json("desc.id", newId)), new UpdateOptions().setMulti(true));
 	}
 
 	@Suspendable
 	protected static MongoClientDeleteResult removeCards(String... ids) {
-		return Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+		return Mongo.mongo().removeDocuments(INVENTORY, json("desc.id",
 				json("$in", array(ids))));
 	}
 }

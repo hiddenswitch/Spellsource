@@ -87,6 +87,9 @@ public class EntityState implements Serializable {
   @JsonProperty("frozen")
   private Boolean frozen = null;
 
+  @JsonProperty("uncensored")
+  private Boolean uncensored = null;
+
   @JsonProperty("silenced")
   private Boolean silenced = null;
 
@@ -624,6 +627,24 @@ public class EntityState implements Serializable {
 
   public void setFrozen(Boolean frozen) {
     this.frozen = frozen;
+  }
+
+  public EntityState uncensored(Boolean uncensored) {
+    this.uncensored = uncensored;
+    return this;
+  }
+
+   /**
+   * When true, indicates that this entity that is ordinarily censored to this user is not. It can be \&quot;flipped\&quot; and shown to the opponent. 
+   * @return uncensored
+  **/
+  @ApiModelProperty(value = "When true, indicates that this entity that is ordinarily censored to this user is not. It can be \"flipped\" and shown to the opponent. ")
+  public Boolean isUncensored() {
+    return uncensored;
+  }
+
+  public void setUncensored(Boolean uncensored) {
+    this.uncensored = uncensored;
   }
 
   public EntityState silenced(Boolean silenced) {
@@ -1321,6 +1342,7 @@ public class EntityState implements Serializable {
         Objects.equals(this.destroyed, entityState.destroyed) &&
         Objects.equals(this.summoningSickness, entityState.summoningSickness) &&
         Objects.equals(this.frozen, entityState.frozen) &&
+        Objects.equals(this.uncensored, entityState.uncensored) &&
         Objects.equals(this.silenced, entityState.silenced) &&
         Objects.equals(this.windfury, entityState.windfury) &&
         Objects.equals(this.permanent, entityState.permanent) &&
@@ -1362,7 +1384,7 @@ public class EntityState implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
   }
 
 
@@ -1390,6 +1412,7 @@ public class EntityState implements Serializable {
     sb.append("    destroyed: ").append(toIndentedString(destroyed)).append("\n");
     sb.append("    summoningSickness: ").append(toIndentedString(summoningSickness)).append("\n");
     sb.append("    frozen: ").append(toIndentedString(frozen)).append("\n");
+    sb.append("    uncensored: ").append(toIndentedString(uncensored)).append("\n");
     sb.append("    silenced: ").append(toIndentedString(silenced)).append("\n");
     sb.append("    windfury: ").append(toIndentedString(windfury)).append("\n");
     sb.append("    permanent: ").append(toIndentedString(permanent)).append("\n");
