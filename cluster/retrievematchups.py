@@ -1,4 +1,3 @@
-#!/usr/bin/python
 import urllib.request as urllib
 import json
 
@@ -17,11 +16,11 @@ def retrieve_matchups_rows():
     _archetypes = {str(x['id']): x for x in _archetypes_list}
     
     def _iter_matchup(series_data):
-        for player1_id, matchup in series_data.iteritems():
+        for player1_id, matchup in series_data.items():
             if player1_id not in _archetypes:
                 continue
             archetype1 = _archetypes[player1_id]['name']
-            for player2_id, result in matchup.iteritems():
+            for player2_id, result in matchup.items():
                 if player2_id not in _archetypes:
                     continue
                 archetype2 = _archetypes[player2_id]['name']
