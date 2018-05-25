@@ -104,6 +104,8 @@ public class GameEvent implements Serializable {
     
     LOSE_DIVINE_SHIELD("LOSE_DIVINE_SHIELD"),
     
+    LOSE_DEFLECT("LOSE_DEFLECT"),
+    
     MILL("MILL"),
     
     MAX_MANA("MAX_MANA"),

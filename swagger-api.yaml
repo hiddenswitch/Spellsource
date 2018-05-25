@@ -804,6 +804,7 @@ definitions:
           - 'JOUST'
           - 'KILL'
           - 'LOSE_DIVINE_SHIELD'
+          - 'LOSE_DEFLECT'
           - 'MILL'
           - 'MAX_MANA'
           - 'OVERLOAD'
@@ -1456,6 +1457,9 @@ definitions:
           When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
           shown to the opponent.
         type: 'boolean'
+      deflect:
+        description: |
+          When true, the entity's first incoming hit will hit its owner rather than itself.
       silenced:
         description: |
           Indicates that the entity was silenced.
