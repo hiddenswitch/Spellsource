@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.logic;
 
+import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -14,7 +15,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-class TraceBehaviour extends AbstractBehaviour {
+class TraceBehaviour extends UtilityBehaviour {
 	private int playerId;
 	private int[][] mulligans;
 	private AtomicInteger nextAction;

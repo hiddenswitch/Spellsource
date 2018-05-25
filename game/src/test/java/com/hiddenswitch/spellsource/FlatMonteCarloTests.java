@@ -7,7 +7,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
-import net.demilich.metastone.game.behaviour.FlatMonteCarlo;
+import net.demilich.metastone.game.behaviour.FlatMonteCarloBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
@@ -16,7 +16,6 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -73,7 +72,7 @@ public class FlatMonteCarloTests extends TestBase {
 				"#").toGameDeck();
 
 		final AtomicInteger matchCounter = new AtomicInteger();
-		SimulationResult result = GameContext.simulate(Arrays.asList(druid, warrior), FlatMonteCarlo::new, PlayRandomBehaviour::new, 10, true, matchCounter);
+		SimulationResult result = GameContext.simulate(Arrays.asList(druid, warrior), FlatMonteCarloBehaviour::new, PlayRandomBehaviour::new, 10, true, matchCounter);
 		Assert.assertEquals(result.getNumberOfGames(), 10);
 	}
 
@@ -81,7 +80,7 @@ public class FlatMonteCarloTests extends TestBase {
 	public void testFlatMonteCarlo() {
 		runGym((context, player, opponent) -> {
 			Card winTheGame = receiveCard(context, player, "spell_win_the_game");
-			FlatMonteCarlo behaviour = new FlatMonteCarlo(10);
+			FlatMonteCarloBehaviour behaviour = new FlatMonteCarloBehaviour(10);
 			List<GameAction> validActions = context.getValidActions();
 			GameAction playCardAction = behaviour.requestAction(context, player, validActions);
 			Assert.assertEquals(playCardAction.getActionType(), ActionType.SPELL);

@@ -9,6 +9,7 @@ import java.util.stream.StreamSupport;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
@@ -352,7 +353,7 @@ public class TestBase {
 				: StreamSupport.stream(split, false);
 	}
 
-	public static class TestBehaviour extends AbstractBehaviour {
+	public static class TestBehaviour extends UtilityBehaviour {
 
 		private EntityReference targetPreference;
 

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.behaviour;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -10,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class RequestActionFunction extends AbstractBehaviour {
+public class RequestActionFunction extends UtilityBehaviour {
 	private final T delegate;
 
 	public RequestActionFunction(T delegate) {

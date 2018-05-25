@@ -9,14 +9,17 @@ import com.hiddenswitch.spellsource.models.RequestActionRequest;
 import com.hiddenswitch.spellsource.models.RequestActionResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.Collections;
 
 import static org.junit.Assert.*;
 
@@ -73,6 +76,25 @@ public class BotsTest extends SpellsourceTestBase {
 							CardCatalogue.getCardById("spell_assassinate")));
 			MulliganResponse r = Bots.mulligan(request);
 			assertEquals(2, r.discardedCards.size());
+		});
+	}
+
+	@Test
+	public void testFiberBehaviour(TestContext context) {
+		sync(() -> {
+			GameContext gc = GameContext.fromTwoRandomDecks();
+			FiberBehaviour fb1 = new FiberBehaviour();
+			FiberBehaviour fb2 = new FiberBehaviour();
+			gc.getPlayer(0).setBehaviour(fb1);
+			gc.getPlayer(1).setBehaviour(fb2);
+			gc.play();
+			while (!fb1.getMulliganCards().isEmpty() || !fb2.getMulliganCards().isEmpty()) {
+				fb1.setMulligan(Collections.emptyList());
+				fb2.setMulligan(Collections.emptyList());
+			}
+			FiberBehaviour active = (FiberBehaviour) gc.getActivePlayer().getBehaviour();
+			assertTrue(!active.getValidActions().isEmpty());
+			active.setAction(active.getValidActions().get(0));
 		});
 	}
 }

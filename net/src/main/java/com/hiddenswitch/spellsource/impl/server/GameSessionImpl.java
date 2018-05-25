@@ -17,7 +17,7 @@ import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
+import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.gameconfig.PlayerConfig;
@@ -246,7 +246,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	private Player createAIPlayer(Configuration pregame, int id) {
-		PlayerConfig playerConfig = new PlayerConfig(pregame.getDeck(), new DoNothingBehaviour());
+		PlayerConfig playerConfig = new PlayerConfig(pregame.getDeck(), new ChooseLastBehaviour());
 		Player player = new Player(playerConfig);
 		player.setId(id);
 		return player;

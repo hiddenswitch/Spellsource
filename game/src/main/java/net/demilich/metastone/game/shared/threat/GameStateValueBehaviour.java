@@ -7,6 +7,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.behaviour.RequestActionFunction;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
@@ -75,7 +76,7 @@ import java.util.stream.Stream;
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
  * 		with the highest score.
  */
-public class GameStateValueBehaviour extends AbstractBehaviour {
+public class GameStateValueBehaviour extends IntelligentBehaviour {
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
 	protected Heuristic heuristic;

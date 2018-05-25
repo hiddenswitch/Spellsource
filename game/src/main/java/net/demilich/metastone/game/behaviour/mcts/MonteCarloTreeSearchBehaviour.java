@@ -8,11 +8,14 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
+import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.cards.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class MonteCarloTreeSearch extends AbstractBehaviour {
+public class MonteCarloTreeSearchBehaviour extends IntelligentBehaviour {
 
-	//private final static Logger logger = LoggerFactory.getLogger(MonteCarloTreeSearch.class);
+	private final static Logger logger = LoggerFactory.getLogger(MonteCarloTreeSearchBehaviour.class);
 
 	private static final int ITERATIONS = 500;
 
@@ -35,18 +38,17 @@ public class MonteCarloTreeSearch extends AbstractBehaviour {
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		if (validActions.size() == 1) {
-			// logger.info("MCTS selected best action {}", validActions.get(0));
 			return validActions.get(0);
 		}
+
 		Node root = new Node(null, player.getId());
 		root.initState(context, validActions);
 		UctPolicy treePolicy = new UctPolicy();
 		for (int i = 0; i < ITERATIONS; i++) {
 			root.process(treePolicy);
 		}
-		GameAction bestAction = root.getBestAction();
-		// logger.info("MCTS selected best action {}", bestAction);
-		return bestAction;
+
+		return root.getBestAction();
 	}
 
 }

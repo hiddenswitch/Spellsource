@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
+import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
@@ -67,11 +67,11 @@ public class Player extends Entity implements Serializable {
 	/**
 	 * Create an empty player instance.
 	 *
-	 * @return A player specified with an {@link Deck#EMPTY} and a {@link DoNothingBehaviour}.
+	 * @return A player specified with an {@link Deck#EMPTY} and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player empty() {
 		Player player = new Player();
-		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new DoNothingBehaviour());
+		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new ChooseLastBehaviour());
 		player.init(config);
 		return player;
 	}
@@ -83,11 +83,11 @@ public class Player extends Entity implements Serializable {
 	 * @param id     The player's ID, {@link net.demilich.metastone.game.targeting.IdFactory#PLAYER_1} or {@link
 	 *               net.demilich.metastone.game.targeting.IdFactory#PLAYER_2}
 	 * @param deck   The deck to initialize the player with.
-	 * @return A new player instance with the specified settings and a {@link DoNothingBehaviour}.
+	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player forUser(String userId, int id, Deck deck) {
 		Player player = new Player();
-		PlayerConfig config = new PlayerConfig(deck, new DoNothingBehaviour());
+		PlayerConfig config = new PlayerConfig(deck, new ChooseLastBehaviour());
 		config.setHeroCard(deck.getHeroCard());
 		player.setId(id);
 		player.init(config);
