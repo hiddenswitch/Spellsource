@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "EPIC",
-  "description": "Your hero can only\r\ntake 1 damage at a time until the start of\r\nyour next turn.",
+  "description": "Your hero can only take 1 damage at a time until the start of your next turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

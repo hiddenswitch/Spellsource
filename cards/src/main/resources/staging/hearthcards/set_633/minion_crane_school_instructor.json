@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "Whenever a friendly minion's [b]Deflect[/b] triggers, gain +2 Attack.",
+  "description": "Whenever a friendly minion's Deflect triggers, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

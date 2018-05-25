@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you summon a minion, give it [b]Deflect[/b].",
+  "description": "Whenever you summon a minion, give it Deflect.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

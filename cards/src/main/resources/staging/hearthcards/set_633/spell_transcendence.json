@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "EPIC",
-  "description": "Draw a card.\r\nDraw an additional card for each friendly\r\n[b]Deflect[/b] minion.",
+  "description": "Draw a card. Draw an additional card for each friendly Deflect minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",

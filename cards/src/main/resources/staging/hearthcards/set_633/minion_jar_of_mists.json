@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "[b]Taunt[/b]\r\n[b]Deathrattle:[/b] If it's your opponent's turn, summon a 6/6 Mistlurker.",
+  "description": "Taunt Deathrattle: If it's your opponent's turn, summon a 6/6 Mistlurker.",
   "deathrattle": {
     "class": "SummonSpell",
     "target": "FRIENDLY_CHARACTERS",

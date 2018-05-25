@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "[b]Deflect[/b]\r\n[b]Battlecry:[/b] Summon a random August\r\nCelestial.",
+  "description": "Deflect Battlecry: Summon a random August Celestial.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

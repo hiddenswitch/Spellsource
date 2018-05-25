@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Restore 4 Health.\r\nIf cast on a minion,\r\nalso give it +2 Health.",
+  "description": "Restore 4 Health. If cast on a minion, also give it +2 Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

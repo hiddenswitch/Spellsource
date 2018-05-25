@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Choose a minion.\r\nRestore Health to your hero equal to its Attack.",
+  "description": "Choose a minion. Restore Health to your hero equal to its Attack.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
