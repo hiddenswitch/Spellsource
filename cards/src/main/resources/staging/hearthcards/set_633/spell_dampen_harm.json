@@ -1,0 +1,19 @@
+{
+  "name": "Dampen Harm",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "Your minions can only take 1 damage at a time until the start of your next turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

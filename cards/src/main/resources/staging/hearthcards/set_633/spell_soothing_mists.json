@@ -1,0 +1,21 @@
+{
+  "name": "Soothing Mists",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "COMMON",
+  "description": "[b][b]Echo[/b][/b]\r\nRestore 5 Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

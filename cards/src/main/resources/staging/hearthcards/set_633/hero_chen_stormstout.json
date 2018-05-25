@@ -1,0 +1,12 @@
+{
+  "name": "Chen Stormstout",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

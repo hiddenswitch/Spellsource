@@ -1,0 +1,16 @@
+{
+  "name": "Widow Greenpaw",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "[b]Deflect[/b]\r\nYour spells that cost (3) or more have [b]Echo[/b].",
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

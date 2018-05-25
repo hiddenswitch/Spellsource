@@ -1,0 +1,24 @@
+{
+  "name": "Emperor Shaohao",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "[b]Deflect[/b]\r\n[b]Battlecry:[/b] Summon a random August\r\nCelestial.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_bloodfen_raptor",
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

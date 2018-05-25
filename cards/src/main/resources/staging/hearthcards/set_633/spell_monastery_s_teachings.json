@@ -1,0 +1,26 @@
+{
+  "name": "Monastery's Teachings",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Each time you summon a minion this turn, add a 'Tiger Palm Strike' spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_mirror_image"
+      },
+      {
+        "class": "SummonSpell",
+        "card": "minion_bloodfen_raptor"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

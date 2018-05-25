@@ -1,0 +1,14 @@
+{
+  "name": "Elusive Brawler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Can't be targeted by spells or Hero Powers.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

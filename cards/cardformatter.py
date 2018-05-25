@@ -8,9 +8,8 @@ end in alphabetical order.
 
 This script requires the objdict package to help it serialize to JSON  in the appropriate key order.
 """
-from collections import Counter
-import os.path as path
 from objdict import ObjDict as OrderedDict
+
 from utils import write_card, iter_cards
 
 VERSION = 1
