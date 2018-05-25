@@ -1,0 +1,16 @@
+{
+  "name": "Keg Smash",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Choose a minion and adjacent minions. Destroy the next one that takes damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

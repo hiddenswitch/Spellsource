@@ -1,0 +1,19 @@
+{
+  "name": "Fortifying Brew",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "Give your minions +4 Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

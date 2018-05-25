@@ -1,0 +1,19 @@
+{
+  "name": "Black Ox Brew",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "EPIC",
+  "description": "Your hero can only\r\ntake 1 damage at a time until the start of\r\nyour next turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

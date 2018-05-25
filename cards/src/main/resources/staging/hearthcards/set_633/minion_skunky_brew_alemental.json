@@ -1,0 +1,23 @@
+{
+  "name": "Skunky Brew Alemental",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "[b]Deflect[/b]\r\n[b]Battlecry:[/b] Summon two 1/2 Alementals.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

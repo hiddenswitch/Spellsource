@@ -1,0 +1,22 @@
+{
+  "name": "Eerie Fermentation",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "LEGENDARY",
+  "description": "[b]Quest:[/b] Trigger 5 friendly minions' [b]Deflect[/b].\r\n[b]Reward:[/b] Eerie Brew",
+  "quest": {
+    "class": "CardPlayedTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 5,
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_the_coin"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Suspicious Wanderer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "[b]Deflect[/b]. [b]Echo[/b].",
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

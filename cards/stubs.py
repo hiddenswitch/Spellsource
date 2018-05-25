@@ -1,35 +1,26 @@
-import urllib2
 import json
-import utils
-import re
 import os
-from fixfields import fix_dict
+
+import urllib.request
 from os import path
+
+import utils
+from cardformatter import fix_dict
 
 
 def main():
-    hero_class_mapping = {
-        'SHAMAN': 'SILVER',
-        'PRIEST': 'WHITE',
-        'WARRIOR': 'RED',
-        'ROGUE': 'BLACK',
-        'MAGE': 'BLUE',
-        'DRUID': 'BROWN',
-        'WARLOCK': 'VIOLET',
-        'PALADIN': 'GOLD',
-        'HUNTER': 'GREEN',
-        'NEUTRAL': 'ANY'
-    }
-    request = urllib2.Request(
+    hero_class_mapping = utils.CLASS_MAPPING
+    
+    request = urllib.request.Request(
         url='https://api.hearthstonejson.com/v1/23966/enUS/cards.json',
         headers={'User-Agent': 'Mozilla/5.0'
                  })
-
-    db = json.loads(urllib2.urlopen(request).read())
-
+    
+    db = json.loads(urllib.request.urlopen(request).read())
+    
     # Filter for only witchwood
     db = [x for x in db if 'set' in x and x['set'] == 'GILNEAS' and 'type' in x and x['type'] != 'ENCHANTMENT']
-
+    
     for hs_card in db:
         card_dict = {}
         card_dict['set'] = 'WITCHWOOD'
@@ -45,7 +36,7 @@ def main():
         lower = hs_card['type'].lower()
         if lower == 'minion' and not card_dict['collectible']:
             lower = 'token'
-        name = lower + "_" + re.sub('[^a-zA-Z0-9]', '_', hs_card['name'].lower())
+        filename = utils.name_to_id(name=hs_card['name'], card_type=lower)
         if hs_card['type'] == 'MINION':
             card_dict['baseAttack'] = hs_card['attack']
             card_dict['baseHp'] = hs_card['health']
@@ -54,7 +45,7 @@ def main():
         if hs_card['type'] == 'SPELL' or hs_card['type'] == 'HERO_POWER':
             card_dict['spell'] = {'class': 'BuffSpell', 'target': 'SELF'}
             card_dict['targetSelection'] = 'NONE'
-
+        
         if 'mechanics' in hs_card:
             mechanics = hs_card['mechanics']
             if 'BATTLECRY' in mechanics:
@@ -86,7 +77,7 @@ def main():
                 attributes['WINDFURY'] = True
             if 'RUSH' in mechanics:
                 attributes['RUSH'] = True
-
+        
         card_dict['fileFormatVersion'] = 1
         stubs_ = 'src/main/resources/cards/hearthstone/witchwood/stubs/'
         if card_dict['collectible']:
@@ -97,7 +88,7 @@ def main():
             os.makedirs(stubs_)
         except:
             pass
-        utils.write_card(fix_dict(card_dict), path.join(stubs_, name + '.json'))
+        utils.write_card(fix_dict(card_dict), path.join(stubs_, filename + '.json'))
 
 
 if __name__ == '__main__':

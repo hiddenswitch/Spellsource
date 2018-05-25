@@ -1,0 +1,16 @@
+{
+  "name": "Monastery Guard",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "[b]Taunt[/b]\r\nYour other minions have +2 Health.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

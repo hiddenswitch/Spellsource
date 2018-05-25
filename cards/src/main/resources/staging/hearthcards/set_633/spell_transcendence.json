@@ -1,0 +1,18 @@
+{
+  "name": "Transcendence",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "EPIC",
+  "description": "Draw a card.\r\nDraw an additional card for each friendly\r\n[b]Deflect[/b] minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
