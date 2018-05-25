@@ -68,6 +68,7 @@ HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
 JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;
+LOSE_DEFLECT | &quot;LOSE_DEFLECT&quot;
 MILL | &quot;MILL&quot;
 MAX_MANA | &quot;MAX_MANA&quot;
 OVERLOAD | &quot;OVERLOAD&quot;
