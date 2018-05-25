@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Represents a behaviour that delegates its requests to a networking interface provided by a {@link GameContext}.
  */
-public class NetworkBehaviour extends AbstractBehaviour implements Serializable {
+public class NetworkBehaviour extends UtilityBehaviour implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Logger logger = LoggerFactory.getLogger(NetworkBehaviour.class);

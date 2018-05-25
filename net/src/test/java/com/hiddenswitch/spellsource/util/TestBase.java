@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.util;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
+import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class TestBase {
 
-	protected static class TestBehaviour extends AbstractBehaviour {
+	protected static class TestBehaviour extends UtilityBehaviour {
 
 		private EntityReference targetPreference;
 

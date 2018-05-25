@@ -1,6 +1,7 @@
 package net.demilich.metastone.game;
 
 import ch.qos.logback.classic.Level;
+import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
@@ -9,6 +10,7 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.FiberBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.Deck;
@@ -57,6 +59,8 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A game context helps execute a match of Spellsource, providing a place to store state, deliver requests for actions
@@ -129,14 +133,14 @@ import java.util.stream.Stream;
  *
  * @see #play() for more about how a game is "played."
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
- * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
- * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- * 		{@link Behaviour#requestAction(GameContext, Player, List)}.
+ * both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
+ * sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
+ * {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
- * 		decisions when requested.
+ * decisions when requested.
  * @see NetworkBehaviour for the class that turns requests to the {@link Behaviour} into calls over the network.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- * 		GameContext} because it manipulates the state stored in it.
+ * GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.
@@ -222,6 +226,34 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 		this.setLogic(logic);
 		this.setDeckFormat(deckFormat);
+	}
+
+	/**
+	 * Construct a game with the specified hero class and cards for both players.
+	 *
+	 * @param heroClass1
+	 * @param cardIds1
+	 * @param heroClass2
+	 * @param cardIds2
+	 */
+	public GameContext(HeroClass heroClass1, List<String> cardIds1, HeroClass heroClass2, List<String> cardIds2) {
+		HeroClass[] heroClasses = new HeroClass[]{heroClass1, heroClass2};
+		List[] cardIds = new List[]{cardIds1, cardIds2};
+		List<Deck> decks = new ArrayList<>();
+		for (int i = 0; i < 2; i++) {
+			Deck deck = new Deck(heroClasses[i]);
+			for (Object s : cardIds[i]) {
+				Card c = CardCatalogue.getCardById(s.toString());
+				deck.getCards().add(c);
+			}
+			Player player = new Player(deck);
+			player.setId(i);
+			setPlayer(i, player);
+			decks.add(deck);
+		}
+		DeckFormat deckFormat = DeckFormat.getSmallestSupersetFormat(decks);
+		setLogic(new GameLogic());
+		setDeckFormat(deckFormat);
 	}
 
 	protected boolean acceptAction(GameAction nextAction) {
@@ -394,7 +426,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 *                      This may be synthetic triggers that implement analytics, networked game logic, newsfeed
 	 *                      reports, spectating features, etc.
 	 * @see net.demilich.metastone.game.spells.trigger.HealingTrigger for an example of a trigger that listens to a
-	 * 		specific event.
+	 * specific event.
 	 * @see TriggerManager#fireGameEvent(GameEvent, List) for the complete game logic for firing game events.
 	 * @see #addTrigger(Trigger) for the place to add triggers that react to game events.
 	 */
@@ -411,7 +443,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * Determines whether the game is over (decided). As a side effect, records the current result of the game.
 	 *
 	 * @return {@code true} if the game has been decided by concession or because one of the two heroes have been
-	 * 		destroyed.
+	 * destroyed.
 	 */
 	@Suspendable
 	public boolean updateAndGetGameOver() {
@@ -616,7 +648,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 *
 	 * @param minionReference The minion from whose perspective we will consider "opposite."
 	 * @return The list of {@link Actor} (typically one or two) that are geometrically opposite from the minion referenced
-	 * 		by {@code minionReference}.
+	 * by {@code minionReference}.
 	 */
 	public List<Actor> getOppositeMinions(EntityReference minionReference) {
 		List<Actor> oppositeMinions = new ArrayList<>();
@@ -875,9 +907,17 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 */
 	@Suspendable
 	public void play() {
-		logger.debug("{} play: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-		init();
-		resume();
+		logger.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
+		if (Fiber.isCurrentFiber()
+				&& getPlayers().stream().map(Player::getBehaviour).anyMatch(FiberBehaviour.class::isInstance)) {
+			new Fiber<Void>(() -> {
+				init();
+				resume();
+			}).start();
+		} else {
+			init();
+			resume();
+		}
 	}
 
 	/**
@@ -888,7 +928,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * GameAction}.
 	 *
 	 * @return {@code false} if the player selected an {@link net.demilich.metastone.game.actions.EndTurnAction},
-	 * 		indicating the player would like to end their turn.
+	 * indicating the player would like to end their turn.
 	 */
 	@Suspendable
 	public boolean takeActionInTurn() {
@@ -948,7 +988,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 *
 	 * @param targetKey The reference to find.
 	 * @return The {@link Entity} pointed to by the {@link EntityReference}, or {@code null} if the provided entity
-	 * 		reference was {@code null} or {@link EntityReference#NONE}
+	 * reference was {@code null} or {@link EntityReference#NONE}
 	 * @throws NullPointerException if the reference could not be found. Game rules shouldn't be looking for references
 	 *                              that cannot be found.
 	 */
@@ -976,14 +1016,14 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param targetKey The {@link EntityReference}.
 	 * @return A potentially empty list of entities.
 	 * @see TargetLogic#resolveTargetKey(GameContext, Player, Entity, EntityReference) for more about how target
-	 * 		resolution works.
+	 * resolution works.
 	 */
 	public List<Entity> resolveTarget(Player player, Entity source, EntityReference targetKey) {
 		final List<Entity> entities = targetLogic.resolveTargetKey(this, player, source, targetKey);
 		if (entities == null) {
 			return null;
 		}
-		return entities.stream().map(e -> e.transformResolved(this)).collect(Collectors.toList());
+		return entities.stream().map(e -> e.transformResolved(this)).collect(toList());
 	}
 
 	public void setIgnoreEvents(boolean ignoreEvents) {

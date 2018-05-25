@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -371,7 +372,7 @@ public class AdvancedMechanicTests extends TestBase {
 		warrior.setMana(10);
 
 		int baseAttack = 1;
-		mage.setBehaviour(new AbstractBehaviour() {
+		mage.setBehaviour(new UtilityBehaviour() {
 
 			@Override
 			public String getName() {
