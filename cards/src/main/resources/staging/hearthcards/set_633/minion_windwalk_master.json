@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "[b]Windfury[/b]. [b]Deflect[/b].",
+  "description": "Windfury. Deflect.",
   "attributes": {
     "WINDFURY": true
   },

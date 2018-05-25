@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "EPIC",
-  "description": "Give your minions &quot;[b]Deathrattle:[/b] Restore 4 Health to your Hero.&quot;",
+  "description": "Give your minions &quot;Deathrattle: Restore 4 Health to your Hero.&quot;",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",

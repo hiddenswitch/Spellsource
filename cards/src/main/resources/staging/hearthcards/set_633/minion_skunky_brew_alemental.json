@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "[b]Deflect[/b]\r\n[b]Battlecry:[/b] Summon two 1/2 Alementals.",
+  "description": "Deflect Battlecry: Summon two 1/2 Alementals.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

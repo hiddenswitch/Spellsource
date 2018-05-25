@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "[b]Taunt[/b]\r\nYour other minions have +2 Health.",
+  "description": "Taunt Your other minions have +2 Health.",
   "attributes": {
     "TAUNT": true
   },

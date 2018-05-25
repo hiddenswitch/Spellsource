@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "LEGENDARY",
-  "description": "[b]Quest:[/b] Trigger 5 friendly minions' [b]Deflect[/b].\r\n[b]Reward:[/b] Eerie Brew",
+  "description": "Quest: Trigger 5 friendly minions' Deflect. Reward: Eerie Brew",
   "quest": {
     "class": "CardPlayedTrigger",
     "targetPlayer": "SELF"

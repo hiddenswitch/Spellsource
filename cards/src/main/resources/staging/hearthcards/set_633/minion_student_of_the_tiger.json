@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] Deal 2 damage to all enemy minions.",
+  "description": "Battlecry: Deal 2 damage to all enemy minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

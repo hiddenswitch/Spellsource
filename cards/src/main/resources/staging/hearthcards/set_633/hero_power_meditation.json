@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "[b]Hero[/b] [b]Power[/b]\r\nRestore 1 Health.\r\n+1 Attack this turn.",
+  "description": "Hero Power Restore 1 Health. +1 Attack this turn.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

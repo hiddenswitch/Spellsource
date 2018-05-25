@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "[b]Deflect[/b]\r\nYour spells that cost (3) or more have [b]Echo[/b].",
+  "description": "Deflect Your spells that cost (3) or more have Echo.",
   "attributes": {
     "ECHO": true
   },

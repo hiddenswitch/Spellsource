@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Give a minion [b]Deflect[/b].",
+  "description": "Give a minion Deflect.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
