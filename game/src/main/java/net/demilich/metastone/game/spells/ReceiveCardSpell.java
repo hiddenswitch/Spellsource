@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects;
@@ -264,7 +265,7 @@ public class ReceiveCardSpell extends Spell {
 	 *
 	 * @param filter A filter to apply to a {@link net.demilich.metastone.game.spells.desc.source.CatalogueSource}.
 	 *               Typically, you should specify a {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}
-	 *               with a specified {@link net.demilich.metastone.game.spells.desc.filter.FilterArg#CARD_TYPE}.
+	 *               with a specified {@link EntityFilterArg#CARD_TYPE}.
 	 * @param cards  How many cards should be received from the filtered cards, <b>without replacement</b>. This means
 	 *               each card will be distinct as long as the source gave distinct cards.
 	 * @return The spell
@@ -279,7 +280,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @param source The {@link CardSource} to use to filter. When {@code null}, defaults to a {@link CatalogueSource}.
 	 * @param filter A filter to apply to the {@code source}. Typically, you should specify a {@link
 	 *               net.demilich.metastone.game.spells.desc.filter.CardFilter} with a specified {@link
-	 *               net.demilich.metastone.game.spells.desc.filter.FilterArg#CARD_TYPE}.
+	 *               EntityFilterArg#CARD_TYPE}.
 	 * @param cards  How many cards should be received from the filtered cards, <b>without replacement</b>. This means
 	 *               each card will be distinct as long as the source gave distinct cards.
 	 * @return The spell

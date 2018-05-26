@@ -27,7 +27,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			receiveCard(context, player, "spell_wild_growth");
 			receiveCard(context, player, "minion_pompous_thespian");
 			player.setMana(2);
-			player.setBehaviour(new GameStateValueBehaviour());
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 
 			while (context.takeActionInTurn()) {
 			}
@@ -45,7 +45,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			player.getHero().setHp(17);
 			receiveCard(context, player, "spell_wild_growth");
 			receiveCard(context, player, "minion_pompous_thespian");
-			player.setBehaviour(new GameStateValueBehaviour());
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 
 			while (context.takeActionInTurn()) {
 			}
@@ -78,10 +78,9 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testAIExploresDiscoversForWinning() {
 		runGym((context, player, opponent) -> {
-			Behaviour behaviour = new GameStateValueBehaviour();
 
 			// There is a branch of discover actions that wins the bot the game.
-			player.setBehaviour(behaviour);
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 			receiveCard(context, player, "spell_cascading_discovers");
 
 			while (context.takeActionInTurn()) {
@@ -105,8 +104,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			receiveCard(context, player, "minion_shattered_sun_cleric");
 			// Cost 1, Has Charge while you have a weapon equipped
 			receiveCard(context, player, "minion_southsea_deckhand");
-			Behaviour behaviour = new GameStateValueBehaviour();
-			player.setBehaviour(behaviour);
+			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 
 			while (context.takeActionInTurn()) {
 			}

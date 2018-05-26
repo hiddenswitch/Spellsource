@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 
 import java.io.Serializable;
 
@@ -38,7 +39,7 @@ import java.io.Serializable;
  * argument of a card cost modifier.</li> <li>{@code null} in {@link net.demilich.metastone.game.spells.MissilesSpell}
  * and {@link net.demilich.metastone.game.spells.HealingMissilesSpell}'s {@code getValue} calls.</li> <li>{@code null}
  * if the {@link net.demilich.metastone.game.spells.desc.filter.AttributeFilter} has a {@link
- * net.demilich.metastone.game.spells.desc.filter.FilterArg#TARGET} that evaluates to zero entities.</li> <li>{@code
+ * EntityFilterArg#TARGET} that evaluates to zero entities.</li> <li>{@code
  * null} in all other situations.</li> </ul>
  * <p>
  * Refer to the class hierarchy of this class for all the possible value providers.

@@ -5,7 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.Iterator;
 import java.util.List;
 
 public class EntityEqualsFilter extends EntityFilter {
@@ -16,9 +15,9 @@ public class EntityEqualsFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		List<Entity> secondaries = context.resolveTarget(player, host, (EntityReference) getDesc().get(FilterArg.SECONDARY_TARGET));
-		if (getDesc().containsKey(FilterArg.FILTERS)) {
-			EntityFilter[] filters = (EntityFilter[]) getDesc().get(FilterArg.FILTERS);
+		List<Entity> secondaries = context.resolveTarget(player, host, (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET));
+		if (getDesc().containsKey(EntityFilterArg.FILTERS)) {
+			EntityFilter[] filters = (EntityFilter[]) getDesc().get(EntityFilterArg.FILTERS);
 			for (EntityFilter filter : filters) {
 				secondaries.removeIf(entity1 -> !filter.test(context, player, entity1, host));
 			}

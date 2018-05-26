@@ -12,6 +12,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
@@ -386,7 +387,7 @@ public class JourneyToUngoroTests extends TestBase {
 							.filter(da -> da.getCard().getCardId().equals(rightCardId))
 							.findFirst()
 							.orElseThrow(AssertionError::new));
-			player.setBehaviour(override);
+			context.setBehaviour(player.getId(), override);
 			playMinionCard(context, player, "minion_curious_glimmerroot");
 			Assert.assertEquals(player.getHand().size(), 1);
 			Assert.assertEquals(player.getHand().get(0).getCardId(), rightCardId);
@@ -403,7 +404,7 @@ public class JourneyToUngoroTests extends TestBase {
 							.filter(da -> !da.getCard().getCardId().equals(rightCardId))
 							.findFirst()
 							.orElseThrow(AssertionError::new));
-			player.setBehaviour(override);
+			context.setBehaviour(player.getId(), override);
 			playMinionCard(context, player, "minion_curious_glimmerroot");
 			Assert.assertEquals(player.getHand().size(), 0);
 		});
@@ -693,7 +694,7 @@ public class JourneyToUngoroTests extends TestBase {
 				count.incrementAndGet();
 				return discoverActions.get(0);
 			});
-			player.setBehaviour(behaviour);
+			context.setBehaviour(player.getId(), behaviour);
 			playCardWithTarget(context, player, "spell_adaptation", voraxx);
 			Card card = discoverAction[0].getCard();
 			Assert.assertEquals(player.getMinions().size(), 2);
@@ -864,7 +865,7 @@ public class JourneyToUngoroTests extends TestBase {
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];
 		final int[] handSize = new int[1];
-		player.setBehaviour(new TestBehaviour() {
+		context.setBehaviour(player.getId(), new TestBehaviour() {
 			boolean first = true;
 
 			@Override

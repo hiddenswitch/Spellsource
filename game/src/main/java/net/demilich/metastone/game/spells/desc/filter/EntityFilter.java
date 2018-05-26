@@ -2,7 +2,6 @@ package net.demilich.metastone.game.spells.desc.filter;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
@@ -28,11 +27,11 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 		this.desc = desc;
 	}
 
-	public Object getArg(FilterArg arg) {
+	public Object getArg(EntityFilterArg arg) {
 		return getDesc().get(arg);
 	}
 
-	public boolean hasArg(FilterArg arg) {
+	public boolean hasArg(EntityFilterArg arg) {
 		return getDesc().containsKey(arg);
 	}
 
@@ -41,8 +40,8 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 	}
 
 	public boolean matches(GameContext context, Player player, Entity entity, Entity host) {
-		boolean invert = getDesc().getBool(FilterArg.INVERT);
-		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(FilterArg.TARGET_PLAYER);
+		boolean invert = getDesc().getBool(EntityFilterArg.INVERT);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EntityFilterArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
 		}
@@ -92,7 +91,7 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 	}
 
 	protected List<Entity> getTargetedEntities(GameContext context, Player player, Entity host) {
-		EntityReference targetReference = (EntityReference) getDesc().get(FilterArg.TARGET);
+		EntityReference targetReference = (EntityReference) getDesc().get(EntityFilterArg.TARGET);
 		List<Entity> entities = null;
 		if (targetReference != null) {
 			entities = context.resolveTarget(player, host, targetReference);

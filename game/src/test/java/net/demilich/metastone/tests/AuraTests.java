@@ -97,7 +97,7 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(minion2.getAttack(), 2);
 	}
 
-	@Test
+	@Test(invocationCount = 100)
 	public void testAuraPlusFaceless() {
 		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player player = context.getPlayer1();
@@ -112,7 +112,7 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(warleader.getAttack(), 3);
 		Assert.assertEquals(warleader.getHp(), 3);
 
-		TestBehaviour behaviour = (TestBehaviour) player.getBehaviour();
+		TestBehaviour behaviour = (TestBehaviour) context.getBehaviours().get(0);
 		behaviour.setTargetPreference(warleader.getReference());
 
 		Card facelessCard = CardCatalogue.getCardById("minion_faceless_manipulator");
@@ -174,7 +174,7 @@ public class AuraTests extends TestBase {
 		
 		context.getLogic().endTurn(player.getId());
 
-		TestBehaviour behaviour = (TestBehaviour) opponent.getBehaviour();
+		TestBehaviour behaviour = (TestBehaviour) context.getBehaviours().get(1);
 		behaviour.setTargetPreference(dummy.getReference());
 
 		Card facelessCard = CardCatalogue.getCardById("minion_faceless_manipulator");

@@ -6,8 +6,8 @@ import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfigurationImpl;
-import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
+import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Handler;
@@ -17,10 +17,9 @@ import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.events.TouchingNotification;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -142,9 +141,8 @@ public class GameSessionImpl implements GameSession {
 		// Configure the network behaviours on the players
 		Player player1 = getPlayer(configuration1.getUserId());
 		Player player2 = getPlayer(configuration2.getUserId());
-		player1.setBehaviour(new NetworkBehaviour());
-		player2.setBehaviour(new NetworkBehaviour());
 		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), Rpc.connect(Logic.class), new VertxScheduler(vertx));
+		this.gameContext.setBehaviours(new Behaviour[]{new NetworkBehaviour(), new NetworkBehaviour()});
 		final Writer listener1;
 		final Writer listener2;
 
@@ -246,8 +244,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	private Player createAIPlayer(Configuration pregame, int id) {
-		PlayerConfig playerConfig = new PlayerConfig(pregame.getDeck(), new ChooseLastBehaviour());
-		Player player = new Player(playerConfig);
+		Player player = new Player(pregame.getDeck(), pregame.getName());
 		player.setId(id);
 		return player;
 	}

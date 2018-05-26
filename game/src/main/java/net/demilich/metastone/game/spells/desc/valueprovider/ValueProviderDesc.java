@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.ValueProviderDescDeserializer;
+import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.EnumMap;
@@ -15,7 +16,7 @@ import java.util.Map;
 public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
 	public ValueProviderDesc() {
-		super();
+		super(ValueProviderArg.class);
 	}
 
 	public static Map<ValueProviderArg, Object> build(Class<? extends ValueProvider> providerClass) {
@@ -25,11 +26,11 @@ public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 	}
 
 	public ValueProviderDesc(Map<ValueProviderArg, Object> arguments) {
-		super(arguments);
+		super(arguments, ValueProviderArg.class);
 	}
 
 	public ValueProviderDesc(Class<? extends ValueProvider> vpClass) {
-		super(vpClass);
+		super(vpClass, ValueProviderArg.class);
 	}
 
 	@Override

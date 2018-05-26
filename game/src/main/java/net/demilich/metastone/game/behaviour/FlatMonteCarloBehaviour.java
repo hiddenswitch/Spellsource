@@ -66,9 +66,7 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 
 	@Suspendable
 	private int playRandomUntilEnd(GameContext simulation, int playerId) {
-		for (Player player : simulation.getPlayers()) {
-			player.setBehaviour(new PlayRandomBehaviour());
-		}
+		simulation.setBehaviours(new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()});
 		simulation.resume();
 		return simulation.getWinningPlayerId() == playerId ? 1 : 0;
 	}

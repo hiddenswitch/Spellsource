@@ -19,8 +19,8 @@ public class AttributeFilter extends EntityFilter {
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
-		Attribute attribute = (Attribute) getDesc().get(FilterArg.ATTRIBUTE);
-		Operation operation = (Operation) getDesc().get(FilterArg.OPERATION);
+		Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
+		Operation operation = (Operation) getDesc().get(EntityFilterArg.OPERATION);
 
 		if (operation == null) {
 			operation = Operation.HAS;
@@ -32,9 +32,9 @@ public class AttributeFilter extends EntityFilter {
 
 		int targetValue;
 		if (entities == null) {
-			targetValue = getDesc().getValue(FilterArg.VALUE, context, player, null, host, 0);
+			targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, host, 0);
 		} else {
-			targetValue = getDesc().getValue(FilterArg.VALUE, context, player, entities.get(0), host, 0);
+			targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), host, 0);
 		}
 
 		int actualValue = -1;

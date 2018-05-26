@@ -33,8 +33,8 @@ public class InventoryRecord extends MongoRecord {
 	private String userId;
 
 	/**
-	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also
-	 * a collection ID.
+	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also a
+	 * collection ID.
 	 */
 	@JsonProperty
 	private String allianceId;
@@ -158,8 +158,12 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	public AttributeMap getPersistentAttributes() {
-		return new AttributeMap(getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
-				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue)));
+		Map<Attribute, Object> collect = getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
+				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue));
+		if (collect.isEmpty()) {
+			return new AttributeMap();
+		}
+		return new AttributeMap(collect);
 	}
 
 	@Override

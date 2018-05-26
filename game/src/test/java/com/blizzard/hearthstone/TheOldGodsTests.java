@@ -345,7 +345,7 @@ public class TheOldGodsTests extends TestBase {
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];
 		final int[] handSize = new int[1];
-		player.setBehaviour(new TestBehaviour() {
+		context.setBehaviour(player.getId(), new TestBehaviour() {
 			boolean first = true;
 
 			@Override

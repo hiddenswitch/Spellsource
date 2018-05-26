@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.GameContext;

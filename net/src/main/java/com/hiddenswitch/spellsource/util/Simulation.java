@@ -113,11 +113,12 @@ public class Simulation {
 		out.println("Deck 1\tDeck 2\tNumber of Games\t" + statsHeaders);
 
 		// Write the results to the output, or standard out if it's not specified. Output as a TSV
-		for (SimulationResult simulation : results.values()) {
+		for (Map.Entry<String[], SimulationResult> result : results.entrySet()) {
+			SimulationResult simulation = result.getValue();
 			StringBuilder row = new StringBuilder();
-			row.append(simulation.getConfig().getPlayerConfig1().getDeck().getName());
+			row.append(result.getKey()[0]);
 			row.append("\t");
-			row.append(simulation.getConfig().getPlayerConfig2().getDeck().getName());
+			row.append(result.getKey()[1]);
 			row.append("\t");
 			row.append(simulation.getNumberOfGames());
 			row.append("\t");

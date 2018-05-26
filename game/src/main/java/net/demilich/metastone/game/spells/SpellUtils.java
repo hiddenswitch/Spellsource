@@ -323,7 +323,7 @@ public class SpellUtils {
 	 * This method makes a network request if required.
 	 *
 	 * @param context The game context that hosts the player and state for this request.
-	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the cards.
+	 * @param player  The player that will choose from the cards.
 	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this {@link
 	 *                SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically, this
 	 *                {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell}, or a

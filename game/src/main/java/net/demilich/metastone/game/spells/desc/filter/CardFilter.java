@@ -40,16 +40,16 @@ public class CardFilter extends EntityFilter {
 
 		Card card = entity.getSourceCard();
 
-		CardType cardType = (CardType) getDesc().get(FilterArg.CARD_TYPE);
+		CardType cardType = (CardType) getDesc().get(EntityFilterArg.CARD_TYPE);
 		if (cardType != null && !card.getCardType().isCardType(cardType)) {
 			return false;
 		}
-		Race race = (Race) getDesc().get(FilterArg.RACE);
+		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
 		if (race != null && !card.getRace().hasRace(race)) {
 			return false;
 		}
 
-		HeroClass[] heroClasses = (HeroClass[]) getDesc().get(FilterArg.HERO_CLASSES);
+		HeroClass[] heroClasses = (HeroClass[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
 			for (HeroClass heroClass : heroClasses) {
@@ -60,31 +60,31 @@ public class CardFilter extends EntityFilter {
 			}
 		}
 
-		HeroClass heroClass = (HeroClass) getDesc().get(FilterArg.HERO_CLASS);
+		HeroClass heroClass = (HeroClass) getDesc().get(EntityFilterArg.HERO_CLASS);
 		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
 			return false;
 		}
 
-		if (getDesc().containsKey(FilterArg.MANA_COST)) {
-			int manaCost = getDesc().getValue(FilterArg.MANA_COST, context, player, null, host, 0);
+		if (getDesc().containsKey(EntityFilterArg.MANA_COST)) {
+			int manaCost = getDesc().getValue(EntityFilterArg.MANA_COST, context, player, null, host, 0);
 			// TODO: Should we be looking at base mana cost or modified mana cost here?
 			if (manaCost != card.getBaseManaCost()) {
 				return false;
 			}
 		}
-		Rarity rarity = (Rarity) getDesc().get(FilterArg.RARITY);
+		Rarity rarity = (Rarity) getDesc().get(EntityFilterArg.RARITY);
 		if (rarity != null && !card.getRarity().isRarity(rarity)) {
 			return false;
 		}
 
-		if (getDesc().containsKey(FilterArg.ATTRIBUTE)) {
-			Attribute attribute = (Attribute) getDesc().get(FilterArg.ATTRIBUTE);
+		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
+			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
 			Operation operation = null;
-			if (getDesc().containsKey(FilterArg.OPERATION)) {
-				operation = (Operation) getDesc().get(FilterArg.OPERATION);
+			if (getDesc().containsKey(EntityFilterArg.OPERATION)) {
+				operation = (Operation) getDesc().get(EntityFilterArg.OPERATION);
 			}
-			if (!getDesc().containsKey(FilterArg.OPERATION)
-					&& getDesc().containsKey(FilterArg.VALUE)) {
+			if (!getDesc().containsKey(EntityFilterArg.OPERATION)
+					&& getDesc().containsKey(EntityFilterArg.VALUE)) {
 				operation = Operation.EQUAL;
 			}
 			if (operation == Operation.HAS || operation == null) {
@@ -93,16 +93,16 @@ public class CardFilter extends EntityFilter {
 
 			int targetValue;
 			if (entities == null) {
-				targetValue = getDesc().getInt(FilterArg.VALUE);
+				targetValue = getDesc().getInt(EntityFilterArg.VALUE);
 			} else {
-				targetValue = getDesc().getValue(FilterArg.VALUE, context, player, entities.get(0), null, 0);
+				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), null, 0);
 			}
 
 			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 		}
 
-		CardSet cardSet = (CardSet) getDesc().get(FilterArg.CARD_SET);
+		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
 		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
 			return false;
 		}
@@ -122,10 +122,10 @@ public class CardFilter extends EntityFilter {
 	public static CardFilter create(CardType cardType, Race race) {
 		EntityFilterDesc arguments = new EntityFilterDesc(CardFilter.class);
 		if (cardType != null) {
-			arguments.put(FilterArg.CARD_TYPE, cardType);
+			arguments.put(EntityFilterArg.CARD_TYPE, cardType);
 		}
 		if (race != null) {
-			arguments.put(FilterArg.RACE, race);
+			arguments.put(EntityFilterArg.RACE, race);
 		}
 		return new CardFilter(arguments);
 	}

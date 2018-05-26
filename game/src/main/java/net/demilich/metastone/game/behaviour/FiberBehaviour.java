@@ -2,12 +2,10 @@ package net.demilich.metastone.game.behaviour;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.channels.Channels;
 import co.paralleluniverse.strands.channels.QueueChannel;
 import co.paralleluniverse.strands.channels.QueueObjectChannel;
 import co.paralleluniverse.strands.queues.SingleConsumerLinkedObjectQueue;
-import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;

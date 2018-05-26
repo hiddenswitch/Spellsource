@@ -78,10 +78,8 @@ public class TraceTests {
 	@Test
 	public void testTraceValid() {
 		Logging.setLoggingLevel(Level.ERROR);
-		Player player1 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD));
-		player1.setBehaviour(new PlayRandomBehaviour());
-		Player player2 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD));
-		player2.setBehaviour(new PlayRandomBehaviour());
+		Player player1 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 1");
+		Player player2 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 2");
 		GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
 		context1.play();
 		Trace trace = context1.getTrace();
@@ -99,9 +97,7 @@ public class TraceTests {
 			HeroClass heroClass1 = classes.get(RandomUtils.nextInt(0, classes.size()));
 			HeroClass heroClass2 = classes.get(RandomUtils.nextInt(0, classes.size()));
 			Player player1 = new Player(new RandomDeck(heroClass1, DeckFormat.STANDARD));
-			player1.setBehaviour(new PlayRandomBehaviour());
 			Player player2 = new Player(new RandomDeck(heroClass2, DeckFormat.STANDARD));
-			player2.setBehaviour(new PlayRandomBehaviour());
 			GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
 			context1.play();
 			Trace trace = context1.getTrace();

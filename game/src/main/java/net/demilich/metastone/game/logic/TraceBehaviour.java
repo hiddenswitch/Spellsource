@@ -1,12 +1,10 @@
 package net.demilich.metastone.game.logic;
 
-import com.hiddenswitch.spellsource.common.UtilityBehaviour;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.Card;
-import org.apache.commons.math3.exception.NullArgumentException;
 
 import java.util.Arrays;
 import java.util.Collections;

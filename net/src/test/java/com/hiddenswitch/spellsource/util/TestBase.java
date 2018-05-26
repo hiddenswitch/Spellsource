@@ -2,12 +2,11 @@ package com.hiddenswitch.spellsource.util;
 
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
-import com.hiddenswitch.spellsource.common.UtilityBehaviour;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -15,7 +14,6 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.LoggerFactory;
@@ -81,16 +79,8 @@ public class TestBase {
 		for (CardSet set : CardSet.values()) {
 			deckFormat.addSet(set);
 		}
-		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, deckFormat), new TestBehaviour());
-		player1Config.setName("GamePlayer 1");
-		player1Config.setHeroCard(HeroClass.getHeroCard(hero1));
-		Player player1 = new Player(player1Config);
-
-		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(hero2, deckFormat), new TestBehaviour());
-		player2Config.setName("GamePlayer 2");
-		player2Config.setHeroCard(HeroClass.getHeroCard(hero2));
-		Player player2 = new Player(player2Config);
-
+		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, DeckFormat.WILD),"Player 1");
+		Player player2 = new Player(DeckFactory.getRandomDeck(hero2, DeckFormat.WILD),"Player 2");
 		GameLogic logic = new GameLogic();
 		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
 		logic.setContext(context);
@@ -141,11 +131,6 @@ public class TestBase {
 		context.getLogic().receiveCard(player.getId(), card);
 		context.getLogic().performGameAction(player.getId(), card.play());
 		return getSummonedMinion(player.getMinions());
-	}
-
-	protected static void target(Player player, Entity target) {
-		TestBehaviour testBehaviour = (TestBehaviour) player.getBehaviour();
-		testBehaviour.setTargetPreference(target != null ? target.getReference() : null);
 	}
 
 }

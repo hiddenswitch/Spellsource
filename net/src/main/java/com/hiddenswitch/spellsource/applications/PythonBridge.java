@@ -65,8 +65,8 @@ public class PythonBridge {
 						GameContext.simulate(deckPair, behaviours, gamesPerBatch, reduce, simulationResult -> {
 							generator.offer(new JsonObject()
 									.put("decks", new JsonArray(Arrays.asList(
-											simulationResult.getConfig().getPlayerConfig1().getDeck().getName(),
-											simulationResult.getConfig().getPlayerConfig2().getDeck().getName())))
+											deckKeyPair[0],
+											deckKeyPair[1])))
 									.put("numberOfGames", simulationResult.getNumberOfGames())
 									.put("results", new JsonArray(Arrays.asList(
 											JsonObject.mapFrom(simulationResult.getPlayer1Stats().getStats()),

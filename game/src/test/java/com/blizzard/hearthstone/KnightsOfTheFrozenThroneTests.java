@@ -60,7 +60,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card card1 = shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			Card card2 = shuffleToDeck(context, player, "minion_bloodfen_raptor");
-			overrideDiscover(player, discoverActions -> {
+			overrideDiscover(context, player, discoverActions -> {
 				Assert.assertEquals(discoverActions.size(), 1, "Discovers should be distinct");
 				return discoverActions.get(0);
 			});
@@ -384,8 +384,8 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@SuppressWarnings("unchecked")
 	public void testDeathstalkerRexxar() {
 		runGym((GameContext context, Player player, Player opponent) -> {
-			Behaviour spiedBehavior = Mockito.spy(player.getBehaviour());
-			player.setBehaviour(spiedBehavior);
+			Behaviour spiedBehavior = Mockito.spy(context.getBehaviours().get(player.getId()));
+			context.setBehaviour(player.getId(), spiedBehavior);
 			List<Card> cards = new ArrayList<>();
 			AtomicBoolean isBuildingBeast = new AtomicBoolean(false);
 			final Answer<GameAction> answer = invocation -> {
@@ -572,7 +572,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			playCardWithTarget(context, player, "spell_fireball", target1);
 			playCardWithTarget(context, player, "spell_fireball", target2);
 			Assert.assertEquals(player.getMinions().size(), 0);
-			overrideDiscover(player, discoverActions -> {
+			overrideDiscover(context, player, discoverActions -> {
 				Assert.assertEquals(discoverActions.size(), 1, "Discover actions should be distinct");
 				return discoverActions.get(0);
 			});

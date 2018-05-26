@@ -13,8 +13,8 @@ public class AndFilter extends EntityFilter {
 	}
 
 	public static AndFilter create(EntityFilter... filters) {
-		Map<FilterArg, Object> arguments = new EntityFilterDesc(AndFilter.class);
-		arguments.put(FilterArg.FILTERS, filters);
+		Map<EntityFilterArg, Object> arguments = new EntityFilterDesc(AndFilter.class);
+		arguments.put(EntityFilterArg.FILTERS, filters);
 		return new AndFilter(new EntityFilterDesc(arguments));
 	}
 
@@ -24,7 +24,7 @@ public class AndFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityFilter[] filters = (EntityFilter[]) getDesc().get(FilterArg.FILTERS);
+		EntityFilter[] filters = (EntityFilter[]) getDesc().get(EntityFilterArg.FILTERS);
 		if (filters == null) {
 			return true;
 		}

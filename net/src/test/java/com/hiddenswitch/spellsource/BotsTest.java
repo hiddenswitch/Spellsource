@@ -85,14 +85,14 @@ public class BotsTest extends SpellsourceTestBase {
 			GameContext gc = GameContext.fromTwoRandomDecks();
 			FiberBehaviour fb1 = new FiberBehaviour();
 			FiberBehaviour fb2 = new FiberBehaviour();
-			gc.getPlayer(0).setBehaviour(fb1);
-			gc.getPlayer(1).setBehaviour(fb2);
+			gc.setBehaviour(0, fb1);
+			gc.setBehaviour(1, fb2);
 			gc.play();
 			while (!fb1.getMulliganCards().isEmpty() || !fb2.getMulliganCards().isEmpty()) {
 				fb1.setMulligan(Collections.emptyList());
 				fb2.setMulligan(Collections.emptyList());
 			}
-			FiberBehaviour active = (FiberBehaviour) gc.getActivePlayer().getBehaviour();
+			FiberBehaviour active = (FiberBehaviour) gc.getBehaviours().get(gc.getActivePlayerId());
 			assertTrue(!active.getValidActions().isEmpty());
 			active.setAction(active.getValidActions().get(0));
 		});
