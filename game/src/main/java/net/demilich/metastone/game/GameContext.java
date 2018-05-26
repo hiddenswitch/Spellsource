@@ -8,10 +8,7 @@ import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
-import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.FiberBehaviour;
-import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.behaviour.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -27,7 +24,6 @@ import net.demilich.metastone.game.environment.EnvironmentDeque;
 import net.demilich.metastone.game.environment.EnvironmentMap;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.logic.TargetLogic;
@@ -56,7 +52,6 @@ import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
@@ -115,10 +110,10 @@ import static java.util.stream.Collectors.toList;
  * <p>
  * Game actions are chosen by {@link Behaviour} objects living inside the {@link Player} object. Typically, the {@link
  * GameLogic} instance will call {@link #getActivePlayer()} for the currently active player, call {@link
- * Player#getBehaviour()} to get the behaviour, and then call {@link Behaviour#requestAction(GameContext, Player, List)}
- * to request which action of a list of actions the player takes. Note that this is just called as a plain function, so
- * the end user of the {@link GameContext} is responsible for the blocking that would occur if e.g. the {@link
- * Behaviour} waits on user input to answer the action request. Ordinarily, as long as the thread running {@link
+ * GameContext#getBehaviours()} to get the behaviour, and then call {@link Behaviour#requestAction(GameContext, Player,
+ * List)} to request which action of a list of actions the player takes. Note that this is just called as a plain
+ * function, so the end user of the {@link GameContext} is responsible for the blocking that would occur if e.g. the
+ * {@link Behaviour} waits on user input to answer the action request. Ordinarily, as long as the thread running {@link
  * GameContext} doesn't do anything but process the game, blocking on user input isn't an issue; only one player may
  * take an action at a time.
  * <p>
@@ -151,6 +146,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	public static final int PLAYER_2 = 1;
 	protected static Logger logger = LoggerFactory.getLogger(GameContext.class);
 	private Player[] players = new Player[2];
+	private Behaviour[] behaviours = new Behaviour[2];
 	private GameLogic logic;
 	private DeckFormat deckFormat;
 	private TargetLogic targetLogic = new TargetLogic();
@@ -170,9 +166,14 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	private boolean gameEnded;
 
 	/**
-	 * Creates a game context with no valid start state.
+	 * Creates a game context with two empty players.
 	 */
 	public GameContext() {
+		setLogic(new GameLogic());
+		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
+		setDeckFormat(DeckFormat.STANDARD);
+		setPlayer1(Player.empty());
+		setPlayer2(Player.empty());
 	}
 
 	/**
@@ -210,6 +211,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param deckFormat The cards that are legal to play in terms of a set of {@link CardSet} values.
 	 */
 	public GameContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
+		this();
 		if (player1.getId() == IdFactory.UNASSIGNED) {
 			player1.setId(PLAYER_1);
 		}
@@ -237,6 +239,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param cardIds2
 	 */
 	public GameContext(HeroClass heroClass1, List<String> cardIds1, HeroClass heroClass2, List<String> cardIds2) {
+		this();
 		HeroClass[] heroClasses = new HeroClass[]{heroClass1, heroClass2};
 		List[] cardIds = new List[]{cardIds1, cardIds2};
 		List<Deck> decks = new ArrayList<>();
@@ -246,9 +249,10 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 				Card c = CardCatalogue.getCardById(s.toString());
 				deck.getCards().add(c);
 			}
-			Player player = new Player(deck);
+			Player player = new Player(deck, "Player " + Integer.toString(i));
 			player.setId(i);
 			setPlayer(i, player);
+			behaviours[i] = new PlayRandomBehaviour();
 			decks.add(deck);
 		}
 		DeckFormat deckFormat = DeckFormat.getSmallestSupersetFormat(decks);
@@ -317,6 +321,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 			}
 		}
 
+		clone.behaviours = new Behaviour[]{behaviours[0] == null ? null : behaviours[0].clone(), behaviours[1] == null ? null : behaviours[1].clone()};
 		return clone;
 	}
 
@@ -366,8 +371,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	@Suspendable
 	protected void notifyPlayersGameOver() {
-		for (Player player : getPlayers()) {
-			player.getBehaviour().onGameOver(this, player.getId(), getWinner() != null ? getWinner().getId() : -1);
+		for (int i = 0; i < behaviours.length; i++) {
+			behaviours[i].onGameOver(this, i, getWinner() != null ? getWinner().getId() : -1);
 		}
 	}
 
@@ -730,11 +735,15 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 *
 	 * @return An {@link java.util.Collections.UnmodifiableList} of {@link Player} objects.
 	 */
-	public synchronized List<Player> getPlayers() {
+	public List<Player> getPlayers() {
 		if (players == null) {
 			return Collections.unmodifiableList(new ArrayList<>());
 		}
 		return Collections.unmodifiableList(Arrays.asList(players));
+	}
+
+	public List<Behaviour> getBehaviours() {
+		return Collections.unmodifiableList(Arrays.asList(behaviours));
 	}
 
 	/**
@@ -909,7 +918,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	public void play() {
 		logger.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		if (Fiber.isCurrentFiber()
-				&& getPlayers().stream().map(Player::getBehaviour).anyMatch(FiberBehaviour.class::isInstance)) {
+				&& Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
 			new Fiber<Void>(() -> {
 				init();
 				resume();
@@ -949,11 +958,10 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 			return false;
 		}
 
-		GameAction nextAction = getActivePlayer().getBehaviour().requestAction(this, getActivePlayer(), getValidActions());
+		GameAction nextAction = behaviours[getActivePlayerId()].requestAction(this, getActivePlayer(), getValidActions());
 
 		if (nextAction == null) {
-			throw new RuntimeException("Behaviour " + getActivePlayer().getBehaviour().getName() + " selected NULL action while "
-					+ getValidActions().size() + " actions were available");
+			throw new NullPointerException("nextAction");
 		}
 
 		trace.addAction(nextAction.getId(), nextAction);
@@ -1129,7 +1137,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	public void setLogic(GameLogic logic) {
 		this.logic = logic;
-		this.getLogic().setContext(this);
+		logic.setContext(this);
 	}
 
 	public void setDeckFormat(DeckFormat deckFormat) {
@@ -1172,61 +1180,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		this.actionsThisTurn = actionsThisTurn;
 	}
 
-	public String toLongString() {
-		StringBuilder builder = new StringBuilder("GameContext hashCode: " + hashCode() + "\n");
-
-		for (Player player : getPlayers()) {
-			if (player == null) {
-				builder.append("(null player)\n");
-				continue;
-			}
-			builder.append("Player " + player.getName() + "\n");
-			builder.append(" Mana: ");
-			builder.append(player.getMana());
-			builder.append('/');
-			builder.append(player.getMaxMana());
-			builder.append(" HP: ");
-			builder.append(player.getHero().getHp() + "(" + player.getHero().getArmor() + ")");
-			builder.append('\n');
-			builder.append("Behaviour: " + player.getBehaviour().getName() + "\n");
-			builder.append("Minions:\n");
-			for (Actor minion : player.getMinions()) {
-				builder.append('\t');
-				builder.append(minion);
-				builder.append('\n');
-			}
-			builder.append("Cards (hand):\n");
-			for (Card card : player.getHand()) {
-				builder.append('\t');
-				builder.append(card);
-				builder.append('\n');
-			}
-			builder.append("Set aside:\n");
-			for (Entity entity : player.getSetAsideZone()) {
-				builder.append('\t');
-				builder.append(entity);
-				builder.append('\n');
-			}
-			builder.append("Graveyard:\n");
-			for (Entity entity : player.getGraveyard()) {
-				builder.append('\t');
-				builder.append(entity);
-				builder.append('\n');
-			}
-			builder.append("Secrets:\n");
-			for (String secretId : player.getSecretCardIds()) {
-				builder.append('\t');
-				builder.append(secretId);
-				builder.append('\n');
-			}
-		}
-		builder.append("Turn: " + getTurn() + "\n");
-		builder.append("Result: " + getStatus() + "\n");
-		builder.append("Winner: " + (getWinner() == null ? "tbd" : getWinner().getName()));
-
-		return builder.toString();
-	}
-
 	public void setPlayer1(Player player1) {
 		setPlayer(PLAYER_1, player1);
 	}
@@ -1254,6 +1207,9 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	public void setPlayer(int index, Player player) {
 		this.players[index] = player;
+		if (player.getId() != index) {
+			player.setId(index);
+		}
 	}
 
 	public void setActivePlayerId(int id) {
@@ -1491,15 +1447,13 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}
 
 		return deckStream.map(decksPair -> {
-			final GameConfig config = GameConfig.fromDecks(Arrays.asList(decksPair), player1, player2);
-
-			Player playerContext1 = new Player(config.getPlayerConfig1());
-			Player playerContext2 = new Player(config.getPlayerConfig2());
-			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
+			GameContext newGame = GameContext.fromDecks(decks);
+			newGame.behaviours[0] = player1.get();
+			newGame.behaviours[1] = player2.get();
 			if (contextHandler != null) {
 				contextHandler.accept(newGame);
 			}
-			SimulationResult innerResult = new SimulationResult(config);
+			SimulationResult innerResult = new SimulationResult(1);
 
 			try {
 				newGame.play();
@@ -1534,19 +1488,16 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel().unordered();
 
 		Stream<SimulationResult> result = stream.map(i -> {
-			final GameConfig config;
+			GameContext newGame;
 			if (behaviours.size() == 0) {
-				config = GameConfig.fromDecks(deckPair, PlayRandomBehaviour::new, PlayRandomBehaviour::new);
+				newGame = fromDecks(deckPair);
 			} else if (behaviours.size() == 1) {
-				config = GameConfig.fromDecks(deckPair, behaviours.get(0), PlayRandomBehaviour::new);
+				newGame = fromDecks(deckPair, behaviours.get(0).get(), new PlayRandomBehaviour());
 			} else {
-				config = GameConfig.fromDecks(deckPair, behaviours.get(0), behaviours.get(1));
+				newGame = fromDecks(deckPair, behaviours.get(0).get(), behaviours.get(1).get());
 			}
 
-			Player playerContext1 = new Player(config.getPlayerConfig1());
-			Player playerContext2 = new Player(config.getPlayerConfig2());
-			GameContext newGame = new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
-			SimulationResult innerResult = new SimulationResult(config);
+			SimulationResult innerResult = new SimulationResult(1);
 
 			try {
 				newGame.play();
@@ -1571,22 +1522,24 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
-	 * Retrieves a game context from a {@link GameConfig}. Does not mutate the contents of the {@link GameConfig}.
+	 * Gets a game context that's ready to play from two {@link Deck} objects.
 	 *
-	 * @param config The {@link GameConfig} specifying the decks.
-	 * @return A {@link GameContext}.
-	 * @see GameConfig#fromDecks(List) to get a game config from a pair of decks.
+	 * @param decks The {@link Deck}s to use for the players.
+	 * @return A {@link GameContext} for which {@link #play()} will immediately work.
+	 * @see #getTrace() to get the log of actions that were taken in the game.
+	 * @see #play() to actually execute the game.
 	 */
-	public static GameContext fromConfig(GameConfig config) {
-		try {
-			config = config.clone();
-		} catch (CloneNotSupportedException ex) {
-			return null;
+	public static GameContext fromDecks(List<Deck> decks, Behaviour behaviour1, Behaviour behaviour2) {
+		GameContext context = new GameContext();
+		Behaviour[] behaviours = new Behaviour[]{behaviour1, behaviour2};
+		for (int i = 0; i < 2; i++) {
+			context.setPlayer(i, new Player(decks.get(i), "Player " + Integer.toString(i)));
+			context.behaviours[i] = behaviours[i];
 		}
+		context.setDeckFormat(DeckFormat.getSmallestSupersetFormat(decks));
 
-		Player playerContext1 = new Player(config.getPlayerConfig1());
-		Player playerContext2 = new Player(config.getPlayerConfig2());
-		return new GameContext(playerContext1, playerContext2, new GameLogic(), config.getDeckFormat());
+		return context;
+
 	}
 
 	/**
@@ -1599,7 +1552,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @see #play() to actually execute the game.
 	 */
 	public static GameContext fromDecks(List<Deck> decks) {
-		return fromConfig(GameConfig.fromDecks(decks));
+		return fromDecks(decks, new PlayRandomBehaviour(), new PlayRandomBehaviour());
 	}
 
 
@@ -1610,7 +1563,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @see #play() to actually execute the game.
 	 */
 	public static GameContext fromTwoRandomDecks() {
-		return fromConfig(GameConfig.fromDecks(Arrays.asList(new RandomDeck(), new RandomDeck())));
+		return fromDecks(Arrays.asList(new RandomDeck(), new RandomDeck()));
 	}
 
 	/**
@@ -1762,5 +1715,13 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	@SuppressWarnings("unchecked")
 	public <E extends Entity> EntityZone<E> getZone(int owner, Zones zone) {
 		return (EntityZone<E>) getPlayer(owner).getZone(zone);
+	}
+
+	public void setBehaviours(Behaviour[] behaviours) {
+		this.behaviours = behaviours;
+	}
+
+	public void setBehaviour(int i, Behaviour behaviour) {
+		behaviours[i] = behaviour;
 	}
 }

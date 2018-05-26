@@ -97,7 +97,7 @@ public class BlackrockMountainTests extends TestBase {
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
-		TestBehaviour behaviour = (TestBehaviour) player.getBehaviour();
+		TestBehaviour behaviour = (TestBehaviour) context.getBehaviours().get(player.getId());
 		final EntityReference heroReference = player.getHero().getReference();
 		behaviour.setTargetPreference(heroReference);
 		Assert.assertTrue(heroReference.getId() != -1);

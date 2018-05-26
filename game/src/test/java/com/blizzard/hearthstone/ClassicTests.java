@@ -113,7 +113,7 @@ public class ClassicTests extends TestBase {
 	public void testPerditionsBlade() {
 		runGym((context, player, opponent) -> {
 			AtomicBoolean cried = new AtomicBoolean(false);
-			overrideBattlecry(player, battlecryActions -> {
+			overrideBattlecry(context, player, battlecryActions -> {
 				Assert.assertEquals(battlecryActions.size(), 2);
 				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(player.getHero().getReference())).count(), 1L);
 				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(opponent.getHero().getReference())).count(), 1L);
@@ -128,7 +128,7 @@ public class ClassicTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			AtomicBoolean cried = new AtomicBoolean(false);
-			overrideBattlecry(player, battlecryActions -> {
+			overrideBattlecry(context, player, battlecryActions -> {
 				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(player.getHero().getReference())).count(), 1L);
 				Assert.assertEquals(battlecryActions.stream().filter(ba -> ba.getTargetReference().equals(opponent.getHero().getReference())).count(), 1L);
 				cried.set(true);

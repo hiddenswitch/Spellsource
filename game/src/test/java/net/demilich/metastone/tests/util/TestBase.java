@@ -9,7 +9,7 @@ import java.util.stream.StreamSupport;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
-import com.hiddenswitch.spellsource.common.UtilityBehaviour;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.*;
@@ -19,7 +19,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
-import org.apache.commons.collections4.Bag;
 import org.mockito.MockingDetails;
 import org.mockito.Mockito;
 import org.mockito.stubbing.Answer;
@@ -29,14 +28,12 @@ import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.decks.DeckFactory;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.testng.Assert;
@@ -151,9 +148,9 @@ public class TestBase {
 		return handle;
 	}
 
-	protected static OverrideHandle<Card> overrideDiscover(Player player, Function<List<DiscoverAction>, GameAction> discovery) {
-		Behaviour overriden = Mockito.spy(player.getBehaviour());
-		player.setBehaviour(overriden);
+	protected static OverrideHandle<Card> overrideDiscover(GameContext context, Player player, Function<List<DiscoverAction>, GameAction> discovery) {
+		Behaviour overriden = Mockito.spy(context.getBehaviours().get(player.getId()));
+		context.setBehaviour(player.getId(), overriden);
 		OverrideHandle<Card> handle = new OverrideHandle<>();
 		Mockito.doAnswer(invocation -> {
 			List<GameAction> actions = invocation.getArgument(2);
@@ -171,9 +168,9 @@ public class TestBase {
 		return handle;
 	}
 
-	protected static OverrideHandle<EntityReference> overrideBattlecry(Player player, Function<List<BattlecryAction>, GameAction> battlecry) {
-		Behaviour overriden = Mockito.spy(player.getBehaviour());
-		player.setBehaviour(overriden);
+	protected static OverrideHandle<EntityReference> overrideBattlecry(GameContext context, Player player, Function<List<BattlecryAction>, GameAction> battlecry) {
+		Behaviour overriden = Mockito.spy(context.getBehaviours().get(player.getId()));
+		context.setBehaviour(player.getId(), overriden);
 		OverrideHandle<EntityReference> handle = new OverrideHandle<>();
 		Mockito.doAnswer(invocation -> {
 			List<GameAction> actions = invocation.getArgument(2);
@@ -198,20 +195,20 @@ public class TestBase {
 	}
 
 	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, String cardId, Entity target) {
-		OverrideHandle<EntityReference> handle = overrideBattlecry(player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
+		OverrideHandle<EntityReference> handle = overrideBattlecry(context, player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
 		Minion result = playMinionCard(context, player, cardId);
 		handle.stop();
 		return result;
 	}
 
 	protected static Minion playMinionCardWithBattlecry(GameContext context, Player player, Card card, Entity target) {
-		OverrideHandle<EntityReference> handle = overrideBattlecry(player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
+		OverrideHandle<EntityReference> handle = overrideBattlecry(context, player, battlecryActions -> battlecryActions.stream().filter(c -> c.getTargetReference().equals(target.getReference())).findFirst().orElseThrow(AssertionError::new));
 		return playMinionCard(context, player, card);
 	}
 
 	protected static void overrideDiscover(GameContext context, Player player, String cardId) {
 		OverrideHandle<Card> handle = overrideRandomCard(context, cardId);
-		overrideDiscover(player, discovers -> {
+		overrideDiscover(context, player, discovers -> {
 			DiscoverAction action = discovers.stream().filter(da -> da.getCard().getCardId().equals(cardId)).findFirst().orElseThrow(AssertionError::new);
 			handle.stop();
 			return action;
@@ -429,23 +426,16 @@ public class TestBase {
 				CardSet.CUSTOM
 		);
 
-		PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(
-				CardSet.BASIC,
-				CardSet.CLASSIC)), new TestBehaviour());
-		player1Config.setName("Player 1");
-		player1Config.setHeroCard(HeroClass.getHeroCard(hero1));
-		Player player1 = new Player(player1Config);
+		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(CardSet.BASIC,
+				CardSet.CLASSIC)), "Player 1");
 
-		PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(hero2, new DeckFormat().withCardSets(
-				CardSet.BASIC,
-				CardSet.CLASSIC)), new TestBehaviour());
-		player2Config.setName("Player 2");
-		player2Config.setHeroCard(HeroClass.getHeroCard(hero2));
-		Player player2 = new Player(player2Config);
+		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(CardSet.BASIC,
+				CardSet.CLASSIC)), "Player 2");
+
 
 		GameLogic logic = new GameLogic();
 		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
-		logic.setContext(context);
+		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
 		if (shouldInit) {
 			context.init();
 		}
@@ -517,11 +507,6 @@ public class TestBase {
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
 		context.getLogic().performGameAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
-	}
-
-	protected static void target(Player player, Entity target) {
-		TestBehaviour testBehaviour = (TestBehaviour) player.getBehaviour();
-		testBehaviour.setTargetPreference(target != null ? target.getReference() : null);
 	}
 
 }

@@ -129,9 +129,6 @@ class Node {
 		}
 
 		GameContext simulation = node.getState().clone();
-		for (Player player : simulation.getPlayers()) {
-			player.setBehaviour(new PlayRandomBehaviour());
-		}
 
 		simulation.takeActionInTurn();
 

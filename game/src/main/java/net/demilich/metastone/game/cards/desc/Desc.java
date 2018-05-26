@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -25,17 +26,21 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V> The abstract base class of the concrete type.
  */
 @JsonSerialize(using = DescSerializer.class)
-public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
-	protected Desc(Map<T, Object> arguments) {
-		super(arguments);
+public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends EnumMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
+	protected Desc(Map<T, Object> arguments, Class<T> keyType) {
+		super(keyType);
+		if (arguments.isEmpty()) {
+			return;
+		}
+		putAll(arguments);
 	}
 
-	protected Desc() {
-		super();
+	protected Desc(Class<T> keyType) {
+		super(keyType);
 	}
 
-	public Desc(Class<? extends V> clazz) {
-		super();
+	public Desc(Class<? extends V> clazz, Class<T> keyType) {
+		super(keyType);
 		put(getClassArg(), clazz);
 	}
 
@@ -127,15 +132,13 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Conc
 	}
 
 	protected Desc<T, V> copyTo(Desc<T, V> clone) {
-		synchronized (this) {
-			for (T arg : keySet()) {
-				Object value = get(arg);
-				if (value instanceof CustomCloneable) {
-					CustomCloneable cloneable = (CustomCloneable) value;
-					clone.put(arg, cloneable.clone());
-				} else {
-					clone.put(arg, value);
-				}
+		for (T arg : keySet()) {
+			Object value = get(arg);
+			if (value instanceof CustomCloneable) {
+				CustomCloneable cloneable = (CustomCloneable) value;
+				clone.put(arg, cloneable.clone());
+			} else {
+				clone.put(arg, value);
 			}
 		}
 		return clone;

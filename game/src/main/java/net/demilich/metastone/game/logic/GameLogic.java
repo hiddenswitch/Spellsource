@@ -24,7 +24,7 @@ import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.FilterArg;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -601,7 +601,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see #castSpell(int, SpellDesc, EntityReference, EntityReference, TargetSelection, boolean) for complete documentation.
 	 */
 	@Suspendable
-	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, @NotNull EntityReference sourceReference, @NotNull EntityReference targetReference,
+	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      boolean childSpell) {
 		castSpell(playerId, spellDesc, sourceReference, targetReference, TargetSelection.NONE, childSpell, null);
 	}
@@ -616,7 +616,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * <p>
 	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
-	 * EntityFilter} with {@link FilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be {@code
+	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be {@code
 	 * 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
 	 * <p>
 	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
@@ -653,7 +653,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Battlecries are spells in the sense that they are effects, though they're not {@link Card} objects.
 	 */
 	@Suspendable
-	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, @NotNull EntityReference sourceReference, @NotNull EntityReference targetReference,
+	public void castSpell(int playerId, @NotNull SpellDesc spellDesc, EntityReference sourceReference, EntityReference targetReference,
 	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
@@ -2290,7 +2290,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	protected List<Card> mulligan(Player player, boolean begins) {
 		FirstHand firstHand = new FirstHand(player, begins).invoke();
 
-		List<Card> discardedCards = player.getBehaviour().mulligan(context, player, firstHand.getStarterCards());
+		List<Card> discardedCards = context.getBehaviours().get(player.getId()).mulligan(context, player, firstHand.getStarterCards());
 
 		handleMulligan(player, begins, firstHand, discardedCards);
 		return discardedCards;
@@ -2976,7 +2976,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		for (int i = 0; i < actions.size(); i++) {
 			actions.get(i).setId(i);
 		}
-		GameAction action = player.getBehaviour().requestAction(context, player, actions);
+		GameAction action = context.getBehaviours().get(player.getId()).requestAction(context, player, actions);
 		context.getTrace().addAction(action.getId(), action);
 		return action;
 	}

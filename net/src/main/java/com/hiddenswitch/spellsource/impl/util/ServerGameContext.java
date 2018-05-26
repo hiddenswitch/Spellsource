@@ -19,6 +19,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -151,7 +152,7 @@ public class ServerGameContext extends GameContext {
 
 		// Set the mulligan timer
 		final TimerId mulliganTimerId;
-		if (getPlayers().stream().allMatch(Player::isHuman)) {
+		if (getBehaviours().stream().allMatch(Behaviour::isHuman)) {
 			timerLengthMillis = getLogic().getMulliganTimeMillis();
 			timerStartTimeMillis = System.currentTimeMillis();
 			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
@@ -253,7 +254,7 @@ public class ServerGameContext extends GameContext {
 			scheduler.cancelTimer(turnTimerId);
 		}
 		timerElapsedForPlayerId = -1;
-		if (getNonActivePlayer().isHuman()) {
+		if (getBehaviours().get(getNonActivePlayer().getId()).isHuman()) {
 			timerLengthMillis = (long) getTurnTimeForPlayer(activePlayerId);
 			timerStartTimeMillis = System.currentTimeMillis();
 
@@ -477,9 +478,9 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	protected void notifyPlayersGameOver() {
-		for (Player player : getPlayers()) {
-			NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
-			networkBehaviour.onGameOverAuthoritative(this, player.getId(), getWinner() != null ? getWinner().getId() : -1);
+		for (int i = 0; i < 2; i++) {
+			Behaviour networkBehaviour = getBehaviours().get(i);
+			networkBehaviour.onGameOverAuthoritative(this, i, getWinner() != null ? getWinner().getId() : -1);
 		}
 	}
 

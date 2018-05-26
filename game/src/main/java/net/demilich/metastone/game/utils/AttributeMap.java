@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.utils;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -25,9 +26,10 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @see Attribute for more about valid attributes here.
  */
-public class AttributeMap extends ConcurrentHashMap<Attribute, Object> implements Serializable, Cloneable {
+//@JsonDeserialize(using = AttributeMapDeserializer.class)
+public class AttributeMap extends EnumMap<Attribute, Object> implements Serializable, Cloneable {
 	public AttributeMap() {
-		super();
+		super(Attribute.class);
 	}
 
 	public AttributeMap(Map<Attribute, Object> attributes) {

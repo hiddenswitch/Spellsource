@@ -5,14 +5,12 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.behaviour.RequestActionFunction;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.shared.threat.cuckoo.CuckooLearner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -69,12 +67,12 @@ import java.util.stream.Stream;
  * context.
  * <p>
  * The {@link ThreatBasedHeuristic} tries to maximize the chance of winning by somehow relating its scoring mechanism to
- * the actual outcome of a match. The {@link CuckooLearner} is the system that tweaks the scoring function in order to
- * choose tweaks that corresponded to greater wins in the game. This approach makes GameStateValueBehaviour the best
- * delivered AI in the Hearthstone community.
+ * the actual outcome of a match. The <b>Cuckoo</b> application in the cluster package is the system that tweaks the
+ * scoring function in order to choose tweaks that corresponded to greater wins in the game. This approach makes
+ * GameStateValueBehaviour the best delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
- * 		with the highest score.
+ * with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
@@ -459,7 +457,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		Deque<IntermediateNode> intermediateNodes = new ArrayDeque<>();
 		AtomicBoolean guard = new AtomicBoolean();
 
-		mutateContext.getPlayer(playerId).setBehaviour(new RequestActionFunction((context1, player1, validActions1) -> {
+		mutateContext.setBehaviour(playerId, new RequestActionFunction((context1, player1, validActions1) -> {
 			// This is a guard function that detects if intermediate game actions, like discovers or battlecries, are created
 			// while processing the edge we got from the parameters of the expandAndAppend call. If we reach this code, we
 			// have to process intermediate nodes separately. We'll queue the first batch here, and then throw away the result
@@ -507,7 +505,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			int[] choices = intermediateNode.choices;
 			AtomicInteger counter = new AtomicInteger(0);
 			AtomicBoolean intermediateGuard = new AtomicBoolean();
-			intermediateMutateContext.getPlayer(playerId).setBehaviour(new RequestActionFunction((context, player, validActions) -> {
+			intermediateMutateContext.setBehaviour(playerId, new RequestActionFunction((context, player, validActions) -> {
 				// Make choices until we've exhausted the actions that were specified by this intermediate node.
 				int choiceIndex = counter.getAndIncrement();
 				if (choiceIndex >= choices.length) {

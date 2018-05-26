@@ -129,7 +129,7 @@ public class CustomCardsTests extends TestBase {
 			Minion bloodfen2 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			Minion killThis = playMinionCard(context, player, "minion_bloodfen_raptor");
 			AtomicReference<String> adapted = new AtomicReference<>(null);
-			overrideDiscover(player, discoverActions -> {
+			overrideDiscover(context, player, discoverActions -> {
 				adapted.set(discoverActions.get(0).getCard().getName());
 				return discoverActions.get(0);
 			});
@@ -258,7 +258,7 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertTrue(card1.hasAttribute(Attribute.DISCARDED));
 			Assert.assertTrue(card2.hasAttribute(Attribute.DISCARDED));
 			CountDownLatch latch = new CountDownLatch(1);
-			overrideDiscover(player, discoverActions -> {
+			overrideDiscover(context, player, discoverActions -> {
 				latch.countDown();
 				assertEquals(discoverActions.size(), 1, "Should not show duplicate cards due to discover rules");
 				assertEquals(discoverActions.get(0).getCard().getCardId(), "minion_bloodfen_raptor");
@@ -776,7 +776,7 @@ public class CustomCardsTests extends TestBase {
 			CountDownLatch latch = new CountDownLatch(1);
 			// Checks that a Virmen Sensei can target the Beast Virmen Sensei on the board and not the Race.NONE
 			// Virmen Sensei that was created from the Boulderfist Ogre
-			overrideBattlecry(player, battlecryActions -> {
+			overrideBattlecry(context, player, battlecryActions -> {
 				assertEquals(battlecryActions.size(), 1);
 				assertEquals(battlecryActions.get(0).getTargetReference(), target.getReference());
 				latch.countDown();
@@ -1095,7 +1095,7 @@ public class CustomCardsTests extends TestBase {
 			runGym((context, player, opponent) -> {
 				playCard(context, player, "spell_the_coin");
 				CardArrayList cards = new CardArrayList();
-				overrideDiscover(player, discoveries -> {
+				overrideDiscover(context, player, discoveries -> {
 					assertEquals(discoveries.size(), 4);
 					discoveries.stream().map(DiscoverAction::getCard).forEach(cards::addCard);
 					return discoveries.get(heroClass);
@@ -1594,7 +1594,7 @@ public class CustomCardsTests extends TestBase {
 			// TODO: This should still work if it's a different class
 			playCard(context, player, "spell_mirror_image");
 			int[] cost = new int[1];
-			overrideDiscover(player, actions -> {
+			overrideDiscover(context, player, actions -> {
 				cost[0] = actions.get(0).getCard().getBaseManaCost();
 				return actions.get(0);
 			});

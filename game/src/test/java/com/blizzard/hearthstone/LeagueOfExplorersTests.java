@@ -100,7 +100,7 @@ public class LeagueOfExplorersTests extends TestBase {
 		final Card[] discoveryCard = new Card[1];
 		final int[] handSize = new int[1];
 		// Set up a trick to catch the discover action.
-		player.setBehaviour(new TestBehaviour() {
+		context.setBehaviour(player.getId(), new TestBehaviour() {
 			boolean shouldIntercept = true;
 
 			@Override

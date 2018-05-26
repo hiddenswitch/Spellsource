@@ -19,11 +19,11 @@ import java.util.Map;
 public class AuraDesc extends Desc<AuraArg, Aura> {
 
 	public AuraDesc() {
-		super();
+		super(AuraArg.class);
 	}
 
 	public AuraDesc(Class<? extends Aura> clazz) {
-		super(clazz);
+		super(clazz, AuraArg.class);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class AuraDesc extends Desc<AuraArg, Aura> {
 	}
 
 	public AuraDesc(Map<AuraArg, Object> arguments) {
-		super(arguments);
+		super(arguments, AuraArg.class);
 	}
 
 	@Override

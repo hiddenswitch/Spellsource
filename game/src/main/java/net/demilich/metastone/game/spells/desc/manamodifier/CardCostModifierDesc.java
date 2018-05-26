@@ -12,15 +12,15 @@ import java.util.Map;
 public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCostModifier> {
 
 	public CardCostModifierDesc() {
-		super();
+		super(CardCostModifierArg.class);
 	}
 
 	public CardCostModifierDesc(Class<? extends CardCostModifier> clazz) {
-		super(clazz);
+		super(clazz, CardCostModifierArg.class);
 	}
 
 	public CardCostModifierDesc(Map<CardCostModifierArg, Object> arguments) {
-		super(arguments);
+		super(arguments, CardCostModifierArg.class);
 	}
 
 	@Override

@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.behaviour;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.UtilityBehaviour;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;

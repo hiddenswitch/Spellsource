@@ -12,15 +12,15 @@ import net.demilich.metastone.game.cards.desc.Desc;
 public class ConditionDesc extends Desc<ConditionArg, Condition> {
 
 	public ConditionDesc() {
-		super();
+		super(ConditionArg.class);
 	}
 
 	public ConditionDesc(Class<? extends Condition> conditionClass) {
-		super(conditionClass);
+		super(conditionClass,ConditionArg.class);
 	}
 
 	public ConditionDesc(Map<ConditionArg, Object> arguments) {
-		super(arguments);
+		super(arguments, ConditionArg.class);
 	}
 
 	@Override

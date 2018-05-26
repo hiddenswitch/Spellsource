@@ -6,6 +6,7 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -31,7 +32,7 @@ public class GameLogicAsync extends GameLogic {
 	protected void mulliganAsync(Player player, boolean begins, Handler<List<Card>> callback) {
 		FirstHand firstHand = new FirstHand(player, begins).invoke();
 
-		NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
+		Behaviour networkBehaviour = context.getBehaviours().get(player.getId());
 
 		if (mulliganEnabled) {
 			networkBehaviour.mulliganAsync(context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {

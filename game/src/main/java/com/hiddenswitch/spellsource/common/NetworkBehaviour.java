@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.common;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -8,8 +7,7 @@ import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
-import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

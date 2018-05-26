@@ -17,6 +17,10 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Battlecry actions occur when {@link net.demilich.metastone.game.entities.Actor} entities are played from cards and
+ * have battlecries. A battlecry is a possibly targeted effect.
+ */
 public class BattlecryAction extends GameAction {
 	public static final BattlecryAction NONE = new BattlecryAction(NullSpell.create());
 	private static final String BATTLECRY_NAME = "Battlecry";

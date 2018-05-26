@@ -71,7 +71,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 			Card card = receiveCard(context, player, "minion_virmen_sensei");
 
 			CountDownLatch latch = new CountDownLatch(1);
-			overrideBattlecry(player, battlecryActions -> {
+			overrideBattlecry(context, player, battlecryActions -> {
 				Assert.assertEquals(battlecryActions.size(), 1);
 				Assert.assertEquals(battlecryActions.get(0).getTargetReference(), beast.getReference());
 				latch.countDown();

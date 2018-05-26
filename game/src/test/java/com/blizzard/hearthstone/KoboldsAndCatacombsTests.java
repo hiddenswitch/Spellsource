@@ -215,7 +215,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_mirror_image");
 			shuffleToDeck(context, player, "spell_mirror_image");
-			overrideDiscover(player, discoveries -> discoveries.stream().filter(c -> c.getCard().getName().equals("Eat the Mushroom")).findFirst().orElseThrow(AssertionError::new));
+			overrideDiscover(context, player, discoveries -> discoveries.stream().filter(c -> c.getCard().getName().equals("Eat the Mushroom")).findFirst().orElseThrow(AssertionError::new));
 			playCard(context, player, "spell_branching_paths");
 			assertEquals(player.getHand().stream().filter(c -> c.getCardId().equals("spell_mirror_image")).count(), 2L, "Should have drawn cards twice.");
 		});

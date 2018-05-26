@@ -67,8 +67,8 @@ public class Trace implements Serializable, Cloneable {
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
-		stateRestored.getPlayer1().setBehaviour(new TraceBehaviour(0, mulligans, nextAction, behaviourActions));
-		stateRestored.getPlayer2().setBehaviour(new TraceBehaviour(1, mulligans, nextAction, behaviourActions));
+		stateRestored.setBehaviour(0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions));
+		stateRestored.setBehaviour(1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions));
 		GameLogic logic = new GameLogic((IdFactoryImpl) stateRestored.getLogic().getIdFactory(), getSeed());
 		logic.setContext(stateRestored);
 		stateRestored.setLogic(logic);

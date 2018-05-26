@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-public enum FilterArg {
+public enum EntityFilterArg {
 	CLASS,
 	TARGET_PLAYER,
 	VALUE,

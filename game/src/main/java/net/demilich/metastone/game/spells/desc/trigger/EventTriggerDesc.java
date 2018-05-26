@@ -14,15 +14,15 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 public final class EventTriggerDesc extends Desc<EventTriggerArg, EventTrigger> {
 
 	public EventTriggerDesc() {
-		super();
+		super(EventTriggerArg.class);
 	}
 
 	public EventTriggerDesc(Class<? extends EventTrigger> triggerClass) {
-		super(triggerClass);
+		super(triggerClass, EventTriggerArg.class);
 	}
 
 	public EventTriggerDesc(Map<EventTriggerArg, Object> arguments) {
-		super(arguments);
+		super(arguments, EventTriggerArg.class);
 	}
 
 	@Override

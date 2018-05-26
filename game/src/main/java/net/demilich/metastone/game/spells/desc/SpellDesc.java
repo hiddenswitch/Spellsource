@@ -46,7 +46,7 @@ import static java.util.stream.Collectors.toList;
  *     }
  * </pre>
  * This JSON would deserialize into a {@link SpellDesc} instance that would equal the following code:
- * <p>
+ *
  * <pre>
  *      final Map<SpellArg, Object> arguments = SpellDesc.build(SummonSpell.class);
  *      arguments.put(SpellArg.CARD, "minion_bloodfen_raptor");
@@ -59,7 +59,7 @@ import static java.util.stream.Collectors.toList;
  * </pre>
  * Notice that the keys of the objects in the JSON are transformed, "camelCase", from the names in the {@code enum} in
  * {@link SpellArg}.
- * <p>
+ *
  * <h3>Deathrattles</h3>
  * <p>
  * This class also describes an actor's deathrattle.
@@ -77,11 +77,11 @@ import static java.util.stream.Collectors.toList;
 public class SpellDesc extends Desc<SpellArg, Spell> {
 
 	public SpellDesc() {
-		super();
+		super(SpellArg.class);
 	}
 
 	public SpellDesc(Map<SpellArg, Object> arguments) {
-		super(arguments);
+		super(arguments, SpellArg.class);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	}
 
 	public SpellDesc(Class<? extends Spell> spellClass) {
-		super(spellClass);
+		super(spellClass, SpellArg.class);
 	}
 
 	public SpellDesc addArg(SpellArg spellArg, Object value) {

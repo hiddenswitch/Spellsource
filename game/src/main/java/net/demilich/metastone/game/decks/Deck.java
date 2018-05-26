@@ -123,6 +123,9 @@ public class Deck implements Serializable, Cloneable {
 	}
 
 	public Card getHeroCard() {
+		if (heroCard == null) {
+			return HeroClass.getHeroCard(getHeroClass());
+		}
 		return heroCard;
 	}
 
