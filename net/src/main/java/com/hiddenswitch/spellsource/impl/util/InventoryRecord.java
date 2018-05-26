@@ -61,6 +61,7 @@ public class InventoryRecord extends MongoRecord {
 		this.cardDesc = cardDesc;
 	}
 
+	@JsonIgnore
 	public CardDesc getCardDesc() {
 		return cardDesc;
 	}
@@ -144,19 +145,23 @@ public class InventoryRecord extends MongoRecord {
 				: null;
 	}
 
+	@JsonIgnore
 	public Object getPersistentAttribute(Attribute attribute) {
 		return getFacts().getOrDefault(ParseUtils.toCamelCase(attribute.toString()), null);
 	}
 
 	@SuppressWarnings("unchecked")
+	@JsonIgnore
 	public <T> T getPersistentAttribute(Attribute attribute, T defaultValue) {
 		return (T) getFacts().getOrDefault(attribute.toKeyCase(), defaultValue);
 	}
 
+	@JsonIgnore
 	public void putPersistentAttribute(Attribute attribute, Object value) {
 		getFacts().put(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, attribute.toString()), value);
 	}
 
+	@JsonIgnore
 	public AttributeMap getPersistentAttributes() {
 		Map<Attribute, Object> collect = getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
 				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue));

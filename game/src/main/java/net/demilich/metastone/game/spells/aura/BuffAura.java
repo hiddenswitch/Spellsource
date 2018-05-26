@@ -46,6 +46,7 @@ public class BuffAura extends Aura {
 			triggers.add(desc.getSecondaryTrigger().create());
 		}
 		setCondition(desc.getCondition());
+		setDesc(desc);
 	}
 
 	public BuffAura(Object attackBonus, Object hpBonus, EntityReference targetSelection, EntityFilter filter) {

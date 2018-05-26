@@ -1,14 +1,25 @@
 package net.demilich.metastone.game.spells.desc;
 
 import java.io.Serializable;
+import java.util.AbstractMap;
+import java.util.Map;
+import java.util.Set;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.deser.BeanDeserializer;
+import com.fasterxml.jackson.databind.ser.BeanSerializer;
+import com.google.common.collect.Maps;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+
+import static com.google.common.collect.Maps.immutableEntry;
 
 /**
  * The object describing a battlecry.
@@ -69,12 +80,16 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * how the battlecry action is processed.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class BattlecryDesc implements Serializable {
+public final class BattlecryDesc /*extends AbstractMap<BattlecryDescArg, Object>*/ implements Serializable {
 	public SpellDesc spell;
 	public TargetSelection targetSelection;
 	public ConditionDesc condition;
 	public String name;
 	public String description;
+
+	public BattlecryDesc() {
+		super();
+	}
 
 	/**
 	 * The targets the battlecry can choose from.
@@ -93,8 +108,8 @@ public final class BattlecryDesc implements Serializable {
 	}
 
 	/**
-	 * The spell to cast when this battlecry's {@link #condition} is true (or always cast if no condition is specified
-	 * and a valid target is available).
+	 * The spell to cast when this battlecry's {@link #condition} is true (or always cast if no condition is specified and
+	 * a valid target is available).
 	 */
 	public SpellDesc getSpell() {
 		return spell;
@@ -111,8 +126,8 @@ public final class BattlecryDesc implements Serializable {
 	/**
 	 * The condition to evaluate if the player will be prompted to make a battlecry action.
 	 * <p>
-	 * The condition is also used to determine if the {@link net.demilich.metastone.game.cards.Card} in the
-	 * player's hand should receive a "yellow glow" indicating its condition is met.
+	 * The condition is also used to determine if the {@link net.demilich.metastone.game.cards.Card} in the player's hand
+	 * should receive a "yellow glow" indicating its condition is met.
 	 * <p>
 	 * In order to implement this glow, it is preferred to specify a condition here rather than using a {@link
 	 * net.demilich.metastone.game.spells.ConditionalSpell} in the {@link #spell} field.
@@ -126,12 +141,12 @@ public final class BattlecryDesc implements Serializable {
 	}
 
 	/**
-	 * A name used to render a card representing the battlecry. When not specified, the description is used instead.
-	 * Used for choose-one battlecries.
+	 * A name used to render a card representing the battlecry. When not specified, the description is used instead. Used
+	 * for choose-one battlecries.
 	 * <p>
 	 * If the {@link #spell} is a {@link net.demilich.metastone.game.spells.TransformMinionSpell}, the {@link
-	 * SpellArg#CARD} of that spell (the minion the choose-one minion will be transformed into) will be used to render
-	 * the choice instead, regardless of your specification of name.
+	 * SpellArg#CARD} of that spell (the minion the choose-one minion will be transformed into) will be used to render the
+	 * choice instead, regardless of your specification of name.
 	 */
 	public String getName() {
 		return name;
@@ -145,8 +160,8 @@ public final class BattlecryDesc implements Serializable {
 	 * A description used to render a card representing the battlecry. Used for choose-one battlecries.
 	 * <p>
 	 * If the {@link #spell} is a {@link net.demilich.metastone.game.spells.TransformMinionSpell}, the {@link
-	 * SpellArg#CARD} of that spell (the minion the choose-one minion will be transformed into) will be used to render
-	 * the choice instead, regardless of your specification of description.
+	 * SpellArg#CARD} of that spell (the minion the choose-one minion will be transformed into) will be used to render the
+	 * choice instead, regardless of your specification of description.
 	 */
 	public String getDescription() {
 		return description;
@@ -154,5 +169,15 @@ public final class BattlecryDesc implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public Set<Map.Entry<BattlecryDescArg, Object>> entrySet() {
+		return Sets.newHashSet(
+				immutableEntry(BattlecryDescArg.SPELL, spell),
+				immutableEntry(BattlecryDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(BattlecryDescArg.CONDITION, condition),
+				immutableEntry(BattlecryDescArg.NAME, name),
+				immutableEntry(BattlecryDescArg.DESCRIPTION, description)
+		);
 	}
 }

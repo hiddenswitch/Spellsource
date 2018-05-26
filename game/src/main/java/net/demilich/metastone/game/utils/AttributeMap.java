@@ -33,7 +33,7 @@ public class AttributeMap extends EnumMap<Attribute, Object> implements Serializ
 	}
 
 	public AttributeMap(Map<Attribute, Object> attributes) {
-		super(attributes);
+		super(attributes == null ? Collections.emptyMap() : attributes);
 	}
 
 	@Override

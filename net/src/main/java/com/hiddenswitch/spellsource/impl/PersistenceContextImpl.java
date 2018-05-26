@@ -87,10 +87,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 		// TODO: Are we interested in the number of inventory items modified?
 
 		for (Entity entity : entities) {
-			SpellDesc spell = SetAttributeSpell.create(entity.getReference(), attribute, newValue);
-			// By setting childSpell to true, additional spell casting triggers don't get called
-			// But target overriding effects apply, as they should.
-			gameContext.getLogic().castSpell(entity.getOwner(), spell, entity.getReference(), entity.getReference(), true);
+			entity.setAttribute(attribute, newValue);
 		}
 
 		return response.getUpdated();
