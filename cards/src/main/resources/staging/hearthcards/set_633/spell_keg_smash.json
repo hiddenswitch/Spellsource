@@ -5,9 +5,54 @@
   "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Choose a minion and adjacent minions. Destroy the next one that takes damage.",
-  "targetSelection": "ANY",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "DestroySpell"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AdjacentEffectSpell",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "attribute": "RESERVED_BOOLEAN_3"
+        }
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "DamageReceivedTrigger",
+            "fireCondition": {
+              "class": "AttributeCondition",
+              "attribute": "RESERVED_BOOLEAN_3"
+            }
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "DestroySpell",
+                "target": "EVENT_TARGET"
+              },
+              {
+                "class": "AddEnchantmentSpell",
+                "target": "FRIENDLY_PLAYER",
+                "trigger": {
+                  "eventTrigger": {
+                    "class": "WillEndSequenceTrigger"
+                  },
+                  "spell": {
+                    "class": "RemoveAttributeSpell",
+                    "attribute": "RESERVED_BOOLEAN_3",
+                    "target": "ALL_MINIONS"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,
