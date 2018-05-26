@@ -97,7 +97,7 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(minion2.getAttack(), 2);
 	}
 
-	@Test(invocationCount = 100)
+	@Test
 	public void testAuraPlusFaceless() {
 		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
 		Player player = context.getPlayer1();

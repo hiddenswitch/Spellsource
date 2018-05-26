@@ -442,6 +442,9 @@ public class Spellsource {
 	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
 	 */
 	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
+		if (getPersistAttributeHandlers().containsKey(id)) {
+			return this;
+		}
 		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
 		return this;
 	}

@@ -27,6 +27,7 @@ public class CardAura extends Aura {
 				desc.getTarget(),
 				(EntityFilter) desc.get(AuraArg.FILTER),
 				desc.getCondition());
+		setDesc(desc);
 	}
 }
 

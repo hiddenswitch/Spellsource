@@ -52,7 +52,7 @@ import java.util.*;
  */
 public class Card extends Entity implements HasChooseOneActions {
 	protected static final Set<Attribute> ignoredAttributes = new HashSet<>(
-			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGER, Attribute.BASE_ATTACK,
+			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGERS, Attribute.BASE_ATTACK,
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO,
 					Attribute.TRANSFORM_REFERENCE));
 
@@ -406,11 +406,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return A list of {@link EnchantmentDesc} objects.
 	 */
 	public EnchantmentDesc[] getDeckTriggers() {
-		final EnchantmentDesc enchantmentDesc = (EnchantmentDesc) getAttribute(Attribute.DECK_TRIGGER);
-		if (enchantmentDesc == null) {
-			return new EnchantmentDesc[0];
-		}
-		return new EnchantmentDesc[]{enchantmentDesc};
+		return (EnchantmentDesc[]) getAttribute(Attribute.DECK_TRIGGERS);
 	}
 
 	public void setDesc(CardDesc desc) {

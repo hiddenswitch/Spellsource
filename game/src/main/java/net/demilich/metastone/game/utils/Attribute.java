@@ -470,7 +470,7 @@ public enum Attribute {
 	 * @see #PASSIVE_TRIGGERS for an attribute that marks the entity has a trigger that is only active in the player's
 	 * battlefield or hand.
 	 */
-	DECK_TRIGGER,
+	DECK_TRIGGERS,
 	/**
 	 * Marks that this {@link Card} has a trigger (this attribute) that should be active throughout the game.
 	 */
