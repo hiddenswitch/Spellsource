@@ -86,6 +86,7 @@ public class EquipWeaponSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.TARGET_PLAYER);
 		String cardId = (String) desc.get(SpellArg.CARD);
 		CardList results = new CardArrayList();
 		if (cardId != null) {

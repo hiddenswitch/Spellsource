@@ -15,6 +15,9 @@ import org.slf4j.LoggerFactory;
  * <p>
  * Casts the {@link SpellArg#SPELL} sub-spell with the newly drawn card as the {@link
  * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
+ * <p>
+ * The method used to draw cards from the deck will trigger fatigue damage if the deck is empty. If an effect puts a
+ * card into the deck on the (n-1)th sub spell just before attempting the n-th draw, this spell will draw it correctly.
  *
  * @see FromDeckToHandSpell to draw a specific card from the deck.
  */

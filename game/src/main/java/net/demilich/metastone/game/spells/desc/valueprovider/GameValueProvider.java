@@ -6,6 +6,34 @@ import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
+/**
+ * Used to retrieve a variable calculated in a {@link net.demilich.metastone.game.spells.MetaSpell}.
+ * <p>
+ * This value provider lets you "bake in" or calculate a value at one point of time, using it at a later point. This is
+ * especially useful for effects that deal damage based on the number of minions destroyed, for example; an earlier part
+ * of the spell destroyed the minions you need to count, so you can count how many minions were on the board before the
+ * destroy spell was run, and then see how many of those old ones still remain.
+ * <p>
+ * To retrieve the {@link net.demilich.metastone.game.spells.desc.SpellArg#VALUE} from a {@link
+ * net.demilich.metastone.game.spells.MetaSpell}, use {@link GameValue#SPELL_VALUE}:
+ * <pre>
+ *   {
+ *     "class": "MetaSpell",
+ *     "value": { ... },
+ *     "spells": [
+ *       {
+ *         "class": "DamageSpell",
+ *         "value": {
+ *           "class": "GameValueProvider",
+ *           "gameValue": "SPELL_VALUE"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * </pre>
+ *
+ * @see net.demilich.metastone.game.spells.MetaSpell for a complete description on how to use this value provider.
+ */
 public class GameValueProvider extends ValueProvider {
 	public GameValueProvider(ValueProviderDesc desc) {
 		super(desc);

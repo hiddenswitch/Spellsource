@@ -23,6 +23,21 @@ import java.util.List;
  * <p>
  * After the attack occurs, casts the {@link SpellArg#SPELL} sub-spell with the {@code source} as the source of this
  * spell cast, the {@code target} as the defender, and the {@link EntityReference#OUTPUT} set to the attacker.
+ * <p>
+ * For example, consider the text from Birb's You from the Future, "Summon a copy of a friendly minion. Then, it attacks
+ * the original":
+ * <pre>
+ *   {
+ *     "class": "SummonSpell",
+ *     "spell": {
+ *       "class": "FightSpell",
+ *       "secondaryTarget": "OUTPUT"
+ *     }
+ *   }
+ * </pre>
+ * Note that the {@link EntityReference#OUTPUT} refers to the newly copied minion. Since the copied minion is in the
+ * {@link SpellArg#SECONDARY_TARGET} specifier, the copied minion is the attacker. The {@code target} is implied to be
+ * the selected target of the spell, i.e., the original minion.
  */
 public class FightSpell extends Spell {
 
@@ -31,6 +46,7 @@ public class FightSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.SECONDARY_TARGET);
 		EntityReference secondaryTarget = (EntityReference) desc.getOrDefault(SpellArg.SECONDARY_TARGET, source == null ? EntityReference.NONE : source.getReference());
 		List<Entity> resolvedSources = context.resolveTarget(player, source, secondaryTarget);
 		if (resolvedSources == null) {

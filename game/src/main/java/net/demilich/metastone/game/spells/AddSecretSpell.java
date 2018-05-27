@@ -16,6 +16,8 @@ import org.slf4j.LoggerFactory;
 /**
  * Puts the specified {@link SpellArg#SECRET} (an {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc})
  * into play.
+ *
+ * If the secret is a card, use {@link RecastSpell}.
  */
 public class AddSecretSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(AddSecretSpell.class);
