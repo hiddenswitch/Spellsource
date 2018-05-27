@@ -12,6 +12,23 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 
+/**
+ * Recasts the specified {@link SpellArg#CARD} or the card targeted by {@link SpellArg#SECONDARY_TARGET} onto the {@code
+ * target}.
+ * <p>
+ * For example, to cast Inner Fire on every minion in your deck:
+ * <pre>
+ *   {
+ *     "class": "RecastSpell",
+ *     "card": "spell_inner_fire",
+ *     "target": "FRIENDLY_DECK",
+ *     "filter": {
+ *       "class": "CardFilter",
+ *       "cardType": "MINION"
+ *     }
+ *   }
+ * </pre>
+ */
 public class RecastSpell extends Spell {
 
 	@Override
