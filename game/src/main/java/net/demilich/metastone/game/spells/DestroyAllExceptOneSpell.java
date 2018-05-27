@@ -17,6 +17,8 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 /**
  * Destroys all minions except one. Respects {@link net.demilich.metastone.game.spells.desc.SpellArg#FILTER} if
  * specified.
+ * <p>
+ * Implements Brawl.
  */
 public class DestroyAllExceptOneSpell extends DestroySpell {
 

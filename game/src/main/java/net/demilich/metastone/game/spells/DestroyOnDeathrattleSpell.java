@@ -19,6 +19,8 @@ import org.slf4j.LoggerFactory;
  *     }
  *   }
  * </pre>
+ * Internally, this spell creates a new deathrattle on the {@code source} that calls a {@link DestroySpell} whose {@link
+ * SpellArg#TARGET} is the targeted minion.
  */
 public class DestroyOnDeathrattleSpell extends AddDeathrattleSpell {
 

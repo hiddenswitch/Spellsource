@@ -21,6 +21,10 @@ import org.slf4j.LoggerFactory;
 /**
  * Copies the {@code target} actor's deathrattles onto the {@code source} (i.e., result of {@link EntityReference#SELF})
  * of this spell.
+ * <p>
+ * If the target is a {@link Card}, the deathrattles specified on the card are put on the {@code source} actor. If the
+ * target is an actor, its currently active deathrattles (i.e., excluding those that were silenced, including those
+ * added by other cards) are copied.
  */
 public class CopyDeathrattleSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(CopyDeathrattleSpell.class);
