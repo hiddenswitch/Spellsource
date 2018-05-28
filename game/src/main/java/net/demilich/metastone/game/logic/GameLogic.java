@@ -669,14 +669,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Card sourceCard = source != null ? source.getSourceCard() : null;
 
 		Entity override = targetAcquisition(player, source, sourceAction);
-		if (override != null) {
+		if (override != null && !spellDesc.hasPredefinedTarget()) {
 			targets = Collections.singletonList(override);
 			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 		}
 
 		// This implements Ice Walker
-		if (sourceAction != null
-				&& sourceAction instanceof HeroPowerAction
+		if (sourceAction instanceof HeroPowerAction
 				&& targetSelection != TargetSelection.NONE
 				&& hasAttribute(player, Attribute.HERO_POWER_FREEZES_TARGET)) {
 			spellDesc = SpellDesc.join(spellDesc, AddAttributeSpell.create(Attribute.FROZEN));
@@ -684,7 +683,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// This implements a more durable tracking of spells that were casted
 		if (sourceCard != null
-				&& sourceAction != null
 				&& sourceAction instanceof PlaySpellCardAction) {
 			sourceCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
 		}

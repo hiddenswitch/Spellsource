@@ -74,6 +74,10 @@ public class AddEnchantmentSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		if (target == null) {
+			logger.error("onCast {} {}: Target cannot be null.", context.getGameId(), source);
+			throw new NullPointerException("target");
+		}
 		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER);
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 		Aura aura = (Aura) desc.get(SpellArg.AURA);

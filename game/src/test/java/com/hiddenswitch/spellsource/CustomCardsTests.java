@@ -37,7 +37,6 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
-	@Ignore
 	public void testTouchOfKarma() {
 		// Target friendly
 		runGym((context, player, opponent) -> {
@@ -62,7 +61,6 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testKegSmash() {
 		// Test regular
 		runGym((context, player, opponent) -> {
@@ -90,31 +88,29 @@ public class CustomCardsTests extends TestBase {
 			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCardWithTarget(context, player, "spell_keg_smash", target2);
-			playCard(context, player, "spell_arcane_blast");
+			playCard(context, player, "spell_arcane_explosion");
 			assertTrue(target1.isDestroyed());
 			assertTrue(target2.isDestroyed());
 			assertTrue(target3.isDestroyed());
 			context.endTurn();
 			Minion target4 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
-			playCard(context, player, "spell_arcane_blast");
+			playCard(context, player, "spell_arcane_explosion");
 			assertFalse(target4.isDestroyed());
 		});
 	}
 
 	@Test
-	@Ignore
 	public void testEnvelopingMists() {
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(1);
 			Minion twoHp = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCardWithTarget(context, player, "spell_enveloping_mists", twoHp);
-			assertEquals(player.getHero().getHp(), 3);
+			assertEquals(player.getHero().getHp(), 4);
 		});
 	}
 
 	@Test
-	@Ignore
 	public void testDampenHarm() {
 		runGym((context, player, opponent) -> {
 			// Your minions can only take 1 damage at a time until the start of your next turn.

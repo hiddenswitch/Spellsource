@@ -39,7 +39,7 @@ public class RandomDeck extends Deck {
 		final List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
 		final HeroClass randomHeroClass = baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 		setHeroClass(randomHeroClass);
-		populate(DeckFormat.STANDARD);
+		populate(DeckFormat.CUSTOM);
 	}
 
 	void populate(DeckFormat deckFormat) {

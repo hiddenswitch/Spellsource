@@ -71,16 +71,25 @@ public class AdjacentEffectSpell extends Spell {
 		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2);
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		List<Actor> adjacentMinions = context.getAdjacentMinions(target.getReference());
-
-		SpellDesc primary = (SpellDesc) desc.get(SpellArg.SPELL1);
-		if (primary != null) {
-			context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
-		}
-
-		SpellDesc secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
-		if (secondary == null) {
+		SpellDesc primary;
+		SpellDesc secondary;
+		if (desc.containsKey(SpellArg.SPELL) &&
+				!desc.containsKey(SpellArg.SPELL1)
+				&& !desc.containsKey(SpellArg.SPELL2)) {
+			primary = (SpellDesc) desc.get(SpellArg.SPELL);
 			secondary = primary;
+		} else {
+			primary = (SpellDesc) desc.get(SpellArg.SPELL1);
+			if (primary != null) {
+				context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
+			}
+
+			secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
+			if (secondary == null) {
+				secondary = primary;
+			}
 		}
+
 		for (Entity adjacent : adjacentMinions) {
 			context.getLogic().castSpell(player.getId(), secondary, sourceReference, adjacent.getReference(), true);
 		}

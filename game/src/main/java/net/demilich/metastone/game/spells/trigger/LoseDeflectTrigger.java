@@ -32,6 +32,6 @@ public class LoseDeflectTrigger extends EventTrigger {
 
 	@Override
 	public GameEventType interestedIn() {
-		return GameEventType.LOSE_DIVINE_SHIELD;
+		return GameEventType.LOSE_DEFLECT;
 	}
 }
