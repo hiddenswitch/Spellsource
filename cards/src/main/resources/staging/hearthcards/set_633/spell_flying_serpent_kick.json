@@ -2,16 +2,15 @@
   "name": "Flying Serpent Kick",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Deal 7 damage to the enemy hero.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
     "target": "ENEMY_HERO",
-    "value": 1
+    "value": 7
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

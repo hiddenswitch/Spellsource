@@ -37,6 +37,34 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTouchOfKarma() {
+		runGym((context, player, opponent) -> {
+
+		});
+	}
+
+	@Test
+	public void testKegSmash() {
+		runGym((context, player, opponent) -> {
+
+		});
+	}
+
+	@Test
+	public void testEnvelopingMists() {
+		runGym((context, player, opponent) -> {
+
+		});
+	}
+
+	@Test
+	public void testDampenHarm() {
+		runGym((context, player, opponent) -> {
+
+		});
+	}
+
+	@Test
 	public void testEchoOfGuldan() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "token_echo_of_guldan");

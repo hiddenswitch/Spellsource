@@ -2,15 +2,21 @@
   "name": "Leg Sweep",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "RARE",
   "description": "Deal 2 damage to a minion and adjacent minions.",
-  "targetSelection": "ANY",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "value": 1
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
+    }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

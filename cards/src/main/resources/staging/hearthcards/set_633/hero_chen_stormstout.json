@@ -1,12 +1,16 @@
 {
   "name": "Chen Stormstout",
+  "heroPower": "hero_power_meditation",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "",
-  "attributes": {},
-  "collectible": true,
+  "description": "Hero Power: Restore 1 Health to a target and gain +1 Attack this turn.",
+  "attributes": {
+	"HP": 30,
+	"MAX_HP": 30
+},
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

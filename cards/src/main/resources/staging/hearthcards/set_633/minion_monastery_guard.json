@@ -2,11 +2,16 @@
   "name": "Monastery Guard",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Taunt Your other minions have +2 Health.",
+  "description": "Taunt. Your other minions have +2 Health.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "hpBonus": 2
+  },
   "attributes": {
     "TAUNT": true
   },

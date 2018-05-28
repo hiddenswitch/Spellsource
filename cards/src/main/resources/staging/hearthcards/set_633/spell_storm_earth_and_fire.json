@@ -1,0 +1,35 @@
+{
+  "name": "Storm, Earth, and Fire",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Summon two random Elemental Spirits.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_storm_spirit",
+          "token_earth_spirit",
+          "token_fire_spirit"
+        ],
+        "randomTarget": true
+      },
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_storm_spirit",
+          "token_earth_spirit",
+          "token_fire_spirit"
+        ],
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

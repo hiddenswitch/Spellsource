@@ -11,10 +11,10 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
-      "attribute": "UNCENSORED",
       "spell": {
         "class": "ReceiveCardSpell"
       },
+      "attribute": "UNCENSORED",
       "cardSource": {
         "class": "SecretSource"
       }

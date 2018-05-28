@@ -2,24 +2,26 @@
   "name": "Crane School Instructor",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "Whenever a friendly minion's Deflect triggers, gain +2 Attack.",
+  "description": "When a friendly minion's Deflect triggers, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
+      "class": "LoseDeflectTrigger",
+      "targetEntityType": "MINION",
+      "fireCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "SELF"
+      }
     },
     "spell": {
       "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "target": "SELF",
+      "attackBonus": 2
     }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

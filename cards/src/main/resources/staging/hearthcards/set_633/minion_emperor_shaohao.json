@@ -2,21 +2,25 @@
   "name": "Emperor Shaohao",
   "baseManaCost": 10,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Deflect Battlecry: Summon a random August Celestial.",
+  "description": "Deflect. Battlecry: Summon a random August Celestial.",
   "battlecry": {
-    "targetSelection": "NONE",
-    "spell": {
+	"spell": {
       "class": "SummonSpell",
-      "card": "minion_bloodfen_raptor",
+      "cards": [
+        "token_xuen_the_white_tiger",
+        "token_niuzao_the_black_ox",
+        "token_chi_ji_the_red_crane",
+		"token_yu_lon_the_jade_serpent"
+      ],
       "randomTarget": true
-    }
+	}
   },
   "attributes": {
-    "BATTLECRY": true
+	"DEFLECT": true
   },
   "collectible": true,
   "set": "CUSTOM",

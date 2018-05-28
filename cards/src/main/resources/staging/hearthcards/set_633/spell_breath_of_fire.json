@@ -2,16 +2,28 @@
   "name": "Breath of Fire",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "RARE",
   "description": "Deal 1 damage to all enemy minions, then 1 damage to the enemy hero for each one hit.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_MINIONS",
-    "value": 1
+    "class": "MetaSpell",
+    "spells": [
+	  {
+		"class": "DamageSpell",
+		"target": "ENEMY_HERO",
+		"value": {
+          "class": "EntityCounter",
+          "target": "ENEMY_MINIONS"
+		}
+	  },
+	  {
+		"class": "DamageSpell",
+		"target": "ENEMY_MINIONS",
+		"value": 1
+	  }
+	]
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
