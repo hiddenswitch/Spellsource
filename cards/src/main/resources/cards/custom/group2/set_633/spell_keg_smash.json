@@ -47,8 +47,8 @@
                   },
                   "spell": {
                     "class": "RemoveAttributeSpell",
-                    "attribute": "RESERVED_BOOLEAN_3",
-                    "target": "ALL_MINIONS"
+                    "target": "ALL_MINIONS",
+                    "attribute": "RESERVED_BOOLEAN_3"
                   }
                 }
               }
@@ -58,9 +58,9 @@
       }
     ]
   },
-  "wiki": "Area of effect damage like Flamestrike counts as damage being dealt simultaneously, so all Keg Smashed targets will be destroyed.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "wiki": "Area of effect damage like Flamestrike counts as damage being dealt simultaneously, so all Keg Smashed targets will be destroyed."
 }

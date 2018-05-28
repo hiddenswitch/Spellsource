@@ -12,13 +12,13 @@
       "class": "CardPropertyCondition",
       "cardType": "MINION"
     },
-    "spell2": {
-      "class": "BuffSpell",
-      "hpBonus": 2
-    },
     "spell1": {
       "class": "HealSpell",
       "value": 4
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "hpBonus": 2
     }
   },
   "collectible": true,

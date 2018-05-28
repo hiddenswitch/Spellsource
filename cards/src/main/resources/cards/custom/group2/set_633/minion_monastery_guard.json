@@ -10,8 +10,8 @@
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",
-    "hpBonus": 2,
-    "attackBonus": 2
+    "attackBonus": 2,
+    "hpBonus": 2
   },
   "attributes": {
     "TAUNT": true

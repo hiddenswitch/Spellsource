@@ -14,11 +14,11 @@
         "trigger": {
           "eventTrigger": {
             "class": "PreDamageTrigger",
-            "targetEntityType": "MINION",
             "fireCondition": {
               "class": "OwnedByPlayerCondition",
               "targetPlayer": "SELF"
             },
+            "targetEntityType": "MINION",
             "targetPlayer": "SELF"
           },
           "spell": {
@@ -43,11 +43,11 @@
             "trigger": {
               "eventTrigger": {
                 "class": "PreDamageTrigger",
-                "targetEntityType": "MINION",
                 "fireCondition": {
                   "class": "OwnedByPlayerCondition",
                   "targetPlayer": "SELF"
                 },
+                "targetEntityType": "MINION",
                 "targetPlayer": "SELF"
               },
               "spell": {
