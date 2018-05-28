@@ -9,9 +9,9 @@ if sys.version_info < (3, 6):
 
 def build_net():
     if os.name == "nt":
-        subprocess.run(["./gradlew.bat", "net:shadowJar"], shell=True)
+        subprocess.run(["./gradlew.bat net:shadowJar"], shell=True)
     else:
-        subprocess.run(["./gradlew", "net:shadowJar"], shell=True)
+        subprocess.run(["./gradlew net:shadowJar"], shell=True)
 
 
 try:
