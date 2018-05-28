@@ -22,6 +22,7 @@ public class NetworkBehaviour extends UtilityBehaviour implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Logger logger = LoggerFactory.getLogger(NetworkBehaviour.class);
+	private boolean isHuman = true;
 
 	public NetworkBehaviour() {
 	}
@@ -72,6 +73,10 @@ public class NetworkBehaviour extends UtilityBehaviour implements Serializable {
 
 	@Override
 	public boolean isHuman() {
-		return true;
+		return isHuman;
+	}
+
+	public void setHuman(boolean human) {
+		isHuman = human;
 	}
 }
