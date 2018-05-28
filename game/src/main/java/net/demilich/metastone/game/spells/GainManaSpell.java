@@ -23,6 +23,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *         "value": 1
  *     }
  * </pre>
+ *
+ * @see RefreshManaSpell to refresh existing, empty mana crystals.
  */
 public class GainManaSpell extends Spell {
 
@@ -44,6 +46,7 @@ public class GainManaSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.VALUE);
 		int mana = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		if (mana <= 0) {
 			logger.debug("onCast {} {}: Player loses mana ({}) in this spell.", context.getGameId(), source, mana);
