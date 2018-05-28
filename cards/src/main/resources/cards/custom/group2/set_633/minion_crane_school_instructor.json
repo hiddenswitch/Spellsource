@@ -10,11 +10,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "LoseDeflectTrigger",
-      "targetEntityType": "MINION",
       "fireCondition": {
         "class": "OwnedByPlayerCondition",
         "targetPlayer": "SELF"
-      }
+      },
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "BuffSpell",

@@ -9,20 +9,20 @@
   "spell": {
     "class": "MetaSpell",
     "spells": [
-	  {
-		"class": "DamageSpell",
-		"target": "ENEMY_HERO",
-		"value": {
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": {
           "class": "EntityCounter",
           "target": "ENEMY_MINIONS"
-		}
-	  },
-	  {
-		"class": "DamageSpell",
-		"target": "ENEMY_MINIONS",
-		"value": 1
-	  }
-	]
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

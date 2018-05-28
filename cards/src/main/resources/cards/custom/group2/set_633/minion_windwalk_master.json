@@ -8,8 +8,8 @@
   "rarity": "FREE",
   "description": "Windfury. Deflect.",
   "attributes": {
-    "WINDFURY": true,
-	"DEFLECT": true
+    "DEFLECT": true,
+    "WINDFURY": true
   },
   "collectible": true,
   "set": "CUSTOM",

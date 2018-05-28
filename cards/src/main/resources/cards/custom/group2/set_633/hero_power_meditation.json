@@ -14,9 +14,9 @@
         "value": 1
       },
       {
-		"class": "BuffSpell",
-		"target": "FRIENDLY_HERO",
-		"attackBonus": 1
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "attackBonus": 1
       }
     ]
   },

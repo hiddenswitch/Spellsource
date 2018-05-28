@@ -12,7 +12,7 @@
     "spell": {
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-	  "value": 4
+      "value": 4
     }
   },
   "collectible": true,

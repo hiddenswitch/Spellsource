@@ -8,19 +8,19 @@
   "rarity": "LEGENDARY",
   "description": "Deflect. Battlecry: Summon a random August Celestial.",
   "battlecry": {
-	"spell": {
+    "spell": {
       "class": "SummonSpell",
       "cards": [
         "token_xuen_the_white_tiger",
         "token_niuzao_the_black_ox",
         "token_chi_ji_the_red_crane",
-		"token_yu_lon_the_jade_serpent"
+        "token_yu_lon_the_jade_serpent"
       ],
       "randomTarget": true
-	}
+    }
   },
   "attributes": {
-	"DEFLECT": true
+    "DEFLECT": true
   },
   "collectible": true,
   "set": "CUSTOM",
