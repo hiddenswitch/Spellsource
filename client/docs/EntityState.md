@@ -24,6 +24,7 @@ Name | Type | Description | Notes
 **summoningSickness** | **Boolean** | When true, the entity cannot attack this turn because it has \&quot;summoning sickness,\&quot; or a disability related to the first turn the entity came into play. Typically rendered with snooze icons.  |  [optional]
 **frozen** | **Boolean** | When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when it would normally be able to attack.  |  [optional]
 **uncensored** | **Boolean** | When true, indicates that this entity that is ordinarily censored to this user is not. It can be \&quot;flipped\&quot; and shown to the opponent.  |  [optional]
+**deflect** | **Boolean** | When true, the entity&#39;s first incoming hit will hit its owner rather than itself.  |  [optional]
 **silenced** | **Boolean** | Indicates that the entity was silenced.  |  [optional]
 **windfury** | **Boolean** | Indicates the entity can attack twice a turn.  |  [optional]
 **permanent** | **Boolean** | Indicates the entity is an on-battlefield permanent.  |  [optional]
