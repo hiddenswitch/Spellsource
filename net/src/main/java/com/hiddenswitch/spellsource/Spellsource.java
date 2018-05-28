@@ -530,12 +530,12 @@ public class Spellsource {
 		}
 
 		return Mongo.mongo().updateCollectionWithOptions(INVENTORY,
-				json("desc.id", oldId), json("$set", json("desc.id", newId)), new UpdateOptions().setMulti(true));
+				json("cardDesc.id", oldId), json("$set", json("cardDesc.id", newId)), new UpdateOptions().setMulti(true));
 	}
 
 	@Suspendable
 	protected static MongoClientDeleteResult removeCards(String... ids) {
-		return Mongo.mongo().removeDocuments(INVENTORY, json("desc.id",
+		return Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
 				json("$in", array(ids))));
 	}
 }

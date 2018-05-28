@@ -36,7 +36,7 @@ public final class SuspendableAsyncMap<K, V> implements SuspendableMap<K, V> {
 	public boolean containsKey(Object key) {
 		return awaitResult(done -> {
 			map.get((K) key, then -> {
-				done.handle(Future.succeededFuture(then.succeeded()));
+				done.handle(Future.succeededFuture(then.succeeded() && then.result() != null));
 			});
 		});
 	}

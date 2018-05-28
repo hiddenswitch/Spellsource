@@ -181,6 +181,12 @@ public class GatewayTest extends SpellsourceTestBase {
 					client.matchmakeAndPlay(null);
 					client.waitUntilDone();
 					assertTrue(client.isGameOver());
+					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+					// Try two games in a row
+					client.matchmakeAndPlay(null);
+					client.waitUntilDone();
+					assertTrue(client.isGameOver());
+					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
 					latch.countDown();
 				} catch (Throwable t) {
 					context.exceptionHandler().handle(t);

@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.impl.server;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.client.models.Emote;
@@ -43,7 +44,7 @@ public class GameSessionImpl implements GameSession {
 	private final String gameId;
 	//	private final Map<String, String> secretForUserId = new HashMap<>();
 	private Logger logger = LoggerFactory.getLogger(GameSessionImpl.class);
-	private final HashSet<Handler<GameSessionImpl>> gameOverHandlers = new HashSet<>();
+	private final HashSet<SuspendableAction1<GameSessionImpl>> gameOverHandlers = new HashSet<>();
 	private final Vertx vertx;
 
 	public GameSessionImpl(String host, int websocketPort, Configuration p1, Configuration p2, String gameId, Vertx vertx) {
@@ -181,9 +182,9 @@ public class GameSessionImpl implements GameSession {
 		getGameContext().setUpdateListener(player1, listener1);
 		getGameContext().setUpdateListener(player2, listener2);
 		getGameContext().handleEndGame(sgc -> {
-			gameOverHandlers.forEach(h -> {
-				h.handle(this);
-			});
+			for (SuspendableAction1<GameSessionImpl> h : gameOverHandlers) {
+				h.call(this);
+			}
 		});
 		getGameContext().play();
 	}
@@ -373,7 +374,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
-	public void handleGameOver(Handler<GameSessionImpl> handler) {
+	public void handleGameOver(SuspendableAction1<GameSessionImpl> handler) {
 		gameOverHandlers.add(handler);
 	}
 

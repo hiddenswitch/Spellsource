@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
+import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.MulliganRequest;
 import com.hiddenswitch.spellsource.models.MulliganResponse;
 import com.hiddenswitch.spellsource.models.RequestActionRequest;
@@ -20,7 +22,9 @@ import org.junit.Test;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static org.junit.Assert.*;
 
 /**
@@ -95,6 +99,39 @@ public class BotsTest extends SpellsourceTestBase {
 			FiberBehaviour active = (FiberBehaviour) gc.getBehaviours().get(gc.getActivePlayerId());
 			assertTrue(!active.getValidActions().isEmpty());
 			active.setAction(active.getValidActions().get(0));
+		});
+	}
+
+	@Test
+	public void testBotReused(TestContext context) {
+		UnityClient client = new UnityClient(context);
+		client.createUserAccount();
+		NoArgs playAndWait = () -> {
+			client.matchmakeAndPlayAgainstAI(null);
+			client.waitUntilDone();
+			assertTrue(client.isGameOver());
+			try {
+				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+			} catch (ApiException e) {
+				throw new AssertionError(e);
+			}
+		};
+		sync(() -> {
+			Mongo.mongo().removeDocuments(Accounts.USERS, json("bot", true));
+			Sync.invoke0(playAndWait);
+			List<String> botIds = Bots.getBotIds();
+			assertEquals("Only one bot document should have been created", botIds.size(), 1);
+			SuspendableMap<UserId, GameId> games = Games.getGames();
+
+			for (String id : botIds) {
+				assertFalse(games.containsKey(new UserId(id)));
+			}
+
+			Sync.invoke0(playAndWait);
+			assertEquals("Only one bot document should have been created", botIds.size(), 1);
+			for (String id : botIds) {
+				assertFalse(games.containsKey(new UserId(id)));
+			}
 		});
 	}
 }
