@@ -32,3 +32,4 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
+// Currently only checks for whenever you draw a card, needs to be changed to whenever you add a card to your hand.
