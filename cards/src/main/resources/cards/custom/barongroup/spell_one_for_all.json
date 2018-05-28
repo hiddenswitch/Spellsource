@@ -7,7 +7,7 @@
   "description": "The next minion you play this turn has +3/+1.",
    "targetSelection": "NONE",
   "spell": {
-    [
+    {
           "class": "AddEnchantmentSpell",
           "target": "FRIENDLY_PLAYER",
           "trigger": {
@@ -26,6 +26,7 @@
       "class": "TurnEndTrigger"
           }
         }
+}
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
