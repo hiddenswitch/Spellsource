@@ -1462,6 +1462,7 @@ definitions:
       deflect:
         description: |
           When true, the entity's first incoming hit will hit its owner rather than itself.
+        type: 'boolean'
       silenced:
         description: |
           Indicates that the entity was silenced.
