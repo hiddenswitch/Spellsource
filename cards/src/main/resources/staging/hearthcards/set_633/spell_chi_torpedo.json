@@ -2,16 +2,24 @@
   "name": "Chi Torpedo",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Draw 2 cards. Restore 8 Health to your hero.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardSpell",
-    "target": "FRIENDLY_HERO",
-    "value": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      {
+        "class": "HealSpell",
+		"target": "FRIENDLY_HERO",
+        "value": 8
+      }
+    ]
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

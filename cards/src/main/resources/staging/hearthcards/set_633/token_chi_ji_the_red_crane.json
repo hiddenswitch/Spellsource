@@ -1,0 +1,30 @@
+{
+  "name": "Chi-Ji, the Red Crane",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 8,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Deflect. Whenever you target this minion with a spell, repeat it on your other minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "RecastSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "secondaryTarget": "EVENT_SOURCE"
+    }
+  },
+  "attributes": {
+    "DEFLECT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

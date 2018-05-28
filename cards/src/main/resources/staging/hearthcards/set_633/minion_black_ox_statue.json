@@ -2,33 +2,23 @@
   "name": "Black Ox Statue",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
+  "race": "ELEMENTAL",
   "description": "Whenever you summon a minion, give it Deflect.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
+      "class": "BeforeMinionSummonedTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "target": "SELF",
-          "attackBonus": 0,
-          "hpBonus": 0
-        },
-        {
-          "class": "SummonSpell",
-          "card": "minion_bloodfen_raptor"
-        }
-      ]
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "DEFLECT"
     }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

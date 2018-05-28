@@ -1,0 +1,38 @@
+{
+  "name": "Niuzao, the Black Ox",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 4,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Taunt. At the end of your turn, give your other minions +2 Health and Deflect.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "OTHER_FRIENDLY_MINIONS",
+          "hpBonus": 2
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "OTHER_FRIENDLY_MINIONS",
+          "attribute": "DEFLECT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

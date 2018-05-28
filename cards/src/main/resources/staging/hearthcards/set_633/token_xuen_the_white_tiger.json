@@ -1,0 +1,19 @@
+{
+  "name": "Xuen, the White Tiger",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 10,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Charge. Deflect. Can't attack heroes.",
+  "attributes": {
+    "CANNOT_ATTACK_HEROES": true,
+    "CHARGE": true,
+    "DEFLECT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

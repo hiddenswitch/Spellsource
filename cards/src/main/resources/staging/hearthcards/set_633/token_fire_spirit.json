@@ -1,17 +1,17 @@
 {
-  "name": "Windwalk Master",
+  "name": "Fire Spirit",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 3,
+  "baseAttack": 4,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Windfury. Deflect.",
+  "race": "ELEMENTAL",
+  "description": "Charge",
   "attributes": {
-    "WINDFURY": true,
-	"DEFLECT": true
+    "CHARGE": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

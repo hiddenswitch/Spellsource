@@ -2,7 +2,7 @@
   "name": "Keg Smash",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "RARE",
   "description": "Choose a minion and adjacent minions. Destroy the next one that takes damage.",
   "targetSelection": "MINIONS",
@@ -54,6 +54,7 @@
       }
     ]
   },
+  "wiki": "Area of effect damage like Flamestrike counts as damage being dealt simultaneously, so all Keg Smashed targets will be destroyed.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

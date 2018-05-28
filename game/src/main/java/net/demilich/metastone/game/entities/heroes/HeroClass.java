@@ -15,6 +15,7 @@ public enum HeroClass {
 	SILVER,
 	VIOLET,
 	RED,
+	JADE,
 	SPIRIT,
 	SELF,
 	OPPONENT,
@@ -40,6 +41,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_guldan");
 			case RED:
 				return CardCatalogue.getCardById("hero_garrosh");
+			case JADE:
+				return CardCatalogue.getCardById("hero_chen_stormstout");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

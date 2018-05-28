@@ -2,16 +2,25 @@
   "name": "Touch of Karma",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Choose a minion. Whenever it attacks, deal 2 damage to the enemy hero.",
-  "targetSelection": "ANY",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_MINIONS",
-    "value": 1
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "PhysicalAttackTrigger",
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 2
+      },
+      "persistentOwner": true
+    }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
