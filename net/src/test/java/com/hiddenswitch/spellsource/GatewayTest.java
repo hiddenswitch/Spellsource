@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
@@ -7,6 +8,7 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.CreateGameSessionRequest;
@@ -197,6 +199,42 @@ public class GatewayTest extends SpellsourceTestBase {
 		// Random games can take quite a long time to finish so be patient...
 		latch.await(80L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
+	}
+
+	@Test
+	public void testConcede(TestContext context) {
+		sync(() -> {
+			Logging.setLoggingLevel(Level.DEBUG);
+			UnityClient client = new UnityClient(context);
+			client.setShouldDisconnect(false);
+			Sync.invoke0(() -> {
+				client.createUserAccount();
+				client.getTurnsToPlay().set(1);
+				client.matchmakeAndPlayAgainstAI(null);
+			});
+
+			Strand.sleep(200L);
+			// 1 turn was played, concede
+
+			Sync.invoke0(client::concede);
+			try {
+				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+			} catch (ApiException e) {
+				throw new AssertionError(e);
+			}
+			SuspendableMap<UserId, GameId> games = Games.getGames();
+			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
+			context.assertFalse(hasUser);
+
+			// Can go into another game
+			Sync.invoke0(() -> {
+				client.disconnect();
+				client.getTurnsToPlay().set(999);
+				client.matchmakeAndPlayAgainstAI(null);
+				client.waitUntilDone();
+				context.assertTrue(client.isGameOver());
+			});
+		});
 	}
 
 	@Test

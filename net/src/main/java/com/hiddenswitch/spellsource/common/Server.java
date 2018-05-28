@@ -20,12 +20,16 @@ public interface Server extends ClientConnectionHandler {
 	@Suspendable
 	void onMulliganReceived(String messageId2, List<Integer> discardedCardIndices);
 
+	@Suspendable
 	void onEmote(int entityId, Emote.MessageEnum message);
 
+	@Suspendable
 	void onConcede(int playerId);
 
+	@Suspendable
 	void onTouch(int playerId, int entityId);
 
+	@Suspendable
 	void onUntouch(int playerId, int entityId);
 
 	Writer getClient1();

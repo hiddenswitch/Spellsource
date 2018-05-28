@@ -1279,6 +1279,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 *
 	 * @param playerId The player that should concede/lose
 	 */
+	@Suspendable
 	public void concede(int playerId) {
 		getLogic().concede(playerId);
 		endGame();
