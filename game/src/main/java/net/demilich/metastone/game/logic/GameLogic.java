@@ -3540,6 +3540,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param playerId The player that should concede.
 	 */
+	@Suspendable
 	public void concede(int playerId) {
 		final Hero hero = context.getPlayer(playerId).getHero();
 		if (!hero.isDestroyed()

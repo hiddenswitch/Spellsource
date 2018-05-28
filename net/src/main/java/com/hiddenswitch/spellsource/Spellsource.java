@@ -375,9 +375,15 @@ public class Spellsource {
 						.withVersion(17)
 						.withUp(thisVertx -> {
 							CardCatalogue.loadCardsFromPackage();
-							removeCards("minion_shadowglen_vagrant", "minion_lone_wolf", "spell_bag_of_tricks" );
+							removeCards("minion_shadowglen_vagrant", "minion_lone_wolf", "spell_bag_of_tricks");
 						}))
-				.migrateTo(17, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(18)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							removeCards("spell_lone_wolf");
+						}))
+				.migrateTo(18, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

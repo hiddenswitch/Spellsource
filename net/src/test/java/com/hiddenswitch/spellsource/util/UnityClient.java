@@ -41,6 +41,7 @@ public class UnityClient {
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
 	private String thisUrl;
+	private boolean shouldDisconnect = true;
 
 
 	public UnityClient(TestContext context) {
@@ -170,7 +171,8 @@ public class UnityClient {
 			logger.debug("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 			switch (message.getMessageType()) {
 				case ON_TURN_END:
-					if (turnsToPlay.getAndDecrement() <= 0) {
+					if (turnsToPlay.getAndDecrement() <= 0
+							&& shouldDisconnect) {
 						disconnect();
 					}
 					break;
@@ -349,5 +351,18 @@ public class UnityClient {
 
 	public String getToken() {
 		return loginToken;
+	}
+
+	public void concede() {
+		endpoint.sendMessage(serialize(new ClientToServerMessage()
+				.messageType(MessageType.CONCEDE)));
+	}
+
+	public boolean isShouldDisconnect() {
+		return shouldDisconnect;
+	}
+
+	public void setShouldDisconnect(boolean shouldDisconnect) {
+		this.shouldDisconnect = shouldDisconnect;
 	}
 }

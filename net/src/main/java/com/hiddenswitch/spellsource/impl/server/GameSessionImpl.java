@@ -1,15 +1,18 @@
 package com.hiddenswitch.spellsource.impl.server;
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfigurationImpl;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
+import com.hiddenswitch.spellsource.models.MatchExpireRequest;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -298,6 +301,9 @@ public class GameSessionImpl implements GameSession {
 
 	@Override
 	public GameAction getActionForMessage(String messageId, int actionIndex) {
+		if (!isGameReady()) {
+			throw new RuntimeException("Unexpectedly trying to receive a game action for a game that isn't ready yet");
+		}
 		return getGameContext().getActionForMessage(messageId, actionIndex);
 	}
 
@@ -338,16 +344,25 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
+	@Suspendable
 	public void onConcede(int playerId) {
 		if (!isGameReady()) {
 			return;
 		}
 		if (getGameContext() != null) {
 			getGameContext().concede(playerId);
+			MatchExpireRequest request = new MatchExpireRequest(getGameId());
+			request.users = getUserIds();
+			try {
+				Matchmaking.expireOrEndMatch(request);
+			} catch (SuspendExecution | InterruptedException execution) {
+				throw new RuntimeException(execution);
+			}
 		}
 	}
 
 	@Override
+	@Suspendable
 	public void onTouch(int playerId, int entityId) {
 		if (!isGameReady()) {
 			return;
@@ -359,6 +374,7 @@ public class GameSessionImpl implements GameSession {
 	}
 
 	@Override
+	@Suspendable
 	public void onUntouch(int playerId, int entityId) {
 		if (!isGameReady()) {
 			return;
