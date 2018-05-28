@@ -259,14 +259,16 @@ public class AdvancedMechanicTests extends TestBase {
 	@Test
 	public void testEnrage() {
 		runGym((context, player, opponent) -> {
+			context.endTurn();
 			final int BASE_ATTACK = 2;
 			final int ENRAGE_ATTACK_BONUS = 3;
 			Minion attacker = playMinionCard(context, opponent, "minion_test_enrage");
+			context.endTurn();
 			Minion defender1 = playMinionCard(context, player, new TestMinionCard(1, 10));
 
 			assertEquals(attacker.getAttack(), BASE_ATTACK);
 			assertFalse(attacker.hasAttribute(Attribute.ENRAGED));
-
+			context.endTurn();
 			// attack once, should apply the enrage attack bonus
 			attack(context, opponent, attacker, defender1);
 			assertEquals(attacker.getAttack(), BASE_ATTACK + ENRAGE_ATTACK_BONUS);
