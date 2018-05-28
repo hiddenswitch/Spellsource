@@ -1,0 +1,23 @@
+{
+  "name": "Valient Protector",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "At the end of each turn, swap this minion's Attack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
