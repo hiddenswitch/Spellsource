@@ -17,6 +17,9 @@ import net.demilich.metastone.game.utils.Attribute;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Casts healing missiles.
+ */
 public class HealingMissilesSpell extends HealSpell {
 
 	public static SpellDesc create(int healing) {
