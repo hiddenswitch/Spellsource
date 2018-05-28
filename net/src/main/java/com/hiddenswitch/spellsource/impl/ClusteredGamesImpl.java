@@ -108,7 +108,11 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 		logger.debug("onGameOver: Handling on game over for session " + session.getGameId());
 		final String gameOverId = session.getGameId();
 		// The players should not accidentally wind back up in games
-		vertx.setTimer(500L, Sync.suspendableHandler(t -> kill(gameOverId)));
+		try {
+			kill(gameOverId);
+		} catch (InterruptedException | SuspendExecution e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	/**

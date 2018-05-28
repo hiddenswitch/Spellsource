@@ -175,8 +175,13 @@ public interface Matchmaking extends Verticle {
 			throw new NullPointerException("Request does not contain users specified");
 		}
 
+		if (request.users.size() != 2) {
+			throw new IllegalStateException("There should be two users in a match expire request.");
+		}
+
+		SuspendableMap<UserId, GameId> games = Games.getGames();
 		for (UserId userId : request.users) {
-			Games.getGames().remove(userId);
+			games.remove(userId);
 		}
 
 		/*

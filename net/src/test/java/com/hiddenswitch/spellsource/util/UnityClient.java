@@ -32,7 +32,7 @@ public class UnityClient {
 	public static String basePath = BASE + Integer.toString(Port.port());
 	private ApiClient apiClient;
 	private DefaultApi api;
-	private boolean gameOver;
+	private volatile boolean gameOver;
 	private Handler<UnityClient> onGameOver;
 	private Account account;
 	private TestContext context;
@@ -145,6 +145,7 @@ public class UnityClient {
 	}
 
 	public void play() {
+		this.gameOver = false;
 		logger.debug("play: Playing userId " + getUserId());
 		// Get the port from the url
 		final URL basePathUrl;

@@ -116,36 +116,20 @@ public abstract class StringEx implements Serializable,
 			return null;
 		}
 	}
-/*
+
 	private void writeObject(java.io.ObjectOutputStream out)
 			throws IOException {
-		if (id == null) {
-			out.write(0);
-			return;
-		}
-		final byte[] bytes = id.getBytes(Charset.defaultCharset());
-		out.write(bytes.length);
-		out.write(bytes);
+		out.writeObject(id);
 	}
 
 	private void readObject(java.io.ObjectInputStream in)
 			throws IOException, ClassNotFoundException {
-		int size = in.readInt();
-		if (size == 0) {
-			id = null;
-			return;
-		}
-		byte[] buf = new byte[size];
-		int read = in.read(buf, 0, size);
-		if (read != size) {
-			throw new IOException("invalid size");
-		}
-		id = new String(buf, Charset.defaultCharset());
+		id = (String) in.readObject();
 	}
 
 	private void readObjectNoData()
 			throws ObjectStreamException {
 		id = null;
 	}
-	*/
+
 }

@@ -1,7 +1,9 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.*;
@@ -59,7 +61,7 @@ public class ServerGameContext extends GameContext {
 	private Map<Player, Writer> listenerMap = new ConcurrentHashMap<>();
 	private final Map<CallbackId, GameplayRequest> requestCallbacks = new ConcurrentHashMap<>();
 	private boolean isRunning = true;
-	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
+	private final transient HashSet<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new HashSet<>();
 	private final List<Trigger> gameTriggers = new ArrayList<>();
 	private final transient RpcClient<Logic> logic;
 	private final Scheduler scheduler;
@@ -544,13 +546,17 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void endGame() {
 		super.endGame();
-		onGameEndHandlers.forEach(h -> {
-			h.handle(this);
-		});
+		for (SuspendableAction1<ServerGameContext> h : onGameEndHandlers) {
+			try {
+				h.call(this);
+			} catch (SuspendExecution | InterruptedException execution) {
+				throw new RuntimeException(execution);
+			}
+		}
 	}
 
 	@Suspendable
-	public void handleEndGame(Handler<ServerGameContext> handler) {
+	public void handleEndGame(SuspendableAction1<ServerGameContext> handler) {
 		onGameEndHandlers.add(handler);
 	}
 

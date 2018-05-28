@@ -121,10 +121,7 @@ public interface Bots {
 	}
 
 	static String pollBotId() throws SuspendExecution, InterruptedException {
-		List<String> bots = Mongo.mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("_id", 1)))
-				.stream()
-				.map(jo -> jo.getString("_id"))
-				.collect(Collectors.toList());
+		List<String> bots = getBotIds();
 
 		Collections.shuffle(bots);
 		SuspendableMap<UserId, GameId> games = Games.getGames();
@@ -143,6 +140,13 @@ public interface Bots {
 
 		Logic.initializeUser(InitializeUserRequest.create(response.getUserId()));
 		return response.getUserId();
+	}
+
+	static List<String> getBotIds() throws SuspendExecution, InterruptedException {
+		return Mongo.mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("_id", 1)))
+					.stream()
+					.map(jo -> jo.getString("_id"))
+					.collect(Collectors.toList());
 	}
 
 	static String getRandomDeck(UserRecord bot) {
