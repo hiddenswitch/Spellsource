@@ -616,8 +616,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * <p>
 	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
-	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be {@code
-	 * 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
+	 * EntityFilter} with {@link EntityFilterArg#RACE} as {@link Race#MURLOC}, (3) whose {@link SpellArg#VALUE} would be
+	 * {@code 2} to deal 2 damage, and whose (4) {@link SpellArg#TARGET} would be {@link EntityReference#ALL_MINIONS}.
 	 * <p>
 	 * Effects can modify spells or create new ones. {@link SpellDesc} allows the code to modify the "code" of a spell.
 	 * <p>
@@ -1118,7 +1118,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return 0;
 		}
 		if (minion.hasAttribute(Attribute.DEFLECT)
-				&& minion.getHp() == damage) {
+				&& minion.getHp() <= damage) {
 			removeAttribute(minion, Attribute.DEFLECT);
 			context.fireGameEvent(new LoseDeflectEvent(context, minion, player.getId(), source.getId()));
 			damage(player, context.getPlayer(minion.getOwner()).getHero(), damage, source, true);
