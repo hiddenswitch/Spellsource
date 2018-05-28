@@ -11,7 +11,11 @@
     "spells": [
       {
         "class": "AdjacentEffectSpell",
-        "spell": {
+        "spell1": {
+          "class": "AddAttributeSpell",
+          "attribute": "RESERVED_BOOLEAN_3"
+        },
+        "spell2": {
           "class": "AddAttributeSpell",
           "attribute": "RESERVED_BOOLEAN_3"
         }

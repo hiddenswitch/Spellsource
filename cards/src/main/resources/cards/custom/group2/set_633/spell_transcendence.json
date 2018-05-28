@@ -19,7 +19,7 @@
           "class": "EntityCounter",
           "target": "FRIENDLY_MINIONS",
           "filter": {
-            "class": "AttributeCondition",
+            "class": "AttributeFilter",
             "attribute": "DEFLECT"
           }
         }
