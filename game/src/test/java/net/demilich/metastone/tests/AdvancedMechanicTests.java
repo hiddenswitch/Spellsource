@@ -43,6 +43,46 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testDeflect() {
+		runGym((context, player, opponent) -> {
+			int hp = player.getHero().getHp();
+			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
+			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
+			playCardWithTarget(context, player, "spell_fireball", deflect);
+			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
+			assertFalse(deflect.isDestroyed());
+			assertEquals(player.getHero().getHp(), hp - 6);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
+			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
+			context.endTurn();
+			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			int hp = player.getHero().getHp();
+			attack(context, opponent, attacker, deflect);
+			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
+			assertFalse(deflect.isDestroyed());
+			assertEquals(player.getHero().getHp(), hp - attacker.getAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
+			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_wolfrider");
+			context.endTurn();
+
+			int hp = player.getHero().getHp();
+			attack(context, player, deflect, defender);
+			assertTrue(defender.isDestroyed());
+			assertFalse(deflect.isDestroyed());
+			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
+			assertEquals(player.getHero().getHp(), hp - defender.getAttack());
+		});
+	}
+
+	@Test
 	public void testCardFilter() {
 		runGym((context, player, opponent) -> {
 			Card hasTaunt = CardCatalogue.getCardById("minion_test_taunts");
