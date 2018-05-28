@@ -98,6 +98,27 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_arcane_explosion");
 			assertFalse(target4.isDestroyed());
 		});
+
+		// Test hero attacking
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_keg_smash", target2);
+			playCard(context, player, "weapon_wicked_knife");
+
+			attack(context, player, player.getHero(), target3);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+			playCardWithTarget(context, player, "spell_razorpetal", target1);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+		});
+
 	}
 
 	@Test
