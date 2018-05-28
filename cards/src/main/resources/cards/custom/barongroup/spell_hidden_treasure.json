@@ -1,0 +1,21 @@
+{
+"name": "Hidden Treasure"
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+       "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+      "class": "DrawCardSpell",
+      "value": 3,
+      "targetPlayer": "SELF"
+      }
+        },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
