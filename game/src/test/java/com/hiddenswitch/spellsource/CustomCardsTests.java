@@ -37,30 +37,97 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	@Ignore
 	public void testTouchOfKarma() {
+		// Target friendly
 		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_wolfrider");
+			playCardWithTarget(context, player, "spell_touch_of_karma", attacker);
+			int hp = opponent.getHero().getHp();
+			attack(context, player, attacker, opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - attacker.getAttack() - 2);
+		});
 
+		// Target opponent
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_touch_of_karma", attacker);
+			context.endTurn();
+			int hp = opponent.getHero().getHp();
+			attack(context, opponent, attacker, player.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - 2);
 		});
 	}
 
 	@Test
+	@Ignore
 	public void testKegSmash() {
+		// Test regular
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_keg_smash", target2);
+			playCardWithTarget(context, player, "spell_razorpetal", target3);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+			playCardWithTarget(context, player, "spell_razorpetal", target1);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+		});
 
+		// Test AoE
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_keg_smash", target2);
+			playCard(context, player, "spell_arcane_blast");
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			assertTrue(target3.isDestroyed());
+			context.endTurn();
+			Minion target4 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "spell_arcane_blast");
+			assertFalse(target4.isDestroyed());
 		});
 	}
 
 	@Test
+	@Ignore
 	public void testEnvelopingMists() {
 		runGym((context, player, opponent) -> {
-
+			player.getHero().setHp(1);
+			Minion twoHp = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playCardWithTarget(context, player, "spell_enveloping_mists", twoHp);
+			assertEquals(player.getHero().getHp(), 3);
 		});
 	}
 
 	@Test
+	@Ignore
 	public void testDampenHarm() {
 		runGym((context, player, opponent) -> {
-
+			// Your minions can only take 1 damage at a time until the start of your next turn.
+			Minion target = playMinionCard(context, player, "minion_sleepy_dragon");
+			playCard(context, player, "spell_dampen_harm");
+			playCardWithTarget(context, player, "spell_fireball", target);
+			assertEquals(target.getHp(), target.getBaseHp() - 1);
+			playCardWithTarget(context, player, "spell_fireball", target);
+			assertEquals(target.getHp(), target.getBaseHp() - 2);
+			context.endTurn();
+			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			attack(context, opponent, attacker, target);
+			assertEquals(target.getHp(), target.getBaseHp() - 3);
 		});
 	}
 
