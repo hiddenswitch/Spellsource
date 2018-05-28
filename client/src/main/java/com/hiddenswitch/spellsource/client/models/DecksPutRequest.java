@@ -32,7 +32,7 @@ public class DecksPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class. 
+   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Monk (custom) class. 
    */
   public enum HeroClassEnum {
     BROWN("BROWN"),
@@ -51,7 +51,9 @@ public class DecksPutRequest implements Serializable {
     
     VIOLET("VIOLET"),
     
-    RED("RED");
+    RED("RED"),
+    
+    JADE("JADE");
 
     private String value;
 
@@ -142,10 +144,10 @@ public class DecksPutRequest implements Serializable {
   }
 
    /**
-   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class. 
+   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Monk (custom) class. 
    * @return heroClass
   **/
-  @ApiModelProperty(value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class. ")
+  @ApiModelProperty(value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Monk (custom) class. ")
   public HeroClassEnum getHeroClass() {
     return heroClass;
   }
