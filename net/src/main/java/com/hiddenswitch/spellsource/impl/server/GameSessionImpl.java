@@ -155,11 +155,13 @@ public class GameSessionImpl implements GameSession {
 				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
 				getGameContext().getPlayer(0).setAttribute(Attribute.AI_OPPONENT);
 				listener2 = getPlayerListener(PLAYER_2);
+				((NetworkBehaviour) getGameContext().getBehaviours().get(0)).setHuman(false);
 				setClient1(listener1);
 			} else if (configuration2.isAI()) {
 				listener1 = getPlayerListener(PLAYER_1);
 				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
 				getGameContext().getPlayer(1).setAttribute(Attribute.AI_OPPONENT);
+				((NetworkBehaviour) getGameContext().getBehaviours().get(1)).setHuman(false);
 				setClient2(listener2);
 			} else {
 				throw new RuntimeException();
