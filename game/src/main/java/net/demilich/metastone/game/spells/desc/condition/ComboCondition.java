@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class ComboCondition extends Condition {
 
+	public static final ComboCondition INSTANCE = new ComboCondition(new ConditionDesc(ComboCondition.class));
+
 	public ComboCondition(ConditionDesc desc) {
 		super(desc);
 	}

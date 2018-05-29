@@ -37,6 +37,56 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testMistyManaTea() {
+		// Test basic
+		runGym((context, player, opponent) -> {
+			player.setMana(8);
+			for (int i = 0; i < 8; i++) {
+				playCardWithTarget(context, player, "spell_razorpetal", opponent.getHero());
+			}
+			assertEquals(player.getMana(), 0);
+			playCard(context, player, "spell_misty_mana_tea");
+			assertEquals(player.getMana(), 4);
+		});
+
+		// Test basic
+		runGym((context, player, opponent) -> {
+			player.setMana(7);
+			for (int i = 0; i < 7; i++) {
+				playCardWithTarget(context, player, "spell_razorpetal", opponent.getHero());
+			}
+			assertEquals(player.getMana(), 0);
+			assertEquals(player.getAttributeValue(Attribute.MANA_SPENT_THIS_TURN), 7);
+			playCard(context, player, "spell_misty_mana_tea");
+			assertEquals(player.getMana(), 0);
+		});
+
+
+		// Test spend all your mana effects
+		runGym((context, player, opponent) -> {
+			player.setMana(8);
+			playCard(context, player, "spell_spend_all_your_mana");
+			assertEquals(player.getMana(), 0);
+			playCard(context, player, "spell_misty_mana_tea");
+			assertEquals(player.getMana(), 4);
+		});
+
+		// Test resets at end of turn
+		runGym((context, player, opponent) -> {
+			player.setMana(7);
+			playCard(context, player, "spell_spend_all_your_mana");
+			assertEquals(player.getMana(), 0);
+			context.endTurn();
+			context.endTurn();
+			player.setMana(1);
+			playCard(context, player, "spell_spend_all_your_mana");
+			assertEquals(player.getMana(), 0);
+			playCard(context, player, "spell_misty_mana_tea");
+			assertEquals(player.getMana(), 0);
+		});
+	}
+
+	@Test
 	public void testTouchOfKarma() {
 		// Target friendly
 		runGym((context, player, opponent) -> {

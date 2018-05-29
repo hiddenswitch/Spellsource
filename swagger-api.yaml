@@ -809,6 +809,7 @@ definitions:
           - 'LOSE_DEFLECT'
           - 'MILL'
           - 'MAX_MANA'
+          - 'MANA_MODIFIED'
           - 'OVERLOAD'
           - 'PERFORMED_GAME_ACTION'
           - 'PHYSICAL_ATTACK'
@@ -1556,6 +1557,9 @@ definitions:
         type: 'string'
       playable:
         description: When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
+        type: 'boolean'
+      conditionMet:
+        description: When true, indicates that a condition written on the card is met and the player should be informed.
         type: 'boolean'
       mana:
         description: The player's current mana.

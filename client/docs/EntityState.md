@@ -50,6 +50,7 @@ Name | Type | Description | Notes
 **customRenderer** | **String** |  |  [optional]
 **customData** | **String** |  |  [optional]
 **playable** | **Boolean** | When true, indicates the card can be played, or the hero / minion can initiate a physical attack. |  [optional]
+**conditionMet** | **Boolean** | When true, indicates that a condition written on the card is met and the player should be informed. |  [optional]
 **mana** | **Integer** | The player&#39;s current mana. |  [optional]
 **maxMana** | **Integer** | The player&#39;s maximum amount of mana. |  [optional]
 **lockedMana** | **Integer** | The amount of mana that was locked due to overload. |  [optional]

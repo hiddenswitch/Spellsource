@@ -110,6 +110,8 @@ public class GameEvent implements Serializable {
     
     MAX_MANA("MAX_MANA"),
     
+    MANA_MODIFIED("MANA_MODIFIED"),
+    
     OVERLOAD("OVERLOAD"),
     
     PERFORMED_GAME_ACTION("PERFORMED_GAME_ACTION"),

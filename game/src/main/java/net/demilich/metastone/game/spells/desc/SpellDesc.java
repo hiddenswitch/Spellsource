@@ -160,6 +160,14 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	}
 
 	public List<SpellDesc> subSpells(final int depth) {
+		return spellStream(depth).collect(Collectors.toList());
+	}
+
+	public List<SpellDesc> subSpells() {
+		return subSpells(20);
+	}
+
+	public Stream<SpellDesc> spellStream(int depth) {
 		Stream<SpellDesc> spells;
 		SpellDesc[] spellsArray = (SpellDesc[]) get(SpellArg.SPELLS);
 		if (spellsArray != null && spellsArray.length > 0) {
@@ -181,11 +189,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 			unitSpells = Stream.concat(units.stream(), units.stream().flatMap(u -> u.subSpells(depth - 1).stream()));
 		}
 
-		return Stream.concat(spells, unitSpells).collect(Collectors.toList());
-	}
-
-	public List<SpellDesc> subSpells() {
-		return subSpells(20);
+		return Stream.concat(spells, unitSpells);
 	}
 
 	/**

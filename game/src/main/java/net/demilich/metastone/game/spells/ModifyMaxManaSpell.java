@@ -17,8 +17,7 @@ public class ModifyMaxManaSpell extends Spell {
 
 		context.getLogic().modifyMaxMana(player, value);
 		if (fullManaCrystals) {
-			context.getLogic().modifyCurrentMana(player.getId(), value);
+			context.getLogic().modifyCurrentMana(player.getId(), value, false);
 		}
 	}
-
 }

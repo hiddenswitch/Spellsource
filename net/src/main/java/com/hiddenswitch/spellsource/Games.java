@@ -1080,6 +1080,8 @@ public interface Games extends Verticle {
 		entityState.deathrattles(card.hasAttribute(Attribute.DEATHRATTLES));
 		entityState.permanent(card.hasAttribute(Attribute.PERMANENT));
 		entityState.collectible(card.isCollectible());
+		// TODO: A little too underperformant so we're going to skip this
+		// entityState.conditionMet(workingContext.getLogic().conditionMet(localPlayerId, card));
 		HeroClass heroClass = card.getHeroClass();
 
 		// Handles tri-class cards correctly

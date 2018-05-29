@@ -34,7 +34,7 @@ public class ClearOverloadSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int lockedMana = player.getLockedMana();
 		if (lockedMana > 0) {
-			context.getLogic().modifyCurrentMana(player.getId(), lockedMana);
+			context.getLogic().modifyCurrentMana(player.getId(), lockedMana, false);
 			player.setLockedMana(0);
 		}
 
