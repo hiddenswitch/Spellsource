@@ -19,10 +19,13 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.ComboSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.condition.ComboCondition;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -36,10 +39,8 @@ import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Stream;
 
 import static com.google.common.collect.Maps.immutableEntry;
 
@@ -982,5 +983,52 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	@JsonIgnore
 	public EnchantmentDesc[] getDeckTriggers() {
 		return deckTrigger != null ? new EnchantmentDesc[]{deckTrigger} : deckTriggers;
+	}
+
+	/**
+	 * Iterates through all the conditions specified in the card.
+	 * <p>
+	 * This includes spell conditions ({@link #getCondition()}, battlecry conditions {@link BattlecryDesc#getCondition()},
+	 * {@link ComboSpell} and condition arguments specified on subspells.
+	 *
+	 * @return A stream.
+	 */
+	@JsonIgnore
+	public Stream<ConditionDesc> getConditions() {
+		Stream<ConditionDesc> stream = Stream.empty();
+		// Case 1: Spell condition
+		if (condition != null) {
+			stream = Stream.concat(stream, Stream.of(condition));
+		}
+		// Case 2: Condition on battlecry
+		if (battlecry != null
+				&& battlecry.condition != null) {
+			stream = Stream.concat(stream, Stream.of(battlecry.condition));
+		}
+
+		// Case 3: ComboSpell, conditions in subspells
+		Stream<SpellDesc> spells = Stream.empty();
+		if (spell != null) {
+			spells = Stream.concat(spells, spell.spellStream(20));
+		}
+
+		if (battlecry.spell != null) {
+			spells = Stream.concat(spells, battlecry.spell.spellStream(20));
+		}
+
+		stream = Stream.concat(stream, spells.flatMap(spellDesc -> {
+			if (spellDesc.getClass().isAssignableFrom(ComboSpell.class)) {
+				return Stream.of(ComboCondition.INSTANCE.getDesc());
+			}
+			if (spellDesc.containsKey(SpellArg.CONDITION)) {
+				return Stream.of(((Condition) spellDesc.get(SpellArg.CONDITION)).getDesc());
+			}
+			if (spellDesc.containsKey(SpellArg.CONDITIONS)) {
+				return Arrays.stream((Condition[]) spellDesc.get(SpellArg.CONDITIONS)).map(Condition::getDesc);
+			}
+			return Stream.empty();
+		}));
+
+		return stream;
 	}
 }

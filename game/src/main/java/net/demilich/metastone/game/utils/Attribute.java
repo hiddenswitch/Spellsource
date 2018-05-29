@@ -726,6 +726,10 @@ public enum Attribute {
 	 */
 	USED_THIS_TURN,
 	/**
+	 * On the player entity, specifies how much mana has been spent this turn.
+	 */
+	MANA_SPENT_THIS_TURN,
+	/**
 	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#heroClass} field.
 	 */
 	HERO_CLASS,

@@ -5,8 +5,10 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.*;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
@@ -44,6 +46,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * A networked game context from the server's point of view.
@@ -522,7 +526,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	private void retryRequests(Player player) {
-		List<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().stream().filter(e -> e.getKey().playerId == player.getId()).collect(Collectors.toList());
+		List<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().stream().filter(e -> e.getKey().playerId == player.getId()).collect(toList());
 		if (requests.size() > 0) {
 			requestCallbacks.entrySet().removeIf(e -> e.getKey().playerId == player.getId());
 			requests.forEach(e -> {
@@ -545,6 +549,13 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void endGame() {
+		// Immediately expire the match
+		try {
+			Matchmaking.expireOrEndMatch(new GameId(getGameId()), getUserIds());
+		} catch (VertxException noHandlerFound) {
+			logger.error("kill: For gameId " + gameId + ", an error occurred trying to expireOrEndMatch: " + noHandlerFound.getMessage());
+		}
+
 		super.endGame();
 		for (SuspendableAction1<ServerGameContext> h : onGameEndHandlers) {
 			try {
@@ -553,6 +564,10 @@ public class ServerGameContext extends GameContext {
 				throw new RuntimeException(execution);
 			}
 		}
+	}
+
+	public List<UserId> getUserIds() {
+		return getPlayers().stream().map(Player::getUserId).filter(Objects::nonNull).map(UserId::new).collect(toList());
 	}
 
 	@Suspendable
@@ -596,7 +611,7 @@ public class ServerGameContext extends GameContext {
 		}
 		CallbackId reqId = reqResult.get();
 		GameplayRequest request = requestCallbacks.get(reqId);
-		List<Card> discardedCards = discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(Collectors.toList());
+		List<Card> discardedCards = discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(toList());
 		onMulliganReceived(messageId, getPlayer(reqId.playerId), discardedCards);
 	}
 

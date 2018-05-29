@@ -23,6 +23,7 @@ import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -2225,14 +2226,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Modifies the current mana that the player has.
+	 * <p>
+	 * Fires a {@link ModifyCurrentManaEvent} if the {@code mana} does not equal zero <b>and</b> if the {@code mana} is
+	 * negative, only if {@code spent} is {@code true}.
 	 *
 	 * @param playerId The player whose mana should be modified.
 	 * @param mana     The amount to increment or decrement the mana by.
+	 * @param spent    If {@code true}, indicates the effect modifying this mana should be considered a form of spending.
 	 */
-	public void modifyCurrentMana(int playerId, int mana) {
+	public void modifyCurrentMana(int playerId, int mana, boolean spent) {
 		Player player = context.getPlayer(playerId);
 		int newMana = Math.min(player.getMana() + mana, MAX_MANA);
 		player.setMana(newMana);
+		if ((mana < 0 && spent) || mana > 0) {
+			context.getPlayer(playerId).modifyAttribute(Attribute.MANA_SPENT_THIS_TURN, mana < 0 ? -mana : 0);
+			context.fireGameEvent(new ModifyCurrentManaEvent(context, playerId, mana));
+		}
 	}
 
 
@@ -2278,7 +2287,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		final int change = maxMana - initialMaxMana;
 		player.setMaxMana(maxMana);
 		if (delta < 0 && player.getMana() > player.getMaxMana()) {
-			modifyCurrentMana(player.getId(), delta);
+			modifyCurrentMana(player.getId(), delta, false);
 		}
 		if (change != 0) {
 			context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), change));
@@ -2427,7 +2436,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			damage(player, player.getHero(), modifiedManaCost, card, true);
 		} else {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, modifiedManaCost);
-			modifyCurrentMana(playerId, -modifiedManaCost);
+			modifyCurrentMana(playerId, -modifiedManaCost, true);
 			player.getStatistics().manaSpent(modifiedManaCost);
 		}
 
@@ -3234,6 +3243,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		final int _startTime = now - gameStartTime;
 		final int startTime = _startTime + (_startTime < 0 ? Integer.MAX_VALUE : 0);
+		player.setAttribute(Attribute.MANA_SPENT_THIS_TURN, 0);
 		player.getAttributes().put(Attribute.TURN_START_TIME_MILLIS, startTime);
 
 		if (player.getMaxMana() < MAX_MANA) {
@@ -3492,7 +3502,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Uses the player's hero power (plays the {@link HeroPowerCard}).
+	 * Uses the player's hero power.
 	 *
 	 * @param playerId The player whose power should be used.
 	 */
@@ -3501,7 +3511,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = context.getPlayer(playerId);
 		Card power = player.getHero().getHeroPower();
 		int modifiedManaCost = getModifiedManaCost(player, power);
-		modifyCurrentMana(playerId, -modifiedManaCost);
+		modifyCurrentMana(playerId, -modifiedManaCost, true);
 		power.markUsed();
 		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
@@ -3642,6 +3652,27 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	public long getSeed() {
 		return seed;
+	}
+
+	/**
+	 * Returns {@code true} if all the card's conditions are met.
+	 * <p>
+	 * If the card does not contain any conditions, returns {@code false}.
+	 * <p>
+	 * For cards with spells that contain multiple conditions, it's unlikely they are supposed to be interpreted as all of
+	 * them are met.
+	 *
+	 * @param localPlayerId
+	 * @param card
+	 * @return {@code} true if there are conditions and all are met, otherwise false.
+	 */
+	@Suspendable
+	public boolean conditionMet(int localPlayerId, @NotNull Card card) {
+		try {
+			return card.getDesc().getConditions().allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
+		} catch (Throwable ignored) {
+			return false;
+		}
 	}
 
 	protected class FirstHand {

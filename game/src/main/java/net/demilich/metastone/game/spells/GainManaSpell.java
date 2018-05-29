@@ -51,7 +51,8 @@ public class GainManaSpell extends Spell {
 		if (mana <= 0) {
 			logger.debug("onCast {} {}: Player loses mana ({}) in this spell.", context.getGameId(), source, mana);
 		}
-		context.getLogic().modifyCurrentMana(player.getId(), mana);
+		if (mana != 0) {
+			context.getLogic().modifyCurrentMana(player.getId(), mana, mana < 0);
+		}
 	}
-
 }

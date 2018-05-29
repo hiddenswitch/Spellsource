@@ -5,17 +5,22 @@
   "heroClass": "SILVER",
   "rarity": "EPIC",
   "description": "If you spent 8 or more Mana Crystals this turn, gain 4 Mana Crystals this turn only.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF",
+    "class": "ConditionalSpell",
     "condition": {
-      "class": "PlayedLastTurnCondition"
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "attribute": "MANA_SPENT_THIS_TURN",
+      "value": 8,
+      "operation": "GREATER_OR_EQUAL"
     },
-    "attackBonus": 0,
-    "hpBonus": 0
+    "spell": {
+      "class": "GainManaSpell",
+      "value": 4,
+      "targetPlayer": "SELF"
+    }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

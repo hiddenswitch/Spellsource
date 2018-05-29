@@ -85,3 +85,4 @@ public abstract class GameEvent implements Notification {
 		return toString();
 	}
 }
+

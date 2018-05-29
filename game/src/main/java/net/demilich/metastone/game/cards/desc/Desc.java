@@ -51,6 +51,11 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Enum
 
 	protected abstract Class<? extends Desc> getDescImplClass();
 
+	/**
+	 * Per-instance memoized desc create instance.
+	 *
+	 * @return An instance of the underlying implementation of this desc.
+	 */
 	public V create() {
 		Class<? extends V> clazz = getDescClass();
 		try {

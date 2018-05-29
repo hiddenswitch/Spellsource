@@ -26,6 +26,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.trigger.GameStartTrigger;
+import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -44,7 +45,8 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 /**
  * A Logic service that handles complex game logic.
  * <p>
- * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute, Handler)}.
+ * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
+ * Handler)}.
  */
 public interface Logic {
 	Logger logger = LoggerFactory.getLogger(Logic.class);
@@ -128,7 +130,7 @@ public interface Logic {
 
 		Spellsource.spellsource().trigger(
 				"has-rafaam-archivist-deck-1",
-				GameStartTrigger.create(TargetPlayer.BOTH),
+				TurnStartTrigger.create(TargetPlayer.BOTH),
 				(context, player, desc, source, target) -> {
 					final String userId = player.getUserId();
 

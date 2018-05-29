@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -56,39 +57,22 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 		}
 
 		final GameContext gameContext = event().getGameContext();
-		List<Entity> entities = gameContext.resolveTarget(gameContext.getActivePlayer(), event().getEventSource(), reference);
-		if (entities == null || entities.isEmpty()) {
-			return 0L;
-		}
-
-		List<String> inventoryIds = new ArrayList<>();
-		for (Entity entity1 : entities) {
-			if (entity1 != null) {
-				if (entity1.hasPersistentEffects()) {
-					String cardInventoryId = entity1.getCardInventoryId();
-					if (cardInventoryId != null) {
-						inventoryIds.add(cardInventoryId);
-					}
-				}
-			}
-		}
-
-		if (inventoryIds.isEmpty()) {
+		Entity entity = gameContext.tryFind(reference);
+		if (entity == null) {
+			logger.error("update: Could not find entity {} to persist {}", reference, id);
 			return 0L;
 		}
 
 		// TODO: We should probably queue these calls until the end of the match, and then execute only the latest
 		// value when the match is over. We don't have to save this stuff in real time. Maybe a new queued Rpc primitive?
 		PersistAttributeResponse response = Logic.persistAttribute(new PersistAttributeRequest()
-				.withInventoryIds(inventoryIds)
+				.withInventoryIds(Collections.singletonList(entity.getCardInventoryId()))
 				.withAttribute(attribute)
 				.withNewValue(newValue));
 
 		// TODO: Are we interested in the number of inventory items modified?
 
-		for (Entity entity : entities) {
-			entity.setAttribute(attribute, newValue);
-		}
+		entity.setAttribute(attribute, newValue);
 
 		return response.getUpdated();
 	}

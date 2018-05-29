@@ -168,6 +168,9 @@ public class EntityState implements Serializable {
   @JsonProperty("playable")
   private Boolean playable = null;
 
+  @JsonProperty("conditionMet")
+  private Boolean conditionMet = null;
+
   @JsonProperty("mana")
   private Integer mana = null;
 
@@ -1118,6 +1121,24 @@ public class EntityState implements Serializable {
     this.playable = playable;
   }
 
+  public EntityState conditionMet(Boolean conditionMet) {
+    this.conditionMet = conditionMet;
+    return this;
+  }
+
+   /**
+   * When true, indicates that a condition written on the card is met and the player should be informed.
+   * @return conditionMet
+  **/
+  @ApiModelProperty(value = "When true, indicates that a condition written on the card is met and the player should be informed.")
+  public Boolean isConditionMet() {
+    return conditionMet;
+  }
+
+  public void setConditionMet(Boolean conditionMet) {
+    this.conditionMet = conditionMet;
+  }
+
   public EntityState mana(Integer mana) {
     this.mana = mana;
     return this;
@@ -1390,6 +1411,7 @@ public class EntityState implements Serializable {
         Objects.equals(this.customRenderer, entityState.customRenderer) &&
         Objects.equals(this.customData, entityState.customData) &&
         Objects.equals(this.playable, entityState.playable) &&
+        Objects.equals(this.conditionMet, entityState.conditionMet) &&
         Objects.equals(this.mana, entityState.mana) &&
         Objects.equals(this.maxMana, entityState.maxMana) &&
         Objects.equals(this.lockedMana, entityState.lockedMana) &&
@@ -1406,7 +1428,7 @@ public class EntityState implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
+    return Objects.hash(location, background, portrait, gold, boardPosition, owner, heroClass, baseHp, hp, durability, maxHp, baseAttack, attack, baseManaCost, manaCost, armor, destroyed, summoningSickness, frozen, uncensored, deflect, silenced, windfury, permanent, collectible, taunt, spellDamage, charge, rush, lifesteal, poisonous, enraged, battlecry, deathrattles, immune, divineShield, stealth, combo, overload, chooseOne, untargetableBySpells, cannotAttack, underAura, customRenderer, customData, playable, conditionMet, mana, maxMana, lockedMana, hostsTrigger, note, cardType, tribe, fires, countUntilCast, cardSet, rarity, gameStarted);
   }
 
 
@@ -1461,6 +1483,7 @@ public class EntityState implements Serializable {
     sb.append("    customRenderer: ").append(toIndentedString(customRenderer)).append("\n");
     sb.append("    customData: ").append(toIndentedString(customData)).append("\n");
     sb.append("    playable: ").append(toIndentedString(playable)).append("\n");
+    sb.append("    conditionMet: ").append(toIndentedString(conditionMet)).append("\n");
     sb.append("    mana: ").append(toIndentedString(mana)).append("\n");
     sb.append("    maxMana: ").append(toIndentedString(maxMana)).append("\n");
     sb.append("    lockedMana: ").append(toIndentedString(lockedMana)).append("\n");

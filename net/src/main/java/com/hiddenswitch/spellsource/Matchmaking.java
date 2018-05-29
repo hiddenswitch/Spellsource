@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.Semaphore;
 import com.hiddenswitch.spellsource.impl.DeckId;
@@ -26,6 +27,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ConcurrentModificationException;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -462,6 +464,17 @@ public interface Matchmaking extends Verticle {
 			if (lock != null) {
 				lock.release();
 			}
+		}
+	}
+
+	@Suspendable
+	static void expireOrEndMatch(GameId gameId, List<UserId> userIds) {
+		MatchExpireRequest request = new MatchExpireRequest(gameId.toString());
+		request.users = userIds;
+		try {
+			expireOrEndMatch(request);
+		} catch (SuspendExecution | InterruptedException execution) {
+			throw new RuntimeException(execution);
 		}
 	}
 
