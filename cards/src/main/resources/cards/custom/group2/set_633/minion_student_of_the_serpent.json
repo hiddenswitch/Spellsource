@@ -2,21 +2,22 @@
   "name": "Student of the Serpent",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
-  "baseAttack": 2,
-  "baseHp": 4,
+  "heroClass": "JADE",
+  "damage": 2,
+  "durability": 4,
   "rarity": "COMMON",
   "description": "After your hero attacks, restore 4 Health to your hero.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "BuffSpell",
+      "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "value": 4
     }
   },
   "attributes": {},

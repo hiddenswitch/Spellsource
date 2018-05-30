@@ -169,6 +169,45 @@ public class CustomCardsTests extends TestBase {
 			assertFalse(target2.isDestroyed());
 		});
 
+		// Test keg smash playing more than once
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_keg_smash", target2);
+			playCardWithTarget(context, player, "spell_razorpetal", target3);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+			playCardWithTarget(context, player, "spell_razorpetal", target1);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+
+			// end some turns
+			for (int i = 0; i < 3; i++) {
+				context.endTurn();
+				context.endTurn();
+			}
+
+			// keg smash again
+			context.endTurn();
+			target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_keg_smash", target2);
+			playCardWithTarget(context, player, "spell_razorpetal", target3);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+			playCardWithTarget(context, player, "spell_razorpetal", target1);
+			assertTrue(target3.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
+		});
 	}
 
 	@Test

@@ -90,6 +90,10 @@
             {
               "class": "HasHeroPowerCondition",
               "cardId": "hero_power_armor_up"
+            },
+            {
+              "class": "HasHeroPowerCondition",
+              "cardId": "hero_power_meditation"
             }
           ],
           "spells": [
@@ -128,6 +132,10 @@
             {
               "class": "ChangeHeroPowerSpell",
               "card": "hero_power_tank_up"
+            },
+            {
+              "class": "ChangeHeroPowerSpell",
+              "card": "hero_power_zen_meditation"
             }
           ],
           "targetPlayer": "SELF"

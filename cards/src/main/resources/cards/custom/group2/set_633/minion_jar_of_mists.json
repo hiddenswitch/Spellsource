@@ -2,15 +2,22 @@
   "name": "Jar of Mists",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Taunt Deathrattle: If it's your opponent's turn, summon a 6/6 Mistlurker.",
+  "description": "Taunt. Deathrattle: If it's your opponent's turn, summon a 6/6 Mistlurker.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "target": "FRIENDLY_CHARACTERS",
-    "card": "minion_bloodfen_raptor"
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_mistlurker",
+      "targetPlayer": "SELF"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true,
