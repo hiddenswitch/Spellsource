@@ -37,6 +37,48 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSlamhammerKnight() {
+		// Test divine shield
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_slamhammer_knight");
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_argent_squire");
+			Minion bigMinion = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			attack(context, player, attacker, target);
+			assertEquals(target.getHp(), 1);
+			assertEquals(bigMinion.getHp(), bigMinion.getBaseHp() - attacker.getAttack());
+			assertEquals(attacker.getHp(), attacker.getBaseHp() - target.getAttack());
+		});
+
+		// Confirm that minions go into negative HP
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_slamhammer_knight");
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion bigMinion = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			attack(context, player, attacker, target);
+			assertTrue(target.isDestroyed());
+			assertEquals(bigMinion.getHp(), bigMinion.getBaseHp() - attacker.getAttack() + 2);
+			assertEquals(attacker.getHp(), attacker.getBaseHp() - target.getAttack());
+		});
+
+		// If there's no excess damage, no damage
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_slamhammer_knight");
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			Minion bigMinion = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			attack(context, player, attacker, target);
+			assertFalse(target.isDestroyed());
+			assertEquals(bigMinion.getHp(), bigMinion.getBaseHp());
+			assertEquals(attacker.getHp(), attacker.getBaseHp() - target.getAttack());
+		});
+	}
+
+	@Test
 	public void testMistyManaTea() {
 		// Test basic
 		runGym((context, player, opponent) -> {

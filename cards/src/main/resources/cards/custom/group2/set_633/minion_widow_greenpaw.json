@@ -26,10 +26,10 @@
       ]
     }
   },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1,
   "attributes": {
     "DEFLECT": true
-  }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

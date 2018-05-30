@@ -1,0 +1,21 @@
+{
+  "name": "Defenses Up",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Summon four 0/2 Defenders with Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_baron_defender",
+      "token_baron_defender",
+      "token_baron_defender",
+      "token_baron_defender"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

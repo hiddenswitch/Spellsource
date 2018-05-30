@@ -1,0 +1,17 @@
+{
+  "name": "Battlefield",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Give all minions Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "ALL_MINIONS",
+    "attribute": "TAUNT"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

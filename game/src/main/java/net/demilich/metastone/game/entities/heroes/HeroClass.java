@@ -9,6 +9,7 @@ public enum HeroClass {
 	BROWN,
 	GREEN,
 	BLUE,
+	NAVY,
 	GOLD,
 	WHITE,
 	BLACK,
@@ -43,6 +44,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_garrosh");
 			case JADE:
 				return CardCatalogue.getCardById("hero_chen_stormstout");
+			case NAVY:
+				return CardCatalogue.getCardById("hero_baron_aldus");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
