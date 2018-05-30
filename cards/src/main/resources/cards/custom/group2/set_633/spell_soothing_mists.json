@@ -2,15 +2,13 @@
   "name": "Soothing Mists",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "COMMON",
-  "description": "Echo Restore 5 Health.",
-  "targetSelection": "MINIONS",
+  "description": "Echo. Restore 5 Health.",
+  "targetSelection": "ANY",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "class": "HealSpell",
+    "value": 5
   },
   "attributes": {
     "ECHO": true

@@ -2,15 +2,34 @@
   "name": "Widow Greenpaw",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "baseAttack": 7,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Deflect Your spells that cost (3) or more have Echo.",
-  "attributes": {
-    "ECHO": true
+  "description": "Deflect. Your spells that cost 3 or more have Echo.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HAND",
+    "attribute": "AURA_ECHO",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "ManaCostFilter",
+          "value": 3,
+          "operation": "GREATER_OR_EQUAL"
+        }
+      ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "attributes": {
+    "DEFLECT": true
+  }
 }

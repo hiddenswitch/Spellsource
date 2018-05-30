@@ -5,6 +5,7 @@
   "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Your minions can only take 1 damage at a time until the start of your next turn.",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [

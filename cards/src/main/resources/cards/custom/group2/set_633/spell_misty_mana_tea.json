@@ -11,8 +11,8 @@
     "condition": {
       "class": "AttributeCondition",
       "target": "FRIENDLY_PLAYER",
-      "attribute": "MANA_SPENT_THIS_TURN",
       "value": 8,
+      "attribute": "MANA_SPENT_THIS_TURN",
       "operation": "GREATER_OR_EQUAL"
     },
     "spell": {
