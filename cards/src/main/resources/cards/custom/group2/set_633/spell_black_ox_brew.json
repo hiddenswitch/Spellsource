@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "JADE",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Your hero can only take 1 damage at a time until the start of your next turn.",
   "targetSelection": "NONE",
   "spell": {
