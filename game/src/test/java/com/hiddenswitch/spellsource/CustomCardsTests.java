@@ -37,6 +37,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSuspiciousWanderer() {
+		runGym((context, player, opponent) -> {
+			Card card = receiveCard(context, player, "minion_suspicious_wanderer");
+			Minion minion1 = playMinionCard(context, player, card);
+			Minion minion2 = playMinionCard(context, player, player.getHand().get(0));
+			context.endTurn();
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(minion1.getZone(), Zones.BATTLEFIELD);
+			assertEquals(minion2.getZone(), Zones.BATTLEFIELD);
+		});
+	}
+
+	@Test
 	public void testSlamhammerKnight() {
 		// Test divine shield
 		runGym((context, player, opponent) -> {

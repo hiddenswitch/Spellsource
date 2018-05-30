@@ -38,7 +38,7 @@ public class TestMinionCard extends Card {
 		CardDesc desc = getDesc();
 		Minion minion1 = new Minion(this);
 		for (Attribute gameTag : getAttributes().keySet()) {
-			if (!ignoredAttributes.contains(gameTag)) {
+			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
 				minion1.setAttribute(gameTag, getAttribute(gameTag));
 			}
 		}
@@ -63,7 +63,7 @@ public class TestMinionCard extends Card {
 		CardDesc desc = getDesc();
 		Minion minion1 = new Minion(this);
 		for (Attribute gameTag : getAttributes().keySet()) {
-			if (!ignoredAttributes.contains(gameTag)) {
+			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
 				minion1.setAttribute(gameTag, getAttribute(gameTag));
 			}
 		}
