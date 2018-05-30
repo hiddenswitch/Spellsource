@@ -1,0 +1,23 @@
+
+{
+  "name": "Possession",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Give your minions Rush.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "RUSH",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "RUSH",
+      "invert": true,
+      "operation": "HAS"
+    },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
