@@ -5,12 +5,12 @@
   "heroClass": "NAVY",
   "rarity": "FREE",
   "description": "Give all minions +3/+2.",
+  "targetSelection": "NONE",
   "spell": {
-      "class": "BuffSpell",
+    "class": "BuffSpell",
     "target": "ALL_MINIONS",
-      "attackBonus": 3,
-      "hpBonus": 2
-          }
+    "attackBonus": 3,
+    "hpBonus": 2
   },
   "collectible": true,
   "set": "CUSTOM",

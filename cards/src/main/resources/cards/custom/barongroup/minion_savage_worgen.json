@@ -12,9 +12,9 @@
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
-    "CastRepeatedlyspell": {
+    "spell": {
       "class": "FightSpell",
-      "target": "LEFTMOST_ENEMY_MINION"
+      "target": "ENEMY_MINIONS_LEFT_TO_RIGHT"
     }
   },
   "collectible": true,

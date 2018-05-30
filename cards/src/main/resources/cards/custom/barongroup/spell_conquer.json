@@ -5,14 +5,12 @@
   "heroClass": "NAVY",
   "rarity": "EPIC",
   "description": "Summon a 5/5 Dragon for your opponent. When it dies, draw 3 cards.",
-    "spell": {
-      "class": "SummonSpell",
-      "cards": [
-        "token_evil_dragon"
-      ],
-      "targetPlayer": "OPPONENT"
-    }
-    }
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_evil_dragon"
+    ],
+    "targetPlayer": "OPPONENT"
   },
   "collectible": true,
   "set": "CUSTOM",

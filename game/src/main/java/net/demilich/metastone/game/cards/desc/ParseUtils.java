@@ -170,6 +170,8 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_HERO_POWER;
 			case "enemy_hero_power":
 				return EntityReference.ENEMY_HERO_POWER;
+			case "enemy_minions_left_to_right":
+				return EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT;
 			default:
 				return null;
 		}

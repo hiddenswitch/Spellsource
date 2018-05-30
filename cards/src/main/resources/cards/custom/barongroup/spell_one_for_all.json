@@ -1,32 +1,29 @@
-  {
+{
   "name": "One For All",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
   "description": "The next minion you play this turn has +3/+1.",
-   "targetSelection": "NONE",
+  "targetSelection": "NONE",
   "spell": {
-    {
-          "class": "AddEnchantmentSpell",
-          "target": "FRIENDLY_PLAYER",
-          "trigger": {
-            "eventTrigger": {
-              "class": "BeforeMinionPlayedTrigger",
-              "targetPlayer": "SELF"
-            },
-            "spell": {
-              "class": "BuffSpell",
-              "target": "EVENT_TARGET",
-              "attackBonus": 3,
-              "hpBonus": 1
-            },
-            "maxFires": 1
-                "revertTrigger": {
-      "class": "TurnEndTrigger"
-          }
-        }
-}
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "BeforeMinionPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "EVENT_TARGET",
+        "attackBonus": 3,
+        "hpBonus": 1
+      },
+      "maxFires": 1,
+      "oneTurn": true
+    }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

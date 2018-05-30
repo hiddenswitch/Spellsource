@@ -9,7 +9,7 @@
   "spell": {
     "class": "AddAttributeSpell",
     "target": "ALL_MINIONS",
-      "attribute": "TAUNT"
+    "attribute": "TAUNT"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -6,30 +6,70 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Whenever you add a card to your hand gain +1 Attack.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "CardDrawnTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "IsDeadCondition",
-        "target": "SELF",
-        "invert": true
+  "description": "Whenever you add a card to your hand, gain +1 Attack.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "BeforeMinionSummonedTrigger",
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
       "spell": {
-        "class": "BuffSpell",
-        "target": "SELF",
-        "attackBonus": 1,
-        "hpBonus": 0
+        "class": "SetAttributeSpell",
+        "target": "TRIGGER_HOST",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT"
+        },
+        "attribute": "RESERVED_INTEGER_1"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "WillEndSequenceTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "attackBonus": {
+              "class": "AlgebraicValueProvider",
+              "operation": "MAXIMUM",
+              "value1": 0,
+              "value2": {
+                "class": "AlgebraicValueProvider",
+                "operation": "SUBTRACT",
+                "value1": {
+                  "class": "PlayerAttributeValueProvider",
+                  "playerAttribute": "HAND_COUNT"
+                },
+                "value2": {
+                  "class": "AttributeValueProvider",
+                  "target": "TRIGGER_HOST",
+                  "attribute": "RESERVED_INTEGER_1"
+                }
+              }
+            },
+            "hpBonus": 0
+          },
+          {
+            "class": "SetAttributeSpell",
+            "target": "TRIGGER_HOST",
+            "value": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "HAND_COUNT"
+            },
+            "attribute": "RESERVED_INTEGER_1"
+          }
+        ]
       }
     }
+  ],
+  "attributes": {
+    "RESERVED_INTEGER_1": 0
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
-//Currently only checks for whenever you draw a card, needs to be changed to whenever you add a card to your hand.

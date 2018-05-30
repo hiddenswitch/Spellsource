@@ -9,8 +9,8 @@
   "race": "BEAST",
   "description": "<b>Poisonous</b>, <b>Charge</b>",
   "attributes": {
-    "POISONOUS": true,
-    "CHARGE": true
+    "CHARGE": true,
+    "POISONOUS": true
   },
   "collectible": true,
   "set": "CUSTOM",

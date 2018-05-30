@@ -1,19 +1,16 @@
 {
-"name": "Enchanted Shield",
+  "name": "Enchanted Shield",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
   "description": "Choose a minion. It cannot take damage this turn.",
+  "targetSelection": "MINIONS",
   "spell": {
-      "class": "ModifyDamageSpell",
-      "value": 0,
-      "operation": "SET"
-      }
-      "revertTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-            }
+    "class": "AddAttributeSpell",
+    "attribute": "IMMUNE",
+    "revertTrigger": {
+      "class": "TurnEndTrigger"
     }
   },
   "collectible": true,
