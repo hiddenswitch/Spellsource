@@ -344,7 +344,8 @@ definitions:
            - SILVER: Shaman class.
            - VIOLET: Warlock class.
            - RED: Warrior class.
-           - JADE: Monk (custom) class.
+           - JADE: Custom class.
+           - NAVY: Custom class.
         type: 'string'
         enum:
           - 'BROWN'
@@ -356,7 +357,8 @@ definitions:
           - 'SILVER'
           - 'VIOLET'
           - 'RED'
-          - 'JADE'
+          - 'JADE',
+          - 'NAVY
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to

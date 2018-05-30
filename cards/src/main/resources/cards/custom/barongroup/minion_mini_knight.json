@@ -1,0 +1,75 @@
+{
+  "name": "Mini Knight",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Whenever you add a card to your hand, gain +1 Attack.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "BeforeMinionSummonedTrigger",
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
+      },
+      "spell": {
+        "class": "SetAttributeSpell",
+        "target": "TRIGGER_HOST",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT"
+        },
+        "attribute": "RESERVED_INTEGER_1"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "WillEndSequenceTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "attackBonus": {
+              "class": "AlgebraicValueProvider",
+              "operation": "MAXIMUM",
+              "value1": 0,
+              "value2": {
+                "class": "AlgebraicValueProvider",
+                "operation": "SUBTRACT",
+                "value1": {
+                  "class": "PlayerAttributeValueProvider",
+                  "playerAttribute": "HAND_COUNT"
+                },
+                "value2": {
+                  "class": "AttributeValueProvider",
+                  "target": "TRIGGER_HOST",
+                  "attribute": "RESERVED_INTEGER_1"
+                }
+              }
+            },
+            "hpBonus": 0
+          },
+          {
+            "class": "SetAttributeSpell",
+            "target": "TRIGGER_HOST",
+            "value": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "HAND_COUNT"
+            },
+            "attribute": "RESERVED_INTEGER_1"
+          }
+        ]
+      }
+    }
+  ],
+  "attributes": {
+    "RESERVED_INTEGER_1": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

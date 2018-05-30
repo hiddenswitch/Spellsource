@@ -1,23 +1,26 @@
 {
-  "name": "Monastery's Teachings",
-  "baseManaCost": 3,
+  "name": "One For All",
+  "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "JADE",
-  "rarity": "RARE",
-  "description": "Whenever you summon a minion this turn, add a 'Tiger Palm Strike' spell to your hand.",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "The next minion you play this turn has +3/+1.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "MinionSummonedTrigger",
+        "class": "BeforeMinionPlayedTrigger",
         "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "ReceiveCardSpell",
-        "card": "spell_tiger_palm_strike"
+        "class": "BuffSpell",
+        "target": "EVENT_TARGET",
+        "attackBonus": 3,
+        "hpBonus": 1
       },
+      "maxFires": 1,
       "oneTurn": true
     }
   },

@@ -1,0 +1,74 @@
+{
+  "name": "Slamhammer Knight",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "NONE",
+  "description": "Excess damage dealt by this minion is dealt to all other minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "RESERVED_BOOLEAN_1",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ALL_OTHER_MINIONS",
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "RESERVED_BOOLEAN_1",
+            "invert": true
+          },
+          "value": {
+            "class": "ConditionalValueProvider",
+            "condition": {
+              "class": "ComparisonCondition",
+              "operation": "EQUAL",
+              "value1": {
+                "class": "EventValueProvider"
+              },
+              "value2": 0
+            },
+            "ifTrue": {
+              "class": "AttributeValueProvider",
+              "target": "TRIGGER_HOST",
+              "attribute": "ATTACK"
+            },
+            "ifFalse": {
+              "class": "AlgebraicValueProvider",
+              "operation": "NEGATE",
+              "value1": {
+                "class": "AlgebraicValueProvider",
+                "operation": "MINIMUM",
+                "value1": {
+                  "class": "AttributeValueProvider",
+                  "target": "EVENT_TARGET",
+                  "attribute": "HP"
+                },
+                "value2": 0
+              }
+            }
+          }
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "attribute": "RESERVED_BOOLEAN_1",
+          "target": "EVENT_TARGET"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
