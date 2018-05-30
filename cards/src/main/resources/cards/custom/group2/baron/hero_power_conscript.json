@@ -1,0 +1,17 @@
+{
+  "name": "Conscript",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Add a 3/3 Protector to your hand.",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_baron_protector"
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
