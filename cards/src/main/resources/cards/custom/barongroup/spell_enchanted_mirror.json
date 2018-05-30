@@ -5,21 +5,18 @@
   "heroClass": "NAVY",
   "rarity": "FREE",
   "description": "Summon a copy of a minion and give it +2/+2.",
-   "targetSelection": "MINIONS",
-   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-          {
-    "class": "CloneMinionSpell"
-      }
-      {
-    "class": "BuffSpell",
-    "attackBonus": 2,
-    "hpBonus": 2
-      },
-    ]
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "attackBonus": 2,
+      "hpBonus": 2
+    },
+    "targetPlayer": "SELF"
   },
-    "collectible": true,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

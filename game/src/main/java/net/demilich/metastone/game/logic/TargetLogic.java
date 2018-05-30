@@ -2,6 +2,7 @@ package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -208,6 +209,10 @@ public class TargetLogic implements Serializable {
 			return this.getEntities(context, player, TargetSelection.ENEMY_HERO);
 		} else if (targetKey.equals(EntityReference.ENEMY_MINIONS)) {
 			return this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
+		} else if (targetKey.equals(EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT)) {
+			List<Entity> enemyMinions = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
+			enemyMinions.sort(Comparator.comparingInt(e -> e.getEntityLocation().getIndex()));
+			return enemyMinions;
 		} else if (targetKey.equals(EntityReference.FRIENDLY_CHARACTERS)) {
 			return this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
 		} else if (targetKey.equals(EntityReference.FRIENDLY_HERO)) {

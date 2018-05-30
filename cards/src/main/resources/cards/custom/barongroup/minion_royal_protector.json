@@ -6,13 +6,14 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-
   "description": "Taunt. Adjacent minions have +1/+1.",
   "aura": {
     "class": "BuffAura",
     "target": "ADJACENT_MINIONS",
-    "value": 1
-     "attributes": {
+    "attackBonus": 1,
+    "hpBonus": 1
+  },
+  "attributes": {
     "TAUNT": true
   },
   "collectible": true,

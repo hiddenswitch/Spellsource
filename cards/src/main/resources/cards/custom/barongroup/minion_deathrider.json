@@ -7,19 +7,19 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "description": "Charge. At the end of your turn, destroy this minion.",
-    "trigger": {
+  "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-            "class": "DestroySpell",
-            "target": "SELF"
+      "class": "DestroySpell",
+      "target": "SELF"
     }
   },
   "attributes": {
     "CHARGE": true
-    },
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

@@ -6,8 +6,8 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a 1/1 Whelp for your opponent."
-    "battlecry": {
+  "description": "Battlecry: Summon a 1/1 Whelp for your opponent.",
+  "battlecry": {
     "spell": {
       "class": "SummonSpell",
       "cards": [
@@ -18,8 +18,8 @@
   },
   "attributes": {
     "BATTLECRY": true
-    }
-    "collectible": true,
-    "set": "CUSTOM"
-    "fileFormatVersion": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

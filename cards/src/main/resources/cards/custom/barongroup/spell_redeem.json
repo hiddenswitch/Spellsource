@@ -1,10 +1,11 @@
- "name": "Redeem",
+{
+  "name": "Redeem",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Change a minion's Health to be equal to it's Attack.",
-"targetSelection": "MINIONS",
+  "description": "Change a minion's Health to be equal to its Attack.",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "SetHpSpell",
     "value": {
@@ -12,7 +13,7 @@
       "attribute": "ATTACK"
     }
   },
-    "collectible": true,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

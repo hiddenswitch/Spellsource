@@ -417,6 +417,11 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference TRIGGER_HOST = new EntityReference(-56);
 
+	/**
+	 * References all the enemy's minions, except ordered by their location on the board instead of their order of play.
+	 */
+	public static final EntityReference ENEMY_MINIONS_LEFT_TO_RIGHT = new EntityReference(-57);
+
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;
