@@ -33,6 +33,7 @@
         "spells": [
           {
             "class": "BuffSpell",
+            "target": "TRIGGER_HOST",
             "attackBonus": {
               "class": "AlgebraicValueProvider",
               "operation": "MAXIMUM",
