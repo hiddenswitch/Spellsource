@@ -50,6 +50,10 @@
         {
           "class": "HasHeroPowerCondition",
           "cardId": "hero_power_meditation"
+        },
+        {
+          "class": "HasHeroPowerCondition",
+          "cardId": "hero_power_quick_shot"
         }
       ],
       "spells": [
@@ -92,6 +96,10 @@
         {
           "class": "ChangeHeroPowerSpell",
           "card": "hero_power_zen_meditation"
+        },
+        {
+          "class": "ChangeHeroPowerSpell",
+          "card": "hero_power_scatter_shot"
         }
       ],
       "targetPlayer": "SELF"

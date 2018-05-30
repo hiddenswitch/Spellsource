@@ -1,0 +1,16 @@
+{
+  "name": "Distract",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Change a minion's Attack to 0.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SetAttackSpell",
+    "value": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

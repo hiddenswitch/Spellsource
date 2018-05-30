@@ -18,17 +18,12 @@
       "spells": [
         {
           "class": "AddAttributeSpell",
-          "attribute": "RESERVED_BOOLEAN_1",
-          "target": "EVENT_TARGET"
+          "target": "EVENT_TARGET",
+          "attribute": "RESERVED_BOOLEAN_1"
         },
         {
           "class": "DamageSpell",
           "target": "ALL_OTHER_MINIONS",
-          "filter": {
-            "class": "AttributeFilter",
-            "attribute": "RESERVED_BOOLEAN_1",
-            "invert": true
-          },
           "value": {
             "class": "ConditionalValueProvider",
             "condition": {
@@ -38,11 +33,6 @@
                 "class": "EventValueProvider"
               },
               "value2": 0
-            },
-            "ifTrue": {
-              "class": "AttributeValueProvider",
-              "target": "TRIGGER_HOST",
-              "attribute": "ATTACK"
             },
             "ifFalse": {
               "class": "AlgebraicValueProvider",
@@ -57,13 +47,23 @@
                 },
                 "value2": 0
               }
+            },
+            "ifTrue": {
+              "class": "AttributeValueProvider",
+              "target": "TRIGGER_HOST",
+              "attribute": "ATTACK"
             }
+          },
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "RESERVED_BOOLEAN_1",
+            "invert": true
           }
         },
         {
           "class": "RemoveAttributeSpell",
-          "attribute": "RESERVED_BOOLEAN_1",
-          "target": "EVENT_TARGET"
+          "target": "EVENT_TARGET",
+          "attribute": "RESERVED_BOOLEAN_1"
         }
       ]
     }

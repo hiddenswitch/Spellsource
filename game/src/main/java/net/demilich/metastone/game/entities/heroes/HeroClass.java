@@ -17,6 +17,7 @@ public enum HeroClass {
 	VIOLET,
 	RED,
 	JADE,
+	LEATHER,
 	SPIRIT,
 	SELF,
 	OPPONENT,
@@ -46,6 +47,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_chen_stormstout");
 			case NAVY:
 				return CardCatalogue.getCardById("hero_baron_aldus");
+			case LEATHER:
+				return CardCatalogue.getCardById("hero_quarnassio");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

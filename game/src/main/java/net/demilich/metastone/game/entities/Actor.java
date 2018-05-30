@@ -22,7 +22,7 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON}),
  * {@link net.demilich.metastone.game.events.BoardChangedEvent} will be raised.
  */
-public abstract class Actor extends Entity {
+public abstract class Actor extends Entity implements HasEnchantments {
 
 	private Card sourceCard;
 	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
@@ -33,6 +33,7 @@ public abstract class Actor extends Entity {
 		this.sourceCard = sourceCard;
 	}
 
+	@Override
 	public void addDeathrattle(SpellDesc deathrattleSpell) {
 		if (!hasAttribute(Attribute.DEATHRATTLES)) {
 			setAttribute(Attribute.DEATHRATTLES, new ArrayList<SpellDesc>());
@@ -40,6 +41,7 @@ public abstract class Actor extends Entity {
 		getDeathrattles().add(deathrattleSpell);
 	}
 
+	@Override
 	public void addEnchantment(Enchantment enchantment) {
 		enchantments.add(enchantment);
 		enchantment.setHost(this);
@@ -63,6 +65,7 @@ public abstract class Actor extends Entity {
 		return getAttack() > 0 && ((getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + getAttributeValue(Attribute.EXTRA_ATTACKS)) > 0 || hasAttribute(Attribute.UNLIMITED_ATTACKS));
 	}
 
+	@Override
 	public void clearEnchantments() {
 		this.enchantments = new ArrayList<>();
 	}
@@ -150,10 +153,12 @@ public abstract class Actor extends Entity {
 		return sourceCard;
 	}
 
+	@Override
 	public List<Enchantment> getEnchantments() {
 		return new ArrayList<>(enchantments);
 	}
 
+	@Override
 	public boolean hasEnchantment() {
 		return enchantments.size() != 0;
 	}

@@ -1,0 +1,11 @@
+{
+  "name": "Marked",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Marked minions will always be the target of Scatter Shot",
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

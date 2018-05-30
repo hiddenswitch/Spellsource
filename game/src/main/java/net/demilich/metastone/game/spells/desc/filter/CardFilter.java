@@ -14,7 +14,7 @@ import net.demilich.metastone.game.spells.SpellUtils;
 
 import java.util.List;
 
-public class CardFilter extends EntityFilter {
+public final class CardFilter extends EntityFilter {
 
 	public CardFilter(EntityFilterDesc desc) {
 		super(desc);
@@ -130,3 +130,4 @@ public class CardFilter extends EntityFilter {
 		return new CardFilter(arguments);
 	}
 }
+
