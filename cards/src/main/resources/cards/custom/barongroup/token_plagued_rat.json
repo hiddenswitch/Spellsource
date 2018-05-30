@@ -1,0 +1,17 @@
+
+{
+  "name": "Plagued Rat",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
