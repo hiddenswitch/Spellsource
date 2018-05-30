@@ -44,16 +44,16 @@ import java.util.*;
  * created by other cards. Like all entities, they have attributes and are mutable.
  *
  * @see Entity#getSourceCard() for a way to retrieve the card that backs an entity. For a {@link
- * 		net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
- * 		Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
- * 		casts for {@link net.demilich.metastone.game.entities.Actor} objects.
+ * net.demilich.metastone.game.entities.minions.Minion} summoned from the hand, this typically corresponds to a {@link
+ * Card} in the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. This saves you from doing many kinds of
+ * casts for {@link net.demilich.metastone.game.entities.Actor} objects.
  * @see CardDesc for the class that is the base of the serialized representation of cards.
  */
 public class Card extends Entity implements HasChooseOneActions {
-	protected static final Set<Attribute> ignoredAttributes = new HashSet<>(
+	protected static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGERS, Attribute.BASE_ATTACK,
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO,
-					Attribute.TRANSFORM_REFERENCE));
+					Attribute.TRANSFORM_REFERENCE, Attribute.ECHO, Attribute.AURA_ECHO));
 
 	protected static final Set<Attribute> HERO_ATTRIBUTES = new HashSet<>(
 			Arrays.asList(Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR, Attribute.TAUNT));
@@ -83,9 +83,14 @@ public class Card extends Entity implements HasChooseOneActions {
 
 		Minion minion = new Minion(this);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
-			if (!ignoredAttributes.contains(gameTag)) {
+			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
 				minion.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
+		}
+
+		if ((hasAttribute(Attribute.ECHO) || hasAttribute(Attribute.AURA_ECHO))
+				&& hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
+			minion.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
 		}
 
 		applyText(minion);
@@ -234,7 +239,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * that have variables, like which minion will be summoned or how much spell damage the spell will deal.
 	 *
 	 * @return The value of the {@link Attribute#DESCRIPTION} on this {@link Card}, if it is not null. Otherwise, the
-	 * 		{@link CardDesc#description} field.
+	 * {@link CardDesc#description} field.
 	 */
 	public String getDescription() {
 		// Cleanup the html tags that appear in the description
@@ -262,7 +267,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 *                owner.
 	 * @return The cost.
 	 * @see net.demilich.metastone.game.logic.GameLogic#getModifiedManaCost(Player, Card) for the best method to get the
-	 * 		cost of a card.
+	 * cost of a card.
 	 */
 	@Suspendable
 	public int getManaCost(GameContext context, Player player) {
@@ -335,7 +340,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Create an action representing playing the card.
 	 *
 	 * @return An action that should be evaluated by {@link net.demilich.metastone.game.logic.GameLogic#performGameAction(int,
-	 *    GameAction)}.
+	 * GameAction)}.
 	 */
 	@Suspendable
 	public PlayCardAction play() {
@@ -570,7 +575,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		Weapon weapon = new Weapon(this);
 		// assign battlecry if there is one specified
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
-			if (!ignoredAttributes.contains(gameTag)) {
+			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
 				weapon.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
 		}
