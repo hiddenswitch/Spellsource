@@ -1,14 +1,30 @@
 package com.blizzard.hearthstone;
 
+import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class AdventureTests extends TestBase {
+
+	@Test
+	public void testCurator() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "hero_the_curator");
+			Assert.assertTrue(opponent.getHero().hasAttribute(Attribute.TAUNT));
+			Minion notTargetable = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
+			Assert.assertTrue(context.getValidActions().stream().noneMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& ga.getTargetReference().equals(notTargetable.getReference())));
+		});
+	}
 
 	@Test
 	public void testMagmatron() {

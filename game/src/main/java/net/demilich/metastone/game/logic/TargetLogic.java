@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.demilich.metastone.game.entities.EntityZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,7 +32,7 @@ public class TargetLogic implements Serializable {
 		return list;
 	}
 
-	private boolean containsTaunters(List<Minion> minions) {
+	private boolean containsTaunters(List<? extends Entity> minions) {
 		for (Entity entity : minions) {
 			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT))
 					&& !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE) && !entity.hasAttribute(Attribute.AURA_STEALTH)) {
@@ -141,9 +142,9 @@ public class TargetLogic implements Serializable {
 		return getEntities(context, player, targetRequirement, true);
 	}
 
-	private List<Entity> getTaunters(List<Minion> entities) {
+	private List<Entity> getTaunters(List<? extends Entity> entities) {
 		List<Entity> taunters = new ArrayList<>();
-		for (Actor entity : entities) {
+		for (Entity entity : entities) {
 			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT)) && !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE)) {
 				taunters.add(entity);
 			}
@@ -164,8 +165,10 @@ public class TargetLogic implements Serializable {
 		// attack only allow corresponding minions as targets
 		if (actionType == ActionType.PHYSICAL_ATTACK
 				&& (targetRequirement == TargetSelection.ENEMY_CHARACTERS || targetRequirement == TargetSelection.ENEMY_MINIONS)
-				&& containsTaunters(withoutPermanents(opponent.getMinions()))) {
-			return getTaunters(opponent.getMinions());
+				&& (containsTaunters(withoutPermanents(opponent.getMinions())) || containsTaunters(opponent.getHeroZone()))) {
+			List<Entity> entities = new ArrayList<>(opponent.getMinions());
+			entities.add(opponent.getHero());
+			return getTaunters(entities);
 		}
 		if (actionType == ActionType.SUMMON) {
 			// you can summon next to any friendly minion or provide no target
