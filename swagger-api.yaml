@@ -117,6 +117,10 @@ definitions:
                 description: |
                   The new message ID.
                 type: 'string'
+  Enchantment:
+    type: 'object'
+    description: |
+      An enchantment
   ChatMessage:
     description: |
       A chat message.
@@ -346,6 +350,7 @@ definitions:
            - RED: Warrior class.
            - JADE: Custom class.
            - NAVY: Custom class.
+           - LEATHER: Custom class.
         type: 'string'
         enum:
           - 'BROWN'
@@ -359,6 +364,7 @@ definitions:
           - 'RED'
           - 'JADE'
           - 'NAVY'
+          - 'LEATHER'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to

@@ -1,0 +1,30 @@
+{
+  "name": "Countershot",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Secret: When your opponent plays a minion, deal 3 damage to it. Add a coin to your hand.",
+  "secret": {
+    "class": "MinionPlayedTrigger",
+    "targetPlayer": "OPPONENT"
+  },
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "EVENT_TARGET",
+        "value": 3
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_coin",
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

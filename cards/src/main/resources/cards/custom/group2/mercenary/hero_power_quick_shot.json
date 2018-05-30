@@ -1,0 +1,39 @@
+{
+  "name": "Quick Shot",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Deal 3 damage randomly split among all enemies.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "ENEMY_CHARACTERS",
+      "filter": {
+        "class": "HasEnchantmentFilter",
+        "cardId": "enchantment_marked"
+      }
+    },
+    "spell1": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "filter": {
+        "class": "HasEnchantmentFilter",
+        "cardId": "enchantment_marked"
+      },
+      "howMany": 3
+    },
+    "spell2": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 3
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

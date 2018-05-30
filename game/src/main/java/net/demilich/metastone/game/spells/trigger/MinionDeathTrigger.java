@@ -9,11 +9,28 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetType;
 
 public class MinionDeathTrigger extends EventTrigger {
 
 	public MinionDeathTrigger(EventTriggerDesc desc) {
 		super(desc);
+	}
+
+	public static EventTriggerDesc create(TargetType targetType) {
+		EventTriggerDesc inst = new EventTriggerDesc(MinionDeathTrigger.class);
+		inst.put(EventTriggerArg.HOST_TARGET_TYPE, targetType);
+		return inst;
+	}
+
+	/**
+	 * Creates a minion death trigger that fires when its host dies.
+	 *
+	 * @return A new desc
+	 */
+	public static EventTriggerDesc create() {
+		return create(TargetType.IGNORE_OTHER_TARGETS);
 	}
 
 	@Override
@@ -29,7 +46,7 @@ public class MinionDeathTrigger extends EventTrigger {
 		if (race != null && !minion.getRace().hasRace(race)) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
