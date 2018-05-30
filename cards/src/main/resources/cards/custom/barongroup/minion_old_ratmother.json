@@ -1,0 +1,36 @@
+{
+  "name": "Old Ratmother",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "NONE",
+  "description": "Battlecry: Summon two 1/1 Rats for both players.",
+  "battlecry": {
+ "spell": [
+    "class": "MetaSpell",
+    "spells": [
+      "class": "SummonSpell",
+      "cards": [
+        "token_gilnean_rat",
+        "token_gilnean_rat"
+      ],
+      "targetPlayer": "OPPONENT"
+    ]
+    [
+      "class": "SummonSpell",
+      "cards": [
+        "token_gilnean_rat",
+        "token_gilnean_rat"
+      ]
+}
+  },
+  "attributes": {
+    "BATTLECRY": true,
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
