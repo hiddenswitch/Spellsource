@@ -1,0 +1,23 @@
+{
+  "name": "Savage Worgen",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "At the end of your turn, attack all enemy minions (left to right).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "CastRepeatedlyspell": {
+      "class": "FightSpell",
+      "target": "LEFTMOST_ENEMY_MINION"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
