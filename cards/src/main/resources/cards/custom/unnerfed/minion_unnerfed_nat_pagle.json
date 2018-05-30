@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "At the start of your turn, you have a 50% chance to draw an extra card.",
+  "description": "At the end of your turn, you have a 50% chance to draw an extra card.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
