@@ -32,7 +32,6 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.jetbrains.annotations.NotNull;
 
@@ -56,8 +55,8 @@ public class Card extends Entity implements HasChooseOneActions {
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO,
 					Attribute.TRANSFORM_REFERENCE));
 
-	protected static final Set<Attribute> inheritedAttributes = new HashSet<>(
-			Arrays.asList(Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR));
+	protected static final Set<Attribute> HERO_ATTRIBUTES = new HashSet<>(
+			Arrays.asList(Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR, Attribute.TAUNT));
 
 	private CardDesc desc;
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
@@ -105,7 +104,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		Card heroPower = CardCatalogue.getCardById(getDesc().getHeroPower());
 		Hero hero = new Hero(this, heroPower);
 		for (Attribute gameTag : getAttributes().unsafeKeySet()) {
-			if (inheritedAttributes.contains(gameTag)) {
+			if (HERO_ATTRIBUTES.contains(gameTag)) {
 				hero.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
 		}
