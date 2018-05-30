@@ -1,0 +1,13 @@
+{
+  "name": "Knight",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,33 @@
+{
+  "name": "King Blackstrom",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 9,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Fill your hand with 2/2 Knights.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": 10,
+        "value2": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
+        }
+      },
+      "card": "token_knight"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+}

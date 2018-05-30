@@ -1,0 +1,17 @@
+{
+  "name": "Spellforce",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Choose a minion. It cannot be targeted by spells or Hero Powers.",
+  "targetSelection": "MINIONS",
+  "spell": {
+          "class": "AddAttributeSpell",
+          "attribute": "UNTARGETABLE_BY_SPELLS"
+          }
+          },
+            "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

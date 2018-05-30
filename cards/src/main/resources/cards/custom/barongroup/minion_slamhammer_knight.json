@@ -1,0 +1,43 @@
+{
+  "name": "Slamhammer Knight",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "NONE",
+  "description": "Excess damage dealt by this minion is dealt to all other minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      {
+       "class": "DamageSpell",
+        "target": "OTHER_MINIONS",
+        "spell1": {
+          "class": "DamageSpell",
+          "value": {
+            "class": "AlgebraicValueProvider",
+            "operation": "MAXIMUM",
+            "value1": 0,
+            "value2": {
+              "class": "AlgebraicValueProvider",
+              "operation": "MINIMUM",
+              "value1": "BaseAttack",
+              "value2": {
+                "class": "GameValueProvider",
+                "gameValue": "SPELL_VALUE"
+              }
+            }
+          }
+        },
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
