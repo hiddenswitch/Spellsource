@@ -550,12 +550,13 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void endGame() {
 		// Immediately expire the match
+		/*
 		try {
 			Matchmaking.expireOrEndMatch(new GameId(getGameId()), getUserIds());
 		} catch (VertxException noHandlerFound) {
 			logger.error("kill: For gameId " + gameId + ", an error occurred trying to expireOrEndMatch: " + noHandlerFound.getMessage());
 		}
-
+		*/
 		super.endGame();
 		for (SuspendableAction1<ServerGameContext> h : onGameEndHandlers) {
 			try {
