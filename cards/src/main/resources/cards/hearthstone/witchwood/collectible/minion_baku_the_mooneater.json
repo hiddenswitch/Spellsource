@@ -98,6 +98,10 @@
             {
               "class": "HasHeroPowerCondition",
               "cardId": "hero_power_quick_shot"
+            },
+            {
+              "class": "HasHeroPowerCondition",
+              "cardId": "hero_power_enlist"
             }
           ],
           "spells": [
@@ -144,6 +148,10 @@
             {
               "class": "ChangeHeroPowerSpell",
               "card": "hero_power_scatter_shot"
+            },
+            {
+              "class": "ChangeHeroPowerSpell",
+              "card": "hero_power_conscript"
             }
           ],
           "targetPlayer": "SELF"
