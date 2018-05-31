@@ -37,6 +37,44 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testForcesOfGilneas() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_forces_of_gilneas");
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, "spell_summon_for_opponent");
+			}
+			assertEquals(player.getHand().get(0).getCardId(), "minion_king_archibald");
+		});
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_forces_of_gilneas");
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, "minion_bloodfen_raptor");
+			}
+			assertEquals(player.getQuests().size(), 1);
+			assertEquals(player.getHand().size(), 0);
+		});
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_forces_of_gilneas");
+			context.endTurn();
+			for (int i = 0; i < 5; i++) {
+				playCard(context, opponent, "minion_bloodfen_raptor");
+			}
+			assertEquals(player.getQuests().size(), 1);
+			assertEquals(player.getHand().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_forces_of_gilneas");
+			context.endTurn();
+			for (int i = 0; i < 5; i++) {
+				playCard(context, opponent, "spell_summon_for_opponent");
+			}
+			assertEquals(player.getQuests().size(), 1);
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testSuspiciousWanderer() {
 		runGym((context, player, opponent) -> {
 			Card card = receiveCard(context, player, "minion_suspicious_wanderer");

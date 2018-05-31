@@ -6,19 +6,19 @@
   "rarity": "FREE",
   "description": "Draw a card. Refresh this.",
   "targetSelection": "NONE",
-   "spell": {
-   "class": "MetaSpell",
+  "spell": {
+    "class": "MetaSpell",
     "spells": [
-    {
-    "class": "DrawCardSpell",
-    "value": 1
+      {
+        "class": "DrawCardSpell",
+        "value": 1
       },
       {
-      "class": "RefreshHeroPowerSpell",
-      "targetPlayer": "SELF"
-  }
-  ]
-  }
+        "class": "RefreshHeroPowerSpell",
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

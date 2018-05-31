@@ -1,9 +1,9 @@
-
 {
   "name": "Plagued Rat",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "NAVY",
+  "race": "BEAST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",

@@ -6,29 +6,21 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "NONE",
+  "race": "BEAST",
   "description": "Battlecry: Summon two 1/1 Rats for both players.",
   "battlecry": {
- "spell": [
-    "class": "MetaSpell",
-    "spells": [
+    "targetSelection": "NONE",
+    "spell": {
       "class": "SummonSpell",
+      "targetPlayer": "BOTH",
       "cards": [
-        "token_gilnean_rat",
-        "token_gilnean_rat"
-      ],
-      "targetPlayer": "OPPONENT"
-    ]
-    [
-      "class": "SummonSpell",
-      "cards": [
-        "token_gilnean_rat",
-        "token_gilnean_rat"
+        "token_rat",
+        "token_rat"
       ]
-}
+    }
   },
   "attributes": {
-    "BATTLECRY": true,
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -44,9 +44,11 @@ public class CardCatalogue {
 		if (card != null) {
 			card = card.getCopy();
 		} else {
+			logger.error("getCardById: {} could not be found", id);
 			return null;
 		}
 		if (card.getDesc().getFileFormatVersion() > version) {
+			logger.error("getCardById: {} is not in this version", id);
 			return null;
 		}
 		return card;
