@@ -10,7 +10,7 @@
     "targetPlayer": "OPPONENT"
         "condition": {
       "class": "OwnedByPlayerCondition",
-      "targetPlayer": "ACTIVE"
+      "targetPlayer": "INACTIVE"
     },
   },
   "countUntilCast": 5,
