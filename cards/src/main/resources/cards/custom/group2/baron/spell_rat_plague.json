@@ -9,15 +9,15 @@
   "spell": {
     "class": "MetaSpell",
     "spells": [
-    "class": "ShuffleToDeckSpell",
-    "card": "token_plagued_rat",
-    "howMany": 3,
-    "targetPlayer": "SELF"
-]
-[
-    "class": "DrawCardSpell",
-    "value": 1,
-]
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "token_plagued_rat",
+        "value": 3
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

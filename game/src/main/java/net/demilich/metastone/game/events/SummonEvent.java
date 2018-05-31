@@ -11,7 +11,7 @@ public class SummonEvent extends GameEvent implements HasCard {
 	private final Card source;
 
 	public SummonEvent(GameContext context, Actor minion, Card source) {
-		super(context, minion.getOwner(), -1);
+		super(context, minion.getOwner(), source == null ? -1 : source.getOwner());
 		this.minion = minion;
 		this.source = source;
 	}

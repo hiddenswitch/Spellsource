@@ -1,4 +1,3 @@
-
 {
   "name": "King Archibald",
   "baseManaCost": 5,
@@ -7,15 +6,20 @@
   "baseAttack": 8,
   "baseHp": 8,
   "description": "<b>Rush</b>. Battlecry: Transform your Hero Power into Eternal Strength.",
-          "spell": {
-          "class": "ChangeHeroPowerSpell",
-        "cards": [
-          "hero_power_eternal_strength", 
-          }
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ChangeHeroPowerSpell",
+      "cards": [
+        "hero_power_eternal_strength"
+      ]
+    }
+  },
   "attributes": {
+    "BATTLECRY": true,
     "RUSH": true
   },
   "collectible": false,
-  "set": "WITCHWOOD",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
