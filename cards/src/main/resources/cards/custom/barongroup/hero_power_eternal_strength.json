@@ -1,0 +1,25 @@
+{
+  "name": "Eternal Strength",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Draw a card. Refresh this.",
+  "targetSelection": "NONE",
+   "spell": {
+   "class": "MetaSpell",
+    "spells": [
+    {
+    "class": "DrawCardSpell",
+    "value": 1
+      },
+      {
+      "class": "RefreshHeroPowerSpell",
+      "targetPlayer": "SELF"
+  }
+  ]
+  }
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
