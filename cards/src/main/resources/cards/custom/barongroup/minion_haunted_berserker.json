@@ -2,7 +2,7 @@
   "name": "Haunted Berserker",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "GREEN",
+  "heroClass": "NAVY",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
