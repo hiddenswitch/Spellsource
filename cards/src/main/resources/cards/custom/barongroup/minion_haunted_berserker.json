@@ -1,0 +1,32 @@
+{
+  "name": "Haunted Berserker",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Rush. After this attacks a minion, it also hits all minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+    "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

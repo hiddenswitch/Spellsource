@@ -1,0 +1,25 @@
+{
+  "name": "Forces of Gilneas",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon 5 minions for your opponent. Reward: King Archibald.",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "targetPlayer": "OPPONENT"
+        "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
+    },
+  },
+  "countUntilCast": 5,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_king_archibald"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
