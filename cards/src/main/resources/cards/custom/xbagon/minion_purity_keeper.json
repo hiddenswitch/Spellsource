@@ -1,0 +1,81 @@
+{
+  "name": "Purity Keeper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Remove all Keywords without text from all minions.",
+  "targetSelection": "MINIONS",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "STEALTH"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "WINDFURY"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "TAUNT"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "CHARGE"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "RUSH"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "DIVINE_SHIELD"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "LIFESTEAL"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "POISONOUS"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "FROZEN"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "IMMUNE"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "DEFLECT"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "PERMANENT"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
