@@ -2,7 +2,7 @@
   "name": "Weak Challenger",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "JADE",
+  "heroClass": "NAVY",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
