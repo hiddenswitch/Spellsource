@@ -2,7 +2,7 @@
   "name": "Mini Knight",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "BLUE",
+  "heroClass": "NAVY",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "RARE",
