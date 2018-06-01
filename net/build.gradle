@@ -42,6 +42,7 @@ dependencies {
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
     compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
     compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.5.1'
+    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.5.1'
     compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.5.1'
     compile group: 'io.vertx', name: 'vertx-web', version: '3.5.1'
     compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.5.1'

@@ -6,6 +6,7 @@ import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
@@ -99,6 +100,7 @@ public abstract class SpellsourceTestBase {
 
 	public static DefaultApi getApi() {
 		DefaultApi api = new DefaultApi();
+		api.setApiClient(new ApiClient());
 		api.getApiClient().setBasePath(UnityClient.basePath);
 		return api;
 	}
