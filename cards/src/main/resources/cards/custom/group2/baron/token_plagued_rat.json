@@ -3,10 +3,10 @@
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "NAVY",
-  "race": "BEAST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
+  "race": "BEAST",
   "description": "Charge",
   "attributes": {
     "CHARGE": true

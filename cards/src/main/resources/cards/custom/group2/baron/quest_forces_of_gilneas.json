@@ -7,11 +7,11 @@
   "description": "Quest: Summon 5 minions for your opponent. Reward: King Archibald.",
   "quest": {
     "class": "MinionSummonedTrigger",
-    "targetPlayer": "OPPONENT",
     "fireCondition": {
       "class": "OwnedByPlayerCondition",
       "targetPlayer": "ACTIVE"
-    }
+    },
+    "targetPlayer": "OPPONENT"
   },
   "countUntilCast": 5,
   "targetSelection": "NONE",

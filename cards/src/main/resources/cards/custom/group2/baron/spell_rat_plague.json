@@ -11,8 +11,8 @@
     "spells": [
       {
         "class": "ShuffleToDeckSpell",
-        "card": "token_plagued_rat",
-        "value": 3
+        "value": 3,
+        "card": "token_plagued_rat"
       },
       {
         "class": "DrawCardSpell"
