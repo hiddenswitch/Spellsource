@@ -3,8 +3,8 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "JADE",
-  "damage": 2,
-  "durability": 4,
+  "baseAttack": 2,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "After your hero attacks, restore 4 Health to your hero.",
   "trigger": {
