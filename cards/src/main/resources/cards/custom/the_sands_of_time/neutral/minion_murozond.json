@@ -65,7 +65,7 @@
               "target": "FRIENDLY_HERO",
               "filter": {
                 "class": "SpecificCardFilter",
-                "cardId": "hero_ragnaros"
+                "card": "hero_ragnaros"
               }
             }
           ],
@@ -175,7 +175,7 @@
               "target": "ENEMY_HERO",
               "filter": {
                 "class": "SpecificCardFilter",
-                "cardId": "hero_ragnaros"
+                "card": "hero_ragnaros"
               }
             }
           ],

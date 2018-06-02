@@ -14,7 +14,7 @@
       "class": "MinionSummonValueProvider",
       "filter": {
         "class": "SpecificCardFilter",
-        "cardId": "token_silver_hand_recruit"
+        "card": "token_silver_hand_recruit"
       }
     }
   },

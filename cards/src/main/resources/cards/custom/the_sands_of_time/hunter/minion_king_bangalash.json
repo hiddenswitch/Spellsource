@@ -20,7 +20,7 @@
         "filters": [
           {
             "class": "SpecificCardFilter",
-            "cardId": "permanent_the_big_game_hunt"
+            "card": "permanent_the_big_game_hunt"
           },
           {
             "class": "OwnedByPlayerFilter",
@@ -39,7 +39,7 @@
         "filters": [
           {
             "class": "SpecificCardFilter",
-            "cardId": "permanent_the_big_game_hunt"
+            "card": "permanent_the_big_game_hunt"
           },
           {
             "class": "OwnedByPlayerFilter",

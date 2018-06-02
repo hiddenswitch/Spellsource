@@ -40,7 +40,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *       "class": "HoldsCardCondition",
  *       "cardFilter": {
  *         "class": "SpecificCardFilter",
- *         "cardId": "spell_bananas"
+ *         "card": "spell_bananas"
  *       }
  *     },
  *     "targetSelection": "ENEMY_MINIONS",
@@ -51,7 +51,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *           "class": "DiscardSpell",
  *           "cardFilter": {
  *             "class": "SpecificCardFilter",
- *             "cardId": "spell_bananas"
+ *             "card": "spell_bananas"
  *           }
  *         },
  *         {

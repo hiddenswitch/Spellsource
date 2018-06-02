@@ -10,7 +10,7 @@
   "aura": {
     "class": "CardAura",
     "target": "FRIENDLY_HERO_POWER",
-    "cardId": "hero_power_1_1_weapon"
+    "card": "hero_power_1_1_weapon"
   },
   "attributes": {
     "CANNOT_ATTACK": true

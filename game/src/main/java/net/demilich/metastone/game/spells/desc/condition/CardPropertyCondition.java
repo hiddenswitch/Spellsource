@@ -28,7 +28,7 @@ public class CardPropertyCondition extends Condition {
 			return false;
 		}
 
-		String cardId = (String) desc.get(ConditionArg.CARD_ID);
+		String cardId = (String) desc.get(ConditionArg.CARD);
 		if (cardId != null && !card.getCardId().contains(cardId)) {
 			return false;
 		}

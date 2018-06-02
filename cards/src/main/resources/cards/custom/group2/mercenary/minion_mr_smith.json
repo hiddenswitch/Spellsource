@@ -1,0 +1,40 @@
+{
+  "name": "Mr. Smith",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry and Deathrattle: Add a random weapon to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "WEAPON"
+      }
+    }
+  },
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

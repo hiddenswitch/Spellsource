@@ -18,7 +18,7 @@
       "class": "ConditionalSpell",
       "condition": {
         "class": "HasHeroPowerCondition",
-        "cardId": "hero_power_necrosis",
+        "card": "hero_power_necrosis",
         "invert": true
       },
       "spell": {

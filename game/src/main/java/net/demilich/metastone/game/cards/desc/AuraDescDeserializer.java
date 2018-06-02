@@ -27,7 +27,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.SECONDARY_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(AuraArg.REVERT_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(AuraArg.CONDITION, ParseValueType.CONDITION);
-		ctx.add(AuraArg.CARD_ID, ParseValueType.STRING);
+		ctx.add(AuraArg.CARD, ParseValueType.STRING);
 	}
 
 	@Override

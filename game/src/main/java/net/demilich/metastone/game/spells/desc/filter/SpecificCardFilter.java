@@ -10,7 +10,7 @@ import java.util.List;
 
 /**
  * A card or actor will pass this filter if its {@link Entity#getSourceCard()} {@link Card#getCardId()} matches the
- * {@link EntityFilterArg#CARD_ID} argument.
+ * {@link EntityFilterArg#CARD} argument.
  *
  * If a {@link EntityFilterArg#SECONDARY_TARGET} is specified, the card or actor will pass the filter if its card ID matches the card ID of the secondary target.
  */
@@ -23,7 +23,7 @@ public class SpecificCardFilter extends EntityFilter {
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		String cardId = entity.getSourceCard().getCardId();
-		String requiredCardId = getDesc().getString(EntityFilterArg.CARD_ID);
+		String requiredCardId = getDesc().getString(EntityFilterArg.CARD);
 		EntityReference comparedTo = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
 		if (comparedTo != null
 				&& !comparedTo.equals(EntityReference.NONE)) {

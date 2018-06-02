@@ -29,7 +29,7 @@ import java.io.Serializable;
 public class GameActionsDiscoveries implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("cardId")
+  @JsonProperty("card")
   private Integer cardId = null;
 
   @JsonProperty("action")

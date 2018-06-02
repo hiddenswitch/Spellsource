@@ -13,7 +13,7 @@
     "attackBonus": 1,
     "filter": {
       "class": "SpecificCardFilter",
-      "cardId": "token_silver_hand_recruit"
+      "card": "token_silver_hand_recruit"
     }
   },
   "collectible": true,

@@ -1,0 +1,28 @@
+{
+  "name": "Snapshooter",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 4 damage to a Marked minion.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 4,
+      "filter": {
+        "class": "HasEnchantmentFilter",
+        "card": "enchantment_marked"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
+

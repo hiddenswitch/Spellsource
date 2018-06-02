@@ -1,0 +1,21 @@
+{
+  "name": "Extermination Team",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "EPIC",
+  "description": "Deal 5 damage to all marked minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 5,
+    "filter": {
+      "class": "HasEnchantmentFilter",
+      "card": "enchantment_marked"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

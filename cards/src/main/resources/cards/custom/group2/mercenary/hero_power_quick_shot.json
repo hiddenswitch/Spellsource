@@ -13,7 +13,7 @@
       "target": "ENEMY_CHARACTERS",
       "filter": {
         "class": "HasEnchantmentFilter",
-        "cardId": "enchantment_marked"
+        "card": "enchantment_marked"
       }
     },
     "spell1": {
@@ -22,7 +22,7 @@
       "value": 1,
       "filter": {
         "class": "HasEnchantmentFilter",
-        "cardId": "enchantment_marked"
+        "card": "enchantment_marked"
       },
       "howMany": 3
     },
