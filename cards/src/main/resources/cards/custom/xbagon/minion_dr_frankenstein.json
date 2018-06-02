@@ -1,0 +1,37 @@
+{
+    "name": "Dr. Frankenstein",
+    "baseManaCost": 5,
+    "type": "MINION",
+    "heroClass": "ANY",
+    "baseAttack": 3,
+    "baseHp": 5,
+    "rarity": "LEGENDARY",
+    "description": "Battlecry: Discover 2 friendly minion that died this game and combine them into Frankenstein's Monster.",
+    "battlecry": {
+        "spell": {
+            "class": "custom.CreateCardFromChoicesSpell",
+            "name": "Frankenstein's Monster",
+            "cardFilters": [
+                {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                },
+                {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                }
+            ],
+            "cardSource": {
+                "class": "GraveyardActorsSource",
+                "targetPlayer": "SELF"
+            },
+            "howMany": 3
+        }
+    },
+    "attributes": {
+        "BATTLECRY": true
+    },
+    "collectible": true,
+    "set": "CUSTOM",
+    "fileFormatVersion": 1
+}
