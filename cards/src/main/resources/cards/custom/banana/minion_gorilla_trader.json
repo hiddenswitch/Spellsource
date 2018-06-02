@@ -13,7 +13,7 @@
       "class": "HoldsCardCondition",
       "cardFilter": {
         "class": "SpecificCardFilter",
-        "cardId": "spell_bananas"
+        "card": "spell_bananas"
       }
     },
     "targetSelection": "NONE",
@@ -24,7 +24,7 @@
           "class": "DiscardSpell",
           "cardFilter": {
             "class": "SpecificCardFilter",
-            "cardId": "spell_bananas"
+            "card": "spell_bananas"
           }
         },
         {

@@ -16,7 +16,7 @@
         "class": "HoldsCardCondition",
         "cardFilter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_shadow_reflection"
+          "card": "token_shadow_reflection"
         },
         "invert": true
       },

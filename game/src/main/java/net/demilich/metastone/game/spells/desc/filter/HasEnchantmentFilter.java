@@ -17,10 +17,10 @@ public class HasEnchantmentFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		String cardId = getDesc().getString(EntityFilterArg.CARD_ID);
+		String cardId = getDesc().getString(EntityFilterArg.CARD);
 		if (cardId == null) {
 			logger.error("test {} {}: No cardId specified", context.getGameId(), host);
-			throw new NullPointerException("cardId");
+			throw new NullPointerException("card");
 		}
 
 		for (Trigger e : context.getTriggersAssociatedWith(entity.getReference())) {

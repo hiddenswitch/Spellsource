@@ -1,0 +1,26 @@
+{
+  "name": "Handsized Flamethrower",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give minions in your hand +2/+2.'",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HAND",
+    "attackBonus": 2,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "hpBonus": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "fileFormatVersion": 1
+}

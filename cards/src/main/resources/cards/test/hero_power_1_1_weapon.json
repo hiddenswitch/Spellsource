@@ -10,7 +10,7 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "HasWeaponCondition",
-      "cardId": "weapon_survival_knife",
+      "card": "weapon_survival_knife",
       "invert": "true"
     },
     "spell": {

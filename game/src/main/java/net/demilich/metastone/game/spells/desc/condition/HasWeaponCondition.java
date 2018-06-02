@@ -17,7 +17,7 @@ public class HasWeaponCondition extends Condition {
 		if (weapon == null || weapon.isBroken()) {
 			return false;
 		}
-		String cardId = (String) desc.get(ConditionArg.CARD_ID);
+		String cardId = (String) desc.get(ConditionArg.CARD);
 		if (cardId != null && !weapon.getSourceCard().getCardId().contains(cardId)) {
 			return false;
 		}

@@ -1,0 +1,29 @@
+{
+  "name": "Defensive Position",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "EPIC",
+  "description": "Give a minion Immune until the end of your turn. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "IMMUNE",
+        "revertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1,
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

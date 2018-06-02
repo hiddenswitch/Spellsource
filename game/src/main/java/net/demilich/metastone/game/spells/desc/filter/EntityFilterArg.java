@@ -12,7 +12,7 @@ public enum EntityFilterArg {
 	MANA_COST,
 	HERO_CLASS,
 	HERO_CLASSES,
-	CARD_ID,
+	CARD,
 	FILTERS,
 	INVERT,
 	CARD_SET,

@@ -512,7 +512,7 @@ public class Card extends Entity implements HasChooseOneActions {
 					String cardId = getChooseOneCardIds()[i];
 					Card card = CardCatalogue.getCardById(cardId);
 					if (card == null) {
-						throw new NullPointerException("cardId");
+						throw new NullPointerException("card");
 					}
 					PlayCardAction cardAction;
 

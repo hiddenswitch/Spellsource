@@ -10,7 +10,7 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "HasWeaponCondition",
-      "cardId": "weapon_poisoned_blade",
+      "card": "weapon_poisoned_blade",
       "invert": "true"
     },
     "spell": {

@@ -14,7 +14,7 @@
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_healing_totem"
+          "card": "token_healing_totem"
         },
         "invert": true
       },
@@ -23,7 +23,7 @@
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_searing_totem"
+          "card": "token_searing_totem"
         },
         "invert": true
       },
@@ -32,7 +32,7 @@
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_stoneclaw_totem"
+          "card": "token_stoneclaw_totem"
         },
         "invert": true
       },
@@ -41,7 +41,7 @@
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_wrath_of_air_totem"
+          "card": "token_wrath_of_air_totem"
         },
         "invert": true
       }

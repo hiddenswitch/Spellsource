@@ -24,15 +24,15 @@
             "filters": [
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_light_wrath"
+                "card": "spell_light_wrath"
               },
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_xal_atath"
+                "card": "spell_xal_atath"
               },
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_tuure"
+                "card": "spell_tuure"
               }
             ]
           }

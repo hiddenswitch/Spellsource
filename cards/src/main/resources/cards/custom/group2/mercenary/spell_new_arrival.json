@@ -1,0 +1,19 @@
+{
+  "name": "New Arrival",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "EPIC",
+  "description": "Put one of each Secret from your deck into the battlefield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "PutRandomSecretIntoPlaySpell",
+    "cardSource": {
+      "class": "DeckSource"
+    },
+    "howMany": 99
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
