@@ -8,9 +8,9 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ShuffleToDeckSpell",
-    "targetPlayer": "OPPONENT",
+    "value": 2,
     "card": "spell_stolen_supplies",
-    "value": 2
+    "targetPlayer": "OPPONENT"
   },
   "collectible": true,
   "set": "CUSTOM",

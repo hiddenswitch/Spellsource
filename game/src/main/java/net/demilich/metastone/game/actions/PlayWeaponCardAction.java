@@ -27,7 +27,7 @@ public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry
 
 	@Override
 	@Suspendable
-	public void play(GameContext context, int playerId) {
+	public void innerExecute(GameContext context, int playerId) {
 		Card weaponCard = context.getPendingCard();
 
 		Weapon weapon = weaponCard.createWeapon();

@@ -12,7 +12,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -67,6 +66,25 @@ public class SpellUtils {
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
 
+	/**
+	 * Plays a card "randomly."
+	 *
+	 * @param context
+	 * @param player
+	 * @param card
+	 * @param source
+	 * @param summonRightmost       When {@code true} and {@link Card#isActor()}, summons the card in the rightmost
+	 *                              position. Otherwise, summons it to a random position.
+	 * @param resolveBattlecry      When {@code true}, also resolves the battlecry with a random target. Otherwise, the
+	 *                              battlecry is ignored.
+	 * @param onlyWhileSourceInPlay When {@code true},
+	 * @param randomChooseOnes      When {@code true}, randomly chooses the choose-one effects. Otherwise, checks if the
+	 *                              card has had a {@link Attribute#CHOICES} made.
+	 * @param playFromHand          When {@code true}, the card is counterable, mana is deducted and played card stats are
+	 *                              incremented. Otherwise, only the effects of the card, like putting a minion into play
+	 *                              or the underlying spell effects, are executed.
+	 * @return
+	 */
 	@Suspendable
 	public static boolean playCardRandomly(GameContext context,
 	                                       Player player,
@@ -75,7 +93,8 @@ public class SpellUtils {
 	                                       boolean summonRightmost,
 	                                       boolean resolveBattlecry,
 	                                       boolean onlyWhileSourceInPlay,
-	                                       boolean randomChooseOnes) {
+	                                       boolean randomChooseOnes,
+	                                       boolean playFromHand) {
 
 		CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
 		// Stop casting battlecries if Shudderwock is transformed or destroyed
@@ -193,7 +212,11 @@ public class SpellUtils {
 		}
 
 		// Do the deed
-		action.execute(context, player.getId());
+		if (playFromHand) {
+			action.execute(context, player.getId());
+		} else {
+			action.innerExecute(context, player.getId());
+		}
 
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 		return true;
@@ -466,16 +489,6 @@ public class SpellUtils {
 			}
 		}
 		return validTargets;
-	}
-
-	public static int hasHowManyOfRace(Player player, Race race) {
-		int count = 0;
-		for (Minion minion : player.getMinions()) {
-			if (minion.getRace().hasRace(race)) {
-				count++;
-			}
-		}
-		return count;
 	}
 
 	public static boolean highlanderDeck(Player player) {

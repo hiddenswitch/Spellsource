@@ -525,15 +525,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @return A clone of the {@link Card}.
 	 */
 	public Card getCardById(String cardId) {
-		Card card = CardCatalogue.getCardById(cardId);
-		if (card == null) {
-			for (Card tempCard : getTempCards()) {
-				if (tempCard.getCardId().equalsIgnoreCase(cardId)) {
-					return tempCard.clone();
-				}
+		for (Card tempCard : getTempCards()) {
+			if (tempCard.getCardId().equalsIgnoreCase(cardId)) {
+				return tempCard.clone();
 			}
 		}
-		return card;
+		return CardCatalogue.getCardById(cardId);
 	}
 
 	/**

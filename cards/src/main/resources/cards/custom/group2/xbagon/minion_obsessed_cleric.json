@@ -9,10 +9,10 @@
   "description": "Battlecry: Lose +3/+3.",
   "battlecry": {
     "targetSelection": "NONE",
-	"spell": {
+    "spell": {
       "class": "BuffSpell",
       "target": "SELF",
-	  "value": -3
+      "value": -3
     }
   },
   "attributes": {

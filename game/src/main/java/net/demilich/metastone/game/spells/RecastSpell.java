@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 
 /**
@@ -48,10 +49,11 @@ public class RecastSpell extends Spell {
 
 		if (card.isSpell()
 				&& card.getSpell() != null) {
-			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER), card.getId() == IdFactory.UNASSIGNED ? source : card, target);
+			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER),
+					card.getId() == IdFactory.UNASSIGNED ? source : card,
+					card.getTargetSelection().equals(TargetSelection.NONE) ? null : target);
 		}
 	}
-
 }
 
 

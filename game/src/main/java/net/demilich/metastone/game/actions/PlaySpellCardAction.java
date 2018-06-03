@@ -27,7 +27,7 @@ public class PlaySpellCardAction extends PlayCardAction {
 
 	@Override
 	@Suspendable
-	public void play(GameContext context, int playerId) {
+	public void innerExecute(GameContext context, int playerId) {
 		context.getLogic().castSpell(playerId, spell, entityReference, getTargetReference(), getTargetRequirement(), false, this);
 	}
 

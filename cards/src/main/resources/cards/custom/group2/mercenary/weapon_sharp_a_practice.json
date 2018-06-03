@@ -11,9 +11,9 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "NullSpell",
+      "target": "FRIENDLY_HERO_POWER",
       "value": 2,
-      "operation": "MULTIPLY",
-      "target": "FRIENDLY_HERO_POWER"
+      "operation": "MULTIPLY"
     }
   },
   "attributes": {

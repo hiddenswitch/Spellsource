@@ -11,23 +11,23 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      },
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "WEAPON"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
       }
     }
   },
   "deathrattle": {
     "class": "ReceiveCardSpell",
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
-    },
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "WEAPON"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "attributes": {

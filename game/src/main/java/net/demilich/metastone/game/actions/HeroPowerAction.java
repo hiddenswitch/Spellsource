@@ -31,13 +31,13 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		play(context, playerId);
+		innerExecute(context, playerId);
 		context.getLogic().useHeroPower(playerId);
 	}
 
 	@Override
 	@Suspendable
-	public void play(GameContext context, int playerId) {
+	public void innerExecute(GameContext context, int playerId) {
 		context.getLogic().castSpell(playerId, getSpell(), entityReference, getTargetReference(), getTargetRequirement(), false, this);
 	}
 
