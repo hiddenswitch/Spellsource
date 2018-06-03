@@ -383,7 +383,13 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							removeCards("spell_lone_wolf");
 						}))
-				.migrateTo(18, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(19)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("spell_eerie_fermentation", "quest_eerie_fermentation");
+						}))
+				.migrateTo(19, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

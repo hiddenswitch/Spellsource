@@ -4,16 +4,18 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.util.*;
-import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
-import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.impl.util.DraftRecord;
+import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
+import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -33,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -143,9 +146,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 			if (routingContext.failure() != null) {
 				logger.error(routingContext.failure());
-				routingContext.response().end(Serialization.serialize(new SpellsourceException().message(routingContext.failure().getMessage())));
+				if (!routingContext.response().closed()) {
+					routingContext.response().end(Serialization.serialize(new SpellsourceException().message(routingContext.failure().getMessage())));
+				}
 			} else {
-				routingContext.response().end(Serialization.serialize(new SpellsourceException().message("An internal server error occurred. Try again later.")));
+				if (!routingContext.response().closed()) {
+					routingContext.response().end(Serialization.serialize(new SpellsourceException().message("An internal server error occurred. Try again later.")));
+				}
 			}
 
 		});
@@ -464,12 +471,23 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
-		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId).withBotMatch(request.isCasual())
+		AtomicBoolean didMatchmake = new AtomicBoolean();
+
+		routingContext.request().connection().closeHandler(Sync.suspendableHandler(v1 -> {
+			if (didMatchmake.compareAndSet(false, false)) {
+				Matchmaking.cancel(new UserId(userId));
+			}
+		}));
+
+		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId)
+				.withBotMatch(request.isCasual())
+				.withTimeout(1000)
 				.withBotDeckId(request.getBotDeckId());
 
 		GameId internalResponse = null;
 		try {
 			internalResponse = Matchmaking.matchmake(internalRequest);
+			didMatchmake.compareAndSet(false, true);
 		} catch (Throwable ex) {
 			return WebResult.failed(500, ex);
 		}

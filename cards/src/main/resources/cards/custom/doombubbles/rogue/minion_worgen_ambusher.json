@@ -16,7 +16,7 @@
         "class": "CardsPlayedValueProvider",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "minion_worgen_ambusher"
+          "card": "minion_worgen_ambusher"
         },
         "multiplier": 1,
         "offset": -1

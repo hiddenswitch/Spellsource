@@ -21,7 +21,7 @@ public class ReplaceCardsSpell extends Spell {
 			replacement = specificCard;
 		}
 
-		replacement = context.getLogic().replaceCard(player.getId(), (Card) target, replacement);
+		replacement = context.getLogic().replaceCard(target.getOwner(), (Card) target, replacement);
 		final Card output = replacement;
 		for (SpellDesc subSpell : desc.subSpells(0)) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target, output);

@@ -2,7 +2,7 @@
   "name": "Misty Mana Tea",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "JADE",
   "rarity": "EPIC",
   "description": "If you spent 8 or more Mana Crystals this turn, gain 4 Mana Crystals this turn only.",
   "targetSelection": "NONE",

@@ -16,7 +16,7 @@
       },
       "cardFilter": {
         "class": "SpecificCardFilter",
-        "cardId": "spell_the_coin"
+        "card": "spell_the_coin"
       },
       "cardSource": {
         "class": "UncollectibleCatalogueSource"

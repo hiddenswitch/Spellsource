@@ -175,7 +175,7 @@ public class InventoryRecord extends MongoRecord {
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("id", getId())
-				.append("cardId", getCardId())
+				.append("card", getCardId())
 				.toString();
 	}
 }

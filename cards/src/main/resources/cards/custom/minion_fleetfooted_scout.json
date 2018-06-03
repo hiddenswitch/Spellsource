@@ -15,11 +15,11 @@
       "filters": [
         {
           "class": "SpecificCardFilter",
-          "cardId": "spell_barrage"
+          "card": "spell_barrage"
         },
         {
           "class": "SpecificCardFilter",
-          "cardId": "spell_load_and_lock"
+          "card": "spell_load_and_lock"
         }
       ]
     },

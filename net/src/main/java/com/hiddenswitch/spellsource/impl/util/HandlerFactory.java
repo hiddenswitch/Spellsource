@@ -11,6 +11,8 @@ import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
 /**
  * Created by bberman on 2/17/17.
  */
@@ -80,6 +82,11 @@ public class HandlerFactory {
 
 	private static <R> void respond(RoutingContext context, WebResult<R> result) {
 		context.response().setStatusCode(result.responseCode());
+		if (context.response().closed()) {
+			context.fail(new IOException("Response was closed (client disconnected)"));
+			return;
+		}
+
 		if (result.succeeded()) {
 			if (result.result() == null) {
 				// Allow empty response bodies

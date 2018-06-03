@@ -81,7 +81,7 @@ public class RandomCardTargetSpell extends Spell {
 			return;
 		}
 
-		action = new PlaySpellCardAction(spellCard.getSpell(), spellCard, spellCard.getTargetSelection());
+		action = spellCard.play();
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 		EntityReference randomTarget = null;
 		if (targets != null && targets.size() != 0) {

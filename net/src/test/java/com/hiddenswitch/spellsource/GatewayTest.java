@@ -19,8 +19,12 @@ import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
+import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpClientOptions;
+import io.vertx.core.http.RequestOptions;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.web.client.WebClient;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -35,6 +39,8 @@ import java.util.Collections;
 import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -370,4 +376,64 @@ public class GatewayTest extends SpellsourceTestBase {
 		context.assertEquals(response3.getVersion(), response1.getVersion());
 	}
 
+	@Test
+	public void testDisconnectingClientMatchmaking(TestContext context) throws ApiException, InterruptedException {
+		Logging.setLoggingLevel(Level.DEBUG);
+		DefaultApi user1 = getApi();
+		DefaultApi user2 = getApi();
+
+		CreateAccountResponse res1 = user1.createAccount(new CreateAccountRequest()
+				.name("username" + RandomStringUtils.randomAlphanumeric(10))
+				.email("email-" + RandomStringUtils.randomAlphanumeric(10) + "@test.com")
+				.password("password"));
+		CreateAccountResponse res2 = user2.createAccount(new CreateAccountRequest()
+				.name("username" + RandomStringUtils.randomAlphanumeric(10))
+				.email("email-" + RandomStringUtils.randomAlphanumeric(10) + "@test.com")
+				.password("password"));
+		user1.getApiClient().setApiKey(res1.getLoginToken());
+		user2.getApiClient().setApiKey(res2.getLoginToken());
+
+		HttpClient client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost"));
+		WebClient webClient = WebClient.wrap(client);
+
+		AtomicBoolean successfulTimeout = new AtomicBoolean();
+		webClient
+				.put("/matchmaking/constructed")
+				.putHeader("X-Auth-Token", res1.getLoginToken())
+				.timeout(100L)
+				.sendJson(new MatchmakingQueuePutRequest()
+						.casual(false)
+						.deckId(res1.getAccount().getDecks().get(0).getId()), res -> {
+					successfulTimeout.set(true);
+				});
+
+		HttpClient finalClient = client;
+		vertx.setTimer(101L, v1 -> {
+			finalClient.close();
+		});
+
+		vertx.exceptionHandler(context.exceptionHandler());
+
+		Thread.sleep(1000L);
+
+		client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost"));
+		webClient = WebClient.wrap(client);
+		Thread.sleep(1000L);
+		context.assertTrue(successfulTimeout.get());
+		webClient
+				.put("/matchmaking/constructed")
+				.putHeader("X-Auth-Token", res2.getLoginToken())
+				.timeout(100L)
+				.sendJson(new MatchmakingQueuePutRequest()
+						.casual(false)
+						.deckId(res2.getAccount().getDecks().get(0).getId()), res -> {
+				});
+
+		Thread.sleep(1000L);
+		Async async = context.async();
+		sync(() -> {
+			context.assertFalse(Games.getGames().containsKey(new UserId(res1.getAccount().getId())));
+			async.complete();
+		});
+	}
 }

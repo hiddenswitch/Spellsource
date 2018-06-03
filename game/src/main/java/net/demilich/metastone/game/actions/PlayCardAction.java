@@ -40,6 +40,12 @@ public abstract class PlayCardAction extends GameAction {
 		return true;
 	}
 
+	/**
+	 * Plays a card from the hand. Evaluates whether the card was countered, increments combos, and deducts mana.
+	 *
+	 * @param context
+	 * @param playerId
+	 */
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
@@ -49,7 +55,7 @@ public abstract class PlayCardAction extends GameAction {
 		context.getLogic().playCard(playerId, getEntityReference());
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
-			play(context, playerId);
+			innerExecute(context, playerId);
 		}
 
 		context.getLogic().afterCardPlayed(playerId, getEntityReference());
@@ -60,8 +66,24 @@ public abstract class PlayCardAction extends GameAction {
 		return entityReference;
 	}
 
+	/**
+	 * Represents the consequences of playing a spell card, minion card, hero card, hero power card, etc.
+	 * <p>
+	 * <p>
+	 * Unlike {@link #execute(GameContext, int)}, this method will not deduct mana, will not be counterable, and will not
+	 * increment combos. In other words, this method omits the effects of playing a card from the hand.
+	 * <p>
+	 * However, by using the action, a {@link net.demilich.metastone.game.targeting.TargetSelection} will still occur.
+	 * <p>
+	 * The {@link EntityReference#TARGET} will refer to whatever is the {@link #getTargetReference()}.
+	 * <p>
+	 * The {@link #getTargetRequirement()} indicates whether or not these effects require a target to be selected.
+	 *
+	 * @param context
+	 * @param playerId
+	 */
 	@Suspendable
-	protected abstract void play(GameContext context, int playerId);
+	public abstract void innerExecute(GameContext context, int playerId);
 
 	@Override
 	public String toString() {

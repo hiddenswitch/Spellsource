@@ -20,19 +20,19 @@
             "filters": [
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_pyroblast"
+                "card": "spell_pyroblast"
               },
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_meteor"
+                "card": "spell_meteor"
               },
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_fireball"
+                "card": "spell_fireball"
               },
               {
                 "class": "SpecificCardFilter",
-                "cardId": "spell_felfire_potion"
+                "card": "spell_felfire_potion"
               }
             ]
           }
@@ -63,19 +63,19 @@
       "filters": [
         {
           "class": "SpecificCardFilter",
-          "cardId": "spell_pyroblast"
+          "card": "spell_pyroblast"
         },
         {
           "class": "SpecificCardFilter",
-          "cardId": "spell_meteor"
+          "card": "spell_meteor"
         },
         {
           "class": "SpecificCardFilter",
-          "cardId": "spell_fireball"
+          "card": "spell_fireball"
         },
         {
           "class": "SpecificCardFilter",
-          "cardId": "spell_felfire_potion"
+          "card": "spell_felfire_potion"
         }
       ]
     }

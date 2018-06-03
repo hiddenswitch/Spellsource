@@ -12,11 +12,11 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "targetPlayer": "BOTH",
       "cards": [
         "token_rat",
         "token_rat"
-      ]
+      ],
+      "targetPlayer": "BOTH"
     }
   },
   "attributes": {

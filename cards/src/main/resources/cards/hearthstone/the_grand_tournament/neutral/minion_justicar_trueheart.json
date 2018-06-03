@@ -13,51 +13,51 @@
       "conditions": [
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_shapeshift"
+          "card": "hero_power_shapeshift"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_steady_shot"
+          "card": "hero_power_steady_shot"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_fireblast"
+          "card": "hero_power_fireblast"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_reinforce"
+          "card": "hero_power_reinforce"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_lesser_heal"
+          "card": "hero_power_lesser_heal"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_dagger_mastery"
+          "card": "hero_power_dagger_mastery"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_totemic_call"
+          "card": "hero_power_totemic_call"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_life_tap"
+          "card": "hero_power_life_tap"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_armor_up"
+          "card": "hero_power_armor_up"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_meditation"
+          "card": "hero_power_meditation"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_quick_shot"
+          "card": "hero_power_quick_shot"
         },
         {
           "class": "HasHeroPowerCondition",
-          "cardId": "hero_power_enlist"
+          "card": "hero_power_enlist"
         }
       ],
       "spells": [

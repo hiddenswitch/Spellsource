@@ -34,7 +34,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	@Override
 	@Suspendable
 	public boolean trySend(V item) {
-		logger.debug("trySend {} {}: Enter", name, item);
+		logger.trace("trySend {} {}: Enter", name, item);
 		if (item == null) {
 			throw new NullPointerException("item");
 		}
@@ -43,12 +43,12 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		try {
 			Long counter1 = awaitResult(h -> counter.get(h));
 			if (counter1 == capacity) {
-				logger.debug("trySend {} {}: At capacity", name, item);
+				logger.trace("trySend {} {}: At capacity", name, item);
 				return false;
 			}
 			Node<V> node = new Node<V>(item);
 
-			logger.debug("trySend {} {}: Node put", name, item);
+			logger.trace("trySend {} {}: Node put", name, item);
 			long expected = counter1;
 			while (expected < capacity) {
 				long finalExpected = expected;
@@ -60,7 +60,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 				map.put(node.id, node);
 				enqueue(node);
-				logger.debug("trySend {} {}: Enqueued", name, item);
+				logger.trace("trySend {} {}: Enqueued", name, item);
 				c = finalExpected;
 				if (c + 1 < capacity) {
 					notFull.signal();
@@ -72,7 +72,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		}
 		if (c == 0) {
 			signalNotEmpty();
-			logger.debug("trySend {} {}: Signaled not empty", name, item);
+			logger.trace("trySend {} {}: Signaled not empty", name, item);
 		}
 		return c >= 0;
 	}
@@ -101,7 +101,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 	@Suspendable
 	public V poll(long timeout) throws InterruptedException, SuspendExecution {
-		logger.debug("poll {}: Enter", name);
+		logger.trace("poll {}: Enter", name);
 		V x = null;
 		long c = -1L;
 		long startTime = System.currentTimeMillis();
@@ -109,9 +109,9 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		Lock takeLock;
 		try {
 			takeLock = lock("__takeLock", timeout);
-			logger.debug("receive {}: Taking lock", name);
+			logger.trace("receive {}: Taking lock", name);
 		} catch (VertxException timedOut) {
-			logger.debug("receive {}: Lock timed out", name);
+			logger.trace("receive {}: Lock timed out", name);
 			return null;
 		}
 
@@ -124,7 +124,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 					if (millis <= 0) {
 						return null;
 					}
-					logger.debug("receive {}: awaiting not empty", name);
+					logger.trace("receive {}: awaiting not empty", name);
 					millis = notEmpty.awaitMillis(millis);
 				} else {
 					break;
@@ -132,20 +132,20 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 			}
 
 			x = dequeue();
-			logger.debug("receive {}: dequeued {}", name, x);
+			logger.trace("receive {}: dequeued {}", name, x);
 			c = awaitResult(h -> counter.getAndAdd(-1L, h));
-			logger.debug("receive {}: subtracted counter to {}", name, c - 1);
+			logger.trace("receive {}: subtracted counter to {}", name, c - 1);
 			if (c > 1) {
-				logger.debug("receive {}: signaling not empty", name);
+				logger.trace("receive {}: signaling not empty", name);
 				notEmpty.signal();
 			}
 		} finally {
 			takeLock.release();
-			logger.debug("receive {}: releasing lock", name);
+			logger.trace("receive {}: releasing lock", name);
 		}
 		if (c == capacity) {
 			signalNotFull();
-			logger.debug("receive {}: signaled not full", name);
+			logger.trace("receive {}: signaled not full", name);
 		}
 		return x;
 	}

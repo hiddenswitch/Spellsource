@@ -1,0 +1,23 @@
+{
+  "name": "Gnoll Scout",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Mark a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "card": "enchantment_marked"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

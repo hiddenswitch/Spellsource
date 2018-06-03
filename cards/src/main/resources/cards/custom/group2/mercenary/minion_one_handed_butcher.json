@@ -1,0 +1,23 @@
+{
+  "name": "One-Handed Butcher",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Set a minion's attack to 1.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SetAttackSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
