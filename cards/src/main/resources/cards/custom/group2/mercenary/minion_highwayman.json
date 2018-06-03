@@ -1,0 +1,17 @@
+{
+  "name": "Highwayman",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Charge. Can't attack heroes.",
+  "attributes": {
+    "CANNOT_ATTACK_HEROES": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,18 +1,19 @@
 package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 
 public class SilenceEvent extends GameEvent {
 
-	private final Minion target;
+	private final Actor target;
 
-	public SilenceEvent(GameContext context, int playerId, Minion target) {
+	public SilenceEvent(GameContext context, int playerId, Actor target) {
 		super(context, playerId, -1);
 		this.target = target;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getTarget();
@@ -23,7 +24,7 @@ public class SilenceEvent extends GameEvent {
 		return GameEventType.SILENCE;
 	}
 
-	public Minion getTarget() {
+	public Actor getTarget() {
 		return target;
 	}
 

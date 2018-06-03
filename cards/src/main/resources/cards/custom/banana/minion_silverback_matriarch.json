@@ -14,7 +14,7 @@
       "fireCondition": {
         "class": "CardPropertyCondition",
         "target": "EVENT_SOURCE",
-        "cardId": "spell_bananas"
+        "card": "spell_bananas"
       },
       "hostTargetType": "IGNORE_OTHER_TARGETS",
       "sourcePlayer": "BOTH"

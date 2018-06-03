@@ -1,0 +1,62 @@
+{
+  "name": "Abandoned Geneticist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Add a 1/1 copy of a random minion with Battlecry and Deathrattle to your hand. It costs (1).",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "BATTLECRY",
+            "operation": "HAS"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "DEATHRATTLES",
+            "operation": "HAS"
+          }
+        ]
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "CardCostModifierSpell",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SET"
+            }
+          },
+          {
+            "class": "SetAttackSpell",
+            "value": 1,
+            "exclusive": true
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 1,
+            "exclusive": true
+          }
+        ]
+      }
+    },
+    "targetSelection": "NONE"
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

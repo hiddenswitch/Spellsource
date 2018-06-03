@@ -71,6 +71,8 @@ def main():
         if 'race' in card:
             if card['race'] == 'MECHANICAL':
                 card['race'] = 'MECH'
+        if 'rarity' not in card:
+            card['rarity'] = 'FREE'
         if 'id' in card:
             del card['id']
         fixed_card = fix_dict(card)

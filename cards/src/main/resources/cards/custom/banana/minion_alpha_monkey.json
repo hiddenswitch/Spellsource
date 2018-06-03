@@ -16,7 +16,7 @@
       "cardLocation": "HAND",
       "filter": {
         "class": "SpecificCardFilter",
-        "cardId": "spell_bananas"
+        "card": "spell_bananas"
       }
     }
   },

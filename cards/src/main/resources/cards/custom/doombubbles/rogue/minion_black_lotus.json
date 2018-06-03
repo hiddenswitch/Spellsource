@@ -13,7 +13,7 @@
       "queueCondition": {
         "class": "CardPropertyCondition",
         "target": "EVENT_SOURCE",
-        "cardId": "spell_razorpetal"
+        "card": "spell_razorpetal"
       },
       "sourcePlayer": "SELF"
     },

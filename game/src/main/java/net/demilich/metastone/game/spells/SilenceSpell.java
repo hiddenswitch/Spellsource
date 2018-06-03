@@ -5,13 +5,30 @@ import java.util.Map;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Silences the specified {@link Actor}.
+ * <p>
+ * For example, to silence a random enemy minion:
+ * <pre>
+ *   {
+ *     "class": "SilenceSpell",
+ *     "target": "ENEMY_MINIONS",
+ *     "randomTarget": true
+ *   }
+ * </pre>
+ */
 public class SilenceSpell extends Spell {
+
+	private static Logger logger = LoggerFactory.getLogger(SilenceSpell.class);
 
 	public static SpellDesc create() {
 		return create(null);
@@ -26,7 +43,12 @@ public class SilenceSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		context.getLogic().silence(player.getId(), (Minion) target);
+		if (!(target instanceof Actor)) {
+			logger.error("onCast {} {}: The specified target {} is not an actor, so it cannot be silenced", context.getGameId(), source, target);
+			return;
+		}
+
+		context.getLogic().silence(player.getId(), (Actor) target);
 	}
 
 }

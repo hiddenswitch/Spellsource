@@ -124,7 +124,7 @@ public enum Attribute {
 	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the minion
 	 * was {@link #FROZEN}.
 	 *
-	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
+	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
 	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
@@ -138,7 +138,7 @@ public enum Attribute {
 	/**
 	 * Records that an {@link Entity} was silenced. Silencing clears all attributes and effects.
 	 *
-	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
+	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
 	 */
 	SILENCED,
 	/**

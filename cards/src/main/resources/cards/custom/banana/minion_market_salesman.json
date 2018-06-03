@@ -12,7 +12,7 @@
       "class": "HoldsCardCondition",
       "cardFilter": {
         "class": "SpecificCardFilter",
-        "cardId": "spell_the_coin"
+        "card": "spell_the_coin"
       }
     },
     "targetSelection": "NONE",
@@ -23,7 +23,7 @@
           "class": "DiscardSpell",
           "cardFilter": {
             "class": "SpecificCardFilter",
-            "cardId": "spell_the_coin"
+            "card": "spell_the_coin"
           }
         },
         {

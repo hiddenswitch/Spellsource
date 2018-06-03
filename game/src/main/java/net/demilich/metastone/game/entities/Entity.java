@@ -255,7 +255,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	private void clearSilence(Attribute attribute) {
-		if (!GameLogic.immuneToSilence.contains(attribute)) {
+		if (!GameLogic.IMMUNE_TO_SILENCE.contains(attribute)) {
 			getAttributes().remove(Attribute.SILENCED);
 		}
 	}

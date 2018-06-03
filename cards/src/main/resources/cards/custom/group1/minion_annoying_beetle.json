@@ -11,7 +11,7 @@
   "aura": {
     "class": "CardAura",
     "target": "ENEMY_HERO_POWER",
-    "cardId": "hero_power_die_insect"
+    "card": "hero_power_die_insect"
   },
   "collectible": true,
   "set": "CUSTOM",

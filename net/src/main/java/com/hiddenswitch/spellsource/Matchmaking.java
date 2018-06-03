@@ -14,12 +14,14 @@ import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Closeable;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
+import io.vertx.core.VertxException;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Lock;
 import net.demilich.metastone.game.decks.Deck;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -31,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * The matchmaking service is the primary entry point into ranked games for clients.
@@ -347,7 +350,7 @@ public interface Matchmaking extends Verticle {
 		Lock lock = null;
 		final UserId userId = new UserId(request.getUserId());
 		try {
-			lock = SharedData.lock("Matchmaking::lock." + request.getUserId(), 350L);
+			lock = SharedData.lock("Matchmaking::lock." + request.getUserId(), 80L);
 			GameId gameId = Games.getGames().get(userId);
 			if (gameId != null) {
 				LOGGER.debug("matchmake: User {} already has a game {}", request.getUserId(), gameId);
@@ -386,6 +389,7 @@ public interface Matchmaking extends Verticle {
 									startTime = System.currentTimeMillis();
 									if (timeout < 0) {
 										// We timed out for whatever reason
+										LOGGER.debug("matchmaking: User {} retrying", userId);
 										return null;
 									}
 									// Wait until the second user is added
@@ -401,7 +405,7 @@ public interface Matchmaking extends Verticle {
 										}
 										return match.gameId;
 									}
-								} catch (InterruptedException canceled) {
+								} catch (VertxException | InterruptedException canceled) {
 									// We timed out or cancelled waiting for a second user. The semaphore and the queue semantics
 									// ensure we're the user in firstUser, unless a second user has already gotten us
 									if (firstUser.poll(180L) == null) {
@@ -411,6 +415,7 @@ public interface Matchmaking extends Verticle {
 									} else {
 										// We successfully cancelled. The semaphore ensures that this user was the one that removed
 										// itself from first user if a second user didn't.
+										LOGGER.debug("matchmake: User {} cancelled matchmaking", userId);
 										return null;
 									}
 								}
@@ -441,8 +446,8 @@ public interface Matchmaking extends Verticle {
 									LOGGER.debug("matchmake: Matching {} and {} into game {}", match.req.getUserId(), userId, match.gameId);
 									return match.gameId;
 								}
-							} catch (InterruptedException canceled) {
-								// We timed out or cancelled.
+							} catch (VertxException | InterruptedException canceled) {
+								LOGGER.debug("matchmake: User {} cancelled matchmaking", userId);
 								return null;
 							}
 						}
@@ -458,7 +463,16 @@ public interface Matchmaking extends Verticle {
 				strands.remove(userId);
 			}
 		} catch (Throwable t) {
-			LOGGER.debug("matchmake: User {} is already waiting on another invocation", userId);
+			Throwable inner = t;
+			if (t instanceof VertxException) {
+				inner = t.getCause();
+			}
+			if (inner instanceof TimeoutException) {
+				LOGGER.debug("matchmake: User {} is already waiting on another invocation", userId);
+			} else if (inner instanceof InterruptedException) {
+				LOGGER.debug("matchmake: User {} cancelled matchmaking", userId);
+			}
+
 			return null;
 		} finally {
 			if (lock != null) {

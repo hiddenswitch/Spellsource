@@ -16,7 +16,7 @@
       "card": "spell_lava_burst",
       "filter": {
         "class": "SpecificCardFilter",
-        "cardId": "token_flame_elemental"
+        "card": "token_flame_elemental"
       }
     }
   },

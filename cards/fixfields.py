@@ -1,5 +1,5 @@
 import utils
-from formatter import fix_dict
+from cardformatter import fix_dict
 
 if __name__ == '__main__':
     for (card, filepath) in utils.iter_cards():

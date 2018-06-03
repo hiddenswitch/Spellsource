@@ -13,7 +13,7 @@
       "class": "custom.FarseerNobundoSpell",
       "filter": {
         "class": "SpecificCardFilter",
-        "cardId": "minion_farseer_nobundo",
+        "card": "minion_farseer_nobundo",
         "invert": true
       }
     }

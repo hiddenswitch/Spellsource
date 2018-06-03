@@ -15,28 +15,28 @@
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_deathlord_nazgrim"
+              "card": "token_deathlord_nazgrim"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_darion_mograine"
+              "card": "token_darion_mograine"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_inquisitor_whitemane"
+              "card": "token_inquisitor_whitemane"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_thoras_trollbane"
+              "card": "token_thoras_trollbane"
             }
           }
         ],
@@ -59,28 +59,28 @@
           "class": "MinionOnBoardCondition",
           "cardFilter": {
             "class": "SpecificCardFilter",
-            "cardId": "token_deathlord_nazgrim"
+            "card": "token_deathlord_nazgrim"
           }
         },
         {
           "class": "MinionOnBoardCondition",
           "cardFilter": {
             "class": "SpecificCardFilter",
-            "cardId": "token_darion_mograine"
+            "card": "token_darion_mograine"
           }
         },
         {
           "class": "MinionOnBoardCondition",
           "cardFilter": {
             "class": "SpecificCardFilter",
-            "cardId": "token_inquisitor_whitemane"
+            "card": "token_inquisitor_whitemane"
           }
         },
         {
           "class": "MinionOnBoardCondition",
           "cardFilter": {
             "class": "SpecificCardFilter",
-            "cardId": "token_thoras_trollbane"
+            "card": "token_thoras_trollbane"
           }
         }
       ]

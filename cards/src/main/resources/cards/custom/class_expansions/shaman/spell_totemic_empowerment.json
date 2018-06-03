@@ -15,7 +15,7 @@
         "card": "token_sun_and_earth_totem",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_healing_totem"
+          "card": "token_healing_totem"
         }
       },
       {
@@ -24,7 +24,7 @@
         "card": "token_magmatic_totem",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_searing_totem"
+          "card": "token_searing_totem"
         }
       },
       {
@@ -33,7 +33,7 @@
         "card": "token_earthbound_totem",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_stoneclaw_totem"
+          "card": "token_stoneclaw_totem"
         }
       },
       {
@@ -42,7 +42,7 @@
         "card": "token_hurricane_totem",
         "filter": {
           "class": "SpecificCardFilter",
-          "cardId": "token_wrath_of_air_totem"
+          "card": "token_wrath_of_air_totem"
         }
       }
     ]

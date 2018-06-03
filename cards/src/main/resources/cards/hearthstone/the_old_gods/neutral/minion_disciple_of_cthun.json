@@ -22,7 +22,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "cardId": "minion_cthun"
+            "card": "minion_cthun"
           }
         },
         {
@@ -31,7 +31,7 @@
           "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
-            "cardId": "minion_cthun"
+            "card": "minion_cthun"
           }
         },
         {
