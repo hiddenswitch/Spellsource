@@ -21,7 +21,7 @@ public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 	}
 
 	@Override
-	protected void play(GameContext context, int playerId) {
+	public void innerExecute(GameContext context, int playerId) {
 		Card heroCard = context.getPendingCard();
 		Hero hero = heroCard.createHero();
 		if (battlecryAction != null) {

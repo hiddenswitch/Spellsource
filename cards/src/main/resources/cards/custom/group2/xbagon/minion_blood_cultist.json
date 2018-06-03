@@ -11,11 +11,7 @@
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
-        "class": "CopyDeathrattleSpell",
-        "filter": {
-          "class": "SpecificCardFilter",
-          "secondaryTarget": "OUTPUT"
-        }
+        "class": "CopyDeathrattleSpell"
       },
       "cardFilter": {
         "class": "CardFilter",

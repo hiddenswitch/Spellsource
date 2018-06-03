@@ -10,8 +10,6 @@ import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.utils.Attribute;
 
-import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
-
 public class ReplayCardsSpell extends Spell {
 
 	@Override
@@ -29,7 +27,7 @@ public class ReplayCardsSpell extends Spell {
 		// Replay
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
-			if (!SpellUtils.playCardRandomly(context, player, card, source, true, false, false, false)) {
+			if (!SpellUtils.playCardRandomly(context, player, card, source, true, false, false, false, false)) {
 				break;
 			}
 			context.getLogic().revealCard(player, card);
