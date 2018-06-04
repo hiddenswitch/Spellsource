@@ -37,6 +37,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testShieldOfNature() {
+		runGym((context, player, opponent) -> {
+			// Using life tap with shield of nature should not stack overflow
+			playCard(context, player, "weapon_shield_of_nature");
+			Weapon shield = player.getWeaponZone().get(0);
+			player.setMana(2);
+			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+			// It should have run out of durability and been put to the graveyard
+			assertEquals(shield.getZone(), Zones.GRAVEYARD);
+		}, HeroClass.VIOLET, HeroClass.VIOLET);
+	}
+
+	@Test
 	public void testForcesOfGilneas() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_forces_of_gilneas");

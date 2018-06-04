@@ -18,6 +18,9 @@
       "class": "MetaSpell",
       "spells": [
         {
+          "class": "ForceDeathPhaseSpell"
+        },
+        {
           "class": "ModifyDurabilitySpell",
           "value": -1,
           "targetPlayer": "SELF"

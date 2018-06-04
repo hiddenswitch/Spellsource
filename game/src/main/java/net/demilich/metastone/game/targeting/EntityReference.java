@@ -249,10 +249,6 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference ATTACKER = new EntityReference(-30);
 	/**
-	 * Whenever a player plays a card, this reference will return the card or whatever it was overridden to.
-	 */
-	public static final EntityReference PENDING_CARD = new EntityReference(-31);
-	/**
 	 * Use this reference to apply effects to new entities created by spells.
 	 * <p>
 	 * For example, to apply a buff to a newly summoned minion:

@@ -29,9 +29,9 @@
             "invert": true
           },
           {
-            "class": "EntityEqualsFilter",
+            "class": "SpecificCardFilter",
             "invert": true,
-            "secondaryTarget": "PENDING_CARD"
+            "card": "minion_tess_greymane"
           }
         ]
       },

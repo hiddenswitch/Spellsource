@@ -67,6 +67,11 @@
                 "class": "SpecificCardFilter",
                 "card": "hero_ragnaros"
               }
+            },
+            {
+              "class": "HeroClassCondition",
+              "heroClass": "JADE",
+              "targetPlayer": "SELF"
             }
           ],
           "spells": [
@@ -118,6 +123,11 @@
             {
               "class": "ReceiveCardSpell",
               "card": "token_echo_of_ragnaros",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "ReceiveCardSpell",
+              "card": "token_echo_of_chen",
               "targetPlayer": "SELF"
             }
           ]
@@ -177,6 +187,11 @@
                 "class": "SpecificCardFilter",
                 "card": "hero_ragnaros"
               }
+            },
+            {
+              "class": "HeroClassCondition",
+              "heroClass": "JADE",
+              "targetPlayer": "OPPONENT"
             }
           ],
           "spells": [
@@ -228,6 +243,11 @@
             {
               "class": "ReceiveCardSpell",
               "card": "token_echo_of_ragnaros",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "ReceiveCardSpell",
+              "card": "token_echo_of_chen",
               "targetPlayer": "SELF"
             }
           ]

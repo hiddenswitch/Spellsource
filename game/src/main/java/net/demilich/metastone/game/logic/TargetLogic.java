@@ -303,8 +303,6 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.KILLED_MINION)));
 		} else if (targetKey.equals(EntityReference.ATTACKER)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()));
-		} else if (targetKey.equals(EntityReference.PENDING_CARD)) {
-			return singleTargetAsList((Entity) context.getPendingCard());
 		} else if (targetKey.equals(EntityReference.OUTPUT)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getOutputStack().peek()));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_WEAPON)) {
