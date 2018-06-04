@@ -12,9 +12,13 @@ public class AlgebraicValueProvider extends ValueProvider {
 		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AlgebraicValueProvider.class);
 		if (value1 != null) {
 			arguments.put(ValueProviderArg.VALUE1, value1);
+		} else {
+			arguments.put(ValueProviderArg.VALUE1, 0);
 		}
 		if (value2 != null) {
 			arguments.put(ValueProviderArg.VALUE2, value2);
+		} else {
+			arguments.put(ValueProviderArg.VALUE2, 0);
 		}
 		arguments.put(ValueProviderArg.OPERATION, operation);
 		return (AlgebraicValueProvider) (new ValueProviderDesc(arguments).create());

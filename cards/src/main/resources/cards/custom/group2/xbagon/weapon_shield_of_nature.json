@@ -39,6 +39,6 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "wiki": "Shield (X) reads: \"Whenever your hero takes damage, reduce it by X and lose 1 Durability.\" Activate will use the hero power regardless if it has uses available.",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "wiki": "Shield (X) reads: \"Whenever your hero takes damage, reduce it by X and lose 1 Durability.\" Activate will use the hero power regardless if it has uses available."
 }

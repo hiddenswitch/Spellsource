@@ -9,16 +9,32 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
 public class BasicTests extends TestBase {
+
+	@Test
+	public void testRaidLeader() {
+		runGym((context, player, opponent) -> {
+			Minion raidLeader = playMinionCard(context, player, "minion_raid_leader");
+			useHeroPower(context, player);
+			Minion silverHandRecruit = player.getMinions().get(1);
+			Assert.assertEquals(silverHandRecruit.getSourceCard().getCardId(), "token_silver_hand_recruit");
+			destroy(context, raidLeader);
+			Assert.assertEquals(silverHandRecruit.getZone(), Zones.BATTLEFIELD);
+			Assert.assertEquals(player.getMinions().size(), 1);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+	}
+
 	private Card getTheCoin(CardList cards) {
 		for (Card card : cards) {
 			if (card.getCardId().equalsIgnoreCase("spell_the_coin")) {

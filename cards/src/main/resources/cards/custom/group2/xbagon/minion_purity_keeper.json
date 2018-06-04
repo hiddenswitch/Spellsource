@@ -8,6 +8,7 @@
   "rarity": "RARE",
   "description": "Battlecry: Remove all Keywords without text from all minions.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
       "target": "ALL_MINIONS",
@@ -61,8 +62,7 @@
           "attribute": "PERMANENT"
         }
       ]
-    },
-    "targetSelection": "NONE"
+    }
   },
   "attributes": {
     "BATTLECRY": true
