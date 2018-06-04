@@ -19,6 +19,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
@@ -70,7 +71,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	private AuraDesc desc;
 
 	public Aura(AuraDesc desc) {
-		this(desc.getSecondaryTrigger() == null ? null : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
+		this(desc.getSecondaryTrigger() == null ? new WillEndSequenceTrigger() : desc.getSecondaryTrigger().create(), desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
 		setEntityFilter(desc.getFilter());
 		setCondition(desc.getCondition());
 		setDesc(desc);
@@ -153,8 +154,10 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			}
 		}
 
+		boolean alwaysApply = getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+
 		for (Entity target : relevantTargets) {
-			if (affects(context, owner, target, resolvedTargets) && !affectedEntities.contains(target.getId())) {
+			if (affects(context, owner, target, resolvedTargets) && (!affectedEntities.contains(target.getId()) || alwaysApply)) {
 				affectedEntities.add(target.getId());
 				context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
 				// target is not affected anymore, remove effect
