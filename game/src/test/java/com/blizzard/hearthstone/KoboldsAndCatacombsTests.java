@@ -26,6 +26,19 @@ import static org.testng.Assert.*;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testTwigOfTheWorldTreeRestoreMana() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_twig_of_the_world_tree");
+			playCard(context, player, "weapon_twig_of_the_world_tree");
+			assertEquals(player.getMana(), 10);
+			assertEquals(player.getMaxMana(), 10);
+			player.setMana(4);
+			playCard(context, player, "weapon_twig_of_the_world_tree");
+			assertEquals(player.getMana(), 10);
+		});
+	}
+
+	@Test
 	public void testSpellstoneKeepsManaCostChange() {
 		runGym((context, player, opponent) -> {
 			Card card = receiveCard(context, player, "spell_amethyst_spellstone");
