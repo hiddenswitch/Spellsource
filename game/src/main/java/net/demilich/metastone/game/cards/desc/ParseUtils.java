@@ -124,8 +124,6 @@ public class ParseUtils {
 				return EntityReference.TARGET;
 			case "spell_target":
 				return EntityReference.SPELL_TARGET;
-			case "pending_card":
-				return EntityReference.PENDING_CARD;
 			case "output":
 				return EntityReference.OUTPUT;
 			case "self":

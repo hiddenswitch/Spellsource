@@ -66,10 +66,6 @@ public enum Environment {
 	 */
 	DAMAGE_STACK,
 	/**
-	 * This variable stores the current card being played.
-	 */
-	PENDING_CARD,
-	/**
 	 * This variable stores a stack of entities that were output by spells. The variable can be referenced with {@link
 	 * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
 	 * <p>

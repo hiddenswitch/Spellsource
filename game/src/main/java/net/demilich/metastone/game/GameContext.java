@@ -683,15 +683,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	}
 
 	/**
-	 * Gets the card that is currently being played, or {@code null} if no card is currently being played.
-	 *
-	 * @return A {@link Card} that was the result of a {@link net.demilich.metastone.game.actions.PlayCardAction}.
-	 */
-	public Card getPendingCard() {
-		return (Card) resolveSingleTarget((EntityReference) getEnvironment().get(Environment.PENDING_CARD));
-	}
-
-	/**
 	 * Gets the player at the given index.
 	 *
 	 * @param index {@link GameContext#PLAYER_1} or {@link GameContext#PLAYER_2}
@@ -1033,14 +1024,6 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 
 	public void setIgnoreEvents(boolean ignoreEvents) {
 		this.ignoreEvents = ignoreEvents;
-	}
-
-	public void setPendingCard(Card pendingCard) {
-		if (pendingCard != null) {
-			getEnvironment().put(Environment.PENDING_CARD, pendingCard.getReference());
-		} else {
-			getEnvironment().put(Environment.PENDING_CARD, null);
-		}
 	}
 
 	@SuppressWarnings("unchecked")

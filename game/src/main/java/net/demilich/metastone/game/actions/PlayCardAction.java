@@ -50,7 +50,6 @@ public abstract class PlayCardAction extends GameAction {
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		Card card = (Card) context.resolveSingleTarget(getEntityReference());
-		context.setPendingCard(card);
 
 		context.getLogic().playCard(playerId, getEntityReference());
 		// card was countered, do not actually resolve its effects
@@ -59,7 +58,6 @@ public abstract class PlayCardAction extends GameAction {
 		}
 
 		context.getLogic().afterCardPlayed(playerId, getEntityReference());
-		context.setPendingCard(null);
 	}
 
 	public EntityReference getEntityReference() {
@@ -84,6 +82,7 @@ public abstract class PlayCardAction extends GameAction {
 	 */
 	@Suspendable
 	public abstract void innerExecute(GameContext context, int playerId);
+
 
 	@Override
 	public String toString() {

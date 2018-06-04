@@ -216,6 +216,16 @@ public class CardInteractionTests extends TestBase {
 	}
 
 	@Test
+	public void testLordJaraxxusMirrorEntityInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_mirror_entity");
+			context.endTurn();
+			playCard(context, opponent, "minion_lord_jaraxxus");
+			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_lord_jaraxxus");
+		});
+	}
+
+	@Test
 	public void testLordJaraxxus() {
 		GameContext context = createContext(HeroClass.VIOLET, HeroClass.VIOLET);
 		Player warlock = context.getActivePlayer();

@@ -22,7 +22,7 @@
     "spell": {
       "class": "RecastSpell",
       "target": "SELF",
-      "card": "PENDING_CARD"
+      "secondaryTarget": "EVENT_SOURCE"
     }
   },
   "collectible": true,

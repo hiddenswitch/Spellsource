@@ -8,8 +8,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 	protected BattlecryAction battlecryAction;
 
-	public PlayHeroCardAction(EntityReference EntityReference) {
-		super(EntityReference);
+	public PlayHeroCardAction(EntityReference card) {
+		super(card);
 		setActionType(ActionType.HERO);
 		battlecryAction = null;
 	}
@@ -22,7 +22,7 @@ public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 
 	@Override
 	public void innerExecute(GameContext context, int playerId) {
-		Card heroCard = context.getPendingCard();
+		Card heroCard = (Card) context.resolveSingleTarget(getSourceReference());
 		Hero hero = heroCard.createHero();
 		if (battlecryAction != null) {
 			hero.setBattlecry(battlecryAction);
