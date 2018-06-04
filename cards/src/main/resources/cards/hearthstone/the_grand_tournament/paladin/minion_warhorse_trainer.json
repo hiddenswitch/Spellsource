@@ -14,7 +14,8 @@
     "filter": {
       "class": "SpecificCardFilter",
       "card": "token_silver_hand_recruit"
-    }
+    },
+    "hpBonus": 0
   },
   "collectible": true,
   "set": "THE_GRAND_TOURNAMENT",

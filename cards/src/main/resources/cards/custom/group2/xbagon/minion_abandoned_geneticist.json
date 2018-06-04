@@ -8,23 +8,9 @@
   "rarity": "RARE",
   "description": "Battlecry: Add a 1/1 copy of a random minion with Battlecry and Deathrattle to your hand. It costs (1).",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "AttributeFilter",
-            "attribute": "BATTLECRY",
-            "operation": "HAS"
-          },
-          {
-            "class": "AttributeFilter",
-            "attribute": "DEATHRATTLES",
-            "operation": "HAS"
-          }
-        ]
-      },
       "spell": {
         "class": "MetaSpell",
         "target": "OUTPUT",
@@ -49,9 +35,23 @@
             "exclusive": true
           }
         ]
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "BATTLECRY",
+            "operation": "HAS"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "DEATHRATTLES",
+            "operation": "HAS"
+          }
+        ]
       }
-    },
-    "targetSelection": "NONE"
+    }
   },
   "attributes": {
     "BATTLECRY": true

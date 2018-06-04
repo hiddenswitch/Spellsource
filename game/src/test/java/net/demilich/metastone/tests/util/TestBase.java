@@ -482,6 +482,18 @@ public class TestBase {
 		context.getLogic().performGameAction(player.getId(), card.play());
 	}
 
+	@Suspendable
+	protected static void useHeroPower(GameContext context, Player player) {
+		context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+	}
+
+	@Suspendable
+	protected static void useHeroPower(GameContext context, Player player, EntityReference target) {
+		PlayCardAction action = player.getHero().getHeroPower().play();
+		action.setTargetReference(target);
+		context.getLogic().performGameAction(player.getId(), action);
+	}
+
 	protected static void playCardWithTarget(GameContext context, Player player, String cardId, Entity target) {
 		playCardWithTarget(context, player, CardCatalogue.getCardById(cardId), target);
 	}

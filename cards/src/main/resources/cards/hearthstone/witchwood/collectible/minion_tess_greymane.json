@@ -30,8 +30,8 @@
           },
           {
             "class": "SpecificCardFilter",
-            "invert": true,
-            "card": "minion_tess_greymane"
+            "card": "minion_tess_greymane",
+            "invert": true
           }
         ]
       },

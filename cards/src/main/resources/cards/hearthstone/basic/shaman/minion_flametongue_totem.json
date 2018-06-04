@@ -11,7 +11,8 @@
   "aura": {
     "class": "BuffAura",
     "target": "ADJACENT_MINIONS",
-    "attackBonus": 2
+    "attackBonus": 2,
+    "hpBonus": 0
   },
   "collectible": true,
   "set": "BASIC",

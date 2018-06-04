@@ -15,7 +15,8 @@
     "filter": {
       "class": "RaceFilter",
       "race": "MURLOC"
-    }
+    },
+    "hpBonus": 0
   },
   "attributes": {
     "DESCRIPTION": "Your other Murlocs have +2 Attack.",
