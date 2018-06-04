@@ -32,7 +32,7 @@ public class Entity implements Serializable {
   @JsonProperty("id")
   private Integer id = null;
 
-  @JsonProperty("card")
+  @JsonProperty("cardId")
   private String cardId = null;
 
   /**
