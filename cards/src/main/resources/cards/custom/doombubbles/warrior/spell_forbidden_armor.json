@@ -5,7 +5,7 @@
   "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Spend all your mana. Gain Armor for double the mana spent.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
