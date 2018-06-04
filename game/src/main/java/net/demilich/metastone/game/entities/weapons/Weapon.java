@@ -53,7 +53,7 @@ public class Weapon extends Actor {
 	}
 
 	public int getWeaponDamage() {
-		return Math.max(0, getAttributeValue(Attribute.ATTACK) + getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS)) + getAttributeValue(Attribute.ATTACK_BONUS);
+		return Math.max(0, getAttributeValue(Attribute.ATTACK) + getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS)) + getAttributeValue(Attribute.ATTACK_BONUS) + getAttributeValue(Attribute.AURA_ATTACK_BONUS);
 	}
 
 	public boolean isActive() {

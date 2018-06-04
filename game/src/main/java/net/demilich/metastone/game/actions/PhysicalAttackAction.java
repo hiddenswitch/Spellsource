@@ -33,7 +33,7 @@ public class PhysicalAttackAction extends GameAction {
 			return true;
 		}
 		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);
-		if (attacker.hasAttribute(Attribute.CANNOT_ATTACK_HEROES) ||
+		if (attacker.hasAttribute(Attribute.CANNOT_ATTACK_HEROES) || attacker.hasAttribute(Attribute.AURA_CANNOT_ATTACK_HEROES) ||
 				((attacker.hasAttribute(Attribute.RUSH) || attacker.hasAttribute(Attribute.AURA_RUSH))
 						&& attacker.hasAttribute(Attribute.SUMMONING_SICKNESS))) {
 			return false;

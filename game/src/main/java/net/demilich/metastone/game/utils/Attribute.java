@@ -408,6 +408,10 @@ public enum Attribute {
 	 */
 	CANNOT_ATTACK_HEROES,
 	/**
+	 * An Aura version of {@link #CANNOT_ATTACK_HEROES}
+	 */
+	AURA_CANNOT_ATTACK_HEROES,
+	/**
 	 * Whens set on any entity, friendly healing effects deal damage instead.
 	 */
 	INVERT_HEALING,

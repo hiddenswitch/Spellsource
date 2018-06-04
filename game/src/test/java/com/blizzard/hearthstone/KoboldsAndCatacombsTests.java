@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
@@ -24,6 +25,28 @@ import java.util.stream.Stream;
 import static org.testng.Assert.*;
 
 public class KoboldsAndCatacombsTests extends TestBase {
+
+	@Test
+	public void testBladedGauntlet() {
+		runGym((context, player, opponent) -> {
+			// Prevent fatigue damage
+			shuffleToDeck(context, player, "spell_the_coin");
+			playCard(context, player, "weapon_bladed_gauntlet");
+			Weapon weapon = player.getHero().getWeapon();
+			assertEquals(weapon.getAttack(), 0);
+			useHeroPower(context, player);
+			assertEquals(player.getHero().getArmor(), 2);
+			assertEquals(weapon.getAttack(), 2);
+			context.endTurn();
+			Minion bloodfenRaptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			assertEquals(weapon.getAttack(), 2);
+			attack(context, player, player.getHero(), bloodfenRaptor);
+			assertTrue(bloodfenRaptor.isDestroyed());
+			assertEquals(player.getHero().getArmor(), 0);
+			assertEquals(weapon.getAttack(), 0);
+		}, HeroClass.RED, HeroClass.RED);
+	}
 
 	@Test
 	public void testTwigOfTheWorldTreeRestoreMana() {

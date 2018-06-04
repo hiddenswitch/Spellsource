@@ -8,9 +8,9 @@
   "rarity": "LEGENDARY",
   "description": "Deathrattle: Gain 10 Mana Crystals.",
   "deathrattle": {
-      "class": "ModifyMaxManaSpell",
-      "value": 10,
-      "fullManaCrystals": true
+    "class": "ModifyMaxManaSpell",
+    "value": 10,
+    "fullManaCrystals": true
   },
   "attributes": {
     "DEATHRATTLES": true
