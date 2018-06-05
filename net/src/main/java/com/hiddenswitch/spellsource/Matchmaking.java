@@ -350,7 +350,7 @@ public interface Matchmaking extends Verticle {
 		Lock lock = null;
 		final UserId userId = new UserId(request.getUserId());
 		try {
-			lock = SharedData.lock("Matchmaking::lock." + request.getUserId(), 80L);
+			lock = SharedData.lock("Matchmaking::lock." + request.getUserId(), 350L);
 			GameId gameId = Games.getGames().get(userId);
 			if (gameId != null) {
 				LOGGER.debug("matchmake: User {} already has a game {}", request.getUserId(), gameId);
@@ -408,7 +408,7 @@ public interface Matchmaking extends Verticle {
 								} catch (VertxException | InterruptedException canceled) {
 									// We timed out or cancelled waiting for a second user. The semaphore and the queue semantics
 									// ensure we're the user in firstUser, unless a second user has already gotten us
-									if (firstUser.poll(180L) == null) {
+									if (firstUser.poll(350L) == null) {
 										// A second user has already consumed us to start a match. We have to continue to wait
 										// for the second user.
 										continue;

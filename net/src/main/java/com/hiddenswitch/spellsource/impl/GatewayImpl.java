@@ -481,7 +481,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId)
 				.withBotMatch(request.isCasual())
-				.withTimeout(1000)
+				.withTimeout(5000)
 				.withBotDeckId(request.getBotDeckId());
 
 		GameId internalResponse = null;
