@@ -12,7 +12,7 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_MINIONS",
-        "attackBonus": 4
+        "attackBonus": 2
       },
       {
         "class": "SwapAttackAndHpSpell",
