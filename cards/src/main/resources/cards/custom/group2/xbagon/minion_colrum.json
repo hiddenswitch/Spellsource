@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Battlecry: Transform ALL Murlocs to random non-Murloc minions of same cost (wherever they are).",
+  "description": "Battlecry: Transform ALL Murlocs to random non-Murloc minions (wherever they are).",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
@@ -16,9 +16,21 @@
           "class": "ReplaceCardsSpell",
           "target": "BOTH_DECKS",
           "cardFilter": {
-            "class": "RaceFilter",
-            "race": "MURLOC",
-            "invert": true
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "MURLOC",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "type": "MINION"
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
           },
           "filter": {
             "class": "RaceFilter",
@@ -29,9 +41,21 @@
           "class": "ReplaceCardsSpell",
           "target": "BOTH_HANDS",
           "cardFilter": {
-            "class": "RaceFilter",
-            "race": "MURLOC",
-            "invert": true
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "MURLOC",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "type": "MINION"
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
           },
           "filter": {
             "class": "RaceFilter",
@@ -42,9 +66,21 @@
           "class": "TransformToRandomMinionSpell",
           "target": "ALL_MINIONS",
           "cardFilter": {
-            "class": "RaceFilter",
-            "race": "MURLOC",
-            "invert": true
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "MURLOC",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "type": "MINION"
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
           },
           "filter": {
             "class": "RaceFilter",
