@@ -11,8 +11,9 @@ import java.util.List;
 /**
  * A card or actor will pass this filter if its {@link Entity#getSourceCard()} {@link Card#getCardId()} matches the
  * {@link EntityFilterArg#CARD} argument.
- *
- * If a {@link EntityFilterArg#SECONDARY_TARGET} is specified, the card or actor will pass the filter if its card ID matches the card ID of the secondary target.
+ * <p>
+ * If a {@link EntityFilterArg#SECONDARY_TARGET} is specified, the card or actor will pass the filter if its card ID
+ * matches the card ID of the secondary target.
  */
 public class SpecificCardFilter extends EntityFilter {
 
@@ -27,11 +28,7 @@ public class SpecificCardFilter extends EntityFilter {
 		EntityReference comparedTo = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
 		if (comparedTo != null
 				&& !comparedTo.equals(EntityReference.NONE)) {
-			List<Entity> entities = context.resolveTarget(player, host, comparedTo);
-			if (entities != null &&
-					!entities.isEmpty()) {
-				requiredCardId = entities.get(0).getSourceCard().getCardId();
-			}
+			requiredCardId = context.resolveSingleTarget(player, host, comparedTo).getSourceCard().getCardId();
 		}
 
 		return cardId.equalsIgnoreCase(requiredCardId);

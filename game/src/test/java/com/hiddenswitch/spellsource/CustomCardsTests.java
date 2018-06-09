@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.Card;
@@ -35,6 +36,35 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testVoidReaper() {
+		runGym((context, player, opponent) -> {
+
+			for (Player p : new Player[]{player, opponent}) {
+				shuffleToDeck(context, p, "minion_bloodfen_raptor");
+				shuffleToDeck(context, p, "minion_argent_squire");
+				shuffleToDeck(context, p, "minion_argent_squire");
+				receiveCard(context, p, "minion_bloodfen_raptor");
+				receiveCard(context, p, "minion_argent_squire");
+				receiveCard(context, p, "minion_argent_squire");
+				playMinionCard(context, p, "minion_bloodfen_raptor");
+				playMinionCard(context, p, "minion_argent_squire");
+				playMinionCard(context, p, "minion_argent_squire");
+			}
+
+			// Removing bloodfen should leave two of everything on the board
+			playMinionCardWithBattlecry(context, player, "minion_void_reaper",
+					player.getMinions().get(0));
+
+			assertEquals(player.getMinions().size(), 2 + 1, "2 argents + void reaper");
+			for (Player p : new Player[]{player, opponent}) {
+				assertEquals(p.getHand().size(), 2);
+				assertEquals(p.getDeck().size(), 2);
+			}
+			assertEquals(opponent.getMinions().size(), 2);
+		});
+	}
 
 	@Test
 	public void testShieldOfNature() {
