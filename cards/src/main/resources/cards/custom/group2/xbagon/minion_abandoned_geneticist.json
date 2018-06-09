@@ -26,13 +26,11 @@
           },
           {
             "class": "SetAttackSpell",
-            "value": 1,
-            "exclusive": true
+            "value": 1
           },
           {
             "class": "SetHpSpell",
-            "value": 1,
-            "exclusive": true
+            "value": 1
           }
         ]
       },
