@@ -1,10 +1,10 @@
 {
   "name": " Ton Elemental",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 4.0,
-  "baseHp": 5.0,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "EPIC",
   "race": "DEMON",
   "description": "Battlecry: Deal 5 damage to your hero.",

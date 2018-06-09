@@ -1,10 +1,10 @@
 {
   "name": "Savant",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 2.0,
-  "baseHp": 4.0,
+  "baseAttack": 2,
+  "baseHp": 4,
   "rarity": "RARE",
   "description": "Choose One - Give each player a Mana Crystal; or Each player draws a card.",
   "chooseOneBattlecries": [

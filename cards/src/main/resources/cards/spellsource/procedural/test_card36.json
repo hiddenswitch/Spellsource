@@ -1,10 +1,10 @@
 {
   "name": "Original Gangster Snekin",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "SILVER",
-  "baseAttack": 1.0,
-  "baseHp": 4.0,
+  "baseAttack": 1,
+  "baseHp": 4,
   "rarity": "RARE",
   "description": "Inspire: Give your Totems +2 Attack.",
   "trigger": {

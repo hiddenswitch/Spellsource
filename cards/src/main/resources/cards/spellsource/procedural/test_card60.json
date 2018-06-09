@@ -1,10 +1,10 @@
 {
   "name": "Bald Snekin",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 6.0,
-  "baseHp": 8.0,
+  "baseAttack": 6,
+  "baseHp": 8,
   "rarity": "EPIC",
   "description": "Choose One - +5 Attack; or +5 Health and Taunt.",
   "chooseOneBattlecries": [

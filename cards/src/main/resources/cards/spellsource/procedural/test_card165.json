@@ -1,10 +1,10 @@
 {
   "name": "Swordjerer",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 7.0,
-  "baseHp": 9.0,
+  "baseAttack": 7,
+  "baseHp": 9,
   "rarity": "COMMON",
   "description": "Battlecry: If you're holding a Dragon, deal 3 damage.",
   "battlecry": {

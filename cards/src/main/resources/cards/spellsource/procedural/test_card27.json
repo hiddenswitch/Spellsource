@@ -1,10 +1,10 @@
 {
   "name": "Canner",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "SILVER",
-  "baseAttack": 5.0,
-  "baseHp": 5.0,
+  "baseAttack": 5,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Taunt. Whenever you play a card with Overload, gain +1/+1.",
   "trigger": {

@@ -1,10 +1,10 @@
 {
   "name": "Cloed",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 6.0,
-  "baseHp": 4.0,
+  "baseAttack": 6,
+  "baseHp": 4,
   "rarity": "EPIC",
   "description": "Battlecry: Give a friendly Beast Immune this turn.",
   "battlecry": {

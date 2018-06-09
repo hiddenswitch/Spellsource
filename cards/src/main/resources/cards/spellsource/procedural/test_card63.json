@@ -1,10 +1,10 @@
 {
   "name": "Frokeman Hurtself",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 7.0,
-  "baseHp": 5.0,
+  "baseAttack": 7,
+  "baseHp": 5,
   "rarity": "RARE",
   "description": "Battlecry: Deal 4 damage to HIMSELF.",
   "battlecry": {

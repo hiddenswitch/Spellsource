@@ -1,10 +1,10 @@
 {
   "name": "Amanscate",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2.0,
-  "baseHp": 6.0,
+  "baseAttack": 2,
+  "baseHp": 6,
   "rarity": "COMMON",
   "race": "PIRATE",
   "description": "Costs (1) less per Attack of your weapon.",

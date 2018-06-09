@@ -1,10 +1,10 @@
 {
   "name": "Ancehlor",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BLUE",
-  "baseAttack": 3.0,
-  "baseHp": 2.0,
+  "baseAttack": 3,
+  "baseHp": 2,
   "rarity": "RARE",
   "description": "Your hero can only take 1 damage at a time.",
   "trigger": {

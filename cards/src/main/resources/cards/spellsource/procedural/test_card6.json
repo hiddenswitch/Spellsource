@@ -1,10 +1,10 @@
 {
   "name": "Rifle Of Ofhe Shefal",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "SILVER",
-  "baseAttack": 2.0,
-  "baseHp": 3.0,
+  "baseAttack": 2,
+  "baseHp": 3,
   "rarity": "RARE",
   "race": "TOTEM",
   "description": "At the end of your turn, draw a card.",

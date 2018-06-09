@@ -1,10 +1,10 @@
 {
   "name": "Raver",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 5.0,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "LEGENDARY",
   "description": "Battlecry and Deathrattle: Add a Spare Part card to your hand.",
   "battlecry": {

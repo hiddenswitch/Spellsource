@@ -1,10 +1,10 @@
 {
   "name": "King Kodo",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 1.0,
-  "baseHp": 3.0,
+  "baseAttack": 1,
+  "baseHp": 3,
   "rarity": "EPIC",
   "description": "(2) Overload. Battlecry: Choose a minion and become a copy of it.",
   "battlecry": {
@@ -15,7 +15,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "OVERLOAD": 2.0
+    "OVERLOAD": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE",

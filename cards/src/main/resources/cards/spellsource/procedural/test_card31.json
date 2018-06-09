@@ -1,10 +1,10 @@
 {
   "name": "Slightly Protective Mink",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2.0,
-  "baseHp": 4.0,
+  "baseAttack": 2,
+  "baseHp": 4,
   "rarity": "RARE",
   "description": "All attacks deal 2 damage to your hero.",
   "trigger": {

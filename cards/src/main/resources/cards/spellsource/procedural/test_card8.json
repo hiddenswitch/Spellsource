@@ -1,10 +1,10 @@
 {
   "name": "Knight Of The Pure",
-  "baseManaCost": 10.0,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 8.0,
-  "baseHp": 8.0,
+  "baseAttack": 8,
+  "baseHp": 8,
   "rarity": "FREE",
   "description": "",
   "attributes": {

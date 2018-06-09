@@ -1,10 +1,10 @@
 {
   "name": "Autovererer",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 5.0,
-  "baseHp": 7.0,
+  "baseAttack": 5,
+  "baseHp": 7,
   "rarity": "RARE",
   "description": "Battlecry: If your C'Thun has at least 10 Attack, gain +5 Health.",
   "battlecry": {

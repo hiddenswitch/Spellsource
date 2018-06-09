@@ -1,10 +1,10 @@
 {
   "name": "Poyfend Bolten",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 5.0,
-  "baseHp": 6.0,
+  "baseAttack": 5,
+  "baseHp": 6,
   "rarity": "COMMON",
   "race": "DEMON",
   "description": "(3) Overload. Deathrattle: Put a random Demon from your hand into the battlefield.",
@@ -18,7 +18,7 @@
   },
   "attributes": {
     "DEATHRATTLES": true,
-    "OVERLOAD": 3.0,
+    "OVERLOAD": 3,
     "TAUNT": true
   },
   "collectible": true,

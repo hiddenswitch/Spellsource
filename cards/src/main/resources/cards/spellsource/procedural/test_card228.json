@@ -1,10 +1,10 @@
 {
   "name": "Gartor Destroyer",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 6.0,
+  "baseAttack": 6,
+  "baseHp": 6,
   "rarity": "COMMON",
   "description": "Deathrattle: Give your minions +1/+1.",
   "deathrattle": {

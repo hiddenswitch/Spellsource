@@ -1,10 +1,10 @@
 {
   "name": "Alternative Leader",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 3.0,
-  "baseHp": 2.0,
+  "baseAttack": 3,
+  "baseHp": 2,
   "rarity": "COMMON",
   "description": "Choose One - Transform to gain Charge; or +1/+1 and Stealth.",
   "chooseOneBattlecries": [

@@ -1,14 +1,14 @@
 {
   "name": "Eletter",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 12.0,
-  "baseHp": 8.0,
+  "baseAttack": 12,
+  "baseHp": 8,
   "rarity": "LEGENDARY",
   "description": "Overload (5)",
   "attributes": {
-    "OVERLOAD": 5.0
+    "OVERLOAD": 5
   },
   "collectible": true,
   "set": "SPELLSOURCE",

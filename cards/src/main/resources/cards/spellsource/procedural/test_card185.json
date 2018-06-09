@@ -1,10 +1,10 @@
 {
   "name": "Ghostry Yokthter",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 6.0,
-  "baseHp": 4.0,
+  "baseAttack": 6,
+  "baseHp": 4,
   "rarity": "RARE",
   "race": "MECH",
   "description": "At the end of your turn, deal 2 damage to a non-Mech minion.",

@@ -1,10 +1,10 @@
 {
   "name": "Barly",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 2.0,
-  "baseHp": 5.0,
+  "baseAttack": 2,
+  "baseHp": 5,
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "Deathrattle: Summon a random 1-Cost minion.",

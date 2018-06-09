@@ -1,10 +1,10 @@
 {
   "name": "Ony",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 8.0,
+  "baseAttack": 6,
+  "baseHp": 8,
   "rarity": "RARE",
   "race": "DRAGON",
   "description": "Spell Damage +1. Battlecry: Draw a card.",

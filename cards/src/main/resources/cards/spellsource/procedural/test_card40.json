@@ -1,10 +1,10 @@
 {
   "name": "Happyfeeter",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 2.0,
+  "baseAttack": 6,
+  "baseHp": 2,
   "rarity": "EPIC",
   "race": "MECH",
   "description": "Whenever your opponent plays a card, remove one card from the top of your deck.",
@@ -19,7 +19,7 @@
     }
   },
   "attributes": {
-    "OVERLOAD": 1.0
+    "OVERLOAD": 1
   },
   "collectible": true,
   "set": "SPELLSOURCE",

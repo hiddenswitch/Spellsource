@@ -1,10 +1,10 @@
 {
   "name": "Cleans Crena",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 2.0,
-  "baseHp": 4.0,
+  "baseAttack": 2,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "Deathrattle: Summon a 1/1 Shadowbeast.",
   "deathrattle": {

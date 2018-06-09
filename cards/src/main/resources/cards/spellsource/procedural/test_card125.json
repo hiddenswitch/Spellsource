@@ -1,10 +1,10 @@
 {
   "name": "Sadeit Snake",
-  "baseManaCost": 1.0,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 1.0,
-  "baseHp": 1.0,
+  "baseAttack": 1,
+  "baseHp": 1,
   "rarity": "COMMON",
   "race": "DEMON",
   "description": "Taunt. Whenever your hero takes damage on your turn, gain +2/+2.",

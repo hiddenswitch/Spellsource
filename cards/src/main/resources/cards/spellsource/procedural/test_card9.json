@@ -1,14 +1,14 @@
 {
   "name": "Stormyniat Rader",
-  "baseManaCost": 10.0,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 7.0,
-  "baseHp": 11.0,
+  "baseAttack": 7,
+  "baseHp": 11,
   "rarity": "LEGENDARY",
   "description": "(2) Overload",
   "attributes": {
-    "OVERLOAD": 2.0
+    "OVERLOAD": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE",

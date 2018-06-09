@@ -1,10 +1,10 @@
 {
   "name": "Axe Of Ofing",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 7.0,
-  "baseHp": 5.0,
+  "baseAttack": 7,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Inspire: Gain +2/+2.",
   "trigger": {

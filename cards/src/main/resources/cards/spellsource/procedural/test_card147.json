@@ -1,10 +1,10 @@
 {
   "name": "Blade Of Of Justingher",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 3.0,
-  "baseHp": 4.0,
+  "baseAttack": 3,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "At the end of your turn, summon a 1/1 Scarab with Taunt.",
   "trigger": {

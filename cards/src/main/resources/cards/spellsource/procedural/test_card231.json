@@ -1,10 +1,10 @@
 {
   "name": "Inquisitive Deathbubble",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 10.0,
-  "baseHp": 9.0,
+  "baseAttack": 10,
+  "baseHp": 9,
   "rarity": "LEGENDARY",
   "description": "",
   "collectible": true,

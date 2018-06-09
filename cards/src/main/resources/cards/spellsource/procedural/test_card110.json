@@ -1,10 +1,10 @@
 {
   "name": "Angryknit Sees",
-  "baseManaCost": 1.0,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 1.0,
-  "baseHp": 1.0,
+  "baseAttack": 1,
+  "baseHp": 1,
   "rarity": "RARE",
   "race": "MECH",
   "description": "At the end of your turn, deal 2 damage to a non-Mech minion.",

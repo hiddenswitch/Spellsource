@@ -1,10 +1,10 @@
 {
   "name": "Raid Light",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 7.0,
-  "baseHp": 5.0,
+  "baseAttack": 7,
+  "baseHp": 5,
   "rarity": "FREE",
   "race": "DEMON",
   "description": "Battlecry: Deal 1 damage to ALL other characters.",

@@ -1,10 +1,10 @@
 {
   "name": "Jingle! Again!",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "WHITE",
-  "baseAttack": 3.0,
-  "baseHp": 7.0,
+  "baseAttack": 3,
+  "baseHp": 7,
   "rarity": "COMMON",
   "description": "(2) Overload. Charge. Deathrattle: Give a random friendly minion +3 Health.",
   "deathrattle": {
@@ -16,7 +16,7 @@
   "attributes": {
     "CHARGE": true,
     "DEATHRATTLES": true,
-    "OVERLOAD": 2.0
+    "OVERLOAD": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE",

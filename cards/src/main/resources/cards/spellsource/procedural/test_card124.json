@@ -1,10 +1,10 @@
 {
   "name": "Fluck",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 6.0,
-  "baseHp": 7.0,
+  "baseAttack": 6,
+  "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Deathrattle: Shuffle this minion into your deck.",

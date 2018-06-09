@@ -1,10 +1,10 @@
 {
   "name": "Trapinwath",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "BLUE",
-  "baseAttack": 2.0,
-  "baseHp": 2.0,
+  "baseAttack": 2,
+  "baseHp": 2,
   "rarity": "EPIC",
   "description": "Adjacent minions can't be targeted by spells or Hero Powers.",
   "aura": {

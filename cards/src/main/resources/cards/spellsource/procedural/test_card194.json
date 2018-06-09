@@ -1,10 +1,10 @@
 {
   "name": "Shield Black",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3.0,
-  "baseHp": 4.0,
+  "baseAttack": 3,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "Battlecry: Freeze a character.",
   "battlecry": {

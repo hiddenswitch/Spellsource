@@ -1,10 +1,10 @@
 {
   "name": "Oxed Nething",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 8.0,
-  "baseHp": 8.0,
+  "baseAttack": 8,
+  "baseHp": 8,
   "rarity": "COMMON",
   "description": "At the end of your turn, summon a 1/1 Scarab with Taunt.",
   "trigger": {

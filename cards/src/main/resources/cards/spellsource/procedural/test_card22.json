@@ -1,10 +1,10 @@
 {
   "name": "Clerical",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 6.0,
-  "baseHp": 5.0,
+  "baseAttack": 6,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Taunt. Battlecry: Give your C'Thun +3/+3 (wherever it is).",
   "battlecry": {

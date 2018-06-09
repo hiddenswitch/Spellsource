@@ -1,10 +1,10 @@
 {
   "name": "Gartorcrafter",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 4.0,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "COMMON",
   "race": "MURLOC",
   "description": "Battlecry: Summon a 1/1 Ooze with Taunt.",

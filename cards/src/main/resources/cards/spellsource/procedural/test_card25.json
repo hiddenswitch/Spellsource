@@ -1,10 +1,10 @@
 {
   "name": "Handsome Hander",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 1.0,
-  "baseHp": 3.0,
+  "baseAttack": 1,
+  "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Destroy any minion damaged by this minion.",

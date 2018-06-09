@@ -1,10 +1,10 @@
 {
   "name": "Con The Ancient One",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "BLUE",
-  "baseAttack": 3.0,
-  "baseHp": 5.0,
+  "baseAttack": 3,
+  "baseHp": 5,
   "rarity": "RARE",
   "description": "If you control a Secret at the end of your turn, gain +2/+2.",
   "trigger": {

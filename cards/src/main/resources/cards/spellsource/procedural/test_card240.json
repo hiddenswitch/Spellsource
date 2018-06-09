@@ -1,10 +1,10 @@
 {
   "name": "Sneparin",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 1.0,
-  "baseHp": 6.0,
+  "baseAttack": 1,
+  "baseHp": 6,
   "rarity": "EPIC",
   "race": "MURLOC",
   "description": "ALL other Murlocs have +2/+1.",

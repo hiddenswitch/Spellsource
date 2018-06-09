@@ -1,10 +1,10 @@
 {
   "name": "Passion Flights",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 12.0,
-  "baseHp": 10.0,
+  "baseAttack": 12,
+  "baseHp": 10,
   "rarity": "LEGENDARY",
   "description": "",
   "collectible": true,

@@ -1,10 +1,10 @@
 {
   "name": "Zeration",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8.0,
-  "baseHp": 4.0,
+  "baseAttack": 8,
+  "baseHp": 4,
   "rarity": "EPIC",
   "description": "Whenever you play a card with Battlecry, gain +1/+1.",
   "trigger": {

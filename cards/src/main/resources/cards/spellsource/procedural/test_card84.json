@@ -1,10 +1,10 @@
 {
   "name": "Nuttyalt Warden Champion",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 3.0,
+  "baseAttack": 4,
+  "baseHp": 3,
   "rarity": "COMMON",
   "description": "Charge. Your Hero Power costs (1).",
   "cardCostModifier": {

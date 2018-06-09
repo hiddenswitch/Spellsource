@@ -1,10 +1,10 @@
 {
   "name": "Maggic C'Laggic",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "WHITE",
-  "baseAttack": 3.0,
-  "baseHp": 5.0,
+  "baseAttack": 3,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Whenever a character is healed, give your C'Thun +1/+1 (wherever it is).",
   "trigger": {

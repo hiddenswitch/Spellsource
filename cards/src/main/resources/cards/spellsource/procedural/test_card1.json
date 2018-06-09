@@ -1,10 +1,10 @@
 {
   "name": "King Coar",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "BLACK",
-  "baseAttack": 3.0,
-  "baseHp": 4.0,
+  "baseAttack": 3,
+  "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Whenever your opponent casts a spell, gain a copy of it and give them a Coin.",
   "trigger": {
