@@ -52,6 +52,24 @@ public class DeckFormat implements Serializable, Cloneable {
 					))
 			);
 
+	public static final DeckFormat PAST = new DeckFormat()
+			.withName("Past")
+			.withCardSets(
+					Collections.unmodifiableSet(EnumSet.of(
+							REWARD,
+							PROMO,
+							NAXXRAMAS,
+							GOBLINS_VS_GNOMES,
+							BLACKROCK_MOUNTAIN,
+							THE_GRAND_TOURNAMENT,
+							LEAGUE_OF_EXPLORERS,
+							THE_OLD_GODS,
+							ONE_NIGHT_IN_KARAZHAN,
+							MEAN_STREETS_OF_GADGETZAN,
+							HALL_OF_FAME
+					))
+			);
+
 	public static final DeckFormat CUSTOM = new DeckFormat()
 			.withName("Custom")
 			.withCardSets(
@@ -112,7 +130,13 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(new HashSet<>(Arrays.asList(CardSet.values())))
 			);
 
-	private static final Map<String, DeckFormat> FORMATS = Collections.unmodifiableMap(Stream.of(STANDARD, WILD, CUSTOM, ALL)
+	private static final Map<String, DeckFormat> FORMATS = Collections.unmodifiableMap(Stream.of(
+			STANDARD,
+			WILD,
+			CUSTOM,
+			PAST,
+			SPELLSOURCE,
+			ALL)
 			.collect(Collectors.toMap(DeckFormat::getName, Function.identity())));
 
 	public static DeckFormat getFormat(String name) {
@@ -126,6 +150,8 @@ public class DeckFormat implements Serializable, Cloneable {
 				return ALL;
 			case "spellsource":
 				return SPELLSOURCE;
+			case "past":
+				return PAST;
 			case "custom":
 			default:
 				return CUSTOM;

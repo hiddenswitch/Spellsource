@@ -19,7 +19,7 @@
       },
       "cardSource": {
         "class": "FormatCatalogueSource",
-        "format": "WILD"
+        "format": "PAST"
       }
     }
   },
