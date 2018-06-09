@@ -2,7 +2,7 @@
   "name": "Blood Cultist",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "GREEN",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
