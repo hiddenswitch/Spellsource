@@ -1,10 +1,10 @@
 {
   "name": "Jorseisc",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "BLUE",
-  "baseAttack": 10.0,
-  "baseHp": 8.0,
+  "baseAttack": 10,
+  "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "MECH",
   "description": "When you draw this, deal 2 damage to all characters.",

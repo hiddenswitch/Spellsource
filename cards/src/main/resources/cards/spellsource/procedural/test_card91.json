@@ -1,10 +1,10 @@
 {
   "name": "Scarlet",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BLACK",
-  "baseAttack": 5.0,
-  "baseHp": 2.0,
+  "baseAttack": 5,
+  "baseHp": 2,
   "rarity": "LEGENDARY",
   "description": "Battlecry and Deathrattle: Add a random Toxin card to your hand.",
   "battlecry": {

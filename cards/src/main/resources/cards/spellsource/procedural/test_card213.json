@@ -1,10 +1,10 @@
 {
   "name": "Ogre",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 7.0,
-  "baseHp": 7.0,
+  "baseAttack": 7,
+  "baseHp": 7,
   "rarity": "COMMON",
   "description": "At the end of your turn, summon a 1/1 Scarab with Taunt.",
   "trigger": {

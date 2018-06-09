@@ -1,10 +1,10 @@
 {
   "name": "House Of Ofhant",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "BLUE",
-  "baseAttack": 4.0,
-  "baseHp": 4.0,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "FREE",
   "description": "Freeze any character damaged by this minion.",
   "trigger": {

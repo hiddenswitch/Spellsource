@@ -1,10 +1,10 @@
 {
   "name": "Volettile",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3.0,
-  "baseHp": 2.0,
+  "baseAttack": 3,
+  "baseHp": 2,
   "rarity": "LEGENDARY",
   "description": "At the start of your opponent's turn, they have a 50% chance to draw an extra card.",
   "trigger": {

@@ -1,10 +1,10 @@
 {
   "name": "Darker",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "WHITE",
-  "baseAttack": 2.0,
-  "baseHp": 4.0,
+  "baseAttack": 2,
+  "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Charge. Battlecry: Swap Health with another minion.",
   "battlecry": {

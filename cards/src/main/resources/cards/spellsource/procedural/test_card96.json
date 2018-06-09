@@ -1,10 +1,10 @@
 {
   "name": "Creneo",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 3.0,
-  "baseHp": 7.0,
+  "baseAttack": 3,
+  "baseHp": 7,
   "rarity": "EPIC",
   "race": "DEMON",
   "description": "Battlecry: Deal 5 damage to your hero.",

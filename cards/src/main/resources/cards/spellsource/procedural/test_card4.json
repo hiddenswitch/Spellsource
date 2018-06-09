@@ -1,10 +1,10 @@
 {
   "name": "Oned Artanita",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "SILVER",
-  "baseAttack": 5.0,
-  "baseHp": 2.0,
+  "baseAttack": 5,
+  "baseHp": 2,
   "rarity": "COMMON",
   "description": "After you play a Battlecry minion, deal 2 damage to a random enemy.",
   "trigger": {

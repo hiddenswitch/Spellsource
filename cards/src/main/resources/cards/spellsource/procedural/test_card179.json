@@ -1,10 +1,10 @@
 {
   "name": "Chain Of Ofhewhe Snake",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2.0,
-  "baseHp": 2.0,
+  "baseAttack": 2,
+  "baseHp": 2,
   "rarity": "EPIC",
   "race": "MECH",
   "description": "Stealth. Battlecry: Give your other minions Windfury, Taunt, or Divine Shield. (at random)",

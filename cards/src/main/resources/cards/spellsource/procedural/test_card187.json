@@ -1,10 +1,10 @@
 {
   "name": "Bold Sers",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 0.0,
-  "baseHp": 4.0,
+  "baseAttack": 0,
+  "baseHp": 4,
   "rarity": "RARE",
   "race": "DEMON",
   "description": "Inspire: Destroy a random minion for each player.",

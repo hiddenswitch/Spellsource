@@ -1,10 +1,10 @@
 {
   "name": "Sad Flurry",
-  "baseManaCost": 8.0,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "BLACK",
-  "baseAttack": 3.0,
-  "baseHp": 6.0,
+  "baseAttack": 3,
+  "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "PIRATE",
   "description": "(2) Overload. Divine Shield. Windfury. Charge. Taunt. Deathrattle: Give your weapon +2 Attack.",
@@ -17,7 +17,7 @@
     "CHARGE": true,
     "DEATHRATTLES": true,
     "DIVINE_SHIELD": true,
-    "OVERLOAD": 2.0,
+    "OVERLOAD": 2,
     "TAUNT": true,
     "WINDFURY": true
   },

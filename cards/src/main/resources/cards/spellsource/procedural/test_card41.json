@@ -1,10 +1,10 @@
 {
   "name": "Badexy On The Warr",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 5.0,
+  "baseAttack": 6,
+  "baseHp": 5,
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Battlecry: Destroy a random enemy minion with 2 or less Attack.",

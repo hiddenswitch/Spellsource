@@ -1,10 +1,10 @@
 {
   "name": "Cherry Mink Coat",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 5.0,
-  "baseHp": 4.0,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Battlecry: If you have at least 4 other minions, deal 4 damage.",
   "battlecry": {

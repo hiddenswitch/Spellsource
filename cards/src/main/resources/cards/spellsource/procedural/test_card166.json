@@ -1,10 +1,10 @@
 {
   "name": "Sneaky",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 1.0,
-  "baseHp": 4.0,
+  "baseAttack": 1,
+  "baseHp": 4,
   "rarity": "FREE",
   "description": "Taunt. Your other minions have +1/+1.",
   "aura": {

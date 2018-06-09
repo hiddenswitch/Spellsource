@@ -1,10 +1,10 @@
 {
   "name": "Darkveler",
-  "baseManaCost": 8.0,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 10.0,
-  "baseHp": 8.0,
+  "baseAttack": 10,
+  "baseHp": 8,
   "rarity": "FREE",
   "description": "Windfury. ",
   "attributes": {

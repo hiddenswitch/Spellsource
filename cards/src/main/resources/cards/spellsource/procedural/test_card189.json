@@ -1,10 +1,10 @@
 {
   "name": "Hanping",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8.0,
-  "baseHp": 5.0,
+  "baseAttack": 8,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Your minions cost (3) more.",
   "cardCostModifier": {

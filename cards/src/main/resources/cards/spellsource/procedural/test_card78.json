@@ -1,14 +1,14 @@
 {
   "name": "Garriu",
-  "baseManaCost": 10.0,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8.0,
-  "baseHp": 4.0,
+  "baseAttack": 8,
+  "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Windfury. (1) Overload",
   "attributes": {
-    "OVERLOAD": 1.0,
+    "OVERLOAD": 1,
     "WINDFURY": true
   },
   "collectible": true,

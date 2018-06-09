@@ -1,10 +1,10 @@
 {
   "name": "Odder",
-  "baseManaCost": 1.0,
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 2.0,
-  "baseHp": 1.0,
+  "baseAttack": 2,
+  "baseHp": 1,
   "rarity": "EPIC",
   "race": "DEMON",
   "description": "(2) Overload. Deathrattle: Summon a Dreadsteed.",
@@ -14,7 +14,7 @@
   },
   "attributes": {
     "DEATHRATTLES": true,
-    "OVERLOAD": 2.0
+    "OVERLOAD": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE",

@@ -1,10 +1,10 @@
 {
   "name": "Unbulker",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 9.0,
-  "baseHp": 1.0,
+  "baseAttack": 9,
+  "baseHp": 1,
   "rarity": "COMMON",
   "description": "Battlecry: Deal 1 damage to all other minions.",
   "battlecry": {

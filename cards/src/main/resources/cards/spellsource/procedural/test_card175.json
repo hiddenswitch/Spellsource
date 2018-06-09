@@ -1,14 +1,14 @@
 {
   "name": "Nanoypourgion",
-  "baseManaCost": 8.0,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 9.0,
-  "baseHp": 10.0,
+  "baseAttack": 9,
+  "baseHp": 10,
   "rarity": "LEGENDARY",
   "description": "(2) Overload",
   "attributes": {
-    "OVERLOAD": 2.0
+    "OVERLOAD": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE",

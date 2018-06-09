@@ -1,10 +1,10 @@
 {
   "name": "Grimer",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 3.0,
+  "baseAttack": 4,
+  "baseHp": 3,
   "rarity": "RARE",
   "race": "MECH",
   "description": "Deathrattle: Restore 8 Health to the enemy hero.",

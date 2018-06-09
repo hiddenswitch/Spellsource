@@ -1,10 +1,10 @@
 {
   "name": "Clashdodalp",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 4.0,
-  "baseHp": 6.0,
+  "baseAttack": 4,
+  "baseHp": 6,
   "rarity": "EPIC",
   "race": "MECH",
   "description": "At the end of each turn, destroy this minion if it's your only one.",

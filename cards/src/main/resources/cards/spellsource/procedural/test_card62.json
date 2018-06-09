@@ -1,10 +1,10 @@
 {
   "name": "Pattider",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 4.0,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "Battlecry: Give a random friendly Beast, Dragon, and Murloc +2/+2.",
   "battlecry": {

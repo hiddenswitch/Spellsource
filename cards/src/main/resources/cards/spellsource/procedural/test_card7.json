@@ -1,10 +1,10 @@
 {
   "name": "Jubilant Zapeque from Spain",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 7.0,
+  "baseAttack": 4,
+  "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "Battlecry: If you're holding a Dragon, destroy a Legendary minion.",
   "battlecry": {

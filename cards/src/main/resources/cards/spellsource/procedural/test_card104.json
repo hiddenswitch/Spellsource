@@ -1,10 +1,10 @@
 {
   "name": "Pid Corsair",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "GOLD",
-  "baseAttack": 5.0,
-  "baseHp": 4.0,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "Taunt. Battlecry: Give a friendly minion Divine Shield.",
   "battlecry": {

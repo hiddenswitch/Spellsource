@@ -1,10 +1,10 @@
 {
   "name": "Kanight",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 5.0,
-  "baseHp": 4.0,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Deathrattle: Summon two 1/1 Spiders.",

@@ -1,10 +1,10 @@
 {
   "name": "Zerafn",
-  "baseManaCost": 7.0,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 4.0,
-  "baseHp": 8.0,
+  "baseAttack": 4,
+  "baseHp": 8,
   "rarity": "EPIC",
   "description": "When you draw this, deal 1 damage to your minions.",
   "passiveTrigger": {

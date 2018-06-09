@@ -1,10 +1,10 @@
 {
   "name": "Raver Reaver",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 6.0,
+  "baseAttack": 6,
+  "baseHp": 6,
   "rarity": "RARE",
   "race": "MECH",
   "description": "Deathrattle: Restore 8 Health to the enemy hero.",

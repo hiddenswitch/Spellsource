@@ -1,10 +1,10 @@
 {
   "name": "Anmegjas Archer",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "GOLD",
-  "baseAttack": 4.0,
-  "baseHp": 2.0,
+  "baseAttack": 4,
+  "baseHp": 2,
   "rarity": "RARE",
   "description": "Whenever you summon a 1-Health minion, give it Divine Shield.",
   "trigger": {

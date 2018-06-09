@@ -1,10 +1,10 @@
 {
   "name": "Axesnake",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "BLUE",
-  "baseAttack": 2.0,
-  "baseHp": 2.0,
+  "baseAttack": 2,
+  "baseHp": 2,
   "rarity": "COMMON",
   "description": "Battlecry: Summon a random 3-Cost minion.",
   "battlecry": {

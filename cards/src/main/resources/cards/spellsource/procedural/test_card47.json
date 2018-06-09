@@ -1,10 +1,10 @@
 {
   "name": "Karves",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 8.0,
-  "baseHp": 8.0,
+  "baseAttack": 8,
+  "baseHp": 8,
   "rarity": "LEGENDARY",
   "description": "Charge. Battlecry: Summon two 1/1 Boom Bots. WARNING: Bots may explode.",
   "battlecry": {

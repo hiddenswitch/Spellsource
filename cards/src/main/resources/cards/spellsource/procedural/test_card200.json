@@ -1,10 +1,10 @@
 {
   "name": "Snoshjast",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 4.0,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "COMMON",
   "description": "Can't be targeted by spells or Hero Powers.",
   "attributes": {

@@ -1,10 +1,10 @@
 {
   "name": "Darkscale",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 5.0,
-  "baseHp": 6.0,
+  "baseAttack": 5,
+  "baseHp": 6,
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Whenever this attacks and kills a minion, it may attack again.",

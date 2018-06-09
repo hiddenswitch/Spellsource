@@ -1,10 +1,10 @@
 {
   "name": "Tirter",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 4.0,
-  "baseHp": 5.0,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Windfury. Taunt. Your Secrets cost (0).",
   "cardCostModifier": {

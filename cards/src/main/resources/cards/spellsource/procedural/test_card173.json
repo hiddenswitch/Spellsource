@@ -1,10 +1,10 @@
 {
   "name": "Pistold'S Valet",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 3.0,
+  "baseAttack": 4,
+  "baseHp": 3,
   "rarity": "EPIC",
   "description": "You can use your Hero Power twice a turn.",
   "attributes": {

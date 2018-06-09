@@ -1,10 +1,10 @@
 {
   "name": "Bath",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "VIOLET",
-  "baseAttack": 7.0,
-  "baseHp": 6.0,
+  "baseAttack": 7,
+  "baseHp": 6,
   "rarity": "COMMON",
   "description": "Your minions cost (2) less, but not less than (1).",
   "cardCostModifier": {

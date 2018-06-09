@@ -1,10 +1,10 @@
 {
   "name": "Mover",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 3.0,
-  "baseHp": 4.0,
+  "baseAttack": 3,
+  "baseHp": 4,
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Deathrattle: Deal 2 damage to all minions.",

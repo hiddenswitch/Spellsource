@@ -1,10 +1,10 @@
 {
   "name": "Shiel Raver",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 1.0,
+  "baseAttack": 4,
+  "baseHp": 1,
   "rarity": "COMMON",
   "description": "(2) Overload. At the start of your turn, reduce this card's Cost by (1).",
   "passiveTrigger": {
@@ -24,7 +24,7 @@
     }
   },
   "attributes": {
-    "OVERLOAD": 2.0
+    "OVERLOAD": 2
   },
   "collectible": true,
   "set": "SPELLSOURCE",

@@ -1,10 +1,10 @@
 {
   "name": "Equip",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 4.0,
-  "baseHp": 5.0,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "EPIC",
   "description": "Whenever you play a card with Battlecry, gain +1/+1.",
   "trigger": {

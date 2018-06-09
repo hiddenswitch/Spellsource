@@ -1,10 +1,10 @@
 {
   "name": "Noxry",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2.0,
-  "baseHp": 5.0,
+  "baseAttack": 2,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Battlecry: Summon a 2/2 Squire.",
   "battlecry": {

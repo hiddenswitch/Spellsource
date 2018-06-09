@@ -1,10 +1,10 @@
 {
   "name": "Antuir's Omen",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 8.0,
-  "baseHp": 8.0,
+  "baseAttack": 8,
+  "baseHp": 8,
   "rarity": "LEGENDARY",
   "description": "Battlecry: Equip a random weapon.",
   "battlecry": {

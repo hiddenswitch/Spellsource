@@ -1,10 +1,10 @@
 {
   "name": "Windlung",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 2.0,
-  "baseHp": 2.0,
+  "baseAttack": 2,
+  "baseHp": 2,
   "rarity": "EPIC",
   "description": "Also damages the minions next to whomever he attacks.",
   "trigger": {

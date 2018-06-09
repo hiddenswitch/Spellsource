@@ -1,10 +1,10 @@
 {
   "name": "Old Giant",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "BROWN",
-  "baseAttack": 5.0,
-  "baseHp": 5.0,
+  "baseAttack": 5,
+  "baseHp": 5,
   "rarity": "LEGENDARY",
   "description": "Your Choose One cards have both effects combined.",
   "attributes": {

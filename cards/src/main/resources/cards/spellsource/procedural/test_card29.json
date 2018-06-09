@@ -1,10 +1,10 @@
 {
   "name": "Betterbugs",
-  "baseManaCost": 8.0,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 7.0,
-  "baseHp": 7.0,
+  "baseAttack": 7,
+  "baseHp": 7,
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Deathrattle: Summon two 2/2 Hyenas.",

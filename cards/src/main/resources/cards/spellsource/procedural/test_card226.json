@@ -1,10 +1,10 @@
 {
   "name": "Soldier Of Ofen Xarvan",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 6.0,
+  "baseAttack": 6,
+  "baseHp": 6,
   "rarity": "COMMON",
   "race": "PIRATE",
   "description": "Costs (1) less per Attack of your weapon.",

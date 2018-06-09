@@ -1,10 +1,10 @@
 {
   "name": "Roboser",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "WHITE",
-  "baseAttack": 3.0,
-  "baseHp": 3.0,
+  "baseAttack": 3,
+  "baseHp": 3,
   "rarity": "COMMON",
   "description": "This minion's Attack is always equal to its Health.",
   "attributes": {

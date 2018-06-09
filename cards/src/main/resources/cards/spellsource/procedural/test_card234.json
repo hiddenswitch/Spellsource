@@ -1,10 +1,10 @@
 {
   "name": "Boredh'Ster",
-  "baseManaCost": 6.0,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "SILVER",
-  "baseAttack": 6.0,
-  "baseHp": 7.0,
+  "baseAttack": 6,
+  "baseHp": 7,
   "rarity": "FREE",
   "description": "Windfury. Battlecry: Give a friendly minion Windfury.",
   "battlecry": {

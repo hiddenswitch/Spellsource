@@ -1,10 +1,10 @@
 {
   "name": "Krader",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "RED",
-  "baseAttack": 4.0,
-  "baseHp": 4.0,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "EPIC",
   "description": "When you draw this, deal 1 damage to your minions.",
   "passiveTrigger": {

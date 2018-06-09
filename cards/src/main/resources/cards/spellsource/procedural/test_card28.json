@@ -1,10 +1,10 @@
 {
   "name": "Evilerber Cofna",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 5.0,
-  "baseHp": 4.0,
+  "baseAttack": 5,
+  "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Your minions trigger their Deathrattles twice.",
   "attributes": {

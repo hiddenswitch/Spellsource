@@ -1,10 +1,10 @@
 {
   "name": "Raith",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 2.0,
-  "baseHp": 3.0,
+  "baseAttack": 2,
+  "baseHp": 3,
   "rarity": "EPIC",
   "description": "Your Hero Power can target minions.",
   "attributes": {

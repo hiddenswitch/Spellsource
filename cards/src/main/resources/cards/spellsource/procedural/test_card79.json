@@ -1,10 +1,10 @@
 {
   "name": "Painry Thtryguurzar",
-  "baseManaCost": 8.0,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "GOLD",
-  "baseAttack": 5.0,
-  "baseHp": 8.0,
+  "baseAttack": 5,
+  "baseHp": 8,
   "rarity": "EPIC",
   "description": "Battlecry: Put one of each Secret from your deck into the battlefield.",
   "battlecry": {

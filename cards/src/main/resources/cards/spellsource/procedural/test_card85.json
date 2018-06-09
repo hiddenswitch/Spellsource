@@ -1,10 +1,10 @@
 {
   "name": "Loch\u2642Pary",
-  "baseManaCost": 9.0,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 9.0,
-  "baseHp": 9.0,
+  "baseAttack": 9,
+  "baseHp": 9,
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Whenever this attacks and kills a minion, it may attack again.",

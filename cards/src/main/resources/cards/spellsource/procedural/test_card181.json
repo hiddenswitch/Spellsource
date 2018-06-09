@@ -1,10 +1,10 @@
 {
   "name": "Treve",
-  "baseManaCost": 3.0,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 2.0,
-  "baseHp": 3.0,
+  "baseAttack": 2,
+  "baseHp": 3,
   "rarity": "COMMON",
   "description": "Inspire: Gain +2/+2.",
   "trigger": {

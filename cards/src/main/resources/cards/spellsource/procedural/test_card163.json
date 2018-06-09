@@ -1,10 +1,10 @@
 {
   "name": "Etorcer",
-  "baseManaCost": 5.0,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 7.0,
-  "baseHp": 5.0,
+  "baseAttack": 7,
+  "baseHp": 5,
   "rarity": "RARE",
   "description": "Battlecry: Shuffle an 'Ancient Curse' into your deck that deals 7 damage to you when drawn.",
   "battlecry": {

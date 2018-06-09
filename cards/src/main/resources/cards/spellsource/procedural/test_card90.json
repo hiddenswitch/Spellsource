@@ -1,10 +1,10 @@
 {
   "name": "Trath",
-  "baseManaCost": 4.0,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 6.0,
-  "baseHp": 3.0,
+  "baseAttack": 6,
+  "baseHp": 3,
   "rarity": "LEGENDARY",
   "description": "(1) Overload. At the end of your turn, restore 5 Health to a damaged friendly character.",
   "trigger": {
@@ -23,7 +23,7 @@
     }
   },
   "attributes": {
-    "OVERLOAD": 1.0
+    "OVERLOAD": 1
   },
   "collectible": true,
   "set": "SPELLSOURCE",

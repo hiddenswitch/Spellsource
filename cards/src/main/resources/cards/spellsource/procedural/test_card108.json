@@ -1,10 +1,10 @@
 {
   "name": "Cansh",
-  "baseManaCost": 2.0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "GREEN",
-  "baseAttack": 1.0,
-  "baseHp": 3.0,
+  "baseAttack": 1,
+  "baseHp": 3,
   "rarity": "RARE",
   "race": "MECH",
   "description": "Battlecry: Give your other Mechs +2 Attack.",
