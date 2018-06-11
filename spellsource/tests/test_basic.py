@@ -23,8 +23,8 @@ class BasicTest(unittest.TestCase):
             gc = ctx.game.GameContext.fromTwoRandomDecks()
             behaviour1 = PlayRandomBehaviour()
             behaviour2 = PlayRandomBehaviour()
-            gc.getPlayer1().setBehaviour(behaviour1.wrap(ctx))
-            gc.getPlayer2().setBehaviour(behaviour2.wrap(ctx))
+            gc.setBehaviour(0, behaviour1.wrap(ctx))
+            gc.setBehaviour(1, behaviour2.wrap(ctx))
             gc.play()
             self.assertTrue(gc.updateAndGetGameOver())
     
@@ -33,8 +33,8 @@ class BasicTest(unittest.TestCase):
             gc = ctx.game.GameContext.fromTwoRandomDecks()
             behaviour1 = GameStateValueBehaviour(ctx)
             behaviour2 = PlayRandomBehaviour()
-            gc.getPlayer1().setBehaviour(behaviour1.wrap(ctx))
-            gc.getPlayer2().setBehaviour(behaviour2.wrap(ctx))
+            gc.setBehaviour(0, behaviour1.wrap(ctx))
+            gc.setBehaviour(1, behaviour2.wrap(ctx))
             gc.play()
             self.assertTrue(gc.updateAndGetGameOver())
     

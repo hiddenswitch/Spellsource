@@ -42,8 +42,8 @@ This requires **Python 3** and **Java 8**. To get started:
         game_context = ctx.game.GameContext.fromTwoRandomDecks()
         behaviour1 = PlayRandomBehaviour()
         behaviour2 = PlayRandomBehaviour()
-        game_context.getPlayer1().setBehaviour(behaviour1.wrap(ctx))
-        game_context.getPlayer2().setBehaviour(behaviour2.wrap(ctx))
+        game_context.setBehaviour(0, behaviour1.wrap(ctx))
+        game_context.setBehaviour(1, behaviour2.wrap(ctx))
         game_context.play()
         assert game_context.updateAndGetGameOver()
     ```
