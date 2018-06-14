@@ -2,11 +2,13 @@
 
 [![Build Status](https://travis-ci.org/hiddenswitch/Spellsource-Server.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource-Server)
 
-![In-Game Screenshot](docs/sn2.png)
+![In-Game Screenshot](https://thumbs.gfycat.com/EverlastingGiddyBluetickcoonhound-size_restricted.gif)
 
-A multiplayer, networked adaptation of `metastone`. This is a simulator and game server for community and official Hearthstone cards.
+This is a simulator and game server for community and official Hearthstone cards.
 
-Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
+**Play Now**: Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win) to get a copy of the game client. Play online against others! No other installation required.
+
+**Developers**: See [this example notebook](docs/simulation_example.ipynb) for how to simulate games.
 
 Please see the Issues tab to report bugs or request functionality.
 
@@ -14,15 +16,7 @@ Please see the Issues tab to report bugs or request functionality.
 
 The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained Hearthstone simulator, to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, plus hundreds of community cards.
 
-The `Spellsource-Client` project lets you play the game. Download it for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win). The source code is available on request. It backs the game client for this server. It is fully animated.
-
 The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
-
-### Quick Start Multiplayer
-
- 1. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
- 2. Download the Spellsource Client from within the launcher and start it.
- 3. Enter Quick Play to play against a bot, or Matchmaking to play against a random opponent.
 
 ### Quick Start Python
 
@@ -50,21 +44,24 @@ This requires **Python 3** and **Java 8**. To get started:
 
 Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see an implementation of a complex AI bot in Python. This is a direct port of the Java code. Unfortunately, on the Python platform, remoting (accessing the Java engine) in the particular way this bot does is slow. To implement more sophisticated bots, consider adding a method to `GameContext` that will extract the exact data, in a binary format, that you need in your Python implementation, to reduce the communication overhead between Java and Python.
 
-Alternatively, [this example notebook](docs/simulation_example.ipynb) to see an example of simulating games.
+### Quick Start Multiplayer
+
+ 1. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
+ 2. Download the Spellsource Client from within the launcher and start it.
+ 3. Enter Quick Play to play against a bot, or Matchmaking to play against a random opponent.
 
 ### Quick Start Contributing Cards
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
  1. Install the Java 8 SDK (JDK).
- 2. Optionally, install exactly `swagger-codegen` version 2.2.2.
- 3. Clone this repository.
- 4. To run the server locally, execute the following on a command prompt:
+ 2. Clone this repository.
+ 3. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
     * Windows: See the **Getting started with Development on Windows** guide below.
- 5. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
- 6. Download the Spellsource Client from within the launcher and start it.
- 7. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
+ 4. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
+ 5. Download the Spellsource Client from within the launcher and start it.
+ 6. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
 
 ### Using the Command Line Simulator
 
@@ -179,15 +176,14 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
     import org.testng.annotations.Test;
 
     public class ExampleCardTests extends TestBase {
-        @Test
-    	public void testExampler() {
-    		runGym((context, player, opponent) -> {
-    			playCard(context, player, "minion_exampler");
-    			Assert.assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(),
-    					"token_skeletal_enforcer",
-    					"The opponent should have a Skeletal Enforcer after Exampler is summoned");
-    		});
-    	}
+      @Test public void testExampler() {
+        runGym((context, player, opponent) -> {
+          playCard(context, player, "minion_exampler");
+          Assert.assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(),
+          "token_skeletal_enforcer",
+          "The opponent should have a Skeletal Enforcer after Exampler is summoned");
+        });
+      }
     }
     ```
 
