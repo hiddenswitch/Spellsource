@@ -1,0 +1,21 @@
+{
+  "name": "Wispering Woods",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "EPIC",
+  "description": "Give a minion +1 Attack for each card in your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": {
+      "class": "PlayerAttributeValueProvider",
+      "playerAttribute": "HAND_COUNT",
+      "targetPlayer": "SELF"
+      },
+      "hpBonus": 0
+        },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
