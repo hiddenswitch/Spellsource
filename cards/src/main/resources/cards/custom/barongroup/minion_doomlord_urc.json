@@ -1,0 +1,23 @@
+//incomplete
+{
+  "name": "Doomlord Urc",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Gain your minions' enchantments.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
