@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Charge. Can only attack minions with less Attack.",
+  "description": "Charge. Can't attack minions with more Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
@@ -35,7 +35,6 @@
           }
     "attributes": {
     "CHARGE": true,
-    "CANNOT_ATTACK_HEROES": true
     }
   "collectible": true,
   "set": "CUSTOM",
