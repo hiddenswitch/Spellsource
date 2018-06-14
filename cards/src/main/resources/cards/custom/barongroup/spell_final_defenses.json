@@ -1,0 +1,16 @@
+{
+  "name": "Final Defenses",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "EPIC",
+  "description": "Transform your minions into 0/6 Guardians with Taunt.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "token_doomsday_guardian"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
