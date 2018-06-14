@@ -20,7 +20,7 @@
           "attribute": "ATTACK"
         },
         "attribute": "ATTACK",
-        "operation": "LESS"
+        "operation": "MORE"
       }
   },
         "spells": [
