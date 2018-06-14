@@ -1,0 +1,43 @@
+{
+  "name": "Hapless Knight",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Charge. Can only attack minions with less Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+      "filter": {
+        "class": "AttributeFilter",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "ATTACK"
+        },
+        "attribute": "ATTACK",
+        "operation": "LESS"
+      }
+  },
+        "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "MINION"
+        },
+        {
+          "class": "ModifyDamageSpell",
+          "value": 0,
+          "operation": "SET"
+          }
+    "attributes": {
+    "CHARGE": true,
+    "CANNOT_ATTACK_HEROES": true
+    }
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
