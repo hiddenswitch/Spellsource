@@ -1,0 +1,31 @@
+{
+  "name": "Take Down",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "MULBERRY",
+  "rarity": "FREE",
+  "description": "Destroy a minion that costs (5) or more.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 5,
+      "attribute": "COST",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 5,
+      "attribute": "COST",
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
