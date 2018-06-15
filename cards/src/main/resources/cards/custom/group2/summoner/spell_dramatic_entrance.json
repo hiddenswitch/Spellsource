@@ -22,7 +22,7 @@
       {
         "class": "AddAttributeSpell",
         "attribute": "TAUNT"
-}
+      },
       "maxFires": 1,
       "oneTurn": true
   }
