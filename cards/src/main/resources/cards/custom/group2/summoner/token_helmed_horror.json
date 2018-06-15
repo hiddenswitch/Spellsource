@@ -2,7 +2,7 @@
   "name": "Helmed Horror",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "Mulberry",
+  "heroClass": "EGGPLANT",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
