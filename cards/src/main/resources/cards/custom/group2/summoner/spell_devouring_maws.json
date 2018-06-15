@@ -2,7 +2,7 @@
   "name": "Devouring Maws",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Destroy all minions that cost (3) or less.",
   "targetSelection": "NONE",
