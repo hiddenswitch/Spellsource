@@ -8,7 +8,7 @@
   "rarity": "FREE",
   "description": "Taunt. Can't Attack.",
   "attributes": {
-    "CANNOT_ATTACK": true
+    "CANNOT_ATTACK": true,
     "TAUNT": true
   },
   "collectible": true,
