@@ -2,7 +2,7 @@
   "name": "Morsel",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Destroy a minion that costs (2) or less.",
   "condition": {
