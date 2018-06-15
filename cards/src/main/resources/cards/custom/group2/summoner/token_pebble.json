@@ -1,0 +1,16 @@
+{
+  "name": "Pebble",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "Mulberry",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Taunt",
+   "attributes": {
+   "TAUNT": true
+},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
