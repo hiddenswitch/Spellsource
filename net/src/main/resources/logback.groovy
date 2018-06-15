@@ -45,7 +45,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 
     filter(ThresholdFilter) {
-        level = isAWS ? WARN : DEBUG
+        level = isAWS ? WARN : INFO
     }
 }
 

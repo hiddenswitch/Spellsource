@@ -30,13 +30,13 @@ public interface Invites {
 	JsonArray PENDING_STATUSES = new JsonArray().add(Invite.StatusEnum.UNDELIVERED.getValue()).add(Invite.StatusEnum.PENDING.getValue());
 
 
-	static void subscribe() throws SuspendExecution {
-		Realtime.connected(Sync.suspendableHandler(connection -> {
+	static void handleConnections() throws SuspendExecution {
+		Connection.connected(Sync.suspendableHandler(connection -> {
 			// Notify recipients of all pending invites.
 			List<Invite> invites = mongo().find(INVITES, json("toUserId", connection.userId(), "status", json("$in", PENDING_STATUSES)), Invite.class);
 			for (Invite invite : invites) {
 				invite.status(Invite.StatusEnum.PENDING);
-				connection.write(JsonObject.mapFrom(new Envelope().added(new EnvelopeAdded().invite(invite))));
+				connection.write(new Envelope().added(new EnvelopeAdded().invite(invite)));
 			}
 
 			// Set undelivered to pending
@@ -119,27 +119,27 @@ public interface Invites {
 	static void updateInvite(@NotNull Invite invite) throws SuspendExecution {
 		// Notify both users of the new invite, but only wait to see if the recipient is around to actually receive it right
 		// now. We'll update the record immediately and only insert it into the db with the proper status
-		WriteStream<Buffer> toUserConnection = Connection.get(invite.getToUserId());
+		WriteStream<Envelope> toUserConnection = Connection.writeStream(invite.getToUserId());
 		if (toUserConnection != null) {
 			if (invite.getStatus() == Invite.StatusEnum.UNDELIVERED) {
 				invite.status(Invite.StatusEnum.PENDING);
 			}
-			toUserConnection.write(Json.encodeToBuffer(
+			toUserConnection.write(
 					new Envelope().added(new EnvelopeAdded().invite(invite))
-			));
+			);
 		}
 
 		// The sender can receive this invite at any time through the channel since they will receive it in their post
 		// response also.
-		Connection.get(invite.getFromUserId(), res -> {
-			WriteStream<Buffer> conn = res.result();
+		Connection.writeStream(invite.getFromUserId(), res -> {
+			WriteStream<Envelope> conn = res.result();
 			if (conn == null) {
 				return;
 			}
 
-			conn.write(Json.encodeToBuffer(
+			conn.write(
 					new Envelope().added(new EnvelopeAdded().invite(invite))
-			));
+			);
 		});
 	}
 

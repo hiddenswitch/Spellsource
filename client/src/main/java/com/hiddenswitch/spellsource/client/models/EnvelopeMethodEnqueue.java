@@ -17,58 +17,59 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Indicates that a record has been removed from the client&#39;s ephemeral collections. 
+ * Enter a queue with the specified request. 
  */
-@ApiModel(description = "Indicates that a record has been removed from the client's ephemeral collections. ")
+@ApiModel(description = "Enter a queue with the specified request. ")
 
-public class EnvelopeRemoved implements Serializable {
+public class EnvelopeMethodEnqueue implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("inviteId")
-  private String inviteId = null;
+  @JsonProperty("queueId")
+  private String queueId = null;
 
-  @JsonProperty("matchId")
-  private String matchId = null;
+  @JsonProperty("request")
+  private MatchmakingQueuePutRequest request = null;
 
-  public EnvelopeRemoved inviteId(String inviteId) {
-    this.inviteId = inviteId;
+  public EnvelopeMethodEnqueue queueId(String queueId) {
+    this.queueId = queueId;
     return this;
   }
 
    /**
-   * The unique ID of the invitation that should be removed. 
-   * @return inviteId
+   * The queue to which the server should direct this request. 
+   * @return queueId
   **/
-  @ApiModelProperty(value = "The unique ID of the invitation that should be removed. ")
-  public String getInviteId() {
-    return inviteId;
+  @ApiModelProperty(value = "The queue to which the server should direct this request. ")
+  public String getQueueId() {
+    return queueId;
   }
 
-  public void setInviteId(String inviteId) {
-    this.inviteId = inviteId;
+  public void setQueueId(String queueId) {
+    this.queueId = queueId;
   }
 
-  public EnvelopeRemoved matchId(String matchId) {
-    this.matchId = matchId;
+  public EnvelopeMethodEnqueue request(MatchmakingQueuePutRequest request) {
+    this.request = request;
     return this;
   }
 
    /**
-   * The unique ID of the match that should be removed. 
-   * @return matchId
+   * Get request
+   * @return request
   **/
-  @ApiModelProperty(value = "The unique ID of the match that should be removed. ")
-  public String getMatchId() {
-    return matchId;
+  @ApiModelProperty(value = "")
+  public MatchmakingQueuePutRequest getRequest() {
+    return request;
   }
 
-  public void setMatchId(String matchId) {
-    this.matchId = matchId;
+  public void setRequest(MatchmakingQueuePutRequest request) {
+    this.request = request;
   }
 
 
@@ -80,24 +81,24 @@ public class EnvelopeRemoved implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
-    return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
-        Objects.equals(this.matchId, envelopeRemoved.matchId);
+    EnvelopeMethodEnqueue envelopeMethodEnqueue = (EnvelopeMethodEnqueue) o;
+    return Objects.equals(this.queueId, envelopeMethodEnqueue.queueId) &&
+        Objects.equals(this.request, envelopeMethodEnqueue.request);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId, matchId);
+    return Objects.hash(queueId, request);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeRemoved {\n");
+    sb.append("class EnvelopeMethodEnqueue {\n");
     
-    sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
-    sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
+    sb.append("    queueId: ").append(toIndentedString(queueId)).append("\n");
+    sb.append("    request: ").append(toIndentedString(request)).append("\n");
     sb.append("}");
     return sb.toString();
   }

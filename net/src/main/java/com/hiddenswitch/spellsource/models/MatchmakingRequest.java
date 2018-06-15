@@ -144,7 +144,8 @@ public class MatchmakingRequest implements Serializable {
 		return queueId;
 	}
 
-	public void setQueueId(String queueId) {
+	public MatchmakingRequest setQueueId(String queueId) {
 		this.queueId = queueId;
+		return this;
 	}
 }

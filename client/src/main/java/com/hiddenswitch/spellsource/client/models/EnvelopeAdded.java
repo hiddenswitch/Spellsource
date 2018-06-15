@@ -20,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.ChatMessage;
 import com.hiddenswitch.spellsource.client.models.Friend;
 import com.hiddenswitch.spellsource.client.models.Invite;
+import com.hiddenswitch.spellsource.client.models.Match;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -40,6 +41,9 @@ public class EnvelopeAdded implements Serializable {
 
   @JsonProperty("invite")
   private Invite invite = null;
+
+  @JsonProperty("match")
+  private Match match = null;
 
   public EnvelopeAdded chatMessage(ChatMessage chatMessage) {
     this.chatMessage = chatMessage;
@@ -95,6 +99,24 @@ public class EnvelopeAdded implements Serializable {
     this.invite = invite;
   }
 
+  public EnvelopeAdded match(Match match) {
+    this.match = match;
+    return this;
+  }
+
+   /**
+   * Get match
+   * @return match
+  **/
+  @ApiModelProperty(value = "")
+  public Match getMatch() {
+    return match;
+  }
+
+  public void setMatch(Match match) {
+    this.match = match;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -107,12 +129,13 @@ public class EnvelopeAdded implements Serializable {
     EnvelopeAdded envelopeAdded = (EnvelopeAdded) o;
     return Objects.equals(this.chatMessage, envelopeAdded.chatMessage) &&
         Objects.equals(this.friend, envelopeAdded.friend) &&
-        Objects.equals(this.invite, envelopeAdded.invite);
+        Objects.equals(this.invite, envelopeAdded.invite) &&
+        Objects.equals(this.match, envelopeAdded.match);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(chatMessage, friend, invite);
+    return Objects.hash(chatMessage, friend, invite, match);
   }
 
 
@@ -124,6 +147,7 @@ public class EnvelopeAdded implements Serializable {
     sb.append("    chatMessage: ").append(toIndentedString(chatMessage)).append("\n");
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
+    sb.append("    match: ").append(toIndentedString(match)).append("\n");
     sb.append("}");
     return sb.toString();
   }

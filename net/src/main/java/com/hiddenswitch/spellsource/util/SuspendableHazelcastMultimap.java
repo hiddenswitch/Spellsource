@@ -5,9 +5,13 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.hazelcast.core.MultiMap;
 import io.reactivex.Observable;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
+import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static com.hiddenswitch.spellsource.util.Sync.invoke0;
@@ -89,8 +93,9 @@ class SuspendableHazelcastMultimap<K, V> implements SuspendableMultimap<K, V> {
 
 	@Override
 	@Suspendable
-	public List<V> removeAll(@Nullable Object key) {
-		return new ArrayList<>(invoke(map::remove, key));
+	public List<V> removeAll(@Nullable K key) {
+		List<V> invoke = new ArrayList<>(invoke((Function<Object, Collection<V>>) map::remove, key));
+		return new ArrayList<>(invoke);
 	}
 
 	@Override

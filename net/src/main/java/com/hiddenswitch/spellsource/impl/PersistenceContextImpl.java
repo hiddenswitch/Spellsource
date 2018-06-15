@@ -69,7 +69,7 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 			} else {
 				throw new NullPointerException("invalid player");
 			}
-		} catch (NullPointerException ex) {
+		} catch (NullPointerException | IndexOutOfBoundsException ex) {
 			logger.error("update: Game isn't sufficiently ready yet to do an update for {}", id);
 			return 0L;
 		}

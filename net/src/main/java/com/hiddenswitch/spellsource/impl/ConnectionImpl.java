@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
 import com.hiddenswitch.spellsource.Connection;
+import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -17,7 +18,7 @@ public class ConnectionImpl implements Connection {
 	private final String userId;
 	private final List<Handler<Throwable>> exceptionHandlers = new ArrayList<>();
 	private final List<Handler<Void>> drainHandlers = new ArrayList<>();
-	private final List<Handler<JsonObject>> handlers = new ArrayList<>();
+	private final List<Handler<Envelope>> handlers = new ArrayList<>();
 	private final List<Handler<Void>> endHandlers = new ArrayList<>();
 
 	public ConnectionImpl(ServerWebSocket socket, String userId) {
@@ -25,8 +26,8 @@ public class ConnectionImpl implements Connection {
 		this.userId = userId;
 
 		socket.handler(Sync.suspendableHandler(buf -> {
-			JsonObject decoded = new JsonObject(buf);
-			for (Handler<JsonObject> handler : handlers) {
+			Envelope decoded = Json.decodeValue(buf, Envelope.class);
+			for (Handler<Envelope> handler : handlers) {
 				handler.handle(decoded);
 			}
 		}));
@@ -61,7 +62,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public Connection write(JsonObject data) {
+	public Connection write(Envelope data) {
 		socket.write(Json.encodeToBuffer(data));
 		return this;
 	}
@@ -89,7 +90,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public Connection handler(Handler<JsonObject> handler) {
+	public Connection handler(Handler<Envelope> handler) {
 		handlers.add(handler);
 		return this;
 	}

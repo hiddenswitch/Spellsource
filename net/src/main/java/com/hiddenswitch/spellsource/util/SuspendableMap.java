@@ -1,14 +1,37 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import io.vertx.core.shareddata.LocalMap;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.core.shareddata.AsyncMap;
 
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 
+import static io.vertx.ext.sync.Sync.awaitResult;
+
 public interface SuspendableMap<K, V> {
+	@Suspendable
+	static <K, V> SuspendableMap<K, V> getOrCreate(String name) {
+		final Vertx vertx = Vertx.currentContext().owner();
+		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
+		if (vertx.isClustered()) {
+			AsyncMap<K, V> map = awaitResult(done -> client.<K, V>getClusterWideMap(name, done));
+			return new SuspendableAsyncMap<>(map);
+		} else {
+			return new SuspendableWrappedMap<>(client.<K, V>getLocalMap(name));
+		}
+	}
+
+	static <K, V> void getOrCreate(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
+		Vertx vertx = Vertx.currentContext().owner();
+		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
+		client.getAsyncMap(name, handler);
+	}
+
 	@Suspendable
 	int size();
 
