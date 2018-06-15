@@ -2,7 +2,7 @@
   "name": "Dramatic Entrance",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "The next minion you summon this turn has +5 Health and Taunt.",
   "targetSelection": "NONE",
