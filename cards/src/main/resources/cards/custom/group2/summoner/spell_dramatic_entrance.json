@@ -19,13 +19,13 @@
         "target": "EVENT_TARGET",
         "hpBonus": 5
       },
-            {
-        "class": "AddAttributeSpell",
-        "attribute": "TAUNT"
+      {
+      "class": "AddAttributeSpell",
+      "attribute": "TAUNT"
 }
       "maxFires": 1,
       "oneTurn": true
-    }
+  }
   },
   "collectible": true,
   "set": "CUSTOM",
