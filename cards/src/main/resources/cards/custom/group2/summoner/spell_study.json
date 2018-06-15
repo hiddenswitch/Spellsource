@@ -1,0 +1,26 @@
+{
+  "name": "Study",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Add a copy of the last card you played to your hand.",
+  "passiveTriggers": [
+    {
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "hostTargetType": "IGNORE_AS_TARGET",
+        "targetPlayer": "SELF"
+      },
+    }
+  ],
+    "spell": {
+      "class": "ReceiveCardSpell",
+        "target": "SELF",
+        "exclusive": false,
+        "secondaryTarget": "EVENT_TARGET"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
