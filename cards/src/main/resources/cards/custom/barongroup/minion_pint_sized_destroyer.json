@@ -6,7 +6,8 @@
   "heroClass": "NAVY",
   "baseAttack": 3,
   "baseHp": 3,
-  "rarity": "EPIC",   
+  "rarity": "EPIC",
+  "description": "Destroy the second minion summoned during your turn."
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_HERO",
