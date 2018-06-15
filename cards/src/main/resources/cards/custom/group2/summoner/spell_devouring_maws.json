@@ -1,0 +1,22 @@
+{
+  "name": "Devouring Maws",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MULBERRY",
+  "rarity": "FREE",
+  "description": "Destroy all minions that cost (3) or less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": 3,
+      "attribute": "COST",
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
