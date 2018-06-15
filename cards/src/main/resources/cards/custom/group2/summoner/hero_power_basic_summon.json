@@ -2,7 +2,7 @@
   "name": "Basic Summon",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Summon a 0/1 Pebble with Taunt.",
   "condition": {
