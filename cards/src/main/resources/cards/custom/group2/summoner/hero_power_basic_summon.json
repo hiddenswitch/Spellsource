@@ -1,0 +1,21 @@
+{
+  "name": "Basic Summon",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "MULBERRY",
+  "rarity": "FREE",
+  "description": "Summon a 0/1 Pebble with Taunt.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_pebble"
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
