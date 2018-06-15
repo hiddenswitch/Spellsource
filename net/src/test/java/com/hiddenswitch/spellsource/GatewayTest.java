@@ -24,6 +24,7 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.RequestOptions;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.Repeat;
 import io.vertx.ext.web.client.WebClient;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
@@ -170,7 +171,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		async.complete();
 	}
 
-	@Test(timeout = 110000L)
+	@Test(timeout = 165000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
 		final int count = processorCount * 3;
@@ -203,7 +204,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(80L, TimeUnit.SECONDS);
+		latch.await(135L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 	}
 

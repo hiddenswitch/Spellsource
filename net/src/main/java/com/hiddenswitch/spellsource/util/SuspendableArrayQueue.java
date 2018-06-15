@@ -31,7 +31,7 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 
 	@Override
 	@Suspendable
-	public boolean trySend(@NotNull V item, boolean createQueue) {
+	public boolean offer(@NotNull V item, boolean createQueue) {
 		Lock lock = lock();
 		try {
 			try {

@@ -70,6 +70,7 @@ public class ServerGameContext extends GameContext {
 	private final transient RpcClient<Logic> logic;
 	private final Scheduler scheduler;
 	private AtomicInteger eventCounter = new AtomicInteger(0);
+	private AtomicInteger callbackIdCounter = new AtomicInteger(0);
 	private int timerElapsedForPlayerId;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
@@ -376,7 +377,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@Override
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
-		String id = RandomStringUtils.randomAscii(8);
+		String id = Integer.toString(callbackIdCounter.getAndIncrement());
 		logger.debug("{} networkRequestAction: Requesting actions {} with callback {} for playerId={} userId={}", getGameId(), actions, id, playerId, getPlayer(playerId).getUserId());
 		final CallbackId callbackId = new CallbackId(id, playerId);
 		requestCallbacks.put(callbackId, new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
@@ -426,7 +427,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
 		logger.debug("{} networkRequestMulligan: Requesting mulligan for playerId={} userId={}", getGameId(), player.getId(), player.getUserId());
-		String id = RandomStringUtils.randomAscii(8);
+		String id = Integer.toString(callbackIdCounter.getAndIncrement());
 		requestCallbacks.put(new CallbackId(id, player.getId()), new GameplayRequest(GameplayRequestType.MULLIGAN, starterCards, callback));
 		getListenerMap().get(player).onMulligan(id, getGameStateCopy(), starterCards, player.getId());
 	}
@@ -608,7 +609,7 @@ public class ServerGameContext extends GameContext {
 		// Get the player reference
 		final Optional<CallbackId> reqResult = requestCallbacks.keySet().stream().filter(ci -> ci.id.equals(messageId)).findFirst();
 		if (!reqResult.isPresent()) {
-			throw new RuntimeException();
+			throw new RuntimeException("Could not find a callback with the specified ID");
 		}
 		CallbackId reqId = reqResult.get();
 		GameplayRequest request = requestCallbacks.get(reqId);
