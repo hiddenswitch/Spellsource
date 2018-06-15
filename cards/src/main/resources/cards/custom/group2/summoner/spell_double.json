@@ -2,7 +2,7 @@
   "name": "Double",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Add a copy of a card from your deck to your hand.",
   "targetSelection": "NONE",
