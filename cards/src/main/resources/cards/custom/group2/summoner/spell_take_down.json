@@ -2,7 +2,7 @@
   "name": "Take Down",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Destroy a minion that costs (5) or more.",
   "condition": {
