@@ -6,6 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
+  "race": "ELEMENTAL",
   "description": "Taunt",
    "attributes": {
    "TAUNT": true
