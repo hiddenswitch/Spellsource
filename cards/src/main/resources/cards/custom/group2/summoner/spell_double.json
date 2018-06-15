@@ -1,0 +1,22 @@
+{
+  "name": "Double",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "MULBERRY",
+  "rarity": "FREE",
+  "description": "Add a copy of a card from your deck to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "targetPlayer": "SELF"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
