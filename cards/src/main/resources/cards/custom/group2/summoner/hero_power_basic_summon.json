@@ -16,6 +16,6 @@
     "card": "token_pebble"
   },
   "collectible": false,
-  "set": "BASIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
