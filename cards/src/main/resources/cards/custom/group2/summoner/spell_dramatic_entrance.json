@@ -20,8 +20,8 @@
         "hpBonus": 5
       },
       {
-      "class": "AddAttributeSpell",
-      "attribute": "TAUNT"
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
 }
       "maxFires": 1,
       "oneTurn": true
