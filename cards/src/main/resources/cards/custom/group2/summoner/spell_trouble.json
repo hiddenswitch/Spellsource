@@ -2,7 +2,7 @@
   "name": "Trouble!",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Summon three 5/5 Dragons.",
   "targetSelection": "ANY",
