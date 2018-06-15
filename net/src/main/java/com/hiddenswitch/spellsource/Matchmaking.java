@@ -388,7 +388,7 @@ public interface Matchmaking extends Verticle {
 					try {
 						// Test if we are the first user
 						GameId thisGameId = GameId.create();
-						if (firstUser.trySend(new QueueEntry(request, thisGameId), true)) {
+						if (firstUser.offer(new QueueEntry(request, thisGameId), true)) {
 							// One user is in the queue at this point (this user)
 							while (true) {
 								try {
@@ -445,7 +445,7 @@ public interface Matchmaking extends Verticle {
 											new DeckId(request.getDeckId()));
 									// Queue ourselves into the second user slot, to signal to the first user whom they're matching
 									// with.
-									if (!secondUser.trySend(new QueueEntry(request, match.gameId), true)) {
+									if (!secondUser.offer(new QueueEntry(request, match.gameId), true)) {
 										throw new AssertionError();
 									}
 									// At this point, the first user isn't permitted to cancel gracefully. The test for valid
@@ -529,7 +529,7 @@ public interface Matchmaking extends Verticle {
 			}
 
 			SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId());
-			if (!queue.trySend(new MatchmakingQueueEntry()
+			if (!queue.offer(new MatchmakingQueueEntry()
 					.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
 					.setUserId(request.getUserId())
 					.setRequest(request), false)) {
@@ -552,7 +552,7 @@ public interface Matchmaking extends Verticle {
 			String queueId = currentQueue.remove(userId);
 			if (queueId != null) {
 				SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
-				queue.trySend(new MatchmakingQueueEntry()
+				queue.offer(new MatchmakingQueueEntry()
 						.setCommand(MatchmakingQueueEntry.Command.CANCEL)
 						.setUserId(userId.toString()), false);
 			}
@@ -657,8 +657,8 @@ public interface Matchmaking extends Verticle {
 	}
 
 	@Suspendable
-	static void startDefaultQueues() throws SuspendExecution {
-		startMatchmaker("constructed", new MatchmakingQueueConfiguration()
+	static Closeable startDefaultQueues() throws SuspendExecution {
+		Closeable constructed = startMatchmaker("constructed", new MatchmakingQueueConfiguration()
 				.setBotOpponent(false)
 				.setLobbySize(2)
 				.setName("Constructed")
@@ -669,7 +669,7 @@ public interface Matchmaking extends Verticle {
 				.setStillConnectedTimeout(1000L)
 				.setWaitsForHost(false));
 
-		startMatchmaker("quick-play", new MatchmakingQueueConfiguration()
+		Closeable quickPlay = startMatchmaker("quick-play", new MatchmakingQueueConfiguration()
 				.setBotOpponent(true)
 				.setLobbySize(1)
 				.setName("Quick Play")
@@ -679,111 +679,121 @@ public interface Matchmaking extends Verticle {
 				.setRules(new CardDesc[0])
 				.setStillConnectedTimeout(4000L)
 				.setWaitsForHost(false));
+
+		return (completionHandler -> constructed.close(v1 -> quickPlay.close(completionHandler)));
 	}
 
 	@Suspendable
-	static void startMatchmaker(String queueId, MatchmakingQueueConfiguration configuration) throws SuspendExecution {
-		// There should only be one matchmaker per queue per cluster
-		Lock lock;
-		try {
-			// TODO: Specify a smart, cluster-wide timeout for things like this.
-			lock = SharedData.lock(queueId, 8000L);
-		} catch (VertxException timedOut) {
-			if (timedOut.getCause() instanceof TimeoutException) {
-				// The queue already exists elsewhere in the cluster, message will be logged later
-				lock = null;
-			} else {
-				// A different, probably real error occurred.
-				throw new RuntimeException(timedOut);
-			}
-		}
-
-		if (lock == null) {
-			LOGGER.info("startMatchmaker {}: Matchmaker already exists (only one per node per cluster allowed)", queueId);
-			return;
-		}
-
-		try {
-			List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
-			int lobbySize = configuration.getLobbySize();
-			SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
-
-			// Dequeue requests
-			do {
-				MatchmakingQueueEntry request = queue.poll(Long.MAX_VALUE);
-				switch (request.command) {
-					case ENQUEUE:
-						thisMatchRequests.add(request.request);
-						break;
-					case CANCEL:
-						thisMatchRequests.removeIf(existingReq -> existingReq.getUserId().equals(request.userId));
-						break;
+	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration configuration) throws SuspendExecution {
+		Fiber fiber = new Fiber(() -> {
+			// There should only be one matchmaker per queue per cluster
+			Lock lock;
+			try {
+				lock = SharedData.lock(queueId);
+			} catch (VertxException timedOut) {
+				if (timedOut.getCause() instanceof TimeoutException) {
+					// The queue already exists elsewhere in the cluster, message will be logged later
+					lock = null;
+				} else {
+					// A different, probably real error occurred.
+					throw new RuntimeException(timedOut);
 				}
+			}
 
-				if (thisMatchRequests.size() == lobbySize) {
-					// Start a game. Check that everyone is still connected.
+			if (lock == null) {
+				LOGGER.info("startMatchmaker {}: Matchmaker already exists (only one per node per cluster allowed)", queueId);
+				return;
+			}
 
-					long stillConnectedTimeout = configuration.getStillConnectedTimeout();
-					List<Future> futures = new ArrayList<>(thisMatchRequests.size());
-					// Everyone in the lobby will be pinged
-					for (int i = 0; i < thisMatchRequests.size(); i++) {
-						Future<Void> future = Future.future();
-						SuspendableCondition pong = SuspendableCondition.getOrCreate("Matchmaking::connection__pong[" + thisMatchRequests.get(i).getUserId() + "]");
-						SuspendableCondition ping = SuspendableCondition.getOrCreate("Matchmaking::connection__ping[" + thisMatchRequests.get(i).getUserId() + "]");
-						ping.signal();
-						pong.awaitMillis(stillConnectedTimeout, future);
-						futures.add(future);
+			try {
+				List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
+				int lobbySize = configuration.getLobbySize();
+				SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
+
+				// Dequeue requests
+				do {
+					MatchmakingQueueEntry request = queue.take();
+					switch (request.command) {
+						case ENQUEUE:
+							thisMatchRequests.add(request.request);
+							break;
+						case CANCEL:
+							thisMatchRequests.removeIf(existingReq -> existingReq.getUserId().equals(request.userId));
+							break;
 					}
 
-					// Send out all the pings at once
-					CompositeFuture allConnected = invoke(CompositeFuture.join(futures)::setHandler);
+					if (thisMatchRequests.size() == lobbySize) {
+						// Start a game. Check that everyone is still connected.
 
-					// Is everyone still connected?
-					if (allConnected.failed()) {
-						// Reenqueue people who are still alive, then continue
-						for (int i = thisMatchRequests.size() - 1; i >= 0; i--) {
-							if (allConnected.failed(i)) {
-								thisMatchRequests.remove(i);
-							}
+						long stillConnectedTimeout = configuration.getStillConnectedTimeout();
+						List<Future> futures = new ArrayList<>(thisMatchRequests.size());
+						// Everyone in the lobby will be pinged
+						for (int i = 0; i < thisMatchRequests.size(); i++) {
+							Future<Void> future = Future.future();
+							SuspendableCondition pong = SuspendableCondition.getOrCreate("Matchmaking::connection__pong[" + thisMatchRequests.get(i).getUserId() + "]");
+							SuspendableCondition ping = SuspendableCondition.getOrCreate("Matchmaking::connection__ping[" + thisMatchRequests.get(i).getUserId() + "]");
+							ping.signal();
+							pong.awaitMillis(stillConnectedTimeout, future);
+							futures.add(future);
 						}
 
-						continue;
+						// Send out all the pings at once
+						CompositeFuture allConnected = invoke(CompositeFuture.join(futures)::setHandler);
+
+						// Is everyone still connected?
+						if (allConnected.failed()) {
+							// Reenqueue people who are still alive, then continue
+							for (int i = thisMatchRequests.size() - 1; i >= 0; i--) {
+								if (allConnected.failed(i)) {
+									thisMatchRequests.remove(i);
+								}
+							}
+
+							continue;
+						}
+
+						// Is this a bot game?
+						if (configuration.isBotOpponent()) {
+							// Create a bot game.
+							MatchmakingRequest user = thisMatchRequests.get(0);
+							bot(new UserId(user.getUserId()), new DeckId(user.getDeckId()), user.getBotDeckId() == null ? null : new DeckId(user.getBotDeckId()));
+							getGameReadyCondition(user.getUserId()).signal();
+							continue;
+						}
+
+						// Create a game for every pair
+						if (thisMatchRequests.size() % 2 != 0) {
+							throw new AssertionError("thisMatchRequests.size()");
+						}
+
+						for (int i = 0; i < thisMatchRequests.size(); i += 2) {
+							MatchmakingRequest user1 = thisMatchRequests.get(i);
+							MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
+
+							// This is a standard competitive match
+							vs(GameId.create(), new UserId(user1.getUserId()), new DeckId(user1.getDeckId()), new UserId(user2.getUserId()), new DeckId(user2.getDeckId()));
+
+							getGameReadyCondition(user1.getUserId()).signal();
+							getGameReadyCondition(user2.getUserId()).signal();
+						}
 					}
+				} while (/*Queues that run once are typically private games*/!configuration.isOnce());
 
-					// Is this a bot game?
-					if (configuration.isBotOpponent()) {
-						// Create a bot game.
-						MatchmakingRequest user = thisMatchRequests.get(0);
-						bot(new UserId(user.getUserId()), new DeckId(user.getDeckId()), user.getBotDeckId() == null ? null : new DeckId(user.getBotDeckId()));
-						getGameReadyCondition(user.getUserId()).signal();
-						continue;
-					}
+				// Clean up all the resources that the queue used
+				queue.destroy();
+			} catch (VertxException | InterruptedException ex) {
+				// Cancelled
+			} finally {
+				lock.release();
+			}
+		});
 
-					// Create a game for every pair
-					if (thisMatchRequests.size() % 2 != 0) {
-						throw new AssertionError("thisMatchRequests.size()");
-					}
+		fiber.start();
 
-					for (int i = 0; i < thisMatchRequests.size(); i += 2) {
-						MatchmakingRequest user1 = thisMatchRequests.get(i);
-						MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
-
-						// This is a standard competitive match
-						vs(GameId.create(), new UserId(user1.getUserId()), new DeckId(user1.getDeckId()), new UserId(user2.getUserId()), new DeckId(user2.getDeckId()));
-
-						getGameReadyCondition(user1.getUserId()).signal();
-						getGameReadyCondition(user2.getUserId()).signal();
-					}
-				}
-			} while (/*Queues that run once are typically private games*/!configuration.isOnce());
-
-			// Clean up all the resources that the queue used
-			queue.destroy();
-		} catch (VertxException | InterruptedException ex) {
-			// Cancelled
-		} finally {
-			lock.release();
-		}
+		return completionHandler -> {
+			fiber.interrupt();
+			completionHandler.handle(Future.succeededFuture());
+		};
 	}
 
 	@NotNull

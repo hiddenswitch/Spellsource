@@ -12,10 +12,18 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
+import java.util.concurrent.TimeoutException;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
+	private static final String TAKE_LOCK = "__takeLock";
+	private static final String INITED = "__inited";
+	private static final String HEAD = "__head";
+	private static final String LAST = "__last";
+	private static final String PUT_LOCK = "__putLock";
+	private static final String HEADER = "__header";
 	private static Logger logger = LoggerFactory.getLogger(SuspendableLinkedQueue.class);
 	private final String name;
 	private final SuspendableMap<String, Node<V>> map;
@@ -45,44 +53,34 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		return suspendableQueue;
 	}
 
+	static <V> SuspendableQueue<V> getOrCreate(String name) throws SuspendExecution {
+		return getOrCreate(name, Integer.MAX_VALUE);
+	}
+
 	@Override
 	@Suspendable
-	public boolean trySend(@NotNull V item, boolean createQueue) {
+	public boolean offer(@NotNull V item, boolean createQueue) {
 		logger.trace("trySend {} {}: Enter", name, item);
-		if (item == null) {
-			throw new NullPointerException("item");
-		}
 		long c = -1L;
-		Lock putLock = lock("__putLock", Long.MAX_VALUE);
+		Lock putLock = null;
 		try {
-			Long counter1 = awaitResult(h -> counter.get(h));
-			if (counter1 == capacity) {
-				logger.trace("trySend {} {}: At capacity", name, item);
-				return false;
-			}
+			putLock = lock(PUT_LOCK);
 			Node<V> node = new Node<V>(item);
-
 			logger.trace("trySend {} {}: Node put", name, item);
-			long expected = counter1;
-			while (expected < capacity) {
-				long finalExpected = expected;
-				Boolean incremented = awaitResult(h -> counter.compareAndSet(finalExpected, finalExpected + 1, h));
-				if (!incremented) {
-					expected += 1;
-					continue;
-				}
 
+			if (invoke(counter::get) < capacity) {
 				map.put(node.id, node);
 				enqueue(node);
+				c = invoke(counter::getAndIncrement);
 				logger.trace("trySend {} {}: Enqueued", name, item);
-				c = finalExpected;
 				if (c + 1 < capacity) {
 					notFull.signal();
 				}
-				break;
 			}
 		} finally {
-			putLock.release();
+			if (putLock != null) {
+				putLock.release();
+			}
 		}
 		if (c == 0) {
 			signalNotEmpty();
@@ -92,23 +90,28 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	}
 
 	@Suspendable
+	private Lock lock(String varName) {
+		return SharedData.lock(name + varName);
+	}
+
+	@Suspendable
 	private void signalNotEmpty() {
-//		Lock takeLock = lock("__takeLock", Integer.MAX_VALUE);
-//		try {
-		notEmpty.signal();
-//		} finally {
-//			takeLock.release();
-//		}
+		Lock takeLock = lock(TAKE_LOCK);
+		try {
+			notEmpty.signal();
+		} finally {
+			takeLock.release();
+		}
 	}
 
 	@Suspendable
 	private void enqueue(Node<V> node) {
-		Node<V> last = map.get("__last");
+		Node<V> last = map.get(LAST);
 		last.next = node.id;
-		map.put("__last", node);
+		map.put(LAST, node);
 		// This was the head element, so update it too
 		if (last.item == null) {
-			map.put("__head", last);
+			map.put(HEAD, last);
 		}
 		map.put(last.id, last);
 	}
@@ -122,18 +125,27 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		long millis = timeout;
 		Lock takeLock;
 		try {
-			takeLock = lock("__takeLock", timeout);
+			takeLock = lock(TAKE_LOCK, timeout);
 			logger.trace("receive {}: Taking lock", name);
 		} catch (VertxException timedOut) {
-			logger.trace("receive {}: Lock timed out", name);
-			return null;
+			if (timedOut.getCause() instanceof TimeoutException) {
+				logger.trace("receive {}: Lock timed out", name);
+				return null;
+			} else {
+				throw timedOut;
+			}
 		}
 
 		millis -= System.currentTimeMillis() - startTime;
 		try {
 			Long c1;
 			while (true) {
-				c1 = awaitResult(h -> counter.get(h));
+				c1 = invoke(counter::get);
+				if (c1 == -1L) {
+					// Destroyed
+					return null;
+				}
+
 				if (c1 == 0L) {
 					if (millis <= 0) {
 						return null;
@@ -147,7 +159,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 			x = dequeue();
 			logger.trace("receive {}: dequeued {}", name, x);
-			c = awaitResult(h -> counter.getAndAdd(-1L, h));
+			c = invoke(counter::getAndAdd, -1L);
 			logger.trace("receive {}: subtracted counter to {}", name, c - 1);
 			if (c > 1) {
 				logger.trace("receive {}: signaling not empty", name);
@@ -164,14 +176,39 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		return x;
 	}
 
+	@Override
+	public V take() throws InterruptedException, SuspendExecution {
+		V x;
+		Long c = -1L;
+		Lock takeLock = lock(TAKE_LOCK);
+		try {
+			while (invoke(counter::get) == 0) {
+				notEmpty.awaitMillis(Long.MAX_VALUE);
+			}
+			x = dequeue();
+			c = invoke(counter::getAndAdd, -1L);
+			if (c > 1) {
+				notEmpty.signal();
+			}
+		} finally {
+			takeLock.release();
+		}
+
+		if (c == capacity) {
+			signalNotFull();
+		}
+
+		return x;
+	}
+
 	@Suspendable
 	private void signalNotFull() {
-//		Lock putLock = lock("__putLock", Long.MAX_VALUE);
-//		try {
-		notFull.signal();
-//		} finally {
-//			putLock.release();
-//		}
+		Lock putLock = lock(PUT_LOCK);
+		try {
+			notFull.signal();
+		} finally {
+			putLock.release();
+		}
 	}
 
 	@Suspendable
@@ -181,7 +218,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 	@Suspendable
 	private V dequeue() {
-		Node<V> h = map.remove("__head");
+		Node<V> h = map.remove(HEAD);
 		map.remove(h.id);
 		if (h.item != null) {
 			throw new AssertionError("head.item != null");
@@ -189,22 +226,43 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		Node<V> first = map.get(h.next);
 		V x = first.item;
 		first.item = null;
-		map.put("__head", first);
+		map.put(HEAD, first);
 		map.put(first.id, first);
 		// If there is no next element, this is also the last element
 		if (first.next == null) {
-			map.put("__last", first);
+			map.put(LAST, first);
 		}
 		return x;
 	}
 
 	void initIfNeeded() throws SuspendExecution {
-		SuspendableLinkedQueue.Node<V> nullNode = new SuspendableLinkedQueue.Node<>(null);
-		if (map.putIfAbsent("__inited", nullNode) == null) {
-			map.put(nullNode.id, nullNode);
-			map.put("__last", nullNode);
-			map.put("__head", nullNode);
+		Lock lock = lock(HEADER);
+		try {
+			SuspendableLinkedQueue.Node<V> nullNode = new SuspendableLinkedQueue.Node<>(null);
+			if (map.putIfAbsent(INITED, nullNode) == null) {
+				invoke(counter::compareAndSet, invoke(counter::get), 0L);
+				map.put(nullNode.id, nullNode);
+				map.put(LAST, nullNode);
+				map.put(HEAD, nullNode);
+			}
+		} finally {
+			lock.release();
 		}
+	}
+
+	@Override
+	@Suspendable
+	public void destroy() {
+		Lock lock = lock(HEADER);
+		try {
+			map.clear();
+			invoke(counter::compareAndSet, invoke(counter::get), -1L);
+			signalNotFull();
+			signalNotEmpty();
+		} finally {
+			lock.release();
+		}
+
 	}
 
 	static class Node<V> implements Serializable {

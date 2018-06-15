@@ -484,11 +484,14 @@ public class Spellsource {
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
 		final List<Verticle> verticles = Arrays.asList(services());
 
-		CompositeFuture.all(verticles.stream().map(verticle -> {
+		List<Future> futures = new ArrayList<>();
+		for (Verticle verticle : verticles) {
 			final Future<String> future = Future.future();
 			vertx.deployVerticle(verticle, future);
-			return future;
-		}).collect(toList())).setHandler(deployments);
+			futures.add(future);
+		}
+
+		CompositeFuture.all(futures).setHandler(deployments);
 	}
 
 	protected Verticle[] services() {

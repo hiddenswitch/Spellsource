@@ -17,6 +17,7 @@ import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
+import io.vertx.core.Closeable;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -38,6 +39,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -52,6 +54,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static final DateFormat dateTimeFormatter = Utils.createRFC1123DateTimeFormatter();
 	private final int port;
 	private HttpServer server;
+	private Closeable queues;
 
 	public GatewayImpl(int port) {
 		this.port = port;
@@ -97,7 +100,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		Conversations.handleConnections();
 
 		// Create default matchmaking queues
-		Matchmaking.startDefaultQueues();
+		queues = Matchmaking.startDefaultQueues();
 
 		// Handle the enqueue and dequeue methods through the matchmaker
 		Matchmaking.handleConnections();
@@ -755,6 +758,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	public void stop() throws Exception {
 		if (server != null) {
 			server.close();
+		}
+		if (queues != null) {
+			invoke(queues::close);
 		}
 	}
 
