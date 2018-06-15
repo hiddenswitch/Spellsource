@@ -2,7 +2,7 @@
   "name": "Pound",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "MULBERRY",
+  "heroClass": "EGGPLANT",
   "rarity": "FREE",
   "description": "Deal 4 damage. Draw a card.",
   "targetSelection": "ANY",
