@@ -22,53 +22,53 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Indicates that a record has been removed from the client&#39;s ephemeral collections. 
+ * A document that describes an awaiting match. 
  */
-@ApiModel(description = "Indicates that a record has been removed from the client's ephemeral collections. ")
+@ApiModel(description = "A document that describes an awaiting match. ")
 
-public class EnvelopeRemoved implements Serializable {
+public class Match implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("inviteId")
-  private String inviteId = null;
+  @JsonProperty("_id")
+  private String id = null;
 
-  @JsonProperty("matchId")
-  private String matchId = null;
+  @JsonProperty("createdAt")
+  private Long createdAt = null;
 
-  public EnvelopeRemoved inviteId(String inviteId) {
-    this.inviteId = inviteId;
+  public Match id(String id) {
+    this.id = id;
     return this;
   }
 
    /**
-   * The unique ID of the invitation that should be removed. 
-   * @return inviteId
+   * The ID of the match. 
+   * @return id
   **/
-  @ApiModelProperty(value = "The unique ID of the invitation that should be removed. ")
-  public String getInviteId() {
-    return inviteId;
+  @ApiModelProperty(value = "The ID of the match. ")
+  public String getId() {
+    return id;
   }
 
-  public void setInviteId(String inviteId) {
-    this.inviteId = inviteId;
+  public void setId(String id) {
+    this.id = id;
   }
 
-  public EnvelopeRemoved matchId(String matchId) {
-    this.matchId = matchId;
+  public Match createdAt(Long createdAt) {
+    this.createdAt = createdAt;
     return this;
   }
 
    /**
-   * The unique ID of the match that should be removed. 
-   * @return matchId
+   * A timestamp for when this game was created (approximate). 
+   * @return createdAt
   **/
-  @ApiModelProperty(value = "The unique ID of the match that should be removed. ")
-  public String getMatchId() {
-    return matchId;
+  @ApiModelProperty(value = "A timestamp for when this game was created (approximate). ")
+  public Long getCreatedAt() {
+    return createdAt;
   }
 
-  public void setMatchId(String matchId) {
-    this.matchId = matchId;
+  public void setCreatedAt(Long createdAt) {
+    this.createdAt = createdAt;
   }
 
 
@@ -80,24 +80,24 @@ public class EnvelopeRemoved implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
-    return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
-        Objects.equals(this.matchId, envelopeRemoved.matchId);
+    Match match = (Match) o;
+    return Objects.equals(this.id, match.id) &&
+        Objects.equals(this.createdAt, match.createdAt);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId, matchId);
+    return Objects.hash(id, createdAt);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeRemoved {\n");
+    sb.append("class Match {\n");
     
-    sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
-    sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
+    sb.append("    id: ").append(toIndentedString(id)).append("\n");
+    sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("}");
     return sb.toString();
   }

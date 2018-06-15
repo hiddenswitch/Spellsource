@@ -17,6 +17,7 @@ import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
+import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -70,10 +71,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		// Handle game messaging here
 		final String websocketPath = "/" + Games.WEBSOCKET_PATH + "-clustered";
+
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(authHandler);
 
+		// Enables the gateway to handle incoming game sockets.
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(Games.createWebSocketHandler());
@@ -85,13 +88,22 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		router.route("/realtime")
 				.method(HttpMethod.GET)
-				.handler(Realtime.create());
-
-		// Enable realtime conversations
-		Conversations.realtime();
+				.handler(Connection.create());
 
 		// Enable presence
-		Presence.realtime();
+		Presence.handleConnections();
+
+		// Enable realtime conversations
+		Conversations.handleConnections();
+
+		// Create default matchmaking queues
+		Matchmaking.startDefaultQueues();
+
+		// Handle the enqueue and dequeue methods through the matchmaker
+		Matchmaking.handleConnections();
+
+		// Handle realtime notification of invitations
+		Invites.handleConnections();
 
 		// Health check comes first
 		router.route("/")
@@ -100,7 +112,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 					routingContext.response().end("OK");
 				});
 
-		// All routes need logging.
+		// All routes need logging of URLs. URLs never leak private information
 		router.route().handler(LoggerHandler.create());
 
 		// CORS
@@ -120,6 +132,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.allowedMethods(Sets.newHashSet(HttpMethod.GET, HttpMethod.POST, HttpMethod.PUT, HttpMethod.DELETE, HttpMethod.OPTIONS, HttpMethod.HEAD)));
 
 		// Pass through cookies
+		// TODO: This obviously isn't working for the load balancer / cookies coming from the client
 		router.route().handler(CookieHandler.create());
 
 		// add "content-type=application/json" to all responses
@@ -677,7 +690,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, Object> cache = SharedData.getClusterWideMap("Cards::cards");
+		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards::cards");
 		// Our objective is to create a cards version ONCE for the entire cluster
 		final String thisCardsVersionId = deploymentID();
 		final String thisDate = dateTimeFormatter.format(new Date());

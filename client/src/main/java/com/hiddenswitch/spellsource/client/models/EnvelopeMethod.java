@@ -17,6 +17,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.EnvelopeMethodDequeue;
+import com.hiddenswitch.spellsource.client.models.EnvelopeMethodEnqueue;
 import com.hiddenswitch.spellsource.client.models.EnvelopeMethodSendMessage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -32,6 +34,12 @@ public class EnvelopeMethod implements Serializable {
 
   @JsonProperty("methodId")
   private String methodId = null;
+
+  @JsonProperty("enqueue")
+  private EnvelopeMethodEnqueue enqueue = null;
+
+  @JsonProperty("dequeue")
+  private EnvelopeMethodDequeue dequeue = null;
 
   @JsonProperty("sendMessage")
   private EnvelopeMethodSendMessage sendMessage = null;
@@ -52,6 +60,42 @@ public class EnvelopeMethod implements Serializable {
 
   public void setMethodId(String methodId) {
     this.methodId = methodId;
+  }
+
+  public EnvelopeMethod enqueue(EnvelopeMethodEnqueue enqueue) {
+    this.enqueue = enqueue;
+    return this;
+  }
+
+   /**
+   * Get enqueue
+   * @return enqueue
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeMethodEnqueue getEnqueue() {
+    return enqueue;
+  }
+
+  public void setEnqueue(EnvelopeMethodEnqueue enqueue) {
+    this.enqueue = enqueue;
+  }
+
+  public EnvelopeMethod dequeue(EnvelopeMethodDequeue dequeue) {
+    this.dequeue = dequeue;
+    return this;
+  }
+
+   /**
+   * Get dequeue
+   * @return dequeue
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeMethodDequeue getDequeue() {
+    return dequeue;
+  }
+
+  public void setDequeue(EnvelopeMethodDequeue dequeue) {
+    this.dequeue = dequeue;
   }
 
   public EnvelopeMethod sendMessage(EnvelopeMethodSendMessage sendMessage) {
@@ -83,12 +127,14 @@ public class EnvelopeMethod implements Serializable {
     }
     EnvelopeMethod envelopeMethod = (EnvelopeMethod) o;
     return Objects.equals(this.methodId, envelopeMethod.methodId) &&
+        Objects.equals(this.enqueue, envelopeMethod.enqueue) &&
+        Objects.equals(this.dequeue, envelopeMethod.dequeue) &&
         Objects.equals(this.sendMessage, envelopeMethod.sendMessage);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(methodId, sendMessage);
+    return Objects.hash(methodId, enqueue, dequeue, sendMessage);
   }
 
 
@@ -98,6 +144,8 @@ public class EnvelopeMethod implements Serializable {
     sb.append("class EnvelopeMethod {\n");
     
     sb.append("    methodId: ").append(toIndentedString(methodId)).append("\n");
+    sb.append("    enqueue: ").append(toIndentedString(enqueue)).append("\n");
+    sb.append("    dequeue: ").append(toIndentedString(dequeue)).append("\n");
     sb.append("    sendMessage: ").append(toIndentedString(sendMessage)).append("\n");
     sb.append("}");
     return sb.toString();

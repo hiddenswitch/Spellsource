@@ -1,14 +1,13 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;
+import io.vertx.core.Handler;
 
 public interface SuspendableCondition extends Closeable {
 
-	static SuspendableCondition create(String name) throws SuspendExecution {
-//		SuspendableHazelcastCondition condition = new SuspendableHazelcastCondition(name);
-//		condition.init();
+	static SuspendableCondition getOrCreate(String name) {
 		return new SuspendableEventBusCondition(name);
 	}
 
@@ -16,5 +15,11 @@ public interface SuspendableCondition extends Closeable {
 	long awaitMillis(long millis);
 
 	@Suspendable
+	void awaitMillis(long millis, Handler<AsyncResult<Void>> handler);
+
+	@Suspendable
 	void signal();
+
+	@Suspendable
+	void signalAll();
 }

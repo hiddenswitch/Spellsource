@@ -609,11 +609,11 @@ public interface Games extends Verticle {
 	 * instance.
 	 */
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SharedData.getClusterWideMap("Games::connections");
+		return SuspendableMap.getOrCreate("Games::connections");
 	}
 
 	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
-		return SharedData.getClusterWideMap("Games::players");
+		return SuspendableMap.getOrCreate("Games::players");
 	}
 
 	/**

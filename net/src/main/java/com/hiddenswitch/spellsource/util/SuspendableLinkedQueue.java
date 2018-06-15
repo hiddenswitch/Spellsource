@@ -2,10 +2,12 @@ package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.shareddata.Counter;
 import io.vertx.core.shareddata.Lock;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,7 +24,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	private final SuspendableCondition notEmpty;
 	private final SuspendableCondition notFull;
 
-	SuspendableLinkedQueue(String name, Counter counter, SuspendableMap<String, Node<V>> map, int capacity, SuspendableCondition notEmpty, SuspendableCondition notFull) {
+	private SuspendableLinkedQueue(String name, Counter counter, SuspendableMap<String, Node<V>> map, int capacity, SuspendableCondition notEmpty, SuspendableCondition notFull) {
 		this.counter = counter;
 		this.name = name;
 		this.map = map;
@@ -31,9 +33,21 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		this.notFull = notFull;
 	}
 
+	static <V> SuspendableLinkedQueue<V> getOrCreate(String name, int capacity) throws SuspendExecution {
+		Vertx vertx = Vertx.currentContext().owner();
+		System.setProperty("vertx.hazelcast.async-api", "true");
+		Counter counter = awaitResult(h -> vertx.sharedData().getCounter(name + "__counter", h));
+		SuspendableMap<String, Node<V>> map = SuspendableMap.getOrCreate(name + "__nodes");
+		SuspendableCondition notEmpty = SuspendableCondition.getOrCreate(name + "__notEmpty");
+		SuspendableCondition notFull = SuspendableCondition.getOrCreate(name + "__notFull");
+		SuspendableLinkedQueue<V> suspendableQueue = new SuspendableLinkedQueue<>(name, counter, map, capacity, notEmpty, notFull);
+		suspendableQueue.initIfNeeded();
+		return suspendableQueue;
+	}
+
 	@Override
 	@Suspendable
-	public boolean trySend(V item) {
+	public boolean trySend(@NotNull V item, boolean createQueue) {
 		logger.trace("trySend {} {}: Enter", name, item);
 		if (item == null) {
 			throw new NullPointerException("item");
@@ -81,7 +95,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	private void signalNotEmpty() {
 //		Lock takeLock = lock("__takeLock", Integer.MAX_VALUE);
 //		try {
-			notEmpty.signal();
+		notEmpty.signal();
 //		} finally {
 //			takeLock.release();
 //		}
@@ -154,7 +168,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	private void signalNotFull() {
 //		Lock putLock = lock("__putLock", Long.MAX_VALUE);
 //		try {
-			notFull.signal();
+		notFull.signal();
 //		} finally {
 //			putLock.release();
 //		}
@@ -184,12 +198,13 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		return x;
 	}
 
-	void init() throws SuspendExecution {
+	void initIfNeeded() throws SuspendExecution {
 		SuspendableLinkedQueue.Node<V> nullNode = new SuspendableLinkedQueue.Node<>(null);
-
-		map.put(nullNode.id, nullNode);
-		map.put("__last", nullNode);
-		map.put("__head", nullNode);
+		if (map.putIfAbsent("__inited", nullNode) == null) {
+			map.put(nullNode.id, nullNode);
+			map.put("__last", nullNode);
+			map.put("__head", nullNode);
+		}
 	}
 
 	static class Node<V> implements Serializable {

@@ -1,12 +1,14 @@
 package com.hiddenswitch.spellsource.util;
 
 
+import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SetMultimap;
-import io.reactivex.Observable;
+import com.hazelcast.core.MultiMap;
+import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,8 +16,35 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
+	Map<String, LocalMultimap> LOCAL_MULTIMAPS = new ConcurrentHashMap<>();
+
+	@Suspendable
+	@SuppressWarnings("unchecked")
+	static <K, V> SuspendableMultimap<K, V> getOrCreate(String name) {
+		final Vertx vertx = Vertx.currentContext().owner();
+		if (vertx.isClustered()) {
+			return new SuspendableHazelcastMultimap<>(name);
+		} else {
+			return (SuspendableMultimap<K, V>) LOCAL_MULTIMAPS.computeIfAbsent(name, (k) -> new LocalMultimap<K, V>());
+		}
+	}
+
+	@Suspendable
+	static <K, V> AddedChangedRemoved<K, V> subscribeToKeyInMultimap(String name, K key) throws SuspendExecution {
+		final Vertx vertx = Vertx.currentContext().owner();
+		if (vertx.isClustered()) {
+			final RxEntryListenerAdaptor<K, V> adaptor = new RxEntryListenerAdaptor<>();
+			MultiMap<K, V> map = Sync.invoke(SharedData.getHazelcastInstance()::getMultiMap, name);
+			map.addEntryListener(adaptor, key, true);
+			return adaptor;
+		} else {
+			SuspendableMultimap<K, V> map = getOrCreate(name);
+			return new SingleKeyAddedChangedRemoved<>(key, map);
+		}
+	}
 	// Query Operations
 
 	/**
@@ -126,7 +155,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 	 * updating it will have no effect on the multimap.
 	 */
 	@Suspendable
-	List<V> removeAll(@Nullable Object key);
+	List<V> removeAll(@Nullable K key);
 
 	/**
 	 * Removes all key-value pairs from the multimap, leaving it {@linkplain #isEmpty empty}.

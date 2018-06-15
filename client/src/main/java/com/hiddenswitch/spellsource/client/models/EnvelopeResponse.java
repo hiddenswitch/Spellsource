@@ -17,58 +17,38 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.DefaultMethodResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Indicates that a record has been removed from the client&#39;s ephemeral collections. 
+ * When populated by the client and sent to the server, indicates a response to a request from the server. 
  */
-@ApiModel(description = "Indicates that a record has been removed from the client's ephemeral collections. ")
+@ApiModel(description = "When populated by the client and sent to the server, indicates a response to a request from the server. ")
 
-public class EnvelopeRemoved implements Serializable {
+public class EnvelopeResponse implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("inviteId")
-  private String inviteId = null;
+  @JsonProperty("isAlive")
+  private DefaultMethodResponse isAlive = null;
 
-  @JsonProperty("matchId")
-  private String matchId = null;
-
-  public EnvelopeRemoved inviteId(String inviteId) {
-    this.inviteId = inviteId;
+  public EnvelopeResponse isAlive(DefaultMethodResponse isAlive) {
+    this.isAlive = isAlive;
     return this;
   }
 
    /**
-   * The unique ID of the invitation that should be removed. 
-   * @return inviteId
+   * Get isAlive
+   * @return isAlive
   **/
-  @ApiModelProperty(value = "The unique ID of the invitation that should be removed. ")
-  public String getInviteId() {
-    return inviteId;
+  @ApiModelProperty(value = "")
+  public DefaultMethodResponse getIsAlive() {
+    return isAlive;
   }
 
-  public void setInviteId(String inviteId) {
-    this.inviteId = inviteId;
-  }
-
-  public EnvelopeRemoved matchId(String matchId) {
-    this.matchId = matchId;
-    return this;
-  }
-
-   /**
-   * The unique ID of the match that should be removed. 
-   * @return matchId
-  **/
-  @ApiModelProperty(value = "The unique ID of the match that should be removed. ")
-  public String getMatchId() {
-    return matchId;
-  }
-
-  public void setMatchId(String matchId) {
-    this.matchId = matchId;
+  public void setIsAlive(DefaultMethodResponse isAlive) {
+    this.isAlive = isAlive;
   }
 
 
@@ -80,24 +60,22 @@ public class EnvelopeRemoved implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
-    return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
-        Objects.equals(this.matchId, envelopeRemoved.matchId);
+    EnvelopeResponse envelopeResponse = (EnvelopeResponse) o;
+    return Objects.equals(this.isAlive, envelopeResponse.isAlive);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId, matchId);
+    return Objects.hash(isAlive);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeRemoved {\n");
+    sb.append("class EnvelopeResponse {\n");
     
-    sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
-    sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
+    sb.append("    isAlive: ").append(toIndentedString(isAlive)).append("\n");
     sb.append("}");
     return sb.toString();
   }

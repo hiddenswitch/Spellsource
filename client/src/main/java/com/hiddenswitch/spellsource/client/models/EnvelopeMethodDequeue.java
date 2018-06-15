@@ -22,53 +22,32 @@ import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Indicates that a record has been removed from the client&#39;s ephemeral collections. 
+ * Leave the specified queue 
  */
-@ApiModel(description = "Indicates that a record has been removed from the client's ephemeral collections. ")
+@ApiModel(description = "Leave the specified queue ")
 
-public class EnvelopeRemoved implements Serializable {
+public class EnvelopeMethodDequeue implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("inviteId")
-  private String inviteId = null;
+  @JsonProperty("queueId")
+  private String queueId = null;
 
-  @JsonProperty("matchId")
-  private String matchId = null;
-
-  public EnvelopeRemoved inviteId(String inviteId) {
-    this.inviteId = inviteId;
+  public EnvelopeMethodDequeue queueId(String queueId) {
+    this.queueId = queueId;
     return this;
   }
 
    /**
-   * The unique ID of the invitation that should be removed. 
-   * @return inviteId
+   * The queue to which the server should direct this request. 
+   * @return queueId
   **/
-  @ApiModelProperty(value = "The unique ID of the invitation that should be removed. ")
-  public String getInviteId() {
-    return inviteId;
+  @ApiModelProperty(value = "The queue to which the server should direct this request. ")
+  public String getQueueId() {
+    return queueId;
   }
 
-  public void setInviteId(String inviteId) {
-    this.inviteId = inviteId;
-  }
-
-  public EnvelopeRemoved matchId(String matchId) {
-    this.matchId = matchId;
-    return this;
-  }
-
-   /**
-   * The unique ID of the match that should be removed. 
-   * @return matchId
-  **/
-  @ApiModelProperty(value = "The unique ID of the match that should be removed. ")
-  public String getMatchId() {
-    return matchId;
-  }
-
-  public void setMatchId(String matchId) {
-    this.matchId = matchId;
+  public void setQueueId(String queueId) {
+    this.queueId = queueId;
   }
 
 
@@ -80,24 +59,22 @@ public class EnvelopeRemoved implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
-    return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
-        Objects.equals(this.matchId, envelopeRemoved.matchId);
+    EnvelopeMethodDequeue envelopeMethodDequeue = (EnvelopeMethodDequeue) o;
+    return Objects.equals(this.queueId, envelopeMethodDequeue.queueId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId, matchId);
+    return Objects.hash(queueId);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class EnvelopeRemoved {\n");
+    sb.append("class EnvelopeMethodDequeue {\n");
     
-    sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
-    sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
+    sb.append("    queueId: ").append(toIndentedString(queueId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

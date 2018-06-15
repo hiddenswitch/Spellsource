@@ -15,67 +15,10 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class SharedData {
-	private static Map<String, LocalMultimap> localMultimaps = new ConcurrentHashMap<>();
-
-	@Suspendable
-	public static <K, V> SuspendableMap<K, V> getClusterWideMap(String name) throws SuspendExecution {
-		return getClusterWideMap(name, Vertx.currentContext().owner());
-	}
-
-	@Suspendable
-	public static <K, V> SuspendableMap<K, V> getClusterWideMapUnchecked(String name) {
-		try {
-			return getClusterWideMap(name);
-		} catch (SuspendExecution execution) {
-			// Unreachable
-			return null;
-		}
-	}
-
-	@Suspendable
-	public static <K, V> SuspendableMap<K, V> getClusterWideMap(String name, final Vertx vertx) throws SuspendExecution {
-		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
-		if (vertx.isClustered()) {
-			AsyncMap<K, V> map = awaitResult(done -> client.<K, V>getClusterWideMap(name, done));
-			return new SuspendableAsyncMap<>(map);
-		} else {
-			return new SuspendableWrappedMap<>(client.<K, V>getLocalMap(name));
-		}
-	}
-
-	public static <K, V> void getClusterWideMap(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
-		Vertx vertx = Vertx.currentContext().owner();
-		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
-		client.getAsyncMap(name, handler);
-	}
-
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	public static <K, V> SuspendableMultimap<K, V> getClusterWideMultimap(String name) throws SuspendExecution {
-		final Vertx vertx = Vertx.currentContext().owner();
-		if (vertx.isClustered()) {
-			return new SuspendableHazelcastMultimap<>(name);
-		} else {
-			return (SuspendableMultimap<K, V>) localMultimaps.computeIfAbsent(name, (k) -> new LocalMultimap<K, V>());
-		}
-	}
-
-	@Suspendable
-	public static <K, V> AddedChangedRemoved<K, V> subscribeToKeyInMultimap(String name, K key) throws SuspendExecution {
-		final Vertx vertx = Vertx.currentContext().owner();
-		if (vertx.isClustered()) {
-			final RxEntryListenerAdaptor<K, V> adaptor = new RxEntryListenerAdaptor<>();
-			MultiMap<K, V> map = Sync.invoke(getHazelcastInstance()::getMultiMap, name);
-			map.addEntryListener(adaptor, key, true);
-			return adaptor;
-		} else {
-			SuspendableMultimap<K, V> map = getClusterWideMultimap(name);
-			return new SingleKeyAddedChangedRemoved<>(key, map);
-		}
-	}
 
 	public static HazelcastInstance getHazelcastInstance() {
 		return getClusterManager().getHazelcastInstance();
@@ -89,5 +32,10 @@ public class SharedData {
 	public static Lock lock(String name, long timeout) {
 		final Vertx vertx = Vertx.currentContext().owner();
 		return awaitResult(h -> vertx.sharedData().getLockWithTimeout(name, timeout, h));
+	}
+
+	@Suspendable
+	public static Lock lock(String name) {
+		return invoke(Vertx.currentContext().owner().sharedData()::getLock, name);
 	}
 }
