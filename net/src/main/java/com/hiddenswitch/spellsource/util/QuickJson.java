@@ -22,7 +22,7 @@ public class QuickJson {
 					|| arg.getClass().isAssignableFrom(String.class)) {
 				arr.add(arg);
 			} else {
-				arr.add(json(arg));
+				arr.add(JsonObject.mapFrom(arg));
 			}
 		}
 		return arr;

@@ -1,9 +1,10 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
 import io.reactivex.Observable;
 import org.jetbrains.annotations.Nullable;
 
@@ -12,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-class LocalMultimap<K, V> extends AbstractAddedChangedRemoved<K, V> implements SuspendableMultimap<K, V> {
+public class LocalMultimap<K, V> extends AbstractAddedChangedRemoved<K, V> implements SuspendableMultimap<K, V> {
 	ArrayListMultimap<K, V> map = ArrayListMultimap.create();
 
 	@Override

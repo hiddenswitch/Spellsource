@@ -824,8 +824,11 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public String getBattlecryDescription(int index) {
-		if (index < 0 || index >= getChooseOneBattlecries().length) {
+		if (index < -1 || index >= getChooseOneBattlecries().length) {
 			return null;
+		}
+		if (index == -1) {
+			return getDesc().getChooseBothBattlecry().getDescription();
 		}
 		if (getChooseOneBattlecries()[index] == null) {
 			return null;
@@ -834,18 +837,30 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	public String getBattlecryName(int index) {
-		if (index < 0 || index >= getChooseOneBattlecries().length) {
+		if (index == -1) {
+			return getDesc().getChooseBothBattlecry().getName();
+		}
+
+		if (index < -1 || index >= getChooseOneBattlecries().length) {
 			return getBattlecryDescription(index);
 		}
 		if (getChooseOneBattlecries()[index] == null) {
 			return getBattlecryDescription(index);
 		}
+
+
 		final String name = getChooseOneBattlecries()[index].getName();
 		return name == null ? getBattlecryDescription(index) : name;
 	}
 
 	public String getTransformMinionCardId(int index) {
-		BattlecryDesc battlecryOption = getChooseOneBattlecries()[index];
+		BattlecryDesc battlecryOption;
+		if (index == -1) {
+			battlecryOption = getDesc().getChooseBothBattlecry();
+		} else {
+			battlecryOption = getChooseOneBattlecries()[index];
+		}
+
 		if (battlecryOption == null) {
 			return null;
 		}

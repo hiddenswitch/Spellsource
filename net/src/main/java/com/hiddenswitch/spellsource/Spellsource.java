@@ -4,17 +4,15 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.impl.Trigger;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerOptions;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
-import io.vertx.ext.web.Router;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.utils.Attribute;
@@ -50,6 +48,8 @@ import static java.util.stream.Collectors.toSet;
  * GameEventType, Attribute, Handler)}.
  * <p>
  * It will provide more APIs for features in the future.
+ *
+ * @see com.hiddenswitch.spellsource.applications.LocalClustered for the entry point of the executable.
  */
 public class Spellsource {
 	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
@@ -484,11 +484,14 @@ public class Spellsource {
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
 		final List<Verticle> verticles = Arrays.asList(services());
 
-		CompositeFuture.all(verticles.stream().map(verticle -> {
+		List<Future> futures = new ArrayList<>();
+		for (Verticle verticle : verticles) {
 			final Future<String> future = Future.future();
 			vertx.deployVerticle(verticle, future);
-			return future;
-		}).collect(toList())).setHandler(deployments);
+			futures.add(future);
+		}
+
+		CompositeFuture.all(futures).setHandler(deployments);
 	}
 
 	protected Verticle[] services() {

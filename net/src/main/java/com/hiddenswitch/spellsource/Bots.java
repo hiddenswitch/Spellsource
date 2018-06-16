@@ -8,8 +8,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
-import com.hiddenswitch.spellsource.util.SharedData;
-import com.hiddenswitch.spellsource.util.SuspendableMap;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
@@ -68,7 +67,7 @@ public interface Bots {
 		// See if there's a cache of bot plans for this action
 		if (behaviour instanceof GameStateValueBehaviour) {
 			GameStateValueBehaviour gsvb = (GameStateValueBehaviour) behaviour;
-			SuspendableMap<GameId, Buffer> map = SharedData.getClusterWideMapUnchecked("Bots::indexPlans");
+			SuspendableMap<GameId, Buffer> map = SuspendableMap.getOrCreate("Bots::indexPlans");
 			GameId gameId = request.gameId;
 			Buffer buf = map.get(gameId);
 			if (buf != null) {

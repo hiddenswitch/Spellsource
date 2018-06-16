@@ -35,13 +35,16 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 
 
 /**
- * The Accounts service. Provides a way for end users to create accounts, get account data, and authenticate users.
+ * The accounts services. Provides a way for end users to create accounts, get account data, and authenticate users.
  */
 public interface Accounts {
 	/**
 	 * The USERS constant specifies the name of the collection in Mongo that contains the user data.
 	 */
 	String USERS = "accounts.users";
+	/**
+	 * This pattern specifies what characters make a valid username.
+	 */
 	Pattern USERNAME_PATTERN = Pattern.compile("[A-Za-z0-9_]+");
 	Logger LOGGER = LoggerFactory.getLogger(Accounts.class);
 
@@ -163,9 +166,9 @@ public interface Accounts {
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
-	 * 		set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
-	 * 		that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests.
-	 * 		The token and user ID should be saved.
+	 * set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
+	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests. The
+	 * token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
@@ -223,28 +226,61 @@ public interface Accounts {
 		return response;
 	}
 
+	/**
+	 * Creates a secure (non-reversible) reprsentation of a password.
+	 *
+	 * @param password The user password, typically in plaintext.
+	 * @return The SCrypted password.
+	 */
 	static String securedPassword(String password) {
 		return SCryptUtil.scrypt(password, 16384, 8, 1);
 	}
 
+	/**
+	 * Validates that a password is not null and at least of length 1.
+	 * @param password The password, in plaintext, to check.
+	 * @return {@code true} if the password is not {@code null} and its length is at least 1.
+	 */
 	static boolean isValidPassword(String password) {
 		return password != null && password.length() >= 1;
 	}
 
+	/**
+	 * Checks if an email already exists.
+	 * @param emailAddress The address ot check.
+	 * @return {@code true} if the email exists in the database.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static boolean emailExists(String emailAddress) throws SuspendExecution, InterruptedException {
 		Long count = mongo().count(USERS, json(UserRecord.EMAILS_ADDRESS, emailAddress));
 		return count != 0;
 	}
 
+	/**
+	 * Uses the Apache {@link EmailValidator} to determine if an email is valid.
+	 * @param emailAddress The address to check.
+	 * @return {@code true} if the address is valid.
+	 */
 	static boolean isValidEmailAddress(String emailAddress) {
 		return EmailValidator.getInstance().isValid(emailAddress);
 	}
 
+	/**
+	 * Checks that a username is valid.
+	 * @param name The username to check.
+	 * @return {@code true} if it's nonnull, nonempty, cnotains valid characters and is not vulgar.
+	 */
 	static boolean isValidName(String name) {
-		return getUsernamePattern().matcher(name).matches()
+		return name != null && name.length() >= 1 && getUsernamePattern().matcher(name).matches()
 				&& !isVulgar(name);
 	}
 
+	/**
+	 * Checks if a username is vulgar.
+	 * @param name The username to check
+	 * @return {@code true} if the username is vulgar.
+	 */
 	static boolean isVulgar(String name) {
 		return false;
 	}
@@ -320,7 +356,7 @@ public interface Accounts {
 	 *
 	 * @param request An email and password combination.
 	 * @return The result of logging in, or information about why the login failed if it was for a handled reason (bad
-	 * 		email or password).
+	 * email or password).
 	 */
 	@Suspendable
 	static LoginResponse login(LoginRequest request) {

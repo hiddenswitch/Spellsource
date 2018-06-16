@@ -15,10 +15,10 @@ import io.vertx.ext.mongo.UpdateOptions;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
-public class Presence {
-	public static void realtime() {
+public interface Presence {
+	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
-		Realtime.connected(Sync.suspendableHandler(connection -> {
+		Connection.connected(Sync.suspendableHandler(connection -> {
 			final UserId key = new UserId(connection.userId());
 			connection.endHandler(Sync.suspendableHandler(ignored -> {
 				setPresence(key, PresenceEnum.OFFLINE);
@@ -29,7 +29,7 @@ public class Presence {
 		}));
 	}
 
-	public static void setPresence(UserId userId, PresenceEnum presence) {
+	static void setPresence(UserId userId, PresenceEnum presence) {
 		// This doesn't need to be blocking.
 		mongo().client().updateCollectionWithOptions(Accounts.USERS,
 						json("friends.friendId", userId.toString()),
@@ -39,19 +39,19 @@ public class Presence {
 						.setFields(json("_id", 1, "friends.friendId", 1, "friends.presence", 1));
 		mongo().client().findWithOptions(Accounts.USERS, json("friends.friendId", userId.toString()), findOptions, res -> {
 			for (JsonObject user : res.result()) {
-				Connection.get(user.getString("_id"), otherUser -> {
+				Connection.writeStream(user.getString("_id"), otherUser -> {
 					if (otherUser.failed() || otherUser.result() == null) {
 						return;
 					}
-					otherUser.result().write(Json.encodeToBuffer(new Envelope().changed(new EnvelopeChanged().friend(new Friend().friendId(userId.toString()).presence(presence)))));
+					otherUser.result().write(new Envelope().changed(new EnvelopeChanged().friend(new Friend().friendId(userId.toString()).presence(presence))));
 				});
 			}
 		});
 	}
 
-	public static void setPresence(String userId) {
+	static void setPresence(String userId) {
 		final UserId key = new UserId(userId);
-		Connection.get(userId, res -> {
+		Connection.writeStream(userId, res -> {
 			if (res.failed() || res.result() == null) {
 				setPresence(key, PresenceEnum.OFFLINE);
 			} else {

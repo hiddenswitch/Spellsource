@@ -2,23 +2,19 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.*;
 import io.reactivex.disposables.Disposable;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static io.vertx.core.json.JsonObject.mapFrom;
+public interface Conversations {
 
-public class Conversations {
+	static void handleConnections() throws SuspendExecution {
+		SuspendableMultimap<ConversationId, ChatMessage> conversations = SuspendableMultimap.getOrCreate("conversations");
 
-	public static void realtime() throws SuspendExecution {
-		SuspendableMultimap<ConversationId, ChatMessage> conversations = SharedData.getClusterWideMultimap("conversations");
-
-		Realtime.connected(connection -> {
-			connection.handler(Sync.suspendableHandler(buf -> {
-				// TODO: Cache the deserialization here
-				Envelope msg = buf.mapTo(Envelope.class);
-
+		Connection.connected(connection -> {
+			connection.handler(Sync.suspendableHandler(msg -> {
 				// Send a message
 				if (msg.getMethod() != null && msg.getMethod().getSendMessage() != null) {
 					EnvelopeMethodSendMessage sendMessage = msg.getMethod().getSendMessage();
@@ -40,7 +36,7 @@ public class Conversations {
 									.senderName(sender.getUsername());
 
 					conversations.put(new ConversationId(conversationId), message);
-					connection.write(mapFrom(new Envelope().result(new EnvelopeResult().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId())))));
+					connection.write(new Envelope().result(new EnvelopeResult().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId()))));
 				}
 
 				if (msg.getSub() != null && msg.getSub().getConversation() != null) {
@@ -50,14 +46,14 @@ public class Conversations {
 					ConversationId key = new ConversationId(conversationId);
 
 					AddedChangedRemoved<ConversationId, ChatMessage> observer =
-									SharedData.subscribeToKeyInMultimap("conversations", key);
+									SuspendableMultimap.subscribeToKeyInMultimap("conversations", key);
 
 					for (ChatMessage message : conversations.get(key)) {
-						connection.write(mapFrom(new Envelope().added(new EnvelopeAdded().chatMessage(message))));
+						connection.write(new Envelope().added(new EnvelopeAdded().chatMessage(message)));
 					}
 
 					Disposable sub = observer.added().subscribe(next -> {
-						connection.write(mapFrom(new Envelope().added(new EnvelopeAdded().chatMessage(next.getValue()))));
+						connection.write(new Envelope().added(new EnvelopeAdded().chatMessage(next.getValue())));
 					});
 
 					connection.endHandler(v -> {

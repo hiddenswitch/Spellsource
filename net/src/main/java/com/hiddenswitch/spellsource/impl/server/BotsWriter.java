@@ -26,16 +26,16 @@ import java.util.List;
  * <p>
  * This method should typically not be overridden.
  */
-public class AIServiceConnection implements Writer {
+public class BotsWriter implements Writer {
 	final int playerId;
 	final WeakReference<ServerGameContext> context;
-	static final Logger logger = LoggerFactory.getLogger(AIServiceConnection.class);
+	static final Logger logger = LoggerFactory.getLogger(BotsWriter.class);
 	/**
 	 * Make the default timeout slightly shorter than the networking timeout
 	 */
 	final long timeout = RpcClient.DEFAULT_TIMEOUT - 800;
 
-	public AIServiceConnection(ServerGameContext context, EventBus eventBus, int playerId) {
+	public BotsWriter(ServerGameContext context, EventBus eventBus, int playerId) {
 
 		this.context = new WeakReference<>(context);
 		this.playerId = playerId;

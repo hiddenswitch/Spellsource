@@ -21,6 +21,8 @@ import com.hiddenswitch.spellsource.client.models.EnvelopeAdded;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.EnvelopeMethod;
 import com.hiddenswitch.spellsource.client.models.EnvelopeRemoved;
+import com.hiddenswitch.spellsource.client.models.EnvelopeRequest;
+import com.hiddenswitch.spellsource.client.models.EnvelopeResponse;
 import com.hiddenswitch.spellsource.client.models.EnvelopeResult;
 import com.hiddenswitch.spellsource.client.models.EnvelopeSub;
 import io.swagger.annotations.ApiModel;
@@ -46,6 +48,12 @@ public class Envelope implements Serializable {
 
   @JsonProperty("sub")
   private EnvelopeSub sub = null;
+
+  @JsonProperty("request")
+  private EnvelopeRequest request = null;
+
+  @JsonProperty("response")
+  private EnvelopeResponse response = null;
 
   @JsonProperty("method")
   private EnvelopeMethod method = null;
@@ -125,6 +133,42 @@ public class Envelope implements Serializable {
     this.sub = sub;
   }
 
+  public Envelope request(EnvelopeRequest request) {
+    this.request = request;
+    return this;
+  }
+
+   /**
+   * Get request
+   * @return request
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeRequest getRequest() {
+    return request;
+  }
+
+  public void setRequest(EnvelopeRequest request) {
+    this.request = request;
+  }
+
+  public Envelope response(EnvelopeResponse response) {
+    this.response = response;
+    return this;
+  }
+
+   /**
+   * Get response
+   * @return response
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeResponse getResponse() {
+    return response;
+  }
+
+  public void setResponse(EnvelopeResponse response) {
+    this.response = response;
+  }
+
   public Envelope method(EnvelopeMethod method) {
     this.method = method;
     return this;
@@ -175,13 +219,15 @@ public class Envelope implements Serializable {
         Objects.equals(this.changed, envelope.changed) &&
         Objects.equals(this.removed, envelope.removed) &&
         Objects.equals(this.sub, envelope.sub) &&
+        Objects.equals(this.request, envelope.request) &&
+        Objects.equals(this.response, envelope.response) &&
         Objects.equals(this.method, envelope.method) &&
         Objects.equals(this.result, envelope.result);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(added, changed, removed, sub, method, result);
+    return Objects.hash(added, changed, removed, sub, request, response, method, result);
   }
 
 
@@ -194,6 +240,8 @@ public class Envelope implements Serializable {
     sb.append("    changed: ").append(toIndentedString(changed)).append("\n");
     sb.append("    removed: ").append(toIndentedString(removed)).append("\n");
     sb.append("    sub: ").append(toIndentedString(sub)).append("\n");
+    sb.append("    request: ").append(toIndentedString(request)).append("\n");
+    sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
     sb.append("}");

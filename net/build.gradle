@@ -15,7 +15,7 @@ shadowJar {
     zip64 true
 }
 
-mainClassName = 'com.hiddenswitch.spellsource.applications.Embedded'
+mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
 
 configurations {
     quasar

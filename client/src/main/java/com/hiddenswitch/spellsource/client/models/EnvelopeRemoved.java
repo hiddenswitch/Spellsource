@@ -32,6 +32,9 @@ public class EnvelopeRemoved implements Serializable {
   @JsonProperty("inviteId")
   private String inviteId = null;
 
+  @JsonProperty("matchId")
+  private String matchId = null;
+
   public EnvelopeRemoved inviteId(String inviteId) {
     this.inviteId = inviteId;
     return this;
@@ -50,6 +53,24 @@ public class EnvelopeRemoved implements Serializable {
     this.inviteId = inviteId;
   }
 
+  public EnvelopeRemoved matchId(String matchId) {
+    this.matchId = matchId;
+    return this;
+  }
+
+   /**
+   * The unique ID of the match that should be removed. 
+   * @return matchId
+  **/
+  @ApiModelProperty(value = "The unique ID of the match that should be removed. ")
+  public String getMatchId() {
+    return matchId;
+  }
+
+  public void setMatchId(String matchId) {
+    this.matchId = matchId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -60,12 +81,13 @@ public class EnvelopeRemoved implements Serializable {
       return false;
     }
     EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
-    return Objects.equals(this.inviteId, envelopeRemoved.inviteId);
+    return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
+        Objects.equals(this.matchId, envelopeRemoved.matchId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId);
+    return Objects.hash(inviteId, matchId);
   }
 
 
@@ -75,6 +97,7 @@ public class EnvelopeRemoved implements Serializable {
     sb.append("class EnvelopeRemoved {\n");
     
     sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
+    sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

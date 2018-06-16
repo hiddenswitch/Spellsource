@@ -1,12 +1,14 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Maps;
 import com.hazelcast.core.EntryEvent;
 import com.hazelcast.core.EntryListener;
 import com.hazelcast.core.MapEvent;
+import com.hiddenswitch.spellsource.concurrent.impl.AbstractAddedChangedRemoved;
+import com.hiddenswitch.spellsource.util.AddedChangedRemoved;
 
-public class RxEntryListenerAdaptor<K, V> extends AbstractAddedChangedRemoved<K, V> implements AddedChangedRemoved<K, V>, EntryListener<K, V> {
+public final class RxEntryListenerAdaptor<K, V> extends AbstractAddedChangedRemoved<K, V> implements AddedChangedRemoved<K, V>, EntryListener<K, V> {
 
 	public RxEntryListenerAdaptor() {
 	}

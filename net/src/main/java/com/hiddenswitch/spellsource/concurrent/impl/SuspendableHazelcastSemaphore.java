@@ -1,8 +1,10 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hazelcast.core.ISemaphore;
+import com.hiddenswitch.spellsource.util.Hazelcast;
+import com.hiddenswitch.spellsource.concurrent.SuspendableSemaphore;
 import io.vertx.core.Vertx;
 
 import java.util.concurrent.TimeUnit;
@@ -10,13 +12,13 @@ import java.util.concurrent.TimeUnit;
 import static com.hiddenswitch.spellsource.util.Sync.*;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
-class SuspendableHazelcastSemaphore implements SuspendableSemaphore {
+public class SuspendableHazelcastSemaphore implements SuspendableSemaphore {
 
 	private final String name;
 	private final int permits;
 	private ISemaphore sem;
 
-	SuspendableHazelcastSemaphore(String name, int permits) {
+	public SuspendableHazelcastSemaphore(String name, int permits) {
 		this.name = name;
 		this.permits = permits;
 	}
@@ -41,9 +43,9 @@ class SuspendableHazelcastSemaphore implements SuspendableSemaphore {
 	}
 
 	@Suspendable
-	void init() throws SuspendExecution {
+	public void init() throws SuspendExecution {
 		Void t = awaitResult(h -> Vertx.currentContext().executeBlocking(fut -> {
-			sem = SharedData.getHazelcastInstance().getSemaphore(name);
+			sem = Hazelcast.getHazelcastInstance().getSemaphore(name);
 			this.sem.init(permits);
 			fut.complete();
 		},false, h));

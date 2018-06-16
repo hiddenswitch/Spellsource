@@ -22,7 +22,6 @@ public class AccountsTest extends SpellsourceTestBase {
 	@Test
 	public void testCreateAccount(TestContext context) throws Exception {
 		sync(() -> {
-			Logging.setLoggingLevel(Level.ERROR);
 			CreateAccountResponse response = Accounts.createAccount(getEmailAddress(), "destructoid", getUsername());
 			assertNotNull(response.getLoginToken());
 			assertFalse(response.isInvalidEmailAddress());

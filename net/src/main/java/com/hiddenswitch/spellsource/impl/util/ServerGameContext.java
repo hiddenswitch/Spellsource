@@ -4,15 +4,16 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.*;
-import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
+import com.hiddenswitch.spellsource.models.MatchExpireRequest;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
@@ -40,12 +41,10 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -62,14 +61,15 @@ import static java.util.stream.Collectors.toList;
  */
 public class ServerGameContext extends GameContext {
 	private final String gameId;
-	private Map<Player, Writer> listenerMap = new ConcurrentHashMap<>();
-	private final Map<CallbackId, GameplayRequest> requestCallbacks = new ConcurrentHashMap<>();
-	private boolean isRunning = true;
 	private final transient HashSet<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new HashSet<>();
+	private final transient Map<Player, Writer> listenerMap = new ConcurrentHashMap<>();
+	private final transient Map<CallbackId, GameplayRequest> requestCallbacks = new ConcurrentHashMap<>();
+	private final transient ReentrantLock lock = new ReentrantLock();
 	private final List<Trigger> gameTriggers = new ArrayList<>();
-	private final transient RpcClient<Logic> logic;
 	private final Scheduler scheduler;
-	private AtomicInteger eventCounter = new AtomicInteger(0);
+	private boolean isRunning = true;
+	private final AtomicInteger eventCounter = new AtomicInteger(0);
+	private final AtomicInteger callbackIdCounter = new AtomicInteger(0);
 	private int timerElapsedForPlayerId;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
@@ -84,10 +84,9 @@ public class ServerGameContext extends GameContext {
 	 * @param player2    The second player.
 	 * @param deckFormat The legal cards that can be played.
 	 * @param gameId     The game ID that corresponds to this game context.
-	 * @param logic      The {@link RpcClient} on which this trigger will make {@link Logic} requests.
 	 * @param scheduler  The {@link Scheduler} instance to use for scheduling game events.
 	 */
-	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic, Scheduler scheduler) {
+	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, Scheduler scheduler) {
 		// The player's IDs are set here
 		super(player1, player2, new GameLogicAsync(), deckFormat);
 		if (player1.getId() == player2.getId()
@@ -97,7 +96,6 @@ public class ServerGameContext extends GameContext {
 			player2.setId(IdFactory.PLAYER_2);
 		}
 		this.gameId = gameId;
-		this.logic = logic;
 		this.scheduler = scheduler;
 
 		enablePersistenceEffects();
@@ -117,7 +115,7 @@ public class ServerGameContext extends GameContext {
 	 * Enables this match to use custom networked triggers
 	 */
 	private void enableTriggers() {
-		for (com.hiddenswitch.spellsource.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
+		for (com.hiddenswitch.spellsource.impl.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
 			final Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
@@ -139,19 +137,19 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void init() {
-		logger.debug("{} networkedPlay: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
+		logger.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		getLogic().contextReady();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 
-		logger.debug("{} networkedPlay: Updating active players", getGameId());
+		logger.trace("init {}: Updating active players", getGameId());
 		updateActivePlayers();
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 
 		// Make sure the players are initialized before sending the original player updates.
 		getLogic().initializePlayer(IdFactory.PLAYER_1);
 		getLogic().initializePlayer(IdFactory.PLAYER_2);
-		logger.debug("{} networkedPlay: Players initialized", getGameId());
+		logger.trace("init {}: Players initialized", getGameId());
 
 		Future<Void> init1 = Future.future();
 		Future<Void> init2 = Future.future();
@@ -163,7 +161,7 @@ public class ServerGameContext extends GameContext {
 			timerStartTimeMillis = System.currentTimeMillis();
 			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
 		} else {
-			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
+			logger.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
 			timerLengthMillis = null;
 			timerStartTimeMillis = null;
 			mulliganTimerId = null;
@@ -176,10 +174,12 @@ public class ServerGameContext extends GameContext {
 
 		// Mulligan simultaneously now
 		try {
-			CompositeFuture done = Sync.awaitResult(h -> CompositeFuture.all(init1, init2).setHandler(h), 2 * GameLogic.DEFAULT_MULLIGAN_TIME * 1000);
+			CompositeFuture done = Sync.awaitResult(h -> CompositeFuture.join(init1, init2).setHandler(h), 2 * GameLogic.DEFAULT_MULLIGAN_TIME * 1000);
 		} catch (VertxException ex) {
-			logger.error("{} init: Failed to mulligan due to unknown error: {}", getGameId(), ex);
+				logger.error("{} init: Failed to mulligan due to unknown error: {}", getGameId(), ex);
 		}
+
+		startGame();
 
 		finishMulliganTimer(mulliganTimerId);
 	}
@@ -187,22 +187,25 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void startTurn(int playerId) {
+		lock.lock();
 		processTurnTimers(getActivePlayerId());
-
 		super.startTurn(playerId);
 		GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
 		getListenerMap().get(getPlayer1()).onUpdate(state);
 		getListenerMap().get(getPlayer2()).onUpdate(state);
+		lock.unlock();
 	}
 
 	@Suspendable
 	public void endTurn() {
+		lock.lock();
 		super.endTurn();
 		if (turnTimerId != null) {
 			scheduler.cancelTimer(turnTimerId);
 		}
 		getListenerMap().get(getPlayer1()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 		getListenerMap().get(getPlayer2()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
+		lock.unlock();
 	}
 
 	private Player getNonActivePlayer() {
@@ -365,6 +368,14 @@ public class ServerGameContext extends GameContext {
 		getListenerMap().get(getPlayer2()).onNotification(action, gameStateCopy);
 	}
 
+	@Override
+	@Suspendable
+	public void concede(int playerId) {
+		lock.lock();
+		super.concede(playerId);
+		lock.unlock();
+	}
+
 	/**
 	 * Request an action from a {@link Writer} that corresponds to the given {@code playerId}.
 	 *
@@ -376,7 +387,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@Override
 	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
-		String id = RandomStringUtils.randomAscii(8);
+		String id = Integer.toString(callbackIdCounter.getAndIncrement());
 		logger.debug("{} networkRequestAction: Requesting actions {} with callback {} for playerId={} userId={}", getGameId(), actions, id, playerId, getPlayer(playerId).getUserId());
 		final CallbackId callbackId = new CallbackId(id, playerId);
 		requestCallbacks.put(callbackId, new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
@@ -426,7 +437,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
 		logger.debug("{} networkRequestMulligan: Requesting mulligan for playerId={} userId={}", getGameId(), player.getId(), player.getUserId());
-		String id = RandomStringUtils.randomAscii(8);
+		String id = Integer.toString(callbackIdCounter.getAndIncrement());
 		requestCallbacks.put(new CallbackId(id, player.getId()), new GameplayRequest(GameplayRequestType.MULLIGAN, starterCards, callback));
 		getListenerMap().get(player).onMulligan(id, getGameStateCopy(), starterCards, player.getId());
 	}
@@ -449,9 +460,17 @@ public class ServerGameContext extends GameContext {
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
 		if (!Fiber.isCurrentFiber()) {
-			Sync.fiberHandler((Handler<GameAction>) handler).handle(action);
+			Sync.getContextScheduler().newFiber(() -> {
+				lock.lock();
+				((Handler<GameAction>) handler).handle(action);
+				lock.unlock();
+				return null;
+			}).start();
+//			Sync.fiberHandler((Handler<GameAction>) handler).handle(action);
 		} else {
+			lock.lock();
 			((Handler<GameAction>) handler).handle(action);
+			lock.unlock();
 		}
 		logger.debug("{} onActionReceived: Executed action {} for callback {}", getGameId(), action, messageId);
 	}
@@ -474,7 +493,10 @@ public class ServerGameContext extends GameContext {
 		logger.debug("{} onMulliganReceived: Mulligan {} received from userId={}", getGameId(), discardedCards, player.getUserId());
 		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
 		requestCallbacks.remove(CallbackId.of(messageId));
+		lock.lock();
+		// TODO: Check that the game is still running
 		((Handler<List<Card>>) handler).handle(discardedCards);
+		lock.unlock();
 	}
 
 	@Override
@@ -507,6 +529,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public void onPlayerReconnected(Player player, Writer writer) {
+		lock.lock();
 		// Update the client
 		setUpdateListener(player, writer);
 
@@ -521,6 +544,7 @@ public class ServerGameContext extends GameContext {
 		updateActivePlayers();
 		onGameStateChanged();
 		retryRequests(player);
+		lock.unlock();
 	}
 
 	@Suspendable
@@ -578,11 +602,13 @@ public class ServerGameContext extends GameContext {
 
 	@Suspendable
 	public void kill() {
+		lock.lock();
 		super.endGame();
 		updateAndGetGameOver();
 		isRunning = false;
 		// Clear out even more stuff
 		dispose();
+		lock.unlock();
 	}
 
 	@Override
@@ -608,7 +634,7 @@ public class ServerGameContext extends GameContext {
 		// Get the player reference
 		final Optional<CallbackId> reqResult = requestCallbacks.keySet().stream().filter(ci -> ci.id.equals(messageId)).findFirst();
 		if (!reqResult.isPresent()) {
-			throw new RuntimeException();
+			throw new RuntimeException("Could not find a callback with the specified ID");
 		}
 		CallbackId reqId = reqResult.get();
 		GameplayRequest request = requestCallbacks.get(reqId);

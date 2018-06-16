@@ -1976,13 +1976,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public List<Card> init(int playerId, boolean begins) {
 		List<Card> discardedCards = mulligan(context.getPlayer(playerId), begins);
-
-		startGameForPlayer(context.getPlayer(playerId));
 		return discardedCards;
 	}
 
 	@Suspendable
-	protected void startGameForPlayer(Player player) {
+	public void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);
 
 		processGameTriggers(player, player.getHero());
