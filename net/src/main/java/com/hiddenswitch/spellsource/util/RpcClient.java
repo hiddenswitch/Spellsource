@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;

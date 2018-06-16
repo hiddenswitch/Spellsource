@@ -1,4 +1,4 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent;
 
 
 import co.paralleluniverse.fibers.SuspendExecution;
@@ -8,6 +8,11 @@ import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.collect.SetMultimap;
 import com.hazelcast.core.MultiMap;
+import com.hiddenswitch.spellsource.concurrent.impl.LocalMultimap;
+import com.hiddenswitch.spellsource.concurrent.impl.RxEntryListenerAdaptor;
+import com.hiddenswitch.spellsource.concurrent.impl.SingleKeyAddedChangedRemoved;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableHazelcastMultimap;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Vertx;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -37,7 +42,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 		final Vertx vertx = Vertx.currentContext().owner();
 		if (vertx.isClustered()) {
 			final RxEntryListenerAdaptor<K, V> adaptor = new RxEntryListenerAdaptor<>();
-			MultiMap<K, V> map = Sync.invoke(SharedData.getHazelcastInstance()::getMultiMap, name);
+			MultiMap<K, V> map = Sync.invoke(Hazelcast.getHazelcastInstance()::getMultiMap, name);
 			map.addEntryListener(adaptor, key, true);
 			return adaptor;
 		} else {

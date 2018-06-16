@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -21,10 +22,8 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.RequestOptions;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.unit.junit.Repeat;
 import io.vertx.ext.web.client.WebClient;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
@@ -41,7 +40,6 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -211,7 +209,6 @@ public class GatewayTest extends SpellsourceTestBase {
 	@Test
 	public void testConcede(TestContext context) {
 		sync(() -> {
-			Logging.setLoggingLevel(Level.DEBUG);
 			UnityClient client = new UnityClient(context);
 			client.setShouldDisconnect(false);
 			Sync.invoke0(() -> {

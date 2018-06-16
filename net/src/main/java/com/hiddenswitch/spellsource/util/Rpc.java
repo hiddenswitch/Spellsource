@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
+import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;

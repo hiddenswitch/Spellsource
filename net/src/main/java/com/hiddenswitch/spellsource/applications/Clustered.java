@@ -22,7 +22,6 @@ public class Clustered {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
-		Logging.setLoggingLevel(Level.DEBUG);
 
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();

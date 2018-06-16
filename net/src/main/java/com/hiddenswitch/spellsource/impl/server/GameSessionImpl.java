@@ -14,7 +14,6 @@ import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.MatchExpireRequest;
 import com.hiddenswitch.spellsource.util.Rpc;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -152,14 +151,14 @@ public class GameSessionImpl implements GameSession {
 
 		if (isAgainstAI()) {
 			if (configuration1.isAI()) {
-				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
+				listener1 = new BotsWriter(getGameContext(), vertx.eventBus(), PLAYER_1);
 				getGameContext().getPlayer(0).setAttribute(Attribute.AI_OPPONENT);
 				listener2 = getPlayerListener(PLAYER_2);
 				((NetworkBehaviour) getGameContext().getBehaviours().get(0)).setHuman(false);
 				setClient1(listener1);
 			} else if (configuration2.isAI()) {
 				listener1 = getPlayerListener(PLAYER_1);
-				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
+				listener2 = new BotsWriter(getGameContext(), vertx.eventBus(), PLAYER_2);
 				getGameContext().getPlayer(1).setAttribute(Attribute.AI_OPPONENT);
 				((NetworkBehaviour) getGameContext().getBehaviours().get(1)).setHuman(false);
 				setClient2(listener2);

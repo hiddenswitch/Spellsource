@@ -2,16 +2,15 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.*;
 import io.reactivex.disposables.Disposable;
 import org.apache.commons.lang3.RandomStringUtils;
 
-import static io.vertx.core.json.JsonObject.mapFrom;
+public interface Conversations {
 
-public class Conversations {
-
-	public static void handleConnections() throws SuspendExecution {
+	static void handleConnections() throws SuspendExecution {
 		SuspendableMultimap<ConversationId, ChatMessage> conversations = SuspendableMultimap.getOrCreate("conversations");
 
 		Connection.connected(connection -> {

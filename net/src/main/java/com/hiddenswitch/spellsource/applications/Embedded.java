@@ -17,7 +17,7 @@ public class Embedded {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("vertx.disableDnsResolver", "true");
-		Logging.setLoggingLevel();
+//		Logging.setLoggingLevel();
 		Logger logger = LoggerFactory.getLogger(Embedded.class);
 
 		final Vertx vertx = Vertx.vertx();

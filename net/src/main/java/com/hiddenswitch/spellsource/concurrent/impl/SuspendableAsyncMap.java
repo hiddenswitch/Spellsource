@@ -1,6 +1,7 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.Future;
 import io.vertx.core.shareddata.AsyncMap;
 
@@ -14,7 +15,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public final class SuspendableAsyncMap<K, V> implements SuspendableMap<K, V> {
 	private final AsyncMap<K, V> map;
 
-	SuspendableAsyncMap(AsyncMap<K, V> map) {
+	public SuspendableAsyncMap(AsyncMap<K, V> map) {
 		this.map = map;
 	}
 

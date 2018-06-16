@@ -1,10 +1,9 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableArrayQueue;
 import org.jetbrains.annotations.NotNull;
-
-import static io.vertx.ext.sync.Sync.awaitResult;
 
 public interface SuspendableQueue<V> {
 	/**
@@ -24,8 +23,8 @@ public interface SuspendableQueue<V> {
 	 * @see #get(String) for an unbounded version of this method.
 	 */
 	static <V> SuspendableQueue<V> get(String name, int capacity) throws SuspendExecution {
-		return SuspendableLinkedQueue.getOrCreate(name, capacity <= 0 ? Integer.MAX_VALUE : capacity);
-//		return new SuspendableArrayQueue<>(name, capacity);
+//		return SuspendableLinkedQueue.getOrCreate(name, capacity <= 0 ? Integer.MAX_VALUE : capacity);
+		return new SuspendableArrayQueue<>(name, capacity);
 	}
 
 	/**
@@ -38,8 +37,8 @@ public interface SuspendableQueue<V> {
 	 */
 
 	static <V> SuspendableQueue<V> get(String name) throws SuspendExecution {
-//		return new SuspendableArrayQueue<>(name);
-		return SuspendableLinkedQueue.getOrCreate(name);
+		return new SuspendableArrayQueue<>(name);
+//		return SuspendableLinkedQueue.getOrCreate(name);
 	}
 
 	@Suspendable
@@ -57,6 +56,14 @@ public interface SuspendableQueue<V> {
 	 */
 	V poll(long timeout) throws InterruptedException, SuspendExecution;
 
+	/**
+	 * Takes an item from the queue, blocking until one is received.
+	 *
+	 * @return An item from the queue
+	 * @throws InterruptedException If the take was interrupted / cancelled.
+	 * @throws SuspendExecution
+	 */
+	@Suspendable
 	default V take() throws InterruptedException, SuspendExecution {
 		return poll(Long.MAX_VALUE);
 	}

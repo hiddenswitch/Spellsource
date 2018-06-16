@@ -1,27 +1,26 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.hazelcast.core.MultiMap;
+import com.hiddenswitch.spellsource.util.Hazelcast;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
 import io.reactivex.Observable;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Handler;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
-import java.util.function.BiConsumer;
 import java.util.function.Function;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static com.hiddenswitch.spellsource.util.Sync.invoke0;
 
-class SuspendableHazelcastMultimap<K, V> implements SuspendableMultimap<K, V> {
+public class SuspendableHazelcastMultimap<K, V> implements SuspendableMultimap<K, V> {
 	private final MultiMap<K, V> map;
 	private final RxEntryListenerAdaptor<K, V> adaptor;
 
 	public SuspendableHazelcastMultimap(String name) {
-		map = SharedData.getHazelcastInstance().getMultiMap(name);
+		map = Hazelcast.getHazelcastInstance().getMultiMap(name);
 		adaptor = new RxEntryListenerAdaptor<>();
 		map.addEntryListener(adaptor, true);
 	}

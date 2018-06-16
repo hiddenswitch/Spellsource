@@ -1,31 +1,36 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.hiddenswitch.spellsource.concurrent.SuspendableCondition;
+import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
 import io.vertx.core.VertxException;
-import io.vertx.core.buffer.Buffer;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.Lock;
-import io.vertx.core.shareddata.impl.ClusterSerializable;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.concurrent.TimeoutException;
 
-import static com.hiddenswitch.spellsource.util.QuickJson.array;
-
-class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
-
+public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
+	private static Logger logger = LoggerFactory.getLogger(SuspendableArrayQueue.class);
 	private final String name;
 	private final int capacity;
 
-	SuspendableArrayQueue(String name, int capacity) {
+	public SuspendableArrayQueue(String name, int capacity) {
 		this.name = name;
 		this.capacity = capacity;
 	}
 
-	SuspendableArrayQueue(String name) {
+	public SuspendableArrayQueue(String name) {
 		this(name, -1);
 	}
 
@@ -64,6 +69,7 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 				}
 
 				arrayQueues.put(name, header);
+				logger.trace("offer {}: Set to {}", name, header);
 			} catch (VertxException ex) {
 				// Sender interrupted!
 				if (ex.getCause() instanceof InterruptedException
@@ -79,6 +85,7 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 			// Something else has to have the responsibility of triggering the condition
 			SuspendableCondition notEmpty = notEmpty();
 			notEmpty.signal();
+			logger.trace("offer {}: Signaled not empty", name);
 			return true;
 		} finally {
 			lock.release();
@@ -86,13 +93,14 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 	}
 
 	@NotNull
+	@Suspendable
 	private SuspendableCondition notEmpty() {
 		return SuspendableCondition.getOrCreate("SuspendableArrayQueue::arrayQueues[" + name + "]__notEmpty");
 	}
 
 	@Suspendable
 	private Lock lock() {
-		return SharedData.lock("SuspendableArrayQueue::arrayQueues[" + name + "]__lock", 1000L);
+		return SuspendableLock.lock("SuspendableArrayQueue::arrayQueues[" + name + "]__lock");
 	}
 
 	@Override
@@ -127,52 +135,102 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 				lock = lock();
 				header = arrayQueues.get(name);
 			}
-			V x;
+			return dequeue(arrayQueues, header);
+		} finally {
+			lock.release();
+		}
+	}
 
-			try {
-				if (header.unbounded) {
-					x = (V) header.items[0];
-					if (header.items.length == 1) {
-						header.items = new Object[0];
-					} else {
-						header.items = Arrays.copyOfRange(header.items, 1, header.items.length);
-					}
+	@Suspendable
+	private V dequeue(SuspendableMap<String, SuspendableArrayQueueHeader> arrayQueues, SuspendableArrayQueueHeader header) {
+		V x;
+
+		try {
+			if (header.unbounded) {
+				x = castItem(header.items[0]);
+				if (header.items.length == 1) {
+					header.items = new Object[0];
 				} else {
-					x = (V) header.items[header.takeIndex];
-					header.items[header.takeIndex] = null;
-					header.takeIndex++;
-					if (header.takeIndex == header.items.length) {
-						header.takeIndex = 0;
-					}
+					header.items = Arrays.copyOfRange(header.items, 1, header.items.length);
 				}
-
-				header.count--;
-				arrayQueues.put(name, header);
-			} catch (VertxException ex) {
-				// The request was normally interrupted / canceled
-				if (ex.getCause() instanceof InterruptedException
-						// The request timed out (the cluster is down)
-						|| ex.getCause() instanceof TimeoutException) {
-					return null;
+			} else {
+				x = castItem(header.items[header.takeIndex]);
+				header.items[header.takeIndex] = null;
+				header.takeIndex++;
+				if (header.takeIndex == header.items.length) {
+					header.takeIndex = 0;
 				}
-				// Not recoverable
-				throw ex;
 			}
 
-			SuspendableCondition notFull = notFull();
-			notFull.signal();
-			return x;
+			header.count--;
+			arrayQueues.put(name, header);
+			logger.trace("dequeue {}: Header is now {}", name, header);
+		} catch (VertxException ex) {
+			// The request was normally interrupted / canceled
+			if (ex.getCause() instanceof InterruptedException
+					// The request timed out (the cluster is down)
+					|| ex.getCause() instanceof TimeoutException) {
+				return null;
+			}
+			// Not recoverable
+			throw ex;
+		}
+
+		SuspendableCondition notFull = notFull();
+		notFull.signal();
+		logger.trace("dequeue {}: Signalled not full", name);
+		return x;
+	}
+
+	@SuppressWarnings("unchecked")
+	private V castItem(Object item) {
+		V x;
+		if (item instanceof JsonObject) {
+			x = Json.mapper.convertValue(((JsonObject) item).getMap(), new TypeReference<V>() {
+			});
+		} else {
+			x = (V) item;
+		}
+		return x;
+	}
+
+	@Override
+	@Suspendable
+	public V take() throws InterruptedException {
+		Lock lock = lock();
+		try {
+			SuspendableMap<String, SuspendableArrayQueueHeader> arrayQueues = getArrayQueues();
+			SuspendableArrayQueueHeader header = arrayQueues.get(name);
+			SuspendableCondition notEmpty = notEmpty();
+			if (header == null) {
+				header = new SuspendableArrayQueueHeader(capacity);
+				arrayQueues.put(name, header);
+			}
+			while (header.count == 0) {
+				logger.trace("take {}: Header count was 0", name);
+				lock.release();
+				if (!notEmpty.await()) {
+					// Interrupted
+					throw new InterruptedException();
+				}
+
+				lock = lock();
+				header = arrayQueues.get(name);
+			}
+			return dequeue(getArrayQueues(), header);
 		} finally {
 			lock.release();
 		}
 	}
 
 	@NotNull
+	@Suspendable
 	private SuspendableCondition notFull() {
 		return SuspendableCondition.getOrCreate("SuspendableArrayQueue::arrayQueues[" + name + "]__notFull");
 	}
 
 	@NotNull
+	@Suspendable
 	private SuspendableMap<String, SuspendableArrayQueueHeader> getArrayQueues() {
 		return SuspendableMap.getOrCreate("SuspendableArrayQueue::arrayQueues");
 	}
@@ -185,15 +243,15 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 		notEmpty().signalAll();
 	}
 
-	static class SuspendableArrayQueueHeader implements Serializable, ClusterSerializable {
+	static class SuspendableArrayQueueHeader implements Serializable /*, ClusterSerializable*/ {
 		// TODO: The header probably has to store the hash values of the objects to prevent duplicates from being enqueued
 		Object[] items;
 		int takeIndex;
 		int putIndex;
-		int count;
+		public int count;
 		boolean unbounded = false;
 
-		SuspendableArrayQueueHeader() {
+		public SuspendableArrayQueueHeader() {
 			this(-1);
 		}
 
@@ -206,6 +264,7 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 			items = new Object[capacity];
 		}
 
+		/*
 		@Override
 		public void writeToBuffer(Buffer buffer) {
 			// Assume it has a JSON representation
@@ -228,6 +287,13 @@ class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 			count = header.getInteger("count");
 			unbounded = header.getBoolean("unbounded");
 			return newPos;
+		}
+		*/
+
+		@Override
+		public String toString() {
+			return new ReflectionToStringBuilder(this)
+					.build();
 		}
 	}
 }

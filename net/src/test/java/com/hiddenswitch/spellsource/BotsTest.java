@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.client.ApiException;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -34,7 +35,6 @@ public class BotsTest extends SpellsourceTestBase {
 
 	@Test
 	public void testMulligan(TestContext context) {
-		Logging.setLoggingLevel(Level.ERROR);
 		sync(() -> {
 			MulliganRequest request = new MulliganRequest(
 					Arrays.asList(

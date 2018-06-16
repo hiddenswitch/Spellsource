@@ -32,7 +32,6 @@ public class LogicTest extends SpellsourceTestBase {
 	@Test
 	@Suspendable
 	public void testStartsGame(TestContext context) {
-		Logging.setLoggingLevel(Level.ERROR);
 		sync(() -> {
 			// Create two players
 
@@ -67,7 +66,6 @@ public class LogicTest extends SpellsourceTestBase {
 	@Test
 	@Suspendable
 	public void testCreatesInventory(TestContext context) {
-		Logging.setLoggingLevel(Level.ERROR);
 		sync(() -> {
 			CreateAccountResponse createAccountResponse = createRandomAccount();
 			final String userId = createAccountResponse.getUserId();

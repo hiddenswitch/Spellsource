@@ -3,9 +3,12 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.*;
@@ -906,10 +909,18 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		logger.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		if (Fiber.isCurrentFiber()
 				&& Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
-			new Fiber<Void>(() -> {
+			Fiber<Void> f;
+			SuspendableCallable<Void> innerPlay = () -> {
 				init();
 				resume();
-			}).start();
+				return null;
+			};
+			if (Vertx.currentContext() != null) {
+				f = Sync.getContextScheduler().newFiber(innerPlay);
+			} else {
+				f = new Fiber<>(innerPlay);
+			}
+			f.start();
 		} else {
 			init();
 			resume();

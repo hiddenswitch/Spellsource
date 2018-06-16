@@ -48,13 +48,11 @@ public abstract class SpellsourceTestBase {
 	public static void setUp(TestContext context) {
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			Logging.setLoggingLevel(Level.ERROR);
 			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701));
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
 					.setWorkerPoolSize(99)
-					.setEventLoopPoolSize(99)
 					.setInternalBlockingPoolSize(99)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;

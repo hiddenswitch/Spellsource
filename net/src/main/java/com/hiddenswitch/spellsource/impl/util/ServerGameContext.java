@@ -5,10 +5,8 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Logic;
-import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.*;
-import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
@@ -40,12 +38,10 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
-import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -118,7 +114,7 @@ public class ServerGameContext extends GameContext {
 	 * Enables this match to use custom networked triggers
 	 */
 	private void enableTriggers() {
-		for (com.hiddenswitch.spellsource.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
+		for (com.hiddenswitch.spellsource.impl.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
 			final Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
@@ -140,19 +136,19 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void init() {
-		logger.debug("{} networkedPlay: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
+		logger.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		getLogic().contextReady();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 
-		logger.debug("{} networkedPlay: Updating active players", getGameId());
+		logger.trace("init {}: Updating active players", getGameId());
 		updateActivePlayers();
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 
 		// Make sure the players are initialized before sending the original player updates.
 		getLogic().initializePlayer(IdFactory.PLAYER_1);
 		getLogic().initializePlayer(IdFactory.PLAYER_2);
-		logger.debug("{} networkedPlay: Players initialized", getGameId());
+		logger.trace("init {}: Players initialized", getGameId());
 
 		Future<Void> init1 = Future.future();
 		Future<Void> init2 = Future.future();
@@ -164,7 +160,7 @@ public class ServerGameContext extends GameContext {
 			timerStartTimeMillis = System.currentTimeMillis();
 			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
 		} else {
-			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
+			logger.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
 			timerLengthMillis = null;
 			timerStartTimeMillis = null;
 			mulliganTimerId = null;
