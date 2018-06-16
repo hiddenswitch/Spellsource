@@ -48,6 +48,8 @@ import static java.util.stream.Collectors.toSet;
  * GameEventType, Attribute, Handler)}.
  * <p>
  * It will provide more APIs for features in the future.
+ *
+ * @see com.hiddenswitch.spellsource.applications.LocalClustered for the entry point of the executable.
  */
 public class Spellsource {
 	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
