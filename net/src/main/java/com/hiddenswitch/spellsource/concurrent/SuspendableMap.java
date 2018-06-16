@@ -1,6 +1,8 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableAsyncMap;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableWrappedMap;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -16,6 +18,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public interface SuspendableMap<K, V> {
 	@Suspendable
 	static <K, V> SuspendableMap<K, V> getOrCreate(String name) {
+		System.setProperty("vertx.hazelcast.async-api", "true");
 		final Vertx vertx = Vertx.currentContext().owner();
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
 		if (vertx.isClustered()) {
@@ -27,6 +30,7 @@ public interface SuspendableMap<K, V> {
 	}
 
 	static <K, V> void getOrCreate(String name, Handler<AsyncResult<AsyncMap<K, V>>> handler) {
+		System.setProperty("vertx.hazelcast.async-api", "true");
 		Vertx vertx = Vertx.currentContext().owner();
 		io.vertx.core.shareddata.SharedData client = vertx.sharedData();
 		client.getAsyncMap(name, handler);

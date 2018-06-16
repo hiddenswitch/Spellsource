@@ -1,14 +1,15 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.SuspendableCounter;
 import io.vertx.core.shareddata.Counter;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 
-public class VertxSuspendableCounter implements SuspendableCounter {
+public class SuspendableVertxCounter implements SuspendableCounter {
 	private final Counter counter;
 
-	VertxSuspendableCounter(Counter counter) {
+	public SuspendableVertxCounter(Counter counter) {
 		this.counter = counter;
 	}
 

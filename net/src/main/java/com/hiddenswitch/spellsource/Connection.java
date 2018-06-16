@@ -5,8 +5,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.impl.ConnectionImpl;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.util.SharedData;
-import com.hiddenswitch.spellsource.util.SuspendableMap;
+import com.hiddenswitch.spellsource.util.Hazelcast;
+import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
@@ -28,7 +29,7 @@ import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
-	Logger logger = LoggerFactory.getLogger(SharedData.class);
+	Logger logger = LoggerFactory.getLogger(Hazelcast.class);
 
 	static SuspendableMap<UserId, String> getConnections() throws SuspendExecution {
 		return SuspendableMap.getOrCreate("Connection::connections");
@@ -158,7 +159,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Suspendable
 	static Lock methodLock(String userId) {
-		return SharedData.lock("Connection::method-ordering-lock[" + userId + "]");
+		return SuspendableLock.lock("Connection::method-ordering-lock[" + userId + "]");
 	}
 
 	@Suspendable
@@ -169,7 +170,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		Lock lock;
 
 		try {
-			lock = SharedData.lock("Connection::realtime-data-lock[" + userId + "]", 1000L);
+			lock = SuspendableLock.lock("Connection::realtime-data-lock[" + userId + "]", 1000L);
 		} catch (VertxException ex) {
 			routingContext.fail(ex);
 			return;

@@ -1,5 +1,6 @@
-package com.hiddenswitch.spellsource;
+package com.hiddenswitch.spellsource.impl;
 
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.impl.util.Spell;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 

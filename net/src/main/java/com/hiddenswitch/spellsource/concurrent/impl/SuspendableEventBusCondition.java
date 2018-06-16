@@ -1,6 +1,7 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.SuspendableCondition;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
@@ -12,16 +13,45 @@ import io.vertx.ext.sync.Sync;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-class SuspendableEventBusCondition implements SuspendableCondition, Closeable {
+public final class SuspendableEventBusCondition implements SuspendableCondition, Closeable {
 	private final String address;
 	private final MessageProducer<Buffer> producer;
 
-	SuspendableEventBusCondition(String name) {
+	public SuspendableEventBusCondition(String name) {
 		this.address = "SuspendableEventBusCondition::consumer-" + name;
 		this.producer = Vertx.currentContext().owner()
 				.eventBus()
 				.sender(address);
 		this.producer.deliveryOptions(new DeliveryOptions().setSendTimeout(1000L));
+	}
+
+	@Override
+	@Suspendable
+	public boolean await() {
+		HandlerReceiverAdaptor<Buffer> adaptor = Sync.streamAdaptor();
+		MessageConsumer<Buffer> consumer = Vertx.currentContext().owner().eventBus().consumer(address);
+		consumer.bodyStream().handler(adaptor);
+		Buffer res;
+
+		try {
+			res = adaptor.receive();
+		} catch (VertxException ex) {
+			// Timed out or interrupted, doesn't really matter but it's bad.
+			if (ex.getCause() instanceof TimeoutException
+					|| ex.getCause() instanceof InterruptedException) {
+				return false;
+			}
+			// Not recoverable
+			throw ex;
+		}
+
+		if (res != null && !res.toString().equals("ok")) {
+			throw new AssertionError("not ok");
+		}
+
+		adaptor.receivePort().close();
+		consumer.unregister();
+		return true;
 	}
 
 	@Override

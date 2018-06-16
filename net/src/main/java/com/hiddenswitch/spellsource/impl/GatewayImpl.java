@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
@@ -18,7 +19,6 @@ import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Closeable;
-import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
@@ -497,7 +497,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId)
 				.withBotMatch(request.isCasual())
-				.withTimeout(5000)
+				.withTimeout(9000)
 				.withBotDeckId(request.getBotDeckId());
 
 		GameId internalResponse = null;

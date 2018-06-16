@@ -1,6 +1,7 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableVertxCounter;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.Counter;
 
@@ -11,7 +12,7 @@ public interface SuspendableCounter {
 	@Suspendable
 	static SuspendableCounter create(String name) {
 		Counter counter = awaitResult(h -> Vertx.currentContext().owner().sharedData().getCounter(name, h));
-		return new VertxSuspendableCounter(counter);
+		return new SuspendableVertxCounter(counter);
 	}
 
 	/**

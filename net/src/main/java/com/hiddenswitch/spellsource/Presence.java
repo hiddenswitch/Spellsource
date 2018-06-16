@@ -15,8 +15,8 @@ import io.vertx.ext.mongo.UpdateOptions;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
-public class Presence {
-	public static void handleConnections() {
+public interface Presence {
+	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
 		Connection.connected(Sync.suspendableHandler(connection -> {
 			final UserId key = new UserId(connection.userId());
@@ -29,7 +29,7 @@ public class Presence {
 		}));
 	}
 
-	public static void setPresence(UserId userId, PresenceEnum presence) {
+	static void setPresence(UserId userId, PresenceEnum presence) {
 		// This doesn't need to be blocking.
 		mongo().client().updateCollectionWithOptions(Accounts.USERS,
 						json("friends.friendId", userId.toString()),
@@ -49,7 +49,7 @@ public class Presence {
 		});
 	}
 
-	public static void setPresence(String userId) {
+	static void setPresence(String userId) {
 		final UserId key = new UserId(userId);
 		Connection.writeStream(userId, res -> {
 			if (res.failed() || res.result() == null) {

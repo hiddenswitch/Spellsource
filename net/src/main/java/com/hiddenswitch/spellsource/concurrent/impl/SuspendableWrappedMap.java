@@ -1,5 +1,6 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.shareddata.LocalMap;
 
 import java.util.Collection;

@@ -1,7 +1,8 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.*;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 import io.vertx.core.shareddata.Counter;
@@ -17,7 +18,7 @@ import java.util.concurrent.TimeoutException;
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
-class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
+public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	private static final String TAKE_LOCK = "__takeLock";
 	private static final String INITED = "__inited";
 	private static final String HEAD = "__head";
@@ -28,11 +29,11 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	private final String name;
 	private final SuspendableMap<String, Node<V>> map;
 	private final int capacity;
-	private final Counter counter;
+	private final SuspendableCounter counter;
 	private final SuspendableCondition notEmpty;
 	private final SuspendableCondition notFull;
 
-	private SuspendableLinkedQueue(String name, Counter counter, SuspendableMap<String, Node<V>> map, int capacity, SuspendableCondition notEmpty, SuspendableCondition notFull) {
+	private SuspendableLinkedQueue(String name, SuspendableCounter counter, SuspendableMap<String, Node<V>> map, int capacity, SuspendableCondition notEmpty, SuspendableCondition notFull) {
 		this.counter = counter;
 		this.name = name;
 		this.map = map;
@@ -41,19 +42,22 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		this.notFull = notFull;
 	}
 
-	static <V> SuspendableLinkedQueue<V> getOrCreate(String name, int capacity) throws SuspendExecution {
-		Vertx vertx = Vertx.currentContext().owner();
+	public static <V> SuspendableLinkedQueue<V> getOrCreate(String name, int capacity) throws SuspendExecution {
+		throw new UnsupportedOperationException("The SuspendableLinkedQueue does not currently work.");
+
+		/*
 		System.setProperty("vertx.hazelcast.async-api", "true");
-		Counter counter = awaitResult(h -> vertx.sharedData().getCounter(name + "__counter", h));
+		SuspendableCounter counter = SuspendableCounter.create(name + "__counter");
 		SuspendableMap<String, Node<V>> map = SuspendableMap.getOrCreate(name + "__nodes");
 		SuspendableCondition notEmpty = SuspendableCondition.getOrCreate(name + "__notEmpty");
 		SuspendableCondition notFull = SuspendableCondition.getOrCreate(name + "__notFull");
 		SuspendableLinkedQueue<V> suspendableQueue = new SuspendableLinkedQueue<>(name, counter, map, capacity, notEmpty, notFull);
 		suspendableQueue.initIfNeeded();
 		return suspendableQueue;
+		*/
 	}
 
-	static <V> SuspendableQueue<V> getOrCreate(String name) throws SuspendExecution {
+	public static <V> SuspendableQueue<V> getOrCreate(String name) throws SuspendExecution {
 		return getOrCreate(name, Integer.MAX_VALUE);
 	}
 
@@ -68,10 +72,10 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 			Node<V> node = new Node<V>(item);
 			logger.trace("trySend {} {}: Node put", name, item);
 
-			if (invoke(counter::get) < capacity) {
+			if (counter.get() < capacity) {
 				map.put(node.id, node);
 				enqueue(node);
-				c = invoke(counter::getAndIncrement);
+				c = counter.getAndIncrement();
 				logger.trace("trySend {} {}: Enqueued", name, item);
 				if (c + 1 < capacity) {
 					notFull.signal();
@@ -91,7 +95,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 	@Suspendable
 	private Lock lock(String varName) {
-		return SharedData.lock(name + varName);
+		return SuspendableLock.lock(name + varName);
 	}
 
 	@Suspendable
@@ -140,7 +144,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		try {
 			Long c1;
 			while (true) {
-				c1 = invoke(counter::get);
+				c1 = counter.get();
 				if (c1 == -1L) {
 					// Destroyed
 					return null;
@@ -159,7 +163,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 			x = dequeue();
 			logger.trace("receive {}: dequeued {}", name, x);
-			c = invoke(counter::getAndAdd, -1L);
+			c = counter.getAndAdd(-1L);
 			logger.trace("receive {}: subtracted counter to {}", name, c - 1);
 			if (c > 1) {
 				logger.trace("receive {}: signaling not empty", name);
@@ -177,16 +181,21 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	}
 
 	@Override
+	@Suspendable
 	public V take() throws InterruptedException, SuspendExecution {
 		V x;
 		Long c = -1L;
 		Lock takeLock = lock(TAKE_LOCK);
 		try {
-			while (invoke(counter::get) == 0) {
-				notEmpty.awaitMillis(Long.MAX_VALUE);
+			while (counter.get() == 0) {
+				takeLock.release();
+				if (!notEmpty.await()) {
+					throw new InterruptedException("notEmpty");
+				}
+				takeLock = lock(TAKE_LOCK);
 			}
 			x = dequeue();
-			c = invoke(counter::getAndAdd, -1L);
+			c = counter.getAndAdd(-1L);
 			if (c > 1) {
 				notEmpty.signal();
 			}
@@ -203,17 +212,17 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 
 	@Suspendable
 	private void signalNotFull() {
-		Lock putLock = lock(PUT_LOCK);
-		try {
-			notFull.signal();
-		} finally {
-			putLock.release();
-		}
+//		Lock putLock = lock(PUT_LOCK);
+//		try {
+		notFull.signal();
+//		} finally {
+//			putLock.release();
+//		}
 	}
 
 	@Suspendable
 	private Lock lock(String varName, long timeout) {
-		return SharedData.lock(name + varName, timeout);
+		return SuspendableLock.lock(name + varName, timeout);
 	}
 
 	@Suspendable
@@ -223,7 +232,13 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		if (h.item != null) {
 			throw new AssertionError("head.item != null");
 		}
-		Node<V> first = map.get(h.next);
+		Node<V> first;
+		if (h.next == null) {
+			// TODO: This has been happening a lot
+			throw new NullPointerException("next");
+		} else {
+			first = map.get(h.next);
+		}
 		V x = first.item;
 		first.item = null;
 		map.put(HEAD, first);
@@ -240,7 +255,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		try {
 			SuspendableLinkedQueue.Node<V> nullNode = new SuspendableLinkedQueue.Node<>(null);
 			if (map.putIfAbsent(INITED, nullNode) == null) {
-				invoke(counter::compareAndSet, invoke(counter::get), 0L);
+				counter.compareAndSet(counter.get(), 0L);
 				map.put(nullNode.id, nullNode);
 				map.put(LAST, nullNode);
 				map.put(HEAD, nullNode);
@@ -256,7 +271,7 @@ class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		Lock lock = lock(HEADER);
 		try {
 			map.clear();
-			invoke(counter::compareAndSet, invoke(counter::get), -1L);
+			counter.compareAndSet(counter.get(), -1L);
 			signalNotFull();
 			signalNotEmpty();
 		} finally {

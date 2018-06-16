@@ -12,8 +12,10 @@
 
 import ca.pjer.logback.AwsLogsAppender
 import ch.qos.logback.classic.PatternLayout
+import ch.qos.logback.classic.boolex.OnMarkerEvaluator
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.filter.ThresholdFilter
+import ch.qos.logback.core.filter.EvaluatorFilter
 
 import static ch.qos.logback.classic.Level.*
 
@@ -45,7 +47,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 
     filter(ThresholdFilter) {
-        level = isAWS ? WARN : INFO
+        level = isAWS ? WARN : TRACE
     }
 }
 
@@ -55,3 +57,6 @@ logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
 logger("org.reflections", ERROR)
 logger("co.paralleluniverse", ERROR)
+logger("net.demilich", WARN)
+logger("com.hiddenswitch.spellsource.Matchmaking", TRACE)
+logger("com.hiddenswitch.spellsource.concurrent.impl.SuspendableArrayQueue", TRACE)

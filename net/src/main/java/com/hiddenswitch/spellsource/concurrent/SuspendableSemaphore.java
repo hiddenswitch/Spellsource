@@ -1,7 +1,8 @@
-package com.hiddenswitch.spellsource.util;
+package com.hiddenswitch.spellsource.concurrent;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.concurrent.impl.SuspendableHazelcastSemaphore;
 
 public interface SuspendableSemaphore {
 
