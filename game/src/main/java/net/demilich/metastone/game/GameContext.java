@@ -3,9 +3,12 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.*;
@@ -290,13 +293,12 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * Internally, this is used by AI functions to evaluate a game state until a win condition (or just the end of the
 	 * turn) is reached.
 	 * <p>
-	 * This method is marked {@code synchronized} because the {@link GameContext} object is not thread safe. Two threads
-	 * can't clone and mutate a context at the same time.
+	 * This method is not thread safe. Two threads can't clone and mutate a context at the same time.
 	 *
 	 * @return A cloned instance of the game context.
 	 */
 	@Override
-	public synchronized GameContext clone() {
+	public GameContext clone() {
 		GameLogic logicClone = getLogic().clone();
 		Player player1Clone = getPlayer1().clone();
 		Player player2Clone = getPlayer2().clone();
@@ -328,7 +330,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	/**
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
-	public synchronized void dispose() {
+	protected void dispose() {
 		this.disposed = true;
 		this.players = null;
 		getTriggerManager().dispose();
@@ -688,7 +690,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param index {@link GameContext#PLAYER_1} or {@link GameContext#PLAYER_2}
 	 * @return A reference to the player with that ID / at that {@code index}.
 	 */
-	public synchronized Player getPlayer(int index) {
+	public Player getPlayer(int index) {
 		return getPlayers().get(index);
 	}
 
@@ -696,7 +698,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 * @param id {@link GameContext#PLAYER_1} or {@link GameContext#PLAYER_2}
 	 * @return {@code true} if the game context has a valid {@link Player} object at that index.
 	 */
-	public synchronized boolean hasPlayer(int id) {
+	public boolean hasPlayer(int id) {
 		return id >= 0 && players != null && players.length > id && players[id] != null;
 	}
 
@@ -864,6 +866,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		tracedMulligans[getActivePlayerId()] = mulligans1.stream().mapToInt(Card::getId).toArray();
 		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligans2.stream().mapToInt(Card::getId).toArray();
 		trace.setMulligans(tracedMulligans);
+		startGame();
 	}
 
 	private void startTrace() {
@@ -907,10 +910,18 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		logger.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		if (Fiber.isCurrentFiber()
 				&& Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
-			new Fiber<Void>(() -> {
+			Fiber<Void> f;
+			SuspendableCallable<Void> innerPlay = () -> {
 				init();
 				resume();
-			}).start();
+				return null;
+			};
+			if (Vertx.currentContext() != null) {
+				f = Sync.getContextScheduler().newFiber(innerPlay);
+			} else {
+				f = new Fiber<>(innerPlay);
+			}
+			f.start();
 		} else {
 			init();
 			resume();
@@ -1079,6 +1090,15 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}
 
 		return null;
+	}
+
+	/**
+	 * Fire the start game events here instead
+	 */
+	@Suspendable
+	protected void startGame() {
+		getLogic().startGameForPlayer(getPlayer(PLAYER_1));
+		getLogic().startGameForPlayer(getPlayer(PLAYER_2));
 	}
 
 	/**

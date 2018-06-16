@@ -9,9 +9,8 @@ import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.SharedData;
-import com.hiddenswitch.spellsource.util.SuspendableAsyncMap;
-import com.hiddenswitch.spellsource.util.SuspendableMap;
+import com.hiddenswitch.spellsource.util.Hazelcast;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Handler;
 import io.vertx.core.Verticle;
@@ -603,17 +602,15 @@ public interface Games extends Verticle {
 	/**
 	 * Retrieves the current connections by Game ID
 	 *
-	 * @param vertx The {@link Vertx} that the verticle should use to connect for {@link SharedData}
-	 * @return A {@link io.vertx.core.shareddata.LocalMap} or a {@link SuspendableAsyncMap},
-	 * depending on whether or not the underlying {@link SharedData} is operating on a {@link Vertx#isClustered()}
-	 * instance.
+	 * @param vertx The {@link Vertx} that the verticle should use to connect for {@link Hazelcast}
+	 * @return A map.
 	 */
 	static SuspendableMap<GameId, CreateGameSessionResponse> getConnections() throws SuspendExecution {
-		return SharedData.getClusterWideMap("Games::connections");
+		return SuspendableMap.getOrCreate("Games::connections");
 	}
 
 	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
-		return SharedData.getClusterWideMap("Games::players");
+		return SuspendableMap.getOrCreate("Games::players");
 	}
 
 	/**

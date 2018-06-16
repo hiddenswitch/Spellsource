@@ -15,15 +15,14 @@ public final class CallbackId {
 		this.playerId = playerId;
 	}
 
-	public CallbackId(String id) {
+	private CallbackId(String id) {
 		this.id = id;
 		this.playerId = -1;
 	}
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null
-				|| !(other instanceof CallbackId)) {
+		if (!(other instanceof CallbackId)) {
 			return false;
 		}
 		CallbackId rhs = (CallbackId) other;

@@ -10,6 +10,8 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.json.Json;
 import io.vertx.core.streams.WriteStream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +20,8 @@ import java.util.List;
 import static java.util.stream.Collectors.toList;
 
 public class SessionWriter implements WriteStream<Buffer> {
+	private static Logger logger = LoggerFactory.getLogger(SessionWriter.class);
+
 	private final String userId;
 	private final int playerId;
 	private final EventBus eventBus;
@@ -36,6 +40,10 @@ public class SessionWriter implements WriteStream<Buffer> {
 
 	@Suspendable
 	private void handleWebSocketMessage(Buffer messageBuffer) {
+		if (logger.isTraceEnabled()) {
+			logger.trace("handleWebSocketMessage {} {} {}: {}", userId, playerId, session.getGameId(), messageBuffer);
+		}
+
 		com.hiddenswitch.spellsource.client.models.ClientToServerMessage message =
 				Json.decodeValue(messageBuffer,
 						com.hiddenswitch.spellsource.client.models.ClientToServerMessage.class);

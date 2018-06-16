@@ -354,7 +354,7 @@ public class UnityClient {
 	}
 
 	public void concede() {
-		endpoint.sendMessage(serialize(new ClientToServerMessage()
+		endpoint.sendMessageSync(serialize(new ClientToServerMessage()
 				.messageType(MessageType.CONCEDE)));
 	}
 

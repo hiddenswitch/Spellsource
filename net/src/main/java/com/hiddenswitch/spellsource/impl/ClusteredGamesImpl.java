@@ -5,6 +5,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.*;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.common.SuspendablePump;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
 import com.hiddenswitch.spellsource.impl.server.SessionWriter;

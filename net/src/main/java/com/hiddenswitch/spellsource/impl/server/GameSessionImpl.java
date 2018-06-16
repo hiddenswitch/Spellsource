@@ -14,7 +14,6 @@ import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.MatchExpireRequest;
 import com.hiddenswitch.spellsource.util.Rpc;
-import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -145,21 +144,21 @@ public class GameSessionImpl implements GameSession {
 		// Configure the network behaviours on the players
 		Player player1 = getPlayer(configuration1.getUserId());
 		Player player2 = getPlayer(configuration2.getUserId());
-		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), Rpc.connect(Logic.class), new VertxScheduler(vertx));
+		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), new VertxScheduler(vertx));
 		this.gameContext.setBehaviours(new Behaviour[]{new NetworkBehaviour(), new NetworkBehaviour()});
 		final Writer listener1;
 		final Writer listener2;
 
 		if (isAgainstAI()) {
 			if (configuration1.isAI()) {
-				listener1 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_1);
+				listener1 = new BotsWriter(getGameContext(), vertx.eventBus(), PLAYER_1);
 				getGameContext().getPlayer(0).setAttribute(Attribute.AI_OPPONENT);
 				listener2 = getPlayerListener(PLAYER_2);
 				((NetworkBehaviour) getGameContext().getBehaviours().get(0)).setHuman(false);
 				setClient1(listener1);
 			} else if (configuration2.isAI()) {
 				listener1 = getPlayerListener(PLAYER_1);
-				listener2 = new AIServiceConnection(getGameContext(), vertx.eventBus(), PLAYER_2);
+				listener2 = new BotsWriter(getGameContext(), vertx.eventBus(), PLAYER_2);
 				getGameContext().getPlayer(1).setAttribute(Attribute.AI_OPPONENT);
 				((NetworkBehaviour) getGameContext().getBehaviours().get(1)).setHuman(false);
 				setClient2(listener2);
@@ -352,7 +351,6 @@ public class GameSessionImpl implements GameSession {
 			return;
 		}
 		if (getGameContext() != null) {
-			getGameContext().concede(playerId);
 			MatchExpireRequest request = new MatchExpireRequest(getGameId());
 			request.users = getUserIds();
 			try {
@@ -360,6 +358,7 @@ public class GameSessionImpl implements GameSession {
 			} catch (SuspendExecution | InterruptedException execution) {
 				throw new RuntimeException(execution);
 			}
+			getGameContext().concede(playerId);
 		}
 	}
 

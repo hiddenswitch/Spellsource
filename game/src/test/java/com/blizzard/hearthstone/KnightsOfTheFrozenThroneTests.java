@@ -89,7 +89,6 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 	@Test
 	public void testEvolveHowlfiendInteraction() {
-		Logging.setLoggingLevel(Level.ERROR);
 		for (int i = 0; i < 100; i++) {
 			runGym((context, player, opponent) -> {
 				context.setDeckFormat(DeckFormat.WILD);

@@ -47,6 +47,8 @@ definitions:
             $ref: '#/definitions/Friend'
           invite:
             $ref: '#/definitions/Invite'
+          match:
+            $ref: '#/definitions/Match'
       changed:
         description: |
           Indicates that a record's fields have changed. In this model, the new document is a full replacement.
@@ -63,6 +65,10 @@ definitions:
             description: |
               The unique ID of the invitation that should be removed.
             type: 'string'
+          matchId:
+            description: |
+              The unique ID of the match that should be removed.
+            type: 'string'
       sub:
         description: |
           When populated by the client and sent to the server, subscribes to data of the specified kind.
@@ -75,6 +81,23 @@ definitions:
             properties:
               conversationId:
                 type: 'string'
+      request:
+        description: |
+          When populated by the server and sent to the client, represents a request from the server for information in
+          the client.
+        type: 'object'
+        properties:
+          isAlive:
+            description: |
+              The server is inquiring if the client is still in matchmaking/is alive with a low timeout.
+            type: 'object'
+      response:
+        description: |
+          When populated by the client and sent to the server, indicates a response to a request from the server.
+        type: 'object'
+        properties:
+          isAlive:
+            $ref: '#/definitions/DefaultMethodResponse'
       method:
         description: |
           When populated by the client and sent to the server, indicates a method should be called. The side effects of
@@ -85,6 +108,26 @@ definitions:
             description: |
               The client-specified ID that will be used to mark the reply (the result) of this method call.
             type: 'string'
+          enqueue:
+            description: |
+              Enter a queue with the specified request.
+            type: 'object'
+            properties:
+              queueId:
+                type: 'string'
+                description: |
+                  The queue to which the server should direct this request.
+              request:
+                $ref: '#/definitions/MatchmakingQueuePutRequest'
+          dequeue:
+            description: |
+              Leave the specified queue
+            type: 'object'
+            properties:
+              queueId:
+                type: 'string'
+                description: |
+                  The queue to which the server should direct this request.
           sendMessage:
             description: |
               Send a change message to the indicated conversationId.
@@ -117,6 +160,10 @@ definitions:
                 description: |
                   The new message ID.
                 type: 'string'
+          enqueue:
+            $ref: '#/definitions/DefaultMethodResponse'
+          dequeue:
+            $ref: '#/definitions/DefaultMethodResponse'
   Enchantment:
     type: 'object'
     description: |
@@ -1792,6 +1839,25 @@ definitions:
         $ref: '#/definitions/MatchmakingQueuePutResponse'
       invite:
         $ref: '#/definitions/Invite'
+  DefaultMethodResponse:
+    type: 'object'
+    description: |
+      Indicates a default, successful response.
+  Match:
+    description: |
+      A document that describes an awaiting match.
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+        description: |
+          The ID of the match.
+      createdAt:
+        type: 'integer'
+        format: 'int64'
+        description: |
+          A timestamp for when this game was created (approximate).
+      # TODO: Add the names of the players, additional information like that
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.

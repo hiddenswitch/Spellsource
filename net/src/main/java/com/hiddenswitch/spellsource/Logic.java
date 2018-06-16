@@ -34,10 +34,7 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
@@ -116,6 +113,7 @@ public interface Logic {
 
 					final GameContext gameContext = context.event().getGameContext();
 					Optional<Minion> lowestAttackMinionStillOnBattlefield = gameContext.getEntities()
+							.filter(Objects::nonNull)
 							.filter(e -> e.getEntityType() == EntityType.MINION)
 							.filter(e -> e.getZone() == Zones.BATTLEFIELD)
 							.map(e -> (Minion) e)

@@ -77,7 +77,6 @@ public class TraceTests {
 
 	@Test
 	public void testTraceValid() {
-		Logging.setLoggingLevel(Level.ERROR);
 		Player player1 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 1");
 		Player player2 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 2");
 		GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
@@ -90,7 +89,6 @@ public class TraceTests {
 	@Test
 	@Ignore
 	public void testDiagnoseTraces() {
-		Logging.setLoggingLevel(Level.ERROR);
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {
 			List<HeroClass> classes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
@@ -111,9 +109,7 @@ public class TraceTests {
 		});
 		// Find the card which most frequently appear in the bad set
 		List<String> res = cards.entrySet().stream().sorted((e1, e2) -> Integer.compare(e2.getCount(), e1.getCount())).map(Multiset.Entry::toString).collect(toList());
-		Logging.setLoggingLevel(Level.INFO);
 		LOGGER.info("{}", res);
-		Logging.setLoggingLevel(Level.ERROR);
 	}
 
 }

@@ -24,7 +24,6 @@ public class FlatMonteCarloTests extends TestBase {
 
 	@Test
 	public void testDecksFlatMonteCarlo() {
-		Logging.setLoggingLevel(Level.ERROR);
 		Deck druid = DeckCreateRequest.fromDeckList("### Druid\n" +
 				"# Class: White\n" +
 				"# Format: Standard\n" +

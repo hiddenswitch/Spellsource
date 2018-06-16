@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
+import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
 import com.hiddenswitch.spellsource.util.RpcClient;
@@ -69,9 +70,19 @@ public class PersistenceContextImpl<T extends GameEvent> implements PersistenceC
 			} else {
 				throw new NullPointerException("invalid player");
 			}
-		} catch (NullPointerException ex) {
-			logger.error("update: Game isn't sufficiently ready yet to do an update for {}", id);
-			return 0L;
+		} catch (NullPointerException | IndexOutOfBoundsException ex) {
+			try {
+				// Game is over
+				if (gameContext.updateAndGetGameOver()) {
+					logger.warn("update: Trying to update an entity in a game that's over.");
+					return 0L;
+				} else {
+					activePlayer = gameContext.getPlayer(event().getTargetPlayerId());
+				}
+			} catch (Throwable other) {
+				logger.error("update: Game isn't sufficiently ready yet to do an update for {}", id);
+				return 0L;
+			}
 		}
 
 		List<Entity> entities = gameContext.resolveTarget(activePlayer, event().getEventSource(), reference);

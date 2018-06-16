@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -21,7 +22,6 @@ import io.vertx.core.eventbus.Message;
 import io.vertx.core.eventbus.SendContext;
 import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.RequestOptions;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.web.client.WebClient;
@@ -40,7 +40,6 @@ import java.util.Set;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -170,7 +169,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		async.complete();
 	}
 
-	@Test(timeout = 110000L)
+	@Test(timeout = 165000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
 		final int count = processorCount * 3;
@@ -203,14 +202,13 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(80L, TimeUnit.SECONDS);
+		latch.await(135L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 	}
 
 	@Test
 	public void testConcede(TestContext context) {
 		sync(() -> {
-			Logging.setLoggingLevel(Level.DEBUG);
 			UnityClient client = new UnityClient(context);
 			client.setShouldDisconnect(false);
 			Sync.invoke0(() -> {
@@ -223,11 +221,14 @@ public class GatewayTest extends SpellsourceTestBase {
 			// 1 turn was played, concede
 
 			Sync.invoke0(client::concede);
-			try {
-				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
-			} catch (ApiException e) {
-				throw new AssertionError(e);
-			}
+			GetAccountsResponse account = Sync.invoke(targetUserId -> {
+				try {
+					return client.getApi().getAccount(targetUserId);
+				} catch (ApiException e) {
+					throw new AssertionError(e);
+				}
+			}, client.getAccount().getId());
+			assertFalse(account.getAccounts().get(0).isInMatch());
 			SuspendableMap<UserId, GameId> games = Games.getGames();
 			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
 			context.assertFalse(hasUser);

@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.client.models.MatchmakingDeck;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
+import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
 
@@ -144,7 +145,13 @@ public class MatchmakingRequest implements Serializable {
 		return queueId;
 	}
 
-	public void setQueueId(String queueId) {
+	public MatchmakingRequest setQueueId(String queueId) {
 		this.queueId = queueId;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return new ReflectionToStringBuilder(this).build();
 	}
 }
