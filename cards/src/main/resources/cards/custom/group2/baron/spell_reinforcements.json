@@ -8,13 +8,13 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
-    "value": {
+    "attackBonus": {
       "class": "PlayerAttributeValueProvider",
       "playerAttribute": "HAND_COUNT",
       "targetPlayer": "SELF"
-      },
-      "hpBonus": 0
-        },
+    },
+    "hpBonus": 0
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

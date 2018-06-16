@@ -8,6 +8,7 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Give all enemy minions Taunt.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
       "target": "ENEMY_MINIONS",
