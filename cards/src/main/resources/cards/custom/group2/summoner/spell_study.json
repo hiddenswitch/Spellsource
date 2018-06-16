@@ -8,7 +8,7 @@
   "spell": {
   "class": "CopyCardSpell",
   "target": "ENEMY_LAST_CARD_PLAYED"
-  }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
