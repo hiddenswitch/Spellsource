@@ -398,6 +398,10 @@ public interface Matchmaking extends Verticle {
 			}
 
 			return Games.getGames().get(key);
+		} catch (TimeoutException ex) {
+			LOGGER.trace("matchmake {}: Dequeued due to timeout", userId);
+			dequeue(key);
+			return null;
 		} catch (Throwable any) {
 			LOGGER.error("matchmake {}", userId, any);
 			dequeue(key);

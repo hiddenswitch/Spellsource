@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.logging.LoggerFactory;
 import io.vertx.core.spi.cluster.ClusterManager;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
@@ -22,6 +23,8 @@ public class Clustered {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
+		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
+		LoggerFactory.initialise();
 
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
