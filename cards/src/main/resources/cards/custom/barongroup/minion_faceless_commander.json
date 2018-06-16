@@ -1,0 +1,18 @@
+{
+  "name": "Faceless Commander",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "description": "Adjacent minions have Charge.",
+  "aura": {
+        "class": "AddAttributeSpell",
+        "target": "ADJACENT_MINIONS",
+        "attribute": "CHARGE"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

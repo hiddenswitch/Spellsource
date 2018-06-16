@@ -1,0 +1,15 @@
+
+{
+  "name": "Dark Dragon",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

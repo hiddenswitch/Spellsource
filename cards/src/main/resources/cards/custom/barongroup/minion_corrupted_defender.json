@@ -1,0 +1,23 @@
+{
+  "name": "Corrupted Defender",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Give all enemy minions Taunt.",
+  "battlecry": {
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_MINIONS",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
