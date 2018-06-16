@@ -57,10 +57,7 @@ public class GameLogicAsync extends GameLogic {
 	public void initAsync(int playerId, boolean begins, Handler<List<Card>> callback) {
 		Player player = context.getPlayer(playerId);
 
-		mulliganAsync(player, begins, fiberHandler(o -> {
-			startGameForPlayer(player);
-			callback.handle(o);
-		}));
+		mulliganAsync(player, begins, fiberHandler(callback::handle));
 	}
 
 	public boolean isMulliganEnabled() {

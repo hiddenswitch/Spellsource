@@ -221,11 +221,14 @@ public class GatewayTest extends SpellsourceTestBase {
 			// 1 turn was played, concede
 
 			Sync.invoke0(client::concede);
-			try {
-				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
-			} catch (ApiException e) {
-				throw new AssertionError(e);
-			}
+			GetAccountsResponse account = Sync.invoke(targetUserId -> {
+				try {
+					return client.getApi().getAccount(targetUserId);
+				} catch (ApiException e) {
+					throw new AssertionError(e);
+				}
+			}, client.getAccount().getId());
+			assertFalse(account.getAccounts().get(0).isInMatch());
 			SuspendableMap<UserId, GameId> games = Games.getGames();
 			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
 			context.assertFalse(hasUser);

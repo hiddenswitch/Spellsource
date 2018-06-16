@@ -60,7 +60,7 @@ public class Sync {
 	}
 
 	@Suspendable
-	public static <R> R invoke(Consumer<Handler<AsyncResult<R>>> func) {
+	public static <R> R invoke1(Consumer<Handler<AsyncResult<R>>> func) {
 		return awaitResult(func);
 	}
 

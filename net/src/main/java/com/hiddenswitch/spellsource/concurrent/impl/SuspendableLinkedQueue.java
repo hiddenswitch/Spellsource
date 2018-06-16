@@ -3,10 +3,7 @@ package com.hiddenswitch.spellsource.concurrent.impl;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.*;
-import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
-import io.vertx.core.shareddata.Counter;
-import io.vertx.core.shareddata.Lock;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -14,9 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeoutException;
-
-import static com.hiddenswitch.spellsource.util.Sync.invoke;
-import static io.vertx.ext.sync.Sync.awaitResult;
 
 public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	private static final String TAKE_LOCK = "__takeLock";
@@ -66,7 +60,7 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	public boolean offer(@NotNull V item, boolean createQueue) {
 		logger.trace("trySend {} {}: Enter", name, item);
 		long c = -1L;
-		Lock putLock = null;
+		SuspendableLock putLock = null;
 		try {
 			putLock = lock(PUT_LOCK);
 			Node<V> node = new Node<V>(item);
@@ -94,13 +88,13 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	}
 
 	@Suspendable
-	private Lock lock(String varName) {
+	private SuspendableLock lock(String varName) {
 		return SuspendableLock.lock(name + varName);
 	}
 
 	@Suspendable
 	private void signalNotEmpty() {
-		Lock takeLock = lock(TAKE_LOCK);
+		SuspendableLock takeLock = lock(TAKE_LOCK);
 		try {
 			notEmpty.signal();
 		} finally {
@@ -127,7 +121,7 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 		long c = -1L;
 		long startTime = System.currentTimeMillis();
 		long millis = timeout;
-		Lock takeLock;
+		SuspendableLock takeLock;
 		try {
 			takeLock = lock(TAKE_LOCK, timeout);
 			logger.trace("receive {}: Taking lock", name);
@@ -185,7 +179,7 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	public V take() throws InterruptedException, SuspendExecution {
 		V x;
 		Long c = -1L;
-		Lock takeLock = lock(TAKE_LOCK);
+		SuspendableLock takeLock = lock(TAKE_LOCK);
 		try {
 			while (counter.get() == 0) {
 				takeLock.release();
@@ -221,7 +215,7 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	}
 
 	@Suspendable
-	private Lock lock(String varName, long timeout) {
+	private SuspendableLock lock(String varName, long timeout) {
 		return SuspendableLock.lock(name + varName, timeout);
 	}
 
@@ -251,7 +245,7 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	}
 
 	void initIfNeeded() throws SuspendExecution {
-		Lock lock = lock(HEADER);
+		SuspendableLock lock = lock(HEADER);
 		try {
 			SuspendableLinkedQueue.Node<V> nullNode = new SuspendableLinkedQueue.Node<>(null);
 			if (map.putIfAbsent(INITED, nullNode) == null) {
@@ -268,7 +262,7 @@ public class SuspendableLinkedQueue<V> implements SuspendableQueue<V> {
 	@Override
 	@Suspendable
 	public void destroy() {
-		Lock lock = lock(HEADER);
+		SuspendableLock lock = lock(HEADER);
 		try {
 			map.clear();
 			counter.compareAndSet(counter.get(), -1L);

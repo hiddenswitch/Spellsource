@@ -48,7 +48,7 @@ public class ClusterTest extends SpellsourceTestBase {
 				for (int i = 0; i < 16; i++) {
 					int finalI = i;
 					vertx.runOnContext(suspendableHandler(v2 -> {
-						Lock lock = SuspendableLock.lock("test" + Integer.toString(finalI));
+						SuspendableLock lock = SuspendableLock.lock("test" + Integer.toString(finalI));
 						Strand.sleep(10000L);
 						lock.release();
 						latch.countDown();
@@ -59,7 +59,7 @@ public class ClusterTest extends SpellsourceTestBase {
 					int finalI = i;
 					vertx.runOnContext(suspendableHandler(v2 -> {
 						Strand.sleep(2000L);
-						Lock lock = SuspendableLock.lock("test" + Integer.toString(finalI));
+						SuspendableLock lock = SuspendableLock.lock("test" + Integer.toString(finalI));
 						lock.release();
 						latch.countDown();
 					}));
@@ -70,7 +70,7 @@ public class ClusterTest extends SpellsourceTestBase {
 				for (int i = 0; i < 16; i++) {
 					int finalI = i;
 					vertx.runOnContext(suspendableHandler(v2 -> {
-						Lock lock = SuspendableLock.lock("test" + Integer.toString(finalI));
+						SuspendableLock lock = SuspendableLock.lock("test" + Integer.toString(finalI));
 					}));
 				}
 			});
