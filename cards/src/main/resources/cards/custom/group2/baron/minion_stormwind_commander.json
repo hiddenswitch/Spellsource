@@ -1,4 +1,3 @@
-
 {
   "name": "Stormwind Commander",
   "baseManaCost": 5,
@@ -11,13 +10,13 @@
   "aura": {
     "class": "AttributeAura",
     "target": "OTHER_FRIENDLY_MINIONS",
-        "filter": {
+    "attribute": "AURA_CHARGE",
+    "filter": {
       "class": "SpecificCardFilter",
-      "card": "token_baron_knight"
-      }
-    "attribute": "AURA_CHARGE"
+      "card": "token_knight"
+    }
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

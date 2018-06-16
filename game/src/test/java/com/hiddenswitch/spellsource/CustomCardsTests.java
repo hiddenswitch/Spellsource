@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -20,6 +22,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
+import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
@@ -36,6 +39,27 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testHaplessKnight() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion greaterAttack = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			Minion lessAttack = playMinionCard(context, opponent, "minion_argent_squire");
+			context.endTurn();
+			Minion source = playMinionCard(context, player, "minion_hapless_knight");
+			// Just opponent's hero and Argent Squire
+			assertEquals(getPhysicalAttackActionStream(context).count(), 2L);
+			assertTrue(getPhysicalAttackActionStream(context).noneMatch(ga -> ga.getTargetReference().equals(greaterAttack.getReference())));
+			assertEquals(getPhysicalAttackActionStream(context).filter(ga -> ga.getTargetReference().equals(lessAttack.getReference())).count(), 1L);
+		});
+	}
+
+	@NotNull
+	public Stream<PhysicalAttackAction> getPhysicalAttackActionStream(GameContext context) {
+		return context.getValidActions().stream().filter(ga -> ga instanceof PhysicalAttackAction)
+				.map(ga -> (PhysicalAttackAction) ga);
+	}
 
 	@Test
 	public void testVoidReaper() {

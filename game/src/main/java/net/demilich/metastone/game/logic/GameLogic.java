@@ -1347,12 +1347,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		player.getAttributes().remove(Attribute.COMBO);
 		hero.activateWeapon(false);
+
 		context.getEntities()
 				.filter(actor -> actor.hasAttribute(Attribute.HEALING_THIS_TURN) || actor.hasAttribute(Attribute.DAMAGE_THIS_TURN))
 				.forEach(actor -> {
 					actor.getAttributes().remove(Attribute.HEALING_THIS_TURN);
 					actor.getAttributes().remove(Attribute.DAMAGE_THIS_TURN);
 				});
+
+		for (Player eachPlayer : context.getPlayers()) {
+			eachPlayer.setAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 0);
+			eachPlayer.setAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 0);
+		}
 
 		context.fireGameEvent(new TurnEndEvent(context, playerId));
 		if (hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS)) {
@@ -1366,7 +1372,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				.collect(toList())) {
 			removePeacefully(entity);
 		}
-
 
 		endOfSequence();
 	}
@@ -2511,6 +2516,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
+	@Suspendable
 	void processTargetModifiers(Player player, GameAction action) {
 		Card heroPower = player.getHero().getHeroPower();
 		if (heroPower.getHeroClass() != HeroClass.GREEN) {
@@ -3377,6 +3383,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.getSummonReferenceStack().pop();
 		if (player.getMinions().contains(minion)
 				&& !minion.hasAttribute(Attribute.PERMANENT)) {
+			player.modifyAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 1);
+			player.modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
+			context.getOpponent(player).modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
 			context.fireGameEvent(new AfterSummonEvent(context, minion, source));
 		}
 		context.fireGameEvent(new BoardChangedEvent(context));

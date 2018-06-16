@@ -14,7 +14,7 @@
       "fireCondition": {
         "class": "IsDeadCondition"
       },
-       "targetEntityType": "MINION"
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "DrawCardSpell",

@@ -1,0 +1,40 @@
+{
+  "name": "Hapless Knight",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Charge. Can't attack minions with more Attack.",
+  "aura": {
+    "class": "PhysicalAttackTargetOverrideAura",
+    "target": "PHYSICAL_ATTACK_TARGETS",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "ATTACK"
+          },
+          "attribute": "ATTACK",
+          "operation": "GREATER"
+        },
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      ],
+      "invert": true
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

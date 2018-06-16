@@ -1,11 +1,12 @@
 package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Sets;
+import net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -72,7 +73,29 @@ public class ActionLogic implements Serializable {
 				continue;
 			}
 
-			rollout(new PhysicalAttackAction(minion.getReference()), context, player, physicalAttackActions);
+			List<PhysicalAttackTargetOverrideAura> filters = context.getTriggersAssociatedWith(minion.getReference()).stream()
+					.filter(trigger -> trigger instanceof PhysicalAttackTargetOverrideAura)
+					.map(trigger -> (PhysicalAttackTargetOverrideAura) trigger).collect(Collectors.toList());
+			if (!filters.isEmpty()) {
+				Set<EntityReference> common = new HashSet<>();
+
+				for (Integer targetId : filters.get(0).getAffectedEntities()) {
+					common.add(new EntityReference(targetId));
+				}
+
+				for (int i = 1; i < filters.size(); i++) {
+					common = Sets.intersection(common, filters.get(i).getAffectedEntities().stream().map(EntityReference::new).collect(Collectors.toSet()));
+				}
+
+				for (EntityReference target : common) {
+					PhysicalAttackAction attackAction = new PhysicalAttackAction(minion.getReference());
+					attackAction.setTargetReference(target);
+					physicalAttackActions.add(attackAction);
+				}
+
+			} else {
+				rollout(new PhysicalAttackAction(minion.getReference()), context, player, physicalAttackActions);
+			}
 		}
 		return physicalAttackActions;
 	}

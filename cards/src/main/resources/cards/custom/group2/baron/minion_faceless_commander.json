@@ -8,9 +8,9 @@
   "rarity": "COMMON",
   "description": "Adjacent minions have Charge.",
   "aura": {
-        "class": "AddAttributeSpell",
-        "target": "ADJACENT_MINIONS",
-        "attribute": "CHARGE"
+    "class": "AttributeAura",
+    "target": "ADJACENT_MINIONS",
+    "attribute": "AURA_CHARGE"
   },
   "collectible": true,
   "set": "CUSTOM",

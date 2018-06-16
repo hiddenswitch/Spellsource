@@ -666,6 +666,14 @@ public enum Attribute {
 	 */
 	DAMAGE_THIS_TURN,
 	/**
+	 * Every time a {@link Player} successfully summons a minion, this counter is incremented on the summoning player.
+	 */
+	MINIONS_SUMMONED_THIS_TURN,
+	/**
+	 * Every time a {@link Player} successfully summons a minion, this counter is incremented on both players
+	 */
+	TOTAL_MINIONS_SUMMONED_THIS_TURN,
+	/**
 	 * Whenever an {@link Actor} dies, increment this attribute by 1 if the actor had the lowest attack on the
 	 * battlefield.
 	 */

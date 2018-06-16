@@ -209,5 +209,9 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	public void setDesc(Desc<?, ?> desc) {
 		this.desc = (AuraDesc) desc;
 	}
+
+	public SortedSet<Integer> getAffectedEntities() {
+		return affectedEntities;
+	}
 }
 

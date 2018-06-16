@@ -11,11 +11,10 @@
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
-
       "spells": [
         {
-      "class": "RemoveCardSpell",
-      "target": "FRIENDLY_DECK"
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_DECK"
         },
         {
           "class": "BuffSpell",

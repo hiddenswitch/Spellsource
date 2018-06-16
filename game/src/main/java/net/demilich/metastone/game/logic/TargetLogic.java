@@ -6,6 +6,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.entities.EntityZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -375,6 +376,8 @@ public class TargetLogic implements Serializable {
 			return context.getEntities().collect(Collectors.toList());
 		} else if (targetKey.equals(EntityReference.TRIGGER_HOST)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getTriggerHostStack().peek()));
+		} else if (targetKey.equals(EntityReference.PHYSICAL_ATTACK_TARGETS)) {
+			return getValidTargets(context, player, new PhysicalAttackAction(source.getReference()));
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

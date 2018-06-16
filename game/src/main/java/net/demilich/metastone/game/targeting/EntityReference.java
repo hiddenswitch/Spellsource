@@ -141,8 +141,8 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference LEFTMOST_FRIENDLY_MINION = new EntityReference(-19);
 	/**
-	 * References the enemy minion whose index in the minions zone is 0. Or, a zero length list if no enemy minions are
-	 * on the board.
+	 * References the enemy minion whose index in the minions zone is 0. Or, a zero length list if no enemy minions are on
+	 * the board.
 	 */
 	public static final EntityReference LEFTMOST_ENEMY_MINION = new EntityReference(-20);
 	/**
@@ -157,7 +157,7 @@ public class EntityReference implements Serializable {
 	public static final EntityReference ENEMY_PLAYER = new EntityReference(-22);
 	/**
 	 * References the minions with an index less than the {@code source} minion.
-	 *
+	 * <p>
 	 * The client will appear to be targeting to the minions on-screen to the right of the {@code source}.
 	 */
 	public static final EntityReference MINIONS_TO_LEFT = new EntityReference(-23);
@@ -168,16 +168,15 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference MINIONS_TO_RIGHT = new EntityReference(-24);
 	/**
-	 * When the player performs a {@link net.demilich.metastone.game.actions.GameAction} that has a target choice, like
-	 * a physical attack, a targeted battlecry, casting a targeted spell or summoning a minion (interpreted as the
-	 * minion the player is summoning next to), this reference will return the target that the player originally chose
-	 * regardless of target overriding effects or effects in the sequence that may later destroy or transform the
-	 * target.
+	 * When the player performs a {@link net.demilich.metastone.game.actions.GameAction} that has a target choice, like a
+	 * physical attack, a targeted battlecry, casting a targeted spell or summoning a minion (interpreted as the minion
+	 * the player is summoning next to), this reference will return the target that the player originally chose regardless
+	 * of target overriding effects or effects in the sequence that may later destroy or transform the target.
 	 */
 	public static final EntityReference TARGET = new EntityReference(-25);
 	/**
-	 * This reference allows you to distinguish the target of an effect (the spell target) versus the target selected by
-	 * a player (the {@link #TARGET}).
+	 * This reference allows you to distinguish the target of an effect (the spell target) versus the target selected by a
+	 * player (the {@link #TARGET}).
 	 * <p>
 	 * When an effect like a spell card, a battlecry or an enchantment casts a {@link
 	 * net.demilich.metastone.game.spells.Spell} with a group reference, the spell is cast separately for each entity in
@@ -186,8 +185,8 @@ public class EntityReference implements Serializable {
 	 * <p>
 	 * For example, suppose you had a spell, "Choose a minion. For each other minion, you have a 50% of dealing damage
 	 * equal to the minion's attack or the chosen minion's hitpoints". You need some way of referencing the minion being
-	 * damaged versus the minion that was chosen by the player. Spell target is the minion currently being damaged,
-	 * while {@link #TARGET} (or inherited from the topmost spell) is the minion that was chosen:
+	 * damaged versus the minion that was chosen by the player. Spell target is the minion currently being damaged, while
+	 * {@link #TARGET} (or inherited from the topmost spell) is the minion that was chosen:
 	 * <pre>
 	 *     "targetSelection": "MINIONS",
 	 *     "spell": {
@@ -218,11 +217,11 @@ public class EntityReference implements Serializable {
 	 * This reference retrieves the (possibly {@code null}) entity pointed to by {@link GameEvent#getEventTarget()}. An
 	 * event target is never itself a group reference; it always retrieves a specific entity.
 	 * <p>
-	 * To see which game events generate targets, which can be counter-intuitive, look at the constructors of the
-	 * various {@link GameEvent} classes and see how they're called.
+	 * To see which game events generate targets, which can be counter-intuitive, look at the constructors of the various
+	 * {@link GameEvent} classes and see how they're called.
 	 * <p>
-	 * Some important event targets include: <ul> <li>{@link net.demilich.metastone.game.events.PhysicalAttackEvent}:
-	 * The attacker.</li> <li>{@link net.demilich.metastone.game.events.SpellCastedEvent}: The <b>source card</b></li>
+	 * Some important event targets include: <ul> <li>{@link net.demilich.metastone.game.events.PhysicalAttackEvent}: The
+	 * attacker.</li> <li>{@link net.demilich.metastone.game.events.SpellCastedEvent}: The <b>source card</b></li>
 	 * <li>{@link net.demilich.metastone.game.events.SummonEvent}: The minion being summoned.</li> <li>{@link
 	 * net.demilich.metastone.game.events.AfterSpellCastedEvent}: For a targeted spell, the chosen target or, if it was
 	 * overridden by an effect, the override.</li> </ul>
@@ -231,11 +230,11 @@ public class EntityReference implements Serializable {
 	/**
 	 * Returns the {@code source} of the target resolution.
 	 * <p>
-	 * Inside an enchantment's {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#FIRE_CONDITION}
-	 * and {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#QUEUE_CONDITION}, which are the
-	 * conditions that evaluate whether or not the trigger for the enchantment should fire, the source entity is the
-	 * {@link GameEvent#getEventSource()}; it is <b>not</b> the entity hosting the trigger. To get the entity hosting
-	 * the trigger, use {@link #TRIGGER_HOST} instead.
+	 * Inside an enchantment's {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#FIRE_CONDITION} and
+	 * {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#QUEUE_CONDITION}, which are the conditions
+	 * that evaluate whether or not the trigger for the enchantment should fire, the source entity is the {@link
+	 * GameEvent#getEventSource()}; it is <b>not</b> the entity hosting the trigger. To get the entity hosting the
+	 * trigger, use {@link #TRIGGER_HOST} instead.
 	 */
 	public static final EntityReference SELF = new EntityReference(-28);
 	/**
@@ -244,8 +243,8 @@ public class EntityReference implements Serializable {
 	public static final EntityReference KILLED_MINION = new EntityReference(-29);
 	/**
 	 * This references the attacker during a {@link net.demilich.metastone.game.actions.PhysicalAttackAction} or {@link
-	 * net.demilich.metastone.game.logic.GameLogic#fight(Player, Actor, Actor, PhysicalAttackAction)} invocation (i.e.,
-	 * a {@link net.demilich.metastone.game.spells.FightSpell}).
+	 * net.demilich.metastone.game.logic.GameLogic#fight(Player, Actor, Actor, PhysicalAttackAction)} invocation (i.e., a
+	 * {@link net.demilich.metastone.game.spells.FightSpell}).
 	 */
 	public static final EntityReference ATTACKER = new EntityReference(-30);
 	/**
@@ -263,8 +262,8 @@ public class EntityReference implements Serializable {
 	 *         }
 	 *     }
 	 * </pre>
-	 * Like {@link #SPELL_TARGET}, this reference helps you distinguish between the player's chosen {@link #TARGET},
-	 * which will be propagated downwards to child spells, and the entity created by something like a {@link
+	 * Like {@link #SPELL_TARGET}, this reference helps you distinguish between the player's chosen {@link #TARGET}, which
+	 * will be propagated downwards to child spells, and the entity created by something like a {@link
 	 * net.demilich.metastone.game.spells.SummonSpell}.
 	 *
 	 * @see net.demilich.metastone.game.spells.SpellUtils#castChildSpell(GameContext, Player, SpellDesc, Entity, Entity,
@@ -289,8 +288,8 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference BOTH_HANDS = new EntityReference(-36);
 	/**
-	 * When a minion gets transformed while it is being summoned, the result of the transformation of the minion is
-	 * found with this reference.
+	 * When a minion gets transformed while it is being summoned, the result of the transformation of the minion is found
+	 * with this reference.
 	 * <p>
 	 * Deprecated by {@link Entity#transformResolved(GameContext)}.
 	 */
@@ -328,9 +327,8 @@ public class EntityReference implements Serializable {
 	 * <p>
 	 * TODO: It is not easy to distinguish between cards and actors in the graveyard.
 	 * <p>
-	 * To retrieve cards, use the {@link net.demilich.metastone.game.spells.desc.source.GraveyardCardsSource}. To
-	 * retrieve actors (weapons, minions and heroes that have been destroyed), use {@link
-	 * net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource}.
+	 * To retrieve cards, use the {@link net.demilich.metastone.game.spells.desc.source.GraveyardCardsSource}. To retrieve
+	 * actors (weapons, minions and heroes that have been destroyed), use {@link net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource}.
 	 */
 	public static final EntityReference FRIENDLY_GRAVEYARD = new EntityReference(-43);
 	/**
@@ -338,9 +336,8 @@ public class EntityReference implements Serializable {
 	 * <p>
 	 * TODO: It is not easy to distinguish between cards and actors in the graveyard.
 	 * <p>
-	 * To retrieve cards, use the {@link net.demilich.metastone.game.spells.desc.source.GraveyardCardsSource}. To
-	 * retrieve actors (weapons, minions and heroes that have been destroyed), use {@link
-	 * net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource}.
+	 * To retrieve cards, use the {@link net.demilich.metastone.game.spells.desc.source.GraveyardCardsSource}. To retrieve
+	 * actors (weapons, minions and heroes that have been destroyed), use {@link net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource}.
 	 */
 	public static final EntityReference ENEMY_GRAVEYARD = new EntityReference(-44);
 	/**
@@ -358,8 +355,7 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference EVENT_SOURCE = new EntityReference(-46);
 	/**
-	 * References the next card the friendly player will draw, or an empty list if no cards remain in the player's
-	 * deck.
+	 * References the next card the friendly player will draw, or an empty list if no cards remain in the player's deck.
 	 */
 	public static final EntityReference FRIENDLY_TOP_CARD = new EntityReference(-47);
 	/**
@@ -405,9 +401,9 @@ public class EntityReference implements Serializable {
 	 * References the {@link Entity} that hosts the {@link net.demilich.metastone.game.spells.trigger.Enchantment} whose
 	 * fire condition or spell is currently being evaluated.
 	 * <p>
-	 * During a condition evaluation on an {@link net.demilich.metastone.game.spells.trigger.EventTrigger}, {@link
-	 * #SELF} refers to {@link GameEvent#getEventSource()}, not the host of the trigger whose condition is being
-	 * evaluated. Use this reference to get the host of the trigger currently being evaluated.
+	 * During a condition evaluation on an {@link net.demilich.metastone.game.spells.trigger.EventTrigger}, {@link #SELF}
+	 * refers to {@link GameEvent#getEventSource()}, not the host of the trigger whose condition is being evaluated. Use
+	 * this reference to get the host of the trigger currently being evaluated.
 	 *
 	 * @see #SELF for an important comparison about how this reference is used.
 	 */
@@ -417,6 +413,11 @@ public class EntityReference implements Serializable {
 	 * References all the enemy's minions, except ordered by their location on the board instead of their order of play.
 	 */
 	public static final EntityReference ENEMY_MINIONS_LEFT_TO_RIGHT = new EntityReference(-57);
+	/**
+	 * References the enemy minions and hero which would ordinarily be targetable by a physical attack from the friendly
+	 * player's point of view.
+	 */
+	public static final EntityReference PHYSICAL_ATTACK_TARGETS = new EntityReference(-58);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
