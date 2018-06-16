@@ -66,7 +66,7 @@ public interface Matchmaking extends Verticle {
 	 */
 	static GameId bot(UserId userId, DeckId deckId, DeckId botDeckId) throws SuspendExecution, InterruptedException {
 		LOGGER.debug("bot: Matchmaker is creating an AI game for " + userId);
-		Lock botLock = null;
+		SuspendableLock botLock = null;
 		GameId gameId = GameId.create();
 
 		try {
@@ -321,7 +321,7 @@ public interface Matchmaking extends Verticle {
 	 */
 	static Closeable cancellation() {
 		EventBus eb = Vertx.currentContext().owner().eventBus();
-		MessageConsumer<JsonObject> consumer = eb.<JsonObject>consumer("Matchmaking::cancel", suspendableHandler(message -> {
+		MessageConsumer<JsonObject> consumer = eb.consumer("Matchmaking::cancel", suspendableHandler(message -> {
 			UserId userId = new UserId(message.body().getString("userId"));
 			if (getLocalStrands().containsKey(userId)) {
 				getLocalStrands().get(userId).interrupt();
@@ -417,7 +417,7 @@ public interface Matchmaking extends Verticle {
 	 */
 	@Suspendable
 	static void enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
-		Lock lock = null;
+		SuspendableLock lock = null;
 		try {
 			LOGGER.trace("enqueue {}: Asking for method lock", request.getUserId());
 			lock = Connection.methodLock(request.getUserId());
@@ -460,7 +460,7 @@ public interface Matchmaking extends Verticle {
 
 	@Suspendable
 	static void dequeue(UserId userId) throws SuspendExecution {
-		Lock lock = null;
+		SuspendableLock lock = null;
 		try {
 			lock = Connection.methodLock(userId.toString());
 			SuspendableMap<UserId, String> currentQueue = currentQueue();
@@ -509,13 +509,16 @@ public interface Matchmaking extends Verticle {
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration configuration) throws SuspendExecution {
 		Fiber<Void> fiber = getContextScheduler().newFiber(() -> {
 			// There should only be one matchmaker per queue per cluster
-			Lock lock;
+			SuspendableLock lock;
 			try {
 				lock = SuspendableLock.lock("Matchmaking::queues[" + queueId + "]");
 			} catch (VertxException timedOut) {
 				if (timedOut.getCause() instanceof TimeoutException) {
 					// The queue already exists elsewhere in the cluster, message will be logged later
 					lock = null;
+				} else if (timedOut.getCause() instanceof InterruptedException) {
+					LOGGER.info("startMatchmaker {}: Closing on a failover instance (interrupted while waiting for lock)", queueId);
+					return null;
 				} else {
 					// A different, probably real error occurred.
 					throw new RuntimeException(timedOut);
@@ -534,7 +537,7 @@ public interface Matchmaking extends Verticle {
 
 				// Dequeue requests
 				do {
-					LOGGER.trace("startMatchmaker {}: Awaiting two users", queueId);
+					LOGGER.trace("startMatchmaker {}: Awaiting {} users", queueId, lobbySize);
 					while (thisMatchRequests.size() < lobbySize) {
 						MatchmakingQueueEntry request = queue.take();
 						switch (request.command) {
@@ -566,7 +569,7 @@ public interface Matchmaking extends Verticle {
 					}
 
 					// Send out all the pings at once
-					CompositeFuture allConnected = invoke(CompositeFuture.join(futures)::setHandler);
+					CompositeFuture allConnected = Sync.invoke1(CompositeFuture.join(futures)::setHandler);
 
 					// Is everyone still connected?
 					if (allConnected.failed()) {

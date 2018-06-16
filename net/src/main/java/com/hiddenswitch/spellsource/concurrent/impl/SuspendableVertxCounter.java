@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.concurrent.impl;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.SuspendableCounter;
+import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.shareddata.Counter;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
@@ -16,25 +17,25 @@ public class SuspendableVertxCounter implements SuspendableCounter {
 	@Override
 	@Suspendable
 	public long get() {
-		return invoke(counter::get);
+		return Sync.invoke1(counter::get);
 	}
 
 	@Override
 	@Suspendable
 	public long incrementAndGet() {
-		return invoke(counter::incrementAndGet);
+		return Sync.invoke1(counter::incrementAndGet);
 	}
 
 	@Override
 	@Suspendable
 	public long getAndIncrement() {
-		return invoke(counter::getAndIncrement);
+		return Sync.invoke1(counter::getAndIncrement);
 	}
 
 	@Override
 	@Suspendable
 	public long decrementAndGet() {
-		return invoke(counter::decrementAndGet);
+		return Sync.invoke1(counter::decrementAndGet);
 	}
 
 	@Override

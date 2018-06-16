@@ -144,7 +144,7 @@ public class GameSessionImpl implements GameSession {
 		// Configure the network behaviours on the players
 		Player player1 = getPlayer(configuration1.getUserId());
 		Player player2 = getPlayer(configuration2.getUserId());
-		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), Rpc.connect(Logic.class), new VertxScheduler(vertx));
+		this.gameContext = new ServerGameContext(player1, player2, deckFormat, getGameId(), new VertxScheduler(vertx));
 		this.gameContext.setBehaviours(new Behaviour[]{new NetworkBehaviour(), new NetworkBehaviour()});
 		final Writer listener1;
 		final Writer listener2;
@@ -351,7 +351,6 @@ public class GameSessionImpl implements GameSession {
 			return;
 		}
 		if (getGameContext() != null) {
-			getGameContext().concede(playerId);
 			MatchExpireRequest request = new MatchExpireRequest(getGameId());
 			request.users = getUserIds();
 			try {
@@ -359,6 +358,7 @@ public class GameSessionImpl implements GameSession {
 			} catch (SuspendExecution | InterruptedException execution) {
 				throw new RuntimeException(execution);
 			}
+			getGameContext().concede(playerId);
 		}
 	}
 

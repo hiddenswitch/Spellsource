@@ -37,7 +37,7 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 	@Override
 	@Suspendable
 	public boolean offer(@NotNull V item, boolean createQueue) {
-		Lock lock = lock();
+		SuspendableLock lock = lock();
 		try {
 			try {
 				SuspendableMap<String, SuspendableArrayQueueHeader> arrayQueues = getArrayQueues();
@@ -99,14 +99,14 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 	}
 
 	@Suspendable
-	private Lock lock() {
+	private SuspendableLock lock() {
 		return SuspendableLock.lock("SuspendableArrayQueue::arrayQueues[" + name + "]__lock");
 	}
 
 	@Override
 	@Suspendable
 	public V poll(long timeout) throws InterruptedException, SuspendExecution {
-		Lock lock = lock();
+		SuspendableLock lock = lock();
 
 		try {
 			SuspendableCondition notEmpty = notEmpty();
@@ -197,7 +197,7 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 	@Override
 	@Suspendable
 	public V take() throws InterruptedException {
-		Lock lock = lock();
+		SuspendableLock lock = lock();
 		try {
 			SuspendableMap<String, SuspendableArrayQueueHeader> arrayQueues = getArrayQueues();
 			SuspendableArrayQueueHeader header = arrayQueues.get(name);

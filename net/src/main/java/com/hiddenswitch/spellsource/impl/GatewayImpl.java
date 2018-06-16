@@ -17,13 +17,14 @@ import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.*;
+import com.hiddenswitch.spellsource.util.Rpc;
+import com.hiddenswitch.spellsource.util.Serialization;
+import com.hiddenswitch.spellsource.util.Sync;
+import com.hiddenswitch.spellsource.util.WebResult;
 import io.vertx.core.Closeable;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
-import io.vertx.core.logging.Logger;
-import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -31,6 +32,8 @@ import io.vertx.ext.web.handler.*;
 import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
 import java.util.ArrayList;
@@ -39,7 +42,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -64,10 +66,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	@Override
 	@Suspendable
 	public void start() throws RuntimeException, SuspendExecution {
+		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
+		io.vertx.core.logging.LoggerFactory.initialise();
 		server = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(port));
 		Router router = Router.router(vertx);
 
-		logger.info("start: Configuring router...");
+		logger.info("start: Configuring router on instance {}", this.deploymentID());
 
 		final AuthHandler authHandler = SpellsourceAuthHandler.create();
 		final BodyHandler bodyHandler = BodyHandler.create();
@@ -116,7 +120,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				});
 
 		// All routes need logging of URLs. URLs never leak private information
-		router.route().handler(LoggerHandler.create());
+		router.route().handler(LoggerHandler.create(true, LoggerFormat.DEFAULT));
 
 		// CORS
 		router.route().handler(CorsHandler.create(".*")
@@ -161,7 +165,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			}
 
 			if (routingContext.failure() != null) {
-				logger.error(routingContext.failure());
 				if (!routingContext.response().closed()) {
 					routingContext.response().end(Serialization.serialize(new SpellsourceException().message(routingContext.failure().getMessage())));
 				}
@@ -760,7 +763,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			server.close();
 		}
 		if (queues != null) {
-			invoke(queues::close);
+			Sync.invoke1(queues::close);
 		}
 	}
 

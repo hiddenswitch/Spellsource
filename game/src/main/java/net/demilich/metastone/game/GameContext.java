@@ -330,7 +330,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	/**
 	 * Clears state to ensure this context isn't referencing it anymore.
 	 */
-	public void dispose() {
+	protected void dispose() {
 		this.disposed = true;
 		this.players = null;
 		getTriggerManager().dispose();
@@ -866,6 +866,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		tracedMulligans[getActivePlayerId()] = mulligans1.stream().mapToInt(Card::getId).toArray();
 		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligans2.stream().mapToInt(Card::getId).toArray();
 		trace.setMulligans(tracedMulligans);
+		startGame();
 	}
 
 	private void startTrace() {
@@ -1089,6 +1090,15 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		}
 
 		return null;
+	}
+
+	/**
+	 * Fire the start game events here instead
+	 */
+	@Suspendable
+	protected void startGame() {
+		getLogic().startGameForPlayer(getPlayer(PLAYER_1));
+		getLogic().startGameForPlayer(getPlayer(PLAYER_2));
 	}
 
 	/**

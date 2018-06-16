@@ -18,6 +18,8 @@ import io.vertx.core.streams.Pump;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.sync.Sync;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Pumps data from a {@link io.vertx.core.streams.ReadStream} to a {@link io.vertx.core.streams.WriteStream} and
@@ -39,7 +41,7 @@ import io.vertx.ext.sync.Sync;
  * @author <a href="http://tfox.org">Tim Fox</a>
  */
 public class SuspendablePump<T> implements Pump {
-
+	private static Logger logger = LoggerFactory.getLogger(SuspendablePump.class);
 	private final ReadStream<T> readStream;
 	private final WriteStream<T> writeStream;
 	private final Handler<T> dataHandler;
@@ -70,11 +72,16 @@ public class SuspendablePump<T> implements Pump {
 
 	@Suspendable
 	private void handleData(T data) {
-		writeStream.write(data);
-		incPumped();
-		if (writeStream.writeQueueFull()) {
-			readStream.pause();
-			writeStream.drainHandler(drainHandler);
+		try {
+			writeStream.write(data);
+			incPumped();
+			if (writeStream.writeQueueFull()) {
+				readStream.pause();
+				writeStream.drainHandler(drainHandler);
+			}
+		} catch (IllegalStateException socketClosed) {
+			logger.error("handleData: Tried to write to {} which is closed. Message was: {}", writeStream, data);
+			throw socketClosed;
 		}
 	}
 

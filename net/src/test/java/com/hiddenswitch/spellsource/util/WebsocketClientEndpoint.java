@@ -93,6 +93,14 @@ public class WebsocketClientEndpoint {
 		this.userSession.getAsyncRemote().sendText(message);
 	}
 
+	public void sendMessageSync(String message) {
+		try {
+			this.userSession.getBasicRemote().sendText(message);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
 	public Session getUserSession() {
 		return userSession;
 	}

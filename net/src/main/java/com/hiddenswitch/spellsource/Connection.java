@@ -158,7 +158,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	@Suspendable
-	static Lock methodLock(String userId) {
+	static SuspendableLock methodLock(String userId) {
 		return SuspendableLock.lock("Connection::method-ordering-lock[" + userId + "]");
 	}
 
@@ -167,7 +167,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		registerCodecs();
 
 		String userId = Accounts.userId(routingContext);
-		Lock lock;
+		SuspendableLock lock;
 
 		try {
 			lock = SuspendableLock.lock("Connection::realtime-data-lock[" + userId + "]", 1000L);
