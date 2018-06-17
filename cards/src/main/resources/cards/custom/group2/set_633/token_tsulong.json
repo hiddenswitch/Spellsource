@@ -1,0 +1,22 @@
+{
+  "name": "Tsulong, the Heavenly Serpent",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Taunt. Deathrattle: Summon Tsulong, the Dark Serpent.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "minion_tsulong"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
