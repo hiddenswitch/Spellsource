@@ -1,0 +1,33 @@
+{
+  "name": "Jade Cloud Serpent",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, give your minions +4 Health.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "hpBonus": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
