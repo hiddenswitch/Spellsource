@@ -25,7 +25,7 @@ def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
 if (isAWS) {
     appender("ASYNC_AWS_LOGS", AwsLogsAppender) {
         filter(ThresholdFilter) {
-            level = INFO
+            level = TRACE
         }
 
         layout(PatternLayout) {
@@ -61,4 +61,4 @@ logger("net.demilich", WARN)
 logger("io.vertx", WARN)
 logger("com.hiddenswitch", WARN)
 logger("com.hiddenswitch.spellsource.Matchmaking", TRACE)
-logger("com.hiddenswitch.spellsource.GatewayImpl", ERROR)
+logger("com.hiddenswitch.spellsource.GatewayImpl", WARN)
