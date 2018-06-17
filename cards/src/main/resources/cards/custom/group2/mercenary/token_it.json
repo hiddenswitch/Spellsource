@@ -1,0 +1,22 @@
+{
+  "name": "It",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Win the game.",
+  "battlecry": {
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_HERO"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

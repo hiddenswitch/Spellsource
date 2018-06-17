@@ -49,6 +49,7 @@ public class LocalClustered {
 				} else {
 					Spellsource.spellsource().deployAll(vertx, andThen -> {
 						vertx.deployVerticle(Broadcaster.create(), Future.future());
+						System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
 					});
 				}
 			});

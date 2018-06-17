@@ -1,0 +1,22 @@
+{
+  "name": "Forge It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play a Taunt minion. Reward: Empower It.",
+  "quest": {
+    "class": "MinionPlayedTrigger",
+    "requiredAttribute": "TAUNT",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_empower_it"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
