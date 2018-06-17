@@ -38,6 +38,8 @@ public class LocalClustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
+				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 40)
+				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
 				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 40), then -> {
 
 			final Vertx vertx = then.result();

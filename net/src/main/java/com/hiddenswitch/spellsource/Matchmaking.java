@@ -359,7 +359,7 @@ public interface Matchmaking extends Verticle {
 	static GameId matchmake(@NotNull MatchmakingRequest request) throws SuspendExecution {
 		LOGGER.trace("matchmake {}: Starting request {}", request.getUserId(), request);
 		String userId = request.getUserId();
-		Fiber<Void> f1 = null;
+//		Fiber<Void> f1 = null;
 		if (request.isBotMatch()) {
 			request.setQueueId("quickPlay");
 		} else {
@@ -368,6 +368,7 @@ public interface Matchmaking extends Verticle {
 		UserId key = new UserId(userId);
 		enqueue(request);
 		try {
+			/*
 			f1 = getContextScheduler().newFiber(() -> {
 				SuspendableCondition ping = pingCondition(userId);
 				SuspendableCondition pong = pongCondition(userId);
@@ -381,6 +382,7 @@ public interface Matchmaking extends Verticle {
 			});
 
 			f1.start();
+			*/
 
 			long timeout = request.getTimeout();
 			boolean hasMatch = false;
@@ -408,9 +410,11 @@ public interface Matchmaking extends Verticle {
 			return null;
 		} finally {
 			LOGGER.trace("matchmake {}: Exiting", userId);
+			/*
 			if (f1 != null) {
 				f1.interrupt();
 			}
+			*/
 		}
 	}
 
@@ -557,7 +561,7 @@ public interface Matchmaking extends Verticle {
 						}
 					}
 					// Start a game. Check that everyone is still connected.
-
+/*
 					long stillConnectedTimeout = configuration.getStillConnectedTimeout();
 					List<Future> futures = new ArrayList<>(thisMatchRequests.size());
 					LOGGER.trace("startMatchmaker {}: Checking still connected", queueId);
@@ -589,7 +593,7 @@ public interface Matchmaking extends Verticle {
 					}
 
 					LOGGER.trace("startMatchmaker {}: Succeeded all connected", queueId);
-
+*/
 					// Is this a bot game?
 					if (configuration.isBotOpponent()) {
 						// Create a bot game.
