@@ -1,0 +1,24 @@
+{
+  "name": "Rakanishu",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Add a Magic Candle to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_magic_candle",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

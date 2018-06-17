@@ -1,0 +1,32 @@
+{
+  "name": "Scissors of D.O.T.S.",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 3,
+  "durability": 8,
+  "rarity": "LEGENDARY",
+  "description": "Windfury, Battlecry: Your hero is Immune this turn.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HERO",
+    "attribute": "AURA_WINDFURY"
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "IMMUNE",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
