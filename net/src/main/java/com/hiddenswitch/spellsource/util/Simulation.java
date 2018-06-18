@@ -28,7 +28,7 @@ public class Simulation {
 					try {
 						Constructor<? extends Behaviour> constructor = behaviourClass.getConstructor();
 						// Try to create a new instance
-						Behaviour testInstance = constructor.newInstance();
+						constructor.newInstance();
 
 						// Now return the supplier.
 						return (Supplier<Behaviour>) () -> {

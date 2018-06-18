@@ -94,3 +94,122 @@ class BasicTest(unittest.TestCase):
             per_game_stats = list(simulate(context=ctx, decks=(DECK_1, DECK_2), number=10,
                                            behaviours=('PlayRandomBehaviour', 'PlayRandomBehaviour')))
             self.assertTrue(len(per_game_stats) > 0)
+    def test_notebook(self):
+        from tqdm import tqdm
+        from spellsource.context import Context
+        from spellsource.utils import simulate
+
+        DECK_1 = '''### Cubelock - Standard Meta Snapshot - May 9, 2018
+        # Class: Warlock
+        # Format: Standard
+        # Year of the Raven
+        #
+        # 2x (1) Dark Pact
+        # 2x (1) Kobold Librarian
+        # 1x (2) Acidic Swamp Ooze
+        # 2x (2) Defile
+        # 2x (2) Plated Beetle
+        # 2x (3) Stonehill Defender
+        # 2x (4) Hellfire
+        # 2x (4) Lesser Amethyst Spellstone
+        # 1x (4) Spiritsinger Umbra
+        # 2x (5) Carnivorous Cube
+        # 2x (5) Doomguard
+        # 1x (5) Faceless Manipulator
+        # 2x (5) Possessed Lackey
+        # 1x (5) Skull of the Man'ari
+        # 1x (6) Rin, the First Disciple
+        # 1x (7) Lord Godfrey
+        # 2x (9) Voidlord
+        # 1x (10) Bloodreaver Gul'dan
+        # 1x (12) Mountain Giant
+        '''
+        
+        DECK_2 = '''### Even Paladin - Standard Meta Snapshot - May 9, 2018
+        # Class: Paladin
+        # Format: Standard
+        # Year of the Raven
+        #
+        # 1x (2) Acidic Swamp Ooze
+        # 2x (2) Amani Berserker
+        # 2x (2) Dire Wolf Alpha
+        # 2x (2) Equality
+        # 2x (2) Knife Juggler
+        # 2x (2) Loot Hoarder
+        # 2x (4) Blessing of Kings
+        # 2x (4) Call to Arms
+        # 2x (4) Consecration
+        # 2x (4) Saronite Chain Gang
+        # 2x (4) Spellbreaker
+        # 2x (4) Truesilver Champion
+        # 2x (6) Argent Commander
+        # 2x (6) Avenging Wrath
+        # 1x (6) Genn Greymane
+        # 1x (6) Sunkeeper Tarim
+        # 1x (6) Val'anyr
+        '''
+        DECK_3 = '''### Spiteful Druid - Standard Meta Snapshot - May 9, 2018
+        # Class: Druid
+        # Format: Standard
+        # Year of the Raven
+        #
+        # 2x (1) Fire Fly
+        # 2x (1) Glacial Shard
+        # 1x (2) Prince Keleseth
+        # 2x (3) Crypt Lord
+        # 2x (3) Druid of the Scythe
+        # 2x (3) Greedy Sprite
+        # 2x (3) Mind Control Tech
+        # 1x (3) Tar Creeper
+        # 2x (4) Saronite Chain Gang
+        # 2x (4) Spellbreaker
+        # 2x (5) Cobalt Scalebane
+        # 2x (5) Fungalmancer
+        # 1x (5) Leeroy Jenkins
+        # 2x (6) Spiteful Summoner
+        # 1x (7) Malfurion the Pestilent
+        # 1x (8) Grand Archivist
+        # 1x (8) The Lich King
+        # 2x (10) Ultimate Infestation
+        '''
+        
+        DECK_4 = '''### Aggro Mage - Standard Meta Snapshot - Apr. 30, 2018
+        # Class: Mage
+        # Format: Standard
+        # Year of the Raven
+        #
+        # 2x (1) Arcane Missiles
+        # 2x (1) Mana Wyrm
+        # 1x (1) Mirror Image
+        # 1x (2) Amani Berserker
+        # 2x (2) Arcanologist
+        # 1x (2) Bloodmage Thalnos
+        # 2x (2) Frostbolt
+        # 2x (2) Primordial Glyph
+        # 2x (2) Sorcerer's Apprentice
+        # 2x (3) Arcane Intellect
+        # 2x (3) Cinderstorm
+        # 2x (3) Counterspell
+        # 2x (3) Explosive Runes
+        # 2x (3) Kirin Tor Mage
+        # 2x (4) Fireball
+        # 1x (4) Lifedrinker
+        # 1x (6) Aluneth
+        # 1x (10) Pyroblast
+        '''
+
+        with Context() as ctx:
+            results = list(tqdm(simulate(
+                behaviours=('PlayRandomBehaviour', 'PlayRandomBehaviour'),
+                decks=(DECK_1, DECK_2, DECK_3, DECK_4),
+                number=100,
+                context=ctx)))
+            self.assertIsNotNone(results)
+            self.assertEqual(len(results), 6)
+            results = list(tqdm(simulate(
+                behaviours=('GameStateValueBehaviour', 'GameStateValueBehaviour'),
+                decks=(DECK_1, DECK_2, DECK_3, DECK_4),
+                number=1,
+                context=ctx)))
+            self.assertIsNotNone(results)
+            self.assertEqual(len(results), 6)

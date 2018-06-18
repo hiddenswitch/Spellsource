@@ -73,6 +73,8 @@ class Context(contextlib.AbstractContextManager):
         self.CardCatalogue.loadCardsFromPackage()
     
     def close(self):
+        if not hasattr(self, '_gateway'):
+            return
         # self.process.send_signal(signal=signal.SIGINT)
         self._gateway.close()
         self._process.terminate()

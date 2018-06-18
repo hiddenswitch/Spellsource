@@ -20,6 +20,7 @@ def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
     for i, behaviour in enumerate(behaviours):
         if isinstance(behaviour, str):
             behaviours[i] = PythonBridge.getBehaviourByName(behaviour)
+            assert behaviours[i] is not None
         elif isinstance(behaviour, Behaviour):
             behaviours[i] = _Supplier(lambda: behaviour.clone().wrap(ctx))
         elif isinstance(behaviour, Callable):
