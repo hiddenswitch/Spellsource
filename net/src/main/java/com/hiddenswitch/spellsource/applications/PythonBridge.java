@@ -13,6 +13,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.statistics.SimulationResult;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import py4j.GatewayServer;
 import py4j.Py4JNetworkException;
 
@@ -26,6 +28,7 @@ import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class PythonBridge {
+	private static final Logger logger = LoggerFactory.getLogger(PythonBridge.class);
 	private static final Map<String, Class<? extends Behaviour>> BEHAVIOURS = Simulation.getAllBehaviours();
 	private static final Map<Long, Thread> JOBS = new ConcurrentHashMap<>();
 
@@ -74,6 +77,7 @@ public class PythonBridge {
 									.encode());
 						});
 					} catch (InterruptedException e) {
+						logger.warn("simulate: Interrupted {} {}", deckKeyPair, e);
 						return;
 					}
 				}

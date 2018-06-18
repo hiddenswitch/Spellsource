@@ -1503,14 +1503,13 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 			try {
 				newGame.play();
 			} catch (Throwable t) {
+				logger.error("simulation: {}", t);
 				return null;
 			}
 
 			innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
 			innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
 			innerResult.calculateMetaStatistics();
-
-			newGame.dispose();
 
 			return innerResult;
 		}).filter(Objects::nonNull);
