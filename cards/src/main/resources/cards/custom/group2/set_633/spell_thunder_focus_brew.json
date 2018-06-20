@@ -1,6 +1,6 @@
 {
-  "name": "Staggering Brew",
-  "baseManaCost": 1,
+  "name": "Thunder Focus Brew",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "COMMON",
