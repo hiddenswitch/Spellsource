@@ -398,6 +398,7 @@ definitions:
            - JADE: Custom class.
            - NAVY: Custom class.
            - LEATHER: Custom class.
+           - EGGPLANT: Custom class.
         type: 'string'
         enum:
           - 'BROWN'
@@ -412,6 +413,7 @@ definitions:
           - 'JADE'
           - 'NAVY'
           - 'LEATHER'
+          - 'EGGPLANT'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to

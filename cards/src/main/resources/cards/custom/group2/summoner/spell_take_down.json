@@ -1,0 +1,29 @@
+{
+  "name": "Take Down",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Destroy a minion that costs (5) or more.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

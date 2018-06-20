@@ -1,0 +1,16 @@
+{
+  "name": "Study",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Add a copy of the last card you played to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_LAST_CARD_PLAYED"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
