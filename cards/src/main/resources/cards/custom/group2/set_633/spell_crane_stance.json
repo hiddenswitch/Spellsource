@@ -1,0 +1,30 @@
+{
+  "name": "Crane Stance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Swap the Attack and Health of your minions, then restore 1 Health to your hero for each one.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SwapAttackAndHpSpell",
+        "target": "FRIENDLY_MINIONS"
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_MINIONS"
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
