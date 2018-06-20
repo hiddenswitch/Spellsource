@@ -24,8 +24,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "DEFLECT": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",
