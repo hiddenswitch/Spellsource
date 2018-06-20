@@ -18,6 +18,7 @@ public enum HeroClass {
 	RED,
 	JADE,
 	LEATHER,
+	EGGPLANT,
 	SPIRIT,
 	SELF,
 	OPPONENT,
@@ -49,6 +50,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_baron_aldus");
 			case LEATHER:
 				return CardCatalogue.getCardById("hero_quarnassio");
+			case EGGPLANT:
+				return CardCatalogue.getCardById("hero_mephilia");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

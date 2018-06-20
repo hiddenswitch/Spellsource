@@ -1,0 +1,17 @@
+{
+  "name": "Docile Boulder",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Taunt. Can't Attack.",
+  "attributes": {
+    "CANNOT_ATTACK": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

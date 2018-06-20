@@ -1,0 +1,20 @@
+{
+  "name": "Trouble!",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Summon three 5/5 Dragons.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_smog_dragon",
+      "token_smog_dragon",
+      "token_smog_dragon"
+    ]
+},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
