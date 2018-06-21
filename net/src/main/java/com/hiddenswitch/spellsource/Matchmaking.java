@@ -48,11 +48,6 @@ import static io.vertx.ext.sync.Sync.getContextScheduler;
  */
 public interface Matchmaking extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
-	Map<UserId, Strand> LOCAL_STRANDS = new ConcurrentHashMap<>();
-	Map<String, SuspendableQueue<QueueEntry>> QUEUES = new ConcurrentHashMap<>();
-	Map<String, SuspendableSemaphore> SEMAPHORES = new ConcurrentHashMap<>();
-	Semaphore QUEUES_LOCK = new Semaphore(1);
-	Semaphore SEMAPHORES_LOCK = new Semaphore(1);
 
 	/**
 	 * Creates a bot game
@@ -84,9 +79,8 @@ public interface Matchmaking extends Verticle {
 				botDeckId = new DeckId(Bots.getRandomDeck(bot));
 			}
 
-			MatchCreateResponse matchCreateResponse =
-					Matchmaking.createMatch(
-							MatchCreateRequest.botMatch(gameId, userId, new UserId(bot.getId()), deckId, botDeckId));
+			Matchmaking.createMatch(
+					MatchCreateRequest.botMatch(gameId, userId, new UserId(bot.getId()), deckId, botDeckId));
 
 			LOGGER.debug("bot: User " + userId + " is unlocked by the AI bot creation path.");
 			botLock.release();
@@ -155,7 +149,6 @@ public interface Matchmaking extends Verticle {
 	 * @throws InterruptedException
 	 */
 	static CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
-		LOGGER.trace("getCurrentMatch: Retrieving information for userId " + request.getUserId());
 		GameId gameId = Games.getGames().get(new UserId(request.getUserId()));
 		if (gameId != null) {
 			LOGGER.trace("getCurrentMatch: User " + request.getUserId() + " has match " + gameId);
@@ -263,75 +256,6 @@ public interface Matchmaking extends Verticle {
 	}
 
 	/**
-	 * Retrieves the strands (fibers) that are running on this instance of the JVM.
-	 *
-	 * @return A map of strands.
-	 */
-	static Map<UserId, Strand> getLocalStrands() {
-		return LOCAL_STRANDS;
-	}
-
-
-	/**
-	 * Retrieves a reference to a suspendable queue.
-	 *
-	 * @param queueId The kind of queue (e.g., {@code "constructed"}
-	 * @param key     The component of the queue (e.g., the {@code "first user"} queue.
-	 * @return A suspendable queue reference.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static SuspendableQueue<QueueEntry> getQueue(String queueId, String key) throws SuspendExecution, InterruptedException {
-		String queueKey = key + "[" + queueId + "]";
-		try {
-			QUEUES_LOCK.acquire();
-			if (QUEUES.containsKey(queueKey)) {
-				return QUEUES.get(queueKey);
-			} else {
-				SuspendableQueue<QueueEntry> v = SuspendableQueue.get(queueKey, 1);
-				QUEUES.put(queueKey, v);
-				return v;
-			}
-		} finally {
-			QUEUES_LOCK.release();
-		}
-
-	}
-
-	static SuspendableSemaphore getParty(String queueId) throws SuspendExecution, InterruptedException {
-		String key = "Matchmaking::party[" + queueId + "]";
-		try {
-			SEMAPHORES_LOCK.acquire();
-			if (SEMAPHORES.containsKey(key)) {
-				return SEMAPHORES.get(key);
-			} else {
-				SuspendableSemaphore v = SuspendableSemaphore.create(key, 2);
-				SEMAPHORES.put(key, v);
-				return v;
-			}
-		} finally {
-			SEMAPHORES_LOCK.release();
-		}
-	}
-
-	/**
-	 * Initializes a cancellation handler on this {@link Vertx} instance.
-	 *
-	 * @return A way to close this handler, if necessary.
-	 */
-	static Closeable cancellation() {
-		EventBus eb = Vertx.currentContext().owner().eventBus();
-		MessageConsumer<JsonObject> consumer = eb.consumer("Matchmaking::cancel", suspendableHandler(message -> {
-			UserId userId = new UserId(message.body().getString("userId"));
-			if (getLocalStrands().containsKey(userId)) {
-				getLocalStrands().get(userId).interrupt();
-			}
-		}));
-
-		return consumer::unregister;
-	}
-
-	/**
 	 * Cancels the user's matchmaking, wherever the user may be connected.
 	 *
 	 * @param userId The user whose matchmaking should be canceled.
@@ -340,7 +264,6 @@ public interface Matchmaking extends Verticle {
 	 */
 	static void cancel(UserId userId) throws SuspendExecution, InterruptedException {
 		dequeue(userId);
-//		Vertx.currentContext().owner().eventBus().publish("Matchmaking::cancel", new JsonObject().put("userId", userId.toString()));
 	}
 
 	/**
@@ -427,20 +350,16 @@ public interface Matchmaking extends Verticle {
 	static void enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
 		SuspendableLock lock = null;
 		try {
-			LOGGER.trace("enqueue {}: Asking for method lock", request.getUserId());
 			lock = Connection.methodLock(request.getUserId());
-			LOGGER.trace("enqueue {}: Successfully got method lock", request.getUserId());
 			// Check if the user is already in a game
 			UserId userId = new UserId(request.getUserId());
 			if (Games.getGames().containsKey(userId)) {
 				throw new IllegalStateException("User is already in a game");
 			}
 
-			LOGGER.trace("enqueue {}: Successfully got game map", request.getUserId());
 
 			SuspendableMap<UserId, String> currentQueue = currentQueue();
 			boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
-			LOGGER.trace("enqueue {}: Successfully got currentQueue", request.getUserId());
 			if (alreadyQueued) {
 				throw new IllegalStateException("User is already enqueued in a different queue.");
 			}
@@ -478,6 +397,7 @@ public interface Matchmaking extends Verticle {
 				queue.offer(new MatchmakingQueueEntry()
 						.setCommand(MatchmakingQueueEntry.Command.CANCEL)
 						.setUserId(userId.toString()), false);
+				LOGGER.trace("dequeue {}: Successfully dequeued", userId);
 			}
 		} finally {
 			if (lock != null) {
@@ -561,7 +481,7 @@ public interface Matchmaking extends Verticle {
 						}
 					}
 					// Start a game. Check that everyone is still connected.
-/*
+
 					long stillConnectedTimeout = configuration.getStillConnectedTimeout();
 					List<Future> futures = new ArrayList<>(thisMatchRequests.size());
 					LOGGER.trace("startMatchmaker {}: Checking still connected", queueId);
@@ -572,11 +492,13 @@ public interface Matchmaking extends Verticle {
 						SuspendableCondition pong = pongCondition(userId);
 						SuspendableCondition ping = pingCondition(userId);
 						pong.awaitMillis(stillConnectedTimeout, future);
+						LOGGER.trace("startMatchmaker {}: ponged, now pinging {}", queueId, userId);
 						ping.signal();
 						futures.add(future);
 					}
 
 					// Send out all the pings at once
+					LOGGER.trace("startMatchmaker {}: Joining all connected", queueId);
 					CompositeFuture allConnected = Sync.invoke1(CompositeFuture.join(futures)::setHandler);
 
 					// Is everyone still connected?
@@ -593,7 +515,7 @@ public interface Matchmaking extends Verticle {
 					}
 
 					LOGGER.trace("startMatchmaker {}: Succeeded all connected", queueId);
-*/
+
 					// Is this a bot game?
 					if (configuration.isBotOpponent()) {
 						// Create a bot game.
@@ -662,7 +584,7 @@ public interface Matchmaking extends Verticle {
 	@NotNull
 	@Suspendable
 	static SuspendableCondition getGameReadyCondition(String userId) {
-		return SuspendableCondition.getOrCreate(userId + "__gameReady");
+		return SuspendableCondition.getOrCreate("Matchmaking::connection__gameReady[" + userId + "]");
 	}
 
 
@@ -720,10 +642,11 @@ public interface Matchmaking extends Verticle {
 								}
 
 								connection.write(new Envelope()
-										.added(new EnvelopeAdded()
-												.match(new Match()
-														.createdAt(System.currentTimeMillis())
-														.id(id))));
+										.result(new EnvelopeResult()
+												.enqueue(new MatchmakingQueuePutResponse()
+														.unityConnection(new MatchmakingQueuePutResponseUnityConnection().firstMessage(new ClientToServerMessage()
+																.messageType(MessageType.FIRST_MESSAGE)
+																.firstMessage(new ClientToServerMessageFirstMessage()))))));
 							}
 
 							return null;
@@ -735,12 +658,8 @@ public interface Matchmaking extends Verticle {
 						enqueue(new MatchmakingRequest()
 								.withUserId(connection.userId())
 								.setQueueId(method.getEnqueue().getQueueId())
-								.withDeckId(method.getEnqueue().getRequest().getDeckId())
-								.withBotDeckId(method.getEnqueue().getRequest().getBotDeckId()));
-
-						connection.write(new Envelope()
-								.result(new EnvelopeResult()
-										.enqueue(new DefaultMethodResponse())));
+								.withDeckId(method.getEnqueue().getDeckId())
+								.withBotDeckId(method.getEnqueue().getBotDeckId()));
 					}
 
 					if (method.getDequeue() != null) {
@@ -760,23 +679,6 @@ public interface Matchmaking extends Verticle {
 				}
 			}));
 		}));
-	}
-
-	class QueueEntry implements Serializable {
-		MatchmakingRequest req;
-		GameId gameId;
-
-		public QueueEntry(MatchmakingRequest req, GameId gameId) {
-			this.req = req;
-			this.gameId = gameId;
-		}
-
-		@Override
-		public String toString() {
-			return new ToStringBuilder(this)
-					.append("userId", req.getUserId())
-					.toString();
-		}
 	}
 
 	class MatchmakingQueueEntry implements Serializable, ClusterSerializable {

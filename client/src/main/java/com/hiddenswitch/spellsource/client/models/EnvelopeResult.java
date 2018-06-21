@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.DefaultMethodResponse;
 import com.hiddenswitch.spellsource.client.models.EnvelopeResultSendMessage;
+import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -38,7 +39,7 @@ public class EnvelopeResult implements Serializable {
   private EnvelopeResultSendMessage sendMessage = null;
 
   @JsonProperty("enqueue")
-  private DefaultMethodResponse enqueue = null;
+  private MatchmakingQueuePutResponse enqueue = null;
 
   @JsonProperty("dequeue")
   private DefaultMethodResponse dequeue = null;
@@ -79,7 +80,7 @@ public class EnvelopeResult implements Serializable {
     this.sendMessage = sendMessage;
   }
 
-  public EnvelopeResult enqueue(DefaultMethodResponse enqueue) {
+  public EnvelopeResult enqueue(MatchmakingQueuePutResponse enqueue) {
     this.enqueue = enqueue;
     return this;
   }
@@ -89,11 +90,11 @@ public class EnvelopeResult implements Serializable {
    * @return enqueue
   **/
   @ApiModelProperty(value = "")
-  public DefaultMethodResponse getEnqueue() {
+  public MatchmakingQueuePutResponse getEnqueue() {
     return enqueue;
   }
 
-  public void setEnqueue(DefaultMethodResponse enqueue) {
+  public void setEnqueue(MatchmakingQueuePutResponse enqueue) {
     this.enqueue = enqueue;
   }
 

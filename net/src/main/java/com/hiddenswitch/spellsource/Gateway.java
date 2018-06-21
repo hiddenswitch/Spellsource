@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.GatewayImpl;
 import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
 import com.hiddenswitch.spellsource.models.DeckDeleteResponse;
@@ -117,6 +118,9 @@ public interface Gateway extends Verticle {
 	}
 	static Gateway create(int port) {return new GatewayImpl(port);}
 
+	@Suspendable
+	WebResult<com.hiddenswitch.spellsource.models.MatchCancelResponse> matchmakingDelete(RoutingContext context) throws SuspendExecution;
+
 	WebResult<GetAccountsResponse> getAccount(RoutingContext context, String userId, String targetUserId) throws SuspendExecution, InterruptedException;
 
 	WebResult<GetAccountsResponse> getAccounts(RoutingContext context, String userId, GetAccountsRequest request) throws SuspendExecution, InterruptedException;
@@ -134,14 +138,6 @@ public interface Gateway extends Verticle {
 	WebResult<DecksGetAllResponse> decksGetAll(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 
 	WebResult<DeckDeleteResponse> decksDelete(RoutingContext context, String userId, String deckId) throws SuspendExecution, InterruptedException;
-
-	WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext context, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException;
-
-	WebResult<MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException;
-
-	WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException;
-
-	WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException;
 
 	WebResult<MatchmakingQueuesResponse> matchmakingGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
 

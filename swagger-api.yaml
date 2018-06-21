@@ -109,16 +109,7 @@ definitions:
               The client-specified ID that will be used to mark the reply (the result) of this method call.
             type: 'string'
           enqueue:
-            description: |
-              Enter a queue with the specified request.
-            type: 'object'
-            properties:
-              queueId:
-                type: 'string'
-                description: |
-                  The queue to which the server should direct this request.
-              request:
-                $ref: '#/definitions/MatchmakingQueuePutRequest'
+            $ref: '#/definitions/MatchmakingQueuePutRequest'
           dequeue:
             description: |
               Leave the specified queue
@@ -161,7 +152,7 @@ definitions:
                   The new message ID.
                 type: 'string'
           enqueue:
-            $ref: '#/definitions/DefaultMethodResponse'
+            $ref: '#/definitions/MatchmakingQueuePutResponse'
           dequeue:
             $ref: '#/definitions/DefaultMethodResponse'
   Enchantment:
@@ -1063,37 +1054,21 @@ definitions:
             description: |
               The entity ID corresponding to the source of the trigger that got fired.
             type: 'integer'
-  JavaSerializationObject:
-    type: 'object'
-    required:
-      - 'javaSerialized'
-    properties:
-      javaSerialized:
-        type: 'string'
-  MatchmakingDeck:
-    type: 'object'
-    required:
-      - 'cards'
-    properties:
-      heroClass:
-        type: 'string'
-      cards:
-        type: 'array'
-        items:
-          type: 'string'
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:
-      casual:
-        type: 'boolean'
+      queueId:
+        type: 'string'
+        description: |
+          Indicates which queue this request is for.
       deckId:
         type: 'string'
+        description: |
+          When set, specifies the deck for this queue. Some queues do not accept deck IDs.
       botDeckId:
         type: 'string'
         description: |
           When set, specifies that the bot should play the provided deck.
-      deck:
-        $ref: '#/definitions/MatchmakingDeck'
   MatchmakingQueuePutResponseUnityConnection:
     type: 'object'
     properties:
@@ -1106,8 +1081,6 @@ definitions:
   MatchmakingQueuePutResponse:
     type: 'object'
     properties:
-      connection:
-        $ref: '#/definitions/JavaSerializationObject'
       unityConnection:
         $ref: '#/definitions/MatchmakingQueuePutResponseUnityConnection'
       retry:
@@ -2143,7 +2116,7 @@ paths:
           $ref: '#/responses/InternalServerError'
     delete:
       description: Removes your client from the matchmaking queue, regardless of which queue it is in.
-      operationId: matchmakingConstructedQueueDelete
+      operationId: matchmakingDelete
       security:
         - TokenSecurity: []
       responses:
@@ -2152,85 +2125,6 @@ paths:
             The client's cancel request has been processed. The result can be found in the body's MatchCancelResponse.
           schema:
             $ref: '#/definitions/MatchCancelResponse'
-        default:
-          $ref: '#/responses/InternalServerError'
-  /matchmaking/{queueId}:
-    get:
-      description: |
-        Gets a renderable gamestate representing this player's current game in this queue.
-      operationId: matchmakingConstructedGet
-      parameters:
-        - name: queueId
-          in: path
-          required: true
-          description: The ID of the queue to enter.
-          type: 'string'
-      security:
-        - TokenSecurity: []
-      responses:
-        "404":
-          description: |
-            There is no game currently available.
-        "200":
-          description: |
-            The client has a game and its state was delivered.
-          schema:
-            $ref: '#/definitions/GameState'
-        default:
-          $ref: '#/responses/InternalServerError'
-    delete:
-      description: |
-        Concedes the player's current game in this queue, or cancels their place in it.
-      operationId: matchmakingConstructedDelete
-      parameters:
-        - name: queueId
-          in: path
-          required: true
-          description: The ID of the queue to enter.
-          type: 'string'
-      security:
-        - TokenSecurity: []
-      responses:
-        "200":
-          description: |
-            The client's game was successfully conceded.
-          schema:
-            $ref: '#/definitions/MatchConcedeResponse'
-        default:
-          $ref: '#/responses/InternalServerError'
-    put:
-      description: |
-        Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry
-         alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
-      operationId: matchmakingConstructedQueuePut
-      security:
-        - TokenSecurity: []
-      parameters:
-        - name: queueId
-          in: path
-          required: true
-          description: The ID of the queue to enter.
-          type: 'string'
-        - name: request
-          in: body
-          description: |
-            The matchmaking queue entry. Contains the deck.
-          required: true
-          schema:
-            $ref: '#/definitions/MatchmakingQueuePutRequest'
-      responses:
-        "200":
-          description: |
-            The client has been matched with a client and is ready to connect. Use the "connection" field for connection
-            information (client specific).
-          schema:
-            $ref: '#/definitions/MatchmakingQueuePutResponse'
-        "202":
-          description: |
-            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with
-            in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
-          schema:
-            $ref: '#/definitions/MatchmakingQueuePutResponse'
         default:
           $ref: '#/responses/InternalServerError'
   /friends:

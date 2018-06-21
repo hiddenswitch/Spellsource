@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -107,7 +106,7 @@ public class BotsTest extends SpellsourceTestBase {
 		UnityClient client = new UnityClient(context);
 		client.createUserAccount();
 		NoArgs playAndWait = () -> {
-			client.matchmakeAndPlayAgainstAI(null);
+			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
 			assertTrue(client.isGameOver());
 			try {

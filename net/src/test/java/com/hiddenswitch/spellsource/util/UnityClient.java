@@ -19,11 +19,11 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
 import java.net.MalformedURLException;
-import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class UnityClient {
@@ -37,6 +37,8 @@ public class UnityClient {
 	private Account account;
 	private TestContext context;
 	private WebsocketClientEndpoint endpoint;
+	private WebsocketClientEndpoint realtime;
+	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
@@ -103,46 +105,70 @@ public class UnityClient {
 		onGameOver = io.vertx.ext.sync.Sync.fiberHandler(handler);
 	}
 
-	public UnityClient matchmakeAndPlayAgainstAI(String deckId) {
+	public Future<Void> matchmake(String deckId, String queueId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
-		try {
-			MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut("constructed", new MatchmakingQueuePutRequest()
-					.casual(true)
-					.deckId(deckId));
 
-			play();
+		CompletableFuture<Void> fut = new CompletableFuture<Void>() {
+			@Override
+			public boolean cancel(boolean mayInterruptIfRunning) {
+				realtime.sendMessage(Json.encode(new Envelope()
+						.method(new EnvelopeMethod()
+								.methodId(RandomStringUtils.randomAlphanumeric(10))
+								.dequeue(new EnvelopeMethodDequeue().queueId(queueId)))));
+				return super.cancel(mayInterruptIfRunning);
+			}
+		};
 
-		} catch (ApiException e) {
-			context.fail(e.getMessage());
+		matchmakingFut.set(fut);
+		final long matchmakingThreadId = Thread.currentThread().getId();
+
+		if (realtime == null) {
+			realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
+			realtime.addMessageHandler(message -> {
+				context.assertNotEquals(matchmakingThreadId, Thread.currentThread().getId());
+				Envelope env = Json.decodeValue(message, Envelope.class);
+
+				if (env.getResult() != null && env.getResult().getEnqueue() != null) {
+					if (matchmakingFut.get().isCancelled()) {
+						context.fail(new IllegalStateException("matchmaking was cancelled"));
+					}
+
+					// Might have been cancelled
+					matchmakingFut.get().complete(null);
+				}
+			});
 		}
-		return this;
+
+		realtime.sendMessage(Json.encode(new Envelope()
+				.method(new EnvelopeMethod()
+						.methodId(RandomStringUtils.randomAlphanumeric(10))
+						.enqueue(new MatchmakingQueuePutRequest()
+								.queueId(queueId)
+								.deckId(deckId)))));
+
+		return fut;
 	}
 
-	public UnityClient matchmakeAndPlay(String deckId) {
-		if (deckId == null) {
-			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
-		}
-
+	public void matchmakeQuickPlay(String deckId) {
+		Future<Void> matchmaking = matchmake(deckId, "quickPlay");
 		try {
-			MatchmakingQueuePutResponseUnityConnection unityConnection = null;
-			logger.debug("matchmakeAndPlay: Queueing userId " + getUserId());
-			while (unityConnection == null) {
-				MatchmakingQueuePutResponse mqpr = api.matchmakingConstructedQueuePut("constructed", new MatchmakingQueuePutRequest()
-						.casual(false)
-						.deckId(deckId));
-				unityConnection = mqpr.getUnityConnection();
-				Thread.sleep(500);
-			}
-
+			matchmaking.get();
 			play();
-		} catch (ApiException e) {
-			context.fail(e.getMessage());
-		} catch (InterruptedException e) {
-			context.fail();
+		} catch (InterruptedException | ExecutionException ex) {
+			matchmaking.cancel(true);
 		}
-		return this;
+	}
+
+	public void matchmakeConstructedPlay(String deckId) {
+		Future<Void> matchmaking = matchmake(deckId, "constructed");
+		try {
+			matchmaking.get();
+			play();
+		} catch (InterruptedException | ExecutionException ex) {
+			matchmaking.cancel(true);
+		}
 	}
 
 	public void play() {

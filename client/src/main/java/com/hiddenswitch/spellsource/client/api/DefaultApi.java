@@ -37,7 +37,6 @@ import com.hiddenswitch.spellsource.client.models.DraftsChooseHeroRequest;
 import com.hiddenswitch.spellsource.client.models.DraftsPostRequest;
 import com.hiddenswitch.spellsource.client.models.FriendPutRequest;
 import com.hiddenswitch.spellsource.client.models.FriendPutResponse;
-import com.hiddenswitch.spellsource.client.models.GameState;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
@@ -47,9 +46,6 @@ import com.hiddenswitch.spellsource.client.models.InviteResponse;
 import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.client.models.MatchCancelResponse;
-import com.hiddenswitch.spellsource.client.models.MatchConcedeResponse;
-import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
-import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuesResponse;
 import com.hiddenswitch.spellsource.client.models.SpellsourceException;
 import com.hiddenswitch.spellsource.client.models.UnfriendResponse;
@@ -976,97 +972,11 @@ public class DefaultApi {
       }
   /**
    * 
-   * Concedes the player&#39;s current game in this queue, or cancels their place in it. 
-   * @param queueId The ID of the queue to enter. (required)
-   * @return MatchConcedeResponse
-   * @throws ApiException if fails to make API call
-   */
-  public MatchConcedeResponse matchmakingConstructedDelete(String queueId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'queueId' is set
-    if (queueId == null) {
-      throw new ApiException(400, "Missing the required parameter 'queueId' when calling matchmakingConstructedDelete");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/matchmaking/{queueId}"
-      .replaceAll("\\{" + "queueId" + "\\}", apiClient.escapeString(queueId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "TokenSecurity" };
-
-    GenericType<MatchConcedeResponse> localVarReturnType = new GenericType<MatchConcedeResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * 
-   * Gets a renderable gamestate representing this player&#39;s current game in this queue. 
-   * @param queueId The ID of the queue to enter. (required)
-   * @return GameState
-   * @throws ApiException if fails to make API call
-   */
-  public GameState matchmakingConstructedGet(String queueId) throws ApiException {
-    Object localVarPostBody = null;
-    
-    // verify the required parameter 'queueId' is set
-    if (queueId == null) {
-      throw new ApiException(400, "Missing the required parameter 'queueId' when calling matchmakingConstructedGet");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/matchmaking/{queueId}"
-      .replaceAll("\\{" + "queueId" + "\\}", apiClient.escapeString(queueId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "TokenSecurity" };
-
-    GenericType<GameState> localVarReturnType = new GenericType<GameState>() {};
-    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * 
    * Removes your client from the matchmaking queue, regardless of which queue it is in.
    * @return MatchCancelResponse
    * @throws ApiException if fails to make API call
    */
-  public MatchCancelResponse matchmakingConstructedQueueDelete() throws ApiException {
+  public MatchCancelResponse matchmakingDelete() throws ApiException {
     Object localVarPostBody = null;
     
     // create path and map variables
@@ -1095,55 +1005,6 @@ public class DefaultApi {
 
     GenericType<MatchCancelResponse> localVarReturnType = new GenericType<MatchCancelResponse>() {};
     return apiClient.invokeAPI(localVarPath, "DELETE", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
-      }
-  /**
-   * 
-   * Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry  alive by regularly retrying when they have not yet been matched. Retry within 5 seconds. 
-   * @param queueId The ID of the queue to enter. (required)
-   * @param request The matchmaking queue entry. Contains the deck.  (required)
-   * @return MatchmakingQueuePutResponse
-   * @throws ApiException if fails to make API call
-   */
-  public MatchmakingQueuePutResponse matchmakingConstructedQueuePut(String queueId, MatchmakingQueuePutRequest request) throws ApiException {
-    Object localVarPostBody = request;
-    
-    // verify the required parameter 'queueId' is set
-    if (queueId == null) {
-      throw new ApiException(400, "Missing the required parameter 'queueId' when calling matchmakingConstructedQueuePut");
-    }
-    
-    // verify the required parameter 'request' is set
-    if (request == null) {
-      throw new ApiException(400, "Missing the required parameter 'request' when calling matchmakingConstructedQueuePut");
-    }
-    
-    // create path and map variables
-    String localVarPath = "/matchmaking/{queueId}"
-      .replaceAll("\\{" + "queueId" + "\\}", apiClient.escapeString(queueId.toString()));
-
-    // query params
-    List<Pair> localVarQueryParams = new ArrayList<Pair>();
-    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
-    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
-    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
-
-
-    
-    
-    final String[] localVarAccepts = {
-      "application/json"
-    };
-    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
-
-    final String[] localVarContentTypes = {
-      "application/json"
-    };
-    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
-
-    String[] localVarAuthNames = new String[] { "TokenSecurity" };
-
-    GenericType<MatchmakingQueuePutResponse> localVarReturnType = new GenericType<MatchmakingQueuePutResponse>() {};
-    return apiClient.invokeAPI(localVarPath, "PUT", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
   /**
    * 
