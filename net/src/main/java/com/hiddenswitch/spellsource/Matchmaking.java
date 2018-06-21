@@ -482,6 +482,7 @@ public interface Matchmaking extends Verticle {
 					}
 					// Start a game. Check that everyone is still connected.
 
+					/* TODO: This is still too slow
 					long stillConnectedTimeout = configuration.getStillConnectedTimeout();
 					List<Future> futures = new ArrayList<>(thisMatchRequests.size());
 					LOGGER.trace("startMatchmaker {}: Checking still connected", queueId);
@@ -515,6 +516,7 @@ public interface Matchmaking extends Verticle {
 					}
 
 					LOGGER.trace("startMatchmaker {}: Succeeded all connected", queueId);
+					*/
 
 					// Is this a bot game?
 					if (configuration.isBotOpponent()) {
