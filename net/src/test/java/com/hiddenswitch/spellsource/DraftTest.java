@@ -1,25 +1,18 @@
 package com.hiddenswitch.spellsource;
 
-import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.draft.DraftStatus;
 import com.hiddenswitch.spellsource.impl.*;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
-import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.models.DraftActionRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.Vertx;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
-
-import java.util.Arrays;
 
 import static org.junit.Assert.*;
 
@@ -101,7 +94,9 @@ public class DraftTest extends SpellsourceTestBase {
 
 		final String deckId = state.getDeckId();
 		vertx.executeBlocking(done -> {
-			new UnityClient(context).loginWithUserAccount(name, "testpass").matchmakeAndPlayAgainstAI(deckId).waitUntilDone();
+			UnityClient client = new UnityClient(context).loginWithUserAccount(name, "testpass");
+			client.matchmakeQuickPlay(deckId);
+			client.waitUntilDone();
 			done.handle(Future.succeededFuture());
 		}, context.asyncAssertSuccess(then -> {
 			DraftState newState = null;

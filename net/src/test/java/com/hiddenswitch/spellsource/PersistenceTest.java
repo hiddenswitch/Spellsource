@@ -50,7 +50,7 @@ public class PersistenceTest extends SpellsourceTestBase {
 				fail(e.getMessage());
 				return;
 			}
-			client.matchmakeAndPlayAgainstAI(decksPutResponse.getDeckId());
+			client.matchmakeQuickPlay(decksPutResponse.getDeckId());
 			client.waitUntilDone();
 			assertTrue(client.isGameOver());
 			done.complete();

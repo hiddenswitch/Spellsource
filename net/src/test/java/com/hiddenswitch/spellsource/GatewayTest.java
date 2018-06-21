@@ -162,17 +162,17 @@ public class GatewayTest extends SpellsourceTestBase {
 		for (int i = 0; i < 10; i++) {
 			UnityClient client = new UnityClient(context);
 			client.createUserAccount(null);
-			client.matchmakeAndPlayAgainstAI(null);
+			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
 			assertTrue(client.isGameOver());
 		}
 		async.complete();
 	}
 
-	@Test(timeout = 165000L)
+	@Test(timeout = 220000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 3;
+		final int count = processorCount * 2;
 		CountDownLatch latch = new CountDownLatch(count);
 		CompositeFuture.join(Collections.nCopies(2, Arrays.asList(
 				Games.create()))
@@ -185,12 +185,12 @@ public class GatewayTest extends SpellsourceTestBase {
 				try {
 					UnityClient client = new UnityClient(context);
 					client.createUserAccount(null);
-					client.matchmakeAndPlay(null);
+					client.matchmakeConstructedPlay(null);
 					client.waitUntilDone();
 					assertTrue(client.isGameOver());
 					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
 					// Try two games in a row
-					client.matchmakeAndPlay(null);
+					client.matchmakeConstructedPlay(null);
 					client.waitUntilDone();
 					assertTrue(client.isGameOver());
 					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
@@ -202,7 +202,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(135L, TimeUnit.SECONDS);
+		latch.await(190L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 	}
 
@@ -214,7 +214,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			Sync.invoke0(() -> {
 				client.createUserAccount();
 				client.getTurnsToPlay().set(1);
-				client.matchmakeAndPlayAgainstAI(null);
+				client.matchmakeQuickPlay(null);
 			});
 
 			Strand.sleep(200L);
@@ -237,7 +237,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			Sync.invoke0(() -> {
 				client.disconnect();
 				client.getTurnsToPlay().set(999);
-				client.matchmakeAndPlayAgainstAI(null);
+				client.matchmakeQuickPlay(null);
 				client.waitUntilDone();
 				context.assertTrue(client.isGameOver());
 			});
@@ -259,7 +259,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		};
 
 		client.createUserAccount(null);
-		client.matchmakeAndPlayAgainstAI(client.getAccount().getDecks()
+		client.matchmakeQuickPlay(client.getAccount().getDecks()
 				.stream().filter(d -> d.getName().equals("Necromancer (Scenario)")).findFirst().orElseThrow(AssertionError::new).getId());
 		client.waitUntilDone();
 		assertTrue(client.isGameOver());
@@ -277,7 +277,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		client.createUserAccount(null);
 		final String token = client.getToken();
 		final String userId = client.getAccount().getId();
-		client.matchmakeAndPlayAgainstAI(null);
+		client.matchmakeQuickPlay(null);
 
 		// Assert that session was closed
 		sync(() -> {
@@ -311,13 +311,13 @@ public class GatewayTest extends SpellsourceTestBase {
 		Thread clientThread1 = new Thread(() -> {
 			client1.createUserAccount("user1");
 			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(0).getName())).findFirst().get().getId();
-			client1.matchmakeAndPlay(startDeckId1);
+			client1.matchmakeConstructedPlay(startDeckId1);
 		});
 		UnityClient client2 = new UnityClient(context);
 		Thread clientThread2 = new Thread(() -> {
 			client2.createUserAccount("user2");
 			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(1).getName())).findFirst().get().getId();
-			client2.matchmakeAndPlay(startDeckId2);
+			client2.matchmakeConstructedPlay(startDeckId2);
 		});
 		clientThread1.start();
 		clientThread2.start();
@@ -378,62 +378,21 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 	@Test
-	public void testDisconnectingClientMatchmaking(TestContext context) throws ApiException, InterruptedException {
+	public void testMatchmakingCancellation(TestContext context) throws ApiException, InterruptedException {
 		Logging.setLoggingLevel(Level.DEBUG);
-		DefaultApi user1 = getApi();
-		DefaultApi user2 = getApi();
 
-		CreateAccountResponse res1 = user1.createAccount(new CreateAccountRequest()
-				.name("username" + RandomStringUtils.randomAlphanumeric(10))
-				.email("email-" + RandomStringUtils.randomAlphanumeric(10) + "@test.com")
-				.password("password"));
-		CreateAccountResponse res2 = user2.createAccount(new CreateAccountRequest()
-				.name("username" + RandomStringUtils.randomAlphanumeric(10))
-				.email("email-" + RandomStringUtils.randomAlphanumeric(10) + "@test.com")
-				.password("password"));
-		user1.getApiClient().setApiKey(res1.getLoginToken());
-		user2.getApiClient().setApiKey(res2.getLoginToken());
-
-		HttpClient client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost"));
-		WebClient webClient = WebClient.wrap(client);
-
-		AtomicBoolean successfulTimeout = new AtomicBoolean();
-		webClient
-				.put("/matchmaking/constructed")
-				.putHeader("X-Auth-Token", res1.getLoginToken())
-				.timeout(100L)
-				.sendJson(new MatchmakingQueuePutRequest()
-						.casual(false)
-						.deckId(res1.getAccount().getDecks().get(0).getId()), res -> {
-					successfulTimeout.set(true);
-				});
-
-		HttpClient finalClient = client;
-		vertx.setTimer(101L, v1 -> {
-			finalClient.close();
-		});
-
-		vertx.exceptionHandler(context.exceptionHandler());
-
+		UnityClient client1 = new UnityClient(context);
+		client1.createUserAccount();
+		java.util.concurrent.Future<Void> matchmaking = client1.matchmake(null, "constructed");
 		Thread.sleep(1000L);
-
-		client = vertx.createHttpClient(new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost"));
-		webClient = WebClient.wrap(client);
-		Thread.sleep(1000L);
-		context.assertTrue(successfulTimeout.get());
-		webClient
-				.put("/matchmaking/constructed")
-				.putHeader("X-Auth-Token", res2.getLoginToken())
-				.timeout(100L)
-				.sendJson(new MatchmakingQueuePutRequest()
-						.casual(false)
-						.deckId(res2.getAccount().getDecks().get(0).getId()), res -> {
-				});
-
+		matchmaking.cancel(true);
+		UnityClient client2 = new UnityClient(context);
+		client2.createUserAccount();
+		client2.matchmake(null, "constructed");
 		Thread.sleep(1000L);
 		Async async = context.async();
 		sync(() -> {
-			context.assertFalse(Games.getGames().containsKey(new UserId(res1.getAccount().getId())));
+			context.assertFalse(Games.getGames().containsKey(new UserId(client1.getAccount().getId())));
 			async.complete();
 		});
 	}

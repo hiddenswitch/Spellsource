@@ -17,7 +17,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.MatchmakingDeck;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -29,8 +28,8 @@ import java.io.Serializable;
 public class MatchmakingQueuePutRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("casual")
-  private Boolean casual = null;
+  @JsonProperty("queueId")
+  private String queueId = null;
 
   @JsonProperty("deckId")
   private String deckId = null;
@@ -38,25 +37,22 @@ public class MatchmakingQueuePutRequest implements Serializable {
   @JsonProperty("botDeckId")
   private String botDeckId = null;
 
-  @JsonProperty("deck")
-  private MatchmakingDeck deck = null;
-
-  public MatchmakingQueuePutRequest casual(Boolean casual) {
-    this.casual = casual;
+  public MatchmakingQueuePutRequest queueId(String queueId) {
+    this.queueId = queueId;
     return this;
   }
 
    /**
-   * Get casual
-   * @return casual
+   * Indicates which queue this request is for. 
+   * @return queueId
   **/
-  @ApiModelProperty(value = "")
-  public Boolean isCasual() {
-    return casual;
+  @ApiModelProperty(value = "Indicates which queue this request is for. ")
+  public String getQueueId() {
+    return queueId;
   }
 
-  public void setCasual(Boolean casual) {
-    this.casual = casual;
+  public void setQueueId(String queueId) {
+    this.queueId = queueId;
   }
 
   public MatchmakingQueuePutRequest deckId(String deckId) {
@@ -65,10 +61,10 @@ public class MatchmakingQueuePutRequest implements Serializable {
   }
 
    /**
-   * Get deckId
+   * When set, specifies the deck for this queue. Some queues do not accept deck IDs. 
    * @return deckId
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "When set, specifies the deck for this queue. Some queues do not accept deck IDs. ")
   public String getDeckId() {
     return deckId;
   }
@@ -95,24 +91,6 @@ public class MatchmakingQueuePutRequest implements Serializable {
     this.botDeckId = botDeckId;
   }
 
-  public MatchmakingQueuePutRequest deck(MatchmakingDeck deck) {
-    this.deck = deck;
-    return this;
-  }
-
-   /**
-   * Get deck
-   * @return deck
-  **/
-  @ApiModelProperty(value = "")
-  public MatchmakingDeck getDeck() {
-    return deck;
-  }
-
-  public void setDeck(MatchmakingDeck deck) {
-    this.deck = deck;
-  }
-
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -123,15 +101,14 @@ public class MatchmakingQueuePutRequest implements Serializable {
       return false;
     }
     MatchmakingQueuePutRequest matchmakingQueuePutRequest = (MatchmakingQueuePutRequest) o;
-    return Objects.equals(this.casual, matchmakingQueuePutRequest.casual) &&
+    return Objects.equals(this.queueId, matchmakingQueuePutRequest.queueId) &&
         Objects.equals(this.deckId, matchmakingQueuePutRequest.deckId) &&
-        Objects.equals(this.botDeckId, matchmakingQueuePutRequest.botDeckId) &&
-        Objects.equals(this.deck, matchmakingQueuePutRequest.deck);
+        Objects.equals(this.botDeckId, matchmakingQueuePutRequest.botDeckId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(casual, deckId, botDeckId, deck);
+    return Objects.hash(queueId, deckId, botDeckId);
   }
 
 
@@ -140,10 +117,9 @@ public class MatchmakingQueuePutRequest implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class MatchmakingQueuePutRequest {\n");
     
-    sb.append("    casual: ").append(toIndentedString(casual)).append("\n");
+    sb.append("    queueId: ").append(toIndentedString(queueId)).append("\n");
     sb.append("    deckId: ").append(toIndentedString(deckId)).append("\n");
     sb.append("    botDeckId: ").append(toIndentedString(botDeckId)).append("\n");
-    sb.append("    deck: ").append(toIndentedString(deck)).append("\n");
     sb.append("}");
     return sb.toString();
   }

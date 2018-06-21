@@ -5,14 +5,11 @@ import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
-import com.hiddenswitch.spellsource.concurrent.impl.SuspendableArrayQueue;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
-import io.vertx.core.shareddata.Lock;
-import io.vertx.ext.sync.Sync;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
@@ -152,7 +149,7 @@ public class ClusterTest extends SpellsourceTestBase {
 						.map(port -> new Thread(() -> {
 							UnityClient client = new UnityClient(context, port);
 							client.createUserAccount();
-							client.matchmakeAndPlay(null);
+							client.matchmakeConstructedPlay(null);
 							client.waitUntilDone();
 							context.assertTrue(client.isGameOver());
 							client.disconnect();

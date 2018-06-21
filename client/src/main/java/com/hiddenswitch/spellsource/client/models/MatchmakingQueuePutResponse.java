@@ -17,7 +17,6 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.JavaSerializationObject;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
 import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponseUnityConnection;
 import io.swagger.annotations.ApiModel;
@@ -31,32 +30,11 @@ import java.io.Serializable;
 public class MatchmakingQueuePutResponse implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("connection")
-  private JavaSerializationObject connection = null;
-
   @JsonProperty("unityConnection")
   private MatchmakingQueuePutResponseUnityConnection unityConnection = null;
 
   @JsonProperty("retry")
   private MatchmakingQueuePutRequest retry = null;
-
-  public MatchmakingQueuePutResponse connection(JavaSerializationObject connection) {
-    this.connection = connection;
-    return this;
-  }
-
-   /**
-   * Get connection
-   * @return connection
-  **/
-  @ApiModelProperty(value = "")
-  public JavaSerializationObject getConnection() {
-    return connection;
-  }
-
-  public void setConnection(JavaSerializationObject connection) {
-    this.connection = connection;
-  }
 
   public MatchmakingQueuePutResponse unityConnection(MatchmakingQueuePutResponseUnityConnection unityConnection) {
     this.unityConnection = unityConnection;
@@ -104,14 +82,13 @@ public class MatchmakingQueuePutResponse implements Serializable {
       return false;
     }
     MatchmakingQueuePutResponse matchmakingQueuePutResponse = (MatchmakingQueuePutResponse) o;
-    return Objects.equals(this.connection, matchmakingQueuePutResponse.connection) &&
-        Objects.equals(this.unityConnection, matchmakingQueuePutResponse.unityConnection) &&
+    return Objects.equals(this.unityConnection, matchmakingQueuePutResponse.unityConnection) &&
         Objects.equals(this.retry, matchmakingQueuePutResponse.retry);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(connection, unityConnection, retry);
+    return Objects.hash(unityConnection, retry);
   }
 
 
@@ -120,7 +97,6 @@ public class MatchmakingQueuePutResponse implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class MatchmakingQueuePutResponse {\n");
     
-    sb.append("    connection: ").append(toIndentedString(connection)).append("\n");
     sb.append("    unityConnection: ").append(toIndentedString(unityConnection)).append("\n");
     sb.append("    retry: ").append(toIndentedString(retry)).append("\n");
     sb.append("}");

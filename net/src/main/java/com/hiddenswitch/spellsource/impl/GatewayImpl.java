@@ -17,6 +17,7 @@ import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.Sync;
@@ -142,7 +143,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// TODO: This obviously isn't working for the load balancer / cookies coming from the client
 		router.route().handler(CookieHandler.create());
 
-		// add "content-type=application/json" to all responses
+		// Add "content-type=application/json" to all responses
 		router.route().handler(context -> {
 			if (!context.request().uri().contains(websocketPath)) {
 				context.response().putHeader("Content-Type", "application/json");
@@ -240,38 +241,17 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("deckId", this::decksDelete));
 
-		// Enable matchmaking cancellation
-		Matchmaking.cancellation();
-
-		router.route("/matchmaking/:queueId")
-				.handler(bodyHandler);
-		router.route("/matchmaking/:queueId")
+		router.route("/matchmaking")
 				.handler(authHandler);
-		router.route("/matchmaking/:queueId")
+		router.route("/matchmaking")
 				.method(HttpMethod.GET)
-				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedGet));
-		router.route("/matchmaking/:queueId")
-				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedDelete));
-
-		router.route("/matchmaking/:queueId")
-				.handler(bodyHandler);
-		router.route("/matchmaking/:queueId")
-				.handler(authHandler);
-		router.route("/matchmaking/:queueId")
-				.method(HttpMethod.PUT)
-				.handler(HandlerFactory.handler(MatchmakingQueuePutRequest.class, "queueId",
-						this::matchmakingConstructedQueuePut));
-
-		router.route("/matchmaking/:queueId")
-				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedDelete));
+				.handler(HandlerFactory.handler(this::matchmakingGet));
 
 		router.route("/matchmaking")
 				.handler(authHandler);
 		router.route("/matchmaking")
 				.method(HttpMethod.DELETE)
-				.handler(HandlerFactory.handler("queueId", this::matchmakingConstructedQueueDelete));
+				.handler(HandlerFactory.handler(this::matchmakingDelete));
 
 		router.route("/friends")
 				.handler(bodyHandler);
@@ -328,6 +308,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		HttpServer listening = awaitResult(server::listen);
 
 		logger.info("start: Router configured.");
+	}
+
+	@Override
+	@Suspendable
+	public WebResult<MatchCancelResponse> matchmakingDelete(RoutingContext context) throws SuspendExecution {
+		Matchmaking.dequeue(new UserId(Accounts.userId(context)));
+		return WebResult.succeeded(new MatchCancelResponse(true, null, 0));
 	}
 
 	@Override
@@ -489,94 +476,24 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	}
 
 	@Override
-	public WebResult<MatchmakingQueuePutResponse> matchmakingConstructedQueuePut(RoutingContext routingContext, String userId, String queueId, MatchmakingQueuePutRequest request) throws SuspendExecution, InterruptedException {
-		AtomicBoolean didMatchmake = new AtomicBoolean();
-
-		routingContext.request().connection().closeHandler(Sync.suspendableHandler(v1 -> {
-			if (didMatchmake.compareAndSet(false, false)) {
-				Matchmaking.cancel(new UserId(userId));
-			}
-		}));
-
-		MatchmakingRequest internalRequest = new MatchmakingRequest(request, userId)
-				.withBotMatch(request.isCasual())
-				.withTimeout(4000)
-				.withBotDeckId(request.getBotDeckId());
-
-		GameId internalResponse = null;
-		try {
-			internalResponse = Matchmaking.matchmake(internalRequest);
-			didMatchmake.compareAndSet(false, true);
-		} catch (Throwable ex) {
-			return WebResult.failed(500, ex);
-		}
-
-		// Compute the appropriate response
-		MatchmakingQueuePutResponse userResponse = new MatchmakingQueuePutResponse();
-		if (internalResponse != null) {
-			userResponse.unityConnection(new MatchmakingQueuePutResponseUnityConnection());
-		}
-
-		// Determine status code
-		int statusCode = 200;
-		if (internalResponse == null) {
-			userResponse.retry(new MatchmakingQueuePutRequest()
-					.deckId(request.getDeckId()));
-			statusCode = 202;
-		}
-
-		return WebResult.succeeded(statusCode, userResponse);
-	}
-
-	@Override
-	public WebResult<com.hiddenswitch.spellsource.client.models.MatchCancelResponse> matchmakingConstructedQueueDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		Matchmaking.cancel(new UserId(userId));
-
-		com.hiddenswitch.spellsource.client.models.MatchCancelResponse response =
-				new com.hiddenswitch.spellsource.client.models.MatchCancelResponse()
-						.isCanceled(true);
-
-		return WebResult.succeeded(response);
-	}
-
-	@Override
-	public WebResult<MatchConcedeResponse> matchmakingConstructedDelete(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		UserId key = new UserId(userId);
-		GameId gameId = Games.getGames().get(key);
-		if (gameId == null) {
-			Matchmaking.cancel(key);
-			return WebResult.succeeded(new MatchConcedeResponse().isConceded(false));
-		} else {
-			getGames().concedeGameSession(ConcedeGameSessionRequest.request(gameId, key));
-			return WebResult.succeeded(new MatchConcedeResponse().isConceded(true));
-		}
-	}
-
-	@Override
-	public WebResult<GameState> matchmakingConstructedGet(RoutingContext context, String userId, String queueId) throws SuspendExecution, InterruptedException {
-		if (vertx.isClustered()) {
-			return WebResult.failed(400, new RuntimeException("Cannot retrieve a JSON game state this way in a clustered environment."));
-		}
-
-		CurrentMatchResponse response = Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId));
-		if (response.getGameId() == null) {
-			return WebResult.failed(404, new NullPointerException("Game not found."));
-		}
-
-		return WebResult.succeeded(getGames().getClientGameState(response.getGameId(), userId));
-	}
-
-	@Override
 	public WebResult<MatchmakingQueuesResponse> matchmakingGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		List<String> decks = Accounts.get(userId).getDecks();
 		return WebResult.succeeded(
 				new MatchmakingQueuesResponse()
+						.addQueuesItem(new MatchmakingQueueItem()
+								.name("Quick Play")
+								.description("Play a game against a skilled computer opponent.")
+								.tooltip("Play against a bot!")
+								.queueId("quickPlay")
+								.requires(new MatchmakingQueueItemRequires()
+										.deckIdChoices(decks)))
 						.addQueuesItem(new MatchmakingQueueItem()
 								.name("Constructed")
 								.description("An unranked constructed with decks in the Custom format (includes community cards).")
 								.tooltip("Play online with custom cards!")
 								.queueId("constructed")
 								.requires(new MatchmakingQueueItemRequires()
-										.deckIdChoices(Accounts.get(userId).getDecks()))));
+										.deckIdChoices(decks))));
 	}
 
 	@Override
