@@ -93,33 +93,31 @@ public class DraftTest extends SpellsourceTestBase {
 		context.assertNotNull(state.getDeckId(), "The draft state should contain a deck ID when it is complete.");
 
 		final String deckId = state.getDeckId();
-		vertx.executeBlocking(done -> {
-			UnityClient client = new UnityClient(context).loginWithUserAccount(name, "testpass");
-			client.matchmakeQuickPlay(deckId);
-			client.waitUntilDone();
-			done.handle(Future.succeededFuture());
-		}, context.asyncAssertSuccess(then -> {
-			DraftState newState = null;
-			try {
-				newState = api.draftsPost(new DraftsPostRequest().retireEarly(true));
-			} catch (ApiException e) {
-				context.fail();
-			}
-			context.assertEquals(DraftState.StatusEnum.RETIRED, newState.getStatus(), "Expected a status of retired.");
 
-			try {
-				api.draftsGet();
-			} catch (ApiException e) {
-				context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
-			}
+		UnityClient client = new UnityClient(context).loginWithUserAccount(name, "testpass");
+		client.matchmakeQuickPlay(deckId);
+		client.waitUntilDone();
 
+		DraftState newState = null;
+		try {
+			newState = api.draftsPost(new DraftsPostRequest().retireEarly(true));
+		} catch (ApiException e) {
+			context.fail();
+		}
+		context.assertEquals(DraftState.StatusEnum.RETIRED, newState.getStatus(), "Expected a status of retired.");
 
-			try {
-				newState = api.draftsPost(new DraftsPostRequest().startDraft(true));
-			} catch (ApiException e) {
-				context.fail();
-			}
-			context.assertEquals(DraftState.StatusEnum.SELECT_HERO, newState.getStatus(), "A draft was not correctly started anew.");
-		}));
+		try {
+			api.draftsGet();
+		} catch (ApiException e) {
+			context.assertEquals(404, e.getCode(), "There should be no draft if we retired the draft early.");
+		}
+
+		try {
+			newState = api.draftsPost(new DraftsPostRequest().startDraft(true));
+		} catch (ApiException e) {
+			context.fail();
+		}
+		context.assertEquals(DraftState.StatusEnum.SELECT_HERO, newState.getStatus(), "A draft was not correctly started anew.");
+
 	}
 }

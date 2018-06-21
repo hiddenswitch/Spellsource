@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Games;
@@ -38,7 +39,7 @@ public class UnityClient {
 	private TestContext context;
 	private WebsocketClientEndpoint endpoint;
 	private WebsocketClientEndpoint realtime;
-	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
+	private AtomicReference<SettableFuture<Void>> matchmakingFut = new AtomicReference<>(new SettableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
@@ -105,12 +106,13 @@ public class UnityClient {
 		onGameOver = io.vertx.ext.sync.Sync.fiberHandler(handler);
 	}
 
+	@Suspendable
 	public Future<Void> matchmake(String deckId, String queueId) {
 		if (deckId == null) {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
 
-		CompletableFuture<Void> fut = new CompletableFuture<Void>() {
+		SettableFuture<Void> fut = new SettableFuture<Void>() {
 			@Override
 			public boolean cancel(boolean mayInterruptIfRunning) {
 				realtime.sendMessage(Json.encode(new Envelope()
@@ -122,12 +124,12 @@ public class UnityClient {
 		};
 
 		matchmakingFut.set(fut);
-		final long matchmakingThreadId = Thread.currentThread().getId();
+		final long matchmakingThreadId = Strand.currentStrand().getId();
 
 		if (realtime == null) {
 			realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 			realtime.addMessageHandler(message -> {
-				context.assertNotEquals(matchmakingThreadId, Thread.currentThread().getId());
+				context.assertNotEquals(matchmakingThreadId, Strand.currentStrand().getId());
 				Envelope env = Json.decodeValue(message, Envelope.class);
 
 				if (env.getResult() != null && env.getResult().getEnqueue() != null) {
@@ -136,7 +138,7 @@ public class UnityClient {
 					}
 
 					// Might have been cancelled
-					matchmakingFut.get().complete(null);
+					matchmakingFut.get().set(null);
 				}
 			});
 		}
@@ -151,6 +153,7 @@ public class UnityClient {
 		return fut;
 	}
 
+	@Suspendable
 	public void matchmakeQuickPlay(String deckId) {
 		Future<Void> matchmaking = matchmake(deckId, "quickPlay");
 		try {
@@ -161,6 +164,7 @@ public class UnityClient {
 		}
 	}
 
+	@Suspendable
 	public void matchmakeConstructedPlay(String deckId) {
 		Future<Void> matchmaking = matchmake(deckId, "constructed");
 		try {
