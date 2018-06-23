@@ -28,6 +28,7 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
@@ -2221,6 +2222,114 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testCryWolf() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_cry_wolf");
+			playCard(context, player, player.getHand().peekFirst());
+			playCard(context, player, player.getHand().peekFirst());
+
+			print(player.getMinions().get(0).getSourceCard().getCardId());
+			print(player.getMinions().get(1).getSourceCard().getCardId());
+			print(player.getMinions().get(2).getSourceCard().getCardId());
+		});
+
+	}
+
+	@Test
+	public void testGnarlRoot() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 9; i++) {
+				receiveCard(context, player, "minion_wisp");
+			}
+			playCard(context, player, "minion_gnarlroot");
+
+			player.getHand().forEach(c -> print("Card: " + c.getName()));
+
+			player.getMinions().forEach(m -> print("Minion: " + m.getName()));
+
+		});
+
+	}
+
+	@Test
+	public void testFlame() {
+		runGym(((context, player, opponent) -> {
+			receiveCard(context, player, "minion_rebellious_flame");
+			printCards(context, player);
+			playCard(context, player, "minion_wisp");
+			printCards(context, player);
+			playCard(context, player, "spell_arcane_explosion");
+			printCards(context, player);
+
+		}));
+	}
+
+	@Test
+	public void testMeteorStorm() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_ultrasaur");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			printMinions(context, player);
+			printMinions(context, opponent);
+			playCard(context, player, "spell_meteor_storm");
+			print("Casted!");
+			printMinions(context, player);
+			printMinions(context, opponent);
+		});
+	}
+
+	@Test
+	public void testTriplicate() {
+		runGym((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			printAll(context, player);
+			playCardWithTarget(context, player, "spell_triplicate", wisp);
+			print("Casted!");
+			printAll(context, player);
+		});
+	}
+
+	@Test
+	public void testPolyDragon() {
+		runGym((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			printAll(context, player);
+			playCardWithTarget(context, player, "spell_polymorph_dragon", wisp);
+			print("Casted!");
+			printAll(context, player);
+			playCardWithTarget(context, player, player.getHand().peekFirst(), player.getMinions().get(0));
+			print("Casted!");
+			printAll(context, player);
+		});
+	}
+
+
+	@Test
+	public void testDragonlingPet() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_dragonling_pet");
+			shuffleToDeck(context, player, "minion_murloc_raider");
+			printAll(context, player);
+			print("Test starting game");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			printAll(context, player);
+			print("Complete");
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_dragonling_pet");
+			printAll(context, player);
+			print("Test starting game");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			printAll(context, player);
+			print("Complete");
+		});
+	}
+
+	@Test
 	public void testWyrmrestSniper() {
 		// Friendly Dragon survives damage so 3 damage is dealt to the opponent hero
 		runGym((context, player, opponent) -> {
@@ -2265,4 +2374,80 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertTrue(wyrmrest.hasAttribute(Attribute.STEALTH));
 		});
 	}
+
+	@Test
+	public void testAegwynn() {
+		List<String> spells = Arrays.asList("spell_fireball", "spell_arcane_explosion", "spell_flamestrike", "spell_frostbolt");
+		for (String spell : spells) {
+			runGym((context, player, opponent) -> {
+				shuffleToDeck(context, player, spell);
+				shuffleToDeck(context, player, "minion_aegwynn");
+				context.fireGameEvent(new GameStartEvent(context, player.getId()));
+				print("Spell Damage is " + player.getAttributeValue(Attribute.SPELL_DAMAGE) + " with " + spell);
+			});
+
+		}
+
+	}
+
+	@Test
+	public void testRelicRaider() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "weapon_vinecleaver");
+			playCard(context, player, "minion_relic_raider");
+			if (!player.getWeaponZone().isEmpty()) {
+				Weapon weapon = player.getWeaponZone().get(0);
+				print("Weapon: " + weapon.getName() + " " + weapon.getAttack() + "/" + weapon.getHp());
+			}
+
+		});
+	}
+
+	@Test
+	public void testQuartz() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_lesser_quartz_spellstone");
+			playCard(context, opponent, "minion_wisp");
+			printAll(context, player);
+			playCard(context, player, "spell_frost_nova");
+			playCard(context, player, "spell_frost_nova");
+			print("Freeze!");
+			printAll(context, player);
+		});
+	}
+	
+	@Test
+	public void testImmolate() {
+		runGym(((context, player, opponent) -> {
+			Minion watcher = playMinionCard(context, opponent, "minion_ancient_watcher");
+			playCard(context, player, "minion_spellshifter");
+			playCardWithTarget(context, player, "spell_immolate", watcher);
+
+			for (int i = 0; i < 5; i++) {
+				if (find(context, "minion_ancient_watcher") != null) {
+					print(watcher.getHp() + "");
+					context.endTurn();
+				}
+			}
+		}));
+	}
+
+	@Test
+	public void testCommanderGarrosh() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_commander_garrosh");
+			playCard(context, player, "minion_maiden_of_the_lake");
+			player.setMana(10);
+			useHeroPower(context, player);
+			print(player.getHero().getArmor() + "");
+			print(player.getMana() + "");
+
+			player.setMana(9);
+			useHeroPower(context, player);
+			print(player.getHero().getArmor() + "");
+			print(player.getMana() + "");
+
+		});
+	}
 }
+

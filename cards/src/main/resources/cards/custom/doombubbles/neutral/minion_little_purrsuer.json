@@ -1,0 +1,17 @@
+{
+	"name": "Little Purrsuer",
+	"baseManaCost": 0,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 2,
+	"heroClass": "ANY",
+	"rarity": "RARE",
+	"race": "BEAST",
+	"description": "Rush",
+	"attributes": {
+		"RUSH": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}
