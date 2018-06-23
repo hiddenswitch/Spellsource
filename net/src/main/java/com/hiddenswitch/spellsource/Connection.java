@@ -53,8 +53,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			return null;
 		}
 
-		MessageProducer<Buffer> producer = Vertx.currentContext().owner().eventBus().publisher(handlerId);
-
+		MessageProducer<Envelope> producer = Vertx.currentContext().owner().eventBus().publisher(handlerId);
+		return producer;
+		/*
 		return new WriteStream<Envelope>() {
 			@Override
 			public WriteStream<Envelope> exceptionHandler(Handler<Throwable> handler) {
@@ -64,7 +65,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 			@Override
 			public WriteStream<Envelope> write(Envelope data) {
-				producer.write(Json.encodeToBuffer(data));
+				producer.write(Buffer.buffer(Json.encode(data)));
 				return this;
 			}
 
@@ -89,7 +90,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 				producer.drainHandler(handler);
 				return this;
 			}
-		};
+		};*/
 	}
 
 	static WriteStream<Envelope> writeStream(UserId userId) throws SuspendExecution {
@@ -125,7 +126,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		MessageConsumer<Envelope> consumer = Vertx.currentContext().owner().eventBus().consumer(id);
 		consumer.handler(msg -> {
-			socket.write(Json.encodeToBuffer(msg.body()));
+			socket.write(Buffer.buffer(Json.encode(msg.body())));
 		});
 
 		connections.put(key, id);

@@ -181,7 +181,7 @@ public class ServerGameContext extends GameContext {
 
 		try {
 			startGame();
-		} catch (NullPointerException playerNull) {
+		} catch (NullPointerException | IndexOutOfBoundsException playerNull) {
 			logger.error("init {}: Game already ended during mulligan phase.", getGameId());
 		}
 

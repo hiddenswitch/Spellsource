@@ -8,8 +8,10 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.HttpMethod;
+import io.vertx.core.json.Json;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
@@ -37,12 +39,12 @@ public class ConversationTest extends SpellsourceTestBase {
 			final String conversationId = user1.getUserId() + "," + user2.getUserId();
 			vertx.createHttpClient(options).websocket("/realtime?X-Auth-Token=" + user1.getLoginToken().getToken(), handler -> {
 				// Subscribe
-				handler.write(encodeToBuffer(
-						new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId)))));
+				handler.write(Buffer.buffer(Json.encode(
+						new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId))))));
 
 				// Send message
-				handler.write(encodeToBuffer(
-						new Envelope().method(new EnvelopeMethod().sendMessage(new EnvelopeMethodSendMessage().conversationId(conversationId).message("hello")))));
+				handler.write(Buffer.buffer(Json.encode(
+						new Envelope().method(new EnvelopeMethod().sendMessage(new EnvelopeMethodSendMessage().conversationId(conversationId).message("hello"))))));
 			});
 
 			// User 2 client
@@ -53,7 +55,7 @@ public class ConversationTest extends SpellsourceTestBase {
 					async.complete();
 				});
 				// Subscribe
-				handler.write(encodeToBuffer(new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId)))));
+				handler.write(Buffer.buffer(Json.encode(new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId))))));
 			});
 		});
 	}
