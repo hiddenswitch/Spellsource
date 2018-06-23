@@ -1,27 +1,16 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.HttpClientOptions;
-import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.Json;
-import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import io.vertx.ext.web.Router;
-import io.vertx.ext.web.handler.AuthHandler;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
 import static io.vertx.core.json.Json.decodeValue;
-import static io.vertx.core.json.Json.encodeToBuffer;
 
 public class ConversationTest extends SpellsourceTestBase {
 
