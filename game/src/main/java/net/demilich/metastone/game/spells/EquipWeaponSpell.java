@@ -114,6 +114,10 @@ public class EquipWeaponSpell extends Spell {
 			return;
 		}
 
+		if (results.isEmpty()) {
+			return;
+		}
+
 		Weapon weapon = context.getLogic().getRandom(results).createWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
 		for (SpellDesc spellDesc : desc.subSpells(0)) {

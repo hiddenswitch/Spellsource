@@ -1,0 +1,32 @@
+{
+	"name": "Crouching Tiger",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 1,
+	"heroClass": "ANY",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "Battlecry: Give a Dragon Stealth until your next turn.",
+	"battlecry": {
+		"targetSelection": "MINIONS",
+		"spell": {
+			"class": "AddAttributeSpell",
+			"attribute": "STEALTH",
+			"revertTrigger": {
+				"class": "TurnStartTrigger",
+				"targetPlayer": "SELF"
+			},
+			"filter": {
+				"class": "RaceFilter",
+				"race": "DRAGON"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

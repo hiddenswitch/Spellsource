@@ -1,0 +1,31 @@
+{
+  "name": "Water Formations",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "RARE",
+  "description": "Summon a Water Elemental, or 2 if you played an elemental last turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "spell2": {
+      "class": "SummonSpell",
+      "card": "minion_water_elemental"
+    },
+    "spell1": {
+      "class": "SummonSpell",
+      "card": "minion_water_elemental",
+      "value": 2
+    },
+    "condition": {
+      "class": "PlayedLastTurnCondition",
+      "filter": {
+        "class": "CardFilter",
+        "race": "ELEMENTAL"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

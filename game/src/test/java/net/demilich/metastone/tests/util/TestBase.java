@@ -42,7 +42,12 @@ import org.testng.annotations.BeforeMethod;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 
+
+
 public class TestBase {
+
+	protected static final boolean PRINT = true;
+
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
 		Card baseCard = receiveCard(context, player, baseCardId);
 		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
@@ -519,6 +524,38 @@ public class TestBase {
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
 		context.getLogic().performGameAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
+	}
+
+	protected void printAll(GameContext context, Player player) {
+		printCards(context, player);
+		printMinions(context, player);
+		printDeck(context, player);
+	}
+
+	protected static void printCards(GameContext context, Player player) {
+		if (player.getId() == 0) {
+			player.getHand().forEach(c -> print("Player Hand Card: " + c.getCardId()));
+		} else player.getHand().forEach(c -> print("Opponent Hand Card: " + c.getCardId()));
+
+	}
+
+	protected static void printDeck(GameContext context, Player player) {
+		if (player.getId() == 0) {
+			player.getDeck().forEach(c -> print("Player Deck Card: " + c.getCardId()));
+		} else player.getDeck().forEach(c -> print("Opponent Deck Card: " + c.getCardId()));
+
+	}
+
+	protected static void printMinions(GameContext context, Player player) {
+		if (player.getId() == 0) {
+			player.getMinions().forEach(m -> print("Player Minion: " + m.getSourceCard().getCardId()));
+		} else player.getMinions().forEach(m -> print("Opponent Minion: " + m.getSourceCard().getCardId()));
+	}
+
+	protected static void print(String s) {
+		if (PRINT) {
+			System.out.println(s);
+		}
 	}
 
 }
