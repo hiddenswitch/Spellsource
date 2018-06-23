@@ -176,10 +176,14 @@ public class ServerGameContext extends GameContext {
 		try {
 			CompositeFuture done = Sync.awaitResult(h -> CompositeFuture.join(init1, init2).setHandler(h), 2 * GameLogic.DEFAULT_MULLIGAN_TIME * 1000);
 		} catch (VertxException ex) {
-				logger.error("{} init: Failed to mulligan due to unknown error: {}", getGameId(), ex);
+			logger.error("init {}: Failed to mulligan due to unknown error: {}", getGameId(), ex);
 		}
 
-		startGame();
+		try {
+			startGame();
+		} catch (NullPointerException playerNull) {
+			logger.error("init {}: Game already ended during mulligan phase.", getGameId());
+		}
 
 		finishMulliganTimer(mulliganTimerId);
 	}
@@ -234,7 +238,13 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void resume() {
+		if (!isRunning) {
+			return;
+		}
 		while (!updateAndGetGameOver()) {
+			if (!isRunning) {
+				break;
+			}
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
 				if (!isRunning) {
