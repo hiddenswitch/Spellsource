@@ -169,7 +169,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		async.complete();
 	}
 
-	@Test(timeout = 90000L)
+	@Test(timeout = 120000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
 		final int count = processorCount * 2;
@@ -202,7 +202,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(60L, TimeUnit.SECONDS);
+		latch.await(90L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 	}
 
