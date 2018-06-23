@@ -93,7 +93,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
+All URIs are relative to *http://api-3.hiddenswitch.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -119,10 +119,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
-*DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
-*DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
-*DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
-*DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
+*DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
 *DefaultApi* | [**postInvite**](docs/DefaultApi.md#postInvite) | **POST** /invites | 
 
@@ -142,6 +139,7 @@ Class | Method | HTTP request | Description
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
+ - [DamageTypeEnum](docs/DamageTypeEnum.md)
  - [DecksGetAllResponse](docs/DecksGetAllResponse.md)
  - [DecksGetResponse](docs/DecksGetResponse.md)
  - [DecksPutRequest](docs/DecksPutRequest.md)
@@ -149,11 +147,13 @@ Class | Method | HTTP request | Description
  - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
  - [DecksUpdateCommandPushCardIds](docs/DecksUpdateCommandPushCardIds.md)
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
+ - [DefaultMethodResponse](docs/DefaultMethodResponse.md)
  - [DraftState](docs/DraftState.md)
  - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
  - [DraftsChooseHeroRequest](docs/DraftsChooseHeroRequest.md)
  - [DraftsPostRequest](docs/DraftsPostRequest.md)
  - [Emote](docs/Emote.md)
+ - [Enchantment](docs/Enchantment.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
@@ -163,8 +163,11 @@ Class | Method | HTTP request | Description
  - [EnvelopeAdded](docs/EnvelopeAdded.md)
  - [EnvelopeChanged](docs/EnvelopeChanged.md)
  - [EnvelopeMethod](docs/EnvelopeMethod.md)
+ - [EnvelopeMethodDequeue](docs/EnvelopeMethodDequeue.md)
  - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
  - [EnvelopeRemoved](docs/EnvelopeRemoved.md)
+ - [EnvelopeRequest](docs/EnvelopeRequest.md)
+ - [EnvelopeResponse](docs/EnvelopeResponse.md)
  - [EnvelopeResult](docs/EnvelopeResult.md)
  - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
  - [EnvelopeSub](docs/EnvelopeSub.md)
@@ -180,6 +183,7 @@ Class | Method | HTTP request | Description
  - [GameEventArmorGained](docs/GameEventArmorGained.md)
  - [GameEventBeforeSummon](docs/GameEventBeforeSummon.md)
  - [GameEventDamage](docs/GameEventDamage.md)
+ - [GameEventFatigue](docs/GameEventFatigue.md)
  - [GameEventHeal](docs/GameEventHeal.md)
  - [GameEventHeroPowerUsed](docs/GameEventHeroPowerUsed.md)
  - [GameEventJoust](docs/GameEventJoust.md)
@@ -204,12 +208,11 @@ Class | Method | HTTP request | Description
  - [InviteGetResponse](docs/InviteGetResponse.md)
  - [InvitePostRequest](docs/InvitePostRequest.md)
  - [InviteResponse](docs/InviteResponse.md)
- - [JavaSerializationObject](docs/JavaSerializationObject.md)
  - [LoginRequest](docs/LoginRequest.md)
  - [LoginResponse](docs/LoginResponse.md)
+ - [Match](docs/Match.md)
  - [MatchCancelResponse](docs/MatchCancelResponse.md)
  - [MatchConcedeResponse](docs/MatchConcedeResponse.md)
- - [MatchmakingDeck](docs/MatchmakingDeck.md)
  - [MatchmakingQueueItem](docs/MatchmakingQueueItem.md)
  - [MatchmakingQueueItemRequires](docs/MatchmakingQueueItemRequires.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
@@ -245,5 +248,5 @@ It's recommended to create an instance of `ApiClient` per thread in a multithrea
 
 ## Author
 
-benjamin.s.berman@gmail.com
+ben@hiddenswitch.com
 
