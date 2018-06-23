@@ -17,6 +17,7 @@ import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
+import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
 import org.jetbrains.annotations.NotNull;
@@ -389,6 +390,8 @@ public interface Matchmaking extends Verticle {
 						.setCommand(MatchmakingQueueEntry.Command.CANCEL)
 						.setUserId(userId.toString()), false);
 				LOGGER.trace("dequeue {}: Successfully dequeued", userId);
+			} else {
+				LOGGER.warn("dequeue {}: Could not find current queue value", userId);
 			}
 		} finally {
 			if (lock != null) {
@@ -514,7 +517,12 @@ public interface Matchmaking extends Verticle {
 						// Create a bot game.
 						MatchmakingRequest user = thisMatchRequests.get(0);
 						bot(new UserId(user.getUserId()), new DeckId(user.getDeckId()), user.getBotDeckId() == null ? null : new DeckId(user.getBotDeckId()));
-						getGameReadyCondition(user.getUserId()).signal();
+						WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
+
+						if (connection != null) {
+							connection.write(gameReadyMessage());
+						}
+
 						thisMatchRequests.clear();
 						currentQueue().remove(new UserId(user.getUserId()));
 						continue;
@@ -534,8 +542,15 @@ public interface Matchmaking extends Verticle {
 						vs(GameId.create(), new UserId(user1.getUserId()), new DeckId(user1.getDeckId()), new UserId(user2.getUserId()), new DeckId(user2.getDeckId()));
 						LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
 
+						for (WriteStream<Envelope> connection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
+							if (connection != null) {
+								connection.write(gameReadyMessage());
+							}
+						}
+						/*
 						getGameReadyCondition(user1.getUserId()).signal();
 						getGameReadyCondition(user2.getUserId()).signal();
+						*/
 
 						currentQueue().remove(new UserId(user1.getUserId()));
 						currentQueue().remove(new UserId(user2.getUserId()));
@@ -563,6 +578,15 @@ public interface Matchmaking extends Verticle {
 		};
 	}
 
+	static Envelope gameReadyMessage() {
+		return new Envelope()
+				.result(new EnvelopeResult()
+						.enqueue(new MatchmakingQueuePutResponse()
+								.unityConnection(new MatchmakingQueuePutResponseUnityConnection().firstMessage(new ClientToServerMessage()
+										.messageType(MessageType.FIRST_MESSAGE)
+										.firstMessage(new ClientToServerMessageFirstMessage())))));
+	}
+
 	@NotNull
 	@Suspendable
 	static SuspendableCondition pingCondition(String userId) {
@@ -584,17 +608,21 @@ public interface Matchmaking extends Verticle {
 
 	static void handleConnections() {
 		Connection.connected(suspendableHandler(connection -> {
+			/*
 			AtomicReference<Fiber<Void>> isAlive = new AtomicReference<>();
 			AtomicReference<Fiber<Void>> gameReady = new AtomicReference<>();
+			*/
 
 			// If the user disconnects, dequeue them immediately.
 			connection.endHandler(suspendableHandler(v -> {
+				/*
 				// Dequeue the user if they're currently enqueued.
 				for (Fiber fiber : new Fiber[]{isAlive.getAndSet(null), gameReady.getAndSet(null)}) {
 					if (fiber != null) {
 						fiber.interrupt();
 					}
 				}
+				*/
 
 				dequeue(new UserId(connection.userId()));
 			}));
@@ -604,15 +632,18 @@ public interface Matchmaking extends Verticle {
 
 				if (method != null) {
 					if (method.getEnqueue() != null) {
+						/*
 						// Always dequeue the user first, silently succeeds regardless if they're currently enqueued.
 						for (Fiber fiber : new Fiber[]{isAlive.getAndSet(null), gameReady.getAndSet(null)}) {
 							if (fiber != null) {
 								fiber.interrupt();
 							}
 						}
+						*/
 
 						dequeue(new UserId(connection.userId()));
 
+						/*
 						isAlive.set(getContextScheduler().newFiber(() -> {
 							SuspendableCondition ping = pingCondition(connection.userId());
 							SuspendableCondition pong = pongCondition(connection.userId());
@@ -649,6 +680,7 @@ public interface Matchmaking extends Verticle {
 						isAlive.get().start();
 						gameReady.get().start();
 
+						*/
 						enqueue(new MatchmakingRequest()
 								.withUserId(connection.userId())
 								.setQueueId(method.getEnqueue().getQueueId())
@@ -657,12 +689,14 @@ public interface Matchmaking extends Verticle {
 					}
 
 					if (method.getDequeue() != null) {
+						/*
 						// Interrupt the notifications
 						for (Fiber fiber : new Fiber[]{isAlive.getAndSet(null), gameReady.getAndSet(null)}) {
 							if (fiber != null) {
 								fiber.interrupt();
 							}
 						}
+						*/
 
 						dequeue(new UserId(connection.userId()));
 

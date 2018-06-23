@@ -77,7 +77,7 @@ public class WebSocketWriter implements Writer {
 		if (!open) {
 			return;
 		}
-		socket.write(Json.encodeToBuffer(message));
+		socket.write(Buffer.buffer(Json.encode(message)));
 	}
 
 	@Suspendable

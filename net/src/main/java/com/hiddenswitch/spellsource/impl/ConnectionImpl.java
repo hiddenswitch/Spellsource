@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -63,7 +64,7 @@ public class ConnectionImpl implements Connection {
 
 	@Override
 	public Connection write(Envelope data) {
-		socket.write(Json.encodeToBuffer(data));
+		socket.write(Buffer.buffer(Json.encode(data)));
 		return this;
 	}
 

@@ -27,7 +27,7 @@ import java.util.List;
  * which allows queries to see if a user is authorized to do a particular task (very lightly implemented).
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserRecord extends MongoRecord implements User, Serializable, ClusterSerializable {
+public class UserRecord extends MongoRecord implements User, Serializable {
 	public static final String EMAILS_ADDRESS = "emails.address";
 	public static final String SERVICES = "services";
 	public static final String RESUME = "resume";
@@ -164,16 +164,6 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	 */
 	public FriendRecord getFriendById(String friendId) {
 		return this.friends.stream().filter(friend -> friend.getFriendId().equals(friendId)).findFirst().orElse(null);
-	}
-
-	@Override
-	public void writeToBuffer(Buffer buffer) {
-		Json.encodeToBuffer(this).writeToBuffer(buffer);
-	}
-
-	@Override
-	public int readFromBuffer(int pos, Buffer buffer) {
-		throw new UnsupportedOperationException();
 	}
 
 	public Date getCreatedAt() {
