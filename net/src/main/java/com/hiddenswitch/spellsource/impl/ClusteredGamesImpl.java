@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.impl.server.GameSession;
 import com.hiddenswitch.spellsource.impl.server.GameSessionImpl;
 import com.hiddenswitch.spellsource.impl.server.SessionWriter;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
+import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.VertxException;
@@ -19,15 +20,15 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.streams.Pump;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
+
 public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	public static final String READER_ADDRESS_PREFIX = "Games::reader-";
-	static final Logger logger = LoggerFactory.getLogger(Games.class);
 	private Registration registration;
 	private SuspendableMap<GameId, CreateGameSessionResponse> connections;
 	private Map<GameId, GameSession> sessions = new ConcurrentHashMap<>();
@@ -44,8 +45,8 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 
 	@Override
 	public CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException {
-		if (logger.isDebugEnabled()) {
-			logger.debug("createGameSession: Creating game session for request " + request.toString());
+		if (Games.LOGGER.isDebugEnabled()) {
+			Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
 		}
 		final String gameId = request.getGameId();
 
@@ -58,7 +59,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 		CreateGameSessionResponse connection = connections.putIfAbsent(key, pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
-			logger.debug("createGameSession: DeploymentId " + deploymentID() + " is responsible for deploying this match.");
+			Games.LOGGER.debug("createGameSession: DeploymentId " + deploymentID() + " is responsible for deploying this match.");
 			GameSession session = new GameSessionImpl(Gateway.getHostAddress(),
 					Port.port(),
 					request.getPregame1(),
@@ -84,7 +85,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 			sessions.put(key, session);
 			return response;
 		} else {
-			logger.debug("createGameSession: Repeat createGameSessionRequest suspected because actually deploymentId " + connection.deploymentId + " is responsible for deploying this match.");
+			Games.LOGGER.debug("createGameSession: Repeat createGameSessionRequest suspected because actually deploymentId " + connection.deploymentId + " is responsible for deploying this match.");
 			// Otherwise, return its state, whatever it is
 			return connection;
 		}
@@ -106,7 +107,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 
 	@Suspendable
 	private void onGameOver(GameSessionImpl session) {
-		logger.debug("onGameOver: Handling on game over for session " + session.getGameId());
+		Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
 		final String gameOverId = session.getGameId();
 		// The players should not accidentally wind back up in games
 		try {
@@ -127,7 +128,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	 * @return A function that when called closes all the created pipes.
 	 */
 	private Runnable connect(GameSession session, int playerId, String userId, EventBus eventBus, List<ActivityMonitor> activityMonitors) {
-		logger.debug("connect: Connecting userId " + userId + " with gameId " + session.getGameId());
+		Games.LOGGER.debug("connect: Connecting userId " + userId + " with gameId " + session.getGameId());
 		final SessionWriter writer = new SessionWriter(userId, playerId, eventBus, session, activityMonitors);
 		final MessageConsumer<Buffer> reader = eventBus.consumer(READER_ADDRESS_PREFIX + userId);
 		final Pump pipe = new SuspendablePump<>(reader.bodyStream(), writer, Integer.MAX_VALUE).start();
@@ -135,7 +136,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 			pipe.stop();
 			writer.end();
 			reader.unregister();
-			logger.debug("connect: Closing writing pipe for userId " + userId);
+			Games.LOGGER.debug("connect: Closing writing pipe for userId " + userId);
 		};
 	}
 
@@ -148,26 +149,64 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	private void kill(String gameId) throws InterruptedException, SuspendExecution {
 		final GameId key = new GameId(gameId);
 		if (!sessions.containsKey(key)) {
-			logger.debug("kill: This deployment with deploymentId " + deploymentID() + " does not contain the gameId "
-					+ gameId);
+			Games.LOGGER.debug("kill {}: This deployment with deploymentId {} does not contain the gameId", gameId, deploymentID());
 			return;
 		}
-		logger.debug("kill: Calling kill for gameId " + gameId);
+		Games.LOGGER.debug("kill {}: Calling kill", gameId);
 		GameSession session = sessions.remove(key);
 		CreateGameSessionResponse connection = connections.remove(key);
 
 		final MatchExpireRequest request = new MatchExpireRequest(gameId);
-		request.users = Arrays.asList(connection.userId1, connection.userId2);
-		if (request.users.size() < 2
-				|| request.users.get(0) == null
-				|| request.users.get(1) == null) {
+		request.setUsers(Arrays.asList(connection.userId1, connection.userId2));
+		if (request.getUsers().size() < 2
+				|| request.getUsers().get(0) == null
+				|| request.getUsers().get(1) == null) {
 			throw new IllegalArgumentException("No users were returned correctly by the session.");
+		}
+
+		UserId winner = null;
+		try {
+			session.getGameContext().updateAndGetGameOver();
+			if (session.getGameContext() != null && session.getGameContext().getWinner() != null && session.getGameContext().getWinner().getUserId() != null) {
+				winner = new UserId(session.getGameContext().getWinner().getUserId());
+				request.setWinner(winner);
+			}
+			// Save the wins/losses
+			if (winner != null) {
+				String userIdWinner = winner.toString();
+				String userIdLoser = session.getGameContext().getOpponent(session.getGameContext().getWinner()).getUserId();
+				String deckIdWinner = (String) session.getGameContext().getWinner().getAttribute(Attribute.DECK_ID);
+				String deckIdLoser = (String) session.getGameContext().getOpponent(session.getGameContext().getWinner()).getAttribute(Attribute.DECK_ID);
+				// Check if this deck was a draft deck
+				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
+						json("$inc", json("totalGames", 1, "wins", 1))).getDocModified() > 0L) {
+					Mongo.mongo().updateCollection(Draft.DRAFTS, json("_id", userIdWinner), json("$inc", json("publicDraftState.wins", 1)));
+					LOGGER.trace("kill {}: Marked {} as winner in draft", gameId, userIdWinner);
+				} else {
+					Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner),
+							json("$inc", json("totalGames", 1, "wins", 1)));
+					LOGGER.trace("kill {}: Marked {} as winner in other", gameId, userIdWinner);
+				}
+
+				// Check if this deck was a draft deck
+				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser, "deckType", DeckType.DRAFT.toString()),
+						json("$inc", json("totalGames", 1))).getDocModified() > 0L) {
+					Mongo.mongo().updateCollection(Draft.DRAFTS, json("_id", userIdLoser), json("$inc", json("publicDraftState.losses", 1)));
+					LOGGER.trace("kill {}: Marked {} as loser in draft", gameId, userIdLoser);
+				} else {
+					Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser),
+							json("$inc", json("totalGames", 1)));
+					LOGGER.trace("kill {}: Marked {} as loser in other", gameId, userIdLoser);
+				}
+			}
+		} catch (Throwable ex) {
+			LOGGER.error("kill {}: Could not get winner due to {}", ex);
 		}
 
 		try {
 			Matchmaking.expireOrEndMatch(request);
 		} catch (VertxException noHandlerFound) {
-			logger.error("kill: For gameId " + gameId + ", an error occurred trying to expireOrEndMatch: " + noHandlerFound.getMessage());
+			Games.LOGGER.error("kill: For gameId " + gameId + ", an error occurred trying to expireOrEndMatch: " + noHandlerFound.getMessage());
 		}
 
 		session.kill();
@@ -188,10 +227,10 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	public DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request) {
 		GameId key = new GameId(request.getGameId());
 		if (sessions.containsKey(key)) {
-			logger.debug("describeGameSession: Describing gameId " + request.getGameId());
+			Games.LOGGER.debug("describeGameSession: Describing gameId " + request.getGameId());
 			return DescribeGameSessionResponse.fromGameContext(sessions.get(key).getGameContext());
 		} else {
-			logger.debug("describeGameSession: This game session does not contain the gameId " + request.getGameId());
+			Games.LOGGER.debug("describeGameSession: This game session does not contain the gameId " + request.getGameId());
 			return new DescribeGameSessionResponse();
 		}
 	}
@@ -200,14 +239,14 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution {
 		final GameId key = new GameId(request.getGameId());
 		if (sessions.containsKey(key)) {
-			logger.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
+			Games.LOGGER.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
 			kill(request.getGameId());
 		} else {
-			logger.debug("endGameSession: This instance does not contain the gameId " + request.getGameId()
+			Games.LOGGER.debug("endGameSession: This instance does not contain the gameId " + request.getGameId()
 					+ ". Redirecting your request to the correct deployment.");
 			CreateGameSessionResponse connection = connections.get(key);
 			if (connection == null) {
-				logger.error("endGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
+				Games.LOGGER.error("endGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
 				return new EndGameSessionResponse();
 			}
 
@@ -230,14 +269,14 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	public ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution {
 		final GameId key = new GameId(request.getGameId());
 		if (sessions.containsKey(key)) {
-			logger.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
+			Games.LOGGER.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
 			kill(request.getGameId());
 		} else {
-			logger.debug("concedeGameSession: This instance does not contain the gameId " + request.getGameId()
+			Games.LOGGER.debug("concedeGameSession: This instance does not contain the gameId " + request.getGameId()
 					+ ". Redirecting your request to the correct deployment.");
 			CreateGameSessionResponse connection = connections.get(key);
 			if (connection == null) {
-				logger.error("concedeGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
+				Games.LOGGER.error("concedeGameSession: No gameId " + key.toString() + " was found to be ended. Aborting.");
 				return new ConcedeGameSessionResponse();
 			}
 
@@ -249,17 +288,17 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	@Override
 	@Suspendable
 	public void stop() throws Exception {
-		logger.debug("stop: Stopping the ClusteredGamesImpl.");
+		Games.LOGGER.debug("stop: Stopping the ClusteredGamesImpl.");
 		super.stop();
 		Rpc.unregister(registration);
 		for (ActivityMonitor monitor : gameActivityMonitors.values()) {
 			monitor.cancel();
 		}
 		gameActivityMonitors.clear();
-		logger.debug("stop: Activity monitors unregistered");
+		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		for (GameId gameId : sessions.keySet()) {
 			kill(gameId.toString());
 		}
-		logger.debug("stop: Sessions killed");
+		Games.LOGGER.debug("stop: Sessions killed");
 	}
 }

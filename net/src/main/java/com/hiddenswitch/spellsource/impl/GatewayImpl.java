@@ -41,7 +41,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
@@ -96,7 +95,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		router.route("/realtime")
 				.method(HttpMethod.GET)
-				.handler(Connection.create());
+				.handler(Connection.handler());
 
 		// Enable presence
 		Presence.handleConnections();
@@ -106,6 +105,15 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		// Create default matchmaking queues
 		queues = Matchmaking.startDefaultQueues();
+		// Create draft queue
+		Closeable draftQueue = Draft.startDraftQueue();
+
+		final Closeable originalQueues = queues;
+		queues = fut -> {
+			originalQueues.close(v1 -> {
+				draftQueue.close(fut);
+			});
+		};
 
 		// Handle the enqueue and dequeue methods through the matchmaker
 		Matchmaking.handleConnections();
@@ -539,7 +547,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	public WebResult<DraftState> draftsGet(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
 		DraftRecord record = Draft.get(new GetDraftRequest().withUserId(userId));
 		if (record == null) {
-			return WebResult.failed(404, new NullPointerException("You have not started a draft. Start one first."));
+			return WebResult.notFound("You have not started a draft. Start one first.");
 		}
 
 		return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));

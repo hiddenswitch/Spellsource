@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
@@ -13,7 +12,6 @@ import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import com.hiddenswitch.spellsource.common.Writer;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.MatchExpireRequest;
-import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
@@ -352,7 +350,7 @@ public class GameSessionImpl implements GameSession {
 		}
 		if (getGameContext() != null) {
 			MatchExpireRequest request = new MatchExpireRequest(getGameId());
-			request.users = getUserIds();
+			request.setUsers(getUserIds()).setWinner(getUserIds().get(getOpponent(playerId)));
 			try {
 				Matchmaking.expireOrEndMatch(request);
 			} catch (SuspendExecution | InterruptedException execution) {
