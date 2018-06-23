@@ -11,12 +11,15 @@ import com.hiddenswitch.spellsource.client.models.DraftState;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
+import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
+import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -122,19 +125,6 @@ public interface Draft {
 	}
 
 	/**
-	 * Enters matchmaking with the deck built with a draft.
-	 * <p>
-	 * When the player loses this match, they lose a life.
-	 *
-	 * @param request The user ID of the player who should be entered into the draft.
-	 * @return Connection or retry information for the draft matchmaking.
-	 */
-	@Suspendable
-	static MatchDraftResponse matchDraft(MatchDraftRequest request) {
-		return null;
-	}
-
-	/**
 	 * Quits a draft early.
 	 * <p>
 	 * If the player has lost fewer than 3 matches with his current draft deck, the player can quit the draft early. The
@@ -188,4 +178,17 @@ public interface Draft {
 		return mongo().findOne(DRAFTS, json("_id", userId), DraftRecord.class);
 	}
 
+	@Suspendable
+	static Closeable startDraftQueue() throws SuspendExecution {
+		return Matchmaking.startMatchmaker("draft", new Matchmaking.MatchmakingQueueConfiguration()
+				.setWaitsForHost(false)
+				.setStillConnectedTimeout(1000L)
+				.setRules(new CardDesc[0])
+				.setRanked(true)
+				.setPrivateLobby(false)
+				.setOnce(false)
+				.setName("Draft")
+				.setLobbySize(2)
+				.setBotOpponent(false));
+	}
 }

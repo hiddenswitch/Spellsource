@@ -389,7 +389,14 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							changeCardId("spell_eerie_fermentation", "quest_eerie_fermentation");
 						}))
-				.migrateTo(19, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(20)
+						.withUp(thisVertx -> {
+							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$set", json(
+									"wins", 0, "totalGames", 0
+							)), new UpdateOptions().setMulti(true));
+						}))
+				.migrateTo(20, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

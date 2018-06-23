@@ -137,7 +137,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return connection;
 	}
 
-	static Handler<RoutingContext> create() {
+	static Handler<RoutingContext> handler() {
 		return Sync.suspendableHandler(Connection::connected);
 	}
 
@@ -164,15 +164,28 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 	@Suspendable
 	static void connected(RoutingContext routingContext) throws SuspendExecution {
+		if (routingContext.failed()) {
+			routingContext.next();
+			return;
+		}
+
 		registerCodecs();
 
 		String userId = Accounts.userId(routingContext);
+
+		if (userId == null) {
+			routingContext.fail(403);
+			routingContext.next();
+			return;
+		}
+
 		SuspendableLock lock;
 
 		try {
 			lock = SuspendableLock.lock("Connection::realtime-data-lock[" + userId + "]", 1000L);
 		} catch (VertxException ex) {
 			routingContext.fail(ex);
+			routingContext.next();
 			return;
 		}
 

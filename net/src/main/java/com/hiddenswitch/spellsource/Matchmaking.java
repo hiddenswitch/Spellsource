@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.concurrent.Semaphore;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.*;
 import com.hiddenswitch.spellsource.impl.DeckId;
@@ -16,14 +15,10 @@ import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.shareddata.Lock;
 import io.vertx.core.shareddata.impl.ClusterSerializable;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -31,7 +26,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -151,10 +145,8 @@ public interface Matchmaking extends Verticle {
 	static CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
 		GameId gameId = Games.getGames().get(new UserId(request.getUserId()));
 		if (gameId != null) {
-			LOGGER.trace("getCurrentMatch: User " + request.getUserId() + " has match " + gameId);
 			return CurrentMatchResponse.response(gameId.toString());
 		} else {
-			LOGGER.trace("getCurrentMatch: User " + request.getUserId() + " does not have match.");
 			return CurrentMatchResponse.response(null);
 		}
 	}
@@ -174,19 +166,19 @@ public interface Matchmaking extends Verticle {
 	 */
 	static MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException {
 		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("expireOrEndMatch: Expiring match " + request.gameId);
+			LOGGER.debug("expireOrEndMatch: Expiring match " + request.getGameId());
 		}
 
-		if (request.users == null) {
+		if (request.getUsers() == null) {
 			throw new NullPointerException("Request does not contain users specified");
 		}
 
-		if (request.users.size() != 2) {
+		if (request.getUsers().size() != 2) {
 			throw new IllegalStateException("There should be two users in a match expire request.");
 		}
 
 		SuspendableMap<UserId, GameId> games = Games.getGames();
-		for (UserId userId : request.users) {
+		for (UserId userId : request.getUsers()) {
 			games.remove(userId);
 		}
 
@@ -356,7 +348,6 @@ public interface Matchmaking extends Verticle {
 			if (Games.getGames().containsKey(userId)) {
 				throw new IllegalStateException("User is already in a game");
 			}
-
 
 			SuspendableMap<UserId, String> currentQueue = currentQueue();
 			boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
@@ -565,8 +556,9 @@ public interface Matchmaking extends Verticle {
 
 		fiber.start();
 
+		AtomicReference<Fiber<Void>> thisFiber = new AtomicReference<>(fiber);
 		return completionHandler -> {
-			fiber.interrupt();
+			thisFiber.get().interrupt();
 			completionHandler.handle(Future.succeededFuture());
 		};
 	}
