@@ -1,6 +1,6 @@
 {
   "name": "Student of the Ox",
-  "baseManaCost": 2,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 1,
