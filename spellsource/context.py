@@ -4,32 +4,22 @@ import os
 import subprocess
 import sys
 
-from py4j.java_gateway import JavaGateway, java_import, CallbackServerParameters
+from py4j.java_gateway import JavaGateway, java_import, CallbackServerParameters, GatewayParameters, launch_gateway
 
 
 class Context(contextlib.AbstractContextManager):
     APPLICATION_NAME = 'com.hiddenswitch.spellsource.applications.PythonBridge'
     STATUS_READY = 1
-    STATUS_ADDRESS_IN_USE = 2
+    STATUS_FAILED = 2
     _LINE_BUFFERED = 1
     
     def __init__(self):
         self._is_closed = False
-        # TODO: Do not start multiple JVMs
-        self._process = Context._start_jvm_process()
-        while self._process.poll() is None:
-            msg = self._process.stdout.readline()
-            try:
-                msg = json.loads(msg)
-                if 'status' in msg and msg['status'] == 'ready':
-                    self.status = Context.STATUS_READY
-                elif 'status' in msg and msg['status'] == 'failed':
-                    self.status = Context.STATUS_ADDRESS_IN_USE
-                    raise Exception('Address already in use.')
-                break
-            except json.JSONDecodeError:
-                continue
-        self._gateway = JavaGateway(callback_server_parameters=CallbackServerParameters())
+        try:
+            self._gateway = Context._start_gateway()
+        except:
+            self.status = Context.STATUS_FAILED
+            return
         
         for name, package in (('game', 'net.demilich.metastone.game.*'),
                               ('entities', 'net.demilich.metastone.game.entities.*'),
@@ -41,13 +31,15 @@ class Context(contextlib.AbstractContextManager):
                               ('spells', 'net.demilich.metastone.game.spells.*'),
                               ('targeting', 'net.demilich.metastone.game.targeting.*'),
                               ('utils', 'net.demilich.metastone.game.utils.*'),
-                              ('behaviour', 'net.demilich.metastone.game.behaviour.*')):
+                              ('behaviour', 'net.demilich.metastone.game.behaviour.*'),
+                              ('spellsource', 'com.hiddenswitch.spellsource')):
             view = self._gateway.new_jvm_view(name)
             java_import(view, package)
             setattr(self, name, view)
         
         # Include the important classes and enums
         self.GameAction = self.actions.GameAction
+        self.GameContext = self.game.GameContext
         self.Card = self.cards.CardCatalogue
         self.Deck = self.decks.Deck
         self.Entity = self.entities.Entity
@@ -69,15 +61,16 @@ class Context(contextlib.AbstractContextManager):
         self.CardCatalogue = self.cards.CardCatalogue
         self.PythonBridge = self._gateway.jvm.com.hiddenswitch.spellsource.applications.PythonBridge
         self.ArrayList = self._gateway.jvm.java.util.ArrayList
+        self.Spellsource = self.spellsource.Spellsource
         
         self.CardCatalogue.loadCardsFromPackage()
+        self.status = Context.STATUS_READY
     
     def close(self):
         if not hasattr(self, '_gateway'):
             return
         # self.process.send_signal(signal=signal.SIGINT)
         self._gateway.close()
-        self._process.terminate()
         self._is_closed = True
     
     def __exit__(self, exc_type, exc_val, exc_tb):
@@ -90,16 +83,17 @@ class Context(contextlib.AbstractContextManager):
         self.close()
     
     @staticmethod
-    def _find_jar_path():
+    def _find_jar_path(jar_file='net-1.3.0-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
         paths = []
-        jar_file = "net-1.3.0-all.jar"
         paths.append(jar_file)
         # local
         paths.append(os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "../net/build/libs/" + jar_file))
+        paths.append(os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), "../net/lib/" + jar_file))
         paths.append(os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "../share/spellsource/" + jar_file))
         paths.append(os.path.join(sys.prefix, "share/spellsource/" + jar_file))
@@ -120,10 +114,31 @@ class Context(contextlib.AbstractContextManager):
         return ""
     
     @staticmethod
-    def _start_jvm_process():
-        return subprocess.Popen(
-            ['java', '-Xmx512m', '-cp', Context._find_jar_path(), Context.APPLICATION_NAME],
-            stdout=subprocess.PIPE, bufsize=Context._LINE_BUFFERED, universal_newlines=True)
+    def _start_gateway() -> JavaGateway:
+        # launch Java side with dynamic port and get back the port on which the
+        # server was bound to.
+        port = launch_gateway(port=0,
+                              classpath=Context._find_jar_path('net-1.3.0-all.jar'),
+                              javaopts=['-javaagent:' + Context._find_jar_path('quasar-core-0.7.9-jdk8.jar') + '=mb',
+                                        '-Xmx2048m'],
+                              die_on_exit=True)
+        
+        # connect python side to Java side with Java dynamic port and start python
+        # callback server with a dynamic port
+        gateway = JavaGateway(
+            gateway_parameters=GatewayParameters(port=port, auto_convert=True),
+            callback_server_parameters=CallbackServerParameters(port=0))
+        
+        # retrieve the port on which the python callback server was bound to.
+        python_port = gateway.get_callback_server().get_listening_port()
+        
+        # tell the Java side to connect to the python callback server with the new
+        # python port. Note that we use the java_gateway_server attribute that
+        # retrieves the GatewayServer instance.
+        gateway.java_gateway_server.resetCallbackClient(
+            gateway.java_gateway_server.getCallbackClient().getAddress(),
+            python_port)
+        return gateway
     
     def is_open(self):
         return self._gateway._gateway_client.is_connected

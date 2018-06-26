@@ -41,7 +41,13 @@ def simulate(context: Context, decks: Sequence[str] = (), number: int = 1,
     for d in decks:
         decks_java.add(d)
     generator = SimulationGenerator(estimated_length, ctx)
-    generator.job_id = PythonBridge.simulate(generator, decks_java, number, behaviours_java, mirrors, reduce)
+    # Temporarily disable converters
+    old_converters = ctx._gateway._gateway_client.converters
+    try:
+        ctx._gateway._gateway_client.converters = None
+        generator.job_id = PythonBridge.simulate(generator, decks_java, number, behaviours_java, mirrors, reduce)
+    finally:
+        ctx._gateway._gateway_client.converters = old_converters
     
     return generator
 

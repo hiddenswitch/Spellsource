@@ -17,3 +17,7 @@ global:
   repository: null
   sc: null
   workspace_type: Application
+option_settings:
+  - namespace: aws:elb:policies
+    option_name: ConnectionSettingIdleTimeout
+    value: 4000

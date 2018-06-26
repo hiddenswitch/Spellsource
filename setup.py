@@ -22,7 +22,7 @@ except Exception as ex:
     raise ex
 
 setup(name='spellsource',
-      version='0.4.2',
+      version='0.4.3',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a
@@ -76,7 +76,10 @@ overhead between Java and Python.
       url='http://github.com/hiddenswitch/Spellsource-Server',
       python_requires='>3.6',
       author='Benjamin Berman',
-      data_files=[("share/spellsource", [os.path.join('net', 'build', 'libs', 'net-1.3.0-all.jar')])],
+      data_files=[
+          ("share/spellsource", [os.path.join('net', 'build', 'libs', 'net-1.3.0-all.jar'),
+                                 os.path.join('net', 'lib', 'quasar-core-0.7.9-jdk8.jar')]),
+      ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='GPLv3',

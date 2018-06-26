@@ -1,29 +1,21 @@
 package com.hiddenswitch.spellsource.applications;
 
-import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
-import com.hiddenswitch.spellsource.util.Logging;
-import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.Simulation;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import jdk.nashorn.internal.scripts.JO;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.statistics.SimulationResult;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import py4j.GatewayServer;
-import py4j.Py4JNetworkException;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.*;
-import java.util.function.Function;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -32,6 +24,7 @@ public class PythonBridge {
 	private static final Map<String, Class<? extends Behaviour>> BEHAVIOURS = Simulation.getAllBehaviours();
 	private static final Map<Long, Thread> JOBS = new ConcurrentHashMap<>();
 
+	/*
 	public static void main(String[] args) {
 		Logging.setLoggingLevel(Level.OFF);
 		GatewayServer gatewayServer = new GatewayServer();
@@ -43,6 +36,7 @@ public class PythonBridge {
 			System.out.println(String.format("{\"status\":\"failed\", \"message\": \"%s\"}", ex.getCause().getMessage()));
 		}
 	}
+	*/
 
 	public static Supplier<Behaviour> getBehaviourByName(String behaviourName) {
 		List<Supplier<Behaviour>> behaviours = Simulation.getBehaviourSuppliers(BEHAVIOURS, Collections.singletonList(behaviourName));
