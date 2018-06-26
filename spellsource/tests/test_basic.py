@@ -124,7 +124,7 @@ class BasicTest(unittest.TestCase):
         # 1x (10) Bloodreaver Gul'dan
         # 1x (12) Mountain Giant
         '''
-        
+
         DECK_2 = '''### Even Paladin - Standard Meta Snapshot - May 9, 2018
         # Class: Paladin
         # Format: Standard
@@ -172,7 +172,7 @@ class BasicTest(unittest.TestCase):
         # 1x (8) The Lich King
         # 2x (10) Ultimate Infestation
         '''
-        
+
         DECK_4 = '''### Aggro Mage - Standard Meta Snapshot - Apr. 30, 2018
         # Class: Mage
         # Format: Standard
