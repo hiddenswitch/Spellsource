@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",
-    "spell2": {
+    "spell1": {
       "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
@@ -25,7 +25,7 @@
         "targetPlayer": "SELF"
       }
     },
-    "spell1": {
+    "spell2": {
       "class": "custom.CreateCardFromChoicesSpell",
       "name": "Zombeast",
       "cardFilters": [
@@ -104,8 +104,7 @@
         "class": "CardFilter",
         "cardType": "MINION",
         "race": "BEAST"
-      },
-      "invert": true
+      }
     }
   },
   "collectible": true,

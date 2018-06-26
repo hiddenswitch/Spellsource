@@ -15,7 +15,11 @@
 				"armorBonus": {
 					"class": "PlayerAttributeValueProvider",
 					"playerAttribute": "MANA",
-					"offset": -2
+					"offset": {
+						"class": "ManaCostProvider",
+						"target": "FRIENDLY_HERO_POWER",
+            "multiplier": -1
+					}
 				}
 			},
 			{
