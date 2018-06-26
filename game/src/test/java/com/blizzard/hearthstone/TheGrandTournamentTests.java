@@ -14,6 +14,8 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertEquals;
+
 public class TheGrandTournamentTests extends TestBase {
 
 	@Test
@@ -112,5 +114,4 @@ public class TheGrandTournamentTests extends TestBase {
 		// warrior casted a spell on Eydis - nothing should happen
 		Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);
 	}
-
 }

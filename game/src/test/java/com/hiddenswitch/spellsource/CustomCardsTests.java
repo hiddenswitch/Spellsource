@@ -29,7 +29,9 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -2228,9 +2230,9 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, player.getHand().peekFirst());
 			playCard(context, player, player.getHand().peekFirst());
 
-			print(player.getMinions().get(0).getSourceCard().getCardId());
-			print(player.getMinions().get(1).getSourceCard().getCardId());
-			print(player.getMinions().get(2).getSourceCard().getCardId());
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_sheep");
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_wolf");
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_wolf");
 		});
 
 	}
@@ -2238,14 +2240,17 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testGnarlRoot() {
 		runGym((context, player, opponent) -> {
-			for (int i = 0; i < 9; i++) {
+			for (int i = 0; i < 8; i++) {
 				receiveCard(context, player, "minion_wisp");
 			}
 			playCard(context, player, "minion_gnarlroot");
 
-			player.getHand().forEach(c -> print("Card: " + c.getName()));
+			assertEquals(player.getHand().get(8).getCardId(), "token_treant");
+			assertEquals(player.getHand().get(9).getCardId(), "token_treant");
 
-			player.getMinions().forEach(m -> print("Minion: " + m.getName()));
+			for (int i = 1; i < 4; i++) {
+				assertEquals(player.getMinions().get(i).getSourceCard().getCardId(), "token_treant");
+			}
 
 		});
 
@@ -2255,40 +2260,22 @@ public class CustomCardsTests extends TestBase {
 	public void testFlame() {
 		runGym(((context, player, opponent) -> {
 			receiveCard(context, player, "minion_rebellious_flame");
-			printCards(context, player);
 			playCard(context, player, "minion_wisp");
-			printCards(context, player);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_rebellious_flame");
 			playCard(context, player, "spell_arcane_explosion");
-			printCards(context, player);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_rebellious_flame");
 
 		}));
-	}
-
-	@Test
-	public void testMeteorStorm() {
-		runGym((context, player, opponent) -> {
-			playMinionCard(context, player, "minion_wisp");
-			playMinionCard(context, player, "minion_wisp");
-			playMinionCard(context, player, "minion_ultrasaur");
-			playMinionCard(context, opponent, "minion_wisp");
-			playMinionCard(context, opponent, "minion_wisp");
-			printMinions(context, player);
-			printMinions(context, opponent);
-			playCard(context, player, "spell_meteor_storm");
-			print("Casted!");
-			printMinions(context, player);
-			printMinions(context, opponent);
-		});
 	}
 
 	@Test
 	public void testTriplicate() {
 		runGym((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_wisp");
-			printAll(context, player);
 			playCardWithTarget(context, player, "spell_triplicate", wisp);
-			print("Casted!");
-			printAll(context, player);
+			assertTrue(player.getMinions().size() > 1);
+			assertTrue(player.getHand().size() > 0);
+			assertTrue(player.getDeck().size() > 0);
 		});
 	}
 
@@ -2296,13 +2283,10 @@ public class CustomCardsTests extends TestBase {
 	public void testPolyDragon() {
 		runGym((context, player, opponent) -> {
 			Minion wisp = playMinionCard(context, player, "minion_wisp");
-			printAll(context, player);
 			playCardWithTarget(context, player, "spell_polymorph_dragon", wisp);
-			print("Casted!");
-			printAll(context, player);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_whelp");
 			playCardWithTarget(context, player, player.getHand().peekFirst(), player.getMinions().get(0));
-			print("Casted!");
-			printAll(context, player);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_1212dragon");
 		});
 	}
 
@@ -2312,20 +2296,15 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_dragonling_pet");
 			shuffleToDeck(context, player, "minion_murloc_raider");
-			printAll(context, player);
-			print("Test starting game");
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
-			printAll(context, player);
-			print("Complete");
+			assertTrue(player.getDeck().size() > 1);
 		});
 
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_dragonling_pet");
-			printAll(context, player);
-			print("Test starting game");
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
-			printAll(context, player);
-			print("Complete");
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 1);
 		});
 	}
 
@@ -2377,15 +2356,18 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testAegwynn() {
-		List<String> spells = Arrays.asList("spell_fireball", "spell_arcane_explosion", "spell_flamestrike", "spell_frostbolt");
-		for (String spell : spells) {
+		Map<String, Integer> spellMap = new HashMap<>();
+		spellMap.put("spell_fireball", 0);
+		spellMap.put("spell_arcane_explosion", 2);
+		spellMap.put("spell_flamestrike", 2);
+		spellMap.put("spell_frostbolt", 0);
+		for (String spell : spellMap.keySet()) {
 			runGym((context, player, opponent) -> {
 				shuffleToDeck(context, player, spell);
 				shuffleToDeck(context, player, "minion_aegwynn");
 				context.fireGameEvent(new GameStartEvent(context, player.getId()));
-				print("Spell Damage is " + player.getAttributeValue(Attribute.SPELL_DAMAGE) + " with " + spell);
+				assertEquals(player.hasAttribute(Attribute.SPELL_DAMAGE) ? player.getAttribute(Attribute.SPELL_DAMAGE) : 0, spellMap.get(spell));
 			});
-
 		}
 
 	}
@@ -2397,9 +2379,10 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_relic_raider");
 			if (!player.getWeaponZone().isEmpty()) {
 				Weapon weapon = player.getWeaponZone().get(0);
-				print("Weapon: " + weapon.getName() + " " + weapon.getAttack() + "/" + weapon.getHp());
+				assertEquals(weapon.getName(), "Vinecleaver");
+				assertEquals(weapon.getAttack(), 1);
+				assertEquals(weapon.getHp(), 2);
 			}
-
 		});
 	}
 
@@ -2408,11 +2391,26 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "spell_lesser_quartz_spellstone");
 			playCard(context, opponent, "minion_wisp");
-			printAll(context, player);
 			playCard(context, player, "spell_frost_nova");
 			playCard(context, player, "spell_frost_nova");
-			print("Freeze!");
-			printAll(context, player);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_quartz_spellstone");
+		});
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_lesser_quartz_spellstone");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, player, "spell_frost_nova");
+			playCard(context, player, "spell_frost_nova");
+			assertEquals(player.getHand().get(0).getCardId(), "spell_greater_quartz_spellstone");
+		});
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_lesser_quartz_spellstone");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, player, "spell_frost_nova");
+			assertEquals(player.getHand().get(0).getCardId(), "spell_quartz_spellstone");
 		});
 	}
 	
@@ -2423,9 +2421,9 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_spellshifter");
 			playCardWithTarget(context, player, "spell_immolate", watcher);
 
-			for (int i = 0; i < 5; i++) {
+			for (int i = 1; i < 5; i++) {
 				if (find(context, "minion_ancient_watcher") != null) {
-					print(watcher.getHp() + "");
+					assertEquals(watcher.getHp(), 5 - i * 2);
 					context.endTurn();
 				}
 			}
@@ -2436,18 +2434,20 @@ public class CustomCardsTests extends TestBase {
 	public void testCommanderGarrosh() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_commander_garrosh");
-			playCard(context, player, "minion_maiden_of_the_lake");
 			player.setMana(10);
-			useHeroPower(context, player);
-			print(player.getHero().getArmor() + "");
-			print(player.getMana() + "");
-
-			player.setMana(9);
-			useHeroPower(context, player);
-			print(player.getHero().getArmor() + "");
-			print(player.getMana() + "");
-
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			assertEquals(player.getHero().getArmor(), 13);
+			assertEquals(player.getMana(), 0);
 		});
+
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "hero_commander_garrosh");
+            playCard(context, player, "minion_raza_the_chained");
+            player.setMana(10);
+            context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+            assertEquals(player.getHero().getArmor(), 14);
+            assertEquals(player.getMana(), 0);
+        });
 	}
 }
 

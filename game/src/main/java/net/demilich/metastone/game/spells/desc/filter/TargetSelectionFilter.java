@@ -7,8 +7,8 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
-public class TargetingFilter extends EntityFilter {
-    public TargetingFilter(EntityFilterDesc desc) {
+public class TargetSelectionFilter extends EntityFilter {
+    public TargetSelectionFilter(EntityFilterDesc desc) {
         super(desc);
     }
 
@@ -16,14 +16,14 @@ public class TargetingFilter extends EntityFilter {
     protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
         Card card = entity.getSourceCard();
 
-        CardType cardType = (CardType) getDesc().get(EntityFilterArg.CARD_TYPE);
-        if (cardType != null && !card.getCardType().isCardType(cardType)) {
-            return false;
+        TargetSelection targetSelection = (TargetSelection) getDesc().get(EntityFilterArg.TARGET_SELECTION);
+
+        if (targetSelection == null) {
+            targetSelection = TargetSelection.NONE;
         }
 
-        if (card.getTargetSelection().equals(TargetSelection.NONE)) {
-            return false;
-        }
-        return true;
+        if (card.hasBattlecry()) {
+            return card.getDesc().getBattlecry().getTargetSelection() == targetSelection;
+        } else return card.getTargetSelection() == targetSelection;
     }
 }

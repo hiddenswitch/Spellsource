@@ -34,6 +34,7 @@ public class EntityFilterDescDeserializer extends DescDeserializer<EntityFilterD
 		ctx.add(EntityFilterArg.FILTERS, ParseValueType.ENTITY_FILTER_ARRAY);
 		ctx.add(EntityFilterArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(EntityFilterArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);
+		ctx.add(EntityFilterArg.TARGET_SELECTION, ParseValueType.TARGET_SELECTION);
 
 	}
 

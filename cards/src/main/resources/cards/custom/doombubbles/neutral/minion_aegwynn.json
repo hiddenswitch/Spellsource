@@ -17,8 +17,18 @@
       "condition": {
         "class": "DeckContainsCondition",
         "cardFilter": {
-					"class": "TargetingFilter",
-					"cardType": "SPELL"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "TargetSelectionFilter",
+              "targetSelection": "NONE",
+              "invert": true
+            },
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            }
+          ]
         },
         "invert": true
       },
