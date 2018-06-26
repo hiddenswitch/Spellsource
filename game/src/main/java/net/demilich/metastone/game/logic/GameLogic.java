@@ -232,6 +232,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param seed A random seed.
 	 */
 	public GameLogic(long seed) {
+		this();
 		this.seed = seed;
 		random = new Random(seed);
 	}
