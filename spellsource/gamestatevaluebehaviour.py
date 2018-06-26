@@ -223,9 +223,9 @@ class GameStateValueBehaviour(Behaviour):
         if len(valid_actions) == 1:
             return valid_actions[0]
         
-        if valid_actions[0].getActionType() == self._ctx.ActionType.BATTLECRY:
+        if valid_actions[0].getActionType().toString() == 'BATTLECRY':
             depth = 0
-        elif valid_actions[0].getActionType() == self._ctx.ActionType.DISCOVER:
+        elif valid_actions[0].getActionType().toString() == 'DISCOVER':
             return valid_actions[0]
         
         best_action = valid_actions[0]

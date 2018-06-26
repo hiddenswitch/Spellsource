@@ -4,6 +4,7 @@ import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableCallable;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.common.NetworkBehaviour;
 import io.vertx.core.Handler;
@@ -908,8 +909,7 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	@Suspendable
 	public void play() {
 		logger.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-		if (Fiber.isCurrentFiber()
-				&& Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
+		if (Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
 			Fiber<Void> f;
 			SuspendableCallable<Void> innerPlay = () -> {
 				init();
@@ -1553,6 +1553,52 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 	 */
 	public static GameContext fromDecks(List<Deck> decks) {
 		return fromDecks(decks, new PlayRandomBehaviour(), new PlayRandomBehaviour());
+	}
+
+	/**
+	 * Gets a game context that's ready to play from two deck lists encoded in the standard community format. Uses the
+	 * {@link PlayRandomBehaviour} for both players.
+	 *
+	 * @param deckLists A Hearthstone deck string or a deck list of the format, with newlines:
+	 *                  <p>
+	 *                  Name: Deck Name
+	 *                  <p>
+	 *                  Class: Color Hero Class (e.g., PRIEST) specified in {@link HeroClass}.
+	 *                  <p>
+	 *                  Format: Standard, Wild, Custom or others specified in {@link DeckFormat#formats()}.
+	 *                  <p>
+	 *                  1x Card Name
+	 *                  <p>
+	 *                  2x Card Name
+	 * @return A game context.
+	 * @see #getTrace() to get the log of actions that were taken in the game.
+	 * @see #play() to actually execute the game.
+	 */
+	public static GameContext fromDeckLists(List<String> deckLists) {
+		return fromDecks(deckLists.stream().map(DeckCreateRequest::fromDeckList).map(DeckCreateRequest::toGameDeck).collect(toList()));
+	}
+
+	/**
+	 * Gets a game context that's ready to play from two deck lists encoded in the standard community format. Uses the
+	 * specified behaviours.
+	 *
+	 * @param deckLists  A Hearthstone deck string or a deck list of the format, with newlines:
+	 *                   <p>
+	 *                   Name: Deck Name
+	 *                   <p>
+	 *                   Class: Color Hero Class (e.g., PRIEST) specified in {@link HeroClass}.
+	 *                   <p>
+	 *                   Format: Standard, Wild, Custom or others specified in {@link DeckFormat#formats()}.
+	 *                   <p>
+	 *                   1x Card Name
+	 *                   <p>
+	 *                   2x Card Name
+	 * @param behaviour1 An implementation of {@link Behaviour} for player 1
+	 * @param behaviour2 An implementation of {@link Behaviour} for player 2
+	 * @return A game context
+	 */
+	public static GameContext fromDeckLists(List<String> deckLists, Behaviour behaviour1, Behaviour behaviour2) {
+		return fromDecks(deckLists.stream().map(DeckCreateRequest::fromDeckList).map(DeckCreateRequest::toGameDeck).collect(toList()), behaviour1, behaviour2);
 	}
 
 
