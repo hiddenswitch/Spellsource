@@ -12,16 +12,16 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
-	    "spells" [
-	    {
-		  "class": "DrawCardSpell",
-		  "value": 2
-		  },
-		  {
-		  "class": "ShuffleToDeckSpell",
-		  "target": "FRIENDLY_HAND"
-		  },
-	   ]
+      "spells" [
+        {
+        "class": "DrawCardSpell",
+	"value": 2
+	},
+	{
+	"class": "ShuffleToDeckSpell",
+	"target": "FRIENDLY_HAND"
+	},
+      ]
     }
   },
   "attributes": {
