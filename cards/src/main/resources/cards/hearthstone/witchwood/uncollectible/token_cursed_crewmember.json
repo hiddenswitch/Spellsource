@@ -15,12 +15,12 @@
       "spells" [
         {
         "class": "DrawCardSpell",
-	"value": 2
-	},
-	{
-	"class": "ShuffleToDeckSpell",
-	"target": "FRIENDLY_HAND"
-	},
+		"value": 2
+		},
+		{
+		"class": "ShuffleToDeckSpell",
+		"target": "FRIENDLY_HAND"
+		},
       ]
     }
   },
