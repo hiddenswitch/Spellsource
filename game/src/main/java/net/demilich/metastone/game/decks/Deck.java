@@ -22,7 +22,7 @@ public class Deck implements Serializable, Cloneable {
 	private boolean arbitrary;
 
 	static {
-		EMPTY = new Deck(HeroClass.RED);
+		EMPTY = new Deck(HeroClass.ANY);
 	}
 
 	protected Deck() {

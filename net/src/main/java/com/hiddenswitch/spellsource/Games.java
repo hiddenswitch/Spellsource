@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
+import com.hiddenswitch.spellsource.util.Rpc;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Handler;
 import io.vertx.core.Verticle;
@@ -611,6 +612,18 @@ public interface Games extends Verticle {
 
 	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
 		return SuspendableMap.getOrCreate("Games::players");
+	}
+
+
+	static void endGame(GameId game) throws SuspendExecution, InterruptedException {
+		try {
+			String deploymentId = getConnections().get(game).deploymentId;
+			Rpc.connect(Games.class).sync(deploymentId).endGameSession(new EndGameSessionRequest(game.toString()));
+		} catch (NullPointerException notFound) {
+			NullPointerException rethrown = new NullPointerException(String.format("The specified game %s was not found", game.toString()));
+			rethrown.setStackTrace(notFound.getStackTrace());
+			throw rethrown;
+		}
 	}
 
 	/**

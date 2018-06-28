@@ -200,7 +200,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 				}
 			}
 		} catch (Throwable ex) {
-			LOGGER.error("kill {}: Could not get winner due to {}", ex);
+			LOGGER.error("kill {}: Could not get winner due to {}", gameId, ex.getMessage(), ex);
 		}
 
 		try {
