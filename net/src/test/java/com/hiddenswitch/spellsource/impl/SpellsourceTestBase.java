@@ -52,8 +52,6 @@ public abstract class SpellsourceTestBase {
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
-					.setInternalBlockingPoolSize(400)
-					.setWorkerPoolSize(400)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
@@ -89,6 +87,16 @@ public abstract class SpellsourceTestBase {
 	@Before
 	public void setUpEach(TestContext context) {
 		vertx.exceptionHandler(context.exceptionHandler());
+		// Cleanup anything else that might be going on
+		sync(() -> {
+			for (UserId key : Matchmaking.currentQueue().keySet()) {
+				Matchmaking.dequeue(key);
+			}
+
+			for (GameId games : Games.getConnections().keySet()) {
+				Games.endGame(games);
+			}
+		});
 	}
 
 	public static CreateAccountResponse createRandomAccount() throws SuspendExecution, InterruptedException {

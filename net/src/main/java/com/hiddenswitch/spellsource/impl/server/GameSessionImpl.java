@@ -345,17 +345,19 @@ public class GameSessionImpl implements GameSession {
 	@Override
 	@Suspendable
 	public void onConcede(int playerId) {
+		MatchExpireRequest request = new MatchExpireRequest(getGameId());
+		request.setUsers(getUserIds()).setWinner(getUserIds().get(getOpponent(playerId)));
+		try {
+			Matchmaking.expireOrEndMatch(request);
+		} catch (SuspendExecution | InterruptedException execution) {
+			throw new RuntimeException(execution);
+		}
+
+		// You can concede before the game is ready
 		if (!isGameReady()) {
 			return;
 		}
 		if (getGameContext() != null) {
-			MatchExpireRequest request = new MatchExpireRequest(getGameId());
-			request.setUsers(getUserIds()).setWinner(getUserIds().get(getOpponent(playerId)));
-			try {
-				Matchmaking.expireOrEndMatch(request);
-			} catch (SuspendExecution | InterruptedException execution) {
-				throw new RuntimeException(execution);
-			}
 			getGameContext().concede(playerId);
 		}
 	}

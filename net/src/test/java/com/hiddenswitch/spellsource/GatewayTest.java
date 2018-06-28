@@ -25,12 +25,15 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.web.client.WebClient;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Ignore;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -51,8 +54,9 @@ import static org.junit.Assert.*;
  * Created by bberman on 2/18/17.
  */
 public class GatewayTest extends SpellsourceTestBase {
+	private static Logger logger = LoggerFactory.getLogger(GatewayTest.class);
 
-	@Test(timeout = 100000L)
+	@Test(timeout = 15000L)
 	public void testAccountFlow(TestContext context) throws InterruptedException {
 		Set<String> decks = Spellsource.spellsource().getStandardDecks().stream().map(DeckCreateRequest::getName).collect(Collectors.toSet());
 
@@ -98,11 +102,11 @@ public class GatewayTest extends SpellsourceTestBase {
 			t.start();
 		}
 
-		latch.await(90L, TimeUnit.SECONDS);
+		latch.await(15L, TimeUnit.SECONDS);
 		assertEquals(latch.getCount(), 0L);
 	}
 
-	@Test
+	@Test(timeout = 10000L)
 	public void testLoginWithInvalidToken(TestContext context) throws ApiException {
 		Async async = context.async();
 
@@ -155,25 +159,23 @@ public class GatewayTest extends SpellsourceTestBase {
 
 	}
 
-	@Test
+	@Test(timeout = 15000L)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
-		final Async async = context.async();
-
-		for (int i = 0; i < 10; i++) {
-			UnityClient client = new UnityClient(context);
-			client.createUserAccount(null);
-			client.matchmakeQuickPlay(null);
-			client.waitUntilDone();
-			assertTrue(client.isGameOver());
-		}
-		async.complete();
+		// Just run once
+		UnityClient client = new UnityClient(context);
+		client.createUserAccount(null);
+		client.matchmakeQuickPlay(null);
+		client.waitUntilDone();
+		assertTrue(client.isGameOver());
 	}
 
-	@Test(timeout = 120000L)
+	@Test(timeout = 90000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 2;
+		final int count = processorCount;
+
 		CountDownLatch latch = new CountDownLatch(count);
+		/*
 		CompositeFuture.join(Collections.nCopies(2, Arrays.asList(
 				Games.create()))
 				.stream().flatMap(Collection::stream).map(v -> {
@@ -181,7 +183,9 @@ public class GatewayTest extends SpellsourceTestBase {
 					vertx.deployVerticle(v, future);
 					return future;
 				}).collect(Collectors.toList())).setHandler(then -> {
-			Stream.generate(() -> new Thread(() -> {
+*/
+		for (int i = 0; i < count; i++) {
+			Strand.of(new Thread(() -> {
 				try {
 					UnityClient client = new UnityClient(context);
 					client.createUserAccount(null);
@@ -189,6 +193,7 @@ public class GatewayTest extends SpellsourceTestBase {
 					client.waitUntilDone();
 					assertTrue(client.isGameOver());
 					assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
+					Strand.sleep(1000L);
 					// Try two games in a row
 					client.matchmakeConstructedPlay(null);
 					client.waitUntilDone();
@@ -198,15 +203,19 @@ public class GatewayTest extends SpellsourceTestBase {
 				} catch (Throwable t) {
 					context.exceptionHandler().handle(t);
 				}
-			})).limit(count).forEach(Thread::start);
+			})).start();
+		}
+			/*
 		});
+		*/
 
 		// Random games can take quite a long time to finish so be patient...
 		latch.await(90L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 	}
 
-	@Test
+
+	@Test(timeout = 30000L)
 	public void testConcede(TestContext context) {
 		sync(() -> {
 			UnityClient client = new UnityClient(context);
@@ -217,7 +226,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				client.matchmakeQuickPlay(null);
 			});
 
-			Strand.sleep(200L);
+			Strand.sleep(3000L);
 			// 1 turn was played, concede
 
 			Sync.invoke0(client::concede);
@@ -236,35 +245,19 @@ public class GatewayTest extends SpellsourceTestBase {
 			// Can go into another game
 			Sync.invoke0(() -> {
 				client.disconnect();
+				try {
+					Strand.sleep(200L);
+				} catch (SuspendExecution | InterruptedException execution) {
+					context.fail(execution);
+					return;
+				}
+
 				client.getTurnsToPlay().set(999);
 				client.matchmakeQuickPlay(null);
 				client.waitUntilDone();
 				context.assertTrue(client.isGameOver());
 			});
 		});
-	}
-
-	@Test
-	@Ignore
-	@SuppressWarnings("unchecked")
-	public void testScenario(TestContext context) throws InterruptedException, SuspendExecution {
-		final Async async = context.async();
-
-		UnityClient client = new UnityClient(context) {
-			@Override
-			protected void assertValidStateAndChanges(ServerToClientMessage message) {
-				super.assertValidStateAndChanges(message);
-				assertTrue(message.getGameState().getEntities().stream().filter(e -> e.getCardId() != null && e.getCardId().equals("hero_necromancer")).count() >= 1L);
-			}
-		};
-
-		client.createUserAccount(null);
-		client.matchmakeQuickPlay(client.getAccount().getDecks()
-				.stream().filter(d -> d.getName().equals("Necromancer (Scenario)")).findFirst().orElseThrow(AssertionError::new).getId());
-		client.waitUntilDone();
-		assertTrue(client.isGameOver());
-
-		async.complete();
 	}
 
 	@Test(timeout = 25000L)
@@ -285,77 +278,19 @@ public class GatewayTest extends SpellsourceTestBase {
 			Strand.sleep(10000L);
 			assertNull(Games.getGames().get(new UserId(userId)));
 
-			Boolean done = awaitResult(h -> vertx.executeBlocking((then) -> {
+			Boolean done = Sync.invoke(() -> {
 				UnityClient client2 = new UnityClient(context, token);
 				try {
-					boolean isInMatch = client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
-					then.complete(isInMatch);
+					return client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
 				} catch (ApiException e) {
-					then.fail(new AssertionError());
+					throw new AssertionError();
 				}
-			}, h));
+			});
 
 			assertEquals(false, done);
 		});
 	}
 
-	@Test
-	@SuppressWarnings("unchecked")
-	@Ignore
-	public void testDistinctDecks(TestContext context) throws InterruptedException, SuspendExecution {
-		Handler<SendContext> interceptor = interceptGameCreate(request -> {
-			assertNotEquals(request.getPregame1().getDeck().getName(), request.getPregame2().getDeck().getName(), "The decks are distinct between the two users.");
-		});
-
-		UnityClient client1 = new UnityClient(context);
-		Thread clientThread1 = new Thread(() -> {
-			client1.createUserAccount("user1");
-			final String startDeckId1 = client1.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(0).getName())).findFirst().get().getId();
-			client1.matchmakeConstructedPlay(startDeckId1);
-		});
-		UnityClient client2 = new UnityClient(context);
-		Thread clientThread2 = new Thread(() -> {
-			client2.createUserAccount("user2");
-			String startDeckId2 = client2.getAccount().getDecks().stream().filter(p -> p.getName().equals(Spellsource.spellsource().getStandardDecks().get(1).getName())).findFirst().get().getId();
-			client2.matchmakeConstructedPlay(startDeckId2);
-		});
-		clientThread1.start();
-		clientThread2.start();
-		float time = 0f;
-		while ((!client1.isGameOver() || !client2.isGameOver()) && time < 60f) {
-			Strand.sleep(1000);
-			time += 1f;
-		}
-		assertTrue("The client ended the game", client1.isGameOver());
-		assertTrue("The client ended the game", client2.isGameOver());
-		vertx.eventBus().removeInterceptor(interceptor);
-	}
-
-	private Handler<SendContext> interceptGameCreate(Consumer<CreateGameSessionRequest> assertInHere) {
-		final Handler<SendContext> interceptor = h -> {
-			if (h.message().address().equals(Rpc.getAddress(Games.class, games -> games.createGameSession(null)))) {
-				Message<Buffer> message = h.message();
-				VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
-
-				CreateGameSessionRequest request = null;
-				try {
-					request = Serialization.deserialize(inputStream);
-				} catch (IOException | ClassNotFoundException e) {
-					fail(e.getMessage());
-				}
-
-				if (request != null) {
-					assertInHere.accept(request);
-				} else {
-					fail("Request was null.");
-				}
-
-			}
-			h.next();
-		};
-		vertx.eventBus().addInterceptor(interceptor);
-		return interceptor;
-	}
 
 	@Test
 	public void testCardsCollection(TestContext context) throws ApiException {
@@ -384,16 +319,12 @@ public class GatewayTest extends SpellsourceTestBase {
 		UnityClient client1 = new UnityClient(context);
 		client1.createUserAccount();
 		java.util.concurrent.Future<Void> matchmaking = client1.matchmake(null, "constructed");
-		Thread.sleep(1000L);
+		Thread.sleep(2000L);
 		matchmaking.cancel(true);
 		UnityClient client2 = new UnityClient(context);
 		client2.createUserAccount();
 		client2.matchmake(null, "constructed");
-		Thread.sleep(1000L);
-		Async async = context.async();
-		sync(() -> {
-			context.assertFalse(Games.getGames().containsKey(new UserId(client1.getAccount().getId())));
-			async.complete();
-		});
+		Thread.sleep(2000L);
+		sync(() -> context.assertFalse(Games.getGames().containsKey(new UserId(client1.getAccount().getId()))));
 	}
 }

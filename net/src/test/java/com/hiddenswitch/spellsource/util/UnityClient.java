@@ -128,7 +128,8 @@ public class UnityClient {
 
 		if (realtime == null) {
 			realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
-			realtime.addMessageHandler(message -> {
+			realtime.setMessageHandler(message -> {
+				logger.debug("play: Handling realtime message for userId " + getUserId());
 				context.assertNotEquals(matchmakingThreadId, Strand.currentStrand().getId());
 				Envelope env = Json.decodeValue(message, Envelope.class);
 
@@ -138,11 +139,13 @@ public class UnityClient {
 					}
 
 					// Might have been cancelled
+					context.assertFalse(matchmakingFut.get().isDone());
 					matchmakingFut.get().set(null);
 				}
 			});
 		}
 
+		context.assertTrue(realtime.isOpen());
 		realtime.sendMessage(Json.encode(new Envelope()
 				.method(new EnvelopeMethod()
 						.methodId(RandomStringUtils.randomAlphanumeric(10))
@@ -157,10 +160,12 @@ public class UnityClient {
 	public void matchmakeQuickPlay(String deckId) {
 		Future<Void> matchmaking = matchmake(deckId, "quickPlay");
 		try {
-			matchmaking.get();
+			matchmaking.get(30000L, TimeUnit.MILLISECONDS);
 			play();
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
+		} catch (TimeoutException e) {
+			context.fail(e);
 		}
 	}
 
@@ -168,10 +173,12 @@ public class UnityClient {
 	public void matchmakeConstructedPlay(String deckId) {
 		Future<Void> matchmaking = matchmake(deckId, "constructed");
 		try {
-			matchmaking.get();
+			matchmaking.get(30000L, TimeUnit.MILLISECONDS);
 			play();
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
+		} catch (TimeoutException e) {
+			context.fail(e);
 		}
 	}
 
@@ -188,7 +195,7 @@ public class UnityClient {
 		String url = "ws://" + basePathUrl.getHost() + ":" + Integer.toString(basePathUrl.getPort()) + "/" + Games.WEBSOCKET_PATH + "-clustered";
 
 		endpoint = new WebsocketClientEndpoint(url, loginToken);
-		endpoint.addMessageHandler(h -> {
+		endpoint.setMessageHandler(h -> {
 			logger.debug("play: Handing message for userId " + getUserId());
 			ServerToClientMessage message = Json.decodeValue(h, ServerToClientMessage.class);
 
@@ -249,6 +256,17 @@ public class UnityClient {
 					break;
 			}
 			logger.debug("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
+		});
+
+		endpoint.setCloseHandler(() -> {
+			/*
+			if (!this.gameOver) {
+				this.gameOver = true;
+				if (onGameOver != null) {
+					onGameOver.handle(this);
+				}
+			}
+			*/
 		});
 
 		logger.debug("play: UserId " + getUserId() + " sent first message.");

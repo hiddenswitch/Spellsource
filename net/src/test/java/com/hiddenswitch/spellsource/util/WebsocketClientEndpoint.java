@@ -16,6 +16,7 @@ import java.nio.charset.Charset;
 public class WebsocketClientEndpoint {
 	private Session userSession = null;
 	private MessageHandler messageHandler;
+	private Runnable closeHandler;
 
 	public WebsocketClientEndpoint(String endpoint, String auth) {
 		try {
@@ -48,6 +49,9 @@ public class WebsocketClientEndpoint {
 	 */
 	@OnClose
 	public void onClose(Session userSession, CloseReason reason) {
+		if (closeHandler != null) {
+			closeHandler.run();
+		}
 	}
 
 	/**
@@ -80,7 +84,7 @@ public class WebsocketClientEndpoint {
 	 *
 	 * @param msgHandler
 	 */
-	public void addMessageHandler(MessageHandler msgHandler) {
+	public void setMessageHandler(MessageHandler msgHandler) {
 		this.messageHandler = msgHandler;
 	}
 
@@ -113,9 +117,22 @@ public class WebsocketClientEndpoint {
 		}
 	}
 
+	public boolean isOpen() {
+		return userSession.isOpen();
+	}
+
 	@FunctionalInterface
 	public interface MessageHandler {
 
 		void handleMessage(String message);
+	}
+
+	public Runnable getCloseHandler() {
+		return closeHandler;
+	}
+
+	public WebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
+		this.closeHandler = closeHandler;
+		return this;
 	}
 }

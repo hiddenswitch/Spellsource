@@ -176,8 +176,8 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 		setLogic(new GameLogic());
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
 		setDeckFormat(DeckFormat.STANDARD);
-		setPlayer1(Player.empty());
-		setPlayer2(Player.empty());
+		setPlayer1(new Player());
+		setPlayer2(new Player());
 	}
 
 	/**
@@ -1260,9 +1260,11 @@ public class GameContext implements Cloneable, Serializable, NetworkDelegate, In
 						.flatMap(z -> ((EntityZone<Entity>) p.getZone(z)).stream()));
 	}
 
+	@Suspendable
 	public void onWillPerformGameAction(int playerId, GameAction action) {
 	}
 
+	@Suspendable
 	public void onDidPerformGameAction(int playerId, GameAction action) {
 	}
 

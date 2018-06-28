@@ -370,6 +370,7 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Override
+	@Suspendable
 	public void onWillPerformGameAction(int playerId, GameAction action) {
 		super.onWillPerformGameAction(playerId, action);
 
@@ -382,6 +383,8 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	public void concede(int playerId) {
 		lock.lock();
+		// Clear pending requests
+		requestCallbacks.clear();
 		super.concede(playerId);
 		lock.unlock();
 	}
@@ -461,7 +464,7 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public void onActionReceived(String messageId, GameAction action) {
-		// The action may have been removed due to the timer, so it's okay if it doesn't exist.
+		// The action may have been removed due to the timer or because the game ended, so it's okay if it doesn't exist.
 		if (!requestCallbacks.containsKey(CallbackId.of(messageId))) {
 			return;
 		}
@@ -539,22 +542,16 @@ public class ServerGameContext extends GameContext {
 	@Suspendable
 	@SuppressWarnings("unchecked")
 	public void onPlayerReconnected(Player player, Writer writer) {
-		lock.lock();
-		// Update the client
-		setUpdateListener(player, writer);
-
-		// Don't replace the player object! We don't need it
-		// Resynchronize the game states
-		if (player.getId() == PLAYER_1) {
-
-		} else if (player.getId() == PLAYER_2) {
-
+		try {
+			lock.lock();
+			// Update the client
+			setUpdateListener(player, writer);
+			updateActivePlayers();
+			onGameStateChanged();
+			retryRequests(player);
+		} finally {
+			lock.unlock();
 		}
-
-		updateActivePlayers();
-		onGameStateChanged();
-		retryRequests(player);
-		lock.unlock();
 	}
 
 	@Suspendable
@@ -583,6 +580,8 @@ public class ServerGameContext extends GameContext {
 	@Override
 	@Suspendable
 	public void endGame() {
+		// Clear pending requests
+		requestCallbacks.clear();
 		// Immediately expire the match
 		/*
 		try {
@@ -644,7 +643,9 @@ public class ServerGameContext extends GameContext {
 		// Get the player reference
 		final Optional<CallbackId> reqResult = requestCallbacks.keySet().stream().filter(ci -> ci.id.equals(messageId)).findFirst();
 		if (!reqResult.isPresent()) {
-			throw new RuntimeException("Could not find a callback with the specified ID");
+			// The game may have ended, a mulligan is being received twice, or the game was conceded.
+			return;
+			/*throw new RuntimeException("Could not find a callback with the specified ID");*/
 		}
 		CallbackId reqId = reqResult.get();
 		GameplayRequest request = requestCallbacks.get(reqId);

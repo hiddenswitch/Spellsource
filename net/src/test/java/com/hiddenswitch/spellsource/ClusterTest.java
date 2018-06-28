@@ -128,7 +128,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		}));
 	}
 
-	@Test(timeout = 195000L)
+	@Test(timeout = 60000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		// Connect to existing cluster
 		Async latch = context.async(10);
@@ -136,8 +136,6 @@ public class ClusterTest extends SpellsourceTestBase {
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
-				.setWorkerPoolSize(99)
-				.setInternalBlockingPoolSize(99)
 				.setBlockedThreadCheckInterval(30000L)
 				.setWarningExceptionTime(30000L), context.asyncAssertSuccess(newVertxInstance -> {
 			// Deploy a second gateway
@@ -155,7 +153,6 @@ public class ClusterTest extends SpellsourceTestBase {
 							client.disconnect();
 							latch.countDown();
 						})).limit(10).forEach(Thread::start);
-
 			}));
 		}));
 		latch.awaitSuccess();
