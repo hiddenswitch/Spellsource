@@ -3,33 +3,21 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.common.SuspendablePump;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.impl.server.EventBusWriter;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Hazelcast;
-import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.util.Sync;
-import io.vertx.core.Handler;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
-import io.vertx.core.VertxException;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.EventBus;
-import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.eventbus.MessageProducer;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.shareddata.Lock;
-import io.vertx.core.streams.Pump;
-import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
@@ -49,7 +37,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -58,8 +45,6 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
-import static io.vertx.ext.sync.Sync.fiberHandler;
 import static java.util.stream.Collectors.toList;
 
 
@@ -107,7 +92,7 @@ public interface Games extends Verticle {
 	 * @return A list of game client actions.
 	 */
 	static GameActions getClientActions(GameContext workingContext, List<GameAction> actions, int playerId) {
-		final GameActions clientActions = new GameActions()
+		GameActions clientActions = new GameActions()
 				.battlecries(new ArrayList<>())
 				.chooseOnes(new ArrayList<>())
 				.compatibility(new ArrayList<>())
@@ -155,15 +140,15 @@ public interface Games extends Verticle {
 				.entrySet()
 				.stream()
 				.map(kv -> {
-					final Integer sourceCardId = kv.getKey();
-					final List<PlaySpellCardAction> spellCardActions = kv.getValue();
+					Integer sourceCardId = kv.getKey();
+					List<PlaySpellCardAction> spellCardActions = kv.getValue();
 					return getSpellAction(sourceCardId, spellCardActions);
 				})
 				.forEach(clientActions::addSpellsItem);
 
 
 		// Choose one spells
-		final int[] chooseOneVirtualEntitiesId = {8000};
+		int[] chooseOneVirtualEntitiesId = {8000};
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& ga instanceof PlayChooseOneCardAction)
@@ -473,25 +458,25 @@ public interface Games extends Verticle {
 	 * @return A client-specific view of the event.
 	 */
 	static com.hiddenswitch.spellsource.client.models.GameEvent getClientEvent(net.demilich.metastone.game.events.GameEvent event, int playerId) {
-		final com.hiddenswitch.spellsource.client.models.GameEvent clientEvent = new com.hiddenswitch.spellsource.client.models.GameEvent();
+		com.hiddenswitch.spellsource.client.models.GameEvent clientEvent = new com.hiddenswitch.spellsource.client.models.GameEvent();
 
 		clientEvent.eventType(com.hiddenswitch.spellsource.client.models.GameEvent.EventTypeEnum.valueOf(event.getEventType().toString()));
 
 		GameContext workingContext = event.getGameContext().clone();
 		// Handle the event types here.
 		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
-			final net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
+			net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
 					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
-			final Actor attacker = physicalAttackEvent.getAttacker();
-			final Actor defender = physicalAttackEvent.getDefender();
-			final int damageDealt = physicalAttackEvent.getDamageDealt();
-			final com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
+			Actor attacker = physicalAttackEvent.getAttacker();
+			Actor defender = physicalAttackEvent.getDefender();
+			int damageDealt = physicalAttackEvent.getDamageDealt();
+			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
 			clientEvent.physicalAttack(physicalAttack);
 		} else if (event instanceof DiscardEvent) {
 			// Handles both discard and mill events
-			final DiscardEvent discardEvent = (DiscardEvent) event;
+			DiscardEvent discardEvent = (DiscardEvent) event;
 			// You always see which cards get discarded
-			final CardEvent cardEvent = new CardEvent()
+			CardEvent cardEvent = new CardEvent()
 					.card(getEntity(workingContext, discardEvent.getCard(), playerId));
 			if (discardEvent.getEventType() == GameEventType.DISCARD) {
 				clientEvent.discard(cardEvent);
@@ -499,15 +484,15 @@ public interface Games extends Verticle {
 				clientEvent.mill(cardEvent);
 			}
 		} else if (event instanceof AfterPhysicalAttackEvent) {
-			final AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
-			final Actor attacker = physicalAttackEvent.getAttacker();
-			final Actor defender = physicalAttackEvent.getDefender();
-			final int damageDealt = physicalAttackEvent.getDamageDealt();
-			final com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
+			AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
+			Actor attacker = physicalAttackEvent.getAttacker();
+			Actor defender = physicalAttackEvent.getDefender();
+			int damageDealt = physicalAttackEvent.getDamageDealt();
+			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
 			clientEvent.afterPhysicalAttack(physicalAttack);
 		} else if (event instanceof DrawCardEvent) {
-			final DrawCardEvent drawCardEvent = (DrawCardEvent) event;
-			final Card card = drawCardEvent.getCard();
+			DrawCardEvent drawCardEvent = (DrawCardEvent) event;
+			Card card = drawCardEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			// You never see which cards are drawn by your opponent when they go
 			if (card.getOwner() != playerId) {
@@ -516,16 +501,16 @@ public interface Games extends Verticle {
 			clientEvent.drawCard(new CardEvent()
 					.card(entity));
 		} else if (event instanceof KillEvent) {
-			final KillEvent killEvent = (KillEvent) event;
-			final net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
-			final com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, victim, playerId);
+			KillEvent killEvent = (KillEvent) event;
+			net.demilich.metastone.game.entities.Entity victim = killEvent.getVictim();
+			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, victim, playerId);
 
 			clientEvent.kill(new GameEventKill()
 					.victim(entity));
 		} else if (event instanceof CardPlayedEvent
 				|| event instanceof CardRevealedEvent) {
-			final HasCard cardPlayedEvent = (HasCard) event;
-			final Card card = cardPlayedEvent.getCard();
+			HasCard cardPlayedEvent = (HasCard) event;
+			Card card = cardPlayedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
 					&& card.isSecret()
@@ -538,26 +523,26 @@ public interface Games extends Verticle {
 					.showLocal(event instanceof CardRevealedEvent)
 					.card(entity));
 		} else if (event instanceof HeroPowerUsedEvent) {
-			final HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;
-			final Card card = heroPowerUsedEvent.getHeroPower();
+			HeroPowerUsedEvent heroPowerUsedEvent = (HeroPowerUsedEvent) event;
+			Card card = heroPowerUsedEvent.getHeroPower();
 			clientEvent.heroPowerUsed(new GameEventHeroPowerUsed()
 					.heroPower(getEntity(workingContext, card, playerId)));
 		} else if (event instanceof SummonEvent) {
-			final SummonEvent summonEvent = (SummonEvent) event;
+			SummonEvent summonEvent = (SummonEvent) event;
 
 			clientEvent.summon(new GameEventBeforeSummon()
 					.minion(getEntity(workingContext, summonEvent.getMinion(), playerId))
 					.source(getEntity(workingContext, summonEvent.getSource(), playerId)));
 		} else if (event instanceof DamageEvent) {
-			final DamageEvent damageEvent = (DamageEvent) event;
+			DamageEvent damageEvent = (DamageEvent) event;
 			clientEvent.damage(new GameEventDamage()
 					.damage(damageEvent.getDamage())
 					.source(getEntity(workingContext, damageEvent.getSource(), playerId))
 					.victim(getEntity(workingContext, damageEvent.getVictim(), playerId))
 					.damageType(DamageTypeEnum.fromValue(damageEvent.getDamageType().name())));
 		} else if (event instanceof AfterSpellCastedEvent) {
-			final AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
-			final Card card = afterSpellCastedEvent.getCard();
+			AfterSpellCastedEvent afterSpellCastedEvent = (AfterSpellCastedEvent) event;
+			Card card = afterSpellCastedEvent.getCard();
 			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, playerId);
 			if (card.getCardType() == CardType.SPELL
 					&& card.isSecret()
@@ -569,21 +554,21 @@ public interface Games extends Verticle {
 					.sourceCard(entity)
 					.spellTarget(getEntity(workingContext, afterSpellCastedEvent.getEventTarget(), playerId)));
 		} else if (event instanceof SecretRevealedEvent) {
-			final SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
+			SecretRevealedEvent secretRevealedEvent = (SecretRevealedEvent) event;
 			clientEvent.secretRevealed(new GameEventSecretRevealed()
 					.secret(getEntity(workingContext, secretRevealedEvent.getCard(), playerId)));
 		} else if (event instanceof QuestSuccessfulEvent) {
-			final QuestSuccessfulEvent questSuccessfulEvent = (QuestSuccessfulEvent) event;
+			QuestSuccessfulEvent questSuccessfulEvent = (QuestSuccessfulEvent) event;
 			clientEvent.questSuccessful(new GameEventQuestSuccessful()
 					.quest(getEntity(workingContext, questSuccessfulEvent.getCard(), playerId)));
 		} else if (event instanceof JoustEvent) {
-			final JoustEvent joustEvent = (JoustEvent) event;
+			JoustEvent joustEvent = (JoustEvent) event;
 			clientEvent.joust(new GameEventJoust()
 					.ownCard(getEntity(workingContext, joustEvent.getOwnCard(), playerId))
 					.opponentCard(getEntity(workingContext, joustEvent.getOpponentCard(), playerId))
 					.won(joustEvent.isWon()));
 		} else if (event instanceof FatigueEvent) {
-			final FatigueEvent fatigueEvent = (FatigueEvent) event;
+			FatigueEvent fatigueEvent = (FatigueEvent) event;
 			clientEvent.fatigue(new GameEventFatigue()
 					.damage(fatigueEvent.getValue())
 					.playerId(fatigueEvent.getTargetPlayerId()));
@@ -703,11 +688,11 @@ public interface Games extends Verticle {
 	 */
 	default GameState getClientGameState(String gameId, String userId) {
 		DescribeGameSessionResponse gameSession = describeGameSession(DescribeGameSessionRequest.create(gameId));
-		final com.hiddenswitch.spellsource.common.GameState state = gameSession.getState();
+		com.hiddenswitch.spellsource.common.GameState state = gameSession.getState();
 		GameContext workingContext = new GameContext();
 		workingContext.setGameState(state);
-		final Player local;
-		final Player opponent;
+		Player local;
+		Player opponent;
 		if (state.player1.getUserId().equals(userId)) {
 			local = state.player1;
 			opponent = state.player2;
@@ -728,7 +713,7 @@ public interface Games extends Verticle {
 	 * @param opponent       The opposing player.
 	 * @return A client view game state.
 	 */
-	static GameState getGameState(GameContext workingContext, final Player local, final Player opponent) {
+	static GameState getGameState(GameContext workingContext, Player local, Player opponent) {
 		List<com.hiddenswitch.spellsource.client.models.Entity> entities = new ArrayList<>();
 		// Censor the opponent hand and deck entities
 		// All minions are visible
@@ -737,7 +722,7 @@ public interface Games extends Verticle {
 
 		List<com.hiddenswitch.spellsource.client.models.Entity> localHand = new ArrayList<>();
 		for (Card card : local.getHand()) {
-			final com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, localPlayerId);
+			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, card, localPlayerId);
 			localHand.add(entity);
 		}
 
@@ -747,7 +732,7 @@ public interface Games extends Verticle {
 		for (EntityZone<Minion> battlefield : Arrays.asList(local.getMinions(), opponent.getMinions())) {
 			List<com.hiddenswitch.spellsource.client.models.Entity> minions = new ArrayList<>();
 			for (Minion minion : battlefield) {
-				final com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, minion, localPlayerId);
+				com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, minion, localPlayerId);
 				minions.add(entity);
 			}
 
@@ -758,7 +743,7 @@ public interface Games extends Verticle {
 		List<com.hiddenswitch.spellsource.client.models.Entity> localSecrets = new ArrayList<>();
 		// Add complete information for the local secrets
 		for (Secret secret : local.getSecrets()) {
-			final com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, secret, localPlayerId);
+			com.hiddenswitch.spellsource.client.models.Entity entity = getEntity(workingContext, secret, localPlayerId);
 			localSecrets.add(entity);
 		}
 
@@ -767,7 +752,7 @@ public interface Games extends Verticle {
 		// Add limited information for opposing secrets
 		List<com.hiddenswitch.spellsource.client.models.Entity> opposingSecrets = new ArrayList<>();
 		for (Secret secret : opponent.getSecrets()) {
-			final com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
+			com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(secret.getId())
 					.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.SECRET)
 					.state(new EntityState()
@@ -788,7 +773,7 @@ public interface Games extends Verticle {
 
 		List<com.hiddenswitch.spellsource.client.models.Entity> playerEntities = new ArrayList<>();
 		// Create the heroes
-		for (final Player player : Arrays.asList(local, opponent)) {
+		for (Player player : Arrays.asList(local, opponent)) {
 			com.hiddenswitch.spellsource.client.models.Entity playerEntity = new com.hiddenswitch.spellsource.client.models.Entity()
 					.id(player.getId())
 					.name(player.getName())
@@ -802,7 +787,7 @@ public interface Games extends Verticle {
 							.gameStarted(player.hasAttribute(Attribute.GAME_STARTED)));
 			playerEntities.add(playerEntity);
 			// The heroes may have wound up in the graveyard
-			final com.hiddenswitch.spellsource.client.models.Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
+			com.hiddenswitch.spellsource.client.models.Entity heroEntity = getEntity(workingContext, player.getHero(), localPlayerId);
 
 			if (heroEntity == null) {
 				continue;
@@ -815,11 +800,11 @@ public interface Games extends Verticle {
 					.lockedMana(player.getLockedMana());
 			playerEntities.add(heroEntity);
 			if (player.getHero().getHeroPower() != null) {
-				final com.hiddenswitch.spellsource.client.models.Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower(), localPlayerId);
+				com.hiddenswitch.spellsource.client.models.Entity heroPowerEntity = getEntity(workingContext, player.getHero().getHeroPower(), localPlayerId);
 				playerEntities.add(heroPowerEntity);
 			}
 			if (player.getHero().getWeapon() != null) {
-				final com.hiddenswitch.spellsource.client.models.Entity weaponEntity = getEntity(workingContext, player.getHero().getWeapon(), localPlayerId);
+				com.hiddenswitch.spellsource.client.models.Entity weaponEntity = getEntity(workingContext, player.getHero().getWeapon(), localPlayerId);
 				playerEntities.add(weaponEntity);
 			}
 		}
@@ -838,10 +823,10 @@ public interface Games extends Verticle {
 				.collect(toList()));
 
 		// Get the heroes that may have wound up in the graveyard
-		final List<Entity> graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
+		List<Entity> graveyardHeroes = Stream.of(local.getGraveyard().stream(), opponent.getGraveyard().stream(), local.getRemovedFromPlay().stream(), opponent.getRemovedFromPlay().stream()).flatMap(e -> e)
 				.filter(e -> e.getEntityType() == EntityType.HERO)
 				.map(h -> {
-					final Entity e = getEntity(workingContext, h, localPlayerId);
+					Entity e = getEntity(workingContext, h, localPlayerId);
 					Player owner = h.getOwner() == local.getId() ? local : opponent;
 					e.getState()
 							.mana(owner.getMana())
@@ -884,7 +869,7 @@ public interface Games extends Verticle {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
+	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, net.demilich.metastone.game.entities.Entity entity, int localPlayerId) {
 		if (entity == null) {
 			return null;
 		}
@@ -911,7 +896,7 @@ public interface Games extends Verticle {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final Actor actor, int localPlayerId) {
+	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, Actor actor, int localPlayerId) {
 		if (actor == null) {
 			return null;
 		}
@@ -921,9 +906,9 @@ public interface Games extends Verticle {
 			workingContext.updateAndGetGameOver();
 		}
 
-		final Card card = actor.getSourceCard();
-		final EntityState entityState = new EntityState();
-		final com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		Card card = actor.getSourceCard();
+		EntityState entityState = new EntityState();
+		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
 				.description(actor.getDescription())
 				.name(actor.getName())
 				.id(actor.getId())
@@ -948,7 +933,7 @@ public interface Games extends Verticle {
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
 		entityState.deathrattles(actor.getDeathrattles() != null);
-		final boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
+		boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
 				&& actor.getOwner() == localPlayerId
 				&& workingContext.getStatus() == GameStatus.RUNNING
 				&& actor.canAttackThisTurn();
@@ -987,7 +972,7 @@ public interface Games extends Verticle {
 		entityState.permanent(actor.hasAttribute(Attribute.PERMANENT));
 		entityState.rush(actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
 		entityState.tribe(actor.getRace() != null ? actor.getRace().name() : null);
-		final List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
+		List<Trigger> triggers = workingContext.getTriggerManager().getTriggersAssociatedWith(actor.getReference());
 		entityState.hostsTrigger(triggers.size() > 0);
 		entity.state(entityState);
 		return entity;
@@ -1001,7 +986,7 @@ public interface Games extends Verticle {
 	 * @param localPlayerId  The point of view this method should use o determine which information to show the client.
 	 * @return A client entity view.
 	 */
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final Enchantment enchantment, int localPlayerId) {
+	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, Enchantment enchantment, int localPlayerId) {
 		if (enchantment == null) {
 			return null;
 		}
@@ -1043,19 +1028,19 @@ public interface Games extends Verticle {
 	 * @return A client entity view.
 	 */
 	@Suspendable
-	static com.hiddenswitch.spellsource.client.models.Entity getEntity(final GameContext workingContext, final Card card, int localPlayerId) {
+	static com.hiddenswitch.spellsource.client.models.Entity getEntity(GameContext workingContext, Card card, int localPlayerId) {
 		if (card == null) {
 			return null;
 		}
 
-		final com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
+		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
 				.description(card.getDescription())
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.CARD)
 				.name(card.getName())
 				.description(card.getDescription())
 				.id(card.getId())
 				.cardId(card.getCardId());
-		final EntityState entityState = new EntityState();
+		EntityState entityState = new EntityState();
 		int owner = card.getOwner();
 		Player owningPlayer;
 		if (owner != -1) {
@@ -1064,7 +1049,7 @@ public interface Games extends Verticle {
 					|| card.getZone() == Zones.SET_ASIDE_ZONE
 					|| card.getZone() == Zones.HERO_POWER
 					&& owner == localPlayerId) {
-				final boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
+				boolean playable = workingContext.getLogic().canPlayCard(owner, card.getReference())
 						&& card.getOwner() == workingContext.getActivePlayerId()
 						&& localPlayerId == card.getOwner();
 				entityState.playable(playable);
@@ -1101,7 +1086,7 @@ public interface Games extends Verticle {
 
 		entityState.heroClass(heroClass.toString());
 		entityState.cardType(EntityState.CardTypeEnum.valueOf(card.getCardType().toString()));
-		final boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
+		boolean hostsTrigger = workingContext.getTriggerManager().getTriggersAssociatedWith(card.getReference()).size() > 0;
 		// TODO: Run the game context to see if the card has any triggering side effects. If it does, then color its border yellow.
 		switch (card.getCardType()) {
 			case HERO:
@@ -1189,53 +1174,4 @@ public interface Games extends Verticle {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
 	}
 
-	/**
-	 * Creates a web socket handler to route game traffic (actions, game states, etc.) between the HTTP/WS client this
-	 * handler will create and the appropriate event bus address for game traffic.
-	 *
-	 * @return A suspendable handler.
-	 */
-	static Handler<RoutingContext> createWebSocketHandler() {
-		return Sync.suspendableHandler(context -> {
-			final String userId = context.user().principal().getString("_id");
-			final Vertx vertx = context.vertx();
-			final EventBus bus = vertx.eventBus();
-			try {
-				Lock lock = awaitResult(h -> vertx.sharedData().getLockWithTimeout("pipes-userId-" + userId, 200L, h));
-				LOGGER.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
-				final ServerWebSocket socket;
-				final HttpServerRequest request = context.request();
-				try {
-					socket = request.upgrade();
-				} catch (IllegalStateException ex) {
-					LOGGER.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
-							.append("headers", request.headers().entries())
-							.append("uri", request.uri())
-							.append("userId", userId).toString());
-					throw ex;
-				}
-				final MessageConsumer<Buffer> consumer = bus.consumer(EventBusWriter.WRITER_ADDRESS_PREFIX + userId);
-				final MessageProducer<Buffer> publisher = bus.publisher(ClusteredGamesImpl.READER_ADDRESS_PREFIX + userId);
-				final Pump pump1 = new SuspendablePump<>(socket, publisher, Integer.MAX_VALUE).start();
-				final Pump pump2 = new SuspendablePump<>(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
-
-				socket.closeHandler(fiberHandler(disconnected -> {
-					try {
-						// Include a reference in this lambda to ensure the pump lasts
-						pump2.numberPumped();
-						publisher.close();
-						consumer.unregister();
-						pump1.stop();
-					} catch (Throwable throwable) {
-						LOGGER.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
-					} finally {
-						lock.release();
-					}
-				}));
-			} catch (VertxException timeout) {
-				LOGGER.debug("createWebSocketHandler: Lock was not obtained for userId {}, user probably has another mapping already", userId);
-				context.response().end();
-			}
-		});
-	}
 }

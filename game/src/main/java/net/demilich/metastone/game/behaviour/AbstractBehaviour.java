@@ -47,11 +47,6 @@ public abstract class AbstractBehaviour implements Behaviour, Serializable {
 	}
 
 	@Override
-	@Suspendable
-	public void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId) {
-	}
-
-	@Override
 	public boolean isHuman() {
 		return false;
 	}

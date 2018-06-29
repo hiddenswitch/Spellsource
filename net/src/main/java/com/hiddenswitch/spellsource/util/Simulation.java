@@ -5,6 +5,7 @@ import com.hiddenswitch.spellsource.common.DeckListParsingException;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
 import org.jetbrains.annotations.NotNull;
@@ -52,7 +53,7 @@ public class Simulation {
 				.collect(Collectors.toMap(Class::getSimpleName, Function.identity()));
 	}
 
-	public static ConcurrentMap<String, Deck> getDecks(List<String> deckLists) {
+	public static ConcurrentMap<String, GameDeck> getDecks(List<String> deckLists) {
 		return deckLists
 				.stream()
 				// Convert to deckLists
@@ -67,10 +68,10 @@ public class Simulation {
 				.filter(Objects::nonNull)
 				.map(DeckCreateRequest::toGameDeck)
 				// Make a key-value dictionary of the decks
-				.collect(Collectors.toConcurrentMap(Deck::getName, Function.identity()));
+				.collect(Collectors.toConcurrentMap(GameDeck::getName, Function.identity()));
 	}
 
-	public static List<String[]> getCombinations(boolean mirrors, Map<String, Deck> decks, boolean twoDifferentBehaviours) {
+	public static List<String[]> getCombinations(boolean mirrors, Map<String, GameDeck> decks, boolean twoDifferentBehaviours) {
 		List<String[]> combinations;
 		if (twoDifferentBehaviours) {
 			// Combinations with replacement
@@ -87,7 +88,7 @@ public class Simulation {
 		return combinations;
 	}
 
-	public static Map<String[], SimulationResult> getResults(Supplier<Behaviour> behaviourSupplier1, Supplier<Behaviour> behaviourSupplier2, int number, Map<String, Deck> decks, List<String[]> combinations, AtomicInteger matchesComplete) {
+	public static Map<String[], SimulationResult> getResults(Supplier<Behaviour> behaviourSupplier1, Supplier<Behaviour> behaviourSupplier2, int number, Map<String, GameDeck> decks, List<String[]> combinations, AtomicInteger matchesComplete) {
 		// Get the results
 		return combinations.stream()
 				// Get a map of deck pairs..
@@ -95,7 +96,7 @@ public class Simulation {
 						// ... to simulations, which are parallelized
 						deckKeyPair -> {
 							// Get a pair of decks
-							List<Deck> deckPair = Arrays.stream(deckKeyPair).map(decks::get).collect(Collectors.toList());
+							List<GameDeck> deckPair = Arrays.stream(deckKeyPair).map(decks::get).collect(Collectors.toList());
 							// Run a single simulation on the decks
 							return GameContext.simulate(deckPair, behaviourSupplier1, behaviourSupplier2, number, true, matchesComplete);
 						}));

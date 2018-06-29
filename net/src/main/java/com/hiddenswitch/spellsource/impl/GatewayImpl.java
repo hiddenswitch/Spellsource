@@ -13,6 +13,7 @@ import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
+import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
@@ -86,7 +87,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Enables the gateway to handle incoming game sockets.
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
-				.handler(Games.createWebSocketHandler());
+				.handler(ServerGameContext.createWebSocketHandler());
 
 		// Handle all realtime messaging here
 		router.route("/realtime")

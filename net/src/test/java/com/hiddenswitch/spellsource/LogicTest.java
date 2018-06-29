@@ -29,6 +29,7 @@ import static org.junit.Assert.assertTrue;
  */
 public class LogicTest extends SpellsourceTestBase {
 
+	/*
 	@Test
 	@Suspendable
 	public void testStartsGame(TestContext context) {
@@ -62,6 +63,7 @@ public class LogicTest extends SpellsourceTestBase {
 			}
 		});
 	}
+	*/
 
 	@Test
 	@Suspendable
@@ -90,6 +92,7 @@ public class LogicTest extends SpellsourceTestBase {
 		context.async().complete();
 	}
 
+	/*
 	@Test
 	public void testAllianceCardExtensionsDontBreak(TestContext context) {
 		sync(() -> {
@@ -162,6 +165,7 @@ public class LogicTest extends SpellsourceTestBase {
 			assertTrue(inventory1 || inventory2);
 		});
 	}
+	*/
 
 	private Minion createMinionFromId(String inventoryId, int entityId, String userId, String deckId) throws
 			InterruptedException, SuspendExecution {

@@ -10,22 +10,33 @@ import java.util.List;
  * Created by bberman on 12/5/16.
  */
 public class GameplayRequest {
-	public final Handler handler;
+	public String callbackId;
+	public final Handler callback;
 	public List<Card> starterCards;
 	public GameplayRequestType type;
 	public GameState state;
 	public List<GameAction> actions;
 
-	public GameplayRequest(GameplayRequestType type, GameState state, List<GameAction> actions, Handler handler) {
+	public GameplayRequest(String callbackId, GameplayRequestType type, GameState state, List<GameAction> actions, Handler callback) {
+		this(type, state, actions, callback);
+		this.callbackId = callbackId;
+	}
+
+	public GameplayRequest(GameplayRequestType type, GameState state, List<GameAction> actions, Handler callback) {
 		this.type = type;
-		this.handler = handler;
+		this.callback = callback;
 		this.state = state;
 		this.actions = actions;
+	}
+
+	public GameplayRequest(String callbackId, GameplayRequestType type, List<Card> starterCards, Handler<List<Card>> callback) {
+		this(type, starterCards, callback);
+		this.callbackId = callbackId;
 	}
 
 	public GameplayRequest(GameplayRequestType type, List<Card> starterCards, Handler<List<Card>> callback) {
 		this.type = type;
 		this.starterCards = starterCards;
-		this.handler = callback;
+		this.callback = callback;
 	}
 }

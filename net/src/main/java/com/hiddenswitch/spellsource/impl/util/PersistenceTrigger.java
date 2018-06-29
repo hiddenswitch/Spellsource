@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.impl.util;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.models.EventLogicRequest;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.Handler;
@@ -49,10 +50,9 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	 * The {@link RpcClient} for the {@link Logic} service.
 	 */
 	private transient final GameContext context;
+	private final GameId gameId;
 
-	private final String gameId;
-
-	public PersistenceTrigger(GameContext context, String gameId) {
+	public PersistenceTrigger(GameContext context, GameId gameId) {
 		this.gameId = gameId;
 		this.context = context;
 	}

@@ -3,9 +3,10 @@ package com.hiddenswitch.spellsource.impl.util;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.impl.GameId;
+import com.hiddenswitch.spellsource.impl.TimerId;
+import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import io.vertx.core.Vertx;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 
@@ -15,16 +16,19 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
  * Created by bberman on 12/6/16.
  */
 public class ActivityMonitor {
-	private static Logger logger = LoggerFactory.getLogger(ActivityMonitor.class);
-	private final String gameId;
 	private final long noActivityTimeout;
-	private final WeakReference<Vertx> vertx;
-	private long lastTimerId = Long.MIN_VALUE;
+	private final WeakReference<Scheduler> scheduler;
+	private TimerId lastTimerId;
 	private final SuspendableAction1<ActivityMonitor> onTimeout;
+	private GameId gameId;
 
-	public ActivityMonitor(Vertx vertx, String gameId, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout) {
-		this.vertx = new WeakReference<>(vertx);
+	public ActivityMonitor(Vertx vertx, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout, GameId gameId) {
+		this(new VertxScheduler(vertx), noActivityTimeout, onTimeout, gameId);
+	}
+
+	public ActivityMonitor(Scheduler scheduler, long noActivityTimeout, SuspendableAction1<ActivityMonitor> onTimeout, GameId gameId) {
 		this.gameId = gameId;
+		this.scheduler = new WeakReference<>(scheduler);
 		this.noActivityTimeout = noActivityTimeout;
 		this.onTimeout = onTimeout;
 	}
@@ -35,30 +39,30 @@ public class ActivityMonitor {
 
 	@Suspendable
 	public void activity() {
-		final Vertx vertx = this.vertx.get();
-		if (vertx == null) {
+		Scheduler scheduler = this.scheduler.get();
+		if (scheduler == null) {
 			return;
 		}
 
 		cancel();
 
-		lastTimerId = vertx.setTimer(noActivityTimeout, suspendableHandler(this::handleTimeout));
+		lastTimerId = scheduler.setTimer(noActivityTimeout, suspendableHandler(this::handleTimeout));
 	}
 
 	@Suspendable
 	public void cancel() {
-		final Vertx vertx = this.vertx.get();
+		Scheduler scheduler = this.scheduler.get();
 
-		if (vertx == null) {
+		if (scheduler == null) {
 			return;
 		}
 
-		if (lastTimerId != Long.MIN_VALUE) {
-			vertx.cancelTimer(lastTimerId);
+		if (lastTimerId != null) {
+			scheduler.cancelTimer(lastTimerId);
 		}
 	}
 
-	public String getGameId() {
+	public GameId getGameId() {
 		return gameId;
 	}
 }

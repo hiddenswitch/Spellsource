@@ -187,18 +187,15 @@ public interface Invites {
 		}
 		if (invite.getQueueId() != null) {
 			// Enqueue the player automatically
-			try {
-				GameId gameId = Matchmaking.matchmake(new MatchmakingRequest(request.getMatch(), user.getId()));
-				// These are the semantics of the matchmake function.
-				if (gameId == null) {
-					throw new InterruptedException();
-				}
-				res.match(new MatchmakingQueuePutResponse().unityConnection(new MatchmakingQueuePutResponseUnityConnection()));
-			} catch (InterruptedException ex) {
-				mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", Invite.StatusEnum.REJECTED.getValue())));
-				updateInvite(invite);
-				throw new IllegalStateException("Matchmaking was canceled, so the invite was rejected by the recipient.");
-			}
+//			try {
+			Matchmaking.enqueue(new MatchmakingRequest(request.getMatch(), user.getId()));
+//
+//				res.match(new MatchmakingQueuePutResponse().unityConnection(new MatchmakingQueuePutResponseUnityConnection()));
+//			} catch (InterruptedException ex) {
+//				mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", Invite.StatusEnum.REJECTED.getValue())));
+//				updateInvite(invite);
+//				throw new IllegalStateException("Matchmaking was canceled, so the invite was rejected by the recipient.");
+//			}
 		}
 		return res;
 	}
