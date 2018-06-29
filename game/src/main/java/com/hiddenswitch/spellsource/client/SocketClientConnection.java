@@ -9,7 +9,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
 
 import com.hiddenswitch.spellsource.common.ClientToServerMessage;
-import com.hiddenswitch.spellsource.common.Writer;
+import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.common.ServerToClientMessage;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -22,7 +22,7 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 	private final String host;
 	private final int port;
 	private BlockingQueue<ClientToServerMessage> queue = new LinkedBlockingDeque<>();
-	private Writer updateListener;
+	private Client updateListener;
 	private boolean shouldRun = true;
 	private Logger logger = LoggerFactory.getLogger(SocketClientConnection.class);
 	private boolean isGameEnded;
@@ -38,8 +38,8 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 	}
 
 	@Override
-	public void RegisterListener(Writer writer) {
-		this.updateListener = writer;
+	public void RegisterListener(Client client) {
+		this.updateListener = client;
 	}
 
 	@Override
@@ -85,12 +85,12 @@ public class SocketClientConnection implements ClientCommunicationReceive, Clien
 						logger.debug("Client received message from server: {}", message);
 						switch (message.mt) {
 							case ON_GAME_EVENT:
-								updateListener.onNotification(message.event, message.gameState);
+								updateListener.sendNotification(message.event, message.gameState);
 								break;
 							case ON_GAME_END:
 								isGameEnded = true;
 								shouldRun = false;
-								updateListener.onGameEnd(null, message.winner);
+								updateListener.sendGameOver(null, message.winner);
 								break;
 							case SET_PLAYERS:
 								break;

@@ -4,12 +4,11 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
-import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -65,10 +64,10 @@ public class Player extends Entity implements Serializable {
 	/**
 	 * Create an empty player instance.
 	 *
-	 * @return A player specified with an {@link Deck#EMPTY} and a {@link ChooseLastBehaviour}.
+	 * @return A player specified with an {@link GameDeck#EMPTY} and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player empty() {
-		return new Player(Deck.EMPTY, "Empty player");
+		return new Player(GameDeck.EMPTY, "Empty player");
 	}
 
 	/**
@@ -80,7 +79,7 @@ public class Player extends Entity implements Serializable {
 	 * @param deck   The deck to initialize the player with.
 	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
-	public static Player forUser(String userId, int id, Deck deck) {
+	public static Player forUser(String userId, int id, GameDeck deck) {
 		Player player = new Player(deck, "Player " + userId);
 		player.setId(id);
 		player.setUserId(userId);
@@ -121,7 +120,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param deck The deck instance to use.
 	 */
-	public Player(Deck deck) {
+	public Player(GameDeck deck) {
 		this(deck, "New Player");
 	}
 
@@ -131,7 +130,7 @@ public class Player extends Entity implements Serializable {
 	 * @param deck The deck instance to use.
 	 */
 
-	public Player(Deck deck, String name) {
+	public Player(GameDeck deck, String name) {
 		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy());
 		this.setHero(deck.getHeroCard().createHero());
 		this.setName(name);
@@ -149,7 +148,7 @@ public class Player extends Entity implements Serializable {
 
 	/**
 	 * Retrieves the deck for this player as it is in game. This {@link CardZone} is mutated over time. This is distinct
-	 * from a {@link Deck} object, which is better interpreted as the base deck from which this object was initialized.
+	 * from a {@link GameDeck} object, which is better interpreted as the base deck from which this object was initialized.
 	 *
 	 * @return The player's deck in game.
 	 */

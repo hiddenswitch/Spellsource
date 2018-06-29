@@ -1,8 +1,7 @@
 package com.hiddenswitch.spellsource.models;
 
-import com.hiddenswitch.spellsource.common.ClientConnectionConfiguration;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.impl.server.GameSession;
+import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.util.DefaultClusterSerializable;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -22,8 +21,8 @@ public final class CreateGameSessionResponse implements Serializable, DefaultClu
 		return new CreateGameSessionResponse(true, deploymentId);
 	}
 
-	public static CreateGameSessionResponse session(String deploymentId, GameSession session) {
-		return new CreateGameSessionResponse(deploymentId, session.getGameId(), session.getUserIds().get(0), session.getUserIds().get(1));
+	public static CreateGameSessionResponse session(String deploymentId, ServerGameContext session) {
+		return new CreateGameSessionResponse(deploymentId, session.getGameId(), new UserId(session.getPlayer1().getUserId()), new UserId(session.getPlayer2().getUserId()));
 	}
 
 	public CreateGameSessionResponse() {

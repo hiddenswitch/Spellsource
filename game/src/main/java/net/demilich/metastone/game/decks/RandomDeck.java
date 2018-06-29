@@ -3,7 +3,6 @@ package net.demilich.metastone.game.decks;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.stream.Stream;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -16,7 +15,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 import static java.util.stream.Collectors.toList;
 
-public class RandomDeck extends Deck {
+public final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
 
 	/**

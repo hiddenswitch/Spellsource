@@ -41,7 +41,7 @@ public final class SuspendableAsyncMap<K, V> implements SuspendableMap<K, V> {
 
 		return awaitResult(done -> {
 			map.get((K) key, then -> {
-				done.handle(Future.succeededFuture(then.failed() || then.succeeded() && then.result() != null));
+				done.handle(Future.succeededFuture(then.succeeded() && then.result() != null));
 			});
 		});
 	}

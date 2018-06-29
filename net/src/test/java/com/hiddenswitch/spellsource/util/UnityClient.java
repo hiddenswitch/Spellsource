@@ -45,6 +45,7 @@ public class UnityClient {
 	private String loginToken;
 	private String thisUrl;
 	private boolean shouldDisconnect = true;
+	private CountDownLatch gameOverLatch;
 
 
 	public UnityClient(TestContext context) {
@@ -53,12 +54,6 @@ public class UnityClient {
 		apiClient.setBasePath(basePath);
 		api = new DefaultApi(apiClient);
 		this.context = context;
-		List<UnityClient> clients = context.get("clients");
-		if (clients == null) {
-			clients = new LinkedList<>();
-			context.put("clients", clients);
-		}
-		clients.add(this);
 	}
 
 	public UnityClient(TestContext context, int port) {
@@ -102,8 +97,8 @@ public class UnityClient {
 		return loginWithUserAccount(username, "testpass");
 	}
 
-	public void gameOver(Handler<UnityClient> handler) {
-		onGameOver = io.vertx.ext.sync.Sync.fiberHandler(handler);
+	public void gameOverHandler(Handler<UnityClient> handler) {
+		onGameOver = handler;
 	}
 
 	@Suspendable
@@ -184,6 +179,7 @@ public class UnityClient {
 
 	public void play() {
 		this.gameOver = false;
+		this.gameOverLatch = new CountDownLatch(1);
 		logger.debug("play: Playing userId " + getUserId());
 		// Get the port from the url
 		final URL basePathUrl;
@@ -249,6 +245,7 @@ public class UnityClient {
 					// The game has ended.
 					endpoint.close();
 					this.gameOver = true;
+					gameOverLatch.countDown();
 					if (onGameOver != null) {
 						onGameOver.handle(this);
 					}
@@ -370,16 +367,10 @@ public class UnityClient {
 	@Suspendable
 	public UnityClient waitUntilDone() {
 		logger.debug("waitUntilDone: UserId " + getUserId() + " is waiting");
-		float time = 0f;
-		while (!(time > 90f || this.isGameOver())) {
-			try {
-				Strand.sleep(1000);
-			} catch (SuspendExecution | InterruptedException suspendExecution) {
-				suspendExecution.printStackTrace();
-				return this;
-			}
-
-			time += 1f;
+		try {
+			gameOverLatch.await(90L, TimeUnit.SECONDS);
+		} catch (InterruptedException e) {
+			throw new AssertionError(e);
 		}
 		return this;
 	}

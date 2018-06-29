@@ -1,73 +1,82 @@
 package com.hiddenswitch.spellsource.impl.server;
 
-import net.demilich.metastone.game.utils.Attribute;
+import com.hiddenswitch.spellsource.impl.UserId;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
-public class Configuration implements Serializable {
-	private final Deck deck;
-	private final String name;
-	private AttributeMap attributes;
-	private boolean isAI;
+public class Configuration implements Serializable, Cloneable {
+	private UserId userId;
+	private int playerId;
+	private String name;
+	private AttributeMap playerAttributes;
+	private Deck deck;
+	private boolean isBot;
 
-	public Configuration(Deck deck, String name) {
-		this.deck = deck;
-		this.name = name;
-		this.attributes = new AttributeMap();
+	public UserId getUserId() {
+		return userId;
 	}
 
-	public Deck getDeck() {
-		return deck;
+	public Configuration setUserId(UserId userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public int getPlayerId() {
+		return playerId;
+	}
+
+	public Configuration setPlayerId(int playerId) {
+		this.playerId = playerId;
+		return this;
 	}
 
 	public String getName() {
 		return name;
 	}
 
-	public boolean isAI() {
-		return isAI;
-	}
-
-	public void setAI(boolean AI) {
-		isAI = AI;
-	}
-
-	public Configuration withAI(boolean AI) {
-		isAI = AI;
+	public Configuration setName(String name) {
+		this.name = name;
 		return this;
 	}
 
-	public Configuration withAttributes(final AttributeMap attributes) {
-		this.attributes = attributes;
+	public AttributeMap getPlayerAttributes() {
+		return playerAttributes;
+	}
+
+	public Configuration setPlayerAttributes(AttributeMap playerAttributes) {
+		this.playerAttributes = playerAttributes;
 		return this;
 	}
 
-	public AttributeMap getAttributes() {
-		return attributes;
+	public Deck getDeck() {
+		return deck;
 	}
 
-	public void setAttributes(AttributeMap attributes) {
-		this.attributes = attributes;
+	public Configuration setDeck(Deck deck) {
+		this.deck = deck;
+		return this;
 	}
 
-	public String getUserId() {
-		if (getAttributes() != null) {
-			return (String) getAttributes().get(Attribute.USER_ID);
-		} else {
-			return null;
-		}
+	public boolean isBot() {
+		return isBot;
+	}
+
+	public Configuration setBot(boolean bot) {
+		isBot = bot;
+		return this;
 	}
 
 	@Override
-	public String toString() {
-		return new ToStringBuilder(this)
-				.append("deck", deck)
-				.append("name", name)
-				.append("attributes", attributes)
-				.append("isAi", isAI)
-				.toString();
+	public Configuration clone() {
+		try {
+			Configuration clone = (Configuration)super.clone();
+			clone.playerAttributes = playerAttributes.clone();
+			clone.deck = deck.clone();
+			return clone;
+		} catch (CloneNotSupportedException e) {
+			return null;
+		}
 	}
 }

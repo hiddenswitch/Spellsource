@@ -7,6 +7,8 @@ import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import org.reactivestreams.Subscriber;
+import org.reactivestreams.Subscription;
 
 import java.util.function.*;
 
@@ -18,6 +20,12 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public class Sync {
 	@Suspendable
 	public static <T> Handler<T> suspendableHandler(SuspendableAction1<T> handler) {
+		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
+		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
+	}
+
+	@Suspendable
+	public static <T> Consumer<T> suspendableConsumer(SuspendableAction1<T> handler) {
 		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
 	}
