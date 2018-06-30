@@ -153,10 +153,10 @@ public class GatewayTest extends SpellsourceTestBase {
 		assertTrue(client.isGameOver());
 	}
 
-	@Test(timeout = 130000L)
+	@Test(timeout = 90000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 3;
+		final int count = processorCount;
 		final int checkpointTotal = count * 6;
 
 		CountDownLatch latch = new CountDownLatch(count);
@@ -179,7 +179,6 @@ public class GatewayTest extends SpellsourceTestBase {
 					logger.debug("testSimultaneousGames: {} 2nd Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.matchmakeConstructedPlay(null);
 					logger.debug("testSimultaneousGames: {} 2nd Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-
 					client.waitUntilDone();
 					assertTrue(client.isGameOver());
 					assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
@@ -193,7 +192,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		}
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(130L, TimeUnit.SECONDS);
+		latch.await(90L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 	}
 
