@@ -113,6 +113,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 		}
 		Games.LOGGER.debug("endGame {}: Calling kill", gameId);
 		ServerGameContext session = contexts.remove(gameId);
+		Games.getConnections().remove(gameId);
 
 		UserId winner = null;
 		try {
