@@ -12,7 +12,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import java.util.Collections;
 import java.util.List;
 
-import static io.vertx.ext.sync.Sync.fiberHandler;
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 /**
  * Created by bberman on 11/23/16.
@@ -56,7 +56,7 @@ public class SimultaneousMulliganGameLogic extends GameLogic {
 	public void initAsync(int playerId, boolean begins, Handler<List<Card>> callback) {
 		Player player = context.getPlayer(playerId);
 
-		mulliganAsync(player, begins, fiberHandler(callback));
+		mulliganAsync(player, begins, suspendableHandler(callback::handle));
 	}
 
 	public boolean isMulliganEnabled() {

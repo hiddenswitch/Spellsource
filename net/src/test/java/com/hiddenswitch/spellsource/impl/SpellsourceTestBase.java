@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import ch.qos.logback.classic.Level;
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -36,6 +37,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static org.junit.Assert.fail;
 
 @RunWith(VertxUnitRunner.class)
@@ -114,7 +116,7 @@ public abstract class SpellsourceTestBase {
 	public static void sync(SuspendableRunnable action) {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(Sync.suspendableHandler(v2 -> {
+			vertx.runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
 				action.run();
 				latch.countDown();
 			}));

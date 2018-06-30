@@ -111,7 +111,7 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 			Games.LOGGER.debug("endGame {}: This deployment with deploymentId {} does not contain the gameId", gameId, deploymentID());
 			return;
 		}
-		Games.LOGGER.debug("endGame {}: Calling kill", gameId);
+		Games.LOGGER.debug("endGame {}", gameId);
 		ServerGameContext session = contexts.remove(gameId);
 		Games.getConnections().remove(gameId);
 
