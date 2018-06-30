@@ -9,7 +9,7 @@ cache:
 jdk:
   - oraclejdk8
 script:
-  - ./gradlew game:check
+  - ./gradlew check
 dist: trusty
 sudo: false
 addons:
