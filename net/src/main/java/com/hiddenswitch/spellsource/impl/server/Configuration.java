@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.impl.server;
 import com.hiddenswitch.spellsource.impl.UserId;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;
 
@@ -71,12 +72,22 @@ public class Configuration implements Serializable, Cloneable {
 	@Override
 	public Configuration clone() {
 		try {
-			Configuration clone = (Configuration)super.clone();
+			Configuration clone = (Configuration) super.clone();
 			clone.playerAttributes = playerAttributes.clone();
 			clone.deck = deck.clone();
 			return clone;
 		} catch (CloneNotSupportedException e) {
 			return null;
 		}
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("userId", userId)
+				.append("playerId", playerId)
+				.append("name", name)
+				.append("deck.id", deck.getDeckId())
+				.append("isBot", isBot).toString();
 	}
 }

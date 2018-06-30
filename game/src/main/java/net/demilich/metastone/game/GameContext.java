@@ -12,7 +12,6 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.*;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.decks.RandomDeck;
@@ -163,8 +162,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	private int actionsThisTurn;
 	private boolean ignoreEvents;
 	private CardList tempCards = new CardArrayList();
+	private boolean didCallEndGame;
+
 	private transient Trace trace = new Trace();
-	protected boolean gameEnded;
 
 	/**
 	 * Creates a game context with two empty players.
@@ -341,12 +341,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		updateAndGetGameOver();
 
 		// Don't do processing of end game effects more than once.
-		if (gameEnded) {
+		if (didCallEndGame()) {
 			notifyPlayersGameOver();
 			return;
 		}
 
-		gameEnded = true;
+		didCallEndGame = true;
 
 		// Expire the game just once here
 		getTriggerManager().expireAll();
@@ -1763,5 +1763,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	public void setBehaviour(int i, Behaviour behaviour) {
 		behaviours[i] = behaviour;
+	}
+
+	protected boolean didCallEndGame() {
+		return didCallEndGame;
 	}
 }

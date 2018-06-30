@@ -12,7 +12,9 @@ import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.util.*;
+import com.hiddenswitch.spellsource.util.Logging;
+import com.hiddenswitch.spellsource.util.Sync;
+import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.ext.unit.Async;
@@ -21,7 +23,6 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static io.vertx.ext.sync.Sync.awaitEvent;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.*;
 
@@ -222,7 +222,7 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 
-	@Test(timeout = 30000L)
+	@Test(timeout = 35000L)
 	public void testConcede(TestContext context) {
 		sync(() -> {
 			UnityClient client = new UnityClient(context);

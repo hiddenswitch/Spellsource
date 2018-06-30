@@ -53,6 +53,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
@@ -74,7 +75,7 @@ public class ServerGameContext extends GameContext implements Server {
 	public static final String READER_ADDRESS_PREFIX = "Games::reader[";
 
 	private final transient ReentrantLock lock = new ReentrantLock();
-	private final transient Set<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new HashSet<>();
+	private final transient Queue<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
 	private final transient Map<Integer, Future<Client>> clientsReady = new HashMap<>();
 	private final transient List<Client> clients = new ArrayList<>();
 	private final List<Configuration> playerConfigurations = new ArrayList<>();
@@ -404,8 +405,8 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void startTurn(int playerId) {
+		lock.lock();
 		try {
-			lock.lock();
 			// Start the turn timer
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
@@ -446,8 +447,8 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void endTurn() {
+		lock.lock();
 		try {
-			lock.lock();
 			super.endTurn();
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
@@ -574,8 +575,8 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void concede(int playerId) {
+		lock.lock();
 		try {
-			lock.lock();
 			// TODO: Make sure we don't have to do anything special here
 			super.concede(playerId);
 		} finally {
@@ -604,45 +605,65 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	protected void endGame() {
-		isRunning = false;
-		// Close the inbound messages from the client, they should be ignored by these client instances
-		for (Client client : getClients()) {
-			client.closeInboundMessages();
-		}
-
-		if (gameEnded) {
-			notifyPlayersGameOver();
-			return;
-		}
-
-		// This way the message that the game is over doesn't come before the player's connection information is removed
-		// from the server.
-		if (!didExpire) {
-			didExpire = true;
-			try {
-				Matchmaking.expireOrEndMatch(new MatchExpireRequest(getGameId()).setUsers(getUserIds()));
-			} catch (SuspendExecution | InterruptedException execution) {
-				// Ignore
+		lock.lock();
+		try {
+			isRunning = false;
+			// Close the inbound messages from the client, they should be ignored by these client instances
+			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
+			// later. However, this does block emote processing, which is unfortunate.
+			for (Client client : getClients()) {
+				client.closeInboundMessages();
 			}
+
+			// Don't end the game more than once.
+			if (didCallEndGame()) {
+				return;
+			}
+
+			// This way the message that the game is over doesn't come before the player's connection information is removed
+			// from the server.
+			if (!didExpire) {
+				didExpire = true;
+				try {
+					Matchmaking.expireOrEndMatch(new MatchExpireRequest(getGameId()).setUsers(getUserIds()));
+				} catch (SuspendExecution | InterruptedException execution) {
+					// Ignore (only used to deal with instrumentation issues)
+				}
+			}
+
+			// Actually end the game
+			super.endGame();
+
+			// No end of game handler should be called more than once, so we're removing them one-by-one as we're processing
+			// them.
+			SuspendableAction1<ServerGameContext> handler;
+			while ((handler = onGameEndHandlers.poll()) != null) {
+				try {
+					handler.call(this);
+				} catch (SuspendExecution | InterruptedException execution) {
+					throw new RuntimeException(execution);
+				}
+			}
+
+			// Now that the game is over, we have to stop processing the game event loop. We'll check that we're not in the
+			// loop right now. If we are, we don't need to interrupt ourselves. Conceding, server shutdown and other lifecycle
+			// issues will result, eventually, in calling end game outside this game's event loop. In that case, we'll
+			// interrupt the event loop. Can the event loop itself be in the middle of calling endGame? In that case, the lock
+			// prevents two endGames from being processed simultaneously, along with other important mutating events, like
+			// other callbacks that may be processing player modifications to the game.
+			if (fiber != null && !Strand.currentStrand().equals(fiber)) {
+				fiber.interrupt();
+				fiber = null;
+			}
+
+			// Don't dispose more than once
+			if (!isDisposed()) {
+				dispose();
+			}
+		} finally {
+			lock.unlock();
 		}
 
-		super.endGame();
-		for (SuspendableAction1<ServerGameContext> handler : onGameEndHandlers) {
-			try {
-				handler.call(this);
-			} catch (SuspendExecution | InterruptedException execution) {
-				throw new RuntimeException(execution);
-			}
-		}
-		// Don't call this more than once
-		onGameEndHandlers.clear();
-		if (fiber != null && !Strand.currentStrand().equals(fiber)) {
-			fiber.interrupt();
-			fiber = null;
-		}
-		if (!isDisposed()) {
-			dispose();
-		}
 	}
 
 	private List<UserId> getUserIds() {
