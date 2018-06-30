@@ -1,16 +1,12 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hazelcast.concurrent.semaphore.SemaphoreProxy;
 import com.hazelcast.concurrent.semaphore.SemaphoreService;
 import com.hazelcast.concurrent.semaphore.operations.AcquireOperation;
-import com.hazelcast.concurrent.semaphore.operations.ReleaseOperation;
 import com.hazelcast.core.ExecutionCallback;
 import com.hazelcast.core.HazelcastInstance;
-import com.hazelcast.core.HazelcastInstanceNotActiveException;
 import com.hazelcast.core.ISemaphore;
 import com.hazelcast.instance.HazelcastInstanceImpl;
 import com.hazelcast.instance.HazelcastInstanceProxy;
@@ -22,12 +18,10 @@ import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
 
 import java.lang.reflect.Field;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeoutException;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitFiber;
-import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * A suspendable, cluster-wide lock.
@@ -36,10 +30,12 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * Hazelcast async operations are used. This requires deconstructing the {@link SemaphoreProxy} and calling its
  * equivalent operations, except with async invocations.
  * <p>
- * In the condition where the Hazelcast serializer is used on a Fiber-hosting thread, the async
+ * We need to lock access to the hazelcast instance, because it might be reused by multiple verticles/vertx instances,
+ * and its serializer's use of ThreadLocal is very poorly compatible with the kind of ThreadLocal bashing Quasar does
+ * with its fibers implementation.
  */
 public interface SuspendableLock {
-	ReentrantLock LOCK_SERIALIZATION =new ReentrantLock();
+	ReentrantLock LOCK_SERIALIZATION = new ReentrantLock();
 	String LOCK_SEMAPHORE_PREFIX = "__vertx.";
 
 	@Suspendable
@@ -47,27 +43,15 @@ public interface SuspendableLock {
 		HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
 
 		// Lock accesses to getSemaphore
-//		ISemaphore semaphore = null;
+		ReentrantLock lock = LOCK_SERIALIZATION;
 		ISemaphore iSemaphore;
-		ReentrantLock lock = LOCK_SERIALIZATION; //.computeIfAbsent(hazelcastInstance, (ignored) -> new ReentrantLock());
 		lock.lock();
 		try {
-//			while (semaphore == null) {
-//				try {
-					iSemaphore = hazelcastInstance.getSemaphore(LOCK_SEMAPHORE_PREFIX + name);
-//				} catch (HazelcastInstanceNotActiveException syncIssue) {
-//					try {
-//						Strand.yield();
-//					} catch (SuspendExecution ignored) {
-//					}
-//				}
-//			}
+			// This will typically happen pretty fast, so it's okay to use a blocking thread for this.
+			iSemaphore = invoke(hazelcastInstance::getSemaphore, LOCK_SEMAPHORE_PREFIX + name);
 		} finally {
 			lock.unlock();
 		}
-
-//		ISemaphore iSemaphore = semaphore;
-
 
 		HazelcastInstanceImpl finalInstance = getHazelcastInstance(hazelcastInstance);
 
@@ -81,7 +65,7 @@ public interface SuspendableLock {
 					.setServiceName(SemaphoreService.SERVICE_NAME);
 
 
-			ReentrantLock lockA = LOCK_SERIALIZATION; //.computeIfAbsent(hazelcastInstance, (ignored) -> new ReentrantLock());
+			ReentrantLock lockA = LOCK_SERIALIZATION;
 			lockA.lock();
 			try {
 				operationService.asyncInvokeOnPartition(acquireOperation.getServiceName(),
@@ -139,6 +123,7 @@ public interface SuspendableLock {
 				fut.complete();
 			}, false, null);
 
+			// Releasing a semaphore instance will go fast, but below is the asynchronous implementation
 
 			/*
 			HazelcastInstanceImpl hazelcastInstance = getHazelcastInstance(Hazelcast.getHazelcastInstance());
@@ -169,6 +154,10 @@ public interface SuspendableLock {
 		}
 	}
 
+	/**
+	 * Represents an internal information-gathering mechanism to let us do the work that {@link SemaphoreProxy} does when
+	 * it acquires and releases locks. We need this information in order to do so using async primitives.
+	 */
 	class GetPartitionAndService {
 		private ISemaphore iSemaphore;
 		private HazelcastInstanceImpl finalInstance;
