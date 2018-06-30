@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
@@ -14,7 +15,7 @@ public interface Conversations {
 		SuspendableMultimap<ConversationId, ChatMessage> conversations = SuspendableMultimap.getOrCreate("conversations");
 
 		Connection.connected(connection -> {
-			connection.handler(Sync.suspendableHandler(msg -> {
+			connection.handler(Sync.suspendableHandler((SuspendableAction1<Envelope>) msg -> {
 				// Send a message
 				if (msg.getMethod() != null && msg.getMethod().getSendMessage() != null) {
 					EnvelopeMethodSendMessage sendMessage = msg.getMethod().getSendMessage();

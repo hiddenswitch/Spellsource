@@ -11,6 +11,12 @@ buildscript {
 apply plugin: 'application'
 apply plugin: 'com.github.johnrengelman.shadow'
 
+configurations.all {
+    resolutionStrategy {
+        force 'com.hazelcast:hazelcast:3.10.2'
+    }
+}
+
 shadowJar {
     zip64 true
 }
@@ -62,8 +68,7 @@ dependencies {
     testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.5.1'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
-    testCompile group: 'javax.websocket', name: 'javax.websocket-client-api', version: '1.1'
-    testCompile group: 'org.glassfish.tyrus', name: 'tyrus-container-grizzly-client', version: '1.13.1'
+    testCompile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9'
     testCompile group: 'org.apache.curator', name: 'curator-test', version: '3.3.0'
 }
 

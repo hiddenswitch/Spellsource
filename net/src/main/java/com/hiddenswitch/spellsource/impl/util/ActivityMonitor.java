@@ -46,7 +46,7 @@ public class ActivityMonitor {
 
 		cancel();
 
-		lastTimerId = scheduler.setTimer(noActivityTimeout, suspendableHandler(this::handleTimeout));
+		lastTimerId = scheduler.setTimer(noActivityTimeout, suspendableHandler((SuspendableAction1<Long>) this::handleTimeout));
 	}
 
 	@Suspendable

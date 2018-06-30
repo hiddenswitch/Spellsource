@@ -20,7 +20,6 @@ import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
 import com.hiddenswitch.spellsource.models.MatchExpireRequest;
-import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -56,8 +55,8 @@ import org.jetbrains.annotations.NotNull;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
-import static io.vertx.ext.sync.Sync.fiberHandler;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -186,7 +185,7 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	public static Handler<RoutingContext> createWebSocketHandler() {
 		// Eventually this will be migrated to the Connection / envelope messaging scheme.
-		return Sync.suspendableHandler(context -> {
+		return context -> {
 			String userId = Accounts.userId(context);
 			Vertx vertx = context.vertx();
 			EventBus bus = vertx.eventBus();
@@ -212,7 +211,7 @@ public class ServerGameContext extends GameContext implements Server {
 			Pump socketToEventBus = new SuspendablePump<>(socket, publisher, Integer.MAX_VALUE).start();
 			Pump eventBusToSocket = new SuspendablePump<>(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
 
-			socket.closeHandler(fiberHandler(disconnected -> {
+			socket.closeHandler(suspendableHandler(disconnected -> {
 				try {
 					// Include a reference in this lambda to ensure the pump lasts
 					eventBusToSocket.numberPumped();
@@ -224,7 +223,7 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			}));
 
-		});
+		};
 	}
 
 	/**
@@ -339,7 +338,7 @@ public class ServerGameContext extends GameContext implements Server {
 		if (getBehaviours().stream().allMatch(Behaviour::isHuman)) {
 			timerLengthMillis = getLogic().getMulliganTimeMillis();
 			timerStartTimeMillis = System.currentTimeMillis();
-			mulliganTimerId = scheduler.setTimer(timerLengthMillis, fiberHandler(this::endMulligans));
+			mulliganTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler((SuspendableAction1<Long>) this::endMulligans));
 		} else {
 			logger.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
 			timerLengthMillis = null;
@@ -416,7 +415,7 @@ public class ServerGameContext extends GameContext implements Server {
 				timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
 				timerStartTimeMillis = System.currentTimeMillis();
 
-				turnTimerId = scheduler.setTimer(timerLengthMillis, fiberHandler(ignored -> {
+				turnTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler((SuspendableAction1<Long>) ignored -> {
 					// Since executing the callback may itself trigger more action requests, we'll indicate to
 					// the NetworkDelegate (i.e., this ServerGameContext instance) that further
 					// networkRequestActions should be executed immediately.

@@ -7,8 +7,6 @@ import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import org.reactivestreams.Subscriber;
-import org.reactivestreams.Subscription;
 
 import java.util.function.*;
 
@@ -24,11 +22,14 @@ public class Sync {
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
 	}
 
+	/*
 	@Suspendable
-	public static <T> Consumer<T> suspendableConsumer(SuspendableAction1<T> handler) {
-		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
-		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
+	public static <T> Handler<T> suspendableHandler(Handler<T> handler) {
+		FiberScheduler scheduler = getContextScheduler();
+		return p -> new Fiber<Void>(scheduler, () -> handler.handle(p)).start();
 	}
+	*/
+
 
 	@Suspendable
 	public static <R> R invoke(Supplier<R> func0) {
@@ -81,4 +82,5 @@ public class Sync {
 	public static <T1, T2, R> R invoke(TriConsumer<T1, T2, Handler<AsyncResult<R>>> func, T1 arg1, T2 arg2) {
 		return awaitResult(h -> func.accept(arg1, arg2, h));
 	}
+
 }

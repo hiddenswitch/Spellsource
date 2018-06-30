@@ -120,6 +120,7 @@ public interface Bots {
 	}
 
 	static String pollBotId() throws SuspendExecution, InterruptedException {
+		// TODO: Contains synchronization issues, but the worst that will happen is that a single bot plays multiple games
 		List<String> bots = getBotIds();
 
 		Collections.shuffle(bots);
@@ -143,9 +144,9 @@ public interface Bots {
 
 	static List<String> getBotIds() throws SuspendExecution, InterruptedException {
 		return Mongo.mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("_id", 1)))
-					.stream()
-					.map(jo -> jo.getString("_id"))
-					.collect(Collectors.toList());
+				.stream()
+				.map(jo -> jo.getString("_id"))
+				.collect(Collectors.toList());
 	}
 
 	static String getRandomDeck(UserRecord bot) {

@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource.common;
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -95,7 +96,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				@SuppressWarnings("unchecked")
 				Handler<GameAction> callback = (Handler<GameAction>) request.callback;
 
-				processActionForElapsedTurn(request.actions, callback);
+				processActionForElapsedTurn(request.actions, callback::handle);
 			}
 		}
 	}
@@ -261,7 +262,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		// The player's turn may have ended, so handle the action immediately in this case.
 		if (isTimerElapsed()) {
-			processActionForElapsedTurn(actions, callback);
+			processActionForElapsedTurn(actions, callback::handle);
 		} else {
 			// Send a state update for the other player too
 			GameState state = context.getGameStateCopy();
@@ -287,7 +288,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 * @param callback The callback for this request.
 	 */
 	@Suspendable
-	private void processActionForElapsedTurn(List<GameAction> actions, Handler<GameAction> callback) {
+	private void processActionForElapsedTurn(List<GameAction> actions, SuspendableAction1<GameAction> callback) {
 		// If the request contains an end turn action, execute it. Otherwise, choose an action
 		// at random.
 		final GameAction action = actions.stream()
@@ -295,9 +296,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.findFirst().orElse(getRandom(actions));
 
 		if (Fiber.isCurrentFiber()) {
-			callback.handle(action);
+			try {
+				callback.call(action);
+			} catch (SuspendExecution | InterruptedException execution) {
+				throw new RuntimeException(execution);
+			}
 		} else {
-			Sync.fiberHandler(callback).handle(action);
+			suspendableHandler(callback).handle(action);
 		}
 	}
 

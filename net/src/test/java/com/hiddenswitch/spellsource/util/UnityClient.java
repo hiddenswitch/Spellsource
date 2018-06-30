@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.Strand;
@@ -39,7 +38,7 @@ public class UnityClient {
 	private TestContext context;
 	private WebsocketClientEndpoint endpoint;
 	private WebsocketClientEndpoint realtime;
-	private AtomicReference<SettableFuture<Void>> matchmakingFut = new AtomicReference<>(new SettableFuture<>());
+	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
@@ -107,7 +106,7 @@ public class UnityClient {
 			deckId = account.getDecks().get(random(account.getDecks().size())).getId();
 		}
 
-		SettableFuture<Void> fut = new SettableFuture<Void>() {
+		CompletableFuture<Void> fut = new CompletableFuture<Void>() {
 			@Override
 			public boolean cancel(boolean mayInterruptIfRunning) {
 				realtime.sendMessage(Json.encode(new Envelope()
@@ -135,19 +134,19 @@ public class UnityClient {
 
 					// Might have been cancelled
 					context.assertFalse(matchmakingFut.get().isDone());
-					matchmakingFut.get().set(null);
+					matchmakingFut.get().complete(null);
 				}
 			});
 		}
 
 		context.assertTrue(realtime.isOpen());
+		logger.info("matchmake {}: Sending enqueue", getAccount().getId());
 		realtime.sendMessage(Json.encode(new Envelope()
 				.method(new EnvelopeMethod()
 						.methodId(RandomStringUtils.randomAlphanumeric(10))
 						.enqueue(new MatchmakingQueuePutRequest()
 								.queueId(queueId)
 								.deckId(deckId)))));
-
 		return fut;
 	}
 
@@ -393,7 +392,7 @@ public class UnityClient {
 	}
 
 	public void concede() {
-		endpoint.sendMessageSync(serialize(new ClientToServerMessage()
+		endpoint.sendMessage(serialize(new ClientToServerMessage()
 				.messageType(MessageType.CONCEDE)));
 	}
 
@@ -403,5 +402,14 @@ public class UnityClient {
 
 	public void setShouldDisconnect(boolean shouldDisconnect) {
 		this.shouldDisconnect = shouldDisconnect;
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		if (realtime != null) {
+			realtime.close();
+		}
+		disconnect();
 	}
 }
