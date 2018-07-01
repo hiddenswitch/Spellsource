@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SettableFuture;
 import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Games;
@@ -44,7 +43,7 @@ public class UnityClient {
 	private String loginToken;
 	private String thisUrl;
 	private boolean shouldDisconnect = true;
-	private CountDownLatch gameOverLatch;
+	protected CountDownLatch gameOverLatch;
 
 
 	public UnityClient(TestContext context) {
@@ -231,6 +230,9 @@ public class UnityClient {
 							.discardedCardIndices(Collections.singletonList(0))));
 					break;
 				case ON_REQUEST_ACTION:
+					if (!onRequestAction(message)) {
+						break;
+					}
 					assertValidActions(message);
 					assertValidStateAndChanges(message);
 					context.assertNotNull(message.getGameState());
@@ -275,6 +277,10 @@ public class UnityClient {
 		logger.debug("play: UserId " + getUserId() + " sent first message.");
 		endpoint.sendMessage(serialize(new ClientToServerMessage()
 				.messageType(MessageType.FIRST_MESSAGE)));
+	}
+
+	protected boolean onRequestAction(ServerToClientMessage message) {
+		return true;
 	}
 
 	protected void onMulligan(ServerToClientMessage message) {
