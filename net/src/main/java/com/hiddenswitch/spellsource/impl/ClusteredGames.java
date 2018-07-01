@@ -2,9 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.Draft;
-import com.hiddenswitch.spellsource.Games;
-import com.hiddenswitch.spellsource.Inventory;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.common.UnityClientBehaviour;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
@@ -20,14 +18,19 @@ import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.CollectionDeck;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.utils.AttributeMap;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
-public class ClusteredGamesImpl extends SyncVerticle implements Games {
+public class ClusteredGames extends SyncVerticle implements Games {
 	private Registration registration;
 	private Map<GameId, ServerGameContext> contexts = new ConcurrentHashMap<>();
 
@@ -39,13 +42,47 @@ public class ClusteredGamesImpl extends SyncVerticle implements Games {
 	}
 
 	@Override
-	public CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException {
+	public CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException {
 		if (Games.LOGGER.isDebugEnabled()) {
 			Games.LOGGER.debug("createGameSession: Creating game session for request " + request.toString());
 		}
 
 		if (request.getGameId() == null) {
 			throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
+		}
+
+		Logic.triggers();
+		List<String> borrowableGameIds = new ArrayList<>();
+		// Get the collection data from the configurations that are not yet populated with valid cards
+		for (Configuration configuration : request.getConfigurations()) {
+			if (configuration.getDeck() instanceof CollectionDeck) {
+				GetCollectionResponse deckCollection = Inventory.getCollection(new GetCollectionRequest()
+						.withUserId(configuration.getUserId().toString())
+						.withDeckId(configuration.getDeck().getDeckId()));
+
+				// Create the deck and assign all the appropriate IDs to the cards
+				Deck deck = deckCollection.asDeck(configuration.getUserId().toString());
+
+				// TODO: Add player information as attached to the hero entity
+				configuration.setDeck(deck);
+			}
+
+			String username = Accounts.findOne(configuration.getUserId()).getUsername();
+			configuration.setName(username);
+			// TODO: Get more attributes from database
+			AttributeMap playerAttributes = new AttributeMap();
+			playerAttributes.put(Attribute.NAME, username);
+			playerAttributes.put(Attribute.USER_ID, configuration.getUserId().toString());
+			playerAttributes.put(Attribute.DECK_ID, configuration.getDeck().getDeckId());
+
+			configuration.setPlayerAttributes(playerAttributes);
+			borrowableGameIds.add(configuration.getDeck().getDeckId());
+		}
+
+		if (borrowableGameIds.size() > 0) {
+			Inventory.borrowFromCollection(
+					new BorrowFromCollectionRequest()
+							.withCollectionIds(borrowableGameIds));
 		}
 
 		CreateGameSessionResponse pending = CreateGameSessionResponse.pending(deploymentID());

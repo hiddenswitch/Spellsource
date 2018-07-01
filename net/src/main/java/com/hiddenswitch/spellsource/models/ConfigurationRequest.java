@@ -1,10 +1,12 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.impl.DeckId;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
 import net.demilich.metastone.game.decks.CollectionDeck;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
@@ -19,6 +21,8 @@ import java.util.List;
 public class ConfigurationRequest implements Serializable {
 	private GameId gameId;
 	private List<Configuration> configurations = new ArrayList<>();
+	private Trigger triggers;
+	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 
 	public static ConfigurationRequest botMatch(GameId gameId, UserId userId, UserId botId, DeckId deckId, DeckId botDeckId) {
 		return new ConfigurationRequest()
@@ -79,5 +83,23 @@ public class ConfigurationRequest implements Serializable {
 	@Override
 	public String toString() {
 		return ToStringBuilder.reflectionToString(this);
+	}
+
+	public Trigger getTriggers() {
+		return triggers;
+	}
+
+	public ConfigurationRequest setTriggers(Trigger triggers) {
+		this.triggers = triggers;
+		return this;
+	}
+
+	public long getNoActivityTimeout() {
+		return noActivityTimeout;
+	}
+
+	public ConfigurationRequest setNoActivityTimeout(long noActivityTimeout) {
+		this.noActivityTimeout = noActivityTimeout;
+		return this;
 	}
 }
