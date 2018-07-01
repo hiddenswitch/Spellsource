@@ -46,7 +46,9 @@ import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Represents a behaviour that delegates its requests to a networking interface provided by a {@link GameContext}.
+ * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from {@link
+ * EventListener} into messages on a {@link ReadStream<Buffer>} and {@link WriteStream<Buffer>}, decoding the read
+ * buffers as {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable {
 	private static Logger logger = LoggerFactory.getLogger(UnityClientBehaviour.class);
@@ -61,7 +63,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private ReadStream<Buffer> reader;
 	private WriteStream<Buffer> writer;
 	private Server server;
-	private Scheduler scheduler;
 
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
@@ -69,7 +70,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 	public UnityClientBehaviour(Server server,
-	                            Scheduler scheduler,
 	                            ReadStream<Buffer> reader,
 	                            WriteStream<Buffer> writer,
 	                            UserId userId,
@@ -79,11 +79,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
-		this.scheduler = scheduler;
 
 		reader.handler(suspendableHandler(this::handleWebSocketMessage));
 	}
 
+	/**
+	 * Elapses this client's turn, typically due to a timeout.
+	 */
 	@Override
 	@Suspendable
 	public void elapseTurn() {
@@ -101,6 +103,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
+	/**
+	 * Elapses this client's mulligan, typically due to a timeout.
+	 */
 	@Override
 	@Suspendable
 	public void elapseMulligan() {
@@ -127,29 +132,36 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		return null;
 	}
 
+	/**
+	 * Handles a web socket message (message from the {@link #reader}), decoding it into a {@link ClientToServerMessage}.
+	 *
+	 * @param messageBuffer The buffer containing the JSON of the message.
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
-	private void handleWebSocketMessage(Buffer messageBuffer) throws SuspendExecution {
+	protected void handleWebSocketMessage(Buffer messageBuffer) throws SuspendExecution {
 		if (inboundMessagesClosed) {
 			return;
 		}
 
-		com.hiddenswitch.spellsource.client.models.ClientToServerMessage message =
-				Json.decodeValue(messageBuffer,
-						com.hiddenswitch.spellsource.client.models.ClientToServerMessage.class);
+		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
 
 		switch (message.getMessageType()) {
 			case FIRST_MESSAGE:
+				// The first message indicates the player has connected or reconnected.
 				activityMonitors.forEach(ActivityMonitor::activity);
 
 				if (server.isGameReady()) {
 					// Replace the client
 					server.onPlayerReconnected(this);
+					// Since the player may have pending requests, we're going to send the data the client needs again.
 					retryRequests();
 				} else {
 					server.onPlayerReady(this);
 				}
 				break;
 			case UPDATE_ACTION:
+				// Indicates the player has made a chocie about which action to take.
 				if (server == null) {
 					throw new RuntimeException();
 				}
@@ -362,7 +374,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		try {
 			sendMessage(getWriter(), message);
 		} catch (NullPointerException writerNull) {
-
 		} catch (IOException connectionLost) {
 			throw new RuntimeException(connectionLost);
 		}
@@ -663,7 +674,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			requests.clear();
 			messageBuffer.clear();
 			server = null;
-			scheduler = null;
 			reader = null;
 			writer = null;
 

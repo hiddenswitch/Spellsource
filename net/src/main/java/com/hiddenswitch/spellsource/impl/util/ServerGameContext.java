@@ -157,7 +157,6 @@ public class ServerGameContext extends GameContext implements Server {
 
 				// Create a client that handles game events and action/mulligan requests
 				UnityClientBehaviour client = new UnityClientBehaviour(this,
-						scheduler,
 						consumer.bodyStream(),
 						producer,
 						userId,

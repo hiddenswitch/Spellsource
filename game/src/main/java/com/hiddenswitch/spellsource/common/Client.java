@@ -18,19 +18,7 @@ public interface Client extends ActionListener, GameEventListener {
 	 */
 	@Override
 	@Suspendable
-	default void sendEmote(int entityId, Emote.MessageEnum emote) {
-	}
-
-	/**
-	 * Gets an object that represents the underlying networking socket that powers this client. This is helpful for
-	 * keeping track of reconnecting users, who may be the same {@link Client} but connected with different sockets.
-	 *
-	 * @return An object whose {@link Object#hashCode()} is valid for {@link java.util.Map} keys, to help the server
-	 * infrastructure keep track of which sockets correspond to which {@link Client} objects.
-	 */
-	@Suspendable
-	Object getWriter();
-
+	void sendEmote(int entityId, Emote.MessageEnum emote);
 	/**
 	 * Called when the last event in a stack of {@link GameEvent} has been evaluated. Typically, a client should be
 	 * notified of an entire sequence of events, so that it has valid data at the end of each event, rather than as the

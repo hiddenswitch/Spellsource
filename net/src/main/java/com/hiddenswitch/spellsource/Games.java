@@ -4,7 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.impl.ClusteredGamesImpl;
+import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.models.*;
@@ -57,7 +57,7 @@ public interface Games extends Verticle {
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 
 	static Games create() {
-		return new ClusteredGamesImpl();
+		return new ClusteredGames();
 	}
 
 	/**
@@ -612,6 +612,21 @@ public interface Games extends Verticle {
 	}
 
 	/**
+	 * Creates a match without entering a queue entry between two users.
+	 *
+	 * @param request All the required information to create a game.
+	 * @return Connection information for both users.
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	static MatchCreateResponse createGame(ConfigurationRequest request) throws SuspendExecution, InterruptedException {
+		Matchmaking.LOGGER.debug("createMatch: Creating match for request {}", request);
+
+		Games gamesService = Rpc.connect(Games.class).sync();
+		return new MatchCreateResponse(gamesService.createGameSession(request));
+	}
+
+	/**
 	 * Creates a game session on this instance.
 	 *
 	 * @param request Information needed to start a game.
@@ -620,7 +635,7 @@ public interface Games extends Verticle {
 	 * @throws InterruptedException
 	 */
 	@Suspendable
-	CreateGameSessionResponse createGameSession(CreateGameSessionRequest request) throws SuspendExecution, InterruptedException;
+	CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException;
 
 	/**
 	 * Gets the current game state of a requested game ID. In the future, this method should punt the request to the next

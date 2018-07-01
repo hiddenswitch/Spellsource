@@ -9,22 +9,17 @@ import com.hiddenswitch.spellsource.concurrent.*;
 import com.hiddenswitch.spellsource.impl.DeckId;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
@@ -114,57 +109,6 @@ public interface Matchmaking extends Verticle {
 		*/
 
 		return new MatchExpireResponse();
-	}
-
-	/**
-	 * Creates a match without entering a queue entry between two users.
-	 *
-	 * @param request All the required information to create a game.
-	 * @return Connection information for both users.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static MatchCreateResponse createMatch(ConfigurationRequest request) throws SuspendExecution, InterruptedException {
-		LOGGER.debug("createMatch: Creating match for request {}", request);
-
-		Logic.triggers();
-		List<String> deckIds = new ArrayList<>();
-		List<Configuration> newConfigurations = new ArrayList<>();
-		for (Configuration configuration : request.getConfigurations()) {
-			configuration = configuration.clone();
-
-			GetCollectionResponse deckCollection = Inventory.getCollection(new GetCollectionRequest()
-					.withUserId(configuration.getUserId().toString())
-					.withDeckId(configuration.getDeck().getDeckId()));
-
-			String username = Accounts.findOne(configuration.getUserId()).getUsername();
-			configuration.setName(username);
-			// TODO: Get more attributes from database
-			AttributeMap playerAttributes = new AttributeMap();
-			playerAttributes.put(Attribute.NAME, username);
-			playerAttributes.put(Attribute.USER_ID, configuration.getUserId().toString());
-			playerAttributes.put(Attribute.DECK_ID, configuration.getDeck().getDeckId());
-
-			// Create the deck and assign all the appropriate IDs to the cards
-			Deck deck = deckCollection.asDeck(configuration.getUserId().toString());
-
-			// TODO: Add player information as attached to the hero entity
-			configuration.setDeck(deck);
-			configuration.setPlayerAttributes(playerAttributes);
-			deckIds.add(deck.getDeckId());
-			newConfigurations.add(configuration);
-		}
-
-		Inventory.borrowFromCollection(
-				new BorrowFromCollectionRequest()
-						.withCollectionIds(deckIds));
-
-
-		Games gamesService = Rpc.connect(Games.class).sync();
-		return new MatchCreateResponse(gamesService.createGameSession(
-				new CreateGameSessionRequest()
-						.setGameId(request.getGameId())
-						.setConfigurations(newConfigurations)));
 	}
 
 	/**
@@ -296,9 +240,9 @@ public interface Matchmaking extends Verticle {
 						// Actually creating the game can happen without joining
 						// Create a bot game.
 						MatchmakingRequest user = thisMatchRequests.get(0);
-//						SuspendableLock botLock = SuspendableLock.lock("Matchmaking::takingBot");
+						SuspendableLock botLock = SuspendableLock.lock("Matchmaking::takingBot");
 
-//						try {
+						try {
 						// TODO: Move this lock into pollBotId
 						// The player has been waiting too long. Match to an AI.
 						// Retrieve a bot and use it to play against the opponent
@@ -308,15 +252,15 @@ public interface Matchmaking extends Verticle {
 								? new DeckId(Bots.getRandomDeck(bot))
 								: new DeckId(user.getBotDeckId());
 
-						createMatch(ConfigurationRequest.botMatch(
+						Games.createGame(ConfigurationRequest.botMatch(
 								gameId,
 								new UserId(user.getUserId()),
 								new UserId(bot.getId()),
 								new DeckId(user.getDeckId()),
 								botDeckId));
-//						} finally {
-//							botLock.release();
-//						}
+						} finally {
+							botLock.release();
+						}
 
 						WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
 
@@ -352,7 +296,7 @@ public interface Matchmaking extends Verticle {
 										new DeckId(user1.getDeckId()),
 										new UserId(user2.getUserId()),
 										new DeckId(user2.getDeckId()));
-						createMatch(request);
+						Games.createGame(request);
 
 						LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
 

@@ -9,6 +9,7 @@ import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.impl.UserId;
 import io.vertx.core.Handler;
 import io.vertx.core.json.Json;
 import io.vertx.core.logging.Logger;
@@ -286,11 +287,11 @@ public class UnityClient {
 	protected void onMulligan(ServerToClientMessage message) {
 	}
 
-	protected String getUserId() {
+	public UserId getUserId() {
 		if (getAccount() == null) {
-			return "(token=" + getToken() + ")";
+			return null;
 		}
-		return getAccount().getId();
+		return new UserId(getAccount().getId());
 	}
 
 	protected void assertValidActions(ServerToClientMessage message) {
