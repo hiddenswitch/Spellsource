@@ -216,6 +216,13 @@ public class UnityClient {
 					assertValidStateAndChanges(message);
 					break;
 				case ON_MULLIGAN:
+					onMulligan(message);
+					if (turnsToPlay.get() == 0) {
+						// don't respond to the mulligan attempt
+						disconnect();
+						gameOverLatch.countDown();
+						break;
+					}
 					context.assertNotNull(message.getStartingCards());
 					context.assertTrue(message.getStartingCards().size() > 0);
 					endpoint.sendMessage(serialize(new ClientToServerMessage()
@@ -268,6 +275,9 @@ public class UnityClient {
 		logger.debug("play: UserId " + getUserId() + " sent first message.");
 		endpoint.sendMessage(serialize(new ClientToServerMessage()
 				.messageType(MessageType.FIRST_MESSAGE)));
+	}
+
+	protected void onMulligan(ServerToClientMessage message) {
 	}
 
 	protected String getUserId() {
@@ -402,6 +412,10 @@ public class UnityClient {
 
 	public void setShouldDisconnect(boolean shouldDisconnect) {
 		this.shouldDisconnect = shouldDisconnect;
+	}
+
+	public boolean isConnected() {
+		return endpoint.isOpen();
 	}
 
 	@Override
