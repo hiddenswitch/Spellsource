@@ -10,33 +10,54 @@ import java.util.List;
  * Created by bberman on 12/5/16.
  */
 public class GameplayRequest {
-	public String callbackId;
-	public final Handler callback;
-	public List<Card> starterCards;
-	public GameplayRequestType type;
-	public GameState state;
-	public List<GameAction> actions;
+	private String callbackId;
+	private Handler callback;
+	private List<Card> starterCards;
+	private List<GameAction> actions;
+	private GameplayRequestType type;
 
-	public GameplayRequest(String callbackId, GameplayRequestType type, GameState state, List<GameAction> actions, Handler callback) {
-		this(type, state, actions, callback);
-		this.callbackId = callbackId;
+	public String getCallbackId() {
+		return callbackId;
 	}
 
-	public GameplayRequest(GameplayRequestType type, GameState state, List<GameAction> actions, Handler callback) {
-		this.type = type;
+	public GameplayRequest setCallbackId(String callbackId) {
+		this.callbackId = callbackId;
+		return this;
+	}
+
+	public Handler getCallback() {
+		return callback;
+	}
+
+	public GameplayRequest setCallback(Handler callback) {
 		this.callback = callback;
-		this.state = state;
-		this.actions = actions;
+		return this;
 	}
 
-	public GameplayRequest(String callbackId, GameplayRequestType type, List<Card> starterCards, Handler<List<Card>> callback) {
-		this(type, starterCards, callback);
-		this.callbackId = callbackId;
+	public List<Card> getStarterCards() {
+		return starterCards;
 	}
 
-	public GameplayRequest(GameplayRequestType type, List<Card> starterCards, Handler<List<Card>> callback) {
-		this.type = type;
+	public GameplayRequest setStarterCards(List<Card> starterCards) {
 		this.starterCards = starterCards;
-		this.callback = callback;
+		return this;
+	}
+
+	public List<GameAction> getActions() {
+		return actions;
+	}
+
+	public GameplayRequest setActions(List<GameAction> actions) {
+		this.actions = actions;
+		return this;
+	}
+
+	public GameplayRequestType getType() {
+		return type;
+	}
+
+	public GameplayRequest setType(GameplayRequestType type) {
+		this.type = type;
+		return this;
 	}
 }

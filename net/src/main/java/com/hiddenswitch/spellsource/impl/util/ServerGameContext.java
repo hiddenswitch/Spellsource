@@ -317,6 +317,8 @@ public class ServerGameContext extends GameContext implements Server {
 			return;
 		}
 
+		clientsReady.clear();
+
 		getLogic().contextReady();
 
 		// Make sure the players are initialized before sending the original player updates.

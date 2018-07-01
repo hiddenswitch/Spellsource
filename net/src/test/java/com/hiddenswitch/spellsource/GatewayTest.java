@@ -326,8 +326,6 @@ public class GatewayTest extends SpellsourceTestBase {
 
 	@Test
 	public void testMatchmakingCancellation(TestContext context) throws ApiException, InterruptedException {
-		Logging.setLoggingLevel(Level.DEBUG);
-
 		UnityClient client1 = new UnityClient(context);
 		client1.createUserAccount();
 		java.util.concurrent.Future<Void> matchmaking = client1.matchmake(null, "constructed");
@@ -340,5 +338,36 @@ public class GatewayTest extends SpellsourceTestBase {
 		sync(() -> context.assertFalse(Games.getGames().containsKey(new UserId(client1.getAccount().getId()))));
 		other.cancel(true);
 		Thread.sleep(2000L);
+	}
+
+	@Test
+	public void testReconnectsResumesMulligan(TestContext context) throws InterruptedException {
+		AtomicInteger mulligans = new AtomicInteger(0);
+		UnityClient client = new UnityClient(context) {
+			@Override
+			protected void onMulligan(ServerToClientMessage message) {
+				super.onMulligan(message);
+				mulligans.incrementAndGet();
+			}
+		};
+		client.createUserAccount();
+		client.setShouldDisconnect(true);
+		client.getTurnsToPlay().set(0);
+		client.matchmakeQuickPlay(null);
+		client.waitUntilDone();
+		Thread.sleep(100L);
+		context.assertFalse(client.isConnected());
+		sync(() -> {
+			Strand.sleep(100L);
+			// Game should still be running
+			context.assertTrue(Games.getGames().containsKey(new UserId(client.getAccount().getId())));
+			Strand.sleep(100L);
+		});
+		// Reconnect
+		client.getTurnsToPlay().set(999);
+		client.play();
+		client.waitUntilDone();
+		context.assertTrue(client.isGameOver());
+		context.assertEquals(mulligans.get(), 2);
 	}
 }

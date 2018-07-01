@@ -90,13 +90,13 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		Iterator<GameplayRequest> requestsIter = this.getRequests().iterator();
 		while (requestsIter.hasNext()) {
 			GameplayRequest request = requestsIter.next();
-			if (request.type == GameplayRequestType.ACTION) {
+			if (request.getType() == GameplayRequestType.ACTION) {
 				requestsIter.remove();
 
 				@SuppressWarnings("unchecked")
-				Handler<GameAction> callback = (Handler<GameAction>) request.callback;
+				Handler<GameAction> callback = (Handler<GameAction>) request.getCallback();
 
-				processActionForElapsedTurn(request.actions, callback::handle);
+				processActionForElapsedTurn(request.getActions(), callback::handle);
 			}
 		}
 	}
@@ -107,11 +107,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		Iterator<GameplayRequest> requestsIter = this.getRequests().iterator();
 		while (requestsIter.hasNext()) {
 			GameplayRequest request = requestsIter.next();
-			if (request.type == GameplayRequestType.MULLIGAN) {
+			if (request.getType() == GameplayRequestType.MULLIGAN) {
 				requestsIter.remove();
 
 				@SuppressWarnings("unchecked")
-				Handler<List<Card>> handler = (Handler<List<Card>>) request.callback;
+				Handler<List<Card>> handler = (Handler<List<Card>>) request.getCallback();
 				handler.handle(new ArrayList<>());
 			}
 		}
@@ -119,7 +119,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	private GameplayRequest getRequest(String messageId) {
 		for (GameplayRequest request : getRequests()) {
-			if (request.callbackId.equals(messageId)) {
+			if (request.getCallbackId().equals(messageId)) {
 				return request;
 			}
 		}
@@ -194,12 +194,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	protected void retryRequests() {
 		for (GameplayRequest request : getRequests()) {
-			switch (request.type) {
+			switch (request.getType()) {
 				case ACTION:
-					onRequestAction(request.callbackId, request.state, request.actions);
+					onRequestAction(request.getCallbackId(), lastStateSent, request.getActions());
 					break;
 				case MULLIGAN:
-					onMulligan(request.callbackId, request.state, request.starterCards, playerId);
+					onMulligan(request.getCallbackId(), lastStateSent, request.getStarterCards(), playerId);
 					break;
 				default:
 					logger.error("Unknown gameplay request was pending.");
@@ -224,7 +224,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> next) {
 		String id = Integer.toString(callbackIdCounter.getAndIncrement());
-		getRequests().add(new GameplayRequest(id, GameplayRequestType.MULLIGAN, cards, next));
+		getRequests().add(new GameplayRequest()
+				.setCallbackId(id)
+				.setType(GameplayRequestType.MULLIGAN)
+				.setStarterCards(cards)
+				.setCallback(next));
 		onMulligan(id, context.getGameStateCopy(), cards, playerId);
 	}
 
@@ -239,11 +243,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		getRequests().remove(request);
 		List<Card> discardedCards = discardedCardIndices
 				.stream()
-				.map(i -> request.starterCards.get(i))
+				.map(i -> request.getStarterCards().get(i))
 				.collect(toList());
 
 		@SuppressWarnings("unchecked")
-		Handler<List<Card>> callback = request.callback;
+		Handler<List<Card>> callback = request.getCallback();
 
 		callback.handle(discardedCards);
 	}
@@ -258,7 +262,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, Handler<GameAction> callback) {
 		String id = Integer.toString(callbackIdCounter.getAndIncrement());
-		GameplayRequest request = new GameplayRequest(id, GameplayRequestType.ACTION, context.getGameStateCopy(), actions, callback);
+		GameplayRequest request = new GameplayRequest()
+				.setCallbackId(id)
+				.setType(GameplayRequestType.ACTION)
+				.setActions(actions)
+				.setCallback(callback);
 
 		// The player's turn may have ended, so handle the action immediately in this case.
 		if (isTimerElapsed()) {
@@ -327,10 +335,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 
 		getRequests().remove(request);
-		GameAction action = request.actions.get(actionIndex);
+		GameAction action = request.getActions().get(actionIndex);
 
 		@SuppressWarnings("unchecked")
-		Handler<GameAction> callback = request.callback;
+		Handler<GameAction> callback = request.getCallback();
 
 		if (!Fiber.isCurrentFiber()) {
 			Sync.getContextScheduler().newFiber(() -> {
