@@ -408,4 +408,9 @@ public class GatewayTest extends SpellsourceTestBase {
 		client.waitUntilDone();
 		context.assertTrue(client.isGameOver());
 	}
+
+	@Test
+	public void testElapsesTurnCorrectly(TestContext context) {
+
+	}
 }
