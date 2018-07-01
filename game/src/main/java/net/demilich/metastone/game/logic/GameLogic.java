@@ -93,8 +93,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int MAX_QUESTS = 1;
 	/**
-	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link GameDeck} with. Some effects, like
-	 * Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
+	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link GameDeck} with. Some effects,
+	 * like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
 	 */
 	public static final int DECK_SIZE = 30;
 	/**
@@ -1258,8 +1258,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Draws a card for a player from the deck to the hand.
 	 * <p>
-	 * When a {@link GameDeck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time a
-	 * card should have been drawn but is not.
+	 * When a {@link GameDeck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time
+	 * a card should have been drawn but is not.
 	 *
 	 * @param playerId The player who should draw a card.
 	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
@@ -1985,6 +1985,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return discardedCards;
 	}
 
+	/**
+	 * Activates all the appropriate enchantments for a player who has mulliganned, and gives that player the player's
+	 * {@link GameStartEvent}.
+	 *
+	 * @param player Player who just finished mulligan phase, but before turn starts
+	 */
 	@Suspendable
 	public void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);

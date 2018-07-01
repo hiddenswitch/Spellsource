@@ -308,40 +308,51 @@ public class ServerGameContext extends GameContext implements Server {
 		} else {
 			bothClientsReady = Future.succeededFuture();
 		}
-
 		// One of the two clients did not connect in time, log a win for the player that connected
 		if (bothClientsReady == null
 				|| bothClientsReady.failed()) {
-			// TODO: What should we do here?
+			// Mark the players that have not connected in time as destroyed, which in updateAndGetGameOver will eventually
+			// lead to a double loss
+			for (Map.Entry<Integer, Future<Client>> entry : clientsReady.entrySet()) {
+				if (!entry.getValue().isComplete()) {
+					getLogic().concede(entry.getKey());
+				}
+			}
 			isRunning = false;
+			// resume() will check if the game is over
 			return;
 		}
 
+		// When players reconnect, we don't want them to trigger these futures anymore
 		clientsReady.clear();
-
-		getLogic().contextReady();
 
 		// Make sure the players are initialized before sending the original player updates.
 		getLogic().initializePlayer(IdFactory.PLAYER_1);
 		getLogic().initializePlayer(IdFactory.PLAYER_2);
 		logger.trace("init {}: Players initialized", getGameId());
-		logger.trace("init {}: Updating active players", getGameId());
 
+		// Signal to the game context has made everything have valid IDs.
+		getLogic().contextReady();
+
+		logger.trace("init {}: Updating active players", getGameId());
 		for (Client client : getClients()) {
 			client.onActivePlayer(getActivePlayer());
 		}
 
+		// Record the time that we started the game in system milliseconds, in case a card wants to use this for an event-based thing.
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 
-		Future<List<Card>> init1 = Future.future();
-		Future<List<Card>> init2 = Future.future();
+		// Simultaneous mulligan futures
+		Future<List<Card>> mulligan1 = Future.future();
+		Future<List<Card>> mulligan2 = Future.future();
 
 		// Set the mulligan timer
 		final TimerId mulliganTimerId;
 		if (getBehaviours().stream().allMatch(Behaviour::isHuman)) {
+			// Only two human players will get timers
 			timerLengthMillis = getLogic().getMulliganTimeMillis();
 			timerStartTimeMillis = System.currentTimeMillis();
-			mulliganTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler((SuspendableAction1<Long>) this::endMulligans));
+			mulliganTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler(this::endMulligans));
 		} else {
 			logger.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
 			timerLengthMillis = null;
@@ -349,18 +360,21 @@ public class ServerGameContext extends GameContext implements Server {
 			mulliganTimerId = null;
 		}
 
+		// Send the clients the current game state
 		updateClientsWithGameState();
 
-		getLogic().initAsync(getActivePlayerId(), true, init1::complete);
-		getLogic().initAsync(getNonActivePlayerId(), false, init2::complete);
+		// Simultaneous mulligans now
+		getLogic().initAsync(getActivePlayerId(), true, mulligan1::complete);
+		getLogic().initAsync(getNonActivePlayerId(), false, mulligan2::complete);
+		// If this is interrupted, it'll bubble up to the general interrupt handler
+		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligan1, mulligan2)::setHandler);
 
-		// Mulligan simultaneously now
-		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(init1, init2)::setHandler);
-
+		// If we got this far, we should cancel the time
 		if (mulliganTimerId != null) {
 			scheduler.cancelTimer(mulliganTimerId);
 		}
 
+		// The timer will have completed the mulligans, that's why we don't timeout simultaneous mulligans
 		if (simultaneousMulligans == null || simultaneousMulligans.failed()) {
 			// An error occurred
 			logger.error("init {}: The mulligan phase ended prematurely", getGameId());
@@ -374,26 +388,39 @@ public class ServerGameContext extends GameContext implements Server {
 
 	}
 
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Starts playing in a {@link Fiber} (i.e., {@link #play(boolean)} is called with {@code true}).
+	 */
 	@Override
 	@Suspendable
 	public void play() {
 		play(true);
 	}
 
+	/**
+	 * Plays the game. {@link GameContext#play()} is eventually called.
+	 *
+	 * @param fork When {@code false}, blocks until the game is done. Otherwise, plays the game inside a {@link Fiber}
+	 */
 	@Suspendable
 	public void play(boolean fork) {
 		isRunning = true;
 		if (fork) {
+			// We're going to build this fiber with a huge stack
 			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), 512, () -> {
 				try {
 					super.play();
 				} catch (VertxException interrupted) {
+					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
 						logger.debug("resume {}: Interrupted gracefully");
 					} else {
 						logger.error("resume {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
 					}
-					// The game is already ended whenever the fiber is interrupted
+					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
+					// is allowed to interrupt the fiber.
 				}
 				return null;
 			});
@@ -418,7 +445,7 @@ public class ServerGameContext extends GameContext implements Server {
 				timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
 				timerStartTimeMillis = System.currentTimeMillis();
 
-				turnTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler((SuspendableAction1<Long>) ignored -> {
+				turnTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler(ignored -> {
 					// Since executing the callback may itself trigger more action requests, we'll indicate to
 					// the NetworkDelegate (i.e., this ServerGameContext instance) that further
 					// networkRequestActions should be executed immediately.
