@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.Friend;
@@ -18,9 +19,9 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 public interface Presence {
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
-		Connection.connected(Sync.suspendableHandler(connection -> {
+		Connection.connected(Sync.suspendableHandler((SuspendableAction1<Connection>) connection -> {
 			final UserId key = new UserId(connection.userId());
-			connection.endHandler(Sync.suspendableHandler(ignored -> {
+			connection.endHandler(Sync.suspendableHandler((SuspendableAction1<Void>) ignored -> {
 				setPresence(key, PresenceEnum.OFFLINE);
 			}));
 

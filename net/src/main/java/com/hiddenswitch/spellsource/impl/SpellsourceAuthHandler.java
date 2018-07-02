@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -15,6 +16,8 @@ import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.AuthHandler;
 
 import java.util.Set;
+
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 public class SpellsourceAuthHandler implements AuthHandler {
 	private SpellsourceAuthHandler() {
@@ -78,7 +81,7 @@ public class SpellsourceAuthHandler implements AuthHandler {
 			final String token = userId + ":" + secret;
 
 			Vertx.currentContext().runOnContext(v1 -> {
-				Vertx.currentContext().runOnContext(Sync.suspendableHandler(v2 -> {
+				Vertx.currentContext().runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
 					UserRecord record = Accounts.getWithToken(token);
 					event.setUser(record);
 					if (record == null) {

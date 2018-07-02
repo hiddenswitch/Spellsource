@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
@@ -15,7 +16,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by bberman on 6/7/17.
  */
-class BufferEventBusHandler<T, R> implements Handler<Message<Buffer>> {
+class BufferEventBusHandler<T, R> implements SuspendableAction1<Message<Buffer>> {
 	private final SuspendableFunction<T, R> method;
 
 	BufferEventBusHandler(SuspendableFunction<T, R> method) {
@@ -24,7 +25,7 @@ class BufferEventBusHandler<T, R> implements Handler<Message<Buffer>> {
 
 	@Override
 	@Suspendable
-	public void handle(Message<Buffer> message) {
+	public void call(Message<Buffer> message) {
 		VertxBufferInputStream inputStream = new VertxBufferInputStream(message.body());
 		T request = null;
 		try {

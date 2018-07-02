@@ -13,6 +13,8 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+
 /**
  * Created by bberman on 2/17/17.
  */
@@ -20,7 +22,7 @@ public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
 
 	private static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
-		return Sync.suspendableHandler((context) -> {
+		return suspendableHandler((SuspendableAction1<RoutingContext>) (context) -> {
 			try {
 				handler.call(context);
 			} catch (Throwable unhandled) {

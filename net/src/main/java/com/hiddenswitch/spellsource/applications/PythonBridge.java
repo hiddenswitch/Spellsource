@@ -7,6 +7,7 @@ import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,7 +48,7 @@ public class PythonBridge {
 	}
 
 	public static long simulate(SimulationResultGenerator generator, List<String> deckLists, int gamesPerBatch, List<Supplier<Behaviour>> behaviours, boolean mirrors, boolean reduce) {
-		final Map<String, Deck> decks = Simulation.getDecks(deckLists);
+		final Map<String, GameDeck> decks = Simulation.getDecks(deckLists);
 		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() > 2
 				&& !behaviours.get(0).get().getClass().equals(behaviours.get(1).get().getClass()));
 
@@ -55,7 +56,7 @@ public class PythonBridge {
 			try {
 				for (String[] deckKeyPair : combinations) {
 					// Get a pair of decks
-					List<Deck> deckPair = Arrays.stream(deckKeyPair).map(decks::get).collect(Collectors.toList());
+					List<GameDeck> deckPair = Arrays.stream(deckKeyPair).map(decks::get).collect(Collectors.toList());
 					// Run a single simulation on the decks
 
 					try {

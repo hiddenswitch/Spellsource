@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.client.models.DraftState;
 import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.ext.mongo.UpdateOptions;
@@ -19,7 +20,6 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
-import java.util.Collections;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -180,7 +180,7 @@ public interface Draft {
 
 	@Suspendable
 	static Closeable startDraftQueue() throws SuspendExecution {
-		return Matchmaking.startMatchmaker("draft", new Matchmaking.MatchmakingQueueConfiguration()
+		return Matchmaking.startMatchmaker("draft", new MatchmakingQueueConfiguration()
 				.setWaitsForHost(false)
 				.setStillConnectedTimeout(1000L)
 				.setRules(new CardDesc[0])

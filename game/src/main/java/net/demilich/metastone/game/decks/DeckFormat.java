@@ -182,7 +182,7 @@ public class DeckFormat implements Serializable, Cloneable {
 		return smallestFormat;
 	}
 
-	public static DeckFormat getSmallestSupersetFormat(List<Deck> deckPair) {
+	public static DeckFormat getSmallestSupersetFormat(List<GameDeck> deckPair) {
 		return deckPair.get(0).getFormat().equals(deckPair.get(1).getFormat())
 				? deckPair.get(0).getFormat()
 				: DeckFormat.getSmallestSupersetFormat(deckPair.stream().flatMap(deck -> deck.getCards().stream())

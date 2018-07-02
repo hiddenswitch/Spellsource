@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.impl.ConnectionImpl;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -18,7 +19,6 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.AsyncMap;
-import io.vertx.core.shareddata.Lock;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
@@ -27,6 +27,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
+
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Logger logger = LoggerFactory.getLogger(Hazelcast.class);
@@ -55,42 +57,6 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		MessageProducer<Envelope> producer = Vertx.currentContext().owner().eventBus().publisher(handlerId);
 		return producer;
-		/*
-		return new WriteStream<Envelope>() {
-			@Override
-			public WriteStream<Envelope> exceptionHandler(Handler<Throwable> handler) {
-				producer.exceptionHandler(handler);
-				return this;
-			}
-
-			@Override
-			public WriteStream<Envelope> write(Envelope data) {
-				producer.write(Buffer.buffer(Json.encode(data)));
-				return this;
-			}
-
-			@Override
-			public void end() {
-				producer.end();
-			}
-
-			@Override
-			public WriteStream<Envelope> setWriteQueueMaxSize(int maxSize) {
-				producer.setWriteQueueMaxSize(maxSize);
-				return this;
-			}
-
-			@Override
-			public boolean writeQueueFull() {
-				return producer.writeQueueFull();
-			}
-
-			@Override
-			public WriteStream<Envelope> drainHandler(Handler<Void> handler) {
-				producer.drainHandler(handler);
-				return this;
-			}
-		};*/
 	}
 
 	static WriteStream<Envelope> writeStream(UserId userId) throws SuspendExecution {
@@ -118,28 +84,15 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		});
 	}
 
-	static Connection create(ServerWebSocket socket, String userId) throws SuspendExecution {
-		final ConnectionImpl connection = new ConnectionImpl(socket, userId);
-		final SuspendableMap<UserId, String> connections = getConnections();
-		final UserId key = new UserId(userId);
-		String id = "Connection::clusteredConsumer[" + socket.binaryHandlerID() + "]";
-
-		MessageConsumer<Envelope> consumer = Vertx.currentContext().owner().eventBus().consumer(id);
-		consumer.handler(msg -> {
-			socket.write(Buffer.buffer(Json.encode(msg.body())));
-		});
-
-		connections.put(key, id);
-		connection.endHandler(Sync.suspendableHandler(v -> {
-			connections.remove(key, id);
-			consumer.unregister();
-		}));
-
-		return connection;
+	static Connection create(String userId) throws SuspendExecution {
+		SuspendableMap<UserId, String> connections = getConnections();
+		String id = "Connection::clusteredConsumer[" + userId + "]";
+		connections.put(new UserId(userId), id);
+		return new ConnectionImpl(userId).setId(id);
 	}
 
 	static Handler<RoutingContext> handler() {
-		return Sync.suspendableHandler(Connection::connected);
+		return suspendableHandler((SuspendableAction1<RoutingContext>) Connection::connected);
 	}
 
 	static void connected(Handler<Connection> handler) {
@@ -180,34 +133,21 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			return;
 		}
 
-		SuspendableLock lock;
+		SuspendableLock lock = SuspendableLock.lock("Connection::realtime[" + userId + "]");
 
-		try {
-			lock = SuspendableLock.lock("Connection::realtime-data-lock[" + userId + "]", 1000L);
-		} catch (VertxException ex) {
-			routingContext.fail(ex);
-			routingContext.next();
-			return;
-		}
-
-		ServerWebSocket socket = routingContext.request().upgrade();
 		Deque<Handler<Connection>> handlers = getHandlers();
-		Connection connection = create(socket, userId);
+		Connection connection = create(userId);
 
 		// All handlers should run simultaneously
 		for (Handler<Connection> handler : handlers) {
-			Vertx.currentContext().runOnContext(v -> {
-				try {
-					handler.handle(connection);
-				} catch (Throwable t) {
-					logger.error("connected {} {}: Handler threw an exception, propagated error", userId, routingContext.request().connection().remoteAddress());
-					throw t;
-				}
-			});
+			Vertx.currentContext().runOnContext(v -> handler.handle(connection));
 		}
 
 		// The lock gets released when the user disconnects
 		connection.endHandler(v -> lock.release());
+
+		ServerWebSocket socket = routingContext.request().upgrade();
+		connection.setSocket(socket);
 	}
 
 	static void registerCodecs() {
@@ -217,6 +157,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			// Ignored
 		}
 	}
+
+	void setSocket(ServerWebSocket socket);
 
 	@Override
 	default Connection exceptionHandler(Handler<Throwable> handler) {

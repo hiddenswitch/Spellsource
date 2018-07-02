@@ -1,12 +1,14 @@
 package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.InviteId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.MatchmakingRequest;
 import com.hiddenswitch.spellsource.util.Sync;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
@@ -23,6 +25,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
 
 public interface Invites {
@@ -31,7 +34,7 @@ public interface Invites {
 
 
 	static void handleConnections() throws SuspendExecution {
-		Connection.connected(Sync.suspendableHandler(connection -> {
+		Connection.connected(suspendableHandler((SuspendableAction1<Connection>) connection -> {
 			// Notify recipients of all pending invites.
 			List<Invite> invites = mongo().find(INVITES, json("toUserId", connection.userId(), "status", json("$in", PENDING_STATUSES)), Invite.class);
 			for (Invite invite : invites) {
@@ -81,7 +84,7 @@ public interface Invites {
 		Vertx vertx = Vertx.currentContext().owner();
 
 		// Set timer to expire the invite after 15 minutes
-		vertx.setTimer(15 * 60 * 1000L, Sync.suspendableHandler(timerId -> {
+		vertx.setTimer(15 * 60 * 1000L, suspendableHandler(timerId -> {
 			// If the invite hasn't been acted on, expire it
 			mongo().updateCollection(INVITES,
 					json("_id", inviteId.toString(), "status", json("$in", PENDING_STATUSES)),
@@ -187,18 +190,15 @@ public interface Invites {
 		}
 		if (invite.getQueueId() != null) {
 			// Enqueue the player automatically
-			try {
-				GameId gameId = Matchmaking.matchmake(new MatchmakingRequest(request.getMatch(), user.getId()));
-				// These are the semantics of the matchmake function.
-				if (gameId == null) {
-					throw new InterruptedException();
-				}
-				res.match(new MatchmakingQueuePutResponse().unityConnection(new MatchmakingQueuePutResponseUnityConnection()));
-			} catch (InterruptedException ex) {
-				mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", Invite.StatusEnum.REJECTED.getValue())));
-				updateInvite(invite);
-				throw new IllegalStateException("Matchmaking was canceled, so the invite was rejected by the recipient.");
-			}
+//			try {
+			Matchmaking.enqueue(new MatchmakingRequest(request.getMatch(), user.getId()));
+//
+//				res.match(new MatchmakingQueuePutResponse().unityConnection(new MatchmakingQueuePutResponseUnityConnection()));
+//			} catch (InterruptedException ex) {
+//				mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", Invite.StatusEnum.REJECTED.getValue())));
+//				updateInvite(invite);
+//				throw new IllegalStateException("Matchmaking was canceled, so the invite was rejected by the recipient.");
+//			}
 		}
 		return res;
 	}

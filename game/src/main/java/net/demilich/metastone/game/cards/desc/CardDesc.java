@@ -952,7 +952,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
-		return Sets.newHashSet(
+		@SuppressWarnings("unchecked")
+		HashSet<Map.Entry<CardDescArg, Object>> entries = Sets.newHashSet(
 				immutableEntry(CardDescArg.ID, id),
 				immutableEntry(CardDescArg.NAME, name),
 				immutableEntry(CardDescArg.DESCRIPTION, description),
@@ -979,6 +980,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.SPELL, spell),
 				immutableEntry(CardDescArg.CONDITION, condition)
 		);
+		return entries;
 	}
 
 	@JsonIgnore

@@ -119,15 +119,17 @@ public interface Bots {
 		}
 	}
 
-	static String pollBotId() throws SuspendExecution, InterruptedException {
+	static UserId pollBotId() throws SuspendExecution, InterruptedException {
+		// TODO: Contains synchronization issues, but the worst that will happen is that a single bot plays multiple games
 		List<String> bots = getBotIds();
 
 		Collections.shuffle(bots);
 		SuspendableMap<UserId, GameId> games = Games.getGames();
 
 		for (String id : bots) {
-			if (!games.containsKey(new UserId(id))) {
-				return id;
+			UserId key = new UserId(id);
+			if (!games.containsKey(key)) {
+				return key;
 			}
 		}
 
@@ -138,14 +140,14 @@ public interface Bots {
 				.withBot(true));
 
 		Logic.initializeUser(InitializeUserRequest.create(response.getUserId()));
-		return response.getUserId();
+		return new UserId(response.getUserId());
 	}
 
 	static List<String> getBotIds() throws SuspendExecution, InterruptedException {
 		return Mongo.mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("_id", 1)))
-					.stream()
-					.map(jo -> jo.getString("_id"))
-					.collect(Collectors.toList());
+				.stream()
+				.map(jo -> jo.getString("_id"))
+				.collect(Collectors.toList());
 	}
 
 	static String getRandomDeck(UserRecord bot) {

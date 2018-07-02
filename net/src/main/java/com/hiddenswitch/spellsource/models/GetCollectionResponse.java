@@ -10,8 +10,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckWithId;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
@@ -19,8 +18,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bberman on 1/22/17.
@@ -68,8 +65,9 @@ public final class GetCollectionResponse implements Serializable {
 				.withName(name);
 	}
 
-	public Deck asDeck(String userId) {
-		Deck deck = new DeckWithId(getCollectionId());
+	public GameDeck asDeck(String userId) {
+		GameDeck deck = new GameDeck();
+		deck.setDeckId(getCollectionId());
 		deck.setHeroClass(getHeroClass());
 		deck.setName(getName());
 		String heroCardId = getHeroCardId();
