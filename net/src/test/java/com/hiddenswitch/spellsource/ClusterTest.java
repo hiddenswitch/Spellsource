@@ -73,7 +73,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		}));
 	}
 
-	@Test(timeout = 60000L)
+	@Test(timeout = 90000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		// Connect to existing cluster
 		int count = 10;
