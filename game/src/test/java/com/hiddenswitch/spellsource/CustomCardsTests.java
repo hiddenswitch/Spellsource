@@ -44,6 +44,67 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testEnergeticMentee() {
+		runGym((context, player, opponent) -> {
+			player.setMana(2);
+			playMinionCard(context, player, "minion_energetic_mentee");
+			assertEquals(player.getMinions().size(), 1);
+		});
+		runGym((context, player, opponent) -> {
+			player.setMana(3);
+			playMinionCard(context, player, "minion_energetic_mentee");
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_deathwhelp");
+		});
+	}
+
+	@Test
+	public void testEvilCounterpart() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+
+			// Does not trigger invoke
+			player.setMana(7);
+			Card card = receiveCard(context, player, "spell_evil_counterpart");
+			assertEquals(costOf(context, player, card), 4);
+			playCardWithTarget(context, player, card, target);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMana(), 7 - 4);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+
+			// Does trigger invoke
+			player.setMana(8);
+			Card card = receiveCard(context, player, "spell_evil_counterpart");
+			assertEquals(costOf(context, player, card), 8);
+			playCardWithTarget(context, player, card, target);
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getMana(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+
+			// Does not trigger invoke
+			player.setMana(5);
+			playCard(context, player, "spell_preparation");
+			Card card = receiveCard(context, player, "spell_evil_counterpart");
+			assertEquals(costOf(context, player, card), 1, "Discounted by Preparation");
+			playCardWithTarget(context, player, card, target);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMana(), 5 - 4 + 3);
+		});
+	}
+
+	@Test
 	public void testHaplessKnight() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

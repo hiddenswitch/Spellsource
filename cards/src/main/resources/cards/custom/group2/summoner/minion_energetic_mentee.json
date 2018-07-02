@@ -1,0 +1,28 @@
+{
+  "name": "Energetic Mentee",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Charge. Invoke (3): Summon a 1/1 Whelp with Charge.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_deathwhelp"
+    }
+  },
+  "attributes": {
+    "INVOKE": 3,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
