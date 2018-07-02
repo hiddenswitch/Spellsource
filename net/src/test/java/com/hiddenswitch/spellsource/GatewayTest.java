@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -276,7 +277,7 @@ public class GatewayTest extends SpellsourceTestBase {
 	}
 
 	@Test(timeout = 25000L)
-	public void testDisconnectingUnityClient(TestContext context) {
+	public void testGameClosedAfterNoActivity(TestContext context) {
 		System.setProperty("games.defaultNoActivityTimeout", "8000");
 		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
@@ -304,6 +305,43 @@ public class GatewayTest extends SpellsourceTestBase {
 
 			assertEquals(false, done);
 		});
+
+		// Should not have received end game message
+		assertFalse(client.isGameOver());
+	}
+
+	@Test(timeout = 45000L)
+	public void testGameDoesntCloseAfterActivity(TestContext context) {
+		System.setProperty("games.defaultNoActivityTimeout", "8000");
+		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
+		AtomicInteger counter = new AtomicInteger();
+		AtomicLong startTime = new AtomicLong();
+		UnityClient client = new UnityClient(context) {
+			@Override
+			protected boolean onRequestAction(ServerToClientMessage message) {
+				logger.trace("testGameDoesntCloseAfterActivity: Sending request {}", counter.get());
+				// Spend 7 seconds waiting to send the first action
+				if (counter.getAndIncrement() == 0) {
+					startTime.set(System.currentTimeMillis());
+					vertx.setTimer(7000L, ignored -> {
+						this.respondRandomAction(message);
+					});
+				} else {
+					// Otherwise, slow things down only a little bit
+					vertx.setTimer(150L, ignored -> {
+						this.respondRandomAction(message);
+					});
+				}
+				return false;
+			}
+		};
+
+
+		client.createUserAccount(null);
+		client.matchmakeQuickPlay(null);
+		client.waitUntilDone();
+		assertTrue(System.currentTimeMillis() - startTime.get() > 8000L);
+		assertTrue(client.isGameOver());
 	}
 
 

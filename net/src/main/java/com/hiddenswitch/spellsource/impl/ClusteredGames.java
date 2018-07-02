@@ -103,15 +103,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			// Deal with ending the game
 			session.handleEndGame(this::onGameOver);
 
-			ActivityMonitor activityMonitor = new ActivityMonitor(vertx, request.getNoActivityTimeout(), this::endGame, request.getGameId());
-
-			// Listen for messages from the clients
-			for (Client client : session.getClients()) {
-				if (client instanceof UnityClientBehaviour) {
-					((UnityClientBehaviour) client).getActivityMonitors().add(activityMonitor);
-				}
-			}
-
 			CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), session);
 			// Plays the game context in its own fiber
 			session.play();

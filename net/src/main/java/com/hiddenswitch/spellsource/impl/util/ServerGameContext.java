@@ -17,6 +17,7 @@ import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.BotsServiceBehaviour;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
+import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
 import com.hiddenswitch.spellsource.models.MatchExpireRequest;
@@ -157,10 +158,13 @@ public class ServerGameContext extends GameContext implements Server {
 
 				// Create a client that handles game events and action/mulligan requests
 				UnityClientBehaviour client = new UnityClientBehaviour(this,
+						new VertxScheduler(Vertx.currentContext().owner()),
 						consumer.bodyStream(),
 						producer,
 						userId,
-						configuration.getPlayerId());
+						configuration.getPlayerId(),
+						configuration.getNoActivityTimeout());
+
 				// This client too needs to be closed
 				closeables.add(client);
 
@@ -706,10 +710,10 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void dispose() {
-		super.dispose();
 		for (Closeable closeable : closeables) {
 			closeable.close(Future.future());
 		}
+		super.dispose();
 	}
 
 	public List<Trigger> getGameTriggers() {

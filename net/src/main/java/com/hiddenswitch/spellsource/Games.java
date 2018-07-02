@@ -40,7 +40,9 @@ import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -598,7 +600,6 @@ public interface Games extends Verticle {
 	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
 		return SuspendableMap.getOrCreate("Games::players");
 	}
-
 
 	static void endGame(GameId game) throws SuspendExecution, InterruptedException {
 		try {

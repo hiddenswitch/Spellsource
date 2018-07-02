@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl.server;
 
+import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.impl.UserId;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.utils.AttributeMap;
@@ -14,6 +15,7 @@ public class Configuration implements Serializable, Cloneable {
 	private AttributeMap playerAttributes;
 	private Deck deck;
 	private boolean isBot;
+	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
 
 	public UserId getUserId() {
 		return userId;
@@ -66,6 +68,15 @@ public class Configuration implements Serializable, Cloneable {
 
 	public Configuration setBot(boolean bot) {
 		isBot = bot;
+		return this;
+	}
+
+	public long getNoActivityTimeout() {
+		return noActivityTimeout;
+	}
+
+	public Configuration setNoActivityTimeout(long noActivityTimeout) {
+		this.noActivityTimeout = noActivityTimeout;
 		return this;
 	}
 
