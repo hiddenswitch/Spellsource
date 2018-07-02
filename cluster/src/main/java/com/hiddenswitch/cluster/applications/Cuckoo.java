@@ -13,6 +13,7 @@ import io.jenetics.stat.DoubleMomentStatistics;
 import io.jenetics.util.Factory;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.shared.threat.FeatureVector;
 import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
@@ -92,7 +93,7 @@ public class Cuckoo {
 
 	static double evaluate(Genotype<DoubleGene> genotype) {
 		List<DeckCreateRequest> decks = Spellsource.spellsource().getStandardDecks();
-		List<Deck> gameDecks = Arrays.asList(decks.get(0).toGameDeck(), decks.get(1).toGameDeck());
+		List<GameDeck> gameDecks = Arrays.asList(decks.get(0).toGameDeck(), decks.get(1).toGameDeck());
 		SimulationResult result = GameContext.simulate(gameDecks, () -> {
 			FeatureVector featureVector = fromGenotype(genotype);
 			GameStateValueBehaviour agent = new GameStateValueBehaviour(featureVector, "Agent");

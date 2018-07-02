@@ -105,17 +105,6 @@ public interface Behaviour extends Cloneable {
 	}
 
 	/**
-	 * A networked version of sending a game over message.
-	 *
-	 * @param context         The game context.
-	 * @param playerId        The player receiving this message.
-	 * @param winningPlayerId The winning player.
-	 */
-	@Suspendable
-	default void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId) {
-	}
-
-	/**
 	 * Determines whether this behaviour's actions were determined by a human.
 	 *
 	 * @return {@code true} if the actions are determined by a human, {@code false} otherwise.

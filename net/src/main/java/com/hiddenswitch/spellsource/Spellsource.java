@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
@@ -37,6 +38,7 @@ import static com.hiddenswitch.spellsource.Inventory.INVENTORY;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -460,11 +462,11 @@ public class Spellsource {
 	 *                  where the value will be persisted in a database.
 	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
 	 */
-	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
+	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, SuspendableAction1<PersistenceContext<T>> handler) {
 		if (getPersistAttributeHandlers().containsKey(id)) {
 			return this;
 		}
-		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
+		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(suspendableHandler(handler), id, event, attribute));
 		return this;
 	}
 

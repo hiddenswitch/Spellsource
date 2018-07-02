@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -18,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitFiber;
 
 /**
@@ -102,7 +104,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			address = deploymentId + "::" + address;
 		}
 
-		Handler<AsyncResult<Message<Object>>> handler;
+		SuspendableAction1<AsyncResult<Message<Object>>> handler;
 
 		if (serialization == RpcOptions.Serialization.JAVA) {
 			final Buffer result = Buffer.buffer(512);
@@ -123,6 +125,6 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			throw new RuntimeException("Unspecified serialization option in invocation.");
 		}
 
-		eb.send(address, message, deliveryOptions, Sync.fiberHandler(handler));
+		eb.send(address, message, deliveryOptions, suspendableHandler(handler));
 	}
 }

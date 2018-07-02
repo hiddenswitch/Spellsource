@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -240,8 +241,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return clone;
 	}
 
-	public Deck toGameDeck() {
-		Deck deck = new Deck(getHeroClass());
+	public GameDeck toGameDeck() {
+		GameDeck deck = new GameDeck(getHeroClass());
 		deck.setName(getName());
 		if (getHeroCardId() != null) {
 			deck.setHeroCard((Card) CardCatalogue.getCardById(getHeroCardId()));
