@@ -37,7 +37,6 @@ public class ActivityMonitor {
 		onTimeout.call(this);
 	}
 
-	@Suspendable
 	public void activity() {
 		Scheduler scheduler = this.scheduler.get();
 		if (scheduler == null) {
@@ -46,10 +45,9 @@ public class ActivityMonitor {
 
 		cancel();
 
-		lastTimerId = scheduler.setTimer(noActivityTimeout, suspendableHandler((SuspendableAction1<Long>) this::handleTimeout));
+		lastTimerId = scheduler.setTimer(noActivityTimeout, suspendableHandler(this::handleTimeout));
 	}
 
-	@Suspendable
 	public void cancel() {
 		Scheduler scheduler = this.scheduler.get();
 

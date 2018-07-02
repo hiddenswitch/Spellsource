@@ -152,7 +152,13 @@ public class UnityClient {
 
 	@Suspendable
 	public void matchmakeQuickPlay(String deckId) {
-		Future<Void> matchmaking = matchmake(deckId, "quickPlay");
+		String queueId = "quickPlay";
+		matchmakeAndPlay(deckId, queueId);
+	}
+
+	@Suspendable
+	protected void matchmakeAndPlay(String deckId, String queueId) {
+		Future<Void> matchmaking = matchmake(deckId, queueId);
 		try {
 			matchmaking.get(30000L, TimeUnit.MILLISECONDS);
 			play();
@@ -165,15 +171,8 @@ public class UnityClient {
 
 	@Suspendable
 	public void matchmakeConstructedPlay(String deckId) {
-		Future<Void> matchmaking = matchmake(deckId, "constructed");
-		try {
-			matchmaking.get(30000L, TimeUnit.MILLISECONDS);
-			play();
-		} catch (InterruptedException | ExecutionException ex) {
-			matchmaking.cancel(true);
-		} catch (TimeoutException e) {
-			context.fail(e);
-		}
+		String queueId = "constructed";
+		matchmakeAndPlay(deckId, queueId);
 	}
 
 	public void play() {
@@ -239,16 +238,7 @@ public class UnityClient {
 					context.assertNotNull(message.getGameState());
 					context.assertNotNull(message.getChanges());
 					context.assertNotNull(message.getActions());
-					final int actionCount = message.getActions().getCompatibility().size();
-					context.assertTrue(actionCount > 0);
-					// There should always be an end turn, choose one, discover or battlecry action
-					// Pick a random action
-					int random = random(actionCount);
-					endpoint.sendMessage(serialize(new ClientToServerMessage()
-							.messageType(MessageType.UPDATE_ACTION)
-							.repliesTo(message.getId())
-							.actionIndex(random)));
-					logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(random));
+					respondRandomAction(message);
 					break;
 				case ON_GAME_END:
 					// The game has ended.
@@ -278,6 +268,19 @@ public class UnityClient {
 		logger.debug("play: UserId " + getUserId() + " sent first message.");
 		endpoint.sendMessage(serialize(new ClientToServerMessage()
 				.messageType(MessageType.FIRST_MESSAGE)));
+	}
+
+	public void respondRandomAction(ServerToClientMessage message) {
+		final int actionCount = message.getActions().getCompatibility().size();
+		context.assertTrue(actionCount > 0);
+		// There should always be an end turn, choose one, discover or battlecry action
+		// Pick a random action
+		int random = random(actionCount);
+		endpoint.sendMessage(serialize(new ClientToServerMessage()
+				.messageType(MessageType.UPDATE_ACTION)
+				.repliesTo(message.getId())
+				.actionIndex(random)));
+		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(random));
 	}
 
 	protected boolean onRequestAction(ServerToClientMessage message) {

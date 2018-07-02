@@ -62,6 +62,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final List<ActivityMonitor> activityMonitors = new ArrayList<>();
 	private final UserId userId;
 	private final int playerId;
+	private final Scheduler scheduler;
 	private ReadStream<Buffer> reader;
 	private WriteStream<Buffer> writer;
 	private Server server;
@@ -72,17 +73,31 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 
 	public UnityClientBehaviour(Server server,
+	                            Scheduler scheduler,
 	                            ReadStream<Buffer> reader,
 	                            WriteStream<Buffer> writer,
 	                            UserId userId,
-	                            int playerId) {
+	                            int playerId,
+	                            long noActivityTimeout) {
+		this.scheduler = scheduler;
 		this.reader = reader;
 		this.writer = writer;
 		this.userId = userId;
 		this.playerId = playerId;
 		this.server = server;
 
+		ActivityMonitor activityMonitor = new ActivityMonitor(scheduler, noActivityTimeout, this::noActivity, null);
+		activityMonitor.activity();
+		activityMonitors.add(activityMonitor);
+
 		reader.handler(suspendableHandler(this::handleWebSocketMessage));
+	}
+
+	@Suspendable
+	private void noActivity(ActivityMonitor activityMonitor) {
+		elapseMulligan();
+		elapseTurn();
+		server.onConcede(this);
 	}
 
 	/**
@@ -151,7 +166,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		switch (message.getMessageType()) {
 			case FIRST_MESSAGE:
 				// The first message indicates the player has connected or reconnected.
-				activityMonitors.forEach(ActivityMonitor::activity);
+				for (ActivityMonitor activityMonitor : activityMonitors) {
+					activityMonitor.activity();
+				}
 
 				if (server.isGameReady()) {
 					// Replace the client
@@ -167,7 +184,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					throw new RuntimeException();
 				}
-				activityMonitors.forEach(ActivityMonitor::activity);
+				for (ActivityMonitor activityMonitor : activityMonitors) {
+					activityMonitor.activity();
+				}
 				final String messageId = message.getRepliesTo();
 				onActionReceived(messageId, message.getActionIndex());
 				break;
@@ -175,7 +194,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					throw new RuntimeException();
 				}
-				activityMonitors.forEach(ActivityMonitor::activity);
+				for (ActivityMonitor activityMonitor : activityMonitors) {
+					activityMonitor.activity();
+				}
 				final String messageId2 = message.getRepliesTo();
 				onMulliganReceived(messageId2, message.getDiscardedCardIndices());
 				break;
@@ -189,7 +210,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				if (server == null) {
 					break;
 				}
-				activityMonitors.forEach(ActivityMonitor::activity);
+				for (ActivityMonitor activityMonitor : activityMonitors) {
+					activityMonitor.activity();
+				}
 				if (null != message.getEntityTouch()) {
 					server.onTouch(this, message.getEntityTouch());
 				} else if (null != message.getEntityUntouch()) {
@@ -367,6 +390,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void onGameOver(GameContext context, int playerId, int winningPlayerId) {
+		for (ActivityMonitor activityMonitor : getActivityMonitors()) {
+			activityMonitor.cancel();
+		}
 		sendGameOver(context.getGameStateCopy(), context.getWinner());
 	}
 
@@ -676,16 +702,17 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	public void close(Handler<AsyncResult<Void>> completionHandler) {
 		try {
+			for (ActivityMonitor activityMonitor : activityMonitors) {
+				activityMonitor.cancel();
+			}
+
 			requests.clear();
 			messageBuffer.clear();
 			server = null;
 			reader = null;
 			writer = null;
-
-			for (ActivityMonitor activityMonitor : activityMonitors) {
-				activityMonitor.cancel();
-			}
 		} catch (Throwable ignore) {
+			logger.error("close {}", getUserId(), ignore);
 		} finally {
 			completionHandler.handle(Future.succeededFuture());
 		}

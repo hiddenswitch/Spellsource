@@ -491,7 +491,7 @@ public class Spellsource {
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final List<Verticle> verticles = Arrays.asList(services());
+		final Verticle[] verticles = services();
 
 		List<Future> futures = new ArrayList<>();
 		for (Verticle verticle : verticles) {
