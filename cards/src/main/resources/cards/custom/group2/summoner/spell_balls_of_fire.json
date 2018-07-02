@@ -1,0 +1,19 @@
+{
+  "name": "Balls of Fire",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "EPIC",
+  "description": "Summon a 2/2 Firepuff for each time you've Invoked this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "PlayerAttributeValueProvider",
+      "playerAttribute": "INVOKED_CARDS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

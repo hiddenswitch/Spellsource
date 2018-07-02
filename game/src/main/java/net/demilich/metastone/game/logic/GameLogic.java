@@ -293,13 +293,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * int)} method. Can probably be inlined.
 	 *
 	 * @param playerId        The player index
-	 * @param EntityReference A reference to the card.
+	 * @param entityReference A reference to the card.
 	 */
 	@Suspendable
-	public void afterCardPlayed(int playerId, EntityReference EntityReference) {
+	public void afterCardPlayed(int playerId, EntityReference entityReference) {
 		Player player = context.getPlayer(playerId);
 
-		player.modifyAttribute(Attribute.COMBO, +1);
+		player.modifyAttribute(Attribute.COMBO, 1);
+		Entity card = context.tryFind(entityReference);
+		if (card != null && card.hasAttribute(Attribute.INVOKED)) {
+			// Increment the number of invoked cards that were played
+			player.modifyAttribute(Attribute.INVOKED, 1);
+		}
 	}
 
 	/**
@@ -1691,7 +1696,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
+		if (canActivateInvokeKeyword(player, card)) {
+			manaCost = card.getAttributeValue(Attribute.INVOKE);
+		}
 		return manaCost;
+	}
+
+	private boolean canActivateInvokeKeyword(Player player, Card card) {
+		int mana = player.getMana();
+		if (doesCardCostHealth(player, card) && player.getHero() != null) {
+			mana = player.getHero().getHp();
+		}
+		return card.hasAttribute(Attribute.INVOKE) && card.getAttributeValue(Attribute.INVOKE) <= mana;
 	}
 
 	/**
@@ -2445,8 +2461,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Card card = (Card) context.resolveSingleTarget(EntityReference);
 
 		int modifiedManaCost = getModifiedManaCost(player, card);
+		boolean cardCostsHealth = doesCardCostHealth(player, card);
 
-		if (doesCardCostHealth(player, card)) {
+		// The modified mana cost already reflects the invoke cost
+		if (canActivateInvokeKeyword(player, card)) {
+			card.setAttribute(Attribute.INVOKED);
+		}
+
+		if (cardCostsHealth) {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);
 			damage(player, player.getHero(), modifiedManaCost, card, true);
 		} else {
@@ -2706,6 +2728,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (hand.getCount() < MAX_HAND_CARDS) {
 			// Cards that are received this way should never keep an ephemeral state like choices
 			card.getAttributes().remove(Attribute.CHOICES);
+			// Forget that the card was invoked
+			card.getAttributes().remove(Attribute.INVOKED);
+			// Should have included if the card was discarded
+			card.getAttributes().remove(Attribute.DISCARDED);
 			processGameTriggers(player, card);
 			processPassiveTriggers(player, card);
 			card.getAttributes().put(Attribute.RECEIVED_ON_TURN, context.getTurn());

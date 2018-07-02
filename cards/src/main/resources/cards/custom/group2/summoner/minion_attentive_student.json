@@ -1,0 +1,21 @@
+{
+  "name": "Attentive Student",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Add a copy of a card from your deck to your hand.",
+  "deathrattle": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_DECK",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

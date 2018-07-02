@@ -1,0 +1,16 @@
+{
+  "name": "Army of Darkness",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "COMMON",
+  "description": "Shuffle a copy of each friendly minion into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "target": "FRIENDLY_MINIONS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

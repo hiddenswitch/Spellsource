@@ -814,6 +814,15 @@ public enum Attribute {
 	 */
 	DEFLECT,
 	/**
+	 * Whenever a {@link Card} with this attribute is in your hand, and you have at least the invoke amount of mana, spend
+	 * that much mana instead of its base mana cost and gain the bonus effect written on the card.
+	 */
+	INVOKE,
+	/**
+	 * Indicates a card's invoke was triggered.
+	 */
+	INVOKED,
+	/**
 	 * Indicates that this {@link Entity} should remove itself from play peacefully at the end of the current turn.
 	 */
 	REMOVES_SELF_AT_END_OF_TURN,
