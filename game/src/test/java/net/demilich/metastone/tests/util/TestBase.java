@@ -42,7 +42,10 @@ import org.testng.annotations.BeforeMethod;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 
+
+
 public class TestBase {
+
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
 		Card baseCard = receiveCard(context, player, baseCardId);
 		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
@@ -520,5 +523,6 @@ public class TestBase {
 		context.getLogic().performGameAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
 	}
+
 
 }
