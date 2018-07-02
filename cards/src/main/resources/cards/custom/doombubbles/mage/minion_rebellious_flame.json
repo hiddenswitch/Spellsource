@@ -12,7 +12,8 @@
     "eventTrigger": {
       "class": "CardPlayedTrigger",
       "cardType": "MINION",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_TARGET"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
