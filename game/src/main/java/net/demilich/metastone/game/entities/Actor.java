@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -115,8 +116,13 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		return getAttributeValue(Attribute.BASE_HP);
 	}
 
-	public BattlecryAction getBattlecry() {
-		return (BattlecryAction) getAttribute(Attribute.BATTLECRY);
+	public @Nullable
+	BattlecryAction getBattlecry() {
+		BattlecryAction action = (BattlecryAction) getAttribute(Attribute.BATTLECRY);
+		if (action != null) {
+			action.setSource(getReference());
+		}
+		return action;
 	}
 
 	public CardCostModifier getCardCostModifier() {
@@ -138,8 +144,8 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	}
 
 	/**
-	 * Returns the maximum amount of hitpoints this actor can have, considering all of its bonuses from effects and
-	 * {@link net.demilich.metastone.game.spells.aura.Aura}s.
+	 * Returns the maximum amount of hitpoints this actor can have, considering all of its bonuses from effects and {@link
+	 * net.demilich.metastone.game.spells.aura.Aura}s.
 	 *
 	 * @return The maximum hitpoints.
 	 */
