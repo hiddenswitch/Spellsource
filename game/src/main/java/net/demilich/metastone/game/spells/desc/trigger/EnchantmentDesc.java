@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc.trigger;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -122,7 +123,8 @@ public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Obj
 	public boolean countByValue;
 
 	public Set<Map.Entry<EnchantmentDescArg, Object>> entrySet() {
-		return Sets.newHashSet(
+		@SuppressWarnings("unchecked")
+		HashSet<Map.Entry<EnchantmentDescArg, Object>> entries = Sets.newHashSet(
 				immutableEntry(EnchantmentDescArg.EVENT_TRIGGER, eventTrigger),
 				immutableEntry(EnchantmentDescArg.SPELL, spell),
 				immutableEntry(EnchantmentDescArg.ONE_TURN, oneTurn),
@@ -131,6 +133,8 @@ public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Obj
 				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
 				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue)
 		);
+
+		return entries;
 	}
 
 	/**

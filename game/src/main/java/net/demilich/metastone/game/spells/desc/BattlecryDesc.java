@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.desc;
 
 import java.io.Serializable;
 import java.util.AbstractMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -172,12 +173,14 @@ public final class BattlecryDesc /*extends AbstractMap<BattlecryDescArg, Object>
 	}
 
 	public Set<Map.Entry<BattlecryDescArg, Object>> entrySet() {
-		return Sets.newHashSet(
+		@SuppressWarnings("unchecked")
+		HashSet<Map.Entry<BattlecryDescArg, Object>> entries = Sets.newHashSet(
 				immutableEntry(BattlecryDescArg.SPELL, spell),
 				immutableEntry(BattlecryDescArg.TARGET_SELECTION, targetSelection),
 				immutableEntry(BattlecryDescArg.CONDITION, condition),
 				immutableEntry(BattlecryDescArg.NAME, name),
 				immutableEntry(BattlecryDescArg.DESCRIPTION, description)
 		);
+		return entries;
 	}
 }
