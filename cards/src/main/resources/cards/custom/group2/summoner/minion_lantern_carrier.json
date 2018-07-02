@@ -1,0 +1,32 @@
+{
+  "name": "Lantern Carrier",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give the next minion you summon this turn +1/+1.",
+  "deathrattle": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "BeforeMinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "EVENT_TARGET",
+        "attackBonus": 1,
+        "hpBonus": 1
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
