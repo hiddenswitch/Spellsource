@@ -482,7 +482,7 @@ public class ServerGameContext extends GameContext implements Server {
 				scheduler.cancelTimer(turnTimerId);
 			}
 			for (Client client : getClients()) {
-				client.onTurnEnd(getNonActivePlayer(), getTurn(), getTurnState());
+				client.onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
 			}
 		} finally {
 			lock.unlock();
@@ -496,8 +496,8 @@ public class ServerGameContext extends GameContext implements Server {
 	 */
 	@Suspendable
 	private void endMulligans(long ignored) {
-		for (Client behaviour : getClients()) {
-			behaviour.elapseMulligan();
+		for (Client client : getClients()) {
+			client.elapseMulligan();
 		}
 	}
 
