@@ -1,0 +1,46 @@
+{
+	"name": "Frostfire Bolt",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "BLUE",
+	"rarity": "COMMON",
+	"description": "Deal 3 damage to a character and Freeze it. If it was already Frozen, Un-Freeze it and deal *6* damage instead.",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "EitherOrSpell",
+		"spell1": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "DamageSpell",
+					"value": 6
+				},
+				{
+					"class": "RemoveAttributeSpell",
+					"attribute": "FROZEN"
+				}
+			]
+		},
+		"spell2": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "DamageSpell",
+					"value": 3
+				},
+				{
+					"class": "AddAttributeSpell",
+					"attribute": "FROZEN"
+				}
+			]
+		},
+		"condition": {
+			"class": "AttributeCondition",
+			"attribute": "FROZEN",
+			"operation": "HAS"
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

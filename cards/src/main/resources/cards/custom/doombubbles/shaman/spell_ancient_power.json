@@ -1,0 +1,30 @@
+{
+	"name": "Ancient Power",
+	"baseManaCost": 2,
+	"type": "SPELL",
+	"heroClass": "SILVER",
+	"rarity": "EPIC",
+	"description": "Discover a card with Overload. It loses its Overload.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DiscoverSpell",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF",
+			"spell": {
+				"class": "RemoveAttributeSpell",
+				"target": "OUTPUT",
+				"attribute": "OVERLOAD"
+			}
+		},
+		"cardFilter": {
+			"class": "CardFilter",
+			"attribute": "OVERLOAD",
+			"operation": "HAS",
+			"heroClass": "ANY"
+		}
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,46 @@
+{
+  "name": "Aegwynn",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Start of Game: If your deck has no targeting spells, give your hero Spell Damage +2.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "GameStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "TargetSelectionFilter",
+              "targetSelection": "NONE",
+              "invert": true
+            },
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            }
+          ]
+        },
+        "invert": true
+      },
+      "spell": {
+        "class": "ModifyAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "SPELL_DAMAGE",
+        "value": 2
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

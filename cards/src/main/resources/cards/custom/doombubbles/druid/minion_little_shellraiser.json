@@ -1,0 +1,30 @@
+{
+  "name": "Little Shellraiser",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Taunt. Battlecry: Draw a minion with 5 or more attack from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "attribute": "ATTACK",
+        "operation": "GREATER_OR_EQUAL",
+        "value": 5
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

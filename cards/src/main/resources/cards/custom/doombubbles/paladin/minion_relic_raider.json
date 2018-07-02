@@ -1,0 +1,41 @@
+{
+	"name": "Relic Raider",
+	"baseManaCost": 5,
+	"type": "MINION",
+	"baseAttack": 3,
+	"baseHp": 2,
+	"heroClass": "GOLD",
+	"rarity": "RARE",
+	"description": "Battlecry: Equip a 1/2 copy of a random weapon from your deck.",
+	"battlecry": {
+		"spell": {
+			"class": "EquipWeaponSpell",
+			"cardSource": {
+				"class": "DeckSource",
+				"targetPlayer": "SELF"
+			},
+			"cardFilter": {
+				"class": "CardFilter",
+				"cardType": "WEAPON"
+			},
+			"spells": [
+				{
+					"class": "SetAttackSpell",
+					"value": 1,
+					"target": "FRIENDLY_WEAPON"
+				},
+				{
+					"class": "SetHpSpell",
+					"value": 2,
+					"target": "FRIENDLY_WEAPON"
+				}
+			]
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -1,0 +1,44 @@
+{
+  "name": "Gnarlroot",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "BROWN",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Add 5 2/2 Treants to your hand. Summon any that would not fit.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+				{
+          "class": "SummonSpell",
+          "value": {
+            "class": "AlgebraicValueProvider",
+            "operation": "SUBTRACT",
+            "value1": {
+              "class": "PlayerAttributeValueProvider",
+              "targetPlayer": "SELF",
+              "playerAttribute": "HAND_COUNT"
+            },
+            "value2": 5
+          },
+          "card": "token_treant"
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "card": "token_treant",
+          "value": 5
+        }
+        
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
