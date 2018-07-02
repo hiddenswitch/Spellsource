@@ -2,9 +2,9 @@
   "name": "Aegwynn",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Start of Game: If your deck has no targeting spells, give your hero Spell Damage +2.",
   "deckTrigger": {
@@ -35,8 +35,8 @@
       "spell": {
         "class": "ModifyAttributeSpell",
         "target": "FRIENDLY_PLAYER",
-        "attribute": "SPELL_DAMAGE",
-        "value": 2
+        "value": 2,
+        "attribute": "SPELL_DAMAGE"
       }
     }
   },

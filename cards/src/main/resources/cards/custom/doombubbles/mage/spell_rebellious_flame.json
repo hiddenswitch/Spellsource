@@ -5,22 +5,22 @@
   "heroClass": "BLUE",
   "rarity": "EPIC",
   "description": "Deal 3 damage. (Play a spell to transform into a minion.)",
-  "targetSelection": "ANY",
-  "spell": {
-    "class": "DamageSpell",
-    "value": 3
-  },
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
-      "targetPlayer": "SELF",
-      "cardType": "SPELL"
+      "cardType": "SPELL",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
       "card": "minion_rebellious_flame"
     }
+  },
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 3
   },
   "collectible": false,
   "set": "CUSTOM",

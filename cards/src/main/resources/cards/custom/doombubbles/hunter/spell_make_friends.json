@@ -8,6 +8,14 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",
+    "condition": {
+      "class": "DeckContainsCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "BEAST",
+        "cardType": "MINION"
+      }
+    },
     "spell1": {
       "class": "DiscoverSpell",
       "spell": {
@@ -16,8 +24,8 @@
       },
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
-        "race": "BEAST"
+        "race": "BEAST",
+        "cardType": "MINION"
       },
       "cardSource": {
         "class": "DeckSource",
@@ -97,14 +105,6 @@
         "class": "CatalogueSource"
       },
       "howMany": 3
-    },
-    "condition": {
-      "class": "DeckContainsCondition",
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION",
-        "race": "BEAST"
-      }
     }
   },
   "collectible": true,
