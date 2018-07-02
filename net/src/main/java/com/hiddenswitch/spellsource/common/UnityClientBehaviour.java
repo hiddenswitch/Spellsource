@@ -44,6 +44,8 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 import static java.util.stream.Collectors.toList;
+import static net.demilich.metastone.game.GameContext.PLAYER_1;
+import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
  * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from {@link
@@ -543,12 +545,15 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		// Compute the local player
 		Player local;
 		Player opponent;
-		if (state.player1.getUserId().equals(userId)) {
+		if (playerId == PLAYER_1) {
 			local = state.player1;
 			opponent = state.player2;
-		} else {
+		} else if (playerId == PLAYER_2) {
 			local = state.player2;
 			opponent = state.player1;
+		} else {
+			// TODO: How should we define spectators?
+			throw new IllegalStateException("playerId");
 		}
 		simulatedContext.setIgnoreEvents(true);
 		return Games.getGameState(simulatedContext, local, opponent)
