@@ -12,7 +12,7 @@
       "class": "DamageSpell",
       "target": "ALL_MINIONS",
       "value": 8,
-			"randomTarget": true
+      "randomTarget": true
     }
   },
   "collectible": true,

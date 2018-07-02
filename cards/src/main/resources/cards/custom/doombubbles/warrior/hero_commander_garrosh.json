@@ -13,8 +13,8 @@
       "value": 7,
       "cardFilter": {
         "class": "AttributeFilter",
-				"attribute": "RUSH",
-				"operation": "HAS"
+        "attribute": "RUSH",
+        "operation": "HAS"
       }
     }
   },

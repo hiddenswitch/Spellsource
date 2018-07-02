@@ -2251,9 +2251,7 @@ public class CustomCardsTests extends TestBase {
 			for (int i = 1; i < 4; i++) {
 				assertEquals(player.getMinions().get(i).getSourceCard().getCardId(), "token_treant");
 			}
-
 		});
-
 	}
 
 	@Test
@@ -2413,7 +2411,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "spell_quartz_spellstone");
 		});
 	}
-	
+
 	@Test
 	public void testImmolate() {
 		runGym(((context, player, opponent) -> {
@@ -2440,14 +2438,14 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getMana(), 0);
 		});
 
-        runGym((context, player, opponent) -> {
-            playCard(context, player, "hero_commander_garrosh");
-            playCard(context, player, "minion_raza_the_chained");
-            player.setMana(10);
-            context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
-            assertEquals(player.getHero().getArmor(), 14);
-            assertEquals(player.getMana(), 0);
-        });
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_commander_garrosh");
+			playCard(context, player, "minion_raza_the_chained");
+			player.setMana(10);
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			assertEquals(player.getHero().getArmor(), 14);
+			assertEquals(player.getMana(), 0);
+		});
 	}
 }
 

@@ -8,6 +8,12 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "attribute": "REMOVES_SELF_AT_END_OF_TURN",
+      "operation": "HAS"
+    },
     "spell1": {
       "class": "SummonSpell",
       "card": "token_wolf"
@@ -15,12 +21,6 @@
     "spell2": {
       "class": "SummonSpell",
       "card": "token_sheep"
-    },
-    "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "attribute": "REMOVES_SELF_AT_END_OF_TURN",
-      "operation": "HAS"
     }
   },
   "attributes": {

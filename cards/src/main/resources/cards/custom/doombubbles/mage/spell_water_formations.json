@@ -8,21 +8,21 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",
-    "spell2": {
-      "class": "SummonSpell",
-      "card": "minion_water_elemental"
-    },
-    "spell1": {
-      "class": "SummonSpell",
-      "card": "minion_water_elemental",
-      "value": 2
-    },
     "condition": {
       "class": "PlayedLastTurnCondition",
       "filter": {
         "class": "CardFilter",
         "race": "ELEMENTAL"
       }
+    },
+    "spell1": {
+      "class": "SummonSpell",
+      "value": 2,
+      "card": "minion_water_elemental"
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "card": "minion_water_elemental"
     }
   },
   "collectible": true,
