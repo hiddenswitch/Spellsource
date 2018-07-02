@@ -1,0 +1,32 @@
+{
+  "name": "West Wind Drake",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, add a Wing Blast to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF",
+      "card": "spell_wing_blast"
+    },
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

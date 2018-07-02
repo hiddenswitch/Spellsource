@@ -1,0 +1,28 @@
+{
+  "name": "Rebellious Flame",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Deal 3 damage. (Play a spell to transform into a minion.)",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 3
+  },
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF",
+      "cardType": "SPELL"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "minion_rebellious_flame"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
