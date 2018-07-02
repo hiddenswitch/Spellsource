@@ -11,6 +11,7 @@ import net.demilich.metastone.game.behaviour.FlatMonteCarloBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -24,7 +25,7 @@ public class FlatMonteCarloTests extends TestBase {
 
 	@Test
 	public void testDecksFlatMonteCarlo() {
-		Deck druid = DeckCreateRequest.fromDeckList("### Druid\n" +
+		GameDeck druid = DeckCreateRequest.fromDeckList("### Druid\n" +
 				"# Class: White\n" +
 				"# Format: Standard\n" +
 				"# Year of the Mammoth\n" +
@@ -47,7 +48,7 @@ public class FlatMonteCarloTests extends TestBase {
 				"# 2x (8) Ironbark Protector\n" +
 				"#").toGameDeck();
 
-		Deck warrior = DeckCreateRequest.fromDeckList("### Warrior\n" +
+		GameDeck warrior = DeckCreateRequest.fromDeckList("### Warrior\n" +
 				"# Class: White\n" +
 				"# Format: Standard\n" +
 				"# Year of the Mammoth\n" +

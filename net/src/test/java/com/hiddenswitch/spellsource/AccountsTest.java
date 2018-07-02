@@ -95,7 +95,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			assertEquals(profile.getEmails().get(0).getAddress(), emailAddress);
 			assertEquals(profile.getUsername(), username);
 			assertThrows(() -> Accounts.get("a"));
-			assertThrows(() -> Accounts.get(null));
+			assertThrows(() -> Accounts.get((String) null));
 		});
 	}
 
@@ -128,7 +128,7 @@ public class AccountsTest extends SpellsourceTestBase {
 				return throwableClass.cast(t);
 			} else {
 				String mismatchMessage = String.format("Expected %s to be thrown, but %s was thrown",
-								throwableClass.getSimpleName(), t.getClass().getSimpleName());
+						throwableClass.getSimpleName(), t.getClass().getSimpleName());
 
 				final AssertionError cause = new AssertionError(mismatchMessage, t);
 				fail(cause.getMessage());
@@ -136,7 +136,7 @@ public class AccountsTest extends SpellsourceTestBase {
 			}
 		}
 		String message = String.format("Expected %s to be thrown, but nothing was thrown",
-						throwableClass.getSimpleName());
+				throwableClass.getSimpleName());
 		fail(new AssertionError(message).getMessage());
 		return null;
 	}

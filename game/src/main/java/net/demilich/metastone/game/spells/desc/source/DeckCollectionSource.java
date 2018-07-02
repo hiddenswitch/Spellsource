@@ -5,7 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
@@ -22,7 +22,7 @@ public class DeckCollectionSource extends CardSource implements Serializable, Ha
 	@Suspendable
 	protected CardList match(GameContext context, Entity source, Player player) {
 		final String collectionName = getDesc().getString(CardSourceArg.COLLECTION_NAME);
-		final Deck deck = context.getDeck(player, collectionName);
+		final GameDeck deck = context.getDeck(player, collectionName);
 		if (deck != null) {
 			return deck.getCards();
 		}

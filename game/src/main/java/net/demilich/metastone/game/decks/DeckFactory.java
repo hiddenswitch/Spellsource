@@ -6,7 +6,7 @@ import org.apache.commons.lang3.RandomUtils;
 
 public class DeckFactory {
 
-	public static Deck getRandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
+	public static GameDeck getRandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
 		return new RandomDeck(heroClass, deckFormat);
 	}
 

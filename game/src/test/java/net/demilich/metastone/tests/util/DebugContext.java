@@ -20,7 +20,7 @@ public class DebugContext extends GameContext {
 		getLogic().initializePlayer(PLAYER_1);
 		getLogic().initializePlayer(PLAYER_2);
 		getLogic().init(getActivePlayerId(), true);
-		getLogic().init(getOpponent(getActivePlayer()).getId(), false);
+		getLogic().init(getNonActivePlayerId(), false);
 		super.startGame();
 		startTurn(getActivePlayerId());
 	}

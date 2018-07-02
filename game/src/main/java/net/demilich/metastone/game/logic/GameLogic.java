@@ -8,7 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
-import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -93,8 +93,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public static final int MAX_QUESTS = 1;
 	/**
-	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link Deck} with. Some effects, like
-	 * Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
+	 * The maximum number of {@link Card} entities that a {@link Player} can build a {@link GameDeck} with. Some effects,
+	 * like Prince Malchezaar's text, allow the player to start a game with more than {@link #DECK_SIZE} cards.
 	 */
 	public static final int DECK_SIZE = 30;
 	/**
@@ -390,9 +390,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Assigns an {@link Entity#id} and {@link Entity#ownerIndex} to each {@link Card} in a given {@link Deck}.
+	 * Assigns an {@link Entity#id} and {@link Entity#ownerIndex} to each {@link Card} in a given {@link GameDeck}.
 	 *
-	 * @param cardList   The {@link Deck} whose cards should have IDs and owners assigned.
+	 * @param cardList   The {@link GameDeck} whose cards should have IDs and owners assigned.
 	 * @param ownerIndex The owner to assign to this {@link CardList}
 	 */
 	@Suspendable
@@ -1258,8 +1258,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Draws a card for a player from the deck to the hand.
 	 * <p>
-	 * When a {@link Deck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time a
-	 * card should have been drawn but is not.
+	 * When a {@link GameDeck} is empty, the player's {@link Hero} takes "fatigue" damage, which increases by 1 every time
+	 * a card should have been drawn but is not.
 	 *
 	 * @param playerId The player who should draw a card.
 	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
@@ -1985,6 +1985,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return discardedCards;
 	}
 
+	/**
+	 * Activates all the appropriate enchantments for a player who has mulliganned, and gives that player the player's
+	 * {@link GameStartEvent}.
+	 *
+	 * @param player Player who just finished mulligan phase, but before turn starts
+	 */
 	@Suspendable
 	public void startGameForPlayer(Player player) {
 		player.setAttribute(Attribute.GAME_STARTED);
@@ -2019,6 +2025,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public Player initializePlayer(int playerId) {
 		Player player = context.getPlayer(playerId);
+
+		if (player.getId() == IdFactory.UNASSIGNED) {
+			player.setId(playerId);
+		}
+
 		player.setOwner(player.getId());
 		Hero hero = player.getHero();
 		player.getHero().setId(generateId());
@@ -2034,6 +2045,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
 
 		player.getDeck().shuffle(getRandom());
+		// TODO: Should we really be doing this here?
 		if (player.getHero().hasEnchantment()) {
 			for (Enchantment trigger : player.getHero().getEnchantments()) {
 				addGameEventListener(player, trigger, player.getHero());
@@ -3559,11 +3571,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void concede(int playerId) {
-		final Hero hero = context.getPlayer(playerId).getHero();
-		if (!hero.isDestroyed()
-				&& (hero.getZone() != Zones.GRAVEYARD)) {
-			destroy(hero);
-		}
+		repeatedlyDestroyHero(playerId);
 	}
 
 	/**
@@ -3679,6 +3687,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return card.getDesc().getConditions().allMatch(conditionDesc -> conditionDesc.create().isFulfilled(context, context.getPlayer(localPlayerId), card, null));
 		} catch (Throwable ignored) {
 			return false;
+		}
+	}
+
+	/**
+	 * Destroys both player's heroes to force a draw
+	 */
+	@Suspendable
+	public void loseBothPlayers() {
+		repeatedlyDestroyHero(IdFactory.PLAYER_1);
+		repeatedlyDestroyHero(IdFactory.PLAYER_2);
+	}
+
+	/**
+	 * Repeatedly destroys the hero for the given player ID, to account for heroes that may replace themselves with new
+	 * heroes on a deathrattle.
+	 *
+	 * @param playerId The player whose hero (and subsequent new heroes) should be destroyed
+	 */
+	@Suspendable
+	protected void repeatedlyDestroyHero(int playerId) {
+		while (context.getPlayer(playerId).getHero() != null && context.getPlayer(playerId).getHero().getZone() != Zones.GRAVEYARD) {
+			destroy(context.getPlayer(playerId).getHero());
+			endOfSequence();
 		}
 	}
 

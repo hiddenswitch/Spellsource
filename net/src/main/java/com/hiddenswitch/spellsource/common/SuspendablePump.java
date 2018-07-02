@@ -13,13 +13,15 @@ package com.hiddenswitch.spellsource.common;
 
 import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.Handler;
 import io.vertx.core.streams.Pump;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
-import io.vertx.ext.sync.Sync;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 /**
  * Pumps data from a {@link io.vertx.core.streams.ReadStream} to a {@link io.vertx.core.streams.WriteStream} and
@@ -65,7 +67,7 @@ public class SuspendablePump<T> implements Pump {
 			if (Fiber.isCurrentFiber()) {
 				handleData(data);
 			} else {
-				Sync.fiberHandler(this::handleData).handle(data);
+				suspendableHandler((SuspendableAction1<T>) this::handleData).handle(data);
 			}
 		};
 	}

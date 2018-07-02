@@ -22,6 +22,15 @@ public class Sync {
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
 	}
 
+	/*
+	@Suspendable
+	public static <T> Handler<T> suspendableHandler(Handler<T> handler) {
+		FiberScheduler scheduler = getContextScheduler();
+		return p -> new Fiber<Void>(scheduler, () -> handler.handle(p)).start();
+	}
+	*/
+
+
 	@Suspendable
 	public static <R> R invoke(Supplier<R> func0) {
 		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
@@ -73,4 +82,5 @@ public class Sync {
 	public static <T1, T2, R> R invoke(TriConsumer<T1, T2, Handler<AsyncResult<R>>> func, T1 arg1, T2 arg2) {
 		return awaitResult(h -> func.accept(arg1, arg2, h));
 	}
+
 }

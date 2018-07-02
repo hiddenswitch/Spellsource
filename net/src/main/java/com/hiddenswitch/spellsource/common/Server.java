@@ -3,36 +3,29 @@ package com.hiddenswitch.spellsource.common;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.impl.server.ClientConnectionHandler;
-import net.demilich.metastone.game.actions.GameAction;
-
-import java.util.List;
 
 /**
- * An interface that specifies a server instance that's capable of processing {@link Writer} actions.
+ * An interface that specifies a server instance that's capable of processing {@link Client} actions.
  */
 public interface Server extends ClientConnectionHandler {
-	@Suspendable
-	void onActionReceived(String id, int actionIndex);
 
 	@Suspendable
-	void onActionReceived(String id, GameAction action);
+	void onEmote(Client sender, int entityId, Emote.MessageEnum message);
 
 	@Suspendable
-	void onMulliganReceived(String messageId2, List<Integer> discardedCardIndices);
+	void onConcede(Client sender);
 
 	@Suspendable
-	void onEmote(int entityId, Emote.MessageEnum message);
+	void onTouch(Client sender, int entityId);
 
 	@Suspendable
-	void onConcede(int playerId);
+	void onUntouch(Client sender, int entityId);
 
-	@Suspendable
-	void onTouch(int playerId, int entityId);
-
-	@Suspendable
-	void onUntouch(int playerId, int entityId);
-
-	Writer getClient1();
-
-	Writer getClient2();
+	/**
+	 * Have both players connected?
+	 *
+	 * @return {@code true} if both players have sent their first messages.
+	 * to the game session.
+	 */
+	boolean isGameReady();
 }

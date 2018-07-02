@@ -421,6 +421,11 @@ public interface Accounts {
 	}
 
 	@Suspendable
+	static UserRecord get(UserId userId) {
+		return get(userId.toString());
+	}
+
+	@Suspendable
 	static ChangePasswordResponse changePassword(ChangePasswordRequest request) throws SuspendExecution, InterruptedException {
 		if (request.getUserId() == null) {
 			throw new NullPointerException("No user specified.");

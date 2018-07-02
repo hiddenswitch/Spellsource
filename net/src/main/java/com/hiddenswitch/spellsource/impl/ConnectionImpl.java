@@ -1,12 +1,15 @@
 package com.hiddenswitch.spellsource.impl;
 
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Connection;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
+import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
@@ -14,38 +17,51 @@ import io.vertx.core.json.JsonObject;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+
 public class ConnectionImpl implements Connection {
-	private final ServerWebSocket socket;
+	private ServerWebSocket socket;
 	private final String userId;
 	private final List<Handler<Throwable>> exceptionHandlers = new ArrayList<>();
 	private final List<Handler<Void>> drainHandlers = new ArrayList<>();
 	private final List<Handler<Envelope>> handlers = new ArrayList<>();
 	private final List<Handler<Void>> endHandlers = new ArrayList<>();
+	private String id;
 
-	public ConnectionImpl(ServerWebSocket socket, String userId) {
-		this.socket = socket;
+	public ConnectionImpl(String userId) {
 		this.userId = userId;
 
-		socket.handler(Sync.suspendableHandler(buf -> {
+	}
+
+	@Override
+	public void setSocket(ServerWebSocket socket) {
+		this.socket = socket;
+
+		MessageConsumer<Envelope> consumer = Vertx.currentContext().owner().eventBus().consumer(id);
+		consumer.handler(msg -> {
+			socket.write(Buffer.buffer(Json.encode(msg.body())));
+		});
+
+		socket.handler(buf -> {
 			Envelope decoded = Json.decodeValue(buf, Envelope.class);
 			for (Handler<Envelope> handler : handlers) {
 				handler.handle(decoded);
 			}
-		}));
+		});
 
-		socket.exceptionHandler(Sync.suspendableHandler(t -> {
+		socket.exceptionHandler(t -> {
 			for (Handler<Throwable> handler : exceptionHandlers) {
 				handler.handle(t);
 			}
-		}));
+		});
 
-		socket.drainHandler(Sync.suspendableHandler(v -> {
+		socket.drainHandler(v -> {
 			for (Handler<Void> handler : drainHandlers) {
 				handler.handle(v);
 			}
-		}));
+		});
 
-		socket.endHandler(Sync.suspendableHandler(v -> {
+		socket.endHandler(suspendableHandler((SuspendableAction1<Void>) v -> {
 			for (Handler<Void> handler : endHandlers) {
 				handler.handle(v);
 			}
@@ -53,6 +69,8 @@ public class ConnectionImpl implements Connection {
 			drainHandlers.clear();
 			handlers.clear();
 			endHandlers.clear();
+			consumer.unregister();
+			Connection.getConnections().remove(new UserId(userId));
 		}));
 	}
 
@@ -134,5 +152,14 @@ public class ConnectionImpl implements Connection {
 			completionHandler.handle(Future.failedFuture(t));
 		}
 
+	}
+
+	public ConnectionImpl setId(String id) {
+		this.id = id;
+		return this;
+	}
+
+	public String getId() {
+		return id;
 	}
 }
