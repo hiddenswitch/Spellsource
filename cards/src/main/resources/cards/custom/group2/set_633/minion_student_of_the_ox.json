@@ -19,8 +19,8 @@
       "hpBonus": 1
     }
   },
-  "wiki": "If this minion has 1 Health and is dealt 1 damage, it will survive with 1 Health.",
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "wiki": "If this minion has 1 Health and is dealt 1 damage, it will survive with 1 Health."
 }

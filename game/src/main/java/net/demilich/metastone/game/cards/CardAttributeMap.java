@@ -164,9 +164,13 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	@NotNull
 	public <T> T[] link(T single, T[] multi, Class<? extends T> tClass) {
 		if (single == null && (multi == null || multi.length == 0)) {
-			return (T[]) Array.newInstance(tClass, 0);
+			Object o = Array.newInstance(tClass, 0);
+			@SuppressWarnings("unchecked")
+			T[] ts = (T[]) o;
+			return ts;
 		}
 		if (single != null && (multi == null || multi.length == 0)) {
+			@SuppressWarnings("unchecked")
 			T[] out = (T[]) Array.newInstance(tClass, 1);
 			out[0] = single;
 			return out;

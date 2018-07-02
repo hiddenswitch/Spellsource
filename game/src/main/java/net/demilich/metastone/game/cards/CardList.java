@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -32,7 +33,16 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @param card The card
 	 * @return This instance.
 	 */
-	CardList addCard(Card card);
+	CardList addCard(@NotNull Card card);
+
+	default CardList addCard(String cardId) {
+		Card cardById = CardCatalogue.getCardById(cardId);
+		if (cardById == null) {
+			throw new NullPointerException(cardId);
+		}
+		addCard(cardById);
+		return this;
+	}
 
 	/**
 	 * Adds all the cards from the given list.
@@ -158,8 +168,8 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	void removeAll() throws Exception;
 
 	/**
-	 * Removes the first card. Implements {@link net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell}, used
-	 * by 3 Hearthstone cards.
+	 * Removes the first card. Implements {@link net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell}, used by
+	 * 3 Hearthstone cards.
 	 *
 	 * @return The card that is now removed.
 	 */

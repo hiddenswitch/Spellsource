@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
@@ -17,6 +18,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -187,52 +189,6 @@ public interface Logic {
 		Inventory.returnToCollection(new ReturnToCollectionRequest().withDeckIds(deckIds));
 
 		return new EndGameResponse();
-	}
-
-	/**
-	 * Starts a game for the given two users and their deck selections. This generates information the Games service can
-	 * use to actually create a game. It does not create a connectable game. But it does convert a deck ID into an actual
-	 * deck of cards. It fills in various attributes for the cards that are used for alliance / persistence effects.
-	 *
-	 * @param request The users and their chosen deck IDs.
-	 * @return Information that can be used to create a game.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	@Suspendable
-	static StartGameResponse startGame(StartGameRequest request) throws SuspendExecution, InterruptedException {
-		StartGameResponse response = new StartGameResponse();
-
-		// Create the decks
-		for (StartGameRequest.Player player : request.getPlayers()) {
-			GetCollectionResponse deckCollection = Inventory.getCollection(new GetCollectionRequest()
-					.withUserId(player.getUserId()).withDeckId(player.getDeckId()));
-
-			String name = Accounts.findOne(player.getUserId()).getUsername();
-
-			// TODO: Get more attributes from database
-			AttributeMap playerAttributes = new AttributeMap();
-			playerAttributes.put(Attribute.NAME, name);
-			playerAttributes.put(Attribute.USER_ID, player.getUserId());
-			playerAttributes.put(Attribute.DECK_ID, player.getDeckId());
-
-			// Create the deck and assign all the appropriate IDs to the cards
-			Deck deck = deckCollection.asDeck(player.getUserId());
-
-			// Delegate
-
-			// TODO: Add player information as attached to the hero entity
-			response.getPlayers().set(player.getId(), new StartGameResponse.Player().withDeck(deck).withAttributes
-					(playerAttributes));
-
-		}
-
-		// Borrow the decks
-		final List<String> deckIds = request.getPlayers().stream().map(StartGameRequest.Player::getDeckId).collect
-				(Collectors.toList());
-		Inventory.borrowFromCollection(new BorrowFromCollectionRequest().withCollectionIds(deckIds));
-
-		return response;
 	}
 
 	/**

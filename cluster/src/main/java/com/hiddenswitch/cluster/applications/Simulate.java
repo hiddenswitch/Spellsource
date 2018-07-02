@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.util.Simulation;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
@@ -77,7 +78,7 @@ public class Simulate {
 				// Return null if for some reason we couldn't read the files, and filter the unread ones out
 				.filter(Objects::nonNull);
 
-		final Map<String, Deck> decks = Simulation.getDecks(decklists.collect(Collectors.toList()));
+		final Map<String, GameDeck> decks = Simulation.getDecks(decklists.collect(Collectors.toList()));
 
 		if (decks.size() < 2) {
 			System.err.println("Simulate: Too few decks were specified. You need at least two decks to generate pairs.");
