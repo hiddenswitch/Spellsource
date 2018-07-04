@@ -20,7 +20,7 @@
         {
         "class": "ShuffleToDeckSpell",
         "target": "FRIENDLY_HAND"
-        },
+        }
       ]
     }
   },
