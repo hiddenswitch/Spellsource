@@ -21,8 +21,8 @@
         "class": "ShuffleToDeckSpell",
         "target": "FRIENDLY_HAND"
         },
-      ],
-    },
+      ]
+    }
   },
   "attributes": {
     "BATTLECRY": true
