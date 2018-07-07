@@ -14,12 +14,12 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "class": "DrawCardSpell",
-        "value": 2
+          "class": "DrawCardSpell",
+          "value": 2
         },
         {
-        "class": "ShuffleToDeckSpell",
-        "target": "FRIENDLY_HAND"
+          "class": "ShuffleToDeckSpell",
+          "target": "FRIENDLY_HAND"
         }
       ]
     }
