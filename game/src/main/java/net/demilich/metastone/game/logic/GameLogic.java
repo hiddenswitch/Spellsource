@@ -352,13 +352,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void applyAttribute(Entity entity, Attribute attr, Entity source) {
-		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
-			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, MEGA_WINDFURY_ATTACKS - WINDFURY_ATTACKS);
-		} else if (attr == Attribute.WINDFURY && !entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
-			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, WINDFURY_ATTACKS - 1);
-		} else if (attr == Attribute.MEGA_WINDFURY && !entity.hasAttribute(Attribute.WINDFURY) && !entity.hasAttribute(Attribute.MEGA_WINDFURY)) {
-			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, MEGA_WINDFURY_ATTACKS - 1);
+		boolean hasWindfury = entity.hasAttribute(Attribute.WINDFURY) || entity.hasAttribute(Attribute.AURA_WINDFURY);
+		boolean hasMegaWindfury = entity.hasAttribute(Attribute.MEGA_WINDFURY);
+		boolean gainingWindfury = attr == Attribute.WINDFURY || attr == Attribute.AURA_WINDFURY;
+		boolean gainingMegaWindfury = attr == Attribute.MEGA_WINDFURY;
+		int numberOfAttacks = -1;
+
+		if (!hasWindfury && !hasMegaWindfury && gainingWindfury) {
+			numberOfAttacks = WINDFURY_ATTACKS - 1;
+		} else if (!hasWindfury && !hasMegaWindfury && gainingMegaWindfury) {
+			numberOfAttacks = MEGA_WINDFURY_ATTACKS - 1;
+		} else if (hasWindfury && !hasMegaWindfury && gainingMegaWindfury) {
+			numberOfAttacks = MEGA_WINDFURY_ATTACKS - WINDFURY_ATTACKS;
 		}
+
+		if (numberOfAttacks != -1) {
+			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, numberOfAttacks);
+		}
+
 		entity.setAttribute(attr);
 		context.fireGameEvent(new AttributeAppliedEvent(context, entity.getId(), entity, source, attr));
 	}

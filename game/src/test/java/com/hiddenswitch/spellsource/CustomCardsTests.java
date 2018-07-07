@@ -44,6 +44,18 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testScissorsofDots() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_scissors_of_dots");
+			assertTrue(player.getHero().canAttackThisTurn(), "Should be able to attack now");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertTrue(player.getHero().canAttackThisTurn(), "Should be able to attack still (Windfury weapon)");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertFalse(player.getHero().canAttackThisTurn(), "Should NOT be able to attack still (Windfury weapon)");
+		});
+	}
+
+	@Test
 	public void testEnergeticMentee() {
 		runGym((context, player, opponent) -> {
 			player.setMana(2);
