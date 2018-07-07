@@ -11,7 +11,17 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "NullSpell"
+      "class": "MetaSpell",
+      "spells": [
+        {
+        "class": "DrawCardSpell",
+        "value": 2
+        },
+        {
+        "class": "ShuffleToDeckSpell",
+        "target": "FRIENDLY_HAND"
+        }
+      ]
     }
   },
   "attributes": {
