@@ -15,7 +15,7 @@
     "spell": {
       "class": "MissilesSpell",
       "target": "ENEMY_MINIONS",
-      "value": 8,
+      "value": 4,
       "howMany": 1
     }
   },
