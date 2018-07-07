@@ -21,7 +21,7 @@
       },
       "maxFires": 1,
       "oneTurn": true
-  }
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

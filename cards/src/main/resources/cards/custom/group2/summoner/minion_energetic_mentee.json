@@ -19,8 +19,8 @@
     }
   },
   "attributes": {
-    "INVOKE": 3,
-    "CHARGE": true
+    "CHARGE": true,
+    "INVOKE": 3
   },
   "collectible": true,
   "set": "CUSTOM",

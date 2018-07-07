@@ -9,10 +9,10 @@
   "race": "BEAST",
   "description": "Invoke (5): Summon a 5/5 Mother Gryphon.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "InvokeCondition"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
