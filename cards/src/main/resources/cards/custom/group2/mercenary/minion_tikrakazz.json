@@ -14,7 +14,7 @@
       "target": "FRIENDLY_PLAYER",
       "trigger": {
         "eventTrigger": {
-          "class": "MinionSummonedTrigger",
+          "class": "MinionPlayedTrigger",
           "targetPlayer": "BOTH"
         },
         "spell": {
@@ -29,6 +29,11 @@
               "class": "CastFromGroupSpell",
               "target": "EVENT_TARGET",
               "group": "group_adapt"
+            },
+            {
+              "class": "RemoveAttributeSpell",
+              "target": "EVENT_TARGET",
+              "attribute": "CHOICES"
             },
             {
               "class": "RemoveAttributeSpell",
