@@ -1,4 +1,5 @@
 from setuptools import setup
+from setuptools.command.install import install
 import os
 import subprocess
 import sys
@@ -7,22 +8,21 @@ if sys.version_info < (3, 6):
     sys.exit('Spellsource requires Python 3.6')
 
 
-def build_net():
-    if os.name == "nt":
-        subprocess.run(["./gradlew.bat net:shadowJar"], shell=True)
-    else:
-        subprocess.run(["./gradlew net:shadowJar"], shell=True)
+class CompileSpellsource(install):
+    def run(self):
+        # Compile Spellsource
+        # This will throw an exception if compilation fails, which is exactly what we want
+        
+        src_path = os.getcwd()
+        if os.name == "nt":
+            subprocess.check_call(["./gradlew.bat net:shadowJar"], cwd=src_path, shell=True)
+        else:
+            subprocess.check_call(["./gradlew net:shadowJar"], cwd=src_path, shell=True)
+        install.run(self)
 
-
-try:
-    print('Building the Spellsource engine dependencies. This make take a while.')
-    build_net()
-except Exception as ex:
-    print('An error occurred while trying to build the engine. Make sure you have Java installed.')
-    raise ex
 
 setup(name='spellsource',
-      version='0.4.4',
+      version='0.4.5',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a
@@ -98,4 +98,5 @@ overhead between Java and Python.
                    # that you indicate whether you support Python 2, Python 3 or both.
                    'Programming Language :: Python :: 3',
                    'Programming Language :: Python :: 3.6'],
+      cmdclass={'install': CompileSpellsource},
       zip_safe=False)
