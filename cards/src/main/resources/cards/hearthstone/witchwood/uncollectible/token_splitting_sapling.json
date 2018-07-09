@@ -8,7 +8,11 @@
   "rarity": "FREE",
   "description": "<b>Deathrattle:</b> Summon two 1/1 Woodchips.",
   "deathrattle": {
-    "class": "NullSpell"
+    "class": "SummonSpell",
+    "cards": [
+      "token_woodchip",
+      "token_woodchip"
+    ]
   },
   "attributes": {
     "DEATHRATTLES": true
