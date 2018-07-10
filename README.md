@@ -208,5 +208,12 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
 
     You can support more diverse scenarios/Tavern Brawls by specifying a Hero Card by name. For example, create a custom hero named `Enchantress` and add the line `Hero Card: Enchantress` to your decklist.
  9. You will now play against an AI using the card. To play against others on your local network, enter Matchmaking instead of Quick Play. As long as your opponent's client is running on the local network and the network supports UDP broadcasting (most local Wi-Fi networks), your opponent's client will discover your local server. In the Spellsource client, a toast will appear at the bottom of your login screen indicating that you have connected to a local server if it successfully found one.
- 10. Once you are satisfied with your card, format it correctly by executing [`formatter.py`](cards/formatter.py) from the `cards` directory in a command line. You must have `python` on your path to execute the formatter.
+ 10. Once you are satisfied with your card, format it correctly using Python:
+    
+     ```bash
+     # If you haven't already installed the Spellsource package, do so now.
+     pip3 install spellsource
+     python3 -m 'spellsource.utils.cardformatter'
+     ```
+     
  11. To contribute the card to the public networking servers, commit your changes to your fork with `git commit -am "A custom note about the card"`, `git push` and then pull-request to this repository.

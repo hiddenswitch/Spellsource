@@ -8,13 +8,14 @@ end in alphabetical order.
 
 This script requires the objdict package to help it serialize to JSON  in the appropriate key order.
 """
+import os
+
 from objdict import ObjDict as OrderedDict
+from .cards import write_card, iter_cards
 
-from utils import write_card, iter_cards
+_VERSION = 1
 
-VERSION = 1
-
-ORDER = [
+_ORDER = [
     'class',
     'target',
     'value',
@@ -63,8 +64,8 @@ ORDER = [
 ]
 
 
-def main():
-    for (card, filepath) in iter_cards():
+def fix_cards():
+    for (card, filepath) in iter_cards(os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')):
         if 'set' not in card:
             if 'witchwood' in filepath:
                 card['set'] = 'WITCHWOOD'
@@ -91,7 +92,7 @@ def fix_list(v):
 
 def fix_dict(in_dict):
     new_dict = OrderedDict()
-    for k in ORDER:
+    for k in _ORDER:
         if k not in in_dict:
             continue
         new_dict[k] = fix_value(in_dict[k])
@@ -113,4 +114,4 @@ def fix_value(v):
 
 
 if __name__ == '__main__':
-    main()
+    fix_cards()
