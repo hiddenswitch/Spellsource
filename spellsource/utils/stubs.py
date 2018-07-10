@@ -1,15 +1,14 @@
 import json
 import os
-
 import urllib.request
 from os import path
 
-import utils
-from cardformatter import fix_dict
+from .cards import CLASS_MAPPING, name_to_id, write_card
+from .cardformatter import fix_dict
 
 
 def main():
-    hero_class_mapping = utils.CLASS_MAPPING
+    hero_class_mapping = CLASS_MAPPING
     
     request = urllib.request.Request(
         url='https://api.hearthstonejson.com/v1/23966/enUS/cards.json',
@@ -36,7 +35,7 @@ def main():
         lower = hs_card['type'].lower()
         if lower == 'minion' and not card_dict['collectible']:
             lower = 'token'
-        filename = utils.name_to_id(name=hs_card['name'], card_type=lower)
+        filename = name_to_id(name=hs_card['name'], card_type=lower)
         if hs_card['type'] == 'MINION':
             card_dict['baseAttack'] = hs_card['attack']
             card_dict['baseHp'] = hs_card['health']
@@ -88,7 +87,7 @@ def main():
             os.makedirs(stubs_)
         except:
             pass
-        utils.write_card(fix_dict(card_dict), path.join(stubs_, filename + '.json'))
+        write_card(fix_dict(card_dict), path.join(stubs_, filename + '.json'))
 
 
 if __name__ == '__main__':

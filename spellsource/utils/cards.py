@@ -21,6 +21,7 @@ CLASS_MAPPING = {
     'DREAM': 'ANY'
 }
 
+
 def iter_cards(start_path=None):
     if start_path is None:
         start_path = path.join(path.dirname(__file__), 'src/main/resources/cards')

@@ -1,13 +1,21 @@
 import copy
 import json
-
 import urllib.request
-from utils import *
 import os
+import re
+
+from .cardformatter import fix_dict
+from .cards import *
 
 
-class DownloadCards:
+class HearthcardsCardDownloader(object):
     def __init__(self, set_num=None):
+        """
+        Downloads all the cards from the Hearthcards gallery, or downloads a specific set.
+        
+        Behaves like a generator.
+        :param set_num: When set, downloads a specific set.
+        """
         self._item_id = set_num
         if set_num is not None:
             self._getter = self._get_set_page
@@ -49,7 +57,15 @@ class DownloadCards:
         return data
 
 
-def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE'):
+def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwargs):
+    """
+    Converts a Hearthcard card dict to a Spellsource card,
+    :param card: The Hearthcards card dict to convert
+    :param set: The set, defaulting to 'CUSTOM'
+    :param hero_class: The hero class override
+    :param kwargs: All other overrides
+    :return:
+    """
     if 'type' in card:
         card_type = card['type'].upper()
     else:
@@ -316,17 +332,18 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE'):
         }
     out['collectible'] = True
     out['fileFormatVersion'] = 1
+    if kwargs is not None:
+        out.update(kwargs)
     return out
 
 
-def write_set_stubs(set_id):
-    from cardformatter import fix_dict
-    basedir = 'src/main/resources/staging/hearthcards/set_' + str(set_id) + '/'
+def write_set_stubs(set_id, dest_dir='src/main/resources/staging/hearthcards'):
+    basedir = os.path.join(dest_dir, '/set_' + str(set_id))
     try:
         os.makedirs(basedir)
     except:
         pass
-    for card in DownloadCards(set_num=set_id):
+    for card in HearthcardsCardDownloader(set_num=set_id):
         out_card = fix_dict(from_hearthcard_to_spellsource(card, hero_class='SILVER'))
         write_card(card=out_card,
                    filepath=basedir + name_to_id(

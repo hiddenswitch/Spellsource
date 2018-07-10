@@ -83,7 +83,7 @@ overhead between Java and Python.
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='GPLv3',
-      install_requires=['py4j', 'tqdm'],
+      install_requires=['py4j', 'tqdm', 'objdict'],
       packages=['spellsource'],
       keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
                 'ml'],
