@@ -14,6 +14,7 @@
       "fireCondition": {
         "class": "IsDeadCondition"
       },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
       "targetEntityType": "MINION"
     },
     "spell": {
