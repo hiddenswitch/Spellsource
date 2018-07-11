@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
@@ -36,6 +37,8 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 
 		logger.debug("onCast {} {}: {} battlecries were selected.", context.getGameId(), source, cards.size());
 
+		player.setAttribute(Attribute.RANDOM_CHOICES);
+		context.getOpponent(player).setAttribute(Attribute.RANDOM_CHOICES);
 		// Replay the battlecries with targets chosen randomly
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
@@ -78,7 +81,10 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			action.setSource(source.getReference());
 			EntityReference battlecryTarget;
 			if (action.getTargetRequirement() != TargetSelection.NONE) {
-				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
+				// Compute the battlecry's valid targets as though it was a spell, so that the battlecry can target Shudderwock
+				PlaySpellCardAction spellCardAction = new PlaySpellCardAction(battlecryDesc.spell, card, battlecryDesc.targetSelection);
+				spellCardAction.setSource(action.getSourceReference());
+				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), spellCardAction);
 				if (targets.isEmpty()) {
 					context.getLogic().revealCard(player, card);
 					context.getLogic().endOfSequence();
@@ -97,5 +103,8 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			context.getEnvironment().remove(Environment.TARGET);
 			context.getLogic().endOfSequence();
 		}
+
+		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		context.getOpponent(player).getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
 }

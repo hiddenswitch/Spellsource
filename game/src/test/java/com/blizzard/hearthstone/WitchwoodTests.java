@@ -53,6 +53,30 @@ public class WitchwoodTests extends TestBase {
 	}
 
 	@Test
+	public void testShudderwockZolaInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion remove = playMinionCard(context, player, "minion_zola_the_gorgon");
+			destroy(context, remove);
+			playMinionCard(context, player, "minion_shudderwock");
+			assertEquals(player.getHand().get(0).getCardId(), "minion_shudderwock", "Should copy Shudderwock");
+		});
+	}
+
+	@Test
+	public void testShudderwockBloodCultistInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion remove = playMinionCard(context, player, "minion_blood_cultist");
+			context.getLogic().removePeacefully(remove);
+			context.getLogic().endOfSequence();
+			overrideDiscover(context, player, discoverActions -> {
+				fail("Shouldn't prompt to discover");
+				return null;
+			});
+			playMinionCard(context, player, "minion_shudderwock");
+		});
+	}
+
+	@Test
 	public void testShudderwockYoggInteraction() {
 		runGym((context, player, opponent) -> {
 			// 2 spells
