@@ -4,18 +4,18 @@ Format: Standard
 2x Lesser Jasper Spellstone
 2x Naturalize
 2x Wild Growth
-1x Tar Creeper
+2x Wrath
 2x Witching Hour
 2x Branching Paths
 2x Ironwood Golem
 2x Oaken Summons
 2x Swipe
 2x Carnivorous Cube
-1x Harrison Jones
 2x Nourish
-2x Rotten Applebaum
 2x Primordial Drake
 1x The Lich King
+1x Dragonhatcher
 1x Hadronox
 1x Master Oakheart
+1x Sleepy Dragon
 1x Ultimate Infestation

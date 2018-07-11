@@ -6,7 +6,6 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "BEAST",
   "description": "Both players have Spell Damage +2",
   "attributes": {
     "OPPONENT_SPELL_DAMAGE": 2,

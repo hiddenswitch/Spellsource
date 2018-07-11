@@ -22,7 +22,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.4.8',
+      version='0.4.9',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a

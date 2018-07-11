@@ -3,18 +3,19 @@ Class: Warlock
 Format: Standard
 2x Dark Pact
 2x Kobold Librarian
-2x Mortal Coil
 2x Defile
-2x Doomsayer
-1x Prince Taldaram
+1x Doomsayer
+2x Stonehill Defender
 2x Hellfire
 2x Lesser Amethyst Spellstone
 1x Spiritsinger Umbra
 2x Carnivorous Cube
 2x Doomguard
 2x Faceless Manipulator
-2x Possessed Lackey
 1x Skull of the Man'ari
+2x Possessed Lackey
+1x Lord Godfrey
+1x The Lich King
 2x Voidlord
 1x Bloodreaver Gul'dan
 2x Mountain Giant

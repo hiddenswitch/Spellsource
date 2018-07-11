@@ -1,0 +1,20 @@
+Name: Quest Warrior
+Class: Warrior
+Format: Standard
+1x Fire Plume's Heart
+1x Shield Slam
+2x Whirlwind
+2x Cornered Sentry
+2x Drywhisker Armorer
+2x Execute
+2x Slam
+2x Warpath
+2x Acolyte of Pain
+1x Gluttonous Ooze
+2x Phantom Militia
+2x Shield Block
+2x Stonehill Defender
+2x Blood Razor
+2x Saronite Chain Gang
+2x Brawl
+1x Scourgelord Garrosh

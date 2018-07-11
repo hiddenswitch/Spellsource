@@ -1,20 +1,22 @@
-Name: Token Druid
+Name: Malygos Druid
 Class: Druid
 Format: Standard
-1x Innervate
+2x Innervate
+2x Moonfire
 2x Lesser Jasper Spellstone
-1x Power of the Wild
+1x Bloodmage Thalnos
 2x Wild Growth
 2x Wrath
-2x Savage Roar
+1x Prince Taldaram
 2x Branching Paths
-1x Oaken Summons
-2x Soul of the Forest
 2x Swipe
-2x Violet Teacher
-2x Wispering Woods
+1x Twig of the World Tree
 2x Arcane Tyrant
+1x Faceless Manipulator
 2x Nourish
+1x Starfall
 2x Spreading Plague
 1x Malfurion the Pestilent
+1x The Lich King
+1x Malygos
 2x Ultimate Infestation

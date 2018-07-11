@@ -6,7 +6,6 @@ Format: Standard
 2x Whirlwind
 1x Gluttonous Ooze
 2x Ironbeak Owl
-1x Mind Control Tech
 2x Rabid Worgen
 2x Reckless Flurry
 2x Shield Block
@@ -18,6 +17,7 @@ Format: Standard
 1x Elise the Trailblazer
 1x Faceless Manipulator
 1x Harrison Jones
+1x Azalina Soulthief
 1x Baron Geddon
 1x Gorehowl
 1x Baku the Mooneater
