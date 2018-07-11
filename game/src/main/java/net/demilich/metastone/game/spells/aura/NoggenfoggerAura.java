@@ -39,6 +39,10 @@ public class NoggenfoggerAura extends Aura {
 			validTargets = gc.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
 		}
 
+		if (validTargets.size() == 0) {
+			// An earlier event removed all valid targets
+			return;
+		}
 		gc.setTargetOverride(gc.getLogic().getRandom(validTargets).getReference());
 	}
 }

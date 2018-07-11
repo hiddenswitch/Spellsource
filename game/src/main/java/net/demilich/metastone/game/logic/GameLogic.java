@@ -305,6 +305,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Increment the number of invoked cards that were played
 			player.modifyAttribute(Attribute.INVOKED, 1);
 		}
+
+		context.fireGameEvent(new AfterCardPlayed(context, playerId, entityReference));
 	}
 
 	/**
