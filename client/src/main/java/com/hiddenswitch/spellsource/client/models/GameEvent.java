@@ -66,6 +66,8 @@ public class GameEvent implements Serializable {
     
     AFTER_PHYSICAL_ATTACK("AFTER_PHYSICAL_ATTACK"),
     
+    AFTER_PLAY_CARD("AFTER_PLAY_CARD"),
+    
     AFTER_SPELL_CASTED("AFTER_SPELL_CASTED"),
     
     AFTER_SUMMON("AFTER_SUMMON"),
