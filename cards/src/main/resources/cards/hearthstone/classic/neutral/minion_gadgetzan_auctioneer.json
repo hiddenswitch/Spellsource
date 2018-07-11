@@ -9,7 +9,7 @@
   "description": "Whenever you cast a spell, draw a card.",
   "trigger": {
     "eventTrigger": {
-      "class": "SpellCastedTrigger",
+      "class": "AfterSpellCastedTrigger",
       "sourcePlayer": "SELF"
     },
     "spell": {
