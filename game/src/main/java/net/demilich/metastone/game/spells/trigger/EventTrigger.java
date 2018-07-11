@@ -64,16 +64,11 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		}
 
-		TargetType hostTargetType = (TargetType) getDesc().get(EventTriggerArg.HOST_TARGET_TYPE);
-		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getEventTarget() == host) {
-			return false;
-		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
-			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
-			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {
+
+		if (!hostConditionMet(event, host)) {
 			return false;
 		}
+
 		Condition condition = (Condition) getDesc().get(EventTriggerArg.QUEUE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
 		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
@@ -88,6 +83,20 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		}
 		return fire(event, host);
+	}
+
+	protected boolean hostConditionMet(GameEvent event, Entity host) {
+		TargetType hostTargetType = (TargetType) getDesc().get(EventTriggerArg.HOST_TARGET_TYPE);
+		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getEventTarget() == host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {
+			return false;
+		}
+		return true;
 	}
 
 	public int getOwner() {
@@ -121,6 +130,6 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
-		this.desc = (EventTriggerDesc)desc;
+		this.desc = (EventTriggerDesc) desc;
 	}
 }

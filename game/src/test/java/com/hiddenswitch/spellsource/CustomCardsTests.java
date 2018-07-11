@@ -44,20 +44,29 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testParadoxNoggenfoggerAssassinateInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion paradox = playMinionCard(context, player, "minion_paradox");
+			Minion noggenfogger = playMinionCard(context, player, "minion_mayor_noggenfogger");
+			playCardWithTarget(context, player, "spell_assassinate", paradox);
+		});
+	}
+
+	@Test
 	public void testMiniKnight() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 5; i++) {
-				receiveCard(context,player,"minion_bloodfen_raptor");
+				receiveCard(context, player, "minion_bloodfen_raptor");
 			}
-			Minion knight = playMinionCard(context,player,"minion_mini_knight");
+			Minion knight = playMinionCard(context, player, "minion_mini_knight");
 			context.getLogic().endOfSequence();
-			assertEquals(knight.getAttack(),knight.getBaseAttack());
-			receiveCard(context,player,"minion_bloodfen_raptor");
+			assertEquals(knight.getAttack(), knight.getBaseAttack());
+			receiveCard(context, player, "minion_bloodfen_raptor");
 			context.getLogic().endOfSequence();
-			assertEquals(knight.getAttack(),knight.getBaseAttack()+1);
+			assertEquals(knight.getAttack(), knight.getBaseAttack() + 1);
 			context.getLogic().removeCard(player.getHand().get(0));
 			context.getLogic().endOfSequence();
-			assertEquals(knight.getAttack(),knight.getBaseAttack()+1);
+			assertEquals(knight.getAttack(), knight.getBaseAttack() + 1);
 		});
 	}
 

@@ -835,6 +835,7 @@ definitions:
         enum:
           - 'ALL'
           - 'AFTER_PHYSICAL_ATTACK'
+          - 'AFTER_PLAY_CARD'
           - 'AFTER_SPELL_CASTED'
           - 'AFTER_SUMMON'
           - 'ATTRIBUTE_APPLIED'
