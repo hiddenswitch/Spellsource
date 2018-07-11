@@ -47,14 +47,14 @@ public class ClassicTests extends TestBase {
 			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
 			playCardWithTarget(context, player, "spell_polymorph", auctioneer);
-			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
+			assertEquals(shouldNotBeDrawn.getZone(), Zones.HAND);
 		});
 
 		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
 			playCardWithTarget(context, player, "spell_assassinate", auctioneer);
-			assertEquals(shouldBeDrawn.getZone(), Zones.DECK);
+			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 		});
 	}
 
