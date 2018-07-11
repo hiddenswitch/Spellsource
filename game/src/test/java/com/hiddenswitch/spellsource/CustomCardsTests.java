@@ -44,6 +44,24 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testMiniKnight() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				receiveCard(context,player,"minion_bloodfen_raptor");
+			}
+			Minion knight = playMinionCard(context,player,"minion_mini_knight");
+			context.getLogic().endOfSequence();
+			assertEquals(knight.getAttack(),knight.getBaseAttack());
+			receiveCard(context,player,"minion_bloodfen_raptor");
+			context.getLogic().endOfSequence();
+			assertEquals(knight.getAttack(),knight.getBaseAttack()+1);
+			context.getLogic().removeCard(player.getHand().get(0));
+			context.getLogic().endOfSequence();
+			assertEquals(knight.getAttack(),knight.getBaseAttack()+1);
+		});
+	}
+
+	@Test
 	public void testScissorsofDots() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "weapon_scissors_of_dots");
