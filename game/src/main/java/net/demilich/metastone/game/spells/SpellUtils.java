@@ -63,6 +63,13 @@ public class SpellUtils {
 		if (targetReference == null) {
 			targetReference = EntityReference.NONE;
 		}
+		// Determine casting player here
+		/*
+		if (spell.containsKey(SpellArg.TARGET_PLAYER)) {
+			CastRandomSpellSpell.DetermineCastingPlayer castingPlayer = determineCastingPlayer(context, player, source, spell.getTargetPlayer());
+			player = castingPlayer.getCastingPlayer();
+		}
+		*/
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
 
@@ -293,7 +300,7 @@ public class SpellUtils {
 		}
 		Card card;
 		if (cardId.toUpperCase().equals("EVENT_SOURCE")) {
-			card = (Card)context.resolveSingleTarget(context.getEventSourceStack().peek());
+			card = (Card) context.resolveSingleTarget(context.getEventSourceStack().peek());
 		} else if (cardId.toUpperCase().equals("OUTPUT")) {
 			card = context.getOutputCard();
 		} else {
