@@ -10,6 +10,7 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -112,7 +113,8 @@ public class CastFromGroupSpell extends Spell {
 		List<SpellDesc> allChoices = new ArrayList<SpellDesc>();
 		allChoices.addAll(group);
 
-		if (source.getAttributes().containsKey(Attribute.CHOICES)) {
+		if (source.getAttributes().containsKey(Attribute.CHOICES)
+				&& source.getEntityType() == EntityType.CARD) {
 			int[] choices = (int[]) source.getAttributes().get(Attribute.CHOICES);
 
 			for (int i = 0; i < choices.length; i++) {
