@@ -29,6 +29,7 @@ class GameStateValueBehaviour(Behaviour):
     
     def __init__(self, context: Context):
         self._ctx = context
+        # Weights for calculating heuristic scoring of state
         self.weights = OrderedDict({
             'RED_MODIFIER': -43,
             'YELLOW_MODIFIER': -17,
@@ -69,7 +70,7 @@ class GameStateValueBehaviour(Behaviour):
         elif remaining_hp < 15:
             return GameStateValueBehaviour.THREAT_LEVEL_YELLOW
         
-        return GameStateValueBehaviour.THREAT_LEVEL_RED
+        return GameStateValueBehaviour.THREAT_LEVEL_GREEN
     
     def get_hero_damage(self, hero: Hero) -> int:
         hero_damage = 0
@@ -180,6 +181,7 @@ class GameStateValueBehaviour(Behaviour):
         quest_rewards = 0
         for e in player.getRemovedFromPlay():
             if e.getEntityType() == self._ctx.EntityType.QUEST:
+                # Inspects the Quest object to determine whether it delivered an award
                 if e.isExpired() and e.getFires() == e.getCountUntilCast():
                     quest_rewards += 1
         
@@ -188,6 +190,19 @@ class GameStateValueBehaviour(Behaviour):
         return score
     
     def alpha_beta(self, context: GameContext, player_id: int, action: GameAction, depth: int) -> float:
+        """
+        Perform "alpha beta pruning" (a kind of minimax) to find the next action to take.
+        
+        Since we do not simulate the opponent's turn, there is no beta used here. Indeed, this is just a basic minimax
+        algorithm that brute-force searches all the actions to find the best possible action, up to a certain depth.
+        
+        See the Java implementation of GameStateValueBehaviour for one that caches the search.
+        :param context:
+        :param player_id:
+        :param action:
+        :param depth:
+        :return:
+        """
         simulation = context.clone()
         score = float('-Inf')
         opponent = simulation.getOpponent(simulation.getPlayer(player_id))
