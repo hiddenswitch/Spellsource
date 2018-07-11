@@ -44,6 +44,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testRafaamPhilanthropist() {
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, player, "minion_bloodfen_raptor");
+			playMinionCard(context, player, "minion_rafaam_philanthropist");
+			assertEquals(opponent.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testParadoxNoggenfoggerAssassinateInteraction() {
 		runGym((context, player, opponent) -> {
 			Minion paradox = playMinionCard(context, player, "minion_paradox");

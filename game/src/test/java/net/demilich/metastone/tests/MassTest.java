@@ -32,7 +32,7 @@ public class MassTest extends TestBase {
 	@Test
 	public void testRandomMassPlay() {
 		loggerSetup();
-		int tests = Boolean.parseBoolean(System.getenv("CI")) ? 1000 : 100000;
+		int tests = Boolean.parseBoolean(System.getenv("CI")) ? 1000 : 10000;
 		IntStream.range(0, tests).parallel().forEach(i -> oneGame());
 	}
 

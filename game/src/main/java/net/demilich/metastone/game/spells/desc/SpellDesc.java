@@ -224,9 +224,11 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		if (masterSpell.getEntityFilter() != null) {
 			newDesc.put(SpellArg.FILTER, masterSpell.getEntityFilter());
 		}
+		/*
 		if (masterSpell.getTargetPlayer() != null) {
 			newDesc.put(SpellArg.TARGET_PLAYER, masterSpell.getTargetPlayer());
 		}
+		*/
 		return newDesc;
 	}
 
