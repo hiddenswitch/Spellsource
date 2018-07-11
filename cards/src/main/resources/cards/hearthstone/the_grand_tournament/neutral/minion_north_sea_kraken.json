@@ -6,6 +6,7 @@
   "baseAttack": 9,
   "baseHp": 7,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Battlecry: Deal 4 damage.",
   "battlecry": {
     "targetSelection": "ANY",

@@ -77,9 +77,8 @@ public class Cuckoo {
 					break;
 			}
 		}
-		return DoubleChromosome.of(Arrays.stream(values)
-				.map(ignored -> DoubleGene.of(-100, 100))
-				.toArray(DoubleGene[]::new));
+
+		return DoubleChromosome.of(genes);
 	}
 
 	static FeatureVector fromGenotype(Genotype<DoubleGene> genotype) {

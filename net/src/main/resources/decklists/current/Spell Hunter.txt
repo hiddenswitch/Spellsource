@@ -6,10 +6,12 @@ Format: Standard
 2x Hunter's Mark
 2x Tracking
 2x Explosive Trap
-2x Freezing Trap
+1x Freezing Trap
+1x Grievous Bite
 2x Wandering Monster
 2x Animal Companion
-2x Eaglehorn Bow
+1x Deadly Shot
+1x Eaglehorn Bow
 2x Kill Command
 2x Unleash the Hounds
 2x Flanking Strike

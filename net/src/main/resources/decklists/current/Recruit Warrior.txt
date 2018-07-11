@@ -1,0 +1,23 @@
+Name: Recruit Warrior
+Class: Warrior
+Format: Standard
+2x Iron Hide
+2x Shield Slam
+1x Bring It On!
+1x Dead Man's Hand
+2x Execute
+2x Forge of Souls
+2x Slam
+2x Warpath
+1x Reckless Flurry
+2x Shield Block
+2x Blood Razor
+2x Brawl
+2x Gather Your Party
+1x Geosculptor Yip
+1x Grommash Hellscream
+1x Rotface
+1x Scourgelord Garrosh
+1x The Lich King
+1x Woecleaver
+1x Ysera

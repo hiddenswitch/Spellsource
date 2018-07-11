@@ -9,11 +9,12 @@ Format: Standard
 2x Righteous Protector
 1x Divine Favor
 2x Raid Leader
-2x Stonehill Defender
+1x Tinkmaster Overspark
 2x Unidentified Maul
+2x Void Ripper
 2x Fungalmancer
+1x Leeroy Jenkins
 2x Level Up!
 2x Corridor Creeper
-2x Stormwind Champion
 2x Vinecleaver
 1x Baku the Mooneater

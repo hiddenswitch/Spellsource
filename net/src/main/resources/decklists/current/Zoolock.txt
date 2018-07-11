@@ -1,19 +1,19 @@
 Name: Zoolock
 Class: Warlock
 Format: Standard
-2x Fire Fly
 2x Flame Imp
-2x Glacial Shard
 2x Kobold Librarian
+2x Lightwarden
 2x Soulfire
 2x Voidwalker
+2x Voodoo Doctor
 1x Prince Keleseth
+2x Fungal Enchanter
+2x Happy Ghoul
 2x Tar Creeper
-2x Vicious Fledgling
-2x Dark Iron Dwarf
+1x Void Ripper
+2x Lifedrinker
 2x Saronite Chain Gang
-2x Spellbreaker
 2x Despicable Dreadlord
 2x Doomguard
 2x Fungalmancer
-1x Bloodreaver Gul'dan

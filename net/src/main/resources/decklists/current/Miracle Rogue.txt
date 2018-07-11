@@ -6,15 +6,15 @@ Format: Standard
 1x Shadowstep
 2x Cold Blood
 2x Fire Fly
+1x Bloodmage Thalnos
 2x Eviscerate
 2x Sap
-1x Shiv
 1x Edwin VanCleef
 2x Fan of Knives
 2x Hench-Clan Thug
-2x Questing Adventurer
 2x SI:7 Agent
 2x Elven Minstrel
 2x Fal'dorei Strider
 1x Leeroy Jenkins
-2x Gadgetzan Auctioneer
+2x Vilespine Slayer
+2x Sprint

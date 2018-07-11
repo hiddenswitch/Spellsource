@@ -3,16 +3,18 @@ Class: Priest
 Format: Standard
 2x Northshire Cleric
 2x Power Word: Shield
+1x Acidic Swamp Ooze
 2x Divine Hymn
 2x Mind Blast
 2x Shadow Visions
 2x Wild Pyromancer
-2x Acolyte of Pain
-1x Gluttonous Ooze
+1x Acolyte of Pain
+2x Twilight Acolyte
 2x Duskbreaker
-2x Mass Dispel
-2x Scaleworm
+1x Mass Dispel
 2x Twilight Drake
+1x Cabal Shadow Priest
+1x Holy Fire
 1x Skulking Geist
 2x Psychic Scream
 2x Primordial Drake
