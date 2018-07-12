@@ -1004,6 +1004,13 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testHypnotist() {
 		runGym((context, player, opponent) -> {
+			Minion moltenGiant = playMinionCard(context,player,"minion_molten_giant");
+			playMinionCardWithBattlecry(context,player,"minion_hypnotist",moltenGiant);
+			assertEquals(moltenGiant.getAttack(),moltenGiant.getSourceCard().getBaseManaCost());
+			assertEquals(moltenGiant.getHp(),moltenGiant.getSourceCard().getBaseManaCost());
+		});
+		
+		runGym((context, player, opponent) -> {
 			Card giantCard = receiveCard(context, player, "minion_molten_giant");
 			// Reduce its effective cost
 			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
