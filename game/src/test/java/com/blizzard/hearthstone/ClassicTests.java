@@ -44,10 +44,13 @@ public class ClassicTests extends TestBase {
 	@Test
 	public void testGadgetzanAuctioneer() {
 		runGym((context, player, opponent) -> {
-			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
 			playCardWithTarget(context, player, "spell_polymorph", auctioneer);
-			assertEquals(shouldNotBeDrawn.getZone(), Zones.HAND);
+			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
+			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_mirror_image");
+			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
 		});
 
 		runGym((context, player, opponent) -> {
