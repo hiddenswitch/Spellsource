@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Give your minions +2 Attack, then swap their Attack and Health. Return this to your hand next turn.",
+  "description": "Give your minions +2 Attack, then swap their Attack and Health. Return this to your hand at the end of your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -23,12 +23,23 @@
         "target": "FRIENDLY_PLAYER",
         "trigger": {
           "eventTrigger": {
-            "class": "TurnEndTrigger",
+            "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
           },
           "spell": {
-            "class": "ReceiveCardSpell",
-            "card": "spell_stance_change"
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "trigger": {
+              "eventTrigger": {
+                "class": "TurnEndTrigger",
+                "targetPlayer": "SELF"
+              },
+              "spell": {
+                "class": "ReceiveCardSpell",
+                "card": "spell_stance_change"
+              },
+              "maxFires": 1
+            }
           },
           "maxFires": 1
         }
