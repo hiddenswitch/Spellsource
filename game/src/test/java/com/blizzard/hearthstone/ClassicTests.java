@@ -54,6 +54,16 @@ public class ClassicTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "secret_potion_of_polymorph");
+			context.endTurn();
+			Minion transformed = (Minion) playMinionCard(context, player, "minion_gadgetzan_auctioneer").transformResolved(context);
+			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_mirror_image");
+			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
+		});
+
+		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
 			playCardWithTarget(context, player, "spell_assassinate", auctioneer);

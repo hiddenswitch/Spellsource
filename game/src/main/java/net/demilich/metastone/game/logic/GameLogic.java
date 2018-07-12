@@ -3069,7 +3069,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				actor.getSourceCard().getAttributes().put(Attribute.CHOICE, choice);
 			}
 			actor.getAttributes().put(Attribute.CHOICE, choice);
-			//
 		}
 
 		if (hasAttribute(player, Attribute.DOUBLE_BATTLECRIES) && actor.getSourceCard().hasAttribute(Attribute.BATTLECRY)) {
@@ -3382,67 +3381,86 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		context.getSummonReferenceStack().push(minion.getReference());
 
-		if (index < 0 || index >= player.getMinions().size()) {
-			minion.moveOrAddTo(context, Zones.BATTLEFIELD);
-		} else {
-			player.getMinions().add(index, minion);
+		try {
+			if (index < 0 || index >= player.getMinions().size()) {
+				minion.moveOrAddTo(context, Zones.BATTLEFIELD);
+			} else {
+				player.getMinions().add(index, minion);
+			}
+
+			// After ever event, something may have transformed the minion, so make sure to get the correct entity.
+			if (!minion.hasAttribute(Attribute.PERMANENT)) {
+				context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
+				minion = summonTransformResolved(minion);
+			}
+
+			context.fireGameEvent(new BoardChangedEvent(context));
+			minion = summonTransformResolved(minion);
+
+			if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry() != BattlecryAction.NONE) {
+				resolveBattlecry(player.getId(), minion);
+				minion = summonTransformResolved(minion);
+				// A battlecry may have transformed the minion
+				endOfSequence();
+				minion = summonTransformResolved(minion);
+				// A deathrattle may have transformed the minion
+			}
+
+			// Anything that gets this far will get its triggers put into play, even if it gets destroyed, because the end
+			// of the sequence now comes after the summon
+			context.fireGameEvent(new BoardChangedEvent(context));
+			minion = summonTransformResolved(minion);
+
+			player.getStatistics().minionSummoned(minion);
+			SummonEvent summonEvent;
+			if (context.getEnvironment().get(Environment.TARGET_OVERRIDE) != null) {
+				Actor actor = (Actor) context.resolveTarget(player, source, (EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE)).get(0);
+				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
+				summonEvent = new SummonEvent(context, actor, source);
+			} else {
+				summonEvent = new SummonEvent(context, minion, source);
+			}
+
+			if (summonEvent.getMinion() != null && !summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
+				context.fireGameEvent(summonEvent);
+				minion = summonTransformResolved(minion);
+			}
+
+			applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
+			refreshAttacksPerRound(minion);
+			processBattlefieldEnchantments(player, minion);
+
+			if (minion.getCardCostModifier() != null) {
+				addGameEventListener(player, minion.getCardCostModifier(), minion);
+			}
+
+			handleEnrage(minion);
+
+			if (player.getMinions().contains(minion)
+					&& !minion.hasAttribute(Attribute.PERMANENT)) {
+				player.modifyAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 1);
+				player.modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
+				context.getOpponent(player).modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
+				context.fireGameEvent(new AfterSummonEvent(context, minion, source));
+			}
+			context.fireGameEvent(new BoardChangedEvent(context));
+			return true;
+		} finally {
+			context.getSummonReferenceStack().pop();
 		}
 
-		if (!minion.hasAttribute(Attribute.PERMANENT)) {
-			context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
-		}
+	}
 
-		context.fireGameEvent(new BoardChangedEvent(context));
-
-		if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry() != BattlecryAction.NONE) {
-			resolveBattlecry(player.getId(), minion);
-			endOfSequence();
-		}
-
+	@Suspendable
+	private Minion summonTransformResolved(Minion minion) {
+		// This should probably be deprecated
 		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
 			minion = (Minion) context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE));
 			minion.setBattlecry(null);
 			context.getEnvironment().remove(Environment.TRANSFORM_REFERENCE);
 		}
-
-		context.fireGameEvent(new BoardChangedEvent(context));
-
-		player.getStatistics().minionSummoned(minion);
-		SummonEvent summonEvent;
-		if (context.getEnvironment().get(Environment.TARGET_OVERRIDE) != null) {
-			Actor actor = (Actor) context.resolveTarget(player, source, (EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE)).get(0);
-			context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-			summonEvent = new SummonEvent(context, actor, source);
-		} else {
-			summonEvent = new SummonEvent(context, minion, source);
-		}
-
-		if (summonEvent.getMinion() != null && !summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
-			context.fireGameEvent(summonEvent);
-		}
-
-
-		applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
-		refreshAttacksPerRound(minion);
-
-		processBattlefieldEnchantments(player, minion);
-
-		if (minion.getCardCostModifier() != null) {
-			addGameEventListener(player, minion.getCardCostModifier(), minion);
-		}
-
-		handleEnrage(minion);
-
-		context.getSummonReferenceStack().pop();
-		if (player.getMinions().contains(minion)
-				&& !minion.hasAttribute(Attribute.PERMANENT)) {
-			player.modifyAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 1);
-			player.modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
-			context.getOpponent(player).modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
-			context.fireGameEvent(new AfterSummonEvent(context, minion, source));
-		}
-		context.fireGameEvent(new BoardChangedEvent(context));
-		return true;
+		minion = (Minion) minion.transformResolved(context);
+		return minion;
 	}
 
 	@Suspendable
