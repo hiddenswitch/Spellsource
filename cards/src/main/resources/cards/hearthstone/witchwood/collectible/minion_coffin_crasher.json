@@ -8,7 +8,7 @@
   "rarity": "RARE",
   "description": "Deathrattle: Summon a Deathrattle minion from your hand.",
   "deathrattle": {
-    "class": "SummonSpell",
+    "class": "RecruitSpell",
     "target": "FRIENDLY_HAND",
     "filter": {
       "class": "CardFilter",
