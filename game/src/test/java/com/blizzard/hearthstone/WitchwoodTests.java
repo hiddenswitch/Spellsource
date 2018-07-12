@@ -28,6 +28,17 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testWitchwoodGrizzlySilenceInteraction() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, opponent, "minion_bloodfen_raptor");
+			Minion grizzly = playMinionCard(context, player, "minion_witchwood_grizzly");
+			assertEquals(grizzly.getHp(), grizzly.getBaseHp() - 1);
+			playCardWithTarget(context, player, "spell_silence", grizzly);
+			assertEquals(grizzly.getHp(), grizzly.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testChamelosDoesntKeepCost() {
 		runGym((context, player, opponent) -> {
 			Card corridorCreeper = receiveCard(context, opponent, "minion_corridor_creeper");

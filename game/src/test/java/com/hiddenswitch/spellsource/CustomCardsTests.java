@@ -1009,7 +1009,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(moltenGiant.getAttack(),moltenGiant.getSourceCard().getBaseManaCost());
 			assertEquals(moltenGiant.getHp(),moltenGiant.getSourceCard().getBaseManaCost());
 		});
-		
+
 		runGym((context, player, opponent) -> {
 			Card giantCard = receiveCard(context, player, "minion_molten_giant");
 			// Reduce its effective cost
