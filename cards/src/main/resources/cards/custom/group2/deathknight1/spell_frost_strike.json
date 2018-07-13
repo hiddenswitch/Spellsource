@@ -1,0 +1,28 @@
+{
+  "name": "Frost Strike",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to a minion. If it is Frozen, deal 6 instead.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 6
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

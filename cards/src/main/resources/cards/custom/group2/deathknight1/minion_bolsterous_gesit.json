@@ -1,0 +1,17 @@
+{
+  "name": "Bolsterous Geist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Taunt. Can't be targeted by Spells or Hero Powers.",
+  "attributes": {
+    "TAUNT": true,
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -55,16 +55,8 @@ public class DraftLogic {
 
 	private List<HeroClass> createHeroChoices() {
 		List<HeroClass> classes = Arrays.asList(
-				HeroClass.BROWN,
-				HeroClass.GREEN,
-				HeroClass.BLUE,
-				HeroClass.GOLD,
-				HeroClass.WHITE,
-				HeroClass.BLACK,
-				HeroClass.SILVER,
-				HeroClass.VIOLET,
-				HeroClass.RED,
 				HeroClass.EGGPLANT,
+				HeroClass.ICE,
 				HeroClass.JADE,
 				HeroClass.LEATHER,
 				HeroClass.NAVY

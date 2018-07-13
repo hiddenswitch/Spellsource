@@ -24,7 +24,9 @@ import org.slf4j.LoggerFactory;
  * If a {@link SpellArg#CARD} is specified, the spell will interpret the card as an {@link
  * net.demilich.metastone.game.cards.CardType#ENCHANTMENT}, adding each of its triggers as specified to the {@code
  * target }and the deathrattle as a {@link net.demilich.metastone.game.spells.trigger.MinionDeathTrigger} whose {@link
- * net.demilich.metastone.game.targeting.TargetType} is {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}. If no triggers are present on the card, a dummy enchantment is created for later use in the {@link RemoveEnchantmentSpell} and {@link net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter}.
+ * net.demilich.metastone.game.targeting.TargetType} is {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}.
+ * If no triggers are present on the card, a dummy enchantment is created for later use in the {@link
+ * RemoveEnchantmentSpell} and {@link net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter}.
  * <p>
  * This example implements the text, "At the start of your next turn, summon four 1/1 Silver Hand Recruits." Notice that
  * {@link EntityReference#FRIENDLY_PLAYER} is used as the target of an enchantment for effects that don't really belong
@@ -93,12 +95,14 @@ public final class AddEnchantmentSpell extends Spell {
 		if (enchantmentDesc != null) {
 			Enchantment enchantment = enchantmentDesc.create();
 			enchantment.setOwner(player.getId());
+			enchantment.setSourceCard(source.getSourceCard());
 			context.getLogic().addGameEventListener(player, enchantment, target);
 		}
 
 		if (aura != null) {
 			aura = aura.clone();
 			aura.setOwner(player.getId());
+			aura.setSourceCard(source.getSourceCard());
 			// Enchantments added this way should trigger a board changed event.
 			context.getLogic().addGameEventListener(player, aura, target);
 		}

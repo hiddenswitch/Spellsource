@@ -1,0 +1,39 @@
+{
+  "name": "Rune Tap",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Discard a Rune to gain 8 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_rune"
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscardSpell",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "spell_rune"
+          }
+        },
+        {
+          "class": "BuffHeroSpell",
+          "target": "FRIENDLY_HERO",
+          "armorBonus": 8
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

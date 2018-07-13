@@ -14,21 +14,21 @@
       "spells": [
         {
           "class": "SetAttributeSpell",
-          "attribute": "RESERVED_INTEGER_1",
+          "target": "SELF",
           "value": {
             "class": "PlayerAttributeValueProvider",
             "playerAttribute": "HAND_COUNT",
             "targetPlayer": "OPPONENT"
           },
-          "target": "SELF"
+          "attribute": "RESERVED_INTEGER_1"
         },
         {
           "class": "AddEnchantmentSpell",
           "target": "SELF",
           "aura": {
             "class": "BuffAura",
-            "attackBonus": 0,
             "target": "SELF",
+            "attackBonus": 0,
             "hpBonus": {
               "class": "AttributeValueProvider",
               "attribute": "RESERVED_INTEGER_1",

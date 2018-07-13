@@ -29,7 +29,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 			if (e instanceof Enchantment) {
 				Enchantment enchantment = (Enchantment) e;
 				if (enchantment.getSourceCard() != null && enchantment.getSourceCard().getCardId().equals(card.getCardId())) {
-					enchantment.expire();
+					enchantment.onRemove(context);
 					// TODO: What about targeting effects?
 					context.getTriggerManager().removeTrigger(enchantment);
 				}

@@ -1,0 +1,27 @@
+{
+  "name": "Gilnean Witchhuntress",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "<b>Rush</b>, <b>Lifesteal.</b> Each turn this is in your hand, swap its Attack and Health.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SwapAttackAndHpSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "LIFESTEAL": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
