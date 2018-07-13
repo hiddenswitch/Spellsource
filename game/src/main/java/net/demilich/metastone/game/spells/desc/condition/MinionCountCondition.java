@@ -20,20 +20,20 @@ public class MinionCountCondition extends Condition {
 
 		int minionCount = 0;
 		switch (targetPlayer) {
-		case BOTH:
-			minionCount = context.getTotalMinionCount();
-			break;
-		case OPPONENT:
-			minionCount = context.getOpponent(player).getMinions().size();
-			break;
-		case SELF:
-		case OWNER:
-			minionCount = player.getMinions().size();
-			break;
-		default:
-			break;
+			case BOTH:
+				minionCount = context.getTotalMinionCount();
+				break;
+			case OPPONENT:
+				minionCount = context.getOpponent(player).getMinions().size();
+				break;
+			case SELF:
+			case OWNER:
+				minionCount = player.getMinions().size();
+				break;
+			default:
+				break;
 		}
-		
+
 		int targetValue = desc.getInt(ConditionArg.VALUE);
 		Operation operation = (Operation) desc.get(ConditionArg.OPERATION);
 		return SpellUtils.evaluateOperation(operation, minionCount, targetValue);

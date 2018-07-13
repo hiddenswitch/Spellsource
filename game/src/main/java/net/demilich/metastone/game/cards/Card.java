@@ -151,6 +151,16 @@ public class Card extends Entity implements HasChooseOneActions {
 			enchantments.add(deathrattleDesc.create());
 		}
 
+		if (getDesc().getAura() != null) {
+			enchantments.add(getDesc().getAura().create());
+		}
+
+		if (getDesc().getAuras() != null && getDesc().getAuras().length > 0) {
+			for (AuraDesc auraDesc : getDesc().getAuras()) {
+				enchantments.add(auraDesc.create());
+			}
+		}
+
 		// If there is no enchantment, create a dummy one
 		if (enchantments.size() == 0) {
 			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();

@@ -1,0 +1,17 @@
+{
+  "name": "Efficient Runeforging",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Add two Runes to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 2,
+    "card": "spell_rune"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

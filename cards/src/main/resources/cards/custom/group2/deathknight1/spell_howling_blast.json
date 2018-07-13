@@ -1,0 +1,33 @@
+{
+  "name": "Howling Blast",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to all characters and Freeze them.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_CHARACTERS",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "ALL_CHARACTERS",
+        "attribute": "FROZEN",
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "FROZEN",
+          "invert": true,
+          "operation": "HAS"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

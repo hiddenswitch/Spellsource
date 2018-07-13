@@ -1,0 +1,30 @@
+{
+  "name": "Unholy Frenzy",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Give your minions +2 Attack and the Deathrattle, \"Add a Rune to your hand.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 2
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "target": "FRIENDLY_MINIONS",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "card": "spell_rune"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

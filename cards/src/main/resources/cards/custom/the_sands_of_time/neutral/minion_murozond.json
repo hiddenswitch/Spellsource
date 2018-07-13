@@ -72,6 +72,11 @@
               "class": "HeroClassCondition",
               "heroClass": "JADE",
               "targetPlayer": "SELF"
+            },
+            {
+              "class": "HeroClassCondition",
+              "heroClass": "ICE",
+              "targetPlayer": "SELF"
             }
           ],
           "spells": [
@@ -128,6 +133,11 @@
             {
               "class": "ReceiveCardSpell",
               "card": "token_echo_of_chen",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "ReceiveCardSpell",
+              "card": "token_echo_of_darion",
               "targetPlayer": "SELF"
             }
           ]
@@ -192,6 +202,11 @@
               "class": "HeroClassCondition",
               "heroClass": "JADE",
               "targetPlayer": "OPPONENT"
+            },
+            {
+              "class": "HeroClassCondition",
+              "heroClass": "ICE",
+              "targetPlayer": "OPPONENT"
             }
           ],
           "spells": [
@@ -248,6 +263,11 @@
             {
               "class": "ReceiveCardSpell",
               "card": "token_echo_of_chen",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "ReceiveCardSpell",
+              "card": "token_echo_of_darion",
               "targetPlayer": "SELF"
             }
           ]

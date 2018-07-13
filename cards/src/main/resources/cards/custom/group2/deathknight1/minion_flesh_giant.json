@@ -1,0 +1,16 @@
+{
+  "name": "Flesh Giant",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 2,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

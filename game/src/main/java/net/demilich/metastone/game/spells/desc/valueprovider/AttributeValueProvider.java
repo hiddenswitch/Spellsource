@@ -53,6 +53,8 @@ public class AttributeValueProvider extends ValueProvider {
 						value += source.getMaxHp();
 					} else if (attribute == Attribute.HP) {
 						value += source.getHp();
+					} else if (attribute == Attribute.BASE_MANA_COST) {
+						value += source.getSourceCard().getBaseManaCost();
 					} else {
 						value += source.getAttributeValue(attribute);
 					}

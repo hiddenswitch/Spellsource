@@ -44,6 +44,34 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testPathOfFrost() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_target_dummy");
+			context.endTurn();
+			Minion attacker = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCardWithTarget(context, player, "spell_path_of_frost", attacker);
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			attack(context, opponent, attacker, target);
+			assertEquals(opponent.getHero().getHp(), opponentHp - attacker.getAttack());
+			assertEquals(target.getHp(), target.getBaseHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_target_dummy");
+			context.endTurn();
+			Minion attacker = playMinionCard(context, player, "minion_wolfrider");
+			playCardWithTarget(context, player, "spell_path_of_frost", attacker);
+			int opponentHp = opponent.getHero().getHp();
+			attack(context, player, attacker, target);
+			assertEquals(opponent.getHero().getHp(), opponentHp - attacker.getAttack());
+			assertEquals(target.getHp(), target.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testRafaamPhilanthropist() {
 		runGym((context, player, opponent) -> {
 			overrideDiscover(context, player, "minion_bloodfen_raptor");
@@ -1004,10 +1032,10 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testHypnotist() {
 		runGym((context, player, opponent) -> {
-			Minion moltenGiant = playMinionCard(context,player,"minion_molten_giant");
-			playMinionCardWithBattlecry(context,player,"minion_hypnotist",moltenGiant);
-			assertEquals(moltenGiant.getAttack(),moltenGiant.getSourceCard().getBaseManaCost());
-			assertEquals(moltenGiant.getHp(),moltenGiant.getSourceCard().getBaseManaCost());
+			Minion moltenGiant = playMinionCard(context, player, "minion_molten_giant");
+			playMinionCardWithBattlecry(context, player, "minion_hypnotist", moltenGiant);
+			assertEquals(moltenGiant.getAttack(), moltenGiant.getSourceCard().getBaseManaCost());
+			assertEquals(moltenGiant.getHp(), moltenGiant.getSourceCard().getBaseManaCost());
 		});
 
 		runGym((context, player, opponent) -> {

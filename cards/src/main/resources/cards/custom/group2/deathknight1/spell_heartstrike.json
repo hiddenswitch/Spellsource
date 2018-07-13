@@ -1,0 +1,33 @@
+{
+  "name": "Heartstrike",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Deal your Weapon's Attack in damage. Restore 6 Health to your hero.",
+  "condition": {
+    "class": "HasWeaponCondition"
+  },
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_WEAPON",
+          "attribute": "ATTACK"
+        }
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 6
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
