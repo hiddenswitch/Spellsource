@@ -390,6 +390,7 @@ definitions:
            - NAVY: Custom class.
            - LEATHER: Custom class.
            - EGGPLANT: Custom class.
+           - ICE: Custom class.
         type: 'string'
         enum:
           - 'BROWN'
@@ -405,6 +406,7 @@ definitions:
           - 'NAVY'
           - 'LEATHER'
           - 'EGGPLANT'
+          - 'ICE'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
