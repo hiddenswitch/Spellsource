@@ -32,7 +32,7 @@ public class DecksPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
   /**
-   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Custom class.  - NAVY: Custom class.  - LEATHER: Custom class.  - EGGPLANT: Custom class. 
+   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Custom class.  - NAVY: Custom class.  - LEATHER: Custom class.  - EGGPLANT: Custom class.  - ICE: Custom class. 
    */
   public enum HeroClassEnum {
     BROWN("BROWN"),
@@ -59,7 +59,9 @@ public class DecksPutRequest implements Serializable {
     
     LEATHER("LEATHER"),
     
-    EGGPLANT("EGGPLANT");
+    EGGPLANT("EGGPLANT"),
+    
+    ICE("ICE");
 
     private String value;
 
@@ -150,10 +152,10 @@ public class DecksPutRequest implements Serializable {
   }
 
    /**
-   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Custom class.  - NAVY: Custom class.  - LEATHER: Custom class.  - EGGPLANT: Custom class. 
+   * A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Custom class.  - NAVY: Custom class.  - LEATHER: Custom class.  - EGGPLANT: Custom class.  - ICE: Custom class. 
    * @return heroClass
   **/
-  @ApiModelProperty(value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Custom class.  - NAVY: Custom class.  - LEATHER: Custom class.  - EGGPLANT: Custom class. ")
+  @ApiModelProperty(value = "A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless otherwise specified.   - BROWN: Druid class.  - GREEN: Hunter class.  - BLUE: Mage class.  - GOLD: Paladin class.  - WHITE: Priest class.  - BLACK: Rogue class.  - SILVER: Shaman class.  - VIOLET: Warlock class.  - RED: Warrior class.  - JADE: Custom class.  - NAVY: Custom class.  - LEATHER: Custom class.  - EGGPLANT: Custom class.  - ICE: Custom class. ")
   public HeroClassEnum getHeroClass() {
     return heroClass;
   }
