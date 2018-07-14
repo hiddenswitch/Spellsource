@@ -44,6 +44,76 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSouldrinkerDrake() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_souldrinker_drake");
+			Card fireball = receiveCard(context, player, "spell_fireball");
+			Card fireball2 = receiveCard(context, player, "spell_fireball");
+			player.getHero().setHp(1);
+			playCardWithTarget(context, player, fireball, opponent.getHero());
+			assertEquals(player.getHero().getHp(), 1 + 6);
+			playCardWithTarget(context, player, fireball2, opponent.getHero());
+			assertEquals(player.getHero().getHp(), 1 + 6, "Lifesteal should not have been applied");
+		});
+	}
+
+	@Test
+	public void testSkuggTheUnclean() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_skugg_the_unclean");
+			player.setMana(3);
+			playCard(context, player, "minion_hoardling_of_tolin");
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_skugg_rat");
+		});
+	}
+
+	@Test
+	public void testMagmaSpewer() {
+		runGym((context, player, opponent) -> {
+			// 2 mana total
+			playCard(context, player, "minion_fire_fly");
+			playCard(context, player, "minion_fire_fly");
+			context.endTurn();
+			context.endTurn();
+			// 4 mana total
+			playCard(context, player, "minion_water_elemental");
+			context.endTurn();
+			context.endTurn();
+			// 8 mana total
+			playMinionCard(context, player, "minion_thrakdos_the_hollow");
+			int opponentHp = opponent.getHero().getHp();
+			playMinionCardWithBattlecry(context, player, "minion_magma_spewer", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), opponentHp - 4);
+		});
+	}
+
+	@Test
+	public void testMadProphetRosea() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_mad_prophet_rosea");
+			player.setMana(9);
+			Card theCoin = receiveCard(context, player, "spell_the_coin");
+			assertEquals(costOf(context, player, theCoin), 0);
+			playCard(context, player, theCoin);
+			assertEquals(player.getMana(), 10);
+			assertEquals(player.getMinions().size(), 1, "Only Mad Prophet Rosea");
+			theCoin = receiveCard(context, player, "spell_the_coin");
+			assertEquals(costOf(context, player, theCoin), 0, "Aura Invoke is gone!");
+		});
+
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_mad_prophet_rosea");
+			player.setMana(10);
+			Card theCoin = receiveCard(context, player, "spell_the_coin");
+			assertEquals(costOf(context, player, theCoin), 10, "Aura Invoke applies");
+			playCard(context, player, theCoin);
+			assertEquals(player.getMana(), 1, "The coin gained 1 mana");
+			assertEquals(player.getMinions().size(), 2, "Two: Mad Prophet Rosea & Yoth'al");
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_yoth'al_the_devourer");
+		});
+	}
+
+	@Test
 	public void testPathOfFrost() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_target_dummy");

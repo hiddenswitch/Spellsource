@@ -43,5 +43,6 @@ public enum GameEventType {
 	MAX_MANA,
 	MANA_MODIFIED,
 	FATIGUE,
-	AFTER_PLAY_CARD;
+	AFTER_PLAY_CARD,
+	INVOKED;
 }

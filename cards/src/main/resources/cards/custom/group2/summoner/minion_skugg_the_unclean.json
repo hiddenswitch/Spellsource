@@ -1,0 +1,35 @@
+{
+  "name": "Skugg the Unclean",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: For the rest of the game, summon a 2/2 Rat with Lifesteal when you Invoke.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "AfterCardPlayedTrigger",
+          "targetPlayer": "SELF",
+          "requiredAttribute": "INVOKED"
+        },
+        "spell": {
+          "class": "SummonSpell",
+          "card": "token_skugg_rat"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
+

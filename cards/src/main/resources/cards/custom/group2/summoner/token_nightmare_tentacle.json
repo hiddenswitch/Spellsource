@@ -1,0 +1,13 @@
+{
+  "name": "Nightmare Tentacle",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

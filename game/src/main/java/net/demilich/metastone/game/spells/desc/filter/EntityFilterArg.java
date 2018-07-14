@@ -19,4 +19,5 @@ public enum EntityFilterArg {
 	TARGET,
 	SECONDARY_TARGET,
 	TARGET_SELECTION,
+	ENTITY_TYPE;
 }

@@ -1,0 +1,61 @@
+{
+  "name": "Mad Prophecy",
+  "baseManaCost": 9,
+  "type": "ENCHANTMENT",
+  "heroClass": "EGGPLANT",
+  "rarity": "LEGENDARY",
+  "description": "The next spell you cast has \"Invoke (10): Summon Yoth'al.\"",
+  "aura": {
+    "class": "Aura",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "alwaysApply": true,
+    "applyEffect": {
+      "class": "SetAttributeSpell",
+      "value": 10,
+      "attribute": "AURA_INVOKE"
+    },
+    "removeEffect": {
+      "class": "RemoveAttributeSpell",
+      "attribute": "AURA_INVOKE"
+    },
+    "secondaryTrigger": {
+      "class": "CardReceivedTrigger",
+      "targetPlayer": "SELF"
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "InvokeCondition",
+            "target": "EVENT_SOURCE"
+          },
+          "spell": {
+            "class": "SummonSpell",
+            "card": "token_yoth'al_the_devourer"
+          }
+        },
+        {
+          "class": "RemoveEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_mad_prophecy"
+        }
+      ]
+    },
+    "maxFires": 1
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

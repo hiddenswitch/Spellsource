@@ -102,10 +102,9 @@ public class AddDeathrattleSpell extends Spell {
 		} else if (target instanceof Card) {
 			Card card = (Card) target;
 			for (SpellDesc deathrattle : deathrattles) {
-
 				card.addDeathrattle(deathrattle.clone());
 			}
 		}
 	}
-
 }
+

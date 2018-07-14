@@ -142,6 +142,9 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Enum
 			if (value instanceof CustomCloneable) {
 				CustomCloneable cloneable = (CustomCloneable) value;
 				clone.put(arg, cloneable.clone());
+			} else if (value instanceof Desc) {
+				Desc descClone = (Desc) value;
+				clone.put(arg, descClone.clone());
 			} else {
 				clone.put(arg, value);
 			}

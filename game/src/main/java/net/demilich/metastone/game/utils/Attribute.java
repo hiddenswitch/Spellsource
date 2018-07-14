@@ -819,13 +819,23 @@ public enum Attribute {
 	 */
 	INVOKE,
 	/**
-	 * Indicates a card's invoke was triggered.
+	 * The aura version of {@link #INVOKE}
+	 */
+	AURA_INVOKE,
+	/**
+	 * Indicates a card's invoke for the specified amount of mana.
+	 *
+	 * On a {@link Player} entity, indicates the number of cards that were invoked.
 	 */
 	INVOKED,
 	/**
 	 * Indicates that this {@link Entity} should remove itself from play peacefully at the end of the current turn.
 	 */
 	REMOVES_SELF_AT_END_OF_TURN,
+	/**
+	 * This value indicates the turn number of the {@link Player}'s last turn.
+	 */
+	LAST_TURN,
 	/**
 	 * When {@code true}, indicates this {@link Player} entity is an AI opponent.
 	 * <p>

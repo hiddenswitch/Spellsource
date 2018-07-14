@@ -100,6 +100,8 @@ public class GameEvent implements Serializable {
     
     HERO_POWER_USED("HERO_POWER_USED"),
     
+    INVOKED("INVOKED"),
+    
     JOUST("JOUST"),
     
     KILL("KILL"),

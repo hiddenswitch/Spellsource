@@ -852,6 +852,7 @@ definitions:
           - 'GAME_START'
           - 'HEAL'
           - 'HERO_POWER_USED'
+          - 'INVOKED'
           - 'JOUST'
           - 'KILL'
           - 'LOSE_DIVINE_SHIELD'

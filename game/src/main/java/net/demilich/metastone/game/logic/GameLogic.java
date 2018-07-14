@@ -266,6 +266,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
+
 		gameEventListener.setHost(host);
 		if (!gameEventListener.hasPersistentOwner() || gameEventListener.getOwner() == Entity.NO_OWNER) {
 			gameEventListener.setOwner(player.getId());
@@ -305,6 +306,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (card != null && card.hasAttribute(Attribute.INVOKED)) {
 			// Increment the number of invoked cards that were played
 			player.modifyAttribute(Attribute.INVOKED, 1);
+			context.fireGameEvent(new InvokedEvent(context, playerId, (Card) card, card.getAttributeValue(Attribute.INVOKED)));
 		}
 
 		context.fireGameEvent(new AfterCardPlayed(context, playerId, entityReference));
@@ -1394,6 +1396,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		endOfSequence();
+
+		player.setAttribute(Attribute.LAST_TURN, context.getTurn());
 	}
 
 	/**
@@ -1711,7 +1715,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		manaCost = MathUtils.clamp(manaCost, minValue, Integer.MAX_VALUE);
 		if (canActivateInvokeKeyword(player, card)) {
-			manaCost = card.getAttributeValue(Attribute.INVOKE);
+			if (card.hasAttribute(Attribute.AURA_INVOKE)) {
+				manaCost = card.getAttributeValue(Attribute.AURA_INVOKE);
+			} else if (card.hasAttribute(Attribute.INVOKE)) {
+				manaCost = card.getAttributeValue(Attribute.INVOKE);
+			}
 		}
 		return manaCost;
 	}
@@ -1721,7 +1729,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (doesCardCostHealth(player, card) && player.getHero() != null) {
 			mana = player.getHero().getHp();
 		}
-		return card.hasAttribute(Attribute.INVOKE) && card.getAttributeValue(Attribute.INVOKE) <= mana;
+		return (card.hasAttribute(Attribute.INVOKE) && card.getAttributeValue(Attribute.INVOKE) <= mana)
+				|| (card.hasAttribute(Attribute.AURA_INVOKE) && card.getAttributeValue(Attribute.AURA_INVOKE) <= mana);
 	}
 
 	/**
@@ -2479,7 +2488,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// The modified mana cost already reflects the invoke cost
 		if (canActivateInvokeKeyword(player, card)) {
-			card.setAttribute(Attribute.INVOKED);
+			card.setAttribute(Attribute.INVOKED, modifiedManaCost);
 		}
 
 		if (cardCostsHealth) {

@@ -24,15 +24,7 @@ public class HealSpell extends Spell {
 		arguments.put(SpellArg.TARGET, target);
 		if (randomTarget) {
 			arguments.put(SpellArg.RANDOM_TARGET, true);
-			arguments.put(SpellArg.FILTER, new Predicate<Entity>() {
-
-				@Override
-				public boolean test(Entity entity) {
-					return ((Actor) entity).isWounded();
-				}
-
-			});
-
+			arguments.put(SpellArg.FILTER, (Predicate<Entity>) entity -> ((Actor) entity).isWounded());
 		}
 		return new SpellDesc(arguments);
 	}

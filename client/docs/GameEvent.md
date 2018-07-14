@@ -66,6 +66,7 @@ FATIGUE | &quot;FATIGUE&quot;
 GAME_START | &quot;GAME_START&quot;
 HEAL | &quot;HEAL&quot;
 HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
+INVOKED | &quot;INVOKED&quot;
 JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;

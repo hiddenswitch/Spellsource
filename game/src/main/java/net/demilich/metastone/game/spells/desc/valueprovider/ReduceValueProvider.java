@@ -3,16 +3,28 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * Performs {@link ValueProviderArg#OPERATION} on the values returned by {@link ValueProviderArg#VALUE1} applied to each
+ * entity resolved by {@link ValueProviderArg#TARGET}.
+ */
 public class ReduceValueProvider extends ValueProvider {
+
+	private static Logger logger = LoggerFactory.getLogger(ReduceValueProvider.class);
+
 	public ReduceValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}
@@ -58,27 +70,39 @@ public class ReduceValueProvider extends ValueProvider {
 
 
 		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
+		if (filter != null) {
+			entities.removeIf(filter.matcher(context, player, host).negate());
+		}
+
 		int value;
 
 		if (operation == AlgebraicOperation.MAXIMUM) {
+			/* TODO: Revisit these value provider maximum errors
+			if (entities.isEmpty()) {
+				logger.error("provideValue {} {}: Trying to do a maximum with no entities targeted, returning zero.", context.getGameId(), host);
+				return 0;
+			}
+			*/
 			value = Integer.MIN_VALUE;
 		} else if (operation == AlgebraicOperation.MINIMUM) {
+			/* TODO: Revisit these value provider minimum errors
+			if (entities.isEmpty()) {
+				logger.error("provideValue {} {}: Trying to do a minimum with no entities targeted, returning zero.", context.getGameId(), host);
+				return 0;
+			}
+			*/
 			value = Integer.MAX_VALUE;
 		} else if (operation == AlgebraicOperation.MULTIPLY) {
 			value = 1;
 		} else if (operation == AlgebraicOperation.DIVIDE
 				|| operation == AlgebraicOperation.MODULO
 				|| operation == AlgebraicOperation.NEGATE) {
-			throw new UnsupportedOperationException("Cannot (or ill-advised) to do a reduce with a DIVIDE, MODULO or NEGATE operator.");
+			throw new UnsupportedOperationException("Cannot do a reduce with a DIVIDE, MODULO or NEGATE operator.");
 		} else {
 			value = 0;
 		}
 
 		for (Entity entity : entities) {
-			if (filter != null && !filter.matches(context, player, entity, host)) {
-				continue;
-			}
-
 			boolean isApplyingValueProvider = getDesc().containsKey(ValueProviderArg.VALUE1) &&
 					ValueProvider.class.isAssignableFrom(getDesc().get(ValueProviderArg.VALUE1).getClass());
 			if (isApplyingValueProvider) {

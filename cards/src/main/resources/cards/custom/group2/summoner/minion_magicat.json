@@ -1,0 +1,47 @@
+{
+  "name": "Magicat",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Give all 0-Cost minions in your hand and deck +1/+2.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "attackBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": 0
+          },
+          "hpBonus": 2
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_DECK",
+          "attackBonus": 1,
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": 0
+          },
+          "hpBonus": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

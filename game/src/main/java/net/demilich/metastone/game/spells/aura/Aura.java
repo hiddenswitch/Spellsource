@@ -182,6 +182,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			}
 		}
 		affectedEntities.clear();
+		super.onRemove(context);
 	}
 
 	public EntityFilter getEntityFilter() {

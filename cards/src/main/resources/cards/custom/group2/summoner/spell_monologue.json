@@ -1,0 +1,46 @@
+{
+  "name": "Monologue",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "EPIC",
+  "description": "Lifesteal. At the start of your next turn, deal 4 damage to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "LIFESTEAL"
+          },
+          {
+            "class": "DamageSpell",
+            "target": "ALL_MINIONS",
+            "value": 4
+          },
+          {
+            "class": "RemoveAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "LIFESTEAL"
+          }
+        ]
+      },
+      "maxFires": 1
+    }
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

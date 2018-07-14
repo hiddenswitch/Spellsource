@@ -1,0 +1,47 @@
+{
+  "name": "Abandoned Hatchling",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Stealth. Invoke (5): Copy a minion's Attack and Health.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "target": "SELF",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "TARGET",
+            "attribute": "ATTACK"
+          }
+        },
+        {
+          "class": "SetHpSpell",
+          "target": "SELF",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "TARGET",
+            "attribute": "HP"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "INVOKE": 5,
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

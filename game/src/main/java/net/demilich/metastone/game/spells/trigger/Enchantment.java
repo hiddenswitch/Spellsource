@@ -175,6 +175,14 @@ public class Enchantment extends Entity implements Trigger {
 		}
 
 		boolean spellCasts = true;
+
+		// Prevents infinite looping
+		if (maxFires != null
+				&& fires > maxFires) {
+			spellCasts = false;
+			expire();
+		}
+
 		if (countUntilCast != null && fires < countUntilCast) {
 			spellCasts = false;
 		}

@@ -1,0 +1,16 @@
+{
+  "name": "Skeleton",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Taunt",
+   "attributes": {
+   "TAUNT": true
+},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
