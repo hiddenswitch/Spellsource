@@ -18,8 +18,8 @@ public class DraftLogic {
 	private static final Logger logger = LoggerFactory.getLogger(DraftLogic.class);
 	public static final float EXPANSION_ODDS_FACTOR = 16.0f;
 	public static final float COMMON_ROLL = 0.50f;
-	private static final float RARE_ROLL = 0.25f;
-	private static final float EPIC_ROLL = 0.10f;
+	private static final float RARE_ROLL = 0.30f;
+	private static final float EPIC_ROLL = 0.15f;
 	private final WeakReference<DraftContext> context;
 	public static int DRAFTS = 30;
 	public static int CARDS_PER_DRAFT = 3;
