@@ -1,0 +1,35 @@
+{
+  "name": "Mad Prophecy",
+  "baseManaCost": 9,
+  "type": "ENCHANTMENT",
+  "heroClass": "EGGPLANT",
+  "rarity": "LEGENDARY",
+  "description": "The next spell you cast has Lifesteal.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "attribute": "AURA_LIFESTEAL",
+    "secondaryTrigger": {
+      "class": "CardReceivedTrigger"
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_souldrinking"
+    },
+    "maxFires": 1
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

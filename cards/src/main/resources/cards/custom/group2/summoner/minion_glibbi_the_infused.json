@@ -1,0 +1,26 @@
+{
+  "name": "Glibbi the Infused",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If your deck has no duplicates, copy your hand.",
+  "battlecry": {
+    "condition": {
+      "class": "HighlanderDeckCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PutCopyInHandSpell",
+      "target": "FRIENDLY_HAND"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

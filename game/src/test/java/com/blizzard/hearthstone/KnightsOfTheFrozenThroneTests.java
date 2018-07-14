@@ -569,11 +569,11 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testEternalServitude() {
 		runGym((context, player, opponent) -> {
-			Minion friendlyMinion = playMinionCard(context, player, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			Minion friendlyMinion = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			Minion opposingMinion = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_bloodfen_raptor"));
+			Minion opposingMinion = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
-			context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(friendlyMinion.getReference()).withTargetReference(opposingMinion.getReference()));
+			attack(context, player, friendlyMinion, opposingMinion);
 			assertEquals(player.getMinions().size(), 0);
 			playCard(context, player, "spell_eternal_servitude");
 			assertEquals(player.getMinions().size(), 1);

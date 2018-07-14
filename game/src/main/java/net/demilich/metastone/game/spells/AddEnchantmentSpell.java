@@ -87,7 +87,7 @@ public final class AddEnchantmentSpell extends Spell {
 			logger.error("onCast {} {}: Target cannot be null.", context.getGameId(), source);
 			throw new NullPointerException("target");
 		}
-		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER);
+		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER, SpellArg.CARD);
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 		Aura aura = (Aura) desc.get(SpellArg.AURA);
 		Card enchantmentCard = SpellUtils.getCard(context, desc);

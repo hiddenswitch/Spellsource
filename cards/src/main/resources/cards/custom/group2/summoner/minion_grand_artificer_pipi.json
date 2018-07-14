@@ -1,0 +1,31 @@
+{
+  "name": "Grand Artificer Pipi",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "After you cast a spell, summon a 3/3 Golem that casts a copy of the spell when it dies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_wax_golem",
+      "spell": {
+        "class": "AddDeathrattleSecondaryAsTargetSpell",
+        "target": "OUTPUT",
+        "secondaryTarget": "EVENT_SOURCE",
+        "spell": {
+          "class": "CastRandomSpellSpell"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

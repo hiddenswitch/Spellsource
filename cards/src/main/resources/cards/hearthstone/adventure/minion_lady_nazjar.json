@@ -17,6 +17,7 @@
       "target": "ALL_OTHER_MINIONS",
       "cardFilter": {
         "class": "CardFilter",
+        "cardType": "MINION",
         "manaCost": {
           "class": "AttributeValueProvider",
           "target": "SPELL_TARGET",

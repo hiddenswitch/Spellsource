@@ -284,4 +284,8 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 	public EntityReference getSecondaryTarget() {
 		return (EntityReference) get(SpellArg.SECONDARY_TARGET);
 	}
+
+	public SpellDesc getSpell() {
+		return (SpellDesc) get(SpellArg.SPELL);
+	}
 }

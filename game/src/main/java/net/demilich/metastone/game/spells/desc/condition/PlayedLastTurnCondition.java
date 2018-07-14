@@ -7,6 +7,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+
 public class PlayedLastTurnCondition extends Condition {
 
 	public PlayedLastTurnCondition(ConditionDesc desc) {
@@ -19,6 +20,7 @@ public class PlayedLastTurnCondition extends Condition {
 		int count = 0;
 		int turn = context.getTurn();
 		if (player.getId() == context.getActivePlayerId()) {
+			// TODO: Does not handle previous turns correctly
 			turn -= 2;
 		} else {
 			turn -= 1;

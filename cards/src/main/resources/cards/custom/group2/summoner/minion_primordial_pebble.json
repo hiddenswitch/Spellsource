@@ -1,0 +1,37 @@
+{
+  "name": "Primordial Pebble",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Taunt. Battlecry: Discover an Elemental you played last turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF",
+        "distinct": true
+      },
+      "cardFilter": {
+        "class": "AttributeFilter",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "value": {
+          "class": "LastTurnValueProvider"
+        },
+        "operation": "EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "TAUNT": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

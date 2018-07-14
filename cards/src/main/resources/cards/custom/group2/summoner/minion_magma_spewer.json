@@ -1,0 +1,50 @@
+{
+  "name": "Magma Spewer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Deal damage equal to the combined Cost of Elementals you played last turn.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "ReduceValueProvider",
+        "operation": "ADD",
+        "target": "FRIENDLY_GRAVEYARD",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "BASE_MANA_COST"
+        },
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "CARD"
+            },
+            {
+              "class": "AttributeFilter",
+              "operation": "EQUAL",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "value": {
+                "class": "LastTurnValueProvider",
+                "targetPlayer": "SELF"
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

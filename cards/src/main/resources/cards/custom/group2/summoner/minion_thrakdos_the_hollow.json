@@ -1,0 +1,47 @@
+{
+  "name": "Thrakdos the Hollow",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Taunt. Battlecry: Your Elementals cost (1) on your next turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_PLAYER",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "value": 1,
+            "cardType": "SPELL",
+            "expirationTrigger": {
+              "class": "TurnEndTrigger",
+              "targetPlayer": "SELF"
+            },
+            "operation": "SET",
+            "targetPlayer": "SELF"
+          }
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "TAUNT": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

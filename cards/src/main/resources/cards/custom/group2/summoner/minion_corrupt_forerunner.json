@@ -1,0 +1,36 @@
+{
+  "name": "Corrupt Forerunner",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Invoke (8): Summon a copy of this for each Dragon you're holding.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "INVOKE": 8
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

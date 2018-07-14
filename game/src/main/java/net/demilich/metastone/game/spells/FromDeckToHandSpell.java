@@ -52,6 +52,9 @@ public class FromDeckToHandSpell extends Spell {
 			Card card = (Card) target;
 			if (player.getDeck().containsCard(card)) {
 				context.getLogic().receiveCard(player.getId(), card, source, true);
+				if (desc.getSpell() != null) {
+					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, card);
+				}
 			}
 			return;
 		}
@@ -77,8 +80,10 @@ public class FromDeckToHandSpell extends Spell {
 
 			if (card != null) {
 				context.getLogic().receiveCard(player.getId(), card, source, true);
+				if (desc.getSpell() != null) {
+					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, card);
+				}
 			}
 		}
 	}
-
 }
