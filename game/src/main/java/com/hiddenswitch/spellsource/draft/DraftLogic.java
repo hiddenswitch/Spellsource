@@ -17,7 +17,7 @@ import static java.util.stream.Collectors.toList;
 public class DraftLogic {
 	private static final Logger logger = LoggerFactory.getLogger(DraftLogic.class);
 	public static final float EXPANSION_ODDS_FACTOR = 16.0f;
-	public static final float COMMON_ROLL = 0.45f;
+	public static final float COMMON_ROLL = 0.50f;
 	private static final float RARE_ROLL = 0.25f;
 	private static final float EPIC_ROLL = 0.10f;
 	private final WeakReference<DraftContext> context;
@@ -72,15 +72,6 @@ public class DraftLogic {
 		List<CardSet> equals = Arrays.asList(
 				CardSet.BASIC,
 				CardSet.CLASSIC,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZAN,
-				CardSet.NAXXRAMAS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN,
-				CardSet.HALL_OF_FAME,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.THE_OLD_GODS,
 				CardSet.JOURNEY_TO_UNGORO,
 				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
 				CardSet.WITCHWOOD,
@@ -165,6 +156,11 @@ public class DraftLogic {
 				DeckFormat format = new DeckFormat();
 				float latestExpansionOdds = EXPANSION_ODDS_FACTOR / (equals.size() + EXPANSION_ODDS_FACTOR);
 				if (cardSetRoll < latestExpansionOdds) {
+					if (latestExpansion == CardSet.CUSTOM) {
+						// Include the other two custom sets for now
+						format.addSet(CardSet.BATTLE_FOR_ASHENVALE);
+						format.addSet(CardSet.SANDS_OF_TIME);
+					}
 					format.withCardSets(latestExpansion);
 				} else {
 					format.withCardSets(equals);
