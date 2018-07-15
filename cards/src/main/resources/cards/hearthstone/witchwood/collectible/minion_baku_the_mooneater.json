@@ -106,6 +106,10 @@
             {
               "class": "HasHeroPowerCondition",
               "card": "hero_power_runeforging"
+            },
+            {
+              "class": "HasHeroPowerCondition",
+              "card": "hero_power_basic_summon"
             }
           ],
           "spells": [
@@ -160,6 +164,10 @@
             {
               "class": "ChangeHeroPowerSpell",
               "card": "hero_power_efficient_runeforging"
+            },
+            {
+              "class": "ChangeHeroPowerSpell",
+              "card": "hero_power_advanced_summoning"
             }
           ],
           "targetPlayer": "SELF"
