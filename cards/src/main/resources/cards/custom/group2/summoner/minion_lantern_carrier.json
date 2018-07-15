@@ -6,25 +6,29 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Deathrattle: Give the next minion you summon this turn +1/+1.",
-  "deathrattle": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "trigger": {
-      "eventTrigger": {
-        "class": "BeforeMinionSummonedTrigger",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "BuffSpell",
-        "target": "EVENT_TARGET",
-        "attackBonus": 1,
-        "hpBonus": 1
+  "description": "Battlecry: Give the next minion you summon this turn +1/+1.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "BeforeMinionSummonedTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "attackBonus": 1,
+          "hpBonus": 1
+        },
+        "maxFires": 1
       }
     }
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",
