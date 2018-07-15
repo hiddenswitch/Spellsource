@@ -11,7 +11,7 @@
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "AfterSpellCastedTrigger",
+        "class": "SpellCastedTrigger",
         "sourcePlayer": "SELF"
       },
       "spell": {

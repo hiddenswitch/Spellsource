@@ -44,6 +44,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSignsOfTheEnd() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_signs_of_the_end");
+			assertEquals(player.getMinions().size(), 0);
+			playCard(context, player, "spell_the_coin");
+			assertEquals(player.getMinions().get(0).getSourceCard().getBaseManaCost(), 0);
+		});
+	}
+
+	@Test
 	public void testSouldrinkerDrake() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_souldrinker_drake");
