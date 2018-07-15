@@ -4,16 +4,26 @@
   "type": "ENCHANTMENT",
   "heroClass": "EGGPLANT",
   "rarity": "LEGENDARY",
-  "description": "The next spell you cast has Lifesteal.",
+  "description": "The next card you play has Lifesteal.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterSpellCastedTrigger",
+      "class": "CardPlayedTrigger",
       "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "RemoveEnchantmentSpell",
-      "target": "FRIENDLY_PLAYER",
-      "card": "enchantment_souldrinking"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_TARGET",
+          "attribute": "LIFESTEAL"
+        },
+        {
+          "class": "RemoveEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_souldrinking"
+        }
+      ]
     },
     "maxFires": 1
   },
@@ -21,10 +31,6 @@
     "class": "AttributeAura",
     "target": "FRIENDLY_HAND",
     "attribute": "AURA_LIFESTEAL",
-    "filter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
-    },
     "secondaryTrigger": {
       "class": "CardReceivedTrigger"
     }
