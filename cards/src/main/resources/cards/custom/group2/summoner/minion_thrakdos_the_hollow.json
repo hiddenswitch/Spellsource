@@ -38,8 +38,8 @@
     }
   },
   "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

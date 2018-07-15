@@ -14,12 +14,7 @@
       "class": "DamageSpell",
       "value": {
         "class": "ReduceValueProvider",
-        "operation": "ADD",
         "target": "FRIENDLY_GRAVEYARD",
-        "value1": {
-          "class": "AttributeValueProvider",
-          "attribute": "BASE_MANA_COST"
-        },
         "filter": {
           "class": "AndFilter",
           "filters": [
@@ -29,14 +24,19 @@
             },
             {
               "class": "AttributeFilter",
-              "operation": "EQUAL",
-              "attribute": "PLAYED_FROM_HAND_OR_DECK",
               "value": {
                 "class": "LastTurnValueProvider",
                 "targetPlayer": "SELF"
-              }
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
             }
           ]
+        },
+        "operation": "ADD",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "BASE_MANA_COST"
         }
       }
     }

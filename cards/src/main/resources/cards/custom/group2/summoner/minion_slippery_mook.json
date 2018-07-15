@@ -8,17 +8,17 @@
   "rarity": "RARE",
   "description": "Invoke (5): Gain +2/+2 for each time you've Invoked this game.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "InvokeCondition"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
       "value": {
         "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "INVOKED_CARDS",
-        "multiplier": 2
+        "multiplier": 2,
+        "playerAttribute": "INVOKED_CARDS"
       }
     }
   },

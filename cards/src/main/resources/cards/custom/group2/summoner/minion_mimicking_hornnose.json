@@ -9,10 +9,10 @@
   "race": "BEAST",
   "description": "Stealth. Invoke (5): Copy a minion's Attack and Health.",
   "battlecry": {
-    "targetSelection": "MINIONS",
     "condition": {
       "class": "InvokeCondition"
     },
+    "targetSelection": "MINIONS",
     "spell": {
       "class": "MetaSpell",
       "spells": [

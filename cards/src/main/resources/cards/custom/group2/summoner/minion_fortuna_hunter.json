@@ -11,17 +11,17 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "ManaCostCondition",
         "value": 0
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",
+      "target": "EVENT_TARGET",
       "attackBonus": 1,
-      "hpBonus": 1,
-      "target": "EVENT_TARGET"
+      "hpBonus": 1
     }
   },
   "collectible": true,

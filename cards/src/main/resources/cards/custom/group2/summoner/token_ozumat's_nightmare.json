@@ -17,6 +17,6 @@
   },
   "collectible": false,
   "set": "CUSTOM",
-  "wiki": "The \"You can't lose this\" part means that when the spell triggers, it puts Ozumat's Nightmare back onto the battlefield when it triggers. It also does this when destroyed and is unaffected by your opponent trying to take control of it. This might be a pain to program, and if so, I apologise.",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "wiki": "The \"You can't lose this\" part means that when the spell triggers, it puts Ozumat's Nightmare back onto the battlefield when it triggers. It also does this when destroyed and is unaffected by your opponent trying to take control of it. This might be a pain to program, and if so, I apologise."
 }

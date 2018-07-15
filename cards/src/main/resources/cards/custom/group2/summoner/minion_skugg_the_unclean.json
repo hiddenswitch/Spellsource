@@ -15,8 +15,8 @@
       "trigger": {
         "eventTrigger": {
           "class": "AfterCardPlayedTrigger",
-          "targetPlayer": "SELF",
-          "requiredAttribute": "INVOKED"
+          "requiredAttribute": "INVOKED",
+          "targetPlayer": "SELF"
         },
         "spell": {
           "class": "SummonSpell",
@@ -32,4 +32,3 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
-

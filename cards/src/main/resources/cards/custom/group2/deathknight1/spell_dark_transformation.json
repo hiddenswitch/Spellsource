@@ -8,22 +8,22 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
-    "aura": {
-      "class": "BuffAura",
-      "attackBonus": 6,
-      "hpBonus": 6,
-      "target": "TRIGGER_HOST"
-    },
     "trigger": {
       "eventTrigger": {
         "class": "TurnEndTrigger"
       },
-      "maxFires": 1,
       "spell": {
         "class": "RemoveEnchantmentSpell",
-        "card": "spell_dark_transformation",
-        "target": "TRIGGER_HOST"
-      }
+        "target": "TRIGGER_HOST",
+        "card": "spell_dark_transformation"
+      },
+      "maxFires": 1
+    },
+    "aura": {
+      "class": "BuffAura",
+      "target": "TRIGGER_HOST",
+      "attackBonus": 6,
+      "hpBonus": 6
     }
   },
   "collectible": true,

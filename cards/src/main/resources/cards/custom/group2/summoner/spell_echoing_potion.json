@@ -14,7 +14,6 @@
         "class": "MinionSummonedTrigger",
         "targetPlayer": "SELF"
       },
-      "oneTurn": true,
       "spell": {
         "class": "SummonSpell",
         "target": "EVENT_SOURCE",
@@ -23,18 +22,19 @@
           "spells": [
             {
               "class": "SetAttackSpell",
-              "value": 3,
-              "target": "OUTPUT"
+              "target": "OUTPUT",
+              "value": 3
             },
             {
               "class": "SetHpSpell",
-              "value": 3,
-              "target": "OUTPUT"
+              "target": "OUTPUT",
+              "value": 3
             }
           ]
         }
       },
-      "maxFires": 1
+      "maxFires": 1,
+      "oneTurn": true
     }
   },
   "collectible": true,

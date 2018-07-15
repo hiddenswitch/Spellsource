@@ -12,24 +12,24 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
-      "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "SELF",
-        "distinct": true
-      },
       "cardFilter": {
         "class": "AttributeFilter",
-        "attribute": "PLAYED_FROM_HAND_OR_DECK",
         "value": {
           "class": "LastTurnValueProvider"
         },
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
         "operation": "EQUAL"
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "distinct": true,
+        "targetPlayer": "SELF"
       }
     }
   },
   "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

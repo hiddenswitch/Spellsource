@@ -9,10 +9,10 @@
   "race": "BEAST",
   "description": "Invoke (8): Recruit a Monstrous Roc.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "InvokeCondition"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "RecruitSpell",
       "filter": {

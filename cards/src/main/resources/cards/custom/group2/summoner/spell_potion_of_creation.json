@@ -11,20 +11,20 @@
     "condition": {
       "class": "InvokeCondition"
     },
-    "spell2": {
-      "class": "SummonSpell",
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION",
-        "manaCost": 3
-      }
-    },
     "spell1": {
       "class": "SummonSpell",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION",
         "manaCost": 8
+      }
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 3
       }
     }
   },

@@ -17,8 +17,8 @@
     }
   },
   "attributes": {
-    "LIFESTEAL": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "LIFESTEAL": true
   },
   "collectible": true,
   "set": "CUSTOM",

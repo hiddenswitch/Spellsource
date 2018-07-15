@@ -14,15 +14,15 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "token_wax_golem",
       "spell": {
         "class": "AddDeathrattleSecondaryAsTargetSpell",
         "target": "OUTPUT",
-        "secondaryTarget": "EVENT_SOURCE",
         "spell": {
           "class": "CastRandomSpellSpell"
-        }
-      }
+        },
+        "secondaryTarget": "EVENT_SOURCE"
+      },
+      "card": "token_wax_golem"
     }
   },
   "collectible": true,

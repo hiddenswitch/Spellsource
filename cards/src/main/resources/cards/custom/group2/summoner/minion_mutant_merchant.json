@@ -15,26 +15,26 @@
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      },
       "cardFilters": [
         {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "BEAST"
+          "race": "BEAST",
+          "cardType": "MINION"
         },
         {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "DRAGON"
+          "race": "DRAGON",
+          "cardType": "MINION"
         },
         {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "MURLOC"
+          "race": "MURLOC",
+          "cardType": "MINION"
         }
-      ]
+      ],
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
     }
   },
   "attributes": {
