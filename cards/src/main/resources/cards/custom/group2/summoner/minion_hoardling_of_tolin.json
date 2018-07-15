@@ -12,7 +12,7 @@
     "condition": {
       "class": "InvokeCondition"
     },
-    "targetSelection": "MINIONS",
+    "targetSelection": "NONE",
     "spell": {
       "class": "CopyCardSpell",
       "target": "FRIENDLY_DECK",
