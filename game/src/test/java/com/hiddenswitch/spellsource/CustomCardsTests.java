@@ -44,6 +44,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testLanternCarrier() {
+		runGym((context, player, opponent) -> {
+			Minion lanternCarrier = playMinionCard(context, player, "minion_lantern_carrier");
+			assertEquals(lanternCarrier.getAttack(), lanternCarrier.getBaseAttack());
+			assertEquals(lanternCarrier.getHp(), lanternCarrier.getBaseHp());
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1);
+			assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 1);
+
+		});
+	}
+
+	@Test
 	public void testSignsOfTheEnd() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_signs_of_the_end");
