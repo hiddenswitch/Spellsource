@@ -11,10 +11,6 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "FromDeckToHandSpell",
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "SPELL"
-      },
       "spell": {
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
@@ -23,6 +19,10 @@
           "target": "OUTPUT",
           "attribute": "BASE_MANA_COST"
         }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
       }
     }
   },

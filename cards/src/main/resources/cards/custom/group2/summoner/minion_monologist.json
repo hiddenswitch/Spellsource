@@ -14,8 +14,8 @@
       "cardFilter": {
         "class": "CardFilter",
         "heroClass": "EGGPLANT",
-        "cardType": "SPELL",
-        "attribute": "SECRET"
+        "attribute": "SECRET",
+        "cardType": "SPELL"
       }
     }
   },

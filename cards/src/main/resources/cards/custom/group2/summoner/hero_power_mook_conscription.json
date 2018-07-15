@@ -17,8 +17,8 @@
       "class": "SummonSpell",
       "spell": {
         "class": "AddAttributeSpell",
-        "attribute": "TAUNT",
-        "target": "OUTPUT"
+        "target": "OUTPUT",
+        "attribute": "TAUNT"
       }
     },
     "cardFilter": {

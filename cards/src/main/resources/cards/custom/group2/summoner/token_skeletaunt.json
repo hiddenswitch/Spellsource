@@ -7,9 +7,9 @@
   "baseHp": 1,
   "rarity": "FREE",
   "description": "Taunt",
-   "attributes": {
-   "TAUNT": true
-},
+  "attributes": {
+    "TAUNT": true
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

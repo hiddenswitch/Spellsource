@@ -8,10 +8,10 @@
   "rarity": "COMMON",
   "description": "Battlecry: If you control a Secret, draw a card.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "ControlsSecretCondition"
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "DrawCardSpell"
     }

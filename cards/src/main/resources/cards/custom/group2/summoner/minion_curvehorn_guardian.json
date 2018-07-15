@@ -26,13 +26,13 @@
             "spells": [
               {
                 "class": "SetAttackSpell",
-                "value": 5,
-                "target": "OUTPUT"
+                "target": "OUTPUT",
+                "value": 5
               },
               {
                 "class": "SetHpSpell",
-                "value": 5,
-                "target": "OUTPUT"
+                "target": "OUTPUT",
+                "value": 5
               }
             ]
           }
