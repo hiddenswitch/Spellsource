@@ -36,7 +36,8 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "CUSTOM",
