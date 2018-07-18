@@ -110,27 +110,20 @@ class CharRNNWorkspace(Workspace):
                   + ''.join(KEYWORD_CHARS.values()) + START_SEQ_CHAR + END_SEQ_CHAR + START_NAME_CHAR
     PADDING_CHAR = '_'
     
-    def __init__(self, checkpoint_path='./checkpoint.pkl'):
-        self.checkpoint_path = checkpoint_path
+    def __init__(self):
         self._create_dictionary()
         # load text, convert it into a "sequence"
-        hearthcards = self.hearthcards = pickle.load(open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))
+        hearthcards = pickle.load(open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))
         sequence = [CharRNNWorkspace.format_card(card) for card in hearthcards]
         self.seq_len = max(len(s) for s in sequence)
         # right pad
         sequence = [CharRNNWorkspace.PADDING_CHAR * (self.seq_len - len(s)) + s for s in sequence]
         sequence = ''.join(sequence)
         sequence = self._encode_text(sequence)
+        self.epoch = 0
         self.sequence = np.array(sequence)
         self.batch_size = 32
-        
-        # load or build model
-        if checkpoint_path is not None and os.path.exists(checkpoint_path):
-            self.model = load_model(checkpoint_path)
-            # logger.info("model restored: %s.", load_path)
-        else:
-            self.model = self._build_model(batch_size=self.batch_size, seq_len=self.seq_len, vocab_size=self.vocab_size)
-        self.model.save(self.checkpoint_path)
+        self.model = self._build_model(batch_size=self.batch_size, seq_len=self.seq_len, vocab_size=self.vocab_size)
         self.inference_model = CharRNNWorkspace._build_inference_model(self.model)
         pass
     
@@ -302,39 +295,42 @@ class CharRNNWorkspace(Workspace):
             y = self._one_hot_encode(y, self.vocab_size)
         # logger.info("y shape: %s.", y.shape)
         
-        epoch = 0
         while True:
             # roll so that no need to reset rnn states over epochs
-            x_epoch = np.split(np.roll(x, -epoch, axis=0), num_batches, axis=1)
-            y_epoch = np.split(np.roll(y, -epoch, axis=0), num_batches, axis=1)
+            x_epoch = np.split(np.roll(x, -self.epoch, axis=0), num_batches, axis=1)
+            y_epoch = np.split(np.roll(y, -self.epoch, axis=0), num_batches, axis=1)
             for batch in range(num_batches):
                 yield x_epoch[batch], y_epoch[batch]
-            epoch += 1
+            self.epoch += 1
     
-    def train(self, epochs: int = 1) -> Sequential:
-        """
-        trains model specfied in args.
-        main method for train subcommand.
-        """
+    def train(self):
+        epochs = self.seq_len * 2 - self.epoch
         
         # make and clear checkpoint directory
         log_dir = tempfile.mkdtemp()
-        self.model.save(self.checkpoint_path)
+        
         # logger.info("model saved: %s.", args.checkpoint_path)
         # callbacks
+        checkpoint_path = tempfile.mktemp()
         callbacks = [
-            ModelCheckpoint(self.checkpoint_path, verbose=1, save_best_only=False),
+            ModelCheckpoint(checkpoint_path, verbose=1, save_best_only=False),
             TensorBoard(log_dir, write_graph=True),
             LoggerCallback(self)
         ]
         
+        save_model(self.model, checkpoint_path)
+        
         # training start
         num_batches = (len(self.sequence) - 1) // (self.batch_size * self.seq_len)
         self.model.reset_states()
-        self.model.fit_generator(
-            self.batch_generator(self.sequence, self.batch_size, self.seq_len, one_hot_labels=True),
-            num_batches, epochs, callbacks=callbacks)
-        return self.model
+        try:
+            self.model.fit_generator(
+                self.batch_generator(self.sequence, self.batch_size, self.seq_len, one_hot_labels=True),
+                num_batches, epochs, callbacks=callbacks)
+        except KeyboardInterrupt as ex:
+            # resume with the last known good state
+            self.model = load_model(checkpoint_path)
+            raise ex
     
     def get_inference_model(self) -> Model:
         return self.inference_model
@@ -408,5 +404,16 @@ class CharRNNWorkspace(Workspace):
 
 
 if __name__ == '__main__':
-    workspace = CharRNNWorkspace()
-    workspace.train(10)
+    CharRNNWorkspace._make_keras_picklable()
+    path = 'checkpoint.bin'
+    if os.path.exists(path):
+        workspace = pickle.load(open(path, 'rb'))  # type: CharRNNWorkspace
+        print('Loaded progress (%d epochs) from path %s' % (workspace.epoch, path))
+    else:
+        workspace = CharRNNWorkspace()
+    
+    try:
+        workspace.train()
+    except KeyboardInterrupt as ex:
+        pickle.dump(workspace, open(path, 'wb'))
+        print('Saved progress to path %s' % path)
