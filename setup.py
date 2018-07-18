@@ -78,7 +78,8 @@ overhead between Java and Python.
       author='Benjamin Berman',
       data_files=[
           ("share/spellsource", [os.path.join('net', 'build', 'libs', 'net-1.3.0-all.jar'),
-                                 os.path.join('net', 'lib', 'quasar-core-0.7.9-jdk8.jar')]),
+                                 os.path.join('net', 'lib', 'quasar-core-0.7.9-jdk8.jar'),
+                                 os.path.join('docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,
       author_email='ben@hiddenswitch.com',

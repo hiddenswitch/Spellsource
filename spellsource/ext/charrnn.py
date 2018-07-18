@@ -1,0 +1,412 @@
+import abc
+import os
+import pickle
+import random
+import re
+import time
+import tempfile
+import numpy as np
+from keras.callbacks import Callback, ModelCheckpoint, TensorBoard
+from keras.layers import Dense, Dropout, Embedding, LSTM, TimeDistributed
+from keras.models import load_model, save_model, Sequential, Model
+from keras.optimizers import Adam
+from spellsource.context import Context
+
+
+class Workspace(abc.ABC):
+    @abc.abstractmethod
+    def get_inference_model(self) -> Model:
+        pass
+    
+    @abc.abstractmethod
+    def generate_seed(self) -> np.ndarray:
+        pass
+    
+    @abc.abstractmethod
+    def generate_text(self, seed: np.ndarray) -> str:
+        pass
+
+
+class LoggerCallback(Callback):
+    """
+    callback to log information.
+    generates text at the end of each epoch.
+    """
+    
+    def __init__(self, workspace: Workspace):
+        super(LoggerCallback, self).__init__()
+        self.workspace = workspace
+        # build inference model using config from learning model
+        self.time_train = self.time_epoch = time.time()
+    
+    def on_epoch_begin(self, epoch, logs=None):
+        self.time_epoch = time.time()
+    
+    def on_epoch_end(self, epoch, logs=None):
+        duration_epoch = time.time() - self.time_epoch
+        print("epoch: %s, duration: %ds, loss: %.6g." % (
+            epoch, duration_epoch, logs["loss"]))
+        # transfer weights from learning model
+        self.workspace.get_inference_model().set_weights(self.model.get_weights())
+        
+        # generate text
+        seed = self.workspace.generate_seed()
+        print(self.workspace.generate_text(seed))
+    
+    def on_train_begin(self, logs=None):
+        print("start of training.")
+        self.time_train = time.time()
+    
+    def on_train_end(self, logs=None):
+        duration_train = time.time() - self.time_train
+        print("end of training, duration: %ds." % duration_train)
+        # transfer weights from learning model
+        self.workspace.get_inference_model().set_weights(self.model.get_weights())
+        
+        # generate text
+        seed = self.workspace.generate_seed()
+        print(self.workspace.generate_text(seed))
+
+
+class CharRNNWorkspace(Workspace):
+    DESCRIPTION_CHARS = ' .,;/+-abcdefghijklmnopqrstuvwxyz'
+    ATTACK_COUNT_CHAR = 'A'
+    HEALTH_COUNT_CHAR = 'H'
+    MANA_COST_COUNT_CHAR = 'M'
+    NUMBER_COUNT_CHAR = '#'
+    START_SEQ_CHAR = ']'
+    END_SEQ_CHAR = '}'
+    ZERO_CHAR = '0'
+    START_NAME_CHAR = '['
+    KEYWORD_CHARS = {
+        r'deathrattle[.:\s]*': 'D',
+        r'battlecry[.:\s]*': 'B',
+        r'taunt\.?\s?': 'T',
+        r'divine shield\.?\s?': 'V',
+        r'stealth\.?\s?': 'E',
+        r'(freeze)|(frozen)': 'F',
+        r'windfury\.?\s?': 'W',
+        r'charge\.?\s?': 'C',
+        r'immune\.?\s?': 'I',
+        r'secret[.:\s]*': 'R',
+        r'combo[.:\s]*': '1',
+        r'overload[.:\s]*': 'O',
+        r'choose\s?one[.:\s]*': '2',
+        r"(cannot)|(can't)\s?attack\.?\s?": 'K',
+        r'rush\.?\s?': 'U',
+        r'quest[.:\s]*': 'Q',
+        r'dormant\.?\s?': 'G',
+        r'poisonous\.?\s': 'P',
+        r'lifesteal\.?\s': 'L',
+        r'cost[s.:\s]*': '$',
+        r'start\sof\sgame[.:\s]*': 'Y',
+        r'silence': 'X',
+        r'summon': 'S',
+        r'discover': '3',
+        r'zero': ZERO_CHAR
+    }
+    
+    VALID_CHARS = DESCRIPTION_CHARS + ATTACK_COUNT_CHAR + HEALTH_COUNT_CHAR + MANA_COST_COUNT_CHAR + NUMBER_COUNT_CHAR \
+                  + ''.join(KEYWORD_CHARS.values()) + START_SEQ_CHAR + END_SEQ_CHAR + START_NAME_CHAR
+    PADDING_CHAR = '_'
+    
+    def __init__(self, checkpoint_path='./checkpoint.pkl'):
+        self.checkpoint_path = checkpoint_path
+        self._create_dictionary()
+        # load text, convert it into a "sequence"
+        hearthcards = self.hearthcards = pickle.load(open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))
+        sequence = [CharRNNWorkspace.format_card(card) for card in hearthcards]
+        self.seq_len = max(len(s) for s in sequence)
+        # right pad
+        sequence = [CharRNNWorkspace.PADDING_CHAR * (self.seq_len - len(s)) + s for s in sequence]
+        sequence = ''.join(sequence)
+        sequence = self._encode_text(sequence)
+        self.sequence = np.array(sequence)
+        self.batch_size = 32
+        
+        # load or build model
+        if checkpoint_path is not None and os.path.exists(checkpoint_path):
+            self.model = load_model(checkpoint_path)
+            # logger.info("model restored: %s.", load_path)
+        else:
+            self.model = self._build_model(batch_size=self.batch_size, seq_len=self.seq_len, vocab_size=self.vocab_size)
+        self.model.save(self.checkpoint_path)
+        self.inference_model = CharRNNWorkspace._build_inference_model(self.model)
+        pass
+    
+    def _create_dictionary(self):
+        """
+        create char2id, id2char and vocab_size
+        from printable ascii characters.
+        """
+        chars = CharRNNWorkspace.VALID_CHARS
+        self.char2id = dict((ch, i + 1) for i, ch in enumerate(chars))
+        self.char2id.update({"": 0})
+        self.id2char = dict((self.char2id[ch], ch) for ch in self.char2id)
+        self.vocab_size = len(self.char2id)
+    
+    def _build_model(self, batch_size: int, seq_len: int, vocab_size, embedding_size=32,
+                     rnn_size=128, num_layers=2, drop_rate=0.0,
+                     learning_rate=0.001, clip_norm=5.0) -> Sequential:
+        """
+        build character embeddings LSTM text generation model.
+        """
+        print("building model: batch_size=%s, seq_len=%s, vocab_size=%s, "
+              "embedding_size=%s, rnn_size=%s, num_layers=%s, drop_rate=%s, "
+              "learning_rate=%s, clip_norm=%s." % (
+                  batch_size, seq_len, vocab_size, embedding_size,
+                  rnn_size, num_layers, drop_rate,
+                  learning_rate, clip_norm))
+        model = Sequential()
+        # input shape: (batch_size, seq_len)
+        model.add(Embedding(vocab_size, embedding_size,
+                            batch_input_shape=(batch_size, seq_len)))
+        model.add(Dropout(drop_rate))
+        # shape: (batch_size, seq_len, embedding_size)
+        for _ in range(num_layers):
+            model.add(LSTM(rnn_size, return_sequences=True, stateful=True))
+            model.add(Dropout(drop_rate))
+        # shape: (batch_size, seq_len, rnn_size)
+        model.add(TimeDistributed(Dense(vocab_size, activation="softmax")))
+        # output shape: (batch_size, seq_len, vocab_size)
+        optimizer = Adam(learning_rate, clipnorm=clip_norm)
+        model.compile(loss="categorical_crossentropy", optimizer=optimizer)
+        return model
+    
+    @staticmethod
+    def _build_inference_model(model: Model, batch_size=1, seq_len=1) -> Model:
+        """
+        build inference model from model config
+        input shape modified to (1, 1)
+        """
+        print("building inference model.")
+        config = model.get_config()
+        # edit batch_size and seq_len
+        config[0]["config"]["batch_input_shape"] = (batch_size, seq_len)
+        inference_model = Sequential.from_config(config)
+        inference_model.trainable = False
+        return inference_model
+    
+    @staticmethod
+    def format_card(in_card: dict) -> str:
+        def _replace_numbers(in_str: str, repl_char: str, zero='') -> str:
+            mutable = in_str[:]
+            for match in reversed(list(re.finditer(pattern=r'(\d+)', string=in_str))):
+                i, j = match.span(0)
+                number = max(min(int(match.group(0)), 12), 0)
+                mutable = mutable[0:i] + (zero if number == 0 else repl_char * number) + mutable[j:len(mutable)]
+            return mutable
+        
+        def _replace_keywords(in_str: str) -> str:
+            for keyword, repl in CharRNNWorkspace.KEYWORD_CHARS.items():
+                in_str = re.sub(pattern=keyword, string=in_str, repl=repl, flags=re.IGNORECASE)
+            return in_str
+        
+        def _without_tags(in_str: str) -> str:
+            return re.sub(pattern=r'(\[/?[bi]\])|(&\w+;)', string=in_str, repl='')
+        
+        def _without_llegals(in_str: str) -> str:
+            return re.sub(pattern=r'[^%s]' % re.escape(CharRNNWorkspace.VALID_CHARS), string=in_str, repl='')
+        
+        def _without_newlines(in_str: str) -> str:
+            return re.sub(pattern=r'(\r\n)|(\n)', string=in_str, repl='. ')
+        
+        description = \
+            _without_llegals(
+                _replace_keywords(
+                    _replace_numbers(
+                        _without_newlines(
+                            _without_tags(
+                                in_card['cardtext'].lower())), repl_char=CharRNNWorkspace.NUMBER_COUNT_CHAR)))
+        name = _without_llegals(_without_tags(_without_newlines(in_card['cardname'].lower())))
+        attack = CharRNNWorkspace.ATTACK_COUNT_CHAR * max(min(int(in_card['attack']), 12), 0)
+        health = CharRNNWorkspace.HEALTH_COUNT_CHAR * max(min(int(in_card['health']), 12), 0)
+        mana_cost = CharRNNWorkspace.MANA_COST_COUNT_CHAR * max(min(int(in_card['mana']), 12), 0)
+        encoded = mana_cost + attack + health + CharRNNWorkspace.START_NAME_CHAR + name + \
+                  CharRNNWorkspace.START_SEQ_CHAR + description + CharRNNWorkspace.END_SEQ_CHAR
+        return encoded
+    
+    def _encode_text(self, text: str) -> np.ndarray:
+        """
+        encode text to array of integers with CHAR2ID
+        """
+        return np.fromiter((self.char2id.get(ch, 0) for ch in text), int)
+    
+    def _decode_text(self, int_array: np.ndarray) -> str:
+        """
+        decode array of integers to text with ID2CHAR
+        """
+        return "".join((self.id2char[ch] for ch in int_array))
+    
+    def _one_hot_encode(self, indices, num_classes: int) -> np.ndarray:
+        """
+        one-hot encoding
+        """
+        return np.eye(num_classes)[indices]
+    
+    def generate_text(self, seed: np.ndarray, top_n=10):
+        """
+        generates text of specified length from trained model
+        with given seed character sequence.
+        :param model:
+        :param seed:
+        """
+        model = self.get_inference_model()
+        # logger.info("generating %s characters from top %s choices.", length, top_n)
+        # logger.info('generating with seed: "%s".', seed)
+        generated = self._decode_text(seed)
+        encoded = seed[:]
+        model.reset_states()
+        
+        for idx in encoded[:-1]:
+            x = np.array([[idx]])
+            # input shape: (1, 1)
+            # set internal states
+            model.predict(x)
+        
+        next_index = encoded[-1]
+        for i in range(self.seq_len):
+            x = np.array([[next_index]])
+            # input shape: (1, 1)
+            probs = model.predict(x)
+            # output shape: (1, 1, vocab_size)
+            next_index = self._sample_from_probs(probs.squeeze(), top_n)
+            # append to sequence
+            generated += self.id2char[next_index]
+        
+        # logger.info("generated text: \n%s\n", generated)
+        return generated
+    
+    def batch_generator(self, sequence: np.ndarray, batch_size=64, seq_len=64, one_hot_features=False,
+                        one_hot_labels=False):
+        """
+        batch generator for sequence
+        ensures that batches generated are continuous along axis 1
+        so that hidden states can be kept across batches and epochs
+        """
+        # calculate effective length of text to use
+        num_batches = (len(sequence) - 1) // (batch_size * seq_len)
+        if num_batches == 0:
+            raise ValueError("No batches created. Use smaller batch size or sequence length.")
+        # logger.info("number of batches: %s.", num_batches)
+        rounded_len = num_batches * batch_size * seq_len
+        # logger.info("effective text length: %s.", rounded_len)
+        
+        x = np.reshape(sequence[: rounded_len], [batch_size, num_batches * seq_len])
+        if one_hot_features:
+            x = self._one_hot_encode(x, self.vocab_size)
+        # logger.info("x shape: %s.", x.shape)
+        
+        y = np.reshape(sequence[1: rounded_len + 1], [batch_size, num_batches * seq_len])
+        if one_hot_labels:
+            y = self._one_hot_encode(y, self.vocab_size)
+        # logger.info("y shape: %s.", y.shape)
+        
+        epoch = 0
+        while True:
+            # roll so that no need to reset rnn states over epochs
+            x_epoch = np.split(np.roll(x, -epoch, axis=0), num_batches, axis=1)
+            y_epoch = np.split(np.roll(y, -epoch, axis=0), num_batches, axis=1)
+            for batch in range(num_batches):
+                yield x_epoch[batch], y_epoch[batch]
+            epoch += 1
+    
+    def train(self, epochs: int = 1) -> Sequential:
+        """
+        trains model specfied in args.
+        main method for train subcommand.
+        """
+        
+        # make and clear checkpoint directory
+        log_dir = tempfile.mkdtemp()
+        self.model.save(self.checkpoint_path)
+        # logger.info("model saved: %s.", args.checkpoint_path)
+        # callbacks
+        callbacks = [
+            ModelCheckpoint(self.checkpoint_path, verbose=1, save_best_only=False),
+            TensorBoard(log_dir, write_graph=True),
+            LoggerCallback(self)
+        ]
+        
+        # training start
+        num_batches = (len(self.sequence) - 1) // (self.batch_size * self.seq_len)
+        self.model.reset_states()
+        self.model.fit_generator(
+            self.batch_generator(self.sequence, self.batch_size, self.seq_len, one_hot_labels=True),
+            num_batches, epochs, callbacks=callbacks)
+        return self.model
+    
+    def get_inference_model(self) -> Model:
+        return self.inference_model
+    
+    @staticmethod
+    def _make_dirs(path, empty=False):
+        """
+        create dir in path and clear dir if required
+        """
+        dir_path = os.path.dirname(path)
+        os.makedirs(dir_path, exist_ok=True)
+        
+        if empty:
+            files = [os.path.join(dir_path, item) for item in os.listdir(dir_path)]
+            for item in files:
+                if os.path.isfile(item):
+                    os.remove(item)
+        
+        return dir_path
+    
+    @staticmethod
+    def _sample_from_probs(probs, top_n=10):
+        """
+        truncated weighted random choice.
+        """
+        # need 64 floating point precision
+        probs = np.array(probs, dtype=np.float64)
+        # set probabilities after top_n to 0
+        probs[np.argsort(probs)[:-top_n]] = 0
+        # renormalise probabilities
+        probs /= np.sum(probs)
+        sampled_index = np.random.choice(len(probs), p=probs)
+        return sampled_index
+    
+    def generate_seed(self) -> np.ndarray:
+        """
+        create a valid, balanced card prefix
+        :param seq_lens:
+        :return:
+        """
+        mana_cost = random.randint(0, 11)
+        attack = random.randint(max(0, mana_cost - mana_cost // 2), min(10, mana_cost + mana_cost // 2))
+        health = random.randint(max(0, mana_cost - mana_cost // 2), min(10, mana_cost + mana_cost // 2))
+        is_spell = random.random() < 0.25
+        if is_spell:
+            attack = 0
+            health = 0
+        return self._encode_text(
+            mana_cost * CharRNNWorkspace.MANA_COST_COUNT_CHAR + attack * CharRNNWorkspace.ATTACK_COUNT_CHAR + health * CharRNNWorkspace.HEALTH_COUNT_CHAR + CharRNNWorkspace.START_NAME_CHAR)
+    
+    @staticmethod
+    def _make_keras_picklable():
+        def __getstate__(self):
+            model_str = ""
+            with tempfile.NamedTemporaryFile(suffix='.hdf5', delete=True) as fd:
+                save_model(self, fd.name, overwrite=True)
+                model_str = fd.read()
+            d = {'model_str': model_str}
+            return d
+        
+        def __setstate__(self, state):
+            with tempfile.NamedTemporaryFile(suffix='.hdf5', delete=True) as fd:
+                fd.write(state['model_str'])
+                fd.flush()
+                model = load_model(fd.name)
+            self.__dict__ = model.__dict__
+        
+        cls = Model
+        cls.__getstate__ = __getstate__
+        cls.__setstate__ = __setstate__
+
+
+if __name__ == '__main__':
+    workspace = CharRNNWorkspace()
+    workspace.train(10)
