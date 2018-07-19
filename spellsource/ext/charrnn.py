@@ -1,74 +1,25 @@
-import abc
 import os
 import pickle
 import random
 import re
-import time
 import tempfile
 import numpy as np
-from keras.callbacks import Callback, ModelCheckpoint, TensorBoard
+import itertools
+from keras.callbacks import ModelCheckpoint, TensorBoard
 from keras.layers import Dense, Dropout, Embedding, LSTM, TimeDistributed
 from keras.models import load_model, save_model, Sequential, Model
 from keras.optimizers import Adam
 from spellsource.context import Context
-
-
-class Workspace(abc.ABC):
-    @abc.abstractmethod
-    def get_inference_model(self) -> Model:
-        pass
-    
-    @abc.abstractmethod
-    def generate_seed(self) -> np.ndarray:
-        pass
-    
-    @abc.abstractmethod
-    def generate_text(self, seed: np.ndarray) -> str:
-        pass
-
-
-class LoggerCallback(Callback):
-    """
-    callback to log information.
-    generates text at the end of each epoch.
-    """
-    
-    def __init__(self, workspace: Workspace):
-        super(LoggerCallback, self).__init__()
-        self.workspace = workspace
-        # build inference model using config from learning model
-        self.time_train = self.time_epoch = time.time()
-    
-    def on_epoch_begin(self, epoch, logs=None):
-        self.time_epoch = time.time()
-    
-    def on_epoch_end(self, epoch, logs=None):
-        duration_epoch = time.time() - self.time_epoch
-        print("epoch: %s, duration: %ds, loss: %.6g." % (
-            epoch, duration_epoch, logs["loss"]))
-        # transfer weights from learning model
-        self.workspace.get_inference_model().set_weights(self.model.get_weights())
-        
-        # generate text
-        seed = self.workspace.generate_seed()
-        print(self.workspace.generate_text(seed))
-    
-    def on_train_begin(self, logs=None):
-        print("start of training.")
-        self.time_train = time.time()
-    
-    def on_train_end(self, logs=None):
-        duration_train = time.time() - self.time_train
-        print("end of training, duration: %ds." % duration_train)
-        # transfer weights from learning model
-        self.workspace.get_inference_model().set_weights(self.model.get_weights())
-        
-        # generate text
-        seed = self.workspace.generate_seed()
-        print(self.workspace.generate_text(seed))
+from spellsource.ext.cards import iter_cards
+from spellsource.ext.loggercallback import LoggerCallback
+from spellsource.ext.workspace import Workspace
 
 
 class CharRNNWorkspace(Workspace):
+    # TODO: Replace these with package data paths
+    CUSTOM_CARDS_PATH = '/Users/bberman/Documents/Spellsource-Server/cards/src/main/resources/cards/custom'
+    HEARTHSTONE_CARDS_PATH = '/Users/bberman/Documents/Spellsource-Server/cards/src/main/resources/cards/hearthstone'
+    
     DESCRIPTION_CHARS = ' .,;/+-abcdefghijklmnopqrstuvwxyz'
     ATTACK_COUNT_CHAR = 'A'
     HEALTH_COUNT_CHAR = 'H'
@@ -112,20 +63,37 @@ class CharRNNWorkspace(Workspace):
     
     def __init__(self):
         self._create_dictionary()
-        # load text, convert it into a "sequence"
+        # Load text, convert it into a "sequence"
         hearthcards = pickle.load(open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))
-        sequence = [CharRNNWorkspace.format_card(card) for card in hearthcards]
-        self.seq_len = max(len(s) for s in sequence)
-        # right pad
-        sequence = [CharRNNWorkspace.PADDING_CHAR * (self.seq_len - len(s)) + s for s in sequence]
-        sequence = ''.join(sequence)
-        sequence = self._encode_text(sequence)
+        spellsource = itertools.chain(
+            *map(iter_cards, (CharRNNWorkspace.CUSTOM_CARDS_PATH, CharRNNWorkspace.HEARTHSTONE_CARDS_PATH)))
+        
+        training_names = frozenset(card['cardname'].lower() for card in hearthcards)
+        training = [CharRNNWorkspace._format_hearthcard(card) for card in hearthcards]
+        # Remove cards that exist both in the validation set and training sets by comparing the names
+        validation = [CharRNNWorkspace._format_card(**card) for card in spellsource if
+                      card['name'].lower() not in training_names]
+        
+        # validation = [card for card in spellsource if card['name'].strip().lower() not in training_names]
+        self.seq_len = max(len(s) for s in itertools.chain(training, validation))
+        self.training = self._prepare_data_set(training)
+        self.validation = self._prepare_data_set(validation)
         self.epoch = 0
-        self.sequence = np.array(sequence)
         self.batch_size = 32
         self.model = self._build_model(batch_size=self.batch_size, seq_len=self.seq_len, vocab_size=self.vocab_size)
         self.inference_model = CharRNNWorkspace._build_inference_model(self.model)
-        pass
+    
+    def _prepare_data_set(self, data_set: [str]) -> np.ndarray:
+        """
+        Prepares a data set by encoding it
+        :param data_set:
+        :return:
+        """
+        # right pad
+        data_set = [CharRNNWorkspace.PADDING_CHAR * (self.seq_len - len(s)) + s for s in data_set]
+        data_set = ''.join(data_set)
+        data_set = self._encode_text(data_set)
+        return data_set
     
     def _create_dictionary(self):
         """
@@ -181,7 +149,17 @@ class CharRNNWorkspace(Workspace):
         return inference_model
     
     @staticmethod
-    def format_card(in_card: dict) -> str:
+    def _format_hearthcard(in_card: dict) -> str:
+        description = in_card['cardtext']
+        name = in_card['cardname']
+        baseAttack = in_card['attack']
+        baseHp = in_card['health']
+        baseManaCost = in_card['mana']
+        
+        return CharRNNWorkspace._format_card(baseAttack, baseHp, baseManaCost, description, name)
+    
+    @staticmethod
+    def _format_card(baseAttack=0, baseHp=0, baseManaCost=0, description='', name='', **kwargs):
         def _replace_numbers(in_str: str, repl_char: str, zero='') -> str:
             mutable = in_str[:]
             for match in reversed(list(re.finditer(pattern=r'(\d+)', string=in_str))):
@@ -204,19 +182,19 @@ class CharRNNWorkspace(Workspace):
         def _without_newlines(in_str: str) -> str:
             return re.sub(pattern=r'(\r\n)|(\n)', string=in_str, repl='. ')
         
-        description = \
+        out_description = \
             _without_llegals(
                 _replace_keywords(
                     _replace_numbers(
                         _without_newlines(
                             _without_tags(
-                                in_card['cardtext'].lower())), repl_char=CharRNNWorkspace.NUMBER_COUNT_CHAR)))
-        name = _without_llegals(_without_tags(_without_newlines(in_card['cardname'].lower())))
-        attack = CharRNNWorkspace.ATTACK_COUNT_CHAR * max(min(int(in_card['attack']), 12), 0)
-        health = CharRNNWorkspace.HEALTH_COUNT_CHAR * max(min(int(in_card['health']), 12), 0)
-        mana_cost = CharRNNWorkspace.MANA_COST_COUNT_CHAR * max(min(int(in_card['mana']), 12), 0)
-        encoded = mana_cost + attack + health + CharRNNWorkspace.START_NAME_CHAR + name + \
-                  CharRNNWorkspace.START_SEQ_CHAR + description + CharRNNWorkspace.END_SEQ_CHAR
+                                description.lower())), repl_char=CharRNNWorkspace.NUMBER_COUNT_CHAR)))
+        out_name = _without_llegals(_without_tags(_without_newlines(name.lower())))
+        out_attack = CharRNNWorkspace.ATTACK_COUNT_CHAR * max(min(int(baseAttack), 12), 0)
+        out_health = CharRNNWorkspace.HEALTH_COUNT_CHAR * max(min(int(baseHp), 12), 0)
+        out_base_mana_cost = CharRNNWorkspace.MANA_COST_COUNT_CHAR * max(min(int(baseManaCost), 12), 0)
+        encoded = out_base_mana_cost + out_attack + out_health + CharRNNWorkspace.START_NAME_CHAR + out_name + \
+                  CharRNNWorkspace.START_SEQ_CHAR + out_description + CharRNNWorkspace.END_SEQ_CHAR
         return encoded
     
     def _encode_text(self, text: str) -> np.ndarray:
@@ -270,8 +248,8 @@ class CharRNNWorkspace(Workspace):
         # logger.info("generated text: \n%s\n", generated)
         return generated
     
-    def batch_generator(self, sequence: np.ndarray, batch_size=64, seq_len=64, one_hot_features=False,
-                        one_hot_labels=False):
+    def _batch_generator(self, sequence: np.ndarray, batch_size=64, seq_len=64, one_hot_features=False,
+                         one_hot_labels=False):
         """
         batch generator for sequence
         ensures that batches generated are continuous along axis 1
@@ -321,12 +299,18 @@ class CharRNNWorkspace(Workspace):
         save_model(self.model, checkpoint_path)
         
         # training start
-        num_batches = (len(self.sequence) - 1) // (self.batch_size * self.seq_len)
+        num_training_batches = (len(self.training) - 1) // (self.batch_size * self.seq_len)
+        num_validation_batches = (len(self.validation) - 1) // (self.batch_size * self.seq_len)
         self.model.reset_states()
         try:
             self.model.fit_generator(
-                self.batch_generator(self.sequence, self.batch_size, self.seq_len, one_hot_labels=True),
-                num_batches, epochs, callbacks=callbacks)
+                generator=self._batch_generator(self.training, self.batch_size, self.seq_len, one_hot_labels=True),
+                steps_per_epoch=num_training_batches,
+                validation_data=self._batch_generator(self.validation, self.batch_size, self.seq_len,
+                                                      one_hot_labels=True),
+                validation_steps=num_validation_batches,
+                epochs=epochs,
+                callbacks=callbacks)
         except KeyboardInterrupt as ex:
             # resume with the last known good state
             self.model = load_model(checkpoint_path)
@@ -379,7 +363,8 @@ class CharRNNWorkspace(Workspace):
             attack = 0
             health = 0
         return self._encode_text(
-            mana_cost * CharRNNWorkspace.MANA_COST_COUNT_CHAR + attack * CharRNNWorkspace.ATTACK_COUNT_CHAR + health * CharRNNWorkspace.HEALTH_COUNT_CHAR + CharRNNWorkspace.START_NAME_CHAR)
+            mana_cost * CharRNNWorkspace.MANA_COST_COUNT_CHAR + attack * CharRNNWorkspace.ATTACK_COUNT_CHAR + health \
+            * CharRNNWorkspace.HEALTH_COUNT_CHAR + CharRNNWorkspace.START_NAME_CHAR)
     
     @staticmethod
     def _make_keras_picklable():
@@ -403,17 +388,19 @@ class CharRNNWorkspace(Workspace):
         cls.__setstate__ = __setstate__
 
 
+CharRNNWorkspace._make_keras_picklable()
+
 if __name__ == '__main__':
-    CharRNNWorkspace._make_keras_picklable()
     path = 'checkpoint.bin'
     if os.path.exists(path):
         workspace = pickle.load(open(path, 'rb'))  # type: CharRNNWorkspace
         print('Loaded progress (%d epochs) from path %s' % (workspace.epoch, path))
     else:
         workspace = CharRNNWorkspace()
-    
     try:
         workspace.train()
     except KeyboardInterrupt as ex:
         pickle.dump(workspace, open(path, 'wb'))
+        print()
         print('Saved progress to path %s' % path)
+        raise ex
