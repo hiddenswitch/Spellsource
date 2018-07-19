@@ -22,7 +22,7 @@ CLASS_MAPPING = {
 }
 
 
-def iter_cards(start_path=None):
+def iter_card_and_file_path(start_path=None):
     if start_path is None:
         start_path = path.join(path.dirname(__file__), 'src/main/resources/cards')
     
@@ -38,6 +38,11 @@ def iter_cards(start_path=None):
                 except ValueError as ex:
                     print('Parsing error in %s' % (filepath))
                     continue
+
+
+def iter_cards(start_path=None):
+    for card, _ in iter_card_and_file_path(start_path):
+        yield card
 
 
 def walk_card(card):

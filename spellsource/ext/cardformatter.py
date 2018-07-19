@@ -11,7 +11,7 @@ This script requires the objdict package to help it serialize to JSON  in the ap
 import os
 
 from objdict import ObjDict as OrderedDict
-from .cards import write_card, iter_cards
+from .cards import write_card, iter_card_and_file_path
 
 _VERSION = 1
 
@@ -65,7 +65,7 @@ _ORDER = [
 
 
 def fix_cards():
-    for (card, filepath) in iter_cards(os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')):
+    for (card, filepath) in iter_card_and_file_path(os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')):
         if 'set' not in card:
             if 'witchwood' in filepath:
                 card['set'] = 'WITCHWOOD'

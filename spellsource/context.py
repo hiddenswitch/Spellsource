@@ -99,14 +99,14 @@ class Context(contextlib.AbstractContextManager):
         paths.append(os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "../share/spellsource/" + filename))
         paths.append(os.path.join(sys.prefix, "share/spellsource/" + filename))
-        # pip install py4j # On Ubuntu 16.04, where virtualenvepath=/usr/local
+        # pip install py4j # On Ubuntu 16.04, where virtualenvpath=/usr/local
         #   this file is here:
-        #     virtualenvpath/lib/pythonX/dist-packages/py4j/java_gateway.py
-        #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
+        #     virtualenvpath/lib/pythonX/dist-packages/spellsource/java_gateway.py
+        #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
         # pip install --user py4j # On Ubuntu 16.04, where virtualenvepath=~/.local
         #   this file is here:
-        #     virtualenvpath/lib/pythonX/site-packages/py4j/java_gateway.py
-        #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
+        #     virtualenvpath/lib/pythonX/site-packages/spellsource/java_gateway.py
+        #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
         paths.append(os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "../../../../share/spellsource/" + filename))
         
