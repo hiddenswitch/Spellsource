@@ -5,6 +5,8 @@ import re
 import tempfile
 import numpy as np
 import itertools
+import pkg_resources
+
 from keras.callbacks import ModelCheckpoint, TensorBoard
 from keras.layers import Dense, Dropout, Embedding, LSTM, TimeDistributed
 from keras.models import load_model, save_model, Sequential, Model
@@ -16,10 +18,8 @@ from spellsource.ext.workspace import Workspace
 
 
 class CharRNNWorkspace(Workspace):
-    # TODO: Replace these with package data paths
-    CUSTOM_CARDS_PATH = '/Users/bberman/Documents/Spellsource-Server/cards/src/main/resources/cards/custom'
-    HEARTHSTONE_CARDS_PATH = '/Users/bberman/Documents/Spellsource-Server/cards/src/main/resources/cards/hearthstone'
-    
+    CUSTOM_CARDS_PATH = 'cards/src/main/resources/cards/custom'
+    HEARTHSTONE_CARDS_PATH = 'cards/src/main/resources/cards/hearthstone'
     DESCRIPTION_CHARS = ' .,;/+-abcdefghijklmnopqrstuvwxyz'
     ATTACK_COUNT_CHAR = 'A'
     HEALTH_COUNT_CHAR = 'H'
@@ -32,9 +32,9 @@ class CharRNNWorkspace(Workspace):
     KEYWORD_CHARS = {
         r'deathrattle[.:\s]*': 'D',
         r'battlecry[.:\s]*': 'B',
-        r'taunt\.?\s?': 'T',
-        r'divine shield\.?\s?': 'V',
-        r'stealth\.?\s?': 'E',
+        r'\btaunt\.?\s?': 'T',
+        r'\bdivine shield\.?\s?': 'V',
+        r'\bstealth\.?\s?': '∫',
         r'(freeze)|(frozen)': 'F',
         r'windfury\.?\s?': 'W',
         r'charge\.?\s?': 'C',
@@ -43,18 +43,38 @@ class CharRNNWorkspace(Workspace):
         r'combo[.:\s]*': '1',
         r'overload[.:\s]*': 'O',
         r'choose\s?one[.:\s]*': '2',
-        r"(cannot)|(can't)\s?attack\.?\s?": 'K',
-        r'rush\.?\s?': 'U',
-        r'quest[.:\s]*': 'Q',
-        r'dormant\.?\s?': 'G',
-        r'poisonous\.?\s': 'P',
+        # r"(cannot)|(can't)\s?attack\.?\s?": 'K',
+        r'\brush\.?': 'U',
+        r'\bquest[.:]*': 'Q',
+        r'\bdormant\.?': 'G',
+        r'\bpoison((ed)|(ous\.?))?': 'P',
         r'lifesteal\.?\s': 'L',
-        r'cost[s.:\s]*': '$',
+        r'\bcost[s.:\s]*': '$',
         r'start\sof\sgame[.:\s]*': 'Y',
-        r'silence': 'X',
-        r'summon': 'S',
-        r'discover': '3',
-        r'zero': ZERO_CHAR
+        # r'all': 'å',
+        r'\brandom': '®',
+        r'\btarget': '×',
+        r'\bsilence': 'X',
+        r'\bsummon': 'S',
+        r'\bdiscover': '∂',
+        r'\bminions?': 'µ',
+        r'\bhero(e?s)?': '♔',
+        r'characters?': 'K',
+        r'weapons?': '⚔︎',
+        r'\bspells?': '∭',
+        # r'(yours?)|(friend(ly)?)': '☟',
+        # r'(enemy|theirs?|opposing)': '☝︎',
+        # r'gives?': '→',
+        r'gains?': '↑',
+        r'loses?': '↓',
+        # r'whenever': '◎',
+        # r'(every)|(each)': '◼',
+        # r'turn': '▽',
+        r'damage': '⚡',
+        r'health': '✝',
+        r'\band\b': '&',
+        r'\bor\b': '|',
+        r'\bzero\b': ZERO_CHAR
     }
     
     VALID_CHARS = DESCRIPTION_CHARS + ATTACK_COUNT_CHAR + HEALTH_COUNT_CHAR + MANA_COST_COUNT_CHAR + NUMBER_COUNT_CHAR \
@@ -65,8 +85,9 @@ class CharRNNWorkspace(Workspace):
         self._create_dictionary()
         # Load text, convert it into a "sequence"
         hearthcards = pickle.load(open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))
-        spellsource = itertools.chain(
-            *map(iter_cards, (CharRNNWorkspace.CUSTOM_CARDS_PATH, CharRNNWorkspace.HEARTHSTONE_CARDS_PATH)))
+        paths = [pkg_resources.resource_filename('spellsource', path) for path in
+                 (CharRNNWorkspace.CUSTOM_CARDS_PATH, CharRNNWorkspace.HEARTHSTONE_CARDS_PATH)]
+        spellsource = itertools.chain(*map(iter_cards, paths))
         
         training_names = frozenset(card['cardname'].lower() for card in hearthcards)
         training = [CharRNNWorkspace._format_hearthcard(card) for card in hearthcards]
@@ -120,7 +141,7 @@ class CharRNNWorkspace(Workspace):
                   learning_rate, clip_norm))
         model = Sequential()
         # input shape: (batch_size, seq_len)
-        model.add(Embedding(vocab_size, embedding_size,
+        model.add(Embedding(vocab_size, embedding_size, mask_zero=True,
                             batch_input_shape=(batch_size, seq_len)))
         model.add(Dropout(drop_rate))
         # shape: (batch_size, seq_len, embedding_size)
@@ -355,7 +376,7 @@ class CharRNNWorkspace(Workspace):
         :param seq_lens:
         :return:
         """
-        mana_cost = random.randint(0, 11)
+        mana_cost = random.randint(0, 10)
         attack = random.randint(max(0, mana_cost - mana_cost // 2), min(10, mana_cost + mana_cost // 2))
         health = random.randint(max(0, mana_cost - mana_cost // 2), min(10, mana_cost + mana_cost // 2))
         is_spell = random.random() < 0.25
@@ -391,7 +412,7 @@ class CharRNNWorkspace(Workspace):
 CharRNNWorkspace._make_keras_picklable()
 
 if __name__ == '__main__':
-    path = 'checkpoint.bin'
+    path = 'docs/charrnnn_checkpoint.bin'
     if os.path.exists(path):
         workspace = pickle.load(open(path, 'rb'))  # type: CharRNNWorkspace
         print('Loaded progress (%d epochs) from path %s' % (workspace.epoch, path))
