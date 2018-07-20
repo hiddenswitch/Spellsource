@@ -93,6 +93,11 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testCorrectOrder() {
 		runGym((context, player, opponent) -> {
+			GameStateValueBehaviour checkDepth = new GameStateValueBehaviour();
+			if (checkDepth.getMaxDepth() < 5) {
+				// the expected behaviour is different
+				return;
+			}
 			putOnTopOfDeck(context, opponent, "minion_bloodfen_raptor");
 			opponent.getHero().setHp(4);
 			// Your hero power is, Equip a 1/1 Weapon (costs 2)

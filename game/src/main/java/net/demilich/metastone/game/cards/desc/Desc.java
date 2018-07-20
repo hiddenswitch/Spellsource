@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.utils.BaseMap;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -26,7 +27,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @param <V> The abstract base class of the concrete type.
  */
 @JsonSerialize(using = DescSerializer.class)
-public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends EnumMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
+public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends BaseMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
 	protected Desc(Map<T, Object> arguments, Class<T> keyType) {
 		super(keyType);
 		if (arguments.isEmpty()) {
