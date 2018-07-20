@@ -19,10 +19,7 @@ import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.models.MatchCancelResponse;
-import com.hiddenswitch.spellsource.util.Rpc;
-import com.hiddenswitch.spellsource.util.Serialization;
-import com.hiddenswitch.spellsource.util.Sync;
-import com.hiddenswitch.spellsource.util.WebResult;
+import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Closeable;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
@@ -125,6 +122,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Health check comes first
 		router.route("/")
 				.handler(routingContext -> {
+					// Check that hazelcast is ready in this health check
+					if (!Hazelcast.getHazelcastInstance().getLifecycleService().isRunning()) {
+						routingContext.fail(500);
+						return;
+					}
+					
 					routingContext.response().setStatusCode(200);
 					routingContext.response().end("OK");
 				});
