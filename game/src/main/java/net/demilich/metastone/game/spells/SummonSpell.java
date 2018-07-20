@@ -35,10 +35,10 @@ import java.util.stream.Collectors;
  * summon.
  * <p>
  * If {@link SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_FILTER}, and {@link SpellArg#CARD_SOURCE} are
- * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link
- * Card}, it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link
- * Minion}, the target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then
- * the enchantments are copied.
+ * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link Card},
+ * it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link Minion}, the
+ * target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then the
+ * enchantments are copied.
  * <p>
  * All of the successfully summoned minions will get the {@link SpellArg#SPELL} subspell cast on each of them, where
  * {@link EntityReference#OUTPUT} will reference each summoned minion.
@@ -160,7 +160,7 @@ public class SummonSpell extends Spell {
 	 * Creates this spell to summon the specified minions relative to the source minion (used in a battlecry).
 	 *
 	 * @param relativeBoardPosition The board position.
-	 * @param cards           One or more minions to summon. Each will be summoned.
+	 * @param cards                 One or more minions to summon. Each will be summoned.
 	 * @return The spell
 	 */
 	public static SpellDesc create(RelativeToSource relativeBoardPosition, Card... cards) {
@@ -197,7 +197,7 @@ public class SummonSpell extends Spell {
 	 * Summons the specified cards for the specified player.
 	 *
 	 * @param targetPlayer The player on whose battlefield these minions should be summoned
-	 * @param cards  The minion cards
+	 * @param cards        The minion cards
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer targetPlayer, Card... cards) {
@@ -208,9 +208,9 @@ public class SummonSpell extends Spell {
 	 * Summons the specified minion cards relative to a given source for the specified player (used for a battlecry).
 	 *
 	 * @param targetPlayer          The player whose battlefield should be the destination for these minions
-	 * @param relativeBoardPosition Relative to the source minion (when played as a battlecry), where should these
-	 *                              minions be summoned?
-	 * @param cards           The cards to summon from
+	 * @param relativeBoardPosition Relative to the source minion (when played as a battlecry), where should these minions
+	 *                              be summoned?
+	 * @param cards                 The cards to summon from
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer targetPlayer, RelativeToSource relativeBoardPosition, Card... cards) {
@@ -300,6 +300,9 @@ public class SummonSpell extends Spell {
 				Minion minion;
 				if (target.getEntityType() == EntityType.CARD) {
 					minion = target.getSourceCard().summon();
+				} else if (target.getEntityType() != EntityType.MINION) {
+					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
+					return;
 				} else {
 					minion = ((Minion) target).getCopy();
 					minion.clearEnchantments();

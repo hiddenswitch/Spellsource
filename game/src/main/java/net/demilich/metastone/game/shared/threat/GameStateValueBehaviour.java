@@ -80,10 +80,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected Heuristic heuristic;
 	protected FeatureVector featureVector;
 	protected String nameSuffix = "";
-	protected long timeout = 7200;
+	protected long timeout = 400;
 	protected Deque<GameAction> strictPlan;
 	protected Deque<Integer> indexPlan;
-	protected int maxDepth = 5;
+	protected int maxDepth = 2;
+	protected boolean scoreImmediately = false;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -337,13 +338,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			Node v = contextStack.pop();
 
 			// Is this node terminal?
-			if (v.predecessor != null && (
-					v.depth >= maxDepth
-							|| v.context.updateAndGetGameOver()
-							|| (System.currentTimeMillis() - start > timeout)
-							// Technically allows the bot to play through its extra turns
-							|| v.context.getActivePlayerId() != playerId
-							|| v.context.isDisposed())) {
+			if (isTerminal(v, start, playerId)) {
 				terminalNodes.add(v);
 				continue;
 			}
@@ -407,6 +402,16 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		// Pop off the last element of the plan
 		this.indexPlan.pollFirst();
 		return strictPlan.pollFirst();
+	}
+
+	private boolean isTerminal(Node node, long startTime, int playerId) {
+		return node.predecessor != null && (
+				node.depth >= maxDepth
+						|| node.context.updateAndGetGameOver()
+						|| (System.currentTimeMillis() - startTime > timeout)
+						// Technically allows the bot to play through its extra turns
+						|| node.context.getActivePlayerId() != playerId
+						|| node.context.isDisposed());
 	}
 
 	/**

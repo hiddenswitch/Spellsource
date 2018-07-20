@@ -116,7 +116,7 @@ public class ServerGameContext extends GameContext implements Server {
 				.map(deck -> (GameDeck) deck)
 				.collect(toList())));
 		// Mulligans should happen simultaneously
-		setLogic(new SimultaneousMulliganGameLogic());
+		setLogic(new NetworkedGameLogic());
 
 		// Persistence effects mean cards that remember things that have happened to them in other games
 		enablePersistenceEffects();
@@ -287,8 +287,8 @@ public class ServerGameContext extends GameContext implements Server {
 	 * @return A simultaneous mulligan game logic
 	 */
 	@Override
-	public SimultaneousMulliganGameLogic getLogic() {
-		return (SimultaneousMulliganGameLogic) super.getLogic();
+	public NetworkedGameLogic getLogic() {
+		return (NetworkedGameLogic) super.getLogic();
 	}
 
 	/**
@@ -424,6 +424,14 @@ public class ServerGameContext extends GameContext implements Server {
 					}
 					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
 					// is allowed to interrupt the fiber.
+				} catch (RuntimeException other) {
+					logger.error("resume {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
+					try {
+						endGame();
+					} catch (Throwable endGameError) {
+						logger.error("resume {}: Ending the game threw an exception.", getGameId(), endGameError);
+						// TODO: Deal with any other issues
+					}
 				}
 				return null;
 			});

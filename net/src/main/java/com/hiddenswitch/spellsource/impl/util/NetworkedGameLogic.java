@@ -5,6 +5,8 @@ import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
@@ -17,7 +19,7 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 /**
  * Created by bberman on 11/23/16.
  */
-public class SimultaneousMulliganGameLogic extends GameLogic {
+public class NetworkedGameLogic extends GameLogic {
 	private boolean mulliganEnabled = true;
 
 	@Override
@@ -65,5 +67,16 @@ public class SimultaneousMulliganGameLogic extends GameLogic {
 
 	public void setMulliganEnabled(boolean mulliganEnabled) {
 		this.mulliganEnabled = mulliganEnabled;
+	}
+
+	@Override
+	@Suspendable
+	public GameAction requestAction(Player player, List<GameAction> actions) {
+		try {
+			return super.requestAction(player, actions);
+		} catch (Throwable throwable) {
+			logger.error("requestAction {}: An error occurred requesting an action through the game logic, the first action or end turn was chosen", context.getGameId(), throwable);
+			return actions.stream().filter(e -> e.getActionType() == ActionType.END_TURN).findFirst().orElse(actions.get(0));
+		}
 	}
 }

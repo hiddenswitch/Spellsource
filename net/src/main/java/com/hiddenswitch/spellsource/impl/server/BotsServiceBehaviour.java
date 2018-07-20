@@ -38,7 +38,7 @@ public class BotsServiceBehaviour extends UtilityBehaviour {
 		try {
 			RequestActionResponse response = Bots.requestAction(request);
 			return response.gameAction;
-		} catch (RuntimeException cause) {
+		} catch (Throwable cause) {
 			logger.error("requestAction: The AI threw an exception while trying to get an action: ", cause);
 			for (int i = validActions.size() - 1; i >= 0; i--) {
 				GameAction action = validActions.get(i);

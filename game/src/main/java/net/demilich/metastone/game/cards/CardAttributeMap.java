@@ -230,9 +230,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 	@Override
 	public CardAttributeMap clone() {
 		CardAttributeMap clone = new CardAttributeMap(getCard());
-		synchronized (this) {
-			clone.putAll(this);
-		}
+		clone.putAll(this);
 		return clone;
 	}
 
