@@ -5,7 +5,7 @@
   "heroClass": "ICE",
   "rarity": "FREE",
   "description": "Give your minions +2 Attack and the Deathrattle, \"Add a Rune to your hand.\"",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
