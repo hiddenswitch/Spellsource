@@ -24,6 +24,8 @@
       }
     ]
   },
+  "attributes": {
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
