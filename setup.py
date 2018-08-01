@@ -22,7 +22,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.4.12',
+      version='0.4.13',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description='''
 A multiplayer, networked adaptation of ``metastone``. This is a
@@ -84,7 +84,7 @@ overhead between Java and Python.
       include_package_data=True,
       author_email='ben@hiddenswitch.com',
       license='GPLv3',
-      install_requires=['py4j', 'tqdm', 'objdict', 'msgpack'],
+      install_requires=['py4j', 'tqdm', 'objdict', 'msgpack', 'keras'],
       packages=['spellsource'],
       keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
                 'ml'],
