@@ -1,0 +1,28 @@
+{
+  "name": "Cloning Device",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Discover a copy of a minion in your opponent's deck",
+  "targetSelection": "NONE",
+  "spell": {
+		"class": "DiscoverSpell",
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION"
+		},
+		"cardSource": {
+			"class": "DeckSource",
+      "distinct": true,
+			"targetPlayer": "OPPONENT"
+		},
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		}
+	},
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

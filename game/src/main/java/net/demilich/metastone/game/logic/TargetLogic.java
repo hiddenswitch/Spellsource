@@ -378,6 +378,16 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.resolveSingleTarget(context.getTriggerHostStack().peek()));
 		} else if (targetKey.equals(EntityReference.PHYSICAL_ATTACK_TARGETS)) {
 			return getValidTargets(context, player, new PhysicalAttackAction(source.getReference()));
+		} else if (targetKey.equals(EntityReference.LEFT_ADJACENT_MINION)) {
+			List<Actor> leftMinions = context.getLeftMinions(source.getReference());
+			if (leftMinions.isEmpty()) {
+				return new ArrayList<>();
+			} else return singleTargetAsList(leftMinions.get(leftMinions.size() - 1));
+		} else if (targetKey.equals(EntityReference.RIGHT_ADJACENT_MINION)) {
+			List<Actor> rightMinions = context.getRightMinions(player, source.getReference());
+			if (rightMinions.isEmpty()) {
+				return new ArrayList<>();
+			} else return singleTargetAsList(rightMinions.get(0));
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

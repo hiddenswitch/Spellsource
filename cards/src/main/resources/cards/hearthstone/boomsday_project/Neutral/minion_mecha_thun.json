@@ -1,0 +1,44 @@
+{
+  "name": "Mecha'thun",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Deathrattle: If you have no cards in your deck, hand, and battlefield, destroy the enemy hero",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "DeckContainsCondition",
+          "targetPlayer": "SELF",
+          "invert": true
+        },
+        {
+          "class": "MinionOnBoardCondition",
+          "targetPlayer": "SELF",
+          "invert": true
+        },
+        {
+          "class": "HoldsCardCondition",
+          "targetPlayer": "SELF",
+          "invert": true
+        }
+      ]
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_HERO"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

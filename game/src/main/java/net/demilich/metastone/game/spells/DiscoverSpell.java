@@ -9,6 +9,7 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -257,12 +258,11 @@ public class DiscoverSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Card> specificCards = Arrays.asList(SpellUtils.getCards(context, desc));
 		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER) || desc.containsKey(SpellArg.CARD_SOURCE);
-
 		CardList filteredCards;
 		if (hasFilter) {
 			filteredCards = desc.getFilteredCards(context, player, source);
 		} else {
-			filteredCards = new CardArrayList();
+			filteredCards = CardCatalogue.query(context.getDeckFormat());
 		}
 
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);

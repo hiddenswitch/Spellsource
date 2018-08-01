@@ -1,0 +1,17 @@
+{
+  "name": "Wargear",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Magnetic",
+  "attributes": {
+    "MAGNETIC": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

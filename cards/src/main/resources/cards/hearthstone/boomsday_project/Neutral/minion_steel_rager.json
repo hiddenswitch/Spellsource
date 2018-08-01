@@ -1,0 +1,16 @@
+{
+  "name": "Steel Rager",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Rush",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

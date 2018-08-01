@@ -1,0 +1,23 @@
+{
+  "name": "Spider Bomb",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Magnetic. Deathrattle: Destroy a random enemy minion.",
+  "deathrattle": {
+    "class": "DestroySpell",
+		"target": "ENEMY_MINIONS",
+		"randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "MAGNETIC": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

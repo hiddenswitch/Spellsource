@@ -386,6 +386,7 @@ public enum Attribute {
 	 * This implements Prophet Velen.
 	 */
 	HEAL_AMPLIFY_MULTIPLIER,
+	SPELL_HEAL_AMPLIFY_MULTIPLIER,
 	HERO_POWER_HEAL_AMPLIFY_MULTIPLIER,
 	/**
 	 * An attribute that specifies that the attack of this {@link Minion} is equal to its hitpoints.
@@ -847,6 +848,24 @@ public enum Attribute {
 	 * discovering player's opponent.
 	 */
 	UNCENSORED,
+	/**
+	 * Indicates the minion should magnetize when being played left of a mech instead of summoning normally
+	 */
+	MAGNETIC,
+	/*
+	 * The position in a players hand that a card was played from
+	 */
+	HAND_INDEX,
+	/*
+	 * Dummy attribute to target cards shuffled to the player's deck at the same time
+	 * Implements Augmented Elekk + Academic Espionage
+	 */
+	SHUFFLED,
+	/*
+	 * Implements Electra Stormsurge
+	 */
+	SPELLS_CAST_TWICE,
+
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>

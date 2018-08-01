@@ -1,0 +1,26 @@
+{
+  "name": "Necrium Blade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "damage": 3,
+  "durability": 2,
+  "heroClass": "BLACK",
+  "rarity": "RARE",
+  "description": "Deathrattle: Trigger the Deathrattle of a random friendly minion.",
+  "deathrattle": {
+    "class": "TriggerDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true,
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "DEATHRATTLES",
+      "operation": "HAS"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

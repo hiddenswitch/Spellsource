@@ -1,0 +1,56 @@
+{
+  "name": "Commander Morrigan",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "VIOLET",
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Swap this with a minion from your deck.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ModifyAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "RESERVED_INTEGER_2",
+        "value": 1
+      },
+      {
+        "class": "ConditionalSpell",
+        "spell": {
+          "class": "custom.SwapMinionWithDeckSpell",
+          "target": "SELF"
+        },
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "RESERVED_INTEGER_2",
+          "value": 30,
+          "operation": "LESS_OR_EQUAL"
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "spell": {
+          "class": "RemoveAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "RESERVED_INTEGER_2"
+        },
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "RESERVED_INTEGER_2",
+          "value": 31,
+          "operation": "EQUAL"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

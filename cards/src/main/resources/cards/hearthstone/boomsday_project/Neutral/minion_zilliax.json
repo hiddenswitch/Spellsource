@@ -1,0 +1,21 @@
+{
+  "name": "Zilliax",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Magnetic, Divine Shield, Taunt, Lifesteal, Rush",
+  "attributes": {
+    "MAGNETIC": true,
+    "DIVINE_SHIELD": true,
+    "TAUNT": true,
+    "LIFESTEAL": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

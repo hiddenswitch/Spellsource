@@ -1,0 +1,24 @@
+{
+  "name": "Kangor's Endless Army",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "LEGENDARY",
+  "description": "Resurrect 3 friendly Mechs. They keep any Magnetic upgrades.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ResurrectSpell",
+    "value": 3,
+		"cardFilter": {
+			"class": "CardFilter",
+			"race": "MECH"
+		},
+    "attribute": "MAGNETIC"
+  },
+  "attributes": {
+    "MAGNETIC": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

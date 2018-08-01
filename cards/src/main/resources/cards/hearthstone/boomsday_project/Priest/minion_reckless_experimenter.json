@@ -1,0 +1,40 @@
+{
+  "name": "Reckless Experimenter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "heroClass": "WHITE",
+  "rarity": "EPIC",
+  "description": "Deathrattle minions you play cost (3) less, but die at the end of the turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionPlayedTrigger",
+      "targetPlayer": "SELF",
+      "requiredAttribute": "DEATHRATTLES"
+    },
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "EVENT_TARGET",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "DestroySpell",
+          "target": "SELF"
+        }
+      }
+    }
+  },
+  "cardCostModifier": {
+		"class": "CardCostModifier",
+		"cardType": "MINION",
+		"value": -3,
+		"requiredAttribute": "DEATHRATTLES"
+	},
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

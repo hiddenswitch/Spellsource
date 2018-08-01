@@ -456,6 +456,17 @@ public class TestBase {
 		return null;
 	}
 
+	protected static Entity findCard(GameContext context, String cardId) {
+		for (Player player : context.getPlayers()) {
+			for (Card card : player.getHand()) {
+				if (card.getSourceCard().getCardId().equals(cardId)) {
+					return card;
+				}
+			}
+		}
+		return null;
+	}
+
 	protected static Actor getSingleMinion(List<Minion> minions) {
 		for (Actor minion : minions) {
 			if (minion == null) {

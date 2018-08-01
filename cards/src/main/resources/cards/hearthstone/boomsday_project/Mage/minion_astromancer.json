@@ -1,0 +1,30 @@
+{
+  "name": "Astromancer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Battlecry: Summon a random minion with the same Cost as the number of cards in your hand",
+  "battlecry": {
+		"spell": {
+      "class": "SummonSpell",
+			"boardPositionRelative": "RIGHT",
+			"cardFilter": {
+				"class": "CardFilter",
+				"manaCost": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "SELF",
+          "playerAttribute": "HAND_COUNT"
+        }
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}
