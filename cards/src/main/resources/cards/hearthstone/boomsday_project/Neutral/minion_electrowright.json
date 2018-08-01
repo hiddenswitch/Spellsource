@@ -1,0 +1,44 @@
+{
+  "name": "Electrowright",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Battlecry: If you're holding a spell that costs (5) or more, gain +1/+1.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "value": 1
+      },
+      "condition": {
+        "class": "HoldsCardCondition",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "ManaCostFilter",
+              "operation": "GREATER_OR_EQUAL",
+              "value": 5
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

@@ -1,15 +1,14 @@
 package net.demilich.metastone.game.cards.desc;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
 import net.demilich.metastone.game.utils.BaseMap;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -17,7 +16,6 @@ import org.jetbrains.annotations.NotNull;
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * A map representing a complex type in Spellsource, like a {@link net.demilich.metastone.game.spells.Spell} or {@link
@@ -96,7 +94,11 @@ public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends Base
 		}
 		if (ValueProvider.class.isAssignableFrom(storedValue.getClass())) {
 			ValueProvider valueProvider = (ValueProvider) storedValue;
-			return valueProvider.getValue(context, player, target, host);
+			int value = valueProvider.getValue(context, player, target, host);
+			if (valueProvider.getDesc().getBool(ValueProviderArg.EVALUATE_ONCE)) {
+				this.put(arg, value);
+			}
+			return value;
 		}
 		return (int) storedValue;
 	}

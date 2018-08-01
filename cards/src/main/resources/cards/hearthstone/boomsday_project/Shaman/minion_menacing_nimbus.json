@@ -1,0 +1,28 @@
+{
+	"name": "Menacing Nimbus",
+	"baseManaCost": 2,
+	"type": "MINION",
+	"baseAttack": 2,
+	"baseHp": 2,
+	"heroClass": "SILVER",
+	"rarity": "COMMON",
+	"race": "ELEMENTAL",
+	"description": "Battlecry: Add a random Elemental to your hand",
+	"battlecry": {
+		"targetSelection": "NONE",
+		"spell": {
+			"class": "ReceiveCardSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"race": "ELEMENTAL",
+				"cardType": "MINION"
+			}
+		}
+	},
+	"attributes": {
+		"BATTLECRY": true
+	},
+	"collectible": true,
+	"set": "BOOMSDAY_PROJECT",
+	"fileFormatVersion": 1
+}

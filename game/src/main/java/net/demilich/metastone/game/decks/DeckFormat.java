@@ -25,7 +25,8 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
-							WITCHWOOD
+							WITCHWOOD,
+							BOOMSDAY_PROJECT
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -48,6 +49,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
+							BOOMSDAY_PROJECT,
 							HALL_OF_FAME
 					))
 			);
@@ -90,6 +92,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
+							BOOMSDAY_PROJECT,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							HALL_OF_FAME,
@@ -117,6 +120,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
+							BOOMSDAY_PROJECT,
 							HALL_OF_FAME,
 							PROCEDURAL_PREVIEW,
 							CardSet.SPELLSOURCE,

@@ -1,0 +1,25 @@
+{
+  "name": "Weaponized Pinata",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Deathrattle: Add a random Legendary minion to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "rarity": "LEGENDARY"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

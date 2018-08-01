@@ -1,0 +1,25 @@
+{
+  "name": "Mulchmuncher",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Rush. Costs (1) less for each friendly Treant that died this game.",
+  "manaCostModifier": {
+		"class": "EntityCounter",
+    "target": "FRIENDLY_GRAVEYARD",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "treant"
+    }
+	},
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

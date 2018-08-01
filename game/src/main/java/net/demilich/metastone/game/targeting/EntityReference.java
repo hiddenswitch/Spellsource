@@ -418,6 +418,14 @@ public class EntityReference implements Serializable {
 	 * player's point of view.
 	 */
 	public static final EntityReference PHYSICAL_ATTACK_TARGETS = new EntityReference(-58);
+	/**
+	 * References the minion to the left of the {@code source} of this targeting resolution, or a zero-length list if there isn't one
+	 */
+	public static final EntityReference LEFT_ADJACENT_MINION = new EntityReference(-59);
+	/**
+	 * References the minion to the right of the {@code source} of this targeting resolution, or a zero-length list if there isn't one
+	 */
+	public static final EntityReference RIGHT_ADJACENT_MINION = new EntityReference(-60);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

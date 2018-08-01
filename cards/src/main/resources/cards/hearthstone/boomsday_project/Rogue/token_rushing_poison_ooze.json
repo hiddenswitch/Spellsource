@@ -1,0 +1,17 @@
+{
+	"name": "Ooze",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 1,
+	"heroClass": "BLACK",
+	"rarity": "FREE",
+	"description": "Rush, Poisonous.",
+	"attributes": {
+		"POISONOUS": true,
+    "RUSH": true
+	},
+	"collectible": false,
+	"set": "BOOMSDAY_PROJECT",
+	"fileFormatVersion": 1
+}

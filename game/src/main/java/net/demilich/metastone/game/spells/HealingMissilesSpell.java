@@ -34,9 +34,11 @@ public class HealingMissilesSpell extends HealSpell {
 
 		if (healing == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
+			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			healing = context.getLogic().applySpellpower(player, source, healing);
+			healing = context.getLogic().applyAmplify(player, healing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			healing = context.getLogic().applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		}
 		for (int i = 0; i < missiles; i++) {

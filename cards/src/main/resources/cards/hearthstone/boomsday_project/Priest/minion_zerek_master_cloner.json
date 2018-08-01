@@ -1,0 +1,42 @@
+{
+  "name": "Zerek, Master Cloner",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "heroClass": "WHITE",
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: If you've cast any spells on this minion, resummon it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "RESERVED_BOOLEAN_4"
+    }
+  },
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF"
+    },
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "attribute": "RESERVED_BOOLEAN_4",
+      "operation": "HAS"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

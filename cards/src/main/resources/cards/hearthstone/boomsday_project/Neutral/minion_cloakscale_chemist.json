@@ -1,0 +1,17 @@
+{
+  "name": "Cloakscale Chemist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Stealth, Divine Shield",
+  "attributes": {
+    "STEALTH": true,
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

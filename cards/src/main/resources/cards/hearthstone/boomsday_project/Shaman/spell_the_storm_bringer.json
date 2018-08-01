@@ -1,0 +1,21 @@
+{
+  "name": "The Storm Bringer",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "LEGENDARY",
+  "description": "Transform your minions into random Legendary minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TransformToRandomMinionSpell",
+    "target": "FRIENDLY_MINIONS",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "rarity": "LEGENDARY"
+    }
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "The Boomship",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "LEGENDARY",
+  "description": "Summon 3 random minions from your hand. Give them Rush",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 3,
+		"cardLocation": "HAND",
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION"
+		},
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "RUSH",
+      "target": "OUTPUT"
+    }
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

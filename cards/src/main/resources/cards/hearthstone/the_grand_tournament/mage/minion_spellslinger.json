@@ -12,18 +12,8 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "SPELL"
-          },
-          {
-            "class": "CardFilter",
-            "rarity": "LEGENDARY",
-            "invert": true
-          }
-        ]
+        "class": "CardFilter",
+        "cardType": "SPELL"
       },
       "targetPlayer": "BOTH"
     }

@@ -1,0 +1,23 @@
+{
+  "name": "Crystology",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "Draw 2 1-attack minions from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+		"value": 2,
+		"cardFilter": {
+			"class": "CardFilter",
+			"cardType": "MINION",
+			"attribute": "ATTACK",
+      "operation": "EQUAL",
+      "value": 1
+		}
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

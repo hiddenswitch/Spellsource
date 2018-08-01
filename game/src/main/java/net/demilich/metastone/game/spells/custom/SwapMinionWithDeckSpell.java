@@ -27,11 +27,11 @@ public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
 		context.getLogic().removeCard(randomCard);
 		// return target to deck (Now it's safe and won't destroy itself!)
 
-		// Summon the minion, which ALSO won't destroy itself...
-		context.getLogic().summon(player.getId(), randomCard.summon(), null, -1, false);
+
 
 		// If there is no minion to shuffle... Idk, blame a wizard.
 		super.onCast(context, player, desc, source, target);
+
 		// Summon the minion, which ALSO won't destroy itself...
 		context.getLogic().summon(player.getId(), randomCard.summon(), null, -1, false);
 	}

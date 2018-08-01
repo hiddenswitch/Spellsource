@@ -1,0 +1,35 @@
+{
+	"name": "Zerek's Cloning Gallery",
+	"baseManaCost": 9,
+	"type": "SPELL",
+	"heroClass": "WHITE",
+	"rarity": "LEGENDARY",
+	"description": "Summon a 1/1 copy of each minion in your deck.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "SummonSpell",
+		"cardSource": {
+			"class": "DeckSource",
+			"targetPlayer": "SELF"
+		},
+		"spell": {
+			"class": "MetaSpell",
+			"target": "OUTPUT",
+			"spells": [
+        {
+					"class": "SetAttackSpell",
+					"value": 1
+				}, 
+        {
+					"class": "SetHpSpell",
+					"value": 1
+				}
+			]
+		},
+		"value": 7,
+		"exclusive": true
+	},
+	"collectible": true,
+	"set": "BOOMSDAY_PROJECT",
+	"fileFormatVersion": 1
+}

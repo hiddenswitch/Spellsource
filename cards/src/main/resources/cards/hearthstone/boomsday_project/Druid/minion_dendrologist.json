@@ -1,0 +1,41 @@
+{
+  "name": "Dendrologist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Battlecry: If you control a Treant, Discover a spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        }
+      },
+      "condition": {
+        "class": "MinionOnBoardCondition",
+        "targetPlayer": "SELF",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "card": "treant"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

@@ -8,9 +8,11 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.CardShuffledEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public class ShuffleToDeckSpell extends Spell {
@@ -20,6 +22,7 @@ public class ShuffleToDeckSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int copies = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
+		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
 
 
 		if (target != null) {
@@ -29,7 +32,7 @@ public class ShuffleToDeckSpell extends Spell {
 			for (int i = 0; i < copies; i++) {
 				final Card copy = target.getSourceCard().getCopy();
 				copy.getAttributes().putAll(map);
-				context.getLogic().shuffleToDeck(player, copy);
+				context.getLogic().shuffleToDeck(player, copy, quiet);
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
 			}
 			return;
@@ -41,8 +44,15 @@ public class ShuffleToDeckSpell extends Spell {
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
 				final Card copy = original.getCopy();
-				context.getLogic().shuffleToDeck(player, copy);
-				SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
+				copy.setAttribute(Attribute.SHUFFLED);
+				context.getLogic().shuffleToDeck(player, copy, quiet);
+			}
+		}
+
+		for (Card card : player.getDeck()) {
+			if (card.hasAttribute(Attribute.SHUFFLED)) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+				context.getLogic().removeAttribute(card, Attribute.SHUFFLED);
 			}
 		}
 	}

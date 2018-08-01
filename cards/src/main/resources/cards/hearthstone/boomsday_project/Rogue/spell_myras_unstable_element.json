@@ -1,0 +1,22 @@
+{
+  "name": "Myra's Unstable Element",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "LEGENDARY",
+  "description": "Draw the rest of your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecastWhileSpell",
+    "spell": {
+      "class": "DrawCardSpell"
+    },
+    "howMany": 60,
+    "condition": {
+      "class": "DeckContainsCondition"
+    }
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

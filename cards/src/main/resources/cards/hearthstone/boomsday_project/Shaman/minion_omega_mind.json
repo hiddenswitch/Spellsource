@@ -1,0 +1,41 @@
+{
+  "name": "Omega Mind",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "heroClass": "SILVER",
+  "rarity": "EPIC",
+  "description": "Battlecry: If you have 10 Mana Crystals, your spells have Lifesteal this turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardPlayedTrigger",
+            "cardType": "SPELL"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "EVENT_TARGET",
+            "attribute": "LIFESTEAL"
+          },
+          "oneTurn": true
+        }
+      },
+      "condition": {
+        "class": "ManaMaxedCondition"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

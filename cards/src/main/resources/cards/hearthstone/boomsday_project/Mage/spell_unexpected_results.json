@@ -1,0 +1,24 @@
+{
+  "name": "Unexpected Results",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Summon two random 2-Cost minions (improved by Spell Damage).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "targetPlayer": "SELF",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": {
+        "class": "SpellDamageValueProvider",
+        "offset": 2
+      }
+    }
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

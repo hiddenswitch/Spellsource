@@ -1,0 +1,33 @@
+{
+  "name": "Arcane Dynamo",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a spell that costs (5) or more",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "attribute": "BASE_MANA_COST",
+        "value": 5,
+        "operation": "GREATER_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Blightnozzle Crawler",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "heroClass": "BLACK",
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Deathrattle: Summon a 1/1 Ooze with poisonous and rush.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_rushing_poison_ooze"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}
