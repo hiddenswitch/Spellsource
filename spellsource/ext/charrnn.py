@@ -76,11 +76,11 @@ class CharRNNWorkspace(Workspace):
         r'\bor\b': '|',
         r'\bzero\b': ZERO_CHAR
     }
-    
+
     VALID_CHARS = DESCRIPTION_CHARS + ATTACK_COUNT_CHAR + HEALTH_COUNT_CHAR + MANA_COST_COUNT_CHAR + NUMBER_COUNT_CHAR \
                   + ''.join(KEYWORD_CHARS.values()) + START_SEQ_CHAR + END_SEQ_CHAR + START_NAME_CHAR
     PADDING_CHAR = '_'
-    
+
     def __init__(self):
         self._create_dictionary()
         # Load text, convert it into a "sequence"
@@ -88,13 +88,13 @@ class CharRNNWorkspace(Workspace):
         paths = [pkg_resources.resource_filename('spellsource', path) for path in
                  (CharRNNWorkspace.CUSTOM_CARDS_PATH, CharRNNWorkspace.HEARTHSTONE_CARDS_PATH)]
         spellsource = itertools.chain(*map(iter_cards, paths))
-        
+
         training_names = frozenset(card['cardname'].lower() for card in hearthcards)
         training = [CharRNNWorkspace._format_hearthcard(card) for card in hearthcards]
         # Remove cards that exist both in the validation set and training sets by comparing the names
         validation = [CharRNNWorkspace._format_card(**card) for card in spellsource if
                       card['name'].lower() not in training_names]
-        
+
         # validation = [card for card in spellsource if card['name'].strip().lower() not in training_names]
         self.seq_len = max(len(s) for s in itertools.chain(training, validation))
         self.training = self._prepare_data_set(training)
@@ -103,7 +103,7 @@ class CharRNNWorkspace(Workspace):
         self.batch_size = 32
         self.model = self._build_model(batch_size=self.batch_size, seq_len=self.seq_len, vocab_size=self.vocab_size)
         self.inference_model = CharRNNWorkspace._build_inference_model(self.model)
-    
+
     def _prepare_data_set(self, data_set: [str]) -> np.ndarray:
         """
         Prepares a data set by encoding it
@@ -115,7 +115,7 @@ class CharRNNWorkspace(Workspace):
         data_set = ''.join(data_set)
         data_set = self._encode_text(data_set)
         return data_set
-    
+
     def _create_dictionary(self):
         """
         create char2id, id2char and vocab_size
@@ -126,7 +126,7 @@ class CharRNNWorkspace(Workspace):
         self.char2id.update({"": 0})
         self.id2char = dict((self.char2id[ch], ch) for ch in self.char2id)
         self.vocab_size = len(self.char2id)
-    
+
     def _build_model(self, batch_size: int, seq_len: int, vocab_size, embedding_size=32,
                      rnn_size=128, num_layers=2, drop_rate=0.0,
                      learning_rate=0.001, clip_norm=5.0) -> Sequential:
@@ -154,7 +154,7 @@ class CharRNNWorkspace(Workspace):
         optimizer = Adam(learning_rate, clipnorm=clip_norm)
         model.compile(loss="categorical_crossentropy", optimizer=optimizer)
         return model
-    
+
     @staticmethod
     def _build_inference_model(model: Model, batch_size=1, seq_len=1) -> Model:
         """
@@ -168,7 +168,7 @@ class CharRNNWorkspace(Workspace):
         inference_model = Sequential.from_config(config)
         inference_model.trainable = False
         return inference_model
-    
+
     @staticmethod
     def _format_hearthcard(in_card: dict) -> str:
         description = in_card['cardtext']
@@ -176,9 +176,9 @@ class CharRNNWorkspace(Workspace):
         baseAttack = in_card['attack']
         baseHp = in_card['health']
         baseManaCost = in_card['mana']
-        
+
         return CharRNNWorkspace._format_card(baseAttack, baseHp, baseManaCost, description, name)
-    
+
     @staticmethod
     def _format_card(baseAttack=0, baseHp=0, baseManaCost=0, description='', name='', **kwargs):
         def _replace_numbers(in_str: str, repl_char: str, zero='') -> str:
@@ -188,21 +188,21 @@ class CharRNNWorkspace(Workspace):
                 number = max(min(int(match.group(0)), 12), 0)
                 mutable = mutable[0:i] + (zero if number == 0 else repl_char * number) + mutable[j:len(mutable)]
             return mutable
-        
+
         def _replace_keywords(in_str: str) -> str:
             for keyword, repl in CharRNNWorkspace.KEYWORD_CHARS.items():
                 in_str = re.sub(pattern=keyword, string=in_str, repl=repl, flags=re.IGNORECASE)
             return in_str
-        
+
         def _without_tags(in_str: str) -> str:
             return re.sub(pattern=r'(\[/?[bi]\])|(&\w+;)', string=in_str, repl='')
-        
+
         def _without_llegals(in_str: str) -> str:
             return re.sub(pattern=r'[^%s]' % re.escape(CharRNNWorkspace.VALID_CHARS), string=in_str, repl='')
-        
+
         def _without_newlines(in_str: str) -> str:
             return re.sub(pattern=r'(\r\n)|(\n)', string=in_str, repl='. ')
-        
+
         out_description = \
             _without_llegals(
                 _replace_keywords(
@@ -217,25 +217,25 @@ class CharRNNWorkspace(Workspace):
         encoded = out_base_mana_cost + out_attack + out_health + CharRNNWorkspace.START_NAME_CHAR + out_name + \
                   CharRNNWorkspace.START_SEQ_CHAR + out_description + CharRNNWorkspace.END_SEQ_CHAR
         return encoded
-    
+
     def _encode_text(self, text: str) -> np.ndarray:
         """
         encode text to array of integers with CHAR2ID
         """
         return np.fromiter((self.char2id.get(ch, 0) for ch in text), int)
-    
+
     def _decode_text(self, int_array: np.ndarray) -> str:
         """
         decode array of integers to text with ID2CHAR
         """
         return "".join((self.id2char[ch] for ch in int_array))
-    
+
     def _one_hot_encode(self, indices, num_classes: int) -> np.ndarray:
         """
         one-hot encoding
         """
         return np.eye(num_classes)[indices]
-    
+
     def generate_text(self, seed: np.ndarray, top_n=10):
         """
         generates text of specified length from trained model
@@ -249,13 +249,13 @@ class CharRNNWorkspace(Workspace):
         generated = self._decode_text(seed)
         encoded = seed[:]
         model.reset_states()
-        
+
         for idx in encoded[:-1]:
             x = np.array([[idx]])
             # input shape: (1, 1)
             # set internal states
             model.predict(x)
-        
+
         next_index = encoded[-1]
         for i in range(self.seq_len):
             x = np.array([[next_index]])
@@ -265,10 +265,10 @@ class CharRNNWorkspace(Workspace):
             next_index = self._sample_from_probs(probs.squeeze(), top_n)
             # append to sequence
             generated += self.id2char[next_index]
-        
+
         # logger.info("generated text: \n%s\n", generated)
         return generated
-    
+
     def _batch_generator(self, sequence: np.ndarray, batch_size=64, seq_len=64, one_hot_features=False,
                          one_hot_labels=False):
         """
@@ -283,17 +283,17 @@ class CharRNNWorkspace(Workspace):
         # logger.info("number of batches: %s.", num_batches)
         rounded_len = num_batches * batch_size * seq_len
         # logger.info("effective text length: %s.", rounded_len)
-        
+
         x = np.reshape(sequence[: rounded_len], [batch_size, num_batches * seq_len])
         if one_hot_features:
             x = self._one_hot_encode(x, self.vocab_size)
         # logger.info("x shape: %s.", x.shape)
-        
+
         y = np.reshape(sequence[1: rounded_len + 1], [batch_size, num_batches * seq_len])
         if one_hot_labels:
             y = self._one_hot_encode(y, self.vocab_size)
         # logger.info("y shape: %s.", y.shape)
-        
+
         while True:
             # roll so that no need to reset rnn states over epochs
             x_epoch = np.split(np.roll(x, -self.epoch, axis=0), num_batches, axis=1)
@@ -301,13 +301,13 @@ class CharRNNWorkspace(Workspace):
             for batch in range(num_batches):
                 yield x_epoch[batch], y_epoch[batch]
             self.epoch += 1
-    
+
     def train(self):
         epochs = self.seq_len * 2 - self.epoch
-        
+
         # make and clear checkpoint directory
         log_dir = tempfile.mkdtemp()
-        
+
         # logger.info("model saved: %s.", args.checkpoint_path)
         # callbacks
         checkpoint_path = tempfile.mktemp()
@@ -316,9 +316,9 @@ class CharRNNWorkspace(Workspace):
             TensorBoard(log_dir, write_graph=True),
             LoggerCallback(self)
         ]
-        
+
         save_model(self.model, checkpoint_path)
-        
+
         # training start
         num_training_batches = (len(self.training) - 1) // (self.batch_size * self.seq_len)
         num_validation_batches = (len(self.validation) - 1) // (self.batch_size * self.seq_len)
@@ -336,10 +336,10 @@ class CharRNNWorkspace(Workspace):
             # resume with the last known good state
             self.model = load_model(checkpoint_path)
             raise ex
-    
+
     def get_inference_model(self) -> Model:
         return self.inference_model
-    
+
     @staticmethod
     def _make_dirs(path, empty=False):
         """
@@ -347,15 +347,15 @@ class CharRNNWorkspace(Workspace):
         """
         dir_path = os.path.dirname(path)
         os.makedirs(dir_path, exist_ok=True)
-        
+
         if empty:
             files = [os.path.join(dir_path, item) for item in os.listdir(dir_path)]
             for item in files:
                 if os.path.isfile(item):
                     os.remove(item)
-        
+
         return dir_path
-    
+
     @staticmethod
     def _sample_from_probs(probs, top_n=10):
         """
@@ -369,7 +369,7 @@ class CharRNNWorkspace(Workspace):
         probs /= np.sum(probs)
         sampled_index = np.random.choice(len(probs), p=probs)
         return sampled_index
-    
+
     def generate_seed(self) -> np.ndarray:
         """
         create a valid, balanced card prefix
@@ -386,7 +386,7 @@ class CharRNNWorkspace(Workspace):
         return self._encode_text(
             mana_cost * CharRNNWorkspace.MANA_COST_COUNT_CHAR + attack * CharRNNWorkspace.ATTACK_COUNT_CHAR + health \
             * CharRNNWorkspace.HEALTH_COUNT_CHAR + CharRNNWorkspace.START_NAME_CHAR)
-    
+
     @staticmethod
     def _make_keras_picklable():
         def __getstate__(self):
@@ -396,14 +396,14 @@ class CharRNNWorkspace(Workspace):
                 model_str = fd.read()
             d = {'model_str': model_str}
             return d
-        
+
         def __setstate__(self, state):
             with tempfile.NamedTemporaryFile(suffix='.hdf5', delete=True) as fd:
                 fd.write(state['model_str'])
                 fd.flush()
                 model = load_model(fd.name)
             self.__dict__ = model.__dict__
-        
+
         cls = Model
         cls.__getstate__ = __getstate__
         cls.__setstate__ = __setstate__
@@ -412,7 +412,8 @@ class CharRNNWorkspace(Workspace):
 CharRNNWorkspace._make_keras_picklable()
 
 if __name__ == '__main__':
-    path = 'docs/charrnnn_checkpoint.bin'
+    path = 'charrnnn_checkpoint.bin'
+
     if os.path.exists(path):
         workspace = pickle.load(open(path, 'rb'))  # type: CharRNNWorkspace
         print('Loaded progress (%d epochs) from path %s' % (workspace.epoch, path))
