@@ -7,7 +7,7 @@
   "heroClass": "ANY",
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Magnetic, RUSH",
+  "description": "Magnetic, Rush",
   "attributes": {
     "MAGNETIC": true,
     "RUSH": true
