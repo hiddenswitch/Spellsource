@@ -413,7 +413,7 @@ class CharRNNWorkspace(Workspace):
             health = 0
         return self._encode_text(
             mana_cost * CharRNNWorkspace.MANA_COST_COUNT_CHAR + attack * CharRNNWorkspace.ATTACK_COUNT_CHAR + health \
-            * CharRNNWorkspace.HEALTH_COUNT_CHAR)
+            * CharRNNWorkspace.HEALTH_COUNT_CHAR + CharRNNWorkspace.START_SEQ_CHAR)
 
     @staticmethod
     def _make_keras_picklable():
