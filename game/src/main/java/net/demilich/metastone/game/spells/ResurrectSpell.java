@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -52,10 +53,10 @@ public class ResurrectSpell extends Spell {
 			final Minion summonedMinion;
 			Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE); //allow functionality to resurrect cards with certain attributes they died with
 			if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
-				if (attribute == Attribute.MAGNETIC) { //special coding to remagnetize the mechs for Kangor's Endless Army
+				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
 					summonedMinion = card.summon();
-					context.getLogic().removeAttribute(summonedMinion, Attribute.MAGNETIC);
-					List<String> magnets = (List<String>) resurrectedMinion.getAttribute(Attribute.MAGNETIC);
+					context.getLogic().removeAttribute(summonedMinion, Attribute.MAGNETS);
+					String[] magnets = (String[])resurrectedMinion.getAttribute(Attribute.MAGNETS);
 					for (String magnet : magnets) {
 						Card magnetCard = context.getCardById(magnet);
 						context.getLogic().magnetize(player.getId(), magnetCard, summonedMinion);

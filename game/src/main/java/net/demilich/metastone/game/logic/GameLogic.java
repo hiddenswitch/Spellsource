@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -3494,7 +3495,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		targetMinion.modifyHpBonus(card.getHp());
 		List<Attribute> badAttributes = Arrays.asList(Attribute.HP, Attribute.BASE_HP, Attribute.BASE_ATTACK, Attribute.HP_BONUS,
 				Attribute.ATTACK, Attribute.ATTACK_BONUS, Attribute.RACE, Attribute.BASE_MANA_COST, Attribute.DEATHRATTLES,
-				Attribute.MAGNETIC, Attribute.ECHO, Attribute.AURA_ECHO, Attribute.PLAYED_FROM_HAND_OR_DECK, Attribute.CARD_ID);
+				Attribute.MAGNETIC, Attribute.MAGNETS, Attribute.ECHO, Attribute.AURA_ECHO, Attribute.PLAYED_FROM_HAND_OR_DECK, Attribute.CARD_ID);
 		for (Attribute attribute : card.getDesc().getAttributes().keySet()) {
 			if (!badAttributes.contains(attribute)) {
 				targetMinion.setAttribute(attribute, card.getAttribute(attribute));
@@ -3507,13 +3508,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		List<String> magnets = new ArrayList<>();
-		if (targetMinion.hasAttribute(Attribute.MAGNETIC)) {
-			magnets = (List<String>) targetMinion.getAttribute(Attribute.MAGNETIC);
+		if (targetMinion.hasAttribute(Attribute.MAGNETS)) {
+			magnets.addAll(Arrays.asList((String[]) targetMinion.getAttribute(Attribute.MAGNETS)));
 		}
 		card.applyText(targetMinion);
 		targetMinion.setRace(originalRace);
 		magnets.add(card.getCardId());
-		targetMinion.setAttribute(Attribute.MAGNETIC, magnets);
+		targetMinion.setAttribute(Attribute.MAGNETS, magnets.toArray(new String[0]));
 
 		context.fireGameEvent(new BoardChangedEvent(context));
 		return true;

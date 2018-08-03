@@ -852,6 +852,10 @@ public enum Attribute {
 	 * Indicates the minion should magnetize when being played left of a mech instead of summoning normally
 	 */
 	MAGNETIC,
+	/**
+	 * An array of card IDs that correspond to which cards this card was magnetized from
+	 */
+	MAGNETS,
 	/*
 	 * The position in a player's hand that a card was played from
 	 */
