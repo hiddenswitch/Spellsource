@@ -262,7 +262,7 @@ public class DiscoverSpell extends Spell {
 		if (hasFilter) {
 			filteredCards = desc.getFilteredCards(context, player, source);
 		} else {
-			filteredCards = CardCatalogue.query(context.getDeckFormat());
+			filteredCards = new CardArrayList();
 		}
 
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);

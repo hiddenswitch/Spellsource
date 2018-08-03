@@ -24,7 +24,7 @@ import java.util.List;
 public class CatalogueTests {
 
 	private static String getCurrentCards() {
-		String testedUrl = "https://api.hearthstonejson.com/v1/25252/enUS/cards.json";
+		String testedUrl = "https://api.hearthstonejson.com/v1/25770/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
 		if (overrideUrl != null && !overrideUrl.equals("")) {
 			testedUrl = overrideUrl;
@@ -69,10 +69,16 @@ public class CatalogueTests {
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
-		final Card card = CardCatalogue.getCardByName(cardObject.getString("name"));
+		Card card;
+		try {
+			card = CardCatalogue.getCardByName(cardObject.getString("name"));
+		} catch (NullPointerException ex) {
+			Assert.fail(String.format("Could not find card with name %s", cardObject.getString("name")));
+			return;
+		}
 		String name = cardObject.getString("name");
 		Assert.assertEquals(card.getBaseManaCost(), (int) cardObject.getInteger("cost", -1), "Wrong cost for " + name);
-		Assert.assertTrue(card.isCollectible());
+		Assert.assertTrue(card.isCollectible(), String.format("%s should be collectible", card.getName()));
 		if (card.getCardType() == CardType.MINION) {
 			Assert.assertEquals(card.getBaseAttack(), (int) cardObject.getInteger("attack", -1), "Wrong attack for " + name);
 			Assert.assertEquals(card.getBaseHp(), (int) cardObject.getInteger("health", -1), "Wrong health for " + name);
