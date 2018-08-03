@@ -1,6 +1,8 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableAction2;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
@@ -18,6 +20,7 @@ import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.List;
 import java.util.Map;
+import java.util.function.BiConsumer;
 
 /**
  * Copies a {@code target} card. Includes card cost modifiers that are hosted by the card (typically ones that target
@@ -57,7 +60,7 @@ public class CopyCardSpell extends Spell {
 		if (target != null) {
 			Card targetCard = target.getSourceCard();
 			for (int i = 0; i < numberOfCardsToCopy; i++) {
-				final Card clone = copyAndReceiveCard(context, player, targetCard);
+				final Card clone = copyCard(context, player, targetCard, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
 				final SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, clone);
 			}
@@ -93,7 +96,7 @@ public class CopyCardSpell extends Spell {
 			}
 			Card random = context.getLogic().getRandom(sourceCollection);
 			peek(random, context, player);
-			Card output = copyAndReceiveCard(context, player, random);
+			Card output = copyCard(context, player, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
 			for (SpellDesc subSpell : subSpells) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
 			}
@@ -101,9 +104,9 @@ public class CopyCardSpell extends Spell {
 	}
 
 	@Suspendable
-	private static Card copyAndReceiveCard(GameContext context, Player player, Card inCard) {
+	public static Card copyCard(GameContext context, Player player, Card inCard, BiConsumer<Integer, Card> handler) {
 		Card clone = inCard.getCopy();
-		context.getLogic().receiveCard(player.getId(), clone);
+		handler.accept(player.getId(), clone);
 		// Add copies of the card cost modifiers that are associated with this card here
 		// TODO: What about Val'anyr buffed cards?
 		context.getTriggersAssociatedWith(inCard.getReference())

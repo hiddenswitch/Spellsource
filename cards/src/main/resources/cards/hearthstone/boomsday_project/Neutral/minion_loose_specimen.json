@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 6,
-  "rarity": "RARE",
+  "rarity": "EPIC",
   "race": "BEAST",
   "description": "Battlecry: Deal 6 damage randomly split between other friendly minions.",
   "battlecry": {

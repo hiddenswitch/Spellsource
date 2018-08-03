@@ -27,19 +27,21 @@ public class CopyEnchantmentsSpell extends Spell {
 
 	@Override
 	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity host, Entity originalTarget) {
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity host, Entity target) {
 		List<Entity> copyFrom = context.resolveTarget(player, host, desc.getSecondaryTarget());
-		Actor target = (Actor) originalTarget;
 
 		for (Entity originSource : copyFrom) {
-			Actor source = (Actor) originSource;
-			// Copy deathrattle
-			for (SpellDesc deathrattle : source.getDeathrattles()) {
-				target.addDeathrattle(deathrattle.clone());
+			if (originSource instanceof Actor) {
+				Actor source = (Actor) originSource;
+				Actor actorTarget = (Actor) target;
+				// Copy deathrattle
+				for (SpellDesc deathrattle : source.getDeathrattles()) {
+					actorTarget.addDeathrattle(deathrattle.clone());
+				}
 			}
 
 			// Copy enchantments
-			List<Trigger> triggers = context.getTriggersAssociatedWith(source.getReference());
+			List<Trigger> triggers = context.getTriggersAssociatedWith(originSource.getReference());
 			for (Trigger trigger : triggers) {
 				Trigger cloned = trigger.clone();
 				cloned.setHost(target);
@@ -49,7 +51,7 @@ public class CopyEnchantmentsSpell extends Spell {
 
 			// Copy attributes that aren't present on the card's text (?)
 			for (Attribute attr : new Attribute[]{Attribute.ATTACK_BONUS, Attribute.HP_BONUS}) {
-				target.setAttribute(attr, source.getAttributeValue(attr));
+				target.setAttribute(attr, originSource.getAttributeValue(attr));
 			}
 		}
 	}

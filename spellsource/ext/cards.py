@@ -18,6 +18,7 @@ CLASS_MAPPING = {
     'WARLOCK': 'VIOLET',
     'WARRIOR': 'RED',
     'DEATHKNIGHT': 'SPIRIT',
+    'WHIZBANG': 'ANY',
     'NEUTRAL': 'ANY',
     'DREAM': 'ANY'
 }

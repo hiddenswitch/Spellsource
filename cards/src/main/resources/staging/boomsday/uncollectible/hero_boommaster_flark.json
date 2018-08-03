@@ -1,0 +1,12 @@
+{
+  "name": "Boommaster Flark",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

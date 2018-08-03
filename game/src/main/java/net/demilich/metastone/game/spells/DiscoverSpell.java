@@ -259,10 +259,14 @@ public class DiscoverSpell extends Spell {
 		List<Card> specificCards = Arrays.asList(SpellUtils.getCards(context, desc));
 		boolean hasFilter = desc.containsKey(SpellArg.CARD_FILTER) || desc.containsKey(SpellArg.CARD_SOURCE);
 		CardList filteredCards;
+		CardSource cardSource = desc.getCardSource();
 		if (hasFilter) {
 			filteredCards = desc.getFilteredCards(context, player, source);
-		} else {
+		} else if (specificCards.size() != 0) {
 			filteredCards = new CardArrayList();
+		} else {
+			cardSource = CatalogueSource.create();
+			filteredCards = cardSource.getCards(context, source, player);
 		}
 
 		int count = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
@@ -272,7 +276,6 @@ public class DiscoverSpell extends Spell {
 		// cards originating in a cards variable and will throw an exception in that situation.
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 
-		CardSource cardSource = desc.getCardSource();
 		if (exclusive
 				&& cardSource != null
 				&& (cardSource instanceof HasCardCreationSideEffects)) {
@@ -299,8 +302,7 @@ public class DiscoverSpell extends Spell {
 
 		CardList choices = new CardArrayList();
 		// Apply the weights
-		final boolean isWeighted = (cardSource != null
-				&& cardSource instanceof HasWeights)
+		final boolean isWeighted = (cardSource instanceof HasWeights)
 				|| (specificCards.size() == 0 && cardSource == null && hasFilter);
 
 		// Compute weights if weighting is implied

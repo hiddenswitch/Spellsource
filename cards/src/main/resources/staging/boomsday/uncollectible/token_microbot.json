@@ -1,0 +1,15 @@
+{
+  "name": "Microbot",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

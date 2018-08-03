@@ -1,0 +1,20 @@
+{
+  "name": "Galvanized Golem",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Your 1-Attack minions cost (1) less.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

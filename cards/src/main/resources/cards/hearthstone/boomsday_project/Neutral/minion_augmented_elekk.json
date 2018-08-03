@@ -1,42 +1,42 @@
 {
-	"name": "Augmented Elekk",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 3,
-	"baseHp": 4,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"race": "BEAST",
-	"description": "Whenever you shuffle a card into a deck, shuffle in an extra copy.",
-	"triggers": [
+  "name": "Augmented Elekk",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Whenever you shuffle a card into a deck, shuffle in an extra copy.",
+  "triggers": [
     {
-			"eventTrigger": {
-				"class": "CardShuffledTrigger",
-				"sourcePlayer": "SELF",
+      "eventTrigger": {
+        "class": "CardShuffledTrigger",
+        "sourcePlayer": "SELF",
         "targetPlayer": "SELF"
-			},
-			"spell": {
-				"class": "ShuffleToDeckSpell",
+      },
+      "spell": {
+        "class": "ShuffleToDeckSpell",
         "targetPlayer": "SELF",
         "target": "EVENT_TARGET",
         "exclusive": true
-			}
-		},
+      }
+    },
     {
-			"eventTrigger": {
-				"class": "CardShuffledTrigger",
-				"sourcePlayer": "SELF",
+      "eventTrigger": {
+        "class": "CardShuffledTrigger",
+        "sourcePlayer": "SELF",
         "targetPlayer": "OPPONENT"
-			},
-			"spell": {
-				"class": "ShuffleToDeckSpell",
+      },
+      "spell": {
+        "class": "ShuffleToDeckSpell",
         "targetPlayer": "OPPONENT",
         "target": "EVENT_TARGET",
         "exclusive": true
-			}
-		}
-	],
-	"collectible": true,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

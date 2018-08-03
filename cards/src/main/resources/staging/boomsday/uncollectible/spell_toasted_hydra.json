@@ -1,0 +1,17 @@
+{
+  "name": "Toasted Hydra",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Start Lethal Puzzle 3-6.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

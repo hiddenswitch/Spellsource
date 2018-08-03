@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
+  "race": "MECH",
   "description": "Battlecry: Gain Stealth until until your next turn.",
   "battlecry": {
     "targetSelection": "NONE",

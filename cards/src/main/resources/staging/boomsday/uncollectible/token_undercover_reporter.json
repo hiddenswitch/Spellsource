@@ -1,0 +1,22 @@
+{
+  "name": "Undercover Reporter",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "<b>Battlecry:</b> Choose a minion. Put two copies of it on top of your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

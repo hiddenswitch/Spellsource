@@ -1,0 +1,20 @@
+{
+  "name": "Turret Sentinel",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "[x]After your opponent plays\na minion, attack it.\n<b>Deathrattle:</b> Refresh ALL\nMana Crystals.",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

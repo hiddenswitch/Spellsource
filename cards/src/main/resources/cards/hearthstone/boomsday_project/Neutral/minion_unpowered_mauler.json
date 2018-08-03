@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
+  "race": "MECH",
   "description": "Can only attack if you cast a spell this turn.",
   "aura": {
     "class": "AttributeAura",

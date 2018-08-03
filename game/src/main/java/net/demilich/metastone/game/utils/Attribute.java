@@ -853,7 +853,7 @@ public enum Attribute {
 	 */
 	MAGNETIC,
 	/*
-	 * The position in a players hand that a card was played from
+	 * The position in a player's hand that a card was played from
 	 */
 	HAND_INDEX,
 	/*
