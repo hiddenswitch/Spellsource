@@ -87,6 +87,19 @@ public class TraceTests {
 	}
 
 	@Test
+	public void testFinleyShouldNotChangeHeroPowerToMinion() {
+		Trace noHeroPower = getTrace("noheropower");
+		GameContext context = noHeroPower.replayContext(false);
+	}
+
+
+	@Test
+	public void testShouldNotSummonEvilLaughter() {
+		Trace summoningEvilLaughter = getTrace("summoningevillaughter");
+		GameContext context = summoningEvilLaughter.replayContext(false);
+	}
+
+	@Test
 	@Ignore
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();

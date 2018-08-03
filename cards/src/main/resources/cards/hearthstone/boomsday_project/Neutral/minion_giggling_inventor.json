@@ -14,12 +14,12 @@
 			"spells": [
         {
 					"class": "SummonSpell",
-					"card": "minion_annoy_o_tron",
+					"card": "minion_annoy-o-tron",
 					"boardPositionRelative": "RIGHT"
 				}, 
         {
 					"class": "SummonSpell",
-					"card": "minion_annoy_o_tron",
+					"card": "minion_annoy-o-tron",
 					"boardPositionRelative": "LEFT"
 				}
 			]
