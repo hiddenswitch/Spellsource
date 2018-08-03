@@ -83,43 +83,45 @@ class Context(contextlib.AbstractContextManager):
         self.close()
     
     @staticmethod
-    def _find_jar_path(jar_file='net-1.3.0-all.jar'):
+    def find_resource_path(filename='net-1.3.0-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
         paths = []
-        paths.append(jar_file)
+        paths.append(filename)
         # local
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../net/build/libs/" + jar_file))
+            os.path.realpath(__file__)), "../net/build/libs/" + filename))
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../net/lib/" + jar_file))
+            os.path.realpath(__file__)), "../docs/" + filename))
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../share/spellsource/" + jar_file))
-        paths.append(os.path.join(sys.prefix, "share/spellsource/" + jar_file))
-        # pip install py4j # On Ubuntu 16.04, where virtualenvepath=/usr/local
+            os.path.realpath(__file__)), "../net/lib/" + filename))
+        paths.append(os.path.join(os.path.dirname(
+            os.path.realpath(__file__)), '../share/spellsource/' + filename))
+        paths.append(os.path.join(sys.prefix, 'share/spellsource/' + filename))
+        # pip install py4j # On Ubuntu 16.04, where virtualenvpath=/usr/local
         #   this file is here:
-        #     virtualenvpath/lib/pythonX/dist-packages/py4j/java_gateway.py
-        #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
+        #     virtualenvpath/lib/pythonX/dist-packages/spellsource/java_gateway.py
+        #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
         # pip install --user py4j # On Ubuntu 16.04, where virtualenvepath=~/.local
         #   this file is here:
-        #     virtualenvpath/lib/pythonX/site-packages/py4j/java_gateway.py
-        #   the jar file is here: virtualenvpath/share/py4j/py4j.jar
+        #     virtualenvpath/lib/pythonX/site-packages/spellsource/java_gateway.py
+        #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../../../../share/spellsource/" + jar_file))
+            os.path.realpath(__file__)), "../../../../share/spellsource/" + filename))
         
         for path in paths:
             if os.path.exists(path):
                 return path
-        return ""
+        raise FileNotFoundError()
     
     @staticmethod
     def _start_gateway() -> JavaGateway:
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         port = launch_gateway(port=0,
-                              classpath=Context._find_jar_path('net-1.3.0-all.jar'),
-                              javaopts=['-javaagent:' + Context._find_jar_path('quasar-core-0.7.9-jdk8.jar') + '=mb'],
+                              classpath=Context.find_resource_path('net-1.3.0-all.jar'),
+                              javaopts=['-javaagent:' + Context.find_resource_path('quasar-core-0.7.9-jdk8.jar') + '=mb'],
                               die_on_exit=True)
         
         # connect python side to Java side with Java dynamic port and start python
