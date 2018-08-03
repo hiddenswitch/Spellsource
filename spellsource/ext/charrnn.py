@@ -1,16 +1,17 @@
+import itertools
 import os
 import pickle
 import random
 import re
 import tempfile
-import numpy as np
-import itertools
-import pkg_resources
+from typing import List
 
-from keras.callbacks import ModelCheckpoint, TensorBoard
+import numpy as np
+from keras.callbacks import ModelCheckpoint
 from keras.layers import Dense, Dropout, Embedding, LSTM, TimeDistributed
 from keras.models import load_model, save_model, Sequential, Model
 from keras.optimizers import Adam
+
 from spellsource.context import Context
 from spellsource.ext.cards import iter_cards
 from spellsource.ext.loggercallback import LoggerCallback
@@ -18,6 +19,30 @@ from spellsource.ext.workspace import Workspace
 
 
 class CharRNNWorkspace(Workspace):
+    VALID_CARD_SETS = frozenset([
+        'BASIC',
+        'CLASSIC',
+        'REWARD',
+        'PROMO',
+        'NAXXRAMAS',
+        'GOBLINS_VS_GNOMES',
+        'BLACKROCK_MOUNTAIN',
+        'THE_GRAND_TOURNAMENT',
+        'LEAGUE_OF_EXPLORERS',
+        'THE_OLD_GODS',
+        'ONE_NIGHT_IN_KARAZHAN',
+        'MEAN_STREETS_OF_GADGETZAN',
+        'PROCEDURAL_PREVIEW',
+        'JOURNEY_TO_UNGORO',
+        'KNIGHTS_OF_THE_FROZEN_THRONE',
+        'KOBOLDS_AND_CATACOMBS',
+        'WITCHWOOD',
+        'HALL_OF_FAME',
+        'CUSTOM',
+        'BATTLE_FOR_ASHENVALE',
+        'SANDS_OF_TIME'
+    ])
+
     CUSTOM_CARDS_PATH = 'cards/src/main/resources/cards/custom'
     HEARTHSTONE_CARDS_PATH = 'cards/src/main/resources/cards/hearthstone'
     DESCRIPTION_CHARS = ' .,;/+-abcdefghijklmnopqrstuvwxyz'
@@ -28,7 +53,7 @@ class CharRNNWorkspace(Workspace):
     START_SEQ_CHAR = ']'
     END_SEQ_CHAR = '}'
     ZERO_CHAR = '0'
-    START_NAME_CHAR = '['
+    # START_NAME_CHAR = '['
     KEYWORD_CHARS = {
         r'deathrattle[.:\s]*': 'D',
         r'battlecry[.:\s]*': 'B',
@@ -78,29 +103,32 @@ class CharRNNWorkspace(Workspace):
     }
 
     VALID_CHARS = DESCRIPTION_CHARS + ATTACK_COUNT_CHAR + HEALTH_COUNT_CHAR + MANA_COST_COUNT_CHAR + NUMBER_COUNT_CHAR \
-                  + ''.join(KEYWORD_CHARS.values()) + START_SEQ_CHAR + END_SEQ_CHAR + START_NAME_CHAR
+                  + ''.join(KEYWORD_CHARS.values()) + START_SEQ_CHAR + END_SEQ_CHAR  # + START_NAME_CHAR
     PADDING_CHAR = '_'
 
-    def __init__(self):
+    def __init__(self, batch_size=32, max_epochs=None):
+        self.batch_size = batch_size
         self._create_dictionary()
         # Load text, convert it into a "sequence"
-        hearthcards = pickle.load(open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))
-        paths = [pkg_resources.resource_filename('spellsource', path) for path in
-                 (CharRNNWorkspace.CUSTOM_CARDS_PATH, CharRNNWorkspace.HEARTHSTONE_CARDS_PATH)]
-        spellsource = itertools.chain(*map(iter_cards, paths))
+        hearthcards = pickle.load(
+            open(Context.find_resource_path(filename='hearthcards.pkl'), 'rb'))  # type: List[dict]
+        spellsource = iter_cards(start_path=Context.find_resource_path('cards'))
 
         training_names = frozenset(card['cardname'].lower() for card in hearthcards)
         training = [CharRNNWorkspace._format_hearthcard(card) for card in hearthcards]
         # Remove cards that exist both in the validation set and training sets by comparing the names
         validation = [CharRNNWorkspace._format_card(**card) for card in spellsource if
-                      card['name'].lower() not in training_names]
-
+                      card['name'].lower() not in training_names and card['set'] in CharRNNWorkspace.VALID_CARD_SETS]
+        assert len(training) > 0
+        assert len(validation) > 0
         # validation = [card for card in spellsource if card['name'].strip().lower() not in training_names]
         self.seq_len = max(len(s) for s in itertools.chain(training, validation))
+        assert self.seq_len > 0
         self.training = self._prepare_data_set(training)
         self.validation = self._prepare_data_set(validation)
         self.epoch = 0
-        self.batch_size = 32
+        self.max_epochs = max_epochs or self.seq_len * 2
+        assert self.max_epochs > 0
         self.model = self._build_model(batch_size=self.batch_size, seq_len=self.seq_len, vocab_size=self.vocab_size)
         self.inference_model = CharRNNWorkspace._build_inference_model(self.model)
 
@@ -210,11 +238,12 @@ class CharRNNWorkspace(Workspace):
                         _without_newlines(
                             _without_tags(
                                 description.lower())), repl_char=CharRNNWorkspace.NUMBER_COUNT_CHAR)))
-        out_name = _without_llegals(_without_tags(_without_newlines(name.lower())))
+        # Omit name for now
+        # out_name = _without_llegals(_without_tags(_without_newlines(name.lower())))
         out_attack = CharRNNWorkspace.ATTACK_COUNT_CHAR * max(min(int(baseAttack), 12), 0)
         out_health = CharRNNWorkspace.HEALTH_COUNT_CHAR * max(min(int(baseHp), 12), 0)
         out_base_mana_cost = CharRNNWorkspace.MANA_COST_COUNT_CHAR * max(min(int(baseManaCost), 12), 0)
-        encoded = out_base_mana_cost + out_attack + out_health + CharRNNWorkspace.START_NAME_CHAR + out_name + \
+        encoded = out_base_mana_cost + out_attack + out_health + \
                   CharRNNWorkspace.START_SEQ_CHAR + out_description + CharRNNWorkspace.END_SEQ_CHAR
         return encoded
 
@@ -303,17 +332,13 @@ class CharRNNWorkspace(Workspace):
             self.epoch += 1
 
     def train(self):
-        epochs = self.seq_len * 2 - self.epoch
-
-        # make and clear checkpoint directory
-        log_dir = tempfile.mkdtemp()
+        epochs = self.max_epochs - self.epoch
 
         # logger.info("model saved: %s.", args.checkpoint_path)
         # callbacks
         checkpoint_path = tempfile.mktemp()
         callbacks = [
             ModelCheckpoint(checkpoint_path, verbose=1, save_best_only=False),
-            TensorBoard(log_dir, write_graph=True),
             LoggerCallback(self)
         ]
 
@@ -325,6 +350,7 @@ class CharRNNWorkspace(Workspace):
         self.model.reset_states()
         try:
             self.model.fit_generator(
+                initial_epoch=self.epoch,
                 generator=self._batch_generator(self.training, self.batch_size, self.seq_len, one_hot_labels=True),
                 steps_per_epoch=num_training_batches,
                 validation_data=self._batch_generator(self.validation, self.batch_size, self.seq_len,
@@ -332,10 +358,12 @@ class CharRNNWorkspace(Workspace):
                 validation_steps=num_validation_batches,
                 epochs=epochs,
                 callbacks=callbacks)
-        except KeyboardInterrupt as ex:
-            # resume with the last known good state
+        except KeyboardInterrupt as interrupted:
+            # Restore the last saved checkpoint here
             self.model = load_model(checkpoint_path)
-            raise ex
+            if self.epoch == 0:
+                print('This model has not finished a complete epoch, weights will be saved without configuration.')
+            raise interrupted
 
     def get_inference_model(self) -> Model:
         return self.inference_model
@@ -385,7 +413,7 @@ class CharRNNWorkspace(Workspace):
             health = 0
         return self._encode_text(
             mana_cost * CharRNNWorkspace.MANA_COST_COUNT_CHAR + attack * CharRNNWorkspace.ATTACK_COUNT_CHAR + health \
-            * CharRNNWorkspace.HEALTH_COUNT_CHAR + CharRNNWorkspace.START_NAME_CHAR)
+            * CharRNNWorkspace.HEALTH_COUNT_CHAR)
 
     @staticmethod
     def _make_keras_picklable():
@@ -415,14 +443,18 @@ if __name__ == '__main__':
     path = 'charrnnn_checkpoint.bin'
 
     if os.path.exists(path):
-        workspace = pickle.load(open(path, 'rb'))  # type: CharRNNWorkspace
-        print('Loaded progress (%d epochs) from path %s' % (workspace.epoch, path))
+        try:
+            workspace = pickle.load(open(path, 'rb'))  # type: CharRNNWorkspace
+            print('Loaded progress (%d epochs) from path %s' % (workspace.epoch, path))
+        except Exception as ex:
+            print('Failed to load workspace, creating a new one')
+            print(ex)
+            workspace = CharRNNWorkspace(batch_size=32, max_epochs=1000)
     else:
-        workspace = CharRNNWorkspace()
+        workspace = CharRNNWorkspace(batch_size=32, max_epochs=1000)
     try:
         workspace.train()
     except KeyboardInterrupt as ex:
         pickle.dump(workspace, open(path, 'wb'))
         print()
         print('Saved progress to path %s' % path)
-        raise ex

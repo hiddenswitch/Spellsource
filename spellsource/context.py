@@ -97,8 +97,8 @@ class Context(contextlib.AbstractContextManager):
         paths.append(os.path.join(os.path.dirname(
             os.path.realpath(__file__)), "../net/lib/" + filename))
         paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../share/spellsource/" + filename))
-        paths.append(os.path.join(sys.prefix, "share/spellsource/" + filename))
+            os.path.realpath(__file__)), '../share/spellsource/' + filename))
+        paths.append(os.path.join(sys.prefix, 'share/spellsource/' + filename))
         # pip install py4j # On Ubuntu 16.04, where virtualenvpath=/usr/local
         #   this file is here:
         #     virtualenvpath/lib/pythonX/dist-packages/spellsource/java_gateway.py
@@ -113,7 +113,7 @@ class Context(contextlib.AbstractContextManager):
         for path in paths:
             if os.path.exists(path):
                 return path
-        return ""
+        raise FileNotFoundError()
     
     @staticmethod
     def _start_gateway() -> JavaGateway:
