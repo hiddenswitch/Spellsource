@@ -6,8 +6,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
 
 /**
  * An action representing the playing of a minion card.
@@ -52,7 +54,12 @@ public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry
 		}
 		Player player = context.getPlayer(playerId);
 		int index = player.getMinions().indexOf(nextTo);
-		context.getLogic().summon(playerId, minion, card, index, true);
+		if (card.hasAttribute(Attribute.MAGNETIC) && nextTo instanceof Minion && nextTo.getRace().hasRace(Race.MECH)) {
+			context.getLogic().magnetize(playerId, card, (Minion) nextTo);
+		} else {
+			minion.getAttributes().remove(Attribute.MAGNETIC);
+			context.getLogic().summon(playerId, minion, card, index, true);
+		}
 	}
 
 	@Override

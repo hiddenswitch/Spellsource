@@ -36,6 +36,7 @@ import static java.util.stream.Collectors.summarizingInt;
 import static java.util.stream.Collectors.toList;
 import static org.mockito.Mockito.*;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class KnightsOfTheFrozenThroneTests extends TestBase {
 
@@ -969,5 +970,33 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 			return null;
 		}).collect(toList());
+	}
+
+
+	@Test
+	public void testUtherOfTheEbonBlade() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_uther_of_the_ebon_blade");
+			//doombubbles here, reworking the hero power based on a trigger rather than use, so playing all these guys from hand should win the game
+			playCard(context, player, "token_deathlord_nazgrim");
+			playCard(context, player, "token_darion_mograine");
+			playCard(context, player, "token_inquisitor_whitemane");
+			playCard(context, player, "token_thoras_trollbane");
+			assertTrue(opponent.getHero().isDestroyed(), "yay");
+		});
+	}
+
+	@Test
+	public void testFrostlichJainaRestOfGame() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_frost_lich_jaina");
+			playCard(context, player, "hero_scourgelord_garrosh");
+			playCard(context, player, "minion_water_elemental");
+			for (Minion minion : player.getMinions()) {
+				assertTrue(minion.hasAttribute(Attribute.LIFESTEAL) || minion.hasAttribute(Attribute.AURA_LIFESTEAL),
+						"These guys should have lifesteal even after we're not Jaina anymore");
+			}
+		});
+
 	}
 }

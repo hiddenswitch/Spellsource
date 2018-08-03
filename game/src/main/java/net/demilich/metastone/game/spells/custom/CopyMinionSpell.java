@@ -69,7 +69,8 @@ public class CopyMinionSpell extends Spell {
 		clone.getAttributes().remove(Attribute.AURA_TAUNT);
 		clone.clearEnchantments();
 
-		Minion sourceActor = (Minion) context.resolveSingleTarget(context.getSummonReferenceStack().peek());
+		//Minion sourceActor = (Minion) context.resolveSingleTarget(context.getSummonReferenceStack().peek());
+		Minion sourceActor = (Minion) source;
 		SpellDesc transformSpell = TransformMinionSpell.create(clone);
 		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
 			SpellUtils.castChildSpell(context, player, transformSpell, source, sourceActor);

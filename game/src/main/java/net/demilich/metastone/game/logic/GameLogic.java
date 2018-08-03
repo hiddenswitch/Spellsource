@@ -38,6 +38,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -322,7 +323,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param baseValue The value to multiply.
 	 * @param attribute The attribute to look up in all entities.
 	 * @return The newly calculate spell or healing value.
-	 * @see Attribute#HEAL_AMPLIFY_MULTIPLIER for the healing amplification attribute.
+	 * @see Attribute#SPELL_HEAL_AMPLIFY_MULTIPLIER for the healing amplification attribute.
 	 * @see Attribute#SPELL_AMPLIFY_MULTIPLIER for the spell damage amplification attribute.
 	 */
 	@Suspendable
@@ -1136,7 +1137,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			removeAttribute(minion, Attribute.DIVINE_SHIELD);
-			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, player.getId(), source.getId()));
+			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, minion.getOwner(), source.getId()));
 			return 0;
 		}
 		if (minion.hasAttribute(Attribute.DEFLECT)
@@ -1941,7 +1942,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param healing                   The amount of healing.
 	 * @param source                    The {@link Entity}, typically a {@link Card} or {@link Minion} with battlecry,
 	 *                                  that is the source of the healing.
-	 * @param applyHealingAmplification Whether or not to compute the effects of {@link Attribute#HEAL_AMPLIFY_MULTIPLIER}
+	 * @param applyHealingAmplification Whether or not to compute the effects of {@link Attribute#SPELL_HEAL_AMPLIFY_MULTIPLIER}
 	 *                                  on this card.
 	 * @see Attribute#ENRAGED for more about enrage.
 	 */
@@ -1952,11 +1953,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
+		if (applyHealingAmplification) {
+			healing = applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+		}
+
 		if (source instanceof Card) {
 			Card sourceCard = (Card) source;
-			if (sourceCard.isSpell()
-					|| sourceCard.isHeroPower()) {
-				healing = applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+			if (sourceCard.isSpell()) {
+				healing = applyAmplify(player, healing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			}
 			if (sourceCard.isHeroPower()) {
 				healing = applyAmplify(player, healing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
@@ -2502,11 +2506,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		player.getStatistics().cardPlayed(card, context.getTurn());
 		card.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
+		card.setAttribute(Attribute.HAND_INDEX, card.getEntityLocation().getIndex());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
+			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
+				context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
+			}
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 		}
 
@@ -2528,6 +2536,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
+			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
+				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
+				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
+			}
 			player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 			// Implements Snowfury Giant
 			player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
@@ -3210,11 +3222,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card   The card to shuffle into that player's deck.
 	 */
 	@Suspendable
-	public void shuffleToDeck(Player player, Card card) {
+	public void shuffleToDeck(Player player, Card card, boolean quiet) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
-
+		int originalOwner = card.getOwner();
 		if (card.getOwner() == IdFactory.UNASSIGNED) {
 			card.setOwner(player.getId());
 		}
@@ -3231,7 +3243,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
+
+			if (!quiet) {
+				if (originalOwner == UNASSIGNED) {
+					originalOwner = player.getId();
+				}
+				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
+			}
 		}
+	}
+
+	public void shuffleToDeck(Player player, Card card) {
+		shuffleToDeck(player, card, false);
 	}
 
 	@Suspendable
@@ -3382,12 +3405,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public boolean summon(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry) {
 		Player player = context.getPlayer(playerId);
+
 		if (!canSummonMoreMinions(player)) {
 			return false;
 		}
 		minion.setId(generateId());
 		minion.setOwner(player.getId());
-
 		context.getSummonReferenceStack().push(minion.getReference());
 
 		try {
@@ -3458,6 +3481,43 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.getSummonReferenceStack().pop();
 		}
 
+	}
+
+
+	@SuppressWarnings("unchecked")
+	@Suspendable
+	public boolean magnetize(int playerId, Card card, Minion targetMinion) {
+		Player player = context.getPlayer(playerId);
+		if (!canSummonMoreMinions(player)) {
+			return false;
+		}
+		targetMinion.modifyAttribute(Attribute.ATTACK_BONUS, card.getAttack());
+		targetMinion.modifyHpBonus(card.getHp());
+		List<Attribute> badAttributes = Arrays.asList(Attribute.HP, Attribute.BASE_HP, Attribute.BASE_ATTACK, Attribute.HP_BONUS,
+				Attribute.ATTACK, Attribute.ATTACK_BONUS, Attribute.RACE, Attribute.BASE_MANA_COST, Attribute.DEATHRATTLES,
+				Attribute.MAGNETIC, Attribute.MAGNETS, Attribute.ECHO, Attribute.AURA_ECHO, Attribute.PLAYED_FROM_HAND_OR_DECK, Attribute.CARD_ID);
+		for (Attribute attribute : card.getDesc().getAttributes().keySet()) {
+			if (!badAttributes.contains(attribute)) {
+				targetMinion.setAttribute(attribute, card.getAttribute(attribute));
+			}
+		}
+
+		Race originalRace = targetMinion.getRace();
+		if (originalRace == null) {
+			originalRace = Race.NONE;
+		}
+
+		List<String> magnets = new ArrayList<>();
+		if (targetMinion.hasAttribute(Attribute.MAGNETS)) {
+			magnets.addAll(Arrays.asList((String[]) targetMinion.getAttribute(Attribute.MAGNETS)));
+		}
+		card.applyText(targetMinion);
+		targetMinion.setRace(originalRace);
+		magnets.add(card.getCardId());
+		targetMinion.setAttribute(Attribute.MAGNETS, magnets.toArray(new String[0]));
+
+		context.fireGameEvent(new BoardChangedEvent(context));
+		return true;
 	}
 
 	@Suspendable

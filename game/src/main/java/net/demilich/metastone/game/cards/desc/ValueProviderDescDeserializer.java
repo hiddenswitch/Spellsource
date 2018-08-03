@@ -37,6 +37,7 @@ public class ValueProviderDescDeserializer extends DescDeserializer<ValueProvide
 		ctx.add(ValueProviderArg.GAME_VALUE, ParseValueType.GAME_VALUE);
 		ctx.add(ValueProviderArg.VALUE1, ParseValueType.VALUE);
 		ctx.add(ValueProviderArg.VALUE2, ParseValueType.VALUE);
+		ctx.add(ValueProviderArg.EVALUATE_ONCE, ParseValueType.BOOLEAN);
 	}
 
 	@Override

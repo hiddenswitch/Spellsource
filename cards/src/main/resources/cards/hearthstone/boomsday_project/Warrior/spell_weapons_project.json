@@ -1,0 +1,32 @@
+{
+  "name": "Weapons Project",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "COMMON",
+  "description": "Each player equips a 2/3 Weapon and gains 6 Armor.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_gearblade",
+        "targetPlayer": "BOTH"
+      },
+      {
+        "class": "BuffHeroSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 6
+      },
+      {
+        "class": "BuffHeroSpell",
+        "target": "ENEMY_HERO",
+        "armorBonus": 6
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

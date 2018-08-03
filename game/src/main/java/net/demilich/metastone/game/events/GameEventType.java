@@ -44,5 +44,6 @@ public enum GameEventType {
 	MANA_MODIFIED,
 	FATIGUE,
 	AFTER_PLAY_CARD,
+	CARD_SHUFFLED,
 	INVOKED;
 }

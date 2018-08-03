@@ -1,0 +1,31 @@
+{
+  "name": "Omega Defender",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Taunt. Battlecry: If you have 10 Mana Crystals, gain +10 Attack.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ManaMaxedCondition"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 10
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

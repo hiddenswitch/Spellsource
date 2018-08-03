@@ -4,9 +4,11 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.OverloadEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class PlaySpellCardAction extends PlayCardAction {
 
@@ -28,6 +30,9 @@ public class PlaySpellCardAction extends PlayCardAction {
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
+		if (context.getLogic().hasAttribute(context.getPlayer(playerId), Attribute.SPELLS_CAST_TWICE)) {
+			context.getLogic().castSpell(playerId, spell, entityReference, getTargetReference(), getTargetRequirement(), false, this);
+		}
 		context.getLogic().castSpell(playerId, spell, entityReference, getTargetReference(), getTargetRequirement(), false, this);
 	}
 

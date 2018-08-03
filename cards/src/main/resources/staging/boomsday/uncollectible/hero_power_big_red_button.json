@@ -1,0 +1,17 @@
+{
+  "name": "Big Red Button",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "[x]<b>Hero Power</b>\nActivate this turn's\nMech Suit power!",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

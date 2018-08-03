@@ -23,7 +23,10 @@ public class TriggerDeathrattleSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Actor actor = (Actor) target;
-		context.getLogic().resolveDeathrattles(player, actor);
+		int value = (int) desc.getOrDefault(SpellArg.VALUE, 1);
+		for (int i = 0; i < value; i++) {
+			context.getLogic().resolveDeathrattles(player, actor);
+		}
 	}
 
 }

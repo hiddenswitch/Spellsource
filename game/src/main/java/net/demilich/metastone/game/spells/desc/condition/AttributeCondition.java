@@ -37,16 +37,16 @@ public class AttributeCondition extends Condition {
 			return entity.hasAttribute(attribute);
 		}
 
-		int targetValue = desc.getInt(ConditionArg.VALUE);
+		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, entity, source, 0);
 
 		int actualValue;
 		if (attribute == Attribute.ATTACK) {
 			if (entity instanceof Actor) {
-				actualValue = ((Actor)entity).getAttack();	
+				actualValue = ((Actor) entity).getAttack();
 			} else {
 				actualValue = entity.getAttributeValue(attribute);
 			}
-			
+
 		} else {
 			actualValue = entity.getAttributeValue(attribute);
 		}
