@@ -87,6 +87,7 @@ public class TraceTests {
 	}
 
 	@Test
+	@Ignore
 	public void testFinleyShouldNotChangeHeroPowerToMinion() {
 		Trace noHeroPower = getTrace("noheropower");
 		GameContext context = noHeroPower.replayContext(false);
@@ -94,6 +95,14 @@ public class TraceTests {
 
 
 	@Test
+	@Ignore
+	public void testSuccessfulMagnetize() {
+		Trace trace = getTrace("magnetize1");
+		GameContext context = trace.replayContext(false);
+	}
+
+	@Test
+	@Ignore
 	public void testShouldNotSummonEvilLaughter() {
 		Trace summoningEvilLaughter = getTrace("summoningevillaughter");
 		GameContext context = summoningEvilLaughter.replayContext(false);

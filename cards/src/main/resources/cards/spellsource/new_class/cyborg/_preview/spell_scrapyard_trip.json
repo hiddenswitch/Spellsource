@@ -10,8 +10,7 @@
     "class": "SummonSpell",
     "cards": [
       "token_steel_reel",
-      "token_wally",
-      "token_CO"
+      "token_wally"
     ],
     "randomTarget": "true"
   },

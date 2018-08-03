@@ -9,7 +9,7 @@
   "spell": {
     "class": "ResurrectSpell",
     "value": 3,
-    "attribute": "MAGNETIC",
+    "attribute": "MAGNETS",
     "cardFilter": {
       "class": "CardFilter",
       "race": "MECH"
