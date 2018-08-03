@@ -426,6 +426,7 @@ public class TestBase {
 				CardSet.THE_OLD_GODS,
 				CardSet.KOBOLDS_AND_CATACOMBS,
 				CardSet.WITCHWOOD,
+				CardSet.BOOMSDAY_PROJECT,
 				CardSet.CUSTOM
 		);
 
