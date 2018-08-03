@@ -23,36 +23,36 @@
         {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",
-          "attribute": "RESERVED_INTEGER_2",
-          "value": 1
+          "value": 1,
+          "attribute": "RESERVED_INTEGER_2"
         },
         {
           "class": "ConditionalSpell",
-          "spell": {
-            "class": "custom.SwapMinionWithDeckSpell",
-            "target": "SELF"
-          },
           "condition": {
             "class": "AttributeCondition",
             "target": "FRIENDLY_PLAYER",
-            "attribute": "RESERVED_INTEGER_2",
             "value": 30,
+            "attribute": "RESERVED_INTEGER_2",
             "operation": "LESS_OR_EQUAL"
+          },
+          "spell": {
+            "class": "custom.SwapMinionWithDeckSpell",
+            "target": "SELF"
           }
         },
         {
           "class": "ConditionalSpell",
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "FRIENDLY_PLAYER",
+            "value": 31,
+            "attribute": "RESERVED_INTEGER_2",
+            "operation": "EQUAL"
+          },
           "spell": {
             "class": "RemoveAttributeSpell",
             "target": "FRIENDLY_PLAYER",
             "attribute": "RESERVED_INTEGER_2"
-          },
-          "condition": {
-            "class": "AttributeCondition",
-            "target": "FRIENDLY_PLAYER",
-            "attribute": "RESERVED_INTEGER_2",
-            "value": 31,
-            "operation": "EQUAL"
           }
         }
       ]

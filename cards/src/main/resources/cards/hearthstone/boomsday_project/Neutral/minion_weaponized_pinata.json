@@ -1,10 +1,10 @@
 {
-  "name": "Weaponized Piñata",
+  "name": "Weaponized Pi\u00f1ata",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "race": "MECH",
   "description": "Deathrattle: Add a random Legendary minion to your hand.",
@@ -12,8 +12,8 @@
     "class": "ReceiveCardSpell",
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "rarity": "LEGENDARY"
+      "rarity": "LEGENDARY",
+      "cardType": "MINION"
     }
   },
   "attributes": {

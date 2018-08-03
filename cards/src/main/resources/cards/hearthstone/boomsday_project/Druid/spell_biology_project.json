@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ModifyMaxManaSpell",
-		"fullManaCrystals": true,
-		"value": 2,
+    "value": 2,
+    "fullManaCrystals": true,
     "targetPlayer": "BOTH"
   },
   "collectible": true,

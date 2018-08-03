@@ -8,13 +8,13 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "RecastWhileSpell",
+    "condition": {
+      "class": "DeckContainsCondition"
+    },
     "spell": {
       "class": "DrawCardSpell"
     },
-    "howMany": 60,
-    "condition": {
-      "class": "DeckContainsCondition"
-    }
+    "howMany": 60
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

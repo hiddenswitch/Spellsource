@@ -11,17 +11,17 @@
     "value": 1,
     "spell": {
       "class": "ConditionalSpell",
-      "spell": {
-        "class": "CopyCardSpell",
-        "target": "OUTPUT",
-        "value": 1
-      },
       "condition": {
         "class": "PlayedLastTurnCondition",
         "filter": {
           "class": "CardFilter",
           "race": "ELEMENTAL"
         }
+      },
+      "spell": {
+        "class": "CopyCardSpell",
+        "target": "OUTPUT",
+        "value": 1
       }
     }
   },

@@ -2,9 +2,9 @@
   "name": "Myra Rotspring",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "BLACK",
   "baseAttack": 4,
   "baseHp": 2,
-  "heroClass": "BLACK",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Discover a Deathrattle minion. Also gain its Deathrattle",
   "battlecry": {
@@ -13,17 +13,17 @@
       "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
-        "targetPlayer": "SELF",
         "spell": {
           "class": "CopyDeathrattleSpell",
           "target": "OUTPUT"
-        }
+        },
+        "targetPlayer": "SELF"
       },
       "cardFilter": {
         "class": "CardFilter",
         "attribute": "DEATHRATTLES",
-        "operation": "HAS",
-        "cardType": "MINION"
+        "cardType": "MINION",
+        "operation": "HAS"
       }
     }
   },

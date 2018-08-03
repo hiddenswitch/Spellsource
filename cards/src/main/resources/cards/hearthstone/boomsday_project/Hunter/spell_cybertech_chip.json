@@ -7,16 +7,16 @@
   "description": "Give your minions Deathrattle: Add a random mech to your hand",
   "targetSelection": "NONE",
   "spell": {
-		"class": "AddDeathrattleSpell",
-		"target": "FRIENDLY_MINIONS",
-		"spell": {
-			"class": "ReceiveCardSpell",
-			"cardFilter": {
-				"class": "RaceFilter",
-				"race": "MECH"
-			}
-		}
-	},
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      }
+    }
+  },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",
   "fileFormatVersion": 1

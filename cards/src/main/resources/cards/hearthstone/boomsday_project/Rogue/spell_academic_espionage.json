@@ -9,10 +9,6 @@
   "spell": {
     "class": "ShuffleToDeckSpell",
     "value": 10,
-    "cardFilter": {
-      "class": "CardFilter",
-      "heroClass": "OPPONENT"
-    },
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "OUTPUT",
@@ -22,6 +18,10 @@
         "value": 1,
         "operation": "SET"
       }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "heroClass": "OPPONENT"
     }
   },
   "collectible": true,

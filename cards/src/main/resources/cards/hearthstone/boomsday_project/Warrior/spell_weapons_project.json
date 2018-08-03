@@ -11,8 +11,8 @@
     "spells": [
       {
         "class": "EquipWeaponSpell",
-        "targetPlayer": "BOTH",
-        "card": "weapon_gearblade"
+        "card": "weapon_gearblade",
+        "targetPlayer": "BOTH"
       },
       {
         "class": "BuffHeroSpell",

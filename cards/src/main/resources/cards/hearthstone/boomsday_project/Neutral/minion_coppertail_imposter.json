@@ -12,12 +12,12 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
+      "target": "SELF",
       "attribute": "STEALTH",
       "revertTrigger": {
         "class": "TurnStartTrigger",
         "targetPlayer": "SELF"
-      },
-      "target": "SELF"
+      }
     }
   },
   "attributes": {

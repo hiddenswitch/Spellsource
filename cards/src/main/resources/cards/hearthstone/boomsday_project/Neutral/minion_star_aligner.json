@@ -1,23 +1,18 @@
 {
-	"name": "Star Aligner",
-	"baseManaCost": 7,
-	"type": "MINION",
-	"baseAttack": 7,
-	"baseHp": 7,
-	"heroClass": "ANY",
-	"rarity": "EPIC",
-	"description": "Battlecry: If you control 3 minions with 7 health, deal 7 damage to all enemies.",
-	"battlecry": {
-		"targetSelection": "NONE",
-		"spell": {
-			"class": "ConditionalSpell",
-			"spell": {
-				"class": "DamageSpell",
-				"value": 7,
-				"target": "ENEMY_CHARACTERS"
-			},
-			"condition": {
-				"class": "OrCondition",
+  "name": "Star Aligner",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "Battlecry: If you control 3 minions with 7 health, deal 7 damage to all enemies.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "OrCondition",
         "conditions": [
           {
             "class": "AndCondition",
@@ -27,17 +22,17 @@
                 "value": 2,
                 "cardFilter": {
                   "class": "AttributeFilter",
+                  "value": 7,
                   "attribute": "HP",
-                  "operation": "EQUAL",
-                  "value": 7
+                  "operation": "EQUAL"
                 }
               },
               {
                 "class": "AttributeCondition",
                 "target": "SELF",
+                "value": 7,
                 "attribute": "HP",
-                "operation": "EQUAL",
-                "value": 7
+                "operation": "EQUAL"
               }
             ]
           },
@@ -46,19 +41,24 @@
             "value": 3,
             "cardFilter": {
               "class": "AttributeFilter",
+              "value": 7,
               "attribute": "HP",
-              "operation": "EQUAL",
-              "value": 7
+              "operation": "EQUAL"
             }
           }
         ]
-			}
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 7
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

@@ -8,7 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "targetPlayer": "SELF",
     "value": 2,
     "cardFilter": {
       "class": "CardFilter",
@@ -17,7 +16,8 @@
         "class": "SpellDamageValueProvider",
         "offset": 2
       }
-    }
+    },
+    "targetPlayer": "SELF"
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

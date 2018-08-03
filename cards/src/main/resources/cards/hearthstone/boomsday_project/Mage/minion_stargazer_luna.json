@@ -2,27 +2,27 @@
   "name": "Stargazer Luna",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "BLUE",
   "baseAttack": 2,
   "baseHp": 4,
-  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "After you play the right-most card in your hand, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "AttributeCondition",
-        "attribute": "HAND_INDEX",
         "target": "EVENT_TARGET",
-        "operation": "EQUAL",
         "value": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "SELF",
+          "offset": -1,
           "playerAttribute": "HAND_COUNT",
-          "offset": -1
-        }
-      }
+          "targetPlayer": "SELF"
+        },
+        "attribute": "HAND_INDEX",
+        "operation": "EQUAL"
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "AddEnchantmentSpell",
@@ -31,10 +31,10 @@
         "eventTrigger": {
           "class": "AfterCardPlayedTrigger"
         },
-        "maxFires": 1,
         "spell": {
           "class": "DrawCardSpell"
-        }
+        },
+        "maxFires": 1
       }
     }
   },

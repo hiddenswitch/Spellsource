@@ -8,14 +8,14 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",
-		"spell1": {
-			"class": "DamageSpell",
-			"value": 1
-		},
-		"spell2": {
-			"class": "DamageSpell",
-			"value": 1
-		}
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 1
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 1
+    }
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

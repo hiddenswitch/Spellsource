@@ -1,16 +1,10 @@
 {
-	"name": "Kaboom",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "RED",
-	"rarity": "FREE",
-	"description": "Deal 1 damage to all enemies. Swaps each turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DamageSpell",
-		"target": "ENEMY_CHARACTERS",
-		"value": 1
-	},
+  "name": "Kaboom",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to all enemies. Swaps each turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -26,7 +20,13 @@
       ]
     }
   },
-	"collectible": false,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 1
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

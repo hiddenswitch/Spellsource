@@ -5,51 +5,6 @@
   "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Summon a 2/2 Horseman. If you have all 4, destroy the enemy hero.",
-  "condition": {
-    "class": "AndCondition",
-    "conditions": [
-      {
-        "class": "AndCondition",
-        "conditions": [
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_deathlord_nazgrim"
-            }
-          },
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_darion_mograine"
-            }
-          },
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_inquisitor_whitemane"
-            }
-          },
-          {
-            "class": "MinionOnBoardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "card": "token_thoras_trollbane"
-            }
-          }
-        ],
-        "invert": true
-      },
-      {
-        "class": "MinionCountCondition",
-        "value": 7,
-        "operation": "LESS"
-      }
-    ]
-  },
-  "targetSelection": "NONE",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "GameStateChangedTrigger"
@@ -100,6 +55,51 @@
       }
     }
   },
+  "condition": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_deathlord_nazgrim"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_darion_mograine"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_inquisitor_whitemane"
+            }
+          },
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "token_thoras_trollbane"
+            }
+          }
+        ],
+        "invert": true
+      },
+      {
+        "class": "MinionCountCondition",
+        "value": 7,
+        "operation": "LESS"
+      }
+    ]
+  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "cards": [

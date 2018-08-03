@@ -9,11 +9,11 @@
   "spell": {
     "class": "ResurrectSpell",
     "value": 3,
-		"cardFilter": {
-			"class": "CardFilter",
-			"race": "MECH"
-		},
-    "attribute": "MAGNETIC"
+    "attribute": "MAGNETIC",
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "MECH"
+    }
   },
   "attributes": {
     "MAGNETIC": true

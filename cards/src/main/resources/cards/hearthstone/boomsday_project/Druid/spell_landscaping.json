@@ -8,10 +8,10 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-		"cards": [
-			"token_treant",
-			"token_treant"
-		]
+    "cards": [
+      "token_treant",
+      "token_treant"
+    ]
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

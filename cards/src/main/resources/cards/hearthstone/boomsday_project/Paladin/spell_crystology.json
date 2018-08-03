@@ -8,14 +8,14 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
-		"value": 2,
-		"cardFilter": {
-			"class": "CardFilter",
-			"cardType": "MINION",
-			"attribute": "ATTACK",
-      "operation": "EQUAL",
-      "value": 1
-		}
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "value": 1,
+      "attribute": "ATTACK",
+      "cardType": "MINION",
+      "operation": "EQUAL"
+    }
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

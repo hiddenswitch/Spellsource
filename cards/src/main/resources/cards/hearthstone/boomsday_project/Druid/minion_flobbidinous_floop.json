@@ -2,17 +2,17 @@
   "name": "Flobbidinous Floop",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "BROWN",
   "rarity": "LEGENDARY",
   "description": "While in your hand, this is a 3/4 copy of the last minion you played.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
+      "cardType": "MINION",
       "hostTargetType": "IGNORE_AS_TARGET",
-      "targetPlayer": "SELF",
-      "cardType": "MINION"
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",
