@@ -1,6 +1,6 @@
 {
   "name": "Path of Frost",
-  "baseManaCost": 3,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "COMMON",
