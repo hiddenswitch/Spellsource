@@ -19,6 +19,11 @@ public class AfterCardPlayed extends GameEvent implements HasCard {
 	}
 
 	@Override
+	public Entity getEventSource() {
+		return card;
+	}
+
+	@Override
 	public GameEventType getEventType() {
 		return GameEventType.AFTER_PLAY_CARD;
 	}

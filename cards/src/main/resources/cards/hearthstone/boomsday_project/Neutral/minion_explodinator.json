@@ -6,6 +6,7 @@
   "baseHp": 2,
   "heroClass": "ANY",
   "rarity": "COMMON",
+  "race": "MECH",
   "description": "Battlecry: Summon 2 0/2 Goblin Bombs.",
   "battlecry": {
     "targetSelection": "NONE",

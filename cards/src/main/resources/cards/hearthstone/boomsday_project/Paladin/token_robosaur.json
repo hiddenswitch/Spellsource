@@ -1,14 +1,14 @@
 {
-	"name": "Robosaur",
-	"baseManaCost": 8,
-	"type": "MINION",
-	"baseAttack": 8,
-	"baseHp": 8,
-	"heroClass": "GOLD",
-	"rarity": "FREE",
-	"race": "MECH",
-	"description": "",
-	"collectible": false,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+  "name": "Robosaur",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "heroClass": "GOLD",
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "",
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

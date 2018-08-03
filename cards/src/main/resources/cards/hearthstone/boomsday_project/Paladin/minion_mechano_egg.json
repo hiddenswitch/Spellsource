@@ -6,6 +6,7 @@
   "baseAttack": 0,
   "baseHp": 5,
   "rarity": "COMMON",
+  "race": "MECH",
   "description": "Deathrattle: Summon a 8/8 Robosaur.",
   "deathrattle": {
     "class": "SummonSpell",

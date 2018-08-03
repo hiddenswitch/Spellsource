@@ -12,6 +12,7 @@
     "value": 2,
     "cardFilter": {
       "class": "CardFilter",
+      "cardType": "MINION",
       "manaCost": {
         "class": "SpellDamageValueProvider",
         "offset": 2

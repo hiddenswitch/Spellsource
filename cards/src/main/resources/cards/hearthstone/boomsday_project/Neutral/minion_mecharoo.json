@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "MECH",
   "description": "Deathrattle: Summon a 1/1 Jo-E-Bot.",
   "deathrattle": {
     "class": "SummonSpell",

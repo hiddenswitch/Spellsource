@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "MECH",
   "description": "Rush",
   "attributes": {
     "RUSH": true

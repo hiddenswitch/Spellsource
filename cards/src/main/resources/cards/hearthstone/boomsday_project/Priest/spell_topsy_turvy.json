@@ -9,7 +9,7 @@
   "spell": {
     "class": "SwapAttackAndHpSpell"
   },
-  "collectible": false,
+  "collectible": true,
   "set": "BOOMSDAY_PROJECT",
   "fileFormatVersion": 1
 }
