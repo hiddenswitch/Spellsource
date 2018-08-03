@@ -7,27 +7,27 @@
   "description": "Silence a minion, then Freeze it. If it was already Frozen, draw a card.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spell1": {
+      "class": "DrawCardSpell"
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "spells": [
+        {
         "class": "SilenceSpell"
-      },
-      {
-        "class": "EitherOrSpell",
-        "condition": {
-          "class": "AttributeCondition",
-          "attribute": "FROZEN",
-          "operation": "HAS"
         },
-        "spell1": {
-          "class": "DrawCardSpell"
-        },
-        "spell2": {
-          "class": "AddAttributeSpell",
-          "attribute": "FROZEN"
+        {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
         }
-      }
-    ]
+      ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
