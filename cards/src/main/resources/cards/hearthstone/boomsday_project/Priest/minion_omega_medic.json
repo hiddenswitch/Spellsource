@@ -2,22 +2,22 @@
   "name": "Omega Medic",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Battlecry: If you have 10 Mana Crystals, restore 10 Health to your hero.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ConditionalSpell",
+      "condition": {
+        "class": "ManaMaxedCondition"
+      },
       "spell": {
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
         "value": 10
-      },
-      "condition": {
-        "class": "ManaMaxedCondition"
       }
     }
   },

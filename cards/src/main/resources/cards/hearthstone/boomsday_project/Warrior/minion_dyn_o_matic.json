@@ -2,9 +2,9 @@
   "name": "Dyn-o-matic",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "RED",
   "rarity": "RARE",
   "race": "MECH",
   "description": "Battlecry: Deal 5 damage randomly split among all minions except mechs.",
@@ -14,12 +14,12 @@
       "class": "MissilesSpell",
       "target": "ALL_MINIONS",
       "value": 1,
-      "howMany": 6,
       "filter": {
         "class": "RaceFilter",
         "race": "MECH",
         "invert": true
-      }
+      },
+      "howMany": 6
     }
   },
   "attributes": {

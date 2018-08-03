@@ -2,9 +2,9 @@
   "name": "Dreampetal Florist",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "BROWN",
   "rarity": "EPIC",
   "description": "At the end of your turn, reduce the cost of a random minion in your hand by (7).",
   "trigger": {

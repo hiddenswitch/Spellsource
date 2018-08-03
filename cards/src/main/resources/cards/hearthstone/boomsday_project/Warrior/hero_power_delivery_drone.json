@@ -1,23 +1,10 @@
 {
-	"name": "Delivery Drone",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "RED",
-	"rarity": "FREE",
-	"description": "Discover a Mech. Swaps each turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "DiscoverCardSpell",
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF"
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION",
-      "race": "MECH"
-    }
-	},
+  "name": "Delivery Drone",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "Discover a Mech. Swaps each turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -33,7 +20,20 @@
       ]
     }
   },
-	"collectible": false,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverCardSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "MECH",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

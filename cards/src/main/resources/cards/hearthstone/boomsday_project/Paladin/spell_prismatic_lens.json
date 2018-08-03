@@ -11,10 +11,6 @@
     "spells": [
       {
         "class": "FromDeckToHandSpell",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        },
         "spell": {
           "class": "MetaSpell",
           "spells": [
@@ -26,21 +22,21 @@
             {
               "class": "SetAttributeSpell",
               "target": "FRIENDLY_PLAYER",
-              "attribute": "RESERVED_INTEGER_3",
               "value": {
                 "class": "ManaCostProvider",
                 "target": "OUTPUT"
-              }
+              },
+              "attribute": "RESERVED_INTEGER_3"
             }
           ]
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
         }
       },
       {
         "class": "FromDeckToHandSpell",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "SPELL"
-        },
         "spell": {
           "class": "MetaSpell",
           "spells": [
@@ -52,37 +48,21 @@
             {
               "class": "SetAttributeSpell",
               "target": "FRIENDLY_PLAYER",
-              "attribute": "RESERVED_INTEGER_4",
               "value": {
                 "class": "ManaCostProvider",
                 "target": "OUTPUT"
-              }
+              },
+              "attribute": "RESERVED_INTEGER_4"
             }
           ]
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
         }
       },
       {
         "class": "ConditionalSpell",
-        "spell": {
-          "class": "CardCostModifierSpell",
-          "target": "FRIENDLY_HAND",
-          "cardCostModifier": {
-            "class": "CardCostModifier",
-            "target": "SELF",
-            "operation": "SET",
-            "value": {
-              "class": "AttributeValueProvider",
-              "target": "FRIENDLY_PLAYER",
-              "attribute": "RESERVED_INTEGER_4",
-              "evaluateOnce": true
-            }
-          },
-          "filter": {
-            "class": "AttributeFilter",
-            "attribute": "RESERVED_BOOLEAN_3",
-            "operation": "HAS"
-          }
-        },
         "condition": {
           "class": "HoldsCardCondition",
           "cardFilter": {
@@ -90,35 +70,55 @@
             "attribute": "RESERVED_BOOLEAN_4",
             "operation": "HAS"
           }
-        }
-      },
-      {
-        "class": "ConditionalSpell",
+        },
         "spell": {
           "class": "CardCostModifierSpell",
           "target": "FRIENDLY_HAND",
           "cardCostModifier": {
             "class": "CardCostModifier",
             "target": "SELF",
-            "operation": "SET",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_PLAYER",
+              "attribute": "RESERVED_INTEGER_4",
+              "evaluateOnce": true
+            },
+            "operation": "SET"
+          },
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "RESERVED_BOOLEAN_3",
+            "operation": "HAS"
+          }
+        }
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "HoldsCardCondition",
+          "cardFilter": {
+            "class": "AttributeFilter",
+            "attribute": "RESERVED_BOOLEAN_3",
+            "operation": "HAS"
+          }
+        },
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "FRIENDLY_HAND",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
             "value": {
               "class": "AttributeValueProvider",
               "target": "FRIENDLY_PLAYER",
               "attribute": "RESERVED_INTEGER_3",
               "evaluateOnce": true
-            }
+            },
+            "operation": "SET"
           },
           "filter": {
             "class": "AttributeFilter",
             "attribute": "RESERVED_BOOLEAN_4",
-            "operation": "HAS"
-          }
-        },
-        "condition": {
-          "class": "HoldsCardCondition",
-          "cardFilter": {
-            "class": "AttributeFilter",
-            "attribute": "RESERVED_BOOLEAN_3",
             "operation": "HAS"
           }
         }

@@ -10,8 +10,8 @@
   "description": "Magnetic. Divine Shield. Taunt.",
   "attributes": {
     "DIVINE_SHIELD": true,
-    "TAUNT": true,
-    "MAGNETIC": true
+    "MAGNETIC": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

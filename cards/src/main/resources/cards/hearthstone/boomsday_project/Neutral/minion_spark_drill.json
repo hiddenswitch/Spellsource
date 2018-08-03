@@ -10,11 +10,11 @@
   "description": "Rush. Deathrattle: Add two 1/1 Sparks with Rush to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
-    "targetPlayer": "SELF",
     "cards": [
       "token_spark",
       "token_spark"
-    ]
+    ],
+    "targetPlayer": "SELF"
   },
   "attributes": {
     "DEATHRATTLES": true,

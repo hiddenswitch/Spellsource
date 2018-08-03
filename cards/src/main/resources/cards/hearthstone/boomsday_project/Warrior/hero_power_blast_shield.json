@@ -1,16 +1,10 @@
 {
-	"name": "Blast Shield",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "RED",
-	"rarity": "FREE",
-	"description": "Gain 7 Armor. Swaps each turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "BuffHeroSpell",
-		"target": "FRIENDLY_HERO",
-		"armorBonus": 7
-	},
+  "name": "Blast Shield",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "Gain 7 Armor. Swaps each turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -26,7 +20,13 @@
       ]
     }
   },
-	"collectible": false,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffHeroSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 7
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

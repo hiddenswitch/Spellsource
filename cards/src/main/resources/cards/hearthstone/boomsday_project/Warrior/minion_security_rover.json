@@ -2,21 +2,21 @@
   "name": "Security Rover",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 2,
   "baseHp": 5,
-  "heroClass": "RED",
   "rarity": "RARE",
   "race": "MECH",
   "description": "Whenever this minion takes damage, summon a 2/3 Mech with Taunt",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "token_guard_bot",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "token_guard_bot"
     }
   },
   "collectible": true,

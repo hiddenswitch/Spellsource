@@ -2,9 +2,9 @@
   "name": "Seaforium Bomber",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Battlecry: Shuffle a bomb into your opponent's deck. When drawn, it explodes for 5 damage.",
   "battlecry": {

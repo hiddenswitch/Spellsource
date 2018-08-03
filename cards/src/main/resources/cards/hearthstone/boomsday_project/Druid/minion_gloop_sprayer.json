@@ -2,9 +2,9 @@
   "name": "Gloop Sprayer",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Battlecry: Summon a copy of each adjacent minion.",
   "battlecry": {

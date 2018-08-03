@@ -2,9 +2,9 @@
   "name": "Zerek, Master Cloner",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "WHITE",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Deathrattle: If you've cast any spells on this minion, resummon it.",
   "trigger": {
@@ -22,15 +22,15 @@
   },
   "deathrattle": {
     "class": "ConditionalSpell",
-    "spell": {
-      "class": "ReviveMinionSpell",
-      "target": "SELF"
-    },
     "condition": {
       "class": "AttributeCondition",
       "target": "SELF",
       "attribute": "RESERVED_BOOLEAN_4",
       "operation": "HAS"
+    },
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF"
     }
   },
   "attributes": {

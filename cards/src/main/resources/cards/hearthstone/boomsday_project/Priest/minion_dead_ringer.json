@@ -2,9 +2,9 @@
   "name": "Dead Ringer",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "WHITE",
   "baseAttack": 2,
   "baseHp": 1,
-  "heroClass": "WHITE",
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Deathrattle: Draw a Deathrattle minion from your deck.",
@@ -13,8 +13,8 @@
     "cardFilter": {
       "class": "CardFilter",
       "attribute": "DEATHRATTLES",
-      "operation": "HAS",
-      "cardType": "MINION"
+      "cardType": "MINION",
+      "operation": "HAS"
     }
   },
   "attributes": {

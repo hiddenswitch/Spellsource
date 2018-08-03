@@ -2,9 +2,9 @@
   "name": "Augmented Elekk",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Whenever you shuffle a card into a deck, shuffle in an extra copy.",
@@ -17,9 +17,9 @@
       },
       "spell": {
         "class": "ShuffleToDeckSpell",
-        "targetPlayer": "SELF",
         "target": "EVENT_TARGET",
-        "exclusive": true
+        "exclusive": true,
+        "targetPlayer": "SELF"
       }
     },
     {
@@ -30,9 +30,9 @@
       },
       "spell": {
         "class": "ShuffleToDeckSpell",
-        "targetPlayer": "OPPONENT",
         "target": "EVENT_TARGET",
-        "exclusive": true
+        "exclusive": true,
+        "targetPlayer": "OPPONENT"
       }
     }
   ],

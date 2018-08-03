@@ -12,11 +12,6 @@
       {
         "class": "RecruitSpell",
         "value": 3,
-        "cardLocation": "DECK",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        },
         "spell": {
           "class": "MetaSpell",
           "spells": [
@@ -40,16 +35,16 @@
               "attribute": "RESERVED_BOOLEAN_3"
             }
           ]
-        }
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "cardLocation": "DECK"
       },
       {
         "class": "ExecuteAsSpell",
         "target": "FRIENDLY_MINIONS",
-        "filter": {
-          "class": "AttributeFilter",
-          "attribute": "RESERVED_BOOLEAN_3",
-          "operation": "HAS"
-        },
         "spell": {
           "class": "MetaSpell",
           "spells": [
@@ -62,6 +57,11 @@
               "class": "ForceDeathPhaseSpell"
             }
           ]
+        },
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "RESERVED_BOOLEAN_3",
+          "operation": "HAS"
         }
       },
       {

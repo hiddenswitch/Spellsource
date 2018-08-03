@@ -1,19 +1,10 @@
 {
-	"name": "Micro-Squad",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "RED",
-	"rarity": "FREE",
-	"description": "Summon three 1/1 Microbots. Swaps each turn.",
-	"targetSelection": "NONE",
-	"spell": {
-		"class": "SummonSpell",
-    "cards": [
-      "token_microbot",
-      "token_microbot",
-      "token_microbot"
-    ]
-	},
+  "name": "Micro-Squad",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "Summon three 1/1 Microbots. Swaps each turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -29,7 +20,16 @@
       ]
     }
   },
-	"collectible": false,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_microbot",
+      "token_microbot",
+      "token_microbot"
+    ]
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

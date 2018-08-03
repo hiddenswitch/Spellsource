@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",
-		"value": 2,
+    "value": 2,
     "targetPlayer": "BOTH"
   },
   "collectible": true,

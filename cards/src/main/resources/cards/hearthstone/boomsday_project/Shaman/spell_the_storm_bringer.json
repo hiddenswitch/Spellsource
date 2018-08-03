@@ -11,8 +11,8 @@
     "target": "FRIENDLY_MINIONS",
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "rarity": "LEGENDARY"
+      "rarity": "LEGENDARY",
+      "cardType": "MINION"
     }
   },
   "collectible": true,

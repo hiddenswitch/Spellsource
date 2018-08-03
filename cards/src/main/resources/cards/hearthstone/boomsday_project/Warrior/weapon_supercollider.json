@@ -2,9 +2,9 @@
   "name": "Supercollider",
   "baseManaCost": 5,
   "type": "WEAPON",
+  "heroClass": "RED",
   "damage": 1,
   "durability": 3,
-  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "After you attack a minion, force it to attack one of its neighbors.",
   "trigger": {
@@ -12,8 +12,8 @@
       "class": "AfterPhysicalAttackTrigger",
       "sourceEntityType": "HERO",
       "sourcePlayer": "SELF",
-      "targetPlayer": "BOTH",
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINION",
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "ExecuteAsSpell",

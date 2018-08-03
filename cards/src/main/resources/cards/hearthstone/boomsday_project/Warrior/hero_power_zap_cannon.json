@@ -1,15 +1,10 @@
 {
-	"name": "Zap Cannon",
-	"baseManaCost": 2,
-	"type": "HERO_POWER",
-	"heroClass": "RED",
-	"rarity": "FREE",
-	"description": "Deal 3 damage. Swaps each turn.",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "DamageSpell",
-		"value": 3
-	},
+  "name": "Zap Cannon",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "Deal 3 damage. Swaps each turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -25,7 +20,12 @@
       ]
     }
   },
-	"collectible": false,
-	"set": "BOOMSDAY_PROJECT",
-	"fileFormatVersion": 1
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
 }

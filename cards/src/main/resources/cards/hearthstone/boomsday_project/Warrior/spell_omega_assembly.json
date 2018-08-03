@@ -8,30 +8,30 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",
-		"spell1": {
-			"class": "ReceiveCardSpell",
+    "condition": {
+      "class": "ManaMaxedCondition"
+    },
+    "spell1": {
+      "class": "ReceiveCardSpell",
       "value": 3,
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
-        "race": "MECH"
+        "race": "MECH",
+        "cardType": "MINION"
       }
-		},
-		"spell2": {
-			"class": "DiscoverSpell",
+    },
+    "spell2": {
+      "class": "DiscoverSpell",
       "spell": {
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
-        "race": "MECH"
+        "race": "MECH",
+        "cardType": "MINION"
       }
-		},
-		"condition": {
-			"class": "ManaMaxedCondition"
-		}
+    }
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

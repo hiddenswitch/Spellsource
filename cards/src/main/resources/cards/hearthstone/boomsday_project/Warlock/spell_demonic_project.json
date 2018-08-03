@@ -11,52 +11,52 @@
     "spells": [
       {
         "class": "RevealCardSpell",
-        "cardSource": {
-          "class": "HandSource",
+        "value": 1,
+        "spell": {
+          "class": "TransformInHandSpell",
+          "target": "OUTPUT",
+          "spell": {
+            "class": "RevealCardSpell",
+            "target": "OUTPUT"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "DEMON"
+          },
           "targetPlayer": "SELF"
         },
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION"
         },
-        "value": 1,
-        "spell": {
-          "class": "TransformInHandSpell",
-          "targetPlayer": "SELF",
-          "cardFilter": {
-            "class": "CardFilter",
-            "race": "DEMON"
-          },
-          "target": "OUTPUT",
-          "spell": {
-            "class": "RevealCardSpell",
-            "target": "OUTPUT"
-          }
+        "cardSource": {
+          "class": "HandSource",
+          "targetPlayer": "SELF"
         }
       },
       {
         "class": "RevealCardSpell",
-        "cardSource": {
-          "class": "HandSource",
+        "value": 1,
+        "spell": {
+          "class": "TransformInHandSpell",
+          "target": "OUTPUT",
+          "spell": {
+            "class": "RevealCardSpell",
+            "target": "OUTPUT"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "DEMON"
+          },
           "targetPlayer": "OPPONENT"
         },
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION"
         },
-        "value": 1,
-        "spell": {
-          "class": "TransformInHandSpell",
-          "targetPlayer": "OPPONENT",
-          "cardFilter": {
-            "class": "CardFilter",
-            "race": "DEMON"
-          },
-          "target": "OUTPUT",
-          "spell": {
-            "class": "RevealCardSpell",
-            "target": "OUTPUT"
-          }
+        "cardSource": {
+          "class": "HandSource",
+          "targetPlayer": "OPPONENT"
         }
       }
     ]

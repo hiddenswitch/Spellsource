@@ -2,9 +2,9 @@
   "name": "Lab Recruiter",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "BLACK",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Battlecry: Shuffle 3 of a friendly minion into your deck.",
   "battlecry": {

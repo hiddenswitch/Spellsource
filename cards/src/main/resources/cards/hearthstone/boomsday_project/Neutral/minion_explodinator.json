@@ -2,9 +2,9 @@
   "name": "Explodinator",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Battlecry: Summon 2 0/2 Goblin Bombs.",
@@ -15,13 +15,13 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "card": "minion_goblin_bomb",
-          "boardPositionRelative": "LEFT"
+          "boardPositionRelative": "LEFT",
+          "card": "minion_goblin_bomb"
         },
         {
           "class": "SummonSpell",
-          "card": "minion_goblin_bomb",
-          "boardPositionRelative": "RIGHT"
+          "boardPositionRelative": "RIGHT",
+          "card": "minion_goblin_bomb"
         }
       ]
     }

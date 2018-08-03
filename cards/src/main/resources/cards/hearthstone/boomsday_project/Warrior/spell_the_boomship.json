@@ -9,16 +9,16 @@
   "spell": {
     "class": "RecruitSpell",
     "value": 3,
-		"cardLocation": "HAND",
-		"cardFilter": {
-			"class": "CardFilter",
-			"cardType": "MINION"
-		},
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "RUSH",
-      "target": "OUTPUT"
-    }
+      "target": "OUTPUT",
+      "attribute": "RUSH"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardLocation": "HAND"
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

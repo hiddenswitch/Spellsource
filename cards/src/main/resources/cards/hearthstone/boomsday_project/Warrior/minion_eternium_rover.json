@@ -2,16 +2,16 @@
   "name": "Eternium Rover",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 1,
   "baseHp": 3,
-  "heroClass": "RED",
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Whenever this minion takes damage, gain 2 armor.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
-			"hostTargetType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
       "class": "BuffHeroSpell",
