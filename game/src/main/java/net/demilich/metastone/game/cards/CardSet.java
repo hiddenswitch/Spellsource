@@ -27,6 +27,7 @@ public enum CardSet {
 	KNIGHTS_OF_THE_FROZEN_THRONE,
 	KOBOLDS_AND_CATACOMBS,
 	WITCHWOOD,
+	BOOMSDAY_PROJECT,
 	BLIZZARD_ADVENTURE,
 	HALL_OF_FAME,
 	CUSTOM,
@@ -36,7 +37,7 @@ public enum CardSet {
 	SPELLSOURCE;
 
 	public static CardSet latestHearthstoneExpansion() {
-		return WITCHWOOD;
+		return BOOMSDAY_PROJECT;
 	}
 
 	public boolean isHearthstoneSet() {

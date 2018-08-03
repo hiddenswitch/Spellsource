@@ -7,22 +7,27 @@ from .cards import CLASS_MAPPING, name_to_id, write_card
 from .cardformatter import fix_dict
 
 
-def main():
+def generate_stubs(card_set='BOOMSDAY'):
+    spellsource_card_sets = {
+        'BOOMSDAY': 'BOOMSDAY_PROJECT',
+        'GILNEAS': 'WITCHWOOD'
+    }
+    spellsource_card_set = spellsource_card_sets[card_set]
     hero_class_mapping = CLASS_MAPPING
-    
+
     request = urllib.request.Request(
-        url='https://api.hearthstonejson.com/v1/23966/enUS/cards.json',
+        url='https://api.hearthstonejson.com/v1/latest/enUS/cards.json',
         headers={'User-Agent': 'Mozilla/5.0'
                  })
-    
+
     db = json.loads(urllib.request.urlopen(request).read())
-    
+
     # Filter for only witchwood
-    db = [x for x in db if 'set' in x and x['set'] == 'GILNEAS' and 'type' in x and x['type'] != 'ENCHANTMENT']
-    
+    db = [x for x in db if 'set' in x and x['set'] == card_set and 'type' in x and x['type'] != 'ENCHANTMENT']
+
     for hs_card in db:
         card_dict = {}
-        card_dict['set'] = 'WITCHWOOD'
+        card_dict['set'] = spellsource_card_set
         card_dict['name'] = hs_card['name']
         card_dict['description'] = '' if 'text' not in hs_card else hs_card['text']
         attributes = {}
@@ -41,10 +46,12 @@ def main():
             card_dict['baseHp'] = hs_card['health']
             if 'race' in hs_card:
                 card_dict['race'] = hs_card['race']
+                if card_dict['race'] == 'MECHANICAL':
+                    card_dict['race'] = 'MECH'
         if hs_card['type'] == 'SPELL' or hs_card['type'] == 'HERO_POWER':
             card_dict['spell'] = {'class': 'BuffSpell', 'target': 'SELF'}
             card_dict['targetSelection'] = 'NONE'
-        
+
         if 'mechanics' in hs_card:
             mechanics = hs_card['mechanics']
             if 'BATTLECRY' in mechanics:
@@ -76,9 +83,10 @@ def main():
                 attributes['WINDFURY'] = True
             if 'RUSH' in mechanics:
                 attributes['RUSH'] = True
-        
+
         card_dict['fileFormatVersion'] = 1
-        stubs_ = 'src/main/resources/cards/hearthstone/witchwood/stubs/'
+        stubs_ = os.path.join(os.path.dirname(__file__),
+                              '../../cards/src/main/resources/cards/hearthstone', spellsource_card_set.lower(), 'stubs')
         if card_dict['collectible']:
             stubs_ = path.join(stubs_, 'collectible/')
         else:
@@ -91,4 +99,13 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--set', required=True,
+                        help='The set to generate stubs for based on the Hearthstone internal name (e.g. GILNEAS for '
+                             'Witchwood)')
+    parser.parse_args()
+    args = parser.parse_args()
+    assert 'set' in args
+    generate_stubs(card_set=args.set)

@@ -844,6 +844,7 @@ definitions:
           - 'ARMOR_GAINED'
           - 'BEFORE_SUMMON'
           - 'BOARD_CHANGED'
+          - 'CARD_SHUFFLED'
           - 'DAMAGE'
           - 'DISCARD'
           - 'DRAW_CARD'

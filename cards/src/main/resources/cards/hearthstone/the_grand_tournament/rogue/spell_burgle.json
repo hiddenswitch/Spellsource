@@ -10,19 +10,8 @@
     "class": "ReceiveCardSpell",
     "value": 2,
     "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "CardFilter",
-          "heroClass": "OPPONENT"
-        },
-        {
-          "class": "CardFilter",
-          "rarity": "LEGENDARY",
-          "cardType": "SPELL",
-          "invert": true
-        }
-      ]
+      "class": "CardFilter",
+      "heroClass": "OPPONENT"
     },
     "cardSource": {
       "class": "CatalogueSource",

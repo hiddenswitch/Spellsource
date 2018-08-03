@@ -426,6 +426,7 @@ public class TestBase {
 				CardSet.THE_OLD_GODS,
 				CardSet.KOBOLDS_AND_CATACOMBS,
 				CardSet.WITCHWOOD,
+				CardSet.BOOMSDAY_PROJECT,
 				CardSet.CUSTOM
 		);
 
@@ -450,6 +451,17 @@ public class TestBase {
 			for (Minion minion : player.getMinions()) {
 				if (minion.getSourceCard().getCardId().equals(cardId)) {
 					return minion;
+				}
+			}
+		}
+		return null;
+	}
+
+	protected static Entity findCard(GameContext context, String cardId) {
+		for (Player player : context.getPlayers()) {
+			for (Card card : player.getHand()) {
+				if (card.getSourceCard().getCardId().equals(cardId)) {
+					return card;
 				}
 			}
 		}

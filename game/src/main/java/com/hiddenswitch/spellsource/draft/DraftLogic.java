@@ -75,6 +75,7 @@ public class DraftLogic {
 				CardSet.JOURNEY_TO_UNGORO,
 				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
 				CardSet.WITCHWOOD,
+				CardSet.BOOMSDAY_PROJECT,
 				CardSet.KOBOLDS_AND_CATACOMBS,
 				CardSet.BATTLE_FOR_ASHENVALE,
 				CardSet.SANDS_OF_TIME

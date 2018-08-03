@@ -63,7 +63,6 @@ public class AttributeValueProvider extends ValueProvider {
 				}
 			}
 		}
-
 		return value;
 	}
 }

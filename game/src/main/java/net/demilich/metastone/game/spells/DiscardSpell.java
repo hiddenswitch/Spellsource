@@ -88,17 +88,22 @@ public class DiscardSpell extends Spell {
 		}
 		int numberOfCards = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
-		CardList discardableCards = cardSource.getCards(context, source, player).filtered(cardFilter.matcher(context, player, source));
-		int cardCount = numberOfCards == ALL_CARDS ? discardableCards.getCount() : numberOfCards;
+		if (target instanceof Card && player.getHand().contains(target)) {
+			context.getLogic().discardCard(player, (Card) target);
+		} else {
+			CardList discardableCards = cardSource.getCards(context, source, player).filtered(cardFilter.matcher(context, player, source));
+			int cardCount = numberOfCards == ALL_CARDS ? discardableCards.getCount() : numberOfCards;
 
-		for (int i = 0; i < cardCount; i++) {
-			Card randomCard = context.getLogic().getRandom(discardableCards);
-			if (randomCard == null) {
-				return;
+			for (int i = 0; i < cardCount; i++) {
+				Card randomCard = context.getLogic().getRandom(discardableCards);
+				if (randomCard == null) {
+					return;
+				}
+				context.getLogic().discardCard(player, randomCard);
+				discardableCards.remove(randomCard);
 			}
-			context.getLogic().discardCard(player, randomCard);
-			discardableCards.remove(randomCard);
 		}
+
 	}
 
 }

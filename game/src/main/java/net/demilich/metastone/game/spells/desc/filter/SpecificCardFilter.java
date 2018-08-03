@@ -26,12 +26,15 @@ public class SpecificCardFilter extends EntityFilter {
 		String cardId = entity.getSourceCard().getCardId();
 		String requiredCardId = getDesc().getString(EntityFilterArg.CARD);
 		EntityReference comparedTo = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
-		if (comparedTo != null
-				&& !comparedTo.equals(EntityReference.NONE)) {
+		if (comparedTo != null && !comparedTo.equals(EntityReference.NONE)) {
 			requiredCardId = context.resolveSingleTarget(player, host, comparedTo).getSourceCard().getCardId();
 		}
 
-		return cardId.equalsIgnoreCase(requiredCardId);
+		if (!requiredCardId.contains("_")) { 															//functionality to search for cardIds containing a specific key word,
+			return cardId.length() > cardId.replace(requiredCardId, "").length(); 	//known by the creator not including the usual underscore of a cardId
+		} else return cardId.equalsIgnoreCase(requiredCardId);
+
+
 	}
 
 }

@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -260,6 +261,9 @@ public class SummonSpell extends Spell {
 					.collect(Collectors.toSet());
 			cards.removeIf(c -> existingCardIds.contains(c.getCardId()));
 		}
+
+		// Remove all cards that cannot be summoned (for now, all non-minion cards)
+		cards.removeIf(c -> c.getCardType() != CardType.MINION);
 
 		if (cards.size() > 0) {
 			if (desc.getBool(SpellArg.RANDOM_TARGET)

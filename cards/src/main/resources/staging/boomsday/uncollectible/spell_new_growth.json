@@ -1,0 +1,17 @@
+{
+  "name": "New Growth",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "Summon two 2/2 Treants.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

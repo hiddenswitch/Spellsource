@@ -73,7 +73,10 @@ public class FromDeckToHandSpell extends Spell {
 			Card card = null;
 			if (!relevantCards.isEmpty()) {
 				card = context.getLogic().getRandom(relevantCards);
-				relevantCards.remove(card);
+				if (desc.getBool(SpellArg.EXCLUSIVE)) {
+					final String cardId = card.getCardId();
+					relevantCards.removeIf(c -> c.getCardId().equals(cardId));
+				} else relevantCards.remove(card);
 			} else if (replacementCard != null) {
 				card = context.getCardById(replacementCard);
 			}

@@ -172,6 +172,10 @@ public class ParseUtils {
 				return EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT;
 			case "physical_attack_targets":
 				return EntityReference.PHYSICAL_ATTACK_TARGETS;
+			case "left_adjacent_minion":
+				return EntityReference.LEFT_ADJACENT_MINION;
+			case "right_adjacent_minion":
+				return EntityReference.RIGHT_ADJACENT_MINION;
 			default:
 				return null;
 		}

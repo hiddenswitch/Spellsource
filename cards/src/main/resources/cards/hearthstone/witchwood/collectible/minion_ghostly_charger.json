@@ -6,7 +6,6 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "race": "BEAST",
   "description": "<b>Divine Shield</b> <b>Rush</b>",
   "attributes": {
     "DIVINE_SHIELD": true,

@@ -251,4 +251,20 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(summonedPumpkin.getAttack(), pumpkin.getBaseHp() + 1);
 		});
 	}
+
+	@Test
+	public void testBookOfSpecters() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_wisp");
+			shuffleToDeck(context, player, "minion_wisp");
+			shuffleToDeck(context, player, "spell_pyroblast");
+			receiveCard(context, player, "token_shadow_of_nothing");
+			receiveCard(context, player, "token_shadow_of_nothing");
+			playCard(context, player, "spell_book_of_specters");
+			assertEquals(player.getHand().get(0).getCardId(), "token_shadow_of_nothing");
+			assertEquals(player.getHand().get(1).getCardId(), "token_shadow_of_nothing");
+			assertEquals(player.getHand().get(2).getCardId(), "minion_wisp");
+			assertEquals(player.getHand().get(3).getCardId(), "minion_wisp");
+		});
+	}
 }
