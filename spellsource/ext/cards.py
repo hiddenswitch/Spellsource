@@ -1,12 +1,11 @@
+import re
+from collections import deque
 from json import dump, load
 from os import walk, path
-from collections import deque
-import re
 from typing import Generator, Tuple
 
-from mypy_extensions import TypedDict
-from objdict import ObjDict as OrderedDict
 from objdict import JsonEncoder
+from objdict import ObjDict as OrderedDict
 
 CLASS_MAPPING = {
     'DRUID': 'BROWN',
