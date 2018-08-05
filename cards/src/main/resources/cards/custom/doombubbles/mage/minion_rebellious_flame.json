@@ -10,7 +10,7 @@
   "description": "(Play a minion to transform into a spell.)",
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "CardPlayedTrigger",
+      "class": "AfterCardPlayedTrigger",
       "cardType": "MINION",
       "hostTargetType": "IGNORE_AS_TARGET",
       "targetPlayer": "SELF"

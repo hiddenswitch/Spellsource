@@ -132,8 +132,24 @@ public class BoomsdayProjectTests extends TestBase {
 			for (Attribute attribute : Arrays.asList(Attribute.DEATHRATTLES, Attribute.LIFESTEAL, Attribute.RUSH, Attribute.DIVINE_SHIELD, Attribute.TAUNT)) {
 				assertTrue(two.hasAttribute(attribute), attribute.toString());
 			}
+		});
 
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_venomizer");
+			playCardWithTarget(context, player, "minion_missile_launcher", player.getMinions().get(0));
+			playCard(context, opponent, "minion_ultrasaur");
+			playCard(context, opponent, "minion_ultrasaur");
+			playCard(context, opponent, "minion_ultrasaur");
+			playCard(context, opponent, "minion_ultrasaur");
+			context.endTurn();
+			assertEquals(opponent.getMinions().size(), 0);
+		});
 
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_mecharoo");
+			playCardWithTarget(context, player, "minion_replicating_menace", player.getMinions().get(0));
+			playCard(context, player, "spell_twisting_nether");
+			assertEquals(player.getMinions().size(), 4);
 		});
 
 

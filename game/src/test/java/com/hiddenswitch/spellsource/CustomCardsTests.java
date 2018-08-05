@@ -2500,7 +2500,12 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "spell_rebellious_flame");
 			playCard(context, player, "spell_arcane_explosion");
 			assertEquals(player.getHand().get(0).getCardId(), "minion_rebellious_flame");
-
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_rebellious_flame");
+			receiveCard(context, player, "spell_rebellious_flame");
+			playCardWithTarget(context, player, player.getHand().get(0), opponent.getHero());
+			assertEquals(player.getHand().size(), 0);
 		}));
 	}
 

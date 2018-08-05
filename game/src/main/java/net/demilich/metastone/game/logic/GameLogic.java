@@ -23,6 +23,7 @@ import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -3502,17 +3503,37 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		Race originalRace = targetMinion.getRace();
-		if (originalRace == null) {
-			originalRace = Race.NONE;
-		}
 
 		List<String> magnets = new ArrayList<>();
 		if (targetMinion.hasAttribute(Attribute.MAGNETS)) {
 			magnets.addAll(Arrays.asList((String[]) targetMinion.getAttribute(Attribute.MAGNETS)));
 		}
-		card.applyText(targetMinion);
-		targetMinion.setRace(originalRace);
+		if (card.getDesc().getDeathrattle() != null) {
+			targetMinion.addDeathrattle(card.getDesc().getDeathrattle());
+		}
+		if (card.getDeathrattleEnchantments().size() > 0) {
+			card.getDeathrattleEnchantments().forEach(targetMinion::addDeathrattle);
+		}
+		if (card.getDesc().getTrigger() != null) {
+			addGameEventListener(player, card.getDesc().getTrigger().create(), targetMinion);
+		}
+
+		if (card.getDesc().getTriggers() != null) {
+			for (EnchantmentDesc trigger : card.getDesc().getTriggers()) {
+				addGameEventListener(player, trigger.create(), targetMinion);
+			}
+		}
+		if (card.getDesc().getAura() != null) {
+			final Aura enchantment = card.getDesc().getAura().create();
+			addGameEventListener(player, enchantment, targetMinion);
+		}
+
+		if (card.getDesc().getAuras() != null) {
+			for (AuraDesc auraDesc : card.getDesc().getAuras()) {
+				addGameEventListener(player, auraDesc.create(), targetMinion);
+			}
+		}
+
 		magnets.add(card.getCardId());
 		targetMinion.setAttribute(Attribute.MAGNETS, magnets.toArray(new String[0]));
 

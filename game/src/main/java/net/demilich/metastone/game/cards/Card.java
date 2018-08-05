@@ -816,6 +816,10 @@ public class Card extends Entity implements HasChooseOneActions {
 		deathrattleEnchantments.add(deathrattle);
 	}
 
+	public List<SpellDesc> getDeathrattleEnchantments() {
+		return deathrattleEnchantments;
+	}
+
 	public boolean hasTrigger() {
 		return getDesc().getTrigger() != null || (getDesc().getTriggers() != null && getDesc().getTriggers().length > 0);
 	}

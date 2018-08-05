@@ -989,4 +989,16 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertEquals(player.getDeck().stream().map(Card::getCardId).filter(c -> c.equals("minion_malorne")).count(), 1L);
 		});
 	}
+
+	@Test
+	public void testArcaneArtificer() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_arcane_artificer");
+			playCard(context, player, "minion_sorcerers_apprentice");
+			playCard(context, player, "minion_sorcerers_apprentice");
+			playCardWithTarget(context, player, "spell_pyroblast", opponent.getHero());
+			assertEquals(player.getHero().getArmor(), 8);
+		});
+
+	}
 }
