@@ -1,10 +1,13 @@
 #!/usr/bin/env bash
 set -e
+mkdir -pv "clientcsharp"
 ./gradlew swagger
-
-OUTPUT_DIR=$(pwd)/../Spellsource-Client/Assets/Plugins/Client
-
-swagger-codegen generate -DsupportingFiles=false -DapiTests=false -DmodelTests=false -DmodelDocs=false -DapiDocs=false -o $OUTPUT_DIR -c "csharpconfig.json"  -i "swagger-api.yaml" -l csharp
+./gradlew swaggerClient
+INPUT_DIR="clientcsharp"
+OUTPUT_DIR="../Spellsource-Client/Assets/Plugins/Client"
+rm -rf $OUTPUT_DIR
+mv $INPUT_DIR $OUTPUT_DIR
+rm -rf $INPUT_DIR
 rm -rf $OUTPUT_DIR/src/
 rm -rf $OUTPUT_DIR/docs/
 rm -f $OUTPUT_DIR/build.bat

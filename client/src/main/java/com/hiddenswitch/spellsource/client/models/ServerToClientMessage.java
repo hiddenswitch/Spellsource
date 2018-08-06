@@ -135,7 +135,7 @@ public class ServerToClientMessage implements Serializable {
    * Get messageType
    * @return messageType
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(required = true, value = "")
   public MessageType getMessageType() {
     return messageType;
   }

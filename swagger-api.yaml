@@ -662,6 +662,8 @@ definitions:
           The ID of the player who has won. Null if no player has won.
   ServerToClientMessage:
     type: 'object'
+    required:
+      - messageType
     properties:
       id:
         type: 'string'
