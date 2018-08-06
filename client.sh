@@ -18,3 +18,12 @@ rm -f $OUTPUT_DIR/mono_nunit_test.sh
 rm -f $OUTPUT_DIR/README.md
 rm -rf $OUTPUT_DIR/Scripts/Spellsource.Client/Properties
 rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/packages.config
+rm -rf $OUTPUT_DIR/Scripts/Spellsource.Client/Api
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/ApiClient.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/ApiException.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/ApiResponse.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/Configuration.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/ExceptionFactory.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/GlobalConfiguration.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/IApiAccessor.cs
+rm -f $OUTPUT_DIR/Scripts/Spellsource.Client/Client/IReadableConfiguration.cs

@@ -1276,7 +1276,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			getLogic().initializePlayer(0);
 			getLogic().initializePlayer(1);
 		}
-		
+
 		getLogic().concede(playerId);
 		endGame();
 	}
