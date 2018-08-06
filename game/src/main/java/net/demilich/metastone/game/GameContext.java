@@ -1271,6 +1271,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void concede(int playerId) {
+		// Make sure IDs are assigned before we try to repeatedly destroy hero
+		if (getEntities().anyMatch(e -> e.getId() == IdFactory.UNASSIGNED)) {
+			getLogic().initializePlayer(0);
+			getLogic().initializePlayer(1);
+		}
+		
 		getLogic().concede(playerId);
 		endGame();
 	}

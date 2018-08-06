@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -417,11 +416,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param cardList   The {@link GameDeck} whose cards should have IDs and owners assigned.
 	 * @param ownerIndex The owner to assign to this {@link CardList}
 	 */
-	@Suspendable
-	protected void assignCardIds(CardList cardList, int ownerIndex) {
-		for (Card card : cardList) {
-			card.setId(generateId());
-			card.setOwner(ownerIndex);
+	protected void assignEntityIds(Iterable<? extends Entity> cardList, int ownerIndex) {
+		for (Entity entity : cardList) {
+			entity.setId(generateId());
+			entity.setOwner(ownerIndex);
 		}
 	}
 
@@ -2080,8 +2078,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getHero().setMaxHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
 		player.getHero().setHp(player.getHero().getAttributeValue(Attribute.BASE_HP));
 		hero.getHeroPower().setId(generateId());
-		assignCardIds(player.getDeck(), playerId);
-		assignCardIds(player.getHand(), playerId);
+		assignEntityIds(player.getDeck(), playerId);
+		assignEntityIds(player.getHand(), playerId);
 
 		// Implements Open the Waygate
 		Stream.concat(player.getDeck().stream(),
