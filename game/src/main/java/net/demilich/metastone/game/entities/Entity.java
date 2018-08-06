@@ -137,7 +137,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The entity's ID, or {@link IdFactoryImpl#UNASSIGNED} if it is unassigned.
 	 * @see IdFactoryImpl for the class that generates IDs.
 	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the place where minion IDs are set.
-	 * @see GameLogic#assignCardIds(CardList, int) for the place where IDs are set for all the cards that start in the
+	 * @see GameLogic#assignEntityIds(CardList, int) for the place where IDs are set for all the cards that start in the
 	 * 		game.
 	 * @see EntityReference for a class used to store the notion of a "target."
 	 */
