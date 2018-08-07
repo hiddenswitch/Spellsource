@@ -2529,13 +2529,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		if (card.hasAttribute(Attribute.ECHO)
-				|| card.hasAttribute(Attribute.AURA_ECHO)) {
-			Card copy = card.getCopy();
-			copy.setAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
-			receiveCard(playerId, copy);
-		}
-
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
