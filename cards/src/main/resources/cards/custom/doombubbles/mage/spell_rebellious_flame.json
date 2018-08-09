@@ -7,7 +7,7 @@
   "description": "Deal 3 damage. (Play a spell to transform into a minion.)",
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "CardPlayedTrigger",
+      "class": "AfterCardPlayedTrigger",
       "cardType": "SPELL",
       "targetPlayer": "SELF"
     },

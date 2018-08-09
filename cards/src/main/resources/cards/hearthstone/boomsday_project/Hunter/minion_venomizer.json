@@ -2,7 +2,7 @@
   "name": "Venomizer",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "GREEN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
