@@ -36,3 +36,4 @@ dist/
 
 .ipynb_checkpoints/
 dump/
+.java-version

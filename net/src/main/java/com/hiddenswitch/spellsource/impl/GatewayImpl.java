@@ -642,7 +642,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		final String userVersion = context.request().getHeader("If-None-Match");
 		if (userVersion != null &&
 				userVersion.equals(cardsVersion)) {
-			return WebResult.succeeded(304, null);
+			return WebResult.succeeded(304, new GetCardsResponse().version(cardsVersion));
 		}
 
 		context.response().putHeader("Cache-Control", "public, max-age=31536000");
@@ -650,7 +650,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		context.response().putHeader("Date", thisDate);
 
 		if (context.request().method() == HttpMethod.HEAD) {
-			return WebResult.succeeded(null);
+			return WebResult.succeeded(new GetCardsResponse().version(cardsVersion));
 		}
 
 		// We created the cache for the first time
