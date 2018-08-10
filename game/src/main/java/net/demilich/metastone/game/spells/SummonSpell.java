@@ -4,12 +4,14 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -325,6 +327,13 @@ public class SummonSpell extends Spell {
 						context.getLogic().addGameEventListener(player, triggerClone, minion);
 					}
 				}
+
+				//copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
+				final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
+				for (Card card : list.getCards(context, target)) {
+					list.add(minion, card);
+				}
+
 			}
 		}
 

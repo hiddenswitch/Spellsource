@@ -698,4 +698,18 @@ public class BoomsdayProjectTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testTestSubjectCombo() {
+		runGym((context, player, opponent) -> {
+			Minion subject = playMinionCard(context, player, "minion_boomsday_test_subject");
+			playCardWithTarget(context, player, "spell_divine_spirit", subject);
+			playCardWithTarget(context, player, "spell_vivid_nightmare", subject);
+			playCardWithTarget(context, player, "spell_topsy_turvy", player.getMinions().get(1));
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getHand().size(), 3);
+
+		});
+
+	}
+
 }
