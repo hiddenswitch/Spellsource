@@ -513,7 +513,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void sendGameOver(com.hiddenswitch.spellsource.common.GameState state, Player winner) {
 		flush();
-		if (state == null) {
+		if (state == null || lastStateSent == null) {
 			sendMessage(new ServerToClientMessage()
 					.messageType(com.hiddenswitch.spellsource.client.models.MessageType.ON_GAME_END)
 					.gameOver(new GameOver()
