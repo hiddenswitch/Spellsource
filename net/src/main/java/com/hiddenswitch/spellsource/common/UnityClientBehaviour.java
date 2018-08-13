@@ -165,6 +165,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 		switch (message.getMessageType()) {
 			case FIRST_MESSAGE:
+				lastStateSent = null;
 				// The first message indicates the player has connected or reconnected.
 				for (ActivityMonitor activityMonitor : activityMonitors) {
 					activityMonitor.activity();
