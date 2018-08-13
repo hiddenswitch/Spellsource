@@ -805,7 +805,9 @@ public class ServerGameContext extends GameContext implements Server {
 		if (clientsReady.containsKey(client.getPlayerId())) {
 			@SuppressWarnings("unchecked")
 			Future<Client> fut = clientsReady.get(client.getPlayerId());
-			fut.complete(client);
+			if (!fut.isComplete()) {
+				fut.complete(client);
+			}
 		}
 	}
 
