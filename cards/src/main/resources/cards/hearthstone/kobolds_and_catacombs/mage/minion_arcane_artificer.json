@@ -18,7 +18,7 @@
       "target": "FRIENDLY_HERO",
       "armorBonus": {
         "class": "PlayerAttributeValueProvider",
-				"playerAttribute": "LAST_MANA_COST"
+        "playerAttribute": "LAST_MANA_COST"
       }
     }
   },

@@ -4,7 +4,7 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Choose One - Deal 5 damage; or 2 damage to all enemies.",
+  "description": "Choose One - Deal $5 damage; or 2 damage to all enemies.",
   "targetSelection": "NONE",
   "chooseOneCardIds": [
     "spell_unnerfed_starfall_1",

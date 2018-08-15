@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal 1 damage. Summon a random minion with Cost equal to the damage dealt.",
+  "description": "Deal $1 damage. Summon a random minion with Cost equal to the damage dealt.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "description": "Deal 2 damage and hire two 1/1 tokens.",
+  "description": "Deal $2 damage and hire two 1/1 tokens.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

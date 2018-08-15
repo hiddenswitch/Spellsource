@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Deal 2 damage. Combo: Deal 4 damage.",
+  "description": "Deal $2 damage. Combo: Deal $4 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ComboSpell",

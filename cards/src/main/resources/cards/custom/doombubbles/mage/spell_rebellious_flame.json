@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal 3 damage. (Play a spell to transform into a minion.)",
+  "description": "Deal $3 damage. (Play a spell to transform into a minion.)",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",

@@ -4,7 +4,7 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "description": "Select One - Summon two 1/1 tokens; or deal 2 damage.",
+  "description": "Select One - Summon two 1/1 tokens; or deal $2 damage.",
   "targetSelection": "NONE",
   "chooseOneCardIds": [
     "spell_appetizer_2",

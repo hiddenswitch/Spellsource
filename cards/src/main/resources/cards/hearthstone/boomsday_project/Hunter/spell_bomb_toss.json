@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "COMMON",
-  "description": "Deal 2 damage. Summon a 0/2 Goblin Bomb.",
+  "description": "Deal $2 damage. Summon a 0/2 Goblin Bomb.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

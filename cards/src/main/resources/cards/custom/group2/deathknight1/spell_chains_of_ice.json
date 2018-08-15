@@ -20,11 +20,11 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "class": "SilenceSpell"
+          "class": "SilenceSpell"
         },
         {
-        "class": "AddAttributeSpell",
-        "attribute": "FROZEN"
+          "class": "AddAttributeSpell",
+          "attribute": "FROZEN"
         }
       ]
     }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Deal 5 damage. Add a 'Shadowstep' to your hand.",
+  "description": "Deal $5 damage. Add a 'Shadowstep' to your hand.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

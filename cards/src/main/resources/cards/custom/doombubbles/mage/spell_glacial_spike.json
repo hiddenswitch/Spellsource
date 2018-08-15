@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal *7* damage to an enemy and freeze it. If it was already frozen, add an Ice Lance to your hand.",
+  "description": "Deal $7 damage to an enemy and freeze it. If it was already frozen, add an Ice Lance to your hand.",
   "targetSelection": "ENEMY_CHARACTERS",
   "spell": {
     "class": "MetaSpell",
