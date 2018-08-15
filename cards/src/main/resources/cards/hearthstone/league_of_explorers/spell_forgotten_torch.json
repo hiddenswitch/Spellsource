@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Deal 3 damage. Shuffle a 'Roaring Torch' into your deck that deals 6 damage.",
+  "description": "Deal $3 damage. Shuffle a 'Roaring Torch' into your deck that deals 6 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

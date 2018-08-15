@@ -4,7 +4,7 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "description": "Select One - Deal 1 damage and draw a card; or deal 3 damage.",
+  "description": "Select One - Deal $1 damage and draw a card; or deal $3 damage.",
   "targetSelection": "NONE",
   "chooseOneCardIds": [
     "spell_cleanup_2",

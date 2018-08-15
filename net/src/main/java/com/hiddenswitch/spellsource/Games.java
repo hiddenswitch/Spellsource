@@ -27,9 +27,14 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.SpellDamageValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
@@ -44,6 +49,8 @@ import java.lang.ref.WeakReference;
 import java.util.*;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.BiConsumer;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -57,6 +64,7 @@ public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	String WEBSOCKET_PATH = "games";
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
+	Pattern SPELL_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d)");
 
 	static Games create() {
 		return new ClusteredGames();
@@ -1050,15 +1058,14 @@ public interface Games extends Verticle {
 		}
 
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.description(card.getDescription())
 				.entityType(com.hiddenswitch.spellsource.client.models.Entity.EntityTypeEnum.CARD)
 				.name(card.getName())
-				.description(card.getDescription())
 				.id(card.getId())
 				.cardId(card.getCardId());
 		EntityState entityState = new EntityState();
 		int owner = card.getOwner();
 		Player owningPlayer;
+		String description = card.getDescription();
 		if (owner != -1) {
 			if (card.getZone() == Zones.HAND
 					|| card.getZone() == Zones.DECK
@@ -1075,10 +1082,46 @@ public interface Games extends Verticle {
 				entityState.manaCost(card.getBaseManaCost());
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
+
+			// Handle spell damage
+			if (card.isSpell()) {
+				// Find the $ damages
+				Matcher matcher = SPELL_DAMAGE_IN_DESCRIPTION.matcher(description);
+				StringBuffer newDescription = new StringBuffer();
+
+				boolean didChange = false;
+				while (matcher.find()) {
+					// Skip the dollar sign in the beginning
+					int damage = Integer.parseInt(matcher.group(1));
+					int modifiedDamage;
+					if (card.getId() != GameLogic.UNASSIGNED) {
+						ValueProviderDesc desc = new ValueProviderDesc();
+						desc.put(ValueProviderArg.VALUE, damage);
+						desc.put(ValueProviderArg.CLASS, SpellDamageValueProvider.class);
+						ValueProvider provider = desc.create();
+						modifiedDamage = provider.getValue(workingContext, owningPlayer, owningPlayer.getHero(), card);
+					} else {
+						modifiedDamage = damage;
+					}
+					if (modifiedDamage != damage) {
+						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
+					} else {
+						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
+					}
+					didChange = true;
+				}
+				if (didChange) {
+					matcher.appendTail(newDescription);
+					description = newDescription.toString();
+				}
+			}
+
+			entity.description(description);
 		} else {
 			entityState.playable(false);
 			entityState.manaCost(card.getBaseManaCost());
 			owningPlayer = Player.empty();
+			entity.description(description.replace("$", ""));
 		}
 
 		entityState.owner(card.getOwner());

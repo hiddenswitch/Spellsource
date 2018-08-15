@@ -8,9 +8,11 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
     compile group: 'com.github.hiddenswitch', name: 'vertx-sync', version: 'master-SNAPSHOT'
     testCompile project(':cards')
+
     testCompile group: 'org.jsoup', name: 'jsoup', version: '1.11.2'
     testCompile group: 'org.testng', name: 'testng', version: '6.+'
     testCompile group: 'org.mockito', name: 'mockito-core', version: '2.+'
+    testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
     testCompile group: 'org.reflections', name: 'reflections', version: '0.9.11'
 }
 

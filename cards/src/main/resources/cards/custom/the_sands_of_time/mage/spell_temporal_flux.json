@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal 1 damage. Draw a card for each damage dealt.",
+  "description": "Deal $1 damage. Draw a card for each damage dealt.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

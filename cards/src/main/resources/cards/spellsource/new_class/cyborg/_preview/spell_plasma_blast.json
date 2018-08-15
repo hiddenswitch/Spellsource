@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "COMMON",
-  "description": "Deal 3 damage. Draw a card if you have no cards in hand.",
+  "description": "Deal $3 damage. Draw a card if you have no cards in hand.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

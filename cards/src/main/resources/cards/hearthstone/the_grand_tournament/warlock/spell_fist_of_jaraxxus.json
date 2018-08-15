@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "When you play or discard this, deal 4 damage to a random enemy.",
+  "description": "When you play or discard this, deal $4 damage to a random enemy.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "DiscardTrigger",

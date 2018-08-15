@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Deal 4 damage. Summon two 2/2 Treants.",
+  "description": "Deal $4 damage. Summon two 2/2 Treants.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

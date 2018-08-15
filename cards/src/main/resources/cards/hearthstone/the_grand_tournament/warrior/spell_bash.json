@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RED",
   "rarity": "COMMON",
-  "description": "Deal 3 damage. Gain 3 Armor.",
+  "description": "Deal $3 damage. Gain 3 Armor.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

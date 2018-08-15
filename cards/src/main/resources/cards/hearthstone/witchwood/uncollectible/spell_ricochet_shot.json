@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Deal 3 damage to a random character. Repeat this 12 times.",
+  "description": "Deal $3 damage to a random character. Repeat this 12 times.",
   "targetSelection": "NONE",
   "spell": {
     "class": "RecastWhileSpell",

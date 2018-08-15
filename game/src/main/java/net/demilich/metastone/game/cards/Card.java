@@ -303,7 +303,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		// Cleanup the html tags that appear in the description
 		final String description = hasAttribute(Attribute.DESCRIPTION) ? (String) getAttribute(Attribute.DESCRIPTION) : getDesc().getDescription();
 		if (description == null || description.isEmpty()) {
-			return description;
+			return "";
 		}
 		return description.replaceAll("(</?[bi]>)|\\[x\\]", "");
 	}

@@ -47,7 +47,8 @@
           "class": "AttributeValueProvider",
           "target": "FRIENDLY_WEAPON",
           "attribute": "ATTACK"
-        }
+        },
+        "ignoreSpellDamage": true
       },
       {
         "class": "ReturnTargetToHandSpell",

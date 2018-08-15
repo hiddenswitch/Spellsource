@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "FREE",
-  "description": "Deal 3 damage. Instead deal 5 damage if you have a Cyborg.",
+  "description": "Deal $3 damage. Instead deal $5 damage if you have a Cyborg.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

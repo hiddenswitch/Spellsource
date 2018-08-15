@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "EPIC",
-  "description": "Deal 1 damage. Repeatable this turn.",
+  "description": "Deal $1 damage. Repeatable this turn.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

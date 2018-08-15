@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "EPIC",
-  "description": "Deal 3 damage to yourself and gain 9 armor.",
+  "description": "Deal $3 damage to yourself and gain 9 armor.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

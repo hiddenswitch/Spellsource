@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Deal 3 damage. Take 3 damage.",
+  "description": "Deal $3 damage. Take 3 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

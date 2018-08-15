@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal 1 damage. Give your minions +1 Attack this turn for each damage dealt.",
+  "description": "Deal $1 damage. Give your minions +1 Attack this turn for each damage dealt.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

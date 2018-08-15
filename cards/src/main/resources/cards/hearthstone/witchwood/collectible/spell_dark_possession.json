@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Deal 2 damage to a friendly character. <b>Discover</b> a Demon.",
+  "description": "Deal $2 damage to a friendly character. <b>Discover</b> a Demon.",
   "targetSelection": "FRIENDLY_CHARACTERS",
   "spell": {
     "class": "MetaSpell",

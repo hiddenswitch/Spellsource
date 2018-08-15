@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Deal 4 damage",
+  "description": "Deal $4 damage",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
