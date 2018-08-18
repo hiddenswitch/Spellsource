@@ -1,0 +1,14 @@
+
+{
+  "name": "Training Dummy",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
