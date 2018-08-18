@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Deathrattle: Restore 5 Health to the enemy hero.",
+  "description": "Deathrattle: Restore #5 Health to the enemy hero.",
   "deathrattle": {
     "class": "HealSpell",
     "target": "ENEMY_HERO",

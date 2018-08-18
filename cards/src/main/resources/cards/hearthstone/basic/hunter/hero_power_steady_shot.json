@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "GREEN",
   "rarity": "FREE",
-  "description": "Deal 2 damage to the enemy hero.",
+  "description": "Deal $2 damage to the enemy hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

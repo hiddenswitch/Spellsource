@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Whenever your hero attacks, restore 2 Health to it.",
+  "description": "Whenever your hero attacks, restore #2 Health to it.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

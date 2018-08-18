@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Restore 2 Health. +2 Attack this turn.",
+  "description": "Restore #2 Health. +2 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

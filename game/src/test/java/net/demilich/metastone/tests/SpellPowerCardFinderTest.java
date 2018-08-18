@@ -46,7 +46,7 @@ public class SpellPowerCardFinderTest extends TestBase {
 			GameContext spellDamageContext = createGameContext();
 			GameContext spellAmplifyContext = createGameContext();
 			spellDamageContext.getActivePlayer().getHero().setAttribute(Attribute.SPELL_DAMAGE, 1);
-			spellAmplifyContext.getActivePlayer().getHero().setAttribute(Attribute.SPELL_AMPLIFY_MULTIPLIER, 2);
+			spellAmplifyContext.getActivePlayer().getHero().setAttribute(Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER, 2);
 
 			for (GameContext context : new GameContext[]{nothingContext, spellAmplifyContext, spellDamageContext}) {
 				context.getLogic().receiveCard(activePlayer, card.getCopy());
@@ -63,7 +63,7 @@ public class SpellPowerCardFinderTest extends TestBase {
 				GameContext lhs = nothingContext;
 
 				rhs.getActivePlayer().getHero().getAttributes().remove(Attribute.SPELL_DAMAGE);
-				rhs.getActivePlayer().getHero().getAttributes().remove(Attribute.SPELL_AMPLIFY_MULTIPLIER);
+				rhs.getActivePlayer().getHero().getAttributes().remove(Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER);
 
 				ReflectionComparator reflectionComparator = ReflectionComparatorFactory.createRefectionComparator(ReflectionComparatorMode.IGNORE_DEFAULTS);
 				GameState leftGameState = lhs.getGameStateCopy();

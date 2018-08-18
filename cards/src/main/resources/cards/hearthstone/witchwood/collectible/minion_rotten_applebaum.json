@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Taunt. Deathrattle: Restore 4 Health to your hero.",
+  "description": "Taunt. Deathrattle: Restore #4 Health to your hero.",
   "deathrattle": {
     "class": "HealSpell",
     "target": "FRIENDLY_HERO",

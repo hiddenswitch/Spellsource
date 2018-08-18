@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Taunt. Battlecry: Restore 5 Health.",
+  "description": "Taunt. Battlecry: Restore #5 Health.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

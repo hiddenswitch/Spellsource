@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",
-  "description": "Restore 8 Health. Draw 3 cards.",
+  "description": "Restore #8 Health. Draw 3 cards.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
