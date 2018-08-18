@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Battlecry: Restore 8 Health to your hero.",
+  "description": "Battlecry: Restore #8 Health to your hero.",
   "battlecry": {
     "spell": {
       "class": "HealSpell",

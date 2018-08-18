@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "After your hero attacks, restore 4 Health to your hero.",
+  "description": "After your hero attacks, restore #4 Health to your hero.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

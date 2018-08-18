@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "EPIC",
-  "description": "Restore 8 Health. Costs (1) less for each damage your hero has taken.",
+  "description": "Restore #8 Health. Costs (1) less for each damage your hero has taken.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",

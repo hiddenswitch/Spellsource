@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Battlecry: If your C'Thun has at least 10 Attack, restore 10 Health to your Hero.",
+  "description": "Battlecry: If your C'Thun has at least 10 Attack, restore #10 Health to your Hero.",
   "battlecry": {
     "condition": {
       "class": "OrCondition",

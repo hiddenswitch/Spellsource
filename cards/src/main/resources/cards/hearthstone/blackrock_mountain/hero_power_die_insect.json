@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "INHERIT",
   "rarity": "FREE",
-  "description": "Deal 8 damage to a random enemy.",
+  "description": "Deal $8 damage to a random enemy.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

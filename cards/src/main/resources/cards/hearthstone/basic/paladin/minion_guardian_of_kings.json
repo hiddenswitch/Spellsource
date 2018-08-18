@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "FREE",
-  "description": "Battlecry: Restore 6 Health to your hero.",
+  "description": "Battlecry: Restore #6 Health to your hero.",
   "battlecry": {
     "spell": {
       "class": "HealSpell",

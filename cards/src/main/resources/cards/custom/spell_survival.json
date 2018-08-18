@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "Restore 2 Health. Equip 1/1 Knife. Get a Banana. Draw a card.",
+  "description": "Restore #2 Health. Equip 1/1 Knife. Get a Banana. Draw a card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
