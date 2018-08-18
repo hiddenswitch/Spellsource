@@ -6,6 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
+  "race": "MECH",
   "description": "Battlecry: Force all minions to attack random minions.",
     "battlecry": {
     "targetSelection": "NONE",
