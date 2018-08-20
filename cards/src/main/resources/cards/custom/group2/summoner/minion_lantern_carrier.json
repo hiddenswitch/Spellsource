@@ -23,7 +23,8 @@
           "attackBonus": 1,
           "hpBonus": 1
         },
-        "maxFires": 1
+        "maxFires": 1,
+        "oneTurn": true
       }
     }
   },
