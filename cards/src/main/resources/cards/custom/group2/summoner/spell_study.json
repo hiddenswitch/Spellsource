@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",
-    "target": "FRIENDLY_LAST_CARD_PLAYED"
+    "target": "FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -992,7 +992,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
 		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
-			throw new RuntimeException("Invalid reference.");
+			throw new TargetNotFoundException("Invalid reference.");
 		}
 
 		return entity;
@@ -1352,12 +1352,34 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLastCardPlayedMap().put(playerId, cardReference);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<Integer, EntityReference> getLastCardPlayedBeforeCurrentSequenceMap() {
+		if (!getEnvironment().containsKey(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			getEnvironment().put(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE, new EnvironmentMap<>());
+		}
+		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE);
+	}
+
+	public void setLastCardPlayedBeforeCurrentSequence(int playerId, EntityReference cardReference) {
+		getLastCardPlayedBeforeCurrentSequenceMap().put(IdFactory.UNASSIGNED, cardReference);
+		getLastCardPlayedBeforeCurrentSequenceMap().put(playerId, cardReference);
+	}
+
 	public EntityReference getLastCardPlayed(int playerId) {
 		return getLastCardPlayedMap().get(playerId);
 	}
 
 	public EntityReference getLastCardPlayed() {
 		return getLastCardPlayedMap().get(IdFactory.UNASSIGNED);
+	}
+
+
+	public EntityReference getLastCardPlayedBeforeCurrentSequence() {
+		return getLastCardPlayedBeforeCurrentSequenceMap().get(IdFactory.UNASSIGNED);
+	}
+
+	public EntityReference getLastCardPlayedBeforeCurrentSequence(int playerId) {
+		return getLastCardPlayedBeforeCurrentSequenceMap().get(playerId);
 	}
 
 	protected Player getNonActivePlayer() {

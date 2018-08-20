@@ -79,8 +79,7 @@ public class CopyCardSpell extends Spell {
 		}
 
 		if (sourceCollection == null) {
-			logger.error("Trying to access a null source collection.");
-			return;
+			throw new NullPointerException("Trying to access a null source collection.");
 		}
 
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);

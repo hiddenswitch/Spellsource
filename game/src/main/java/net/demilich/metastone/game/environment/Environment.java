@@ -32,6 +32,11 @@ public enum Environment {
 	 */
 	LAST_CARD_PLAYED,
 	/**
+	 * This variable stores a reference to the last card played for each player before the card this attribute is written
+	 * on. Helps implement Study.
+	 */
+	LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE,
+	/**
 	 * This variable stores a stack of attackers.
 	 */
 	ATTACKER_REFERENCE_STACK,
