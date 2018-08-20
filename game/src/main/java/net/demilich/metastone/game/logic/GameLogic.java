@@ -274,9 +274,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (gameEventListener instanceof Enchantment) {
-			// Start assigning IDs to these things
+			// Start assigning IDs to these things if they don't have an ID
 			Enchantment enchantment = (Enchantment) gameEventListener;
-			enchantment.setId(generateId());
+
+			if (enchantment.getId() == IdFactory.UNASSIGNED) {
+				enchantment.setId(generateId());
+			}
+
 			if (enchantment.getSourceCard() == null) {
 				enchantment.setSourceCard(host.getSourceCard());
 			}
@@ -1054,7 +1058,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					|| (source instanceof Hero
 					&& ((Hero) source).getWeapon() != null
 					&& (((Hero) source).getWeapon().hasAttribute(Attribute.LIFESTEAL)
-					|| ((Hero) source).getWeapon().hasAttribute(Attribute.AURA_LIFESTEAL)))) {
+					|| ((Hero) source).getWeapon().hasAttribute(Attribute.AURA_LIFESTEAL)))
+					|| (source instanceof Secret
+					&& (source.getSourceCard().hasAttribute(Attribute.LIFESTEAL)) || source.getSourceCard().hasAttribute(Attribute.AURA_LIFESTEAL))) {
 				Player sourceOwner = context.getPlayer(source.getOwner());
 				heal(sourceOwner, sourceOwner.getHero(), damageDealt, source);
 			}
@@ -1732,19 +1738,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		return (card.hasAttribute(Attribute.INVOKE) && card.getAttributeValue(Attribute.INVOKE) <= mana)
 				|| (card.hasAttribute(Attribute.AURA_INVOKE) && card.getAttributeValue(Attribute.AURA_INVOKE) <= mana);
-	}
-
-	/**
-	 * Gets a list of secrets for a player.
-	 *
-	 * @param player The player whose point of view to query for secrets.
-	 * @return The secrets as {@link Trigger}
-	 * @see Player#getSecrets() for a more reliable way to get the {@link Secret} entities that are in play for a player.
-	 */
-	private List<Trigger> getSecrets(Player player) {
-		List<Trigger> secrets = context.getTriggersAssociatedWith(player.getHero().getReference());
-		secrets.removeIf(trigger -> !(trigger instanceof Secret));
-		return secrets;
 	}
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
@@ -2572,13 +2565,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
-		Secret newSecret = secret.clone();
-		newSecret.setId(generateId());
-		newSecret.setOwner(player.getId());
-		addGameEventListener(player, newSecret, player.getHero());
-		player.getSecrets().add(newSecret);
+		secret = secret.clone();
+		secret.setId(generateId());
+		secret.setOwner(player.getId());
+		secret.moveOrAddTo(context, Zones.SECRET);
+		addGameEventListener(player, secret, secret);
 		if (fromHand) {
-			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), newSecret.getSourceCard()));
+			context.fireGameEvent(new SecretPlayedEvent(context, player.getId(), secret.getSourceCard()));
 		}
 	}
 
@@ -2918,12 +2911,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void removeSecrets(Player player) {
-		// this only works while Secrets are the only Enchantment on the heroes
-		for (Trigger secret : getSecrets(player)) {
-			secret.onRemove(context);
-			context.removeTrigger(secret);
+		for (Secret secret : new ArrayList<>(player.getSecrets())) {
+			removeEnchantments(secret);
+			secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		}
-		player.getSecrets().clear();
 	}
 
 	@Suspendable
@@ -3740,8 +3731,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		quest = quest.clone();
 		quest.setId(generateId());
 		quest.setOwner(player.getId());
-		addGameEventListener(player, quest, player.getHero());
-		player.getQuests().add(quest);
+		quest.moveOrAddTo(context, Zones.QUEST);
+		addGameEventListener(player, quest, quest);
 		if (fromHand) {
 			context.fireGameEvent(new QuestPlayedEvent(context, player.getId(), quest.getSourceCard()));
 		}
@@ -3754,8 +3745,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param quest  The quest {@link Enchantment} living inside the {@link Zones#QUEST} zone.
 	 */
 	public void questTriggered(Player player, Quest quest) {
-		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		removeEnchantments(quest);
+		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.fireGameEvent(new QuestSuccessfulEvent(context, quest.getSourceCard(), player.getId()));
 	}
 

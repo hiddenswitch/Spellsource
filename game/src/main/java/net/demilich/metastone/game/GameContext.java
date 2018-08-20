@@ -1116,11 +1116,22 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @return The found {@link Entity}, or {@code null} if no entity was found.
 	 */
 	public Entity tryFind(EntityReference targetKey) {
-		try {
-			return resolveSingleTarget(targetKey);
-		} catch (Throwable e) {
+		if (targetKey == null) {
+			return null;
 		}
-		return null;
+
+		Entity entity = targetLogic.findEntity(this, targetKey);
+		if (entity == null) {
+			return null;
+		}
+		entity = entity.transformResolved(this);
+
+		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
+		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
+			return null;
+		}
+
+		return entity;
 	}
 
 	public void setLogic(GameLogic logic) {

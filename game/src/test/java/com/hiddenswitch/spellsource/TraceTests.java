@@ -103,6 +103,13 @@ public class TraceTests {
 
 	@Test
 	@Ignore
+	public void testShudderwockInteraction() {
+		Trace trace = getTrace("shudderwockinteraction");
+		GameContext context = trace.replayContext(false);
+	}
+
+	@Test
+	@Ignore
 	public void testShouldNotSummonEvilLaughter() {
 		Trace summoningEvilLaughter = getTrace("summoningevillaughter");
 		GameContext context = summoningEvilLaughter.replayContext(false);
