@@ -18,6 +18,17 @@ import static org.testng.Assert.*;
 public class BoomsdayProjectTests extends TestBase {
 
 	@Test
+	public void testWeaponsProject() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_weapons_project");
+			assertEquals(player.getHero().getArmor(), 6);
+			assertEquals(opponent.getHero().getArmor(), 6);
+			assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_gearblade");
+			assertEquals(opponent.getHero().getWeapon().getSourceCard().getCardId(), "weapon_gearblade");
+		});
+	}
+
+	@Test
 	public void testDrMorrigan() {
 		runGym((context, player, opponent) -> {
 			Minion morrigan = playMinionCard(context, player, "minion_dr__morrigan");

@@ -15,12 +15,12 @@
         "targetPlayer": "BOTH"
       },
       {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
         "armorBonus": 6
       },
       {
-        "class": "BuffHeroSpell",
+        "class": "BuffSpell",
         "target": "ENEMY_HERO",
         "armorBonus": 6
       }

@@ -13,12 +13,12 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "BuffHeroSpell",
+          "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
           "armorBonus": 6
         },
         {
-          "class": "BuffHeroSpell",
+          "class": "BuffSpell",
           "target": "FRIENDLY_HERO",
           "armorBonus": {
             "class": "AttributeValueProvider",
