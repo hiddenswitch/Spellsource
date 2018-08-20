@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Battlecry: Restore 6 Health. Overload: (1)",
+  "description": "Battlecry: Restore #6 Health. Overload: (1)",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

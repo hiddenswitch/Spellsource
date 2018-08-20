@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "COMMON",
-  "description": "<b>Deathrattle:</b> Restore 8 Health to your hero.",
+  "description": "<b>Deathrattle:</b> Restore #8 Health to your hero.",
   "deathrattle": {
     "class": "HealSpell",
     "target": "FRIENDLY_HERO",

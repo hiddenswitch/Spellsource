@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "WHITE",
   "rarity": "FREE",
-  "description": "Deal 2 damage. After you play a card, refresh this.",
+  "description": "Deal $2 damage. After you play a card, refresh this.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

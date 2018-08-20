@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "RED",
   "rarity": "FREE",
-  "description": "Deal 3 damage. Swaps each turn.",
+  "description": "Deal $3 damage. Swaps each turn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

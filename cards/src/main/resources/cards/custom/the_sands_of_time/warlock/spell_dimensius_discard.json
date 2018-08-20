@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Discard a card. Restore 5 Health to your Hero.",
+  "description": "Discard a card. Restore #5 Health to your Hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

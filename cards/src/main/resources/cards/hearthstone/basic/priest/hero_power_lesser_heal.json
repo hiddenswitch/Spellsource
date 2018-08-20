@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "WHITE",
   "rarity": "FREE",
-  "description": "Restore 2 Health.",
+  "description": "Restore #2 Health.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",

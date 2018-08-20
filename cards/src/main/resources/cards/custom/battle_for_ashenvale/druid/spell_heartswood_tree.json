@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Restore 5 health. Gain 5 Armor. Draw a card.",
+  "description": "Restore #5 health. Gain 5 Armor. Draw a card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

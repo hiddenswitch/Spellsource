@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Destroy a Demon. Restore 5 Health to your hero.",
+  "description": "Destroy a Demon. Restore #5 Health to your hero.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Call to Arms: Restore 4 Health to each hero.",
+  "description": "Call to Arms: Restore #4 Health to each hero.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
