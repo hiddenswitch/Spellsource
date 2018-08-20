@@ -11,7 +11,8 @@
     "value": {
       "class": "PlayerAttributeValueProvider",
       "playerAttribute": "INVOKED_CARDS"
-    }
+    },
+    "card": "token_firepuff"
   },
   "collectible": true,
   "set": "CUSTOM",
