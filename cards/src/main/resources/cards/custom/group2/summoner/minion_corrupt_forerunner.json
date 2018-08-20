@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "EPIC",
-  "race": "BEAST",
+  "race": "DRAGON",
   "description": "Invoke (8): Summon a copy of this for each Dragon you're holding.",
   "battlecry": {
     "condition": {
