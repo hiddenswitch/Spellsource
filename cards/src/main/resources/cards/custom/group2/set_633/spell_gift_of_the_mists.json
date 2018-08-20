@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Give your minions \"Deathrattle: Restore 4 Health to your hero.\"",
+  "description": "Give your minions \"Deathrattle: Restore #4 Health to your hero.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",

@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Battlecry: Discard as many cards as you want. Restore 5 Health to your Hero for each.",
+  "description": "Battlecry: Discard as many cards as you want. Restore #5 Health to your Hero for each.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

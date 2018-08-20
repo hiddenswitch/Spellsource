@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "If you control a Secret at the end of your turn, restore 4 Health to your hero.",
+  "description": "If you control a Secret at the end of your turn, restore #4 Health to your hero.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

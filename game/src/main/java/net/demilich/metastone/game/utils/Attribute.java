@@ -377,8 +377,8 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the full spell damage calculation.
 	 */
-	SPELL_AMPLIFY_MULTIPLIER,
-	HERO_POWER_SPELL_AMPLIFY_MULTIPLIER,
+	SPELL_DAMAGE_AMPLIFY_MULTIPLIER,
+	HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER,
 	/**
 	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
 	 * GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.

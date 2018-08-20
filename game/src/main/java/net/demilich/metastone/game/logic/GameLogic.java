@@ -324,7 +324,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param attribute The attribute to look up in all entities.
 	 * @return The newly calculate spell or healing value.
 	 * @see Attribute#SPELL_HEAL_AMPLIFY_MULTIPLIER for the healing amplification attribute.
-	 * @see Attribute#SPELL_AMPLIFY_MULTIPLIER for the spell damage amplification attribute.
+	 * @see Attribute#SPELL_DAMAGE_AMPLIFY_MULTIPLIER for the spell damage amplification attribute.
 	 */
 	@Suspendable
 	public int applyAmplify(Player player, int baseValue, Attribute attribute) {
@@ -1080,11 +1080,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			} else if (sourceCard.getCardType().isCardType(CardType.HERO_POWER)) {
 				damage = applyHeroPowerDamage(player, damage);
 			}
-			if (sourceCard.isSpell() || sourceCard.isHeroPower()) {
-				damage = applyAmplify(player, damage, Attribute.SPELL_AMPLIFY_MULTIPLIER);
+			if (sourceCard.isSpell()) {
+				damage = applyAmplify(player, damage, Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER);
 			}
 			if (sourceCard.isHeroPower()) {
-				damage = applyAmplify(player, damage, Attribute.HERO_POWER_SPELL_AMPLIFY_MULTIPLIER);
+				damage = applyAmplify(player, damage, Attribute.HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER);
 			}
 		}
 		int damageDealt = 0;

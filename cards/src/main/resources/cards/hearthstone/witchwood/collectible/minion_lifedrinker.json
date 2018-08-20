@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "<b>Battlecry:</b> Deal 3 damage to the enemy hero. Restore 3 Health to your hero.",
+  "description": "<b>Battlecry:</b> Deal 3 damage to the enemy hero. Restore #3 Health to your hero.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "BLUE",
   "rarity": "FREE",
-  "description": "Deal 1 damage. If this kills a minion, summon a Water Elemental.",
+  "description": "Deal $1 damage. If this kills a minion, summon a Water Elemental.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",

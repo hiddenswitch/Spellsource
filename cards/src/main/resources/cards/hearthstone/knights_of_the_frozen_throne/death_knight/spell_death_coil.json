@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SPIRIT",
   "rarity": "FREE",
-  "description": "Deal 5 damage to an enemy, or restore 5 Health to a friendly character.",
+  "description": "Deal 5 damage to an enemy, or restore #5 Health to a friendly character.",
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",
