@@ -4,6 +4,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
@@ -593,8 +594,11 @@ public class BoomsdayProjectTests extends TestBase {
 			Minion knight = playMinionCard(context, player, "minion_tiny_knight_of_evil");
 			playCard(context, player, "spell_the_soularium");
 			playCard(context, player, player.getHand().get(0));
+			// Check that the effect doesn't remove all the cards from the player's hand
+			Card other = receiveCard(context, player, "spell_the_coin");
 			context.endTurn();
-			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(other.getZone(), Zones.HAND);
 			assertEquals(knight.getAttack(), knight.getBaseAttack() + 2);
 		});
 
