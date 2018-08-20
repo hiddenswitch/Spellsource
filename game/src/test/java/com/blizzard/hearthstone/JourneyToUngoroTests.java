@@ -35,6 +35,17 @@ import static org.testng.Assert.assertEquals;
 public class JourneyToUngoroTests extends TestBase {
 
 	@Test
+	public void testBittertideHydraVolcanoInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion bittertide = playMinionCard(context, player, "minion_bittertide_hydra");
+			context.endTurn();
+			int playerHp = player.getHero().getHp();
+			playCard(context, opponent, "spell_volcano");
+			assertEquals(player.getHero().getHp(), playerHp - bittertide.getBaseHp() * 3);
+		});
+	}
+
+	@Test
 	public void testViciousFledgling() {
 		runGym((context, player, opponent) -> {
 			Minion fledgling = playMinionCard(context, player, "minion_vicious_fledgling");
@@ -266,7 +277,7 @@ public class JourneyToUngoroTests extends TestBase {
 			}
 			assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
 		});
-		
+
 		// Cards summoned by your opponent should not count
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_the_caverns_below");
