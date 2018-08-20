@@ -12,7 +12,7 @@
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
       "cardType": "MINION",
-      "hostTargetType": "IGNORE_AS_TARGET",
+      "hostTargetType": "IGNORE_AS_SOURCE",
       "targetPlayer": "SELF"
     },
     "spell": {
