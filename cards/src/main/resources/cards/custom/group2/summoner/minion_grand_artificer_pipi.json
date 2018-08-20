@@ -18,7 +18,8 @@
         "class": "AddDeathrattleSecondaryAsTargetSpell",
         "target": "OUTPUT",
         "spell": {
-          "class": "CastRandomSpellSpell"
+          "class": "CastRandomSpellSpell",
+          "exclusive": true
         },
         "secondaryTarget": "EVENT_SOURCE"
       },

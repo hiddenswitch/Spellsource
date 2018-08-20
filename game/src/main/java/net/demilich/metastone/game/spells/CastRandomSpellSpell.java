@@ -23,6 +23,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * Casts a random spell from the {@link SpellArg#CARD_SOURCE}, {@link SpellArg#CARD_FILTER} and {@link SpellArg#CARDS}
  * provided.
  * <p>
+ * If {@link SpellArg#EXCLUSIVE} is {@code true}, the {@code source} does <b>not</b> have to be in play in order for the
+ * spell to be cast.
+ * <p>
  * For example, to implement "Whenever a player casts a spell, cast a copy of it for them with random targets.":
  * <pre>
  *   {
@@ -80,7 +83,8 @@ public class CastRandomSpellSpell extends Spell {
 				break;
 			}
 			DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, castingTargetPlayer);
-			if (!determineCastingPlayer.isSourceInPlay()) {
+			boolean mustBeInPlay = !desc.getBool(SpellArg.EXCLUSIVE);
+			if (mustBeInPlay && !determineCastingPlayer.isSourceInPlay()) {
 				break;
 			}
 			Player castingPlayer = determineCastingPlayer.getCastingPlayer();
