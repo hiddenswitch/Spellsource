@@ -44,6 +44,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testGrandArtificerPipiAndWaxGolem() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_grand_artificer_pipi");
+			playCard(context, player, "spell_mind_blast");
+			Minion waxGolem = player.getMinions().get(1);
+			assertEquals(waxGolem.getSourceCard().getCardId(), "token_wax_golem");
+			assertEquals(opponent.getHero().getHp(), 30 - 5, "Should have been hit by Mind Blast #1");
+			destroy(context, waxGolem);
+			assertEquals(opponent.getHero().getHp(), 30 - 10, "Should have been hit by Mind Blast #2");
+		});
+	}
+
+	@Test
 	public void testOzumatOfTheDepths() {
 		runGym((context, player, opponent) -> {
 			destroy(context, playMinionCard(context, player, "token_ozumat_of_the_depths"));
