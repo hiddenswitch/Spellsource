@@ -12,8 +12,10 @@
     "eventTrigger": {
       "class": "MinionSummonedTrigger",
       "fireCondition": {
-        "class": "ManaCostCondition",
-        "value": 0
+        "class": "AttributeCondition",
+        "value": 0,
+        "attribute": "BASE_MANA_COST",
+        "operation": "EQUAL"
       },
       "targetPlayer": "SELF"
     },

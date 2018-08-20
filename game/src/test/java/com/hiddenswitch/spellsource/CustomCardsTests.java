@@ -44,6 +44,28 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFortunaHunter() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_fortuna_hunter");
+			Minion buffed = playMinionCard(context, player, "minion_wisp");
+			assertEquals(buffed.getAttack(), buffed.getBaseAttack() + 1);
+			assertEquals(buffed.getHp(), buffed.getBaseHp() + 1);
+			Minion notBuffed = playMinionCard(context, player, "minion_bloodfen_raptor");
+			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
+			assertEquals(notBuffed.getHp(), notBuffed.getBaseHp());
+			player.setMana(5);
+			playMinionCard(context, player, "minion_baby_gryphon");
+			// Get the right card
+			buffed = player.getMinions().get(player.getMinions().size() - 2);
+			// Should have invoked
+			assertEquals(buffed.getSourceCard().getCardId(), "minion_baby_gryphon");
+			assertTrue(buffed.getSourceCard().hasAttribute(Attribute.INVOKED));
+			assertEquals(buffed.getAttack(), buffed.getBaseAttack() + 1);
+			assertEquals(buffed.getHp(), buffed.getBaseHp() + 1);
+		});
+	}
+
+	@Test
 	public void testRebelliousFlame() {
 		runGym((context, player, opponent) -> {
 			Card rebelliousFlame = receiveCard(context, player, "minion_rebellious_flame");
