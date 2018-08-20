@@ -44,6 +44,30 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testOzumatOfTheDepths() {
+		runGym((context, player, opponent) -> {
+			destroy(context, playMinionCard(context, player, "token_ozumat_of_the_depths"));
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(player.getSecrets().size(), 1);
+			assertEquals(player.getSecrets().get(0).getSourceCard().getCardId(), "token_ozumat's_nightmare");
+			context.endTurn();
+			assertEquals(player.getSecrets().size(), 1);
+			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_nightmare_tentacle");
+			context.endTurn();
+			assertEquals(player.getSecrets().size(), 1);
+			context.endTurn();
+			assertEquals(player.getSecrets().size(), 1);
+			playCard(context, opponent, "minion_eater_of_secrets");
+			assertEquals(player.getSecrets().size(), 0);
+			context.endTurn();
+			assertEquals(player.getSecrets().size(), 1);
+		});
+	}
+
+	@Test
 	public void testStudy() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_bloodfen_raptor");

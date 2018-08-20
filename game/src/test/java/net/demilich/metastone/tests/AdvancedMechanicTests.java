@@ -43,6 +43,18 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testSecrets() {
+		runGym((context, player, opponent) -> {
+			// Player cannot play multiples of the same secrets
+			playCard(context, player, "secret_counterspell");
+			Card counterspell = receiveCard(context, player, "secret_counterspell");
+			player.setMana(3);
+			assertFalse(context.getValidActions().stream().anyMatch(p -> p.getActionType() == ActionType.SPELL
+					&& p.getSourceReference().equals(counterspell.getReference())));
+		});
+	}
+
+	@Test
 	public void testDeflect() {
 		runGym((context, player, opponent) -> {
 			int hp = player.getHero().getHp();

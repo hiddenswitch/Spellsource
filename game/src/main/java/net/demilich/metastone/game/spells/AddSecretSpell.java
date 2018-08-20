@@ -41,6 +41,8 @@ public class AddSecretSpell extends Spell {
 		if (secret.getSourceCard() == null) {
 			secret.setSourceCard(source.getSourceCard());
 		}
-		context.getLogic().playSecret(player, secret);
+		if (context.getLogic().canPlaySecret(player,secret.getSourceCard())) {
+			context.getLogic().playSecret(player, secret);
+		}
 	}
 }
