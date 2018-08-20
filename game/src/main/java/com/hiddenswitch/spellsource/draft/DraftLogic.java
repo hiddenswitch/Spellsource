@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toList;
 
@@ -134,6 +135,11 @@ public class DraftLogic {
 				"spell_convert",
 				"spell_inner_fire"
 		));
+
+		CardCatalogue.getAll().stream()
+				.filter(Card::isQuest)
+				.map(Card::getCardId)
+				.forEach(bannedCards::add);
 
 		for (int draft = 0; draft < DRAFTS; draft++) {
 			// Select a rarity at the appropriate frequency
