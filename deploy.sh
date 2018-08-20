@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
-pip install awsebcli
 set -e
-./build.sh
+echo Checking AWS environment
+pip install awsebcli >/dev/null
+echo Building
+./build.sh >/dev/null
 eb use metastone-dev
 eb deploy --staged
