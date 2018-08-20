@@ -480,7 +480,7 @@ public class TestBase {
 
 	protected static Minion getSummonedMinion(List<Minion> minions) {
 		List<Minion> minionList = new ArrayList<>(minions);
-		Collections.sort(minionList, (m1, m2) -> Integer.compare(m1.getId(), m2.getId()));
+		Collections.sort(minionList, Comparator.comparingInt(Entity::getId));
 		return minionList.get(minionList.size() - 1);
 	}
 

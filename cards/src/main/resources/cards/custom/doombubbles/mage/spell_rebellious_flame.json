@@ -9,8 +9,8 @@
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
       "cardType": "SPELL",
-      "targetPlayer": "SELF",
-      "hostTargetType": "IGNORE_AS_SOURCE"
+      "hostTargetType": "IGNORE_AS_SOURCE",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
