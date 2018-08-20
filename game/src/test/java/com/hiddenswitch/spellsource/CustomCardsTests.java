@@ -110,6 +110,17 @@ public class CustomCardsTests extends TestBase {
 			playCardWithTarget(context, player, fireball2, opponent.getHero());
 			assertEquals(player.getHero().getHp(), 1 + 6, "Lifesteal should not have been applied");
 		});
+
+		runGym((context, player, opponent) -> {
+			// Souldrinker Drake should give Watchful Gaze, a secret, lifesteal
+			playMinionCard(context, player, "minion_souldrinker_drake");
+			playCard(context, player, "secret_watchful_gaze");
+			context.endTurn();
+			player.getHero().setHp(1);
+			playCard(context, opponent, "minion_bloodfen_raptor");
+			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getHero().getHp(), 1 + 8);
+		});
 	}
 
 	@Test

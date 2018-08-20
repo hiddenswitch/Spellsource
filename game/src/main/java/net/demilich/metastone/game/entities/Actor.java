@@ -131,7 +131,12 @@ public abstract class Actor extends Entity implements HasEnchantments {
 
 	@SuppressWarnings("unchecked")
 	public List<SpellDesc> getDeathrattles() {
-		return (List<SpellDesc>) getAttribute(Attribute.DEATHRATTLES);
+		Object attribute = getAttribute(Attribute.DEATHRATTLES);
+		if (attribute == null) {
+			return new ArrayList<>();
+		} else {
+			return (List<SpellDesc>) attribute;
+		}
 	}
 
 	/**

@@ -36,9 +36,9 @@ public class Secret extends Enchantment {
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		boolean spellCasts = super.onFire(ownerId, spell, event);
 		if (spellCasts) {
+			expire();
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().secretTriggered(owner, this);
-			expire();
 		}
 		return spellCasts;
 	}

@@ -15,7 +15,7 @@ public class ScenarioTests extends TestBase {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor") /*Cost 2*/;
 			Minion bearshark = playMinionCard(context, player, "minion_bearshark") /*Cost 3*/;
 			Assert.assertEquals(bloodfen.getDeathrattles().size(), 1);
-			Assert.assertNull(bearshark.getDeathrattles());
+			Assert.assertEquals(bearshark.getDeathrattles().size(), 0);
 			context.endTurn();
 			playCardWithTarget(context, opponent, "spell_assassinate", bloodfen);
 			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getBaseManaCost(), 1);
