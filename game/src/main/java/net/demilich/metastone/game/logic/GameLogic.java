@@ -311,6 +311,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		context.fireGameEvent(new AfterCardPlayed(context, playerId, entityReference));
+		context.setLastCardPlayedBeforeCurrentSequence(playerId, card.getReference());
 	}
 
 	/**

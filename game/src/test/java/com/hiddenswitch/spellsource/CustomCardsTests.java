@@ -44,6 +44,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testStudy() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "spell_study");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+		});
+	}
+
+	@Test
 	public void testPanickedSummoning() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "minion_bloodfen_raptor");

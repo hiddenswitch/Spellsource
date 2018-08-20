@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.entities.EntityZone;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -19,8 +18,6 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
@@ -28,6 +25,9 @@ public class TargetLogic implements Serializable {
 	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
 
 	private static List<Entity> singleTargetAsList(Entity target) {
+		if (target == null) {
+			return new ArrayList<>();
+		}
 		ArrayList<Entity> list = new ArrayList<>(1);
 		list.add(target);
 		return list;
@@ -358,6 +358,12 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed(player.getId())));
 		} else if (targetKey.equals(EntityReference.ENEMY_LAST_CARD_PLAYED)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed(context.getOpponent(player).getId())));
+		} else if (targetKey.equals(EntityReference.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayedBeforeCurrentSequence()));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayedBeforeCurrentSequence(player.getId())));
+		} else if (targetKey.equals(EntityReference.ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayedBeforeCurrentSequence(context.getOpponent(player).getId())));
 		} else if (targetKey.equals(EntityReference.TRANSFORM_REFERENCE)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE)));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_SET_ASIDE)) {

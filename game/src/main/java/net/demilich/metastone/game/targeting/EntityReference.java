@@ -426,6 +426,20 @@ public class EntityReference implements Serializable {
 	 * References the minion to the right of the {@code source} of this targeting resolution, or a zero-length list if there isn't one
 	 */
 	public static final EntityReference RIGHT_ADJACENT_MINION = new EntityReference(-60);
+	/**
+	 * References the last card played by either player before the end of this current sequence.
+	 * <p>
+	 * Implements Study.
+	 */
+	public static final EntityReference LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE = new EntityReference(-61);
+	/**
+	 * References the last card played by the friendly player before this current sequence.
+	 */
+	public static final EntityReference FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE = new EntityReference(-62);
+	/**
+	 * References the last card played by the opponent before this current sequence.
+	 */
+	public static final EntityReference ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE = new EntityReference(-63);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

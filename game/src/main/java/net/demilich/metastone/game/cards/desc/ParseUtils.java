@@ -86,6 +86,12 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_LAST_CARD_PLAYED;
 			case "enemy_last_card_played":
 				return EntityReference.ENEMY_LAST_CARD_PLAYED;
+			case "last_card_played_before_current_sequence":
+				return EntityReference.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
+			case "friendly_last_card_played_before_current_sequence":
+				return EntityReference.FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
+			case "enemy_last_card_played_before_current_sequence":
+				return EntityReference.ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
 			case "trigger_host":
 				return EntityReference.TRIGGER_HOST;
 			case "adjacent_minions":
