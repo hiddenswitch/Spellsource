@@ -266,6 +266,22 @@ public class JourneyToUngoroTests extends TestBase {
 			}
 			assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
 		});
+		
+		// Cards summoned by your opponent should not count
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			Stream.of("minion_bloodfen_raptor", "minion_bloodfen_raptor", "minion_bloodfen_raptor", "minion_bloodfen_raptor")
+					.peek(cid -> playCard(context, player, cid)).peek(ignored -> assertEquals(player.getHand().size(), 0))
+					.collect(toList());
+
+			assertEquals(player.getHand().size(), 0);
+			context.endTurn();
+			playCard(context, opponent, "minion_bloodfen_raptor");
+			assertEquals(player.getHand().size(), 0);
+			context.endTurn();
+			playCard(context, player, "minion_bloodfen_raptor");
+			assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
+		});
 	}
 
 	@Test
