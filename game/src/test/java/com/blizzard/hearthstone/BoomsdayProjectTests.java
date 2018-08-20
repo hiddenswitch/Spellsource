@@ -18,6 +18,20 @@ import static org.testng.Assert.*;
 public class BoomsdayProjectTests extends TestBase {
 
 	@Test
+	public void testMissileLauncher() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion shouldBeDestroyed = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			Minion wargear = playMinionCard(context, player, "minion_wargear");
+			playCardWithTarget(context, player, "minion_missile_launcher", wargear);
+			assertEquals(player.getMinions().size(), 1);
+			context.endTurn();
+			assertTrue(shouldBeDestroyed.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testWeaponsProject() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_weapons_project");
