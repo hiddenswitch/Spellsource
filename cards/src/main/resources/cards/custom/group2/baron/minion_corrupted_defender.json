@@ -5,7 +5,7 @@
   "heroClass": "NAVY",
   "baseAttack": 4,
   "baseHp": 4,
-  "rarity": "LEGENDARY",
+  "rarity": "RARE",
   "description": "Battlecry: Give all enemy minions Taunt.",
   "battlecry": {
     "targetSelection": "NONE",
