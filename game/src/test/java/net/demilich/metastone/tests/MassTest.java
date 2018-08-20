@@ -14,15 +14,6 @@ import java.util.stream.IntStream;
 
 public class MassTest extends TestBase {
 
-	private static HeroClass getRandomClass() {
-		HeroClass randomClass = HeroClass.ANY;
-		HeroClass[] values = HeroClass.values();
-		while (!randomClass.isBaseClass()) {
-			randomClass = values[ThreadLocalRandom.current().nextInt(values.length)];
-		}
-		return randomClass;
-	}
-
 	@BeforeTest
 	private void loggerSetup() {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
