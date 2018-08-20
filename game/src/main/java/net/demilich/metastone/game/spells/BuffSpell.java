@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import org.slf4j.Logger;
@@ -126,7 +127,17 @@ public class BuffSpell extends Spell {
 		}
 
 		if (armorBonus != 0) {
-			context.getLogic().gainArmor(player, armorBonus);
+			if (target != null && target.getEntityType() == EntityType.HERO) {
+				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), armorBonus);
+			} else {
+				if (target == null) {
+					logger.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
+				} else if (target.getOwner() != player.getId()) {
+					logger.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
+							" differs from the player {}", context.getGameId(), source, target, player);
+				}
+				context.getLogic().gainArmor(player, armorBonus);
+			}
 		}
 	}
 

@@ -9,8 +9,8 @@
   "race": "MECH",
   "description": "Double the damage and healing of your Hero Power.",
   "attributes": {
-    "HERO_POWER_HEAL_AMPLIFY_MULTIPLIER": 2,
-    "HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER": 2
+    "HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER": 2,
+    "HERO_POWER_HEAL_AMPLIFY_MULTIPLIER": 2
   },
   "collectible": true,
   "set": "WITCHWOOD",
