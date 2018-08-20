@@ -392,6 +392,20 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_mirror_image");
 			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_mirror_image");
 		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "secret_counterspell");
+			playCard(context, player, "minion_grand_archivist");
+			context.endTurn();
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getSecrets().size(), 1);
+			assertEquals(player.getSecrets().get(0).getSourceCard().getCardId(), "secret_counterspell");
+			context.endTurn();
+			shuffleToDeck(context, player, "secret_counterspell");
+			context.endTurn();
+			assertEquals(player.getSecrets().size(), 1);
+			assertEquals(player.getDeck().size(), 0);
+		});
 	}
 
 	@Test
