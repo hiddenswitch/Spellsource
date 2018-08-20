@@ -44,6 +44,26 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testRebelliousFlame() {
+		runGym((context, player, opponent) -> {
+			Card rebelliousFlame = receiveCard(context, player, "minion_rebellious_flame");
+			playCard(context, player, rebelliousFlame);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_rebellious_flame");
+		});
+
+		runGym((context, player, opponent) -> {
+			Card rebelliousFlame = receiveCard(context, player, "minion_rebellious_flame");
+			destroy(context, playMinionCard(context, player, "minion_bloodfen_raptor"));
+			Card spellRebelliousFlame = (Card) rebelliousFlame.transformResolved(context);
+			assertEquals(spellRebelliousFlame.getCardId(), "spell_rebellious_flame");
+			int opponentHp = opponent.getHero().getHp();
+			playCardWithTarget(context, player, spellRebelliousFlame, opponent.getHero());
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(opponent.getHero().getHp(), opponentHp - 3);
+		});
+	}
+
+	@Test
 	public void testGrandArtificerPipiAndWaxGolem() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_grand_artificer_pipi");
