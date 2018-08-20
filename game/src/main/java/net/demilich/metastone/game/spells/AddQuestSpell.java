@@ -87,7 +87,9 @@ public class AddQuestSpell extends Spell {
 			quest.setSourceCard(source.getSourceCard());
 		}
 
-		context.getLogic().playQuest(player, quest.clone());
+		if (context.getLogic().canPlayQuest(player, quest.getSourceCard())) {
+			context.getLogic().playQuest(player, quest.clone());
+		}
 	}
 
 }
