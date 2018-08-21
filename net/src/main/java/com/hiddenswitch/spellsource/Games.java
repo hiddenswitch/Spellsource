@@ -952,7 +952,7 @@ public interface Games extends Verticle {
 		entityState.rarity(card.getRarity() != null ? card.getRarity().getClientRarity() : null);
 		entityState.baseManaCost(card.getBaseManaCost());
 		entityState.silenced(actor.hasAttribute(Attribute.SILENCED));
-		entityState.deathrattles(actor.getDeathrattles() != null);
+		entityState.deathrattles(!actor.getDeathrattles().isEmpty());
 		boolean playable = actor.getOwner() == workingContext.getActivePlayerId()
 				&& actor.getOwner() == localPlayerId
 				&& workingContext.getStatus() == GameStatus.RUNNING

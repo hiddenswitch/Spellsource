@@ -13,6 +13,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 /**
@@ -80,8 +81,7 @@ public abstract class Actor extends Entity implements HasEnchantments {
 			clone.enchantments.add(trigger.clone());
 		}
 		if (hasAttribute(Attribute.DEATHRATTLES)
-				|| (getDeathrattles() != null
-				&& getDeathrattles().size() > 0)) {
+				|| (getDeathrattles().size() > 0)) {
 			clone.getAttributes().remove(Attribute.DEATHRATTLES);
 			for (SpellDesc deathrattleSpell : getDeathrattles()) {
 				SpellDesc deathrattleClone = deathrattleSpell.clone();
@@ -130,6 +130,7 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	}
 
 	@SuppressWarnings("unchecked")
+	@NonNls
 	public List<SpellDesc> getDeathrattles() {
 		Object attribute = getAttribute(Attribute.DEATHRATTLES);
 		if (attribute == null) {
