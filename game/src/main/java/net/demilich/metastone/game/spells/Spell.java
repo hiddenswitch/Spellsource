@@ -84,7 +84,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	}
 
 	@Suspendable
-	private void castForPlayer(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void castForPlayer(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = desc.getTargetPlayer();
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;

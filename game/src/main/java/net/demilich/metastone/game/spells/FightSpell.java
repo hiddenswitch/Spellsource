@@ -10,6 +10,7 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,15 +55,26 @@ public class FightSpell extends Spell {
 			return;
 		}
 
+		// Only attack sources that aren't destroyed
+		if (!target.isInPlay() || target.isDestroyed()) {
+			logger.warn("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
+			return;
+		}
+
 		for (Entity resolvedSource : resolvedSources) {
 			if (!(resolvedSource instanceof Actor)) {
 				logger.error("onCast {} {}: Source entity {} targeting {} is not an Actor", context.getGameId(), source, resolvedSource, target);
-				return;
+				continue;
 			}
 
 			if (!(target instanceof Actor)) {
 				logger.error("onCast {} {}: Target {} is not an Actor (trying to attack with {})", context.getGameId(), source, target, resolvedSource);
-				return;
+				continue;
+			}
+
+			if (!resolvedSource.isInPlay() || resolvedSource.isDestroyed()) {
+				logger.warn("onCast {} {}: Source {} is no longer in play or is destroyed and will not initiate a fight.", context.getGameId(), source, resolvedSource);
+				continue;
 			}
 
 			if (resolvedSource instanceof Hero) {

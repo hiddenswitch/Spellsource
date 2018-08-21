@@ -12,6 +12,10 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+/**
+ * Casts {@link SpellArg#SPELL} on a random target from the list of targets in {@link SpellArg#TARGET} at most {@link
+ * SpellArg#VALUE} times or until random targets are exhausted, whichever comes first.
+ */
 public class MultiTargetSpell extends Spell {
 
 	public static SpellDesc create(int targets) {
@@ -41,5 +45,5 @@ public class MultiTargetSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 	}
-
 }
+
