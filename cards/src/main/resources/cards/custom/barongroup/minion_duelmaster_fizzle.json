@@ -8,15 +8,24 @@
   "rarity": "LEGENDARY",
   "race": "MECH",
   "description": "Battlecry: Force all minions to attack random minions.",
-    "battlecry": {
+  "battlecry": {
     "targetSelection": "NONE",
-   
-        "spell": {
-        "target": "ALL_MINIONS",
-        "class": "FightSpell",
-        "randomTarget": true
-      }
-},
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DuelSpell",
+          "target": "ALL_MINIONS",
+          "secondaryTarget": "ENEMY_MINIONS_LEFT_TO_RIGHT"
+        },
+        {
+          "class": "DuelSpell",
+          "target": "ALL_MINIONS",
+          "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
+        }
+      ]
+    }
+  },
   "attributes": {
     "BATTLECRY": true
   },

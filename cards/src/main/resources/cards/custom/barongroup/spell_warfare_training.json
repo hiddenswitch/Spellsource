@@ -1,4 +1,3 @@
-
 {
   "name": "Warfare Training",
   "baseManaCost": 2,
@@ -10,11 +9,20 @@
   "spell": {
     "class": "DrawCardSpell",
     "value": {
-        "class": "HandSource",
-        "cardFilter": {
-          "class": "CardFilter",
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
+      "class": "EntityCounter",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "SpecificCardFilter",
+            "card": "token_knight"
+          },
+          {
+            "class": "SpecificCardFilter",
+            "card": "token_baron_protector"
+          }
+        ]
       }
     }
   },

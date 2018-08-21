@@ -6,14 +6,13 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "race": "DRAGON",
   "description": "Battlecry: If you're holding a Knight, gain +1/+1.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",
       "cardFilter": {
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
+        "class": "SpecificCardFilter",
+        "card": "token_knight"
       }
     },
     "spell": {
