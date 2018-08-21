@@ -1,29 +1,29 @@
 {
-    "name": "Automatrainer",
-    "baseManaCost": 3,
-    "type": "MINION",
-    "heroClass": "NAVY",
-    "baseAttack": 3,
-    "baseHp": 6,
-    "rarity": "RARE",
-    "race": "MECH",
-    "description": "Battlecry: Summon a 2/2 Training Dummy for your opponent. Attack it.",
-    "battlecry": {
-        "targetSelection": "NONE",
-        "spell": {
-            "class": "SummonSpell",
-      "targetPlayer": "OPPONENT",
-      "card": "token_treant",
+  "name": "Automatrainer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Battlecry: Summon a 2/2 Training Dummy for your opponent. Attack it.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
       "spell": {
         "class": "FightSpell",
         "target": "OUTPUT"
-      }
-        }
-    },
-    "attributes": {
-        "BATTLECRY": true
-    },
-    "collectible": true,
-    "set": "CUSTOM",
-    "fileFormatVersion": 1
+      },
+      "card": "token_training_dummy",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

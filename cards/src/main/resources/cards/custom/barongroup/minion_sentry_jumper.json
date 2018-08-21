@@ -8,12 +8,13 @@
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Battlecry: Choose a minion. Attack it.",
-    "battlecry": {
+  "battlecry": {
     "targetSelection": "MINIONS",
-        "spell": {
-        "class": "FightSpell",
-      }
-},
+    "spell": {
+      "class": "FightSpell",
+      "secondaryTarget": "SELF"
+    }
+  },
   "attributes": {
     "BATTLECRY": true
   },

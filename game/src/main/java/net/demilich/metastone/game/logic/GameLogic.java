@@ -3161,8 +3161,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void secretTriggered(Player player, Secret secret) {
 		// Move the secret to removed from play.
 		removeEnchantments(secret);
-		secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		context.fireGameEvent(new SecretRevealedEvent(context, secret.getSourceCard(), player.getId()));
+		if (secret.isInPlay()) {
+			secret.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			context.fireGameEvent(new SecretRevealedEvent(context, secret.getSourceCard(), player.getId()));
+		}
 	}
 
 	// TODO: circular dependency. Very ugly, refactor!
@@ -3746,8 +3748,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	public void questTriggered(Player player, Quest quest) {
 		removeEnchantments(quest);
-		quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		context.fireGameEvent(new QuestSuccessfulEvent(context, quest.getSourceCard(), player.getId()));
+		if (quest.isInPlay()) {
+			quest.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+			context.fireGameEvent(new QuestSuccessfulEvent(context, quest.getSourceCard(), player.getId()));
+		}
 	}
 
 	/**

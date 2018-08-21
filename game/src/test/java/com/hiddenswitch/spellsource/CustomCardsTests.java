@@ -44,6 +44,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSentryJumper() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion source = playMinionCardWithBattlecry(context, player, "minion_sentry_jumper", target);
+			assertTrue(target.isDestroyed());
+			assertEquals(source.getHp(), source.getBaseHp() - target.getAttack());
+		});
+	}
+
+	@Test
 	public void testFortunaHunter() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_fortuna_hunter");
