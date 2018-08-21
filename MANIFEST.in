@@ -30,7 +30,6 @@ recursive-include net/src *.*
 include build.gradle
 include build.sh
 include client.sh
-include csharpconfig.json
 include gradlew
 include gradlew.bat
 include swagger-api.yaml
