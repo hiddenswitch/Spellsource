@@ -440,6 +440,10 @@ public class EntityReference implements Serializable {
 	 * References the last card played by the opponent before this current sequence.
 	 */
 	public static final EntityReference ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE = new EntityReference(-63);
+	/**
+	 * References all the friendly minions, except ordered by their location on the board instead of their order of play.
+	 */
+	public static final EntityReference FRIENDLY_MINIONS_LEFT_TO_RIGHT = new EntityReference(-64);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

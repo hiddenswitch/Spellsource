@@ -65,7 +65,7 @@ public class Quest extends Enchantment {
 	@Override
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		final boolean spellFired = super.onFire(ownerId, spell, event);
-		if (spellFired) {
+		if (isInPlay() && spellFired) {
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().questTriggered(owner, this);
 			expire();

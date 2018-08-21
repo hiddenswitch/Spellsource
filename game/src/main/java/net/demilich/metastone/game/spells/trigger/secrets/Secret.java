@@ -35,7 +35,7 @@ public class Secret extends Enchantment {
 	@Suspendable
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		boolean spellCasts = super.onFire(ownerId, spell, event);
-		if (spellCasts) {
+		if (isInPlay() && spellCasts) {
 			expire();
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().secretTriggered(owner, this);

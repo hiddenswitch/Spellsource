@@ -176,6 +176,8 @@ public class ParseUtils {
 				return EntityReference.ENEMY_HERO_POWER;
 			case "enemy_minions_left_to_right":
 				return EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT;
+			case "friendly_minions_left_to_right":
+				return EntityReference.FRIENDLY_MINIONS_LEFT_TO_RIGHT;
 			case "physical_attack_targets":
 				return EntityReference.PHYSICAL_ATTACK_TARGETS;
 			case "left_adjacent_minion":
