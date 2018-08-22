@@ -14,6 +14,8 @@ import org.slf4j.LoggerFactory;
  * Casts {@link SpellArg#SPELL1}. Evaluates the {@link SpellArg#CONDITION}: if it is fulfilled, casts {@link
  * SpellArg#SPELL2}. When {@link SpellArg#EXCLUSIVE} is {@code true}, behaves like an {@link EitherOrSpell}.
  * <p>
+ * Use this spell to evaluate a condition after {@link SpellArg#SPELL1} is evaluated.
+ * <p>
  * For example, "Deal 3 damage. If the target dies, draw a card.":
  * <pre>
  *   "spell": {
@@ -32,7 +34,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  *
  * @see EitherOrSpell for a spell that does one thing when true or another when false (i.e., this spell with {@link
- * SpellArg#EXCLUSIVE} set to true.
+ * 		SpellArg#EXCLUSIVE} set to true.
  * @see ConditionalSpell for a spell that executes its subspell only if its condition is met.
  */
 public class ConditionalEffectSpell extends Spell {

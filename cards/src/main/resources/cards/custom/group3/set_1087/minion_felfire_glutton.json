@@ -1,0 +1,42 @@
+{
+  "name": "Felfire Glutton",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "DEMON",
+  "description": "At the start of your turn, remove all enchantments and bonuses from this minion except this one.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveBonusAttributes",
+          "target": "SELF"
+        },
+        {
+          "class": "RemoveEnchantmentSpell",
+          "target": "SELF",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_felfire_glutton",
+            "invert": true
+          },
+          "cardSource": {
+            "class": "UncollectibleCatalogueSource"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

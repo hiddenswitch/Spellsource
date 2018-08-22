@@ -1,0 +1,17 @@
+{
+  "name": "Crater Hatchling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

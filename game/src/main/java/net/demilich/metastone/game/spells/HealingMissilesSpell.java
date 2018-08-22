@@ -42,7 +42,7 @@ public class HealingMissilesSpell extends HealSpell {
 			healing = context.getLogic().applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		}
 		for (int i = 0; i < missiles; i++) {
-			List<Actor> validTargets;
+			List<Entity> validTargets;
 			if (desc.containsKey(SpellArg.FILTER)) {
 				EntityFilter targetFilter = desc.getEntityFilter();
 				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
@@ -62,8 +62,8 @@ public class HealingMissilesSpell extends HealSpell {
 				return;
 			}
 
-			Actor randomTarget = context.getLogic().getRandom(validTargets);
-			context.getLogic().heal(player, randomTarget, healing, source, false);
+			Entity randomTarget = context.getLogic().getRandom(validTargets);
+			context.getLogic().heal(player, (Actor)randomTarget, healing, source, false);
 		}
 	}
 

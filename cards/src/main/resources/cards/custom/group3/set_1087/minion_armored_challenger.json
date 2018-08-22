@@ -1,0 +1,25 @@
+{
+  "name": "Armored Challenger",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Taunt Battlecry: Summon a 4/4 Dragon for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "targetPlayer": "OPPONENT",
+      "card": "token_44dragon"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

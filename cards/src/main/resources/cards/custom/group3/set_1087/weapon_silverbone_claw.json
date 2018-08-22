@@ -1,0 +1,34 @@
+{
+  "name": "Silverbone Claw",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give two random Dragons in your hand +2 Attack.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MultiTargetSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      },
+      "value": 2,
+      "spell": {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 0
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

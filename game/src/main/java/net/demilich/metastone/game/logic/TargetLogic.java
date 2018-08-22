@@ -195,7 +195,7 @@ public class TargetLogic implements Serializable {
 	 *                  refer to the right of this argument.
 	 * @param targetKey The {@link EntityReference} to interpet.
 	 * @return {@code null} if no target key is specified or an {@link EntityReference#NONE} was passed; otherwise, a
-	 * possibly empty list of entities.
+	 * 		possibly empty list of entities.
 	 * @see EntityReference for more about the meaning of the specified entitiy references that are groups of entities.
 	 */
 	@SuppressWarnings("deprecation")
@@ -250,6 +250,12 @@ public class TargetLogic implements Serializable {
 			return targets;
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(source.getReference()));
+		} else if (targetKey.equals(EntityReference.ADJACENT_TO_TARGET)) {
+			EntityReference targetKey1 = (EntityReference) context.getEnvironment().get(Environment.TARGET);
+			if (targetKey1 == null) {
+				return new ArrayList<>();
+			}
+			return new ArrayList<>(context.getAdjacentMinions(targetKey1));
 		} else if (targetKey.equals(EntityReference.ATTACKER_ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()).getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {

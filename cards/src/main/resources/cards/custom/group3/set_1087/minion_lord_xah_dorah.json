@@ -1,0 +1,42 @@
+{
+  "name": "Lord Xah'dorah",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 7,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: At the end of your next turn, resummon this.",
+  "deathrattle": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "SummonSpell",
+            "card": "minion_lord_xah_dorah"
+          },
+          "maxFires": 1
+        }
+      },
+      "maxFires": 1
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

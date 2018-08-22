@@ -40,7 +40,7 @@ public class MissilesSpell extends DamageSpell {
 			damage = context.getLogic().applyAmplify(player, damage, Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER);
 		}
 		for (int i = 0; i < missiles; i++) {
-			List<Actor> validTargets;
+			List<Entity> validTargets;
 			if (desc.containsKey(SpellArg.FILTER)) {
 				EntityFilter targetFilter = desc.getEntityFilter();
 				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
@@ -52,7 +52,7 @@ public class MissilesSpell extends DamageSpell {
 			if (validTargets.isEmpty()) {
 				return;
 			}
-			Actor randomTarget = context.getLogic().getRandom(validTargets);
+			Actor randomTarget = (Actor)context.getLogic().getRandom(validTargets);
 			context.getLogic().damage(player, randomTarget, damage, source, true);
 		}
 	}

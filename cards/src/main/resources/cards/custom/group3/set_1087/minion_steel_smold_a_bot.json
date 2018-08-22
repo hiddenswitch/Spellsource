@@ -1,0 +1,31 @@
+{
+  "name": "Steel Smold-a-Bot",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Magnetic Supremacy: Gain +2/+2.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 2,
+        "target": "TRIGGER_HOST"
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true,
+    "MAGNETIC": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,47 @@
+{
+  "name": "Lady Deathwhisper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Damage all enemy minions until they have 1 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecastWhileSpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "IMMUNE"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "AURA_IMMUNE"
+          }
+        ]
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "value": 1,
+        "ignoreSpellDamage": true
+      },
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "HP",
+        "value": 1,
+        "operation": "EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

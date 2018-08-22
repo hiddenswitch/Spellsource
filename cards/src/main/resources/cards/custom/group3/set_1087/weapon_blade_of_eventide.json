@@ -1,0 +1,43 @@
+{
+  "name": "Blade of Eventide",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 4,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Deathrattle: If your deck has only even-Cost cards, destroy the lowest Attack minion.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AllModuloValueEqualsZeroCondition",
+      "target": "FRIENDLY_DECK",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "BASE_MANA_COST"
+      },
+      "value2": 2
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "randomTarget": true,
+      "target": "ALL_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "ATTACK",
+        "value": {
+          "class": "ReduceValueProvider",
+          "target": "ALL_MINIONS",
+          "attribute": "ATTACK",
+          "operation": "MINIMUM"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

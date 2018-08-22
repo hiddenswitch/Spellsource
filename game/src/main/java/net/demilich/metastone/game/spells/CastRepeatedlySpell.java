@@ -32,7 +32,6 @@ import org.slf4j.LoggerFactory;
  * <p>
  * This spell will <b>not</b> end the sequence after every repeat, while {@link RecastWhileSpell} does.
  */
-@Deprecated
 public class CastRepeatedlySpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(CastRepeatedlySpell.class);

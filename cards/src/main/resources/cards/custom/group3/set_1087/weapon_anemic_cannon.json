@@ -1,0 +1,26 @@
+{
+  "name": "Anemic Cannon",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 5,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "After your hero attacks, give enemy minions -3 Attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourcePlayer": "SELF",
+      "sourceEntityType": "HERO"
+    },
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "target": "ENEMY_MINIONS",
+      "value": -3
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Coldsteel Blade",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 5,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Supremacy: Summon a 4/4 Dragon",
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

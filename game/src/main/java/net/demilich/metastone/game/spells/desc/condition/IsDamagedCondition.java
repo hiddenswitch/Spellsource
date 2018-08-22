@@ -17,3 +17,4 @@ public class IsDamagedCondition extends Condition {
 	}
 
 }
+

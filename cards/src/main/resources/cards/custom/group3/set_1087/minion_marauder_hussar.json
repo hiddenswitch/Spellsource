@@ -1,0 +1,37 @@
+{
+  "name": "Marauder Hussar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Adjacent minions deal their excess damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "sourceEntityType": "MINION",
+      "targetEntityType": "MINION",
+      "hostTargetType": "IGNORE_AS_SOURCE",
+      "fireCondition": {
+        "class": "IsAdjacentCondition",
+        "target": "EVENT_SOURCE"
+      }
+    },
+    "spell": {
+      "class": "ExcessDamageSpell",
+      "target": "EVENT_TARGET",
+      "secondaryTarget": "ENEMY_HERO",
+      "exclusive": true,
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "EVENT_SOURCE",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
