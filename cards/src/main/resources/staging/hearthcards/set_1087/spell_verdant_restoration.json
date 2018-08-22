@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "LEGENDARY",
-  "description": "[b][b]Quest:[/b][/b] Restore 20 Health to your hero.\r\n[b][b]Reward:[/b][/b] Witherheart.",
+  "description": "Quest: Restore 20 Health to your hero. Reward:  Witherheart.",
   "quest": {
     "class": "CardPlayedTrigger",
     "targetPlayer": "SELF"

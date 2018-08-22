@@ -4,8 +4,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.aura.SupremaciesDrawCardAura;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.aura.SupremaciesTriggerTwiceAura;
+import net.demilich.metastone.game.spells.aura.SupremacyBonusEffectAura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.utils.Attribute;
 
@@ -24,33 +25,39 @@ public class SupremacySpell extends MetaSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-
 		super.onCast(context, player, desc, source, target);
-		boolean playerSupremaciesDrawCards = context.getEntities()
-				.filter(e -> e.getOwner() == player.getId() && e.isInPlay())
-				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
-						.filter(t -> t instanceof SupremaciesDrawCardAura)
-						.map(t -> (SupremaciesDrawCardAura) t)
-						.anyMatch(((Predicate<SupremaciesDrawCardAura>) SupremaciesDrawCardAura::isExpired).negate()));
-		if (playerSupremaciesDrawCards) {
-			context.getLogic().drawCard(player.getId(), source);
+		for (SpellDesc subSpell : getSupremacyBonuses(context, player.getId())) {
+			SpellUtils.castChildSpell(context, player, subSpell, source, target);
 		}
-
 		player.modifyAttribute(Attribute.SUPREMACIES_THIS_GAME, 1);
 
-		boolean playerHasDoubleSupremacies = context.getEntities()
-				.filter(e -> e.getOwner() == player.getId() && e.isInPlay())
-				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
-						.filter(t -> t instanceof SupremaciesTriggerTwiceAura)
-						.map(t -> (SupremaciesTriggerTwiceAura) t)
-						.anyMatch(((Predicate<SupremaciesTriggerTwiceAura>) SupremaciesTriggerTwiceAura::isExpired).negate()));
-
+		boolean playerHasDoubleSupremacies = hasAura(context, player.getId(), SupremaciesTriggerTwiceAura.class);
 		if (playerHasDoubleSupremacies) {
 			super.onCast(context, player, desc, source, target);
-			if (playerSupremaciesDrawCards) {
-				context.getLogic().drawCard(player.getId(), source);
+			for (SpellDesc subSpell : getSupremacyBonuses(context, player.getId())) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target);
 			}
 			player.modifyAttribute(Attribute.SUPREMACIES_THIS_GAME, 1);
 		}
+	}
+
+	protected static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (Aura) t)
+						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
+	}
+
+	protected static SpellDesc[] getSupremacyBonuses(GameContext context, int playerId) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(t -> t instanceof SupremacyBonusEffectAura)
+						.map(t -> (Aura) t)
+						.filter(((Predicate<Aura>) Aura::isExpired).negate())
+						.map(aura -> aura.getDesc().getApplyEffect()))
+				.toArray(SpellDesc[]::new);
 	}
 }

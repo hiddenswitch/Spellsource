@@ -2,11 +2,11 @@
   "name": "Rousing Commander",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "[b][b]Inspire:[/b][/b] Give your characters +1 Attack \r\nthis turn.",
+  "description": "Inspire: Give your characters +1 Attack this turn.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

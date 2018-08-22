@@ -2,12 +2,12 @@
   "name": "Rainbow Whelp",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "[b][b]Battlecry:[/b][/b] If you control another Dragon, restore\r\n3 Health to your hero.",
+  "description": "Battlecry: If you control another Dragon, restore 3 Health to your hero.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

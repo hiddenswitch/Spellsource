@@ -1,0 +1,22 @@
+{
+  "name": "Verdant Scimitar",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Costs (1) less for each Dragon you control.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DRAGON"
+    }
+  }
+}

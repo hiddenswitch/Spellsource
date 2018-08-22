@@ -2,11 +2,11 @@
   "name": "Lord Xah'dorah",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 7,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "[b][b]Deathrattle:[/b][/b] At the\r\nend of your next turn,\r\nresummon this.",
+  "description": "Deathrattle: At the end of your next turn, resummon this.",
   "deathrattle": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",

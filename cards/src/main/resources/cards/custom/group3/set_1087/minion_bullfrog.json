@@ -2,7 +2,7 @@
   "name": "Bullfrog",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "COMMON",

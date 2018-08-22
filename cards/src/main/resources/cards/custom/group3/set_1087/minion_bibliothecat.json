@@ -2,12 +2,12 @@
   "name": "Bibliothecat",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "[b]Battlecry:[/b] [b]Discover[/b] a Beast, Dragon or Murloc.",
+  "description": "Battlecry: Discover a Beast, Dragon or Murloc.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -2,7 +2,7 @@
   "name": "Dragon Treasurer",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "FREE",

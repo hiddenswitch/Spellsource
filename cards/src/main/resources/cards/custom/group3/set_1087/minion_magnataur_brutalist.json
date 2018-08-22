@@ -2,11 +2,11 @@
   "name": "Magnataur Brutalist",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "[b]Battlecry:[/b] Deal 10 damage to a minion and any excess to this minion.",
+  "description": "Battlecry: Deal 10 damage to a minion and any excess to this minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

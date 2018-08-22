@@ -9,7 +9,8 @@
   "spell": {
     "class": "SummonSpell",
     "value": {
-      "class": "DeadMinionsThisTurn"
+      "class": "DeadMinionsThisTurn",
+      "targetPlayer": "BOTH"
     },
     "card": "token_insect"
   },

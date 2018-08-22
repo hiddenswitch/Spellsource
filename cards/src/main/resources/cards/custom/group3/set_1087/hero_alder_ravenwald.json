@@ -3,7 +3,7 @@
   "heroPower": "hero_power_sharpen_claws",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "rarity": "FREE",
   "description": "Hero Power: Restore 1 Health and give the character +1 Attack this turn.",
   "attributes": {

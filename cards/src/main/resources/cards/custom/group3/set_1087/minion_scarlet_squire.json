@@ -2,11 +2,11 @@
   "name": "Scarlet Squire",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "[b]Supremacy:[/b] Gain +1/+1.",
+  "description": "Supremacy: Gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

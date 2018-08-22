@@ -2,12 +2,12 @@
   "name": "Molten Whelp",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "[b][b]Battlecry:[/b][/b] Deal 1 damage.",
+  "description": "Battlecry: Deal 1 damage.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

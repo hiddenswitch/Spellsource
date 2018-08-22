@@ -2,11 +2,11 @@
   "name": "Illia The Marionette",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "[b][b]Immune[/b][/b] while you control 3\r\nor more minions.",
+  "description": "Immune while you control 3 or more minions.",
   "aura": {
     "class": "AttributeAura",
     "attribute": "AURA_IMMUNE",

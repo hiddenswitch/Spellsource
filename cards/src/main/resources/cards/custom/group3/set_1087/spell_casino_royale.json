@@ -1,0 +1,31 @@
+{
+  "name": "Casino Royale",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "At the end of your turn, draw a card for each enemy minion killed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "maxFires": 1,
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": {
+          "class": "DeadMinionsThisTurn",
+          "targetPlayer": "OPPONENT"
+        }
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

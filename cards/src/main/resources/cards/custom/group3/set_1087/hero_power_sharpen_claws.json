@@ -2,9 +2,9 @@
   "name": "Sharpen Claws",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "[b]Hero[/b] [b]Power[/b]\r\nRestore 1 Health and give the character +1 Attack this turn.",
+  "description": "Hero Power Restore 1 Health and give the character +1 Attack this turn.",
   "attributes": {},
   "targetSelection": "ANY",
   "spell": {

@@ -2,7 +2,7 @@
   "name": "Marauder Hussar",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "LEGENDARY",
@@ -25,7 +25,7 @@
       "exclusive": true,
       "value": {
         "class": "AttributeValueProvider",
-        "target": "EVENT_TARGET",
+        "target": "EVENT_SOURCE",
         "attribute": "ATTACK"
       }
     }

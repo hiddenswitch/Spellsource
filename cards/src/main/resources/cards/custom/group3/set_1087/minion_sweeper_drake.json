@@ -2,12 +2,12 @@
   "name": "Sweeper Drake",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "[b][b]Battlecry:[/b][/b] Summon two 1/1 Whelps.",
+  "description": "Battlecry: Summon two 1/1 Whelps.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

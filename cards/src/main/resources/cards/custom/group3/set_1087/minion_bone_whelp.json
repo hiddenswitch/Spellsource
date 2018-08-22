@@ -2,12 +2,12 @@
   "name": "Bone Whelp",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "[b][b]Deathrattle:[/b][/b] If you control another Dragon, return this minion to your hand.",
+  "description": "Deathrattle: If you control another Dragon, return this minion to your hand.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

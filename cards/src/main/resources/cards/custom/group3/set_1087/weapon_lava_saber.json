@@ -1,0 +1,35 @@
+{
+  "name": "Lava Saber",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Supremacy: Summon two 1/1 Whelps.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourcePlayer": "SELF",
+      "sourceEntityType": "HERO",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      }
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_whelp",
+        "value": 2
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

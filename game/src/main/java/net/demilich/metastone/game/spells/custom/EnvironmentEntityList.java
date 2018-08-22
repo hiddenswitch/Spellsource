@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.GameContext;
@@ -60,6 +61,7 @@ public class EnvironmentEntityList implements EnvironmentValue, Serializable {
 				.stream()
 				.map(context::resolveSingleTarget)
 				.map(Entity::getSourceCard)
+				.map(e -> (Card) e.transformResolved(context))
 				.forEach(cards::addCard);
 		return cards;
 	}
