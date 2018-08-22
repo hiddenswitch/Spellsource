@@ -1,0 +1,24 @@
+{
+  "name": "Exotic Menace",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "[b]Battlecry:[/b] Summon a 5/5 Bounty Hunter with [b]Taunt[/b] for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "targetPlayer": "OPPONENT",
+      "card": "token_bounty_hunter"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,36 @@
+{
+  "name": "Thitazov",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "After your minions destroy a minion, give your other minions +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourcePlayer": "SELF",
+      "sourceEntityType": "MINION",
+      "targetEntityType": "MINION",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      }
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "EntityEqualsFilter",
+        "secondaryTarget": "TRIGGER_HOST",
+        "invert": true
+      },
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

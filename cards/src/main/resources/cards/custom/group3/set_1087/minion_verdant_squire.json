@@ -1,0 +1,43 @@
+{
+  "name": "Verdant Squire",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "[b]Battlecry:[/b] [b]Discover[/b] a Dragon that costs (4) \r\nor less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "race": "DRAGON"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": 4,
+            "operation": "LESS_OR_EQUAL"
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

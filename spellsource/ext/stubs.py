@@ -105,7 +105,6 @@ if __name__ == '__main__':
     parser.add_argument('-s', '--set', required=True,
                         help='The set to generate stubs for based on the Hearthstone internal name (e.g. GILNEAS for '
                              'Witchwood)')
-    parser.parse_args()
     args = parser.parse_args()
     assert 'set' in args
     generate_stubs(card_set=args.set)

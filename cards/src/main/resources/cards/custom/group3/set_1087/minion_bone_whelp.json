@@ -1,0 +1,32 @@
+{
+  "name": "Bone Whelp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "[b][b]Deathrattle:[/b][/b] If you control another Dragon, return this minion to your hand.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "DRAGON"
+      }
+    },
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Dragon Treasurer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "At the end of your turn, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,19 @@
+{
+  "name": "Despair",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "COMMON",
+  "description": "Set a minion's Attack\r\nto 0 this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

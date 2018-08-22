@@ -1,0 +1,18 @@
+{
+  "name": "Casino Royale",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "EPIC",
+  "description": "At the end of your turn, draw a card for each enemy minion killed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

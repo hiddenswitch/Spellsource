@@ -492,9 +492,13 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}
 
+	/**
+	 * Indicates that the entity is in play by being in an in-play zone.
+	 *
+	 * @return {@code} true if the entity is visible to both players
+	 */
 	public boolean isInPlay() {
 		switch (getZone()) {
-			case HAND:
 			case QUEST:
 			case SECRET:
 			case HERO:

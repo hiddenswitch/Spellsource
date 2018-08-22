@@ -1,0 +1,23 @@
+{
+  "name": "Alder, Death Baron",
+  "baseManaCost": 9,
+  "type": "HERO",
+  "heroClass": "SILVER",
+  "rarity": "LEGENDARY",
+  "description": "[b][b]Battlecry:[/b][/b] Equip a 5/3 Coldsteel that summons \r\na 4/4 Dragon each time\r\nit kills a minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "weapon_coldsteel"
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

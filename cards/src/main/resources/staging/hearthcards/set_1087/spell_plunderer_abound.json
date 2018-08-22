@@ -1,0 +1,26 @@
+{
+  "name": "Plunderer Abound",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Summon three 1/1 Plunderers for your opponent that draws you a card when they die.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "minion_bloodfen_raptor"
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

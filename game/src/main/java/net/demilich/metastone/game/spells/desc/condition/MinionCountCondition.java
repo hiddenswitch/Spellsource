@@ -3,9 +3,14 @@ package net.demilich.metastone.game.spells.desc.condition;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
+
+import java.util.stream.Stream;
 
 public class MinionCountCondition extends Condition {
 
@@ -18,25 +23,30 @@ public class MinionCountCondition extends Condition {
 		TargetPlayer targetPlayer = desc.containsKey(ConditionArg.TARGET_PLAYER) ? (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)
 				: TargetPlayer.SELF;
 
-		int minionCount = 0;
+		Stream<Minion> minions;
+
 		switch (targetPlayer) {
 			case BOTH:
-				minionCount = context.getTotalMinionCount();
+				minions = Stream.concat(player.getMinions().stream(), context.getOpponent(player).getMinions().stream());
 				break;
 			case OPPONENT:
-				minionCount = context.getOpponent(player).getMinions().size();
+				minions = context.getOpponent(player).getMinions().stream();
 				break;
 			case SELF:
 			case OWNER:
-				minionCount = player.getMinions().size();
+				minions = player.getMinions().stream();
 				break;
 			default:
+				minions = Stream.empty();
 				break;
 		}
-
+		EntityFilter filter = (EntityFilter) desc.getOrDefault(ConditionArg.CARD_FILTER, desc.get(ConditionArg.FILTER));
+		if (filter != null) {
+			minions = minions.filter(filter.matcher(context, player, source));
+		}
 		int targetValue = desc.getInt(ConditionArg.VALUE);
 		Operation operation = (Operation) desc.get(ConditionArg.OPERATION);
-		return SpellUtils.evaluateOperation(operation, minionCount, targetValue);
+		return SpellUtils.evaluateOperation(operation, (int) minions.count(), targetValue);
 	}
 
 }

@@ -1,0 +1,47 @@
+{
+  "name": "Bibliothecat",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "[b]Battlecry:[/b] [b]Discover[/b] a Beast, Dragon or Murloc.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "race": "MURLOC",
+          "cardType": "MINION"
+        }
+      ],
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

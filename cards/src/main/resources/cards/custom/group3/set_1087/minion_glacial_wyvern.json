@@ -1,0 +1,43 @@
+{
+  "name": "Glacial Wyvern",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "[b]Battlecry:[/b] If you control another Dragon, gain [b]Taunt[/b] and +1/+1.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "TAUNT"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 0,
+          "hpBonus": 0
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Lacerate",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Deal 1 damage.\r\n[b]Supremacy:[/b] Give your hero +3 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 0,
+        "hpBonus": 0
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Inciendary Break",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Choose a minion. Deal it's Attack damage to all minions around it.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

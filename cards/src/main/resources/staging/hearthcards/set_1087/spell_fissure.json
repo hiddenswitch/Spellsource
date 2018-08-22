@@ -1,0 +1,16 @@
+{
+  "name": "Fissure",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "COMMON",
+  "description": "Destroy the lowest Attack minion on \r\nthe battlefield.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

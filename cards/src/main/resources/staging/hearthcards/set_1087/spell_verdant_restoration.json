@@ -1,0 +1,22 @@
+{
+  "name": "Verdant Restoration",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "LEGENDARY",
+  "description": "[b][b]Quest:[/b][/b] Restore 20 Health to your hero.\r\n[b][b]Reward:[/b][/b] Witherheart.",
+  "quest": {
+    "class": "CardPlayedTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 5,
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_the_coin"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

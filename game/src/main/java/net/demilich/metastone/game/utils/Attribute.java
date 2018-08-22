@@ -167,7 +167,7 @@ public enum Attribute {
 	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
-	 * complete targeting logic.
+	 * 		complete targeting logic.
 	 */
 	TAUNT,
 	/**
@@ -188,7 +188,7 @@ public enum Attribute {
 	 * A {@link Minion} with {@link #CHARGE} can attack the same turn it enters play.
 	 *
 	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking the
-	 * same turn it is summoned.
+	 * 		same turn it is summoned.
 	 */
 	CHARGE,
 	/**
@@ -229,7 +229,7 @@ public enum Attribute {
 	 * This implements Brann Bronzebeard's text.
 	 *
 	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
-	 * battlecries.
+	 * 		battlecries.
 	 */
 	DOUBLE_BATTLECRIES,
 	/**
@@ -244,7 +244,7 @@ public enum Attribute {
 	 * This implements Baron Rivendare's text.
 	 *
 	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
-	 * complete rules for deathrattles.
+	 * 		complete rules for deathrattles.
 	 */
 	DOUBLE_DEATHRATTLES,
 	/**
@@ -272,11 +272,11 @@ public enum Attribute {
 	 * as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
 	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the
-	 * situation where physical attacks cause a minion to lose stealth.
+	 * 		situation where physical attacks cause a minion to lose stealth.
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
-	 * from a minion causes it to lose stealth.
+	 * 		from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * logic behind selecting valid targets.
+	 * 		logic behind selecting valid targets.
 	 */
 	STEALTH,
 	/**
@@ -337,7 +337,7 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
-	 * the battlefield.
+	 * 		the battlefield.
 	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
@@ -346,14 +346,14 @@ public enum Attribute {
 	 * powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * complete target selection logic.
+	 * 		complete target selection logic.
 	 */
 	UNTARGETABLE_BY_SPELLS,
 	/**
 	 * Marks an {@link Actor} to be untargetable by an <b>opponent's</b> spells or hero powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * complete target selection logic.
+	 * 		complete target selection logic.
 	 */
 	UNTARGETABLE_BY_OPPONENT_SPELLS,
 	/**
@@ -473,7 +473,7 @@ public enum Attribute {
 	 * Marks that this {@link Card} has a trigger that should be active while it is in the deck.
 	 *
 	 * @see #PASSIVE_TRIGGERS for an attribute that marks the entity has a trigger that is only active in the player's
-	 * battlefield or hand.
+	 * 		battlefield or hand.
 	 */
 	DECK_TRIGGERS,
 	/**
@@ -484,7 +484,7 @@ public enum Attribute {
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
 	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
-	 * a hero power card, can be played.
+	 * 		a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
 	/**
@@ -506,7 +506,7 @@ public enum Attribute {
 	 * Implements the C'Thun mechanic.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
-	 * attributes like these and provides values to various spells.
+	 * 		attributes like these and provides values to various spells.
 	 */
 	CTHUN_ATTACK_BUFF,
 	/**
@@ -515,7 +515,7 @@ public enum Attribute {
 	 * Implements the C'Thun mechanic.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
-	 * attributes like these and provides values to various spells.
+	 * 		attributes like these and provides values to various spells.
 	 */
 	CTHUN_HEALTH_BUFF,
 	/**
@@ -554,7 +554,7 @@ public enum Attribute {
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.
 	 *
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
-	 * attack.
+	 * 		attack.
 	 */
 	RUSH,
 	/**
@@ -825,7 +825,7 @@ public enum Attribute {
 	AURA_INVOKE,
 	/**
 	 * Indicates a card's invoke for the specified amount of mana.
-	 *
+	 * <p>
 	 * On a {@link Player} entity, indicates the number of cards that were invoked.
 	 */
 	INVOKED,
@@ -860,6 +860,12 @@ public enum Attribute {
 	 * The position in a player's hand that a card was played from
 	 */
 	HAND_INDEX,
+	/**
+	 * Indicates an {@link Actor} will do something when it attacks and kills a minion.
+	 * <p>
+	 * Implements Alder Ravenwald / Supremacy hero.
+	 */
+	SUPREMACY,
 	/*
 	 * Dummy attribute to target cards shuffled to the player's deck at the same time
 	 * Implements Augmented Elekk + Academic Espionage
@@ -884,7 +890,7 @@ public enum Attribute {
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,
 	RESERVED_BOOLEAN_3,
-	RESERVED_BOOLEAN_4;
+	RESERVED_BOOLEAN_4, SUPREMACIES_THIS_GAME;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

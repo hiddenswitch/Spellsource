@@ -1,0 +1,25 @@
+{
+  "name": "Darkmire Drake",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "[b][b]Rush[/b][/b]\r\nCosts (1) less for each Dragon you control.",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "DRAGON"
+    }
+  }
+}

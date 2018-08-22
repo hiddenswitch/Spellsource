@@ -1,0 +1,40 @@
+{
+  "name": "Armageddon Wyvern",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "EPIC",
+  "description": "[b]Supremacy:[/b] Destroy all other minions and deal 10 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "ALL_MINIONS",
+          "filter": {
+            "class": "EntityEqualsFilter",
+            "secondaryTarget": "TRIGGER_HOST",
+            "invert": true
+          }
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_HERO",
+          "value": 10
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
