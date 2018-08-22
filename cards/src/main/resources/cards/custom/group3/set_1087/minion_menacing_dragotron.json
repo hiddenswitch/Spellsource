@@ -1,0 +1,31 @@
+{
+  "name": "Menacing Dragotron",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "race": "MECH",
+  "rarity": "RARE",
+  "description": "[b]Deathrattle:[/b] Destroy all minions with less Attack than this minion.",
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "ATTACK",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK",
+        "target": "SELF"
+      },
+      "operation": "LESS"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

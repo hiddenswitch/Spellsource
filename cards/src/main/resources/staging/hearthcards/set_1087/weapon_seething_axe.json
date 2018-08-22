@@ -1,0 +1,14 @@
+{
+  "name": "Seething Axe",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "SILVER",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "[b]Supremacy:[/b] Give a random friendly \r\nminion +1 Attack.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

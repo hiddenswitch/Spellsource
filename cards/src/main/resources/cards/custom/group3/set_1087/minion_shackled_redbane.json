@@ -1,0 +1,32 @@
+{
+  "name": "Shackled Redbane",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "[b][b]Taunt[/b][/b]\r\nCan't attack unless you control another Dragon.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "MinionCountCondition",
+      "targetPlayer": "SELF",
+      "value": 1,
+      "filter": {
+        "class": "RaceFilter",
+        "race": "DRAGON"
+      },
+      "operation": "LESS_OR_EQUAL"
+    },
+    "attribute": "AURA_CANNOT_ATTACK"
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -71,7 +71,7 @@ import static java.util.stream.Collectors.toList;
  * generally at the end of any action besides discovering.
  *
  * @see SpellDescDeserializer for the official interpretation of each of the attributes (how they are converted from
- * JSON to a concrete value in the game).
+ * 		JSON to a concrete value in the game).
  */
 @JsonDeserialize(using = SpellDescDeserializer.class)
 public class SpellDesc extends Desc<SpellArg, Spell> {

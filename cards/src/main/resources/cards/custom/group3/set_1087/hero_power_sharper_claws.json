@@ -1,0 +1,27 @@
+{
+  "name": "Sharper Claws",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "[b]Hero[/b] [b]Power[/b]\r\nRestore 1 Health and give the character +2 Attack this turn.",
+  "attributes": {},
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 1
+      },
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 1
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

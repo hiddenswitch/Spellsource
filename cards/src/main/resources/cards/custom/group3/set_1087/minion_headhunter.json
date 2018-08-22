@@ -1,0 +1,43 @@
+{
+  "name": "Headhunter",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "[b]Supremacy:[/b] Add an\r\n[b][b]Echo[/b][/b] of the destroyed minion to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "CopyCardSpell",
+        "target": "EVENT_TARGET",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "ECHO"
+            },
+            {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "REMOVES_SELF_AT_END_OF_TURN"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

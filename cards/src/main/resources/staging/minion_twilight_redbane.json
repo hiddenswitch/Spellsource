@@ -1,0 +1,28 @@
+{
+  "name": "Twilight Redbane",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "[b][b]Battlecry:[/b][/b] If your C'Thun has at least 10 Attack, \r\ngive a character +5 \r\nAttack this turn.",
+  "battlecry": {
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,41 @@
+{
+  "name": "Nava and Thanatos",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "[b][b]Rush[/b][/b]\r\n[b]Supremacy:[/b] Destroy another random enemy minion \r\nand draw 2 cards.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "ENEMY_MINIONS",
+          "randomTarget": true,
+          "filter": {
+            "class": "EntityEqualsFilter",
+            "secondaryTarget": "TARGET",
+            "invert": true
+          }
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

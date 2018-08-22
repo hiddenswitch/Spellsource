@@ -1,0 +1,20 @@
+{
+  "name": "Ascendancy",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Summon a 4/4 Dragon.\r\nIf you control a Dragon, summon another \r\n4/4 Dragon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "card": "minion_bloodfen_raptor"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

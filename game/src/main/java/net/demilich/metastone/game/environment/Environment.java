@@ -24,6 +24,10 @@ public enum Environment {
 	 */
 	KILLED_MINION,
 	/**
+	 * This variable stores the number of minions that have been destroyed so far during this sequence.
+	 */
+	DESTROYED_THIS_SEQUENCE_COUNT,
+	/**
 	 * This variable, when defined, specifies that the target of a spell or physical attack should be overriden.
 	 */
 	TARGET_OVERRIDE,

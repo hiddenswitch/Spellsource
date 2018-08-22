@@ -1,0 +1,14 @@
+{
+  "name": "Crimson Blades",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "SILVER",
+  "damage": 5,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "[b]Supremacy:[/b]\r\nGain +1 Attack.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

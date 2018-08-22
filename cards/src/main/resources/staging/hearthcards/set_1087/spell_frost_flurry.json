@@ -1,0 +1,28 @@
+{
+  "name": "Frost Flurry",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Deal 4 damage to a random enemy minion. [b]Supremacy:[/b] Cast\r\nthis again.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 0,
+        "hpBonus": 0
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

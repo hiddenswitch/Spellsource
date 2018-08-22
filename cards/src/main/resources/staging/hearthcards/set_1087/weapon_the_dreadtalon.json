@@ -1,0 +1,38 @@
+{
+  "name": "The Dreadtalon",
+  "baseManaCost": 9,
+  "type": "WEAPON",
+  "heroClass": "SILVER",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "[b][b]Battlecry:[/b][/b] If your deck has no Dragons, summon a 4/4 Dragon at the start of your turn this game.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "fireCondition": {
+        "class": "PlayedLastTurnCondition"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

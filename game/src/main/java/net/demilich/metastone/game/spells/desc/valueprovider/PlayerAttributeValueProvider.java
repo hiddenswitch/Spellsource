@@ -41,6 +41,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return (int) player.getAttributes().getOrDefault(Attribute.OVERLOADED_THIS_GAME, 0);
 			case DAMAGE_THIS_TURN:
 				return (int) player.getAttributeValue(Attribute.DAMAGE_THIS_TURN);
+			case SUPREMACIES_THIS_GAME:
+				return (int) player.getAttributeValue(Attribute.SUPREMACIES_THIS_GAME);
 			default:
 				break;
 		}
