@@ -30,12 +30,12 @@ public class MultiTargetSpell extends Spell {
 		int number = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.FILTER);
-		List<Actor> validTargets = SpellUtils.getValidRandomTargets(SpellUtils.getValidTargets(context, player, targets, filter));
+		List<Entity> validTargets = SpellUtils.getValidRandomTargets(SpellUtils.getValidTargets(context, player, targets, filter));
 		for (int i = 0; i < number; i++) {
 			if (validTargets.isEmpty()) {
 				return;
 			}
-			Actor randomTarget = context.getLogic().getRandom(validTargets);
+			Entity randomTarget = context.getLogic().getRandom(validTargets);
 			validTargets.remove(randomTarget);
 			SpellUtils.castChildSpell(context, player, spell, source, randomTarget);
 		}

@@ -1,0 +1,37 @@
+{
+  "name": "Seething Axe",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 1,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Supremacy: Give a random friendly minion +1 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourcePlayer": "SELF",
+      "sourceEntityType": "HERO",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      }
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "randomTarget": true,
+        "attackBonus": 1,
+        "hpBonus": 0
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

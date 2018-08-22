@@ -2,12 +2,12 @@
   "name": "Glacial Wyvern",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "[b]Battlecry:[/b] If you control another Dragon, gain [b]Taunt[/b] and +1/+1.",
+  "description": "Battlecry: If you control another Dragon, gain Taunt and +1/+1.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

@@ -2,12 +2,12 @@
   "name": "Drakonid Bruiser",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "[b]Charge[/b]",
+  "description": "Charge",
   "attributes": {
     "CHARGE": true
   },

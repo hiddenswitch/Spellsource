@@ -2,12 +2,12 @@
   "name": "Flaxen Whelp",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "[b][b]Battlecry:[/b][/b] If you control another Dragon, \r\ndraw a card.",
+  "description": "Battlecry: If you control another Dragon, draw a card.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

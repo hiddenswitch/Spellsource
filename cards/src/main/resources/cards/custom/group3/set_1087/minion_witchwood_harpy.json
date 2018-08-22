@@ -2,7 +2,7 @@
   "name": "Witchwood Harpy",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",

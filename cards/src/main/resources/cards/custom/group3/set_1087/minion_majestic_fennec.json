@@ -2,11 +2,11 @@
   "name": "Majestic Fennec",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "[b]Taunt[/b]\r\n[b]Battlecry:[/b] Restore\r\n4 Health.",
+  "description": "Taunt Battlecry: Restore 4 Health.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

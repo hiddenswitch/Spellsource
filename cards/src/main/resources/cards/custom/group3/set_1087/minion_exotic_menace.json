@@ -2,11 +2,11 @@
   "name": "Exotic Menace",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] Summon a 5/5 Bounty Hunter with [b]Taunt[/b] for your opponent.",
+  "description": "Battlecry: Summon a 5/5 Bounty Hunter with Taunt for your opponent.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

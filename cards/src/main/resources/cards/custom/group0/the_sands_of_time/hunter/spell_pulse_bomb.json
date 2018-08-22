@@ -1,0 +1,17 @@
+{
+  "name": "Pulse Bomb",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Deal $10 damage to a minion and excess damage to adjacent ones.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ExcessDamageSpell",
+    "secondaryTarget": "ADJACENT_TO_TARGET",
+    "value": 10
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Ready to Shakedown",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Give three random minions in your hand +3 Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "FRIENDLY_HAND",
+    "value": 3,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "attackBonus": 3,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -2,11 +2,11 @@
   "name": "Duskwind Vanguard",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] Give a friendly Dragon +2/+2.",
+  "description": "Battlecry: Give a friendly Dragon +2/+2.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

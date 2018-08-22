@@ -2,12 +2,12 @@
   "name": "Erudite Drakonid",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "[b]Supremacy:[/b] Draw a spell from your deck.",
+  "description": "Supremacy: Draw a spell from your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

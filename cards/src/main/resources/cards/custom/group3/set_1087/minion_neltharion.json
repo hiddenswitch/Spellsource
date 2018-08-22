@@ -2,12 +2,12 @@
   "name": "Neltharion",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "[b][b]Battlecry:[/b][/b] Destroy your other minions. Gain +2/+2 \r\nfor each destroyed.",
+  "description": "Battlecry: Destroy your other minions. Gain +2/+2 for each destroyed.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

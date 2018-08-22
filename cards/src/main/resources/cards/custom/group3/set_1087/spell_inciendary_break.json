@@ -1,0 +1,48 @@
+{
+  "name": "Inciendary Break",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Choose a minion. Deal its Attack to minions adjacent and opposite of it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "ATTACK"
+    },
+    "spells": [
+      {
+        "class": "AdjacentEffectSpell",
+        "spell1": {
+          "class": "NullSpell"
+        },
+        "spell2": {
+          "class": "DamageSpell",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      },
+      {
+        "class": "OppositeEffectSpell",
+        "spell1": {
+          "class": "NullSpell"
+        },
+        "spell2": {
+          "class": "DamageSpell",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

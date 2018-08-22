@@ -2,11 +2,11 @@
   "name": "Sinestra",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 12,
   "rarity": "LEGENDARY",
-  "description": "Whenever you summon\r\na minion, double its\r\nAttack and Health.",
+  "description": "Whenever you summon a minion, double its Attack and Health.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

@@ -2,11 +2,11 @@
   "name": "Trailblazer",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "[b]Supremacy:[/b] [b][b]Recruit[/b][/b] a minion that costs\r\n(3) or less.",
+  "description": "Supremacy: Recruit a minion that costs (3) or less.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

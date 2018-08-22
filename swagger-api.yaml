@@ -389,6 +389,7 @@ definitions:
            - JADE: Custom class.
            - NAVY: Custom class.
            - LEATHER: Custom class.
+           - RUST: Custom class.
            - EGGPLANT: Custom class.
            - ICE: Custom class.
         type: 'string'
@@ -405,6 +406,7 @@ definitions:
           - 'JADE'
           - 'NAVY'
           - 'LEATHER'
+          - 'RUST'
           - 'EGGPLANT'
           - 'ICE'
       name:

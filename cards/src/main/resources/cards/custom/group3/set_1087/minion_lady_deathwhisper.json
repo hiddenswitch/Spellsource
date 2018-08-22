@@ -2,11 +2,11 @@
   "name": "Lady Deathwhisper",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "[b]Battlecry:[/b] Damage all enemy minions until \r\nthey have 1 Health.",
+  "description": "Battlecry: Damage all enemy minions until they have 1 Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

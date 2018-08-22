@@ -2,11 +2,11 @@
   "name": "Rheastrasza",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "[b]Battlecry[/b] [b]and[/b] [b]Supremacy:[/b] Summon a 5/5 Dragon with [b]Charge[/b].",
+  "description": "Battlecry and Supremacy: Summon a 5/5 Dragon with Charge.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

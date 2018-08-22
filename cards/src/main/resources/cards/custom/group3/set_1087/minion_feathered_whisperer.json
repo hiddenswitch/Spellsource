@@ -2,11 +2,11 @@
   "name": "Feathered Whisperer",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "[b][b]Battlecry:[/b][/b] If you control a Dragon, gain +1/+1.",
+  "description": "Battlecry: If you control a Dragon, gain +1/+1.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

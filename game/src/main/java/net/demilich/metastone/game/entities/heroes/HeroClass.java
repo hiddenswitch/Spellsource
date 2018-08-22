@@ -19,6 +19,7 @@ public enum HeroClass {
 	JADE,
 	LEATHER,
 	EGGPLANT,
+	RUST,
 	ICE,
 	SPIRIT,
 	SELF,
@@ -55,6 +56,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_mephilia");
 			case ICE:
 				return CardCatalogue.getCardById("hero_darion");
+			case RUST:
+				return CardCatalogue.getCardById("hero_alder_ravenwald");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

@@ -2,11 +2,11 @@
   "name": "Grimestreet Corporal",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "[b][b]Battlecry:[/b][/b] Destroy a minion with less Attack than this minion.",
+  "description": "Battlecry: Destroy a minion with less Attack than this minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

@@ -1,0 +1,20 @@
+{
+  "name": "Plunderer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Deathrattle: Your opponent draws a card.",
+  "deathrattle": {
+    "class": "DrawCardSpell",
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

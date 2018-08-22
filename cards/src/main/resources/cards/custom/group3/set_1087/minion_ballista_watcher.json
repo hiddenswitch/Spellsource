@@ -2,7 +2,7 @@
   "name": "Ballista Watcher",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "EPIC",

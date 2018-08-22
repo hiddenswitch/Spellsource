@@ -2,11 +2,11 @@
   "name": "Verdant Squire",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] [b]Discover[/b] a Dragon that costs (4) \r\nor less.",
+  "description": "Battlecry: Discover a Dragon that costs (4) or less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

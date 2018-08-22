@@ -2,14 +2,18 @@
   "name": "Supreme Finlord",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
   "race": "MURLOC",
-  "description": "Your [b]Supremacy[/b] effects also draw a card.",
+  "description": "Your Supremacy effects also draw a card.",
   "aura": {
-    "class": "SupremaciesDrawCardAura"
+    "class": "SupremacyBonusEffectAura",
+    "applyEffect": {
+      "class": "DrawCardSpell",
+      "targetPlayer": "SELF"
+    }
   },
   "attributes": {},
   "collectible": true,

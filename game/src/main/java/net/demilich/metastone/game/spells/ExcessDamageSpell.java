@@ -8,19 +8,21 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+import java.util.List;
+
 /**
  * Deals {@link SpellArg#VALUE} damage to the {@code target} and any excess to the {@link SpellArg#SECONDARY_TARGET}.
- *
+ * <p>
  * If {@link SpellArg#EXCLUSIVE} is {@code true}, only deals excess damage.
  */
-public class ExcessDamageSpell extends DamageSpell {
+public final class ExcessDamageSpell extends DamageSpell {
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc toTarget = desc.clone();
 		SpellDesc toExcess = desc.clone();
-		Entity excessDealtTo = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
+		List<Entity> excessDealtTo = context.resolveTarget(player, source, desc.getSecondaryTarget());
 		int damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 6);
 		Actor targetActor = (Actor) target;
 		int hp = targetActor.getHp();
@@ -31,6 +33,8 @@ public class ExcessDamageSpell extends DamageSpell {
 		if (!desc.getBool(SpellArg.EXCLUSIVE)) {
 			super.onCast(context, player, toTarget, source, target);
 		}
-		super.onCast(context, player, toExcess, source, excessDealtTo);
+		for (Entity excessTarget : excessDealtTo) {
+			super.onCast(context, player, toExcess, source, excessTarget);
+		}
 	}
 }

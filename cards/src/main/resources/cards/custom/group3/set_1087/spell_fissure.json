@@ -1,0 +1,28 @@
+{
+  "name": "Fissure",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Destroy the lowest Attack minion on the battlefield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "randomTarget": true,
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "ATTACK",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "ALL_MINIONS",
+        "attribute": "ATTACK",
+        "operation": "MINIMUM"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

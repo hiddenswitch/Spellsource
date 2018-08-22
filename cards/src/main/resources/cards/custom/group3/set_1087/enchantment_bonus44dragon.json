@@ -1,0 +1,31 @@
+{
+  "name": "Dragonforce Supremacy",
+  "baseManaCost": 6,
+  "type": "ENCHANTMENT",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Until the end of your turn, your Supremacy effects also summon a 4/4 Dragon.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_bonus44dragon"
+      }
+    }
+  ],
+  "aura": {
+    "class": "SupremacyBonusEffectAura",
+    "applyEffect": {
+      "class": "SummonSpell",
+      "targetPlayer": "SELF",
+      "card": "token_44dragon"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

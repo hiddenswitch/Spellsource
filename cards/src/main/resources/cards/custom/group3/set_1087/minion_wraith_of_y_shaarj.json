@@ -2,11 +2,11 @@
   "name": "Wraith of Y'Shaarj",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "[b][b]Deathrattle:[/b][/b] Summon a random minion from\r\nyour hand.",
+  "description": "Deathrattle: Summon a random minion from your hand.",
   "deathrattle": {
     "class": "RecruitSpell",
     "cardLocation": "HAND",

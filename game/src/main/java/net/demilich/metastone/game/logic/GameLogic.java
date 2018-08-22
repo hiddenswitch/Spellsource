@@ -1383,6 +1383,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Hero hero = player.getHero();
 		hero.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		hero.getAttributes().remove(Attribute.HERO_POWER_USAGES);
+		if (hero.getWeapon() != null) {
+			hero.getWeapon().getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+		}
 		handleFrozen(hero);
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
@@ -1431,7 +1434,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void removePeacefully(Entity entity) {
-		if (!entity.isInPlay()) {
+		if (!(entity.isInPlay() || entity.getZone() == Zones.HAND)) {
 			return;
 		}
 

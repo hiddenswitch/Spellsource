@@ -2,11 +2,11 @@
   "name": "Underminer",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Can't be targeted by\r\nspells or Hero Powers.",
+  "description": "Can't be targeted by spells or Hero Powers.",
   "attributes": {
     "UNTARGETABLE_BY_SPELLS": true
   },

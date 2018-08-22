@@ -2,7 +2,7 @@
   "name": "Coldsteel Blade",
   "baseManaCost": 6,
   "type": "WEAPON",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "damage": 5,
   "durability": 3,
   "rarity": "EPIC",

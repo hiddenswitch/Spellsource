@@ -2,12 +2,12 @@
   "name": "Gearscrapper",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "[b]Battlecry:[/b] If you control another Mech, attack an enemy minion.",
+  "description": "Battlecry: If you control another Mech, attack an enemy minion.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

@@ -2,12 +2,12 @@
   "name": "Darkmire Drake",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "[b][b]Rush[/b][/b]\r\nCosts (1) less for each Dragon you control.",
+  "description": "Rush Costs (1) less for each Dragon you control.",
   "attributes": {
     "RUSH": true
   },
