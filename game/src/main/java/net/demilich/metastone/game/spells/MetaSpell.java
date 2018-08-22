@@ -29,8 +29,24 @@ public class MetaSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
-		for (SpellDesc spell : (SpellDesc[]) desc.get(SpellArg.SPELLS)) {
+		// Manually obtain sub spells for performance reasons, this is accessed very often
+		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
+		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
+		SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
+		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
+		if (spell != null) {
 			SpellUtils.castChildSpell(context, player, spell, source, target);
+		}
+		if (spells != null && spells.length > 0) {
+			for (SpellDesc subSpell : spells) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target);
+			}
+		}
+		if (spell1 != null) {
+			SpellUtils.castChildSpell(context, player, spell1, source, target);
+		}
+		if (spell2 != null) {
+			SpellUtils.castChildSpell(context, player, spell2, source, target);
 		}
 		context.getSpellValueStack().pollLast();
 	}

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -473,14 +474,17 @@ public class SpellUtils {
 		return postDiscover(context, player, cards, discoverActions);
 	}
 
-	public static List<Actor> getValidRandomTargets(List<Entity> targets) {
-		List<Actor> validTargets = new ArrayList<Actor>();
+	static List<Entity> getValidRandomTargets(List<Entity> targets) {
+		List<Entity> validTargets = new ArrayList<>();
 		for (Entity entity : targets) {
-			Actor actor = (Actor) entity;
-			if (!actor.isDestroyed() || actor.getEntityType() == EntityType.HERO) {
-				validTargets.add(actor);
+			if (entity instanceof Actor) {
+				Actor actor = (Actor)entity;
+				if (!actor.isDestroyed() || actor.getEntityType() == EntityType.HERO) {
+					validTargets.add(actor);
+				}
+			} else {
+				validTargets.add(entity);
 			}
-
 		}
 		return validTargets;
 	}
@@ -500,25 +504,6 @@ public class SpellUtils {
 
 	public static boolean highlanderDeck(Player player) {
 		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
-	}
-
-	@Suspendable
-	public static int howManyMinionsDiedThisTurn(GameContext context) {
-		int currentTurn = context.getTurn();
-		int count = 0;
-		for (Player player : context.getPlayers()) {
-			for (Entity deadEntity : player.getGraveyard()) {
-				if (deadEntity.getEntityType() != EntityType.MINION) {
-					continue;
-				}
-
-				if (deadEntity.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {
-					count++;
-				}
-
-			}
-		}
-		return count;
 	}
 
 	public static int getBoardPosition(GameContext context, Player player, SpellDesc desc, Entity source) {

@@ -1,0 +1,33 @@
+{
+  "name": "Scarlet Dragon",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Supremacy: Restore this minion to full Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "target": "TRIGGER_HOST",
+        "class": "HealSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

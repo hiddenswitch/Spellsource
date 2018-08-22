@@ -22,17 +22,17 @@ class HearthcardsCardDownloader(object):
             self._getter = self._get_gallery_page
         self._pages = {}
         self._get_sizes()
-    
+
     def __iter__(self):
         for x in range(1, self._max_pages + 1):
             if x not in self._pages:
                 self._pages[x] = self._getter(page=x)
             for card in self._pages[x]['cards']:
                 yield card
-    
+
     def __len__(self):
         return self._max_cards
-    
+
     def _get_sizes(self):
         data = self._getter(page=1)
         self._pages[1] = data
@@ -40,14 +40,14 @@ class HearthcardsCardDownloader(object):
         self._max_cards = int(data['main']['total']) \
             if 'total' in data['main'] \
             else int(data['main']['cardsAmount'])
-    
+
     def _get_gallery_page(self, page=1):
         link = 'http://www.hearthcards.net/gallery/json_custom.php?class=&mana=all&page=' + str(
             page) + '&collection=0&sort=date&deckid=&language=en&search=&f=1'
         f = urllib.request.urlopen(link)
         data = json.loads(f.read())
         return data
-    
+
     def _get_set_page(self, page=1):
         link = 'http://www.hearthcards.net/setsandclasses/ajax/ajax_set_hero.php?setid=' + str(
             self._item_id)
@@ -80,7 +80,7 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     out['description'] = card['cardtext']
     out['type'] = card_type
     out['attributes'] = attributes = {}
-    
+
     out['rarity'] = card['rarity'].upper()
     if card['class'].upper() in CLASS_MAPPING:
         out['heroClass'] = CLASS_MAPPING[card['class'].upper()]
@@ -88,7 +88,7 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
         out['heroClass'] = hero_class
     out['baseManaCost'] = int(card['mana'])
     description = out['description'].lower()
-    
+
     spell = {
         'class': 'BuffSpell',
         'target': 'SELF',
@@ -214,7 +214,7 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
         else:
             target_example += 'CHARACTERS'
         spell['target'] = target_example
-    
+
     if len(spells) > 1:
         spell = {
             'class': 'MetaSpell',
@@ -223,12 +223,12 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     condition = {
         'class': 'PlayedLastTurnCondition'
     }
-    
+
     if 'combo' in description:
         condition = {
             'class': 'ComboCondition'
         }
-    
+
     if card_type == 'MINION':
         out['baseAttack'] = int(card['attack'])
         out['baseHp'] = int(card['health'])
@@ -245,7 +245,7 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
         else:
             out['targetSelection'] = 'NONE'
         out['spell'] = spell
-    
+
     if card_type == 'MINION' or card_type == 'WEAPON':
         if 'deathrattle' in description:
             out['deathrattle'] = spell
@@ -336,8 +336,8 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     return out
 
 
-def write_set_stubs(set_id, dest_dir='src/main/resources/staging/hearthcards'):
-    basedir = os.path.join(dest_dir, '/set_' + str(set_id))
+def write_set_stubs(set_id: int, dest_dir: str):
+    basedir = os.path.join(dest_dir, 'set_' + str(set_id))
     try:
         os.makedirs(basedir)
     except:
@@ -345,6 +345,22 @@ def write_set_stubs(set_id, dest_dir='src/main/resources/staging/hearthcards'):
     for card in HearthcardsCardDownloader(set_num=set_id):
         out_card = fix_dict(from_hearthcard_to_spellsource(card, hero_class='SILVER'))
         write_card(card=out_card,
-                   filepath=basedir + name_to_id(
+                   filepath=os.path.join(basedir, name_to_id(
                        out_card['name'],
-                       out_card['type']) + '.json')
+                       out_card['type']) + '.json'))
+
+
+if __name__ == '__main__':
+    import argparse
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-s', '--set', required=True,
+                        help='The set to generate stubs for based on the Hearthcards set ID')
+    parser.add_argument('-d', '--directory', required=False,
+                        default='./cards/src/main/resources/staging/hearthcards',
+                        help='The directory to save the cards to')
+    args = parser.parse_args()
+    assert 'set' in args
+    set_id = int(args.set)
+    assert set_id is not None and set_id != 0
+    write_set_stubs(set_id, dest_dir=args.directory)

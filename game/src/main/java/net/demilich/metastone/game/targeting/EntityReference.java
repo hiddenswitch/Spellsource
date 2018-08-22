@@ -55,9 +55,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * {@link #FRIENDLY_PLAYER} and {@link #ENEMY_PLAYER} will be evaluated.
  *
  * @see net.demilich.metastone.game.GameContext#resolveTarget(Player, Entity, EntityReference) to see how references are
- * interpreted.
+ * 		interpreted.
  * @see net.demilich.metastone.game.spells.Spell#cast(GameContext, Player, SpellDesc, Entity, List) to see more about
- * how group references are used in the casting of spells.
+ * 		how group references are used in the casting of spells.
  */
 public class EntityReference implements Serializable {
 	/**
@@ -267,8 +267,8 @@ public class EntityReference implements Serializable {
 	 * net.demilich.metastone.game.spells.SummonSpell}.
 	 *
 	 * @see net.demilich.metastone.game.spells.SpellUtils#castChildSpell(GameContext, Player, SpellDesc, Entity, Entity,
-	 * Entity) for the method that sets the {@link net.demilich.metastone.game.environment.Environment#OUTPUTS}. All the
-	 * usages of this method set outputs.
+	 *    Entity) for the method that sets the {@link net.demilich.metastone.game.environment.Environment#OUTPUTS}. All the
+	 * 		usages of this method set outputs.
 	 */
 	public static final EntityReference OUTPUT = new EntityReference(-32);
 	/**
@@ -345,7 +345,7 @@ public class EntityReference implements Serializable {
 	 * about specific cards played or used in the past; or to find specific permanents in play.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter for a way to filter for specific card IDs
-	 * using this reference.
+	 * 		using this reference.
 	 */
 	public static final EntityReference ALL_ENTITIES = new EntityReference(-45);
 	/**
@@ -419,11 +419,13 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference PHYSICAL_ATTACK_TARGETS = new EntityReference(-58);
 	/**
-	 * References the minion to the left of the {@code source} of this targeting resolution, or a zero-length list if there isn't one
+	 * References the minion to the left of the {@code source} of this targeting resolution, or a zero-length list if
+	 * there isn't one
 	 */
 	public static final EntityReference LEFT_ADJACENT_MINION = new EntityReference(-59);
 	/**
-	 * References the minion to the right of the {@code source} of this targeting resolution, or a zero-length list if there isn't one
+	 * References the minion to the right of the {@code source} of this targeting resolution, or a zero-length list if
+	 * there isn't one
 	 */
 	public static final EntityReference RIGHT_ADJACENT_MINION = new EntityReference(-60);
 	/**
@@ -444,6 +446,11 @@ public class EntityReference implements Serializable {
 	 * References all the friendly minions, except ordered by their location on the board instead of their order of play.
 	 */
 	public static final EntityReference FRIENDLY_MINIONS_LEFT_TO_RIGHT = new EntityReference(-64);
+	/**
+	 * References the minions adjacent to the current {@link EntityReference#TARGET}, i.e., the currently selected target
+	 * in the pending action.
+	 */
+	public static final EntityReference ADJACENT_TO_TARGET = new EntityReference(-65);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

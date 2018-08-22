@@ -1,0 +1,22 @@
+{
+  "name": "Dragonhorn",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Draw 2 Dragons from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "DRAGON"
+    },
+    "value": 2
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

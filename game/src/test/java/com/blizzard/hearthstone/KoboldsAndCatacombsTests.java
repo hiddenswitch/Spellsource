@@ -822,7 +822,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 						// Explosive Runes, Less than 6 health
 						playCard(context, player, "secret_explosive_runes");
 						context.endTurn();
-						testExplosiveRuinsSituation(context, opponent, minionCardId, false);
+						testExplosiveRunesSituation(context, opponent, minionCardId, false);
 					});
 				});
 
@@ -838,12 +838,12 @@ public class KoboldsAndCatacombsTests extends TestBase {
 						playCard(context, player, "secret_snipe");
 						playCard(context, player, "secret_explosive_runes");
 						context.endTurn();
-						testExplosiveRuinsSituation(context, opponent, minionCardId, true);
+						testExplosiveRunesSituation(context, opponent, minionCardId, true);
 					});
 				});
 	}
 
-	private static void testExplosiveRuinsSituation(GameContext context, Player opponent, final String minionCardId, boolean playedSnipe) {
+	private static void testExplosiveRunesSituation(GameContext context, Player opponent, final String minionCardId, boolean playedSnipe) {
 		final int opponentStartingHp = opponent.getHero().getHp();
 		playCard(context, opponent, minionCardId);
 		Minion minion = (Minion) context.getEntities().filter(c ->

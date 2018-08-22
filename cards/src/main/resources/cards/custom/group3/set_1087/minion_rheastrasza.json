@@ -1,0 +1,36 @@
+{
+  "name": "Rheastrasza",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry and Supremacy: Summon a 5/5 Dragon with Charge.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_55dragoncharge"
+      }
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_55dragoncharge"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

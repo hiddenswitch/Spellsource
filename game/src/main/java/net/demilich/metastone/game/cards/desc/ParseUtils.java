@@ -96,6 +96,8 @@ public class ParseUtils {
 				return EntityReference.TRIGGER_HOST;
 			case "adjacent_minions":
 				return EntityReference.ADJACENT_MINIONS;
+			case "adjacent_to_target":
+				return EntityReference.ADJACENT_TO_TARGET;
 			case "attacker_adjacent_minions":
 				return EntityReference.ATTACKER_ADJACENT_MINIONS;
 			case "friendly_set_aside":

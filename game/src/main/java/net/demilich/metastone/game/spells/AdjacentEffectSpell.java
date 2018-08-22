@@ -43,8 +43,7 @@ import org.slf4j.LoggerFactory;
  * Observe that "damaging next to" is implemented by querying this minion's attack and dealing damage to adjacent
  * minions like a damage spell.
  */
-public class AdjacentEffectSpell extends Spell {
-	private static Logger logger = LoggerFactory.getLogger(AdjacentEffectSpell.class);
+public final class AdjacentEffectSpell extends RelativeToTargetEffectSpell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(AdjacentEffectSpell.class);
@@ -66,33 +65,8 @@ public class AdjacentEffectSpell extends Spell {
 	}
 
 	@Override
-	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2);
-		EntityReference sourceReference = source != null ? source.getReference() : null;
-		List<Actor> adjacentMinions = context.getAdjacentMinions(target.getReference());
-		SpellDesc primary;
-		SpellDesc secondary;
-		if (desc.containsKey(SpellArg.SPELL) &&
-				!desc.containsKey(SpellArg.SPELL1)
-				&& !desc.containsKey(SpellArg.SPELL2)) {
-			primary = (SpellDesc) desc.get(SpellArg.SPELL);
-			secondary = primary;
-		} else {
-			primary = (SpellDesc) desc.get(SpellArg.SPELL1);
-			if (primary != null) {
-				context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
-			}
-
-			secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
-			if (secondary == null) {
-				secondary = primary;
-			}
-		}
-
-		for (Entity adjacent : adjacentMinions) {
-			context.getLogic().castSpell(player.getId(), secondary, sourceReference, adjacent.getReference(), true);
-		}
+	protected List<Actor> getActors(GameContext context, Entity target) {
+		return context.getAdjacentMinions(target.getReference());
 	}
 
 }

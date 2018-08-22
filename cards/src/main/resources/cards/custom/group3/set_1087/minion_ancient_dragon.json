@@ -1,0 +1,30 @@
+{
+  "name": "Ancient Dragon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Supremacy: Adapt",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "CastFromGroupSpell",
+        "group": "group_adapt",
+        "target": "TRIGGER_HOST"
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
