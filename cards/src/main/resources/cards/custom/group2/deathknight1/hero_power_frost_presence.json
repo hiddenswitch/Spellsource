@@ -31,6 +31,9 @@
     }
   ],
   "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
