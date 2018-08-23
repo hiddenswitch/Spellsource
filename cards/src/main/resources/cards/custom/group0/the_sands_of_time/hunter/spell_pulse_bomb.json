@@ -8,8 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ExcessDamageSpell",
-    "secondaryTarget": "ADJACENT_TO_TARGET",
-    "value": 10
+    "value": 10,
+    "secondaryTarget": "ADJACENT_TO_TARGET"
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",

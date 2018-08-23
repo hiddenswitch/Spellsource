@@ -10,12 +10,12 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
       "fireCondition": {
         "class": "IsDeadCondition",
         "target": "EVENT_SOURCE",
         "invert": true
-      }
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
       "class": "TransformMinionSpell",

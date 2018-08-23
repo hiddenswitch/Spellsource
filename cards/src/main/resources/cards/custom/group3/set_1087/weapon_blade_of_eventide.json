@@ -20,18 +20,18 @@
     },
     "spell": {
       "class": "DestroySpell",
-      "randomTarget": true,
       "target": "ALL_MINIONS",
       "filter": {
         "class": "AttributeFilter",
-        "attribute": "ATTACK",
         "value": {
           "class": "ReduceValueProvider",
           "target": "ALL_MINIONS",
           "attribute": "ATTACK",
           "operation": "MINIMUM"
-        }
-      }
+        },
+        "attribute": "ATTACK"
+      },
+      "randomTarget": true
     }
   },
   "attributes": {

@@ -10,24 +10,24 @@
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
-      "sourceEntityType": "MINION",
-      "targetEntityType": "MINION",
-      "hostTargetType": "IGNORE_AS_SOURCE",
       "fireCondition": {
         "class": "IsAdjacentCondition",
         "target": "EVENT_SOURCE"
-      }
+      },
+      "hostTargetType": "IGNORE_AS_SOURCE",
+      "sourceEntityType": "MINION",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "ExcessDamageSpell",
       "target": "EVENT_TARGET",
-      "secondaryTarget": "ENEMY_HERO",
-      "exclusive": true,
       "value": {
         "class": "AttributeValueProvider",
         "target": "EVENT_SOURCE",
         "attribute": "ATTACK"
-      }
+      },
+      "exclusive": true,
+      "secondaryTarget": "ENEMY_HERO"
     }
   },
   "attributes": {},

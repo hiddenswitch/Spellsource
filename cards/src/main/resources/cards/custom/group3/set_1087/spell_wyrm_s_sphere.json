@@ -13,8 +13,8 @@
     },
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "race": "DRAGON"
+      "race": "DRAGON",
+      "cardType": "MINION"
     },
     "cardSource": {
       "class": "CatalogueSource"

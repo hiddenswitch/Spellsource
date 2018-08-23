@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "token_plunderer",
     "value": 3,
+    "card": "token_plunderer",
     "targetPlayer": "OPPONENT"
   },
   "attributes": {},

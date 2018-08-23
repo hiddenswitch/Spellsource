@@ -12,8 +12,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "card": "token_whelp",
-      "value": 2
+      "value": 2,
+      "card": "token_whelp"
     }
   },
   "attributes": {

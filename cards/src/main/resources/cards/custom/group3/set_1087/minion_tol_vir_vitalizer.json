@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourcePlayer": "SELF",
-      "sourceEntityType": "MINION"
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "HealSpell",

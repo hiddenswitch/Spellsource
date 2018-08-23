@@ -15,12 +15,12 @@
     "spell": {
       "class": "DamageSpell",
       "target": "ENEMY_MINIONS",
-      "randomTarget": true,
       "value": {
         "class": "AttributeValueProvider",
         "target": "EVENT_TARGET",
         "attribute": "ATTACK"
-      }
+      },
+      "randomTarget": true
     }
   },
   "attributes": {},

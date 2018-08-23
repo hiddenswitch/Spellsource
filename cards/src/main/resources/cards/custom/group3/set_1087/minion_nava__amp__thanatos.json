@@ -17,12 +17,12 @@
         {
           "class": "DestroySpell",
           "target": "ENEMY_MINIONS",
-          "randomTarget": true,
           "filter": {
             "class": "EntityEqualsFilter",
-            "secondaryTarget": "TARGET",
-            "invert": true
-          }
+            "invert": true,
+            "secondaryTarget": "TARGET"
+          },
+          "randomTarget": true
         },
         {
           "class": "DrawCardSpell",
@@ -32,8 +32,8 @@
     }
   },
   "attributes": {
-    "SUPREMACY": true,
-    "RUSH": true
+    "RUSH": true,
+    "SUPREMACY": true
   },
   "collectible": true,
   "set": "CUSTOM",

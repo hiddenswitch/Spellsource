@@ -8,12 +8,12 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
+    "value": 2,
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "race": "DRAGON"
-    },
-    "value": 2
+      "race": "DRAGON",
+      "cardType": "MINION"
+    }
   },
   "attributes": {},
   "collectible": true,

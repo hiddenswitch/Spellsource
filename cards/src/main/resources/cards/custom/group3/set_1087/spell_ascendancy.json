@@ -17,8 +17,8 @@
     },
     "spell1": {
       "class": "SummonSpell",
-      "card": "token_44dragon",
-      "value": 2
+      "value": 2,
+      "card": "token_44dragon"
     },
     "spell2": {
       "class": "SummonSpell",

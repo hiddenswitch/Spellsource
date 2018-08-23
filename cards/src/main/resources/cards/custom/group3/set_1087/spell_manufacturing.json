@@ -8,11 +8,11 @@
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "SummonSpell",
+    "value": 2,
     "filter": {
       "class": "RaceFilter",
       "race": "MECH"
-    },
-    "value": 2
+    }
   },
   "attributes": {},
   "collectible": true,

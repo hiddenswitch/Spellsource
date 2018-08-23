@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourcePlayer": "SELF",
-      "sourceEntityType": "HERO"
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "TemporaryAttackSpell",

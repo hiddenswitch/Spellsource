@@ -19,16 +19,16 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HAND",
-        "randomTarget": true,
-        "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        },
         "attackBonus": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         },
-        "hpBonus": 0
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "hpBonus": 0,
+        "randomTarget": true
       }
     ]
   },

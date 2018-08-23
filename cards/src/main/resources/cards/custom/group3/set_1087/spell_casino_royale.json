@@ -14,14 +14,14 @@
         "class": "TurnEndTrigger",
         "targetPlayer": "SELF"
       },
-      "maxFires": 1,
       "spell": {
         "class": "DrawCardSpell",
         "value": {
           "class": "DeadMinionsThisTurn",
           "targetPlayer": "OPPONENT"
         }
-      }
+      },
+      "maxFires": 1
     }
   },
   "attributes": {},

@@ -5,12 +5,12 @@
   "heroClass": "RUST",
   "rarity": "FREE",
   "description": "Summon a 1/1 Crater Hatchling with Charge.",
-  "attributes": {},
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "card": "token_crater_hatchling"
   },
+  "attributes": {},
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

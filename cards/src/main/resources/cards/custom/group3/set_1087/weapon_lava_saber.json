@@ -10,19 +10,19 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourcePlayer": "SELF",
-      "sourceEntityType": "HERO",
       "fireCondition": {
         "class": "IsDeadCondition",
         "target": "EVENT_TARGET"
-      }
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "SupremacySpell",
       "spell": {
         "class": "SummonSpell",
-        "card": "token_whelp",
-        "value": 2
+        "value": 2,
+        "card": "token_whelp"
       }
     }
   },

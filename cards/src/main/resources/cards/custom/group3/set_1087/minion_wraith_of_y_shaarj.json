@@ -9,11 +9,11 @@
   "description": "Deathrattle: Summon a random minion from your hand.",
   "deathrattle": {
     "class": "RecruitSpell",
-    "cardLocation": "HAND",
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "MINION"
-    }
+    },
+    "cardLocation": "HAND"
   },
   "attributes": {
     "DEATHRATTLES": true

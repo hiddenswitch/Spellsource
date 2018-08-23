@@ -21,8 +21,8 @@
     "class": "SupremacyBonusEffectAura",
     "applyEffect": {
       "class": "SummonSpell",
-      "targetPlayer": "SELF",
-      "card": "token_44dragon"
+      "card": "token_44dragon",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": false,
