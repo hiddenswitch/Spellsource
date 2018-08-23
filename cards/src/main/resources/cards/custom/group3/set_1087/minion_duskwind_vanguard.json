@@ -12,13 +12,12 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS",
-      "attackBonus": 0,
+      "attackBonus": 2,
       "filter": {
         "class": "RaceFilter",
         "race": "DRAGON"
       },
-      "hpBonus": 0
+      "hpBonus": 2
     }
   },
   "attributes": {

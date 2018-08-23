@@ -44,6 +44,26 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSilverboneClaw() {
+		runGym((context, player, opponent) -> {
+			Card dragon = receiveCard(context, player, "token_44dragon");
+			playCard(context, player, "weapon_silverbone_claw");
+			assertEquals(dragon.getAttack(), dragon.getBaseAttack());
+			assertEquals(dragon.getHp(), dragon.getBaseHp());
+		});
+
+		runGym((context, player, opponent) -> {
+			Card dragon = receiveCard(context, player, "token_44dragon");
+			Card dragon2 = receiveCard(context, player, "token_44dragon");
+			playCard(context, player, "weapon_silverbone_claw");
+			assertEquals(dragon.getBonusAttack(), 2);
+			assertEquals(dragon.getBonusHp(), 0);
+			assertEquals(dragon2.getBonusAttack(), 2);
+			assertEquals(dragon2.getBonusHp(), 0);
+		});
+	}
+
+	@Test
 	public void testSentryJumper() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
