@@ -9,6 +9,20 @@
   "description": "Battlecry: Give two random Dragons in your hand +2 Attack.",
   "battlecry": {
     "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+        }
+      },
+      "value2": 2,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell": {
       "class": "MultiTargetSpell",
       "target": "FRIENDLY_HAND",
