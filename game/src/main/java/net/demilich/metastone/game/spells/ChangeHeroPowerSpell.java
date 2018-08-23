@@ -55,5 +55,6 @@ public class ChangeHeroPowerSpell extends Spell {
 		heroPower.moveOrAddTo(context, Zones.HERO_POWER);
 		context.getLogic().processGameTriggers(player, heroPower);
 		context.getLogic().processPassiveTriggers(player, heroPower);
+		context.getLogic().processAuras(player, heroPower);
 	}
 }

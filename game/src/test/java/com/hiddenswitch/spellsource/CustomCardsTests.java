@@ -17,7 +17,9 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
@@ -42,6 +44,30 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testBloodPresence() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(27);
+			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
+			SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
+			spell.put(SpellArg.CARD, "hero_power_blood_presence");
+			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+			// Make sure aura actually gets recalculated
+			context.getLogic().endOfSequence();
+			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_blood_presence");
+			attack(context, player, wolfrider, opponent.getHero());
+			assertEquals(player.getHero().getHp(), 30);
+			spell.put(SpellArg.CARD, "hero_power_fireblast");
+			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+			// Make sure aura actually gets recalculated
+			context.getLogic().endOfSequence();
+			assertFalse(wolfrider.hasAttribute(Attribute.AURA_LIFESTEAL));
+			player.getHero().setHp(27);
+			attack(context, player, wolfrider, opponent.getHero());
+			assertEquals(player.getHero().getHp(), 27);
+		});
+	}
 
 	@Test
 	public void testSilverboneClaw() {

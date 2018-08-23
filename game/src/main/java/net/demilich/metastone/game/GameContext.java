@@ -979,7 +979,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        that should be removed.
 	 */
 	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
-		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras);
+		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras, this);
 	}
 
 	/**
