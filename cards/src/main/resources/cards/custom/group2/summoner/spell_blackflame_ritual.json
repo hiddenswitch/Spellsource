@@ -1,0 +1,40 @@
+{
+  "name": "Blackflame Ritual",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "Summon two minions with stats equal to this Cost. Costs (1) more for each minion that died this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "ManaCostProvider",
+      "target": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "target": "OUTPUT",
+          "exclusive": false
+        },
+        {
+          "class": "SetHpSpell",
+          "target": "OUTPUT",
+          "exclusive": false
+        }
+      ]
+    },
+    "card": "token_blackflame_elemental"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DeadMinionsThisTurn",
+    "multiplier": -1,
+    "targetPlayer": "BOTH"
+  }
+}
