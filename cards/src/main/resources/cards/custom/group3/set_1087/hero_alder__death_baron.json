@@ -1,6 +1,6 @@
 {
   "name": "Alder, Death Baron",
-  "heroPower": "hero_power_sharper_claws",
+  "heroPower": "hero_power_frostmaker",
   "baseManaCost": 9,
   "type": "HERO",
   "heroClass": "RUST",

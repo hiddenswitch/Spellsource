@@ -6,6 +6,19 @@
   "rarity": "COMMON",
   "description": "Give three random minions in your hand +3 Attack.",
   "targetSelection": "MINIONS",
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    },
+    "value2": 3,
+    "operation": "GREATER_OR_EQUAL"
+  },
   "spell": {
     "class": "MultiTargetSpell",
     "target": "FRIENDLY_HAND",
