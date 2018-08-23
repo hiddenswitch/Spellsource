@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "token_whelp",
-    "value": 4
+    "value": 4,
+    "card": "token_whelp"
   },
   "attributes": {},
   "collectible": true,

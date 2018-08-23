@@ -25,13 +25,13 @@
           "spell": {
             "class": "ExcessDamageSpell",
             "target": "EVENT_TARGET",
-            "secondaryTarget": "ENEMY_HERO",
-            "exclusive": true,
             "value": {
               "class": "AttributeValueProvider",
-              "attribute": "ATTACK",
-              "target": "TRIGGER_HOST"
-            }
+              "target": "TRIGGER_HOST",
+              "attribute": "ATTACK"
+            },
+            "exclusive": true,
+            "secondaryTarget": "ENEMY_HERO"
           }
         }
       }

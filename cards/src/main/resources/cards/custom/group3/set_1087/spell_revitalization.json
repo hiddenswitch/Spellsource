@@ -11,8 +11,8 @@
     "target": "FRIENDLY_CHARACTERS",
     "value": {
       "class": "AttributeValueProvider",
-      "attribute": "ATTACK",
-      "target": "TARGET"
+      "target": "TARGET",
+      "attribute": "ATTACK"
     }
   },
   "attributes": {},

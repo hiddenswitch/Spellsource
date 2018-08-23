@@ -13,13 +13,13 @@
     "target": "SELF",
     "condition": {
       "class": "MinionCountCondition",
-      "targetPlayer": "SELF",
       "value": 1,
       "filter": {
         "class": "RaceFilter",
         "race": "DRAGON"
       },
-      "operation": "LESS_OR_EQUAL"
+      "operation": "LESS_OR_EQUAL",
+      "targetPlayer": "SELF"
     },
     "attribute": "AURA_CANNOT_ATTACK"
   },

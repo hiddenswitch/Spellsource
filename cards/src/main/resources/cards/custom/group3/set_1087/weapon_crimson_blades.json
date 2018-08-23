@@ -10,12 +10,12 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourcePlayer": "SELF",
-      "sourceEntityType": "HERO",
       "fireCondition": {
         "class": "IsDeadCondition",
         "target": "EVENT_TARGET"
-      }
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "SupremacySpell",

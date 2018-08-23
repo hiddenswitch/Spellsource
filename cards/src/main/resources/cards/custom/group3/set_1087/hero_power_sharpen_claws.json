@@ -5,7 +5,6 @@
   "heroClass": "RUST",
   "rarity": "FREE",
   "description": "Hero Power Restore 1 Health and give the character +1 Attack this turn.",
-  "attributes": {},
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -21,6 +20,7 @@
       }
     ]
   },
+  "attributes": {},
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

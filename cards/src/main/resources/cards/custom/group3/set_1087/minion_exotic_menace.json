@@ -11,8 +11,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "targetPlayer": "OPPONENT",
-      "card": "token_bounty_hunter"
+      "card": "token_bounty_hunter",
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {

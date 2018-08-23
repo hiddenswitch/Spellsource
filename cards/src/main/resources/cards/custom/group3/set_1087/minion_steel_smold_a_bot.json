@@ -15,15 +15,15 @@
       "class": "SupremacySpell",
       "spell": {
         "class": "BuffSpell",
+        "target": "TRIGGER_HOST",
         "attackBonus": 2,
-        "hpBonus": 2,
-        "target": "TRIGGER_HOST"
+        "hpBonus": 2
       }
     }
   },
   "attributes": {
-    "SUPREMACY": true,
-    "MAGNETIC": true
+    "MAGNETIC": true,
+    "SUPREMACY": true
   },
   "collectible": true,
   "set": "CUSTOM",

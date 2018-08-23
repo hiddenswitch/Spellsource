@@ -13,13 +13,13 @@
       "class": "DestroySpell",
       "filter": {
         "class": "AttributeFilter",
-        "attribute": "ATTACK",
-        "operation": "LESS",
         "value": {
           "class": "AttributeValueProvider",
-          "attribute": "ATTACK",
-          "target": "SELF"
-        }
+          "target": "SELF",
+          "attribute": "ATTACK"
+        },
+        "attribute": "ATTACK",
+        "operation": "LESS"
       }
     }
   },

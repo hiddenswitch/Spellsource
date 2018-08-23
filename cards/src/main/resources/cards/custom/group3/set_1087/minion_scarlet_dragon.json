@@ -15,8 +15,8 @@
     "spell": {
       "class": "SupremacySpell",
       "spell": {
-        "target": "TRIGGER_HOST",
         "class": "HealSpell",
+        "target": "TRIGGER_HOST",
         "value": {
           "class": "AttributeValueProvider",
           "attribute": "MAX_HP"

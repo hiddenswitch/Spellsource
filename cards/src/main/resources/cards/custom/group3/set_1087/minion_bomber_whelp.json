@@ -14,8 +14,8 @@
     "value": 1,
     "howMany": {
       "class": "AttributeValueProvider",
-      "attribute": "ATTACK",
-      "target": "SELF"
+      "target": "SELF",
+      "attribute": "ATTACK"
     }
   },
   "attributes": {

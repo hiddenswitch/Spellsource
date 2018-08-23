@@ -10,22 +10,22 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourcePlayer": "SELF",
-      "sourceEntityType": "MINION",
-      "targetEntityType": "MINION",
       "fireCondition": {
         "class": "IsDeadCondition"
-      }
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
+      "attackBonus": 1,
       "filter": {
         "class": "EntityEqualsFilter",
-        "secondaryTarget": "TRIGGER_HOST",
-        "invert": true
+        "invert": true,
+        "secondaryTarget": "TRIGGER_HOST"
       },
-      "attackBonus": 1,
       "hpBonus": 1
     }
   },

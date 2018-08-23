@@ -11,8 +11,8 @@
     "condition": {
       "class": "MinionCountCondition",
       "value": 0,
-      "targetPlayer": "SELF",
-      "operation": "EQUAL"
+      "operation": "EQUAL",
+      "targetPlayer": "SELF"
     },
     "targetSelection": "NONE",
     "spell": {

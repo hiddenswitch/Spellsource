@@ -12,6 +12,17 @@
     "spell": {
       "class": "RecastWhileSpell",
       "target": "ENEMY_MINIONS",
+      "condition": {
+        "class": "AttributeCondition",
+        "value": 1,
+        "attribute": "HP",
+        "operation": "EQUAL"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "value": 1,
+        "ignoreSpellDamage": true
+      },
       "filter": {
         "class": "OrFilter",
         "filters": [
@@ -24,17 +35,6 @@
             "attribute": "AURA_IMMUNE"
           }
         ]
-      },
-      "spell": {
-        "class": "DamageSpell",
-        "value": 1,
-        "ignoreSpellDamage": true
-      },
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "HP",
-        "value": 1,
-        "operation": "EQUAL"
       }
     }
   },

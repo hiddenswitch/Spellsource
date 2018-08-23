@@ -8,8 +8,8 @@
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "ExcessDamageSpell",
-    "secondaryTarget": "ADJACENT_TO_TARGET",
-    "value": 7
+    "value": 7,
+    "secondaryTarget": "ADJACENT_TO_TARGET"
   },
   "attributes": {},
   "collectible": true,

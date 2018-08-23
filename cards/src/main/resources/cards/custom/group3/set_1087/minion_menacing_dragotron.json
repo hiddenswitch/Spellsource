@@ -5,20 +5,20 @@
   "heroClass": "RUST",
   "baseAttack": 2,
   "baseHp": 5,
-  "race": "MECH",
   "rarity": "RARE",
+  "race": "MECH",
   "description": "Deathrattle: Destroy all minions with less Attack than this minion.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "ALL_MINIONS",
     "filter": {
       "class": "AttributeFilter",
-      "attribute": "ATTACK",
       "value": {
         "class": "AttributeValueProvider",
-        "attribute": "ATTACK",
-        "target": "SELF"
+        "target": "SELF",
+        "attribute": "ATTACK"
       },
+      "attribute": "ATTACK",
       "operation": "LESS"
     }
   },

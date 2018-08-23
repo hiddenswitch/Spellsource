@@ -16,9 +16,9 @@
       "spell": {
         "class": "BuffSpell",
         "target": "FRIENDLY_HAND",
-        "randomTarget": true,
         "attackBonus": 4,
-        "hpBonus": 0
+        "hpBonus": 0,
+        "randomTarget": true
       }
     }
   },

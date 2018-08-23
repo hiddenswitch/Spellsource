@@ -16,8 +16,8 @@
       "class": "SupremacySpell",
       "spell": {
         "class": "CastFromGroupSpell",
-        "group": "group_adapt",
-        "target": "TRIGGER_HOST"
+        "target": "TRIGGER_HOST",
+        "group": "group_adapt"
       }
     }
   },

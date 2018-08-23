@@ -11,8 +11,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "targetPlayer": "OPPONENT",
-      "card": "token_44dragon"
+      "card": "token_44dragon",
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {
