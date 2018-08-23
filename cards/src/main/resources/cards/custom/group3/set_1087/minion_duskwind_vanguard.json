@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
+  "race": "DRAGON",
   "description": "Battlecry: Give a friendly Dragon +2/+2.",
   "battlecry": {
     "targetSelection": "MINIONS",
