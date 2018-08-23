@@ -2,7 +2,7 @@
   "name": "Cloud Serpent Hatchling",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "JADE",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
@@ -30,8 +30,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "DEFLECT": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",
