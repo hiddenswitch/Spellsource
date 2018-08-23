@@ -902,6 +902,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		processGameTriggers(player, hero);
 		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
+		processAuras(player, hero.getHeroPower());
 		context.fireGameEvent(new BoardChangedEvent(context));
 	}
 
@@ -3891,6 +3892,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		while (context.getPlayer(playerId).getHero() != null && context.getPlayer(playerId).getHero().getZone() != Zones.GRAVEYARD) {
 			destroy(context.getPlayer(playerId).getHero());
 			endOfSequence();
+		}
+	}
+
+	public void processAuras(Player player, Card card) {
+		if (card.getDesc().getAura() != null) {
+			addGameEventListener(player, card.getDesc().getAura().create(), card);
+		}
+		if (card.getDesc().getAuras() != null) {
+			for (AuraDesc aura : card.getDesc().getAuras()) {
+				addGameEventListener(player, aura.create(), card);
+			}
 		}
 	}
 

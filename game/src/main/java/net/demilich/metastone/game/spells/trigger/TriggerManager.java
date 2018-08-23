@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.NoSuchElementException;
 
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.HasValue;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -161,12 +162,13 @@ public class TriggerManager implements Cloneable, Serializable {
 		trigger.expire();
 	}
 
-	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
+	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, GameContext context) {
 		for (Trigger trigger : getListSnapshot(triggers)) {
 			if (trigger.getHostReference().equals(entityReference)) {
 				if (!removeAuras && trigger instanceof Aura) {
 					continue;
 				}
+				trigger.onRemove(context);
 				trigger.expire();
 				triggers.remove(trigger);
 			}
