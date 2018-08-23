@@ -14,7 +14,7 @@
         "class": "AllMatchFilterCondition",
         "target": "EVENT_SOURCE",
         "filter": {
-          "class": "CardFilter",
+          "class": "SpecificCardFilter",
           "card": "spell_rune"
         }
       },
