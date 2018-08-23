@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Taunt Battlecry: Restore 4 Health.",
   "battlecry": {
     "targetSelection": "ANY",
