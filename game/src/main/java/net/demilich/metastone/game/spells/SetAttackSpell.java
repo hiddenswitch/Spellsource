@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 
 /**
  * Sets the {@code target}'s attack-related attributes such that the result of {@link Actor#getAttack()} or {@link
- * ActorCard#getAttack()} is equal to the {@link SpellArg#VALUE}.
+ * net.demilich.metastone.game.cards.Card#getAttack()} is equal to the {@link SpellArg#VALUE}.
  * <p>
  * When {@link SpellArg#EXCLUSIVE} is {@code true} (default), temporary and conditional attack bonuses are removed. This
  * means that minions with conditional attack bonuses like Tar Creeper (+2 Attack during the opponent's turn) will be
