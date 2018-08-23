@@ -3,11 +3,11 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 6,
+  "baseAttack": 3,
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Deflect. Battlecry: If you're holding a Dragon, add a random Dragon to your hand.",
+  "description": "Battlecry: If you're holding a Dragon, add a random Cloud Serpent to your hand.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",
@@ -19,13 +19,14 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "cardFilter": {
-        "class": "CardFilter",
-        "race": "DRAGON"
-      },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      }
+      "cards": [
+        "minion_crimson_cloud_serpent",
+        "minion_golden_cloud_serpent",
+        "minion_jade_cloud_serpent",
+        "minion_onyx_cloud_serpent",
+        "minion_sapphire_cloud_serpent"
+      ],
+      "randomTarget": true
     }
   },
   "attributes": {

@@ -1,0 +1,20 @@
+{
+  "name": "Falling Crusader",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 7,
+  "baseHp": 0,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Add a Rune to your hand (for your troubles).",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_rune"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Blood Presence",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Passive Hero Power. Your minions have Lifesteal this turn.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ChangeHeroPowerSpell",
+      "card": "hero_power_presence",
+      "targetPlayer": "SELF"
+    }
+  },
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_LIFESTEAL"
+  },
+  "targetSelection": "NONE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

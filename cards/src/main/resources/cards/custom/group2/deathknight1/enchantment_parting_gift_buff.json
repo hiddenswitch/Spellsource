@@ -1,0 +1,27 @@
+{
+  "name": "An Unboxed Parting Gift",
+  "type": "ENCHANTMENT",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Friendly minions have +3/+3 this turn only.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_parting_gift_buff"
+    }
+  },
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 3,
+    "hpBonus": 3
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

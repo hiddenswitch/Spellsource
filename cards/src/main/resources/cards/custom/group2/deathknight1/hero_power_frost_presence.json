@@ -1,0 +1,37 @@
+{
+  "name": "Frost Presence",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Passive Hero Power. Your minions Freeze any characters they damage this turn.",
+  "passiveTriggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ChangeHeroPowerSpell",
+        "card": "hero_power_presence",
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "sourceEntityType": "MINION",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "EVENT_TARGET",
+        "attribute": "FROZEN"
+      }
+    }
+  ],
+  "targetSelection": "NONE",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
