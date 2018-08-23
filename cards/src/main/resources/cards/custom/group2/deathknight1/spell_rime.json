@@ -1,0 +1,43 @@
+{
+  "name": "Rime",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Whenever your opponent starts a turn, deal 2 damage to it and Freeze adjacent minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "OPPONENT"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "ADJACENT_MINIONS",
+            "attribute": "FROZEN",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "FROZEN",
+              "invert": true,
+              "operation": "HAS"
+            }
+          },
+          {
+            "class": "DamageSpell",
+            "target": "SELF",
+            "value": 2
+          }
+        ]
+      },
+      "persistentOwner": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
