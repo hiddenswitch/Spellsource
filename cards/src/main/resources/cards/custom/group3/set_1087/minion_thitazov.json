@@ -25,7 +25,7 @@
       "filter": {
         "class": "EntityEqualsFilter",
         "invert": true,
-        "secondaryTarget": "TRIGGER_HOST"
+        "secondaryTarget": "ATTACKER"
       },
       "hpBonus": 1
     }

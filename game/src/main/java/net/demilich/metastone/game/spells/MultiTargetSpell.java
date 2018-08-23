@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
@@ -10,7 +11,9 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.OrFilter;
 
 /**
  * Casts {@link SpellArg#SPELL} on a random target from the list of targets in {@link SpellArg#TARGET} at most {@link

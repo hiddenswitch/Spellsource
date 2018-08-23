@@ -28,8 +28,8 @@
         {
           "class": "BuffSpell",
           "target": "SELF",
-          "attackBonus": 0,
-          "hpBonus": 0
+          "attackBonus": 1,
+          "hpBonus": 1
         }
       ]
     }
