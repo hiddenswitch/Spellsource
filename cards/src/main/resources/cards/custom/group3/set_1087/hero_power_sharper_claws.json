@@ -15,8 +15,7 @@
       },
       {
         "class": "BuffSpell",
-        "attackBonus": 2,
-        "hpBonus": 1
+        "attackBonus": 2
       }
     ]
   },
