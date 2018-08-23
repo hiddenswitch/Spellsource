@@ -16,7 +16,10 @@
         "filter": {
           "class": "CardFilter",
           "card": "spell_rune"
-        }
+	      },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+	      }
       },
       "sourcePlayer": "SELF"
     },
