@@ -48,14 +48,15 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  */
 public class Quest extends Enchantment {
 
-	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast) {
+	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
 		super(trigger, spell);
 		this.setSourceCard(source);
 		this.setCountUntilCast(countUntilCast);
+		this.setCountByValue(countByValue);
 	}
 
 	public Quest(EnchantmentDesc desc, Card source) {
-		this(desc.eventTrigger.create(), desc.spell, source, desc.countUntilCast);
+		this(desc.eventTrigger.create(), desc.spell, source, desc.countUntilCast, desc.countByValue);
 		setMaxFires(desc.maxFires);
 		setKeepAfterTransform(desc.keepAfterTransform);
 		setCountByValue(desc.countByValue);
@@ -68,7 +69,6 @@ public class Quest extends Enchantment {
 		if (isInPlay() && spellFired) {
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().questTriggered(owner, this);
-			expire();
 		}
 		return spellFired;
 	}

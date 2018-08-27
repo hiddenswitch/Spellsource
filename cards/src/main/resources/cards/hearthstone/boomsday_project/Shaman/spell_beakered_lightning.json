@@ -4,11 +4,11 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to all enemy minions. Overload: (2)",
+  "description": "Deal $1 damage to all  minions. Overload: (2)",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
-    "target": "ENEMY_MINIONS",
+    "target": "ALL_MINIONS",
     "value": 1
   },
   "attributes": {

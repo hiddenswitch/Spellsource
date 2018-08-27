@@ -8,8 +8,9 @@
   "passiveTrigger": {
     "countUntilCast": 1,
     "eventTrigger": {
-      "class": "SecretPlayedTrigger",
-      "sourcePlayer": "SELF"
+      "class": "AfterCardPlayedTrigger",
+      "sourcePlayer": "SELF",
+      "requiredAttribute": "SECRET"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",

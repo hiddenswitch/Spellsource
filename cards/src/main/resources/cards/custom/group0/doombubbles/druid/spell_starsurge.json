@@ -1,0 +1,34 @@
+{
+	"name": "Starsurge",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "BROWN",
+	"rarity": "EPIC",
+	"description": "Deal $3 damage. Your next Choose One effect this turn has both options combined",
+	"targetSelection": "ANY",
+	"spell": {
+		"class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "BOTH_CHOOSE_ONE_OPTIONS",
+        "revertTrigger": {
+          "class": "CardPlayedTrigger",
+          "targetPlayer": "SELF",
+          "requiredAttribute": "CHOOSE_ONE"
+        },
+        "secondRevertTrigger": {
+          "class": "TurnEndTrigger"
+        }
+      }
+    ]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

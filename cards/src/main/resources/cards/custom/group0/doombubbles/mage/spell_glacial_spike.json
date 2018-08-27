@@ -1,10 +1,10 @@
 {
   "name": "Glacial Spike",
-  "baseManaCost": 7,
+  "baseManaCost": 8,
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal $7 damage to an enemy and freeze it. If it was already frozen, add an Ice Lance to your hand.",
+  "description": "Deal $8 damage to an enemy and freeze it. If it was already frozen, add an Ice Lance to your hand.",
   "targetSelection": "ENEMY_CHARACTERS",
   "spell": {
     "class": "MetaSpell",
@@ -23,7 +23,7 @@
       },
       {
         "class": "DamageSpell",
-        "value": 7
+        "value": 8
       },
       {
         "class": "AddAttributeSpell",

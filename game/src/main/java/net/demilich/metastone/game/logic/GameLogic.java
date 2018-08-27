@@ -3714,6 +3714,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		power.markUsed();
 		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
+		context.fireGameEvent(new HeroPowerEffectTriggeredEvent(context, playerId, power));
 	}
 
 	@Suspendable
