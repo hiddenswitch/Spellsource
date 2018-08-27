@@ -187,6 +187,9 @@ public class Enchantment extends Entity implements Trigger {
 			spellCasts = false;
 		}
 		if (spellCasts) {
+			if (this instanceof Quest) {
+				expire();
+			}
 			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 		}
 		if (maxFires != null

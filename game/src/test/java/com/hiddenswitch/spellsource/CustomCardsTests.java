@@ -20,6 +20,7 @@ import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
@@ -1983,70 +1984,6 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testVereesaWindrunner() {
-		GymFactory vareesaFactory = getGymFactory((context, player, opponent) -> {
-			playCard(context, player, "minion_vereesa_windrunner");
-		}, (context, player, opponent) -> {
-			assertEquals(player.getSecrets().size(), 0);
-		});
-
-		GymFactory eaglehornBowFactory = getGymFactory((context, player, opponent) -> {
-			playCard(context, player, "minion_vereesa_windrunner");
-			playCard(context, player, "weapon_eaglehorn_bow");
-		}, (context, player, opponent) -> {
-			assertEquals(player.getSecrets().size(), 0);
-			assertEquals(player.getWeaponZone().get(0).getDurability(), player.getWeaponZone().get(0).getBaseDurability() + 1);
-		});
-
-		Stream.of(vareesaFactory, eaglehornBowFactory).forEach(factory -> {
-			Stream.of(
-					"secret_freezing_trap",
-					"secret_snipe",
-					"secret_misdirection",
-					"secret_corpse_explosion"
-			).forEach(noEffectCardId -> {
-				factory.run((context, player, opponent) -> {
-					playCard(context, player, noEffectCardId);
-				});
-			});
-
-			factory.run((context, player, opponent) -> {
-				int opponentHp = opponent.getHero().getHp();
-				playCard(context, player, "secret_explosive_trap");
-				assertEquals(opponent.getHero().getHp(), opponentHp - 2);
-			});
-
-			factory.run((context, player, opponent) -> {
-				playCard(context, player, "secret_cat_trick");
-				assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_cat_in_a_hat");
-			});
-
-			factory.run((context, player, opponent) -> {
-				Card raptor = receiveCard(context, player, "minion_bloodfen_raptor");
-				playCard(context, player, "secret_hidden_cache");
-				Minion raptorOnBoard = playMinionCard(context, player, raptor);
-				assertEquals(raptorOnBoard.getAttack(), raptor.getBaseAttack() + 2);
-				assertEquals(raptorOnBoard.getHp(), raptor.getBaseHp() + 2);
-			});
-
-			factory.run((context, player, opponent) -> {
-				playCard(context, player, "secret_venomstrike_trap");
-				assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_emperor_cobra");
-			});
-
-			factory.run((context, player, opponent) -> {
-				playCard(context, player, "secret_wandering_monster");
-				assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 3);
-			});
-
-			factory.run((context, player, opponent) -> {
-				playCard(context, player, "secret_lie_in_wait");
-				assertEquals(player.getWeaponZone().get(0).getSourceCard().getCardId(), "weapon_eaglehorn_bow");
-			});
-		});
-	}
-
-	@Test
 	public void testFleetfootedScout() {
 		runGym((context, player, opponent) -> {
 			Card card1 = receiveCard(context, player, "spell_barrage");
@@ -2866,6 +2803,91 @@ public class CustomCardsTests extends TestBase {
 			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getArmor(), 14);
 			assertEquals(player.getMana(), 0);
+		});
+	}
+
+	@Test
+	public void testHagara() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			playCard(context, player, "minion_earth_elemental");
+			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 3);
+			useHeroPower(context, player);
+			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 0);
+			playCard(context, player, "hero_hagatha_the_witch");
+			playCard(context, player, "minion_earth_elemental");
+			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 0);
+			playCard(context, player, "spell_volcano");
+			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 2);
+			playCard(context, player, "minion_earth_elemental");
+			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 0);
+		}, HeroClass.SILVER, HeroClass.SILVER);
+	}
+	@Test
+	public void testAFinalStrike() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_a_final_strike");
+			final Quest quest = player.getQuests().get(0);
+			opponent.getHero().setHp(100);
+			for (int i = 0; i < 3; i++) {
+				playCardWithTarget(context, player, "spell_pyroblast", opponent.getHero());
+			}
+			assertTrue(quest.isExpired());
+			assertEquals(opponent.getHero().getHp(), 40);
+		});
+	}
+	@Test
+	public void testVereesaWindrunner2() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_cloaked_huntress");
+			receiveCard(context, player, "secret_freezing_trap");
+			assertEquals(player.getHand().get(0).getCardId(), "secret_freezing_trap");
+			assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 0);
+			Minion vereesa = playMinionCard(context, player, "minion_vereesa_windrunner");
+			assertEquals(player.getHand().get(0).getCardId(), "spell_freezing_trap");
+			assertEquals(context.getLogic().getModifiedManaCost(player, player.getHand().get(0)), 0);
+			destroy(context, vereesa);
+			assertEquals(player.getHand().get(0).getCardId(), "secret_freezing_trap");
+		});
+		runGym((context, player, opponent) -> {
+			List<String> secrets = Arrays.asList("freezing_trap", "misdirection", "explosive_trap",
+					"bear_trap", "rat_trap", "hidden_cache", "snipe", "snake_trap", "venomstrike_trap",
+					"wandering_monster", "dart_trap");
+			for (String secret : secrets) {
+				Card card = shuffleToDeck(context, player, "secret_" + secret);
+				context.getLogic().drawCard(player.getId(), player);
+				playMinionCard(context, player, "minion_vereesa_windrunner");
+				assertEquals(player.getHand().get(0).getCardId(), "spell_" + secret, player.getHand().get(0).getCardId());
+				assertTrue(player.getHand().get(0).hasAttribute(Attribute.SECRET), secret);
+				playCard(context, player, "spell_cataclysm");
+			}
+		});
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "secret_explosive_trap");
+			receiveCard(context, player, "spell_lesser_emerald_spellstone");
+			playCard(context, player, "weapon_eaglehorn_bow");
+			playCard(context, player, "minion_vereesa_windrunner");
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(player.getHand().get(0).getCardId(), "spell_emerald_spellstone");
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 3);
+		});
+	}
+	@Test
+	public void testLunasOtherPocketGalaxy() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_lunas_other_pocket_galaxy");
+			for (int i = 0; i < 100; i++) {
+				playCard(context, player, "spell_excess_mana");
+				assertEquals(player.getDeck().size(), 60);
+			}
+			assertEquals(player.isDestroyed(), false);
+		});
+	}
+	@Test
+	public void testLittleHelper() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_little_helper");
 		});
 	}
 }

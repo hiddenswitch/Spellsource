@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "RARE",
-  "description": "Summon a Water Elemental, or 2 if you played an elemental last turn.",
+  "description": "Summon a Water Elemental, or 2 if you played an Elemental last turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",

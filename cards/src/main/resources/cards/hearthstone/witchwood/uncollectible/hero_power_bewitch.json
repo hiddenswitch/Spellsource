@@ -1,6 +1,6 @@
 {
   "name": "Bewitch",
-  "baseManaCost": 2,
+  "baseManaCost": 0,
   "type": "HERO_POWER",
   "heroClass": "SILVER",
   "rarity": "FREE",
@@ -11,16 +11,26 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "ReceiveCardSpell",
-      "value": 1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "SILVER",
-        "cardType": "SPELL"
-      },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReceiveCardSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "SILVER",
+            "cardType": "SPELL"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        },
+        {
+          "class": "custom.FireGameEventSpell",
+          "name": "HeroPowerEffectTriggeredEvent",
+          "target": "FRIENDLY_HERO_POWER"
+        }
+      ]
     }
   },
   "condition": {
@@ -29,7 +39,16 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "NullSpell"
+    "class": "ReceiveCardSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "heroClass": "SILVER",
+      "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    }
   },
   "collectible": false,
   "set": "WITCHWOOD",
