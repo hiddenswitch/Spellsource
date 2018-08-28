@@ -2,21 +2,20 @@ Name: Control Mage
 Class: Mage
 Format: Standard
 2x Arcane Artificer
-2x Doomsayer
-2x Raven Familiar
-1x Acolyte of Pain
+1x Prince Keleseth
+2x Acolyte of Pain
 1x Gluttonous Ooze
+2x Mind Control Tech
 2x Stonehill Defender
-2x Voodoo Doll
 2x Arcane Keysmith
 2x Polymorph
-1x Witchwood Piper
+2x Saronite Chain Gang
+2x Arcane Tyrant
 2x Dragon's Fury
 2x Blizzard
 2x Meteor
-1x Skulking Geist
-1x Baron Geddon
 2x Flamestrike
 1x Sindragosa
 1x The Lich King
 1x Frost Lich Jaina
+1x Pyroblast
