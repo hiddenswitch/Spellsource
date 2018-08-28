@@ -25,6 +25,12 @@ public class MetaSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(SpellDesc... spells) {
+		Map<SpellArg, Object> arguments = new SpellDesc(MetaSpell.class);
+		arguments.put(SpellArg.SPELLS, spells);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
