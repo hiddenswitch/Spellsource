@@ -4,16 +4,17 @@ Format: Standard
 2x Flame Imp
 2x Kobold Librarian
 2x Lightwarden
+2x Soul Infusion
 2x Soulfire
+1x The Soularium
 2x Voidwalker
 2x Voodoo Doctor
 1x Prince Keleseth
+2x Doubling Imp
 2x Fungal Enchanter
 2x Happy Ghoul
-2x Tar Creeper
-1x Void Ripper
-2x Lifedrinker
+1x Lifedrinker
 2x Saronite Chain Gang
 2x Despicable Dreadlord
-2x Doomguard
 2x Fungalmancer
+1x Leeroy Jenkins

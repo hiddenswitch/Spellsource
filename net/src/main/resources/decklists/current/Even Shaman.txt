@@ -1,21 +1,22 @@
 Name: Even Shaman
 Class: Shaman
 Format: Standard
-2x Dire Wolf Alpha
+2x Zap!
 2x Earthen Might
 2x Flametongue Totem
 2x Knife Juggler
+2x Menacing Nimbus
 2x Murkspark Eel
 2x Primalfin Totem
-1x Vicious Scalehide
-2x Corpsetaker
-2x Fire Plume Phoenix
-2x Hex
+1x Stormforged Axe
 2x Saronite Chain Gang
+1x Spellbreaker
+1x Thunderhead
+2x Arcane Dynamo
 2x Fire Elemental
 1x Genn Greymane
 1x Al'Akir the Windlord
 1x Hagatha the Witch
 1x Kalimos, Primal Lord
-1x The Lich King
+1x The Runespear
 2x Sea Giant

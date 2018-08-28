@@ -1,21 +1,22 @@
-Name: Egg Hunter
+Name: Deathrattle Hunter
 Class: Hunter
 Format: Standard
 2x Candleshot
-2x Fire Fly
 2x Hunter's Mark
 2x Play Dead
 2x Tracking
 1x Prince Keleseth
 2x Devilsaur Egg
-2x Tar Creeper
+1x Gluttonous Ooze
+2x Spider Bomb
 2x Terrorscale Stalker
-1x Defender of Argus
 2x Flanking Strike
 1x Houndmaster Shaw
-1x Saronite Chain Gang
 2x Carnivorous Cube
+2x Giggling Inventor
 2x Witchwood Grizzly
 1x Deathstalker Rexxar
-2x Savannah Highmane
+1x Mossy Horror
+1x Savannah Highmane
 1x Kathrena Winterwisp
+1x King Krush

@@ -1,0 +1,20 @@
+Name: APM Priest
+Class: Priest
+Format: Standard
+2x Topsy Turvy
+2x Binding Heal
+2x Power Word: Shield
+1x Stonetusk Boar
+2x Test Subject
+1x Bloodmage Thalnos
+2x Dead Ringer
+1x Divine Spirit
+1x Doomsayer
+2x Loot Hoarder
+2x Radiant Elemental
+2x Shadow Visions
+2x Spirit Lash
+2x Twilight's Call
+2x Vivid Nightmare
+2x Witchwood Piper
+2x Psychic Scream
