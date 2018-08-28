@@ -192,6 +192,21 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		return Stream.concat(spells, unitSpells);
 	}
 
+	public Stream<SpellDesc> spellStream(int depth, boolean includeThis) {
+		if (includeThis) {
+			return Stream.concat(Stream.of(this), spellStream(depth));
+		}
+		return spellStream(depth);
+	}
+
+	public Stream<SpellDesc> spellStream() {
+		return spellStream(20);
+	}
+
+	public Stream<SpellDesc> spellStream(boolean includeThis) {
+		return spellStream(20, includeThis);
+	}
+
 	/**
 	 * Joins a spell description with another spell using a {@link MetaSpell}.
 	 *
