@@ -101,6 +101,8 @@ public class GameEvent implements Serializable {
     HEAL("HEAL"),
     
     HERO_POWER_USED("HERO_POWER_USED"),
+
+    HERO_POWER_EFFECT_TRIGGERED("HERO_POWER_EFFECT_TRIGGERED"),
     
     INVOKED("INVOKED"),
     
