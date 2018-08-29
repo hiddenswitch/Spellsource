@@ -4,19 +4,22 @@
   "type": "HERO_POWER",
   "heroClass": "INHERIT",
   "rarity": "FREE",
-  "description": "Hero Power: Put a random spell from your opponent's class into your hand.",
+  "description": "Put a random spell from your opponent's class into your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "value": 1,
-    "cardFilter": {
-      "class": "CardFilter",
-      "heroClass": "OPPONENT",
-      "cardType": "SPELL"
-    },
-    "cardSource": {
-      "class": "CatalogueSource",
-      "targetPlayer": "OPPONENT"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "OPPONENT",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "CatalogueSource",
+        "targetPlayer": "OPPONENT"
+      }
     }
   },
   "collectible": false,

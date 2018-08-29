@@ -7,30 +7,33 @@
   "description": "Deal 2 damage randomly split among all enemies.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "EitherOrSpell",
-    "condition": {
-      "class": "AnyMatchFilterCondition",
-      "target": "ENEMY_CHARACTERS",
-      "filter": {
-        "class": "HasEnchantmentFilter",
-        "card": "enchantment_marked"
-      }
-    },
-    "spell1": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "filter": {
-        "class": "HasEnchantmentFilter",
-        "card": "enchantment_marked"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "ENEMY_CHARACTERS",
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_marked"
+        }
       },
-      "howMany": 2
-    },
-    "spell2": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 2
+      "spell1": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1,
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_marked"
+        },
+        "howMany": 2
+      },
+      "spell2": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1,
+        "howMany": 2
+      }
     }
   },
   "collectible": false,

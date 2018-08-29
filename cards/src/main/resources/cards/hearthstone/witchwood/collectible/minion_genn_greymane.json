@@ -25,8 +25,18 @@
               "class": "AllModuloValueEqualsZeroCondition",
               "target": "FRIENDLY_HAND",
               "filter": {
-                "class": "CardFilter",
-                "attribute": "STARTED_IN_DECK"
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "attribute": "STARTED_IN_DECK"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "passive",
+                    "invert": true
+                  }
+                ]
               },
               "value1": {
                 "class": "AttributeValueProvider",
@@ -38,8 +48,18 @@
               "class": "AllModuloValueEqualsZeroCondition",
               "target": "FRIENDLY_DECK",
               "filter": {
-                "class": "CardFilter",
-                "attribute": "STARTED_IN_DECK"
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "attribute": "STARTED_IN_DECK"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "passive",
+                    "invert": true
+                  }
+                ]
               },
               "value1": {
                 "class": "AttributeValueProvider",

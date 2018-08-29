@@ -22,9 +22,12 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_CHARACTERS",
-    "value": 1
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1
+    }
   },
   "collectible": false,
   "set": "BOOMSDAY_PROJECT",

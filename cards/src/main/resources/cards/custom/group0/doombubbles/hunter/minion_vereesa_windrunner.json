@@ -6,247 +6,194 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Your Hunter Secrets are instant spells.",
-  "aura": {
-    "class": "Aura",
-    "target": "SELF",
-    "alwaysApply": true,
-    "applyEffect": {
-      "class": "ConditionalSpell",
+  "description": "Your Hunter Secrets are targetable instant spells.",
+  "auras": [
+    {
+      "class": "CardAura",
       "target": "FRIENDLY_HAND",
-      "spells": [
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_freezing_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_rat_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_bear_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_cat_trick"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_dart_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_wandering_monster"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_venomstrike_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_snake_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_misdirection"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_explosive_trap"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_hidden_cache"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_snipe"
-        },
-        {
-          "class": "ReplaceCardsSpell",
-          "card": "spell_always_a_bigger_fish"
-        }
-      ],
-      "conditions": [
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_freezing_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_rat_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_bear_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_cat_trick"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_dart_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_wandering_monster"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_venomstrike_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_snake_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_misdirection"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_explosive_trap"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_hidden_cache"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_snipe"
-        },
-        {
-          "class": "CardPropertyCondition",
-          "card": "secret_always_a_bigger_fish"
-        }
-      ]
-    },
-    "removeEffect": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "AttributeExistsCondition",
-        "targetPlayer": "SELF",
-        "attribute": "RESERVED_BOOLEAN_2",
-        "invert": true
+      "card": "spell_freezing_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_freezing_trap"
       },
-      "spell": {
-        "class": "ConditionalSpell",
-        "target": "FRIENDLY_HAND",
-        "spells": [
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_freezing_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_rat_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_bear_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_cat_trick"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_dart_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_wandering_monster"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_venomstrike_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_snake_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_misdirection"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_explosive_trap"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_hidden_cache"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_snipe"
-          },
-          {
-            "class": "ReplaceCardsSpell",
-            "card": "secret_always_a_bigger_fish"
-          }
-        ],
-        "conditions": [
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_freezing_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_rat_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_bear_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_cat_trick"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_dart_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_wandering_monster"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_venomstrike_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_snake_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_misdirection"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_explosive_trap"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_hidden_cache"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_snipe"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "card": "spell_always_a_bigger_fish"
-          }
-        ]
-      }
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_rat_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_rat_trap"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_bear_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_bear_trap"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_cat_trick",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_cat_trick"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_dart_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_dart_trap"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_wandering_monster",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_wandering_monster"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_venomstrike_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_venomstrike_trap"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_snake_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_snake_trap"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_misdirection",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_misdirection"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_explosive_trap",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_explosive_trap"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_hidden_cache",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_hidden_cache"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_snipe",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_snipe"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_always_a_bigger_fish",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_always_a_bigger_fish"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_always_a_bigger_fish",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_always_a_bigger_fish"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_corpse_explosion",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_corpse_explosion"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_lie_in_wait",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_lie_in_wait"
+      },
+      "alwaysApply": true
+    },
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HAND",
+      "card": "spell_pack_mentality",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "secret_pack_mentality"
+      },
+      "alwaysApply": true
     }
-  },
-  "attributes": {
-    "RESERVED_BOOLEAN_2": true
+  ],
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF",
+      "requiredAttribute": "SECRET",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "heroClass": "GREEN",
+        "target": "EVENT_TARGET"
+      }
+    },
+    "spell": {
+      "class": "custom.TriggerSecretRevealSpell",
+      "target": "EVENT_TARGET"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

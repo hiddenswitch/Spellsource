@@ -12,9 +12,13 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "card": "token_pebble"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_pebble"
+    }
   },
+  "heroPower": "hero_power_advanced_summoning",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

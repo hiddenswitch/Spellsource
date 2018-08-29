@@ -5,33 +5,20 @@
   "heroClass": "BLACK",
   "rarity": "FREE",
   "description": "Each time you play a card, transform this into a copy of  it.",
-  "passiveTriggers": [
-    {
-      "eventTrigger": {
-        "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "RemoveCardSpell",
-        "target": "SELF"
-      },
-      "keepAfterTransform": true
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
     },
-    {
-      "eventTrigger": {
-        "class": "CardPlayedTrigger",
-        "hostTargetType": "IGNORE_AS_TARGET",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-        "class": "custom.TransformInHandSpell",
-        "target": "SELF",
-        "exclusive": false,
-        "secondaryTarget": "EVENT_TARGET"
-      },
-      "keepAfterTransform": true
-    }
-  ],
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "exclusive": false,
+      "secondaryTarget": "EVENT_TARGET"
+    },
+    "keepAfterTransform": true
+  },
   "condition": {
     "class": "OrCondition",
     "conditions": []

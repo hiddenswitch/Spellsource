@@ -7,7 +7,7 @@
   "description": "Restore #1 Health. +1 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "MetaSpell",
+    "class": "HeroPowerSpell",
     "spells": [
       {
         "class": "HealSpell",
@@ -20,6 +20,7 @@
       }
     ]
   },
+  "heroPower": "hero_power_zen_meditation",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

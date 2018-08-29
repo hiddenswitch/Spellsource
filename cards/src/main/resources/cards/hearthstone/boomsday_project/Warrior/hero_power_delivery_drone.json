@@ -22,15 +22,19 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverCardSpell",
+    "class": "HeroPowerSpell",
+    "description": "Discover a Mech.",
     "spell": {
-      "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF"
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "race": "MECH",
-      "cardType": "MINION"
+      "class": "DiscoverCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "MECH",
+        "cardType": "MINION"
+      }
     }
   },
   "collectible": false,

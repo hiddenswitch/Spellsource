@@ -6,29 +6,23 @@
   "rarity": "FREE",
   "description": "Deal $2 damage. After you play a card, refresh this.",
   "targetSelection": "ANY",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "AfterCardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RefreshHeroPowerSpell",
+      "targetPlayer": "SELF"
+    }
+  },
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DamageSpell",
-        "value": 2
-      },
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "AfterCardPlayedTrigger",
-            "targetPlayer": "SELF"
-          },
-          "spell": {
-            "class": "RefreshHeroPowerSpell",
-            "targetPlayer": "SELF"
-          },
-          "maxFires": 1
-        }
-      }
-    ]
+    "class": "HeroPowerSpell",
+    "description": "Deal $2 damage.",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
   },
   "collectible": false,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

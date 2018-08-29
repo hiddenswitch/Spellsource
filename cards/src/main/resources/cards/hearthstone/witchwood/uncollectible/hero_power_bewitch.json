@@ -11,26 +11,20 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "ReceiveCardSpell",
-          "value": 1,
-          "cardFilter": {
-            "class": "CardFilter",
-            "heroClass": "SILVER",
-            "cardType": "SPELL"
-          },
-          "cardSource": {
-            "class": "UnweightedCatalogueSource"
-          }
+      "class": "HeroPowerSpell",
+      "description": "Add a random Shaman spell to your hand.",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "heroClass": "SILVER",
+          "cardType": "SPELL"
         },
-        {
-          "class": "custom.FireGameEventSpell",
-          "name": "HeroPowerEffectTriggeredEvent",
-          "target": "FRIENDLY_HERO_POWER"
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
         }
-      ]
+      }
     }
   },
   "condition": {
@@ -39,16 +33,7 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "value": 1,
-    "cardFilter": {
-      "class": "CardFilter",
-      "heroClass": "SILVER",
-      "cardType": "SPELL"
-    },
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
-    }
+    "class": "NullSpell"
   },
   "collectible": false,
   "set": "WITCHWOOD",

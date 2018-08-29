@@ -20,6 +20,10 @@
     }
   },
   "targetSelection": "NONE",
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
   "spell": {
     "class": "NullSpell"
   },

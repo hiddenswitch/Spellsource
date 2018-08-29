@@ -5,9 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -2887,8 +2886,31 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testLittleHelper() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_little_helper");
+			CardList heroPowers = CardCatalogue.getAll().filtered(Card::isHeroPower);
+			for (Card heroPower : heroPowers) {
+				SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
+				spell.put(SpellArg.CARD, heroPower.getCardId());
+				context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+
+				playCard(context, player, "minion_little_helper");
+				Card card = player.getHand().get(0);
+				//System.out.println(heroPower.getCardId() + " " + card.getBaseManaCost() + " " + card.getDescription());
+				playCard(context, player, "spell_cataclysm");
+			}
 		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_uther_of_the_ebon_blade");
+			for (int i = 0; i < 3; i++) {
+				playCard(context, player, "minion_little_helper");
+			}
+			useHeroPower(context, player);
+			for (int i = 0; i < 3; i++) {
+				playCard(context, player, player.getHand().get(0));
+			}
+			assertTrue(opponent.isDestroyed());
+		});
+
 	}
 }
 

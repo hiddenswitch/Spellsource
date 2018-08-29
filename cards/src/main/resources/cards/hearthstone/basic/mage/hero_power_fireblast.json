@@ -7,9 +7,13 @@
   "description": "Deal $1 damage.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DamageSpell",
-    "value": 1
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
   },
+  "heroPower": "hero_power_fireblast_rank_2",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

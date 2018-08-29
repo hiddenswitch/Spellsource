@@ -6,11 +6,15 @@
   "rarity": "FREE",
   "description": "Add a 2/2 Knight to your hand.",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "cards": [
-      "token_knight"
-    ]
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_knight"
+      ]
+    }
   },
+  "heroPower": "hero_power_conscript",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

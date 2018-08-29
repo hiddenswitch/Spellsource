@@ -7,23 +7,26 @@
   "description": "Hero Power: Add a random rare card to your hand. It costs (2) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "CardCostModifierSpell",
-      "target": "OUTPUT",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 2,
-        "operation": "SUBTRACT"
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 2,
+          "operation": "SUBTRACT"
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "RARE"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
       }
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "rarity": "RARE"
-    },
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": false,
