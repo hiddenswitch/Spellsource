@@ -51,17 +51,21 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_searing_totem",
-      "token_healing_totem",
-      "token_wrath_of_air_totem",
-      "token_stoneclaw_totem"
-    ],
-    "exclusive": true,
-    "randomTarget": true
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_searing_totem",
+        "token_healing_totem",
+        "token_wrath_of_air_totem",
+        "token_stoneclaw_totem"
+      ],
+      "exclusive": true,
+      "randomTarget": true
+    }
   },
-  "collectible": true,
+  "heroPower": "hero_power_totemic_slam",
+  "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1
 }

@@ -5,10 +5,10 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class AfterCardPlayed extends GameEvent implements HasCard {
+public class AfterCardPlayedEvent extends GameEvent implements HasCard {
 	private Card card;
 
-	public AfterCardPlayed(GameContext context, int playerId, EntityReference cardReference) {
+	public AfterCardPlayedEvent(GameContext context, int playerId, EntityReference cardReference) {
 		super(context, playerId, playerId);
 		card = (Card) context.resolveSingleTarget(cardReference);
 	}

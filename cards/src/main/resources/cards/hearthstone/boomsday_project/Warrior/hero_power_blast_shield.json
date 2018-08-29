@@ -22,9 +22,13 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 7
+    "class": "HeroPowerSpell",
+    "description": "Gain 7 Armor",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 7
+    }
   },
   "collectible": false,
   "set": "BOOMSDAY_PROJECT",

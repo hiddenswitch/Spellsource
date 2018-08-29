@@ -12,19 +12,22 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "SummonSpell",
+      "class": "DiscoverSpell",
       "spell": {
-        "class": "AddAttributeSpell",
-        "target": "OUTPUT",
-        "attribute": "TAUNT"
+        "class": "SummonSpell",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "TAUNT"
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 3
       }
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION",
-      "manaCost": 3
     }
   },
   "collectible": false,

@@ -7,10 +7,13 @@
   "description": "Deal 4 damage randomly split among all enemies.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MissilesSpell",
-    "target": "ENEMY_CHARACTERS",
-    "value": 1,
-    "howMany": 2
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 2
+    }
   },
   "collectible": false,
   "set": "CUSTOM",

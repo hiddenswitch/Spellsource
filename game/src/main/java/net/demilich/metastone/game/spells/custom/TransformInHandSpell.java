@@ -28,6 +28,7 @@ public class TransformInHandSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
 		boolean startedInDeck = card.hasAttribute(Attribute.STARTED_IN_DECK);
+		boolean removesAtEndOfTurn = card.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
 
 		Card newCard;
 		EntityReference secondaryTarget = (EntityReference) desc.get(SpellArg.SECONDARY_TARGET);
@@ -50,6 +51,10 @@ public class TransformInHandSpell extends Spell {
 		// See https://www.reddit.com/r/hearthstone/comments/7ia60v/shifting_scroll_does_not_work_with_leyline/
 		if (startedInDeck) {
 			replaced.setAttribute(Attribute.STARTED_IN_DECK);
+		}
+
+		if (removesAtEndOfTurn) {
+			replaced.setAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
 		}
 	}
 

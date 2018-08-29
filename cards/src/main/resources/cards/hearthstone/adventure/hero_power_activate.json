@@ -7,7 +7,7 @@
   "description": "Activate a random tron.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
+    "class": "HeroPowerSpell",
     "spells": [
       {
         "class": "SummonSpell",

@@ -22,12 +22,16 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_microbot",
-      "token_microbot",
-      "token_microbot"
-    ]
+    "class": "HeroPowerSpell",
+    "description": "Summon three 1/1 Microbots.",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_microbot",
+        "token_microbot",
+        "token_microbot"
+      ]
+    }
   },
   "collectible": false,
   "set": "BOOMSDAY_PROJECT",

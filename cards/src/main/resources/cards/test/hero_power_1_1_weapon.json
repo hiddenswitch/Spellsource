@@ -7,15 +7,18 @@
   "description": "Equip a 1/1 Survival Knife.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalSpell",
-    "condition": {
-      "class": "HasWeaponCondition",
-      "card": "weapon_survival_knife",
-      "invert": "true"
-    },
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "EquipWeaponSpell",
-      "card": "weapon_survival_knife"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "HasWeaponCondition",
+        "card": "weapon_survival_knife",
+        "invert": "true"
+      },
+      "spell": {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_survival_knife"
+      }
     }
   },
   "collectible": false,

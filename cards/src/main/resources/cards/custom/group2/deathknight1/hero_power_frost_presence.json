@@ -31,8 +31,18 @@
     }
   ],
   "targetSelection": "NONE",
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
   "spell": {
-    "class": "NullSpell"
+    "class": "HeroPowerSpell",
+    "description": "Your minions Freeze any characters they damage this turn.",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_frost_prescence"
+    }
   },
   "collectible": false,
   "set": "CUSTOM",

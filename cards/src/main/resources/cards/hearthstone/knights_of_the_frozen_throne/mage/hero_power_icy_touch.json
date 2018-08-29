@@ -7,17 +7,20 @@
   "description": "Deal $1 damage. If this kills a minion, summon a Water Elemental.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "ConditionalEffectSpell",
-    "condition": {
-      "class": "IsDeadCondition"
-    },
-    "spell1": {
-      "class": "DamageSpell",
-      "value": 1
-    },
-    "spell2": {
-      "class": "SummonSpell",
-      "card": "minion_water_elemental"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDeadCondition"
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      "spell2": {
+        "class": "SummonSpell",
+        "card": "minion_water_elemental"
+      }
     }
   },
   "collectible": false,

@@ -7,9 +7,12 @@
   "description": "Deal $4 damage. (Against minions, deals any excess to adjacent minions)",
   "targetSelection": "ANY",
   "spell": {
-    "class": "ExcessDamageSpell",
-    "value": 4,
-    "secondaryTarget": "ADJACENT_TO_TARGET"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ExcessDamageSpell",
+      "value": 4,
+      "secondaryTarget": "ADJACENT_TO_TARGET"
+    }
   },
   "attributes": {},
   "collectible": false,

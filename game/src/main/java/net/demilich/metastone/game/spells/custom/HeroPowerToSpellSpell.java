@@ -9,9 +9,11 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.HeroPowerSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.stream.Stream;
 
@@ -25,7 +27,10 @@ public class HeroPowerToSpellSpell extends Spell {
 
 		TargetSelection selection = heroPower.getDesc().getTargetSelection();
 		// Case 1: Check the spell
-		Stream<SpellDesc> spells = heroPower.getSpell().spellStream(true);
+		Stream<SpellDesc> spells = Stream.empty();
+		if (heroPower.getSpell() != null) {
+			spells = heroPower.getSpell().spellStream(true);
+		}
 
 		// Case 2: Check the passiveTrigger's spell
 		EnchantmentDesc passiveTrigger = heroPower.getDesc().getPassiveTrigger();
@@ -38,25 +43,46 @@ public class HeroPowerToSpellSpell extends Spell {
 				.filter(s -> s.getDescClass().equals(HeroPowerSpell.class))
 				.toArray(SpellDesc[]::new);
 
+		String descriptionOverride = "";
+		String cardOverride = "";
+		for (SpellDesc spellDesc : heroPowerSpellEffect) {
+			if (spellDesc.get(SpellArg.DESCRIPTION) != null) {
+				descriptionOverride = spellDesc.getString(SpellArg.DESCRIPTION);
+			}
+			if (spellDesc.get(SpellArg.CARD) != null) {
+				cardOverride = spellDesc.getString(SpellArg.CARD);
+			}
+		}
+
 		SpellDesc allEffects = MetaSpell.create(heroPowerSpellEffect);
 		Card spellCard;
 
-		if (heroPower.getCardId().equals("hero_power_deaths_shadow")) {
-			spellCard = context.getCardById("spell_shadow_reflection");
+		if (!cardOverride.isEmpty()) {
+			spellCard = context.getCardById(cardOverride);
 		} else {
 			CardDesc spellCardDesc = new CardDesc();
+			if (heroPower.isChooseOne()) {
+				spellCardDesc.setType(CardType.CHOOSE_ONE);
+				spellCardDesc.setChooseOneCardIds(heroPower.getChooseOneCardIds());
+				spellCardDesc.setChooseBothCardId(heroPower.getChooseBothCardId());
+			} else {
+				spellCardDesc.setType(CardType.SPELL);
+				spellCardDesc.setSpell(allEffects);
+			}
 			spellCardDesc.setId(context.getLogic().generateCardId());
 			spellCardDesc.setName(heroPower.getName());
-			spellCardDesc.setType(CardType.SPELL);
-			spellCardDesc.setDescription(heroPower.getDescription());
+			spellCardDesc.setDescription(descriptionOverride.isEmpty() ? heroPower.getDescription() : descriptionOverride);
 			spellCardDesc.setRarity(heroPower.getRarity());
 			spellCardDesc.setBaseManaCost(heroPower.getBaseManaCost());
 			spellCardDesc.setTargetSelection(heroPower.getTargetSelection());
-			spellCardDesc.setSpell(allEffects);
 			spellCardDesc.setHeroClass(heroPower.getHeroClass());
 			spellCardDesc.setSet(heroPower.getCardSet());
 			spellCardDesc.setCollectible(false);
+
 			spellCard = spellCardDesc.create();
+			if (heroPower.hasAttribute(Attribute.LIFESTEAL)) {
+				spellCard.setAttribute(Attribute.LIFESTEAL);
+			}
 		}
 		context.getLogic().receiveCard(player.getId(), spellCard);
 	}

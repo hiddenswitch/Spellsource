@@ -7,7 +7,7 @@
   "description": "Hero Power: Restore 1 Health and give the character +1 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "MetaSpell",
+    "class": "HeroPowerSpell",
     "spells": [
       {
         "class": "HealSpell",

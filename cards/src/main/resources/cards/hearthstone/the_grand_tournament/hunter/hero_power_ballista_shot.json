@@ -1,5 +1,5 @@
 {
-  "name": "Katanaka",
+  "name": "Ballista Shot",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "GREEN",
@@ -7,9 +7,12 @@
   "description": "Deal $3 damage to the enemy hero.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DamageSpell",
-    "target": "ENEMY_HERO",
-    "value": 3
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 3
+    }
   },
   "collectible": false,
   "set": "THE_GRAND_TOURNAMENT",

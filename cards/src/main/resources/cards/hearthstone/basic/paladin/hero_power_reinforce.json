@@ -12,9 +12,13 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "card": "token_silver_hand_recruit"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_silver_hand_recruit"
+    }
   },
+  "heroPower": "hero_power_the_silver_hand",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

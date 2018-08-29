@@ -1,0 +1,26 @@
+{
+  "name": "Blood Presence",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Your minions have Lifesteal this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_blood_presence"
+    }
+  },
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_LIFESTEAL"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
