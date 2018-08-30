@@ -1,0 +1,44 @@
+{
+  "name": "Hero Power: Flurry",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Passive: Your starting Hero Power is 'Freeze a character.'",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "PreGameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF"
+          },
+          {
+            "class": "ChangeHeroPowerSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "hero_power_flurry"
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  ]
+}

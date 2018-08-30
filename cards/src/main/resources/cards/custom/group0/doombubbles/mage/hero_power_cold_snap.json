@@ -1,0 +1,25 @@
+{
+  "name": "Cold Snap",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Freeze a character and deal 1 damage tp them",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

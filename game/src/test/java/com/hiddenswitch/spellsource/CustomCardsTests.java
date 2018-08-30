@@ -14,6 +14,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
+import net.demilich.metastone.game.events.PreGameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
@@ -23,6 +24,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
@@ -2912,5 +2914,35 @@ public class CustomCardsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testAlternateStartingHeroPowers() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "passive_dire_beast");
+			context.fireGameEvent(new PreGameStartEvent(context, player.getId()));
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_dire_beast");
+		});
+
+		int yup = 0;
+
+		for (int i = 0; i < 100; i++) {
+			DebugContext debug = createContext(HeroClass.GREEN, HeroClass.GREEN, false);
+			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+				for (int j = 0; j < 10; j++) {
+					deck.addCard("minion_faithful_lumi");
+				}
+			});
+			debug.getPlayer1().getDeck().addCard(debug.getCardById("passive_dire_beast"));
+			debug.getPlayer1().getDeck().addCard(debug.getCardById("minion_baku_the_mooneater"));
+			debug.init();
+			if (debug.getPlayer1().getHeroPowerZone().get(0).getCardId().equals("hero_power_dire_stable")) {
+				yup++;
+			}
+		}
+		assertEquals(yup, 100);
+	}
+
+
 }
 

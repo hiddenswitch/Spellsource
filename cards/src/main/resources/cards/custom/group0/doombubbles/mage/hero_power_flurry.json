@@ -1,0 +1,20 @@
+{
+  "name": "Flurry",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Freeze a character.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "FROZEN"
+    }
+  },
+  "heroPower": "hero_power_cold_snap",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
