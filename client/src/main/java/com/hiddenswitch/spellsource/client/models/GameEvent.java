@@ -158,7 +158,9 @@ public class GameEvent implements Serializable {
     
     WEAPON_EQUIPPED("WEAPON_EQUIPPED"),
     
-    WILL_END_SEQUENCE("WILL_END_SEQUENCE");
+    WILL_END_SEQUENCE("WILL_END_SEQUENCE"),
+
+    PRE_GAME_START("PRE_GAME_START");
 
     private String value;
 

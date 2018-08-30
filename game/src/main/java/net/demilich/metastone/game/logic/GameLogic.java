@@ -2073,8 +2073,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			processPassiveTriggers(player, card);
 		}
 
-		GameStartEvent gameStartEvent = new GameStartEvent(context, player.getId());
-		context.fireGameEvent(gameStartEvent);
+		context.fireGameEvent(new PreGameStartEvent(context, player.getId()));
+		context.fireGameEvent(new GameStartEvent(context, player.getId()));
 	}
 
 	/**
