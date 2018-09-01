@@ -13,13 +13,13 @@ info:
   contact:
     name: Benjamin Berman
     email: ben@hiddenswitch.com
-    url: http://hiddenswitch.com
+    url: https://hiddenswitch.com
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: api-3.hiddenswitch.com
 schemes:
-  - http
+  - https
 consumes:
   - application/json
 produces:
