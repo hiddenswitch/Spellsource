@@ -1,5 +1,5 @@
 {
-  "name": "Chi Blast",
+  "name": "Fire Blast Rank 2",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLUE",
@@ -7,8 +7,11 @@
   "description": "Deal $2 damage.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DamageSpell",
-    "value": 2
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
   },
   "collectible": false,
   "set": "THE_GRAND_TOURNAMENT",

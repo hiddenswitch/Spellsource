@@ -8,6 +8,9 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -113,5 +116,31 @@ public class TheGrandTournamentTests extends TestBase {
 
 		// warrior casted a spell on Eydis - nothing should happen
 		Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);
+	}
+
+	@Test
+	public void testNewJusticar() {
+		CardCatalogue.getAll().filtered(Card::isHeroPower).forEach(heroPower -> {
+			runGym((context, player, opponent) -> {
+				SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
+				spell.put(SpellArg.CARD, heroPower.getCardId());
+				context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
+
+				playCard(context, player, "minion_justicar_trueheart");
+				if (heroPower.getDesc().getHeroPower() != null) {
+					assertEquals(player.getHeroPowerZone().get(0).getCardId(), heroPower.getDesc().getHeroPower());
+				} else {
+					assertEquals(player.getHeroPowerZone().get(0).getCardId(), heroPower.getCardId());
+				}
+
+
+			});
+
+
+
+		});
+
+
+
 	}
 }

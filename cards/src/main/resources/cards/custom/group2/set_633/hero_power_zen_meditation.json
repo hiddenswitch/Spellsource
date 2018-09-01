@@ -7,7 +7,7 @@
   "description": "Restore #2 Health. +2 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "MetaSpell",
+    "class": "HeroPowerSpell",
     "spells": [
       {
         "class": "HealSpell",

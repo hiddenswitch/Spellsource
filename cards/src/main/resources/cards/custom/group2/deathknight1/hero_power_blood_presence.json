@@ -22,8 +22,18 @@
     "attribute": "AURA_LIFESTEAL"
   },
   "targetSelection": "NONE",
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
   "spell": {
-    "class": "NullSpell"
+    "class": "HeroPowerSpell",
+    "description": "Your minions have Lifesteal this turn.",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_blood_prescence"
+    }
   },
   "collectible": false,
   "set": "CUSTOM",

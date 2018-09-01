@@ -7,32 +7,36 @@
   "description": "Deal 3 damage randomly split among all enemies.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "EitherOrSpell",
-    "condition": {
-      "class": "AnyMatchFilterCondition",
-      "target": "ENEMY_CHARACTERS",
-      "filter": {
-        "class": "HasEnchantmentFilter",
-        "card": "enchantment_marked"
-      }
-    },
-    "spell1": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "filter": {
-        "class": "HasEnchantmentFilter",
-        "card": "enchantment_marked"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "target": "ENEMY_CHARACTERS",
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_marked"
+        }
       },
-      "howMany": 3
-    },
-    "spell2": {
-      "class": "MissilesSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1,
-      "howMany": 3
+      "spell1": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1,
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_marked"
+        },
+        "howMany": 3
+      },
+      "spell2": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1,
+        "howMany": 3
+      }
     }
   },
+  "heroPower": "hero_power_scatter_shot",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

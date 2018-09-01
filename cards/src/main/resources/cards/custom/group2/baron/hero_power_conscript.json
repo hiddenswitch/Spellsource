@@ -6,10 +6,13 @@
   "rarity": "FREE",
   "description": "Add a 3/3 Protector to your hand.",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "cards": [
-      "token_baron_protector"
-    ]
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_baron_protector"
+      ]
+    }
   },
   "collectible": false,
   "set": "CUSTOM",

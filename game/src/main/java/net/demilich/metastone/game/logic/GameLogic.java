@@ -327,7 +327,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.fireGameEvent(new InvokedEvent(context, playerId, (Card) card, card.getAttributeValue(Attribute.INVOKED)));
 		}
 
-		context.fireGameEvent(new AfterCardPlayed(context, playerId, entityReference));
+		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, entityReference));
 		context.setLastCardPlayedBeforeCurrentSequence(playerId, card.getReference());
 	}
 
@@ -3714,6 +3714,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		power.markUsed();
 		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
+		context.fireGameEvent(new HeroPowerEffectTriggeredEvent(context, playerId, power));
 	}
 
 	@Suspendable

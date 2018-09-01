@@ -153,6 +153,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public EventTriggerDesc secret;
 	public EventTriggerDesc quest;
 	public int countUntilCast;
+	public boolean countByValue;
+
 
 	public CardDesc() {
 		super();
@@ -943,6 +945,10 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 */
 	public int getCountUntilCast() {
 		return countUntilCast;
+	}
+
+	public boolean isCountByValue() {
+		return countByValue;
 	}
 
 	public void setCountUntilCast(int countUntilCast) {

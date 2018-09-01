@@ -7,7 +7,7 @@
   "description": "Spend the rest of your mana. Gain that much armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
+    "class": "HeroPowerSpell",
     "spells": [
       {
         "class": "BuffSpell",
