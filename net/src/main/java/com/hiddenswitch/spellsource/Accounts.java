@@ -575,7 +575,14 @@ public interface Accounts {
 						return;
 					}
 
-					String token = routingContext.getCookie("token").getValue();
+					Cookie cookie = routingContext.getCookie("token");
+					if (cookie == null) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().end();
+						return;
+					}
+
+					String token = cookie.getValue();
 					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
 					if (passwordResetRecord == null || System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
 						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
@@ -587,9 +594,10 @@ public interface Accounts {
 						Accounts.changePassword(ChangePasswordRequest.request(new UserId(passwordResetRecord.getUserId()), password1));
 						mongo().removeDocument(RESET_TOKENS, json("_id", token));
 						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetted.html");
-						routingContext.response().end();
 					} catch (Throwable throwable) {
 						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+					} finally {
+						routingContext.removeCookie("token");
 						routingContext.response().end();
 					}
 				}));
