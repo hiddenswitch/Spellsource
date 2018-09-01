@@ -5,7 +5,7 @@
   "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Choose One - Deal $3 damage to a minion; or $1 damage and draw a card.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "chooseOneCardIds": [
     "spell_wrath_1",
     "spell_wrath_2"

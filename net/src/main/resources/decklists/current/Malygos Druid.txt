@@ -1,22 +1,21 @@
 Name: Malygos Druid
 Class: Druid
 Format: Standard
-2x Innervate
 2x Moonfire
 2x Lesser Jasper Spellstone
-1x Bloodmage Thalnos
+2x Naturalize
 2x Wild Growth
-2x Wrath
-1x Prince Taldaram
+2x Ferocious Howl
 2x Branching Paths
+1x Flobbidinous Floop
 2x Swipe
 1x Twig of the World Tree
 2x Arcane Tyrant
-1x Faceless Manipulator
+2x Giggling Inventor
 2x Nourish
-1x Starfall
 2x Spreading Plague
 1x Malfurion the Pestilent
 1x The Lich King
+1x Alexstrasza
 1x Malygos
 2x Ultimate Infestation
