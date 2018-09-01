@@ -7,8 +7,11 @@
   "description": "Summon a 1/1 Crater Hatchling with Charge.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "card": "token_crater_hatchling"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_crater_hatchling"
+    }
   },
   "attributes": {},
   "collectible": false,

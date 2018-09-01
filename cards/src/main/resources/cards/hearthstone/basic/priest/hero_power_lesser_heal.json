@@ -1,5 +1,5 @@
 {
-  "name": "Heal",
+  "name": "Lesser Heal",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "WHITE",
@@ -7,9 +7,13 @@
   "description": "Restore #2 Health.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "HealSpell",
-    "value": 2
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "HealSpell",
+      "value": 2
+    }
   },
+  "heroPower": "hero_power_heal",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

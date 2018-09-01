@@ -198,7 +198,7 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 			case RACE:
 				return desc.getRace() != null;
 			case SECRET:
-				return desc.getSecret() != null;
+				return desc.getSecret() != null || getCard().hasAttribute(Attribute.SECRET);
 			case QUEST:
 				return desc.getQuest() != null;
 			case BASE_ATTACK:

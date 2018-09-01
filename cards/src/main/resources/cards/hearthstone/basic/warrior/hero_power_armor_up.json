@@ -7,10 +7,14 @@
   "description": "Gain 2 Armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 2
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 2
+    }
   },
+  "heroPower": "hero_power_tank_up",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

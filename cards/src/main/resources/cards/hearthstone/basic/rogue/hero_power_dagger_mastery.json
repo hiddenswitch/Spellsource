@@ -7,17 +7,21 @@
   "description": "Equip a 1/2 Dagger.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalSpell",
-    "condition": {
-      "class": "HasWeaponCondition",
-      "card": "weapon_poisoned_blade",
-      "invert": "true"
-    },
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "EquipWeaponSpell",
-      "card": "weapon_wicked_knife"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "HasWeaponCondition",
+        "card": "weapon_poisoned_blade",
+        "invert": "true"
+      },
+      "spell": {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_wicked_knife"
+      }
     }
   },
+  "heroPower": "hero_power_poisoned_dagger",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

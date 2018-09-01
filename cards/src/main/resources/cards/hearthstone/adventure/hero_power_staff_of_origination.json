@@ -7,24 +7,27 @@
   "description": "Hero Power: Add a random legendary minion to your hand. It costs (4) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "CardCostModifierSpell",
-      "target": "OUTPUT",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 4,
-        "operation": "SUBTRACT"
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 4,
+          "operation": "SUBTRACT"
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
       }
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "rarity": "LEGENDARY",
-      "cardType": "MINION"
-    },
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": false,

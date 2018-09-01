@@ -10,8 +10,11 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "SummonSpell",
-        "card": "minion_arcanotron"
+        "class": "HeroPowerSpell",
+        "spell": {
+          "class": "SummonSpell",
+          "card": "minion_arcanotron"
+        }
       },
       {
         "class": "ChangeHeroPowerSpell",

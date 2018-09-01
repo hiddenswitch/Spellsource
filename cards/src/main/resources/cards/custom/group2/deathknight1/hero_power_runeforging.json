@@ -7,9 +7,13 @@
   "description": "Add a Rune to your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "card": "spell_rune"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_rune"
+    }
   },
+  "heroPower": "hero_power_efficient_runeforging",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

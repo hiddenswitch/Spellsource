@@ -12,8 +12,11 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "card": "token_infernal"
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_infernal"
+    }
   },
   "collectible": false,
   "set": "CLASSIC",

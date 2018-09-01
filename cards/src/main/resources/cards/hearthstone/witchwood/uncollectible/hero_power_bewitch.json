@@ -1,6 +1,6 @@
 {
   "name": "Bewitch",
-  "baseManaCost": 2,
+  "baseManaCost": 0,
   "type": "HERO_POWER",
   "heroClass": "SILVER",
   "rarity": "FREE",
@@ -11,15 +11,19 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "ReceiveCardSpell",
-      "value": 1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "SILVER",
-        "cardType": "SPELL"
-      },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
+      "class": "HeroPowerSpell",
+      "description": "Add a random Shaman spell to your hand.",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "heroClass": "SILVER",
+          "cardType": "SPELL"
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
       }
     }
   },

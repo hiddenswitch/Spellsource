@@ -30,8 +30,18 @@
     }
   ],
   "targetSelection": "NONE",
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
   "spell": {
-    "class": "NullSpell"
+    "class": "HeroPowerSpell",
+    "description": "Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_unholy_prescence"
+    }
   },
   "collectible": false,
   "set": "CUSTOM",
