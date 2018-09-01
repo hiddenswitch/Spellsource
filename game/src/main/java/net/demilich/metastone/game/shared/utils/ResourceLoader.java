@@ -36,7 +36,7 @@ public class ResourceLoader {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public static Collection<ResourceInputStream> loadJsonInputStreams(String rootDir, boolean fromFileSystem)
+	public static Collection<ResourceInputStream> loadInputStreams(String rootDir, boolean fromFileSystem)
 			throws URISyntaxException, IOException {
 		if (rootDir == null) {
 			throw new RuntimeException("rootDir cannot be null");

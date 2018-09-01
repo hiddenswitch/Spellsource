@@ -141,7 +141,7 @@ public class CardCatalogue {
 
 			Collection<ResourceInputStream> inputStreams = null;
 			try {
-				inputStreams = ResourceLoader.loadJsonInputStreams(CARDS_FOLDER, false);
+				inputStreams = ResourceLoader.loadInputStreams(CARDS_FOLDER, false);
 				loadCards(inputStreams);
 			} catch (URISyntaxException e) {
 				e.printStackTrace();

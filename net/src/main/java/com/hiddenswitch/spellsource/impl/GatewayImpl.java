@@ -189,6 +189,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		});
 
+		// Password reset
+		Accounts.passwordReset(router);
+
 		router.route("/accounts/:targetUserId")
 				.handler(authHandler);
 		router.route("/accounts/:targetUserId")
