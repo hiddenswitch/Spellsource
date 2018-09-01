@@ -29,6 +29,17 @@ public class DeckParsingTest {
 		Assert.assertEquals(createRequest.getHeroCardId(), "hero_two_word_name");
 	}
 
+	@Test
+	public void testBoomsdayDecklistParsing() {
+		CardCatalogue.loadCardsFromPackage();
+		Stream.of("AAECAZ8FBugBucECnOIC/eoC0PQCp4IDDIwBngHIBKcF8wX1Ba8Hm8sC48sC1uUCrfIC2P4CAA==",
+				"AAECAa0GDAnFBO0F0wqWxALTxQLJxwLHywKJzQLwzwKQ0wLD6gIJ+wGhBNHBAtXBAujQAqniAsvmAp/rAqH+AgA=",
+				"AAECAaoICJQDtAPtBcLOArrSAqfuAur6Apn7Agv5A4EE9QT+BbIG9QjHwQKNzgLD0gLz5wKf/QIA")
+				.forEach(deckList -> {
+					DeckCreateRequest deck = DeckCreateRequest.fromDeckList(deckList);
+					Assert.assertEquals(deck.getCardIds().size(), 30);
+				});
+	}
 
 	@Test
 	public void testDecklistParsing() {

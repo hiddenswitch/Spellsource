@@ -2,15 +2,33 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.PasswordResetRecord;
 import com.hiddenswitch.spellsource.util.QuickJson;
+import com.hiddenswitch.spellsource.util.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
+import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
+import io.vertx.core.http.HttpMethod;
+import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mail.MailClient;
+import io.vertx.ext.mail.MailConfig;
+import io.vertx.ext.mail.MailMessage;
+import io.vertx.ext.mail.MailResult;
 import io.vertx.ext.mongo.*;
+import io.vertx.ext.web.Cookie;
+import io.vertx.ext.web.Route;
+import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.client.WebClient;
+import io.vertx.ext.web.handler.BodyHandler;
+import io.vertx.ext.web.handler.CookieHandler;
+import io.vertx.ext.web.handler.StaticHandler;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
 import org.jetbrains.annotations.NotNull;
@@ -42,6 +60,10 @@ public interface Accounts {
 	 * The USERS constant specifies the name of the collection in Mongo that contains the user data.
 	 */
 	String USERS = "accounts.users";
+	/**
+	 * This constant is the name of the collection that stores reset tokens for a specific email address.
+	 */
+	String RESET_TOKENS = "accounts.reset.tokens";
 	/**
 	 * This pattern specifies what characters make a valid username.
 	 */
@@ -166,9 +188,9 @@ public interface Accounts {
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
-	 * set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
-	 * that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests. The
-	 * token and user ID should be saved.
+	 * 		set to true, the account creation failed with the specified handled reason. On subsequent requests from a client
+	 * 		that's using the HTTP API, the Login Token should be put into the X-Auth-Token header for subsequent requests.
+	 * 		The token and user ID should be saved.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
@@ -238,6 +260,7 @@ public interface Accounts {
 
 	/**
 	 * Validates that a password is not null and at least of length 1.
+	 *
 	 * @param password The password, in plaintext, to check.
 	 * @return {@code true} if the password is not {@code null} and its length is at least 1.
 	 */
@@ -247,6 +270,7 @@ public interface Accounts {
 
 	/**
 	 * Checks if an email already exists.
+	 *
 	 * @param emailAddress The address ot check.
 	 * @return {@code true} if the email exists in the database.
 	 * @throws SuspendExecution
@@ -259,6 +283,7 @@ public interface Accounts {
 
 	/**
 	 * Uses the Apache {@link EmailValidator} to determine if an email is valid.
+	 *
 	 * @param emailAddress The address to check.
 	 * @return {@code true} if the address is valid.
 	 */
@@ -268,6 +293,7 @@ public interface Accounts {
 
 	/**
 	 * Checks that a username is valid.
+	 *
 	 * @param name The username to check.
 	 * @return {@code true} if it's nonnull, nonempty, cnotains valid characters and is not vulgar.
 	 */
@@ -278,6 +304,7 @@ public interface Accounts {
 
 	/**
 	 * Checks if a username is vulgar.
+	 *
 	 * @param name The username to check
 	 * @return {@code true} if the username is vulgar.
 	 */
@@ -356,7 +383,7 @@ public interface Accounts {
 	 *
 	 * @param request An email and password combination.
 	 * @return The result of logging in, or information about why the login failed if it was for a handled reason (bad
-	 * email or password).
+	 * 		email or password).
 	 */
 	@Suspendable
 	static LoginResponse login(LoginRequest request) {
@@ -481,5 +508,144 @@ public interface Accounts {
 		// Remove the user document
 		MongoClientDeleteResult result = mongo().removeDocuments(Accounts.USERS, json("_id", json("$in", userIds)));
 		return result.getRemovedCount();
+	}
+
+	/**
+	 * Configures handlers for password resetting (web URLs)
+	 *
+	 * @return
+	 */
+	static void passwordReset(Router router) {
+		String requestUrl = "/reset/passwords/request";
+		String resetUrl = "/reset/passwords/with-token";
+
+		StaticHandler staticHandler = StaticHandler.create("webroot/reset/passwords");
+		BodyHandler bodyHandler = BodyHandler.create();
+
+		router
+				.route("/reset/passwords/*")
+				.handler(staticHandler);
+
+		router.route(requestUrl)
+				.method(HttpMethod.GET)
+				.handler(routingContext -> {
+					routingContext.response().setStatusCode(303);
+					routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequest.html");
+					routingContext.response().end();
+				});
+
+		router.route(resetUrl)
+				.method(HttpMethod.GET)
+				.handler(Sync.suspendableHandler(routingContext -> {
+					routingContext.response().setStatusCode(303);
+
+					if (routingContext.queryParam("token").size() != 1) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().end();
+						return;
+					}
+					String token = routingContext.queryParam("token").get(0);
+					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
+					if (System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().end();
+						return;
+					}
+
+					routingContext.addCookie(Cookie.cookie("token", token));
+					routingContext.response().putHeader("Location", "/reset/passwords/passwordreset.html");
+					routingContext.response().end();
+				}));
+
+		router.route(resetUrl)
+				.method(HttpMethod.POST)
+				.handler(bodyHandler);
+
+		router.route(resetUrl)
+				.method(HttpMethod.POST)
+				.handler(Sync.suspendableHandler(routingContext -> {
+					routingContext.response().setStatusCode(303);
+
+					String password1 = routingContext.request().getFormAttribute("password1");
+					String password2 = routingContext.request().getFormAttribute("password2");
+
+					if (!password1.equals(password2) || !Accounts.isValidPassword(password1)) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordsdidnotmatch.html");
+						routingContext.response().end();
+						return;
+					}
+
+					Cookie cookie = routingContext.getCookie("token");
+					if (cookie == null) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().end();
+						return;
+					}
+
+					String token = cookie.getValue();
+					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
+					if (passwordResetRecord == null || System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().end();
+						return;
+					}
+
+					try {
+						Accounts.changePassword(ChangePasswordRequest.request(new UserId(passwordResetRecord.getUserId()), password1));
+						mongo().removeDocument(RESET_TOKENS, json("_id", token));
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetted.html");
+					} catch (Throwable throwable) {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+					} finally {
+						routingContext.removeCookie("token");
+						routingContext.response().end();
+					}
+				}));
+
+		router.route(requestUrl)
+				.method(HttpMethod.POST)
+				.handler(bodyHandler);
+
+		router.route(requestUrl)
+				.method(HttpMethod.POST)
+				.handler(Sync.suspendableHandler(routingContext -> {
+					routingContext.response().setStatusCode(303);
+					String email = routingContext.request().getFormAttribute("email");
+					boolean isValid = EmailValidator.getInstance().isValid(email);
+
+					if (isValid) {
+						UserRecord userRecord = mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
+
+						// End the request first to prevent the timing of the function from leaking whether or not an account exists.
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequestsent.html");
+						routingContext.response().end();
+
+						if (userRecord != null) {
+							String token = RandomStringUtils.randomAlphanumeric(64).toLowerCase();
+							PasswordResetRecord record = new PasswordResetRecord(token);
+							record.setUserId(userRecord.getId());
+							mongo().insert(RESET_TOKENS, JsonObject.mapFrom(record));
+							MailClient mailClient = MailClient.createShared(Vertx.currentContext().owner(),
+									new MailConfig()
+											.setHostname(System.getenv().getOrDefault("SMTP_HOST", "smtp.mailgun.org"))
+											.setUsername(System.getenv().getOrDefault("SMTP_USERNAME", "no-reply@hiddenswitch.com"))
+											.setPassword(System.getenv().getOrDefault("SMTP_PASSWORD", "password")));
+							try {
+								String emailUrl = Configuration.getDefaultApiClient().getBasePath() + resetUrl + "?token=" + token;
+								MailResult mailResult = awaitResult(h -> mailClient.sendMail(new MailMessage()
+										.setFrom("no-reply@hiddenswitch.com")
+										.setTo(email)
+										.setSubject("Your Password Reset Request from Spellsource")
+										.setHtml(
+												String.format("Please visit this URL to reset your password for Spellsource: <br /> <a href=\"%s\">%s</a>", emailUrl, emailUrl)), h));
+							} finally {
+								mailClient.close();
+							}
+						}
+					} else {
+						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequestinvalid.html");
+						routingContext.response().end();
+					}
+				}));
 	}
 }
