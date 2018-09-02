@@ -20,12 +20,10 @@
       }
     }
   },
-  "condition": {
-    "class": "OrCondition"
-  },
   "targetSelection": "NONE",
-  "spell": {
-    "class": "NullSpell"
+  "condition": {
+    "class": "AndCondition",
+    "invert": "true"
   },
   "collectible": false,
   "set": "BLIZZARD_ADVENTURE",
