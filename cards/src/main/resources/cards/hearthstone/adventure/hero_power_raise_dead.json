@@ -21,7 +21,8 @@
     }
   },
   "condition": {
-    "class": "OrCondition"
+    "class": "AndCondition",
+    "invert": true
   },
   "targetSelection": "NONE",
   "spell": {
