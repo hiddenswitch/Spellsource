@@ -5,6 +5,7 @@
   "type": "HERO",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
+  "description": "Battlecry: Replace your deck with Noth's.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -51,6 +52,7 @@
         },
         {
           "class": "DrawCardSpell",
+          "value": 0,
           "targetPlayer": "SELF"
         }
       ]
