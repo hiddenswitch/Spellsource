@@ -2,7 +2,7 @@ package net.demilich.metastone.game.spells;
 
 import java.util.Map;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.utils.Attribute;

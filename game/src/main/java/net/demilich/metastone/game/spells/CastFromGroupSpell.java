@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.lang.reflect.Array;
 import java.util.*;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;

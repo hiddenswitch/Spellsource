@@ -63,6 +63,7 @@ dependencies {
     compile project(':game')
     compile project(':cards')
     compile project(':client')
+    compile project(':vertx-sync')
 
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'

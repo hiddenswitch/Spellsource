@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.concurrent.ReentrantLock;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
 import com.hazelcast.concurrent.semaphore.SemaphoreProxy;
 import com.hazelcast.concurrent.semaphore.SemaphoreService;
 import com.hazelcast.concurrent.semaphore.operations.AcquireOperation;

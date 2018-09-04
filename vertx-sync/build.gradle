@@ -1,0 +1,40 @@
+dependencies {
+    compile files("lib/quasar-core-0.7.9-jdk8.jar")
+    compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
+    compile group: 'io.vertx', name: 'vertx-docgen', version: '3.5.1'
+    compile group: 'io.vertx', name: 'vertx-codetrans', version: '3.5.1'
+    compile("com.esotericsoftware:kryo:4.0.0") {
+        exclude group: "org.ow2.asm", module: '*'
+    }
+    compile("de.javakaffee:kryo-serializers:0.42") {
+        exclude group: "com.esotericsoftware", module: '*'
+        exclude group: "com.esotericsoftware.kryo", module: '*'
+    }
+
+    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.5.1'
+    testCompile group: 'io.vertx', name: 'vertx-core', version: '3.5.1', classifier: 'tests'
+
+}
+
+/*
+compileJava.dependsOn processResources
+compileJava {
+    doLast {
+        ant.taskdef(name: 'instrumentation', classname: 'com.github.fromage.quasi.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
+        ant.instrumentation(verbose: 'true', check: 'true', debug: 'true') {
+            fileset(dir: sourceSets.main.output.classesDir)
+        }
+    }
+}
+compileTestJava.dependsOn processTestResources
+compileTestJava {
+    doLast {
+        ant.taskdef(name: 'instrumentation', classname: 'com.github.fromage.quasi.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
+        ant.instrumentation(verbose: 'true', check: 'true', debug: 'true') {
+            fileset(dir: sourceSets.test.output.classesDir)
+        }
+    }
+}
+*/

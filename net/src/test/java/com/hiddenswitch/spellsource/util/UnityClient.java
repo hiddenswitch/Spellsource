@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.Strand;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Port;

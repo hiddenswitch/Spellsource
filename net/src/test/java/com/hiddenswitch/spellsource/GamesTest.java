@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.strands.Strand;
+import com.github.fromage.quasi.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.GameActions;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.GameId;

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;

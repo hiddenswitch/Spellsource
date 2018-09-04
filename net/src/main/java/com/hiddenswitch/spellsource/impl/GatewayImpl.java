@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;

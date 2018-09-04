@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.impl.SuspendableEventBusCondition;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Closeable;

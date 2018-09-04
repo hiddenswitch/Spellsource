@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.models.*;
 import net.demilich.metastone.game.GameContext;
