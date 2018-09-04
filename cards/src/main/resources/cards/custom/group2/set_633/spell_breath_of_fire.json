@@ -11,16 +11,17 @@
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "ENEMY_HERO",
-        "value": {
-          "class": "EntityCounter",
-          "target": "ENEMY_MINIONS"
-        }
+        "target": "ENEMY_MINIONS",
+        "value": 1
       },
       {
         "class": "DamageSpell",
-        "target": "ENEMY_MINIONS",
-        "value": 1
+        "target": "ENEMY_HERO",
+        "value": {
+          "class": "EntityCounter",
+          "target": "ENEMY_MINIONS",
+          "ignoreSpellDamage": true
+        }
       }
     ]
   },
