@@ -63,7 +63,7 @@ public class CatalogueTests {
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testHasCard(JsonObject cardObject) {
-		final Card card = CardCatalogue.getCardByName(cardObject.getString("name"));
+		final Card card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±","\\u00f1"));
 		Assert.assertNotNull(card);
 	}
 
@@ -71,7 +71,7 @@ public class CatalogueTests {
 	public void testAttributes(JsonObject cardObject) {
 		Card card;
 		try {
-			card = CardCatalogue.getCardByName(cardObject.getString("name"));
+			card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±","\\u00f1"));
 		} catch (NullPointerException ex) {
 			Assert.fail(String.format("Could not find card with name %s", cardObject.getString("name")));
 			return;

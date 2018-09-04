@@ -1,0 +1,30 @@
+{
+  "name": "Gorefang",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "damage": 6,
+  "durability": 1,
+  "rarity": "LEGENDARY",
+  "description": "After your hero attacks, gain Stealth until your next turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "STEALTH",
+      "revertTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

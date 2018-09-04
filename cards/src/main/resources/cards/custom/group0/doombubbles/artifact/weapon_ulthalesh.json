@@ -1,0 +1,58 @@
+{
+  "name": "Ulthalesh",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "VIOLET",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "Your cards that target friendly minions can also target enemy minions.",
+  "auras": [
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "TargetSelectionFilter",
+            "targetSelection": "FRIENDLY_MINIONS"
+          },
+          {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          }
+        ]
+      },
+      "applyEffect": {
+        "class": "NullSpell",
+        "targetSelection": "MINIONS"
+      }
+    },
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "TargetSelectionFilter",
+            "targetSelection": "FRIENDLY_MINIONS"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "BATTLECRY",
+            "operation": "HAS"
+          }
+        ]
+      },
+      "applyEffect": {
+        "class": "NullSpell",
+        "targetSelection": "MINIONS"
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

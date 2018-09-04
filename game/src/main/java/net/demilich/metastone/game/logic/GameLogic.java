@@ -19,8 +19,9 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
-import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -700,6 +701,28 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (sourceReference != null) {
 			source = context.resolveSingleTarget(sourceReference);
 		}
+
+		//Implement SpellOverrideAura
+        Object clas = spellDesc.get(SpellArg.CLASS);
+        Entity finalSource = source;
+        List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
+                .filter(t -> t instanceof SpellOverrideAura)
+                .map(t -> (Aura) t)
+                .filter(((Predicate<Aura>) Aura::isExpired).negate())
+                .filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(clas))
+                .filter(aura -> context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).get(0).getId() == playerId)
+				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
+						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
+                .collect(Collectors.toList());
+        if (!overrideAuras.isEmpty()) {
+            for (Aura aura : overrideAuras) {
+                for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
+                    spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
+                }
+            }
+
+        }
+
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
 		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
 		// target can only be changed when there is one target
@@ -1674,6 +1697,40 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return actionLogic.getAutoHeroPower(context, context.getPlayer(playerId));
 	}
 
+	public int getChooseOneOverrides(Player player, final Entity source) {
+		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof ChooseOneOverrideAura)
+				.map(t -> (Aura) t)
+				.filter(((Predicate<Aura>) Aura::isExpired).negate())
+				.filter(aura -> {
+					if (aura.getDesc().getTarget().equals(EntityReference.FRIENDLY_PLAYER)) {
+						return source.getOwner() == player.getId();
+					} else if (aura.getDesc().getTarget().equals(EntityReference.ENEMY_PLAYER)) {
+						return source.getOwner() == context.getOpponent(player).getId();
+					} else return aura.getAffectedEntities().contains(source.getId());
+				})
+				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
+						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
+				.collect(Collectors.toList());
+		int overallValue = -1;
+		if (!overrideAuras.isEmpty()) {
+			for (Aura overrideAura : overrideAuras) {
+				int auraValue = overrideAura.getDesc().getApplyEffect().getValue(SpellArg.VALUE, context, player,
+						context.resolveSingleTarget(overrideAura.getHostReference()),
+						context.resolveSingleTarget(overrideAura.getHostReference()), -1);
+				if (overallValue == 2 || auraValue == -1) {
+					continue;
+				}
+				if (overallValue + auraValue == 1) {
+					overallValue = 2;
+				} else {
+					overallValue = auraValue;
+				}
+			}
+		}
+		return overallValue;
+	}
+
 	/**
 	 * Return the greatest value of an attribute from all {@link Actor}s of a player.
 	 * <p>
@@ -2610,7 +2667,46 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	void processTargetModifiers(Player player, GameAction action) {
+	public GameAction processTargetModifiers(GameAction action) {
+		Entity entity = action.getSource(context);
+		List<Aura> auras = context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof TargetSelectionOverrideAura)
+				.map(t -> (Aura) t)
+				.filter(((Predicate<Aura>) Aura::isExpired).negate())
+				.filter(aura -> aura.getAffectedEntities().contains(entity.getId()))
+				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
+						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
+				.collect(Collectors.toList());
+		if (auras != null && !auras.isEmpty()) {
+			for (Aura aura : auras) {
+				TargetSelection targetSelection = (TargetSelection) aura.getDesc().getApplyEffect().get(SpellArg.TARGET_SELECTION);
+				switch (action.getActionType()) {
+					case HERO_POWER:
+					case SPELL:
+						if (action instanceof PlayChooseOneCardAction){
+							PlayChooseOneCardAction chooseOneCardAction = (PlayChooseOneCardAction) action;
+							if (chooseOneCardAction.getSpell().hasPredefinedTarget()) {
+								SpellDesc targetChangedSpell = chooseOneCardAction.getSpell().removeArg(SpellArg.TARGET);
+								chooseOneCardAction.setSpell(targetChangedSpell);
+							}
+						} else {
+							PlaySpellCardAction spellCardAction = (PlaySpellCardAction) action;
+							if (spellCardAction.getSpell().hasPredefinedTarget()) {
+								SpellDesc targetChangedSpell = spellCardAction.getSpell().removeArg(SpellArg.TARGET);
+								spellCardAction.setSpell(targetChangedSpell);
+							}
+						}
+						break;
+					default:
+						break;
+				}
+				action.setTargetRequirement(targetSelection);
+			}
+		}
+
+
+		return action;
+		/*
 		Card heroPower = player.getHero().getHeroPower();
 		if (heroPower.getHeroClass() != HeroClass.GREEN) {
 			return;
@@ -2621,6 +2717,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			spellCardAction.setSpell(targetChangedSpell);
 			spellCardAction.setTargetRequirement(TargetSelection.ANY);
 		}
+		*/
 	}
 
 	/**
@@ -3044,6 +3141,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		BattlecryAction battlecry = actor.getBattlecry();
 
 		Player player = context.getPlayer(playerId);
+		processTargetModifiers(battlecry);
 		if (!battlecry.canBeExecuted(context, player)) {
 			return;
 		}

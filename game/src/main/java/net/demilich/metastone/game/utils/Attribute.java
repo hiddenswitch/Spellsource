@@ -876,6 +876,11 @@ public enum Attribute {
 	 */
 	SPELLS_CAST_TWICE,
 
+	/*
+	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 */
+	ATTACK_MULTIPLIER,
+
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>

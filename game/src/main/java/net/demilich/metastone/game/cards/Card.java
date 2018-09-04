@@ -586,7 +586,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		PlayCardAction action = null;
 		switch (getCardType()) {
 			case HERO_POWER:
-				action = new HeroPowerAction(CardCatalogue.getCardById(getChooseBothCardId()).getSpell(), this, getTargetSelection());
+				action = new HeroPowerAction(CardCatalogue.getCardById(getChooseBothCardId()).getSpell(), this, getTargetSelection(), CardCatalogue.getCardById(getChooseBothCardId()));
 				break;
 			case CHOOSE_ONE:
 			case SPELL:
@@ -617,7 +617,7 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	@Override
 	public boolean hasBothOptions() {
-		return getDesc().getChooseBothBattlecry() != null;
+		return getDesc().getChooseBothBattlecry() != null || getDesc().getChooseBothCardId() != null;
 	}
 
 
@@ -692,7 +692,10 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 
 		Player opponent = context.getOpponent(player);
-		switch (getTargetSelection()) {
+		TargetSelection selection = hasChoices() || isHeroPower() ?
+				getTargetSelection() :
+				context.getLogic().processTargetModifiers(play()).getTargetRequirement();
+		switch (selection) {
 			case ENEMY_MINIONS:
 				return context.getMinionCount(opponent) > 0;
 			case FRIENDLY_MINIONS:

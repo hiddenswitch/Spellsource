@@ -2,11 +2,13 @@ package net.demilich.metastone.game.logic;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
-import net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura;
+import net.demilich.metastone.game.spells.aura.*;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -47,16 +49,26 @@ public class ActionLogic implements Serializable {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
 		Card heroPower = player.getHero().getHeroPower();
 
-		EntityReference heroPowerReference = new EntityReference(heroPower.getId()
-		);
+		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
 		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
 			return heroPowerActions;
 		}
 		if (heroPower.isChooseOne()) {
 			HasChooseOneActions chooseOneCard = heroPower;
-			for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
-				rollout(chooseOneAction, context, player, heroPowerActions);
+			int overallValue = context.getLogic().getChooseOneOverrides(player, heroPower);
+			if (overallValue != -1) {
+				if (overallValue == 2 && chooseOneCard.hasBothOptions()) {
+					GameAction chooseOneAction = chooseOneCard.playBothOptions();
+					rollout(chooseOneAction, context, player, heroPowerActions);
+				} else if (overallValue == 0 || overallValue == 1) {
+					rollout(chooseOneCard.playOptions()[overallValue], context, player, heroPowerActions);
+				}
+			} else {
+				for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
+					rollout(chooseOneAction, context, player, heroPowerActions);
+				}
 			}
+
 		} else {
 			rollout(heroPower.play(), context, player, heroPowerActions);
 		}
@@ -113,12 +125,22 @@ public class ActionLogic implements Serializable {
 
 			if (card.isChooseOne()) {
 				HasChooseOneActions chooseOneCard = card;
-				if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
-					GameAction chooseOneAction = chooseOneCard.playBothOptions();
-					rollout(chooseOneAction, context, player, playCardActions);
-				} else {
-					for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
+				int overallValue = context.getLogic().getChooseOneOverrides(player, card);
+				if (overallValue != -1) {
+					if (overallValue == 2 && chooseOneCard.hasBothOptions()) {
+						GameAction chooseOneAction = chooseOneCard.playBothOptions();
 						rollout(chooseOneAction, context, player, playCardActions);
+					} else if (overallValue == 0 || overallValue == 1) {
+						rollout(chooseOneCard.playOptions()[overallValue], context, player, playCardActions);
+					}
+				} else {
+					if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
+						GameAction chooseOneAction = chooseOneCard.playBothOptions();
+						rollout(chooseOneAction, context, player, playCardActions);
+					} else {
+						for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
+							rollout(chooseOneAction, context, player, playCardActions);
+						}
 					}
 				}
 			} else {
@@ -157,7 +179,7 @@ public class ActionLogic implements Serializable {
 	}
 
 	public void rollout(GameAction action, GameContext context, Player player, Collection<GameAction> actions) {
-		context.getLogic().processTargetModifiers(player, action);
+		context.getLogic().processTargetModifiers(action);
 		if (action.getTargetRequirement() == TargetSelection.NONE || action.getTargetRequirement() == TargetSelection.AUTO) {
 			actions.add(action);
 		} else {

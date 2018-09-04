@@ -105,6 +105,9 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		int attack = getAttributeValue(Attribute.ATTACK) + getAttributeValue(Attribute.ATTACK_BONUS)
 				+ getAttributeValue(Attribute.AURA_ATTACK_BONUS) + getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS)
 				+ getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS);
+		if (hasAttribute(Attribute.ATTACK_MULTIPLIER) && getAttributeValue(Attribute.ATTACK_MULTIPLIER) != 0) {
+			attack *= getAttributeValue(Attribute.ATTACK_MULTIPLIER);
+		}
 		return Math.max(0, attack);
 	}
 

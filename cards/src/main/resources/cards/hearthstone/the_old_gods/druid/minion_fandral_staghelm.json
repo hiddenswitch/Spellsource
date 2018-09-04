@@ -6,9 +6,14 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Your Choose One cards have both effects combined.",
-  "attributes": {
-    "BOTH_CHOOSE_ONE_OPTIONS": true
+  "description": "Your Choose One cards and powers have both effects combined.",
+  "aura": {
+    "class": "ChooseOneOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "NullSpell",
+      "value": 2
+    }
   },
   "collectible": true,
   "set": "THE_OLD_GODS",
