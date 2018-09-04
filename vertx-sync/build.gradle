@@ -18,6 +18,14 @@ dependencies {
 
 }
 
+tasks.withType(JavaExec) {
+    jvmArgs "-javaagent:lib/quasar-core-0.7.9-jdk8.jar=mb"
+}
+
+test {
+    jvmArgs "-javaagent:lib/quasar-core-0.7.9-jdk8.jar=mb"
+}
+
 /*
 compileJava.dependsOn processResources
 compileJava {
