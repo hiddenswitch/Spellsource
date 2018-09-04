@@ -25,24 +25,3 @@ tasks.withType(JavaExec) {
 test {
     jvmArgs "-javaagent:lib/quasar-core-0.7.9-jdk8.jar=mb"
 }
-
-/*
-compileJava.dependsOn processResources
-compileJava {
-    doLast {
-        ant.taskdef(name: 'instrumentation', classname: 'com.github.fromage.quasi.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
-        ant.instrumentation(verbose: 'true', check: 'true', debug: 'true') {
-            fileset(dir: sourceSets.main.output.classesDir)
-        }
-    }
-}
-compileTestJava.dependsOn processTestResources
-compileTestJava {
-    doLast {
-        ant.taskdef(name: 'instrumentation', classname: 'com.github.fromage.quasi.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
-        ant.instrumentation(verbose: 'true', check: 'true', debug: 'true') {
-            fileset(dir: sourceSets.test.output.classesDir)
-        }
-    }
-}
-*/
