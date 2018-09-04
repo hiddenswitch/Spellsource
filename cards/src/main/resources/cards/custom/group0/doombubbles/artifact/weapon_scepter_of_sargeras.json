@@ -1,0 +1,30 @@
+{
+  "name": "Scepter of Sargeras",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "VIOLET",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "During your turn, you can Discover which cards you randomly discard.",
+  "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "removeEffect": {
+      "class": "DiscardSpell"
+    },
+    "applyEffect": {
+      "class": "custom.DiscoverDiscardSpell",
+      "spell": {
+        "class": "NullSpell"
+      }
+    },
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

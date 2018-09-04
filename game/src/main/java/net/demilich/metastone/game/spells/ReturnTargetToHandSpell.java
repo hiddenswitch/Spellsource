@@ -46,6 +46,9 @@ public class ReturnTargetToHandSpell extends Spell {
 
 		SpellDesc cardSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		Player owner = context.getPlayer(target.getOwner());
+		if (desc.containsKey(SpellArg.TARGET_PLAYER)) {
+			owner = player;
+		}
 		if (owner.getHand().getCount() >= GameLogic.MAX_HAND_CARDS
 				&& Actor.class.isAssignableFrom(target.getClass())) {
 			logger.debug("onCast: {} is destroyed because {}'s hand is full", target, owner.getName());
@@ -75,7 +78,7 @@ public class ReturnTargetToHandSpell extends Spell {
 					&& returnedCard.hasAttribute(Attribute.DISCARDED)) {
 				returnedCard.getAttributes().remove(Attribute.DISCARDED);
 			} else {
-				context.getLogic().receiveCard(target.getOwner(), returnedCard);
+				context.getLogic().receiveCard(owner.getId(), returnedCard);
 			}
 			if (cardSpell != null) {
 				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);

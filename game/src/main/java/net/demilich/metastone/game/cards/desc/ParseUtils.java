@@ -8,6 +8,7 @@ import com.google.common.base.CaseFormat;
 
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -294,6 +295,14 @@ public class ParseUtils {
 			}
 			case CARD_SOURCE: {
 				return sourceParser.innerDeserialize(ctxt, jsonData).create();
+			}
+			case CARD_SOURCE_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				CardSource[] array = new CardSource[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = sourceParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+				}
+				return array;
 			}
 			case AURA: {
 				return auraParser.innerDeserialize(ctxt, jsonData).create();

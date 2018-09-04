@@ -116,7 +116,14 @@ public class SpellUtils {
 
 		PlayCardAction action = null;
 		if (card.isChooseOne()) {
-			if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
+			int chooseOneOverride = context.getLogic().getChooseOneOverrides(player, card);
+			if (chooseOneOverride != -1) {
+				if (chooseOneOverride == 2) {
+					action = card.playBothOptions();
+				} else {
+					action = card.playOptions()[chooseOneOverride];
+				}
+			} else if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
 				action = card.playBothOptions();
 			} else {
 				boolean doesNotContainChoice = !card.getAttributes().containsKey(Attribute.CHOICE)
@@ -288,7 +295,7 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER} zone
+	 * Consider the  and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER} zone
 	 * for the specified card
 	 *
 	 * @param context
@@ -313,7 +320,7 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified inside the {@link SpellArg#CARD} and {@link SpellArg#CARDS} arguments.
 	 *
-	 * @param context The game context to use for {@link GameContext#getPendingCard()} or {@link
+	 * @param context The game context to use for  or {@link
 	 *                GameContext#getOutputCard()} lookups.
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.

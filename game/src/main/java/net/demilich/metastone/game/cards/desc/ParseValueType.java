@@ -142,6 +142,10 @@ public enum ParseValueType {
 	 */
 	CARD_SOURCE,
 	/**
+	 * An array of {@link net.demilich.metastone.game.spells.desc.source.CardSourceDesc}.
+	 */
+	CARD_SOURCE_ARRAY,
+	/**
 	 * An array of integers.
 	 */
 	INTEGER_ARRAY,
@@ -170,5 +174,6 @@ public enum ParseValueType {
 	 * An {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} that should be interpreted as a {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Secret}.
 	 */
-	SECRET
+	SECRET,
+
 }

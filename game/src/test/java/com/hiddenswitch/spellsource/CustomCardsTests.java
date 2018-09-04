@@ -14,13 +14,17 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
+import net.demilich.metastone.game.events.TurnEndEvent;
+import net.demilich.metastone.game.events.TurnStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
@@ -2912,5 +2916,358 @@ public class CustomCardsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testScaleOfTheEarthWarder() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_scale_of_the_earth_warder");
+			assertEquals(player.getHero().getWeapon().getDurability(), 12);
+			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), 30);
+			assertEquals(player.getHero().getWeapon().getDurability(), 6);
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCardWithTarget(context, opponent, "spell_pyroblast", player.getHero());
+			assertEquals(player.getHero().getHp(), 30);
+			assertNull(player.getHero().getWeapon());
+			assertTrue(wisp.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testXalatath() {
+		runGym((context, player, opponent) -> {
+			assertEquals(costOf(context, player, player.getHeroPowerZone().get(0)), 2);
+			Minion maiden = playMinionCard(context, player, "minion_maiden_of_the_lake");
+			assertEquals(costOf(context, player, player.getHeroPowerZone().get(0)), 1);
+			playCard(context, player, "weapon_xalatath");
+			assertEquals(costOf(context, player, player.getHeroPowerZone().get(0)), 0);
+			destroy(context, maiden);
+			assertEquals(costOf(context, player, player.getHeroPowerZone().get(0)), 1);
+		});
+	}
+
+	@Test
+	public void testTheSilverHand() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_onyxia");
+			playCard(context, player, "weapon_the_silver_hand");
+			playCard(context, player, "spell_level_up");
+			player.getMinions().forEach(minion -> assertEquals(minion.getAttack(), minion.getBaseAttack() + 2));
+		});
+
+	}
+
+	@Test
+	public void testWarSwords() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "weapon_warswords_of_the_valarjar");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			assertEquals(player.getHero().getHp(), 20);
+			assertEquals(player.getWeaponZone().get(0).getName(), "Warswords of the Valarjar");
+		});
+
+	}
+
+	@Test
+	public void testUlthalesh() {
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			Card darkPact = receiveCard(context, player, "spell_dark_pact");
+			playCard(context, player, "minion_wisp");
+			playCard(context, player, "minion_wisp");
+			playCard(context, opponent, "minion_wisp");
+			int actionsBefore = (int) context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(darkPact.getReference()))
+					.count();
+			assertEquals(actionsBefore, 2);
+			playCard(context, player, "weapon_ulthalesh");
+			int actionsAfter = (int) context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(darkPact.getReference()))
+					.count();
+
+			assertEquals(actionsAfter, 3);
+			playCardWithTarget(context, player, darkPact, opponent.getMinions().get(0));
+
+			assertTrue(!player.getHero().isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			Card boi = receiveCard(context, player, "minion_sanguine_reveler");
+			playCard(context, player, "minion_wisp");
+			Minion enemyWisp = playMinionCard(context, opponent, "minion_wisp");
+			int i = 0;
+			try {
+				playMinionCardWithBattlecry(context, player, boi, enemyWisp);
+			} catch (AssertionError e) {
+				i++;
+			}
+			assertEquals(i ,1);
+			playCard(context, player, "weapon_ulthalesh");
+
+			playMinionCardWithBattlecry(context, player, boi, enemyWisp);
+
+			assertTrue(!player.getHero().isDestroyed());
+		});
+
+		runGym((context, player, opponent) -> {
+			Card brew = receiveCard(context, player, "minion_youthful_brewmaster");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			playCard(context, player, "weapon_ulthalesh");
+			playMinionCardWithBattlecry(context, player, brew, wisp);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(opponent.getHand().size(), 0);
+		});
+
+		for (int i = 0; i < 10; i++) {
+			runGym((context, player, opponent) -> {
+				Card sac = receiveCard(context, player, "spell_unwilling_sacrifice");
+				Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+				Minion wisp2 = playMinionCard(context, opponent, "minion_wisp");
+				playCard(context, player, "weapon_ulthalesh");
+				playCardWithTarget(context, player, sac, wisp);
+				assertTrue(wisp.isDestroyed());
+				assertTrue(wisp2.isDestroyed());
+			});
+		}
+	}
+
+	@Test
+	public void testScepterOfSargeras() {
+		for (int i = 0; i < 10; i++) {
+			runGym((context, player, opponent) -> {
+				receiveCard(context, player, "minion_target_dummy");
+				receiveCard(context, player, "minion_snowflipper_penguin");
+				receiveCard(context, player, "minion_snowflipper_penguin");
+
+				playCard(context, player, "weapon_scepter_of_sargeras");
+				overrideDiscover(context, player, "minion_target_dummy");
+				playCardWithTarget(context, player, "spell_soulfire", opponent.getHero());
+				assertEquals(player.getHand().size(), 2);
+				assertEquals(player.getHand().get(0).getCardId(), "minion_snowflipper_penguin");
+				assertEquals(player.getHand().get(1).getCardId(), "minion_snowflipper_penguin");
+			});
+		}
+
+	}
+
+	@Test
+	public void testMore() {
+		runGym((context, player, opponent) -> {
+			player.setMana(2);
+			SpellUtils.castChildSpell(context, player, ChangeHeroPowerSpell.create("hero_power_plague_lord"), player, player);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream().count(), 3);
+			playCard(context, player, "minion_fandral_staghelm");
+			player.setMana(2);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream().count(), 2);
+			context.getLogic().performGameAction(player.getId(),context.getLogic().getValidActions(player.getId())
+					.stream().filter(gameAction -> gameAction.getActionType().equals(ActionType.HERO_POWER)).findFirst().get());
+			context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference());
+			assertEquals(player.getHero().getAttack(), 3);
+			assertEquals(player.getHero().getArmor(), 3);
+		});
+	}
+
+	@Test
+	public void testScytheOfElune() {
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			Card roots = receiveCard(context, player, "spell_living_roots");
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.NONE))
+					.count(), 1);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.ANY))
+					.count(), 2);
+
+			playCard(context, player, "weapon_scythe_of_elune");
+			assertEquals(player.getWeaponZone().get(0).getDescription(), "Your Choose One effects have both options combined. Swaps each turn.");
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.NONE))
+					.count(), 0);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.ANY))
+					.count(), 2);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getWeaponZone().get(0).getDescription(), "Your Choose One effects have only their first option. Swaps each turn.");
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.NONE))
+					.count(), 0);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.ANY))
+					.count(), 2);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getWeaponZone().get(0).getDescription(), "Your Choose One effects have only their second option. Swaps each turn.");
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.NONE))
+					.count(), 1);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.ANY))
+					.count(), 0);
+			playCard(context, player, "weapon_rusty_hook");
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.NONE))
+					.count(), 1);
+			assertEquals(context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(roots.getReference()))
+					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.ANY))
+					.count(), 2);
+		});
+
+	}
+
+	@Test
+	public void testEbonChill() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_ebonchill");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, player, "spell_frost_nova");
+			for (Minion minion : opponent.getMinions()) {
+				assertEquals(minion.getHp(), minion.getMaxHp() - 3);
+			}
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_ebonchill");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, opponent, "minion_unpowered_steambot");
+			playCard(context, player, "spell_frost_nova");
+			for (int i = 0; i < 6; i++) {
+				assertEquals(opponent.getMinions().get(i).getHp(), 6);
+			}
+		});
+
+	}
+
+	@Test
+	public void testFelomelorn() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_felomelorn");
+			receiveCard(context, player, "spell_flamestrike");
+			shuffleToDeck(context, player, "spell_flamestrike");
+			playCard(context, player, "minion_kobold_geomancer");
+			Minion dummy = playMinionCard(context, opponent, "minion_unpowered_steambot");
+			context.fireGameEvent(new TurnEndEvent(context, player.getId()));
+			assertEquals(dummy.getHp(), 4);
+			assertEquals(player.getHand().size() + player.getDeck().size(), 1);
+		});
+
+	}
+
+	@Test
+	public void testTuure() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_tuure");
+			for (int i = 0; i < 10; i++) {
+				context.fireGameEvent(new TurnStartEvent(context, player.getId()));
+			}
+		});
+
+	}
+
+	@Test
+	public void testFangsOfAshmane() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_fangs_of_ashmane");
+			playCard(context, player, "spell_bite");
+			assertEquals(player.getHero().getAttack(), 8);
+			destroy(context, player.getWeaponZone().get(0));
+			assertEquals(player.getHero().getAttack(), 4);
+		});
+
+	}
+
+	@Test
+	public void testTheDreadblade() {
+		runGym((context, player, opponent) -> {
+			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
+			assertFalse(dreadBlade.hasAttribute(Attribute.LIFESTEAL));
+			playCard(context, player, "weapon_spectral_cutlass");
+			assertTrue(dreadBlade.hasAttribute(Attribute.LIFESTEAL));
+			playCard(context, player, dreadBlade);
+			assertTrue(player.getWeaponZone().get(0).hasAttribute(Attribute.LIFESTEAL));
+		}, HeroClass.BLACK, HeroClass.BLACK);
+
+		runGym((context, player, opponent) -> {
+			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
+			assertFalse(dreadBlade.hasAttribute(Attribute.BATTLECRY));
+			playCard(context, player, "weapon_jade_claws");
+			assertTrue(dreadBlade.hasAttribute(Attribute.BATTLECRY));
+			playCard(context, player, dreadBlade);
+			assertEquals(player.getMinions().size(), 2);
+		}, HeroClass.BLACK, HeroClass.BLACK);
+
+		runGym((context, player, opponent) -> {
+			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
+			assertFalse(dreadBlade.hasAttribute(Attribute.DEATHRATTLES));
+			playCard(context, player, "weapon_hammer_of_twilight");
+			assertTrue(dreadBlade.hasAttribute(Attribute.DEATHRATTLES));
+			playCard(context, player, dreadBlade);
+			destroy(context, player.getWeaponZone().get(0));
+			assertEquals(player.getMinions().size(), 2);
+		}, HeroClass.BLACK, HeroClass.BLACK);
+
+		runGym((context, player, opponent) -> {
+			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
+			Card shard = receiveCard(context, player, "weapon_obsidian_shard");
+			assertEquals(costOf(context, player, dreadBlade), 7);
+			assertEquals(costOf(context, player, shard), 4);
+			playCard(context, player, "spell_arcane_missiles");
+			playCard(context, player, "spell_arcane_missiles");
+			assertEquals(costOf(context, player, dreadBlade), 7);
+			assertEquals(costOf(context, player, shard), 2);
+			playCard(context, player, shard);
+			assertEquals(costOf(context, player, dreadBlade), 5);
+			playCard(context, player, "weapon_obsidian_shard");
+			assertEquals(costOf(context, player, dreadBlade), 3);
+			playCard(context, player, "spell_arcane_missiles");
+			assertEquals(costOf(context, player, dreadBlade), 1);
+		}, HeroClass.BLACK, HeroClass.BLACK);
+
+		runGym((context, player, opponent) -> {
+			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
+			receiveCard(context, player, "minion_voidlord");
+			receiveCard(context, player, "minion_voidlord");
+			receiveCard(context, player, "minion_voidlord");
+			receiveCard(context, player, "minion_voidlord");
+			playCard(context, player, "weapon_skull_of_the_manari");
+			context.fireGameEvent(new TurnStartEvent(context, player.getId()));
+			assertEquals(player.getMinions().size(), 1);
+			playCard(context, player, dreadBlade);
+			context.fireGameEvent(new TurnStartEvent(context, player.getId()));
+			assertEquals(player.getMinions().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card dreadBlade = receiveCard(context, player, "weapon_the_dreadblade");
+			playCard(context, player, "weapon_candleshot");
+			assertTrue(player.getHero().hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
+			destroy(context, player.getWeaponZone().get(0));
+			assertFalse(player.getHero().hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
+			playCard(context, player, dreadBlade);
+			assertTrue(player.getHero().hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
+			destroy(context, player.getWeaponZone().get(0));
+			assertFalse(player.getHero().hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
+		});
+	}
+
+
 }
 

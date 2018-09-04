@@ -1,0 +1,44 @@
+{
+  "name": "Scythe of Elune - Both",
+  "type": "ENCHANTMENT",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "Your Choose One effects have only their first option. Swaps each turn.",
+  "aura": {
+    "class": "ChooseOneOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "NullSpell",
+      "value": 0
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetDescriptionSpell",
+          "target": "FRIENDLY_WEAPON",
+          "description": "Your Choose One effects have only their second option. Swaps each turn."
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_scythe_of_elune_second"
+        },
+        {
+          "class": "RemoveEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_scythe_of_elune_first"
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

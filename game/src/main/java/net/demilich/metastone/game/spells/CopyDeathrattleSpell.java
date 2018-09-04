@@ -41,9 +41,13 @@ public class CopyDeathrattleSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Actor copyTo = (Actor) source;
 		List<SpellDesc> deathrattles = new ArrayList<>();
-		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, 1);
+		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, 99);
 		if (target == null && !impliedCards.isEmpty()) {
-			target = impliedCards.get(0);
+			for (Card impliedCard : impliedCards) {
+				if (impliedCard.getDesc().getDeathrattle() != null) {
+					deathrattles.add(impliedCard.getDesc().getDeathrattle());
+				}
+			}
 		}
 		if (target instanceof Card) {
 			final CardDesc actorCardDesc = ((Card) target).getDesc();
@@ -52,12 +56,10 @@ public class CopyDeathrattleSpell extends Spell {
 			}
 		} else if (target instanceof Actor) {
 			deathrattles.addAll(((Actor) target).getDeathrattles());
-		} else {
-			logger.error("onCast {} {}: Cannot copy target from {}", context.getGameId(), source, target);
-			return;
 		}
 		for (SpellDesc deathrattle : deathrattles) {
 			copyTo.addDeathrattle(deathrattle.clone());
+
 		}
 	}
 
