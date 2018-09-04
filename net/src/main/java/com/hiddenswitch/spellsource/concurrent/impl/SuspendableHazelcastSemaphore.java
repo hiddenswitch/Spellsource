@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.concurrent.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hazelcast.core.ISemaphore;
 import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.concurrent.SuspendableSemaphore;

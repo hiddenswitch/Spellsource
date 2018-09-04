@@ -2,7 +2,7 @@ package net.demilich.metastone.game.behaviour;
 
 import java.util.List;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;

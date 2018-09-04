@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;

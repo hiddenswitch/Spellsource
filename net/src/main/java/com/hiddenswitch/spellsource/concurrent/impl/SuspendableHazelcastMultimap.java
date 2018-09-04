@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.concurrent.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.hazelcast.core.MultiMap;

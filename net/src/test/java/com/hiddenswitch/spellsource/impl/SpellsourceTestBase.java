@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource.impl;
 
 import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.SuspendableAction1;
-import co.paralleluniverse.strands.SuspendableRunnable;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.SuspendableRunnable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;

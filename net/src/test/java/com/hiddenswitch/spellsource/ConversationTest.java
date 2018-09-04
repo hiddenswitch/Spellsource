@@ -16,7 +16,6 @@ import static io.vertx.core.json.Json.decodeValue;
 public class ConversationTest extends SpellsourceTestBase {
 
 	@Test
-	@Ignore
 	public void testConversationRealtime(TestContext context) {
 		Async async = context.async();
 		sync(() -> {

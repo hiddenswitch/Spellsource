@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.behaviour;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableRunnable;
-import co.paralleluniverse.strands.channels.Channels;
-import co.paralleluniverse.strands.channels.QueueChannel;
-import co.paralleluniverse.strands.channels.QueueObjectChannel;
-import co.paralleluniverse.strands.queues.SingleConsumerLinkedObjectQueue;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.Strand;
+import com.github.fromage.quasi.strands.SuspendableRunnable;
+import com.github.fromage.quasi.strands.channels.Channels;
+import com.github.fromage.quasi.strands.channels.QueueChannel;
+import com.github.fromage.quasi.strands.channels.QueueObjectChannel;
+import com.github.fromage.quasi.strands.queues.SingleConsumerLinkedObjectQueue;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;

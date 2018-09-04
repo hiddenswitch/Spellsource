@@ -1,0 +1,258 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <groupId>io.vertx</groupId>
+    <artifactId>vertx-parent</artifactId>
+    <version>11</version>
+  </parent>
+
+  <artifactId>vertx-sync</artifactId>
+  <version>3.5.1</version>
+
+  <properties>
+    <stack.version>3.5.1</stack.version>
+
+    <quasar-core.version>0.7.9</quasar-core.version>
+    <quasar-maven-plugin.version>0.7.9</quasar-maven-plugin.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.vertx</groupId>
+        <artifactId>vertx-dependencies</artifactId>
+        <version>${stack.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <dependencies>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>co.paralleluniverse</groupId>
+      <artifactId>quasar-core</artifactId>
+      <version>${quasar-core.version}</version>
+      <classifier>jdk8</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>org.latencyutils</groupId>
+          <artifactId>LatencyUtils</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.hdrhistogram</groupId>
+          <artifactId>HdrHistogram</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>com.google.protobuf</groupId>
+          <artifactId>protobuf-java</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-docgen</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-codetrans</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <!-- version aligned with the rest of the stack -->
+      <groupId>com.google.guava</groupId>
+      <artifactId>guava</artifactId>
+      <version>19.0</version>
+    </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>4.12</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-unit</artifactId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>io.vertx</groupId>
+      <artifactId>vertx-core</artifactId>
+      <type>test-jar</type>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+
+    <pluginManagement>
+      <plugins>
+        <!-- Collecting classpath entries as properties in the form groupId:artifactId:type:[classifier]
+             as per http://maven.apache.org/plugins/maven-dependency-plugin/properties-mojo.html -->
+        <plugin>
+          <artifactId>maven-dependency-plugin</artifactId>
+          <version>2.8</version>
+          <executions>
+            <execution>
+              <id>getClasspathFilenames</id>
+              <goals>
+                <goal>properties</goal>
+              </goals>
+            </execution>
+          </executions>
+        </plugin>
+
+
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <executions>
+            <execution>
+              <id>default-compile</id>
+              <configuration>
+                <annotationProcessors>
+                  <annotationProcessor>io.vertx.docgen.JavaDocGenProcessor</annotationProcessor>
+                </annotationProcessors>
+                <compilerArgs>
+                  <arg>-Adocgen.output=${asciidoc.dir}/java</arg>
+                </compilerArgs>
+              </configuration>
+            </execution>
+          </executions>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <plugin>
+        <groupId>com.vlkan</groupId>
+        <artifactId>quasar-maven-plugin</artifactId>
+        <version>${quasar-maven-plugin.version}</version>
+        <configuration>
+          <check>true</check>
+          <debug>true</debug>
+          <verbose>true</verbose>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>instrument</goal>
+            </goals>
+          </execution>
+        </executions>
+        <dependencies>
+          <!--
+          override the internal dependency to use the same quasar version as the one used by vert.x sync, it
+          works until they change the API.
+          -->
+          <dependency>
+            <groupId>co.paralleluniverse</groupId>
+            <artifactId>quasar-core</artifactId>
+            <version>${quasar-core.version}</version>
+          </dependency>
+        </dependencies>
+      </plugin>
+
+      <!-- Collecting classpath entries as properties in the form groupId:artifactId:type:[classifier]
+           as per http://maven.apache.org/plugins/maven-dependency-plugin/properties-mojo.html -->
+      <plugin>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>2.10</version>
+        <executions>
+          <execution>
+            <id>getClasspathFilenames</id>
+            <goals>
+              <goal>properties</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.asciidoctor</groupId>
+        <artifactId>asciidoctor-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>process-asciidoc</goal>
+            </goals>
+            <phase>package</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <executions>
+          <execution>
+            <phase>package</phase>
+            <goals>
+              <goal>javadoc</goal>
+            </goals>
+            <configuration>
+              <reportOutputDirectory>${project.build.directory}/docs</reportOutputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-clean-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>default-clean</id>
+            <configuration>
+              <filesets>
+                <fileset>
+                  <directory>${asciidoc.dir}</directory>
+                </fileset>
+              </filesets>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>assemble-docs</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+            <configuration>
+              <attach>true</attach>
+              <descriptors>
+                <descriptor>src/main/assembly/docs.xml</descriptor>
+              </descriptors>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <configuration>
+
+          <!--<systemPropertyVariables>-->
+          <!--<co.paralleluniverse.fibers.verifyInstrumentation>true</co.paralleluniverse.fibers.verifyInstrumentation>-->
+          <!--</systemPropertyVariables>-->
+          <!--<argLine>-Dco.paralleluniverse.fibers.verifyInstrumentation=true</argLine>-->
+
+          <!-- Enable if using compile-time (AoT) instrumentation -->
+          <!-- argLine>-Dco.paralleluniverse.fibers.disableAgentWarning</argLine -->
+
+          <!-- Quasar Agent for JDK 7 -->
+          <argLine>-javaagent:${co.paralleluniverse:quasar-core:jar:jdk8}</argLine>
+          <!--<forkCount>1</forkCount>-->
+          <!--<reuseForks>true</reuseForks>-->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>

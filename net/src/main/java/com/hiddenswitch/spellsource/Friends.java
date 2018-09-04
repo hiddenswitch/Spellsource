@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.client.models.FriendPutRequest;
 import com.hiddenswitch.spellsource.client.models.FriendPutResponse;
 import com.hiddenswitch.spellsource.client.models.UnfriendResponse;

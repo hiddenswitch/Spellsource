@@ -1,9 +1,9 @@
 package net.demilich.metastone.game;
 
 import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableCallable;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.Vertx;

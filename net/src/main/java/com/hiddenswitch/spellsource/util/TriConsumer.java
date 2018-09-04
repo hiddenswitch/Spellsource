@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 
 @FunctionalInterface
 public interface TriConsumer<T1, T2, T3> {

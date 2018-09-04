@@ -1,32 +1,15 @@
 include *.md
 include setup.py
-
-include cards/build.gradle
 include cards/LICENSE
 include cards/README.md
-recursive-include cards/src *.*
-
-include client/build.gradle
-include client/gradle.properties
 include client/README.md
-recursive-include client/src *.*
-recursive-include client/docs *.*
-
-include cluster/build.gradle
 include cluster/LICENSE
 include cluster/README.md
-recursive-include cluster/src *.*
-
 include game/build.gradle
 include game/LICENSE
 include game/README.md
-recursive-include game/src *.*
-
 include net/build.gradle
 include net/LICENSE
-include net/lib/quasar-core-0.7.9-jdk8.jar
-recursive-include net/src *.*
-
 include build.gradle
 include build.sh
 include client.sh

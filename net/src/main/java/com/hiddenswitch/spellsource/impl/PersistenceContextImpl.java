@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
