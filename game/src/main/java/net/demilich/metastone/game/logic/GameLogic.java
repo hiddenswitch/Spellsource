@@ -21,7 +21,6 @@ import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -703,25 +702,23 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		//Implement SpellOverrideAura
-        Object clas = spellDesc.get(SpellArg.CLASS);
-        Entity finalSource = source;
-        List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
-                .filter(t -> t instanceof SpellOverrideAura)
-                .map(t -> (Aura) t)
-                .filter(((Predicate<Aura>) Aura::isExpired).negate())
-                .filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(clas))
-                .filter(aura -> context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).get(0).getId() == playerId)
-				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
-						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
-                .collect(Collectors.toList());
-        if (!overrideAuras.isEmpty()) {
-            for (Aura aura : overrideAuras) {
-                for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
-                    spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
-                }
-            }
-
-        }
+		Class<? extends Spell> spellClass = spellDesc.getDescClass();
+		Entity finalSource = source;
+		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof SpellOverrideAura)
+				.map(t -> (Aura) t)
+				.filter(((Predicate<Aura>) Aura::isExpired).negate())
+				.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
+				.filter(aura -> aura.getAffectedEntities().contains(playerId))
+				.collect(Collectors.toList());
+		if (!overrideAuras.isEmpty()) {
+			spellDesc = spellDesc.clone();
+			for (Aura aura : overrideAuras) {
+				for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
+					spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
+				}
+			}
+		}
 
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
 		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
@@ -2683,7 +2680,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				switch (action.getActionType()) {
 					case HERO_POWER:
 					case SPELL:
-						if (action instanceof PlayChooseOneCardAction){
+						if (action instanceof PlayChooseOneCardAction) {
 							PlayChooseOneCardAction chooseOneCardAction = (PlayChooseOneCardAction) action;
 							if (chooseOneCardAction.getSpell().hasPredefinedTarget()) {
 								SpellDesc targetChangedSpell = chooseOneCardAction.getSpell().removeArg(SpellArg.TARGET);
@@ -3812,7 +3809,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		power.markUsed();
 		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
-		context.fireGameEvent(new HeroPowerEffectTriggeredEvent(context, playerId, power));
 	}
 
 	@Suspendable

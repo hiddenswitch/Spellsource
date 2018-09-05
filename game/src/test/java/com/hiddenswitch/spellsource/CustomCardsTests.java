@@ -2810,7 +2810,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testHagara() {
+	public void testHagaraTheStormbinder() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
@@ -2827,6 +2827,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 0);
 		}, HeroClass.SILVER, HeroClass.SILVER);
 	}
+
 	@Test
 	public void testAFinalStrike() {
 		runGym((context, player, opponent) -> {
@@ -2840,6 +2841,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), 40);
 		});
 	}
+
 	@Test
 	public void testVereesaWindrunner2() {
 		runGym((context, player, opponent) -> {
@@ -2876,6 +2878,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getWeaponZone().get(0).getDurability(), 3);
 		});
 	}
+
 	@Test
 	public void testLunasOtherPocketGalaxy() {
 		runGym((context, player, opponent) -> {
@@ -2887,6 +2890,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.isDestroyed(), false);
 		});
 	}
+
 	@Test
 	public void testLittleHelper() {
 		runGym((context, player, opponent) -> {
@@ -3002,7 +3006,7 @@ public class CustomCardsTests extends TestBase {
 			} catch (AssertionError e) {
 				i++;
 			}
-			assertEquals(i ,1);
+			assertEquals(i, 1);
 			playCard(context, player, "weapon_ulthalesh");
 
 			playMinionCardWithBattlecry(context, player, boi, enemyWisp);
@@ -3060,7 +3064,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_fandral_staghelm");
 			player.setMana(2);
 			assertEquals(context.getLogic().getValidActions(player.getId()).stream().count(), 2);
-			context.getLogic().performGameAction(player.getId(),context.getLogic().getValidActions(player.getId())
+			context.getLogic().performGameAction(player.getId(), context.getLogic().getValidActions(player.getId())
 					.stream().filter(gameAction -> gameAction.getActionType().equals(ActionType.HERO_POWER)).findFirst().get());
 			context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference());
 			assertEquals(player.getHero().getAttack(), 3);

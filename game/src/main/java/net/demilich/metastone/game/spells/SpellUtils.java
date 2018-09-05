@@ -645,4 +645,24 @@ public class SpellUtils {
 			return cards;
 		}
 	}
+
+	protected static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (Aura) t)
+						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
+	}
+
+	protected static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (Aura) t)
+						.filter(((Predicate<Aura>) Aura::isExpired).negate())
+						.map(aura -> aura.getDesc().getApplyEffect()))
+				.toArray(SpellDesc[]::new);
+	}
 }

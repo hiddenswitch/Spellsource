@@ -3,8 +3,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-public class HeroPowerEffectTrigger extends EventTrigger {
-	public HeroPowerEffectTrigger(EventTriggerDesc desc) {
+public class HeroPowerUsedTrigger extends EventTrigger {
+	public HeroPowerUsedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
 	@Override
@@ -13,6 +13,6 @@ public class HeroPowerEffectTrigger extends EventTrigger {
 	}
 	@Override
 	public GameEventType interestedIn() {
-		return GameEventType.HERO_POWER_EFFECT_TRIGGERED;
+		return GameEventType.HERO_POWER_USED;
 	}
 }
