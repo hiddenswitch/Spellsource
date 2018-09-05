@@ -1,0 +1,44 @@
+{
+  "name": "Claws of Ursoc",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "BROWN",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "After your hero attacks, cast 'Swipe' on the target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SwipeSpell",
+          "target": "EVENT_TARGET",
+          "value": {
+            "class": "SpellDamageValueProvider",
+            "value": 4
+          },
+          "secondaryTarget": "ENEMY_CHARACTERS",
+          "secondaryValue": {
+            "class": "SpellDamageValueProvider",
+            "value": 1
+          }
+        },
+        {
+          "class": "RevealCardSpell",
+          "targetPlayer": "SELF",
+          "card": "spell_swipe"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

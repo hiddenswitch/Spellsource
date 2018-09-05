@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +16,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Changes the {@link SpellArg#TARGET_PLAYER} hero power to a random hero power retrieved from {@link
@@ -27,6 +29,12 @@ import java.util.List;
 public class ChangeHeroPowerSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroPowerSpell.class);
+
+	public static SpellDesc create(String card) {
+		Map<SpellArg, Object> arguments = new SpellDesc(ChangeHeroPowerSpell.class);
+		arguments.put(SpellArg.CARD, card);
+		return new SpellDesc(arguments);
+	}
 
 	@Override
 	@Suspendable

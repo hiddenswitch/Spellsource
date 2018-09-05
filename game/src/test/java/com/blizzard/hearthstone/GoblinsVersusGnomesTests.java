@@ -12,6 +12,10 @@ import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import javax.ws.rs.GET;
+
+import static org.testng.Assert.assertEquals;
+
 public class GoblinsVersusGnomesTests extends TestBase {
 
 	@Test
@@ -123,5 +127,25 @@ public class GoblinsVersusGnomesTests extends TestBase {
 		context.getLogic().performGameAction(rogue.getId(), action);
 
 		Assert.assertEquals(paladin.getMinions().size(), 1);
+	}
+
+	@Test
+	public void testSteamwheedleSniper() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_wisp");
+			player.setMana(10);
+			int actionsBefore = (int) context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(player.getHeroPowerZone().get(0).getReference()))
+					.count();
+			playCard(context, player, "minion_steamwheedle_sniper");
+			int actionsAfter = (int) context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(player.getHeroPowerZone().get(0).getReference()))
+					.count();
+			assertEquals(actionsBefore, 1);
+			assertEquals(actionsAfter, 4);
+
+		}, HeroClass.GREEN, HeroClass.GREEN);
+
+
 	}
 }
