@@ -1,0 +1,66 @@
+{
+  "name": "Warswords of the Valarjar",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "damage": 1,
+  "durability": 4,
+  "rarity": "LEGENDARY",
+  "description": "Cleave. Start of Game: Take 10 damage and equip this from your deck.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "GameStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RevealCardSpell",
+          "targetPlayer": "SELF",
+          "target": "SELF"
+        },
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 10
+        },
+        {
+          "class": "EquipWeaponSpell",
+          "targetPlayer": "SELF",
+          "card": "weapon_warswords_of_the_valarjar"
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "SELF"
+        }
+      ]
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "ATTACK"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "NEVER_MULLIGANS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

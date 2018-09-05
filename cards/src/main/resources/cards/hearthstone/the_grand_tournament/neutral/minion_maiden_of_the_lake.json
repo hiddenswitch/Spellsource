@@ -9,8 +9,8 @@
   "description": "Your Hero Power costs (1).",
   "cardCostModifier": {
     "class": "CardCostModifier",
+    "target": "FRIENDLY_HERO_POWER",
     "value": 1,
-    "cardType": "HERO_POWER",
     "operation": "SET",
     "targetPlayer": "SELF"
   },

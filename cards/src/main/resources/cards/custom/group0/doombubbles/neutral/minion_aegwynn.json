@@ -34,10 +34,20 @@
           "invert": true
         },
         "spell": {
-          "class": "ModifyAttributeSpell",
-          "target": "FRIENDLY_PLAYER",
-          "value": 2,
-          "attribute": "SPELL_DAMAGE"
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ModifyAttributeSpell",
+              "target": "FRIENDLY_PLAYER",
+              "value": 2,
+              "attribute": "SPELL_DAMAGE"
+            },
+            {
+              "class": "RevealCardSpell",
+              "target": "SELF",
+              "targetPlayer": "SELF"
+            }
+          ]
         }
       }
     }

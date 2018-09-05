@@ -327,6 +327,7 @@ public enum Attribute {
 	 * <p>
 	 * This implements the Fandral Staghelm card text.
 	 */
+	@Deprecated
 	BOTH_CHOOSE_ONE_OPTIONS,
 	/**
 	 * Summoning sickness prevents a {@link Minion} from attacking the same turn it is played or summoned. Minions with
@@ -438,6 +439,7 @@ public enum Attribute {
 	 * <p>
 	 * Implements Steamwheedle Sniper
 	 */
+	@Deprecated
 	HERO_POWER_CAN_TARGET_MINIONS,
 	/**
 	 * When any {@link Entity} alive has this attribute, the owning player's hero power freezes its target.
@@ -875,6 +877,11 @@ public enum Attribute {
 	 * Implements Electra Stormsurge
 	 */
 	SPELLS_CAST_TWICE,
+
+	/*
+	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 */
+	ATTACK_MULTIPLIER,
 
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.

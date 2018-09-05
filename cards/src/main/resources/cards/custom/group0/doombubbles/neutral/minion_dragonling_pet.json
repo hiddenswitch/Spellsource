@@ -35,8 +35,18 @@
         "invert": true
       },
       "spell": {
-        "class": "FromDeckToHandSpell",
-        "target": "SELF"
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "FromDeckToHandSpell",
+            "target": "SELF"
+          }
+        ]
       }
     }
   },

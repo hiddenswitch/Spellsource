@@ -1,0 +1,51 @@
+{
+	"name": "Truthguard",
+	"baseManaCost": 10,
+	"type": "WEAPON",
+	"damage": 0,
+	"durability": 8,
+	"heroClass": "GOLD",
+	"rarity": "LEGENDARY",
+	"description": "Whene your hero takes damage, this takes it instead. Deathrattle: Resurrect your Divine Shield minions.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "PreDamageTrigger",
+			"sourcePlayer": "BOTH",
+			"targetPlayer": "SELF",
+			"targetEntityType": "HERO"
+		},
+		"spell": {
+			"class": "MetaSpell",
+			"spells": [
+				{
+					"class": "ModifyDurabilitySpell",
+          "targetPlayer": "SELF",
+          "value": {
+            "class": "EventValueProvider",
+            "multiplier": -1
+          }
+				},
+				{
+					"class": "ModifyDamageSpell",
+					"operation": "SET",
+					"value": 0
+				}
+			]
+		}
+	},
+	"deathrattle": {
+		"class": "ResurrectSpell",
+		"value": 7,
+		"cardFilter": {
+			"class": "CardFilter",
+			"attribute": "DIVINE_SHIELD",
+			"operation": "HAS"
+		}
+	},
+	"attributes": {
+		"DEATHRATTLES": true
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

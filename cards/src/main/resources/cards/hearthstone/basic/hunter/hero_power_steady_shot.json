@@ -8,9 +8,9 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
+    "target": "ENEMY_HERO",
     "spell": {
       "class": "DamageSpell",
-      "target": "ENEMY_HERO",
       "value": 2
     }
   },
