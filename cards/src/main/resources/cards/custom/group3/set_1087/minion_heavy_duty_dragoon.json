@@ -4,8 +4,9 @@
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 3,
-  "baseHp": 5,
+  "baseHp": 6,
   "rarity": "RARE",
+  "race": "DRAGON",
   "description": "Your Hero Power gives 1 more Attack.",
   "aura": {
     "class": "CardAura",
