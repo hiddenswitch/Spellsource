@@ -505,6 +505,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 			case HERO_POWER:
 			case BATTLEFIELD:
 			case WEAPON:
+			case PLAYER:
 				return true;
 		}
 
