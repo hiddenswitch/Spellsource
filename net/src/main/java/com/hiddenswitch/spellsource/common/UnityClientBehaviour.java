@@ -164,6 +164,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
 
 		switch (message.getMessageType()) {
+			case PINGPONG:
+				// The first message indicates the player has connected or reconnected.
+				for (ActivityMonitor activityMonitor : activityMonitors) {
+					activityMonitor.activity();
+				}
+				break;
 			case FIRST_MESSAGE:
 				lastStateSent = null;
 				// The first message indicates the player has connected or reconnected.
