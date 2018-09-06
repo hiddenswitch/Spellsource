@@ -91,6 +91,7 @@ test {
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
     systemProperty "spellsource.port", "8080"
     systemProperty "spellsource.root.logger.level", "DEBUG"
+    systemProperty "games.defaultNoActivityTimeout", "999999000"
     main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
     classpath = sourceSets.main.runtimeClasspath
     jvmArgs = ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}=mb"]
@@ -99,6 +100,7 @@ task(runDebug, dependsOn: 'classes', type: JavaExec) {
 task(local, dependsOn: 'classes', type: JavaExec) {
     systemProperty "spellsource.port", "8080"
     systemProperty "spellsource.root.logger.level", "DEBUG"
+    systemProperty "games.defaultNoActivityTimeout", "999999000"
     main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     classpath = sourceSets.main.runtimeClasspath

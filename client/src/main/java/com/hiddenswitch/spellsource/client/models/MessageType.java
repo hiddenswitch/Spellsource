@@ -52,7 +52,9 @@ public enum MessageType {
   
   TOUCH("TOUCH"),
   
-  CONCEDE("CONCEDE");
+  CONCEDE("CONCEDE"),
+  
+  PINGPONG("PINGPONG");
 
   private String value;
 
