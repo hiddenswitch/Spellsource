@@ -52,7 +52,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param desc
 	 * @param source
 	 * @param targets
-	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter) for the logic which filters the targets
+	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter, Entity) for the logic which filters the targets
 	 * argument.
 	 */
 	@Suspendable
@@ -64,7 +64,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 		}
 
 		EntityFilter targetFilter = desc.getEntityFilter();
-		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 		// there is at least one valid target and the RANDOM_TARGET flag is set,
 		// pick one randomly
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {

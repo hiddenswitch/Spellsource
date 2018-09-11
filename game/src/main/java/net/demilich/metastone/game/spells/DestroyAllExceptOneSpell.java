@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.github.fromage.quasi.fibers.Suspendable;
-import net.demilich.metastone.game.spells.desc.SpellArg;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,7 +33,7 @@ public class DestroyAllExceptOneSpell extends DestroySpell {
 		}
 		EntityFilter filter = desc.getEntityFilter();
 		List<Entity> destroyedTargets = new ArrayList<Entity>(targets);
-		List<Entity> potentialSurvivors = SpellUtils.getValidTargets(context, player, destroyedTargets, filter);
+		List<Entity> potentialSurvivors = SpellUtils.getValidTargets(context, player, destroyedTargets, filter, source);
 		if (!potentialSurvivors.isEmpty()) {
 			Entity randomTarget = context.getLogic().getRandom(potentialSurvivors);
 			destroyedTargets.remove(randomTarget);

@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import com.github.fromage.quasi.fibers.Suspendable;
@@ -11,7 +10,6 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -100,7 +98,7 @@ public class CastFromGroupSpell extends Spell {
 			targets = originalTargets;
 		}
 		EntityFilter targetFilter = desc.getEntityFilter();
-		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 		Entity randomTarget = null;
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
 			randomTarget = context.getLogic().getRandom(validTargets);

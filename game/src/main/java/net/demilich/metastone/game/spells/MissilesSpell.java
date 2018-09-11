@@ -43,7 +43,7 @@ public class MissilesSpell extends DamageSpell {
 			List<Entity> validTargets;
 			if (desc.containsKey(SpellArg.FILTER)) {
 				EntityFilter targetFilter = desc.getEntityFilter();
-				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
 				validTargets = SpellUtils.getValidRandomTargets(targets);

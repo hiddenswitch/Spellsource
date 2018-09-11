@@ -45,7 +45,7 @@ public class HealingMissilesSpell extends HealSpell {
 			List<Entity> validTargets;
 			if (desc.containsKey(SpellArg.FILTER)) {
 				EntityFilter targetFilter = desc.getEntityFilter();
-				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
 				EntityFilter targetFilter = new EntityFilter(new EntityFilterDesc(new HashMap<>())) {
@@ -54,7 +54,7 @@ public class HealingMissilesSpell extends HealSpell {
 						return ((Actor) entity).isWounded();
 					}
 				};
-				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			}
 

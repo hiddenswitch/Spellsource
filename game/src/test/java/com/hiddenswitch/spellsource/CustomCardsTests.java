@@ -50,6 +50,18 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testMenacingDragotron() {
+		runGym((context, player, opponent) -> {
+			Minion toDestroy = playMinionCard(context, player, "minion_menacing_dragotron");
+			Minion shouldBeDestroyed = playMinionCard(context, player, "minion_snowflipper_penguin");
+			Minion shouldNotBeDestroyed = playMinionCard(context, player, "minion_bloodfen_raptor");
+			destroy(context, toDestroy);
+			assertTrue(shouldBeDestroyed.isDestroyed());
+			assertFalse(shouldNotBeDestroyed.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testBloodPresence() {
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(27);
