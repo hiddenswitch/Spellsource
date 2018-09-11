@@ -1,6 +1,6 @@
 {
   "name": "Cybernetic Rager",
-  "baseManaCost": 3,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 15,
@@ -8,7 +8,7 @@
   "rarity": "FREE",
   "race": "MECH",
   "description": "",
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
