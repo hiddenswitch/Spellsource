@@ -122,8 +122,6 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							HALL_OF_FAME,
-							PROCEDURAL_PREVIEW,
-							CardSet.SPELLSOURCE,
 							CardSet.CUSTOM
 					))
 			);
