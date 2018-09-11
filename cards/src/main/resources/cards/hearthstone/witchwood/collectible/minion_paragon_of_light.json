@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "While this minion has 3 or more Attack, it has <b>Taunt</b> and <b>Lifesteal</b>.",
+  "description": "While this minion has 3 or more Attack, it has Taunt and Lifesteal.",
   "attributes": {},
   "collectible": true,
   "set": "WITCHWOOD",
