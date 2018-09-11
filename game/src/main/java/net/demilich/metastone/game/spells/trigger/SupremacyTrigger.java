@@ -18,7 +18,11 @@ public final class SupremacyTrigger extends AfterPhysicalAttackTrigger {
 
 	@Override
 	protected boolean hostConditionMet(GameEvent event, Entity host) {
-		return event.getEventSource() == host;
+		if (host.getEntityType() == EntityType.WEAPON) {
+			return host.getOwner() == event.getEventSource().getOwner() && event.getEventSource().getEntityType() == EntityType.HERO;
+		} else {
+			return event.getEventSource() == host;
+		}
 	}
 
 	@Override
