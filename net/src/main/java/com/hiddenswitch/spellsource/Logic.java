@@ -58,7 +58,6 @@ public interface Logic {
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					if (context.event().getDefender() == null
 							|| context.event().getAttacker() == null
-							|| context.event().getDefender().isDestroyed()
 							|| context.event().getDefender().getCardInventoryId() == null) {
 						return;
 					}
@@ -72,7 +71,6 @@ public interface Logic {
 				(PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 					if (context.event().getDefender() == null
 							|| context.event().getAttacker() == null
-							|| context.event().getDefender().isDestroyed()
 							|| context.event().getDefender().getSourceCard() == null) {
 						return;
 					}
