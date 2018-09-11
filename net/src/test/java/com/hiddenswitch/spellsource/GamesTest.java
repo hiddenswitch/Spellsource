@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public class GamesTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GamesTest.class);
-
+	
 	@Test
 	public void testReconnectsResumesMulligan(TestContext context) throws InterruptedException {
 		AtomicInteger mulligans = new AtomicInteger(0);
