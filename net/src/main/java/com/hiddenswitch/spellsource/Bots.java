@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.github.fromage.quasi.strands.Strand;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
@@ -102,8 +103,16 @@ public interface Bots {
 
 		try {
 			GameAction result = awaitResult(res -> Vertx.currentContext().executeBlocking(fut -> {
+				// TODO: We shouldn't really tie up a general blocking executor for this computation.
 				try {
+					long startTime = System.currentTimeMillis();
 					final GameAction res1 = behaviour.requestAction(context, context.getPlayer(request.playerId), request.validActions);
+					long endTime = System.currentTimeMillis();
+					long thinkingDelay = getDefaultBotThinkingDelay();
+					long waitTime = Math.max(thinkingDelay - endTime + startTime, 0);
+					if (waitTime > 0L) {
+						Strand.sleep(waitTime);
+					}
 					fut.complete(res1);
 				} catch (Throwable t) {
 					fut.fail(t);
@@ -157,5 +166,16 @@ public interface Bots {
 
 	static Supplier<? extends Behaviour> getBehaviour() {
 		return BEHAVIOUR.get();
+	}
+
+	/**
+	 * Retreieves a value in milliseconds that the bot should sleep before sending its computed response to the server.
+	 * <p>
+	 * This value is helpful for debugging or simulating a real player.
+	 *
+	 * @return A delay in milliseconds
+	 */
+	static long getDefaultBotThinkingDelay() {
+		return Long.parseLong(System.getenv().getOrDefault("SPELLSOURCE_BOT_THINKING_DELAY", System.getProperty("spellsource.bots.thinking_delay", "0")));
 	}
 }
