@@ -2,7 +2,7 @@
   "name": "Doubling Imp",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "VIOLET",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
