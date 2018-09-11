@@ -50,11 +50,26 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testGrimestreetVigilante() {
+		runGym((context, player, opponent) -> {
+			Minion vigilante = playMinionCard(context, player, "minion_grimestreet_vigilante");
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_snowflipper_penguin");
+			context.endTurn();
+			Card bloodfen = receiveCard(context, player, "minion_bloodfen_raptor");
+			attack(context, player, vigilante, target);
+			assertEquals(bloodfen.getAttributeValue(Attribute.ATTACK_BONUS), 4);
+			Minion bloodfenMinion = playMinionCard(context, player, bloodfen);
+			assertEquals(bloodfenMinion.getAttack(), bloodfenMinion.getBaseAttack() + 4);
+		});
+	}
+
+	@Test
 	public void testColdsteelBlade() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "weapon_coldsteel");
 			context.endTurn();
-			Minion target = playMinionCard(context, player, "minion_snowflipper_penguin");
+			Minion target = playMinionCard(context, opponent, "minion_snowflipper_penguin");
 			context.endTurn();
 			attack(context, player, player.getHero(), target);
 			assertEquals(player.getMinions().size(), 1);
