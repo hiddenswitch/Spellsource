@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
@@ -7,6 +8,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -19,6 +21,24 @@ import java.util.List;
 import static org.testng.Assert.*;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
+
+	@Test()
+	public void testDiscoverActionsWithLowDepth() {
+		runGym((context, player, opponent) -> {
+			GameStateValueBehaviour checkDepth = new GameStateValueBehaviour();
+			checkDepth.setMaxDepth(2);
+			for (int i = 0; i < 9; i++) {
+				receiveCard(context, player, "minion_ivory_knight");
+			}
+			shuffleToDeck(context, player, "passive_zero_cost");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
+			context.setBehaviour(player.getId(), checkDepth);
+
+			while (context.takeActionInTurn()) {
+			}
+		});
+	}
 
 	@Test
 	public void testPlaysWildGrowth() {
@@ -94,10 +114,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	public void testCorrectOrder() {
 		runGym((context, player, opponent) -> {
 			GameStateValueBehaviour checkDepth = new GameStateValueBehaviour();
-			if (checkDepth.getMaxDepth() < 5) {
-				// the expected behaviour is different
-				return;
-			}
+			checkDepth.setMaxDepth(5);
 			putOnTopOfDeck(context, opponent, "minion_bloodfen_raptor");
 			opponent.getHero().setHp(4);
 			// Your hero power is, Equip a 1/1 Weapon (costs 2)
