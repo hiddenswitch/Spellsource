@@ -126,7 +126,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			receiveCard(context, player, "minion_shattered_sun_cleric");
 			// Cost 1, Has Charge while you have a weapon equipped
 			receiveCard(context, player, "minion_southsea_deckhand");
-			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
+			context.setBehaviour(player.getId(), checkDepth);
 
 			while (context.takeActionInTurn()) {
 			}

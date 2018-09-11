@@ -2,18 +2,14 @@ package net.demilich.metastone.game.spells;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.OrFilter;
 
 /**
  * Casts {@link SpellArg#SPELL} on a random target from the list of targets in {@link SpellArg#TARGET} at most {@link
@@ -33,7 +29,7 @@ public class MultiTargetSpell extends Spell {
 		int number = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		EntityFilter filter = (EntityFilter) desc.get(SpellArg.FILTER);
-		List<Entity> validTargets = SpellUtils.getValidRandomTargets(SpellUtils.getValidTargets(context, player, targets, filter));
+		List<Entity> validTargets = SpellUtils.getValidRandomTargets(SpellUtils.getValidTargets(context, player, targets, filter, source));
 		for (int i = 0; i < number; i++) {
 			if (validTargets.isEmpty()) {
 				return;

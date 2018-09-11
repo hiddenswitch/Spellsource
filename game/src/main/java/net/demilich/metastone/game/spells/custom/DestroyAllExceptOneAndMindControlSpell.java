@@ -31,7 +31,7 @@ public class DestroyAllExceptOneAndMindControlSpell extends DestroySpell {
         }
         EntityFilter filter = desc.getEntityFilter();
         List<Entity> destroyedTargets = new ArrayList<>(targets);
-        List<Entity> potentialSurvivors = SpellUtils.getValidTargets(context, player, destroyedTargets, filter);
+        List<Entity> potentialSurvivors = SpellUtils.getValidTargets(context, player, destroyedTargets, filter, source);
         if (!potentialSurvivors.isEmpty()) {
             Entity randomTarget = context.getLogic().getRandom(potentialSurvivors);
             destroyedTargets.remove(randomTarget);
