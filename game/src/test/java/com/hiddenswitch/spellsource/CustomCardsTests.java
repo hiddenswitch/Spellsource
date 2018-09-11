@@ -417,6 +417,9 @@ public class CustomCardsTests extends TestBase {
 			receiveCard(context, player, "minion_bloodfen_raptor");
 			context.getLogic().endOfSequence();
 			assertEquals(knight.getAttack(), knight.getBaseAttack() + 1);
+			receiveCard(context, opponent, "minion_bloodfen_raptor");
+			context.getLogic().endOfSequence();
+			assertEquals(knight.getAttack(), knight.getBaseAttack() + 1, "Opponent card should not buff mini knight");
 			context.getLogic().removeCard(player.getHand().get(0));
 			context.getLogic().endOfSequence();
 			assertEquals(knight.getAttack(), knight.getBaseAttack() + 1);
