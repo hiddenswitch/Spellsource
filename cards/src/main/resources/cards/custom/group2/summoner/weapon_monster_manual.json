@@ -18,6 +18,9 @@
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
+      "cardSource": {
+        "class": "CatalogueSource"
+      },
       "cardFilters": [
         {
           "class": "CardFilter",
