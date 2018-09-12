@@ -1,15 +1,15 @@
 {
-	"name": "Titanstrike",
-	"baseManaCost": 10,
-	"type": "WEAPON",
-	"damage": 5,
-	"durability": 2,
-	"heroClass": "GREEN",
-	"rarity": "LEGENDARY",
-	"description": "Battlecry: Summon your Animal Companions that died this game.",
-	"battlecry": {
-		"spell": {
-			"class": "ResurrectSpell",
+  "name": "Titanstrike",
+  "baseManaCost": 10,
+  "type": "WEAPON",
+  "heroClass": "GREEN",
+  "damage": 5,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon your Animal Companions that died this game.",
+  "battlecry": {
+    "spell": {
+      "class": "ResurrectSpell",
       "value": 7,
       "cardFilter": {
         "class": "OrFilter",
@@ -28,12 +28,12 @@
           }
         ]
       }
-		}
-	},
-	"attributes": {
-		"BATTLECRY": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

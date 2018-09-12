@@ -1,13 +1,13 @@
 {
-	"name": "Starsurge",
-	"baseManaCost": 3,
-	"type": "SPELL",
-	"heroClass": "BROWN",
-	"rarity": "EPIC",
-	"description": "Deal $3 damage. Your next Choose One effect this turn has both options combined",
-	"targetSelection": "ANY",
-	"spell": {
-		"class": "MetaSpell",
+  "name": "Starsurge",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Deal $3 damage. Your next Choose One effect this turn has both options combined",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
@@ -19,16 +19,16 @@
         "attribute": "BOTH_CHOOSE_ONE_OPTIONS",
         "revertTrigger": {
           "class": "CardPlayedTrigger",
-          "targetPlayer": "SELF",
-          "requiredAttribute": "CHOOSE_ONE"
+          "requiredAttribute": "CHOOSE_ONE",
+          "targetPlayer": "SELF"
         },
         "secondRevertTrigger": {
           "class": "TurnEndTrigger"
         }
       }
     ]
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

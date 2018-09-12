@@ -5,7 +5,6 @@
   "heroClass": "WHITE",
   "rarity": "FREE",
   "description": "Deal $2 damage. After you play a card, refresh this.",
-  "targetSelection": "ANY",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
@@ -16,6 +15,7 @@
       "targetPlayer": "SELF"
     }
   },
+  "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
     "description": "Deal $2 damage.",

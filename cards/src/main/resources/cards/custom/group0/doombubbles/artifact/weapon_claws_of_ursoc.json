@@ -32,8 +32,8 @@
         },
         {
           "class": "RevealCardSpell",
-          "targetPlayer": "SELF",
-          "card": "spell_swipe"
+          "card": "spell_swipe",
+          "targetPlayer": "SELF"
         }
       ]
     }

@@ -16,8 +16,8 @@
         "target": "ENEMY_MINIONS",
         "filter": {
           "class": "AttributeFilter",
-          "attribute": "HP",
           "value": 1,
+          "attribute": "HP",
           "operation": "GREATER"
         }
       },
@@ -25,15 +25,14 @@
         "class": "DamageSpell",
         "target": "ENEMY_MINIONS",
         "value": 1,
-        "ignoreSpellDamage": true,
         "filter": {
           "class": "AndFilter",
           "filters": [
             {
               "class": "AttributeFilter",
+              "value": 1,
               "attribute": "HP",
-              "operation": "GREATER",
-              "value": 1
+              "operation": "GREATER"
             },
             {
               "class": "IsDestroyedFilter",
@@ -54,7 +53,8 @@
               "invert": true
             }
           ]
-        }
+        },
+        "ignoreSpellDamage": true
       }
     }
   },

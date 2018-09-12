@@ -7,6 +7,9 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "description": "Start of Game: If your deck has no targeting spells, give your hero Spell Damage +2.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "gameTriggers": [
     {
       "eventTrigger": {
@@ -51,8 +54,5 @@
         }
       }
     }
-  ],
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

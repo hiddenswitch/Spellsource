@@ -22,8 +22,8 @@
       "alwaysApply": true,
       "applyEffect": {
         "class": "SetAttributeSpell",
-        "attribute": "ATTACK_MULTIPLIER",
-        "value": 2
+        "value": 2,
+        "attribute": "ATTACK_MULTIPLIER"
       },
       "removeEffect": {
         "class": "RemoveAttributeSpell",
