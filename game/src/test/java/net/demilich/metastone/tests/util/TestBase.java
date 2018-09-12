@@ -43,7 +43,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
 
 
-
 public class TestBase {
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
@@ -430,10 +429,14 @@ public class TestBase {
 				CardSet.CUSTOM
 		);
 
-		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(CardSet.BASIC,
+		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(
+				CardSet.BASIC,
+				CardSet.CUSTOM,
 				CardSet.CLASSIC)), "Player 1");
 
-		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(CardSet.BASIC,
+		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(
+				CardSet.BASIC,
+				CardSet.CUSTOM,
 				CardSet.CLASSIC)), "Player 2");
 
 

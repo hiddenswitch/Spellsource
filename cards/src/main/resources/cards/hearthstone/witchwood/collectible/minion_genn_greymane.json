@@ -73,18 +73,18 @@
           "class": "MetaSpell",
           "spells": [
             {
-            	"class": "CardCostModifierSpell",
-            	"target": "FRIENDLY_HERO_POWER",
-            	"cardCostModifier": {
-            		"class": "CardCostModifier",
-            		"target": "SELF",
-            		"value": 1,
-            		"operation": "SET"
-            	}
-            }, 
+              "class": "CardCostModifierSpell",
+              "target": "FRIENDLY_HERO_POWER",
+              "cardCostModifier": {
+                "class": "CardCostModifier",
+                "target": "SELF",
+                "value": 1,
+                "operation": "SET"
+              }
+            },
             {
-            	"class": "RevealCardSpell",
-            	"target": "SELF",
+              "class": "RevealCardSpell",
+              "target": "SELF",
               "targetPlayer": "SELF"
             }
           ]

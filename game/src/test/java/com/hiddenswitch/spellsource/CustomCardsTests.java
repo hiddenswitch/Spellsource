@@ -50,6 +50,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHeavyDutyDragoons() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_heavy_duty_dragoon");
+			playMinionCard(context, player, "minion_heavy_duty_dragoon");
+			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(player.getHero().getReference()));
+			context.getLogic().endOfSequence();
+			assertEquals(player.getHero().getAttack(), 3);
+		}, HeroClass.RUST, HeroClass.RUST);
+	}
+
+	@Test
 	public void testLadyDeathwhisper() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
