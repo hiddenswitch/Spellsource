@@ -146,9 +146,7 @@ public class CreateCardSpell extends Spell {
 			default:
 				return;
 		}
-		if (newCard != null) {
-			context.addTempCard(newCard);
-			context.getLogic().receiveCard(player.getId(), newCard.clone());
-		}
+		context.addTempCard(newCard);
+		context.getLogic().receiveCard(player.getId(), newCard.clone());
 	}
 }

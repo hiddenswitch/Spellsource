@@ -12,8 +12,27 @@
     "class": "HeroPowerBonusAura",
     "target": "FRIENDLY_PLAYER",
     "applyEffect": {
-      "class": "TemporaryAttackSpell",
-      "value": 1
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "HasTargetCondition"
+          },
+          {
+            "target": "TARGET",
+            "class": "AllMatchFilterCondition",
+            "filter": {
+              "class": "EntityEqualsFilter",
+              "secondaryTarget": "ALL_CHARACTERS"
+            }
+          }
+        ]
+      },
+      "spell": {
+        "class": "TemporaryAttackSpell",
+        "value": 1
+      }
     }
   },
   "collectible": true,
