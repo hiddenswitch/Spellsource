@@ -14,10 +14,14 @@
       "value": {
         "class": "ReduceValueProvider",
         "target": "ALL_MINIONS",
-        "attribute": "ATTACK",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "ATTACK"
+        },
         "operation": "MINIMUM"
       },
-      "attribute": "ATTACK"
+      "attribute": "ATTACK",
+      "operation": "EQUAL"
     },
     "randomTarget": true
   },
