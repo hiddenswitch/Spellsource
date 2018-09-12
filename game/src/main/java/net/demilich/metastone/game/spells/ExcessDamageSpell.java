@@ -23,13 +23,15 @@ public final class ExcessDamageSpell extends DamageSpell {
 		SpellDesc toTarget = desc.clone();
 		SpellDesc toExcess = desc.clone();
 		List<Entity> excessDealtTo = context.resolveTarget(player, source, desc.getSecondaryTarget());
-		int damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 6);
+		int damage = context.getLogic().applySpellpower(player, source, desc.getValue(SpellArg.VALUE, context, player, target, source, 6));
 		Actor targetActor = (Actor) target;
 		int hp = targetActor.getHp();
 		int damageToTarget = Math.max(0, Math.min(damage, hp));
 		int damageToExcess = Math.min(damage, Math.max(0, damage - hp));
 		toTarget.put(SpellArg.VALUE, damageToTarget);
+		toTarget.put(SpellArg.IGNORE_SPELL_DAMAGE, true);
 		toExcess.put(SpellArg.VALUE, damageToExcess);
+		toExcess.put(SpellArg.IGNORE_SPELL_DAMAGE, true);
 		if (!desc.getBool(SpellArg.EXCLUSIVE)) {
 			super.onCast(context, player, toTarget, source, target);
 		}
