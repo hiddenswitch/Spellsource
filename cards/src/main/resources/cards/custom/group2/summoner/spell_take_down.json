@@ -20,8 +20,8 @@
     "filter": {
       "class": "AttributeFilter",
       "value": 5,
-      "operation": "GREATER_OR_EQUAL",
-      "attribute": "BASE_MANA_COST"
+      "attribute": "BASE_MANA_COST",
+      "operation": "GREATER_OR_EQUAL"
     }
   },
   "collectible": true,

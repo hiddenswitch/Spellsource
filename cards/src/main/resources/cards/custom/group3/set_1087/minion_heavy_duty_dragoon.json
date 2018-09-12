@@ -20,8 +20,8 @@
             "class": "HasTargetCondition"
           },
           {
-            "target": "TARGET",
             "class": "AllMatchFilterCondition",
+            "target": "TARGET",
             "filter": {
               "class": "EntityEqualsFilter",
               "secondaryTarget": "ALL_CHARACTERS"
