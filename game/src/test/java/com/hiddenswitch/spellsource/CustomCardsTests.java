@@ -50,6 +50,18 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFissure() {
+		runGym((context, player, opponent) -> {
+			Minion threeTwo = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion oneOneBuffed = playMinionCard(context, player, "minion_snowflipper_penguin");
+			playCardWithTarget(context, player, "spell_nightmare", oneOneBuffed);
+			playCard(context, player, "spell_fissure");
+			assertFalse(oneOneBuffed.isDestroyed());
+			assertTrue(threeTwo.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testHeavyDutyDragoons() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_heavy_duty_dragoon");

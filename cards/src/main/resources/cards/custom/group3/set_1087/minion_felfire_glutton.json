@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "EPIC",
-  "race": "DEMON",
+  "race": "DRAGON",
   "description": "At the start of your turn, remove all enchantments and bonuses from this minion except this one.",
   "trigger": {
     "eventTrigger": {
