@@ -11,8 +11,8 @@
     "spells": [
       {
         "class": "DiscardCardsFromDeckSpell",
-        "targetPlayer": "SELF",
-        "value": 60
+        "value": 60,
+        "targetPlayer": "SELF"
       },
       {
         "class": "AddEnchantmentSpell",
@@ -23,11 +23,10 @@
           },
           "spell": {
             "class": "ShuffleToDeckSpell",
-            "targetPlayer": "SELF",
             "value": {
               "class": "AlgebraicValueProvider",
-              "value1": 60,
               "operation": "SUBTRACT",
+              "value1": 60,
               "value2": {
                 "class": "CardCountValueProvider",
                 "cardSource": {
@@ -39,7 +38,8 @@
             "cardFilter": {
               "class": "CardFilter",
               "heroClass": "BLUE"
-            }
+            },
+            "targetPlayer": "SELF"
           }
         }
       }

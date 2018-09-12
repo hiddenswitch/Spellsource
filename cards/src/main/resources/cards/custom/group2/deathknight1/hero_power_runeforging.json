@@ -1,5 +1,6 @@
 {
   "name": "Runeforging",
+  "heroPower": "hero_power_efficient_runeforging",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "ICE",
@@ -13,7 +14,6 @@
       "card": "spell_rune"
     }
   },
-  "heroPower": "hero_power_efficient_runeforging",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

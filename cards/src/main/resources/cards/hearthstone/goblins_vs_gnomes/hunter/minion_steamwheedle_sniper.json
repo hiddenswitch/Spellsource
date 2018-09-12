@@ -10,13 +10,13 @@
   "aura": {
     "class": "TargetSelectionOverrideAura",
     "target": "FRIENDLY_HERO_POWER",
-    "filter": {
-      "class": "TargetSelectionFilter",
-      "targetSelection": "NONE"
-    },
     "applyEffect": {
       "class": "NullSpell",
       "targetSelection": "ANY"
+    },
+    "filter": {
+      "class": "TargetSelectionFilter",
+      "targetSelection": "NONE"
     }
   },
   "collectible": true,

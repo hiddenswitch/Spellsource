@@ -1,5 +1,6 @@
 {
   "name": "Shapeshift",
+  "heroPower": "hero_power_dire_shapeshift",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BROWN",
@@ -15,7 +16,6 @@
       "attackBonus": 1
     }
   },
-  "heroPower": "hero_power_dire_shapeshift",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

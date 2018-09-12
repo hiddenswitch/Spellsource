@@ -1,20 +1,20 @@
 {
-	"name": "Little Helper",
-	"baseManaCost": 1,
-	"type": "MINION",
-	"baseAttack": 1,
-	"baseHp": 2,
-	"heroClass": "ANY",
-	"rarity": "RARE",
-	"race": "MECH",
-	"description": "Add a copy of your Hero Power as a spell to your hand.",
-	"battlecry": {
-		"spell": {
-			"class": "custom.HeroPowerToSpellSpell",
+  "name": "Little Helper",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Add a copy of your Hero Power as a spell to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "custom.HeroPowerToSpellSpell",
       "targetPlayer": "SELF"
-		}
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

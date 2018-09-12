@@ -4,14 +4,6 @@
   "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Your Choose One effects have only their first option. Swaps each turn.",
-  "aura": {
-    "class": "ChooseOneOverrideAura",
-    "target": "FRIENDLY_PLAYER",
-    "applyEffect": {
-      "class": "NullSpell",
-      "value": 0
-    }
-  },
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -36,6 +28,14 @@
           "card": "enchantment_scythe_of_elune_first"
         }
       ]
+    }
+  },
+  "aura": {
+    "class": "ChooseOneOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "NullSpell",
+      "value": 0
     }
   },
   "collectible": false,

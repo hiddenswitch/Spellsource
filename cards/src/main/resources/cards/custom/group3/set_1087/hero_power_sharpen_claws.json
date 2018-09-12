@@ -1,5 +1,6 @@
 {
   "name": "Sharpen Claws",
+  "heroPower": "hero_power_sharper_claws",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "RUST",
@@ -19,7 +20,6 @@
       }
     ]
   },
-  "heroPower": "hero_power_sharper_claws",
   "attributes": {},
   "collectible": false,
   "set": "CUSTOM",
