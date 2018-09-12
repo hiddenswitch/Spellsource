@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
 /**
  * Changes the targeted card's card ID to match the specified {@link AuraArg#CARD}, allowing its behaviour to change.
- *
+ * <p>
  * For example, to change your hero power to DIE, INSECT while the aura's host actor is in play:
  * <pre>
  *   {

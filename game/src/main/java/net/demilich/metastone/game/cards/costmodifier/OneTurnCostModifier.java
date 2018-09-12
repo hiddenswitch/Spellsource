@@ -40,7 +40,7 @@ public final class OneTurnCostModifier extends CardCostModifier {
 
 		super.onGameEvent(event);
 	}
-	
+
 	@Override
 	public boolean oneTurnOnly() {
 		return true;

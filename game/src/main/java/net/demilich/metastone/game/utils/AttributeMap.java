@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.utils;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * An attribute map is a {@link Map} that contains {@link Attribute} as keys and {@link Object} (typically integers and

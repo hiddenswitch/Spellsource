@@ -3,20 +3,18 @@ package net.demilich.metastone.game.behaviour.neutralnetwork;
 public class InputUnit implements Unit {
 
 	/**
-	 * 
+	 *
 	 */
 	private static final long serialVersionUID = 8699533068346744182L;
 	// the current value of the input
 	protected double value;
 
 	/**
-	 * Builds a hidden unit taking the provided number of inputs. Sets the
-	 * initial weights to be random values, using the provided RNG.
+	 * Builds a hidden unit taking the provided number of inputs. Sets the initial weights to be random values, using the
+	 * provided RNG.
 	 *
-	 * @param units
-	 *            The input units to this unit
-	 * @param random
-	 *            The random number generator
+	 * @param units  The input units to this unit
+	 * @param random The random number generator
 	 */
 	protected InputUnit() {
 	}

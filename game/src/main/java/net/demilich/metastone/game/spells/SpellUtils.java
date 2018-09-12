@@ -1,13 +1,11 @@
 package net.demilich.metastone.game.spells;
 
 import com.github.fromage.quasi.fibers.Suspendable;
-import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -15,6 +13,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
 import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -22,6 +21,7 @@ import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -295,8 +295,7 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the  and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER} zone
-	 * for the specified card
+	 * Consider the  and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER} zone for the specified card
 	 *
 	 * @param context
 	 * @param cardId
@@ -320,12 +319,11 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified inside the {@link SpellArg#CARD} and {@link SpellArg#CARDS} arguments.
 	 *
-	 * @param context The game context to use for  or {@link
-	 *                GameContext#getOutputCard()} lookups.
+	 * @param context The game context to use for  or {@link GameContext#getOutputCard()} lookups.
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.
 	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an {@code
-	 * "OUTPUT_CARD"} value corresponds to.
+	 * 		"OUTPUT_CARD"} value corresponds to.
 	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
@@ -372,7 +370,7 @@ public class SpellUtils {
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
-	 * DiscoverCardSpell}.
+	 * 		DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardList cards) {
@@ -437,7 +435,7 @@ public class SpellUtils {
 	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
-	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
+	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -486,7 +484,7 @@ public class SpellUtils {
 		List<Entity> validTargets = new ArrayList<>();
 		for (Entity entity : targets) {
 			if (entity instanceof Actor) {
-				Actor actor = (Actor)entity;
+				Actor actor = (Actor) entity;
 				if (!actor.isDestroyed() || actor.getEntityType() == EntityType.HERO) {
 					validTargets.add(actor);
 				}

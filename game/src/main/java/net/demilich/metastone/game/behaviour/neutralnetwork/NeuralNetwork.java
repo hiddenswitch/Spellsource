@@ -1,11 +1,6 @@
 package net.demilich.metastone.game.behaviour.neutralnetwork;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
+import java.io.*;
 import java.util.Random;
 
 public class NeuralNetwork implements Serializable {
@@ -19,8 +14,7 @@ public class NeuralNetwork implements Serializable {
 	/**
 	 * Method which reads and returns a network from the given file
 	 *
-	 * @param filename
-	 *            The file to read from
+	 * @param filename The file to read from
 	 */
 	public static NeuralNetwork readFrom(String filename) throws IOException, ClassNotFoundException {
 		ObjectInputStream ois = new ObjectInputStream(new FileInputStream(filename));
@@ -36,18 +30,14 @@ public class NeuralNetwork implements Serializable {
 	public HiddenUnit[][] hidden;
 
 	/**
-	 * Builds a neural network with the given number of input units, hidden
-	 * units, and output units. Thus, calling
-	 * 
+	 * Builds a neural network with the given number of input units, hidden units, and output units. Thus, calling
+	 * <p>
 	 * new NeuralNetwork(10, new int[] {20, 5});
+	 * <p>
+	 * creates a neural network with 10 input units, a layer of 20 hidden units, and then 5 output units.
 	 *
-	 * creates a neural network with 10 input units, a layer of 20 hidden units,
-	 * and then 5 output units.
-	 *
-	 * @param input
-	 *            The number of input units
-	 * @param hidden
-	 *            The number of hidden units, as well as the number of layers
+	 * @param input  The number of input units
+	 * @param hidden The number of hidden units, as well as the number of layers
 	 */
 	public NeuralNetwork(int input, int[] hidden) {
 		this.input = new InputUnit[input];
@@ -75,11 +65,10 @@ public class NeuralNetwork implements Serializable {
 	}
 
 	/**
-	 * Builds a neural network based on the provided network and copies the
-	 * weights of the provided network into the new one.
+	 * Builds a neural network based on the provided network and copies the weights of the provided network into the new
+	 * one.
 	 *
-	 * @param net
-	 *            The network to base it off of
+	 * @param net The network to base it off of
 	 */
 	public NeuralNetwork(NeuralNetwork net) {
 		this.input = new InputUnit[net.input.length];
@@ -102,8 +91,7 @@ public class NeuralNetwork implements Serializable {
 	/**
 	 * Calculates the network value given the provided input
 	 *
-	 * @param input
-	 *            The input to check
+	 * @param input The input to check
 	 * @return The network value from this input
 	 */
 	public double[] getValue(double[] input) {
@@ -125,8 +113,7 @@ public class NeuralNetwork implements Serializable {
 	/**
 	 * Method which writes this network to the given file
 	 *
-	 * @param file
-	 *            The file to write to
+	 * @param file The file to write to
 	 */
 	public void writeTo(String filename) throws IOException {
 		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(filename));

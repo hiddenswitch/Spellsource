@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.List;
-import java.util.Map;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -10,6 +7,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Casts {@link SpellArg#SPELL} on a random target from the list of targets in {@link SpellArg#TARGET} at most {@link

@@ -1,19 +1,17 @@
 package net.demilich.metastone.game.spells;
 
 import com.github.fromage.quasi.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.spells.desc.SpellArg;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.List;
 import java.util.Map;
@@ -24,7 +22,7 @@ import java.util.Map;
  *
  * @see CopyHeroPower to copy the opponent's hero power.
  * @see net.demilich.metastone.game.spells.aura.CardAura to temporarily change a card, like a hero power, to another
- * card.
+ * 		card.
  */
 public class ChangeHeroPowerSpell extends Spell {
 

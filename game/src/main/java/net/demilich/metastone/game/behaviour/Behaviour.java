@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.behaviour;
 
-import java.util.List;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
@@ -9,6 +7,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
+
+import java.util.List;
 
 /**
  * Behaviours specify a delegate for player action and mulligan requests.
@@ -20,7 +20,7 @@ import net.demilich.metastone.game.logic.GameLogic;
  *
  * @see AbstractBehaviour for default implementations of some of these requests.
  * @see net.demilich.metastone.game.shared.threat.GameStateValueBehaviour for an example of an artificial-intelligence
- * based behaviour.
+ * 		based behaviour.
  */
 public interface Behaviour extends Cloneable {
 	/***
@@ -38,8 +38,7 @@ public interface Behaviour extends Cloneable {
 	String getName();
 
 	/**
-	 * Use the provided context, player and first hand cards to determine which cards to discard during a mulligan
-	 * phase.
+	 * Use the provided context, player and first hand cards to determine which cards to discard during a mulligan phase.
 	 *
 	 * @param context The game context.
 	 * @param player  The player who's mulliganing.
@@ -93,8 +92,8 @@ public interface Behaviour extends Cloneable {
 	 * @param context      The game context where the choice is being made.
 	 * @param player       The player who is making the choice.
 	 * @param validActions The valid actions the player has to choose from.
-	 * @param handler      The callback whose argument is one of the {@code validActions} that correspond to the
-	 *                     player's choice.
+	 * @param handler      The callback whose argument is one of the {@code validActions} that correspond to the player's
+	 *                     choice.
 	 */
 	@Suspendable
 	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {

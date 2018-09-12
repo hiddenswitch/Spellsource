@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
-import java.util.List;
-
 import com.github.fromage.quasi.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -13,6 +10,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.EnrageChangedTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.List;
 
 public class EnrageAura extends Aura {
 

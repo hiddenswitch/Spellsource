@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.io.Serializable;
-import java.util.*;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
@@ -15,6 +12,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * The base class for "spells," or collections of effects in the engine.
@@ -52,8 +52,8 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param desc
 	 * @param source
 	 * @param targets
-	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter, Entity) for the logic which filters the targets
-	 * argument.
+	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter, Entity) for the logic which filters the
+	 * 		targets argument.
 	 */
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {

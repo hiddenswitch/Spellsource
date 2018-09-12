@@ -1,13 +1,13 @@
 package net.demilich.metastone.tests.util;
 
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 public class TestMinionCard extends Card {

@@ -1,10 +1,7 @@
 package net.demilich.metastone.game.behaviour;
 
-import com.github.fromage.quasi.fibers.Fiber;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.Strand;
-import com.github.fromage.quasi.strands.SuspendableRunnable;
 import com.github.fromage.quasi.strands.channels.Channels;
 import com.github.fromage.quasi.strands.channels.QueueChannel;
 import com.github.fromage.quasi.strands.channels.QueueObjectChannel;
@@ -17,7 +14,6 @@ import net.demilich.metastone.game.cards.Card;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A behaviour that will suspend until {@link #setAction(GameAction)} and {@link #setMulligan(List)} are called.

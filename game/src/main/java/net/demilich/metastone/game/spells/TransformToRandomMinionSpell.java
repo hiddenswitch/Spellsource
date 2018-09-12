@@ -1,17 +1,15 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
+
+import java.util.Map;
 
 public class TransformToRandomMinionSpell extends TransformMinionSpell {
 

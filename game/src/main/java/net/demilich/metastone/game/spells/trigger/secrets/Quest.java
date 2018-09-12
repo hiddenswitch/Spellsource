@@ -7,8 +7,8 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 /**
  * A quest is an enchantment and entity that goes into the {@link net.demilich.metastone.game.targeting.Zones#QUEST}
@@ -43,8 +43,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * amount of armor needed to be gained to fulfill the quest, in this case.
  *
  * @see EnchantmentDesc for a full description of all the fields that make a valid quest. Since a quest is just an
- * enchantment put into play a special way, the way it should be implemented is exactly the same as any other
- * enchantment.
+ * 		enchantment put into play a special way, the way it should be implemented is exactly the same as any other
+ * 		enchantment.
  */
 public class Quest extends Enchantment {
 

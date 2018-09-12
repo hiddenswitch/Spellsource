@@ -1,6 +1,9 @@
 package net.demilich.metastone.game.decks;
 
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 

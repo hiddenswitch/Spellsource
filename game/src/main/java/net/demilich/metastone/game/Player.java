@@ -148,7 +148,8 @@ public class Player extends Entity implements Serializable {
 
 	/**
 	 * Retrieves the deck for this player as it is in game. This {@link CardZone} is mutated over time. This is distinct
-	 * from a {@link GameDeck} object, which is better interpreted as the base deck from which this object was initialized.
+	 * from a {@link GameDeck} object, which is better interpreted as the base deck from which this object was
+	 * initialized.
 	 *
 	 * @return The player's deck in game.
 	 */
@@ -210,7 +211,7 @@ public class Player extends Entity implements Serializable {
 	 * previous turn.
 	 *
 	 * @return The amount of mana that is unusable this turn due to playing a card with {@link Attribute#OVERLOAD} last
-	 * turn.
+	 * 		turn.
 	 * @see Attribute#OVERLOAD for more about locking mana.
 	 */
 	public int getLockedMana() {
@@ -252,7 +253,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @return The set of secret card IDs.
 	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, Card) to see how this method plays into
-	 * rules regarding the ability to play secrets.
+	 * 		rules regarding the ability to play secrets.
 	 */
 	public Set<String> getSecretCardIds() {
 		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
@@ -291,7 +292,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param hero The hero entity.
 	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate hero changing method
-	 * for spells.
+	 * 		for spells.
 	 */
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
@@ -402,7 +403,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param zone The key.
 	 * @return An {@link EntityZone} for the corresponding zone. For {@link Zones#PLAYER}, a new zone is created on the
-	 * fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
+	 * 		fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
 	 */
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
@@ -464,7 +465,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @return A weapon zone.
 	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, Card, boolean) for the appropriate way to
-	 * mutate this zone.
+	 * 		mutate this zone.
 	 */
 	public EntityZone<Weapon> getWeaponZone() {
 		return getHero().getWeaponZone();

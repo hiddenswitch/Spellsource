@@ -1,12 +1,8 @@
 package net.demilich.metastone.tests;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.List;
-
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.CardParser;
+import net.demilich.metastone.game.shared.utils.ResourceInputStream;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.io.FileUtils;
@@ -16,8 +12,11 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.cards.CardParser;
-import net.demilich.metastone.game.shared.utils.ResourceInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.List;
 
 /**
  * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)

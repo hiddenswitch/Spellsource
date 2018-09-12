@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.cards.desc.CardCostModifierDescDeserializer;
 import net.demilich.metastone.game.cards.desc.Desc;
-import net.demilich.metastone.game.logic.CustomCloneable;
 
 import java.util.Map;
 

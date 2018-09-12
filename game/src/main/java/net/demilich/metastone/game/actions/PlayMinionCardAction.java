@@ -46,7 +46,7 @@ public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
-		Card card = (Card)context.resolveSingleTarget(getSourceReference());
+		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		Actor nextTo = (Actor) (getTargetReference() != null ? context.resolveSingleTarget(getTargetReference()) : null);
 		Minion minion = card.summon();
 		if (overrideBattlecry != null) {

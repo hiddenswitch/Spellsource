@@ -28,7 +28,7 @@ public class AfterPhysicalAttackEvent extends GameEvent implements HasValue {
 	public Actor getDefender() {
 		return defender;
 	}
-	
+
 	@Override
 	public Entity getEventSource() {
 		return getAttacker();

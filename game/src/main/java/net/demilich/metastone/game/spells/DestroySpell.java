@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -14,6 +11,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Destroys the {@code target} {@link Actor}.
@@ -37,7 +37,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  *
  * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link
- * net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute.
+ * 		net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute.
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
  */
 public class DestroySpell extends Spell {

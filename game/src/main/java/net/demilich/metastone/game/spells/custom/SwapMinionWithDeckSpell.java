@@ -8,7 +8,6 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
@@ -26,7 +25,6 @@ public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
 		Card randomCard = context.getLogic().getRandom(player.getDeck().filtered(c -> c.getCardType() == CardType.MINION));
 		context.getLogic().removeCard(randomCard);
 		// return target to deck (Now it's safe and won't destroy itself!)
-
 
 
 		// If there is no minion to shuffle... Idk, blame a wizard.

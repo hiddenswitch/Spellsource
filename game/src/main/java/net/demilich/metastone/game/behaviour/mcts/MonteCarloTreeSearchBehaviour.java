@@ -1,17 +1,15 @@
 package net.demilich.metastone.game.behaviour.mcts;
 
-import java.util.ArrayList;
-import java.util.List;
-
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
 import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MonteCarloTreeSearchBehaviour extends IntelligentBehaviour {
 

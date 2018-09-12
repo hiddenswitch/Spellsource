@@ -77,14 +77,14 @@ public enum CardCostModifierArg {
 	 * <p>
 	 * {@link Card#getBaseManaCost()} {@link AlgebraicOperation} {@link #VALUE}.
 	 * <p>
-	 * If there are multiple card cost modifiers applying on the given {@link Card}, then the game evaluates the
-	 * modifiers that came into play earliest, and uses their resulting values on the left-hand side.
+	 * If there are multiple card cost modifiers applying on the given {@link Card}, then the game evaluates the modifiers
+	 * that came into play earliest, and uses their resulting values on the left-hand side.
 	 * <p>
 	 * For <b>example</b>, to reduce the cost of the card by {@code 1}, this attribute should be set to {@link
 	 * AlgebraicOperation#SUBTRACT} and the {@link #VALUE} should be {@code 1}.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider#evaluateOperation(int, int,
-	 * AlgebraicOperation) to see more on how operations are evaluated.
+	 *    AlgebraicOperation) to see more on how operations are evaluated.
 	 */
 	OPERATION
 }

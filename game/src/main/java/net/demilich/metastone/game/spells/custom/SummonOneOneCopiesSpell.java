@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.spells.custom;
 
-import java.util.List;
-import java.util.Map;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -13,6 +10,9 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.List;
+import java.util.Map;
 
 @Deprecated
 public class SummonOneOneCopiesSpell extends Spell {

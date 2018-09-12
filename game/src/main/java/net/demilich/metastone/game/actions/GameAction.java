@@ -1,9 +1,5 @@
 package net.demilich.metastone.game.actions;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -14,6 +10,10 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An action a player can take in the game.
