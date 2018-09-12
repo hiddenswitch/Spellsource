@@ -2309,7 +2309,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                                  {@link Zones#SET_ASIDE_ZONE}.
 	 */
 	@Suspendable
-	public void stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
+	public boolean stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
 		// If the card isn't already in the SET_ASIDE_ZONE, move it
 		if (card.getZone() != Zones.SET_ASIDE_ZONE) {
 			// Move to set aside zone first.
@@ -2323,14 +2323,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Move to the destination
 		if (destination == Zones.HAND) {
-			receiveCard(newOwner.getId(), card, source, false);
+			return receiveCard(newOwner.getId(), card, source, false) != null;
 		} else if (destination == Zones.DECK) {
 			// Remove again to make shuffling to deck valid.
 			context.getPlayer(card.getOwner()).getZone(card.getZone()).remove(card);
-			shuffleToDeck(newOwner, card);
+			return shuffleToDeck(newOwner, card);
 		} else if (destination != Zones.SET_ASIDE_ZONE) {
 			throw new IllegalArgumentException(String.format("Invalid destination %s for card %s", destination.name(), card.getName()));
 		}
+		return true;
 	}
 
 	/**
@@ -3340,7 +3341,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card   The card to shuffle into that player's deck.
 	 */
 	@Suspendable
-	public void shuffleToDeck(Player player, Card card, boolean quiet) {
+	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3368,11 +3369,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				}
 				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
 			}
+			return true;
 		}
+		return false;
 	}
 
-	public void shuffleToDeck(Player player, Card card) {
-		shuffleToDeck(player, card, false);
+	@Suspendable
+	public boolean shuffleToDeck(Player player, Card card) {
+		return shuffleToDeck(player, card, false);
 	}
 
 	@Suspendable

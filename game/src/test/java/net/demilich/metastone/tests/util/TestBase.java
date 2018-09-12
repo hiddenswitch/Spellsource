@@ -407,37 +407,11 @@ public class TestBase {
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit) {
-		DeckFormat deckFormat = new DeckFormat().withCardSets(
-				CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.BLIZZARD_ADVENTURE,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZAN,
-				CardSet.NAXXRAMAS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN,
-				CardSet.PROMO,
-				CardSet.REWARD,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
-				CardSet.THE_OLD_GODS,
-				CardSet.KOBOLDS_AND_CATACOMBS,
-				CardSet.WITCHWOOD,
-				CardSet.BOOMSDAY_PROJECT,
-				CardSet.CUSTOM
-		);
+		DeckFormat deckFormat = DeckFormat.CUSTOM;
 
-		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(
-				CardSet.BASIC,
-				CardSet.CUSTOM,
-				CardSet.CLASSIC)), "Player 1");
+		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, deckFormat), "Player 1");
 
-		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(
-				CardSet.BASIC,
-				CardSet.CUSTOM,
-				CardSet.CLASSIC)), "Player 2");
+		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, deckFormat), "Player 2");
 
 
 		GameLogic logic = new GameLogic();

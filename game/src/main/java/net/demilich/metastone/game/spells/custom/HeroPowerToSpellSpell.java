@@ -80,6 +80,7 @@ public class HeroPowerToSpellSpell extends Spell {
 			spellCardDesc.setCollectible(false);
 
 			spellCard = spellCardDesc.create();
+			context.addTempCard(spellCard.clone());
 			if (heroPower.hasAttribute(Attribute.LIFESTEAL)) {
 				spellCard.setAttribute(Attribute.LIFESTEAL);
 			}

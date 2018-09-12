@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -62,6 +63,8 @@ public class RandomCardTargetSpell extends Spell {
 			destination = Zones.GRAVEYARD;
 		}
 
+		EntityLocation oldLocation = spellCard.getEntityLocation();
+
 		if (spellCard.getId() == IdFactory.UNASSIGNED) {
 			spellCard.setId(context.getLogic().generateId());
 		}
@@ -69,10 +72,10 @@ public class RandomCardTargetSpell extends Spell {
 			spellCard.setOwner(player.getId());
 		}
 
+		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 		context.getLogic().revealCard(player, spellCard);
 
 		if (spellCard.getTargetSelection() == TargetSelection.NONE) {
-			spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
@@ -85,9 +88,13 @@ public class RandomCardTargetSpell extends Spell {
 		EntityReference randomTarget = null;
 		// Grand Archivist must have a valid target
 		if (targets != null && !targets.isEmpty()) {
-			spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			randomTarget = context.getLogic().getRandom(targets).getReference();
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, context.resolveSingleTarget(randomTarget));
+			spellCard.moveOrAddTo(context, destination);
+			context.getLogic().removeCard(spellCard);
+		} else if (!oldLocation.equals(EntityLocation.UNASSIGNED)) {
+			spellCard.moveOrAddTo(context, oldLocation.getZone(), oldLocation.getIndex());
+		} else {
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
 		}

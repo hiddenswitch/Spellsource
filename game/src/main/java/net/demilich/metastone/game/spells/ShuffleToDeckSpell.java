@@ -32,10 +32,11 @@ public class ShuffleToDeckSpell extends Spell {
 			for (int i = 0; i < copies; i++) {
 				final Card copy = target.getSourceCard().getCopy();
 				copy.getAttributes().putAll(map);
-				context.getLogic().shuffleToDeck(player, copy, quiet);
-				copy.setAttribute(Attribute.SHUFFLED);
-				SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
-				context.getLogic().removeAttribute(copy, Attribute.SHUFFLED);
+				if (context.getLogic().shuffleToDeck(player, copy, quiet)) {
+					copy.setAttribute(Attribute.SHUFFLED);
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
+					context.getLogic().removeAttribute(copy, Attribute.SHUFFLED);
+				}
 			}
 			return;
 		}
