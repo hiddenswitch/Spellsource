@@ -50,6 +50,23 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testLadyDeathwhisper() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			for (int i = 0; i < 5; i++) {
+				Minion penguin = playMinionCard(context, opponent, "minion_snowflipper_penguin");
+				for (int j = 0; j < i; j++) {
+					playCardWithTarget(context, opponent, "spell_bananas", penguin);
+				}
+				assertEquals(penguin.getHp(), 1 + i);
+			}
+			context.endTurn();
+			playMinionCard(context, player, "minion_lady_deathwhisper");
+			assertTrue(opponent.getMinions().stream().allMatch(m -> m.getHp() == 1));
+		});
+	}
+
+	@Test
 	public void testGrimestreetVigilante() {
 		runGym((context, player, opponent) -> {
 			Minion vigilante = playMinionCard(context, player, "minion_grimestreet_vigilante");
