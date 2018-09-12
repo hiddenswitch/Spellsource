@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.shared.utils.ResourceInputStream;
 import net.demilich.metastone.game.shared.utils.ResourceLoader;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

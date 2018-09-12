@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards.costmodifier;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import net.demilich.metastone.game.GameContext;
@@ -41,7 +40,7 @@ import java.io.Serializable;
  * </pre>
  *
  * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
- * effects into play.
+ * 		effects into play.
  * @see CardCostModifierArg for a list of arguments for card cost modification.
  */
 public class CardCostModifier extends CustomCloneable implements Trigger, Serializable, HasDesc<CardCostModifierDesc> {
@@ -71,23 +70,23 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	 * Determines whether this modifier applies to the specified card.
 	 * <p>
 	 * First, the method checks if the modifier has been {@link #expired} due to its {@link
-	 * CardCostModifierArg#EXPIRATION_TRIGGER}. For a {@link OneTurnCostModifier}, the expiration trigger is assumed to
-	 * be a {@link net.demilich.metastone.game.spells.trigger.TurnEndTrigger}.
+	 * CardCostModifierArg#EXPIRATION_TRIGGER}. For a {@link OneTurnCostModifier}, the expiration trigger is assumed to be
+	 * a {@link net.demilich.metastone.game.spells.trigger.TurnEndTrigger}.
 	 * <p>
-	 * Then, the modifier evaluates its {@link CardCostModifierArg#TARGET} and {@link CardCostModifierArg#FILTER} and
-	 * sees if the card is equal to or is contained within the resulting set of {@link Entity} objects. When not
-	 * specified, the {@link CardCostModifierArg#TARGET} is assumed to be the {@link EntityReference#FRIENDLY_HAND}.
+	 * Then, the modifier evaluates its {@link CardCostModifierArg#TARGET} and {@link CardCostModifierArg#FILTER} and sees
+	 * if the card is equal to or is contained within the resulting set of {@link Entity} objects. When not specified, the
+	 * {@link CardCostModifierArg#TARGET} is assumed to be the {@link EntityReference#FRIENDLY_HAND}.
 	 * <p>
 	 * The {@link CardCostModifierArg#RACE} argument, if specified, is compared to the {@code card} instance's {@link
 	 * Card#getRace()}.
 	 * <p>
-	 * The {@link CardCostModifierArg#CARD_TYPE} argument, if specified, is compared to the {@code card} instance's
-	 * {@link Card#getCardType()}.
+	 * The {@link CardCostModifierArg#CARD_TYPE} argument, if specified, is compared to the {@code card} instance's {@link
+	 * Card#getCardType()}.
 	 * <p>
 	 * Finally, the {@link CardCostModifierArg#TARGET_PLAYER} argument, if specified, is compared to the {@code card}
 	 * instance's {@link #getOwner()} with respect to the {@link #getHostReference()} of this modifier. For example, if
-	 * {@link CardCostModifierArg#TARGET_PLAYER} is {@link TargetPlayer#SELF}, then the card's {@link Card#getOwner()}
-	 * is compared to the {@link #getHostReference()} {@link Entity#getOwner()}.
+	 * {@link CardCostModifierArg#TARGET_PLAYER} is {@link TargetPlayer#SELF}, then the card's {@link Card#getOwner()} is
+	 * compared to the {@link #getHostReference()} {@link Entity#getOwner()}.
 	 *
 	 * @param context The game context.
 	 * @param card    The card to evaluate.
@@ -225,8 +224,8 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	}
 
 	/**
-	 * The player that originally created the card cost modifier, regardless if this modifier is being hosted by a
-	 * {@link Player} entity.
+	 * The player that originally created the card cost modifier, regardless if this modifier is being hosted by a {@link
+	 * Player} entity.
 	 *
 	 * @return The original creator (caster) of the modifier.
 	 */
@@ -249,8 +248,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	 * This is relative to the owner of the modifier, which is typically the caster, not the owner of the {@link
 	 * #getHostReference()}.
 	 *
-	 * @return {@link TargetPlayer#SELF} if not specified, otherwise the {@link  TargetPlayer} specified by the
-	 * modifier.
+	 * @return {@link TargetPlayer#SELF} if not specified, otherwise the {@link  TargetPlayer} specified by the modifier.
 	 */
 	public TargetPlayer getTargetPlayer() {
 		return (TargetPlayer) desc.getOrDefault(CardCostModifierArg.TARGET_PLAYER, TargetPlayer.SELF);
@@ -339,6 +337,6 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
-		this.desc = (CardCostModifierDesc)desc;
+		this.desc = (CardCostModifierDesc) desc;
 	}
 }

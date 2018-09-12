@@ -3,8 +3,6 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.AbstractCardTrigger;
 
 public class InvokedEvent extends GameEvent implements HasValue, HasCard {
 	private final Card card;
@@ -38,7 +36,7 @@ public class InvokedEvent extends GameEvent implements HasValue, HasCard {
 
 	@Override
 	public int getValue() {
-	 return invokedMana;
+		return invokedMana;
 	}
 
 	@Override

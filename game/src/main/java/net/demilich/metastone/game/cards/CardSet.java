@@ -2,9 +2,6 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.decks.DeckFormat;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 /**
  * An enumeration of card sets from various games.
  */

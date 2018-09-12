@@ -38,9 +38,8 @@ import java.io.Serializable;
  * net.demilich.metastone.game.cards.Card} affected by the {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
  * argument of a card cost modifier.</li> <li>{@code null} in {@link net.demilich.metastone.game.spells.MissilesSpell}
  * and {@link net.demilich.metastone.game.spells.HealingMissilesSpell}'s {@code getValue} calls.</li> <li>{@code null}
- * if the {@link net.demilich.metastone.game.spells.desc.filter.AttributeFilter} has a {@link
- * EntityFilterArg#TARGET} that evaluates to zero entities.</li> <li>{@code
- * null} in all other situations.</li> </ul>
+ * if the {@link net.demilich.metastone.game.spells.desc.filter.AttributeFilter} has a {@link EntityFilterArg#TARGET}
+ * that evaluates to zero entities.</li> <li>{@code null} in all other situations.</li> </ul>
  * <p>
  * Refer to the class hierarchy of this class for all the possible value providers.
  */
@@ -101,6 +100,6 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
-		this.desc = (ValueProviderDesc)desc;
+		this.desc = (ValueProviderDesc) desc;
 	}
 }

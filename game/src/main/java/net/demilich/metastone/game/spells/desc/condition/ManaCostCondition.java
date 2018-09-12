@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
-import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
 public class ManaCostCondition extends Condition {
 

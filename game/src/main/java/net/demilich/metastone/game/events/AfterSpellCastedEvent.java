@@ -14,7 +14,7 @@ public class AfterSpellCastedEvent extends GameEvent implements HasCard {
 		this.sourceCard = sourceCard;
 		this.spellTarget = target;
 	}
-	
+
 	@Override
 	public Entity getEventSource() {
 		return getCard();

@@ -1,13 +1,13 @@
 package net.demilich.metastone.game.behaviour;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A behaviour which instructs the player to always perform the last available action.

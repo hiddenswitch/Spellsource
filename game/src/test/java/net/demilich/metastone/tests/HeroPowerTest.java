@@ -1,12 +1,5 @@
 package net.demilich.metastone.tests;
 
-import net.demilich.metastone.tests.util.TestBase;
-import net.demilich.metastone.tests.util.TestSpellCard;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -14,6 +7,10 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestSpellCard;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class HeroPowerTest extends TestBase {
 

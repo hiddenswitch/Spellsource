@@ -68,7 +68,7 @@ public class SpellPowerCardFinderTest extends TestBase {
 				ReflectionComparator reflectionComparator = ReflectionComparatorFactory.createRefectionComparator(ReflectionComparatorMode.IGNORE_DEFAULTS);
 				GameState leftGameState = lhs.getGameStateCopy();
 				GameState rightGameState = rhs.getGameStateCopy();
-				ObjectDifference difference = (ObjectDifference)reflectionComparator.getDifference(leftGameState, rightGameState);
+				ObjectDifference difference = (ObjectDifference) reflectionComparator.getDifference(leftGameState, rightGameState);
 
 				if (difference != null && difference.getFieldDifferences().size() > 1) {
 					System.err.println(card.getCardId()/*String.format("Difference found for %s:\n%s\n",)*/);

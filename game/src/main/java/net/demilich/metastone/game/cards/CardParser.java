@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.cards;
 
-import java.io.IOException;
-
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.cards.desc.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.shared.utils.ResourceInputStream;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * A class responsible for deserializing JSON representations of cards.

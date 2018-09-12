@@ -1,18 +1,17 @@
 package net.demilich.metastone.game.behaviour;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.github.fromage.quasi.fibers.Suspendable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 	private static class ScoredAction {

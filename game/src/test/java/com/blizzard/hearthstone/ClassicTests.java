@@ -1,11 +1,17 @@
 package com.blizzard.hearthstone;
 
-import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -15,18 +21,13 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.tests.util.TestBase;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -447,7 +448,7 @@ public class ClassicTests extends TestBase {
 	@Test
 	public void testNoviceEngineer() {
 		runGym((context, player, opponent) -> {
-			shuffleToDeck(context,player,"minion_bloodfen_raptor");
+			shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			int cardCount = player.getHand().getCount();
 			assertEquals(player.getHand().getCount(), cardCount);
 			playCard(context, player, "minion_novice_engineer");

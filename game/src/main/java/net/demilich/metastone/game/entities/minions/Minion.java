@@ -1,10 +1,10 @@
 package net.demilich.metastone.game.entities.minions;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class Minion extends Actor {
 

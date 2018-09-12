@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 

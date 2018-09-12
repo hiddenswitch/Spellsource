@@ -1,10 +1,10 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.Map;
 
 /**
  * @deprecated Use {@link BuffSpell} instead.

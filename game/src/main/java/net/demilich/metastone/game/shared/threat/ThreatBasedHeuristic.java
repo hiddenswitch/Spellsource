@@ -1,21 +1,21 @@
 package net.demilich.metastone.game.shared.threat;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.DestroySpell;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThreatBasedHeuristic implements Heuristic, Serializable {
 

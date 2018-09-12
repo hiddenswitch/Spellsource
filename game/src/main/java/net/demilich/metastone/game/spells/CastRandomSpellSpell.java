@@ -1,23 +1,23 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import com.github.fromage.quasi.fibers.Suspendable;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.SpellArg;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
+import java.util.Map;
 
 /**
  * Casts a random spell from the {@link SpellArg#CARD_SOURCE}, {@link SpellArg#CARD_FILTER} and {@link SpellArg#CARDS}

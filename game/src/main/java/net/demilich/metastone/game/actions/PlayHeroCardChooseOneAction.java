@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.actions;
 
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class PlayHeroCardChooseOneAction extends PlayHeroCardAction {

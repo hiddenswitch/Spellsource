@@ -81,9 +81,9 @@ import org.slf4j.LoggerFactory;
  * </pre>
  *
  * @see ConditionalEffectSpell to add an additional effect to a spell, giving you a default behaviour when the condition
- * fails.
+ * 		fails.
  * @see EitherOrSpell to perform a binary effect: one spell if the condition is true, and a different spell if the
- * condition is false.
+ * 		condition is false.
  */
 public class ConditionalSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ConditionalSpell.class);

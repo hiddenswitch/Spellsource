@@ -1,15 +1,13 @@
 package com.hiddenswitch.spellsource.draft;
 
-import com.hiddenswitch.spellsource.util.Result;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.behaviour.human.DraftSelectionOptions;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**

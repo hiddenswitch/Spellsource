@@ -1,20 +1,19 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import com.github.fromage.quasi.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.GameEventType;
+import net.demilich.metastone.game.events.HasValue;
+import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import com.github.fromage.quasi.fibers.Suspendable;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.events.HasValue;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 public class TriggerManager implements Cloneable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);

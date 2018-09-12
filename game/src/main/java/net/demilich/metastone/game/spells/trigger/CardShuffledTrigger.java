@@ -5,12 +5,12 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class CardShuffledTrigger extends AbstractCardTrigger {
 
-    public CardShuffledTrigger(EventTriggerDesc desc) {
-        super(desc);
-    }
+	public CardShuffledTrigger(EventTriggerDesc desc) {
+		super(desc);
+	}
 
-    @Override
-    public GameEventType interestedIn() {
-        return GameEventType.CARD_SHUFFLED;
-    }
+	@Override
+	public GameEventType interestedIn() {
+		return GameEventType.CARD_SHUFFLED;
+	}
 }

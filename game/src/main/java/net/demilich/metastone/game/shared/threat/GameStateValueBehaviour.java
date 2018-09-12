@@ -72,7 +72,7 @@ import java.util.stream.Stream;
  * GameStateValueBehaviour the best delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
- * with the highest score.
+ * 		with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);

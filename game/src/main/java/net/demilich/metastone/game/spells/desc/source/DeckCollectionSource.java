@@ -10,8 +10,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
 
-import static java.util.stream.Collectors.toMap;
-
 public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects, HasWeights {
 
 	public DeckCollectionSource(CardSourceDesc desc) {

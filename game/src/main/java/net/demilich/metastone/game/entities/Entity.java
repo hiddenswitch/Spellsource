@@ -1,23 +1,23 @@
 package net.demilich.metastone.game.entities;
 
-import java.io.Serializable;
-
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.targeting.IdFactoryImpl;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+
+import java.io.Serializable;
 
 /**
  * An in-game entity.

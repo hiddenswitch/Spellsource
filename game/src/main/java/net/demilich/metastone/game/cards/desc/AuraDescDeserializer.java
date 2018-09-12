@@ -9,7 +9,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 	public AuraDescDeserializer() {
 		super(AuraDesc.class);
 	}
-	
+
 	@Override
 	protected AuraDesc createDescInstance() {
 		return new AuraDesc();

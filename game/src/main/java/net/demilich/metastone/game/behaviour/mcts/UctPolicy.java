@@ -16,7 +16,7 @@ class UctPolicy implements ITreePolicy {
 		for (Node child : parent.getChildren()) {
 			double uctValue = child.getVisits() == 0 ? 1000000
 					: child.getScore() / (double) child.getVisits() + C * Math.sqrt(Math.log(parent.getVisits()) / child.getVisits())
-							+ random.nextDouble() * EPSILON;
+					+ random.nextDouble() * EPSILON;
 
 			// small random number to break ties randomly in unexpanded nodes
 			if (uctValue > bestValue) {

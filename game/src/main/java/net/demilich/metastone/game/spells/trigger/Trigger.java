@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import java.io.Serializable;
-
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
@@ -11,12 +9,14 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.io.Serializable;
+
 /**
  * Triggers respond to {@link GameEvent} objects that are raised by various {@link GameLogic} methods, implementing
  * cards that do something when something else happens.
  *
  * @see Enchantment for an implementation that casts a spell when an event is raised. Most trigger effects behave like
- * this.
+ * 		this.
  */
 public interface Trigger extends Serializable {
 	/**
@@ -53,13 +53,13 @@ public interface Trigger extends Serializable {
 	 *
 	 * @param eventType The event type.
 	 * @return {@code true} if this trigger wants its {@link #onGameEvent(GameEvent)} method called whenever it {@link
-	 * #canFire(GameEvent)} to the specified {@code eventType}.
+	 * 		#canFire(GameEvent)} to the specified {@code eventType}.
 	 */
 	boolean interestedIn(GameEventType eventType);
 
 	/**
-	 * Checks if, due to the execution of possibly complex rules inside or outside the trigger, the trigger is expired
-	 * (no longer should fire).
+	 * Checks if, due to the execution of possibly complex rules inside or outside the trigger, the trigger is expired (no
+	 * longer should fire).
 	 *
 	 * @return {@code true} if the trigger should be removed and will no longer fire.
 	 */
@@ -107,8 +107,8 @@ public interface Trigger extends Serializable {
 	 * because card texts can steal secrets. However, the trigger described by Blessing of Wisdom does have a persistent
 	 * owner, since the casting player of that spell should always draw the card it receives.
 	 *
-	 * @return {@code true} if the trigger's {@link #onGameEvent(GameEvent)} should be evaluated from the point of view
-	 * of the owner when the trigger was created, as opposed to what the owner is right now (which may have changed).
+	 * @return {@code true} if the trigger's {@link #onGameEvent(GameEvent)} should be evaluated from the point of view of
+	 * 		the owner when the trigger was created, as opposed to what the owner is right now (which may have changed).
 	 */
 	boolean hasPersistentOwner();
 

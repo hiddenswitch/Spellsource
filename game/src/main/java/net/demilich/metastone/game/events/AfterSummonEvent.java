@@ -4,7 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.utils.Attribute;
 
 public class AfterSummonEvent extends GameEvent {
 
@@ -16,7 +15,7 @@ public class AfterSummonEvent extends GameEvent {
 		this.minion = minion;
 		this.source = source;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getMinion();

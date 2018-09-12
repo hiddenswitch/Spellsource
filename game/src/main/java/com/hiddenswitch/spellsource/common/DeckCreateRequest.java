@@ -1,9 +1,8 @@
 package com.hiddenswitch.spellsource.common;
 
 import com.hiddenswitch.spellsource.util.CommunityDeckStringSerializer;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;

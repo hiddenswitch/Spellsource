@@ -35,7 +35,7 @@ public class TargetAcquisitionTrigger extends EventTrigger {
 		if (targetEntityType != null && targetEntityType != targetAcquisitionEvent.getTarget().getEntityType()) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
