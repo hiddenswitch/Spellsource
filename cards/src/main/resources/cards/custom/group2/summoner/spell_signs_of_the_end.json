@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "RARE",
-  "description": "The next spell you cast summons a minion of equal Cost.",
+  "description": "The next spell you cast summons a random minion of equal Cost.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
@@ -20,8 +20,8 @@
           "class": "CardFilter",
           "cardType": "MINION",
           "manaCost": {
-            "class": "ManaCostProvider",
-            "target": "EVENT_SOURCE"
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "LAST_MANA_COST"
           }
         },
         "cardSource": {
