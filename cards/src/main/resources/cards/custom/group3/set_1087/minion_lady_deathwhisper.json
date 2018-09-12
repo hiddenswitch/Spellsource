@@ -11,30 +11,50 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RecastWhileSpell",
-      "target": "ENEMY_MINIONS",
       "condition": {
-        "class": "AttributeCondition",
-        "value": 1,
-        "attribute": "HP",
-        "operation": "EQUAL"
+        "class": "AnyMatchFilterCondition",
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "HP",
+          "value": 1,
+          "operation": "GREATER"
+        }
       },
       "spell": {
         "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
         "value": 1,
-        "ignoreSpellDamage": true
-      },
-      "filter": {
-        "class": "OrFilter",
-        "filters": [
-          {
-            "class": "AttributeFilter",
-            "attribute": "IMMUNE"
-          },
-          {
-            "class": "AttributeFilter",
-            "attribute": "AURA_IMMUNE"
-          }
-        ]
+        "ignoreSpellDamage": true,
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "attribute": "HP",
+              "operation": "GREATER",
+              "value": 1
+            },
+            {
+              "class": "IsDestroyedFilter",
+              "invert": true
+            },
+            {
+              "class": "OrFilter",
+              "filters": [
+                {
+                  "class": "AttributeFilter",
+                  "attribute": "IMMUNE"
+                },
+                {
+                  "class": "AttributeFilter",
+                  "attribute": "AURA_IMMUNE"
+                }
+              ],
+              "invert": true
+            }
+          ]
+        }
       }
     }
   },
