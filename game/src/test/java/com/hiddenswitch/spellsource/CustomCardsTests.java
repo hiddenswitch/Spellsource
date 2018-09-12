@@ -320,9 +320,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_signs_of_the_end");
 			player.setMana(7);
 			playCard(context, player, "spell_earthquake");
-			assertEquals(player.getMinions().size(), 2);
-			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(),"token_bulette");
-			assertEquals(player.getMinions().get(0).getSourceCard().getBaseManaCost(), 7);
+			assertTrue(player.getMinions().stream().anyMatch(m -> m.getSourceCard().getBaseManaCost() == 7));
 		});
 	}
 

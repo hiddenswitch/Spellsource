@@ -394,416 +394,392 @@ public class ClassicTests extends TestBase {
 
 	@Test
 	public void testBlizzard() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.VIOLET);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion impGangBoss = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_imp_gang_boss"));
+			context.endTurn();
 
-		context.endTurn();
-		Minion impGangBoss = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_imp_gang_boss"));
-		context.endTurn();
+			playCard(context, player, "spell_blizzard");
 
-		playCard(context, player, "spell_blizzard");
-
-		assertEquals(impGangBoss.getHp(), impGangBoss.getMaxHp() - 2);
-		for (Minion minion : opponent.getMinions()) {
-			assertEquals(minion.hasAttribute(Attribute.FROZEN), true);
-		}
+			assertEquals(impGangBoss.getHp(), impGangBoss.getMaxHp() - 2);
+			for (Minion minion : opponent.getMinions()) {
+				assertEquals(minion.hasAttribute(Attribute.FROZEN), true);
+			}
+		}, HeroClass.BLUE, HeroClass.VIOLET);
 	}
 
 	@Test
 	public void testHauntedCreeperHarvestGolem() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playMinionCard(context, opponent, CardCatalogue.getCardById("minion_haunted_creeper"));
+			playMinionCard(context, opponent, CardCatalogue.getCardById("minion_harvest_golem"));
+			assertEquals(opponent.getMinions().size(), 2);
+			context.endTurn();
 
-		context.endTurn();
-		playMinionCard(context, opponent, CardCatalogue.getCardById("minion_haunted_creeper"));
-		playMinionCard(context, opponent, CardCatalogue.getCardById("minion_harvest_golem"));
-		assertEquals(opponent.getMinions().size(), 2);
-		context.endTurn();
-
-		playCard(context, player, "spell_flamestrike");
-		assertEquals(opponent.getMinions().size(), 3);
-		final int HARVEST_GOLEM = 1;
-		for (int i = 0; i < opponent.getMinions().size(); i++) {
-			Minion minion = opponent.getMinions().get(i);
-			if (i == HARVEST_GOLEM) {
-				assertEquals(minion.getAttack(), 2);
-				assertEquals(minion.getHp(), 1);
-				assertEquals(minion.getRace(), Race.MECH);
-			} else {
-				assertEquals(minion.getAttack(), 1);
-				assertEquals(minion.getHp(), 1);
+			playCard(context, player, "spell_flamestrike");
+			assertEquals(opponent.getMinions().size(), 3);
+			final int HARVEST_GOLEM = 1;
+			for (int i = 0; i < opponent.getMinions().size(); i++) {
+				Minion minion = opponent.getMinions().get(i);
+				if (i == HARVEST_GOLEM) {
+					assertEquals(minion.getAttack(), 2);
+					assertEquals(minion.getHp(), 1);
+					assertEquals(minion.getRace(), Race.MECH);
+				} else {
+					assertEquals(minion.getAttack(), 1);
+					assertEquals(minion.getHp(), 1);
+				}
 			}
-		}
+		}, HeroClass.BLUE, HeroClass.RED);
 	}
 
 
 	@Test
 	public void testElvenArcher() {
-		GameContext context = createContext(HeroClass.RED, HeroClass.SILVER);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
-
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
-		Card elvenArcherCard = CardCatalogue.getCardById("minion_elven_archer");
-		playCardWithTarget(context, player, elvenArcherCard, opponent.getHero());
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 1);
+		runGym((context, player, opponent) -> {
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
+			playCardWithTarget(context, player, "minion_elven_archer", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 1);
+		}, HeroClass.RED, HeroClass.SILVER);
 	}
 
 	@Test
 	public void testNoviceEngineer() {
-		GameContext context = createContext(HeroClass.RED, HeroClass.SILVER);
-		Player player = context.getPlayer1();
-
-		int cardCount = player.getHand().getCount();
-		assertEquals(player.getHand().getCount(), cardCount);
-		Card noviceEngineerCard = CardCatalogue.getCardById("minion_novice_engineer");
-		playCard(context, player, noviceEngineerCard);
-		assertEquals(player.getHand().getCount(), cardCount + 1);
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context,player,"minion_bloodfen_raptor");
+			int cardCount = player.getHand().getCount();
+			assertEquals(player.getHand().getCount(), cardCount);
+			playCard(context, player, "minion_novice_engineer");
+			assertEquals(player.getHand().getCount(), cardCount + 1);
+		}, HeroClass.RED, HeroClass.SILVER);
 	}
 
 	@Test
 	public void testKoboldGeomancer() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		runGym((context, player, opponent) -> {
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
+			playCard(context, player, "spell_arcane_missiles");
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3);
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6);
 
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
-		playCard(context, player, "spell_arcane_missiles");
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3);
-		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_fireball"), opponent.getHero());
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6);
+			playCard(context, player, "minion_kobold_geomancer");
 
-		playCard(context, player, "minion_kobold_geomancer");
-
-		playCard(context, player, "spell_arcane_missiles");
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4);
-		playCardWithTarget(context, player, CardCatalogue.getCardById("spell_fireball"), opponent.getHero());
-		assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4 - 7);
+			playCard(context, player, "spell_arcane_missiles");
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4);
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4 - 7);
+		}, HeroClass.BLUE, HeroClass.RED);
 	}
 
 	@Test
 	public void testAcidicSwampOoze() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		Player player = context.getPlayer1();
-		Player opponent = context.getPlayer2();
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "weapon_fiery_war_axe");
+			Assert.assertNotNull(opponent.getHero().getWeapon());
+			context.endTurn();
 
-		context.endTurn();
-		playCard(context, opponent, "weapon_fiery_war_axe");
-		Assert.assertNotNull(opponent.getHero().getWeapon());
-		context.endTurn();
-
-		playCard(context, player, "minion_acidic_swamp_ooze");
-		Assert.assertNull(opponent.getHero().getWeapon());
+			playCard(context, player, "minion_acidic_swamp_ooze");
+			Assert.assertNull(opponent.getHero().getWeapon());
+		}, HeroClass.BLUE, HeroClass.RED);
 	}
 
 	@Test
 	public void testWildPyromancer() {
-		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
-		Player warrior = context.getPlayer2();
-		Card hauntedCreeper = CardCatalogue.getCardById("minion_haunted_creeper");
-		playCard(context, warrior, hauntedCreeper);
+		runGym((context, player, opponent) -> {
+			playCard(context, opponent, "minion_haunted_creeper");
+			playCard(context, player, "minion_wild_pyromancer");
+			assertEquals(opponent.getMinions().size(), 1);
+			playCard(context, player, "spell_holy_nova");
 
-		Player priest = context.getPlayer1();
-		Card wildPyromancer = CardCatalogue.getCardById("minion_wild_pyromancer");
-		playCard(context, priest, wildPyromancer);
-
-		assertEquals(warrior.getMinions().size(), 1);
-
-		Card holyNova = CardCatalogue.getCardById("spell_holy_nova");
-		playCard(context, priest, holyNova);
-
-		// the warriors board should be completely wiped, as the Holy Nova
-		// should kill the
-		// first body of Haunted Creeper, the Deathrattle resolves and then Wild
-		// Pyromancer
-		// triggers, clearing the two 1/1 Spectral Spiders
-		assertEquals(warrior.getMinions().size(), 0);
+			// the warriors board should be completely wiped, as the Holy Nova
+			// should kill the
+			// first body of Haunted Creeper, the Deathrattle resolves and then Wild
+			// Pyromancer
+			// triggers, clearing the two 1/1 Spectral Spiders
+			assertEquals(opponent.getMinions().size(), 0);
+		}, HeroClass.WHITE, HeroClass.RED);
 	}
 
 	@Test
 	public void testBetrayal() {
-		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
-		Player paladin = context.getPlayer1();
+		runGym((context, player, opponent) -> {
+			Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+			Minion adjacentMinion1 = playMinionCard(context, player, adjacentCard1);
 
-		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion1 = playMinionCard(context, paladin, adjacentCard1);
+			Card targetCard = new TestMinionCard(3, 1, 0);
+			Minion targetMinion = playMinionCard(context, player, targetCard);
 
-		Card targetCard = new TestMinionCard(3, 1, 0);
-		Minion targetMinion = playMinionCard(context, paladin, targetCard);
+			Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+			Minion adjacentMinion2 = playMinionCard(context, player, adjacentCard2);
 
-		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion2 = playMinionCard(context, paladin, adjacentCard2);
+			context.getLogic().endTurn(player.getId());
 
-		context.getLogic().endTurn(paladin.getId());
+			assertEquals(player.getMinions().size(), 3);
 
-		assertEquals(paladin.getMinions().size(), 3);
+			Player rogue = context.getPlayer2();
+			Card betrayal = CardCatalogue.getCardById("spell_betrayal");
 
-		Player rogue = context.getPlayer2();
-		Card betrayal = CardCatalogue.getCardById("spell_betrayal");
+			context.getLogic().receiveCard(rogue.getId(), betrayal);
+			GameAction action = betrayal.play();
+			action.setTarget(targetMinion);
+			context.getLogic().performGameAction(rogue.getId(), action);
+			assertEquals(targetMinion.getAttack(), 3);
+			assertEquals(targetMinion.getHp(), 1);
 
-		context.getLogic().receiveCard(rogue.getId(), betrayal);
-		GameAction action = betrayal.play();
-		action.setTarget(targetMinion);
-		context.getLogic().performGameAction(rogue.getId(), action);
-		assertEquals(targetMinion.getAttack(), 3);
-		assertEquals(targetMinion.getHp(), 1);
+			assertEquals(adjacentMinion1.getHp(), 2);
+			assertEquals(adjacentMinion2.getHp(), 2);
 
-		assertEquals(adjacentMinion1.getHp(), 2);
-		assertEquals(adjacentMinion2.getHp(), 2);
+			assertEquals(player.getMinions().size(), 3);
+		}, HeroClass.GOLD, HeroClass.BLACK);
 
-		assertEquals(paladin.getMinions().size(), 3);
 	}
 
 	@Test
 	public void testBetrayalOnEmperorCobraDestroysAdjacentMinions() {
-		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
-		Player paladin = context.getPlayer1();
+		runGym((context, player, opponent) -> {
+			Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+			playMinionCard(context, player, adjacentCard1);
 
-		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentCard1);
+			Card targetCard = CardCatalogue.getCardById("minion_emperor_cobra");
+			Minion targetMinion = playMinionCard(context, player, targetCard);
 
-		Card targetCard = CardCatalogue.getCardById("minion_emperor_cobra");
-		Minion targetMinion = playMinionCard(context, paladin, targetCard);
+			Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+			playMinionCard(context, player, adjacentCard2);
 
-		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentCard2);
+			context.getLogic().endTurn(player.getId());
 
-		context.getLogic().endTurn(paladin.getId());
+			assertEquals(player.getMinions().size(), 3);
 
-		assertEquals(paladin.getMinions().size(), 3);
+			Player rogue = context.getPlayer2();
 
-		Player rogue = context.getPlayer2();
+			Card betrayal = CardCatalogue.getCardById("spell_betrayal");
 
-		Card betrayal = CardCatalogue.getCardById("spell_betrayal");
+			context.getLogic().receiveCard(rogue.getId(), betrayal);
+			GameAction action = betrayal.play();
+			action.setTarget(targetMinion);
+			context.getLogic().performGameAction(rogue.getId(), action);
 
-		context.getLogic().receiveCard(rogue.getId(), betrayal);
-		GameAction action = betrayal.play();
-		action.setTarget(targetMinion);
-		context.getLogic().performGameAction(rogue.getId(), action);
-
-		assertEquals(paladin.getMinions().size(), 1);
+			assertEquals(player.getMinions().size(), 1);
+		}, HeroClass.GOLD, HeroClass.BLACK);
 	}
 
 
 	@Test
 	public void testBetrayalNotAffectedBySpellDamage() {
-		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
-		Player paladin = context.getPlayer1();
+		runGym((context, player, opponent) -> {
 
-		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion1 = playMinionCard(context, paladin, adjacentCard1);
+			Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+			Minion adjacentMinion1 = playMinionCard(context, player, adjacentCard1);
 
-		Card targetCard = new TestMinionCard(3, 1, 0);
-		Minion targetMinion = playMinionCard(context, paladin, targetCard);
+			Card targetCard = new TestMinionCard(3, 1, 0);
+			Minion targetMinion = playMinionCard(context, player, targetCard);
 
-		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
-		Minion adjacentMinion2 = playMinionCard(context, paladin, adjacentCard2);
+			Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+			Minion adjacentMinion2 = playMinionCard(context, player, adjacentCard2);
 
-		context.getLogic().endTurn(paladin.getId());
+			context.getLogic().endTurn(player.getId());
 
-		Player rogue = context.getPlayer2();
+			Player rogue = context.getPlayer2();
 
-		Card azureDrakeCard = CardCatalogue.getCardById("minion_azure_drake");
-		playMinionCard(context, rogue, azureDrakeCard);
+			playMinionCard(context, rogue, "minion_azure_drake");
 
-		Card betrayal = CardCatalogue.getCardById("spell_betrayal");
+			Card betrayal = CardCatalogue.getCardById("spell_betrayal");
 
-		context.getLogic().receiveCard(rogue.getId(), betrayal);
-		GameAction action = betrayal.play();
-		action.setTarget(targetMinion);
-		context.getLogic().performGameAction(rogue.getId(), action);
-		assertEquals(targetMinion.getAttack(), 3);
-		assertEquals(targetMinion.getHp(), 1);
+			context.getLogic().receiveCard(rogue.getId(), betrayal);
+			GameAction action = betrayal.play();
+			action.setTarget(targetMinion);
+			context.getLogic().performGameAction(rogue.getId(), action);
+			assertEquals(targetMinion.getAttack(), 3);
+			assertEquals(targetMinion.getHp(), 1);
 
-		assertEquals(adjacentMinion1.getHp(), 2);
-		assertEquals(adjacentMinion2.getHp(), 2);
+			assertEquals(adjacentMinion1.getHp(), 2);
+			assertEquals(adjacentMinion2.getHp(), 2);
+		}, HeroClass.GOLD, HeroClass.BLACK);
 	}
 
 	@Test
 	public void testSummoningPortal() {
-		GameContext context = createContext(HeroClass.VIOLET, HeroClass.RED);
-		Player player = context.getPlayer1();
-		player.setMana(10);
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
 
-		Card summoningPortal1 = CardCatalogue.getCardById("minion_summoning_portal");
-		context.getLogic().receiveCard(player.getId(), summoningPortal1);
-		Card summoningPortal2 = CardCatalogue.getCardById("minion_summoning_portal");
-		context.getLogic().receiveCard(player.getId(), summoningPortal2);
+			Card summoningPortal1 = CardCatalogue.getCardById("minion_summoning_portal");
+			context.getLogic().receiveCard(player.getId(), summoningPortal1);
+			Card summoningPortal2 = CardCatalogue.getCardById("minion_summoning_portal");
+			context.getLogic().receiveCard(player.getId(), summoningPortal2);
 
-		Card testCard = new TestMinionCard(1, 1, 4);
-		context.getLogic().receiveCard(player.getId(), testCard);
-		assertEquals(player.getMana(), 10);
+			Card testCard = new TestMinionCard(1, 1, 4);
+			context.getLogic().receiveCard(player.getId(), testCard);
+			assertEquals(player.getMana(), 10);
 
-		// first summoning portal costs full 4 mana
-		context.getLogic().performGameAction(player.getId(), summoningPortal1.play());
-		assertEquals(player.getMana(), 6);
+			// first summoning portal costs full 4 mana
+			context.getLogic().performGameAction(player.getId(), summoningPortal1.play());
+			assertEquals(player.getMana(), 6);
 
-		// second summoning portal affected by first one, costs only 2 mana
-		context.getLogic().performGameAction(player.getId(), summoningPortal2.play());
-		assertEquals(player.getMana(), 4);
+			// second summoning portal affected by first one, costs only 2 mana
+			context.getLogic().performGameAction(player.getId(), summoningPortal2.play());
+			assertEquals(player.getMana(), 4);
 
-		// base cost of minion card is 4, reduced by both summoning portals, but
-		// not below 1
-		context.getLogic().performGameAction(player.getId(), testCard.play());
-		assertEquals(player.getMana(), 3);
-
+			// base cost of minion card is 4, reduced by both summoning portals, but
+			// not below 1
+			context.getLogic().performGameAction(player.getId(), testCard.play());
+			assertEquals(player.getMana(), 3);
+		}, HeroClass.VIOLET, HeroClass.RED);
 	}
 
 	@Test
 	public void testSpitefulSmith() {
-		GameContext context = createContext(HeroClass.RED, HeroClass.RED);
-		Player player = context.getPlayer1();
-		player.setMana(10);
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
 
-		Card fieryWarAxe = CardCatalogue.getCardById("weapon_fiery_war_axe");
-		playCard(context, player, fieryWarAxe);
+			Card fieryWarAxe = CardCatalogue.getCardById("weapon_fiery_war_axe");
+			playCard(context, player, fieryWarAxe);
 
-		Assert.assertTrue(player.getHero().getWeapon() != null);
-		assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
+			Assert.assertTrue(player.getHero().getWeapon() != null);
+			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
 
-		Card spitefulSmithCard = CardCatalogue.getCardById("minion_spiteful_smith");
-		Minion spitefulSmith = playMinionCard(context, player, spitefulSmithCard);
-		// Smith has been played, but is not enraged yet, so weapon damage
-		// should still be unaltered
-		assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
+			Card spitefulSmithCard = CardCatalogue.getCardById("minion_spiteful_smith");
+			Minion spitefulSmith = playMinionCard(context, player, spitefulSmithCard);
+			// Smith has been played, but is not enraged yet, so weapon damage
+			// should still be unaltered
+			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
 
-		Card damageSpell = new TestSpellCard(DamageSpell.create(1));
-		damageSpell.setTargetRequirement(TargetSelection.ANY);
-		context.getLogic().receiveCard(player.getId(), damageSpell);
-		GameAction spellAction = damageSpell.play();
-		spellAction.setTarget(spitefulSmith);
-		context.getLogic().performGameAction(player.getId(), spellAction);
+			Card damageSpell = new TestSpellCard(DamageSpell.create(1));
+			damageSpell.setTargetRequirement(TargetSelection.ANY);
+			context.getLogic().receiveCard(player.getId(), damageSpell);
+			GameAction spellAction = damageSpell.play();
+			spellAction.setTarget(spitefulSmith);
+			context.getLogic().performGameAction(player.getId(), spellAction);
 
-		// Smith is damaged now, so weapon should be buffed
-		assertEquals(player.getHero().getWeapon().getWeaponDamage(), 5);
+			// Smith is damaged now, so weapon should be buffed
+			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 5);
 
-		// equip a new weapon; this one should get buffed too
-		fieryWarAxe = CardCatalogue.getCardById("weapon_fiery_war_axe");
-		playCard(context, player, fieryWarAxe);
-		assertEquals(player.getHero().getWeapon().getWeaponDamage(), 5);
+			// equip a new weapon; this one should get buffed too
+			fieryWarAxe = CardCatalogue.getCardById("weapon_fiery_war_axe");
+			playCard(context, player, fieryWarAxe);
+			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 5);
 
-		// wipe everything
-		SpellDesc wipeSpell = DestroySpell.create(EntityReference.ALL_MINIONS);
-		Card wipe = new TestSpellCard(wipeSpell);
-		playCard(context, player, wipe);
+			// wipe everything
+			SpellDesc wipeSpell = DestroySpell.create(EntityReference.ALL_MINIONS);
+			Card wipe = new TestSpellCard(wipeSpell);
+			playCard(context, player, wipe);
 
-		// Smith is destroyed, weapon power should be back to normal
-		assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
+			// Smith is destroyed, weapon power should be back to normal
+			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 3);
+		}, HeroClass.RED, HeroClass.RED);
 	}
 
 
 	@Test
 	public void testFaerieDragon() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		Player mage = context.getPlayer1();
-		mage.setMana(10);
-		Player warrior = context.getPlayer2();
-		warrior.setMana(10);
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			opponent.setMana(10);
 
-		Card faerieDragonCard = CardCatalogue.getCardById("minion_faerie_dragon");
-		context.getLogic().receiveCard(warrior.getId(), faerieDragonCard);
-		context.getLogic().performGameAction(warrior.getId(), faerieDragonCard.play());
+			Card faerieDragonCard = CardCatalogue.getCardById("minion_faerie_dragon");
+			context.getLogic().receiveCard(opponent.getId(), faerieDragonCard);
+			context.getLogic().performGameAction(opponent.getId(), faerieDragonCard.play());
 
-		Card devMonsterCard = new TestMinionCard(1, 1);
-		context.getLogic().receiveCard(mage.getId(), devMonsterCard);
-		context.getLogic().performGameAction(mage.getId(), devMonsterCard.play());
+			Card devMonsterCard = new TestMinionCard(1, 1);
+			context.getLogic().receiveCard(player.getId(), devMonsterCard);
+			context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
 
-		Entity attacker = getSingleMinion(mage.getMinions());
-		Actor elusiveOne = getSingleMinion(warrior.getMinions());
+			Entity attacker = getSingleMinion(player.getMinions());
+			Actor elusiveOne = getSingleMinion(opponent.getMinions());
 
-		GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
-		List<Entity> validTargets = context.getLogic().getValidTargets(warrior.getId(), attackAction);
-		// should be two valid targets: enemy hero and faerie dragon
-		assertEquals(validTargets.size(), 2);
+			GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
+			List<Entity> validTargets = context.getLogic().getValidTargets(opponent.getId(), attackAction);
+			// should be two valid targets: enemy hero and faerie dragon
+			assertEquals(validTargets.size(), 2);
 
-		GameAction useFireblast = mage.getHero().getHeroPower().play();
-		validTargets = context.getLogic().getValidTargets(mage.getId(), useFireblast);
-		// should be three valid targets, both heroes + minion which is not the
-		// faerie dragon
-		assertEquals(validTargets.size(), 3);
-		Assert.assertFalse(validTargets.contains(elusiveOne));
+			GameAction useFireblast = player.getHero().getHeroPower().play();
+			validTargets = context.getLogic().getValidTargets(player.getId(), useFireblast);
+			// should be three valid targets, both heroes + minion which is not the
+			// faerie dragon
+			assertEquals(validTargets.size(), 3);
+			Assert.assertFalse(validTargets.contains(elusiveOne));
 
-		Card arcaneExplosionCard = CardCatalogue.getCardById("spell_arcane_explosion");
-		context.getLogic().receiveCard(mage.getId(), arcaneExplosionCard);
-		int faerieDragonHp = elusiveOne.getHp();
-		context.getLogic().performGameAction(mage.getId(), arcaneExplosionCard.play());
-		// hp should been affected after playing area of effect spell
-		Assert.assertNotEquals(faerieDragonHp, elusiveOne.getHp());
+			Card arcaneExplosionCard = CardCatalogue.getCardById("spell_arcane_explosion");
+			context.getLogic().receiveCard(player.getId(), arcaneExplosionCard);
+			int faerieDragonHp = elusiveOne.getHp();
+			context.getLogic().performGameAction(player.getId(), arcaneExplosionCard.play());
+			// hp should been affected after playing area of effect spell
+			Assert.assertNotEquals(faerieDragonHp, elusiveOne.getHp());
+		}, HeroClass.BLUE, HeroClass.RED);
+
 	}
 
 	@Test
 	public void testGurubashiBerserker() {
-		GameContext context = createContext(HeroClass.BLUE, HeroClass.RED);
-		Player mage = context.getPlayer1();
-		mage.setMana(10);
-		Player warrior = context.getPlayer2();
-		warrior.setMana(10);
+		runGym((context, player, opponent) -> {
+			player.setMana(10);
+			opponent.setMana(10);
 
-		final int BASE_ATTACK = 2;
-		final int ATTACK_BONUS = 3;
+			final int BASE_ATTACK = 2;
+			final int ATTACK_BONUS = 3;
 
-		Card gurubashiBerserkerCard = CardCatalogue.getCardById("minion_gurubashi_berserker");
-		playCard(context, warrior, gurubashiBerserkerCard);
+			playCard(context, opponent, "minion_gurubashi_berserker");
 
-		Card oasisSnapjawCard = CardCatalogue.getCardById("minion_oasis_snapjaw");
-		playCard(context, mage, oasisSnapjawCard);
+			playCard(context, player, "minion_oasis_snapjaw");
 
-		Actor attacker = getSingleMinion(mage.getMinions());
-		Actor defender = getSingleMinion(warrior.getMinions());
+			Actor attacker = getSingleMinion(player.getMinions());
+			Actor defender = getSingleMinion(opponent.getMinions());
 
-		// Gurubashi Berserker should start with just his base attack
-		assertEquals(defender.getAttack(), BASE_ATTACK);
+			// Gurubashi Berserker should start with just his base attack
+			assertEquals(defender.getAttack(), BASE_ATTACK);
 
-		// first attack, Gurubashi Berserker should have increased attack
-		GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
-		attackAction.setTarget(defender);
-		context.getLogic().performGameAction(mage.getId(), attackAction);
+			// first attack, Gurubashi Berserker should have increased attack
+			GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
+			attackAction.setTarget(defender);
+			context.getLogic().performGameAction(player.getId(), attackAction);
 
-		assertEquals(attacker.getHp(), attacker.getMaxHp() - BASE_ATTACK);
-		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
-		assertEquals(defender.getAttack(), BASE_ATTACK + ATTACK_BONUS);
+			assertEquals(attacker.getHp(), attacker.getMaxHp() - BASE_ATTACK);
+			assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
+			assertEquals(defender.getAttack(), BASE_ATTACK + ATTACK_BONUS);
 
-		// second attack, Gurubashi Berserker should become even stronger
-		context.getLogic().performGameAction(mage.getId(), attackAction);
-		assertEquals(attacker.getHp(), attacker.getMaxHp() - 2 * BASE_ATTACK - ATTACK_BONUS);
-		assertEquals(defender.getHp(), defender.getMaxHp() - 2 * attacker.getAttack());
-		assertEquals(defender.getAttack(), BASE_ATTACK + 2 * ATTACK_BONUS);
+			// second attack, Gurubashi Berserker should become even stronger
+			context.getLogic().performGameAction(player.getId(), attackAction);
+			assertEquals(attacker.getHp(), attacker.getMaxHp() - 2 * BASE_ATTACK - ATTACK_BONUS);
+			assertEquals(defender.getHp(), defender.getMaxHp() - 2 * attacker.getAttack());
+			assertEquals(defender.getAttack(), BASE_ATTACK + 2 * ATTACK_BONUS);
+		}, HeroClass.BLUE, HeroClass.RED);
+
 	}
 
 	@Test
 	public void testSavageRoar() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.RED);
-		Player player = context.getPlayer1();
-		Hero druid = player.getHero();
+		runGym((context, player, opponent) -> {
+			Hero druid = player.getHero();
 
-		player.setMana(10);
-		Player warrior = context.getPlayer2();
-		warrior.setMana(10);
+			player.setMana(10);
+			Player warrior = context.getPlayer2();
+			warrior.setMana(10);
 
-		Card devMonsterCard = new TestMinionCard(1, 1);
-		context.getLogic().receiveCard(player.getId(), devMonsterCard);
-		context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
+			Card devMonsterCard = new TestMinionCard(1, 1);
+			context.getLogic().receiveCard(player.getId(), devMonsterCard);
+			context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
 
-		Actor minion = getSingleMinion(player.getMinions());
+			Actor minion = getSingleMinion(player.getMinions());
 
-		context.getLogic().performGameAction(player.getId(), druid.getHeroPower().play());
-		assertEquals(druid.getAttack(), 1);
-		assertEquals(minion.getAttack(), 1);
+			context.getLogic().performGameAction(player.getId(), druid.getHeroPower().play());
+			assertEquals(druid.getAttack(), 1);
+			assertEquals(minion.getAttack(), 1);
 
-		Card savageRoar = CardCatalogue.getCardById("spell_savage_roar");
-		context.getLogic().receiveCard(player.getId(), savageRoar);
-		context.getLogic().performGameAction(player.getId(), savageRoar.play());
-		assertEquals(druid.getAttack(), 3);
-		assertEquals(minion.getAttack(), 3);
+			Card savageRoar = CardCatalogue.getCardById("spell_savage_roar");
+			context.getLogic().receiveCard(player.getId(), savageRoar);
+			context.getLogic().performGameAction(player.getId(), savageRoar.play());
+			assertEquals(druid.getAttack(), 3);
+			assertEquals(minion.getAttack(), 3);
 
-		context.getLogic().endTurn(player.getId());
-		assertEquals(druid.getAttack(), 0);
-		assertEquals(minion.getAttack(), 1);
+			context.getLogic().endTurn(player.getId());
+			assertEquals(druid.getAttack(), 0);
+			assertEquals(minion.getAttack(), 1);
 
-		context.getLogic().endTurn(player.getId());
-		assertEquals(druid.getAttack(), 0);
-		assertEquals(minion.getAttack(), 1);
+			context.getLogic().endTurn(player.getId());
+			assertEquals(druid.getAttack(), 0);
+			assertEquals(minion.getAttack(), 1);
+		}, HeroClass.BROWN, HeroClass.RED);
 	}
 }
