@@ -9,9 +9,12 @@
   "race": "DRAGON",
   "description": "Your Hero Power gives 1 more Attack.",
   "aura": {
-    "class": "CardAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "card": "hero_power_sharper_claws"
+    "class": "HeroPowerBonusAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "TemporaryAttackSpell",
+      "value": 1
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

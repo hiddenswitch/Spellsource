@@ -14,11 +14,12 @@
         "value": 1
       },
       {
-        "class": "BuffSpell",
-        "attackBonus": 1
+        "class": "TemporaryAttackSpell",
+        "value": 1
       }
     ]
   },
+  "heroPower": "hero_power_sharper_claws",
   "attributes": {},
   "collectible": false,
   "set": "CUSTOM",
