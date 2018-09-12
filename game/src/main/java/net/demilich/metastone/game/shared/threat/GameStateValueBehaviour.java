@@ -408,7 +408,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return node.predecessor != null && (
 				node.depth >= maxDepth
 						|| node.context.updateAndGetGameOver()
-						|| (System.currentTimeMillis() - startTime > timeout)
+						|| (System.currentTimeMillis() - startTime > getTimeout())
 						// Technically allows the bot to play through its extra turns
 						|| node.context.getActivePlayerId() != playerId
 						|| node.context.isDisposed());
@@ -585,6 +585,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 	public Deque<Integer> getIndexPlan() {
 		return indexPlan;
+	}
+
+	public long getTimeout() {
+		return timeout;
+	}
+
+	public GameStateValueBehaviour setTimeout(long timeout) {
+		this.timeout = timeout;
+		return this;
 	}
 
 	/**
