@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Put Ozumat's Nightmare into play every turn.",
+  "description": "Battlecry: Ozumat's Nightmare comes into play (permanently).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -17,7 +17,7 @@
           "target": "FRIENDLY_PLAYER",
           "trigger": {
             "eventTrigger": {
-              "class": "TurnStartTrigger",
+              "class": "WillEndSequenceTrigger",
               "targetPlayer": "BOTH"
             },
             "spell": {

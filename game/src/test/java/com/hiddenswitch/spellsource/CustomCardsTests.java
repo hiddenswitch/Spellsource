@@ -248,7 +248,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			assertEquals(player.getSecrets().size(), 1);
 			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
-			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getSecrets().size(), 1);
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_nightmare_tentacle");
 			context.endTurn();
@@ -256,7 +256,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			assertEquals(player.getSecrets().size(), 1);
 			playCard(context, opponent, "minion_eater_of_secrets");
-			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getSecrets().size(), 1);
 			context.endTurn();
 			assertEquals(player.getSecrets().size(), 1);
 		});
