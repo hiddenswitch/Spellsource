@@ -69,11 +69,10 @@ public class RandomCardTargetSpell extends Spell {
 			spellCard.setOwner(player.getId());
 		}
 
-		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-
 		context.getLogic().revealCard(player, spellCard);
 
 		if (spellCard.getTargetSelection() == TargetSelection.NONE) {
+			spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, null);
 			spellCard.moveOrAddTo(context, destination);
 			context.getLogic().removeCard(spellCard);
@@ -84,13 +83,15 @@ public class RandomCardTargetSpell extends Spell {
 		action = spellCard.play();
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 		EntityReference randomTarget = null;
-		if (targets != null && targets.size() != 0) {
+		// Grand Archivist must have a valid target
+		if (targets != null && !targets.isEmpty()) {
+			spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			randomTarget = context.getLogic().getRandom(targets).getReference();
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, context.resolveSingleTarget(randomTarget));
+			spellCard.moveOrAddTo(context, destination);
+			context.getLogic().removeCard(spellCard);
 		}
 
-		spellCard.moveOrAddTo(context, destination);
-		context.getLogic().removeCard(spellCard);
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
 
