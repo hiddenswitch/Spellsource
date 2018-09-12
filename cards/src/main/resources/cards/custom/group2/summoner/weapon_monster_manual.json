@@ -18,9 +18,6 @@
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
-      "cardSource": {
-        "class": "CatalogueSource"
-      },
       "cardFilters": [
         {
           "class": "CardFilter",
@@ -34,7 +31,10 @@
           "class": "CardFilter",
           "race": "MURLOC"
         }
-      ]
+      ],
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
     }
   },
   "collectible": true,

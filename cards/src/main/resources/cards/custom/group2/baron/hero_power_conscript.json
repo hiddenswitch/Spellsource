@@ -9,9 +9,6 @@
     "class": "HeroPowerSpell",
     "spell": {
       "class": "ReceiveCardSpell",
-      "cards": [
-        "token_knight"
-      ],
       "spell": {
         "class": "CardCostModifierSpell",
         "target": "OUTPUT",
@@ -21,7 +18,10 @@
           "value": 0,
           "operation": "SET"
         }
-      }
+      },
+      "cards": [
+        "token_knight"
+      ]
     }
   },
   "collectible": false,
