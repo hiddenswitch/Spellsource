@@ -4,13 +4,13 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Give your minions +4 Health.",
+  "description": "Give your minions +2 Health.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "attackBonus": 0,
-    "hpBonus": 4
+    "hpBonus": 2
   },
   "collectible": true,
   "set": "CUSTOM",
