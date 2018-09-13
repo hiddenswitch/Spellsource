@@ -11,6 +11,10 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A deck that contains cards, a name, a hero card, etc. that can be actually used to populate a player's deck in a
+ * {@link net.demilich.metastone.game.GameContext}.
+ */
 public class GameDeck implements Serializable, Cloneable, Deck {
 	public static final GameDeck EMPTY;
 

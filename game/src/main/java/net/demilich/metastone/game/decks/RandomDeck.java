@@ -15,6 +15,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * A deck that was randomly created.
+ */
 public final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
 
@@ -31,8 +34,8 @@ public final class RandomDeck extends GameDeck {
 
 
 	/**
-	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the Standard
-	 * format.
+	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the {@link
+	 * DeckFormat#CUSTOM} format.
 	 */
 	public RandomDeck() {
 		final List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());

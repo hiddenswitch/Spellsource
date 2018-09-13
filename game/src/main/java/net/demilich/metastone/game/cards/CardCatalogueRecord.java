@@ -18,6 +18,12 @@ public class CardCatalogueRecord implements Serializable {
 		this.desc = desc;
 	}
 
+	/**
+	 * An ID that corresponds to the file name, less the {@code .json} extension, in the {@link
+	 * CardCatalogue#CARDS_FOLDER} in the {@code cards/src/main/resources} directory.
+	 *
+	 * @return
+	 */
 	public String getId() {
 		return id;
 	}

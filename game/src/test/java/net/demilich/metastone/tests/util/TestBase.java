@@ -11,7 +11,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.decks.DeckFactory;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -409,9 +409,9 @@ public class TestBase {
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit) {
 		DeckFormat deckFormat = DeckFormat.CUSTOM;
 
-		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, deckFormat), "Player 1");
+		Player player1 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 1");
 
-		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, deckFormat), "Player 2");
+		Player player2 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 2");
 
 
 		GameLogic logic = new GameLogic();
