@@ -1,0 +1,41 @@
+{
+  "name": "Echolocate",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "EPIC",
+  "description": "Deal $2 damage. Reveal the card about the last card you shuffled into your deck",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RevealCardSpell",
+        "cardSource": {
+          "class": "DeckSource",
+          "targetPlayer": "SELF"
+        },
+        "value": {
+          "class": "IndexInSourceValueProvider",
+          "cardSource": {
+            "class": "DeckSource",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "LAST_SHUFFLED",
+            "operation": "HAS"
+          },
+          "offset": -1
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

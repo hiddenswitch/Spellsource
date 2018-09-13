@@ -1,0 +1,28 @@
+{
+  "name": "Avolanche Acolyte",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Freezes the minions next to whomever this attacks.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

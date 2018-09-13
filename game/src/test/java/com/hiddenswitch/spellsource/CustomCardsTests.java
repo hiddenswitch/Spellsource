@@ -16,12 +16,16 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.events.TurnStartEvent;
+import net.demilich.metastone.game.events.WillEndSequenceEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
+import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -3269,5 +3273,220 @@ public class CustomCardsTests extends TestBase {
 	}
 
 
+
+	@Test
+	public void testTombStoneTerror() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, opponent, "minion_kobold_monk");
+			assertTrue(opponent.getHero().hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+			destroy(context, minion);
+			playCard(context, player, "minion_tombstone_terror");
+			assertTrue(player.getHero().hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
+		});
+
+
+	}
+
+
+	@Test
+	public void testTeronGorefiend() {
+		runGym((context, player, opponent) -> {
+			Minion gorefiend = playMinionCard(context, player, "minion_teron_gorefiend");
+			receiveCard(context, player, "minion_harvest_golem");
+			shuffleToDeck(context, player, "minion_harvest_golem");
+			context.fireGameEvent(new WillEndSequenceEvent(context));
+			assertTrue(gorefiend.hasAttribute(Attribute.DEATHRATTLES));
+			playCard(context, player, "spell_twisting_nether");
+			assertEquals(player.getMinions().size(), 2);
+		});
+	}
+
+	@Test
+	public void testMidnightRide() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_wisp");
+			playCard(context, player, "minion_wisp");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, player, "spell_midnight_ride");
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getDeck().size(), 2);
+
+			context.getLogic().drawCard(player.getId(), null);
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getMinions().size(), 1);
+
+			context.getLogic().drawCard(player.getId(), null);
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(player.getMinions().size(), 2);
+		});
+
+
+	}
+
+	@Test
+	public void testIceCap() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				shuffleToDeck(context, player, "minion_snowflipper_penguin");
+			}
+
+			playCard(context, player, "spell_icecap");
+			playCard(context, player, "spell_arcane_intellect");
+			assertEquals(player.getHand().size(), 3);
+			assertEquals(player.getDeck().size(), 27);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHand().size(), 3);
+			assertEquals(player.getDeck().size(), 27);
+			assertEquals(context.getTriggerManager().getTriggers().size(), 0);
+			playCard(context, player, "spell_arcane_intellect");
+			assertEquals(player.getHand().size(), 5);
+			assertEquals(player.getDeck().size(), 25);
+		});
+
+	}
+
+	@Test
+	public void testMealcatcher() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_argent_squire");
+			shuffleToDeck(context, opponent, "minion_molten_giant");
+			Minion mealcatcher = playMinionCard(context, player, "minion_mealcatcher");
+			assertEquals(mealcatcher.getAttack(), mealcatcher.getBaseAttack() + 1);
+			assertEquals(mealcatcher.getHp(), mealcatcher.getBaseHp() + 1);
+			assertTrue(mealcatcher.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertEquals(player.getDeck().size(), 0);
+		});
+
+	}
+
+	@Test
+	public void testPuzzleBox() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				shuffleToDeck(context, player, "minion_wisp");
+			}
+			playCard(context, player, "permanent_puzzle_box");
+			assertEquals(player.getDeck().size(), 0);
+			for (int i = 0; i < 4; i++) {
+				assertEquals(player.getHand().size(), 0);
+				context.endTurn();
+				context.endTurn();
+			}
+			assertEquals(player.getHand().size(), 4);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHand().size(), 4);
+		});
+
+	}
+
+	@Test
+	public void testDerangedShifter() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_swamp_leech");
+			Minion shifter = playMinionCard(context, player, "minion_deranged_shifter");
+			assertTrue(shifter.hasAttribute(Attribute.LIFESTEAL));
+
+
+		});
+
+
+	}
+
+	@Test
+	public void testContinuity() {
+		runGym((context, player, opponent) -> {
+			Card flame1 = receiveCard(context, player, "token_flame_elemental");
+			Card flame2 = shuffleToDeck(context, player, "token_flame_elemental");
+			Minion flame3 = playMinionCard(context, player, "token_flame_elemental");
+			Minion flame4 = playMinionCard(context, player, "token_flame_elemental");
+			playCardWithTarget(context, player, "spell_continuity", flame3);
+			assertEquals(flame4.getAttack(), 3);
+			assertEquals(flame3.getAttack(), 3);
+			assertEquals(flame2.getBaseAttack() + flame2.getBonusAttack(), 3);
+			assertEquals(flame1.getBaseAttack() + flame1.getBonusAttack(), 3);
+			playCard(context, player, "minion_fire_fly");
+			assertEquals(player.getHand().get(1).getBaseAttack() + player.getHand().get(1).getBonusAttack(), 3);
+			receiveCard(context, player, "minion_fire_fly");
+			assertEquals(player.getHand().get(2).getBaseAttack() + player.getHand().get(2).getBonusAttack(), 1);
+		});
+
+	}
+
+
+	@Test
+	public void testEchoLocate() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_wisp");
+			shuffleToDeck(context, player, "minion_target_dummy");
+			shuffleToDeck(context, player, "minion_snowflipper_penguin");
+			playCardWithTarget(context, player, "spell_forgotten_torch", opponent.getHero());
+			playCardWithTarget(context, player, "spell_echolocate", opponent.getHero());
+
+		});
+	}
+
+	@Test
+	public void testIntoTheMines() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_into_the_mines");
+			for(int i = 0; i < 9; i++) {
+				playCardWithTarget(context, player, "spell_freezing_potion", opponent.getHero());
+			}
+			assertEquals(player.getHand().size(), 1);
+
+		});
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_into_the_mines");
+			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_healing_rain");
+			assertEquals(player.getHand().size(), 1);
+
+		});
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_into_the_mines");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, opponent, "minion_wisp");
+			playCard(context, player, "spell_mass_dispel");
+			playCard(context, player, "spell_mass_dispel");
+			playCard(context, player, "spell_mass_dispel");
+			assertEquals(player.getHand().size(), 1);
+
+		});
+	}
+
+	@Test
+	public void testAkarador() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_wisp");
+			playCard(context, player, "minion_murloc_tinyfin");
+			playCard(context, player, "minion_target_dummy");
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "minion_snowflipper_penguin");
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "minion_akarador");
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_snowflipper_penguin");
+		});
+
+	}
+
+	@Test
+	public void testBonefetcher() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_argent_squire");
+			Minion bonefetcher = playMinionCard(context, player, "minion_bonefetcher");
+			assertTrue(bonefetcher.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+	}
+
+	@Test
+	public void testArthasMenethil() {
+		
+	}
 }
 

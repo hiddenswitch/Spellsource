@@ -1,0 +1,24 @@
+{
+  "name": "Toxic Gargoyle",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Poisonous. Battlecry: Deal 1 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

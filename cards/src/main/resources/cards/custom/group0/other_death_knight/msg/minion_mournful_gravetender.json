@@ -1,0 +1,40 @@
+{
+  "name": "Mournful Gravetender",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a friendly minion that died this game. Give it +1/+1",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "spell": {
+          "class": "BuffSpell",
+          "target": "OUTPUT",
+          "value": 1
+        },
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "distinct": true,
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

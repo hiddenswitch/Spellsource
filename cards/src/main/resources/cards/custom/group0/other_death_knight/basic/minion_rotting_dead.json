@@ -1,0 +1,26 @@
+{
+  "name": "Rotting Dead",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Has +1 Attack for each other minion you control.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "OTHER_FRIENDLY_MINIONS"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

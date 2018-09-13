@@ -1,0 +1,21 @@
+{
+  "name": "Wraith Walk",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "RARE",
+  "description": "Give your hero Immune until your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "IMMUNE",
+    "revertTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

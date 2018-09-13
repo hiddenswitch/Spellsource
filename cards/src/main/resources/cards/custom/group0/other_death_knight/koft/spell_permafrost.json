@@ -1,0 +1,25 @@
+{
+  "name": "Permafrost",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "EPIC",
+  "description": "Freeze a minion. Permanently,",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DONT_UNFREEZE"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

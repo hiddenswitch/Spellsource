@@ -13,6 +13,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -190,7 +191,9 @@ public class Enchantment extends Entity implements Trigger {
 			if (this instanceof Quest) {
 				expire();
 			}
-			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
+
+			boolean useAsSource = getSourceCard() != null && getSourceCard().hasAttribute(Attribute.USE_AS_SOURCE);
+			event.getGameContext().getLogic().castSpell(ownerId, spell, useAsSource ? this.getReference() : hostReference, EntityReference.NONE, true);
 		}
 		if (maxFires != null
 				&& fires >= maxFires) {
@@ -265,6 +268,10 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public boolean canFire(GameEvent event) {
+		if (hostReference.getId() == -1) {
+			System.out.println("Something is def wrong");
+			return false;
+		}
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
 		for (EventTrigger trigger : triggers) {
 			if (triggerFires(trigger, event, host)) {
@@ -301,8 +308,9 @@ public class Enchantment extends Entity implements Trigger {
 			return false;
 		}
 
+		boolean useAsSource = getSourceCard() != null && getSourceCard().hasAttribute(Attribute.USE_AS_SOURCE);
 		for (EventTrigger trigger : triggers) {
-			if (trigger.canFireCondition(event)) {
+			if (trigger.canFireCondition(event, useAsSource ? this : null)) {
 				return true;
 			}
 		}

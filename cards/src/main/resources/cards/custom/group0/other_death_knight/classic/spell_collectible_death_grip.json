@@ -1,0 +1,23 @@
+{
+  "name": "Death Grip",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "RARE",
+  "description": "Steal a minion from your opponent's deck and add it to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "StealCardSpell",
+    "target": "ENEMY_DECK",
+    "cardLocation": "HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "randomTarget": true,
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

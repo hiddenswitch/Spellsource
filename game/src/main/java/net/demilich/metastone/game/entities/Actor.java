@@ -193,7 +193,7 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		if (hasAttribute(Attribute.PERMANENT)) {
 			return hasAttribute(Attribute.DESTROYED);
 		}
-		return getHp() < 1 || super.isDestroyed();
+		return (getHp() < 1 || super.isDestroyed()) && !hasAttribute(Attribute.CANT_BE_DESTROYED);
 	}
 
 	public boolean isWounded() {
@@ -268,7 +268,10 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		updateTriggers();
 	}
 
-	private void updateTriggers() {
+	public void updateTriggers() {
+		if (this.getReference().getId() == -1) {
+			System.out.println("updating bad");
+		}
 		for (Enchantment trigger : enchantments) {
 			trigger.setHost(this);
 		}

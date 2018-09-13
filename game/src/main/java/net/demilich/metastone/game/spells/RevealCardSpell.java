@@ -23,13 +23,20 @@ public class RevealCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList filteredCards = SpellUtils.getCards(context, player, target, source, desc, 1);
+		CardList filteredCards = SpellUtils.getCards(context, player, target, source, desc, 999);
 		if (filteredCards.isEmpty()) {
 			logger.warn("onCast {} {}: Tried to reveal a card but none was specified.", context.getGameId(), source);
 			return;
 		}
+		int i = 0;
+		if (desc.containsKey(SpellArg.VALUE)) {
+			i = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+			if (i < 0 || i >= filteredCards.size()) {
+				return;
+			}
+		}
 
-		Card cardToReveal = filteredCards.get(0);
+		Card cardToReveal = filteredCards.get(i);
 		context.getLogic().revealCard(player, cardToReveal);
 		SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		if (subSpell == null) {

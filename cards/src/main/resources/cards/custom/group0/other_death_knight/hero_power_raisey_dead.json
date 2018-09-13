@@ -1,0 +1,20 @@
+{
+  "name": "Raise Dead",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Summon a 1/1 Ghoul with Charge that dies at the end of the turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_charging_ghoul"
+    }
+  },
+  "heroPower": "hero_power_raise_deader",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

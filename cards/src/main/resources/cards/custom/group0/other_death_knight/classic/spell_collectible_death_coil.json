@@ -1,0 +1,27 @@
+{
+  "name": "Death Coil",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Deal $5 damage to an enemy, or restore #5 Health to a friendly character.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 5
+    },
+    "spell2": {
+      "class": "HealSpell",
+      "value": 5
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

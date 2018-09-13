@@ -1,0 +1,33 @@
+{
+  "name": "Asphyxiate",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "COMMON",
+  "description": "Silenace a minion. At the start of your turn, destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DestroySpell",
+            "target": "SELF"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

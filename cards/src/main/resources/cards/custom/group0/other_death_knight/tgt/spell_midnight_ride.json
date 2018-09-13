@@ -1,0 +1,39 @@
+{
+  "name": "Midnight Ride",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "EPIC",
+  "description": "Shuffle all minions into their owner's deck. They are summoned when drawn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_midnight_ride",
+        "exclusive": true
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "ENEMY_PLAYER",
+        "targetPlayer": "OPPONENT",
+        "card": "enchantment_midnight_ride",
+        "exclusive": true
+      },
+      {
+        "class": "ShuffleMinionToDeckSpell",
+        "target": "ALL_MINIONS",
+        "targetPlayer": "OWNER",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "attribute": "RESERVED_BOOLEAN_2"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.desc.source;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -12,7 +13,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -69,6 +73,10 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 					.stream()
 					.collect(toMap(Card::getCardId, Function.identity(), (p, q) -> p))
 					.values());
+		}
+
+		if (getDesc().getBool(CardSourceArg.INVERT)) {
+			cards = new CardArrayList(Lists.reverse(cards.toList()));
 		}
 
 		return cards;

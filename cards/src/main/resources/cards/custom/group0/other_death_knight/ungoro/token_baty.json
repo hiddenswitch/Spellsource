@@ -1,0 +1,15 @@
+{
+  "name": "Bat",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

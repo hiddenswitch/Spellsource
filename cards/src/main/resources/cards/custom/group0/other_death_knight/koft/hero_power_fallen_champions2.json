@@ -1,0 +1,39 @@
+{
+  "name": "Fallen Champions",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Summon an enemy minion that died this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "DIED_ON_TURN",
+            "operation": "EQUAL"
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

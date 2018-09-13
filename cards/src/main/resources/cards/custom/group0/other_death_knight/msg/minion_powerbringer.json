@@ -1,0 +1,43 @@
+{
+  "name": "Power Bringer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give a random minion in your hand and deck +2/+2.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HAND",
+        "attackBonus": 2,
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "hpBonus": 2,
+        "randomTarget": true
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_DECK",
+        "attackBonus": 2,
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "hpBonus": 2,
+        "randomTarget": true
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

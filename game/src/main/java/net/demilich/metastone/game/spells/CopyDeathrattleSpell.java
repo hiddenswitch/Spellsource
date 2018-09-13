@@ -42,7 +42,7 @@ public class CopyDeathrattleSpell extends Spell {
 		Actor copyTo = (Actor) source;
 		List<SpellDesc> deathrattles = new ArrayList<>();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, 99);
-		if (target == null && !impliedCards.isEmpty()) {
+		if (!impliedCards.isEmpty()) {
 			for (Card impliedCard : impliedCards) {
 				if (impliedCard.getDesc().getDeathrattle() != null) {
 					deathrattles.add(impliedCard.getDesc().getDeathrattle());

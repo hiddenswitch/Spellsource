@@ -276,8 +276,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void addGameEventListener(Player player, Trigger gameEventListener, Entity host) {
-		if (context.updateAndGetGameOver()) {
-			// Don't add game event listeners while the game is over
+		if (context.updateAndGetGameOver() || (host.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS) && gameEventListener instanceof Enchantment)) {
+			// Don't add game event listeners while the game is over or if the target shouldn't get it
 			return;
 		}
 
@@ -396,7 +396,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		entity.setAttribute(attr);
-		context.fireGameEvent(new AttributeAppliedEvent(context, entity.getId(), entity, source, attr));
+		context.fireGameEvent(new AttributeAppliedEvent(context, entity.getOwner(), entity, source, attr));
 	}
 
 	/**
@@ -701,7 +701,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (sourceReference != null) {
 			source = context.resolveSingleTarget(sourceReference);
 		}
-
+		spellDesc = spellDesc.clone();
 		//Implement SpellOverrideAura
         Object clas = spellDesc.get(SpellArg.CLASS);
         Entity finalSource = source;
@@ -714,6 +714,23 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
 						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
                 .collect(Collectors.toList());
+        overrideAuras.addAll(context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof Enchantment)
+				.map(t -> (Enchantment) t)
+				.filter(((Predicate<Enchantment>) Enchantment::isExpired).negate())
+				.filter(e -> e.getSourceCard() != null)
+				.filter(e -> e.getSourceCard().getDesc().getAura() != null)
+				.map(e -> {
+					Aura aura = e.getSourceCard().getDesc().getAura().create();
+					aura.setOwner(e.getOwner());
+					return aura;
+				})
+				.filter(aura -> aura.getDesc() != null && aura.getDesc().getRemoveEffect() != null && aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(clas))
+				.filter(aura -> !context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).isEmpty()
+						&& context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).get(0).getId() == playerId)
+				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
+						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
+				.collect(Collectors.toList()));
         if (!overrideAuras.isEmpty()) {
             for (Aura aura : overrideAuras) {
                 for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
@@ -1216,6 +1233,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Map<Actor, EntityLocation> previousLocation = new HashMap<>();
 
 		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
+
+		reversed.removeIf(actor -> actor.hasAttribute(Attribute.CANT_BE_DESTROYED));
+
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
@@ -1226,6 +1246,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		for (int i = 0; i < targets.length; i++) {
 			Actor target = targets[i];
+			if (target.hasAttribute(Attribute.CANT_BE_DESTROYED)) {
+				continue;
+			}
 			EntityLocation actorPreviousLocation = previousLocation.get(target);
 			Player owner = context.getPlayer(target.getOwner());
 			switch (target.getEntityType()) {
@@ -1258,6 +1281,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			resolveDeathrattles(owner, target, previousLocation.get(target));
 		}
 		for (Actor target : targets) {
+			if (target.hasAttribute(Attribute.CANT_BE_DESTROYED)) {
+				continue;
+			}
 			removeEnchantments(target, true);
 		}
 
@@ -1927,7 +1953,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (!actor.hasAttribute(Attribute.FROZEN)) {
 			return;
 		}
-		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks()) {
+		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks() && !actor.hasAttribute(Attribute.DONT_UNFREEZE)) {
 			removeAttribute(actor, Attribute.FROZEN);
 		}
 	}
@@ -2226,7 +2252,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param target The {@link Actor} to mark as destroyed.
 	 */
 	public void markAsDestroyed(Actor target) {
-		if (target != null) {
+		if (target != null && !target.hasAttribute(Attribute.CANT_BE_DESTROYED)) {
 			if (!target.isDestroyed()) {
 				incrementedDestroyedThisSequenceCount();
 			}
@@ -3371,6 +3397,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				}
 				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
 			}
+
+			if (!player.hasAttribute(Attribute.LAST_SHUFFLED)) {
+				player.setAttribute(Attribute.LAST_SHUFFLED, new CardArrayList(Arrays.asList(context.getCardById(card.getCardId()))));
+			} else {
+				final CardList shuffledCards = (CardList) player.getAttribute(Attribute.LAST_SHUFFLED);
+				shuffledCards.add(context.getCardById(card.getCardId()));
+			}
 		}
 	}
 
@@ -3493,7 +3526,20 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			refreshAttacksPerRound(minion);
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
-		drawCard(playerId, null);
+
+		boolean shouldDraw = true;
+		for (Trigger e : context.getTriggersAssociatedWith(player.getReference())) {
+			if (e instanceof Enchantment) {
+				Enchantment enchantment2 = (Enchantment) e;
+				if (enchantment2.getSourceCard() != null && enchantment2.getSourceCard().getCardId().equalsIgnoreCase("enchantment_frozen_deck")) {
+					shouldDraw = false;
+				}
+			}
+		}
+		if (shouldDraw) {
+			drawCard(playerId, null);
+		}
+		context.fireGameEvent(new AfterTurnStartEvent(context, player.getId()));
 		endOfSequence();
 	}
 

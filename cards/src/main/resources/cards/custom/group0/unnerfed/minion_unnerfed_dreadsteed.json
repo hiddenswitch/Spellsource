@@ -10,7 +10,7 @@
   "description": "Deathrattle: Summon a Dreadsteed.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "minion_dreadsteed"
+    "card": "minion_unnerfed_dreadsteed"
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -1,0 +1,53 @@
+{
+  "name": "Puzzle Box",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Remove the top 4 cards of your deck. In 4 turns, add them to your hand.",
+  "trigger": {
+    "countUntilCast": 4,
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "custom.ReceiveCardsInStorageSpell"
+        },
+        {
+          "class": "DestroySpell",
+          "target": "SELF"
+        }
+      ]
+    },
+    "maxFires": 4
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "howMany": 4,
+      "spells": [
+        {
+          "class": "custom.StoreEntitySpell",
+          "target": "FRIENDLY_TOP_CARD"
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_TOP_CARD"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

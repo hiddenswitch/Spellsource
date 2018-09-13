@@ -1,0 +1,33 @@
+{
+  "name": "Fallen Champions",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Passive Hero Power: After an enemy minion dies, summon it.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "HeroPowerSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "target": "EVENT_TARGET",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,20 @@
+{
+  "name": "Geronimo!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "COMMON",
+  "description": "Choose a minion. Freeze all other minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ExecuteAsSpell",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "attribute": "FROZEN"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

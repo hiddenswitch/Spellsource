@@ -1,0 +1,24 @@
+{
+  "name": "Plagueborn Meatwall",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Whenever one of your other minions dies, gain +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

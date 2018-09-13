@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -99,7 +101,10 @@ public class TargetLogic implements Serializable {
 
 		return context.getEntities().filter(e -> e.getId() == targetId)
 				.findFirst()
-				.orElseThrow(() -> new NullPointerException("Target not found exception: " + targetKey));
+				.orElseThrow(() -> {
+					GameContext lol = context;
+					return new NullPointerException("Target not found exception: " + targetKey);
+				});
 	}
 
 	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {
@@ -108,6 +113,14 @@ public class TargetLogic implements Serializable {
 		}
 		if (!context.getEventSourceStack().isEmpty() && targetKey.equals(EntityReference.EVENT_TARGET)) {
 			return context.resolveSingleTarget(context.getEventSourceStack().peek());
+		}
+		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
+			if (trigger instanceof Enchantment) {
+				Enchantment enchantment = (Enchantment) trigger;
+				if (targetKey.getId() == enchantment.getId()) {
+					return enchantment;
+				}
+			}
 		}
 		return null;
 	}
