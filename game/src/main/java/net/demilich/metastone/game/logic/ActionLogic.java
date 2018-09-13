@@ -176,6 +176,15 @@ public class ActionLogic implements Serializable {
 		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetSelection() == TargetSelection.AUTO);
 	}
 
+	/**
+	 * Rolls out actions. For actions that have {@code targetRequirement} values that aren't {@link TargetSelection#NONE},
+	 * returning new actions whose {@link GameAction#getTargetReference()} is a valid target.
+	 *
+	 * @param action
+	 * @param context
+	 * @param player
+	 * @param actions
+	 */
 	public void rollout(GameAction action, GameContext context, Player player, Collection<GameAction> actions) {
 		context.getLogic().processTargetModifiers(action);
 		if (action.getTargetRequirement() == TargetSelection.NONE || action.getTargetRequirement() == TargetSelection.AUTO) {

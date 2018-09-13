@@ -46,7 +46,7 @@ public class RandomCardTargetSpell extends Spell {
 		GameAction action;
 		Card spellCard;
 		if (card.hasChoices()) {
-			spellCard = CardCatalogue.getCardById(context.getLogic().getRandom(Arrays.asList(card.getChooseOneCardIds())));
+			spellCard = context.getCardById(context.getLogic().getRandom(Arrays.asList(card.getChooseOneCardIds())));
 		} else if (card.getCardType() == CardType.SPELL) {
 			spellCard = card;
 		} else {

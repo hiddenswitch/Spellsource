@@ -85,11 +85,6 @@ public class SetCardSpell extends RevertableSpell {
 			return;
 		}
 
-		if (CardCatalogue.getCardById(cardId) == null) {
-			logger.error("onCast {} {}: Could not find a card with ID {}.", context.getGameId(), source, cardId);
-			return;
-		}
-
 		if (target instanceof Card) {
 			logger.debug("onCast {} {}: Setting {}'s card ID to {}", context.getGameId(), source, target, cardId);
 			target.getAttributes().put(attr, cardId);

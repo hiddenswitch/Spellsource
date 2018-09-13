@@ -3,8 +3,10 @@ package net.demilich.metastone.game.actions;
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -21,6 +23,10 @@ import java.util.List;
  * Typically, discover actions have a {@link net.demilich.metastone.game.spells.ReceiveCardSpell} that puts the card in
  * {@link #getCard()} into the player's hand. But any kind of spell that takes a {@link
  * net.demilich.metastone.game.spells.desc.SpellArg#CARD} argument will work with a DiscoverAction.
+ * <p>
+ * Discover cards should never be executed directly. They are presented to the {@link Behaviour} in {@link
+ * GameLogic#requestAction(Player, List)}, so they will always be some kind of "recursive" call inside a {@link
+ * Behaviour}.
  */
 public class DiscoverAction extends GameAction {
 	private static final String DISCOVERED_NAME = "discovered";
