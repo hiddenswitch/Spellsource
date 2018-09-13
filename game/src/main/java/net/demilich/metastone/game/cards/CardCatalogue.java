@@ -20,6 +20,10 @@ import java.util.stream.Stream;
  * A place that stores {@link CardCatalogueRecord} records that were generated from the "cards" Java package.
  */
 public class CardCatalogue {
+	/**
+	 * The directory/prefix of the location in the JAR resources of the {@code card} module, i.e., a directory inside of
+	 * {@code cards/src/main/resources}.
+	 */
 	public static final String CARDS_FOLDER = "cards";
 	private static Logger logger = LoggerFactory.getLogger(CardCatalogue.class);
 	private static int version = 1;

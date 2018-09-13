@@ -8,7 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.decks.DeckFactory;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -79,8 +79,8 @@ public class TestBase {
 		for (CardSet set : CardSet.values()) {
 			deckFormat.addSet(set);
 		}
-		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, DeckFormat.WILD),"Player 1");
-		Player player2 = new Player(DeckFactory.getRandomDeck(hero2, DeckFormat.WILD),"Player 2");
+		Player player1 = new Player(Deck.getRandomDeck(hero1, DeckFormat.WILD),"Player 1");
+		Player player2 = new Player(Deck.getRandomDeck(hero2, DeckFormat.WILD),"Player 2");
 		GameLogic logic = new GameLogic();
 		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
 		logic.setContext(context);
