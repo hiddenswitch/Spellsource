@@ -1,0 +1,17 @@
+{
+  "name": "Outbreak",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "COMMON",
+  "description": "Give all minions Poisonous.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "ALL_MINIONS",
+    "attribute": "POISONOUS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

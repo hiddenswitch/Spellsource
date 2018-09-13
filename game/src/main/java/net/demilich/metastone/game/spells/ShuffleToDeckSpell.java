@@ -24,6 +24,9 @@ public class ShuffleToDeckSpell extends Spell {
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
 		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
 
+		for (Card card : player.getDeck()) {
+			context.getLogic().removeAttribute(card, Attribute.LAST_SHUFFLED);
+		}
 
 		if (target != null) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
@@ -33,9 +36,8 @@ public class ShuffleToDeckSpell extends Spell {
 				final Card copy = target.getSourceCard().getCopy();
 				copy.getAttributes().putAll(map);
 				context.getLogic().shuffleToDeck(player, copy, quiet);
-				copy.setAttribute(Attribute.SHUFFLED);
+				copy.setAttribute(Attribute.LAST_SHUFFLED);
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
-				context.getLogic().removeAttribute(copy, Attribute.SHUFFLED);
 			}
 			return;
 		}
@@ -43,18 +45,19 @@ public class ShuffleToDeckSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc,
 				desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
 
+
+
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
 				final Card copy = original.getCopy();
-				copy.setAttribute(Attribute.SHUFFLED);
+				copy.setAttribute(Attribute.LAST_SHUFFLED);
 				context.getLogic().shuffleToDeck(player, copy, quiet);
 			}
 		}
 
 		for (Card card : player.getDeck()) {
-			if (card.hasAttribute(Attribute.SHUFFLED)) {
+			if (card.hasAttribute(Attribute.LAST_SHUFFLED)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
-				context.getLogic().removeAttribute(card, Attribute.SHUFFLED);
 			}
 		}
 	}

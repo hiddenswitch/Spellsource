@@ -1,0 +1,25 @@
+{
+  "name": "Hardened Initiate",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Immune during your turn",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    },
+    "attribute": "AURA_IMMUNE",
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

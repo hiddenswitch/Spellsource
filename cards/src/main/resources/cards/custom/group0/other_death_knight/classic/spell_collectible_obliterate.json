@@ -1,0 +1,33 @@
+{
+  "name": "Obliterate",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "RARE",
+  "description": "Destroy a minion. Your hero takes damage equal to its Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

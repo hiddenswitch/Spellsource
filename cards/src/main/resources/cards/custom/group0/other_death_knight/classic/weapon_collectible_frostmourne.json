@@ -1,0 +1,34 @@
+{
+  "name": "Frostmourne",
+  "baseManaCost": 8,
+  "type": "WEAPON",
+  "heroClass": "SPIRIT",
+  "damage": 5,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Summon every minion killed by this weapon.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "custom.StoreEntitySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "deathrattle": {
+    "class": "custom.ResurrectFromEntityStorageSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

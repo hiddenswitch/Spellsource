@@ -1,0 +1,25 @@
+{
+  "name": "Marrow Amulet",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "COMMON",
+  "description": "Give your minions +1 Health. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 1,
+        "target": "FRIENDLY_MINIONS"
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

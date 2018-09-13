@@ -1,0 +1,36 @@
+{
+  "name": "Doom Pact",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "EPIC",
+  "description": "Destroy all minions. Remove the top card from your deck for each minion destroyed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ALL_MINIONS"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS"
+      },
+      {
+        "class": "CastRepeatedlySpell",
+        "spell": {
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_TOP_CARD"
+        },
+        "howMany": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

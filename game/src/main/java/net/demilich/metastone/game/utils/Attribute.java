@@ -869,11 +869,6 @@ public enum Attribute {
 	 */
 	SUPREMACY,
 	/*
-	 * Dummy attribute to target cards shuffled to the player's deck at the same time
-	 * Implements Augmented Elekk + Academic Espionage
-	 */
-	SHUFFLED,
-	/*
 	 * Implements Electra Stormsurge
 	 */
 	SPELLS_CAST_TWICE,
@@ -882,6 +877,31 @@ public enum Attribute {
 	 * The simplest and least buggy way to implement Fangs of Ashmane
 	 */
 	ATTACK_MULTIPLIER,
+
+	/*
+	 * Will block an entity from receiving game event triggers
+	 */
+	CANT_GAIN_ENCHANTMENTS,
+
+	/*
+	 * Signifies that an enchantment should treat itself as the source for triggers rather than the source of the event
+	 */
+	USE_AS_SOURCE,
+
+	/*
+	 * Indicates this cards was the most recently shuffled into a deck
+	 */
+	LAST_SHUFFLED,
+
+	/*
+	 * Indicates a character shouldn't naturally lose the FROZEN attribute
+	 */
+	DONT_UNFREEZE,
+
+	/*
+	 * Indicates a character can't be destroyed
+	 */
+	CANT_BE_DESTROYED,
 
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.

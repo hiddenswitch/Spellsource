@@ -1,0 +1,50 @@
+{
+	"name": "Teron Gorefiend",
+	"baseManaCost": 8,
+	"type": "MINION",
+	"baseAttack": 1,
+	"baseHp": 7,
+	"heroClass": "SPIRIT",
+	"rarity": "LEGENDARY",
+	"description": "Has the Deathrattle of all minions in your hand and deck.",
+	"aura": {
+    "class": "Aura",
+    "target": "SELF",
+    "alwaysApply": true,
+    "applyEffect": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveAttributeSpell",
+          "attribute": "DEATHRATTLES"
+        },
+        {
+          "class": "CopyDeathrattleSpell",
+          "cardSource": {
+            "class": "CombinedSource",
+            "cardSources": [
+              {
+                "class": "HandSource",
+                "targetPlayer": "SELF"
+              },
+              {
+                "class": "DeckSource",
+                "targetPlayer": "SELF"
+              }
+            ]
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        }
+      ]
+    },
+    "removeEffect": {
+      "class": "NullSpell"
+    }
+  },
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

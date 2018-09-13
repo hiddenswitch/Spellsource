@@ -1,0 +1,30 @@
+{
+  "name": "Midnight Ride",
+  "type": "ENCHANTMENT",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Summon any minions you draw that were shuffled by Midnight Ride",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF",
+      "requiredAttribute": "RESERVED_BOOLEAN_2"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

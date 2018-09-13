@@ -1,0 +1,27 @@
+{
+  "name": "Icebox Snowbuddy",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Battlecry: Deal damage equal to this minion's Attack randomly split among all enemies.",
+  "battlecry": {
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "howMany": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,54 @@
+{
+  "name": "Mealcatcher",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Reveal a minion in each deck. If yours costs less, destroy it gain its stats and text.",
+  "battlecry": {
+    "spell": {
+      "class": "JoustSpell",
+      "target": "NONE",
+      "spell1": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "custom.AddActorEffectsToTargetActorSpell",
+            "target": "SELF",
+            "secondaryTarget": "OUTPUT"
+          },
+          {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "attackBonus": {
+              "class": "AttributeValueProvider",
+              "target": "OUTPUT",
+              "attribute": "ATTACK"
+            },
+            "hpBonus": {
+              "class": "AttributeValueProvider",
+              "target": "OUTPUT",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "OUTPUT"
+          }
+        ]
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

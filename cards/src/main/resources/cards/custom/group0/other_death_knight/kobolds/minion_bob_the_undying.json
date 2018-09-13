@@ -1,0 +1,30 @@
+{
+  "name": "Bob the Undying",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Replace the top card of your deck with Bob the Undying.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_TOP_CARD"
+      },
+      {
+        "class": "PutDeckTopSpell",
+        "targetPlayer": "SELF",
+        "card": "minion_bob_the_undying"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

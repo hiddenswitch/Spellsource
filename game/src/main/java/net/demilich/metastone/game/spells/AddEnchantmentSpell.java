@@ -13,6 +13,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -87,10 +88,11 @@ public final class AddEnchantmentSpell extends Spell {
 			logger.error("onCast {} {}: Target cannot be null.", context.getGameId(), source);
 			throw new NullPointerException("target");
 		}
-		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER, SpellArg.CARD);
+		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER, SpellArg.CARD, SpellArg.EXCLUSIVE);
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 		Aura aura = (Aura) desc.get(SpellArg.AURA);
 		Card enchantmentCard = SpellUtils.getCard(context, desc);
+		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 
 		if (enchantmentDesc != null) {
 			Enchantment enchantment = enchantmentDesc.create();
@@ -110,8 +112,25 @@ public final class AddEnchantmentSpell extends Spell {
 		if (enchantmentCard != null) {
 			List<Enchantment> enchantmentList = enchantmentCard.createEnchantments();
 			for (Enchantment enchantment : enchantmentList) {
-				enchantment.setOwner(player.getId());
-				context.getLogic().addGameEventListener(player, enchantment, target);
+				boolean yup = true;
+				if (exclusive) {
+					for (Trigger e : context.getTriggersAssociatedWith(target.getReference())) {
+						if (e instanceof Enchantment) {
+							Enchantment enchantment2 = (Enchantment) e;
+							if (enchantment2.getSourceCard() != null && enchantment2.getSourceCard().getCardId().equalsIgnoreCase(enchantmentCard.getCardId())) {
+								yup = false;
+							}
+						}
+					}
+				}
+
+				if (yup) {
+					enchantment.setOwner(player.getId());
+					context.getLogic().addGameEventListener(player, enchantment, target);
+					if (desc.getSpell() != null) {
+						SpellUtils.castChildSpell(context, player, desc.getSpell(), enchantment, target);
+					}
+				}
 			}
 		}
 	}

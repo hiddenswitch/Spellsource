@@ -1,0 +1,33 @@
+{
+  "name": "Obsidian Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "RARE",
+  "description": "Give a random friendly minion +4/+4. (Shuffle a card to upgrade)",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardShuffledTrigger",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      }
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_greater_obsidian_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "value": 4,
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

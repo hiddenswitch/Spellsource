@@ -1,0 +1,17 @@
+{
+  "name": "Raise Deader",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Summon 2 1/1 Ghouls with Charge which dies at the end of the turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_charging_ghoul",
+    "value": 2
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

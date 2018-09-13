@@ -1,0 +1,23 @@
+{
+  "name": "Death's Embrace",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "RARE",
+  "description": "Take control of an enemy minion. Destroy it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "MindControlSpell"
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

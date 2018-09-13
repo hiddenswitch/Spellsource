@@ -1,0 +1,26 @@
+{
+  "name": "Icy Debris",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Recruit any copies of this.",
+  "deathrattle": {
+    "class": "RecruitSpell",
+    "value": 7,
+    "cardFilter": {
+      "class": "SpecificCardFilter",
+      "card": "minion_icy_debris"
+    },
+    "cardLocation": "DECK",
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

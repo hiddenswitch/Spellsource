@@ -1,0 +1,30 @@
+{
+  "name": "Lord Marrowgar",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 9,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry and Deathrattle: Shuffle 3 copies of 'Bone Storm' into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_bone_storm",
+      "howMany": 3
+    }
+  },
+  "deathrattle": {
+    "class": "ShuffleToDeckSpell",
+    "card": "spell_bone_storm",
+    "howMany": 3
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

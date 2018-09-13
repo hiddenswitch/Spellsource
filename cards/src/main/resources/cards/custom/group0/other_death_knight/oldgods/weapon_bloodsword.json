@@ -1,0 +1,16 @@
+{
+  "name": "Bloodsword",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "SPIRIT",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "Lifesteal",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

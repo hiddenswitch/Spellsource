@@ -1,0 +1,24 @@
+{
+  "name": "Dull Knife",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "100% chance to attack the wrong enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "FumbleSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

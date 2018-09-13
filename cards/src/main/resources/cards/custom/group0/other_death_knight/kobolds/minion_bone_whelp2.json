@@ -1,0 +1,19 @@
+{
+  "name": "Bone Whelp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Your other minions have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

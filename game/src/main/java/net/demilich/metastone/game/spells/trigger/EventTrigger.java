@@ -114,13 +114,21 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		return "[" + getClass().getSimpleName() + " owner:" + owner + "]";
 	}
 
-	public boolean canFireCondition(GameEvent event) {
+	public boolean canFireCondition(GameEvent event, Entity sourceOverride) {
 		Condition condition = (Condition) getDesc().get(EventTriggerArg.FIRE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
-		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
+		Entity source = event.getEventSource();
+		if (sourceOverride != null) {
+			source = sourceOverride;
+		}
+		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, source, event.getEventTarget())) {
 			return false;
 		}
 		return true;
+	}
+
+	public boolean canFireCondition(GameEvent event) {
+		return canFireCondition(event, null);
 	}
 
 	@Override

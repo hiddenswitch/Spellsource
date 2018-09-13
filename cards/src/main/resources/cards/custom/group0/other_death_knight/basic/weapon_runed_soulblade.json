@@ -1,0 +1,22 @@
+{
+  "name": "Runed Soulblade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "SPIRIT",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Silence a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SilenceSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

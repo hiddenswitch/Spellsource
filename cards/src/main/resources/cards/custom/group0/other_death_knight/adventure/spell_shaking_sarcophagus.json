@@ -1,0 +1,27 @@
+{
+  "name": "Shaking Sarcophagus",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "COMMON",
+  "description": "Discover an enemy minion that died this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "targetPlayer": "OPPONENT",
+      "distinct": true
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

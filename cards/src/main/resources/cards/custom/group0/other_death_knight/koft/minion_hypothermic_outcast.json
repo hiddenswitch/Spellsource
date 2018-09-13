@@ -1,0 +1,27 @@
+{
+  "name": "Hypothermic Outcast",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "Frozen. After this minion takes damage, Silence it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "SilenceSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "FROZEN": true,
+    "DONT_UNFREEZE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

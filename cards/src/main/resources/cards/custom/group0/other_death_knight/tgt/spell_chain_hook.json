@@ -1,0 +1,16 @@
+{
+  "name": "Chain Hook",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "RARE",
+  "description": "Put a minion into your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

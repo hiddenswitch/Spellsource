@@ -1,0 +1,28 @@
+{
+  "name": "Cryognome",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Battlecry: Shuffle a copy of all Frozen minions into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "ALL_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Continuity",
+  "type": "ENCHANTMENT",
+  "heroClass": "SPIRIT",
+  "rarity": "FREE",
+  "description": "Buffs a chosen minion whenever you receive it",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "fireCondition": {
+        "class": "StorageContainsCondition",
+        "target": "EVENT_TARGET"
+      }
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "USE_AS_SOURCE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

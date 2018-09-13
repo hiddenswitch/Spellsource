@@ -1,0 +1,112 @@
+{
+  "name": "Into The Mines",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SPIRIT",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Freeze, Silence, or heal 9 characters. Reward: The Omega Rune.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "AttributeAppliedTrigger",
+            "requiredAttribute": "FROZEN",
+            "sourcePlayer": "SELF"
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "AddAttributeSpell",
+                "target": "FRIENDLY_HERO",
+                "attribute": "RESERVED_BOOLEAN_4"
+              },
+              {
+                "class": "RemoveAttributeSpell",
+                "target": "FRIENDLY_HERO",
+                "attribute": "RESERVED_BOOLEAN_4"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "SilenceTrigger",
+            "queueCondition": {
+              "class": "OwnedByPlayerCondition",
+              "targetPlayer": "ACTIVE"
+            }
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "AddAttributeSpell",
+                "target": "FRIENDLY_HERO",
+                "attribute": "RESERVED_BOOLEAN_4"
+              },
+              {
+                "class": "RemoveAttributeSpell",
+                "target": "FRIENDLY_HERO",
+                "attribute": "RESERVED_BOOLEAN_4"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "HealingTrigger",
+            "sourcePlayer": "SELF"
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "AddAttributeSpell",
+                "target": "FRIENDLY_HERO",
+                "attribute": "RESERVED_BOOLEAN_4"
+              },
+              {
+                "class": "RemoveAttributeSpell",
+                "target": "FRIENDLY_HERO",
+                "attribute": "RESERVED_BOOLEAN_4"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "class": "AddQuestSpell",
+        "quest": {
+          "eventTrigger": {
+            "class": "AttributeAppliedTrigger",
+            "targetPlayer": "SELF",
+            "targetEntityType": "HERO",
+            "requiredAttribute": "RESERVED_BOOLEAN_4"
+          },
+          "countUntilCast": 9,
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "card": "spell_the_omega_rune"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

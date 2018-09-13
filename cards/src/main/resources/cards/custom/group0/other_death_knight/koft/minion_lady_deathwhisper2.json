@@ -1,0 +1,24 @@
+{
+  "name": "Lady Deathwhisper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "SPIRIT",
+  "baseAttack": 4,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a minion takes fatal damage, Silence it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "FatalDamageTrigger",
+      "targetEntityType": "MINION",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "SilenceSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
