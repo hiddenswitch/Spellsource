@@ -10,6 +10,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 
+/**
+ * Indicates an attack between {@link #getAttackerReference()} and {@link #getTargetReference()}.
+ */
 public class PhysicalAttackAction extends GameAction {
 	private EntityReference attackerReference;
 

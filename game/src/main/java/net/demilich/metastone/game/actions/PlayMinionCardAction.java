@@ -11,12 +11,17 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 
+import java.util.Collection;
+
 /**
  * An action representing the playing of a minion card.
  * <p>
  * The {@link PlayCardAction#getTargetReference()} refers to the minion to whose left the minion should be summoned
  * (like inserting an element into an array). If {@code null}, the index passed to the summon function will be {@code
  * -1}, which indicates to summon the minion in the rightmost slot.
+ * <p>
+ * Like other {@link PlayCardAction} actions, this action is typically rolled out by {@link
+ * net.demilich.metastone.game.logic.ActionLogic#rollout(GameAction, GameContext, Player, Collection)}.
  * <p>
  * Typically, the battlecry is resolved in this action. The {@link #PlayMinionCardAction(net.demilich.metastone.game.targeting.EntityReference)}
  * will retrieve the battlecry that appears once the minion is summoned. Choose one minion cards override the battlecry

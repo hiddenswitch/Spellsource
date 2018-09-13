@@ -6,6 +6,9 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * An action that corresponds to playing a weapon card from the hand.
+ */
 public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry {
 	private BattlecryAction battlecry;
 

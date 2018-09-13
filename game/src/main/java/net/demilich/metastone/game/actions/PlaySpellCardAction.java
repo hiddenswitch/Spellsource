@@ -9,6 +9,11 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.utils.Attribute;
 
+/**
+ * An action indicating a spell is being cast.
+ *
+ * The spell effect is referenced in the {@link #getSpell()} field.
+ */
 public class PlaySpellCardAction extends PlayCardAction {
 
 	private SpellDesc spell;

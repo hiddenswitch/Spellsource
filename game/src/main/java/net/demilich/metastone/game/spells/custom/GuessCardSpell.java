@@ -81,7 +81,7 @@ public class GuessCardSpell extends Spell {
 		String cardId = result.getCard().getCardId();
 		if (cardId.equals(correctCard.getCardId())) {
 			logger.debug("onCast {} {}: Player {} chose correct card {}", context.getGameId(), source, player, correctCard);
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
+			context.getLogic().receiveCard(player.getId(), context.getCardById(cardId));
 		}
 	}
 }
