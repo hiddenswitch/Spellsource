@@ -1,6 +1,6 @@
 {
   "name": "Black Ox Statue",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 0,
