@@ -1234,8 +1234,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
 
-		reversed.removeIf(actor -> actor.hasAttribute(Attribute.CANT_BE_DESTROYED));
-
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
@@ -1246,9 +1244,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		for (int i = 0; i < targets.length; i++) {
 			Actor target = targets[i];
-			if (target.hasAttribute(Attribute.CANT_BE_DESTROYED)) {
-				continue;
-			}
 			EntityLocation actorPreviousLocation = previousLocation.get(target);
 			Player owner = context.getPlayer(target.getOwner());
 			switch (target.getEntityType()) {
@@ -1281,9 +1276,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			resolveDeathrattles(owner, target, previousLocation.get(target));
 		}
 		for (Actor target : targets) {
-			if (target.hasAttribute(Attribute.CANT_BE_DESTROYED)) {
-				continue;
-			}
 			removeEnchantments(target, true);
 		}
 
@@ -2252,7 +2244,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param target The {@link Actor} to mark as destroyed.
 	 */
 	public void markAsDestroyed(Actor target) {
-		if (target != null && !target.hasAttribute(Attribute.CANT_BE_DESTROYED)) {
+		if (target != null) {
 			if (!target.isDestroyed()) {
 				incrementedDestroyedThisSequenceCount();
 			}
@@ -3539,7 +3531,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (shouldDraw) {
 			drawCard(playerId, null);
 		}
-		context.fireGameEvent(new AfterTurnStartEvent(context, player.getId()));
 		endOfSequence();
 	}
 

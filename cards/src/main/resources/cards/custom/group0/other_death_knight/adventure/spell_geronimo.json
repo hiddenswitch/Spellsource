@@ -7,11 +7,13 @@
   "description": "Choose a minion. Freeze all other minions.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "ExecuteAsSpell",
-    "spell": {
-      "class": "AddAttributeSpell",
-      "target": "ALL_OTHER_MINIONS",
-      "attribute": "FROZEN"
+    "class": "AddAttributeSpell",
+    "attribute": "FROZEN",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "EntityEqualsFilter",
+      "secondaryTarget": "TARGET",
+      "invert": true
     }
   },
   "collectible": true,

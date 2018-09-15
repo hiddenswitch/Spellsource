@@ -898,11 +898,6 @@ public enum Attribute {
 	 */
 	DONT_UNFREEZE,
 
-	/*
-	 * Indicates a character can't be destroyed
-	 */
-	CANT_BE_DESTROYED,
-
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>

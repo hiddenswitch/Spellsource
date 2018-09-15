@@ -1,17 +1,17 @@
 {
   "name": "Continuity",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "BROWN",
-  "rarity": "FREE",
-  "description": "Give a minion and all other copies of it +2/+2 (wherever they are)",
-  "targetSelection": "MINIONS",
+  "heroClass": "SPIRIT",
+  "rarity": "EPIC",
+  "description": "Give a friendly minion and all other copies of it in your hand, deck and battlefield +2/+2",
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
-        "target": "ALL_MINIONS",
+        "target": "FRIENDLY_MINIONS",
         "value": 2,
         "filter": {
           "class": "SpecificCardFilter",
@@ -35,19 +35,10 @@
           "class": "SpecificCardFilter",
           "secondaryTarget": "TARGET"
         }
-      },
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "card": "enchantment_continuity",
-        "spell": {
-          "class": "custom.StoreEntitySpell",
-          "target": "TARGET"
-        }
       }
     ]
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

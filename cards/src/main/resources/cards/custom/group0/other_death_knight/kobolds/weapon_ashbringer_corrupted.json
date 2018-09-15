@@ -10,7 +10,7 @@
   "aura": {
     "class": "AttributeAura",
     "target": "ENEMY_CHARACTERS",
-    "attribute": "LIFESTEAL"
+    "attribute": "AURA_LIFESTEAL"
   },
   "collectible": true,
   "set": "CUSTOM",

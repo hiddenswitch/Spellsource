@@ -9,7 +9,11 @@
   "spell": {
     "class": "ResurrectFromBothSpell",
     "value": 3,
-    "ignoreSpellDamage": true
+    "cardFilter": {
+      "class": "OwnedByPlayerFilter",
+      "invert": true,
+      "targetPlayer": "SELF"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
