@@ -1,11 +1,14 @@
 import os
+import re
+from collections import deque
 from json import loads, dumps
 from mimetypes import MimeTypes
-from typing import Sequence
+from re import Pattern
+from typing import Union, Mapping, Iterable, Optional, Deque
 from urllib.parse import urlparse, ParseResult
 
 from autoboto.services import rekognition, s3
-from autoboto.services.rekognition.shapes import Image, S3Object, DetectTextResponse
+from autoboto.services.rekognition.shapes import Image, S3Object, DetectTextResponse, TextTypes, TextDetection
 from botocore.exceptions import ClientError
 from requests import get
 
@@ -13,22 +16,17 @@ _MIME = MimeTypes()
 
 
 class RekognitionGenerator(object):
-    def __init__(self, *image_uris: Sequence[str], bucket='minionate', results_cache_prefix='image2card/results',
+    def __init__(self, *images: Iterable[Union[str, Mapping, DetectTextResponse]], bucket='minionate',
+                 results_cache_prefix='image2card/results',
                  image_cache_prefix='image2card/images'):
-        self.image_uris = image_uris
+        self.images = images
         self._results_cache_prefix = results_cache_prefix
-
-
+        self._image_cache_prefix = image_cache_prefix
         self._bucket = bucket
         self._requests = {}
-        self._image_cache_prefix = image_cache_prefix
 
     def __len__(self) -> int:
-        return len(self.image_uris)
-
-    def __del__(self):
-        if self._s3 is not None:
-            self._s3.close()
+        return len(self.images)
 
     def __iter__(self) -> DetectTextResponse:
         self._s3 = s3.Client()
@@ -37,13 +35,21 @@ class RekognitionGenerator(object):
         except KeyError as workaround_key_error:
             region_name = workaround_key_error.args[0]
         self._rekognition = rekognition.Client(region_name=region_name)
-        for image_uri in self.image_uris:
-            # Check if we already have the exact URI result locally
-            if image_uri in self._requests:
-                yield DetectTextResponse.from_boto_dict(self._requests[image_uri])
+        for image in self.images:
+            # If we're given a detect text response or boto json, yield it immediately
+            if isinstance(image, DetectTextResponse):
+                yield image
+                continue
+            if isinstance(image, Mapping):
+                yield DetectTextResponse.from_boto_dict(image)
                 continue
 
-            uri = urlparse(image_uri)  # type: ParseResult
+            # Check if we already have the exact URI result locally
+            if image in self._requests:
+                yield DetectTextResponse.from_boto_dict(self._requests[image])
+                continue
+
+            uri = urlparse(image)  # type: ParseResult
 
             # Check if we've already processed and saved this URI to S3
             normalized_path = uri.path[1:] if uri.path[0] in (os.path.pathsep, '/') else uri.path
@@ -60,8 +66,8 @@ class RekognitionGenerator(object):
             if rekognition_res_s3 is not None:
                 # Return this json dict as the result
                 assert rekognition_res_s3.content_type in ('application/json', 'text/json', 'text/plain')
-                self._requests[image_uri] = loads(rekognition_res_s3.body.read())
-                yield DetectTextResponse.from_boto_dict(self._requests[image_uri])
+                self._requests[image] = loads(rekognition_res_s3.body.read())
+                yield DetectTextResponse.from_boto_dict(self._requests[image])
                 continue
 
             # Figure out if we need to upload
@@ -78,7 +84,7 @@ class RekognitionGenerator(object):
                         raise ex
                     if uri.scheme in ('http', 'https'):
                         # download and upload
-                        with get(image_uri) as image_res:
+                        with get(image) as image_res:
                             content_type = image_res.headers['Content-Type']
                             assert 'image' in content_type
                             image_bytes = image_res.content
@@ -99,8 +105,94 @@ class RekognitionGenerator(object):
 
             rekognition_res = self._rekognition.detect_text(
                 image=Image(s3_object=S3Object(bucket=self._bucket, name=location)))
-            self._requests[image_uri] = rekognition_res.to_boto_dict()
+            self._requests[image] = rekognition_res.to_boto_dict()
             # Save the result to S3
             self._s3.put_object(bucket=self._bucket, key=result_key, content_type='application/json',
-                                body=dumps(self._requests[image_uri]))
+                                body=dumps(self._requests[image]))
             yield rekognition_res
+
+
+class SpellsourceCardDescGenerator(object):
+    _DIGIT_CONVERTERS = {  # type: Mapping[Pattern, str]
+        re.compile(r'[Oo]'): '0',
+        re.compile(r'[lLI|]'): '1',
+        re.compile(r'[Ss]'): '5'
+    }
+
+    def __init__(self, *detect_text_responses: Iterable[DetectTextResponse]):
+        self.detect_text_responses = detect_text_responses  # type: Iterable[DetectTextResponse]
+
+    def __len__(self):
+        return len(self.detect_text_responses)
+
+    def __iter__(self) -> Mapping:
+        # The spatially first number reading top to bottom is typically the cost
+        # The spatially first non-numeric text reading top to bottom is we encounter is the title
+        # The last word spatially reading top to bottom could be a tribe.
+        for detect_text in self.detect_text_responses:
+            text_detections = sorted(detect_text.text_detections, key=lambda x: x.id)
+            # strategy 1: use lines
+            lines = [td for td in text_detections if td.type == TextTypes.LINE]  # type: List[TextDetection]
+
+            # First line is the mana line
+            mana_cost = SpellsourceCardDescGenerator._to_digits(lines[0].detected_text)
+
+            # Second line is name
+            name = lines[1].detected_text
+
+            # try to pick apart the ending entities, looking for a number
+            last_words = deque()  # type: Deque[str]
+            digits_counted = 0
+            lines_consumed = 0
+            for i in range(-1, -4, -1):
+                lines_consumed += 1
+                words_in_line = lines[i].detected_text.split(' ')
+                for word in reversed(words_in_line):
+                    last_words.appendleft(word)
+                    if SpellsourceCardDescGenerator._to_digits(word) is not None:
+                        digits_counted += 1
+                if len(last_words) >= 3 or digits_counted == 2:
+                    break
+
+            card_desc = {}
+
+            if digits_counted == 2:
+                # check if we're in a situation where we have two digits
+                card_desc['baseAttack'] = SpellsourceCardDescGenerator._to_digits(last_words[0])
+                card_desc['baseHp'] = SpellsourceCardDescGenerator._to_digits(last_words[-1])
+                if len(last_words) == 3:
+                    # attack, tribe, health
+                    race = last_words[1].upper()
+                    if race == 'MECHANICAL':
+                        race = 'MECH'
+                    card_desc['race'] = race
+                description_lines = lines[2:-lines_consumed]
+                card_type = 'MINION'
+            else:
+                # Parse failure or otherwise
+                card_type = 'SPELL'
+                description_lines = lines[2:]
+
+            description = ' '.join([line.detected_text for line in description_lines])
+            card_desc.update({
+                'name': name,
+                'type': card_type,
+                'baseManaCost': mana_cost,
+                'description': description,
+                'collectible': True,
+                'set': 'CUSTOM',
+                'fileFormatVersion': 1
+            })
+            yield card_desc
+
+    @staticmethod
+    def _to_digits(line: str) -> Optional[int]:
+        # Don't permit numbers that are too long
+        if len(line) > 2:
+            return None
+        for regexp, repl in SpellsourceCardDescGenerator._DIGIT_CONVERTERS.items():
+            line = regexp.sub(repl, line)
+        try:
+            return int(line)
+        except:
+            return None
