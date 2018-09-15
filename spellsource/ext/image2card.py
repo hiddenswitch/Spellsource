@@ -3,7 +3,6 @@ import re
 from collections import deque
 from json import loads, dumps
 from mimetypes import MimeTypes
-from re import Pattern
 from typing import Union, Mapping, Iterable, Optional, Deque
 from urllib.parse import urlparse, ParseResult
 
@@ -113,7 +112,7 @@ class RekognitionGenerator(object):
 
 
 class SpellsourceCardDescGenerator(object):
-    _DIGIT_CONVERTERS = {  # type: Mapping[Pattern, str]
+    _DIGIT_CONVERTERS = {  # type: Mapping[re.Pattern, str]
         re.compile(r'[Oo]'): '0',
         re.compile(r'[lLI|]'): '1',
         re.compile(r'[Ss]'): '5'
