@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -8,6 +8,12 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.io.Serializable;
 
+/**
+ * Indicates an action that is a hero power card.
+ * <p>
+ * It otherwise behaves like a normal spell card, except {@link net.demilich.metastone.game.logic.GameLogic#useHeroPower(int)}
+ * is also called.
+ */
 public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
 	private final String choiceCardId;
 

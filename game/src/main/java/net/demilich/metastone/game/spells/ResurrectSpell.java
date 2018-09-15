@@ -1,12 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -19,6 +13,11 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class ResurrectSpell extends Spell {
 	@SuppressWarnings("unchecked")
@@ -56,7 +55,7 @@ public class ResurrectSpell extends Spell {
 				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
 					summonedMinion = card.summon();
 					context.getLogic().removeAttribute(summonedMinion, Attribute.MAGNETS);
-					String[] magnets = (String[])resurrectedMinion.getAttribute(Attribute.MAGNETS);
+					String[] magnets = (String[]) resurrectedMinion.getAttribute(Attribute.MAGNETS);
 					for (String magnet : magnets) {
 						Card magnetCard = context.getCardById(magnet);
 						context.getLogic().magnetize(player.getId(), magnetCard, summonedMinion);

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Battlecry: Shuffle a bomb into your opponent's deck. When drawn, it explodes for 5 damage.",
+  "description": "Battlecry: Shuffle a Bomb into your opponent's deck. When drawn, it explodes for 5 damage.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

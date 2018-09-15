@@ -34,5 +34,7 @@
 
 * `CONCEDE` (value: `"CONCEDE"`)
 
+* `PINGPONG` (value: `"PINGPONG"`)
+
 
 

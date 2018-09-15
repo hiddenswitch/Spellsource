@@ -12,32 +12,32 @@ import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 
 public class ManaCostModifierValueProvider extends ValueProvider {
-    public ManaCostModifierValueProvider(ValueProviderDesc desc) {
-        super(desc);
-    }
+	public ManaCostModifierValueProvider(ValueProviderDesc desc) {
+		super(desc);
+	}
 
-    @Override
-    protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-        int value = 0;
-        CardSource cardSource = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
-        if (cardSource == null) {
-            cardSource = new CardSourceDesc(HandSource.class).create();
-        }
+	@Override
+	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
+		int value = 0;
+		CardSource cardSource = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
+		if (cardSource == null) {
+			cardSource = new CardSourceDesc(HandSource.class).create();
+		}
 
-        EntityFilter cardFilter;
-        if (getDesc().containsKey(ValueProviderArg.CARD_FILTER)) {
-            cardFilter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
-        } else {
-            cardFilter = AndFilter.create();
-        }
+		EntityFilter cardFilter;
+		if (getDesc().containsKey(ValueProviderArg.CARD_FILTER)) {
+			cardFilter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
+		} else {
+			cardFilter = AndFilter.create();
+		}
 
-        CardList cards = cardSource.getCards(context, host, player).filtered(cardFilter.matcher(context, player, host));
+		CardList cards = cardSource.getCards(context, host, player).filtered(cardFilter.matcher(context, player, host));
 
-        for (Card card : cards) {
-            value += card.getBaseManaCost();
-            value -= card.getManaCost(context, player);
-        }
+		for (Card card : cards) {
+			value += card.getBaseManaCost();
+			value -= card.getManaCost(context, player);
+		}
 
-        return value;
-    }
+		return value;
+	}
 }

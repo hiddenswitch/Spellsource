@@ -1,15 +1,15 @@
 package net.demilich.metastone.game.entities.heroes;
 
-import java.util.EnumMap;
-import java.util.Map;
-
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.EnumMap;
+import java.util.Map;
 
 public class Hero extends Actor {
 	private HeroClass heroClass;
@@ -86,9 +86,10 @@ public class Hero extends Actor {
 
 	/**
 	 * Changes the amount of armor the hero has.
+	 *
 	 * @param armor The requested change in armor.
-	 * @return The amount the armor changed. If damage is being dealt, then the armor will change
-	 * {@code -Infinity < armor <= 0} if it is possible.
+	 * @return The amount the armor changed. If damage is being dealt, then the armor will change {@code -Infinity < armor
+	 * 		<= 0} if it is possible.
 	 */
 	public int modifyArmor(final int armor) {
 		// armor cannot fall below zero

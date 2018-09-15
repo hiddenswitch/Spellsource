@@ -1,29 +1,25 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Collection;
-import java.util.List;
 import java.util.Map;
-
-import static java.util.stream.Collectors.groupingBy;
 
 public class CreateCardFromChoicesSpell extends Spell {
 	public static SpellDesc create() {

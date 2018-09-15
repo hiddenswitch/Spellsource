@@ -29,11 +29,11 @@
       }
     }
   ],
-  "targetSelection": "NONE",
   "condition": {
     "class": "AndCondition",
     "invert": true
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
     "description": "Whenever a minion dies this turn, summon a 2/2 Ghoul.",

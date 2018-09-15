@@ -1,27 +1,24 @@
 package net.demilich.metastone.game.logic;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.Trigger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class TargetLogic implements Serializable {
 	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);

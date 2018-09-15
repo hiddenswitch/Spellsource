@@ -12,7 +12,7 @@ public class QuestPlayedEvent extends GameEvent implements HasCard {
 		super(context, playerId, -1);
 		this.questCard = questCard;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getQuestCard();

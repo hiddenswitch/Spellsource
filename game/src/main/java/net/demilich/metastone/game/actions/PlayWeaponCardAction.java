@@ -1,11 +1,14 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * An action that corresponds to playing a weapon card from the hand.
+ */
 public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry {
 	private BattlecryAction battlecry;
 

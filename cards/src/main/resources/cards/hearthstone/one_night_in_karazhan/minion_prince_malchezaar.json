@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "When the game starts, add 5 extra Legendary minions to your deck.",
+  "description": "Start of Game: Add 5 extra Legendary minions to your deck.",
   "collectible": true,
   "set": "ONE_NIGHT_IN_KARAZHAN",
   "fileFormatVersion": 1,

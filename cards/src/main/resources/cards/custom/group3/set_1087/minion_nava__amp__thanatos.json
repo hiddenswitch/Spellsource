@@ -6,6 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
+  "race": "BEAST",
   "description": "Rush Supremacy: Destroy another random enemy minion and draw 2 cards.",
   "trigger": {
     "eventTrigger": {

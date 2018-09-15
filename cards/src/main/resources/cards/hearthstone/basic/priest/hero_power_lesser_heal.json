@@ -1,5 +1,6 @@
 {
   "name": "Lesser Heal",
+  "heroPower": "hero_power_heal",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "WHITE",
@@ -13,7 +14,6 @@
       "value": 2
     }
   },
-  "heroPower": "hero_power_heal",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

@@ -17,33 +17,33 @@ import java.util.List;
 public class WeaponOnUnEquipEffectSpell extends Spell {
 
 
-    @Override
-    protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-        List<Entity> targets = new ArrayList<>();
-        CardList cards = SpellUtils.getCards(context, player, target, source, desc, 99);
-        if (cards != null) {
-            targets.addAll(cards);
-        }
-        if (target != null) {
-            targets.add(target);
-        }
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		List<Entity> targets = new ArrayList<>();
+		CardList cards = SpellUtils.getCards(context, player, target, source, desc, 99);
+		if (cards != null) {
+			targets.addAll(cards);
+		}
+		if (target != null) {
+			targets.add(target);
+		}
 
-        for (Entity entity : targets) {
-            if (entity instanceof Weapon) {
-                Weapon weapon = (Weapon) entity;
-                Card card = weapon.getSourceCard();
-                if (card.getDesc().getOnUnequip() != null) {
-                    SpellUtils.castChildSpell(context, player, card.getDesc().getOnUnequip(), source, source);
-                }
-            } else if (entity instanceof Card) {
-                Card card = (Card) entity;
-                if (card.getCardType().isCardType(CardType.WEAPON)) {
-                    if (card.getDesc().getOnUnequip() != null) {
-                        SpellUtils.castChildSpell(context, player, card.getDesc().getOnUnequip(), source, source);
-                    }
-                }
+		for (Entity entity : targets) {
+			if (entity instanceof Weapon) {
+				Weapon weapon = (Weapon) entity;
+				Card card = weapon.getSourceCard();
+				if (card.getDesc().getOnUnequip() != null) {
+					SpellUtils.castChildSpell(context, player, card.getDesc().getOnUnequip(), source, source);
+				}
+			} else if (entity instanceof Card) {
+				Card card = (Card) entity;
+				if (card.getCardType().isCardType(CardType.WEAPON)) {
+					if (card.getDesc().getOnUnequip() != null) {
+						SpellUtils.castChildSpell(context, player, card.getDesc().getOnUnequip(), source, source);
+					}
+				}
 
-            }
-        }
-    }
+			}
+		}
+	}
 }

@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
@@ -96,7 +96,7 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
-		this.desc = (CardSourceDesc)desc;
+		this.desc = (CardSourceDesc) desc;
 	}
 }
 

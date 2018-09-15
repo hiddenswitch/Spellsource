@@ -1,5 +1,6 @@
 {
   "name": "Totemic Call",
+  "heroPower": "hero_power_totemic_slam",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "SILVER",
@@ -64,7 +65,6 @@
       "randomTarget": true
     }
   },
-  "heroPower": "hero_power_totemic_slam",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

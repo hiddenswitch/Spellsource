@@ -1,8 +1,8 @@
 package net.demilich.metastone.game.spells.desc.source;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.CardSourceDescDeserializer;
+import net.demilich.metastone.game.cards.desc.Desc;
 
 import java.util.Map;
 

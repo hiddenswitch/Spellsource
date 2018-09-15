@@ -8,18 +8,18 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.List;
@@ -31,8 +31,25 @@ import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertTrue;
 
 public class JourneyToUngoroTests extends TestBase {
+
+	@Test
+	public void testStonehillDefender() {
+		for (int i = 0; i < 1000; i++) {
+			runGym((context, player, opponent) -> {
+				context.setDeckFormat(DeckFormat.ALL);
+				// Check that stonehill never gets a spellsource minion
+				overrideDiscoverChoice(da -> {
+					assertTrue(da.stream().noneMatch(c -> c.getCard().getCardSet() == CardSet.SPELLSOURCE && c.getCard().getCardSet() == CardSet.TEST));
+					return da.get(0);
+				});
+				playMinionCard(context, player, "minion_stonehill_defender");
+			});
+		}
+
+	}
 
 	@Test
 	public void testBittertideHydraVolcanoInteraction() {

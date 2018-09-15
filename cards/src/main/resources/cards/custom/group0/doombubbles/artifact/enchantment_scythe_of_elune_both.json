@@ -4,14 +4,6 @@
   "heroClass": "BROWN",
   "rarity": "FREE",
   "description": "Your Choose One effects have both options combined. Swaps each turn.",
-  "aura": {
-    "class": "ChooseOneOverrideAura",
-    "target": "FRIENDLY_PLAYER",
-    "applyEffect": {
-      "class": "NullSpell",
-      "value": 2
-    }
-  },
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
@@ -36,6 +28,14 @@
           "card": "enchantment_scythe_of_elune_both"
         }
       ]
+    }
+  },
+  "aura": {
+    "class": "ChooseOneOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "NullSpell",
+      "value": 2
     }
   },
   "collectible": false,

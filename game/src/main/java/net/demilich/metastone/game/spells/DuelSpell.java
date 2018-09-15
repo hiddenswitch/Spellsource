@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -11,7 +11,6 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,8 +27,8 @@ public final class DuelSpell extends FightSpell {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		EntityFilter filter = desc.getEntityFilter();
-		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter);
-		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter);
+		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
+		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
 
 		if (validAttackers.size() == 1 && validDefenders.size() == 1) {
 			logger.debug("onCast {} {}: Only one attacker and defender, no dueling occurs", context.getGameId(), source);

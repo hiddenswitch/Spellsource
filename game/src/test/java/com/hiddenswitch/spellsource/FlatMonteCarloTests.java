@@ -1,8 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -10,7 +8,6 @@ import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.behaviour.FlatMonteCarloBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.tests.util.TestBase;

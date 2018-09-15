@@ -11,7 +11,7 @@ public class SecretRevealedEvent extends GameEvent implements HasCard {
 		super(context, playerId, secret.getOwner());
 		this.secretCard = secret;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getCard();

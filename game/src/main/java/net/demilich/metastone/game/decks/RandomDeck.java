@@ -1,20 +1,23 @@
 package net.demilich.metastone.game.decks;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
-
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.decks.validation.IDeckValidator;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomUtils;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 
 import static java.util.stream.Collectors.toList;
 
+/**
+ * A deck that was randomly created.
+ */
 public final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
 
@@ -31,8 +34,8 @@ public final class RandomDeck extends GameDeck {
 
 
 	/**
-	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the Standard
-	 * format.
+	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the {@link
+	 * DeckFormat#CUSTOM} format.
 	 */
 	public RandomDeck() {
 		final List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());

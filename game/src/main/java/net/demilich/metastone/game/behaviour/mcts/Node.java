@@ -1,13 +1,11 @@
 package net.demilich.metastone.game.behaviour.mcts;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.actions.GameAction;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 
 class Node {
 

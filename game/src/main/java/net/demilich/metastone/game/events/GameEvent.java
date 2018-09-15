@@ -44,9 +44,8 @@ public abstract class GameEvent implements Notification {
 	}
 
 	/**
-	 * Spells may specify to be cast on the event target; this is dependent on
-	 * the actual event. For example, a SummonEvent may return the summoned
-	 * minion, a DamageEvent may return the damaged minion/hero, etc.
+	 * Spells may specify to be cast on the event target; this is dependent on the actual event. For example, a
+	 * SummonEvent may return the summoned minion, a DamageEvent may return the damaged minion/hero, etc.
 	 *
 	 * @return
 	 */

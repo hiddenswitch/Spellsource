@@ -1,11 +1,11 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableAction1;
-import co.paralleluniverse.strands.concurrent.ReentrantLock;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.Strand;
+import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.Matchmaking;

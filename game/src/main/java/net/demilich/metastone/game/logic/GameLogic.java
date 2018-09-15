@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.logic;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Multiset;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
@@ -19,9 +19,11 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
-import net.demilich.metastone.game.spells.aura.*;
+import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.aura.ChooseOneOverrideAura;
+import net.demilich.metastone.game.spells.aura.SpellOverrideAura;
+import net.demilich.metastone.game.spells.aura.TargetSelectionOverrideAura;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
-import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -701,6 +703,26 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (sourceReference != null) {
 			source = context.resolveSingleTarget(sourceReference);
 		}
+
+		//Implement SpellOverrideAura
+		Class<? extends Spell> spellClass = spellDesc.getDescClass();
+		Entity finalSource = source;
+		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof SpellOverrideAura)
+				.map(t -> (Aura) t)
+				.filter(((Predicate<Aura>) Aura::isExpired).negate())
+				.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
+				.filter(aura -> aura.getAffectedEntities().contains(playerId))
+				.collect(Collectors.toList());
+		if (!overrideAuras.isEmpty()) {
+			spellDesc = spellDesc.clone();
+			for (Aura aura : overrideAuras) {
+				for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
+					spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
+				}
+			}
+		}
+
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
 		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
 		// target can only be changed when there is one target
@@ -2291,7 +2313,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                                  {@link Zones#SET_ASIDE_ZONE}.
 	 */
 	@Suspendable
-	public void stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
+	public boolean stealCard(Player newOwner, Entity source, Card card, Zones destination) throws IllegalArgumentException {
 		// If the card isn't already in the SET_ASIDE_ZONE, move it
 		if (card.getZone() != Zones.SET_ASIDE_ZONE) {
 			// Move to set aside zone first.
@@ -2305,14 +2327,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Move to the destination
 		if (destination == Zones.HAND) {
-			receiveCard(newOwner.getId(), card, source, false);
+			return receiveCard(newOwner.getId(), card, source, false) != null;
 		} else if (destination == Zones.DECK) {
 			// Remove again to make shuffling to deck valid.
 			context.getPlayer(card.getOwner()).getZone(card.getZone()).remove(card);
-			shuffleToDeck(newOwner, card);
+			return shuffleToDeck(newOwner, card);
 		} else if (destination != Zones.SET_ASIDE_ZONE) {
 			throw new IllegalArgumentException(String.format("Invalid destination %s for card %s", destination.name(), card.getName()));
 		}
+		return true;
 	}
 
 	/**
@@ -2662,7 +2685,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				switch (action.getActionType()) {
 					case HERO_POWER:
 					case SPELL:
-						if (action instanceof PlayChooseOneCardAction){
+						if (action instanceof PlayChooseOneCardAction) {
 							PlayChooseOneCardAction chooseOneCardAction = (PlayChooseOneCardAction) action;
 							if (chooseOneCardAction.getSpell().hasPredefinedTarget()) {
 								SpellDesc targetChangedSpell = chooseOneCardAction.getSpell().removeArg(SpellArg.TARGET);
@@ -3322,7 +3345,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card   The card to shuffle into that player's deck.
 	 */
 	@Suspendable
-	public void shuffleToDeck(Player player, Card card, boolean quiet) {
+	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3357,11 +3380,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				final CardList shuffledCards = (CardList) player.getAttribute(Attribute.LAST_SHUFFLED);
 				shuffledCards.add(context.getCardById(card.getCardId()));
 			}
+			return true;
 		}
+		return false;
 	}
 
-	public void shuffleToDeck(Player player, Card card) {
-		shuffleToDeck(player, card, false);
+	@Suspendable
+	public boolean shuffleToDeck(Player player, Card card) {
+		return shuffleToDeck(player, card, false);
 	}
 
 	@Suspendable
@@ -3801,7 +3827,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		power.markUsed();
 		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
-		context.fireGameEvent(new HeroPowerEffectTriggeredEvent(context, playerId, power));
 	}
 
 	@Suspendable

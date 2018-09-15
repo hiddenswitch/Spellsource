@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.targeting;
 
-import java.io.Serializable;
-import java.util.List;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
@@ -12,6 +9,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  * An entity reference identifies a specific game entity, like a card or minion; or, it is interpreted as a group of

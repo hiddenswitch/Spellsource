@@ -7,10 +7,17 @@
   "durability": 3,
   "rarity": "LEGENDARY",
   "description": "Your cards that target friendly minions can also target enemy minions.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "TargetSelectionOverrideAura",
       "target": "FRIENDLY_HAND",
+      "applyEffect": {
+        "class": "NullSpell",
+        "targetSelection": "MINIONS"
+      },
       "filter": {
         "class": "AndFilter",
         "filters": [
@@ -23,15 +30,15 @@
             "cardType": "SPELL"
           }
         ]
-      },
-      "applyEffect": {
-        "class": "NullSpell",
-        "targetSelection": "MINIONS"
       }
     },
     {
       "class": "TargetSelectionOverrideAura",
       "target": "FRIENDLY_MINIONS",
+      "applyEffect": {
+        "class": "NullSpell",
+        "targetSelection": "MINIONS"
+      },
       "filter": {
         "class": "AndFilter",
         "filters": [
@@ -45,14 +52,7 @@
             "operation": "HAS"
           }
         ]
-      },
-      "applyEffect": {
-        "class": "NullSpell",
-        "targetSelection": "MINIONS"
       }
     }
-  ],
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

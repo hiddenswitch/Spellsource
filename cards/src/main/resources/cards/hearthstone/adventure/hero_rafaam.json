@@ -17,6 +17,7 @@
         },
         {
           "class": "ShuffleToDeckSpell",
+          "value": 60,
           "cards": [
             "spell_explosive_trap",
             "spell_unstable_portal",

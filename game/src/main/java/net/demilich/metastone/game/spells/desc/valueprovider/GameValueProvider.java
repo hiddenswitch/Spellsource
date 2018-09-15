@@ -1,10 +1,10 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.spells.GameValue;
 
 /**
  * Used to retrieve a variable calculated in a {@link net.demilich.metastone.game.spells.MetaSpell}.

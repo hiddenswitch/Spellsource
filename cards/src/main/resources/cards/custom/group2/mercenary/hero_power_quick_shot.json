@@ -1,5 +1,6 @@
 {
   "name": "Quick Shot",
+  "heroPower": "hero_power_scatter_shot",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "LEATHER",
@@ -36,7 +37,6 @@
       }
     }
   },
-  "heroPower": "hero_power_scatter_shot",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

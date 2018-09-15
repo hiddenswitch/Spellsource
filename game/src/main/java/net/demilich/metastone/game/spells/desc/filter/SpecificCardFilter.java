@@ -58,8 +58,8 @@ public class SpecificCardFilter extends EntityFilter {
 		}
 
 
-		if (!requiredCardId.contains("_")) { 															//functionality to search for cardIds containing a specific key word,
-			return cardId.length() > cardId.replace(requiredCardId, "").length(); 	//known by the creator not including the usual underscore of a cardId
+		if (!requiredCardId.contains("_")) {                              //functionality to search for cardIds containing a specific key word,
+			return cardId.length() > cardId.replace(requiredCardId, "").length();  //known by the creator not including the usual underscore of a cardId
 		} else return cardId.equalsIgnoreCase(requiredCardId);
 
 

@@ -1,24 +1,18 @@
 package net.demilich.metastone.game.spells.desc;
 
-import java.io.Serializable;
-import java.util.AbstractMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.BeanDeserializer;
-import com.fasterxml.jackson.databind.ser.BeanSerializer;
-import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 import static com.google.common.collect.Maps.immutableEntry;
 
@@ -78,7 +72,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  * </pre>
  *
  * @see net.demilich.metastone.game.logic.GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) to see
- * how the battlecry action is processed.
+ * 		how the battlecry action is processed.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class BattlecryDesc /*extends AbstractMap<BattlecryDescArg, Object>*/ implements Serializable {

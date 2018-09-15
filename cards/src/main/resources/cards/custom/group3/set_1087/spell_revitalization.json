@@ -1,6 +1,6 @@
 {
-  "name": "Revitalization",
-  "baseManaCost": 1,
+  "name": "Revitalize",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "RARE",

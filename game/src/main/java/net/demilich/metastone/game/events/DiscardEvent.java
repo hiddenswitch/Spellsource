@@ -15,7 +15,7 @@ public class DiscardEvent extends GameEvent implements HasCard {
 	public Card getCard() {
 		return card;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getCard();

@@ -4,7 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -28,12 +27,12 @@ import java.util.Set;
  * the {@link #GRAVEYARD} the information inside of it is not considered secret.
  * <p>
  * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Card, int,
- * boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and
- * a new {@link Minion} is created by {@link Card#summon()} and placed into the {@link #BATTLEFIELD}.
+ * boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
+ * {@link Minion} is created by {@link Card#summon()} and placed into the {@link #BATTLEFIELD}.
  *
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.
  * @see net.demilich.metastone.game.entities.EntityLocation for more about entity locations and how zones are
- * manipulated.
+ * 		manipulated.
  */
 public enum Zones {
 	/**
@@ -55,8 +54,8 @@ public enum Zones {
 	/**
 	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference)} goes;
 	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes. A {@link
-	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link Enchantment} go
-	 * to {@link #REMOVED_FROM_PLAY}.
+	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link Enchantment} go to
+	 * {@link #REMOVED_FROM_PLAY}.
 	 *
 	 * @see #REMOVED_FROM_PLAY for the alternative location for "destroyed" entities.
 	 * @see GameLogic#destroy(Actor...) for more about destroying actors.
@@ -74,16 +73,15 @@ public enum Zones {
 	 */
 	SECRET,
 	/**
-	 * This zone is  where {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} entities go, which behave
-	 * like secrets that are visible to the opponent and do not go away the first time they  are triggered.
+	 * This zone is  where {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} entities go, which behave like
+	 * secrets that are visible to the opponent and do not go away the first time they  are triggered.
 	 *
 	 * @see GameLogic#playQuest(Player, Quest) for more about quests.
 	 */
 	QUEST,
 	/**
-	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a
-	 * corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at
-	 * a time.
+	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a corresponding
+	 * {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at a time.
 	 *
 	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
 	 */
@@ -107,8 +105,8 @@ public enum Zones {
 	 * <p>
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
-	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, SpellDesc, CardList) for
-	 * more about how discover is implemented.
+	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, SpellDesc, CardList) for more
+	 * 		about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */
 	DISCOVER,
@@ -128,7 +126,7 @@ public enum Zones {
 	 * zone.
 	 *
 	 * @see GameLogic#removeActor(Actor, boolean) for an example of usage of a set aside zone (when the method is called
-	 * with {@code peacefully = false;}.
+	 * 		with {@code peacefully = false;}.
 	 */
 	SET_ASIDE_ZONE,
 	/**
@@ -145,7 +143,8 @@ public enum Zones {
 	 */
 	public static final Set<Zones> PUBLIC = EnumSet.of(Zones.BATTLEFIELD, Zones.PLAYER, Zones.HERO, Zones.HERO_POWER, Zones.WEAPON, Zones.QUEST, Zones.SECRET);
 	/**
-	 * These zones are private: only the player that owns the entity in the zone ought to see notifications originating from that zone.
+	 * These zones are private: only the player that owns the entity in the zone ought to see notifications originating
+	 * from that zone.
 	 */
 	public static final Set<Zones> PRIVATE = EnumSet.of(Zones.DISCOVER, Zones.HAND, Zones.DECK, Zones.SET_ASIDE_ZONE, Zones.GRAVEYARD, Zones.REMOVED_FROM_PLAY);
 }

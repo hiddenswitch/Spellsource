@@ -1,24 +1,23 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * @deprecated Use {@link SummonSpell} instead:
- * <pre>
- *   {
- *     "class": "SummonSpell",
- *     "target": The target that you would like to clone.
- *   }
- * </pre>
- * <p>
- * Clones a specified minion.
+ * 		<pre>
+ * 		  {
+ * 		    "class": "SummonSpell",
+ * 		    "target": The target that you would like to clone.
+ * 		  }
+ * 		</pre>
+ * 		<p>
+ * 		Clones a specified minion.
  */
 @Deprecated
 public class CloneMinionSpell extends Spell {

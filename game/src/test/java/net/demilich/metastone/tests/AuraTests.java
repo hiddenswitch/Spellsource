@@ -1,12 +1,5 @@
 package net.demilich.metastone.tests;
 
-import net.demilich.metastone.tests.util.TestBase;
-import net.demilich.metastone.tests.util.TestMinionCard;
-import net.demilich.metastone.tests.util.TestSpellCard;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -20,6 +13,12 @@ import net.demilich.metastone.game.spells.DestroySpell;
 import net.demilich.metastone.game.spells.aura.BuffAura;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import net.demilich.metastone.tests.util.TestSpellCard;
+import org.testng.Assert;
+import org.testng.annotations.Test;
 
 public class AuraTests extends TestBase {
 
@@ -153,7 +152,7 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(minion1.getAttack(), 2);
 		Assert.assertEquals(opponentMinion.getAttack(), 1);
 	}
-	
+
 	@Test
 	public void testOpponentAuraPlusFaceless() {
 		GameContext context = createContext(HeroClass.WHITE, HeroClass.RED);
@@ -168,10 +167,10 @@ public class AuraTests extends TestBase {
 		Assert.assertEquals(dummy.getAttack(), 1);
 		Assert.assertEquals(dummy.getHp(), 2);
 		Assert.assertEquals(dummy.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS), false);
-		
+
 		playMinionCard(context, player, CardCatalogue.getCardById("minion_wee_spellstopper"));
 		Assert.assertEquals(dummy.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS), true);
-		
+
 		context.getLogic().endTurn(player.getId());
 
 		TestBehaviour behaviour = (TestBehaviour) context.getBehaviours().get(1);
@@ -182,7 +181,7 @@ public class AuraTests extends TestBase {
 		GameAction action = facelessCard.play();
 		action.setTarget(dummy);
 		context.getLogic().performGameAction(opponent.getId(), action);
-		
+
 		Minion facelessCopy = getSummonedMinion(opponent.getMinions());
 		Assert.assertEquals(facelessCopy.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS), false);
 		Assert.assertEquals(facelessCopy.getAttack(), 0);

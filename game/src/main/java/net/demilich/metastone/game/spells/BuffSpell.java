@@ -1,21 +1,20 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.weapons.Weapon;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Gives the {@code target} a stats boost of either *+ {@link SpellArg#VALUE} / + {@link SpellArg#VALUE}) or (+ {@link

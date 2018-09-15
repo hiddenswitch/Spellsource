@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -18,6 +16,8 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.DeckSource;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.Map;
 
 /**
  * Discards cards from the {@link net.demilich.metastone.game.targeting.Zones#HAND} or from a {@link CardSource} like

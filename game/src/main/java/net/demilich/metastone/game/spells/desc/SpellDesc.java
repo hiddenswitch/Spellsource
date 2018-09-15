@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.spells.desc;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
@@ -12,14 +12,18 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.MetaSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.desc.filter.*;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 

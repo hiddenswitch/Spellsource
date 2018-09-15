@@ -1,14 +1,13 @@
 package net.demilich.metastone.game.decks;
 
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.common.collect.Sets;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 
 import static net.demilich.metastone.game.cards.CardSet.*;
 
@@ -122,8 +121,6 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							HALL_OF_FAME,
-							PROCEDURAL_PREVIEW,
-							CardSet.SPELLSOURCE,
 							CardSet.CUSTOM
 					))
 			);

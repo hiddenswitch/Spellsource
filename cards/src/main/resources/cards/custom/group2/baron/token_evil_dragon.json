@@ -2,7 +2,7 @@
   "name": "Evil Dragon",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "FREE",

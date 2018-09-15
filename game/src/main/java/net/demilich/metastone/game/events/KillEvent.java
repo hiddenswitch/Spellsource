@@ -13,6 +13,11 @@ public final class KillEvent extends GameEvent implements HasVictim {
 	}
 
 	@Override
+	public Entity getEventSource() {
+		return getVictim();
+	}
+
+	@Override
 	public Entity getEventTarget() {
 		return getVictim();
 	}

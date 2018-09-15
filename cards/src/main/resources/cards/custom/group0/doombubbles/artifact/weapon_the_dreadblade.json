@@ -7,6 +7,140 @@
   "durability": 3,
   "rarity": "LEGENDARY",
   "description": "This weapon has the effects of all other weapons you've played this game.",
+  "passiveTriggers": [
+    {
+      "eventTrigger": {
+        "class": "WillEndSequenceTrigger"
+      },
+      "spell": {
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
+            "value1": {
+              "class": "CardCountValueProvider",
+              "cardFilter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "attribute": "BATTLECRY",
+                    "cardType": "WEAPON"
+                  },
+                  {
+                    "class": "CardFilter",
+                    "attribute": "PLAYED_FROM_HAND_OR_DECK"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "weapon_the_dreadblade",
+                    "invert": true
+                  }
+                ]
+              },
+              "cardSource": {
+                "class": "GraveyardCardsSource",
+                "targetPlayer": "SELF"
+              }
+            },
+            "value2": 1
+          },
+          {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "ComparisonCondition",
+                "operation": "GREATER_OR_EQUAL",
+                "value1": {
+                  "class": "CardCountValueProvider",
+                  "cardFilter": {
+                    "class": "AndFilter",
+                    "filters": [
+                      {
+                        "class": "CardFilter",
+                        "attribute": "DEATHRATTLES",
+                        "cardType": "WEAPON"
+                      },
+                      {
+                        "class": "CardFilter",
+                        "attribute": "PLAYED_FROM_HAND_OR_DECK"
+                      },
+                      {
+                        "class": "SpecificCardFilter",
+                        "card": "weapon_the_dreadblade",
+                        "invert": true
+                      }
+                    ]
+                  },
+                  "cardSource": {
+                    "class": "GraveyardCardsSource",
+                    "targetPlayer": "SELF"
+                  }
+                },
+                "value2": 1
+              },
+              {
+                "class": "AttributeCondition",
+                "target": "SELF",
+                "attribute": "DEATHRATTLES",
+                "invert": true,
+                "operation": "HAS"
+              }
+            ]
+          },
+          {
+            "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
+            "value1": {
+              "class": "CardCountValueProvider",
+              "cardFilter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "attribute": "LIFESTEAL",
+                    "cardType": "WEAPON"
+                  },
+                  {
+                    "class": "CardFilter",
+                    "attribute": "PLAYED_FROM_HAND_OR_DECK"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "weapon_the_dreadblade",
+                    "invert": true
+                  }
+                ]
+              },
+              "cardSource": {
+                "class": "GraveyardCardsSource",
+                "targetPlayer": "SELF"
+              }
+            },
+            "value2": 1
+          }
+        ],
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "BATTLECRY"
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "DEATHRATTLES"
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "LIFESTEAL"
+          }
+        ]
+      }
+    }
+  ],
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -146,140 +280,9 @@
       "targetPlayer": "SELF"
     }
   },
-  "passiveTriggers": [
-    {
-      "eventTrigger": {
-        "class": "WillEndSequenceTrigger"
-      },
-      "spell": {
-        "class": "ConditionalSpell",
-        "spells": [
-          {
-            "class": "AddAttributeSpell",
-            "target": "SELF",
-            "attribute": "BATTLECRY"
-          },
-          {
-            "class": "AddAttributeSpell",
-            "target": "SELF",
-            "attribute": "DEATHRATTLES"
-          },
-          {
-            "class": "AddAttributeSpell",
-            "target": "SELF",
-            "attribute": "LIFESTEAL"
-          }
-        ],
-        "conditions": [
-          {
-            "class": "ComparisonCondition",
-            "value1": {
-              "class": "CardCountValueProvider",
-              "cardFilter": {
-                "class": "AndFilter",
-                "filters": [
-                  {
-                    "class": "CardFilter",
-                    "attribute": "BATTLECRY",
-                    "cardType": "WEAPON"
-                  },
-                  {
-                    "class": "CardFilter",
-                    "attribute": "PLAYED_FROM_HAND_OR_DECK"
-                  },
-                  {
-                    "class": "SpecificCardFilter",
-                    "card": "weapon_the_dreadblade",
-                    "invert": true
-                  }
-                ]
-              },
-              "cardSource": {
-                "class": "GraveyardCardsSource",
-                "targetPlayer": "SELF"
-              }
-            },
-            "operation": "GREATER_OR_EQUAL",
-            "value2": 1
-          },
-          {
-            "class": "AndCondition",
-            "conditions": [
-              {
-                "class": "ComparisonCondition",
-                "value1": {
-                  "class": "CardCountValueProvider",
-                  "cardFilter": {
-                    "class": "AndFilter",
-                    "filters": [
-                      {
-                        "class": "CardFilter",
-                        "attribute": "DEATHRATTLES",
-                        "cardType": "WEAPON"
-                      },
-                      {
-                        "class": "CardFilter",
-                        "attribute": "PLAYED_FROM_HAND_OR_DECK"
-                      },
-                      {
-                        "class": "SpecificCardFilter",
-                        "card": "weapon_the_dreadblade",
-                        "invert": true
-                      }
-                    ]
-                  },
-                  "cardSource": {
-                    "class": "GraveyardCardsSource",
-                    "targetPlayer": "SELF"
-                  }
-                },
-                "operation": "GREATER_OR_EQUAL",
-                "value2": 1
-              },
-              {
-                "class": "AttributeCondition",
-                "target": "SELF",
-                "attribute": "DEATHRATTLES",
-                "operation": "HAS",
-                "invert": true
-              }
-            ]
-          },
-          {
-            "class": "ComparisonCondition",
-            "value1": {
-              "class": "CardCountValueProvider",
-              "cardFilter": {
-                "class": "AndFilter",
-                "filters": [
-                  {
-                    "class": "CardFilter",
-                    "attribute": "LIFESTEAL",
-                    "cardType": "WEAPON"
-                  },
-                  {
-                    "class": "CardFilter",
-                    "attribute": "PLAYED_FROM_HAND_OR_DECK"
-                  },
-                  {
-                    "class": "SpecificCardFilter",
-                    "card": "weapon_the_dreadblade",
-                    "invert": true
-                  }
-                ]
-              },
-              "cardSource": {
-                "class": "GraveyardCardsSource",
-                "targetPlayer": "SELF"
-              }
-            },
-            "operation": "GREATER_OR_EQUAL",
-            "value2": 1
-          }
-        ]
-      }
-    }
-  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "ManaCostModifierValueProvider",
     "cardFilter": {
@@ -304,8 +307,5 @@
       "class": "GraveyardCardsSource",
       "targetPlayer": "SELF"
     }
-  },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  }
 }

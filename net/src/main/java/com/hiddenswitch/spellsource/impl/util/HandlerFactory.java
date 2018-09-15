@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;

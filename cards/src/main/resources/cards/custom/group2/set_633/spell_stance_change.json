@@ -1,6 +1,6 @@
 {
   "name": "Stance Change",
-  "baseManaCost": 2,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",

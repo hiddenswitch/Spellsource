@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Migrations;
 import com.hiddenswitch.spellsource.models.MigrateToRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;

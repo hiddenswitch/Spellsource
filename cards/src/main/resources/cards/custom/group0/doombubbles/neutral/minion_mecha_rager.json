@@ -1,17 +1,17 @@
 {
-	"name": "Mecha Rager",
-	"baseManaCost": 3,
-	"type": "MINION",
-	"baseAttack": 5,
-	"baseHp": 1,
-	"heroClass": "ANY",
-	"rarity": "COMMON",
-	"description": "Magnetic",
+  "name": "Mecha Rager",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 1,
+  "rarity": "COMMON",
   "race": "MECH",
-	"attributes": {
-		"MAGNETIC": true
-	},
-	"collectible": true,
-	"set": "CUSTOM",
-	"fileFormatVersion": 1
+  "description": "Magnetic",
+  "attributes": {
+    "MAGNETIC": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
 }

@@ -21,11 +21,11 @@
     "target": "FRIENDLY_MINIONS",
     "attribute": "AURA_LIFESTEAL"
   },
-  "targetSelection": "NONE",
   "condition": {
     "class": "AndCondition",
     "invert": true
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
     "description": "Your minions have Lifesteal this turn.",

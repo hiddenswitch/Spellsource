@@ -9,8 +9,8 @@
     "countUntilCast": 1,
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
-      "sourcePlayer": "SELF",
-      "requiredAttribute": "SECRET"
+      "requiredAttribute": "SECRET",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",

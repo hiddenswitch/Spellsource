@@ -4,6 +4,9 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
+/**
+ * Indicates a deck from the player's online collection.
+ */
 public final class CollectionDeck implements Serializable, Cloneable, Deck {
 
 	private final String deckId;

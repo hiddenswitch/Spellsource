@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;

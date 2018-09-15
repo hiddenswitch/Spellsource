@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -15,7 +15,7 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Map;
 
 /**
  * A map representing a complex type in Spellsource, like a {@link net.demilich.metastone.game.spells.Spell} or {@link

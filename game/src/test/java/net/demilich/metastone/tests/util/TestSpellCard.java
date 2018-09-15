@@ -2,9 +2,9 @@ package net.demilich.metastone.tests.util;
 
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.SpellDesc;

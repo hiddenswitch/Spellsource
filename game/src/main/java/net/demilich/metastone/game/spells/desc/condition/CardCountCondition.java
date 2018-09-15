@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
 
 public class CardCountCondition extends Condition {
 

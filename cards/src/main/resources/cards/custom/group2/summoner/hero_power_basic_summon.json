@@ -1,5 +1,6 @@
 {
   "name": "Basic Summon",
+  "heroPower": "hero_power_advanced_summoning",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "EGGPLANT",
@@ -18,7 +19,6 @@
       "card": "token_pebble"
     }
   },
-  "heroPower": "hero_power_advanced_summoning",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

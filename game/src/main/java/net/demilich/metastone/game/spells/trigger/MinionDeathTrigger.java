@@ -9,7 +9,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetType;
 
 public class MinionDeathTrigger extends EventTrigger {

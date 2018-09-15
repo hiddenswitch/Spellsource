@@ -19,11 +19,11 @@
       ]
     }
   },
-  "targetSelection": "NONE",
   "condition": {
     "class": "AndCondition",
     "invert": true
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"
   },

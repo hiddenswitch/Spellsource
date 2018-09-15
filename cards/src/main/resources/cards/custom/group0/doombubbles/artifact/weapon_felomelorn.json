@@ -14,23 +14,6 @@
     },
     "spell": {
       "class": "RevealCardSpell",
-      "cardSource": {
-        "class": "CombinedSource",
-        "cardSources": [
-          {
-            "class": "HandSource",
-            "targetPlayer": "SELF"
-          },
-          {
-            "class": "DeckSource",
-            "targetPlayer": "SELF"
-          }
-        ]
-      },
-      "cardFilter": {
-        "class": "SpecificCardFilter",
-        "card": "spell_flamestrike"
-      },
       "spell": {
         "class": "MetaSpell",
         "spells": [
@@ -46,7 +29,23 @@
               "value": 4
             }
           }
-        
+        ]
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_flamestrike"
+      },
+      "cardSource": {
+        "class": "CombinedSource",
+        "cardSources": [
+          {
+            "class": "HandSource",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "DeckSource",
+            "targetPlayer": "SELF"
+          }
         ]
       }
     }

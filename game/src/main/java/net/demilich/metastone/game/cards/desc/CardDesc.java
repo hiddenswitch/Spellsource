@@ -2,10 +2,6 @@ package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.deser.BeanDeserializer;
-import com.fasterxml.jackson.databind.ser.BeanSerializer;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
@@ -27,7 +23,6 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.ComboCondition;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
@@ -376,8 +371,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * </pre>
 	 *
 	 * @see Attribute for a full description of attributes. Some of them are not appropriate to put on a card, because
-	 * they are ephemeral (that is, they are only on a {@link net.demilich.metastone.game.entities.Entity} while it is in
-	 * play, not on a card definition like {@link CardDesc}).
+	 * 		they are ephemeral (that is, they are only on a {@link net.demilich.metastone.game.entities.Entity} while it is
+	 * 		in play, not on a card definition like {@link CardDesc}).
 	 */
 	public AttributeMap getAttributes() {
 		return attributes;

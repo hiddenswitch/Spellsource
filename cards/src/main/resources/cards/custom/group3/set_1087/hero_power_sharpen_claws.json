@@ -1,5 +1,6 @@
 {
   "name": "Sharpen Claws",
+  "heroPower": "hero_power_sharper_claws",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "RUST",
@@ -14,8 +15,8 @@
         "value": 1
       },
       {
-        "class": "BuffSpell",
-        "attackBonus": 1
+        "class": "TemporaryAttackSpell",
+        "value": 1
       }
     ]
   },

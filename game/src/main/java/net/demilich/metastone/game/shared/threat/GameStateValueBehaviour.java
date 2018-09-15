@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.shared.threat;
 
 import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -72,7 +72,7 @@ import java.util.stream.Stream;
  * GameStateValueBehaviour the best delivered AI in the Hearthstone community.
  *
  * @see #requestAction(GameContext, Player, List) to see how each action of the possible actions is tested for the one
- * with the highest score.
+ * 		with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
@@ -408,7 +408,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return node.predecessor != null && (
 				node.depth >= maxDepth
 						|| node.context.updateAndGetGameOver()
-						|| (System.currentTimeMillis() - startTime > timeout)
+						|| (System.currentTimeMillis() - startTime > getTimeout())
 						// Technically allows the bot to play through its extra turns
 						|| node.context.getActivePlayerId() != playerId
 						|| node.context.isDisposed());
@@ -585,6 +585,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 	public Deque<Integer> getIndexPlan() {
 		return indexPlan;
+	}
+
+	public long getTimeout() {
+		return timeout;
+	}
+
+	public GameStateValueBehaviour setTimeout(long timeout) {
+		this.timeout = timeout;
+		return this;
 	}
 
 	/**

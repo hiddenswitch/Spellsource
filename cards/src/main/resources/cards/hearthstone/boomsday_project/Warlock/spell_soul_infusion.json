@@ -5,7 +5,7 @@
   "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Give the left-most minion in your hand +2/+2.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
     "target": "LEFTMOST_FRIENDLY_CARD_HAND",

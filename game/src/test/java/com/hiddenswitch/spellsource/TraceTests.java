@@ -1,15 +1,10 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
 import com.google.common.collect.ConcurrentHashMultiset;
-import com.google.common.collect.LinkedListMultimap;
-import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -36,8 +31,6 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 

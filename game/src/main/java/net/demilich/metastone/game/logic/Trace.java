@@ -7,7 +7,6 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 
-import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;

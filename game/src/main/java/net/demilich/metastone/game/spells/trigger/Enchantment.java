@@ -1,29 +1,28 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
 import java.util.Collections;

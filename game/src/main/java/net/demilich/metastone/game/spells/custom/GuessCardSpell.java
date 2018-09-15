@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -13,6 +12,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -81,7 +81,7 @@ public class GuessCardSpell extends Spell {
 		String cardId = result.getCard().getCardId();
 		if (cardId.equals(correctCard.getCardId())) {
 			logger.debug("onCast {} {}: Player {} chose correct card {}", context.getGameId(), source, player, correctCard);
-			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById(cardId));
+			context.getLogic().receiveCard(player.getId(), context.getCardById(cardId));
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.strands.Strand;
+import com.github.fromage.quasi.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.GameActions;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -26,7 +26,7 @@ import java.util.function.Supplier;
 
 public class GamesTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GamesTest.class);
-
+	
 	@Test
 	public void testReconnectsResumesMulligan(TestContext context) throws InterruptedException {
 		AtomicInteger mulligans = new AtomicInteger(0);

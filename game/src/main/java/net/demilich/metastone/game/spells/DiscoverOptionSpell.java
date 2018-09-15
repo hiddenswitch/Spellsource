@@ -1,23 +1,22 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.actions.DiscoverAction;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @deprecated The discover option spell is fairly brittle. You should use {@link DiscoverSpell} instead, discovering a
- * sequence of cards and playing one by casting or summoning it.
+ * 		sequence of cards and playing one by casting or summoning it.
  */
 @Deprecated
 public class DiscoverOptionSpell extends Spell {
