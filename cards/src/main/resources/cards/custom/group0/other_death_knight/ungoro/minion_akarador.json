@@ -15,6 +15,10 @@
         "class": "GraveyardActorsSource",
         "invert": true
       },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
       "howMany": 1,
       "spell": {
         "class": "SummonSpell",

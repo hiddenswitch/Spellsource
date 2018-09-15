@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * Draws {@link SpellArg#VALUE} cards from the top of the player's deck.
  * <p>
@@ -22,6 +24,11 @@ import org.slf4j.LoggerFactory;
  * @see FromDeckToHandSpell to draw a specific card from the deck.
  */
 public class DrawCardSpell extends Spell {
+
+	public static SpellDesc create() {
+		Map<SpellArg, Object> arguments = new SpellDesc(DrawCardSpell.class);
+		return new SpellDesc(arguments);
+	}
 
 	private static Logger logger = LoggerFactory.getLogger(DrawCardSpell.class);
 
