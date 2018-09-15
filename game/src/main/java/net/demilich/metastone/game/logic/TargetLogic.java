@@ -101,10 +101,7 @@ public class TargetLogic implements Serializable {
 
 		return context.getEntities().filter(e -> e.getId() == targetId)
 				.findFirst()
-				.orElseThrow(() -> {
-					GameContext lol = context;
-					return new NullPointerException("Target not found exception: " + targetKey);
-				});
+				.orElseThrow(() -> new NullPointerException("Target not found exception: " + targetKey));
 	}
 
 	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {

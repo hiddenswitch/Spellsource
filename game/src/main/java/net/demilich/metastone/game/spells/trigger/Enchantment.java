@@ -190,7 +190,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (spellCasts) {
 			if (this instanceof Quest) {
 				expire();
-			};
+			}
 			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 		}
 		if (maxFires != null
@@ -301,6 +301,7 @@ public class Enchantment extends Entity implements Trigger {
 		if (isExpired()) {
 			return false;
 		}
+
 		for (EventTrigger trigger : triggers) {
 			if (trigger.canFireCondition(event)) {
 				return true;
