@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Can't draw cards until your next turn",
+  "description": "Can't draw cards until after you've finished your next full turn",
   "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
@@ -16,9 +16,9 @@
   },
   "trigger": {
     "eventTrigger": {
-      "class": "AfterTurnStartTrigger",
-      "targetPlayer": "SELF"
+      "class": "TurnEndTrigger"
     },
+    "countUntilCast": 3,
     "spell": {
       "class": "RemoveEnchantmentSpell",
       "target": "TRIGGER_HOST",

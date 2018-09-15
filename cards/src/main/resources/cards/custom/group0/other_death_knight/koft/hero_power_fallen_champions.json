@@ -13,9 +13,22 @@
     "spell": {
       "class": "HeroPowerSpell",
       "spell": {
-        "class": "SummonSpell",
-        "target": "EVENT_TARGET",
-        "targetPlayer": "SELF"
+        "class": "ResurrectFromBothSpell",
+        "targetPlayer": "SELF",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "OwnedByPlayerFilter",
+              "targetPlayer": "SELF",
+              "invert": true
+            },
+            {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "EVENT_TARGET"
+            }
+          ]
+        }
       }
     }
   },

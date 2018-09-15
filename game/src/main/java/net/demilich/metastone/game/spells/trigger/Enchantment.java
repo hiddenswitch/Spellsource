@@ -190,10 +190,8 @@ public class Enchantment extends Entity implements Trigger {
 		if (spellCasts) {
 			if (this instanceof Quest) {
 				expire();
-			}
-
-			boolean useAsSource = getSourceCard() != null && getSourceCard().hasAttribute(Attribute.USE_AS_SOURCE);
-			event.getGameContext().getLogic().castSpell(ownerId, spell, useAsSource ? this.getReference() : hostReference, EntityReference.NONE, true);
+			};
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 		}
 		if (maxFires != null
 				&& fires >= maxFires) {
@@ -268,10 +266,6 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public boolean canFire(GameEvent event) {
-		if (hostReference.getId() == -1) {
-			System.out.println("Something is def wrong");
-			return false;
-		}
 		Entity host = event.getGameContext().resolveSingleTarget(hostReference);
 		for (EventTrigger trigger : triggers) {
 			if (triggerFires(trigger, event, host)) {
@@ -307,10 +301,8 @@ public class Enchantment extends Entity implements Trigger {
 		if (isExpired()) {
 			return false;
 		}
-
-		boolean useAsSource = getSourceCard() != null && getSourceCard().hasAttribute(Attribute.USE_AS_SOURCE);
 		for (EventTrigger trigger : triggers) {
-			if (trigger.canFireCondition(event, useAsSource ? this : null)) {
+			if (trigger.canFireCondition(event)) {
 				return true;
 			}
 		}

@@ -10,7 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_SOURCE"
     },
     "spell": {
       "class": "HealSpell",

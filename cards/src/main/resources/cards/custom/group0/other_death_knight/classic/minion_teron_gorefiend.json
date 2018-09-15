@@ -6,43 +6,34 @@
 	"baseHp": 7,
 	"heroClass": "SPIRIT",
 	"rarity": "LEGENDARY",
-	"description": "Has the Deathrattle of all minions in your hand and deck.",
-	"aura": {
-    "class": "Aura",
-    "target": "SELF",
-    "alwaysApply": true,
-    "applyEffect": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "RemoveAttributeSpell",
-          "attribute": "DEATHRATTLES"
-        },
-        {
-          "class": "CopyDeathrattleSpell",
-          "cardSource": {
-            "class": "CombinedSource",
-            "cardSources": [
-              {
-                "class": "HandSource",
-                "targetPlayer": "SELF"
-              },
-              {
-                "class": "DeckSource",
-                "targetPlayer": "SELF"
-              }
-            ]
-          },
-          "cardFilter": {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          }
+	"description": "Deathrattle: Cast the Deathrattles of all minions in your hand and deck.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TriggerDeathrattleSpell",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "attribute": "DEATHRATTLES",
+          "operation": "HAS"
         }
-      ]
-    },
-    "removeEffect": {
-      "class": "NullSpell"
-    }
+      },
+      {
+        "class": "TriggerDeathrattleSpell",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "attribute": "DEATHRATTLES",
+          "operation": "HAS"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
   },
 	"collectible": true,
 	"set": "CUSTOM",

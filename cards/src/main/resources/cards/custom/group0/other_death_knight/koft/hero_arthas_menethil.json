@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "SPIRIT",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Freeze all characters and decks.",
+  "description": "Battlecry: Freeze all characters and decks. (Players can't draw cards this turn and next)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -27,21 +27,6 @@
           "target": "ENEMY_PLAYER",
           "card": "enchantment_frozen_deck",
           "exclusive": true
-        },
-        {
-          "class": "AddEnchantmentSpell",
-          "target": "ENEMY_PLAYER",
-          "trigger": {
-            "eventTrigger": {
-              "class": "AfterTurnStartTrigger"
-            },
-            "spell": {
-              "class": "AddEnchantmentSpell",
-              "target": "SELF",
-              "card": "enchantment_frozen_deck",
-              "exclusive": true
-            }
-          }
         }
       ]
     }

@@ -3409,10 +3409,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(flame3.getAttack(), 3);
 			assertEquals(flame2.getBaseAttack() + flame2.getBonusAttack(), 3);
 			assertEquals(flame1.getBaseAttack() + flame1.getBonusAttack(), 3);
-			playCard(context, player, "minion_fire_fly");
-			assertEquals(player.getHand().get(1).getBaseAttack() + player.getHand().get(1).getBonusAttack(), 3);
-			receiveCard(context, player, "minion_fire_fly");
-			assertEquals(player.getHand().get(2).getBaseAttack() + player.getHand().get(2).getBonusAttack(), 1);
 		});
 
 	}
@@ -3485,8 +3481,59 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testSlainParty() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_fiendish_circle");
+			playCard(context, opponent, "spell_call_in_the_finishers");
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "spell_slain_party");
+			for (Minion minion : player.getMinions()) {
+				assertTrue(minion.getRace().hasRace(Race.MURLOC));
+			}
+
+		});
+	}
+
+	@Test
+	public void testSummonAttackCards() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, "minion_murloc_tinyfin");
+			}
+			Minion dummy = playMinionCard(context, opponent, "minion_target_dummy");
+			playMinionCardWithBattlecry(context, player, "minion_boneyard_brute", dummy);
+			assertEquals(dummy.getHp(), 1);
+		});
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, "minion_murloc_tinyfin");
+			}
+			Minion dummy = playMinionCard(context, opponent, "minion_unpowered_steambot");
+			playCardWithTarget(context, player, "spell_bat_swarm", dummy);
+			assertEquals(dummy.getHp(), 5);
+		});
+	}
+
+	@Test
 	public void testArthasMenethil() {
-		
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_arthas_menethil");
+			playCard(context, opponent, "spell_call_in_the_finishers");
+			playCard(context, player, "spell_twisting_nether");
+			assertEquals(player.getMinions().size(), 4);
+
+		});
+	}
+
+	@Test
+	public void testLadyDeathwhisper() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_lady_deathwhisper2");
+			Minion wurm = playMinionCard(context, opponent, "minion_violet_wurm");
+			playCardWithTarget(context, player, "spell_pyroblast", wurm);
+			assertEquals(opponent.getMinions().size(), 0);
+		});
+
 	}
 }
 

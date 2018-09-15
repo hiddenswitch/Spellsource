@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "SPIRIT",
   "rarity": "FREE",
-  "description": "Summon 2 1/1 Ghouls with Charge which dies at the end of the turn.",
+  "description": "Summon 2 1/1 Ghouls with Charge that dies at the end of the turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

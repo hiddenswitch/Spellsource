@@ -6,51 +6,23 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Choose a minion. Summon two 1/1 Skeletons to attack it.",
+  "description": "Battlecry: Choose an enemy minion. Summon two 1/1 Skeletons to attack it.",
   "battlecry": {
-    "targetSelection": "ANY",
+    "targetSelection": "ENEMY_MINIONS",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "SummonSpell",
-          "cards": [
-            "token_skeleton",
-            "token_skeleton"
-          ],
-          "spell": {
-            "class": "AddAttributeSpell",
-            "target": "OUTPUT",
-            "attribute": "RESERVED_BOOLEAN_3"
-          }
-        },
-        {
-          "class": "ExecuteAsSpell",
-          "target": "FRIENDLY_MINIONS",
-          "spell": {
-            "class": "MetaSpell",
-            "spells": [
-              {
-                "class": "FightSpell",
-                "target": "TARGET"
-              },
-              {
-                "class": "ForceDeathPhaseSpell"
-              }
-            ]
-          },
-          "filter": {
-            "class": "AttributeFilter",
-            "attribute": "RESERVED_BOOLEAN_3",
-            "operation": "HAS"
-          }
-        },
-        {
-          "class": "RemoveAttributeSpell",
-          "target": "FRIENDLY_MINIONS",
-          "attribute": "RESERVED_BOOLEAN_3"
+      "class": "SummonSpell",
+      "cards": [
+        "token_skeleton",
+        "token_skeleton"
+      ],
+      "spell": {
+        "class": "FightSpell",
+        "target": "TARGET",
+        "secondaryTarget": "OUTPUT",
+        "spell": {
+          "class": "ForceDeathPhaseSpell"
         }
-      ]
+      }
     }
   },
   "attributes": {

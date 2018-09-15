@@ -151,8 +151,6 @@ public class GameEvent implements Serializable {
     TURN_END("TURN_END"),
     
     TURN_START("TURN_START"),
-
-    AFTER_TURN_START("AFTER_TURN_START"),
     
     SILENCE("SILENCE"),
     

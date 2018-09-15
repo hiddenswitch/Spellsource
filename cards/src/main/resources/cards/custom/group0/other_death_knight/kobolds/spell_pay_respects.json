@@ -20,12 +20,12 @@
         "conditions": [
           {
             "class": "GraveyardContainsCondition",
-            "target": "SPELL_TARGET",
+            "target": "TARGET",
             "targetPlayer": "SELF"
           },
           {
             "class": "GraveyardContainsCondition",
-            "target": "SPELL_TARGET",
+            "target": "TARGET",
             "targetPlayer": "OPPONENT"
           }
         ]
