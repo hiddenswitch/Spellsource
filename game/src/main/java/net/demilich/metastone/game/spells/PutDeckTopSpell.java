@@ -21,11 +21,8 @@ public class PutDeckTopSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc);
 
 		for (Card card : cards) {
-			try {
-				context.getLogic().putOnTopOfDeck(player, card);
-			} catch (ArrayStoreException e) {
-				context.getLogic().putOnTopOfDeck(player, card.getCopy());
-			}
+			context.getLogic().putOnTopOfDeck(player, card.getCopy());
+
 
 			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);

@@ -3414,6 +3414,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 
+	/*
 	@Test
 	public void testEchoLocate() {
 		runGym((context, player, opponent) -> {
@@ -3425,6 +3426,7 @@ public class CustomCardsTests extends TestBase {
 
 		});
 	}
+	*/
 
 	@Test
 	public void testIntoTheMines() {

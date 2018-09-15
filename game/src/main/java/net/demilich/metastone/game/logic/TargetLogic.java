@@ -114,14 +114,6 @@ public class TargetLogic implements Serializable {
 		if (!context.getEventSourceStack().isEmpty() && targetKey.equals(EntityReference.EVENT_TARGET)) {
 			return context.resolveSingleTarget(context.getEventSourceStack().peek());
 		}
-		for (Trigger trigger : context.getTriggerManager().getTriggers()) {
-			if (trigger instanceof Enchantment) {
-				Enchantment enchantment = (Enchantment) trigger;
-				if (targetKey.getId() == enchantment.getId()) {
-					return enchantment;
-				}
-			}
-		}
 		return null;
 	}
 

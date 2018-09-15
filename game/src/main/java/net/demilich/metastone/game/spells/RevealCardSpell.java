@@ -23,7 +23,7 @@ public class RevealCardSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList filteredCards = SpellUtils.getCards(context, player, target, source, desc, 999);
+		CardList filteredCards = SpellUtils.getCards(context, player, target, source, desc, 30);
 		if (filteredCards.isEmpty()) {
 			logger.warn("onCast {} {}: Tried to reveal a card but none was specified.", context.getGameId(), source);
 			return;

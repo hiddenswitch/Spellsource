@@ -3519,18 +3519,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 
-		boolean shouldDraw = true;
-		for (Trigger e : context.getTriggersAssociatedWith(player.getReference())) {
-			if (e instanceof Enchantment) {
-				Enchantment enchantment2 = (Enchantment) e;
-				if (enchantment2.getSourceCard() != null && enchantment2.getSourceCard().getCardId().equalsIgnoreCase("enchantment_frozen_deck")) {
-					shouldDraw = false;
-				}
-			}
-		}
-		if (shouldDraw) {
-			drawCard(playerId, null);
-		}
+		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, true);
+		//drawCard(playerId, null);
+
 		endOfSequence();
 	}
 
