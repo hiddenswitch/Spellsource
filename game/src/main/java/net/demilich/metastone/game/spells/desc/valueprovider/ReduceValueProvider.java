@@ -1,21 +1,18 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.jetbrains.annotations.NotNull;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Performs {@link ValueProviderArg#OPERATION} on the values returned by {@link ValueProviderArg#VALUE1} applied to each

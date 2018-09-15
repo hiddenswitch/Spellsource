@@ -1,20 +1,20 @@
 package net.demilich.metastone.game.spells.custom;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.environment.Environment;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TransformMinionSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.Map;
 
 /**
  * Transforms the {@code source} (casting entity) of this spell into the {@code target} {@link Minion}.

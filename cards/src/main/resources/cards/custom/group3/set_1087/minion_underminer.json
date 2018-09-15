@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 5,
   "rarity": "COMMON",
+  "race": "MECH",
   "description": "Can't be targeted by spells or Hero Powers.",
   "attributes": {
     "UNTARGETABLE_BY_SPELLS": true

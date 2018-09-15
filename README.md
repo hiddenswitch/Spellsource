@@ -22,9 +22,9 @@ The project also contains adapters for Amazon Elastic MapReduce for processor-in
 
 The `spellsource` package creates a bridge with the Java-based `Spellsource-Server` engine. It provides a direct 1-to-1 mapping with the Java API.
 
-This requires **Python 3** and **Java 8**. To get started:
+This requires **Python 3** and **Java 8 or higher**. To get started:
 
- 1. Install the Java 8 SDK (JDK) from Oracle's website.
+ 1. Install the Java JDK from [Oracle's website](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html).
  2. `pip3 install spellsource` to install the latest version of the package.
  3. Start a game and play it with the specified bots:
  
@@ -54,7 +54,7 @@ Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
- 1. Install the Java 8 SDK (JDK).
+ 1. Install the Java JDK from [Oracle's website](http://www.oracle
  2. Clone this repository.
  3. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
@@ -84,7 +84,6 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
       This installs `chocolatey`, the Windows development package manager.
    4. We'll now install basic development packages. This includes the MongoDB, Java 8 SDK, `git` and `ConEmu`, a great Windows terminal emulator.
       ```
-      choco install mongodb.install --version 3.6.0
       choco install chocolatey-core.extension git.install git-credential-manager-for-windows jdk8 conemu
       ```
       Then, install [IntelliJ Idea Community Edition](https://www.jetbrains.com/idea/download/#section=windows) to edit the `Spellsource-Server` Java project. Since sometimes `choco` packages fail to install, you might need to manually install [MongoDB](https://www.mongodb.com/download-center#community), [JDK8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html), and [git](https://git-scm.com/download/win).  
@@ -213,7 +212,7 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
      ```bash
      # If you haven't already installed the Spellsource package, do so now.
      pip3 install spellsource
-     python3 -m 'spellsource.utils.cardformatter'
+     python3 -m 'spellsource.ext.cardformatter'
      ```
      
  11. To contribute the card to the public networking servers, commit your changes to your fork with `git commit -am "A custom note about the card"`, `git push` and then pull-request to this repository.

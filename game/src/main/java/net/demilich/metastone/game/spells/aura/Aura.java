@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
-import java.util.*;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -17,11 +15,13 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
+
+import java.util.*;
 
 /**
  * Auras represent ongoing effects applied to certain entities and is updated whenever (1) the board changes, (2) a

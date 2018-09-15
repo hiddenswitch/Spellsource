@@ -1,38 +1,37 @@
 package net.demilich.metastone.tests;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
-
-import net.demilich.metastone.game.behaviour.UtilityBehaviour;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.HasChooseOneActions;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.SetHpSpell;
+import net.demilich.metastone.game.spells.SilenceSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
+import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.HasChooseOneActions;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.spells.SetHpSpell;
-import net.demilich.metastone.game.spells.SilenceSpell;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.TargetSelection;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;

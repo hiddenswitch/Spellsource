@@ -9,7 +9,8 @@
   "description": "Whenever you add a card to your hand, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardReceivedTrigger"
+      "class": "CardReceivedTrigger",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",

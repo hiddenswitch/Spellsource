@@ -12,8 +12,6 @@ import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import javax.ws.rs.GET;
-
 import static org.testng.Assert.assertEquals;
 
 public class GoblinsVersusGnomesTests extends TestBase {

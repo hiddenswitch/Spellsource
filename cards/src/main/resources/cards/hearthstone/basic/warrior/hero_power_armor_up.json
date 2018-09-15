@@ -1,5 +1,6 @@
 {
   "name": "Armor Up!",
+  "heroPower": "hero_power_tank_up",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "RED",
@@ -14,7 +15,6 @@
       "armorBonus": 2
     }
   },
-  "heroPower": "hero_power_tank_up",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

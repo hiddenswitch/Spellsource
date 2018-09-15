@@ -104,8 +104,7 @@ public enum Environment {
 	 */
 	ENTITY_LIST,
 	/**
-	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own
-	 * minions.
+	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own minions.
 	 */
 	LYNESSA_SUNSORROW_ENTITY_LIST,
 	/**

@@ -9,8 +9,8 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class TriggerSecretRevealSpell extends Spell {
-    @Override
-    protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-        context.fireGameEvent(new SecretRevealedEvent(context, (Card) target, player.getId()));
-    }
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		context.fireGameEvent(new SecretRevealedEvent(context, (Card) target, player.getId()));
+	}
 }

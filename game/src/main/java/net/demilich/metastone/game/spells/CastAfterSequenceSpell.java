@@ -9,14 +9,14 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
 public class CastAfterSequenceSpell extends Spell {
-    @Override
-    protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-        SpellDesc spell = desc.getSpell();
+	@Override
+	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		SpellDesc spell = desc.getSpell();
 
-        EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
-        enchantmentDesc.spell = spell;
-        enchantmentDesc.maxFires = 1;
-        enchantmentDesc.eventTrigger = new EventTriggerDesc(WillEndSequenceTrigger.class);
-        context.getLogic().addGameEventListener(player, enchantmentDesc.create(), player);
-    }
+		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
+		enchantmentDesc.spell = spell;
+		enchantmentDesc.maxFires = 1;
+		enchantmentDesc.eventTrigger = new EventTriggerDesc(WillEndSequenceTrigger.class);
+		context.getLogic().addGameEventListener(player, enchantmentDesc.create(), player);
+	}
 }

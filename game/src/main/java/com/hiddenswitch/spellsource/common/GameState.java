@@ -2,23 +2,24 @@ package com.hiddenswitch.spellsource.common;
 
 import com.google.common.collect.MapDifference;
 import com.google.common.collect.Maps;
-import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.targeting.IdFactoryImpl;
-import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.TurnState;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -174,8 +175,8 @@ public class GameState implements Serializable, Cloneable {
 	/**
 	 * Gets a {@link MapDifference} that corresponds to this state being the first state.
 	 *
-	 * @return A {@link Maps#difference(Map, Map)} call where an empty map is the left argument and this game state is
-	 * the right argument.
+	 * @return A {@link Maps#difference(Map, Map)} call where an empty map is the left argument and this game state is the
+	 * 		right argument.
 	 */
 	public MapDifference<Integer, EntityLocation> start() {
 		return Maps.difference(Collections.emptyMap(), getMap());

@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.ConditionDescDeserializer;
 import net.demilich.metastone.game.cards.desc.Desc;
+
+import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonDeserialize(using = ConditionDescDeserializer.class)
@@ -16,7 +16,7 @@ public class ConditionDesc extends Desc<ConditionArg, Condition> {
 	}
 
 	public ConditionDesc(Class<? extends Condition> conditionClass) {
-		super(conditionClass,ConditionArg.class);
+		super(conditionClass, ConditionArg.class);
 	}
 
 	public ConditionDesc(Map<ConditionArg, Object> arguments) {
@@ -35,6 +35,6 @@ public class ConditionDesc extends Desc<ConditionArg, Condition> {
 
 	@Override
 	public ConditionDesc clone() {
-		return (ConditionDesc)copyTo(new ConditionDesc(getDescClass()));
+		return (ConditionDesc) copyTo(new ConditionDesc(getDescClass()));
 	}
 }

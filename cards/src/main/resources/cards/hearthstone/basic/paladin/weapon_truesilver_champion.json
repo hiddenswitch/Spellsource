@@ -18,7 +18,7 @@
     "spell": {
       "class": "HealSpell",
       "target": "FRIENDLY_HERO",
-      "value": 3
+      "value": 2
     }
   },
   "attributes": {

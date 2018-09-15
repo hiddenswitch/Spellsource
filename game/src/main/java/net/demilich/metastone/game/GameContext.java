@@ -1,16 +1,19 @@
 package net.demilich.metastone.game;
 
 import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableCallable;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.Vertx;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.*;
+import net.demilich.metastone.game.behaviour.AbstractBehaviour;
+import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.FiberBehaviour;
+import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -66,50 +69,24 @@ import static java.util.stream.Collectors.toList;
  * For example, this code starts a game between two opponents that perform random actions:
  * <pre>
  * {@code
- * // Adds every card set to the card format available in this game.
- * DeckFormat deckFormat = new DeckFormat();
- * for (CardSet set : CardSet.values()) {
- *      deckFormat.addSet(set);
- * }
- * // Chooses a random class and creates a player for it.
- * HeroClass heroClass1 = getRandomClass();
- * // Note "PlayRandomBehaviour"--this is the delegate for player actions.
- * PlayerConfig player1Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass1, deckFormat), new
- * PlayRandomBehaviour());
- * player1Config.setName("Player 1");
- * player1Config.setHeroCard(getHeroCardForClass(heroClass1));
- * Player player1 = new Player(player1Config);
- * // Chooses another random class and creates another player for it
- * HeroClass heroClass2 = getRandomClass();
- * PlayerConfig player2Config = new PlayerConfig(DeckFactory.getRandomDeck(heroClass2, deckFormat), new
- * PlayRandomBehaviour());
- * player2Config.setName("Player 2");
- * player2Config.setHeroCard(getHeroCardForClass(heroClass2));
- * Player player2 = new Player(player2Config);
- * // Creates a game context with the given players, a new game logic, and the specified deck format.
- * GameContext context = new GameContext(player1, player2, new GameLogic(), deckFormat);
- * // Plays the game to completion.
+ * GameContext context = GameContext.fromTwoRandomDecks();
+ * context.setBehaviour(GameContext.PLAYER_1, new PlayRandomBehaviour());
+ * context.setBehaviour(GameContext.PLAYER_2, new PlayRandomBehaviour());
  * context.play();
- * // Disposes the context.
- * context.dispose();
+ * // The game is over here.
  * }
  * </pre>
  * <p>
- * Based on the code above, you'll see the minimum requirements to execute a {@link #play()} command: <ul> <li>2 {@link
- * Player} objects, each configured with a {@link Behaviour}. These objects represent (1) the most important part of the
- * game state (encoded inside the fields of the {@link Player} object, like {@link Player#getMinions()}; and (2) the
- * {@link Behaviour} delegate for player actions and mulligans. </li>. <li>A {@link GameLogic} instance. It handles
- * everything in between receiving a player action to the request for the next player action..</li> <li>A {@link
- * DeckFormat}, which is a collection of {@link CardSet} values that correspond to the (1) legal cards that may be
- * played and put into decks and (2) legal cards that may appear in randomly drawn or created card
- * effects.</li></ul><p>
+ * The most important part of the game state is encoded inside the fields of the {@link Player} object in {@link
+ * #getPlayers()}, like {@link Player#getMinions()}. The actions taken by the players are delegated to the {@link
+ * Behaviour} objects in {@link #getBehaviours()}.
  * <p>
  * Game state is composed of a variety of fields that live inside the context. To get a copy of the state, use {@link
  * #getGameStateCopy()}; while you can access a modifiable copy of the {@link GameState} with {@link #getGameState()},
  * you're encouraged only use the {@link GameLogic} methods (which mutate the state stored inside this game context) in
  * order to always have valid data.
  * <p>
- * Game actions are chosen by {@link Behaviour} objects living inside the {@link Player} object. Typically, the {@link
+ * Game actions are chosen by {@link Behaviour} objects living inside {@link #getBehaviours()}. Typically, the {@link
  * GameLogic} instance will call {@link #getActivePlayer()} for the currently active player, call {@link
  * GameContext#getBehaviours()} to get the behaviour, and then call {@link Behaviour#requestAction(GameContext, Player,
  * List)} to request which action of a list of actions the player takes. Note that this is just called as a plain

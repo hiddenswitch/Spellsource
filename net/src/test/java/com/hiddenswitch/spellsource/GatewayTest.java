@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.Strand;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;

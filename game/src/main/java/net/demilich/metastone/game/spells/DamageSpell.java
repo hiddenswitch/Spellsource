@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -15,6 +12,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * Deals {@link SpellArg#VALUE} damage to the specified {@code target}.

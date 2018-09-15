@@ -1,14 +1,11 @@
 package net.demilich.metastone.game.behaviour;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableRunnable;
-import co.paralleluniverse.strands.channels.Channels;
-import co.paralleluniverse.strands.channels.QueueChannel;
-import co.paralleluniverse.strands.channels.QueueObjectChannel;
-import co.paralleluniverse.strands.queues.SingleConsumerLinkedObjectQueue;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.channels.Channels;
+import com.github.fromage.quasi.strands.channels.QueueChannel;
+import com.github.fromage.quasi.strands.channels.QueueObjectChannel;
+import com.github.fromage.quasi.strands.queues.SingleConsumerLinkedObjectQueue;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -17,7 +14,6 @@ import net.demilich.metastone.game.cards.Card;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A behaviour that will suspend until {@link #setAction(GameAction)} and {@link #setMulligan(List)} are called.

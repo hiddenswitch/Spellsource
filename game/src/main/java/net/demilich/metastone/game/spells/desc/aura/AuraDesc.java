@@ -2,17 +2,15 @@ package net.demilich.metastone.game.spells.desc.aura;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.AuraDescDeserializer;
-import net.demilich.metastone.game.spells.desc.condition.Condition;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.EnumMap;
 import java.util.Map;
 
 @JsonDeserialize(using = AuraDescDeserializer.class)

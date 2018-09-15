@@ -31,7 +31,10 @@
           "class": "CardFilter",
           "race": "MURLOC"
         }
-      ]
+      ],
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
     }
   },
   "collectible": true,

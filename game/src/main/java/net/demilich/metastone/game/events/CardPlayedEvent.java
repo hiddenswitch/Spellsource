@@ -17,7 +17,7 @@ public final class CardPlayedEvent extends GameEvent implements HasCard {
 	public Card getCard() {
 		return card;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getCard();

@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;

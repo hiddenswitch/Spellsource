@@ -6,6 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "EPIC",
+  "race": "DRAGON",
   "description": "Can only attack heroes and minions with Taunt.",
   "aura": {
     "class": "PhysicalAttackTargetOverrideAura",

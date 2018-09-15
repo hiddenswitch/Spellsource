@@ -5,7 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;

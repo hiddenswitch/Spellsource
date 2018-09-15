@@ -1,6 +1,9 @@
 package net.demilich.metastone.game.decks;
 
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
@@ -8,6 +11,10 @@ import java.io.Serializable;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * A deck that contains cards, a name, a hero card, etc. that can be actually used to populate a player's deck in a
+ * {@link net.demilich.metastone.game.GameContext}.
+ */
 public class GameDeck implements Serializable, Cloneable, Deck {
 	public static final GameDeck EMPTY;
 

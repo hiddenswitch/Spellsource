@@ -12,7 +12,7 @@ public class WeaponDestroyedEvent extends GameEvent {
 		super(context, weapon.getOwner(), -1);
 		this.weapon = weapon;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return getWeapon();

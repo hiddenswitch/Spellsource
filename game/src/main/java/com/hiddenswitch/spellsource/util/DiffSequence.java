@@ -11,8 +11,8 @@ public interface DiffSequence {
 	Logger logger = LoggerFactory.getLogger(DiffSequence.class);
 
 	/**
-	 * Computes a correct sequence of added, changed, removed and moved commands against a context between two lists.
-	 * O(N log N).
+	 * Computes a correct sequence of added, changed, removed and moved commands against a context between two lists. O(N
+	 * log N).
 	 *
 	 * @param oldResults The original sequence.
 	 * @param newResults The new sequence.

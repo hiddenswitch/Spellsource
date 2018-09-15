@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.HasCard;
 import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Objects;

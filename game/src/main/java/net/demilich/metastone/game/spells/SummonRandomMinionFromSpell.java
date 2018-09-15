@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.*;
@@ -21,7 +21,7 @@ public class SummonRandomMinionFromSpell extends Spell {
 				relevantMinions.addCard(card);
 			}
 		}
-		
+
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		Card card = context.getLogic().getRandom(relevantMinions);
 		context.getLogic().summon(player.getId(), card.summon(), null, boardPosition, false);

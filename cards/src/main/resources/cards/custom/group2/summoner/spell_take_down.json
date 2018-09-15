@@ -18,8 +18,9 @@
   "spell": {
     "class": "DestroySpell",
     "filter": {
-      "class": "ManaCostFilter",
+      "class": "AttributeFilter",
       "value": 5,
+      "attribute": "BASE_MANA_COST",
       "operation": "GREATER_OR_EQUAL"
     }
   },

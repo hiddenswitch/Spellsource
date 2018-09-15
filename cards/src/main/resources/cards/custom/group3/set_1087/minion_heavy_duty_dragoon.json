@@ -4,13 +4,36 @@
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 3,
-  "baseHp": 5,
+  "baseHp": 6,
   "rarity": "RARE",
+  "race": "DRAGON",
   "description": "Your Hero Power gives 1 more Attack.",
   "aura": {
-    "class": "CardAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "card": "hero_power_sharper_claws"
+    "class": "HeroPowerBonusAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "HasTargetCondition"
+          },
+          {
+            "class": "AllMatchFilterCondition",
+            "target": "TARGET",
+            "filter": {
+              "class": "EntityEqualsFilter",
+              "secondaryTarget": "ALL_CHARACTERS"
+            }
+          }
+        ]
+      },
+      "spell": {
+        "class": "TemporaryAttackSpell",
+        "value": 1
+      }
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

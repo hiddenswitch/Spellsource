@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.List;
 

@@ -1,13 +1,13 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class HasEntitiesOnBoardCondition extends Condition {
 
@@ -29,13 +29,13 @@ public class HasEntitiesOnBoardCondition extends Condition {
 			entity = entities.get(0);
 		}
 		String[] cardNames = (String[]) desc.get(ConditionArg.CARDS);
-		
+
 		List<Actor> checkedActors = new ArrayList<Actor>(player.getMinions());
 		if (player.getHero().getWeapon() != null) {
 			checkedActors.add(player.getHero().getWeapon());
 		}
 		checkedActors.add(player.getHero());
-		
+
 		for (String cardName : cardNames) {
 			boolean check = false;
 			for (Actor actor : checkedActors) {

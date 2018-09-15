@@ -1,26 +1,26 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.Map;
 
 /**
  * @deprecated Use a {@link SetAttributeSpell} instead:
- * <pre>
- *   {
- *     "class": "SetAttributeSpell",
- *     "target": "FRIENDLY_PLAYER",
- *     "attribute": "OVERLOAD",
- *     "value": 0
- *   }
- * </pre>
- * Resets the player's overload status.
+ * 		<pre>
+ * 		  {
+ * 		    "class": "SetAttributeSpell",
+ * 		    "target": "FRIENDLY_PLAYER",
+ * 		    "attribute": "OVERLOAD",
+ * 		    "value": 0
+ * 		  }
+ * 		</pre>
+ * 		Resets the player's overload status.
  */
 public class ClearOverloadSpell extends Spell {
 

@@ -158,22 +158,21 @@ public class LeagueOfExplorersTests extends TestBase {
 
 	@Test
 	public void testCurseOfRafaam() {
-		GameContext context = createContext(HeroClass.RED, HeroClass.VIOLET);
-
-		Player player = context.getPlayer1();
-		Card koboldGeomancerCard = CardCatalogue.getCardById("minion_kobold_geomancer");
-		playCard(context, player, koboldGeomancerCard);
-		context.endTurn();
-
-		Player opponent = context.getPlayer2();
-		Card curseOfRafaamCard = CardCatalogue.getCardById("spell_curse_of_rafaam");
-		playCard(context, opponent, curseOfRafaamCard);
-		context.endTurn();
-
-		final int CURSE_OF_RAFAAM_DAMAGE = 2;
-		// first player should take exactly 2 damage (NOT 3, because the spell
-		// damage should not be applied)
-		Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - CURSE_OF_RAFAAM_DAMAGE);
-
+		runGym((context, player, opponent) -> {
+			// Prevent fatigue damage
+			shuffleToDeck(context, player, "spell_the_coin");
+			shuffleToDeck(context, opponent, "spell_the_coin");
+			shuffleToDeck(context, opponent, "spell_the_coin");
+			Card koboldGeomancerCard = CardCatalogue.getCardById("minion_kobold_geomancer");
+			playCard(context, player, koboldGeomancerCard);
+			context.endTurn();
+			Card curseOfRafaamCard = CardCatalogue.getCardById("spell_curse_of_rafaam");
+			playCard(context, opponent, curseOfRafaamCard);
+			context.endTurn();
+			final int CURSE_OF_RAFAAM_DAMAGE = 2;
+			// first player should take exactly 2 damage (NOT 3, because the spell
+			// damage should not be applied)
+			Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - CURSE_OF_RAFAAM_DAMAGE);
+		});
 	}
 }

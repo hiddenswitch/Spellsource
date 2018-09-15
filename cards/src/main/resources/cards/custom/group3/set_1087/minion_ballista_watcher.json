@@ -6,6 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "EPIC",
+  "race": "MECH",
   "description": "Whenever you summon a minion, it deals its Attack to a random enemy minion.",
   "trigger": {
     "eventTrigger": {

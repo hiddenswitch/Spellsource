@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource.common;
 
-import co.paralleluniverse.fibers.Fiber;
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -164,6 +164,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
 
 		switch (message.getMessageType()) {
+			case PINGPONG:
+				// The first message indicates the player has connected or reconnected.
+				for (ActivityMonitor activityMonitor : activityMonitors) {
+					activityMonitor.activity();
+				}
+				break;
 			case FIRST_MESSAGE:
 				lastStateSent = null;
 				// The first message indicates the player has connected or reconnected.

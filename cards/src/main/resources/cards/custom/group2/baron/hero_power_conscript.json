@@ -4,13 +4,23 @@
   "type": "HERO_POWER",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Add a 3/3 Protector to your hand.",
+  "description": "Add a 2/2 Knight to your hand. It costs (0)",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
       "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 0,
+          "operation": "SET"
+        }
+      },
       "cards": [
-        "token_baron_protector"
+        "token_knight"
       ]
     }
   },

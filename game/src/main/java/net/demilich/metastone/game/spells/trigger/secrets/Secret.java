@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.spells.trigger.secrets;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 public class Secret extends Enchantment {
 	public Secret(EventTrigger trigger, SpellDesc spell, Card source) {

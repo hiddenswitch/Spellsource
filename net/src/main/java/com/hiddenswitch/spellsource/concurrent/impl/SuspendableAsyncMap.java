@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.concurrent.impl;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.Future;
 import io.vertx.core.shareddata.AsyncMap;

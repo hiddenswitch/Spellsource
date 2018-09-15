@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
-      "sourcePlayer": "SELF",
-      "requiredAttribute": "SECRET"
+      "requiredAttribute": "SECRET",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "PutRandomSecretIntoPlaySpell",

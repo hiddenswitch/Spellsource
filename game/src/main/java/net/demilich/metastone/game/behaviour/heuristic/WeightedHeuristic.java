@@ -1,9 +1,9 @@
 package net.demilich.metastone.game.behaviour.heuristic;
 
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class WeightedHeuristic implements Heuristic {
 

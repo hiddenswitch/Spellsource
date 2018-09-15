@@ -1,10 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.List;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -15,8 +11,12 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
 
 public class MissilesSpell extends DamageSpell {
 
@@ -43,7 +43,7 @@ public class MissilesSpell extends DamageSpell {
 			List<Entity> validTargets;
 			if (desc.containsKey(SpellArg.FILTER)) {
 				EntityFilter targetFilter = desc.getEntityFilter();
-				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
 				validTargets = SpellUtils.getValidRandomTargets(targets);
@@ -52,7 +52,7 @@ public class MissilesSpell extends DamageSpell {
 			if (validTargets.isEmpty()) {
 				return;
 			}
-			Actor randomTarget = (Actor)context.getLogic().getRandom(validTargets);
+			Actor randomTarget = (Actor) context.getLogic().getRandom(validTargets);
 			context.getLogic().damage(player, randomTarget, damage, source, true);
 		}
 	}

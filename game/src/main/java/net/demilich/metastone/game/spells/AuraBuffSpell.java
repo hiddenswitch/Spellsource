@@ -1,20 +1,19 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
-import co.paralleluniverse.fibers.Suspendable;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.function.Predicate;
 
 /**
  * An internal spell used to implement {@link net.demilich.metastone.game.spells.aura.BuffAura}. Behaves like a {@link

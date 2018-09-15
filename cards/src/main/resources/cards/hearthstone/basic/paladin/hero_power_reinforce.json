@@ -1,5 +1,6 @@
 {
   "name": "Reinforce",
+  "heroPower": "hero_power_the_silver_hand",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "GOLD",
@@ -18,7 +19,6 @@
       "card": "token_silver_hand_recruit"
     }
   },
-  "heroPower": "hero_power_the_silver_hand",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

@@ -28,6 +28,45 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testGlindaCrowskin() {
+		runGym((context, player, opponent) -> {
+			Card bloodfen = receiveCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_glinda_crowskin");
+			assertTrue(bloodfen.hasAttribute(Attribute.AURA_ECHO));
+			playCard(context, player, bloodfen);
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(player.getHand().get(0).hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN));
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(player.getHand().get(0).hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN));
+		});
+	}
+
+	@Test
+	public void testParagonOfLight() {
+		runGym((context, player, opponent) -> {
+			Minion paragon = playMinionCard(context, player, "minion_paragon_of_light");
+			context.endTurn();
+			context.endTurn();
+			player.getHero().setHp(10);
+			attack(context, player, paragon, opponent.getHero());
+			assertEquals(player.getHero().getHp(), 10);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion paragon = playMinionCard(context, player, "minion_paragon_of_light");
+			playCardWithTarget(context, player, "spell_dragon_s_strength", paragon);
+			context.endTurn();
+			context.endTurn();
+			player.getHero().setHp(10);
+			assertTrue(paragon.hasAttribute(Attribute.AURA_LIFESTEAL));
+			assertTrue(paragon.hasAttribute(Attribute.AURA_TAUNT));
+			attack(context, player, paragon, opponent.getHero());
+			assertEquals(player.getHero().getHp(), 10 + paragon.getAttack());
+		});
+	}
+
+	@Test
 	public void testWitchwoodGrizzlySilenceInteraction() {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, opponent, "minion_bloodfen_raptor");

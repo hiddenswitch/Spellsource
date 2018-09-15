@@ -10,8 +10,9 @@
   "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
-    "removeEffect": {
-      "class": "DiscardSpell"
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
     },
     "applyEffect": {
       "class": "custom.DiscoverDiscardSpell",
@@ -19,9 +20,8 @@
         "class": "NullSpell"
       }
     },
-    "condition": {
-      "class": "OwnedByPlayerCondition",
-      "targetPlayer": "ACTIVE"
+    "removeEffect": {
+      "class": "DiscardSpell"
     }
   },
   "collectible": true,

@@ -1,10 +1,15 @@
 package net.demilich.metastone.game.actions;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Indicates playing a hero card from the hand. This will eventually call {@link net.demilich.metastone.game.logic.GameLogic#changeHero(Player,
+ * Hero, boolean)}. Since it is played from the hand, battlecries are resolved.
+ */
 public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
 	protected BattlecryAction battlecryAction;
 

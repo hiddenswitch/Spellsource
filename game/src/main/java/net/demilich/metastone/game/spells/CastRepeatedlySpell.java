@@ -1,10 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -14,23 +10,28 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @see RecastWhileSpell for a more appropriate way to cast a spell multiple times with a condition.
  * @see ForceDeathPhaseSpell to see how to cause the end of a sequence and clean dead minions off the battlefield.
  * @deprecated See {@link RecastWhileSpell} for a better implementation of this spell, since this one is prone to
- * errors.
- * <p>
- * Casts the specified {@link SpellArg#SPELL} for {@link SpellArg#HOW_MANY} times. If a {@link SpellArg#CONDITION} is
- * specified, the condition is evaluated after the first cast; if the condition is not {@link
- * Condition#isFulfilled(GameContext, Player, Entity, Entity)}, the casting stops.
- * <p>
- * If {@link SpellArg#EXCLUSIVE} is specified, the spell will only be recast on targets that were not previously cast on
- * in a prior iteration.
- * <p>
- * If this spell's invocation has a non-null {@code target}, the sub spell will be cast with a random target in this
- * spell's {@link SpellArg#TARGET} property. This surprising behaviour reflects a consequence of legacy Metastone code.
- * <p>
- * This spell will <b>not</b> end the sequence after every repeat, while {@link RecastWhileSpell} does.
+ * 		errors.
+ * 		<p>
+ * 		Casts the specified {@link SpellArg#SPELL} for {@link SpellArg#HOW_MANY} times. If a {@link SpellArg#CONDITION} is
+ * 		specified, the condition is evaluated after the first cast; if the condition is not {@link
+ * 		Condition#isFulfilled(GameContext, Player, Entity, Entity)}, the casting stops.
+ * 		<p>
+ * 		If {@link SpellArg#EXCLUSIVE} is specified, the spell will only be recast on targets that were not previously cast
+ * 		on in a prior iteration.
+ * 		<p>
+ * 		If this spell's invocation has a non-null {@code target}, the sub spell will be cast with a random target in this
+ * 		spell's {@link SpellArg#TARGET} property. This surprising behaviour reflects a consequence of legacy Metastone
+ * 		code.
+ * 		<p>
+ * 		This spell will <b>not</b> end the sequence after every repeat, while {@link RecastWhileSpell} does.
  */
 public class CastRepeatedlySpell extends Spell {
 

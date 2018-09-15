@@ -1,5 +1,6 @@
 {
   "name": "Dagger Mastery",
+  "heroPower": "hero_power_poisoned_dagger",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLACK",
@@ -21,7 +22,6 @@
       }
     }
   },
-  "heroPower": "hero_power_poisoned_dagger",
   "collectible": false,
   "set": "BASIC",
   "fileFormatVersion": 1

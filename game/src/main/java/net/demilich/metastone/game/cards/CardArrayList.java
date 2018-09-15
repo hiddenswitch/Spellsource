@@ -12,8 +12,8 @@ import java.util.stream.Stream;
  * An implementation of {@link CardList} for easy shuffling, choosing and uniqueness testing of lists of cards.
  *
  * @see CardCatalogue#query(DeckFormat, Predicate) for an example of using this class to return a list of cards from a
- * function. By using this class instead of a plain {@link List}, the calling code can e.g. easily {@link #shuffle()}
- * the results.
+ * 		function. By using this class instead of a plain {@link List}, the calling code can e.g. easily {@link #shuffle()}
+ * 		the results.
  * @see net.demilich.metastone.game.spells.DiscoverFilteredCardSpell for a more advanced example of this class.
  */
 public class CardArrayList extends AbstractList<Card> implements Cloneable, Serializable, CardList {

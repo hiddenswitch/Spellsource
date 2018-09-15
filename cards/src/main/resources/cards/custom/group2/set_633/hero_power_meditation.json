@@ -1,5 +1,6 @@
 {
   "name": "Meditation",
+  "heroPower": "hero_power_zen_meditation",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "JADE",
@@ -20,7 +21,6 @@
       }
     ]
   },
-  "heroPower": "hero_power_zen_meditation",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

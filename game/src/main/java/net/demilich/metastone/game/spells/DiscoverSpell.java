@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
@@ -9,7 +9,6 @@ import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;

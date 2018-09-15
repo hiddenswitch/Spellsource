@@ -30,11 +30,11 @@
       }
     }
   ],
-  "targetSelection": "NONE",
   "condition": {
     "class": "AndCondition",
     "invert": true
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
     "description": "Your minions Freeze any characters they damage this turn.",

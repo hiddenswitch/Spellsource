@@ -5,9 +5,9 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
 public class ChooseOneOverrideAura extends Aura {
-    public ChooseOneOverrideAura(AuraDesc desc) {
-        super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
-        setDesc(desc);
-    }
+	public ChooseOneOverrideAura(AuraDesc desc) {
+		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
+		setDesc(desc);
+	}
 
 }

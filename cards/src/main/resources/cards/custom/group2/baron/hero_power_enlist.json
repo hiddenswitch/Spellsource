@@ -1,5 +1,6 @@
 {
   "name": "Enlist",
+  "heroPower": "hero_power_conscript",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "NAVY",
@@ -14,7 +15,6 @@
       ]
     }
   },
-  "heroPower": "hero_power_conscript",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

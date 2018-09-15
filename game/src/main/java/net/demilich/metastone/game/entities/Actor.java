@@ -1,10 +1,5 @@
 package net.demilich.metastone.game.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -13,8 +8,13 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.utils.Attribute;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be

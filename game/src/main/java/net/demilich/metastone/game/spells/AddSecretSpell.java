@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -13,10 +11,12 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * Puts the specified {@link SpellArg#SECRET} (an {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc})
  * into play.
- *
+ * <p>
  * If the secret is a card, use {@link RecastSpell}.
  */
 public class AddSecretSpell extends Spell {
@@ -41,7 +41,7 @@ public class AddSecretSpell extends Spell {
 		if (secret.getSourceCard() == null) {
 			secret.setSourceCard(source.getSourceCard());
 		}
-		if (context.getLogic().canPlaySecret(player,secret.getSourceCard())) {
+		if (context.getLogic().canPlaySecret(player, secret.getSourceCard())) {
 			context.getLogic().playSecret(player, secret);
 		}
 	}

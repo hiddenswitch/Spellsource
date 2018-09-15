@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
@@ -985,7 +985,7 @@ public interface Games extends Verticle {
 		entityState.cannotAttack(actor.hasAttribute(Attribute.CANNOT_ATTACK) || actor.hasAttribute(Attribute.AURA_CANNOT_ATTACK));
 		entityState.spellDamage(actor.getAttributeValue(Attribute.SPELL_DAMAGE));
 		entityState.windfury(actor.hasAttribute(Attribute.WINDFURY) || actor.hasAttribute(Attribute.AURA_WINDFURY));
-		entityState.lifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.LIFESTEAL));
+		entityState.lifesteal(actor.hasAttribute(Attribute.LIFESTEAL) || actor.hasAttribute(Attribute.AURA_LIFESTEAL));
 		entityState.poisonous(actor.hasAttribute(Attribute.POISONOUS) || actor.hasAttribute(Attribute.AURA_POISONOUS));
 		entityState.summoningSickness(actor.hasAttribute(Attribute.SUMMONING_SICKNESS));
 		entityState.untargetableBySpells(actor.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || actor.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));

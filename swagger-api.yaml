@@ -618,6 +618,7 @@ definitions:
       - 'EMOTE'
       - 'TOUCH'
       - 'CONCEDE'
+      - 'PINGPONG'
   Emote:
     description: |
       An emote that should play from the specified entity.

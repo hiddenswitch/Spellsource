@@ -1,17 +1,17 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Sets the {@code target}'s attack-related attributes such that the result of {@link Actor#getAttack()} or {@link
@@ -66,7 +66,7 @@ import org.slf4j.LoggerFactory;
  * @see BuffSpell to add a permanent attack bonus.
  * @see EnrageSpell to implement Enrage effects related to attack bonuses.
  * @see Attribute#ATTACK_EQUALS_HP to enforce a Lightspawn-like effect where the minion's attack always equals its
- * hitpoints after damage effects have been resolved.
+ * 		hitpoints after damage effects have been resolved.
  */
 public class SetAttackSpell extends Spell {
 

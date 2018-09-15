@@ -1,5 +1,37 @@
 package net.demilich.metastone.tests.util;
 
+import ch.qos.logback.classic.Level;
+import ch.qos.logback.classic.Logger;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.google.common.collect.Multiset;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.*;
+import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityZone;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
+import org.mockito.MockingDetails;
+import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
+import org.slf4j.LoggerFactory;
+import org.testng.Assert;
+import org.testng.annotations.BeforeMethod;
+
 import java.util.*;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.function.BiFunction;
@@ -7,41 +39,8 @@ import java.util.function.Function;
 import java.util.stream.Stream;
 import java.util.stream.StreamSupport;
 
-import co.paralleluniverse.fibers.Suspendable;
-import com.google.common.collect.Multiset;
-import net.demilich.metastone.game.behaviour.UtilityBehaviour;
-import net.demilich.metastone.game.actions.*;
-import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.entities.EntityZone;
-import net.demilich.metastone.game.spells.desc.SpellArg;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import org.mockito.MockingDetails;
-import org.mockito.Mockito;
-import org.mockito.stubbing.Answer;
-import org.slf4j.LoggerFactory;
-
-import ch.qos.logback.classic.Level;
-import ch.qos.logback.classic.Logger;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.decks.DeckFactory;
-import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.targeting.EntityReference;
-import org.testng.Assert;
-import org.testng.annotations.BeforeMethod;
-
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
-
 
 
 public class TestBase {
@@ -408,33 +407,11 @@ public class TestBase {
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit) {
-		DeckFormat deckFormat = new DeckFormat().withCardSets(
-				CardSet.BASIC,
-				CardSet.CLASSIC,
-				CardSet.BLIZZARD_ADVENTURE,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZAN,
-				CardSet.NAXXRAMAS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN,
-				CardSet.PROMO,
-				CardSet.REWARD,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
-				CardSet.THE_OLD_GODS,
-				CardSet.KOBOLDS_AND_CATACOMBS,
-				CardSet.WITCHWOOD,
-				CardSet.BOOMSDAY_PROJECT,
-				CardSet.CUSTOM
-		);
+		DeckFormat deckFormat = DeckFormat.CUSTOM;
 
-		Player player1 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(CardSet.BASIC,
-				CardSet.CLASSIC)), "Player 1");
+		Player player1 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 1");
 
-		Player player2 = new Player(DeckFactory.getRandomDeck(hero1, new DeckFormat().withCardSets(CardSet.BASIC,
-				CardSet.CLASSIC)), "Player 2");
+		Player player2 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 2");
 
 
 		GameLogic logic = new GameLogic();

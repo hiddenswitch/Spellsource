@@ -1,23 +1,21 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSecretCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.logic.GameLogic;
 
 public class SecretTest extends TestBase {
 

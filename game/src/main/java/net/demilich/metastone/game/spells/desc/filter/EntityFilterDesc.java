@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import java.util.Map;
-
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.EntityFilterDescDeserializer;
+
+import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 @JsonDeserialize(using = EntityFilterDescDeserializer.class)

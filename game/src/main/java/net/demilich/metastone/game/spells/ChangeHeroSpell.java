@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.List;
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -14,6 +11,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Changes the hero of {@link SpellArg#TARGET_PLAYER} to the specified hero card ID in {@link SpellArg#CARD}. If {@link
