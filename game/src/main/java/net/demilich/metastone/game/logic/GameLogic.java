@@ -701,45 +701,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (sourceReference != null) {
 			source = context.resolveSingleTarget(sourceReference);
 		}
-		spellDesc = spellDesc.clone();
-		//Implement SpellOverrideAura
-        Object clas = spellDesc.get(SpellArg.CLASS);
-        Entity finalSource = source;
-        List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
-                .filter(t -> t instanceof SpellOverrideAura)
-                .map(t -> (Aura) t)
-                .filter(((Predicate<Aura>) Aura::isExpired).negate())
-                .filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(clas))
-                .filter(aura -> context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).get(0).getId() == playerId)
-				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
-						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
-                .collect(Collectors.toList());
-        overrideAuras.addAll(context.getTriggerManager().getTriggers().stream()
-				.filter(t -> t instanceof Enchantment)
-				.map(t -> (Enchantment) t)
-				.filter(((Predicate<Enchantment>) Enchantment::isExpired).negate())
-				.filter(e -> e.getSourceCard() != null)
-				.filter(e -> e.getSourceCard().getDesc().getAura() != null)
-				.map(e -> {
-					Aura aura = e.getSourceCard().getDesc().getAura().create();
-					aura.setOwner(e.getOwner());
-					return aura;
-				})
-				.filter(aura -> aura.getDesc() != null && aura.getDesc().getRemoveEffect() != null && aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(clas))
-				.filter(aura -> !context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).isEmpty()
-						&& context.resolveTarget(player, finalSource, aura.getDesc().getTarget()).get(0).getId() == playerId)
-				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
-						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
-				.collect(Collectors.toList()));
-        if (!overrideAuras.isEmpty()) {
-            for (Aura aura : overrideAuras) {
-                for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
-                    spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
-                }
-            }
-
-        }
-
 		EntityReference spellTarget = spellDesc.hasPredefinedTarget() ? spellDesc.getTarget() : targetReference;
 		List<Entity> targets = targetLogic.resolveTargetKey(context, player, source, spellTarget);
 		// target can only be changed when there is one target
