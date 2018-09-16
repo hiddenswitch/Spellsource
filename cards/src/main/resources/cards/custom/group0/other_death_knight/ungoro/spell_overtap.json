@@ -20,7 +20,7 @@
             "class": "RemoveCardSpell"
           }
         ],
-        "ranomTarget": true
+        "randomTarget": true
       },
       {
         "class": "DrawCardSpell",
