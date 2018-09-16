@@ -1,0 +1,18 @@
+{
+  "name": "Rude Stare",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Haha! You don't get to draw a card this turn!",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 0,
+    "howMany": 0
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

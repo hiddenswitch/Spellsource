@@ -1,0 +1,25 @@
+{
+  "name": "Xavius",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "At the end of your turn, summon a Nightmare Tentacle.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_nightmare_tentacle"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
