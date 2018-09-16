@@ -2,7 +2,6 @@ import os
 import re
 from collections import deque
 from copy import deepcopy
-from dataclasses import dataclass
 from json import loads, dumps
 from mimetypes import MimeTypes
 from typing import Union, Mapping, Iterable, Optional, Deque, List, Generator, Dict
@@ -13,19 +12,14 @@ from autoboto.services.rekognition.shapes import Image, S3Object, DetectTextResp
 from botocore.exceptions import ClientError
 from requests import get
 from scrapy.http import TextResponse
-from scrapy.spider import Spider, Request
+from scrapy.spiders import Spider, Request
 
 from ..ext.hearthcards import enrich_from_description
 
 _MIME = MimeTypes()
 
 
-@dataclass()
-class ImgElement:
-    src: str
-
-
-class PageToImages(Iterable[ImgElement]):
+class PageToImages(Iterable[str]):
     class _Spider(Spider):
         name = 'hearthpwn'
 
@@ -39,7 +33,7 @@ class PageToImages(Iterable[ImgElement]):
     def __init__(self, *urls: str):
         super(PageToImages, self).__init__()
         self.urls = urls
-        self._results = {}  # type: Dict[str, Iterable[ImgElement]]
+        self._results = {}  # type: Dict[str, Iterable[str]]
 
     def __len__(self):
         return len(self.urls)
@@ -57,7 +51,7 @@ class PageToImages(Iterable[ImgElement]):
 
     @staticmethod
     def to_images(url: Optional[str] = None, request: Optional[Request] = None,
-                  response: Optional[TextResponse] = None) -> Generator[ImgElement, None, None]:
+                  response: Optional[TextResponse] = None) -> Generator[str, None, None]:
         if url is not None:
             request = get(url)
         if request is not None:
@@ -72,10 +66,10 @@ class PageToImages(Iterable[ImgElement]):
             height = img_selector.css('::attr(height)').extract()  # type: List[str]
             if len(width) == 0 or len(height) == 0:
                 # return any image without its width or height specified that appears in the post body
-                yield ImgElement(src=src)
+                yield src
             elif len(width) > 0 and len(height) > 0:
                 if 0.68 <= int(width[0]) / int(height[0]) <= 0.78:
-                    yield ImgElement(src=src)
+                    yield src
 
 
 class Enricher(Iterable[Dict]):
@@ -271,3 +265,25 @@ class SpellsourceCardDescGenerator(Iterable[Dict]):
             return int(line)
         except:
             return None
+
+
+if __name__ == '__main__':
+    import argparse
+    from .cards import name_to_id, write_card
+    from .cardformatter import fix_card
+    from os import makedirs
+    from os.path import join
+
+    parser = argparse.ArgumentParser()
+    parser.add_argument('-u', '--url', required=True,
+                        help='The URL whose images should be scraped')
+    parser.add_argument('-d', '--directory', required=False,
+                        default='./cards/src/main/resources/staging/scraped',
+                        help='The directory to save the cards to')
+    args = parser.parse_args()
+    assert 'url' in args
+    url = args.url
+    makedirs(args.directory, exist_ok=True)
+    for card_desc in Enricher(*SpellsourceCardDescGenerator(*RekognitionGenerator(*PageToImages(url)))):
+        id = name_to_id(card_desc['name'], card_desc['type'])
+        write_card(fix_card(card_desc), join(args.directory, id + '.json'))
