@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
-  "description": "All your minions have +1/1. Quest: Reach 10 mana crystals. Reward: Die. Horribly.",
+  "description": "All your minions have +1/1. Quest: Reach 7 mana crystals. Reward: Die. Horribly.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -33,7 +33,7 @@
                 "playerAttribute": "MAX_MANA",
                 "targetPlayer": "SELF"
               },
-              "value2": 10
+              "value2": 7
             },
             "targetPlayer": "SELF"
           },

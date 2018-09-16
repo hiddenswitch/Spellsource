@@ -2813,8 +2813,8 @@ public class CustomCardsTests extends TestBase {
 	public void testAegwynn() {
 		Map<String, Integer> spellMap = new HashMap<>();
 		spellMap.put("spell_fireball", 0);
-		spellMap.put("spell_arcane_explosion", 2);
-		spellMap.put("spell_flamestrike", 2);
+		spellMap.put("spell_arcane_explosion", 1);
+		spellMap.put("spell_flamestrike", 1);
 		spellMap.put("spell_frostbolt", 0);
 		for (String spell : spellMap.keySet()) {
 			runGym((context, player, opponent) -> {
@@ -3673,6 +3673,19 @@ public class CustomCardsTests extends TestBase {
 
 
 		});
+	}
+
+	@Test
+	public void testRiseOfTheAncientOnesChange() {
+		runGym((context, player, opponent) -> {
+			Card rise = receiveCard(context, player, "spell_rise_of_the_ancient_ones");
+			assertEquals(context.getLogic().getModifiedManaCost(player, rise), 30);
+			playCard(context, player, "minion_onyxia");
+			playCard(context, opponent, "minion_onyxia");
+			playCard(context, player, "spell_twisting_nether");
+			assertEquals(context.getLogic().getModifiedManaCost(player, rise), 16);
+		});
+
 	}
 }
 
