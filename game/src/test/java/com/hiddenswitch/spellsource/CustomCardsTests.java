@@ -3687,5 +3687,15 @@ public class CustomCardsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testObsidianSpellstone() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_lesser_obsidian_spellstone");
+			playCard(context, player, "spell_overtap");
+
+		});
+
+	}
 }
 
