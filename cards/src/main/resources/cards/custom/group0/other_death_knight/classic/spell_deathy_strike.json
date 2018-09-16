@@ -2,7 +2,7 @@
   "name": "Death Strike",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Lifesteal. Deal $3 damage.",
   "targetSelection": "ANY",

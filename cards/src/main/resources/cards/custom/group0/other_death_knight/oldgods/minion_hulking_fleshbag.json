@@ -2,7 +2,7 @@
   "name": "Hulking Fleshbag",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",

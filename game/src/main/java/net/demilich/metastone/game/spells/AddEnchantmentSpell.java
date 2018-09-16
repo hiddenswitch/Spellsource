@@ -85,8 +85,12 @@ public final class AddEnchantmentSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target == null) {
-			logger.error("onCast {} {}: Target cannot be null.", context.getGameId(), source);
-			throw new NullPointerException("target");
+			if (desc.containsKey(SpellArg.TARGET_PLAYER)) {
+				target = player;
+			} else {
+				logger.error("onCast {} {}: Target cannot be null.", context.getGameId(), source);
+				throw new NullPointerException("target");
+			}
 		}
 		checkArguments(logger, context, source, desc, SpellArg.AURA, SpellArg.TRIGGER, SpellArg.CARD, SpellArg.EXCLUSIVE);
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);

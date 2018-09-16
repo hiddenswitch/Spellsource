@@ -2,7 +2,7 @@
   "name": "Echoweb Lurker",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "RARE",

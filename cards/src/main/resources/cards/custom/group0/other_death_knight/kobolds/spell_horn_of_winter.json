@@ -2,7 +2,7 @@
   "name": "Horn of Winter",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Recruit a minion. Freeze It",
   "targetSelection": "NONE",

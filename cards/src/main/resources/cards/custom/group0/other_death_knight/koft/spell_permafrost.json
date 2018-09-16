@@ -2,7 +2,7 @@
   "name": "Permafrost",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
   "description": "Freeze a minion. Permanently,",
   "targetSelection": "MINIONS",

@@ -1,0 +1,29 @@
+{
+	"name": "Corpse Explosion",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "OBSIDIAN",
+	"rarity": "FREE",
+	"description": "Destroy a friendly minion. Draw a card.",
+	"condition": {
+		"class": "MinionCountCondition",
+		"value": 0,
+		"operation": "GREATER",
+		"targetPlayer": "SELF"
+	},
+	"targetSelection": "FRIENDLY_MINIONS",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+      {
+				"class": "DestroySpell"
+			}, 
+      {
+				"class": "DrawCardSpell"
+			}
+		]
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
+}

@@ -2,7 +2,7 @@
   "name": "Raise Dead",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Summon a 1/1 Ghoul with Charge that dies at the end of the turn.",
   "targetSelection": "NONE",

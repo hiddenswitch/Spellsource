@@ -2,7 +2,7 @@
   "name": "The Omega Rune",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
   "description": "Freeze all minions. Summon seven 2/2 Ghouls. This game, your spells have Lifesteal.",
   "targetSelection": "NONE",

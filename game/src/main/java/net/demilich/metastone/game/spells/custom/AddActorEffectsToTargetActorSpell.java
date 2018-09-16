@@ -16,6 +16,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
 import java.util.stream.Stream;
 
 public class AddActorEffectsToTargetActorSpell extends Spell {
@@ -38,8 +39,11 @@ public class AddActorEffectsToTargetActorSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Entity sourceEntity =
-				context.resolveTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET)).get(0);
+		List<Entity> sourceList = context.resolveTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+		if (sourceList.isEmpty()) {
+			return;
+		}
+		Entity sourceEntity = sourceList.get(0);
 		Card sourceCard = sourceEntity.getSourceCard();
 		// Restore the race after it is changed
 		Actor targetActor = (Actor) target;

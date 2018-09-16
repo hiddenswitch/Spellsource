@@ -2,7 +2,7 @@
   "name": "Shaking Sarcophagus",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Discover an enemy minion that died this game.",
   "targetSelection": "NONE",

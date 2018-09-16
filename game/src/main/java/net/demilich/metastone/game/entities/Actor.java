@@ -268,9 +268,7 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		updateTriggers();
 	}
 
-	public void updateTriggers() {
-		if (this.getReference().getId() == -1) {
-		}
+	private void updateTriggers() {
 		for (Enchantment trigger : enchantments) {
 			trigger.setHost(this);
 		}

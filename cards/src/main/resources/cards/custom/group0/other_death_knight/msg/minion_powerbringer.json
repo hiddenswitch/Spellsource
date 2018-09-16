@@ -2,7 +2,7 @@
   "name": "Power Bringer",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",

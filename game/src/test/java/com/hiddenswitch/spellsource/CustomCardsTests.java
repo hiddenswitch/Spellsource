@@ -3437,10 +3437,9 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			assertEquals(player.getHand().size(), 3);
 			assertEquals(player.getDeck().size(), 27);
-			assertEquals(context.getTriggerManager().getTriggers().size(), 0);
 			playCard(context, player, "spell_arcane_intellect");
-			assertEquals(player.getHand().size(), 5);
-			assertEquals(player.getDeck().size(), 25);
+			assertEquals(player.getHand().size(), 3);
+			assertEquals(player.getDeck().size(), 27);
 		});
 
 	}
@@ -3614,12 +3613,29 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testArthasMenethil() {
+		/*
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_arthas_menethil");
 			playCard(context, opponent, "spell_call_in_the_finishers");
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(player.getMinions().size(), 4);
 
+		});
+		*/
+
+		runGym((context, player, opponent) -> {
+			playCard(context, opponent, "spell_fiendish_circle");
+			playCard(context, player, "spell_twisting_nether");
+			context.endTurn();
+			context.endTurn();
+			playCard(context, player, "hero_arthas_menethil");
+			player.setMana(10);
+			assertTrue(!context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference()));
+			playCard(context, opponent, "spell_call_in_the_finishers");
+			playCard(context, player, "spell_twisting_nether");
+			assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference()));
+			useHeroPower(context, player);
+			assertTrue(player.getMinions().get(0).getRace().hasRace(Race.MURLOC));
 		});
 	}
 
@@ -3632,6 +3648,21 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getMinions().size(), 0);
 		});
 
+	}
+
+	@Test
+	public void testPayRespects() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_pay_respects");
+			playCard(context, player, "spell_fiendish_circle");
+			playCardWithTarget(context, player, "spell_dark_pact", player.getMinions().get(0));
+			playCard(context, player, "spell_pay_respects");
+			for (Minion minion : player.getMinions()) {
+				assertEquals(minion.getHp(), 2);
+			}
+
+
+		});
 	}
 }
 

@@ -4,9 +4,9 @@
 	"type": "MINION",
 	"baseAttack": 1,
 	"baseHp": 7,
-	"heroClass": "SPIRIT",
+	"heroClass": "OBSIDIAN",
 	"rarity": "LEGENDARY",
-	"description": "Deathrattle: Cast the Deathrattles of all minions in your hand and deck.",
+	"description": "Deathrattle: Cast all other Deathrattles in your hand and deck.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [
@@ -14,20 +14,38 @@
         "class": "TriggerDeathrattleSpell",
         "target": "FRIENDLY_HAND",
         "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "DEATHRATTLES",
-          "operation": "HAS"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "attribute": "DEATHRATTLES",
+              "operation": "HAS"
+            },
+            {
+              "class": "SpecificCardFilter",
+              "card": "minion_teron_gorefiend",
+              "invert": true
+            }
+          ]
         }
       },
       {
         "class": "TriggerDeathrattleSpell",
         "target": "FRIENDLY_DECK",
         "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "DEATHRATTLES",
-          "operation": "HAS"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "attribute": "DEATHRATTLES",
+              "operation": "HAS"
+            },
+            {
+              "class": "SpecificCardFilter",
+              "card": "minion_teron_gorefiend",
+              "invert": true
+            }
+          ]
         }
       }
     ]

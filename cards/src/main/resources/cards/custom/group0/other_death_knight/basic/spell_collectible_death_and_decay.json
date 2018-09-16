@@ -2,7 +2,7 @@
   "name": "Death and Decay",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Deal 3 damage to all enemies",
   "targetSelection": "NONE",

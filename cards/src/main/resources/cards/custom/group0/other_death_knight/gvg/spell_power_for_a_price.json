@@ -2,7 +2,7 @@
   "name": "Power for a Price",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
   "description": "Give a friendly minion Immune. Next turn, Silence it.",
   "targetSelection": "FRIENDLY_MINIONS",

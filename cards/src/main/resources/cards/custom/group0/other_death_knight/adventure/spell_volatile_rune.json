@@ -2,7 +2,7 @@
   "name": "Volatile Rune",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Deal $4 damage randomly split among all enemy minions.",
   "targetSelection": "NONE",

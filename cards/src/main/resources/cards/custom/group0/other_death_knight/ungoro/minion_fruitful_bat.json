@@ -2,7 +2,7 @@
   "name": "Fruitful Bat",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",

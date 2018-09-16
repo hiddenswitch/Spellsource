@@ -2,6 +2,7 @@ package net.demilich.metastone.game.entities.heroes;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 
 public enum HeroClass {
 	ANY,
@@ -22,6 +23,7 @@ public enum HeroClass {
 	RUST,
 	ICE,
 	SPIRIT,
+	OBSIDIAN,
 	SELF,
 	OPPONENT,
 	INHERIT;
@@ -58,6 +60,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_darion");
 			case RUST:
 				return CardCatalogue.getCardById("hero_alder_ravenwald");
+			case OBSIDIAN:
+				return CardCatalogue.getCardById("hero_nerzhul");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

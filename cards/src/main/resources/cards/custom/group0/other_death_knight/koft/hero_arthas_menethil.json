@@ -1,9 +1,9 @@
 {
   "name": "Arthas Menethil",
-  "heroPower": "hero_power_fallen_champions",
-  "baseManaCost": 10,
+  "heroPower": "hero_power_fallen_champion",
+  "baseManaCost": 8,
   "type": "HERO",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Freeze all characters and decks. (Players can't draw cards this turn and next)",
   "battlecry": {
@@ -18,13 +18,13 @@
         },
         {
           "class": "AddEnchantmentSpell",
-          "target": "FRIENDLY_PLAYER",
+          "targetPlayer": "SELF",
           "card": "enchantment_frozen_deck",
           "exclusive": true
         },
         {
           "class": "AddEnchantmentSpell",
-          "target": "ENEMY_PLAYER",
+          "targetPlayer": "OPPONENT",
           "card": "enchantment_frozen_deck",
           "exclusive": true
         }

@@ -2,7 +2,7 @@
   "name": "Bat",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "FREE",

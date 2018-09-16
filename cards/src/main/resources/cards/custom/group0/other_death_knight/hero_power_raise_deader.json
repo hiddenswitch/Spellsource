@@ -2,7 +2,7 @@
   "name": "Raise Deader",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Summon 2 1/1 Ghouls with Charge that dies at the end of the turn.",
   "targetSelection": "NONE",

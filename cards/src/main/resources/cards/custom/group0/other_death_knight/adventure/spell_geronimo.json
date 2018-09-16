@@ -2,7 +2,7 @@
   "name": "Geronimo!",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Choose a minion. Freeze all other minions.",
   "targetSelection": "MINIONS",

@@ -2,7 +2,7 @@
   "name": "Sacred Tombstone",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",

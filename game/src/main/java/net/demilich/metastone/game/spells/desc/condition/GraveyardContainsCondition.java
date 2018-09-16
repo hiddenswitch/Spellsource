@@ -17,7 +17,7 @@ public class GraveyardContainsCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		String cardId = (String) desc.get(ConditionArg.CARD);
 		if (desc.containsKey(ConditionArg.TARGET)) {
-			cardId = context.resolveSingleTarget((EntityReference) desc.get(ConditionArg.TARGET)).getSourceCard().getCardId();
+			cardId = context.resolveTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)).get(0).getSourceCard().getCardId();
 		}
 		for (Entity deadEntity : player.getGraveyard()) {
 			Card card = null;

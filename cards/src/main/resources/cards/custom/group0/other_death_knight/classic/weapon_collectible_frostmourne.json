@@ -2,7 +2,7 @@
   "name": "Frostmourne",
   "baseManaCost": 8,
   "type": "WEAPON",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "damage": 5,
   "durability": 3,
   "rarity": "LEGENDARY",

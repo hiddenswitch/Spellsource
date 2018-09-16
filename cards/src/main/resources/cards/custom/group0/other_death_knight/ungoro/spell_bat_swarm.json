@@ -2,7 +2,7 @@
   "name": "Bat Swarm",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
   "description": "Choose a minion. Summon seven 2/1 Bats to attack it.",
   "targetSelection": "ENEMY_MINIONS",
@@ -27,6 +27,6 @@
     }
   },
   "collectible": true,
-  "set": "BOOMSDAY_PROJECT",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

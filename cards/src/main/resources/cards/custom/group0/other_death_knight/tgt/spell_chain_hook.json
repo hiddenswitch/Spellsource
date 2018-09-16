@@ -2,7 +2,7 @@
   "name": "Chain Hook",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Put a minion into your hand.",
   "targetSelection": "MINIONS",

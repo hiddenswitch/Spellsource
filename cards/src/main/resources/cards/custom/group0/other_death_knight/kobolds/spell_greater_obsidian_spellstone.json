@@ -2,7 +2,7 @@
   "name": "Greater Obsidian Spellstone",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Give a random friendly minion +6/+6.",
   "targetSelection": "NONE",
