@@ -31,7 +31,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.5.9',
+      version='0.5.10',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -50,7 +50,7 @@ setup(name='spellsource',
       license='GPLv3',
       install_requires=['py4j', 'tqdm', 'objdict', 'msgpack'],
       extras_require={
-          'ext': ['numpy', 'h5py', 'keras', 'hearthstone', 'hearthstone_data']
+          'ext': ['numpy', 'h5py', 'keras', 'hearthstone', 'hearthstone_data', 'autoboto', 'boto3', 'nltk', 'scrapy']
       },
       packages=['spellsource', 'spellsource.ext', 'spellsource.tests'],
       keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',

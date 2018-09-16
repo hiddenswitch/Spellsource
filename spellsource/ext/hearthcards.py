@@ -2,6 +2,7 @@ import copy
 import json
 import os
 import urllib.request
+from typing import Optional, Union, Mapping
 
 from .cardformatter import fix_dict
 from .cards import *
@@ -65,10 +66,12 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     :param kwargs: All other overrides
     :return:
     """
+    card_attack = card['attack']
+    card_health = card['health']
     if 'type' in card:
         card_type = card['type'].upper()
     else:
-        if card['attack'] == '0' and card['health'] == '0':
+        if card_attack == '0' and card_health == '0':
             card_type = 'SPELL'
         else:
             card_type = 'MINION'
@@ -78,17 +81,29 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     out['name'] = card['cardname']
     out['set'] = set
     out['description'] = card['cardtext']
+    description = out['description'].lower()
     out['type'] = card_type
-    out['attributes'] = attributes = {}
-
     out['rarity'] = card['rarity'].upper()
     if card['class'].upper() in CLASS_MAPPING:
         out['heroClass'] = CLASS_MAPPING[card['class'].upper()]
     else:
         out['heroClass'] = hero_class
     out['baseManaCost'] = int(card['mana'])
-    description = out['description'].lower()
 
+    enrich_from_description(out, description, card_attack, card_health, card_type)
+    out['collectible'] = True
+    out['fileFormatVersion'] = 1
+    if kwargs is not None:
+        out.update(kwargs)
+    return out
+
+
+def enrich_from_description(card_dict: Mapping,
+                            description: str,
+                            card_attack: Optional[Union[str, int]] = None,
+                            card_health: Optional[Union[str, int]] = None,
+                            card_type: Optional[str] = None):
+    card_dict['attributes'] = attributes = {}
     spell = {
         'class': 'BuffSpell',
         'target': 'SELF',
@@ -97,7 +112,7 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     }
     spells = []
     if re.search(r'costs \(\d+\) (more)|(less)', description):
-        out['manaCostModifier'] = {
+        card_dict['manaCostModifier'] = {
             'class': 'PlayerAttributeValueProvider',
             'playerAttribute': 'HAND_COUNT'
         }
@@ -214,7 +229,6 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
         else:
             target_example += 'CHARACTERS'
         spell['target'] = target_example
-
     if len(spells) > 1:
         spell = {
             'class': 'MetaSpell',
@@ -223,41 +237,39 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     condition = {
         'class': 'PlayedLastTurnCondition'
     }
-
     if 'combo' in description:
         condition = {
             'class': 'ComboCondition'
         }
-
-    if card_type == 'MINION':
-        out['baseAttack'] = int(card['attack'])
-        out['baseHp'] = int(card['health'])
-    elif card_type == 'WEAPON':
-        out['damage'] = int(card['attack'])
-        out['durability'] = int(card['health'])
+    if card_type is not None and card_attack is not None and card_health is not None:
+        if card_type == 'MINION':
+            card_dict['baseAttack'] = int(card_attack)
+            card_dict['baseHp'] = int(card_health)
+        elif card_type == 'WEAPON':
+            card_dict['damage'] = int(card_attack)
+            card_dict['durability'] = int(card_health)
     elif card_type == 'SPELL':
         if 'if' in description:
             spell['condition'] = condition
         if spell['class'] == 'DamageSpell' or spell['class'] == 'DestroySpell':
-            out['targetSelection'] = 'ANY'
+            card_dict['targetSelection'] = 'ANY'
         elif spell['class'] == 'BuffSpell':
-            out['targetSelection'] = 'MINIONS'
+            card_dict['targetSelection'] = 'MINIONS'
         else:
-            out['targetSelection'] = 'NONE'
-        out['spell'] = spell
-
+            card_dict['targetSelection'] = 'NONE'
+        card_dict['spell'] = spell
     if card_type == 'MINION' or card_type == 'WEAPON':
         if 'deathrattle' in description:
-            out['deathrattle'] = spell
+            card_dict['deathrattle'] = spell
             attributes['DEATHRATTLES'] = True
         if 'battlecry' in description:
-            out['battlecry'] = {
+            card_dict['battlecry'] = {
                 'targetSelection': 'NONE',
                 'spell': spell
             }
             attributes['BATTLECRY'] = True
         if 'inspire' in description:
-            out['trigger'] = {
+            card_dict['trigger'] = {
                 'eventTrigger': {
                     'class': 'InspireTrigger',
                     'targetPlayer': 'SELF'
@@ -265,7 +277,7 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
                 'spell': spell
             }
         if 'start of game' in description:
-            out['gameTriggers'] = [
+            card_dict['gameTriggers'] = [
                 {
                     'eventTrigger': {
                         'class': 'GameStartTrigger',
@@ -275,13 +287,13 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
                 }
             ]
             if 'if' in description:
-                out['gameTriggers'][0]['eventTrigger']['spell']['condition'] = condition
+                card_dict['gameTriggers'][0]['eventTrigger']['spell']['condition'] = condition
         if 'whenever' in description \
                 or 'at the end' in description \
                 or 'at the start' in description \
                 or 'after' in description \
                 or 'each turn' in description:
-            out['trigger'] = {
+            card_dict['trigger'] = {
                 'eventTrigger': {
                     'class': 'TurnEndTrigger',
                     'targetPlayer': 'SELF'
@@ -289,9 +301,9 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
                 'spell': spell
             }
             if 'if' in description:
-                out['trigger']['eventTrigger']['fireCondition'] = condition
-        elif 'battlecry' in out and 'if' in description:
-            out['battlecry']['condition'] = condition
+                card_dict['trigger']['eventTrigger']['fireCondition'] = condition
+        elif 'battlecry' in card_dict and 'if' in description:
+            card_dict['battlecry']['condition'] = condition
         if 'taunt' in description:
             attributes['TAUNT'] = True
         if 'stealth' in description:
@@ -315,25 +327,21 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
     if 'echo' in description:
         attributes['ECHO'] = True
     if 'quest:' in description:
-        out['countUntilCast'] = 5
-        out['quest'] = {
+        card_dict['countUntilCast'] = 5
+        card_dict['quest'] = {
             'class': 'CardPlayedTrigger',
             'targetPlayer': 'SELF'
         }
-        out['spell'] = {
+        card_dict['spell'] = {
             'class': 'ReceiveCardSpell',
             'card': 'spell_the_coin'
         }
     elif 'secret:' in description:
-        out['secret'] = {
+        card_dict['secret'] = {
             'class': 'CardPlayedTrigger',
             'targetPlayer': 'SELF'
         }
-    out['collectible'] = True
-    out['fileFormatVersion'] = 1
-    if kwargs is not None:
-        out.update(kwargs)
-    return out
+    return card_dict
 
 
 def write_set_stubs(set_id: int, dest_dir: str):
