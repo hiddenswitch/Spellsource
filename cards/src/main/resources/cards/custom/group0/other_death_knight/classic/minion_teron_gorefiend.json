@@ -11,42 +11,68 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "TriggerDeathrattleSpell",
-        "target": "FRIENDLY_HAND",
-        "filter": {
-          "class": "AndFilter",
-          "filters": [
+        "class": "ModifyAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "value": 1,
+        "attribute": "RESERVED_INTEGER_2"
+      },
+      {
+        "class": "ConditionalSpell",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
             {
-              "class": "CardFilter",
-              "attribute": "DEATHRATTLES",
-              "operation": "HAS"
+              "class": "TriggerDeathrattleSpell",
+              "target": "FRIENDLY_HAND",
+              "filter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "attribute": "DEATHRATTLES",
+                    "operation": "HAS"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_teron_gorefiend",
+                    "invert": true
+                  }
+                ]
+              }
             },
             {
-              "class": "SpecificCardFilter",
-              "card": "minion_teron_gorefiend",
-              "invert": true
+              "class": "TriggerDeathrattleSpell",
+              "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "attribute": "DEATHRATTLES",
+                    "operation": "HAS"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_teron_gorefiend",
+                    "invert": true
+                  }
+                ]
+              }
             }
           ]
+        },
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "value": 30,
+          "attribute": "RESERVED_INTEGER_2",
+          "operation": "LESS_OR_EQUAL"
         }
       },
       {
-        "class": "TriggerDeathrattleSpell",
-        "target": "FRIENDLY_DECK",
-        "filter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "CardFilter",
-              "attribute": "DEATHRATTLES",
-              "operation": "HAS"
-            },
-            {
-              "class": "SpecificCardFilter",
-              "card": "minion_teron_gorefiend",
-              "invert": true
-            }
-          ]
-        }
+        "class": "RemoveAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "RESERVED_INTEGER_2"
       }
     ]
   },
