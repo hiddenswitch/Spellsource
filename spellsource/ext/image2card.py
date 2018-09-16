@@ -25,7 +25,7 @@ class ImgElement:
     src: str
 
 
-class HearthpwnThreadPageToImages(Iterable[ImgElement]):
+class PageToImages(Iterable[ImgElement]):
     class _Spider(Spider):
         name = 'hearthpwn'
 
@@ -34,10 +34,10 @@ class HearthpwnThreadPageToImages(Iterable[ImgElement]):
                 yield Request(url=url, callback=self.parse)
 
         def parse(self, response: TextResponse):
-            yield HearthpwnThreadPageToImages.to_images(response=response)
+            yield PageToImages.to_images(response=response)
 
     def __init__(self, *urls: str):
-        super(HearthpwnThreadPageToImages, self).__init__()
+        super(PageToImages, self).__init__()
         self.urls = urls
         self._results = {}  # type: Dict[str, Iterable[ImgElement]]
 
@@ -51,7 +51,7 @@ class HearthpwnThreadPageToImages(Iterable[ImgElement]):
                     yield image_element
                 continue
             results = self._results[url] = deque()
-            for image_element in HearthpwnThreadPageToImages.to_images(url=url):
+            for image_element in PageToImages.to_images(url=url):
                 results.append(image_element)
                 yield image_element
 
@@ -63,7 +63,10 @@ class HearthpwnThreadPageToImages(Iterable[ImgElement]):
         if request is not None:
             response = TextResponse(request.url, body=request.text, encoding='utf-8')
 
-        for img_selector in response.selector.css('.forum-post-body img'):
+        selector_string = 'img'
+        if 'hearthpwn.com/forums' in response.url:
+            selector_string = '.forum-post-body ' + selector_string
+        for img_selector in response.selector.css(selector_string):
             src = img_selector.css('::attr(src)').extract()[0]  # type: str
             width = img_selector.css('::attr(width)').extract()  # type: List[str]
             height = img_selector.css('::attr(height)').extract()  # type: List[str]
