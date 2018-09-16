@@ -1,0 +1,24 @@
+{
+  "name": "Nightmare Auto-Barber",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "Common",
+  "race": "Mech",
+  "description": "Battlecry: Give your weapon +1 Durability.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_WEAPON",
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
