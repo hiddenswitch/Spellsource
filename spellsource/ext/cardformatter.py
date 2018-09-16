@@ -11,6 +11,7 @@ This script requires the objdict package to help it serialize to JSON  in the ap
 import os
 
 from objdict import ObjDict as OrderedDict
+
 from .cards import write_card, iter_card_and_file_path
 
 _VERSION = 1
@@ -65,22 +66,28 @@ _ORDER = [
 
 
 def fix_cards():
-    for (card, filepath) in iter_card_and_file_path(os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')):
+    for (card, filepath) in iter_card_and_file_path(
+            os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')):
         if 'set' not in card:
             if 'witchwood' in filepath:
                 card['set'] = 'WITCHWOOD'
-        if 'race' in card:
-            if card['race'] == 'MECHANICAL':
-                card['race'] = 'MECH'
-        if 'rarity' not in card:
-            card['rarity'] = 'FREE'
-        if 'id' in card:
-            del card['id']
-        fixed_card = fix_dict(card)
-        if 'fileFormatVersion' not in fixed_card:
-            fixed_card['fileFormatVersion'] = 1
-        
+        fixed_card = fix_card(card)
+
         write_card(fixed_card, filepath)
+
+
+def fix_card(card):
+    if 'race' in card:
+        if card['race'] == 'MECHANICAL':
+            card['race'] = 'MECH'
+    if 'rarity' not in card:
+        card['rarity'] = 'FREE'
+    if 'id' in card:
+        del card['id']
+    fixed_card = fix_dict(card)
+    if 'fileFormatVersion' not in fixed_card:
+        fixed_card['fileFormatVersion'] = 1
+    return fixed_card
 
 
 def fix_list(v):
@@ -100,7 +107,7 @@ def fix_dict(in_dict):
         if k in new_dict:
             continue
         new_dict[k] = fix_value(in_dict[k])
-    
+
     return new_dict
 
 
