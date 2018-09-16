@@ -2,7 +2,7 @@
   "name": "Fallen Champions",
   "baseManaCost": 0,
   "type": "HERO_POWER",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Passive Hero Power: After an enemy minion dies, summon it.",
   "passiveTrigger": {

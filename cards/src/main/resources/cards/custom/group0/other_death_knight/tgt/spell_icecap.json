@@ -2,7 +2,7 @@
   "name": "Icecap",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Draw 3 cards. Freeze your deck. (Can't draw until after next turn)",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Overtap",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Shuffle a random card in your hand into your deck. Draw 3 cards.",
   "targetSelection": "NONE",
@@ -19,7 +19,8 @@
           {
             "class": "RemoveCardSpell"
           }
-        ]
+        ],
+        "ranomTarget": true
       },
       {
         "class": "DrawCardSpell",

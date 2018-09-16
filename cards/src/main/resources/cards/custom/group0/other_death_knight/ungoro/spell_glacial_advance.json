@@ -2,7 +2,7 @@
   "name": "Glacial Advance",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Destroy all minions. Freeze any minions summoned next turn.",
   "targetSelection": "NONE",

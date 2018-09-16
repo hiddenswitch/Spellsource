@@ -1,14 +1,14 @@
 {
-  "name": "Deranged Shifter",
-  "baseManaCost": 6,
+  "name": "Flesh Monstrosity",
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "OBSIDIAN",
-  "baseAttack": 2,
-  "baseHp": 2,
+  "baseAttack": 3,
+  "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Battlecry: Gain adjacent minions' stats and text.",
+  "description": "Battlecry: Destroy a friendly minion and gain its stats and text.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "MetaSpell",
       "spells": [
@@ -17,19 +17,22 @@
           "target": "SELF",
           "attackBonus": {
             "class": "AttributeValueProvider",
-            "target": "ADJACENT_MINIONS",
+            "target": "SPELL_TARGET",
             "attribute": "ATTACK"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
-            "target": "ADJACENT_MINIONS",
+            "target": "SPELL_TARGET",
             "attribute": "HP"
           }
         },
         {
           "class": "custom.AddActorEffectsToTargetActorSpell",
           "target": "SELF",
-          "secondaryTarget": "ADJACENT_MINIONS"
+          "secondaryTarget": "SPELL_TARGET"
+        },
+        {
+          "class": "DestroySpell"
         }
       ]
     }

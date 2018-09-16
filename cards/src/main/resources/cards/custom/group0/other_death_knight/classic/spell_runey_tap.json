@@ -1,8 +1,8 @@
 {
-  "name": "Rune Tap",
+  "name": "Rune Tap ",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Draw a minion, spell, and weapon from your deck.",
   "targetSelection": "NONE",

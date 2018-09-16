@@ -2,7 +2,7 @@
   "name": "Decomposed Spectator",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",

@@ -2,7 +2,7 @@
   "name": "Frozen Pulse",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Freeze a minion and adjacent ones.",
   "targetSelection": "MINIONS",
@@ -18,6 +18,6 @@
     }
   },
   "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

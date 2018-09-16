@@ -2,7 +2,7 @@
   "name": "Death's Embrace",
   "baseManaCost": 6,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Take control of an enemy minion. Destroy it.",
   "targetSelection": "ENEMY_MINIONS",

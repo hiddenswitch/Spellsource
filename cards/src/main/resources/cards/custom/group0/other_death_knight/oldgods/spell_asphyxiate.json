@@ -2,7 +2,7 @@
   "name": "Asphyxiate",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
   "description": "Silenace a minion. At the start of your turn, destroy it.",
   "targetSelection": "MINIONS",

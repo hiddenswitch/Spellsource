@@ -2,36 +2,42 @@
   "name": "Midnight Ride",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
   "description": "Shuffle all minions into their owner's deck. They are summoned when drawn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "card": "enchantment_midnight_ride",
-        "exclusive": true
-      },
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "ENEMY_PLAYER",
-        "targetPlayer": "OPPONENT",
-        "card": "enchantment_midnight_ride",
-        "exclusive": true
-      },
-      {
-        "class": "ShuffleMinionToDeckSpell",
-        "target": "ALL_MINIONS",
-        "targetPlayer": "OWNER",
-        "spell": {
-          "class": "AddAttributeSpell",
-          "attribute": "RESERVED_BOOLEAN_2"
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "ShuffleMinionToDeckSpell",
+      "target": "SPELL_TARGET",
+      "targetPlayer": "OWNER",
+      "spell": {
+        "class": "custom.AddTriggerToCardSpell",
+        "attribute": "PASSIVE_TRIGGERS",
+        "target": "OUTPUT",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardDrawnTrigger",
+            "hostTargetType": "IGNORE_OTHER_TARGETS"
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "SummonSpell",
+                "target": "SELF"
+              },
+              {
+                "class": "RemoveCardSpell",
+                "target": "SELF"
+              }
+            ]
+          }
         }
       }
-    ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

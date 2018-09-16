@@ -2,7 +2,7 @@
   "name": "Cryognome",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "EPIC",

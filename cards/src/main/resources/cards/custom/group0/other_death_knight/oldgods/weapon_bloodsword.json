@@ -2,7 +2,7 @@
   "name": "Bloodsword",
   "baseManaCost": 3,
   "type": "WEAPON",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "damage": 2,
   "durability": 3,
   "rarity": "COMMON",

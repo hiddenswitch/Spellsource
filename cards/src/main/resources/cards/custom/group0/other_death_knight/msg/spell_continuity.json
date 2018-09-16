@@ -1,8 +1,8 @@
 {
   "name": "Continuity",
-  "baseManaCost": 4,
+  "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "EPIC",
   "description": "Give a friendly minion and all other copies of it in your hand, deck and battlefield +2/+2",
   "targetSelection": "FRIENDLY_MINIONS",

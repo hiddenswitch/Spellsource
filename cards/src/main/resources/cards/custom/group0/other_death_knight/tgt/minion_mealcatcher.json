@@ -2,7 +2,7 @@
   "name": "Mealcatcher",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
@@ -38,6 +38,9 @@
             "target": "OUTPUT"
           }
         ]
+      },
+      "spell": {
+        "class": "NullSpell"
       },
       "cardFilter": {
         "class": "CardFilter",

@@ -2,7 +2,7 @@
   "name": "Blood Melon",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Restore #8 Health.",
   "targetSelection": "ANY",

@@ -304,6 +304,10 @@ public class SummonSpell extends Spell {
 			for (int i = 0; i < count; i++) {
 				Minion minion;
 				if (target.getEntityType() == EntityType.CARD) {
+					if (!target.getSourceCard().getCardType().isCardType(CardType.MINION)) {
+						logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
+						return;
+					}
 					minion = target.getSourceCard().summon();
 				} else if (target.getEntityType() != EntityType.MINION) {
 					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);

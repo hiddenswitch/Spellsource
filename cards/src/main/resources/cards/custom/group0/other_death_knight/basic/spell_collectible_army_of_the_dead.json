@@ -2,7 +2,7 @@
   "name": "Army of the Dead",
   "baseManaCost": 10,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Remove the top 5 cards of your deck. Summon any minions removed.",
   "targetSelection": "NONE",

@@ -2,7 +2,7 @@
   "name": "Icebox Snowbuddy",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "RARE",

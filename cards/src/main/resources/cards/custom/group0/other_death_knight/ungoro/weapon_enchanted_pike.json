@@ -4,7 +4,7 @@
 	"type": "WEAPON",
 	"damage": 1,
 	"durability": 4,
-	"heroClass": "SPIRIT",
+	"heroClass": "OBSIDIAN",
 	"rarity": "COMMON",
 	"description": "Battlecry: Draw a card that didn't start in your deck.",
 	"battlecry": {

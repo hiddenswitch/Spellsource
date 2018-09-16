@@ -2,7 +2,7 @@
   "name": "Icebound Fortitude",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Gain 10 Armor. Freeze your hero.",
   "targetSelection": "NONE",
@@ -12,7 +12,7 @@
       {
         "class": "BuffSpell",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 5
+        "armorBonus": 10
       },
       {
         "class": "AddAttributeSpell",

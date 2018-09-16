@@ -2,7 +2,7 @@
   "name": "Trapped Soul",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",

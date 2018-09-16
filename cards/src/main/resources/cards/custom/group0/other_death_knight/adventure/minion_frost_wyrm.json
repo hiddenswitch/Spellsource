@@ -2,7 +2,7 @@
   "name": "Frost Wyrm",
   "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "baseAttack": 2,
   "baseHp": 7,
   "rarity": "RARE",

@@ -1,15 +1,14 @@
 {
-  "name": "Vampire Bat",
+  "name": "Spectral Warrior",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "OBSIDIAN",
   "baseAttack": 1,
-  "baseHp": 3,
+  "baseHp": 1,
   "rarity": "COMMON",
-  "race": "BEAST",
-  "description": "Lifesteal",
+  "description": "Echo",
   "attributes": {
-    "LIFESTEAL": true
+    "ECHO": true
   },
   "collectible": true,
   "set": "CUSTOM",

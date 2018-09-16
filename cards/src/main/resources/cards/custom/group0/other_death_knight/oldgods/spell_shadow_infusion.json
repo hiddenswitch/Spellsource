@@ -2,7 +2,7 @@
   "name": "Shadow Infusion",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "RARE",
   "description": "Give a minion \"Deathrattle: Summon 2 copies of this.\"",
   "targetSelection": "MINIONS",

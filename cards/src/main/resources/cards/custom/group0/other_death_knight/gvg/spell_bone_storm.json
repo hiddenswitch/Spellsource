@@ -2,16 +2,16 @@
   "name": "Bone Storm",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "SPIRIT",
+  "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Deal $1 damage to all characters. Draw a card.",
+  "description": "Deal $1 damage to all enemies. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "ALL_CHARACTERS",
+        "target": "ENEMY_CHARACTERS",
         "value": 1
       },
       {

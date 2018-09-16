@@ -714,6 +714,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
 				.filter(aura -> aura.getAffectedEntities().contains(playerId))
 				.collect(Collectors.toList());
+
+		context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof Enchantment)
+				.map(t -> (Enchantment) t)
+				.filter(e -> e.getSourceCard() != null && e.getSourceCard().getCardType().isCardType(CardType.ENCHANTMENT))
+				.filter(e -> e.getOwner() == playerId)
+				.filter(((Predicate<Enchantment>) Enchantment::isExpired).negate())
+				.forEach(e -> overrideAuras.addAll(e.getSourceCard().createEnchantments().stream()
+						.filter(t -> t instanceof SpellOverrideAura)
+						.map(t -> (Aura) t)
+						.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
+						.collect(Collectors.toList())));
+
 		if (!overrideAuras.isEmpty()) {
 			spellDesc = spellDesc.clone();
 			for (Aura aura : overrideAuras) {
@@ -2932,7 +2945,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void processTriggerDesc(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
+	public void processTriggerDesc(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
 		Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(entity.getReference())
 				.stream()
 				.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
