@@ -4,13 +4,13 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "COMMON",
-  "description": "Deal $4 damage randomly split among all enemy minions.",
+  "description": "Deal $3 damage randomly split among all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",
     "target": "ENEMY_MINIONS",
     "value": 1,
-    "howMany": 4
+    "howMany": 3
   },
   "collectible": true,
   "set": "CUSTOM",

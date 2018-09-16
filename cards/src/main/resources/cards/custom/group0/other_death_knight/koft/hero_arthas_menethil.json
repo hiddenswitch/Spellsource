@@ -1,7 +1,7 @@
 {
   "name": "Arthas Menethil",
   "heroPower": "hero_power_fallen_champion",
-  "baseManaCost": 8,
+  "baseManaCost": 10,
   "type": "HERO",
   "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",

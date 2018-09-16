@@ -31,7 +31,7 @@
             },
             {
               "class": "DamageSpell",
-              "target": "ALL_CHARACTERS",
+              "target": "ENEMY_CHARACTERS",
               "value": {
                 "class": "SpellDamageValueProvider",
                 "value": 1

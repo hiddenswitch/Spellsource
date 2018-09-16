@@ -3417,6 +3417,16 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(player.getHand().size(), 0);
 			assertEquals(player.getMinions().size(), 2);
+
+
+			assertEquals(opponent.getDeck().size(), 1);
+			assertEquals(opponent.getHand().size(), 0);
+			assertEquals(opponent.getMinions().size(), 0);
+			context.getLogic().drawCard(opponent.getId(), null);
+			assertEquals(opponent.getDeck().size(), 0);
+			assertEquals(opponent.getHand().size(), 0);
+			assertEquals(opponent.getMinions().size(), 1);
+
 		});
 
 
