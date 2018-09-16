@@ -1,21 +1,94 @@
 import os
 import re
 from collections import deque
+from copy import deepcopy
+from dataclasses import dataclass
 from json import loads, dumps
 from mimetypes import MimeTypes
-from typing import Union, Mapping, Iterable, Optional, Deque
+from typing import Union, Mapping, Iterable, Optional, Deque, List, Generator, Dict
 from urllib.parse import urlparse, ParseResult
 
 from autoboto.services import rekognition, s3
 from autoboto.services.rekognition.shapes import Image, S3Object, DetectTextResponse, TextTypes, TextDetection
 from botocore.exceptions import ClientError
 from requests import get
+from scrapy.http import TextResponse
+from scrapy.spider import Spider, Request
+
+from ..ext.hearthcards import enrich_from_description
 
 _MIME = MimeTypes()
 
 
-class RekognitionGenerator(object):
-    def __init__(self, *images: Iterable[Union[str, Mapping, DetectTextResponse]], bucket='minionate',
+@dataclass()
+class ImgElement:
+    src: str
+
+
+class HearthpwnThreadPageToImages(Iterable[ImgElement]):
+    class _Spider(Spider):
+        name = 'hearthpwn'
+
+        def start_requests(self):
+            for url in self.start_urls:
+                yield Request(url=url, callback=self.parse)
+
+        def parse(self, response: TextResponse):
+            yield HearthpwnThreadPageToImages.to_images(response=response)
+
+    def __init__(self, *urls: str):
+        super(HearthpwnThreadPageToImages, self).__init__()
+        self.urls = urls
+        self._results = {}  # type: Dict[str, Iterable[ImgElement]]
+
+    def __len__(self):
+        return len(self.urls)
+
+    def __iter__(self):
+        for url in self.urls:
+            if url in self._results:
+                for image_element in self._results[url]:
+                    yield image_element
+                continue
+            results = self._results[url] = deque()
+            for image_element in HearthpwnThreadPageToImages.to_images(url=url):
+                results.append(image_element)
+                yield image_element
+
+    @staticmethod
+    def to_images(url: Optional[str] = None, request: Optional[Request] = None,
+                  response: Optional[TextResponse] = None) -> Generator[ImgElement, None, None]:
+        if url is not None:
+            request = get(url)
+        if request is not None:
+            response = TextResponse(request.url, body=request.text, encoding='utf-8')
+
+        for img_selector in response.selector.css('.forum-post-body img'):
+            src = img_selector.css('::attr(src)').extract()[0]  # type: str
+            width = img_selector.css('::attr(width)').extract()  # type: List[str]
+            height = img_selector.css('::attr(height)').extract()  # type: List[str]
+            if len(width) == 0 or len(height) == 0:
+                # return any image without its width or height specified that appears in the post body
+                yield ImgElement(src=src)
+            elif len(width) > 0 and len(height) > 0:
+                if 0.68 <= int(width[0]) / int(height[0]) <= 0.78:
+                    yield ImgElement(src=src)
+
+
+class Enricher(Iterable[Dict]):
+    def __init__(self, *card_descs: Dict):
+        self.card_descs = card_descs
+
+    def __len__(self):
+        return len(self.card_descs)
+
+    def __iter__(self) -> Mapping:
+        for card_desc in self.card_descs:
+            yield enrich_from_description(card_dict=deepcopy(card_desc), description=card_desc['description'])
+
+
+class RekognitionGenerator(Iterable[DetectTextResponse]):
+    def __init__(self, *images: Union[str, Mapping, DetectTextResponse], bucket='minionate',
                  results_cache_prefix='image2card/results',
                  image_cache_prefix='image2card/images'):
         self.images = images
@@ -27,7 +100,7 @@ class RekognitionGenerator(object):
     def __len__(self) -> int:
         return len(self.images)
 
-    def __iter__(self) -> DetectTextResponse:
+    def __iter__(self):
         self._s3 = s3.Client()
         try:
             region_name = self._s3.get_bucket_location(bucket=self._bucket).location_constraint
@@ -111,20 +184,20 @@ class RekognitionGenerator(object):
             yield rekognition_res
 
 
-class SpellsourceCardDescGenerator(object):
+class SpellsourceCardDescGenerator(Iterable[Dict]):
     _DIGIT_CONVERTERS = {  # type: Mapping[re.Pattern, str]
         re.compile(r'[Oo]'): '0',
         re.compile(r'[lLI|]'): '1',
         re.compile(r'[Ss]'): '5'
     }
 
-    def __init__(self, *detect_text_responses: Iterable[DetectTextResponse]):
+    def __init__(self, *detect_text_responses: DetectTextResponse):
         self.detect_text_responses = detect_text_responses  # type: Iterable[DetectTextResponse]
 
     def __len__(self):
         return len(self.detect_text_responses)
 
-    def __iter__(self) -> Mapping:
+    def __iter__(self):
         # The spatially first number reading top to bottom is typically the cost
         # The spatially first non-numeric text reading top to bottom is we encounter is the title
         # The last word spatially reading top to bottom could be a tribe.

@@ -50,7 +50,7 @@ setup(name='spellsource',
       license='GPLv3',
       install_requires=['py4j', 'tqdm', 'objdict', 'msgpack'],
       extras_require={
-          'ext': ['numpy', 'h5py', 'keras', 'hearthstone', 'hearthstone_data', 'autoboto', 'boto3', 'nltk']
+          'ext': ['numpy', 'h5py', 'keras', 'hearthstone', 'hearthstone_data', 'autoboto', 'boto3', 'nltk', 'scrapy']
       },
       packages=['spellsource', 'spellsource.ext', 'spellsource.tests'],
       keywords=['hearthstone', 'artificial intelligence', 'ai', 'spellsource', 'cards', 'games', 'machine learning',
