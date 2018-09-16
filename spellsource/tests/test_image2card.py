@@ -6,7 +6,7 @@ from os.path import join, dirname, abspath
 from autoboto.services.rekognition.shapes import DetectTextResponse, TextTypes
 from nltk.translate.bleu_score import sentence_bleu
 
-from ..ext.image2card import RekognitionGenerator, SpellsourceCardDescGenerator, HearthpwnThreadPageToImages
+from ..ext.image2card import RekognitionGenerator, SpellsourceCardDescGenerator, PageToImages
 
 
 def _base_test(test_case: unittest.TestCase, cases: typing.Mapping[str, typing.Any]):
@@ -99,5 +99,5 @@ class Image2CardTest(unittest.TestCase):
     def test_gets_correct_image_urls(self):
         url = 'https://www.hearthpwn.com/forums/hearthstone-general/fan-creations/223735-weekly-card-design' \
               '-competition-8-11-final-poll'
-        res = list(HearthpwnThreadPageToImages(url))
+        res = list(PageToImages(url))
         self.assertEqual(len(res), 17)
