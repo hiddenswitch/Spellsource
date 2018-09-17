@@ -29,7 +29,12 @@
         {
           "class": "custom.AddActorEffectsToTargetActorSpell",
           "target": "SELF",
-          "secondaryTarget": "ADJACENT_MINIONS"
+          "secondaryTarget": "LEFT_ADJACENT_MINION"
+        },
+        {
+          "class": "custom.AddActorEffectsToTargetActorSpell",
+          "target": "SELF",
+          "secondaryTarget": "RIGHT_ADJACENT_MINION"
         }
       ]
     }
