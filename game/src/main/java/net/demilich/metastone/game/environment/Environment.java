@@ -100,13 +100,22 @@ public enum Environment {
 	 */
 	EVENT_VALUE_STACK,
 	/**
-	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has destroyed.
+	 * This implements Frostmourne and other entity tracking effects. For example, it keeps track of which particular
+	 * entities a particular Frostmourne has destroyed.
+	 *
+	 * @see net.demilich.metastone.game.spells.custom.ResurrectFromEntityStorageSpell for resurrecting minions from this
+	 * 		list.
+	 * @see net.demilich.metastone.game.spells.custom.StoreEntitySpell for adding entities to the list.
 	 */
 	ENTITY_LIST,
 	/**
 	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own minions.
 	 */
 	LYNESSA_SUNSORROW_ENTITY_LIST,
+	/**
+	 * This entity list implements Bonefetcher, keeping track of the cards that were shuffled in each player's deck.
+	 */
+	SHUFFLED_CARDS_LIST,
 	/**
 	 * Stores a stack of event sources.
 	 */

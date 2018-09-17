@@ -10,20 +10,8 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.CastUsingCardSourceSpell",
-      "spell": {
-        "class": "SummonSpell",
-        "target": "OUTPUT"
-      },
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      },
-      "cardSource": {
-        "class": "GraveyardActorsSource",
-        "invert": true
-      },
-      "howMany": 1
+      "class": "SummonSpell",
+      "target": "FRIENDLY_LAST_DIED_MINION"
     }
   },
   "attributes": {

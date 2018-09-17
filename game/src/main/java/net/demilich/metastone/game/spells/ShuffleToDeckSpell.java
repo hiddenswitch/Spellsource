@@ -8,8 +8,10 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class ShuffleToDeckSpell extends Spell {
 
@@ -20,10 +22,6 @@ public class ShuffleToDeckSpell extends Spell {
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
 		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
 
-		for (Card card : player.getDeck()) {
-			context.getLogic().removeAttribute(card, Attribute.LAST_SHUFFLED);
-		}
-
 		if (target != null) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
@@ -32,7 +30,6 @@ public class ShuffleToDeckSpell extends Spell {
 				final Card copy = target.getSourceCard().getCopy();
 				copy.getAttributes().putAll(map);
 				if (context.getLogic().shuffleToDeck(player, copy, quiet)) {
-					copy.setAttribute(Attribute.LAST_SHUFFLED);
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
 				}
 			}
@@ -42,18 +39,16 @@ public class ShuffleToDeckSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc,
 				desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
 
-
-
+		Map<Card, Boolean> didShuffle = new HashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
-				final Card copy = original.getCopy();
-				copy.setAttribute(Attribute.LAST_SHUFFLED);
-				context.getLogic().shuffleToDeck(player, copy, quiet);
+				Card copy = original.getCopy();
+				didShuffle.put(copy, context.getLogic().shuffleToDeck(player, copy, quiet));
 			}
 		}
 
-		for (Card card : player.getDeck()) {
-			if (card.hasAttribute(Attribute.LAST_SHUFFLED)) {
+		for (Card card : didShuffle.keySet()) {
+			if (didShuffle.get(card)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 			}
 		}

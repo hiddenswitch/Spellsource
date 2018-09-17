@@ -10,30 +10,29 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.CastUsingCardSourceSpell",
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
+      "class": "custom.AddActorEffectsToTargetActorSpell",
+      "target": "SELF",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
           {
-            "class": "custom.AddActorEffectsToTargetActorSpell",
-            "target": "SELF",
-            "secondaryTarget": "OUTPUT"
+            "class": "CardFilter",
+            "cardType": "MINION"
           },
           {
-            "class": "RevealCardSpell",
-            "target": "OUTPUT"
+            "class": "OwnedByPlayerFilter",
+            "targetPlayer": "SELF"
           }
         ]
       },
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      },
       "cardSource": {
         "class": "ShuffledCardsSource",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
-      "randomTarget": true
+      "spell": {
+        "class": "RevealCardSpell",
+        "target": "OUTPUT"
+      }
     }
   },
   "attributes": {

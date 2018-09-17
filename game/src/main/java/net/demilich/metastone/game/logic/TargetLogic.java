@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -403,6 +404,13 @@ public class TargetLogic implements Serializable {
 			if (rightMinions.isEmpty()) {
 				return new ArrayList<>();
 			} else return singleTargetAsList(rightMinions.get(0));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_DIED_MINION)) {
+			for (int i = player.getGraveyard().size() - 1; i >= 0; i--) {
+				if (player.getGraveyard().get(i).getEntityType() == EntityType.MINION) {
+					return singleTargetAsList(player.getGraveyard().get(i));
+				}
+			}
+			return new ArrayList<>();
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

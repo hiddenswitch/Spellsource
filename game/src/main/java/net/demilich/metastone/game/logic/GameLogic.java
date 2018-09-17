@@ -1941,7 +1941,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (!actor.hasAttribute(Attribute.FROZEN)) {
 			return;
 		}
-		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks() && !actor.hasAttribute(Attribute.DONT_UNFREEZE)) {
+		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks() && !actor.hasAttribute(Attribute.FREEZES_PERMANENTLY)) {
 			removeAttribute(actor, Attribute.FROZEN);
 		}
 	}
@@ -2614,7 +2614,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
+			// Implements Electra Stormsurge w/ Overload spells
+			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
 				context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 			}
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
@@ -2631,7 +2632,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
+			// Implements Electra Stormsurge w/ Overload spells
+			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 			}
@@ -3356,6 +3358,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
+	 * @param quiet  If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
+	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
@@ -3387,12 +3393,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
 			}
 
-			if (!player.hasAttribute(Attribute.LAST_SHUFFLED)) {
-				player.setAttribute(Attribute.LAST_SHUFFLED, new CardArrayList(Arrays.asList(context.getCardById(card.getCardId()))));
-			} else {
-				final CardList shuffledCards = (CardList) player.getAttribute(Attribute.LAST_SHUFFLED);
-				shuffledCards.add(context.getCardById(card.getCardId()));
-			}
+			EnvironmentEntityList.getList(context, Environment.SHUFFLED_CARDS_LIST).add(player, card);
 			return true;
 		}
 		return false;

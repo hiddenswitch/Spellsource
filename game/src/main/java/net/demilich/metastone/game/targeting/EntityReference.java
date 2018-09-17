@@ -451,6 +451,10 @@ public class EntityReference implements Serializable {
 	 * in the pending action.
 	 */
 	public static final EntityReference ADJACENT_TO_TARGET = new EntityReference(-65);
+	/**
+	 * References the last minion belonging to the friendly player that died.
+	 */
+	public static final EntityReference FRIENDLY_LAST_DIED_MINION = new EntityReference(-66);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

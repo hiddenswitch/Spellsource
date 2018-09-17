@@ -18,7 +18,7 @@
     }
   },
   "attributes": {
-    "DONT_UNFREEZE": true,
+    "FREEZES_PERMANENTLY": true,
     "FROZEN": true
   },
   "collectible": true,
