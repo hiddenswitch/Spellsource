@@ -16,7 +16,7 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "ExecuteAsSpell",
+      "class": "TargetToSourceSecondaryToTargetSpell",
       "target": "EVENT_TARGET",
       "spell": {
         "class": "FightSpell",

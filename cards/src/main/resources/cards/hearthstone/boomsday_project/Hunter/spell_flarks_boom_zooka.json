@@ -43,7 +43,7 @@
         "cardLocation": "DECK"
       },
       {
-        "class": "ExecuteAsSpell",
+        "class": "TargetToSourceSecondaryToTargetSpell",
         "target": "FRIENDLY_MINIONS",
         "spell": {
           "class": "MetaSpell",
