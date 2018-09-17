@@ -30,6 +30,7 @@ LEATHER | &quot;LEATHER&quot;
 RUST | &quot;RUST&quot;
 EGGPLANT | &quot;EGGPLANT&quot;
 ICE | &quot;ICE&quot;
+OBSIDIAN | &quot;OBSIDIAN&quot;
 
 
 <a name="FormatEnum"></a>
