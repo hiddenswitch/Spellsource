@@ -16,8 +16,8 @@
       },
       {
         "class": "PutDeckTopSpell",
-        "targetPlayer": "SELF",
-        "card": "minion_bob_the_undying"
+        "card": "minion_bob_the_undying",
+        "targetPlayer": "SELF"
       }
     ]
   },

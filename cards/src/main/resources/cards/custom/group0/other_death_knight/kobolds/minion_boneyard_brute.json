@@ -11,18 +11,18 @@
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "SummonSpell",
-      "cards": [
-        "token_skeleton",
-        "token_skeleton"
-      ],
       "spell": {
         "class": "FightSpell",
         "target": "TARGET",
-        "secondaryTarget": "OUTPUT",
         "spell": {
           "class": "ForceDeathPhaseSpell"
-        }
-      }
+        },
+        "secondaryTarget": "OUTPUT"
+      },
+      "cards": [
+        "token_skeleton",
+        "token_skeleton"
+      ]
     }
   },
   "attributes": {

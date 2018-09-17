@@ -12,10 +12,8 @@
     "spell": {
       "class": "ShuffleMinionToDeckSpell",
       "target": "SPELL_TARGET",
-      "targetPlayer": "OWNER",
       "spell": {
         "class": "custom.AddTriggerToCardSpell",
-        "attribute": "PASSIVE_TRIGGERS",
         "target": "OUTPUT",
         "trigger": {
           "eventTrigger": {
@@ -35,8 +33,10 @@
               }
             ]
           }
-        }
-      }
+        },
+        "attribute": "PASSIVE_TRIGGERS"
+      },
+      "targetPlayer": "OWNER"
     }
   },
   "collectible": true,

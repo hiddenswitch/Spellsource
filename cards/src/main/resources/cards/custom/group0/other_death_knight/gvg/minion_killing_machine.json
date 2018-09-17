@@ -12,9 +12,9 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "FightSpell",
-      "secondaryTarget": "SELF",
       "target": "ENEMY_MINIONS",
-      "randomTarget": true
+      "randomTarget": true,
+      "secondaryTarget": "SELF"
     }
   },
   "attributes": {

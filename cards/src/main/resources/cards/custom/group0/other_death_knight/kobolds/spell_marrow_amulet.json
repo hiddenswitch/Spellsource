@@ -11,8 +11,8 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": 1,
-        "target": "FRIENDLY_MINIONS"
+        "target": "FRIENDLY_MINIONS",
+        "hpBonus": 1
       },
       {
         "class": "DrawCardSpell"

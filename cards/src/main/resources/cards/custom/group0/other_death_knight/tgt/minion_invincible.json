@@ -8,8 +8,8 @@
   "rarity": "LEGENDARY",
   "description": "Immune. Can't gain enchantments.",
   "attributes": {
-    "IMMUNE": true,
-    "CANT_GAIN_ENCHANTMENTS": true
+    "CANT_GAIN_ENCHANTMENTS": true,
+    "IMMUNE": true
   },
   "collectible": true,
   "set": "CUSTOM",

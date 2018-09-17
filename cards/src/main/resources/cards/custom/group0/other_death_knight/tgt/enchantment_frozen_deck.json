@@ -4,25 +4,25 @@
   "heroClass": "ANY",
   "rarity": "FREE",
   "description": "Can't draw cards until after you've finished your next full turn",
-  "aura": {
-    "class": "SpellOverrideAura",
-    "target": "FRIENDLY_PLAYER",
-    "removeEffect": {
-      "class": "DrawCardSpell"
-    },
-    "applyEffect": {
-      "class": "NullSpell"
-    }
-  },
   "trigger": {
+    "countUntilCast": 3,
     "eventTrigger": {
       "class": "TurnEndTrigger"
     },
-    "countUntilCast": 3,
     "spell": {
       "class": "RemoveEnchantmentSpell",
       "target": "TRIGGER_HOST",
       "card": "enchantment_frozen_deck"
+    }
+  },
+  "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "NullSpell"
+    },
+    "removeEffect": {
+      "class": "DrawCardSpell"
     }
   },
   "collectible": false,
