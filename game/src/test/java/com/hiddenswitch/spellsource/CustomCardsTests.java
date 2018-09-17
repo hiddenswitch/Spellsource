@@ -3590,7 +3590,6 @@ public class CustomCardsTests extends TestBase {
 			for (Minion minion : player.getMinions()) {
 				assertTrue(minion.getRace().hasRace(Race.MURLOC));
 			}
-
 		});
 	}
 
