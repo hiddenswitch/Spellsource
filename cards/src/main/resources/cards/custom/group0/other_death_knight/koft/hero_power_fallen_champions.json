@@ -1,0 +1,46 @@
+{
+  "name": "Fallen Champions",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "OBSIDIAN",
+  "rarity": "FREE",
+  "description": "Passive Hero Power: After an enemy minion dies, summon it.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "HeroPowerSpell",
+      "spell": {
+        "class": "ResurrectFromBothSpell",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "OwnedByPlayerFilter",
+              "invert": true,
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "EVENT_TARGET"
+            }
+          ]
+        },
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

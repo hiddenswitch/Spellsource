@@ -278,8 +278,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void addGameEventListener(Player player, Trigger gameEventListener, Entity host) {
-		if (context.updateAndGetGameOver()) {
-			// Don't add game event listeners while the game is over
+		if (context.updateAndGetGameOver() || (host.hasAttribute(Attribute.CANT_GAIN_ENCHANTMENTS) && gameEventListener instanceof Enchantment)) {
+			// Don't add game event listeners while the game is over or if the target shouldn't get it
 			return;
 		}
 
@@ -398,7 +398,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		entity.setAttribute(attr);
-		context.fireGameEvent(new AttributeAppliedEvent(context, entity.getId(), entity, source, attr));
+		context.fireGameEvent(new AttributeAppliedEvent(context, entity.getOwner(), entity, source, attr));
 	}
 
 	/**
@@ -714,6 +714,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
 				.filter(aura -> aura.getAffectedEntities().contains(playerId))
 				.collect(Collectors.toList());
+
+		context.getTriggerManager().getTriggers().stream()
+				.filter(t -> t instanceof Enchantment)
+				.map(t -> (Enchantment) t)
+				.filter(e -> e.getSourceCard() != null && e.getSourceCard().getCardType().isCardType(CardType.ENCHANTMENT))
+				.filter(e -> e.getOwner() == playerId)
+				.filter(((Predicate<Enchantment>) Enchantment::isExpired).negate())
+				.forEach(e -> overrideAuras.addAll(e.getSourceCard().createEnchantments().stream()
+						.filter(t -> t instanceof SpellOverrideAura)
+						.map(t -> (Aura) t)
+						.filter(aura -> aura.getDesc().getRemoveEffect().get(SpellArg.CLASS).equals(spellClass))
+						.collect(Collectors.toList())));
+
 		if (!overrideAuras.isEmpty()) {
 			spellDesc = spellDesc.clone();
 			for (Aura aura : overrideAuras) {
@@ -1216,6 +1229,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Map<Actor, EntityLocation> previousLocation = new HashMap<>();
 
 		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
+
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
@@ -1927,7 +1941,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (!actor.hasAttribute(Attribute.FROZEN)) {
 			return;
 		}
-		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks()) {
+		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks() && !actor.hasAttribute(Attribute.FREEZES_PERMANENTLY)) {
 			removeAttribute(actor, Attribute.FROZEN);
 		}
 	}
@@ -2484,7 +2498,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		player.getDeck().shuffle(getRandom());
+		if (!player.getDeck().isEmpty()) {
+			player.getDeck().shuffle(getRandom());
+		}
 
 		// second player gets the coin additionally
 		if (!begins) {
@@ -2600,7 +2616,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
+			// Implements Electra Stormsurge w/ Overload spells
+			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
 				context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 			}
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
@@ -2617,7 +2634,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) { //implements Electra Stormsurge w/ Overload spells
+			// Implements Electra Stormsurge w/ Overload spells
+			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 			}
@@ -2931,7 +2949,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void processTriggerDesc(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
+	public void processTriggerDesc(Player player, Entity entity, EnchantmentDesc enchantmentDesc) {
 		Stream<Enchantment> existingTriggers = context.getTriggersAssociatedWith(entity.getReference())
 				.stream()
 				.filter(t -> Enchantment.class.isAssignableFrom(t.getClass()))
@@ -3342,6 +3360,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
+	 * @param quiet  If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
+	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
@@ -3372,6 +3394,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				}
 				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
 			}
+
+			EnvironmentEntityList.getList(context, Environment.SHUFFLED_CARDS_LIST).add(player, card);
 			return true;
 		}
 		return false;
@@ -3497,7 +3521,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			refreshAttacksPerRound(minion);
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
-		drawCard(playerId, null);
+
+		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, true);
+		//drawCard(playerId, null);
+
 		endOfSequence();
 	}
 
@@ -4042,7 +4069,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
 
-			for (int j = starterCards.size(); j < numberOfStarterCards; j++) {
+			for (int j = starterCards.size(); j < numberOfStarterCards && !player.getDeck().isEmpty(); j++) {
 				Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
 				if (randomCard != null) {
 					player.getDeck().move(randomCard, player.getSetAsideZone());

@@ -1,0 +1,51 @@
+{
+  "name": "Obsidian Knight",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a spell. Draw all copies of it from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "spell": {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "DeckContainsCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "OUTPUT"
+            }
+          },
+          "spell": {
+            "class": "FromDeckToHandSpell",
+            "target": "FRIENDLY_DECK",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "secondaryTarget": "OUTPUT"
+            }
+          }
+        },
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

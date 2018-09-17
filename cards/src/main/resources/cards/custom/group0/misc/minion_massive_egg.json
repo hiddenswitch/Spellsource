@@ -1,10 +1,10 @@
 {
   "name": "Massive Egg",
-  "baseManaCost": 4,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 0,
-  "baseHp": 8,
+  "baseHp": 7,
   "rarity": "EPIC",
   "description": "Deathrattle: Summon a 7/14 Ultrasaur",
   "deathrattle": {

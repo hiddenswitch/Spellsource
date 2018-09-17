@@ -26,53 +26,53 @@ import java.util.*;
  * 		<p>
  * 		In order to use this spell, first create a group card. A group file may look like:
  * 		<pre>
- * 		  {
- * 		  "name": "Plan Your Attack!",
- * 		  "baseManaCost": 0,
- * 		  "type": "GROUP",
- * 		  "heroClass": "BROWN",
- * 		  "group": [
- * 		    {
- * 		      "class": "MetaSpell",
- * 		      "target": "SELF",
- * 		      "name": "Stalk Your Prey",
- * 		      "description": "Gain +2/+1 and Stealth.",
- * 		      "spells": [
- * 		        {
- * 		          "class": "BuffSpell",
- * 		          "target": "SELF",
- * 		          "attackBonus": 2,
- * 		          "hpBonus": 1
- * 		        },
- * 		        {
- * 		          "class": "AddAttributeSpell",
- * 		          "target": "SELF",
- * 		          "attribute": "STEALTH"
- * 		        }
- * 		      ]
- * 		    },
- * 		    {
- * 		      "class": "SummonSpell",
- * 		      "target": "NONE",
- * 		      "value": 2,
- * 		      "name": "Consult the Trees",
- * 		      "description": "Summon two 1/1 Saplings.",
- * 		      "card": "token_sapling"
- * 		    },
- * 		    {
- * 		      "class": "DamageSpell",
- * 		      "target": "SPELL_TARGET",
- * 		      "value": 2,
- * 		      "name": "Leap From the Canopy",
- * 		      "description": "Deal 2 damage."
- * 		    }
- * 		  ],
- * 		  "rarity": "FREE",
- * 		  "collectible": false,
- * 		  "set": "CUSTOM",
- * 		  "fileFormatVersion": 1
- * 		}
- * 		</pre>
+ * 				  {
+ * 				  "name": "Plan Your Attack!",
+ * 				  "baseManaCost": 0,
+ * 				  "type": "GROUP",
+ * 				  "heroClass": "BROWN",
+ * 				  "group": [
+ * 				    {
+ * 				      "class": "MetaSpell",
+ * 				      "target": "SELF",
+ * 				      "name": "Stalk Your Prey",
+ * 				      "description": "Gain +2/+1 and Stealth.",
+ * 				      "spells": [
+ * 				        {
+ * 				          "class": "BuffSpell",
+ * 				          "target": "SELF",
+ * 				          "attackBonus": 2,
+ * 				          "hpBonus": 1
+ * 				        },
+ * 				        {
+ * 				          "class": "AddAttributeSpell",
+ * 				          "target": "SELF",
+ * 				          "attribute": "STEALTH"
+ * 				        }
+ * 				      ]
+ * 				    },
+ * 				    {
+ * 				      "class": "SummonSpell",
+ * 				      "target": "NONE",
+ * 				      "value": 2,
+ * 				      "name": "Consult the Trees",
+ * 				      "description": "Summon two 1/1 Saplings.",
+ * 				      "card": "token_sapling"
+ * 				    },
+ * 				    {
+ * 				      "class": "DamageSpell",
+ * 				      "target": "SPELL_TARGET",
+ * 				      "value": 2,
+ * 				      "name": "Leap From the Canopy",
+ * 				      "description": "Deal 2 damage."
+ * 				    }
+ * 				  ],
+ * 				  "rarity": "FREE",
+ * 				  "collectible": false,
+ * 				  "set": "CUSTOM",
+ * 				  "fileFormatVersion": 1
+ * 				}
+ * 				</pre>
  * 		Observe that the {@link CardDesc#type} is {@link CardType#GROUP}; each choice is represented by a {@link SpellDesc}
  * 		in group; and that the {@link SpellDesc} in {@link CardDesc#group} have the {@link SpellArg#NAME} and {@link
  * 		SpellArg#DESCRIPTION} specified.

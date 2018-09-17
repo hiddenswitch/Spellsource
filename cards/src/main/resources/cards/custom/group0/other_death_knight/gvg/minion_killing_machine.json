@@ -1,0 +1,26 @@
+{
+  "name": "Killing Machine",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Battlecry: Attack a random enemy minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FightSpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true,
+      "secondaryTarget": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

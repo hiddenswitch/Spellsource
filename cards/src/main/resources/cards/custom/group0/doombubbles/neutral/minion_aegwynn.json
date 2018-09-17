@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Start of Game: If your deck has no targeting spells, give your hero Spell Damage +2.",
+  "description": "Start of Game: If your deck has no targeting spells, give your hero Spell Damage +1.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
@@ -42,7 +42,7 @@
             {
               "class": "ModifyAttributeSpell",
               "target": "FRIENDLY_PLAYER",
-              "value": 2,
+              "value": 1,
               "attribute": "SPELL_DAMAGE"
             },
             {

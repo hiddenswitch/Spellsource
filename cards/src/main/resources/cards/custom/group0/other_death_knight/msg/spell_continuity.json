@@ -1,0 +1,44 @@
+{
+  "name": "Continuity",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "EPIC",
+  "description": "Give a friendly minion and all other copies of it in your hand, deck and battlefield +2/+2",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HAND",
+        "value": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_DECK",
+        "value": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "secondaryTarget": "TARGET"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

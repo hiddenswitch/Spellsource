@@ -1,0 +1,34 @@
+{
+  "name": "Boneyard Brute",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Choose an enemy minion. Summon two 1/1 Skeletons to attack it.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "SummonSpell",
+      "spell": {
+        "class": "FightSpell",
+        "target": "TARGET",
+        "spell": {
+          "class": "ForceDeathPhaseSpell"
+        },
+        "secondaryTarget": "OUTPUT"
+      },
+      "cards": [
+        "token_skeleton",
+        "token_skeleton"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

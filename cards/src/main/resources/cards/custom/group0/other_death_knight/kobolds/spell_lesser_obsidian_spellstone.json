@@ -1,0 +1,34 @@
+{
+  "name": "Lesser Obsidian Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "RARE",
+  "description": "Give a random friendly minion +2/+2. (Shuffle a card to upgrade)",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardShuffledTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      }
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_obsidian_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 2,
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

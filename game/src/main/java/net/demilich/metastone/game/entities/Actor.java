@@ -193,7 +193,7 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		if (hasAttribute(Attribute.PERMANENT)) {
 			return hasAttribute(Attribute.DESTROYED);
 		}
-		return getHp() < 1 || super.isDestroyed();
+		return (getHp() < 1 || super.isDestroyed());
 	}
 
 	public boolean isWounded() {

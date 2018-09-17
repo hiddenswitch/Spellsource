@@ -1,0 +1,25 @@
+{
+  "name": "Plague Dog",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Whenever one of your other minions dies, restore 3 health to your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

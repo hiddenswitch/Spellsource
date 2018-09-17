@@ -1,0 +1,26 @@
+{
+  "name": "Echoweb Lurker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Destroy an enemy minion that you have a copy of in your deck.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "DeckContainsFilter"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

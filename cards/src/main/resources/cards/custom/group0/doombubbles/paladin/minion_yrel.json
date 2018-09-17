@@ -6,11 +6,20 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "After you cast a spell on this minion, refund the mana cost.",
+  "description": "After you cast a spell that costs 3 or more on this minion, refund the mana cost.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "queueCondition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST"
+        },
+        "value2": 3
+      },
       "sourcePlayer": "SELF",
       "targetEntityType": "MINION",
       "targetPlayer": "SELF"

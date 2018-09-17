@@ -1,0 +1,38 @@
+{
+  "name": "Pay Respects",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "EPIC",
+  "description": "Give all minions with copies that have died this game +1/+1",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "GraveyardContainsCondition",
+            "target": "SPELL_TARGET",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "GraveyardContainsCondition",
+            "target": "SPELL_TARGET",
+            "targetPlayer": "OPPONENT"
+          }
+        ]
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "value": 1
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
