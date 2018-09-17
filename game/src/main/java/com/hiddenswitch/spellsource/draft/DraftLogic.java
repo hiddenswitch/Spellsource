@@ -60,7 +60,8 @@ public class DraftLogic {
 				HeroClass.JADE,
 				HeroClass.LEATHER,
 				HeroClass.NAVY,
-				HeroClass.RUST
+				HeroClass.RUST,
+				HeroClass.OBSIDIAN
 		);
 
 		Collections.shuffle(classes, getRandom());

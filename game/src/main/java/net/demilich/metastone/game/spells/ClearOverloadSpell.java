@@ -13,13 +13,13 @@ import java.util.Map;
 /**
  * @deprecated Use a {@link SetAttributeSpell} instead:
  * 		<pre>
- * 		  {
- * 		    "class": "SetAttributeSpell",
- * 		    "target": "FRIENDLY_PLAYER",
- * 		    "attribute": "OVERLOAD",
- * 		    "value": 0
- * 		  }
- * 		</pre>
+ * 				  {
+ * 				    "class": "SetAttributeSpell",
+ * 				    "target": "FRIENDLY_PLAYER",
+ * 				    "attribute": "OVERLOAD",
+ * 				    "value": 0
+ * 				  }
+ * 				</pre>
  * 		Resets the player's overload status.
  */
 public class ClearOverloadSpell extends Spell {

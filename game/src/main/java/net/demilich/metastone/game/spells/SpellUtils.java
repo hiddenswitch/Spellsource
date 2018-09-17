@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -523,6 +524,10 @@ public class SpellUtils {
 			return UNDEFINED;
 		}
 
+		if (!(source instanceof Minion)) {
+			return UNDEFINED;
+		}
+
 		int sourcePosition = ((Minion) source).getEntityLocation().getIndex();
 		if (sourcePosition == UNDEFINED) {
 			return UNDEFINED;
@@ -579,9 +584,23 @@ public class SpellUtils {
 			return;
 		}
 
+		// We should never try to cast a child on output that is valid but has an unassigned location. Temporarily move it
+		// into set aside when that happens
+		boolean needsToBeRemoved = false;
+		if (output.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+			output.setId(context.getLogic().generateId());
+			output.setOwner(player.getId());
+			output.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			needsToBeRemoved = true;
+		}
+
 		context.getOutputStack().push(output.getReference());
 		castChildSpell(context, player, spell, source, target);
 		context.getOutputStack().pop();
+
+		if (needsToBeRemoved) {
+			output.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		}
 	}
 
 	/**

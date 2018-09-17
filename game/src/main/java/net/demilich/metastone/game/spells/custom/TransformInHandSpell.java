@@ -5,6 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
@@ -25,6 +26,10 @@ public class TransformInHandSpell extends Spell {
 		Card card = (Card) target;
 		boolean startedInDeck = card.hasAttribute(Attribute.STARTED_IN_DECK);
 		boolean removesAtEndOfTurn = card.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
+
+		if (!(player.getZone(card.getZone()) instanceof CardZone)) {
+			return;
+		}
 
 		Card newCard;
 		EntityReference secondaryTarget = (EntityReference) desc.get(SpellArg.SECONDARY_TARGET);

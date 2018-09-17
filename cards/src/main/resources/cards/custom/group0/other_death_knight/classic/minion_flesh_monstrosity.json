@@ -1,0 +1,46 @@
+{
+  "name": "Flesh Monstrosity",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Destroy a friendly minion and gain its stats and text.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "target": "SPELL_TARGET",
+            "attribute": "ATTACK"
+          },
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "target": "SPELL_TARGET",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "custom.AddActorEffectsToTargetActorSpell",
+          "target": "SELF",
+          "secondaryTarget": "SPELL_TARGET"
+        },
+        {
+          "class": "DestroySpell"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

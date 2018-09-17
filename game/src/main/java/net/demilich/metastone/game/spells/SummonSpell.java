@@ -303,7 +303,13 @@ public class SummonSpell extends Spell {
 				&& !(target.getReference().equals(EntityReference.NONE))) {
 			for (int i = 0; i < count; i++) {
 				Minion minion;
-				if (target.getEntityType() == EntityType.CARD) {
+				// Is this a card? Summon it. Is this a non-battlefield minion? If so, summon from the base card too
+				if (target.getEntityType() == EntityType.CARD
+						|| (target.getEntityType() == EntityType.MINION && !target.isInPlay())) {
+					if (!target.getSourceCard().getCardType().isCardType(CardType.MINION)) {
+						logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
+						return;
+					}
 					minion = target.getSourceCard().summon();
 				} else if (target.getEntityType() != EntityType.MINION) {
 					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);

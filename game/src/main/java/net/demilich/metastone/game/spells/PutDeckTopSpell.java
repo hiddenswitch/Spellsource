@@ -16,7 +16,8 @@ public class PutDeckTopSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc);
 
 		for (Card card : cards) {
-			context.getLogic().putOnTopOfDeck(player, card);
+			context.getLogic().putOnTopOfDeck(player, card.getCopy());
+
 
 			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);

@@ -108,6 +108,8 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_GRAVEYARD;
 			case "enemy_graveyard":
 				return EntityReference.ENEMY_GRAVEYARD;
+			case "friendly_last_died_minion":
+				return EntityReference.FRIENDLY_LAST_DIED_MINION;
 			case "all_entities":
 				return EntityReference.ALL_ENTITIES;
 			case "opposite_minions":

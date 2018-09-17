@@ -1,0 +1,32 @@
+{
+  "name": "Bat Swarm",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Summon seven 2/1 Bats to attack it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "FightSpell",
+      "target": "TARGET",
+      "spell": {
+        "class": "ForceDeathPhaseSpell"
+      },
+      "secondaryTarget": "OUTPUT"
+    },
+    "cards": [
+      "token_baty",
+      "token_baty",
+      "token_baty",
+      "token_baty",
+      "token_baty",
+      "token_baty",
+      "token_baty"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

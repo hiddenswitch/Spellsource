@@ -1,0 +1,24 @@
+{
+  "name": "Fruitful Bat",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add a 'Blood Melon' to your hand that restores 8 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_blood_melon",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

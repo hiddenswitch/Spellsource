@@ -17,19 +17,19 @@ import java.util.Map;
  * @deprecated Use a {@link BuffAura} instead. For example, to give a minion +1 attack only if the friendly player has
  * 		more than 3 cards:
  * 		<pre>
- * 		  "aura": {
- * 		    "class": "BuffAura",
- * 		    "attackBonus": 1,
- * 		    "hpBonus": 0,
- * 		    "target": "SELF",
- * 		    "condition": {
- * 		      "class": "CardCountCondition",
- * 		      "targetPlayer": "SELF",
- * 		      "operation": "GREATER",
- * 		      "value": 3
- * 		    }
- * 		  }
- * 		</pre>
+ * 				  "aura": {
+ * 				    "class": "BuffAura",
+ * 				    "attackBonus": 1,
+ * 				    "hpBonus": 0,
+ * 				    "target": "SELF",
+ * 				    "condition": {
+ * 				      "class": "CardCountCondition",
+ * 				      "targetPlayer": "SELF",
+ * 				      "operation": "GREATER",
+ * 				      "value": 3
+ * 				    }
+ * 				  }
+ * 				</pre>
  * 		<p>
  * 		Gives a minion an attack bonus with a given condition.
  */

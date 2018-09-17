@@ -1,0 +1,50 @@
+{
+  "name": "The Omega Rune",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "LEGENDARY",
+  "description": "Freeze all minions. Summon seven 2/2 Ghouls. This game, your spells have Lifesteal.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "ENEMY_CHARACTERS",
+        "attribute": "FROZEN"
+      },
+      {
+        "class": "SummonSpell",
+        "cards": [
+          "token_ghoul",
+          "token_ghoul",
+          "token_ghoul",
+          "token_ghoul",
+          "token_ghoul",
+          "token_ghoul",
+          "token_ghoul"
+        ]
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardPlayedTrigger",
+            "cardType": "SPELL",
+            "sourcePlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "target": "EVENT_TARGET",
+            "attribute": "LIFESTEAL"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

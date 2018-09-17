@@ -1,0 +1,45 @@
+{
+  "name": "Midnight Ride",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "EPIC",
+  "description": "Shuffle all minions into their owner's deck. They are summoned when drawn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "ShuffleMinionToDeckSpell",
+      "target": "SPELL_TARGET",
+      "spell": {
+        "class": "custom.AddTriggerToCardSpell",
+        "target": "OUTPUT",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardDrawnTrigger",
+            "hostTargetType": "IGNORE_OTHER_TARGETS"
+          },
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "SummonSpell",
+                "target": "SELF"
+              },
+              {
+                "class": "RemoveCardSpell",
+                "target": "SELF"
+              }
+            ]
+          }
+        },
+        "attribute": "PASSIVE_TRIGGERS"
+      },
+      "targetPlayer": "OWNER"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

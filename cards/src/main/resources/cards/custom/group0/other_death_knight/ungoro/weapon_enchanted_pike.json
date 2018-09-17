@@ -1,0 +1,28 @@
+{
+  "name": "Enchanted Pike",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "OBSIDIAN",
+  "damage": 1,
+  "durability": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Draw a card that didn't start in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "STARTED_IN_DECK",
+        "invert": true,
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

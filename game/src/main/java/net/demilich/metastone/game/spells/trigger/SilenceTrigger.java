@@ -14,8 +14,7 @@ public class SilenceTrigger extends EventTrigger {
 
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
-		SilenceEvent silenceEvent = (SilenceEvent) event;
-		return silenceEvent.getTarget() == host;
+		return true;
 	}
 
 	@Override

@@ -1,0 +1,35 @@
+{
+  "name": "Tombstone Terror",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "Battlecry: Gain the text of a random enemy minion that died this game.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.AddActorEffectsToTargetActorSpell",
+      "target": "SELF",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "OPPONENT"
+      },
+      "spell": {
+        "class": "RevealCardSpell",
+        "target": "OUTPUT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Blood Melon",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "FREE",
+  "description": "Restore #8 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 8
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

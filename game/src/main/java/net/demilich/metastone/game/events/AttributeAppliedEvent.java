@@ -10,7 +10,7 @@ public class AttributeAppliedEvent extends GameEvent {
 	private final Attribute attribute;
 
 	public AttributeAppliedEvent(GameContext context, int targetPlayerId, Entity target, Entity source, Attribute attribute) {
-		super(context, targetPlayerId, source == null ? -1 : source.getId());
+		super(context, targetPlayerId, source == null ? -1 : source.getOwner());
 		this.target = target;
 		this.source = source;
 		this.attribute = attribute;

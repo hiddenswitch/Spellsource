@@ -1,0 +1,17 @@
+{
+  "name": "Archerus Deathcharger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Charge. Can't attack heroes.",
+  "attributes": {
+    "CANNOT_ATTACK_HEROES": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

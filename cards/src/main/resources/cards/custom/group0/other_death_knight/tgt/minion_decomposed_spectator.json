@@ -1,0 +1,24 @@
+{
+  "name": "Decomposed Spectator",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Inspire: Summon a 1/1 Decomposed Spectator.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_decomposed_spectator"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

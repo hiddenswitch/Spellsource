@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -142,6 +143,9 @@ public class ActionLogic implements Serializable {
 					}
 				}
 			} else {
+				if (card.getCardType().isCardType(CardType.ENCHANTMENT)) {
+					System.out.println(context.getTrace().dump());
+				}
 				rollout(card.play(), context, player, playCardActions);
 			}
 
