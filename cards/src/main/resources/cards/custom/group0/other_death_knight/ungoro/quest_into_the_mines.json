@@ -91,13 +91,13 @@
       {
         "class": "AddQuestSpell",
         "quest": {
+          "countUntilCast": 9,
           "eventTrigger": {
             "class": "AttributeAppliedTrigger",
-            "targetPlayer": "SELF",
+            "requiredAttribute": "RESERVED_BOOLEAN_4",
             "targetEntityType": "HERO",
-            "requiredAttribute": "RESERVED_BOOLEAN_4"
+            "targetPlayer": "SELF"
           },
-          "countUntilCast": 9,
           "spell": {
             "class": "ReceiveCardSpell",
             "card": "spell_the_omega_rune"

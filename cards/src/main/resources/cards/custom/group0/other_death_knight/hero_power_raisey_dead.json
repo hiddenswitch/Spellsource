@@ -1,5 +1,6 @@
 {
   "name": "Raise Dead",
+  "heroPower": "hero_power_raise_deader",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "OBSIDIAN",
@@ -13,7 +14,6 @@
       "card": "token_charging_ghoul"
     }
   },
-  "heroPower": "hero_power_raise_deader",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

@@ -18,15 +18,15 @@
         },
         {
           "class": "AddEnchantmentSpell",
-          "targetPlayer": "SELF",
           "card": "enchantment_frozen_deck",
-          "exclusive": true
+          "exclusive": true,
+          "targetPlayer": "SELF"
         },
         {
           "class": "AddEnchantmentSpell",
-          "targetPlayer": "OPPONENT",
           "card": "enchantment_frozen_deck",
-          "exclusive": true
+          "exclusive": true,
+          "targetPlayer": "OPPONENT"
         }
       ]
     }

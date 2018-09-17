@@ -11,19 +11,19 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "custom.CastUsingCardSourceSpell",
-      "cardSource": {
-        "class": "GraveyardActorsSource",
-        "invert": true
+      "spell": {
+        "class": "SummonSpell",
+        "target": "OUTPUT"
       },
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
       },
-      "howMany": 1,
-      "spell": {
-        "class": "SummonSpell",
-        "target": "OUTPUT"
-      }
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "invert": true
+      },
+      "howMany": 1
     }
   },
   "attributes": {

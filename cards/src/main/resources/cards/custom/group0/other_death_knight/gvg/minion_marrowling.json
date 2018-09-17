@@ -26,8 +26,8 @@
             },
             {
               "class": "RevealCardSpell",
-              "targetPlayer": "SELF",
-              "card": "spell_bone_storm"
+              "card": "spell_bone_storm",
+              "targetPlayer": "SELF"
             },
             {
               "class": "DamageSpell",

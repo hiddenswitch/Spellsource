@@ -11,14 +11,14 @@
     "spell": {
       "class": "ReceiveCardSpell"
     },
-    "cardSource": {
-      "class": "GraveyardActorsSource",
-      "targetPlayer": "OPPONENT",
-      "distinct": true
-    },
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "distinct": true,
+      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": true,

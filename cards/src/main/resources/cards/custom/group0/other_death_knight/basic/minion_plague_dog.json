@@ -10,13 +10,13 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "SELF",
-      "hostTargetType": "IGNORE_AS_SOURCE"
+      "hostTargetType": "IGNORE_AS_SOURCE",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "HealSpell",
-      "value": 3,
-      "target": "FRIENDLY_HERO"
+      "target": "FRIENDLY_HERO",
+      "value": 3
     }
   },
   "collectible": true,

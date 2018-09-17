@@ -11,15 +11,6 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "custom.CastUsingCardSourceSpell",
-      "cardSource": {
-        "class": "ShuffledCardsSource",
-        "targetPlayer": "SELF"
-      },
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      },
-      "randomTarget": true,
       "spell": {
         "class": "MetaSpell",
         "spells": [
@@ -33,7 +24,16 @@
             "target": "OUTPUT"
           }
         ]
-      }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "ShuffledCardsSource",
+        "targetPlayer": "SELF"
+      },
+      "randomTarget": true
     }
   },
   "attributes": {

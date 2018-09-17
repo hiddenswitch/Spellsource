@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
-    "value": 6,
     "target": "FRIENDLY_MINIONS",
+    "value": 6,
     "randomTarget": true
   },
   "collectible": false,

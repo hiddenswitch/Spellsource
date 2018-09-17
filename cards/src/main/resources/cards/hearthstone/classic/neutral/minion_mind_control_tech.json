@@ -10,16 +10,16 @@
   "battlecry": {
     "spell": {
       "class": "ConditionalSpell",
-      "spell": {
-        "class": "MindControlSpell",
-        "target": "ENEMY_MINIONS",
-        "randomTarget": true
-      },
       "condition": {
         "class": "MinionCountCondition",
         "value": 4,
         "operation": "GREATER_OR_EQUAL",
         "targetPlayer": "OPPONENT"
+      },
+      "spell": {
+        "class": "MindControlSpell",
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true
       }
     }
   },

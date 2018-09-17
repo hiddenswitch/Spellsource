@@ -18,8 +18,8 @@
     }
   },
   "attributes": {
-    "FROZEN": true,
-    "DONT_UNFREEZE": true
+    "DONT_UNFREEZE": true,
+    "FROZEN": true
   },
   "collectible": true,
   "set": "CUSTOM",

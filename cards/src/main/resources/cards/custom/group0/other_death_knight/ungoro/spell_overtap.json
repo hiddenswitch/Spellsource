@@ -12,6 +12,7 @@
       {
         "class": "MetaSpell",
         "target": "FRIENDLY_HAND",
+        "randomTarget": true,
         "spells": [
           {
             "class": "ShuffleToDeckSpell"
@@ -19,8 +20,7 @@
           {
             "class": "RemoveCardSpell"
           }
-        ],
-        "randomTarget": true
+        ]
       },
       {
         "class": "DrawCardSpell",

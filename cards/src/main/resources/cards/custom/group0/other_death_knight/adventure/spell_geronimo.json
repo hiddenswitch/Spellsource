@@ -8,12 +8,12 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",
-    "attribute": "FROZEN",
     "target": "ALL_MINIONS",
+    "attribute": "FROZEN",
     "filter": {
       "class": "EntityEqualsFilter",
-      "secondaryTarget": "TARGET",
-      "invert": true
+      "invert": true,
+      "secondaryTarget": "TARGET"
     }
   },
   "collectible": true,

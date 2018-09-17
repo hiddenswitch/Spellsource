@@ -8,6 +8,14 @@
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "SummonSpell",
+    "spell": {
+      "class": "FightSpell",
+      "target": "TARGET",
+      "spell": {
+        "class": "ForceDeathPhaseSpell"
+      },
+      "secondaryTarget": "OUTPUT"
+    },
     "cards": [
       "token_baty",
       "token_baty",
@@ -16,15 +24,7 @@
       "token_baty",
       "token_baty",
       "token_baty"
-    ],
-    "spell": {
-      "class": "FightSpell",
-      "target": "TARGET",
-      "secondaryTarget": "OUTPUT",
-      "spell": {
-        "class": "ForceDeathPhaseSpell"
-      }
-    }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

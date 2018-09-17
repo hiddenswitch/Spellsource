@@ -8,11 +8,11 @@
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardShuffledTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE",
       "queueCondition": {
         "class": "OwnedByPlayerCondition",
         "targetPlayer": "ACTIVE"
-      },
-      "hostTargetType": "IGNORE_AS_SOURCE"
+      }
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
@@ -24,8 +24,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
-    "value": 4,
     "target": "FRIENDLY_MINIONS",
+    "value": 4,
     "randomTarget": true
   },
   "collectible": false,

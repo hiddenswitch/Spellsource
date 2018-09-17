@@ -11,18 +11,18 @@
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS",
-      "sourcePlayer": "SELF",
-      "targetEntityType": "MINION",
-      "targetPlayer": "SELF",
       "queueCondition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "PlayerAttributeValueProvider",
           "playerAttribute": "LAST_MANA_COST"
         },
-        "operation": "GREATER_OR_EQUAL",
         "value2": 3
-      }
+      },
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "GainManaSpell",

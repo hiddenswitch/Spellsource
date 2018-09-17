@@ -7,15 +7,15 @@
   "baseHp": 6,
   "rarity": "RARE",
   "description": "Your hero is immune. Your cards cost (10) more.",
-  "aura": {
-    "class": "AttributeAura",
-    "target": "FRIENDLY_HERO",
-    "attribute": "AURA_IMMUNE"
-  },
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": 10,
     "targetPlayer": "SELF"
+  },
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HERO",
+    "attribute": "AURA_IMMUNE"
   },
   "collectible": true,
   "set": "CUSTOM",

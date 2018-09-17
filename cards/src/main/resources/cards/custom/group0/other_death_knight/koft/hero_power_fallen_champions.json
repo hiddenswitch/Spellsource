@@ -14,21 +14,21 @@
       "class": "HeroPowerSpell",
       "spell": {
         "class": "ResurrectFromBothSpell",
-        "targetPlayer": "SELF",
         "cardFilter": {
           "class": "AndFilter",
           "filters": [
             {
               "class": "OwnedByPlayerFilter",
-              "targetPlayer": "SELF",
-              "invert": true
+              "invert": true,
+              "targetPlayer": "SELF"
             },
             {
               "class": "SpecificCardFilter",
               "secondaryTarget": "EVENT_TARGET"
             }
           ]
-        }
+        },
+        "targetPlayer": "SELF"
       }
     }
   },

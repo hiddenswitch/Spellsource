@@ -15,19 +15,19 @@
       "minion_yshaarj_rage_unbound"
     ]
   },
-  "manaCostModifier": {
-    "class": "CardCountValueProvider",
-    "cardSource": {
-      "class": "GraveyardActorsSource",
-      "targetPlayer": "BOTH"
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    }
-  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
-  "author": "Jack of Spades"
+  "author": "Jack of Spades",
+  "manaCostModifier": {
+    "class": "CardCountValueProvider",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "targetPlayer": "BOTH"
+    }
+  }
 }

@@ -8,14 +8,14 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "RecruitSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
     "spell": {
       "class": "AddAttributeSpell",
       "target": "OUTPUT",
       "attribute": "FROZEN"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
     }
   },
   "collectible": true,
