@@ -2,7 +2,7 @@ package net.demilich.metastone.game.cards;
 
 /**
  * Specifies a type of the object in the card desc.
- *
+ * <p>
  * TODO: CardDescType requires more explanation. Currently not really used.
  */
 public enum CardDescType {

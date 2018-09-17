@@ -11,7 +11,7 @@ import net.demilich.metastone.game.utils.Attribute;
 
 /**
  * An action indicating a spell is being cast.
- *
+ * <p>
  * The spell effect is referenced in the {@link #getSpell()} field.
  */
 public class PlaySpellCardAction extends PlayCardAction {

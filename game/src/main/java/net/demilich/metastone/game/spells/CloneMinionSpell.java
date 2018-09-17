@@ -11,11 +11,11 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 /**
  * @deprecated Use {@link SummonSpell} instead:
  * 		<pre>
- * 		  {
- * 		    "class": "SummonSpell",
- * 		    "target": The target that you would like to clone.
- * 		  }
- * 		</pre>
+ * 				  {
+ * 				    "class": "SummonSpell",
+ * 				    "target": The target that you would like to clone.
+ * 				  }
+ * 				</pre>
  * 		<p>
  * 		Clones a specified minion.
  */

@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells;
 
 import java.util.List;
+
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -33,7 +34,7 @@ public class MetaSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-    @Override
+	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
