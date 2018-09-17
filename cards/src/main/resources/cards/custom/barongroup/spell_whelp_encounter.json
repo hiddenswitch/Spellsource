@@ -1,0 +1,27 @@
+{
+  "name": "Whelp Encounter",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Summon two 1/1 Whelps for your opponent. Draw 4 cards.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "class": "SummonSpell",
+      "cards": [
+        "token_whelp",
+        "token_whelp"
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 4
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
