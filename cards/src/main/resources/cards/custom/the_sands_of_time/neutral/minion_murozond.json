@@ -61,6 +61,11 @@
               "targetPlayer": "SELF"
             },
             {
+              "class": "HeroClassCondition",
+              "heroClass": "NAVY",
+              "targetPlayer": "SELF"
+            },
+            {
               "class": "AnyMatchFilterCondition",
               "target": "FRIENDLY_HERO",
               "filter": {
@@ -117,6 +122,11 @@
             },
             {
               "class": "ReceiveCardSpell",
+              "card": "token_echo_of_aldus",
+              "targetPlayer": "SELF"
+            }
+            {
+              "class": "ReceiveCardSpell",
               "card": "token_echo_of_ragnaros",
               "targetPlayer": "SELF"
             }
@@ -168,6 +178,11 @@
             {
               "class": "HeroClassCondition",
               "heroClass": "RED",
+              "targetPlayer": "OPPONENT"
+            },
+            {
+              "class": "HeroClassCondition",
+              "heroClass": "NAVY",
               "targetPlayer": "OPPONENT"
             },
             {
@@ -226,6 +241,10 @@
               "targetPlayer": "SELF"
             },
             {
+              "class": "ReceiveCardSpell",
+              "card": "token_echo_of_aldus",
+              "targetPlayer": "SELF"
+             {
               "class": "ReceiveCardSpell",
               "card": "token_echo_of_ragnaros",
               "targetPlayer": "SELF"
