@@ -11,7 +11,7 @@ public interface Deck extends Cloneable {
 	 * <p>
 	 * The random deck creation function tries to make a balance of 50% class cards and 50% neutrals.
 	 *
-	 * @param heroClass A hero class that is {@link HeroClass#isBaseClass()}.
+	 * @param heroClass  A hero class that is {@link HeroClass#isBaseClass()}.
 	 * @param deckFormat A deck format, like {@link DeckFormat#STANDARD}.
 	 * @return
 	 */
