@@ -1,0 +1,27 @@
+{
+  "name": "Naga Illusionist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: Summon a 2/2 Knight for every Knight in your hand.",
+  "battlecry": {
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+        "class": "HandSource",
+        "cardFilter": {
+          "class": "CardFilter",
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+    },
+    "card": "token_baron_knight"
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1

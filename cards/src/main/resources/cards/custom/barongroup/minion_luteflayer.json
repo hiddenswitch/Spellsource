@@ -1,0 +1,20 @@
+
+{
+  "name": "Luteflayer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Your leftmost minion has +3/+3.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "LEFTMOST_ENEMY_MINION"",
+    "attackBonus": 3,
+    "hpBonus": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
