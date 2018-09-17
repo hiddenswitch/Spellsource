@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
-  "description": "Freeze all minions. Summon seven 2/2 Ghouls. This game, your spells have Lifesteal.",
+  "description": "Freeze all enemies. Summon seven 2/2 Ghouls. This game, your spells have Lifesteal.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
