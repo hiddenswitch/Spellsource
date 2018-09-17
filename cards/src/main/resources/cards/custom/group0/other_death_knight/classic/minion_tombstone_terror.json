@@ -10,21 +10,8 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.CastUsingCardSourceSpell",
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "custom.AddActorEffectsToTargetActorSpell",
-            "target": "SELF",
-            "secondaryTarget": "OUTPUT"
-          },
-          {
-            "class": "RevealCardSpell",
-            "target": "OUTPUT"
-          }
-        ]
-      },
+      "class": "custom.AddActorEffectsToTargetActorSpell",
+      "target": "SELF",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
@@ -33,7 +20,10 @@
         "class": "GraveyardActorsSource",
         "targetPlayer": "OPPONENT"
       },
-      "randomTarget": true
+      "spell": {
+        "class": "RevealCardSpell",
+        "target": "OUTPUT"
+      }
     }
   },
   "attributes": {

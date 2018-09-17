@@ -15,7 +15,7 @@
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "DONT_UNFREEZE"
+        "attribute": "FREEZES_PERMANENTLY"
       }
     ]
   },

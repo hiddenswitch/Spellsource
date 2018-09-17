@@ -25,9 +25,6 @@ import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
-import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -3369,7 +3366,6 @@ public class CustomCardsTests extends TestBase {
 	}
 
 
-
 	@Test
 	public void testTombStoneTerror() {
 		runGym((context, player, opponent) -> {
@@ -3379,10 +3375,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_tombstone_terror");
 			assertTrue(player.getHero().hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS));
 		});
-
-
 	}
-
 
 	@Test
 	public void testTeronGorefiend() {
@@ -3537,7 +3530,7 @@ public class CustomCardsTests extends TestBase {
 	public void testIntoTheMines() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_into_the_mines");
-			for(int i = 0; i < 9; i++) {
+			for (int i = 0; i < 9; i++) {
 				playCardWithTarget(context, player, "spell_freezing_potion", opponent.getHero());
 			}
 			assertEquals(player.getHand().size(), 1);
@@ -3670,8 +3663,6 @@ public class CustomCardsTests extends TestBase {
 			for (Minion minion : player.getMinions()) {
 				assertEquals(minion.getHp(), 2);
 			}
-
-
 		});
 	}
 
@@ -3693,9 +3684,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "spell_lesser_obsidian_spellstone");
 			playCard(context, player, "spell_overtap");
-
 		});
-
 	}
 }
 

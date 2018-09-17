@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
-  "description": "Summon a 2/2 Ghoul and 2 1/1 Skeletons.",
+  "description": "Summon a 2/2 Ghoul and two 1/1 Skeletons.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
