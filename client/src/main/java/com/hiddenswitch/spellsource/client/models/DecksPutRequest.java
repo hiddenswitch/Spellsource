@@ -63,7 +63,9 @@ public class DecksPutRequest implements Serializable {
     
     EGGPLANT("EGGPLANT"),
     
-    ICE("ICE");
+    ICE("ICE"),
+    
+    OBSIDIAN("OBSIDIAN");
 
     private String value;
 
