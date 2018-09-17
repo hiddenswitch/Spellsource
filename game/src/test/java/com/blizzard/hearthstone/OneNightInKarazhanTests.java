@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
@@ -63,7 +64,7 @@ public class OneNightInKarazhanTests extends TestBase {
 
 	@Test
 	public void testPrinceMalchezaar() {
-		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);
+		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")

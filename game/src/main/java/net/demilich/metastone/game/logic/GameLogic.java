@@ -2498,7 +2498,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		player.getDeck().shuffle(getRandom());
+		if (!player.getDeck().isEmpty()) {
+			player.getDeck().shuffle(getRandom());
+		}
 
 		// second player gets the coin additionally
 		if (!begins) {
@@ -4067,7 +4069,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
 
-			for (int j = starterCards.size(); j < numberOfStarterCards; j++) {
+			for (int j = starterCards.size(); j < numberOfStarterCards && !player.getDeck().isEmpty(); j++) {
 				Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
 				if (randomCard != null) {
 					player.getDeck().move(randomCard, player.getSetAsideZone());

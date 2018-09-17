@@ -404,7 +404,6 @@ public class BoomsdayProjectTests extends TestBase {
 
 	@Test
 	public void testAcademicEspionage() {
-
 		runGym((context, player, opponent) -> {
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(opponent.getHero().getHeroClass(), HeroClass.RED, "class");
@@ -413,7 +412,7 @@ public class BoomsdayProjectTests extends TestBase {
 				assertEquals(costOf(context, player, card), 1, card.getName() + " mana");
 				assertTrue(card.hasHeroClass(HeroClass.RED), card.getName() + " class");
 			}
-		}, HeroClass.RED, HeroClass.BLACK);
+		}, HeroClass.RED, HeroClass.RED);
 
 		/* TODO: Card cost modifiers should be copied with Academic Espionage
 		runGym((context, player, opponent) -> {
