@@ -4,6 +4,7 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -24,7 +25,7 @@ import java.util.stream.Stream;
  * <p>
  * If a {@link SpellArg#SECONDARY_TARGET} is not specified, retrieves a random card from the specified {@link
  * SpellArg#CARD_SOURCE} and {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARDS}.
- *
+ * <p>
  * Casts {@link SpellArg#SPELL} with the {@link EntityReference#OUTPUT} set to the card the effects were copied from.
  */
 public class AddActorEffectsToTargetActorSpell extends Spell {
@@ -50,8 +51,15 @@ public class AddActorEffectsToTargetActorSpell extends Spell {
 		Entity sourceEntity;
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
 			sourceEntity = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+			if (sourceEntity == null) {
+				return;
+			}
 		} else {
-			sourceEntity = SpellUtils.getCards(context, player, target, source, desc, 1).get(0);
+			CardList cards = SpellUtils.getCards(context, player, target, source, desc, 1);
+			if (cards.isEmpty()) {
+				return;
+			}
+			sourceEntity = cards.get(0);
 		}
 
 		Card sourceCard = sourceEntity.getSourceCard();
