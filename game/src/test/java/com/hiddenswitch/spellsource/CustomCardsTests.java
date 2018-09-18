@@ -3529,6 +3529,11 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testIntoTheMines() {
 		runGym((context, player, opponent) -> {
+			Card intoTheMines = receiveCard(context, player, "quest_into_the_mines");
+			assertTrue(intoTheMines.isQuest());
+		});
+
+		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_into_the_mines");
 			for (int i = 0; i < 9; i++) {
 				playCardWithTarget(context, player, "spell_freezing_potion", opponent.getHero());
