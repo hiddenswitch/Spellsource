@@ -37,12 +37,10 @@ import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.mockito.ArgumentMatchers.anyList;
@@ -51,6 +49,27 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testElaborateScheme() {
+		runGym((context, player, opponent) -> {
+			String[] cardIds = {"secret_cat_trick", "secret_dart_trap", "secret_explosive_runes"};
+			Stream.of(cardIds).forEach(cardId -> shuffleToDeck(context, player, cardId));
+			playCard(context, player, "secret_elaborate_scheme");
+			assertEquals(player.getSecrets().size(), 1);
+			context.endTurn();
+			assertEquals(player.getSecrets().size(), 1);
+			context.endTurn();
+			assertEquals(player.getHand().size(), 2, "Should draw a card at start of the turn and due to Elaborate Scheme");
+			assertEquals(player.getSecrets().size(), 1, "Should have triggered Elaborate Scheme and put a secret into play.");
+			Set<String> secretsInHand = player.getHand().stream().map(Card::getCardId).collect(Collectors.toSet());
+			assertFalse(secretsInHand.contains(player.getSecrets().get(0).getSourceCard().getCardId()));
+			Set<String> remainingSecret = new HashSet<>(Arrays.asList(cardIds));
+			remainingSecret.removeAll(secretsInHand);
+			assertTrue(remainingSecret.contains(player.getSecrets().get(0).getSourceCard().getCardId()));
+			assertEquals(remainingSecret.size(), 1);
+		});
+	}
 
 	@Test
 	public void testHeartstopAura() {
