@@ -500,9 +500,9 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public SpellDesc getSpell() {
-		if (isSecret()) {
+		if (isSecret() && getDesc().getSecret() != null) {
 			return AddSecretSpell.create(new Secret(getDesc().getSecret().create(), getDesc().getSpell(), this));
-		} else if (isQuest()) {
+		} else if (isQuest() && getDesc().getQuest() != null) {
 			return AddQuestSpell.create(new Quest(getDesc().getQuest().create(), getDesc().getSpell(), this, getDesc().getCountUntilCast(), getDesc().isCountByValue()));
 		} else {
 			return getDesc().getSpell();
@@ -806,7 +806,8 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * @return
 	 */
 	public boolean isQuest() {
-		return getDesc().getQuest() != null;
+		boolean hasQuestAttribute = getDesc().getAttributes() != null && (boolean) getDesc().getAttributes().getOrDefault(Attribute.QUEST, false);
+		return getDesc().getQuest() != null || hasQuestAttribute;
 	}
 
 	/**
@@ -1048,8 +1049,14 @@ public class Card extends Entity implements HasChooseOneActions {
 		getAttributes().put(Attribute.TARGET_SELECTION, targetRequirement);
 	}
 
+	/**
+	 * Returns {@code true} if this card is a secret.
+	 *
+	 * @return
+	 */
 	public boolean isSecret() {
-		return getDesc().getSecret() != null;
+		boolean hasSecretAttribute = getDesc().getAttributes() != null && (boolean) getDesc().getAttributes().getOrDefault(Attribute.SECRET, false);
+		return getDesc().getSecret() != null || hasSecretAttribute;
 	}
 
 	public boolean isSpell() {
