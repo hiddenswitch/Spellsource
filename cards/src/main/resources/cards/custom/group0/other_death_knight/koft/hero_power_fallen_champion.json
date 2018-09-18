@@ -5,6 +5,7 @@
   "heroClass": "OBSIDIAN",
   "rarity": "FREE",
   "description": "Summon an enemy minion that died this turn.",
+  "heroPower": "hero_power_fallen_champions",
   "condition": {
     "class": "ComparisonCondition",
     "operation": "GREATER",

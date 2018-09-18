@@ -3615,15 +3615,17 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testArthasMenethil() {
-		/*
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_arthas_menethil");
-			playCard(context, opponent, "spell_call_in_the_finishers");
-			playCard(context, player, "spell_twisting_nether");
-			assertEquals(player.getMinions().size(), 4);
-
+			player.setMana(10);
+			playCard(context, player, "spell_summon_for_opponent");
+			assertEquals(opponent.getMinions().size(), 1);
+			destroy(context, opponent.getMinions().get(0));
+			assertEquals(opponent.getMinions().size(), 0);
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> ga.getActionType() == ActionType.HERO_POWER));
+			useHeroPower(context, player);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_wisp");
 		});
-		*/
 
 		runGym((context, player, opponent) -> {
 			playCard(context, opponent, "spell_fiendish_circle");
