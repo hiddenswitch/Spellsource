@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Battlecry: Add a 'Blood Melon' to your hand that restores 8 Health.",
   "battlecry": {
     "targetSelection": "NONE",
