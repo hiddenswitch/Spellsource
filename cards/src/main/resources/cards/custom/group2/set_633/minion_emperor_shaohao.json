@@ -20,6 +20,7 @@
     }
   },
   "attributes": {
+    "BATTLECRY": true,
     "DEFLECT": true
   },
   "collectible": true,
