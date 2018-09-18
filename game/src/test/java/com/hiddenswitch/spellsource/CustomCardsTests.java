@@ -51,6 +51,35 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBlackflameRitual() {
+		for (int i = 0; i < 7; i++) {
+			final int count = i;
+			runGym((context, player, opponent) -> {
+				List<Minion> minions = new ArrayList<>();
+				for (int j = 0; j < count; j++) {
+					minions.add(playMinionCard(context, player, "minion_wisp"));
+				}
+				for (Minion minion : minions) {
+					destroy(context, minion);
+				}
+				player.setMana(10);
+				playCard(context, player, "spell_blackflame_ritual");
+				assertEquals(player.getMana(), 10 - count);
+				if (count == 0) {
+					assertEquals(player.getMinions().size(), 0);
+				} else {
+					assertEquals(player.getMinions().size(), 2);
+					for (int k = 0; k < 2; k++) {
+						assertEquals(player.getMinions().get(k).getAttack(), count);
+						assertEquals(player.getMinions().get(k).getHp(), count);
+					}
+				}
+			});
+		}
+
+	}
+
+	@Test
 	public void testElaborateScheme() {
 		runGym((context, player, opponent) -> {
 			String[] cardIds = {"secret_cat_trick", "secret_dart_trap", "secret_explosive_runes"};

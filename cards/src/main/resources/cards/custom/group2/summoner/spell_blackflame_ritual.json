@@ -8,21 +8,26 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "value": {
-      "class": "ManaCostProvider",
-      "target": "SELF"
-    },
+    "value": 2,
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
           "class": "SetAttackSpell",
           "target": "OUTPUT",
+          "value": {
+            "class": "ManaCostProvider",
+            "target": "SELF"
+          },
           "exclusive": false
         },
         {
           "class": "SetHpSpell",
           "target": "OUTPUT",
+          "value": {
+            "class": "ManaCostProvider",
+            "target": "SELF"
+          },
           "exclusive": false
         }
       ]
