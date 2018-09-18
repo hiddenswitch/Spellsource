@@ -20,7 +20,7 @@
           "target": "FRIENDLY_MINIONS",
           "attackBonus": {
             "class": "AttributeValueProvider",
-            "target": "TARGET",
+            "target": "EVENT_TARGET",
             "attribute": "ATTACK"
           },
           "filter": {
@@ -29,7 +29,7 @@
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
-            "target": "TARGET",
+            "target": "EVENT_TARGET",
             "attribute": "HP"
           }
         },
@@ -38,7 +38,7 @@
           "target": "FRIENDLY_HAND",
           "attackBonus": {
             "class": "AttributeValueProvider",
-            "target": "TARGET",
+            "target": "EVENT_TARGET",
             "attribute": "ATTACK"
           },
           "filter": {
@@ -47,7 +47,7 @@
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
-            "target": "TARGET",
+            "target": "EVENT_TARGET",
             "attribute": "HP"
           }
         },
@@ -56,7 +56,7 @@
           "target": "FRIENDLY_PLAYER",
           "value": {
             "class": "AttributeValueProvider",
-            "target": "TARGET",
+            "target": "EVENT_TARGET",
             "attribute": "ATTACK"
           },
           "attribute": "CTHUN_ATTACK_BUFF"
@@ -66,7 +66,7 @@
           "target": "FRIENDLY_PLAYER",
           "value": {
             "class": "AttributeValueProvider",
-            "target": "TARGET",
+            "target": "EVENT_TARGET",
             "attribute": "HP"
           },
           "attribute": "CTHUN_HEALTH_BUFF"
