@@ -5,8 +5,8 @@
   "heroClass": "OBSIDIAN",
   "baseAttack": 2,
   "baseHp": 1,
-  "race": "DRAGON",
   "rarity": "COMMON",
+  "race": "DRAGON",
   "description": "Your other minions have +1 Attack.",
   "aura": {
     "class": "BuffAura",
