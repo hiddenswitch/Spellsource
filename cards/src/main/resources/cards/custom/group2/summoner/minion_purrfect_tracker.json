@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Battlecry: Draw two 1-Cost cards from your deck.",
+  "description": "Battlecry: Draw two 0-Cost minions from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,7 +15,8 @@
       "value": 2,
       "cardFilter": {
         "class": "CardFilter",
-        "manaCost": 1
+        "cardType": "MINION",
+        "manaCost": 0
       }
     }
   },
