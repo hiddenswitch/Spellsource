@@ -53,6 +53,42 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHeartstopAura() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_wisp");
+			Minion target2 = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			Minion attacker = playMinionCard(context, player, "minion_wolfrider");
+			Minion defender = playMinionCard(context, player, "minion_wisp");
+			Minion doubleDefender = playMinionCard(context, player, "minion_boulderfist_ogre");
+			playCard(context, player, "spell_heartstop_aura");
+			attack(context, player, attacker, target1);
+			assertFalse(attacker.isDestroyed());
+			assertTrue(target1.isDestroyed());
+			context.endTurn();
+			Minion opponentAttacker = playMinionCard(context, opponent, "minion_wolfrider");
+			attack(context, opponent, opponentAttacker, defender);
+			assertTrue(opponentAttacker.isDestroyed());
+			assertFalse(defender.isDestroyed());
+			// Deal 6 damage to 7 hp boulderfist
+			playCardWithTarget(context, opponent, "spell_fireball", doubleDefender);
+			assertEquals(doubleDefender.getHp(), 1);
+			context.endTurn();
+			assertTrue(attacker.isDestroyed());
+			assertTrue(defender.isDestroyed());
+			assertFalse(doubleDefender.isDestroyed(), "Boulderfist Ogre should not have taken enough damage to be killed.");
+			attacker = playMinionCard(context, player, "minion_wolfrider");
+			attack(context, player, attacker, target2);
+			assertTrue(attacker.isDestroyed(), "Hearstopped enchantment should have expired.");
+		});
+
+		runGym((context, player, opponent) -> {
+			// Test playing Heartstopped two turns in a row
+		});
+	}
+
+	@Test
 	public void testFissure() {
 		runGym((context, player, opponent) -> {
 			Minion threeTwo = playMinionCard(context, player, "minion_bloodfen_raptor");

@@ -17,8 +17,9 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * Expires and removes all the enchantments whose {@link Entity#getSourceCard()} has the card ID of {@link
- * net.demilich.metastone.game.spells.desc.SpellArg#CARD} from the {@code target}.
+ * Expires and removes {@link SpellArg#HOW_MANY} copies (default {@link Integer#MAX_VALUE}) of the enchantments whose
+ * {@link Entity#getSourceCard()} has the card ID of {@link net.demilich.metastone.game.spells.desc.SpellArg#CARD} from
+ * the {@code target}.
  */
 public final class RemoveEnchantmentSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(RemoveEnchantmentSpell.class);
@@ -31,11 +32,16 @@ public final class RemoveEnchantmentSpell extends Spell {
 		if (cards.isEmpty()) {
 			return;
 		}
+		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, Integer.MAX_VALUE);
 		Set<String> cardIds = cards.stream().map(Card::getCardId).collect(Collectors.toSet());
 		for (Trigger e : context.getTriggersAssociatedWith(target.getReference())) {
+			if (howMany <= 0) {
+				break;
+			}
 			if (e instanceof Enchantment) {
 				Enchantment enchantment = (Enchantment) e;
 				if (enchantment.getSourceCard() != null && cardIds.contains(enchantment.getSourceCard().getCardId())) {
+					howMany--;
 					enchantment.onRemove(context);
 					// TODO: What about targeting effects?
 					context.getTriggerManager().removeTrigger(enchantment);

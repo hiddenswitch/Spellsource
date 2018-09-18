@@ -12,6 +12,10 @@
     "spell": {
       "class": "custom.AddActorEffectsToTargetActorSpell",
       "target": "SELF",
+      "spell": {
+        "class": "RevealCardSpell",
+        "target": "OUTPUT"
+      },
       "cardFilter": {
         "class": "AndFilter",
         "filters": [
@@ -28,10 +32,6 @@
       "cardSource": {
         "class": "ShuffledCardsSource",
         "targetPlayer": "BOTH"
-      },
-      "spell": {
-        "class": "RevealCardSpell",
-        "target": "OUTPUT"
       }
     }
   },

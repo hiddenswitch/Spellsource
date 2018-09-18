@@ -12,6 +12,10 @@
     "spell": {
       "class": "custom.AddActorEffectsToTargetActorSpell",
       "target": "SELF",
+      "spell": {
+        "class": "RevealCardSpell",
+        "target": "OUTPUT"
+      },
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
@@ -19,10 +23,6 @@
       "cardSource": {
         "class": "GraveyardActorsSource",
         "targetPlayer": "OPPONENT"
-      },
-      "spell": {
-        "class": "RevealCardSpell",
-        "target": "OUTPUT"
       }
     }
   },
