@@ -134,6 +134,10 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
 
 On Windows, delete the `%APPDATA%\Electron` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Electron`)*.
 
+**I receive an error about Weaponized Piñata when I try to run tests while contributing cards on Windows.**
+
+This message can be safely ignored.
+
 ### Contributing Cards
 
 Contributing cards consists of writing specially-crafted JSON files into the `cards` directories and writing tests for them.
