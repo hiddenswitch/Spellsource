@@ -1,12 +1,12 @@
 {
-  "name": "Twilight Redbane",
-  "baseManaCost": 5,
-  "type": "MINION",
-  "heroClass": "SILVER",
-  "baseAttack": 5,
-  "baseHp": 5,
-  "rarity": "RARE",
-  "description": "[b][b]Battlecry:[/b][/b] If your C'Thun has at least 10 Attack, \r\ngive a character +5 \r\nAttack this turn.",
+  "name": "No Man's Maul",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "[b][b]Battlecry:[/b][/b] If you don't have any minions,\r\ngain +1 Attack.",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition"
@@ -14,7 +14,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
-      "target": "FRIENDLY_CHARACTERS",
+      "target": "SELF",
       "attackBonus": 0,
       "hpBonus": 0
     }

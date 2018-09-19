@@ -1,0 +1,26 @@
+{
+  "name": "Tol'vir Vitalizer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "After a friendly minion attacks, restore them\r\nto full Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

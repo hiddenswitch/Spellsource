@@ -1,0 +1,12 @@
+{
+  "name": "Alder Ravenwald",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "RUST",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Colosseum Behemoth",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "Can only attack heroes and minions with [b]Taunt[/b].",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

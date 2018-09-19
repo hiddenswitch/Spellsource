@@ -1,0 +1,27 @@
+{
+  "name": "Omega Dragon",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Rush. Battlecry: If you have 10 Mana Crystals, deal 4 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "ManaMaxedCondition"
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

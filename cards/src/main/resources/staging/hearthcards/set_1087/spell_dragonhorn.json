@@ -1,0 +1,12 @@
+{
+  "name": "Dragonhorn",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Draw 2 Dragons \r\nfrom your deck.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

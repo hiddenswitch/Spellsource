@@ -1,0 +1,12 @@
+{
+  "name": "Big Bad Assault",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Choose an enemy minion. Your minions will attack that minion.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Gearscrapper",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "[b]Battlecry:[/b] If you control another Mech, attack an enemy minion.",
+  "battlecry": {
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "ENEMY_MINIONS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

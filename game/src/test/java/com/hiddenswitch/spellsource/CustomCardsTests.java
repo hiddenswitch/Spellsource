@@ -51,6 +51,42 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFlamewarper() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_flamewarper");
+			int hp = opponent.getHero().getHp();
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - 12);
+			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - 18);
+		});
+	}
+
+	@Test
+	public void testWyrmrestAspirant() {
+		runGym((context, player, opponent) -> {
+			Minion wyrmrest = playMinionCard(context, player, "minion_wyrmrest_aspirant");
+			int TEMPORARY_ATTACK_BONUS = 2;
+			playMinionCardWithBattlecry(context, player, "minion_abusive_sergeant", wyrmrest);
+			assertEquals(wyrmrest.getAttack(), wyrmrest.getBaseAttack() + 2 * TEMPORARY_ATTACK_BONUS);
+			int ATTACK_BONUS = 4;
+			playCardWithTarget(context, player, "spell_blessing_of_kings", wyrmrest);
+			assertEquals(wyrmrest.getAttack(), wyrmrest.getBaseAttack() + 2 * (TEMPORARY_ATTACK_BONUS + ATTACK_BONUS));
+			playCardWithTarget(context, player, "spell_blessed_champion", wyrmrest);
+			// current attack: 4 base + 2 temporary + 4 attack bonus
+			// doubling from blessed champion: 4 base + 2 temporary + 4 attack bonuses + 2 temporary + 4 attack bonuses + 4 base
+			// to bonuses: 4 base + 16 bonuses
+			// doubling bonuses: 4 base + 32 bonuses
+			assertEquals(wyrmrest.getAttack(), 36);
+			context.endTurn();
+			// doubling from blessed champion: 4 base + 4 attack bonuses + 4 attack bonuses + 4 base
+			// to bonuses: 4 base + 12 bonuses
+			// doubling of bonuses: 4 base + 24 bonuses
+			assertEquals(wyrmrest.getAttack(), 28);
+		});
+	}
+
+	@Test
 	public void testBlackflameRitual() {
 		for (int i = 0; i < 7; i++) {
 			final int count = i;

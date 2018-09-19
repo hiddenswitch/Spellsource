@@ -1,0 +1,12 @@
+{
+  "name": "Manufacturing",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Choose a friendly Mech. Summon two copies of it.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

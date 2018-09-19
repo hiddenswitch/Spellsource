@@ -1,0 +1,34 @@
+{
+  "name": "Flamewarped",
+  "type": "ENCHANTMENT",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "The next time this player deals damage, double it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ModifyDamageSpell",
+          "value": 2,
+          "operation": "MULTIPLY"
+        },
+        {
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "RemoveEnchantmentSpell",
+            "target": "TRIGGER_HOST",
+            "card": "enchantment_flamewarped"
+          }
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

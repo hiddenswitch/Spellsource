@@ -1,0 +1,25 @@
+{
+  "name": "Exotic Menace",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "[b]Battlecry:[/b] Summon a 5/5 Bounty Hunter with [b]Taunt[/b] for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

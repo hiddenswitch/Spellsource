@@ -1,0 +1,39 @@
+{
+  "name": "Hornmender",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Supremacy: Restore #2 Health to all other friendly characters.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SupremacyTrigger"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "HealSpell",
+            "target": "OTHER_FRIENDLY_MINIONS",
+            "value": 2
+          },
+          {
+            "class": "HealSpell",
+            "target": "FRIENDLY_HERO",
+            "value": 2
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

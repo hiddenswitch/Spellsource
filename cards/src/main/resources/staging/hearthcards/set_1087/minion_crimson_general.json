@@ -1,0 +1,35 @@
+{
+  "name": "Crimson General",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Whenever you summon a minion, give it +1 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 0,
+          "hpBonus": 0
+        },
+        {
+          "class": "SummonSpell",
+          "card": "minion_bloodfen_raptor"
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

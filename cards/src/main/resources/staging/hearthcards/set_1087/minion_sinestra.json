@@ -1,0 +1,24 @@
+{
+  "name": "Sinestra",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you summon\r\na minion, double its\r\nAttack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

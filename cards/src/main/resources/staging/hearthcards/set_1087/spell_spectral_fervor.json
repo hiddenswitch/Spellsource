@@ -1,0 +1,12 @@
+{
+  "name": "Spectral Fervor",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Give a minion +2 Attack.\r\nDraw a card.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

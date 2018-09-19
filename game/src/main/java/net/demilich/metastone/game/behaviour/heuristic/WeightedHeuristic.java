@@ -23,8 +23,8 @@ public class WeightedHeuristic implements Heuristic {
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			minionScore += 1.5f * baseScore;
 		}
-		if (minion.hasAttribute(Attribute.SPELL_DAMAGE)) {
-			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE);
+		if (minion.hasAttribute(Attribute.SPELL_DAMAGE) || minion.hasAttribute(Attribute.AURA_SPELL_DAMAGE)) {
+			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE) + minion.getAttributeValue(Attribute.AURA_SPELL_DAMAGE);
 		}
 		if (minion.hasAttribute(Attribute.ENRAGED)) {
 			minionScore += 1;
