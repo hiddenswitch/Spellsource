@@ -260,6 +260,10 @@ public enum Attribute {
 	 */
 	IMMUNE_WHILE_ATTACKING,
 	/**
+	 * An Aura version of {@link #IMMUNE_WHILE_ATTACKING}.
+	 */
+	AURA_IMMUNE_WHILE_ATTACKING,
+	/**
 	 * Marks that the {@link Actor} has a divine shield.
 	 * <p>
 	 * Divine shield causes the actor to take zero damage instead of the full damage it should receive the first time it
@@ -555,6 +559,10 @@ public enum Attribute {
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the complete damage implementation.
 	 */
 	TAKE_DOUBLE_DAMAGE,
+	/**
+	 * The Aura version of {@link #TAKE_DOUBLE_DAMAGE}
+	 */
+	AURA_TAKE_DOUBLE_DAMAGE,
 	/**
 	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is typically
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.

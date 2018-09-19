@@ -14,9 +14,12 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "BuffSpell",
-      "target": "ADJACENT_MINIONS",
-      "hpBonus": 2
+      "class": "AdjacentEffectSpell",
+      "target": "TRIGGER_HOST",
+      "spell2": {
+        "class": "BuffSpell",
+        "hpBonus": 2
+      }
     }
   },
   "collectible": true,

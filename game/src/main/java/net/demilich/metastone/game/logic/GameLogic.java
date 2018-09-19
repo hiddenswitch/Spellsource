@@ -1147,7 +1147,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 		int damageDealt = 0;
-		if (target.hasAttribute(Attribute.TAKE_DOUBLE_DAMAGE)) {
+		if (target.hasAttribute(Attribute.TAKE_DOUBLE_DAMAGE) || target.hasAttribute(Attribute.AURA_TAKE_DOUBLE_DAMAGE)) {
 			damage *= 2;
 		}
 		context.getDamageStack().push(damage);
@@ -1574,7 +1574,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			defender = target;
 		}
 
-		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
+		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING) || attacker.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING)) {
 			applyAttribute(attacker, Attribute.IMMUNE);
 		}
 
@@ -1608,7 +1608,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageType.PHYSICAL);
 		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageType.PHYSICAL);
 
-		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)) {
+		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING) || attacker.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING)) {
 			attacker.getAttributes().remove(Attribute.IMMUNE);
 		}
 

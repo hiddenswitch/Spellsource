@@ -1,9 +1,8 @@
-
 {
   "name": "Field Supplier",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 0,
   "baseHp": 8,
   "rarity": "EPIC",
@@ -11,9 +10,9 @@
   "aura": {
     "class": "AttributeAura",
     "target": "OTHER_FRIENDLY_MINIONS",
-    "attribute": "IMMUNE_WHILE_ATTACKING"
+    "attribute": "AURA_IMMUNE_WHILE_ATTACKING"
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

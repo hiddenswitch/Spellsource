@@ -8,24 +8,24 @@
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Has +1 Attack for each Knight in your hand.",
- "trigger": {
+  "trigger": {
     "eventTrigger": {
-      "class": "BoardChangedTrigger"
+      "class": "WillEndSequenceTrigger"
     },
     "spell": {
       "class": "ConditionalAttackBonusSpell",
       "target": "SELF",
       "value": {
-        "class": "HandSource",
-        "cardFilter": {
-          "class": "CardFilter",
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
+        "filter": {
           "class": "SpecificCardFilter",
           "card": "token_knight"
+        }
       }
     }
-      }
-},
-
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
+}

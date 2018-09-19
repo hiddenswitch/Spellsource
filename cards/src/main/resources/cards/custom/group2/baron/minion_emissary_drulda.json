@@ -8,20 +8,20 @@
   "rarity": "LEGENDARY",
   "race": "DRAGON",
   "description": "Battlecry: Transform your Knights in your hand into random Legendary minions.",
-
+  "battlecry": {
     "spell": {
-    "class": "TransformToRandomMinionSpell",
-    "target": "FRIENDLY_HAND",
-    "cardFilter": {
-      "class": "CardFilter",
-      "rarity": "LEGENDARY",
-      "cardType": "MINION"
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      },
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_knight"
+      }
     }
-          "filter": {
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
-
-
   },
   "attributes": {
     "BATTLECRY": true

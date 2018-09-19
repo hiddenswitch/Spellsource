@@ -10,66 +10,59 @@
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
+      "value": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+        }
+      },
       "spells": [
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
-    "value": {
-        "class": "HandSource",
-        "cardFilter": {
-          "class": "CardFilter",
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
-    },
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
           "filter": {
             "class": "SpecificCardFilter",
-            "cardId": "minion_cthun"
+            "card": "minion_cthun"
           }
         },
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_HAND",
-    "value": {
-        "class": "HandSource",
-        "cardFilter": {
-          "class": "CardFilter",
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
-    },
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
           "filter": {
             "class": "SpecificCardFilter",
-            "cardId": "minion_cthun"
+            "card": "minion_cthun"
           }
         },
         {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",
-    "value": {
-        "class": "HandSource",
-        "cardFilter": {
-          "class": "CardFilter",
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
-    },
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
           "attribute": "CTHUN_ATTACK_BUFF"
         },
         {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",
-    "value": {
-        "class": "HandSource",
-        "cardFilter": {
-          "class": "CardFilter",
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
-    },
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
           "attribute": "CTHUN_HEALTH_BUFF"
         }
       ]
     }
   },
-      }
-},
   "attributes": {
     "BATTLECRY": true
   },
