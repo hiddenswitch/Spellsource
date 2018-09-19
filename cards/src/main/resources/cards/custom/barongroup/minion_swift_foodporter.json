@@ -1,0 +1,25 @@
+{
+  "name": "Swift Foodporter",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "At the end of your turn, give adjacent minions +2 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "ADJACENT_MINIONS",
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

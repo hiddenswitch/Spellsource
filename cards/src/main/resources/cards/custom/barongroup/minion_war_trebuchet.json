@@ -1,0 +1,26 @@
+{
+  "name": "War Trebuchet",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "After you summon a minion, force it to attack a random enemy.",
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      }
+    },
+   "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+      "class": "FightSpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
