@@ -1,0 +1,17 @@
+{
+  "name": "Healing Honey",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Restore 6 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+	"target": "FRIENDLY_HERO",
+    "value": 6
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

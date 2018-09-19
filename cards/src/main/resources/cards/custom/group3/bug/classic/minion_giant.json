@@ -1,0 +1,25 @@
+{
+  "name": "Gi-Ant",
+  "baseManaCost": 15,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Costs (1) less for each Beast that died this game.",
+  "manaCostModifier": {
+    "class": "CardCountValueProvider",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "BEAST"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "targetPlayer": "BOTH"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

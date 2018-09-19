@@ -1,0 +1,25 @@
+{
+  "name": "Spider Surveillance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Draw a card. Summon a 1/1 Spiderling.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+	"spells": [
+	  {
+	    "class": "DrawCardSpell",
+		"value": 1
+	  },
+	  {
+	    "class": "SummonSpell",
+        "card": "token_spiderling"
+	  }
+	]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

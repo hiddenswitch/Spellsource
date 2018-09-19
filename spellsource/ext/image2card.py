@@ -73,15 +73,16 @@ class PageToImages(Iterable[str]):
 
 
 class Enricher(Iterable[Dict]):
-    def __init__(self, *card_descs: Dict):
+    def __init__(self, *card_descs: Dict, hero_class: Optional[str] = 'ANY'):
         self.card_descs = card_descs
+        self.hero_class = hero_class
 
     def __len__(self):
         return len(self.card_descs)
 
     def __iter__(self) -> Mapping:
         for card_desc in self.card_descs:
-            yield enrich_from_description(card_dict=deepcopy(card_desc), description=card_desc['description'])
+            yield enrich_from_description(card_dict=deepcopy(card_desc), description=card_desc['description'], hero_class=self.hero_class)
 
 
 class RekognitionGenerator(Iterable[DetectTextResponse]):
@@ -276,14 +277,23 @@ if __name__ == '__main__':
 
     parser = argparse.ArgumentParser()
     parser.add_argument('-u', '--url', required=True,
-                        help='The URL whose images should be scraped')
+                        help='The URL that is an image or a page whose images should be scraped')
     parser.add_argument('-d', '--directory', required=False,
                         default='./cards/src/main/resources/staging/scraped',
                         help='The directory to save the cards to')
+    parser.add_argument('-h', '--hero-class', required=False,
+                        default='ANY',
+                        help='The hero class to put into the cards')
     args = parser.parse_args()
     assert 'url' in args
     url = args.url
     makedirs(args.directory, exist_ok=True)
-    for card_desc in Enricher(*SpellsourceCardDescGenerator(*RekognitionGenerator(*PageToImages(url)))):
+    iterable = None
+    if len(url) > 4 and url[-4:] in ('.png', '.jpg'):
+        iterable = Enricher(*SpellsourceCardDescGenerator(*RekognitionGenerator(url)), hero_class=args.hero_class)
+    else:
+        iterable = Enricher(*SpellsourceCardDescGenerator(*RekognitionGenerator(*PageToImages(url))),
+                            hero_class=args.hero_class)
+    for card_desc in iterable:
         id = name_to_id(card_desc['name'], card_desc['type'])
         write_card(fix_card(card_desc), join(args.directory, id + '.json'))

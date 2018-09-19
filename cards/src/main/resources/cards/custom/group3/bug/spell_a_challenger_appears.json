@@ -1,0 +1,22 @@
+{
+  "name": "A Challenger Appears",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Choose a minion. Summon a 1/1 Spiderling to attack it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_spiderling",
+    "spell": {
+      "class": "FightSpell",
+      "target": "TARGET",
+      "secondaryTarget": "OUTPUT"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

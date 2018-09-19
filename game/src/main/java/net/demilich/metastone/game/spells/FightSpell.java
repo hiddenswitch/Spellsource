@@ -76,6 +76,11 @@ public class FightSpell extends Spell {
 				continue;
 			}
 
+			if (resolvedSource.equals(target)) {
+				logger.warn("onCast {} {}: Source {} is trying to attack itself, which is not allowed. Skipping.", context.getGameId(), source, resolvedSource);
+				continue;
+			}
+
 			if (resolvedSource instanceof Hero) {
 				// Activate the weapon if the hero has one
 				((Hero) resolvedSource).activateWeapon(true);

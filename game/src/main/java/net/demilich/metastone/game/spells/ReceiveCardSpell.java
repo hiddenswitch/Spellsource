@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -168,7 +169,9 @@ public class ReceiveCardSpell extends Spell {
 
 				if (card != null) {
 					context.getLogic().receiveCard(player.getId(), card);
-					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+					if (card.getZone() == Zones.HAND) {
+						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+					}
 				}
 			}
 		} else if (desc.containsKey(SpellArg.CARD) || desc.containsKey(SpellArg.CARDS)) {
@@ -186,7 +189,9 @@ public class ReceiveCardSpell extends Spell {
 						}
 						card = card.getCopy();
 						context.getLogic().receiveCard(player.getId(), card);
-						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+						if (card.getZone() == Zones.HAND) {
+							SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+						}
 					}
 				}
 			} else {
@@ -197,15 +202,18 @@ public class ReceiveCardSpell extends Spell {
 
 					final Card card = context.getLogic().removeRandom(receivableCards).getCopy();
 					context.getLogic().receiveCard(player.getId(), card);
-					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
-
+					if (card.getZone() == Zones.HAND) {
+						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+					}
 				}
 			}
 		} else if (target instanceof Card && target.getOwner() == player.getId()) {
 			// The card is being moved into the hand from somewhere
 			final Card card = (Card) target;
 			context.getLogic().receiveCard(player.getId(), card);
-			SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			if (card.getZone() == Zones.HAND) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			}
 		} else if (!(target instanceof Card)) {
 			logger.error("onCast {} {}: Attempting to receive non-Card target {}", context.getGameId(), source, target);
 		} else if (!(target.getOwner() == player.getId())) {

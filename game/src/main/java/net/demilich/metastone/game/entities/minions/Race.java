@@ -3,6 +3,7 @@ package net.demilich.metastone.game.entities.minions;
 public enum Race {
 	NONE,
 	BEAST,
+	BEAST_DRAGON,
 	MURLOC,
 	PIRATE,
 	DEMON,
@@ -19,6 +20,10 @@ public enum Race {
 
 		if (comparedTo == ALL
 				&& this != NONE) {
+			return true;
+		}
+
+		if (this == BEAST_DRAGON && (comparedTo == BEAST || comparedTo == DRAGON)) {
 			return true;
 		}
 

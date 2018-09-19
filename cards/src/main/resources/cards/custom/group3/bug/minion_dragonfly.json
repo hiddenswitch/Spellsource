@@ -1,0 +1,15 @@
+{
+  "name": "Dragonfly",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "BEAST_DRAGON",
+  "description": "Also counts as a Dragon.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

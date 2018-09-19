@@ -1,0 +1,29 @@
+{
+  "name": "Nursery Overseer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Transform all Spiderlings in your hand into Giant Spiders.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      },
+      "card": "minion_giant_spider"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

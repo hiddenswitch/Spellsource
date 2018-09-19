@@ -1,0 +1,19 @@
+{
+  "name": "Poison Dart",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Poisonous. Deal 1 damage.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1
+  },
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

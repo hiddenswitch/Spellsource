@@ -1,0 +1,17 @@
+{
+  "name": "Extreme Evolution",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Adapt a minion twice.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "CastFromGroupSpell",
+    "group": "group_adapt",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

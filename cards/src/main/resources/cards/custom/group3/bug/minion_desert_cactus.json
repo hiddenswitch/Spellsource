@@ -1,0 +1,29 @@
+{
+  "name": "Desert Cactus",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "description": "Damage dealt to this minion is also dealt to attackers.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "AfterPhysicalAttackTrigger",
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "EVENT_SOURCE",
+        "value": {
+          "class": "EventValueProvider"
+        }
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

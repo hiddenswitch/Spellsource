@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
 import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
 
 /**
@@ -664,7 +665,7 @@ public class SpellUtils {
 		}
 	}
 
-	protected static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
+	public static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
 				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
@@ -673,7 +674,17 @@ public class SpellUtils {
 						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
 	}
 
-	protected static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass) {
+	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (T) t)
+						.filter(((Predicate<Aura>) Aura::isExpired).negate()))
+				.collect(toList());
+	}
+
+	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
 				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()

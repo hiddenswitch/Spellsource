@@ -376,22 +376,6 @@ definitions:
         description: |
           A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
           otherwise specified.
-
-           - BROWN: Druid class.
-           - GREEN: Hunter class.
-           - BLUE: Mage class.
-           - GOLD: Paladin class.
-           - WHITE: Priest class.
-           - BLACK: Rogue class.
-           - SILVER: Shaman class.
-           - VIOLET: Warlock class.
-           - RED: Warrior class.
-           - JADE: Custom class.
-           - NAVY: Custom class.
-           - LEATHER: Custom class.
-           - RUST: Custom class.
-           - EGGPLANT: Custom class.
-           - ICE: Custom class.
         type: 'string'
         enum:
           - 'BROWN'
@@ -410,6 +394,7 @@ definitions:
           - 'EGGPLANT'
           - 'ICE'
           - 'OBSIDIAN'
+          - 'AMBER'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to

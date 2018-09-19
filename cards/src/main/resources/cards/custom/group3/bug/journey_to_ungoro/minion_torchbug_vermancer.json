@@ -1,0 +1,28 @@
+{
+  "name": "Torchbug Vermancer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Adapt a friendly Common minion.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "CastFromGroupSpell",
+      "filter": {
+        "class": "CardFilter",
+        "rarity": "COMMON"
+      },
+      "group": "group_adapt"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
