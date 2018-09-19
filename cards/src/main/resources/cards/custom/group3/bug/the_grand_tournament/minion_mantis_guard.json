@@ -1,0 +1,27 @@
+{
+  "name": "Mantis Lady",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Taunt. Your Common minions have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "rarity": "COMMON"
+    },
+    "attackBonus": 1,
+    "hpBonus": 0
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

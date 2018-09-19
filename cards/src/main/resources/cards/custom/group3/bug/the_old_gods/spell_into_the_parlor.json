@@ -1,0 +1,33 @@
+{
+  "name": "Into the Parlor",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Take control of an enemy minion. At the start of your turn, destroy it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+		"class": "MindControlSpell"
+      },
+      {
+		"class": "AddEnchantmentSpell",
+		"trigger": {
+		  "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DestroySpell",
+            "target": "SELF"
+          }
+        }
+      } 
+    ]
+  },	
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

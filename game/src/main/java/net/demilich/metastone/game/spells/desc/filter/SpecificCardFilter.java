@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.aura.SpecificCardFilterOverrideAura;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
@@ -41,7 +42,6 @@ public class SpecificCardFilter extends EntityFilter {
 				requiredCardId = target.getSourceCard().getCardId();
 			}
 		}
-
 
 		List<Aura> filterAuras = context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof SpecificCardFilterOverrideAura)

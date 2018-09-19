@@ -24,6 +24,7 @@ public enum HeroClass {
 	ICE,
 	SPIRIT,
 	OBSIDIAN,
+	AMBER,
 	SELF,
 	OPPONENT,
 	INHERIT;
@@ -62,6 +63,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_alder_ravenwald");
 			case OBSIDIAN:
 				return CardCatalogue.getCardById("hero_nerzhul");
+			case AMBER:
+				return CardCatalogue.getCardById("hero_zara");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

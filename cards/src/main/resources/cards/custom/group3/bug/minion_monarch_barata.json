@@ -1,0 +1,36 @@
+{
+  "name": "Monarch Barata",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 2,
+  "heroClass": "AMBER",
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Deathrattle: Give a random minion in your hand +1/+3 and this Deathrattle.",
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "deathrattle": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_HAND",
+    "randomTarget": true,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 1,
+        "hpBonus": 3
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "card": "enchantment_barata_monarchy"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

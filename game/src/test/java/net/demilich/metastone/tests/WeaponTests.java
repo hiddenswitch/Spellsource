@@ -14,21 +14,20 @@ public class WeaponTests extends TestBase {
 
 	@Test
 	public void testWeapon() {
-		DebugContext context = createContext(HeroClass.RED, HeroClass.RED);
-		Player player = context.getPlayer1();
-		Hero warrior = player.getHero();
+		runGym((context, player, opponent) -> {
+			Card weaponCard = CardCatalogue.getCardById("weapon_test_3_2");
 
-		Card weaponCard = CardCatalogue.getCardById("weapon_test_3_2");
+			Hero warrior = player.getHero();
+			context.setActivePlayerId(player.getId());
+			context.getLogic().startTurn(player.getId());
+			Assert.assertEquals(warrior.getAttack(), 0);
+			context.getLogic().receiveCard(player.getId(), weaponCard);
+			context.getLogic().performGameAction(player.getId(), weaponCard.play());
+			Assert.assertEquals(warrior.getAttack(), 3);
+			Assert.assertEquals(warrior.getWeapon().getDurability(), 2);
 
-		context.setActivePlayerId(player.getId());
-		context.getLogic().startTurn(player.getId());
-		Assert.assertEquals(warrior.getAttack(), 0);
-		context.getLogic().receiveCard(player.getId(), weaponCard);
-		context.getLogic().performGameAction(player.getId(), weaponCard.play());
-		Assert.assertEquals(warrior.getAttack(), 3);
-		Assert.assertEquals(warrior.getWeapon().getDurability(), 2);
-
-		attack(context, player, warrior, context.getPlayer2().getHero());
-		Assert.assertEquals(warrior.getWeapon().getDurability(), 1);
+			attack(context, player, warrior, context.getPlayer2().getHero());
+			Assert.assertEquals(warrior.getWeapon().getDurability(), 1);
+		}, HeroClass.RED, HeroClass.RED);
 	}
 }

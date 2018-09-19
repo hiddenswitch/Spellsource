@@ -102,7 +102,8 @@ def enrich_from_description(card_dict: Mapping,
                             description: str,
                             card_attack: Optional[Union[str, int]] = None,
                             card_health: Optional[Union[str, int]] = None,
-                            card_type: Optional[str] = None):
+                            card_type: Optional[str] = None,
+                            hero_class: Optional[str] = None):
     card_dict['attributes'] = attributes = {}
     spell = {
         'class': 'BuffSpell',
@@ -341,6 +342,8 @@ def enrich_from_description(card_dict: Mapping,
             'class': 'CardPlayedTrigger',
             'targetPlayer': 'SELF'
         }
+    if hero_class is not None:
+        card_dict['heroClass'] = hero_class
     return card_dict
 
 

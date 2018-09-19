@@ -1,0 +1,28 @@
+{
+  "name": "Prophet Skeram",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Replace all Spiderlings in your hand with Silithid Wasps.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      },
+      "card": "minion_silithid_wasp"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

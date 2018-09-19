@@ -1,0 +1,20 @@
+{
+  "name": "Infested Murloc",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon a 1/1 Spiderling.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_spiderling"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

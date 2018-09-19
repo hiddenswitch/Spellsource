@@ -1,0 +1,24 @@
+{
+  "name": "Broodspawn",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "At the end of your turn, summon a Broodspawn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_broodspawn"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

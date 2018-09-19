@@ -1,0 +1,35 @@
+{
+  "name": "Qiraji Guardian",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Has +1/+1 for each other Common minion on the battlefield.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "SELF",
+    "attackBonus": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "CardFilter",
+        "rarity": "COMMON"
+      },
+      "offset": -1
+    },
+    "hpBonus": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "CardFilter",
+        "rarity": "COMMON"
+      },
+      "offset": -1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

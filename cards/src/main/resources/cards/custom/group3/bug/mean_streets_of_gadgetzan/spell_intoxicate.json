@@ -1,0 +1,31 @@
+{
+  "name": "Intoxicate",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Give a minion and a random minion in your hand Poisonous.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "POISONOUS"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "POISONOUS",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

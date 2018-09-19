@@ -1,0 +1,26 @@
+{
+  "name": "Dinner Time",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Deal 3 damage. Give your minions +1/+1.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+		"class": "BuffSpell",
+		"target": "FRIENDLY_MINIONS",
+		"value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

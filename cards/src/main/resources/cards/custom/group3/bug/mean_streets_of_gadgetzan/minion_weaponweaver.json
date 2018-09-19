@@ -1,0 +1,29 @@
+{
+  "name": "Weaponweaver",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Give a random minion in your hand Poisonous.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "POISONOUS",
+	  "target": "FRIENDLY_HAND",
+	  "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+	  "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
