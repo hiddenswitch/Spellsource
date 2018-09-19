@@ -14,7 +14,7 @@
       "cards": [
         "token_whelp",
         "token_whelp"
-      },
+      ],
       {
         "class": "DrawCardSpell",
         "value": 4
