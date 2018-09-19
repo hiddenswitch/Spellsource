@@ -12,6 +12,17 @@ This is a simulator and game server for community and official Hearthstone cards
 
 Please see the Issues tab to report bugs or request functionality.
 
+### Contents
+
+ 1. [Description](#description)
+ 2. [Quick Start Python](#quick-start-python)
+ 3. [Quick Start Multiplayer](#quick-start-multiplayer)
+ 4. [Quick Start Contributing Cards](#quick-start-contributing-cards)
+ 5. [Using the Command Line Simulator](#using-the-command-line-simulator)
+ 6. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
+ 7. [Troubleshooting](#troubleshooting)
+ 8. [Contributing Cards](#contributing-cards)
+
 ### Description
 
 The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained Hearthstone simulator, to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, plus hundreds of community cards.
