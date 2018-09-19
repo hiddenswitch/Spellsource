@@ -1,0 +1,24 @@
+
+{
+  "name": "Warfare Training",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Draw a card for each Knight in your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+        "class": "HandSource",
+        "cardFilter": {
+          "class": "CardFilter",
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,25 @@
+{
+  "name": "Echo of Aldus",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon two copies of a minion.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+   "targetSelection": "ALL_MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 2
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1
+}
