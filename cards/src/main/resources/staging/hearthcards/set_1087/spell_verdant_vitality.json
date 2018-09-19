@@ -1,0 +1,12 @@
+{
+  "name": "Verdant Vitality",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Give a minion +2/+4 and restore them\r\nto full Health.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

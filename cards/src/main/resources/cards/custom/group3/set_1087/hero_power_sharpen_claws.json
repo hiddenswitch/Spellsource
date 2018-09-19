@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "RUST",
   "rarity": "FREE",
-  "description": "Hero Power: Restore 1 Health and give the character +1 Attack this turn.",
+  "description": "Hero Power: Restore #1 Health and give the character +1 Attack this turn.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",

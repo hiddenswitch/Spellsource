@@ -8,17 +8,14 @@
   "rarity": "RARE",
   "description": "Battlecry: If you have 10 Mana Crystals, restore #10 Health to your hero.",
   "battlecry": {
+    "condition": {
+      "class": "ManaMaxedCondition"
+    },
     "targetSelection": "NONE",
     "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "ManaMaxedCondition"
-      },
-      "spell": {
-        "class": "HealSpell",
-        "target": "FRIENDLY_HERO",
-        "value": 10
-      }
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 10
     }
   },
   "attributes": {

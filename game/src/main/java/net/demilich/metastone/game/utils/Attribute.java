@@ -181,6 +181,10 @@ public enum Attribute {
 	 */
 	SPELL_DAMAGE,
 	/**
+	 * The aura version of spell damage.
+	 */
+	AURA_SPELL_DAMAGE,
+	/**
 	 * Some cards give the opponent spell damage. This attribute stores how much.
 	 */
 	OPPONENT_SPELL_DAMAGE,
@@ -868,19 +872,24 @@ public enum Attribute {
 	 * Implements Alder Ravenwald / Supremacy hero.
 	 */
 	SUPREMACY,
-	/*
+	/**
 	 * Implements Electra Stormsurge.
 	 */
 	SPELLS_CAST_TWICE,
-	/*
+	/**
 	 * The simplest and least buggy way to implement Fangs of Ashmane
 	 */
 	ATTACK_MULTIPLIER,
-	/*
+	/**
+	 * When non-zero, multiplies the {@link #ATTACK_BONUS}, {@link #TEMPORARY_ATTACK_BONUS}, {@link #AURA_ATTACK_BONUS}
+	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount.
+	 */
+	ATTACK_BONUS_MULTIPLIER,
+	/**
 	 * Will block an entity from receiving game event triggers
 	 */
 	CANT_GAIN_ENCHANTMENTS,
-	/*
+	/**
 	 * Indicates a character shouldn't naturally lose the FROZEN attribute
 	 */
 	FREEZES_PERMANENTLY,

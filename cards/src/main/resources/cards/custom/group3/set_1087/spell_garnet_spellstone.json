@@ -1,0 +1,32 @@
+{
+  "name": "Garnet Spellstone",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Give your minions +3/+3. (Deal 7 damage with your hero to upgrade).",
+  "passiveTrigger": {
+    "countUntilCast": 7,
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_greater_garnet_spellstone"
+    },
+    "countByValue": true,
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 3,
+    "hpBonus": 3
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

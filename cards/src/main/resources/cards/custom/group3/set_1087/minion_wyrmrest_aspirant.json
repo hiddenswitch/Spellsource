@@ -2,12 +2,14 @@
   "name": "Wyrmrest Aspirant",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
   "description": "Double any Attack this minion gains.",
-  "attributes": {},
+  "attributes": {
+    "ATTACK_BONUS_MULTIPLIER": 2
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

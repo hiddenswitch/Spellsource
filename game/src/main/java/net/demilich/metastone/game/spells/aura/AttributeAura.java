@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.aura;
 
 import net.demilich.metastone.game.spells.AddAttributeSpell;
+import net.demilich.metastone.game.spells.ModifyAttributeSpell;
 import net.demilich.metastone.game.spells.RemoveAttributeSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -39,5 +40,3 @@ public class AttributeAura extends Aura {
 		setDesc(desc);
 	}
 }
-
-

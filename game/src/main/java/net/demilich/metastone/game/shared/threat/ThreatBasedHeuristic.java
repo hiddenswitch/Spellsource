@@ -133,6 +133,9 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		if (minion.hasAttribute(Attribute.SPELL_DAMAGE)) {
 			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE) * weights.get(WeightedFeature.MINION_SPELL_POWER_MODIFIER);
 		}
+		if (minion.hasAttribute(Attribute.AURA_SPELL_DAMAGE)) {
+			minionScore += minion.getAttributeValue(Attribute.AURA_SPELL_DAMAGE) * weights.get(WeightedFeature.MINION_SPELL_POWER_MODIFIER);
+		}
 
 		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
 			minionScore += weights.get(WeightedFeature.MINION_STEALTHED_MODIFIER);

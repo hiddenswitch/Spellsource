@@ -1,0 +1,26 @@
+{
+  "name": "Majestic Fennec",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "[b]Taunt[/b]\r\n[b]Battlecry:[/b] Restore\r\n4 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

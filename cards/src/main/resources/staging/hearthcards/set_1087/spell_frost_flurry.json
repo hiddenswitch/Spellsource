@@ -2,37 +2,9 @@
   "name": "Frost Flurry",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "SILVER",
+  "heroClass": "RUST",
   "rarity": "RARE",
-  "description": "Deal $4 damage to a random enemy minion. [b]Supremacy:[/b] Cast\r\nthis again.",
-  "targetSelection": "NONE",
-  "spell": {
-    "class": "ConditionalEffectSpell",
-    "target": "ENEMY_MINIONS",
-    "randomTarget": true,
-    "spell1": {
-      "class": "DamageSpell",
-      "value": 4
-    },
-    "condition": {
-      "class": "IsDeadCondition"
-    },
-    "spell2": {
-      "class": "RecastWhileSpell",
-      "condition": {
-        "class": "IsDeadCondition"
-      },
-      "spell": {
-        "class": "SupremacySpell",
-        "spell": {
-          "class": "DamageSpell",
-          "target": "ENEMY_MINIONS",
-          "randomTarget": true,
-          "value": 4
-        }
-      }
-    }
-  },
+  "description": "Deal 4 damage to a random enemy minion. [b]Supremacy:[/b] Cast\r\nthis again.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

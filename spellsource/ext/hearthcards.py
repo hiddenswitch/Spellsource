@@ -344,14 +344,14 @@ def enrich_from_description(card_dict: Mapping,
     return card_dict
 
 
-def write_set_stubs(set_id: int, dest_dir: str):
+def write_set_stubs(set_id: int, dest_dir: str, hero_class: str):
     basedir = os.path.join(dest_dir, 'set_' + str(set_id))
     try:
         os.makedirs(basedir)
     except:
         pass
     for card in HearthcardsCardDownloader(set_num=set_id):
-        out_card = fix_dict(from_hearthcard_to_spellsource(card, hero_class='SILVER'))
+        out_card = fix_dict(from_hearthcard_to_spellsource(card, hero_class=hero_class))
         write_card(card=out_card,
                    filepath=os.path.join(basedir, name_to_id(
                        out_card['name'],
@@ -367,8 +367,11 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--directory', required=False,
                         default='./cards/src/main/resources/staging/hearthcards',
                         help='The directory to save the cards to')
+    parser.add_argument('-c', '--hero-class', required=False,
+                        default='SILVER',
+                        help='The hero class to write into the cards')
     args = parser.parse_args()
     assert 'set' in args
     set_id = int(args.set)
     assert set_id is not None and set_id != 0
-    write_set_stubs(set_id, dest_dir=args.directory)
+    write_set_stubs(set_id, dest_dir=args.directory, hero_class=args.hero_class)

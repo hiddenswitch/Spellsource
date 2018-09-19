@@ -1,0 +1,23 @@
+{
+  "name": "Aspect Awakening",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Discover and summon a Familiar Aspect.",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
+    "cards": [
+      "token_alniaxtrasza",
+      "token_zavathion",
+      "token_rylvagos"
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

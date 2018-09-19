@@ -1,15 +1,15 @@
 {
-  "name": "Cult Reverend",
+  "name": "Rousing Commander",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "SILVER",
-  "baseAttack": 4,
-  "baseHp": 3,
-  "rarity": "COMMON",
-  "description": "Whenever a character gains an Attack, give your C'Thun +1/+1\r\n[i](wherever[/i] [i]it[/i] [i]is)[/i].",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "[b][b]Inspire:[/b][/b] Give your characters +1 Attack \r\nthis turn.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
+      "class": "InspireTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
@@ -20,7 +20,7 @@
     }
   },
   "attributes": {},
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

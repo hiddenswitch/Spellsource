@@ -1,0 +1,12 @@
+{
+  "name": "Eye of The Dragon",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "FREE",
+  "description": "Give your characters \r\n+1 Attack this turn.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Underminer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Can't be targeted by\r\nspells or Hero Powers.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

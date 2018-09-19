@@ -8,17 +8,14 @@
   "rarity": "EPIC",
   "description": "Battlecry: If you have 10 Mana Crystals, summon 2 copies of this minion.",
   "battlecry": {
+    "condition": {
+      "class": "ManaMaxedCondition"
+    },
     "targetSelection": "NONE",
     "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "ManaMaxedCondition"
-      },
-      "spell": {
-        "class": "SummonCopySpell",
-        "target": "SELF",
-        "value": 2
-      }
+      "class": "SummonSpell",
+      "target": "SELF",
+      "value": 2
     }
   },
   "attributes": {

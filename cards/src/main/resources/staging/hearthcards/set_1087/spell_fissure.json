@@ -1,0 +1,12 @@
+{
+  "name": "Fissure",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Destroy the lowest Attack minion on \r\nthe battlefield.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

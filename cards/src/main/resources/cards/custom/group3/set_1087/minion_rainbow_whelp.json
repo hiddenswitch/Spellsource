@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Battlecry: If you control another Dragon, restore 3 Health to your hero.",
+  "description": "Battlecry: If you control another Dragon, restore #3 Health to your hero.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",
