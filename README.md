@@ -54,7 +54,7 @@ Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
- 1. Install the Java JDK from [Oracle's website](http://www.oracle
+ 1. Install the Java JDK from [Oracle's website](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
  2. Clone this repository.
  3. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
