@@ -8,13 +8,11 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Summon two copies of a minion.",
   "battlecry": {
-    "condition": {
-      "class": "ComboCondition"
-    },
-   "targetSelection": "ALL_MINIONS",
-  "spell": {
-    "class": "SummonSpell",
-    "value": 2
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 2
+    }
   },
   "attributes": {
     "BATTLECRY": true

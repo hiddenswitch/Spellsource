@@ -1,4 +1,3 @@
-
 {
   "name": "Luteflayer",
   "baseManaCost": 6,
@@ -10,7 +9,7 @@
   "description": "Your leftmost minion has +3/+3.",
   "aura": {
     "class": "BuffAura",
-    "target": "LEFTMOST_ENEMY_MINION"",
+    "target": "LEFTMOST_FRIENDLY_MINION",
     "attackBonus": 3,
     "hpBonus": 3
   },

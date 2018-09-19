@@ -975,7 +975,7 @@ public interface Games extends Verticle {
 				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
 		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
 		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE) || actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
-		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING));
+		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.AURA_IMMUNE));
 		entityState.stealth(actor.hasAttribute(Attribute.STEALTH) || actor.hasAttribute(Attribute.AURA_STEALTH));
 		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) || actor.hasAttribute(Attribute.AURA_TAUNT));
 		entityState.divineShield(actor.hasAttribute(Attribute.DIVINE_SHIELD));

@@ -7,20 +7,22 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "description": "After you summon a minion, force it to attack a random enemy.",
+  "trigger": {
     "eventTrigger": {
       "class": "AfterMinionSummonedTrigger",
-      }
+      "targetPlayer": "SELF"
     },
-   "spell": {
+    "spell": {
       "class": "TargetToSourceSecondaryToTargetSpell",
       "target": "EVENT_TARGET",
       "spell": {
-      "class": "FightSpell",
-      "target": "ENEMY_MINIONS",
-      "randomTarget": true
+        "class": "FightSpell",
+        "target": "ENEMY_MINIONS",
+        "randomTarget": true
+      }
     }
   },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

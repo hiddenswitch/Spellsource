@@ -8,14 +8,16 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Enemy minions take double damage this game",
   "battlecry": {
-   "spell": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "aura": {
-      "class": "Aura",
-      "target": "ENEMY_MINIONS",
-      "applyEffect": {
-      "attribute": "TAKE_DOUBLE_DAMAGE"
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "AttributeAura",
+        "target": "ENEMY_MINIONS",
+        "attribute": "AURA_TAKE_DOUBLE_DAMAGE"
+      }
+    },
+    "targetSelection": "NONE"
   },
   "attributes": {
     "BATTLECRY": true

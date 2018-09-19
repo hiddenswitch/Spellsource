@@ -8,16 +8,17 @@
   "rarity": "EPIC",
   "description": "Battlecry: Summon a 2/2 Knight for every Knight in your hand.",
   "battlecry": {
-  "spell": {
-    "class": "SummonSpell",
-    "value": {
-        "class": "HandSource",
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "CardCountValueProvider",
         "cardFilter": {
-          "class": "CardFilter",
           "class": "SpecificCardFilter",
           "card": "token_knight"
-    },
-    "card": "token_baron_knight"
+        }
+      },
+      "card": "token_knight"
+    }
   },
   "attributes": {
     "BATTLECRY": true
@@ -25,3 +26,4 @@
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
+}
