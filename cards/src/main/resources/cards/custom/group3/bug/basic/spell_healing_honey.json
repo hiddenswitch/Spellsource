@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",
-	"target": "FRIENDLY_HERO",
+    "target": "FRIENDLY_HERO",
     "value": 6
   },
   "collectible": true,

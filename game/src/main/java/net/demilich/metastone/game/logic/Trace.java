@@ -14,6 +14,19 @@ import java.util.List;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 
+/**
+ * Stores information about a game context that allows you to reproduce exactly what happened in the match.
+ * <p>
+ * Given the seed, starting conditions and index of each action in the available actions that a player chose, the game
+ * will reproduce.
+ *
+ * @see #dump() to create a string you can save and later load.
+ * @see #load(String) to recreate this object from a dumped string.
+ * @see #replayContext(boolean) to replay a context after loading it from a string. Provide {@code skipLastAction: true}
+ * 		as the argument if the last action throws an exception (useful for debugging).
+ * @see #getRawActions() to iterate through the actions that were taken in the game. This is <b>not</b> restored by the
+ * 		trace, while the integer actions themselves in {@link #getActions()} are.
+ */
 public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
 	private GameState gameState;
@@ -112,5 +125,9 @@ public class Trace implements Serializable, Cloneable {
 		} catch (Exception ex) {
 			return null;
 		}
+	}
+
+	public List<GameAction> getRawActions() {
+		return rawActions;
 	}
 }

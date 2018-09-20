@@ -10,12 +10,12 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-	   "class": "ReceiveCardSpell",
-	   "cards": [
-	   "token_spiderling",
-	   "token_whelpling",
-	   "token_murkling"
-	   ]
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_spiderling",
+        "token_whelpling",
+        "token_murkling"
+      ]
     }
   },
   "attributes": {

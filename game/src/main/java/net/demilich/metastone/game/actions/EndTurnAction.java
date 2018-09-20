@@ -3,6 +3,7 @@ package net.demilich.metastone.game.actions;
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.util.Collections;
@@ -16,7 +17,10 @@ import java.util.List;
  */
 public class EndTurnAction extends GameAction {
 
-	public EndTurnAction() {
+	private int playerId;
+
+	public EndTurnAction(int playerId) {
+		this.playerId = playerId;
 		setActionType(ActionType.END_TURN);
 		setTargetRequirement(TargetSelection.NONE);
 	}
@@ -34,7 +38,7 @@ public class EndTurnAction extends GameAction {
 
 	@Override
 	public Entity getSource(GameContext context) {
-		return context.getActivePlayer().getHero();
+		return context.getPlayer(playerId).getHero();
 	}
 
 	@Override

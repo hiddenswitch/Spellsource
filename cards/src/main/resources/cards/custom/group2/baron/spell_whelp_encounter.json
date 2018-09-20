@@ -11,11 +11,11 @@
     "spells": [
       {
         "class": "SummonSpell",
-        "targetPlayer": "OPPONENT",
         "cards": [
           "token_whelp",
           "token_whelp"
-        ]
+        ],
+        "targetPlayer": "OPPONENT"
       },
       {
         "class": "DrawCardSpell",

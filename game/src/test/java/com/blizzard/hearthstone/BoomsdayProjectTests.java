@@ -1,5 +1,6 @@
 package com.blizzard.hearthstone;
 
+import net.demilich.metastone.game.actions.PlayChooseOneCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -734,9 +735,26 @@ public class BoomsdayProjectTests extends TestBase {
 			playCardWithTarget(context, player, "spell_topsy_turvy", player.getMinions().get(1));
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getHand().size(), 3);
-
 		});
-
 	}
 
+	@Test
+	public void testTestSubjectChooseOne() {
+		runGym((context, player, opponent) -> {
+			Minion subject = playMinionCard(context, player, "minion_boomsday_test_subject");
+			Card starfall = receiveCard(context, player, "spell_starfall");
+			player.setMana(starfall.getBaseManaCost());
+			PlayChooseOneCardAction choice = context.getValidActions().stream()
+					.filter(c -> c instanceof PlayChooseOneCardAction)
+					.map(PlayChooseOneCardAction.class::cast)
+					.filter(f -> f.getChoiceCardId().equals("spell_starfall_1") && f.getTargetReference().equals(subject.getReference()))
+					.findFirst()
+					.orElseThrow(NullPointerException::new);
+
+			context.getLogic().performGameAction(player.getId(), choice);
+			assertTrue(subject.isDestroyed());
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_starfall");
+		});
+	}
 }

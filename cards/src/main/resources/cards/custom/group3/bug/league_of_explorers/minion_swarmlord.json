@@ -11,21 +11,21 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RecruitSpell",
-      "cardLocation": "HAND",
-      "targetPlayer": "SELF",
       "value": {
         "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
         "value1": 7,
         "value2": {
           "class": "EntityCounter",
           "target": "FRIENDLY_MINIONS"
-        },
-        "operation": "SUBTRACT"
+        }
       },
       "cardFilter": {
         "class": "SpecificCardFilter",
         "card": "token_spiderling"
-      }
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

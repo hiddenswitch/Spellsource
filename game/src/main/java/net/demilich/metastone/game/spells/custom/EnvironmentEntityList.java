@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.environment.EnvironmentValue;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -59,7 +60,13 @@ public class EnvironmentEntityList implements EnvironmentValue, Serializable {
 		}
 		data.get(source.getReference())
 				.stream()
-				.map(context::resolveSingleTarget)
+				.map(ref -> context.resolveSingleTarget(ref, false))
+				.map(e -> {
+					if (e.hasAttribute(Attribute.CHOICE_SOURCE)) {
+						return context.resolveSingleTarget((EntityReference) e.getAttribute(Attribute.CHOICE_SOURCE));
+					}
+					return e;
+				})
 				.map(Entity::getSourceCard)
 				.map(e -> (Card) e.transformResolved(context))
 				.forEach(cards::addCard);

@@ -18,11 +18,11 @@
         "class": "ConditionalValueProvider",
         "condition": {
           "class": "MinionOnBoardCondition",
+          "value": 2,
           "cardFilter": {
             "class": "CardFilter",
             "rarity": "COMMON"
-          },
-          "value": 2
+          }
         },
         "ifFalse": 0,
         "ifTrue": 2

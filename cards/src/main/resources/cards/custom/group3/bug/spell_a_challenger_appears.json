@@ -8,12 +8,12 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SummonSpell",
-    "card": "token_spiderling",
     "spell": {
       "class": "FightSpell",
       "target": "TARGET",
       "secondaryTarget": "OUTPUT"
-    }
+    },
+    "card": "token_spiderling"
   },
   "attributes": {},
   "collectible": true,

@@ -14,9 +14,9 @@
         "value": 2
       },
       {
-		"class": "BuffSpell",
-		"target": "FRIENDLY_MINIONS",
-		"value": 1
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 1
       }
     ]
   },

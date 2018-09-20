@@ -11,11 +11,11 @@
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 2,
       "filter": {
         "class": "HasAttackedFilter"
       },
-      "hpBonus": 2,
-      "attackBonus": 2
+      "hpBonus": 2
     }
   },
   "attributes": {

@@ -13,11 +13,11 @@
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
+      "card": "minion_giant_spider",
       "filter": {
         "class": "SpecificCardFilter",
         "card": "token_spiderling"
-      },
-      "card": "minion_giant_spider"
+      }
     }
   },
   "attributes": {

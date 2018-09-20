@@ -8,8 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "CastFromGroupSpell",
-    "group": "group_adapt",
-    "value": 2
+    "value": 2,
+    "group": "group_adapt"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -9,7 +9,7 @@
   "race": "BEAST",
   "description": "Charge. Poisonous",
   "attributes": {
-	"CHARGE": true,
+    "CHARGE": true,
     "POISONOUS": true
   },
   "collectible": false,
