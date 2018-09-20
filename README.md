@@ -12,11 +12,27 @@ This is a simulator and game server for community and official Hearthstone cards
 
 Please see the Issues tab to report bugs or request functionality.
 
+### Contents
+
+ 1. [Description](#description)
+ 2. [AI Research FAQ](#ai-research-faq)
+ 3. [Quick Start Python](#quick-start-python)
+ 4. [Quick Start Multiplayer](#quick-start-multiplayer)
+ 5. [Quick Start Contributing Cards](#quick-start-contributing-cards)
+ 6. [Using the Command Line Simulator](#using-the-command-line-simulator)
+ 7. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
+ 8. [Troubleshooting](#troubleshooting)
+ 9. [Contributing Cards](#contributing-cards)
+
 ### Description
 
 The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained Hearthstone simulator, to fully support hosted, networked gameplay. It features rudimentary matchmaking, collection management and support for game mechanics that persist between matches. It currently covers 100% of Hearthstone cards, with a handful of bugs, plus hundreds of community cards.
 
 The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
+
+### AI Research FAQ
+
+Please visit [this FAQ](docs/faq.ipynb) for an example of interactively playing a match in Python using Spellsource. This example can help you get started poking around Spellsource.
 
 ### Quick Start Python
 
@@ -54,7 +70,7 @@ Visit [`GameStateValueBehaviour`](spellsource/gamestatevaluebehaviour.py) to see
 
 If you'd like to **contributed or edit cards**, **write new game mechanics** or **improve the server**, follow these instructions to install and run the server:
 
- 1. Install the Java JDK from [Oracle's website](http://www.oracle
+ 1. Install the Java JDK from [Oracle's website](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html)
  2. Clone this repository.
  3. To run the server locally, execute the following on a command prompt:
     * Linux/Mac OS X: Run `./gradlew net:local`.
@@ -123,6 +139,10 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
 
 On Windows, delete the `%APPDATA%\Electron` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Electron`)*.
 
+**I receive an error about Weaponized Piñata when I try to run tests while contributing cards on Windows.**
+
+This message can be safely ignored.
+
 ### Contributing Cards
 
 Contributing cards consists of writing specially-crafted JSON files into the `cards` directories and writing tests for them.
@@ -190,7 +210,7 @@ Let's run through a complete example of implementing a card, "Exampler" that rea
 
     Visit other tests to see how more complex cards are tested. An example of modifying random outcomes can be found in [`TheOldGodsTests#testYoggSaronHopesEnd`](/game/src/test/java/com/blizzard/hearthstone/TheOldGodsTests.java). For an example of overriding a discover action, see [`JourneyToUngoroTests#testFreeFromAmber()`](game/src/test/java/com/blizzard/hearthstone/JourneyToUngoroTests.java).
 
- 6. Run your tests by executing `./gradlew game:test` on Mac or `gradlew.bat game:test` on Windows from a command line. You should receive no errors. If the engine has an issue parsing your card, you'll see an error in `CardValidationTests` with your card name specified.
+ 6. Run your tests by executing `./gradlew game:test` on Mac or `gradlew.bat game:test` on Windows from a command line. If the engine has an issue parsing your card, you'll see an error in `CardValidationTests` with your card name specified. Other errors may occur due to differences in how projects run on Windows versus macOS; check the messages carefully for errors about your cards. If you don't see any about your cards, and you didn't change anything about other cards, you can safely proceed. For example, you can ignore issues related to "Weaponized Piñata" on Windows, because Windows does not read the "ñ" character correctly.
 
  7. To play with the card, start the server and client using the instructions in the Quick Start guide.
 
