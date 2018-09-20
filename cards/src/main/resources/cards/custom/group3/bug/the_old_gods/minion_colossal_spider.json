@@ -9,8 +9,8 @@
   "race": "BEAST",
   "description": "Taunt. Poisonous.",
   "attributes": {
-    "TAUNT": true,
-	"POISONOUS": true
+    "POISONOUS": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

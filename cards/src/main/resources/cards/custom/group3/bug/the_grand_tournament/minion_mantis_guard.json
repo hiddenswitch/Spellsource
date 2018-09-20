@@ -10,12 +10,12 @@
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
     "filter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "rarity": "COMMON"
+      "rarity": "COMMON",
+      "cardType": "MINION"
     },
-    "attackBonus": 1,
     "hpBonus": 0
   },
   "attributes": {

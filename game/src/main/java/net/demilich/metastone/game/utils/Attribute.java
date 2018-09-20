@@ -25,6 +25,14 @@ public enum Attribute {
 	 */
 	BASE_MANA_COST,
 	/**
+	 * Indicates that this {@link Card} costs health instead of mana when played from the hand.
+	 */
+	COSTS_HEALTH_INSTEAD_OF_MANA,
+	/**
+	 * An Aura version of {@link #COSTS_HEALTH_INSTEAD_OF_MANA}.
+	 */
+	AURA_COSTS_HEALTH_INSTEAD_OF_MANA,
+	/**
 	 * The number of hit points the {@link Actor} currently has.
 	 */
 	HP,
@@ -915,7 +923,12 @@ public enum Attribute {
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,
 	RESERVED_BOOLEAN_3,
-	RESERVED_BOOLEAN_4, SUPREMACIES_THIS_GAME;
+	RESERVED_BOOLEAN_4,
+	SUPREMACIES_THIS_GAME,
+	/**
+	 * Records the {@link EntityReference} of this choose one spell card's source card.
+	 */
+	CHOICE_SOURCE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

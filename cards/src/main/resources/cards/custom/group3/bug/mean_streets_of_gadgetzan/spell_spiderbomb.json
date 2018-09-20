@@ -8,16 +8,16 @@
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
-	"spells": [
-	  {
-	    "class": "DamageSpell",
-		"value": 3
-	  },
-	  {
-	    "class": "SummonSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "SummonSpell",
         "card": "token_spiderling"
-	  }
-	]
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -21,6 +21,11 @@ public abstract class BaseMap<K extends Enum<K>, V> extends EnumMap<K, V> {
 		super(m);
 	}
 
+	@Override
+	public String toString() {
+		return super.toString();
+	}
+
 	/* TODO: To switch to a different implementation, re-enable this
 	@Override
 	public V getOrDefault(Object key, V defaultValue) {

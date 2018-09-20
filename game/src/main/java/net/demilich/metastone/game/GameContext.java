@@ -969,6 +969,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                              that cannot be found.
 	 */
 	public Entity resolveSingleTarget(EntityReference targetKey) throws NullPointerException {
+		return resolveSingleTarget(targetKey, true);
+	}
+
+	public Entity resolveSingleTarget(EntityReference targetKey, boolean rejectRemovedFromPlay) {
 		if (targetKey == null) {
 			return null;
 		}
@@ -976,7 +980,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		final Entity entity = targetLogic.findEntity(this, targetKey).transformResolved(this);
 
 		// TODO: Better inspect and test what causes these issues (Auras being removed from transformed entities?)
-		if (entity.getZone() == Zones.REMOVED_FROM_PLAY) {
+		if (rejectRemovedFromPlay && entity.getZone() == Zones.REMOVED_FROM_PLAY) {
 			throw new TargetNotFoundException("Invalid reference.");
 		}
 

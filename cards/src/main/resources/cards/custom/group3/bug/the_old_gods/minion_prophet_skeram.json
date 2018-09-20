@@ -12,11 +12,11 @@
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
+      "card": "minion_silithid_wasp",
       "filter": {
         "class": "SpecificCardFilter",
         "card": "token_spiderling"
-      },
-      "card": "minion_silithid_wasp"
+      }
     }
   },
   "attributes": {

@@ -15,8 +15,8 @@
       },
       {
         "class": "AddAttributeSpell",
-        "attribute": "POISONOUS",
         "target": "FRIENDLY_HAND",
+        "attribute": "POISONOUS",
         "filter": {
           "class": "CardFilter",
           "cardType": "MINION"

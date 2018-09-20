@@ -11,13 +11,13 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HAND",
       "attribute": "POISONOUS",
-	  "target": "FRIENDLY_HAND",
-	  "filter": {
+      "filter": {
         "class": "CardFilter",
         "cardType": "MINION"
       },
-	  "randomTarget": true
+      "randomTarget": true
     }
   },
   "attributes": {

@@ -8,16 +8,16 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
-	"spells": [
-	  {
-	    "class": "DrawCardSpell",
-		"value": 1
-	  },
-	  {
-	    "class": "SummonSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "SummonSpell",
         "card": "token_spiderling"
-	  }
-	]
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

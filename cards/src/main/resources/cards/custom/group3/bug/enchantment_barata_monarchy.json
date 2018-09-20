@@ -7,11 +7,11 @@
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_HAND",
-    "randomTarget": true,
     "filter": {
       "class": "CardFilter",
       "cardType": "MINION"
     },
+    "randomTarget": true,
     "spells": [
       {
         "class": "BuffSpell",

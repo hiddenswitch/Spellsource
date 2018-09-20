@@ -8,7 +8,7 @@
   "rarity": "RARE",
   "description": "Taunt. Inspire: Gain 4 Armor.",
   "trigger": {
-	"eventTrigger": {
+    "eventTrigger": {
       "class": "InspireTrigger",
       "targetPlayer": "SELF"
     },
@@ -19,7 +19,7 @@
     }
   },
   "attributes": {
-	"TAUNT": true
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -1,10 +1,10 @@
 {
   "name": "Hatch Eggs",
+  "heroPower": "hero_power_overhatch",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "heroPower": "hero_power_overhatch",
   "description": "Add two 1/1 Spiderlings to your hand.",
   "targetSelection": "NONE",
   "spell": {

@@ -606,6 +606,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			chosenCard.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
+			chosenCard.getAttributes().put(Attribute.CHOICE_SOURCE, sourceCard.getReference());
 			sourceCard.getAttributes().put(Attribute.CHOICE, Arrays.asList(sourceCard.getChooseOneCardIds()).indexOf(cardId));
 		}
 
@@ -701,13 +702,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	                      @NotNull TargetSelection targetSelection, boolean childSpell, @Nullable GameAction sourceAction) {
 		Player player = context.getPlayer(playerId);
 		Entity source = null;
-		if (sourceReference != null) {
+		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
 			source = context.resolveSingleTarget(sourceReference);
 		}
 
 		//Implement SpellOverrideAura
 		Class<? extends Spell> spellClass = spellDesc.getDescClass();
-		Entity finalSource = source;
 		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof SpellOverrideAura)
 				.map(t -> (Aura) t)
@@ -2563,6 +2563,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return {@code true} if this card costs health, otherwise {@code false}.
 	 */
 	public boolean doesCardCostHealth(Player player, Card card) {
+		final boolean cardCostsHealthAttribute = card.hasAttribute(Attribute.COSTS_HEALTH_INSTEAD_OF_MANA)
+				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
 		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
@@ -2571,7 +2573,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
 		return spellsCostHealthCondition
 				|| murlocsCostHealthCondition
-				|| minionsCostHealthCondition;
+				|| minionsCostHealthCondition
+				|| cardCostsHealthAttribute;
 	}
 
 	/**
@@ -3839,8 +3842,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void useHeroPower(int playerId) {
 		Player player = context.getPlayer(playerId);
 		Card power = player.getHero().getHeroPower();
+		// Hero powers could also cost health
 		int modifiedManaCost = getModifiedManaCost(player, power);
-		modifyCurrentMana(playerId, -modifiedManaCost, true);
+		boolean cardCostsHealth = doesCardCostHealth(player, power);
+		if (cardCostsHealth) {
+			damage(player, player.getHero(), modifiedManaCost, power, true);
+		} else {
+			modifyCurrentMana(playerId, -modifiedManaCost, true);
+			player.getStatistics().manaSpent(modifiedManaCost);
+		}
 		power.markUsed();
 		player.getStatistics().cardPlayed(power, context.getTurn());
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));

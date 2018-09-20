@@ -14,8 +14,8 @@
     "armorBonus": 4
   },
   "attributes": {
-    "TAUNT": true,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

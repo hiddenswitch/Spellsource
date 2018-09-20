@@ -8,7 +8,7 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "PutCopyInHandSpell",
-	"howMany": 3
+    "howMany": 3
   },
   "collectible": true,
   "set": "CUSTOM",
