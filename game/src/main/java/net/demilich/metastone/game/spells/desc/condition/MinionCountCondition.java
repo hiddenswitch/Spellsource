@@ -6,8 +6,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.Operation;
 
 import java.util.stream.Stream;
 
@@ -44,7 +44,7 @@ public class MinionCountCondition extends Condition {
 			minions = minions.filter(filter.matcher(context, player, source));
 		}
 		int targetValue = desc.getInt(ConditionArg.VALUE);
-		Operation operation = (Operation) desc.get(ConditionArg.OPERATION);
+		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
 		return SpellUtils.evaluateOperation(operation, (int) minions.count(), targetValue);
 	}
 

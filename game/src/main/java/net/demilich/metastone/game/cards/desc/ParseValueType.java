@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
+
 /**
  * Indicates a common set of types for arguments to various {@link Desc} objects that appear in the card JSON.
  */
@@ -73,7 +75,7 @@ public enum ParseValueType {
 	 */
 	CARD_LOCATION,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.spells.desc.filter.Operation} enum.
+	 * A string matching the name of a {@link ComparisonOperation} enum.
 	 */
 	OPERATION,
 	/**

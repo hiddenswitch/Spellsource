@@ -100,7 +100,7 @@ public class AdvancedMechanicTests extends TestBase {
 			EntityFilterDesc desc = new EntityFilterDesc(CardFilter.class);
 			desc.put(EntityFilterArg.CARD_TYPE, CardType.MINION);
 			desc.put(EntityFilterArg.ATTRIBUTE, Attribute.TAUNT);
-			desc.put(EntityFilterArg.OPERATION, Operation.HAS);
+			desc.put(EntityFilterArg.OPERATION, ComparisonOperation.HAS);
 			EntityFilter filter = desc.create();
 			assertTrue(filter.matches(context, player, hasTaunt, player.getHero()));
 		});
