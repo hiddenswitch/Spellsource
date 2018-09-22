@@ -130,7 +130,7 @@ public interface SuspendableLock {
 			GetPartitionAndService getPartitionAndService = new GetPartitionAndService(semaphore, hazelcastInstance).invoke();
 			int partitionId = getPartitionAndService.getPartitionId();
 			InternalOperationService operationService = getPartitionAndService.getOperationService();
-			Operation operation = new ReleaseOperation(semaphore.getName(), 1)
+			ComparisonOperation operation = new ReleaseOperation(semaphore.getName(), 1)
 					.setPartitionId(partitionId)
 					.setServiceName(SemaphoreService.SERVICE_NAME);
 

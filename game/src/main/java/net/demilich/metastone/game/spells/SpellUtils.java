@@ -17,8 +17,8 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -241,14 +241,14 @@ public class SpellUtils {
 
 
 	/**
-	 * Given a filter {@link Operation}, return a boolean representing whether that operation is satisfied.
+	 * Given a filter {@link ComparisonOperation}, return a boolean representing whether that operation is satisfied.
 	 *
 	 * @param operation   The algebraic operation.
 	 * @param actualValue The left hand side.
 	 * @param targetValue The right hand side.
 	 * @return {@code true} if the evaluation is truue.
 	 */
-	public static boolean evaluateOperation(Operation operation, int actualValue, int targetValue) {
+	public static boolean evaluateOperation(ComparisonOperation operation, int actualValue, int targetValue) {
 		switch (operation) {
 			case EQUAL:
 				return actualValue == targetValue;

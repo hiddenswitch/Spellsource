@@ -22,9 +22,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
-import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
@@ -270,7 +270,7 @@ public class ParseUtils {
 			case CARD_LOCATION:
 				return Enum.valueOf(Zones.class, jsonData.asText());
 			case OPERATION:
-				return Enum.valueOf(Operation.class, jsonData.asText());
+				return Enum.valueOf(ComparisonOperation.class, jsonData.asText());
 			case CARD_TYPE:
 				return Enum.valueOf(CardType.class, jsonData.asText());
 			case ENTITY_TYPE:
