@@ -6,11 +6,11 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import com.github.fromage.quasi.strands.Strand;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
-import com.hiddenswitch.spellsource.Accounts;
-import com.hiddenswitch.spellsource.Logic;
-import com.hiddenswitch.spellsource.Matchmaking;
-import com.hiddenswitch.spellsource.Spellsource;
+import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.Emote;
+import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.client.models.EnvelopeGame;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.common.*;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
@@ -28,6 +28,8 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.http.HttpServerRequest;
 import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.impl.ConcurrentHashSet;
+import io.vertx.core.json.Json;
 import io.vertx.core.streams.Pump;
 import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
@@ -182,11 +184,83 @@ public class ServerGameContext extends GameContext implements Server {
 	}
 
 	/**
+	 * Sends game traffic over the {@link com.hiddenswitch.spellsource.Connection} messaging system.
+	 *
+	 * @return A way to disconnect the machinery that makes the messaging happen for this particular server instance.
+	 */
+	public static Closeable handleConnections() {
+		Vertx vertx = Vertx.currentContext().owner();
+		EventBus bus = vertx.eventBus();
+		Set<MessageConsumer<Buffer>> consumers = new ConcurrentHashSet<>();
+		Set<MessageProducer<Buffer>> producers = new ConcurrentHashSet<>();
+
+		// Set up the connectivity for the user.
+		Handler<Connection> handler = connection -> {
+			String userId = connection.userId();
+			MessageConsumer<Buffer> consumer = bus.consumer(getMessagesFromServerAddress(userId));
+			MessageProducer<Buffer> producer = bus.publisher(getMessagesFromClientAddress(userId));
+			consumers.add(consumer);
+			producers.add(producer);
+
+			// Read messages from the client and send them to the server processing this request.
+			connection.handler(suspendableHandler(env -> {
+				if (env.getGame() != null && env.getGame().getClientToServer() != null) {
+					producer.send(Buffer.buffer(Json.encode(env.getGame().getClientToServer())));
+				}
+			}));
+
+			// Write messages from the server to the game body.
+			consumer.bodyStream().handler(suspendableHandler(serverToClientBuf -> {
+				try {
+					connection.write(new Envelope().game(
+							new EnvelopeGame().serverToClient(Json.decodeValue(serverToClientBuf, ServerToClientMessage.class))));
+				} catch (IllegalStateException ex) {
+					// TODO: We might want to signal to the server that the message it tried to send failed.
+					logger.warn("handleConnections {}: Socket disconnected for message {}", userId, serverToClientBuf);
+				}
+			}));
+
+			// When the user disconnects, make sure to remove these event bus registrations
+			connection.endHandler(suspendableHandler(v1 -> {
+				consumers.remove(consumer);
+				producers.remove(producer);
+				producer.close();
+				consumer.unregister();
+			}));
+		};
+
+		// Handle the connections here.
+		Connection.connected(handler);
+
+		// Remove all remaining handlers
+		return completionHandler -> {
+			Connection.getHandlers().remove(handler);
+			for (MessageProducer<Buffer> producer : producers) {
+				producer.close();
+			}
+
+			CompositeFuture.all(consumers.stream().map(mc -> {
+				Future<Void> future = Future.future();
+				mc.unregister(future);
+				return future;
+			}).collect(toList())).setHandler(v1 -> {
+				if (v1.succeeded()) {
+					completionHandler.handle(Future.succeededFuture());
+				} else {
+					completionHandler.handle(Future.failedFuture(v1.cause()));
+				}
+			});
+		};
+	}
+
+	/**
 	 * Creates a web socket handler to route game traffic (actions, game states, etc.) between the HTTP/WS client this
 	 * handler will create and the appropriate event bus address for game traffic.
 	 *
 	 * @return A suspendable handler.
+	 * @deprecated Game traffic should come across {@link #handleConnections()} instead.
 	 */
+	@Deprecated
 	public static Handler<RoutingContext> createWebSocketHandler() {
 		// Eventually this will be migrated to the Connection / envelope messaging scheme.
 		return context -> {
@@ -210,16 +284,16 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			MessageConsumer<Buffer> consumer = bus.consumer(getMessagesFromServerAddress(userId));
-			MessageProducer<Buffer> publisher = bus.publisher(getMessagesFromClientAddress(userId));
+			MessageProducer<Buffer> producer = bus.publisher(getMessagesFromClientAddress(userId));
 			// This pumps messages to and from the event bus, but inside a fiber
-			Pump socketToEventBus = new SuspendablePump<>(socket, publisher, Integer.MAX_VALUE).start();
+			Pump socketToEventBus = new SuspendablePump<>(socket, producer, Integer.MAX_VALUE).start();
 			Pump eventBusToSocket = new SuspendablePump<>(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
 
 			socket.closeHandler(suspendableHandler(disconnected -> {
 				try {
 					// Include a reference in this lambda to ensure the pump lasts
 					eventBusToSocket.numberPumped();
-					publisher.close();
+					producer.close();
 					consumer.unregister();
 					socketToEventBus.stop();
 				} catch (Throwable throwable) {
@@ -307,7 +381,7 @@ public class ServerGameContext extends GameContext implements Server {
 		// Await both clients ready for 10s
 		Future bothClientsReady;
 		if (!clientsReady.values().stream().allMatch(Future::isComplete)) {
-			bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, 10000L);
+			bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, 25000L);
 		} else {
 			bothClientsReady = Future.succeededFuture();
 		}
@@ -318,6 +392,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// lead to a double loss
 			for (Map.Entry<Integer, Future<Client>> entry : clientsReady.entrySet()) {
 				if (!entry.getValue().isComplete()) {
+					logger.warn("init {}: Game prematurely ended because player {} did not connect in 25s", getGameId(), entry.getKey());
 					getLogic().concede(entry.getKey());
 				}
 			}

@@ -12,6 +12,7 @@ Name | Type | Description | Notes
 **response** | [**EnvelopeResponse**](EnvelopeResponse.md) |  |  [optional]
 **method** | [**EnvelopeMethod**](EnvelopeMethod.md) |  |  [optional]
 **result** | [**EnvelopeResult**](EnvelopeResult.md) |  |  [optional]
+**game** | [**EnvelopeGame**](EnvelopeGame.md) |  |  [optional]
 
 
 

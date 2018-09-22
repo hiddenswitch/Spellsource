@@ -55,6 +55,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	private final int port;
 	private HttpServer server;
 	private Closeable queues;
+	private Closeable serverMessaging;
 
 	public GatewayImpl(int port) {
 		this.port = port;
@@ -82,6 +83,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(authHandler);
 
 		// Enables the gateway to handle incoming game sockets.
+		// TODO: This is now a legacy connectivity channel.
 		router.route(websocketPath)
 				.method(HttpMethod.GET)
 				.handler(ServerGameContext.createWebSocketHandler());
@@ -94,6 +96,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/realtime")
 				.method(HttpMethod.GET)
 				.handler(Connection.handler());
+
+		// Send game traffic over the Connection nowadays.
+		serverMessaging = ServerGameContext.handleConnections();
 
 		// Enable presence
 		Presence.handleConnections();
@@ -109,7 +114,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		final Closeable originalQueues = queues;
 		queues = fut -> {
 			originalQueues.close(v1 -> {
-				draftQueue.close(fut);
+				serverMessaging.close(v2 -> {
+					draftQueue.close(fut);
+				});
 			});
 		};
 
@@ -127,7 +134,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 						routingContext.fail(500);
 						return;
 					}
-					
+
 					routingContext.response().setStatusCode(200);
 					routingContext.response().end("OK");
 				});

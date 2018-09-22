@@ -160,7 +160,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		assertTrue(client.isGameOver());
 	}
 
-	@Test(timeout = 135000L)
+	@Test(timeout = 165000L)
 	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
 		final int processorCount = Runtime.getRuntime().availableProcessors();
 		final int count = processorCount * 2;
@@ -212,7 +212,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Random games can take quite a long time to finish so be patient...
-		latch.await(135L, TimeUnit.SECONDS);
+		latch.await(165L, TimeUnit.SECONDS);
 		assertEquals(0L, latch.getCount());
 		testExecutor.shutdown();
 
@@ -230,7 +230,6 @@ public class GatewayTest extends SpellsourceTestBase {
 	public void testConcede(TestContext context) {
 		sync(() -> {
 			UnityClient client = new UnityClient(context);
-			client.setShouldDisconnect(false);
 			Sync.invoke0(() -> {
 				client.createUserAccount();
 				client.getTurnsToPlay().set(1);
@@ -282,6 +281,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		assertEquals(Games.getDefaultNoActivityTimeout(), 8000L);
 
 		UnityClient client = new UnityClient(context);
+		client.setShouldDisconnect(true);
 		client.getTurnsToPlay().set(1);
 		client.createUserAccount(null);
 		final String token = client.getToken();
