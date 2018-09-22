@@ -19,6 +19,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.EnvelopeAdded;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
+import com.hiddenswitch.spellsource.client.models.EnvelopeGame;
 import com.hiddenswitch.spellsource.client.models.EnvelopeMethod;
 import com.hiddenswitch.spellsource.client.models.EnvelopeRemoved;
 import com.hiddenswitch.spellsource.client.models.EnvelopeRequest;
@@ -60,6 +61,9 @@ public class Envelope implements Serializable {
 
   @JsonProperty("result")
   private EnvelopeResult result = null;
+
+  @JsonProperty("game")
+  private EnvelopeGame game = null;
 
   public Envelope added(EnvelopeAdded added) {
     this.added = added;
@@ -205,6 +209,24 @@ public class Envelope implements Serializable {
     this.result = result;
   }
 
+  public Envelope game(EnvelopeGame game) {
+    this.game = game;
+    return this;
+  }
+
+   /**
+   * Get game
+   * @return game
+  **/
+  @ApiModelProperty(value = "")
+  public EnvelopeGame getGame() {
+    return game;
+  }
+
+  public void setGame(EnvelopeGame game) {
+    this.game = game;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -222,12 +244,13 @@ public class Envelope implements Serializable {
         Objects.equals(this.request, envelope.request) &&
         Objects.equals(this.response, envelope.response) &&
         Objects.equals(this.method, envelope.method) &&
-        Objects.equals(this.result, envelope.result);
+        Objects.equals(this.result, envelope.result) &&
+        Objects.equals(this.game, envelope.game);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(added, changed, removed, sub, request, response, method, result);
+    return Objects.hash(added, changed, removed, sub, request, response, method, result, game);
   }
 
 
@@ -244,6 +267,7 @@ public class Envelope implements Serializable {
     sb.append("    response: ").append(toIndentedString(response)).append("\n");
     sb.append("    method: ").append(toIndentedString(method)).append("\n");
     sb.append("    result: ").append(toIndentedString(result)).append("\n");
+    sb.append("    game: ").append(toIndentedString(game)).append("\n");
     sb.append("}");
     return sb.toString();
   }

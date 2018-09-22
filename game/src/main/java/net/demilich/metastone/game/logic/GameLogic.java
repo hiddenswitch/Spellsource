@@ -4030,6 +4030,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	protected void repeatedlyDestroyHero(int playerId) {
 		while (context.getPlayer(playerId).getHero() != null && context.getPlayer(playerId).getHero().getZone() != Zones.GRAVEYARD) {
+			Hero hero = context.getPlayer(playerId).getHero();
+			if (hero.getOwner() == UNASSIGNED) {
+				hero.setOwner(playerId);
+			}
+
+			if (hero.getId() == UNASSIGNED) {
+				hero.setId(generateId());
+			}
+
 			destroy(context.getPlayer(playerId).getHero());
 			endOfSequence();
 		}

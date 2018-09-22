@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
 import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.Strand;
+import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Port;
@@ -36,15 +36,16 @@ public class UnityClient {
 	private Handler<UnityClient> onGameOver;
 	private Account account;
 	private TestContext context;
-	private WebsocketClientEndpoint endpoint;
 	private WebsocketClientEndpoint realtime;
 	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
 	private String loginToken;
 	private String thisUrl;
-	private boolean shouldDisconnect = true;
+	private boolean shouldDisconnect = false;
 	protected CountDownLatch gameOverLatch;
+	// No op lock for now
+	protected ReentrantLock messagingLock = new ReentrantLock();
 
 
 	public UnityClient(TestContext context) {
@@ -118,36 +119,56 @@ public class UnityClient {
 		};
 
 		matchmakingFut.set(fut);
-		final long matchmakingThreadId = Strand.currentStrand().getId();
-
-		if (realtime == null) {
-			realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
-			realtime.setMessageHandler(message -> {
-				logger.debug("play: Handling realtime message for userId " + getUserId());
-				context.assertNotEquals(matchmakingThreadId, Strand.currentStrand().getId());
-				Envelope env = Json.decodeValue(message, Envelope.class);
-
-				if (env.getResult() != null && env.getResult().getEnqueue() != null) {
-					if (matchmakingFut.get().isCancelled()) {
-						context.fail(new IllegalStateException("matchmaking was cancelled"));
-					}
-
-					// Might have been cancelled
-					context.assertFalse(matchmakingFut.get().isDone());
-					matchmakingFut.get().complete(null);
-				}
-			});
-		}
-
+		ensureConnected();
 		context.assertTrue(realtime.isOpen());
 		logger.info("matchmake {}: Sending enqueue", getAccount().getId());
-		realtime.sendMessage(Json.encode(new Envelope()
-				.method(new EnvelopeMethod()
-						.methodId(RandomStringUtils.randomAlphanumeric(10))
-						.enqueue(new MatchmakingQueuePutRequest()
-								.queueId(queueId)
-								.deckId(deckId)))));
+		try {
+			messagingLock.lock();
+			realtime.sendMessage(Json.encode(new Envelope()
+					.method(new EnvelopeMethod()
+							.methodId(RandomStringUtils.randomAlphanumeric(10))
+							.enqueue(new MatchmakingQueuePutRequest()
+									.queueId(queueId)
+									.deckId(deckId)))));
+		} finally {
+			messagingLock.unlock();
+		}
+
 		return fut;
+	}
+
+	private void ensureConnected() {
+		try {
+			messagingLock.lock();
+			if (realtime == null) {
+				realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
+				realtime.setMessageHandler(message -> {
+					try {
+						messagingLock.lock();
+						logger.debug("play: Handling realtime message for userId " + getUserId());
+						Envelope env = Json.decodeValue(message, Envelope.class);
+
+						if (env.getResult() != null && env.getResult().getEnqueue() != null) {
+							if (matchmakingFut.get().isCancelled()) {
+								context.fail(new IllegalStateException("matchmaking was cancelled"));
+							}
+
+							// Might have been cancelled
+							context.assertFalse(matchmakingFut.get().isDone());
+							matchmakingFut.get().complete(null);
+						}
+
+						if (env.getGame() != null && env.getGame().getServerToClient() != null) {
+							handleServerToClientMessage(env.getGame().getServerToClient());
+						}
+					} finally {
+						messagingLock.unlock();
+					}
+				});
+			}
+		} finally {
+			messagingLock.unlock();
+		}
 	}
 
 	@Suspendable
@@ -179,20 +200,20 @@ public class UnityClient {
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
 		logger.debug("play: Playing userId " + getUserId());
-		// Get the port from the url
-		final URL basePathUrl;
+
+		ensureConnected();
+		logger.debug("play: UserId " + getUserId() + " sent first message.");
+		sendStartGameMessage();
+	}
+
+	private void sendStartGameMessage() {
+		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
+				.messageType(MessageType.FIRST_MESSAGE)))));
+	}
+
+	private void handleServerToClientMessage(ServerToClientMessage message) {
+		messagingLock.lock();
 		try {
-			basePathUrl = new URL(thisUrl);
-		} catch (MalformedURLException e) {
-			throw new RuntimeException(e);
-		}
-		String url = "ws://" + basePathUrl.getHost() + ":" + Integer.toString(basePathUrl.getPort()) + "/" + Games.WEBSOCKET_PATH + "-clustered";
-
-		endpoint = new WebsocketClientEndpoint(url, loginToken);
-		endpoint.setMessageHandler(h -> {
-			logger.debug("play: Handing message for userId " + getUserId());
-			ServerToClientMessage message = Json.decodeValue(h, ServerToClientMessage.class);
-
 			for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
 				if (handler != null) {
 					handler.accept(message);
@@ -216,7 +237,7 @@ public class UnityClient {
 					break;
 				case ON_MULLIGAN:
 					onMulligan(message);
-					if (turnsToPlay.get() == 0) {
+					if (turnsToPlay.get() == 0 && shouldDisconnect) {
 						// don't respond to the mulligan attempt
 						disconnect();
 						gameOverLatch.countDown();
@@ -224,10 +245,10 @@ public class UnityClient {
 					}
 					context.assertNotNull(message.getStartingCards());
 					context.assertTrue(message.getStartingCards().size() > 0);
-					endpoint.sendMessage(serialize(new ClientToServerMessage()
+					realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 							.messageType(MessageType.UPDATE_MULLIGAN)
 							.repliesTo(message.getId())
-							.discardedCardIndices(Collections.singletonList(0))));
+							.discardedCardIndices(Collections.singletonList(0))))));
 					break;
 				case ON_REQUEST_ACTION:
 					if (!onRequestAction(message)) {
@@ -242,8 +263,11 @@ public class UnityClient {
 					break;
 				case ON_GAME_END:
 					// The game has ended.
-					endpoint.close();
 					this.gameOver = true;
+					// TODO: Should we disconnect realtime here?
+					if (shouldDisconnect) {
+						disconnect();
+					}
 					gameOverLatch.countDown();
 					if (onGameOver != null) {
 						onGameOver.handle(this);
@@ -252,22 +276,9 @@ public class UnityClient {
 					break;
 			}
 			logger.debug("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
-		});
-
-		endpoint.setCloseHandler(() -> {
-			/*
-			if (!this.gameOver) {
-				this.gameOver = true;
-				if (onGameOver != null) {
-					onGameOver.handle(this);
-				}
-			}
-			*/
-		});
-
-		logger.debug("play: UserId " + getUserId() + " sent first message.");
-		endpoint.sendMessage(serialize(new ClientToServerMessage()
-				.messageType(MessageType.FIRST_MESSAGE)));
+		} finally {
+			messagingLock.unlock();
+		}
 	}
 
 	public void respondRandomAction(ServerToClientMessage message) {
@@ -276,10 +287,11 @@ public class UnityClient {
 		// There should always be an end turn, choose one, discover or battlecry action
 		// Pick a random action
 		int random = random(actionCount);
-		endpoint.sendMessage(serialize(new ClientToServerMessage()
+		context.assertNotNull(realtime);
+		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 				.messageType(MessageType.UPDATE_ACTION)
 				.repliesTo(message.getId())
-				.actionIndex(random)));
+				.actionIndex(random)))));
 		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(random));
 	}
 
@@ -302,9 +314,16 @@ public class UnityClient {
 	}
 
 	public void disconnect() {
-		if (endpoint != null) {
-			endpoint.close();
+		try {
+			messagingLock.lock();
+			if (realtime != null && realtime.isOpen()) {
+				realtime.close();
+				realtime = null;
+			}
+		} finally {
+			messagingLock.unlock();
 		}
+
 	}
 
 	protected void assertValidStateAndChanges(ServerToClientMessage message) {
@@ -412,8 +431,10 @@ public class UnityClient {
 	}
 
 	public void concede() {
-		endpoint.sendMessage(serialize(new ClientToServerMessage()
-				.messageType(MessageType.CONCEDE)));
+		messagingLock.lock();
+		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
+				.messageType(MessageType.CONCEDE)))));
+		messagingLock.unlock();
 	}
 
 	public boolean isShouldDisconnect() {
@@ -425,15 +446,24 @@ public class UnityClient {
 	}
 
 	public boolean isConnected() {
-		return endpoint.isOpen();
+		return realtime != null && realtime.isOpen();
 	}
 
 	@Override
 	protected void finalize() throws Throwable {
-		super.finalize();
-		if (realtime != null) {
-			realtime.close();
-		}
 		disconnect();
+		super.finalize();
+	}
+
+	protected static class NoOpLock extends ReentrantLock {
+		@Override
+		public void lock() {
+			return;
+		}
+
+		@Override
+		public void unlock() {
+			return;
+		}
 	}
 }

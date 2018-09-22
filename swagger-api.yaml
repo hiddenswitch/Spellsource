@@ -19,11 +19,11 @@ info:
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: api-3.hiddenswitch.com
 schemes:
-  - https
+- https
 consumes:
-  - application/json
+- application/json
 produces:
-  - application/json
+- application/json
 securityDefinitions:
   TokenSecurity:
     type: apiKey
@@ -155,6 +155,15 @@ definitions:
             $ref: '#/definitions/MatchmakingQueuePutResponse'
           dequeue:
             $ref: '#/definitions/DefaultMethodResponse'
+      game:
+        description: |
+          Stores a ClientToServerMessage or a ServerToClientMessage. Allows envelopes to carry game messages.
+        type: 'object'
+        properties:
+          serverToClient:
+            $ref: '#/definitions/ServerToClientMessage'
+          clientToServer:
+            $ref: '#/definitions/ClientToServerMessage'
   Enchantment:
     type: 'object'
     description: |
@@ -250,21 +259,21 @@ definitions:
            * CANCELLED: The sender cancelled the invitation.
         type: 'string'
         enum:
-          - 'UNDELIVERED'
-          - 'PENDING'
-          - 'TIMEOUT'
-          - 'ACCEPTED'
-          - 'REJECTED'
-          - 'CANCELLED'
+        - 'UNDELIVERED'
+        - 'PENDING'
+        - 'TIMEOUT'
+        - 'ACCEPTED'
+        - 'REJECTED'
+        - 'CANCELLED'
   PresenceEnum:
     description: |
       Indicates the current status of a friend.
     type: 'string'
     enum:
-      - 'UNKNOWN'
-      - 'OFFLINE'
-      - 'IN_GAME'
-      - 'ONLINE'
+    - 'UNKNOWN'
+    - 'OFFLINE'
+    - 'IN_GAME'
+    - 'ONLINE'
   Friend:
     type: 'object'
     properties:
@@ -303,7 +312,7 @@ definitions:
   GetAccountsRequest:
     type: 'object'
     required:
-      - userIds
+    - userIds
     properties:
       userIds:
         description: |
@@ -321,9 +330,9 @@ definitions:
   CreateAccountRequest:
     type: 'object'
     required:
-      - name
-      - email
-      - password
+    - name
+    - email
+    - password
     properties:
       name:
         description: |
@@ -351,8 +360,8 @@ definitions:
   LoginRequest:
     type: 'object'
     required:
-      - email
-      - password
+    - email
+    - password
     properties:
       email:
         type: 'string'
@@ -378,23 +387,23 @@ definitions:
           otherwise specified.
         type: 'string'
         enum:
-          - 'BROWN'
-          - 'GREEN'
-          - 'BLUE'
-          - 'GOLD'
-          - 'WHITE'
-          - 'BLACK'
-          - 'SILVER'
-          - 'VIOLET'
-          - 'RED'
-          - 'JADE'
-          - 'NAVY'
-          - 'LEATHER'
-          - 'RUST'
-          - 'EGGPLANT'
-          - 'ICE'
-          - 'OBSIDIAN'
-          - 'AMBER'
+        - 'BROWN'
+        - 'GREEN'
+        - 'BLUE'
+        - 'GOLD'
+        - 'WHITE'
+        - 'BLACK'
+        - 'SILVER'
+        - 'VIOLET'
+        - 'RED'
+        - 'JADE'
+        - 'NAVY'
+        - 'LEATHER'
+        - 'RUST'
+        - 'EGGPLANT'
+        - 'ICE'
+        - 'OBSIDIAN'
+        - 'AMBER'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -419,11 +428,11 @@ definitions:
           matchmakingGet, the queues will specify which current decks can be chosen.
         type: 'string'
         enum:
-          - 'Standard'
-          - 'Wild'
-          - 'Custom'
-          - 'Spellsource'
-          - 'All'
+        - 'Standard'
+        - 'Wild'
+        - 'Custom'
+        - 'Spellsource'
+        - 'All'
       deckList:
         type: 'string'
         description: |
@@ -472,7 +481,7 @@ definitions:
           same as the deck's hero class marks the deck as invalid.
         type: 'object'
         required:
-          - $each
+        - $each
         properties:
           $each:
             description: |
@@ -488,7 +497,7 @@ definitions:
           same as the deck's hero class.
         type: 'object'
         required:
-          - $each
+        - $each
         properties:
           $each:
             description: |
@@ -529,7 +538,7 @@ definitions:
   ChangePasswordRequest:
     type: 'object'
     required:
-      - password
+    - password
     properties:
       password:
         type: 'string'
@@ -555,14 +564,14 @@ definitions:
       type:
         type: 'string'
         enum:
-          - 'USER'
-          - 'ALLIANCE'
-          - 'DECK'
+        - 'USER'
+        - 'ALLIANCE'
+        - 'DECK'
       deckType:
         type: 'string'
         enum:
-          - 'DRAFT'
-          - 'CONSTRUCTED'
+        - 'DRAFT'
+        - 'CONSTRUCTED'
       inventory:
         type: 'array'
         items:
@@ -589,22 +598,22 @@ definitions:
   MessageType:
     type: 'string'
     enum:
-      - 'REGISTER_PLAYER'
-      - 'UPDATE_ACTION'
-      - 'ON_GAME_EVENT'
-      - 'ON_GAME_END'
-      - 'SET_PLAYERS'
-      - 'ON_ACTIVE_PLAYER'
-      - 'ON_UPDATE'
-      - 'ON_TURN_END'
-      - 'ON_REQUEST_ACTION'
-      - 'FIRST_MESSAGE'
-      - 'ON_MULLIGAN'
-      - 'UPDATE_MULLIGAN'
-      - 'EMOTE'
-      - 'TOUCH'
-      - 'CONCEDE'
-      - 'PINGPONG'
+    - 'REGISTER_PLAYER'
+    - 'UPDATE_ACTION'
+    - 'ON_GAME_EVENT'
+    - 'ON_GAME_END'
+    - 'SET_PLAYERS'
+    - 'ON_ACTIVE_PLAYER'
+    - 'ON_UPDATE'
+    - 'ON_TURN_END'
+    - 'ON_REQUEST_ACTION'
+    - 'FIRST_MESSAGE'
+    - 'ON_MULLIGAN'
+    - 'UPDATE_MULLIGAN'
+    - 'EMOTE'
+    - 'TOUCH'
+    - 'CONCEDE'
+    - 'PINGPONG'
   Emote:
     description: |
       An emote that should play from the specified entity.
@@ -615,12 +624,12 @@ definitions:
       message:
         type: 'string'
         enum:
-          - 'HELLO'
-          - 'AMAZING'
-          - 'WHOOPS'
-          - 'GOOD_GAME'
-          - 'FACE_MY_WRATH'
-          - 'WELL_PLAYED'
+        - 'HELLO'
+        - 'AMAZING'
+        - 'WHOOPS'
+        - 'GOOD_GAME'
+        - 'FACE_MY_WRATH'
+        - 'WELL_PLAYED'
   Timers:
     description: |
       Information about timers. This helps the client render the countdown clock.
@@ -652,7 +661,7 @@ definitions:
   ServerToClientMessage:
     type: 'object'
     required:
-      - messageType
+    - messageType
     properties:
       id:
         type: 'string'
@@ -737,36 +746,36 @@ definitions:
   EntityLocation:
     type: 'object'
     required:
-     - zone
-     - index
-     - player
+    - zone
+    - index
+    - player
     properties:
       player:
         type: 'integer'
         enum:
-          - -1
-          - 0
-          - 1
+        - -1
+        - 0
+        - 1
       index:
         type: 'integer'
       zone:
         type: 'string'
         enum:
-          - 'NONE'
-          - 'HAND'
-          - 'DECK'
-          - 'GRAVEYARD'
-          - 'BATTLEFIELD'
-          - 'SECRET'
-          - 'QUEST'
-          - 'HERO_POWER'
-          - 'HERO'
-          - 'WEAPON'
-          - 'SET_ASIDE_ZONE'
-          - 'HIDDEN'
-          - 'DISCOVER'
-          - 'REMOVED_FROM_PLAY'
-          - 'PLAYER'
+        - 'NONE'
+        - 'HAND'
+        - 'DECK'
+        - 'GRAVEYARD'
+        - 'BATTLEFIELD'
+        - 'SECRET'
+        - 'QUEST'
+        - 'HERO_POWER'
+        - 'HERO'
+        - 'WEAPON'
+        - 'SET_ASIDE_ZONE'
+        - 'HIDDEN'
+        - 'DISCOVER'
+        - 'REMOVED_FROM_PLAY'
+        - 'PLAYER'
   EntityChangeSet:
     description: |
       An abbreviated description of changes since the last change set this client received.
@@ -781,9 +790,9 @@ definitions:
             populated in this changeset.
           type: 'string'
           enum:
-            - 'A'
-            - 'C'
-            - 'R'
+          - 'A'
+          - 'C'
+          - 'R'
         id:
           description: |
             The ID of the entity in this change set.
@@ -804,8 +813,8 @@ definitions:
   DamageTypeEnum:
     type: 'string'
     enum:
-      - 'PHYSICAL'
-      - 'MAGICAL'
+    - 'PHYSICAL'
+    - 'MAGICAL'
   GameEvent:
     type: 'object'
     properties:
@@ -826,54 +835,54 @@ definitions:
         description: |
           The game event type corresponding to this game event.
         enum:
-          - 'ALL'
-          - 'AFTER_PHYSICAL_ATTACK'
-          - 'AFTER_PLAY_CARD'
-          - 'AFTER_SPELL_CASTED'
-          - 'AFTER_SUMMON'
-          - 'ATTRIBUTE_APPLIED'
-          - 'ARMOR_GAINED'
-          - 'BEFORE_SUMMON'
-          - 'BOARD_CHANGED'
-          - 'CARD_SHUFFLED'
-          - 'DAMAGE'
-          - 'DISCARD'
-          - 'DRAW_CARD'
-          - 'ENRAGE_CHANGED'
-          - 'ENTITY_TOUCHED'
-          - 'ENTITY_UNTOUCHED'
-          - 'FATIGUE'
-          - 'GAME_START'
-          - 'HEAL'
-          - 'HERO_POWER_USED'
-          - 'INVOKED'
-          - 'JOUST'
-          - 'KILL'
-          - 'LOSE_DIVINE_SHIELD'
-          - 'LOSE_DEFLECT'
-          - 'MILL'
-          - 'MAX_MANA'
-          - 'MANA_MODIFIED'
-          - 'OVERLOAD'
-          - 'PERFORMED_GAME_ACTION'
-          - 'PHYSICAL_ATTACK'
-          - 'PLAY_CARD'
-          - 'PRE_DAMAGE'
-          - 'QUEST_PLAYED'
-          - 'QUEST_SUCCESSFUL'
-          - 'REVEAL_CARD'
-          - 'SECRET_PLAYED'
-          - 'SECRET_REVEALED'
-          - 'SPELL_CASTED'
-          - 'SUMMON'
-          - 'TARGET_ACQUISITION'
-          - 'TRIGGER_FIRED'
-          - 'TURN_END'
-          - 'TURN_START'
-          - 'SILENCE'
-          - 'WEAPON_DESTROYED'
-          - 'WEAPON_EQUIPPED'
-          - 'WILL_END_SEQUENCE'
+        - 'ALL'
+        - 'AFTER_PHYSICAL_ATTACK'
+        - 'AFTER_PLAY_CARD'
+        - 'AFTER_SPELL_CASTED'
+        - 'AFTER_SUMMON'
+        - 'ATTRIBUTE_APPLIED'
+        - 'ARMOR_GAINED'
+        - 'BEFORE_SUMMON'
+        - 'BOARD_CHANGED'
+        - 'CARD_SHUFFLED'
+        - 'DAMAGE'
+        - 'DISCARD'
+        - 'DRAW_CARD'
+        - 'ENRAGE_CHANGED'
+        - 'ENTITY_TOUCHED'
+        - 'ENTITY_UNTOUCHED'
+        - 'FATIGUE'
+        - 'GAME_START'
+        - 'HEAL'
+        - 'HERO_POWER_USED'
+        - 'INVOKED'
+        - 'JOUST'
+        - 'KILL'
+        - 'LOSE_DIVINE_SHIELD'
+        - 'LOSE_DEFLECT'
+        - 'MILL'
+        - 'MAX_MANA'
+        - 'MANA_MODIFIED'
+        - 'OVERLOAD'
+        - 'PERFORMED_GAME_ACTION'
+        - 'PHYSICAL_ATTACK'
+        - 'PLAY_CARD'
+        - 'PRE_DAMAGE'
+        - 'QUEST_PLAYED'
+        - 'QUEST_SUCCESSFUL'
+        - 'REVEAL_CARD'
+        - 'SECRET_PLAYED'
+        - 'SECRET_REVEALED'
+        - 'SPELL_CASTED'
+        - 'SUMMON'
+        - 'TARGET_ACQUISITION'
+        - 'TRIGGER_FIRED'
+        - 'TURN_END'
+        - 'TURN_START'
+        - 'SILENCE'
+        - 'WEAPON_DESTROYED'
+        - 'WEAPON_EQUIPPED'
+        - 'WILL_END_SEQUENCE'
       afterPhysicalAttack:
         $ref: '#/definitions/PhysicalAttackEvent'
       drawCard:
@@ -1116,10 +1125,10 @@ definitions:
           Gets the status of the draft.
         type: 'string'
         enum:
-          - 'IN_PROGRESS'
-          - 'SELECT_HERO'
-          - 'COMPLETE'
-          - 'RETIRED'
+        - 'IN_PROGRESS'
+        - 'SELECT_HERO'
+        - 'COMPLETE'
+        - 'RETIRED'
       selectedCards:
         type: 'array'
         items:
@@ -1158,7 +1167,7 @@ definitions:
         description: |
           Not supported. Throws an error if this is specified on the client.
     required:
-      - friendId
+    - friendId
   FriendPutResponse:
     type: 'object'
     properties:
@@ -1380,7 +1389,7 @@ definitions:
   Entity:
     type: 'object'
     required:
-      - 'id'
+    - 'id'
     properties:
       id:
         description: The entity's ID in the game.
@@ -1606,12 +1615,12 @@ definitions:
         description: When not null, indicates this card entity has a specified type.
         type: 'string'
         enum:
-          - 'HERO'
-          - 'MINION'
-          - 'SPELL'
-          - 'WEAPON'
-          - 'HERO_POWER'
-          - 'CHOOSE_ONE'
+        - 'HERO'
+        - 'MINION'
+        - 'SPELL'
+        - 'WEAPON'
+        - 'HERO_POWER'
+        - 'CHOOSE_ONE'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
@@ -1632,12 +1641,12 @@ definitions:
           The rarity of the card
         type: 'string'
         enum:
-          - 'FREE'
-          - 'COMMON'
-          - 'RARE'
-          - 'EPIC'
-          - 'LEGENDARY'
-          - 'ALLIANCE'
+        - 'FREE'
+        - 'COMMON'
+        - 'RARE'
+        - 'EPIC'
+        - 'LEGENDARY'
+        - 'ALLIANCE'
       gameStarted:
         description: |
           For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the
@@ -1647,14 +1656,14 @@ definitions:
   DraftsChooseCardRequest:
     type: 'object'
     required:
-      - cardIndex
+    - cardIndex
     properties:
       cardIndex:
         type: 'integer'
   DraftsChooseHeroRequest:
     type: 'object'
     required:
-      - heroIndex
+    - heroIndex
     properties:
       heroIndex:
         type: 'integer'
@@ -1752,7 +1761,7 @@ definitions:
           A user-renderable message explaining the source of the error.
         type: 'string'
     required:
-      - message
+    - message
   InvitePostRequest:
     type: 'object'
     description: |
@@ -1850,12 +1859,12 @@ paths:
         Get a specific account. Contains more information if the userId matches the requesting user.
       operationId: getAccount
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: targetUserId
-          in: path
-          required: true
-          type: 'string'
+      - name: targetUserId
+        in: path
+        required: true
+        type: 'string'
       responses:
         "200":
           description: |
@@ -1870,13 +1879,13 @@ paths:
         Get a list of accounts including user profile information.
       operationId: getAccounts
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/GetAccountsRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/GetAccountsRequest'
       responses:
         "200":
           description: |
@@ -1890,11 +1899,11 @@ paths:
         Create an account with Spellsource.
       operationId: createAccount
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/CreateAccountRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/CreateAccountRequest'
       responses:
         "200":
           description: |
@@ -1908,11 +1917,11 @@ paths:
         Login with a username and password, receiving an authentication token to use for future sessions.
       operationId: login
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/LoginRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/LoginRequest'
       responses:
         "200":
           description: |
@@ -1927,13 +1936,13 @@ paths:
         Changes your password. Does not log you out after the password is changed.
       operationId: changePassword
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/ChangePasswordRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/ChangePasswordRequest'
       responses:
         "200":
           description: |
@@ -1948,12 +1957,12 @@ paths:
         Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
       operationId: getCards
       parameters:
-        - name: If-None-Match
-          in: header
-          description: |
-            The value returned in the ETag header from the server when this was last called, or empty if this is the
-            first call to this resource.
-          type: string
+      - name: If-None-Match
+        in: header
+        description: |
+          The value returned in the ETag header from the server when this was last called, or empty if this is the
+          first call to this resource.
+        type: string
       responses:
         "304":
           description: |
@@ -1988,14 +1997,14 @@ paths:
               type: string
               format: date-time
               description: |
-                 The RFC1123 date when this request was made.
+                The RFC1123 date when this request was made.
   /decks:
     get:
       description: |
         Gets all the user's decks.
       operationId: decksGetAll
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2009,15 +2018,15 @@ paths:
         Creates a new deck with optionally specified inventory IDs, a name and a hero class.
       operationId: decksPut
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          description: |
-            The deck creation request.
-          required: true
-          schema:
-            $ref: '#/definitions/DecksPutRequest'
+      - name: request
+        in: body
+        description: |
+          The deck creation request.
+        required: true
+        schema:
+          $ref: '#/definitions/DecksPutRequest'
       responses:
         "200":
           description: |
@@ -2032,13 +2041,13 @@ paths:
         Gets a deck. Only viewable for the owner of the deck or players in the alliance.
       operationId: decksGet
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: deckId
-          in: path
-          required: true
-          description: The Deck ID to get.
-          type: 'string'
+      - name: deckId
+        in: path
+        required: true
+        description: The Deck ID to get.
+        type: 'string'
       responses:
         "200":
           description: |
@@ -2052,20 +2061,20 @@ paths:
         Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
       operationId: decksUpdate
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: deckId
-          in: path
-          description: The Deck ID to update.
-          required: true
-          type: 'string'
-        - name: updateCommand
-          in: body
-          description: |
-            An update command modifying specified properties of the deck.
-          required: true
-          schema:
-            $ref: '#/definitions/DecksUpdateCommand'
+      - name: deckId
+        in: path
+        description: The Deck ID to update.
+        required: true
+        type: 'string'
+      - name: updateCommand
+        in: body
+        description: |
+          An update command modifying specified properties of the deck.
+        required: true
+        schema:
+          $ref: '#/definitions/DecksUpdateCommand'
       responses:
         "200":
           description: |
@@ -2079,13 +2088,13 @@ paths:
         Deletes the specified deck by ID.
       operationId: decksDelete
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: deckId
-          in: path
-          description: The Deck ID to delete.
-          required: true
-          type: 'string'
+      - name: deckId
+        in: path
+        description: The Deck ID to delete.
+        required: true
+        type: 'string'
       responses:
         "200":
           description: |
@@ -2098,7 +2107,7 @@ paths:
         Gets a list of queues available for matchmaking.
       operationId: matchmakingGet
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       responses:
         "404":
           description: |
@@ -2114,7 +2123,7 @@ paths:
       description: Removes your client from the matchmaking queue, regardless of which queue it is in.
       operationId: matchmakingDelete
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2129,13 +2138,13 @@ paths:
         Adds a specified user to your friend list.
       operationId: friendPut
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/FriendPutRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/FriendPutRequest'
       responses:
         "200":
           description: |
@@ -2157,13 +2166,13 @@ paths:
         Removes the friend relationship between two users.
       operationId: friendDelete
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: friendId
-          in: path
-          required: true
-          description: id of friend to unfriend.
-          type: 'string'
+      - name: friendId
+        in: path
+        required: true
+        description: id of friend to unfriend.
+        type: 'string'
       responses:
         "200":
           description: |
@@ -2184,7 +2193,7 @@ paths:
         Gets your latest state of the draft.
       operationId: draftsGet
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2201,13 +2210,13 @@ paths:
         Starts a draft, or make a change to your draft, like retiring early.
       operationId: draftsPost
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/DraftsPostRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DraftsPostRequest'
       responses:
         "200":
           description: |
@@ -2226,13 +2235,13 @@ paths:
         Choose a hero from your hero selection.
       operationId: draftsChooseHero
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/DraftsChooseHeroRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DraftsChooseHeroRequest'
       responses:
         "200":
           description: |
@@ -2250,13 +2259,13 @@ paths:
         Make a selection for the given draft index.
       operationId: draftsChooseCard
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/DraftsChooseCardRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/DraftsChooseCardRequest'
       responses:
         "200":
           description: |
@@ -2274,7 +2283,7 @@ paths:
         Retrieve all invites where this user is either the sender or recipient.
       operationId: getInvites
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2288,13 +2297,13 @@ paths:
         Send an invite.
       operationId: postInvite
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/InvitePostRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/InvitePostRequest'
       responses:
         "200":
           description: |
@@ -2317,13 +2326,13 @@ paths:
         method will enter you into the special invite matchmaking queue.
       operationId: acceptInvite
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
-        - name: request
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/AcceptInviteRequest'
+      - name: request
+        in: body
+        required: true
+        schema:
+          $ref: '#/definitions/AcceptInviteRequest'
       responses:
         "200":
           description: |
@@ -2347,7 +2356,7 @@ paths:
         Retrieves information about a specific invite, as long as this user is either the sender or recipient.
       operationId: getInvite
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2362,7 +2371,7 @@ paths:
         When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite.
       operationId: deleteInvite
       security:
-        - TokenSecurity: []
+      - TokenSecurity: []
       parameters:
       responses:
         "200":
