@@ -45,7 +45,7 @@ public class UnityClient {
 	private boolean shouldDisconnect = false;
 	protected CountDownLatch gameOverLatch;
 	// No op lock for now
-	protected ReentrantLock messagingLock = new ReentrantLock();
+	protected ReentrantLock messagingLock = new NoOpLock();
 
 
 	public UnityClient(TestContext context) {
@@ -282,6 +282,10 @@ public class UnityClient {
 	}
 
 	public void respondRandomAction(ServerToClientMessage message) {
+		if (realtime == null) {
+			logger.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
+			return;
+		}
 		final int actionCount = message.getActions().getCompatibility().size();
 		context.assertTrue(actionCount > 0);
 		// There should always be an end turn, choose one, discover or battlecry action
