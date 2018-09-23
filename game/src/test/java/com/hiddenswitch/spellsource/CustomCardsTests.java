@@ -5,10 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -30,6 +28,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
@@ -3811,6 +3810,59 @@ public class CustomCardsTests extends TestBase {
 			receiveCard(context, player, "spell_lesser_obsidian_spellstone");
 			playCard(context, player, "spell_overtap");
 		});
+	}
+
+	@Test
+	public void testAlternateBaku() {
+		DebugContext context = createContext(HeroClass.SILVER, HeroClass.SILVER, false, DeckFormat.CUSTOM);
+		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(() -> "minion_faithful_lumi")
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_alternate_baku_the_mooneater"));
+		});
+		context.init();
+		assertEquals(context.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_alternate_totemic_slam");
+
+
+		DebugContext context2 = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		context2.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context2.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(() -> "minion_faithful_lumi")
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_alternate_baku_the_mooneater"));
+		});
+		context2.init();
+		assertEquals(context2.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_heal");
+
+	}
+
+	@Test
+	public void testAlternateGenn() {
+		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(() -> "minion_bloodfen_raptor")
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_alternate_genn_greymane"));
+		});
+
+		context.init();
+		Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
+		playCard(context, context.getPlayer1(), "hero_shadowreaper_anduin");
+		// Both player's hero powers should cost one
+		assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
+				.map(c -> (Card) c)
+				.filter(c -> c.getCardType() == CardType.HERO_POWER)
+				.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 1)
+				.count(), 2L);
+
 	}
 }
 
