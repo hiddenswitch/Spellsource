@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "race": "DEMON",
   "description": "Costs (1) less for each damage your hero has taken.",
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {

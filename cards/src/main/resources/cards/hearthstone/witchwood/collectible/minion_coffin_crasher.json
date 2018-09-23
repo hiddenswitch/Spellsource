@@ -9,13 +9,15 @@
   "description": "Deathrattle: Summon a Deathrattle minion from your hand.",
   "deathrattle": {
     "class": "RecruitSpell",
-    "target": "FRIENDLY_HAND",
-    "filter": {
+    "cardFilter": {
       "class": "CardFilter",
       "attribute": "DEATHRATTLES",
       "cardType": "MINION"
     },
-    "randomTarget": true
+    "cardSource": {
+      "class": "HandSource",
+      "targetPlayer": "SELF"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

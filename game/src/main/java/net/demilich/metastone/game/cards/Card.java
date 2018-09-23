@@ -93,10 +93,8 @@ public class Card extends Entity implements HasChooseOneActions {
 			}
 		}
 
-		if ((hasAttribute(Attribute.ECHO) || hasAttribute(Attribute.AURA_ECHO))
-				&& hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
-			minion.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
-		}
+		minion.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
+
 
 		applyText(minion);
 
@@ -717,7 +715,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		weapon.setMaxHp(getDurability());
 		weapon.setHp(weapon.getMaxDurability());
 		weapon.setBaseHp(getBaseDurability());
-
+		weapon.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
 		applyText(weapon);
 
 		weapon.setOnEquip(getDesc().getOnEquip());
