@@ -116,6 +116,21 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return new GameStateValueBehaviour();
 	}
 
+	/**
+	 * Indicates the maximum depth of breadth-first-searched nodes that should be expanded in order to find the highest
+	 * scoring game state.
+	 * <p>
+	 * Setting this depth higher exponentially increases the number of nodes that could get visited for evaluating
+	 * potential game state scores.
+	 * <p>
+	 * Setting this depth too low will make the bot miss lethal, especially if it has to use more than {@code maxDepth}
+	 * cards or attack with more than {@code maxDepth} minions in order to kill the bot's opponent.
+	 * <p>
+	 * The default value on the hosted version of Spellsource is {@code 2}. For a good compromise between performance and
+	 * finding the most commmon lethals, choose {@code 5}.
+	 *
+	 * @return The currently configured maximium depth.
+	 */
 	public int getMaxDepth() {
 		return maxDepth;
 	}
@@ -129,6 +144,42 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return "Game state value " + nameSuffix;
 	}
 
+	/**
+	 * A strict plan is a cache of a computed path (sequence of actions) to a gamestate stored as the actions themselves.
+	 * <p>
+	 * Whenever you call {@link #requestAction(GameContext, Player, List)}, the instance of {@link
+	 * GameStateValueBehaviour} evaluates sequences of actions of length maximum {@link #getMaxDepth()}, and scores the
+	 * value of the <b>last</b> game state (i.e. the game state you arrive at after performing that sequence of actions).
+	 * But the {@link #requestAction(GameContext, Player, List)} method returns the <b>first</b> action in that sequence.
+	 * <p>
+	 * Clearly, the sequence of best actions isn't going to change before and after you take the {@link GameAction} that
+	 * was returned by the first call to {@link #requestAction(GameContext, Player, List)}. This {@link Deque} stores the
+	 * sequence that was computed as a side effect of {@link #requestAction(GameContext, Player, List)}. With it, the next
+	 * call to {@link #requestAction(GameContext, Player, List)} doesn't have to recompute a whole sequence of actions
+	 * every time; it can use whatever is left of the sequence of actions that led to the best scoring state.
+	 * <p>
+	 * Since game states are reproducible, and this behaviour "cheats" (it knows what the random seed is), there should be
+	 * an exact match between the {@link Deque#peekFirst()}'d {@link GameAction} in this plan and a game action returned
+	 * by {@link GameContext#getValidActions()}  until the plan has been exhausted (i.e. the plan is {@link
+	 * Deque#isEmpty()} {@code == true}).
+	 * <p>
+	 * Because the API of a {@link GameContext} does not guarantee that a {@link GameAction} has no references to the
+	 * {@link GameContext} or its objects, this class also implements a {@link #getIndexPlan()}, which uses integers to
+	 * represent an index into {@link GameContext#getValidActions()}.
+	 * <p>
+	 * For example, this code will "follow the plan" that was computed as a side effect of running {@link
+	 * #requestAction(GameContext, Player, List)}.
+	 * <pre>
+	 * {@code
+	 * while (!getStrictPlan().isEmpty()) {
+	 *   context.performGameAction(playerId, getStrictPlan().pollFirst());
+	 * }
+	 * }
+	 * </pre>
+	 *
+	 * @return A path of actions (state transitions) towards the highest scoring game state.
+	 * @see #getIndexPlan() for an equivalent representation of the path that does not use {@link GameAction} objects.
+	 */
 	public Deque<GameAction> getStrictPlan() {
 		return strictPlan;
 	}
@@ -583,6 +634,24 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		this.indexPlan = indexPlan;
 	}
 
+	/**
+	 * The index plan is a sequence of indices into {@link GameContext#getValidActions()} that the bot can perform to go
+	 * towards a previously-computed highest-scoring game state. It is essentially a cache of a prior computation of the
+	 * best possible {@link #getMaxDepth()} number of actions.
+	 * <p>
+	 * For example, this code will "follow the plan" that was computed as a side effect of running {@link
+	 * #requestAction(GameContext, Player, List)}.
+	 * <pre>
+	 * {@code
+	 * while (!getIndexPlan().isEmpty()) {
+	 *   context.performGameAction(playerId, context.getValidActions().get(getIndexPlan().pollFirst());
+	 * }
+	 * }
+	 * </pre>
+	 *
+	 * @return Indices into {@link GameContext#getValidActions()}
+	 * @see #getStrictPlan() for an explanation of how this cache works.
+	 */
 	public Deque<Integer> getIndexPlan() {
 		return indexPlan;
 	}
