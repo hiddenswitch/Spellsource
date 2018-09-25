@@ -1019,7 +1019,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
-	public void testWanderingMonster(){
+	public void testWanderingMonster() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_wandering_monster");
 			context.endTurn();
