@@ -1017,4 +1017,20 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testWanderingMonster() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_wandering_monster");
+			context.endTurn();
+			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			context.endTurn();
+			int startingHp = player.getHero().getHp();
+			attack(context, opponent, bloodfen, player.getHero());
+			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getHero().getHp(), startingHp);
+			assertTrue((int) player.getAttributes().get(Attribute.MINIONS_SUMMONED_THIS_TURN) > 0);
+		});
+	}
 }
