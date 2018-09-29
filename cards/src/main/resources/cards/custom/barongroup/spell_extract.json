@@ -1,0 +1,31 @@
+{
+  "name": "Extract",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Choose a minion. Recruit a minion with less Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+  "class": "SummonSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK"
+      },
+      "attribute": "ATTACK",
+      "cardType": "MINION",
+      "operation": "LESS"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
+    "targetPlayer": "SELF"
+  },
+    "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
