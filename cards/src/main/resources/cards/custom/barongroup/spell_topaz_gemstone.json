@@ -16,7 +16,7 @@
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_topaz_spellstone"
+      "card": "spell_greater_topaz_spellstone"
     },
     "countByValue": false,
     "keepAfterTransform": false
