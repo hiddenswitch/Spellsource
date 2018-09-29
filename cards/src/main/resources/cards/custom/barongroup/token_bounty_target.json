@@ -1,0 +1,28 @@
+{
+  "name": "Bounty Target",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Deathrattle: Summon a Bounty Target. Your opponent draws a card.",
+  "deathrattle": {
+    "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+    "class": "DrawCardSpell",
+    "value": 1,
+    "targetPlayer": "OPPONENT"
+      },
+        "class": "SummonSpell",
+        "card": "token_bounty_target"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
