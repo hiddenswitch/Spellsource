@@ -5,11 +5,19 @@
   "heroClass": "NAVY",
   "rarity": "FREE",
   "description": "Draw a card. Refresh this.",
+    "passiveTrigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RefreshHeroPowerSpell",
+      "targetPlayer": "SELF"
+    }
+  },
+
   "targetSelection": "NONE",
    "spell": {
-   "class": "MetaSpell",
-    "spells": [
-    {
     "class": "DrawCardSpell",
     "value": 1
       },
