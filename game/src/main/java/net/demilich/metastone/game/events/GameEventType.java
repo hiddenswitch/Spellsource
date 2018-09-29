@@ -45,5 +45,6 @@ public enum GameEventType {
 	FATIGUE,
 	AFTER_PLAY_CARD,
 	CARD_SHUFFLED,
-	INVOKED;
+	INVOKED,
+    PRE_GAME_START;
 }
