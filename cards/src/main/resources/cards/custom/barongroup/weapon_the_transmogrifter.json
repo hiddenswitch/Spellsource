@@ -1,0 +1,29 @@
+{
+  "name": "The Transmogrifter",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "NAVY",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After you summon a Knight, transform it into a random minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BeforeMinionPlayedTrigger",
+      "queueCondition": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+        "class": "TransformToRandomMinionSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
