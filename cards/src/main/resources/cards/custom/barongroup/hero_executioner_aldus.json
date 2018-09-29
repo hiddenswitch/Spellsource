@@ -1,6 +1,6 @@
 {
   "name": "Deathlord Mograine",
-  "heroPower": "hero_power_execute",
+  "heroPower": "hero_power_accuse",
   "baseManaCost": 4,
   "type": "HERO",
   "heroClass": "NAVY",
