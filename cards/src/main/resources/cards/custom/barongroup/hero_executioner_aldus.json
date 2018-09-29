@@ -1,0 +1,26 @@
+{
+  "name": "Deathlord Mograine",
+  "heroPower": "hero_power_execute",
+  "baseManaCost": 4,
+  "type": "HERO",
+  "heroClass": "NAVY",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon a 1/2 Bounty Target for your opponent that draws cards when it dies.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_bounty_target"
+      ],
+      "targetPlayer": "OPPONENT"
+    }
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
