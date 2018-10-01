@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: If you're holding a Dragon, give your minions +4 Health.",
+  "description": "Battlecry: If you're holding a Dragon, give your minions +2 Health.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",
@@ -20,7 +20,7 @@
     "spell": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
-      "hpBonus": 4
+      "hpBonus": 2
     }
   },
   "attributes": {
