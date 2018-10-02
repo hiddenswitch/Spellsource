@@ -1,10 +1,10 @@
 {
   "name": "Mother Gryphon",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "EGGPLANT",
-  "baseAttack": 5,
-  "baseHp": 5,
+  "baseAttack": 6,
+  "baseHp": 6,
   "rarity": "FREE",
   "race": "BEAST",
   "description": "",

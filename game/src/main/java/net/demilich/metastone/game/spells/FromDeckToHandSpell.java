@@ -50,7 +50,7 @@ public class FromDeckToHandSpell extends Spell {
 		checkArguments(logger, context, source, desc, SpellArg.VALUE, SpellArg.CARD_FILTER, SpellArg.CARD);
 		if (target != null && target.getEntityType() == EntityType.CARD) {
 			Card card = (Card) target;
-			if (player.getDeck().containsCard(card)) {
+			if (player.getDeck().contains(card)) {
 				context.getLogic().receiveCard(player.getId(), card, source, true);
 				if (desc.getSpell() != null) {
 					SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, card);
