@@ -1,0 +1,22 @@
+{
+  "name": "Crazed Explorer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 9,
+  "rarity": "EPIC",
+  "description": "Battlecry: Attack three random enemy minions.",
+  "battlecry": {
+    "spell": {
+    "value": 3,
+      "class": "FightSpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true,
+      "secondaryTarget": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
