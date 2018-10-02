@@ -316,7 +316,7 @@ public class CustomCardsTests extends TestBase {
 			Minion notBuffed = playMinionCard(context, player, "minion_bloodfen_raptor");
 			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
 			assertEquals(notBuffed.getHp(), notBuffed.getBaseHp());
-			player.setMana(5);
+			player.setMana(6);
 			playMinionCard(context, player, "minion_baby_gryphon");
 			// Get the right card
 			buffed = player.getMinions().get(player.getMinions().size() - 2);
