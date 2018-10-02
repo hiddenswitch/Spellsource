@@ -1,0 +1,23 @@
+{
+  "name": "Nightmare Tentacle",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ALL",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Xavius has +3 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "minion_xavius"
+    },
+    "hpBonus": 0
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
