@@ -12,11 +12,11 @@
         "description": "Choose a minion. Force a random friendly minion to attack it.",
         "spell": {
       "class": "TargetToSourceSecondaryToTargetSpell",
-      "target": "EVENT_TARGET",
+        "target": "FRIENDLY_MINIONS",
+        "randomTarget": true
       "spell": {
         "class": "FightSpell",
-        "target": "ENEMY_MINIONS",
-        "randomTarget": true
+        "target": "EVENT_TARGET",
         }
   },
   "collectible": false,
