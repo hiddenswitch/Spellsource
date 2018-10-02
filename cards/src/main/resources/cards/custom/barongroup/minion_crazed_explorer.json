@@ -9,8 +9,8 @@
   "description": "Battlecry: Attack three random enemy minions.",
   "battlecry": {
     "spell": {
-    "value": 3,
       "class": "FightSpell",
+      "value": 3,
       "target": "ENEMY_MINIONS",
       "randomTarget": true,
       "secondaryTarget": "SELF"
