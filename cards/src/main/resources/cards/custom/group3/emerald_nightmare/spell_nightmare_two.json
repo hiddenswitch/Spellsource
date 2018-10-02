@@ -1,0 +1,35 @@
+{
+  "name": "Nightmare",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give a minion +4/+4. At the end of your turn, destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 4,
+        "hpBonus": 4
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DestroySpell",
+            "target": "SELF"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
