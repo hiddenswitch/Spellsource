@@ -1826,6 +1826,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				manaCost = card.getAttributeValue(Attribute.INVOKE);
 			}
 		}
+
+		// A card that was invoked has a different modified mana cost
+		if (card.hasAttribute(Attribute.INVOKED)) {
+			manaCost = card.getAttributeValue(Attribute.INVOKED);
+		}
 		return manaCost;
 	}
 
