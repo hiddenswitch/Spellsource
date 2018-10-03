@@ -16,8 +16,8 @@
       }
     },
     "spell": {
-	"class": "ReceiveCardSpell",
-    "card": "spell_nightmare_two"
+      "class": "ReceiveCardSpell",
+      "card": "spell_nightmare_two"
     }
   },
   "attributes": {

@@ -23,7 +23,7 @@
           },
           "spell": {
             "class": "DestroySpell",
-            "target": "SELF"
+            "target": "TRIGGER_HOST"
           }
         }
       }
