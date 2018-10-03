@@ -1,0 +1,31 @@
+{
+  "name": "Desert Maiden",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "During your turn, Discover cards from your deck instead of drawing.",
+  "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "FromDeckToHandSpell"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "distinct": true
+      },
+      "exclusive": true
+    },
+    "removeEffect": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

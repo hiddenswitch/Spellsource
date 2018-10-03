@@ -1,0 +1,30 @@
+{
+  "name": "Pearlfur Howler",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Shuffle a minion that costs (1) or less into your opponent's deck.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ShuffleMinionToDeckSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "operation": "LESS_OR_EQUAL"
+      },
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -11,7 +11,10 @@
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
-        "class": "ChangeHeroPowerSpell"
+        "class": "CastAfterSequenceSpell",
+        "spell": {
+          "class": "ChangeHeroPowerSpell"
+        }
       },
       "cards": [
         "hero_power_fel_s_grip",
