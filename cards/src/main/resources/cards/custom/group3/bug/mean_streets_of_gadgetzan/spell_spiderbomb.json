@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Deal 3 damage. Summon a 1/1 Spiderling.",
+  "description": "Deal $3 damage. Summon a 1/1 Spiderling.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

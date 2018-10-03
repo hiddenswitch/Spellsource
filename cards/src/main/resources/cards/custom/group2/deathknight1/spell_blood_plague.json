@@ -1,0 +1,21 @@
+{
+  "name": "Blood Plague",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Give all minions 'Deathrattle: Deal $1 damage to adjacent minions.'",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ADJACENT_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

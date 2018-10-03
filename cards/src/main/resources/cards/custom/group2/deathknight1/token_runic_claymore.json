@@ -1,0 +1,13 @@
+{
+  "name": "Living Runic Claymore",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "COMMON",
-  "description": "Choose One - Deal 2 damage; or Summon two 1/1 Saplings.",
+  "description": "Choose One - Deal $2 damage; or Summon two 1/1 Saplings.",
   "targetSelection": "NONE",
   "chooseOneCardIds": [
     "spell_living_roots_1",

@@ -710,13 +710,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Gets minions geometrically right of the given {@code minionReference} on the {@link Zones#BATTLEFIELD} that belongs
 	 * to the specified player.
 	 *
-	 * @param player          The player to query.
 	 * @param minionReference The minion reference.
 	 * @return A list of {@link Actor} (sometimes empty) of minions to the geometric right of the {@code minionReference}.
 	 */
-	public List<Actor> getRightMinions(Player player, EntityReference minionReference) {
+	public List<Actor> getRightMinions(EntityReference minionReference) {
 		List<Actor> rightMinions = new ArrayList<>();
 		Actor minion = (Actor) resolveSingleTarget(minionReference);
+		Player player = getPlayer(minion.getOwner());
 		List<Minion> minions = getPlayer(minion.getOwner()).getMinions();
 		int index = minion.getEntityLocation().getIndex();
 		if (index == -1) {
