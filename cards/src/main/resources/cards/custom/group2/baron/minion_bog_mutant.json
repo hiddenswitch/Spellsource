@@ -1,0 +1,32 @@
+{
+  "name": "Bog Mutant",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Deathrattle: If your hand is full, Recruit a minion.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 10,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "OWNER"
+    },
+    "spell": {
+      "class": "RecruitSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

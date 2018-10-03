@@ -1021,6 +1021,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testWanderingMonster() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.CLASSIC, CardSet.BASIC));
 			playCard(context, player, "secret_wandering_monster");
 			context.endTurn();
 			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
