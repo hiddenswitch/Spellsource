@@ -17,9 +17,9 @@
         "attackBonus": 1,
         "hpBonus": 1
       },
-      "randomTarget": true,
       "exclusive": true,
-      "howMany": 3
+      "howMany": 3,
+      "randomTarget": true
     }
   },
   "attributes": {
