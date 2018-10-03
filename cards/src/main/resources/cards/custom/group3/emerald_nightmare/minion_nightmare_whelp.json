@@ -1,13 +1,13 @@
 {
-  "name": "Jade Cloud Serpent",
-  "baseManaCost": 5,
+  "name": "Nightmare Whelp",
+  "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "JADE",
-  "baseAttack": 5,
-  "baseHp": 2,
-  "rarity": "RARE",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Battlecry: If you're holding a Dragon, give your minions +2 Health.",
+  "description": "Battlecry: If you're holding a Dragon, deal 2 damage.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",
@@ -16,11 +16,10 @@
         "race": "DRAGON"
       }
     },
-    "targetSelection": "NONE",
+    "targetSelection": "ANY",
     "spell": {
-      "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS",
-      "hpBonus": 2
+      "class": "DamageSpell",
+      "value": 2
     }
   },
   "attributes": {

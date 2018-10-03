@@ -1,0 +1,29 @@
+{
+  "name": "Dastardly Duo",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "Summon a copy of a friendly minion. Give them both Taunt.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "TAUNT"
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

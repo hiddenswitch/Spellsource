@@ -112,7 +112,36 @@ public class CustomCardsTests extends TestBase {
 				}
 			});
 		}
+	}
 
+	@Test
+	public void testBlackflameRitualMadProphecyInteraction() {
+		// Interaction with Mad Prophet Rosea should cast a 2x 10/10 minions
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_mad_prophet_rosea");
+			player.setMaxMana(10);
+			player.setMana(10);
+			Card blackflameRitual = receiveCard(context, player, "spell_blackflame_ritual");
+			playCard(context, player, blackflameRitual);
+			for (int i = 2; i < 4; i++) {
+				Minion token = player.getMinions().get(i);
+				assertEquals(token.getAttack(), 10);
+				assertEquals(token.getHp(), 10);
+			}
+		});
+	}
+
+	@Test
+	public void testArcaneTyrantInvokeInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
+			player.setMana(10);
+			player.setMaxMana(10);
+			// Petrifying Gaze is a cost 3 with an invoke of 9
+			playCardWithTarget(context, player, "spell_petrifying_gaze", bloodfen);
+			Card arcaneTyrant = receiveCard(context, player, "minion_arcane_tyrant");
+			assertEquals(costOf(context, player, arcaneTyrant), 0, "Petrifying Gaze should have been played as a Cost-9 card.");
+		});
 	}
 
 	@Test
@@ -316,7 +345,7 @@ public class CustomCardsTests extends TestBase {
 			Minion notBuffed = playMinionCard(context, player, "minion_bloodfen_raptor");
 			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
 			assertEquals(notBuffed.getHp(), notBuffed.getBaseHp());
-			player.setMana(5);
+			player.setMana(6);
 			playMinionCard(context, player, "minion_baby_gryphon");
 			// Get the right card
 			buffed = player.getMinions().get(player.getMinions().size() - 2);

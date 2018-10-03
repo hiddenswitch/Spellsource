@@ -1,13 +1,12 @@
 {
-  "name": "Jade Cloud Serpent",
-  "baseManaCost": 5,
+  "name": "Faerie Nightmare",
+  "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "JADE",
-  "baseAttack": 5,
-  "baseHp": 2,
-  "rarity": "RARE",
-  "race": "DRAGON",
-  "description": "Battlecry: If you're holding a Dragon, give your minions +2 Health.",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: If you're holding a Dragon, gain +2 Health.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",
@@ -19,7 +18,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS",
+      "target": "SELF",
       "hpBonus": 2
     }
   },
