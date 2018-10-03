@@ -312,7 +312,7 @@ public class WitchwoodTests extends TestBase {
 	public void testMalchezaarBaku() {
 		int success = 0;
 		for (int i = 0; i < 100; i++) {
-			DebugContext debug = createContext(HeroClass.BLUE, HeroClass.BLUE, false);
+			DebugContext debug = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.ALL);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 				for (int j = 0; j < 10; j++) {
