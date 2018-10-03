@@ -1,0 +1,34 @@
+{
+  "name": "Frost Wyrm",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: Deal 2 damage to all other characters and Freeze them.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ALL_OTHER_CHARACTERS",
+          "value": 2
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "ALL_OTHER_CHARACTERS",
+          "attribute": "FROZEN"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

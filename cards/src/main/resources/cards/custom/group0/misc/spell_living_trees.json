@@ -4,7 +4,7 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Choose One - Deal 4 damage; or Summon two 2/2 Treants.",
+  "description": "Choose One - Deal $4 damage; or Summon two 2/2 Treants.",
   "targetSelection": "NONE",
   "chooseOneCardIds": [
     "spell_living_trees_1",
