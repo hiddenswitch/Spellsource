@@ -2,6 +2,8 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.actions.PlayChooseOneCardAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -200,11 +202,15 @@ public class BoomsdayProjectTests extends TestBase {
 	@Test
 	public void testUnexpectedResults() { //well hopefully we can get some expected results here
 		runGym((context, player, opponent) -> {
+			// Just summon basic cards so that there aren't so many weird interactions
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_unexpected_results");
 			assertEquals(player.getMinions().get(0).getSourceCard().getBaseManaCost(), 2);
 			assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 2);
 		});
+
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "minion_bloodmage_thalnos");
 			playCard(context, player, "spell_unexpected_results");
 			assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 3);

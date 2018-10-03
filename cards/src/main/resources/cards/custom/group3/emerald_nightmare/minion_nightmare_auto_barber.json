@@ -5,8 +5,8 @@
   "heroClass": "BLACK",
   "baseAttack": 2,
   "baseHp": 3,
-  "rarity": "Common",
-  "race": "Mech",
+  "rarity": "COMMON",
+  "race": "MECH",
   "description": "Battlecry: Give your weapon +1 Durability.",
   "battlecry": {
     "spell": {

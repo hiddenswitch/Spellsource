@@ -15,7 +15,7 @@
     },
     "spell": {
       "class": "BuffSpell",
-      "target": "SELF",
+      "target": "TRIGGER_HOST",
       "hpBonus": 2
     }
   },

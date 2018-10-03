@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus:" 3
+        "hpBonus": 3
       },
       {
         "class": "SummonSpell",
@@ -19,6 +19,9 @@
           "class": "CardFilter",
           "cardType": "MINION",
           "manaCost": 3
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
         }
       }
     ]
