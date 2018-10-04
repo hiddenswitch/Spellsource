@@ -1,0 +1,19 @@
+{
+  "name": "Alternate Glacial Mysteries",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Put one of each Secret from your deck into the battlefield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "PutRandomSecretIntoPlaySpell",
+    "cardSource": {
+      "class": "DeckSource"
+    },
+    "howMany": 60
+  },
+  "collectible": true,
+  "set": "ALTERNATE",
+  "fileFormatVersion": 1
+}
