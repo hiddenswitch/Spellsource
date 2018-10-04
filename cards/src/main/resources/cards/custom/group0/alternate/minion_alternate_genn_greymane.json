@@ -1,15 +1,14 @@
 {
-  "name": "Alternate Baku the Mooneater",
-  "baseManaCost": 9,
+  "name": "Alternate Genn Greymane",
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 7,
-  "baseHp": 8,
+  "baseAttack": 6,
+  "baseHp": 5,
   "rarity": "LEGENDARY",
-  "race": "BEAST",
-  "description": "Start of Game: If your deck has only odd-Cost cards, upgrade your Hero Power.",
+  "description": "Start of Game: If your deck has only even-Cost cards, your Hero Power costs (1) less this game.",
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "ALTERNATE",
   "fileFormatVersion": 1,
   "gameTriggers": [
     {
@@ -41,8 +40,7 @@
               },
               "value1": {
                 "class": "AttributeValueProvider",
-                "attribute": "BASE_MANA_COST",
-                "offset": 1
+                "attribute": "BASE_MANA_COST"
               },
               "value2": 2
             },
@@ -65,8 +63,7 @@
               },
               "value1": {
                 "class": "AttributeValueProvider",
-                "attribute": "BASE_MANA_COST",
-                "offset": 1
+                "attribute": "BASE_MANA_COST"
               },
               "value2": 2
             }
@@ -76,14 +73,19 @@
           "class": "MetaSpell",
           "spells": [
             {
+              "class": "CardCostModifierSpell",
+              "target": "FRIEDNLY_PLAYER",
+              "cardCostModifier": {
+                "class": "CardCostModifier",
+                "target": "FRIENDLY_HERO_POWER",
+                "value": 1,
+                "operation": "SUBTRACT"
+              }
+            },
+            {
               "class": "RevealCardSpell",
               "target": "SELF",
               "targetPlayer": "SELF"
-            },
-            {
-              "class": "custom.UpgradeHeroPowerSpell",
-              "targetPlayer": "SELF",
-              "exclusive": true
             }
           ]
         }

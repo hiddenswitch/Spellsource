@@ -1,0 +1,26 @@
+{
+  "name": "Alternate Damaged Stegotron",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 12,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Taunt. Battlecry: Deal 5 damage to this minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "SELF",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "ALTERNATE",
+  "fileFormatVersion": 1
+}
