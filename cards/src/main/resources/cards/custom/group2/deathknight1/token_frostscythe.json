@@ -1,0 +1,55 @@
+{
+  "name": "Living Frostscythe",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "ICE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Also damages the minions next to whomever this attacks. Deals double damage to the target minion if it is Frozen.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "spell": {
+            "class": "DamageSpell",
+            "target": "EVENT_TARGET",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "ATTACK"
+            }
+          },
+          "condition": {
+            "class": "AttributeCondition",
+            "attribute": "FROZEN",
+            "target": "EVENT_TARGET",
+            "operation": "HAS"
+          }
+        },
+        {
+          "class": "AdjacentEffectSpell",
+          "target": "EVENT_TARGET",
+          "spell2": {
+            "class": "DamageSpell",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "ATTACK"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -47,7 +47,7 @@ public class TargetToSourceSecondaryToTargetSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Entity secondTarget = context.resolveSingleTarget((EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+		Entity secondTarget = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		List<SpellDesc> subSpells = desc.subSpells(0);
 		if (target == null && (subSpells == null || subSpells.isEmpty())) {
 			return;

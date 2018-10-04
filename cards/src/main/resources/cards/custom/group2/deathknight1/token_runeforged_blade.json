@@ -1,0 +1,13 @@
+{
+  "name": "Living Runeforged Blade",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
