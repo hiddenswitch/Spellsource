@@ -1,0 +1,29 @@
+{
+  "name": "Lingering Apparition",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "EPIC",
+  "description": "Choose an enemy minion. As long as it lives, your minions are Immune during your opponent's turn.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "aura": {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_MINIONS",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "INACTIVE"
+      },
+      "attribute": "AURA_IMMUNE",
+      "secondaryTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "BOTH"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

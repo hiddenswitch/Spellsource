@@ -1,0 +1,56 @@
+{
+  "name": "Frostscythe",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "ICE",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "Also damages the minions next to whomever your hero attacks. Deals double damage to the target minion if it is Frozen.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "spell": {
+            "class": "DamageSpell",
+            "target": "EVENT_TARGET",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_HERO",
+              "attribute": "ATTACK"
+            }
+          },
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "EVENT_TARGET",
+            "attribute": "FROZEN",
+            "operation": "HAS"
+          }
+        },
+        {
+          "class": "AdjacentEffectSpell",
+          "target": "EVENT_TARGET",
+          "spell2": {
+            "class": "DamageSpell",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_HERO",
+              "attribute": "ATTACK"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

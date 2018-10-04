@@ -1,0 +1,15 @@
+{
+  "name": "Amal'thuzad",
+  "heroPower": "hero_power_winds_of_northrend",
+  "baseManaCost": 10,
+  "type": "HERO",
+  "heroClass": "ICE",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "HP": 15,
+    "MAX_HP": 15
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

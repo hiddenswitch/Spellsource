@@ -263,7 +263,7 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
 			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
-			return new ArrayList<>(context.getRightMinions(player, source.getReference()));
+			return new ArrayList<>(context.getRightMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.LEFTMOST_ENEMY_MINION)) {
 			final List<Entity> minions = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
 			if (minions.size() == 0) {
@@ -400,7 +400,7 @@ public class TargetLogic implements Serializable {
 				return new ArrayList<>();
 			} else return singleTargetAsList(leftMinions.get(leftMinions.size() - 1));
 		} else if (targetKey.equals(EntityReference.RIGHT_ADJACENT_MINION)) {
-			List<Actor> rightMinions = context.getRightMinions(player, source.getReference());
+			List<Actor> rightMinions = context.getRightMinions(source.getReference());
 			if (rightMinions.isEmpty()) {
 				return new ArrayList<>();
 			} else return singleTargetAsList(rightMinions.get(0));
