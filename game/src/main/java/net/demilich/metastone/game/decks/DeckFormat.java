@@ -93,6 +93,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							BATTLE_FOR_ASHENVALE,
+							ALTERNATE,
 							SANDS_OF_TIME,
 							HALL_OF_FAME,
 							CardSet.CUSTOM
