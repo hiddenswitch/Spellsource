@@ -1,0 +1,17 @@
+{
+  "name": "Hot Meal",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal 1 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Spicy Elemental",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

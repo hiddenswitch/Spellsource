@@ -1,0 +1,28 @@
+{
+  "name": "Cannibal Cake",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Battlecry: Roast three 1-Cost minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RoastCardSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "CardFilter",
+        "manaCost": 1,
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

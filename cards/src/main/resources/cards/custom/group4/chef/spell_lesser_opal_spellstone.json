@@ -1,0 +1,17 @@
+{
+  "name": "Lesser Opal Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal 2 damage. (Roast 2 cards to upgrade).",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

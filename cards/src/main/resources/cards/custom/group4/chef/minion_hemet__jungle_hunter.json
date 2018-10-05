@@ -1,0 +1,27 @@
+{
+  "name": "Hemet, Jungle Hunter",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Battlecry: Destroy all cards in deck that cost your (3) or less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "FRIENDLY_CHARACTERS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Unsatisfied Customer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Add the last card YOu Roasted this turn to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "card": "spell_mirror_image"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

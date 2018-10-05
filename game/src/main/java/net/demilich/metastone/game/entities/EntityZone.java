@@ -1,11 +1,14 @@
 package net.demilich.metastone.game.entities;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.AbstractList;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -28,6 +31,15 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public EntityZone(int player, Zones zone) {
 		this.zone = zone;
 		this.player = player;
+	}
+
+	@NotNull
+	public static Comparator<Card> getManaCostComparator() {
+		return (card1, card2) -> {
+			Integer manaCost1 = card1.getBaseManaCost();
+			Integer manaCost2 = card2.getBaseManaCost();
+			return manaCost1.compareTo(manaCost2);
+		};
 	}
 
 	@SuppressWarnings("unchecked")

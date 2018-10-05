@@ -1,0 +1,30 @@
+{
+  "name": "Opal Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal 2 damage. Add a Lesser Opal Spellstone to your hand. (Roast 2 cards to upgrade)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_mirror_image"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Al Dente",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal 3 damage to a minion. If that kills it without excess damage, return this to your hand.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 1,
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

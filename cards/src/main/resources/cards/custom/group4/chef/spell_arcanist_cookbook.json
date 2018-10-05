@@ -1,0 +1,26 @@
+{
+  "name": "Arcanist Cookbook",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Discover a Beast, a Dragon or a Murloc.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "CatalogueSource"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

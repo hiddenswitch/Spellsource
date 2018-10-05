@@ -1,0 +1,18 @@
+{
+  "name": "Tree",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Banana Taunt After this minion takes add damage, a Banana to your hand. 7",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "target": "FRIENDLY_MINIONS",
+    "card": "spell_mirror_image"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

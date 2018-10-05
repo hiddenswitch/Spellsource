@@ -1,0 +1,35 @@
+{
+  "name": "Tuskarr Provisions",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Discover, then Roast, then draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

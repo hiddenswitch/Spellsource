@@ -1,0 +1,27 @@
+{
+  "name": "Kitchenlord",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Ragnaros, At the end of turn, your randomly draw or Roast cards until you have 8 in hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "value": 1,
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

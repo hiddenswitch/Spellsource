@@ -1,0 +1,14 @@
+{
+  "name": "Skilled Cook",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "You can now choose the target of Hero Power. your",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

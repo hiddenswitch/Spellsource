@@ -30,6 +30,10 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.OriginalValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -706,7 +710,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			source = context.resolveSingleTarget(sourceReference);
 		}
 
-		//Implement SpellOverrideAura
+		// Implement SpellOverrideAura
 		Class<? extends Spell> spellClass = spellDesc.getDescClass();
 		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof SpellOverrideAura)
@@ -732,7 +736,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			spellDesc = spellDesc.clone();
 			for (Aura aura : overrideAuras) {
 				for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
-					spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
+					Object value = spellArgObjectEntry.getValue();
+
+					boolean originalValueProvider = value instanceof OriginalValueProvider;
+					if (originalValueProvider) {
+						if (spellDesc.containsKey(spellArgObjectEntry.getKey())) {
+							// Only override key/value pairs in the override using OriginalValueProvider if the original value exists
+							Object originalValue = spellDesc.get(spellArgObjectEntry.getKey());
+							ValueProvider newValue = (ValueProvider) value;
+							ValueProviderDesc newDesc = newValue.getDesc().clone();
+							newDesc.put(ValueProviderArg.VALUE, originalValue);
+							newValue.setDesc(newDesc);
+							value = newValue;
+						} else {
+							// If the key doesn't exist in the original SpellDesc that we're trying to retrieve with
+							// OriginalValueProvider, don't put the new key/value pair into the new SpellDesc
+							continue;
+						}
+					}
+					spellDesc.put(spellArgObjectEntry.getKey(), value);
 				}
 			}
 		}

@@ -1,0 +1,21 @@
+{
+  "name": "Healing Mushroom",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Your next Hero Power deals 2 more damage and has Lifesteal.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 1,
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

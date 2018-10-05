@@ -1,0 +1,21 @@
+{
+  "name": "Top Chef",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Look at the top card of deck. If it costs your (5) or more, draw it. Otherwise, Roast it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": 1,
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

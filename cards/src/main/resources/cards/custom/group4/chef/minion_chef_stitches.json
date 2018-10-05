@@ -1,0 +1,23 @@
+{
+  "name": "Chef Stitches",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Your Roast effects now draw cards instead.",
+  "aura": {
+    "class": "SpellOverrideAura",
+    "applyEffect": {
+      "class": "DrawCardSpell"
+    },
+    "removeEffect": {
+      "class": "RoastCardSpell"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "The Rokk",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "After you cast a spell on a minion, cast copies on adjacent minions (left minion first).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

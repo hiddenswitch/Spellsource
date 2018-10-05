@@ -1,0 +1,16 @@
+{
+  "name": "Mass Extinction",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Destroy all minions except those with the lowest Attack. Adapt them.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

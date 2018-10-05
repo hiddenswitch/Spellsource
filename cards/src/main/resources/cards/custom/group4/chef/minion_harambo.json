@@ -1,0 +1,25 @@
+{
+  "name": "Harambo",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Boss Battlecry: Add 10 Bananas to haND and put your any excess to the bottom of your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "card": "spell_mirror_image"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,14 @@
+{
+  "name": "Inedible Ghoul",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "When you Roast this, deal 3 damage to all enemy minions.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

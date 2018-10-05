@@ -1,0 +1,19 @@
+{
+  "name": "At the end of your turn,",
+  "baseManaCost": null,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "add a random Chef spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "card": "spell_mirror_image",
+    "randomTarget": true
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

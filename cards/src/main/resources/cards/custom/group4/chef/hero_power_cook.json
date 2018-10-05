@@ -1,0 +1,22 @@
+{
+  "name": "Cook",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to a random enemy.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

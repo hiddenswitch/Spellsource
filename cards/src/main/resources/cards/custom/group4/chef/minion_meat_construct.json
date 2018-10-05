@@ -1,0 +1,21 @@
+{
+  "name": "Meat Construct",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "Deathrattle: If your deck is empty, resummon this.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "card": "minion_bloodfen_raptor"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Uitimate Recipe",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "The Quest: 7 cards Add to your deck. Reward: Titan Feast.",
+  "quest": {
+    "class": "CardPlayedTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 5,
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_the_coin"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
