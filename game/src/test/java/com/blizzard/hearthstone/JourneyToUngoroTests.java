@@ -30,8 +30,7 @@ import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
+import static org.testng.Assert.*;
 
 public class JourneyToUngoroTests extends TestBase {
 
@@ -309,6 +308,20 @@ public class JourneyToUngoroTests extends TestBase {
 			context.endTurn();
 			playCard(context, player, "minion_bloodfen_raptor");
 			assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
+		});
+
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_wisp");
+				receiveCard(context, player, "minion_novice_engineer");
+			}
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, player.getHand().get(0));
+			}
+			assertTrue(player.getHand().filtered(c -> c.getCardId().equals("spell_crystal_core")).isEmpty());
+
 		});
 	}
 
