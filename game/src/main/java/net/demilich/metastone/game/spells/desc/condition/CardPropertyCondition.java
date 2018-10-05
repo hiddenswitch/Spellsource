@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 public class CardPropertyCondition extends Condition {
@@ -36,6 +37,11 @@ public class CardPropertyCondition extends Condition {
 
 		HeroClass heroClass = (HeroClass) desc.get(ConditionArg.HERO_CLASS);
 		if (heroClass != null && !card.hasHeroClass(heroClass)) {
+			return false;
+		}
+
+		Race race = (Race)desc.get(ConditionArg.RACE);
+		if (race != null && !card.getRace().hasRace(race)) {
 			return false;
 		}
 

@@ -1,0 +1,32 @@
+{
+  "name": "Roasting Drake",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Battlecry: If your deck contains 15 or less cards, deal 4 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "name": "Tasty Murloc",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "MURLOC",
+  "description": "When you Roast this, add a Meal to your hand that restores 7 Health.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -25,6 +25,7 @@ public enum HeroClass {
 	SPIRIT,
 	OBSIDIAN,
 	AMBER,
+	TOAST,
 	SELF,
 	OPPONENT,
 	INHERIT;
@@ -65,6 +66,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_nerzhul");
 			case AMBER:
 				return CardCatalogue.getCardById("hero_zara");
+			case TOAST:
+				return CardCatalogue.getCardById("hero_warchef_gordo");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

@@ -1,0 +1,47 @@
+{
+  "name": "Banana Juice Bottle",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Battlecry: If you played a 1-Cost spell this turn, gain +1/+1.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_GRAVEYARD",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "manaCost": 1,
+            "cardType": "SPELL"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "operation": "EQUALS"
+          }
+        ]
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

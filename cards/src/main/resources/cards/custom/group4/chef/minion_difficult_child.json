@@ -1,0 +1,35 @@
+{
+  "name": "Difficult Child",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Battlecry: Roast a card. If it costs (2) or less, return this to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RoastCardSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "target": "OUTPUT",
+        "condition": {
+          "class": "ManaCostCondition",
+          "value": 2,
+          "operation": "LESS_OR_EQUAL"
+        },
+        "spell": {
+          "class": "ReturnTargetToHandSpell",
+          "target": "SELF"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

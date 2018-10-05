@@ -1,0 +1,28 @@
+{
+  "name": "Unidentified Mushroom",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Your next Hero Power deals 2 more damage. Gains a bonus effect in your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 0,
+        "hpBonus": 0
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

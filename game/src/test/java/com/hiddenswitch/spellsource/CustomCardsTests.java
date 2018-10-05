@@ -51,6 +51,38 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBananamancer() {
+		runGym((context, player, opponent) -> {
+			// Giving a hero bonus armor with a spell played from hand
+			playMinionCard(context, player, "minion_bananamancer");
+			playCard(context, player, "spell_gnash");
+			assertEquals(player.getHero().getAttack(), 4, "3 + 1 spell damage");
+			assertEquals(player.getHero().getArmor(), 4, "3 + 1 spell damage");
+		});
+
+		runGym((context, player, opponent) -> {
+			// Giving a minion a buff from a spell should buff it, from a subsequent battlecry should not
+			playMinionCard(context, player, "minion_bananamancer");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_mark_of_the_lotus");
+			assertEquals(wisp.getAttack(), wisp.getBaseAttack() + 2, "1 + 1 spell damage");
+			assertEquals(wisp.getHp(), wisp.getBaseHp() + 2, "1 + 1 spell damage");
+			playMinionCardWithBattlecry(context, player, "minion_fallen_sun_cleric", wisp);
+			assertEquals(wisp.getAttack(), wisp.getBaseAttack() + 3, "1 + 1 spell damage + 1 Sun Cleric buff");
+			assertEquals(wisp.getHp(), wisp.getBaseHp() + 3, "1 + 1 spell damage + 1 Sun Cleric buff");
+		});
+
+		runGym((context, player, opponent) -> {
+			// Give your hero 2x the mana spent in armor + 1 spell damage = 21 armor
+			playMinionCard(context, player, "minion_bananamancer");
+			player.setMaxMana(10);
+			player.setMana(10);
+			playCard(context, player, "spell_forbidden_armor");
+			assertEquals(player.getHero().getArmor(), 21, "2x the mana spent in armor + 1 spell damage = 21 armor");
+		});
+	}
+
+	@Test
 	public void testFlamewarper() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_flamewarper");

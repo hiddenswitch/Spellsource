@@ -1,0 +1,28 @@
+{
+  "name": "Red Proto-whelp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, draw a card you added to your deck.",
+  "battlecry": {
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

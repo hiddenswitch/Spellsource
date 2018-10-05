@@ -1,0 +1,17 @@
+{
+  "name": "Beefy Vegetarian",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "Taunt. Can't attack.",
+  "attributes": {
+    "TAUNT": true,
+    "CANNOT_ATTACK": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

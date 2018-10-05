@@ -1,0 +1,15 @@
+{
+  "name": "Utrasaur",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 7,
+  "baseHp": 14,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

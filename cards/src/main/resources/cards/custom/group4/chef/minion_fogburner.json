@@ -1,0 +1,34 @@
+{
+  "name": "Fogburner",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "After a character takes untargeted damage, gain +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "AllMatchFilterCondition",
+        "filter": {
+          "class": "EntityEqualsFilter",
+          "secondaryTarget": "TARGET"
+        },
+        "invert": true
+      }
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "TRIGGER_HOST",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

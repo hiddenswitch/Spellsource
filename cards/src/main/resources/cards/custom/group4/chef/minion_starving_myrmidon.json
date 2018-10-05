@@ -1,0 +1,27 @@
+{
+  "name": "Starving Myrmidon",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Battlecry: lf your deck contains 8 or less cards, destroy a minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "FRIENDLY_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

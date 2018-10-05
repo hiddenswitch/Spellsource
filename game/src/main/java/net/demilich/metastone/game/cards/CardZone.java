@@ -123,13 +123,7 @@ public class CardZone extends EntityZone<Card> implements CardList {
 
 	@Override
 	public void sortByManaCost() {
-		Comparator<Card> manaComparator = (card1, card2) -> {
-			Integer manaCost1 = card1.getBaseManaCost();
-			Integer manaCost2 = card2.getBaseManaCost();
-			return manaCost1.compareTo(manaCost2);
-		};
-
-		sort(manaComparator);
+		sort(getManaCostComparator());
 	}
 
 	@Override

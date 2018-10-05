@@ -1,0 +1,27 @@
+{
+  "name": "Weird Mushroom",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Give a minion +3/+ +3 or destroy it (at random).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 0,
+        "hpBonus": 0
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

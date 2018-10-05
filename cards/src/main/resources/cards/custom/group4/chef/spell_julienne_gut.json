@@ -1,0 +1,25 @@
+{
+  "name": "Julienne Gut",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Destroy a minion. Summon two 1/1 copies of it to replace it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "minion_bloodfen_raptor"
+      },
+      {
+        "class": "DestroySpell"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

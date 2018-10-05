@@ -15,3 +15,4 @@ public class CurrentTurnValueProvider extends ValueProvider {
 		return context.getTurn();
 	}
 }
+

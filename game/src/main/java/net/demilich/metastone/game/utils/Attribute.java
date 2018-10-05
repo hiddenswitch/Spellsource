@@ -37,6 +37,16 @@ public enum Attribute {
 	 */
 	HP,
 	/**
+	 * Returns the index of the entity in its current zone.
+	 */
+	INDEX,
+	/**
+	 * Returns the index of the entity from the end of its current zone.
+	 * <p>
+	 * For example, if it's the last element (i.e., index {@code -1}), its index from the end will be {@code 1}.
+	 */
+	INDEX_FROM_END,
+	/**
 	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base attack
 	 * value of the {@link Minion} this card would summon.
 	 */
@@ -732,7 +742,7 @@ public enum Attribute {
 	 */
 	DOUBLE_END_TURN_TRIGGERS,
 	/**
-	 * Indicates that the specified card was played from the hand or the deck.
+	 * Indicates the {@link Integer} turn that the specified card was played from the hand or the deck.
 	 */
 	PLAYED_FROM_HAND_OR_DECK,
 	/**
@@ -875,7 +885,7 @@ public enum Attribute {
 	 */
 	MAGNETIC,
 	/**
-	 * An array of card IDs that correspond to which cards this card was magnetized from
+	 * An array of card ID strings that correspond to which cards this card was magnetized from.
 	 */
 	MAGNETS,
 	/*
@@ -883,9 +893,16 @@ public enum Attribute {
 	 */
 	HAND_INDEX,
 	/**
+	 * Indicates this card was roasted (removed from the top of the deck) by a {@link
+	 * net.demilich.metastone.game.spells.RoastCardSpell} on the specified {@link Integer} turn.
+	 * <p>
+	 * Implements Warchef Gordo / Chef's Roast effect.
+	 */
+	ROASTED,
+	/**
 	 * Indicates an {@link Actor} will do something when it attacks and kills a minion.
 	 * <p>
-	 * Implements Alder Ravenwald / Supremacy hero.
+	 * Implements Alder Ravenwald / Dragoon's Supremacy effect.
 	 */
 	SUPREMACY,
 	/**

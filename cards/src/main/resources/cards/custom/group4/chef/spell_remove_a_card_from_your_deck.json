@@ -1,0 +1,22 @@
+{
+  "name": "Remove a card from your deck",
+  "baseManaCost": null,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "(the top card if no precisions).",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF",
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

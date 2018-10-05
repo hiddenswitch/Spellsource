@@ -1,0 +1,29 @@
+{
+  "name": "Head of the Caravan",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Battlecry and Deathrattle: Summon a 0/ 4 Caravan.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "minion_bloodfen_raptor"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

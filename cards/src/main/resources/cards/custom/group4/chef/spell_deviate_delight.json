@@ -1,0 +1,24 @@
+{
+  "name": "Deviate Delight",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Transform a minion into a 3/2 2 with either Charge or Stealth (at random).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TransformToRandomMinionSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "CatalogueSource"
+    },
+    "randomTarget": true
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

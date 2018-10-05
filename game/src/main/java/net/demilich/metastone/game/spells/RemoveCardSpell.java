@@ -7,8 +7,25 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+/**
+ * Removes the {@code target} {@link Card} by putting it directly from the zone it's currently in into the {@link
+ * Zones#GRAVEYARD}.
+ * <p>
+ * For example, to remove the top card from the opponent's deck:
+ * <pre>
+ *   {
+ *     "class": "RevealCardSpell",
+ *     "target": "ENEMY_TOP_CARD",
+ *     "spell": {
+ *       "class": "RemoveCardSpell",
+ *       "target": "OUTPUT"
+ *     }
+ *   }
+ * </pre>
+ */
 public class RemoveCardSpell extends Spell {
 
 	@Override
@@ -23,5 +40,4 @@ public class RemoveCardSpell extends Spell {
 		SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 		context.getLogic().removeCard(card);
 	}
-
 }
