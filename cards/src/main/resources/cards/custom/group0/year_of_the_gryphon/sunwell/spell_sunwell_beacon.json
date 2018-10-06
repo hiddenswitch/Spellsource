@@ -1,0 +1,41 @@
+{
+  "name": "Sunwell Beacon",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "COMMON",
+  "description": "Draw a Divine Shield, Lifesteal, and Taunt minion from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "attribute": "DIVINE_SHIELD"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "attribute": "LIFESTEAL"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "attribute": "TAUNT"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
