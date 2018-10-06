@@ -7,7 +7,8 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "description": "Whenever you cast a spell on a minion, cast it on the ones next to it instead.",
-  "eventTrigger": {
+  "trigger": {
+    "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
       "actionType": "SPELL",
       "queueCondition": {
@@ -22,7 +23,8 @@
       "target": "ADJACENT_MINIONS",
       "secondaryTarget": "EVENT_SOURCE"
       }
-    },
+    }
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
