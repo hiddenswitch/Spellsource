@@ -16,7 +16,7 @@
       },
     "spell": {
       "class": "MetaSpell",
-      "target": "EVENT_TARGET",
+      "target": "OUTPUT",
       "spells": [
         {
           "class": "SetAttackSpell",
@@ -32,7 +32,7 @@
       "class": "AddDeathrattleSpell",
       "spell": {
         "class": "SummonSpell",
-        "target": "EVENT_TARGET",
+        "target": "OUTPUT",
         "card": "minion_kiljaeden_the_deceiver"
       }
     }
