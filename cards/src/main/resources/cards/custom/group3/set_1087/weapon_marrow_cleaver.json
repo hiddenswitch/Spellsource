@@ -1,0 +1,34 @@
+{
+  "name": "Marrow Cleaver",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 6,
+  "durability": 1,
+  "rarity": "RARE",
+  "description": "Supremacy: Add a copy of this weapon to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "card": "weapon_marrow_cleaver"
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

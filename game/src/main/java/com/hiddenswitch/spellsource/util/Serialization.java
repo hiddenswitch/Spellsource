@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource.util;
 
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import org.nustaq.serialization.FSTConfiguration;
 
 import java.io.*;
 import java.util.Base64;

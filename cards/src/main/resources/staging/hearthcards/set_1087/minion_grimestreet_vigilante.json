@@ -1,0 +1,14 @@
+{
+  "name": "Grimestreet Vigilante",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "[b]Supremacy:[/b] Give a random minion in your hand +4 Attack.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

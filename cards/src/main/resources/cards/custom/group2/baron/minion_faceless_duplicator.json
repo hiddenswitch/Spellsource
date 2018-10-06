@@ -1,0 +1,22 @@
+{
+  "name": "Faceless Duplicator",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon a copy of a minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "SummonSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

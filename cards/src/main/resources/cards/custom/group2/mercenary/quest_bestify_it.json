@@ -1,0 +1,27 @@
+{
+  "name": "Bestify It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon two minions with 5 or more Attack. Reward: Enchant It!",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "queueCondition": {
+      "class": "AttributeCondition",
+      "value": 5,
+      "attribute": "ATTACK",
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 2,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_enchant_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

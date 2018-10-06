@@ -6,20 +6,29 @@
   "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Summon a 3/6 Water Elemental. Your Elementals have Lifesteal for the rest of the game.",
-  "aura": {
-    "class": "AttributeAura",
-    "target": "FRIENDLY_MINIONS",
-    "attribute": "LIFESTEAL",
-    "filter": {
-      "class": "RaceFilter",
-      "race": "ELEMENTAL"
-    }
-  },
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonSpell",
-      "card": "minion_water_elemental"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "card": "minion_water_elemental"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "AttributeAura",
+            "target": "FRIENDLY_MINIONS",
+            "attribute": "LIFESTEAL",
+            "filter": {
+              "class": "RaceFilter",
+              "race": "ELEMENTAL"
+            }
+          }
+        }
+      ]
     }
   },
   "attributes": {

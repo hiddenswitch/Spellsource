@@ -1,0 +1,35 @@
+{
+  "name": "Zavathion",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Charge. Deal any excess damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ExcessDamageSpell",
+      "target": "EVENT_TARGET",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "EVENT_SOURCE",
+        "attribute": "ATTACK"
+      },
+      "exclusive": true,
+      "secondaryTarget": "ENEMY_HERO"
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

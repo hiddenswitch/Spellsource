@@ -1,6 +1,6 @@
 {
   "name": "Possessed Lackey",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "VIOLET",
   "baseAttack": 2,

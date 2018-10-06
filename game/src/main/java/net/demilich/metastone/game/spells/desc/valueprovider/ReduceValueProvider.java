@@ -1,18 +1,27 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Performs {@link ValueProviderArg#OPERATION} on the values returned by {@link ValueProviderArg#VALUE1} applied to each
+ * entity resolved by {@link ValueProviderArg#TARGET}.
+ */
 public class ReduceValueProvider extends ValueProvider {
+
+	private static Logger logger = LoggerFactory.getLogger(ReduceValueProvider.class);
+
 	public ReduceValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}
@@ -39,8 +48,8 @@ public class ReduceValueProvider extends ValueProvider {
 	@Override
 	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		EntityReference sourceReference = (EntityReference) desc.get(ValueProviderArg.TARGET);
-		Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
+		EntityReference sourceReference = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
+		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
 		List<Entity> entities = null;
 		if (sourceReference != null) {
 			entities = context.resolveTarget(player, host, sourceReference);
@@ -52,43 +61,55 @@ public class ReduceValueProvider extends ValueProvider {
 			return 0;
 		}
 
-		AlgebraicOperation operation = desc.containsKey(ValueProviderArg.OPERATION) ?
-				(AlgebraicOperation) desc.get(ValueProviderArg.OPERATION)
+		AlgebraicOperation operation = getDesc().containsKey(ValueProviderArg.OPERATION) ?
+				(AlgebraicOperation) getDesc().get(ValueProviderArg.OPERATION)
 				: AlgebraicOperation.MAXIMUM;
 
 
-		EntityFilter filter = (EntityFilter) desc.get(ValueProviderArg.FILTER);
+		EntityFilter filter = (EntityFilter) getDesc().get(ValueProviderArg.FILTER);
+		if (filter != null) {
+			entities.removeIf(filter.matcher(context, player, host).negate());
+		}
+
 		int value;
 
 		if (operation == AlgebraicOperation.MAXIMUM) {
+			/* TODO: Revisit these value provider maximum errors
+			if (entities.isEmpty()) {
+				logger.error("provideValue {} {}: Trying to do a maximum with no entities targeted, returning zero.", context.getGameId(), host);
+				return 0;
+			}
+			*/
 			value = Integer.MIN_VALUE;
 		} else if (operation == AlgebraicOperation.MINIMUM) {
+			/* TODO: Revisit these value provider minimum errors
+			if (entities.isEmpty()) {
+				logger.error("provideValue {} {}: Trying to do a minimum with no entities targeted, returning zero.", context.getGameId(), host);
+				return 0;
+			}
+			*/
 			value = Integer.MAX_VALUE;
 		} else if (operation == AlgebraicOperation.MULTIPLY) {
 			value = 1;
 		} else if (operation == AlgebraicOperation.DIVIDE
 				|| operation == AlgebraicOperation.MODULO
 				|| operation == AlgebraicOperation.NEGATE) {
-			throw new UnsupportedOperationException("Cannot (or ill-advised) to do a reduce with a DIVIDE, MODULO or NEGATE operator.");
+			throw new UnsupportedOperationException("Cannot do a reduce with a DIVIDE, MODULO or NEGATE operator.");
 		} else {
 			value = 0;
 		}
 
 		for (Entity entity : entities) {
-			if (filter != null && !filter.matches(context, player, entity, host)) {
-				continue;
-			}
-
-			boolean isApplyingValueProvider = desc.containsKey(ValueProviderArg.VALUE1) &&
-					ValueProvider.class.isAssignableFrom(desc.get(ValueProviderArg.VALUE1).getClass());
+			boolean isApplyingValueProvider = getDesc().containsKey(ValueProviderArg.VALUE1) &&
+					ValueProvider.class.isAssignableFrom(getDesc().get(ValueProviderArg.VALUE1).getClass());
 			if (isApplyingValueProvider) {
-				ValueProvider targetValueProvider = (ValueProvider) desc.get(ValueProviderArg.VALUE1);
+				ValueProvider targetValueProvider = (ValueProvider) getDesc().get(ValueProviderArg.VALUE1);
 				value = operation.performOperation(value, targetValueProvider.getValue(context, player, entity, target));
 			} else if (attribute != null) {
 				int value1 = AttributeValueProvider.create(attribute, entity.getReference()).create().getValue(context, player, entity, host);
 				value = operation.performOperation(value, value1);
 			} else {
-				value = operation.performOperation(value, desc.getInt(ValueProviderArg.VALUE1));
+				value = operation.performOperation(value, getDesc().getInt(ValueProviderArg.VALUE1));
 			}
 
 		}

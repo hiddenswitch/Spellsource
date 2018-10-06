@@ -1,6 +1,6 @@
 {
   "name": "Naga Sea Witch",
-  "baseManaCost": 5,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 5,

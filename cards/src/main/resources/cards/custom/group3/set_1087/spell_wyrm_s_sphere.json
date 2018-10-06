@@ -1,0 +1,27 @@
+{
+  "name": "Wyrm's Sphere",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Discover a Dragon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DRAGON",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "CatalogueSource"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

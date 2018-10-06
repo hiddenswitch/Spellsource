@@ -3,12 +3,20 @@ package net.demilich.metastone.game.utils;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * An attribute map is a {@link Map} that contains {@link Attribute} as keys and {@link Object} (typically integers and
- * booleans) as values.
+ * booleans) as values. For example, the attributes of a minion that has "Divine Shield. Spell Damage +1" looks like:
+ * <pre>
+ *   {
+ *     "DIVINE_SHIELD": true,
+ *     "SPELL_DAMAGE": 1
+ *   }
+ * </pre>
+ * Observe that the key names are capitalized and have underscores, exactly like they appear in {@link Attribute}.
  * <p>
  * Attributes should store whatever is meant to be persisted throughout the game. They can be affected by spells like
  * {@link net.demilich.metastone.game.spells.AddAttributeSpell} and {@link net.demilich.metastone.game.spells.RemoveAttributeSpell};
@@ -18,21 +26,20 @@ import java.util.concurrent.ConcurrentHashMap;
  *
  * @see Attribute for more about valid attributes here.
  */
-public class AttributeMap extends ConcurrentHashMap<Attribute, Object> implements Serializable, Cloneable {
+//@JsonDeserialize(using = AttributeMapDeserializer.class)
+public class AttributeMap extends BaseMap<Attribute, Object> implements Serializable, Cloneable {
 	public AttributeMap() {
-		super();
+		super(Attribute.class);
 	}
 
 	public AttributeMap(Map<Attribute, Object> attributes) {
-		super(attributes);
+		super(attributes == null ? Collections.emptyMap() : attributes);
 	}
 
 	@Override
 	public AttributeMap clone() {
 		AttributeMap map = new AttributeMap();
-		synchronized (this) {
-			map.putAll(this);
-		}
+		map.putAll(this);
 		return map;
 	}
 

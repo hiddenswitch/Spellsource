@@ -1,0 +1,21 @@
+{
+  "name": "Enlist",
+  "heroPower": "hero_power_conscript",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Add a 2/2 Knight to your hand.",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_knight"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

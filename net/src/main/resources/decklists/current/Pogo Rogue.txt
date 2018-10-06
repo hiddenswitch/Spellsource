@@ -1,0 +1,22 @@
+Name: Pogo Rogue
+Class: Rogue
+Format: Standard
+2x Backstab
+2x Preparation
+2x Shadowstep
+2x Eviscerate
+2x Lab Recruiter
+2x Pogo-Hopper
+2x Sap
+1x Augmented Elekk
+1x Edwin VanCleef
+2x Fan of Knives
+1x Academic Espionage
+2x Elven Minstrel
+2x Fal'dorei Strider
+1x Giggling Inventor
+1x Myra's Unstable Element
+1x Vilespine Slayer
+1x Zilliax
+2x Gadgetzan Auctioneer
+1x Valeera the Hollow

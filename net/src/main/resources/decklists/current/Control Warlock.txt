@@ -1,25 +1,22 @@
-### Control Warlock - Standard Meta Snapshot - Jan. 8, 2018
-# Class: Violet
-# Format: Standard
-# Year of the Mammoth
-#
-# 1x (1) Dark Pact
-# 2x (1) Kobold Librarian
-# 2x (1) Mistress of Mixtures
-# 2x (1) Mortal Coil
-# 1x (2) Bloodmage Thalnos
-# 2x (2) Defile
-# 2x (2) Plated Beetle
-# 1x (2) Tainted Zealot
-# 1x (3) Stonehill Defender
-# 1x (3) Tar Creeper
-# 2x (4) Hellfire
-# 2x (4) Lesser Amethyst Spellstone
-# 1x (4) Spellbreaker
-# 2x (5) Possessed Lackey
-# 1x (6) Siphon Soul
-# 1x (6) Skulking Geist
-# 2x (8) Twisting Nether
-# 2x (9) Voidlord
-# 1x (10) Bloodreaver Gul'dan
-# 1x (10) N'Zoth, the Corruptor
+Name: Control Warlock
+Class: Warlock
+Format: Standard
+1x Sacrificial Pact
+2x Kobold Librarian
+2x Defile
+2x Demonic Project
+2x Doomsayer
+2x Gnomeferatu
+2x Vulgar Homunculus
+1x Ironbeak Owl
+2x Stonehill Defender
+2x Hellfire
+2x Lesser Amethyst Spellstone
+2x Shroom Brewer
+1x Big Game Hunter
+2x Giggling Inventor
+1x Siphon Soul
+1x Lord Godfrey
+1x Twisting Nether
+1x Voidlord
+1x Bloodreaver Gul'dan

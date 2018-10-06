@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.models;
 
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.util.SuspendableSerializableAction;
 import io.vertx.core.Vertx;
 

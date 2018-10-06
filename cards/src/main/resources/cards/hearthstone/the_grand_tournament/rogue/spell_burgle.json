@@ -9,10 +9,13 @@
   "spell": {
     "class": "ReceiveCardSpell",
     "value": 2,
-    "card": "spell_the_coin",
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "OPPONENT"
+    },
+    "cardSource": {
+      "class": "CatalogueSource",
+      "targetPlayer": "OPPONENT"
     }
   },
   "collectible": true,

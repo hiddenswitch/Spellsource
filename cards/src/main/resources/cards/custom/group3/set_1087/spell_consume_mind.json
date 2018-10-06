@@ -1,0 +1,29 @@
+{
+  "name": "Consume Mind",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage. Supremacy: Draw a card.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "DrawCardSpell"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

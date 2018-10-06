@@ -1,0 +1,23 @@
+{
+  "name": "Princess",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "<b>Battlecry:</b> Gain the <b>Deathrattles</b> of 3 random minions in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

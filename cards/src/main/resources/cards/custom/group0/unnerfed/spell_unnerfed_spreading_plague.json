@@ -1,0 +1,31 @@
+{
+  "name": "Unnerfed Spreading Plague",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Summon a 1/5 Scarab with Taunt. If your opponent has more minions, cast this again.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecastWhileSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "ENEMY_MINIONS"
+      },
+      "value2": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+      }
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_scarab_beetle"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

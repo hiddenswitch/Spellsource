@@ -1,0 +1,19 @@
+Name: Token Druid
+Class: Druid
+Format: Standard
+1x Innervate
+2x Lesser Jasper Spellstone
+2x Naturalize
+2x Power of the Wild
+2x Wild Growth
+2x Savage Roar
+2x Branching Paths
+2x Soul of the Forest
+2x Swipe
+2x Wispering Woods
+2x Arcane Tyrant
+2x Giggling Inventor
+2x Nourish
+2x Spreading Plague
+1x Malfurion the Pestilent
+2x Ultimate Infestation

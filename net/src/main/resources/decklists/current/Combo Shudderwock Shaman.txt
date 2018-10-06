@@ -1,0 +1,22 @@
+Name: Combo Shudderwock Shaman
+Class: Shaman
+Format: Standard
+1x Earth Shock
+2x Glacial Shard
+1x Prince Keleseth
+2x Acolyte of Pain
+1x Electra Stormsurge
+2x Far Sight
+1x Gluttonous Ooze
+2x Healing Rain
+2x Lightning Storm
+2x Mana Tide Totem
+2x Mind Control Tech
+1x Zola the Gorgon
+2x Hex
+2x Lifedrinker
+2x Saronite Chain Gang
+2x Volcano
+1x Grumble, Worldshaker
+1x Hagatha the Witch
+1x Shudderwock

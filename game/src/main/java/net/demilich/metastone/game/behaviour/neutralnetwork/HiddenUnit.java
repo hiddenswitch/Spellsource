@@ -17,13 +17,11 @@ public class HiddenUnit implements Unit {
 	protected double value;
 
 	/**
-	 * Builds a hidden unit taking the provided number of inputs. Sets the
-	 * initial weights to be a copy of the provided weights
+	 * Builds a hidden unit taking the provided number of inputs. Sets the initial weights to be a copy of the provided
+	 * weights
 	 *
-	 * @param units
-	 *            The input units to this unit
-	 * @param weights
-	 *            The weights to use
+	 * @param units   The input units to this unit
+	 * @param weights The weights to use
 	 */
 	protected HiddenUnit(Unit[] units, double[] weights) {
 		this.units = units;
@@ -33,13 +31,10 @@ public class HiddenUnit implements Unit {
 	}
 
 	/**
-	 * Builds a hidden unit taking the provided number of inputs. Sets the
-	 * initial weights to be random values to be 0.
+	 * Builds a hidden unit taking the provided number of inputs. Sets the initial weights to be random values to be 0.
 	 *
-	 * @param units
-	 *            The input units to this unit
-	 * @param random
-	 *            The random number generator
+	 * @param units  The input units to this unit
+	 * @param random The random number generator
 	 */
 	protected HiddenUnit(Unit[] units, Random random) {
 		this.units = units;
@@ -72,8 +67,7 @@ public class HiddenUnit implements Unit {
 	/**
 	 * Generates a new weight
 	 *
-	 * @param random
-	 *            The rng
+	 * @param random The rng
 	 * @return A new value
 	 */
 	public void randomizeWeights(Random random) {
@@ -89,13 +83,11 @@ public class HiddenUnit implements Unit {
 	}
 
 	/**
-	 * Implements the sigmoid function to provide the non-linearity to this
-	 * function. Simply returns
-	 *
+	 * Implements the sigmoid function to provide the non-linearity to this function. Simply returns
+	 * <p>
 	 * 1 / (1 + e^-x)
 	 *
-	 * @param x
-	 *            The value to apply the function to
+	 * @param x The value to apply the function to
 	 * @return The result
 	 */
 	protected double sigmoid(double x) {

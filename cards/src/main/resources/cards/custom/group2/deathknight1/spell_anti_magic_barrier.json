@@ -1,0 +1,25 @@
+{
+  "name": "Anti-Magic Barrier",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+2 and \"Can't be targeted by spells or Hero Powers.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "UNTARGETABLE_BY_SPELLS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

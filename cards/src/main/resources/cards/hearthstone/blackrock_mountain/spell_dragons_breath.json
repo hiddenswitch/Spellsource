@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Deal 4 damage. Costs (1) less for each minion that died this turn.",
+  "description": "Deal $4 damage. Costs (1) less for each minion that died this turn.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
@@ -14,6 +14,7 @@
   "set": "BLACKROCK_MOUNTAIN",
   "fileFormatVersion": 1,
   "manaCostModifier": {
-    "class": "DeadMinionsThisTurn"
+    "class": "DeadMinionsThisTurn",
+    "targetPlayer": "BOTH"
   }
 }

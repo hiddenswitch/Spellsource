@@ -1,22 +1,18 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.SpellFactory;
-import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
-import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider;
-import net.demilich.metastone.game.spells.desc.valueprovider.PlayerAttributeValueProvider;
 
 /**
  * Refreshes the player's mana by gaining an amount of mana equal to the difference in their max mana and current mana.
  * <p>
  * If a {@link SpellArg#VALUE} is provided, only refreshes that many mana crystals.
  * <p>
- * To use this, simple put {@code "RefreshManaSpell"} into the {@link SpellArg#CLASS} argument:
+ * To use this, simply put {@code "RefreshManaSpell"} into the {@link SpellArg#CLASS} argument:
  * <pre>
  *     "spell": {
  *         "class": "RefreshManaSpell"

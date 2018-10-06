@@ -1,0 +1,29 @@
+{
+  "name": "Empower It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Cast a spell on a friendly minion. Reward: Accompany It!",
+  "quest": {
+    "class": "TargetAcquisitionTrigger",
+    "actionType": "SPELL",
+    "queueCondition": {
+      "class": "OwnedByPlayerCondition",
+      "target": "EVENT_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "sourcePlayer": "SELF",
+    "targetEntityType": "MINION",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_accompany_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

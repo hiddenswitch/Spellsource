@@ -1,0 +1,25 @@
+{
+  "name": "Shivering Tempest",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Deathrattle: Add a random Shaman spell to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "heroClass": "SILVER",
+      "cardType": "SPELL"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

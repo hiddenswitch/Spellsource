@@ -1,0 +1,22 @@
+{
+  "name": "Royal Protector",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Adjacent minions have +1/+1.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 1
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

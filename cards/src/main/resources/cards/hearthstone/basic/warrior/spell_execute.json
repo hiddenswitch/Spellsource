@@ -5,6 +5,13 @@
   "heroClass": "RED",
   "rarity": "FREE",
   "description": "Destroy a damaged enemy minion.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ENEMY_MINIONS",
+    "filter": {
+      "class": "DamagedFilter"
+    }
+  },
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "DestroySpell",

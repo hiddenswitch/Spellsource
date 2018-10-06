@@ -1,0 +1,32 @@
+{
+  "name": "Falling Stones",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage. Invoke (3): Summon two 0/1 Pebbles with Taunt.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_pebble",
+        "token_pebble"
+      ]
+    }
+  },
+  "attributes": {
+    "INVOKE": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

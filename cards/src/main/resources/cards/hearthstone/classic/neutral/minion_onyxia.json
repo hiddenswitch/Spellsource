@@ -41,6 +41,11 @@
           "class": "SummonSpell",
           "boardPositionRelative": "LEFT",
           "card": "token_whelp"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
         }
       ]
     }

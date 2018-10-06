@@ -1,0 +1,29 @@
+{
+  "name": "Saronite Drake",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry and Deathrattle: Duplicate the top card of your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PutDeckTopSpell",
+      "target": "FRIENDLY_TOP_CARD"
+    }
+  },
+  "deathrattle": {
+    "class": "PutDeckTopSpell",
+    "target": "FRIENDLY_TOP_CARD"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

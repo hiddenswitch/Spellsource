@@ -33,8 +33,8 @@ public class InventoryRecord extends MongoRecord {
 	private String userId;
 
 	/**
-	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also
-	 * a collection ID.
+	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also a
+	 * collection ID.
 	 */
 	@JsonProperty
 	private String allianceId;
@@ -61,6 +61,7 @@ public class InventoryRecord extends MongoRecord {
 		this.cardDesc = cardDesc;
 	}
 
+	@JsonIgnore
 	public CardDesc getCardDesc() {
 		return cardDesc;
 	}
@@ -139,34 +140,42 @@ public class InventoryRecord extends MongoRecord {
 
 	@JsonIgnore
 	public String getCardId() {
-		return cardDesc != null && cardDesc.id != null
-				? cardDesc.id
+		return cardDesc != null && cardDesc.getId() != null
+				? cardDesc.getId()
 				: null;
 	}
 
+	@JsonIgnore
 	public Object getPersistentAttribute(Attribute attribute) {
 		return getFacts().getOrDefault(ParseUtils.toCamelCase(attribute.toString()), null);
 	}
 
 	@SuppressWarnings("unchecked")
+	@JsonIgnore
 	public <T> T getPersistentAttribute(Attribute attribute, T defaultValue) {
 		return (T) getFacts().getOrDefault(attribute.toKeyCase(), defaultValue);
 	}
 
+	@JsonIgnore
 	public void putPersistentAttribute(Attribute attribute, Object value) {
 		getFacts().put(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, attribute.toString()), value);
 	}
 
+	@JsonIgnore
 	public AttributeMap getPersistentAttributes() {
-		return new AttributeMap(getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
-				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue)));
+		Map<Attribute, Object> collect = getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
+				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue));
+		if (collect.isEmpty()) {
+			return new AttributeMap();
+		}
+		return new AttributeMap(collect);
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("id", getId())
-				.append("cardId", getCardId())
+				.append("card", getCardId())
 				.toString();
 	}
 }

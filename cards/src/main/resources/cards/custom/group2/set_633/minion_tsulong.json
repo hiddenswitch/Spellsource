@@ -1,0 +1,36 @@
+{
+  "name": "Tsulong, the Dark Serpent",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "Deflect. Battlecry: If you're holding a Dragon, gain 'Deathrattle: Summon Tsulong, the Heavenly Serpent.'",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_tsulong"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

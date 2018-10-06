@@ -5,6 +5,7 @@
   "type": "HERO",
   "heroClass": "INHERIT",
   "rarity": "LEGENDARY",
+  "description": "Hero Power: Deal 8 damage to a random enemy.",
   "attributes": {
     "HP": 8,
     "MAX_HP": 8

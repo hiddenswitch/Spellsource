@@ -1,0 +1,36 @@
+{
+  "name": "Mook Conscription",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Discover a 3-Cost minion. Summon it with Taunt.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "spell": {
+          "class": "AddAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "TAUNT"
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 3
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

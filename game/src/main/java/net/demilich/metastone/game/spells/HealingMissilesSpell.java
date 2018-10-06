@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -17,6 +17,9 @@ import net.demilich.metastone.game.utils.Attribute;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Casts healing missiles.
+ */
 public class HealingMissilesSpell extends HealSpell {
 
 	public static SpellDesc create(int healing) {
@@ -31,16 +34,18 @@ public class HealingMissilesSpell extends HealSpell {
 
 		if (healing == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
+			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			healing = context.getLogic().applySpellpower(player, source, healing);
+			healing = context.getLogic().applyAmplify(player, healing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
 			healing = context.getLogic().applyAmplify(player, healing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
 		}
 		for (int i = 0; i < missiles; i++) {
-			List<Actor> validTargets;
+			List<Entity> validTargets;
 			if (desc.containsKey(SpellArg.FILTER)) {
 				EntityFilter targetFilter = desc.getEntityFilter();
-				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
 				EntityFilter targetFilter = new EntityFilter(new EntityFilterDesc(new HashMap<>())) {
@@ -49,7 +54,7 @@ public class HealingMissilesSpell extends HealSpell {
 						return ((Actor) entity).isWounded();
 					}
 				};
-				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+				List<Entity> filteredTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			}
 
@@ -57,8 +62,8 @@ public class HealingMissilesSpell extends HealSpell {
 				return;
 			}
 
-			Actor randomTarget = context.getLogic().getRandom(validTargets);
-			context.getLogic().heal(player, randomTarget, healing, source, false);
+			Entity randomTarget = context.getLogic().getRandom(validTargets);
+			context.getLogic().heal(player, (Actor) randomTarget, healing, source, false);
 		}
 	}
 

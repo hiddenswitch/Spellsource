@@ -4,7 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 
-public class AfterPhysicalAttackEvent extends GameEvent {
+public class AfterPhysicalAttackEvent extends GameEvent implements HasValue {
 
 	private final Actor attacker;
 	private final Actor defender;
@@ -28,7 +28,7 @@ public class AfterPhysicalAttackEvent extends GameEvent {
 	public Actor getDefender() {
 		return defender;
 	}
-	
+
 	@Override
 	public Entity getEventSource() {
 		return getAttacker();
@@ -47,5 +47,10 @@ public class AfterPhysicalAttackEvent extends GameEvent {
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	@Override
+	public int getValue() {
+		return getDamageDealt();
 	}
 }

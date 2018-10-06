@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -9,10 +9,12 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -167,7 +169,9 @@ public class ReceiveCardSpell extends Spell {
 
 				if (card != null) {
 					context.getLogic().receiveCard(player.getId(), card);
-					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+					if (card.getZone() == Zones.HAND) {
+						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+					}
 				}
 			}
 		} else if (desc.containsKey(SpellArg.CARD) || desc.containsKey(SpellArg.CARDS)) {
@@ -179,9 +183,15 @@ public class ReceiveCardSpell extends Spell {
 				for (Card card : receivableCards) {
 					// Move at most one card from discover or create a card. Handled by get cards.
 					for (int i = 0; i < count; i++) {
+						if (card == null) {
+							logger.error("onCast {} {}: Error retrieving cards", context.getGameId(), source);
+							continue;
+						}
 						card = card.getCopy();
 						context.getLogic().receiveCard(player.getId(), card);
-						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+						if (card.getZone() == Zones.HAND) {
+							SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+						}
 					}
 				}
 			} else {
@@ -192,15 +202,18 @@ public class ReceiveCardSpell extends Spell {
 
 					final Card card = context.getLogic().removeRandom(receivableCards).getCopy();
 					context.getLogic().receiveCard(player.getId(), card);
-					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
-
+					if (card.getZone() == Zones.HAND) {
+						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+					}
 				}
 			}
 		} else if (target instanceof Card && target.getOwner() == player.getId()) {
 			// The card is being moved into the hand from somewhere
 			final Card card = (Card) target;
 			context.getLogic().receiveCard(player.getId(), card);
-			SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			if (card.getZone() == Zones.HAND) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			}
 		} else if (!(target instanceof Card)) {
 			logger.error("onCast {} {}: Attempting to receive non-Card target {}", context.getGameId(), source, target);
 		} else if (!(target.getOwner() == player.getId())) {
@@ -260,7 +273,7 @@ public class ReceiveCardSpell extends Spell {
 	 *
 	 * @param filter A filter to apply to a {@link net.demilich.metastone.game.spells.desc.source.CatalogueSource}.
 	 *               Typically, you should specify a {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}
-	 *               with a specified {@link net.demilich.metastone.game.spells.desc.filter.FilterArg#CARD_TYPE}.
+	 *               with a specified {@link EntityFilterArg#CARD_TYPE}.
 	 * @param cards  How many cards should be received from the filtered cards, <b>without replacement</b>. This means
 	 *               each card will be distinct as long as the source gave distinct cards.
 	 * @return The spell
@@ -275,7 +288,7 @@ public class ReceiveCardSpell extends Spell {
 	 * @param source The {@link CardSource} to use to filter. When {@code null}, defaults to a {@link CatalogueSource}.
 	 * @param filter A filter to apply to the {@code source}. Typically, you should specify a {@link
 	 *               net.demilich.metastone.game.spells.desc.filter.CardFilter} with a specified {@link
-	 *               net.demilich.metastone.game.spells.desc.filter.FilterArg#CARD_TYPE}.
+	 *               EntityFilterArg#CARD_TYPE}.
 	 * @param cards  How many cards should be received from the filtered cards, <b>without replacement</b>. This means
 	 *               each card will be distinct as long as the source gave distinct cards.
 	 * @return The spell

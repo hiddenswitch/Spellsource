@@ -1,0 +1,54 @@
+{
+  "name": "Marrowling",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Draw a card. If it's a 'Bone Storm', cast it.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "target": "OUTPUT",
+        "condition": {
+          "class": "CardPropertyCondition",
+          "card": "spell_bone_storm"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "RemoveCardSpell",
+              "target": "OUTPUT"
+            },
+            {
+              "class": "RevealCardSpell",
+              "card": "spell_bone_storm",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "DamageSpell",
+              "target": "ENEMY_CHARACTERS",
+              "value": {
+                "class": "SpellDamageValueProvider",
+                "value": 1
+              }
+            },
+            {
+              "class": "DrawCardSpell"
+            }
+          ]
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

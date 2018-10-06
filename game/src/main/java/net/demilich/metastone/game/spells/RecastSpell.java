@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -8,7 +8,26 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.TargetSelection;
 
+/**
+ * Recasts the specified {@link SpellArg#CARD} or the card targeted by {@link SpellArg#SECONDARY_TARGET} onto the {@code
+ * target}.
+ * <p>
+ * For example, to cast Inner Fire on every minion in your deck:
+ * <pre>
+ *   {
+ *     "class": "RecastSpell",
+ *     "card": "spell_inner_fire",
+ *     "target": "FRIENDLY_DECK",
+ *     "filter": {
+ *       "class": "CardFilter",
+ *       "cardType": "MINION"
+ *     }
+ *   }
+ * </pre>
+ */
 public class RecastSpell extends Spell {
 
 	@Override
@@ -26,11 +45,13 @@ public class RecastSpell extends Spell {
 			return;
 		}
 
-		if (card.isSpell()) {
-			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER), source, target);
+		if (card.isSpell()
+				&& card.getSpell() != null) {
+			SpellUtils.castChildSpell(context, player, card.getSpell().removeArg(SpellArg.FILTER),
+					card.getId() == IdFactory.UNASSIGNED ? source : card,
+					card.getTargetSelection().equals(TargetSelection.NONE) ? null : target);
 		}
 	}
-
 }
 
 

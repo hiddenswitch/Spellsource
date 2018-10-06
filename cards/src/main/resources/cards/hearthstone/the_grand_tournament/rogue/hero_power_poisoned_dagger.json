@@ -1,5 +1,5 @@
 {
-  "name": "Poisoned Blade",
+  "name": "Poisoned Dagger",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLACK",
@@ -7,15 +7,18 @@
   "description": "Equip a 2/2 Dagger.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalSpell",
-    "condition": {
-      "class": "HasWeaponCondition",
-      "cardId": "weapon_poisoned_blade",
-      "invert": "true"
-    },
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "EquipWeaponSpell",
-      "card": "weapon_poisoned_dagger"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "HasWeaponCondition",
+        "card": "weapon_poisoned_blade",
+        "invert": "true"
+      },
+      "spell": {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_poisoned_dagger"
+      }
     }
   },
   "collectible": false,

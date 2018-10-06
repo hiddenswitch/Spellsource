@@ -1,0 +1,34 @@
+{
+  "name": "Overtap",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "COMMON",
+  "description": "Shuffle a random card in your hand into your deck. Draw 3 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "MetaSpell",
+        "target": "FRIENDLY_HAND",
+        "randomTarget": true,
+        "spells": [
+          {
+            "class": "ShuffleToDeckSpell"
+          },
+          {
+            "class": "RemoveCardSpell"
+          }
+        ]
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

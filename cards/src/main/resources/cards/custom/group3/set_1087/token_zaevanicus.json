@@ -1,0 +1,44 @@
+{
+  "name": "Zaevanicus",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Battlecry: After a friendly minion dies, add a copy to your hand that costs (1) less. (For the rest of the game).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "MinionDeathTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "CopyCardSpell",
+          "target": "EVENT_TARGET",
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SUBTRACT"
+            }
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

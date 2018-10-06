@@ -1,14 +1,18 @@
 {
   "name": "Fireblast",
+  "heroPower": "hero_power_fireblast_rank_2",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLUE",
   "rarity": "FREE",
-  "description": "Deal 1 damage.",
+  "description": "Deal $1 damage.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DamageSpell",
-    "value": 1
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
   },
   "collectible": false,
   "set": "BASIC",

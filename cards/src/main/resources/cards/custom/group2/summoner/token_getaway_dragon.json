@@ -1,0 +1,19 @@
+{
+  "name": "Getaway Dragon",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Your hero is Immune.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_HERO",
+    "attribute": "AURA_IMMUNE"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

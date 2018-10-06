@@ -1,13 +1,16 @@
 package com.blizzard.hearthstone;
 
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -49,6 +52,17 @@ import java.util.stream.Stream;
 import static net.demilich.metastone.game.targeting.EntityReference.EVENT_TARGET;
 
 public class TheOldGodsTests extends TestBase {
+
+	@Test
+	public void testThingFromBelow() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_mana_tide_totem");
+			playCard(context, player, "minion_bloodfen_raptor");
+			playCard(context, player, "minion_bloodfen_raptor");
+			Card thing = receiveCard(context, player, "minion_thing_from_below");
+			Assert.assertEquals(costOf(context, player, thing), thing.getBaseManaCost() - 1);
+		});
+	}
 
 	@Test
 	public void testShadowcaster() {
@@ -149,6 +163,19 @@ public class TheOldGodsTests extends TestBase {
 	}
 
 	@Test
+	public void testYshaarjRecruitsItself() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_yshaarj_rage_unbound");
+			playCard(context, player, "minion_end_of_turn_trigger");
+			shuffleToDeck(context, player, "minion_yshaarj_rage_unbound");
+			context.endTurn();
+			Assert.assertEquals(player.getDeck().size(), 1);
+			Assert.assertEquals(player.getDeck().get(0).getCardId(), "minion_bloodfen_raptor");
+			Assert.assertEquals(player.getMinions().stream().filter(c -> c.getSourceCard().getCardId().equals("minion_yshaarj_rage_unbound")).count(), 2L);
+		});
+	}
+
+	@Test
 	public void testYshaarjRageUnboundShadowEssence() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_yshaarj_rage_unbound");
@@ -208,19 +235,19 @@ public class TheOldGodsTests extends TestBase {
 			}
 			// Modify yogg to only cast the coin
 			Card yoggCard = CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
-			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).battlecry;
-			final SpellDesc originalSpell = battlecry.spell;
+			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).getBattlecry();
+			final SpellDesc originalSpell = battlecry.getSpell();
 			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
 			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
-			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
+			battlecry.setSpell(originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
 				@Override
 				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_the_coin"));
 				}
-			});
+			}));
 			playMinionCard(context, player, "minion_yogg_saron_hopes_end");
 			Assert.assertEquals(YoggTestSpell1.counter.getCount(), 0, "The number of spells left to cast should be zero.");
-			battlecry.spell = originalSpell;
+			battlecry.setSpell(originalSpell);
 		});
 
 		// Test that if yogg destroys itself, the spell casting ends.
@@ -251,19 +278,19 @@ public class TheOldGodsTests extends TestBase {
 			}
 			// Modify yogg to only cast the coin
 			Card yoggCard = CardCatalogue.getCardById("minion_yogg_saron_hopes_end");
-			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).battlecry;
-			final SpellDesc originalSpell = battlecry.spell;
+			final BattlecryDesc battlecry = ((CardDesc) yoggCard.getDesc()).getBattlecry();
+			final SpellDesc originalSpell = battlecry.getSpell();
 			Map<CardSourceArg, Object> cardSourceArgs = new CardSourceDesc(CardSource.class);
 			cardSourceArgs.put(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
-			battlecry.spell = originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
+			battlecry.setSpell(originalSpell.addArg(SpellArg.CARD_SOURCE, new CardSource(new CardSourceDesc(cardSourceArgs)) {
 				@Override
 				protected CardList match(GameContext context, Entity source, Player player) {
 					return new CardArrayList().addCard(CardCatalogue.getCardById("spell_fireball"));
 				}
-			});
+			}));
 			playCard(context, player, "minion_yogg_saron_hopes_end");
 			Assert.assertEquals(YoggTestSpell2.counter.getCount(), 2, "Since yogg fireballed itself, we expect two spells left uncasted.");
-			battlecry.spell = originalSpell;
+			battlecry.setSpell(originalSpell);
 		});
 	}
 
@@ -304,6 +331,14 @@ public class TheOldGodsTests extends TestBase {
 			Assert.assertEquals(darkshireCouncilman2.getAttack(), darkshireCouncilman2.getBaseAttack());
 			Assert.assertEquals(opponentMinion.getAttack(), opponentMinion.getBaseAttack());
 		});
+
+		runGym((context, player, opponent) -> {
+			Minion darkshireCouncilman = playMinionCard(context, player, "minion_darkshire_councilman");
+			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack());
+
+			playMinionCard(context, player, "permanent_test");
+			Assert.assertEquals(darkshireCouncilman.getAttack(), darkshireCouncilman.getBaseAttack());
+		});
 	}
 
 	@Test
@@ -313,7 +348,7 @@ public class TheOldGodsTests extends TestBase {
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];
 		final int[] handSize = new int[1];
-		player.setBehaviour(new TestBehaviour() {
+		context.setBehaviour(player.getId(), new TestBehaviour() {
 			boolean first = true;
 
 			@Override
@@ -358,8 +393,8 @@ public class TheOldGodsTests extends TestBase {
 
 		boolean buffsSelf = false;
 		// LISP to the rescue
-		if (sourceCard.getDesc().battlecry != null) {
-			buffsSelf = Stream.concat(Stream.of(sourceCard.getDesc().battlecry.spell), sourceCard.getDesc().battlecry.spell.subSpells().stream())
+		if (sourceCard.getDesc().getBattlecry() != null) {
+			buffsSelf = Stream.concat(Stream.of(sourceCard.getDesc().getBattlecry().getSpell()), sourceCard.getDesc().getBattlecry().getSpell().subSpells().stream())
 					.anyMatch(spellDesc -> (BuffSpell.class.isAssignableFrom(spellDesc.getDescClass())
 							|| CastFromGroupSpell.class.isAssignableFrom(spellDesc.getDescClass())) && spellDesc.getTarget() != null
 							&& spellDesc.getTarget().equals(EntityReference.SELF));

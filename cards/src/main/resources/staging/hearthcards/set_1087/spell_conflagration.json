@@ -1,0 +1,12 @@
+{
+  "name": "Conflagration",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "FREE",
+  "description": "Deal 3 damage to all enemy minions.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

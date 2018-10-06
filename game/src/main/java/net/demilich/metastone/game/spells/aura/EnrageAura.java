@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells.aura;
 
-import java.util.List;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -13,6 +10,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.EnrageChangedTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.List;
 
 public class EnrageAura extends Aura {
 
@@ -20,6 +20,7 @@ public class EnrageAura extends Aura {
 
 	public EnrageAura(AuraDesc desc) {
 		this(desc.getApplyEffect(), desc.getRemoveEffect(), desc.getTarget());
+		setDesc(desc);
 	}
 
 	private EnrageAura(SpellDesc applyAuraEffect, SpellDesc removeAuraEffect, EntityReference targetSelection) {

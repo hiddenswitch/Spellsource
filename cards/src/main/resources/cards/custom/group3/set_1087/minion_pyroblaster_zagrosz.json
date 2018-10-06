@@ -1,0 +1,39 @@
+{
+  "name": "Pyroblaster Zagrosz",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a friendly minion survives damage, deal 3 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "target": "EVENT_TARGET",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "invert": true
+          },
+          {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "SELF"
+          }
+        ]
+      }
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 3,
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

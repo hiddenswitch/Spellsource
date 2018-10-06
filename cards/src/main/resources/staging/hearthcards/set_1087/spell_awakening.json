@@ -1,0 +1,12 @@
+{
+  "name": "Awakening",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Transform a friendly minion into a \r\n4/4 Dragon.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

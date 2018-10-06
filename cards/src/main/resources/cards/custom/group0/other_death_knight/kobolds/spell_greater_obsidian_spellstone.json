@@ -1,0 +1,18 @@
+{
+  "name": "Greater Obsidian Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "RARE",
+  "description": "Give a random friendly minion +6/+6.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 6,
+    "randomTarget": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

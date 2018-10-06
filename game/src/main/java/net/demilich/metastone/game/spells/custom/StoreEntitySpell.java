@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -24,9 +24,9 @@ import org.slf4j.LoggerFactory;
  * </pre>
  *
  * @see ReceiveCardsInStorageSpell for a spell that retrieves the {@link net.demilich.metastone.game.cards.Card}
- * entities in storage and puts them in your hand.
+ * 		entities in storage and puts them in your hand.
  * @see net.demilich.metastone.game.spells.desc.source.StoredEntitiesSource for a {@link
- * net.demilich.metastone.game.spells.desc.source.CardSource} that lets you access the entities stored by this spell.
+ * 		net.demilich.metastone.game.spells.desc.source.CardSource} that lets you access the entities stored by this spell.
  */
 public class StoreEntitySpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(StoreEntitySpell.class);

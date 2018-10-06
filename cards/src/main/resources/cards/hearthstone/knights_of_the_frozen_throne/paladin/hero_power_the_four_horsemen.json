@@ -5,87 +5,66 @@
   "heroClass": "GOLD",
   "rarity": "FREE",
   "description": "Summon a 2/2 Horseman. If you have all 4, destroy the enemy hero.",
-  "condition": {
-    "class": "AndCondition",
-    "conditions": [
-      {
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "GameStateChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
         "class": "AndCondition",
         "conditions": [
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_deathlord_nazgrim"
+              "card": "token_deathlord_nazgrim"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_darion_mograine"
+              "card": "token_darion_mograine"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_inquisitor_whitemane"
+              "card": "token_inquisitor_whitemane"
             }
           },
           {
             "class": "MinionOnBoardCondition",
             "cardFilter": {
               "class": "SpecificCardFilter",
-              "cardId": "token_thoras_trollbane"
+              "card": "token_thoras_trollbane"
             }
+          },
+          {
+            "class": "AttributeExistsCondition",
+            "attribute": "HERO_POWERS_DISABLED",
+            "invert": true
           }
-        ],
-        "invert": true
+        ]
       },
-      {
-        "class": "MinionCountCondition",
-        "value": 7,
-        "operation": "LESS"
+      "spell": {
+        "class": "DestroySpell",
+        "target": "ENEMY_HERO"
       }
-    ]
+    }
+  },
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalEffectSpell",
-    "condition": {
-      "class": "AndCondition",
-      "conditions": [
-        {
-          "class": "MinionOnBoardCondition",
-          "cardFilter": {
-            "class": "SpecificCardFilter",
-            "cardId": "token_deathlord_nazgrim"
-          }
-        },
-        {
-          "class": "MinionOnBoardCondition",
-          "cardFilter": {
-            "class": "SpecificCardFilter",
-            "cardId": "token_darion_mograine"
-          }
-        },
-        {
-          "class": "MinionOnBoardCondition",
-          "cardFilter": {
-            "class": "SpecificCardFilter",
-            "cardId": "token_inquisitor_whitemane"
-          }
-        },
-        {
-          "class": "MinionOnBoardCondition",
-          "cardFilter": {
-            "class": "SpecificCardFilter",
-            "cardId": "token_thoras_trollbane"
-          }
-        }
-      ]
-    },
-    "spell1": {
+    "class": "HeroPowerSpell",
+    "description": "Summon a 2/2 Horseman.",
+    "spell": {
       "class": "SummonSpell",
       "cards": [
         "token_deathlord_nazgrim",
@@ -95,10 +74,6 @@
       ],
       "exclusive": true,
       "randomTarget": true
-    },
-    "spell2": {
-      "class": "DestroySpell",
-      "target": "ENEMY_HERO"
     }
   },
   "collectible": false,

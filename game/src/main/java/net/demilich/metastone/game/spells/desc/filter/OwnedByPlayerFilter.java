@@ -13,7 +13,7 @@ public class OwnedByPlayerFilter extends EntityFilter {
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(FilterArg.TARGET_PLAYER);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EntityFilterArg.TARGET_PLAYER);
 
 		switch (targetPlayer) {
 			case ACTIVE:
@@ -26,6 +26,8 @@ public class OwnedByPlayerFilter extends EntityFilter {
 				return entity.getOwner() != player.getId();
 			case SELF:
 				return entity.getOwner() == player.getId();
+			case OWNER:
+				return entity.getOwner() == host.getOwner();
 			default:
 				break;
 

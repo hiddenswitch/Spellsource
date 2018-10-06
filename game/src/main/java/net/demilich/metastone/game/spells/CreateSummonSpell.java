@@ -1,20 +1,28 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.cards.*;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
+ * 		{@link CreateCardFromChoicesSpell} for an example.
+ */
+@Deprecated
 public class CreateSummonSpell extends Spell {
 
 	Logger logger = LoggerFactory.getLogger(CreateSummonSpell.class);
@@ -23,23 +31,23 @@ public class CreateSummonSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String description = "";
-		CardDesc CardDesc = new CardDesc();
-		CardDesc.id = context.getLogic().generateCardId();
-		CardDesc.name = desc.getString(SpellArg.NAME);
-		CardDesc.baseAttack = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
-		CardDesc.baseHp = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		CardDesc.heroClass = HeroClass.ANY;
-		CardDesc.type = CardType.MINION;
-		CardDesc.rarity = Rarity.FREE;
-		CardDesc.description = description;
+		CardDesc cardDesc = new CardDesc();
+		cardDesc.setId(context.getLogic().generateCardId());
+		cardDesc.setName(desc.getString(SpellArg.NAME));
+		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
+		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
+		cardDesc.setHeroClass(HeroClass.ANY);
+		cardDesc.setType(CardType.MINION);
+		cardDesc.setRarity(Rarity.FREE);
+		cardDesc.setDescription(description);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		if (attribute != null) {
-			CardDesc.attributes.put(attribute, true);
+			cardDesc.getAttributes().put(attribute, true);
 		}
-		CardDesc.set = CardSet.BASIC;
-		CardDesc.collectible = false;
-		CardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, target, source, 0);
-		Card newCard = CardDesc.create();
+		cardDesc.setSet(CardSet.BASIC);
+		cardDesc.setCollectible(false);
+		cardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
+		Card newCard = cardDesc.create();
 		context.addTempCard(newCard);
 
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);

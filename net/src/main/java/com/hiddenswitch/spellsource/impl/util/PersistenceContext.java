@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.Spellsource;
 import io.vertx.core.Handler;
@@ -55,14 +55,5 @@ public interface PersistenceContext<T extends GameEvent> {
 	 * @return The attribute, or {@code null} if this context wasn't associated with a particular attribute.
 	 */
 	Attribute attribute();
-
-	/**
-	 * Make a call to the {@link Logic} service. Make sure to get a new {@link Logic} from this method this every time
-	 * you want to make a new call.
-	 *
-	 * @return A {@link Logic} that's good for one call.
-	 */
-	@Suspendable
-	Logic logic();
 }
 

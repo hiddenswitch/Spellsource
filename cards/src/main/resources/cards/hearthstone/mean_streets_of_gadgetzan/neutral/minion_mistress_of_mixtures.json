@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Restore 4 Health to both players.",
+  "description": "Deathrattle: Restore #4 Health to both players.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

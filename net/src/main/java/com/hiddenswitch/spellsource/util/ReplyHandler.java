@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.fasterxml.jackson.core.JsonParseException;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -11,7 +12,7 @@ import io.vertx.core.eventbus.Message;
 import java.io.IOException;
 import java.io.OptionalDataException;
 
-class ReplyHandler implements Handler<AsyncResult<Message<Object>>> {
+class ReplyHandler implements SuspendableAction1<AsyncResult<Message<Object>>> {
 	private final Handler<AsyncResult<Object>> next;
 
 	ReplyHandler(Handler<AsyncResult<Object>> next) {
@@ -20,7 +21,7 @@ class ReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 
 	@Override
 	@Suspendable
-	public void handle(AsyncResult<Message<Object>> reply) {
+	public void call(AsyncResult<Message<Object>> reply) {
 		if (reply.succeeded()) {
 			try {
 				Object body = Serialization.deserialize(new VertxBufferInputStream((Buffer) reply.result().body()));

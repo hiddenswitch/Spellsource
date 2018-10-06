@@ -23,19 +23,19 @@ public class TargetAcquisitionTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		TargetAcquisitionEvent targetAcquisitionEvent = (TargetAcquisitionEvent) event;
 
-		ActionType actionType = (ActionType) desc.get(EventTriggerArg.ACTION_TYPE);
+		ActionType actionType = (ActionType) getDesc().get(EventTriggerArg.ACTION_TYPE);
 		if (actionType != null && targetAcquisitionEvent.getActionType() != actionType) {
 			return false;
 		}
-		EntityType sourceEntityType = (EntityType) desc.get(EventTriggerArg.SOURCE_ENTITY_TYPE);
+		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
 		if (sourceEntityType != null && sourceEntityType != targetAcquisitionEvent.getSource().getEntityType()) {
 			return false;
 		}
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if (targetEntityType != null && targetEntityType != targetAcquisitionEvent.getTarget().getEntityType()) {
 			return false;
 		}
-		
+
 		return true;
 	}
 

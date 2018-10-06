@@ -1,0 +1,24 @@
+{
+  "name": "Crusade",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "EPIC",
+  "description": "Deal $1 damage to a random enemy for each Silver Hand Recruit you've summoned this game.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 1,
+    "howMany": {
+      "class": "MinionSummonValueProvider",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_silver_hand_recruit"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

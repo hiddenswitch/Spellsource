@@ -1,0 +1,33 @@
+{
+  "name": "Forbidden Roar",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Spend all your Mana. Give a minion that much Attack this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TemporaryAttackSpell",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MANA"
+        }
+      },
+      {
+        "class": "GainManaSpell",
+        "value": {
+          "class": "PlayerAttributeValueProvider",
+          "multiplier": -1,
+          "playerAttribute": "MANA"
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,18 +1,20 @@
 package net.demilich.metastone.game.spells;
 
-import java.io.Serializable;
-import java.util.*;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
+
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * The base class for "spells," or collections of effects in the engine.
@@ -22,15 +24,25 @@ import org.slf4j.Logger;
  * <p>
  * To browse all the possible effects, visit the deriving classes of this class.
  */
-public abstract class Spell implements Serializable {
+public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
+	private SpellDesc desc;
+
 	/**
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
 	private static final Set<SpellArg> COMMON_ARGS = Sets.newEnumSet(
-			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL), SpellArg.class);
+			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE), SpellArg.class);
 
 	/**
 	 * Casts a spell for the given arguments.
+	 * <p>
+	 * If there is at least one valid target in {@code targets} and {@link SpellArg#RANDOM_TARGET} is {@code true}, a
+	 * single target from the list will be chosen at random.
+	 * <p>
+	 * If {@code targets} is {@code null}, this is a spell that does not ordinarily receive targets, so it will be cast
+	 * once.
+	 * <p>
+	 * If {@code targets.size()} is {@code 0}, this spell takes targets but none were found, so the spell is not cast.
 	 * <p>
 	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link
 	 * SpellArg#RANDOM_TARGET} attributes of a {@link SpellDesc}.
@@ -40,8 +52,8 @@ public abstract class Spell implements Serializable {
 	 * @param desc
 	 * @param source
 	 * @param targets
-	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter) for the logic which filters the targets
-	 * argument.
+	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter, Entity) for the logic which filters the
+	 * 		targets argument.
 	 */
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
@@ -52,7 +64,7 @@ public abstract class Spell implements Serializable {
 		}
 
 		EntityFilter targetFilter = desc.getEntityFilter();
-		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter);
+		List<Entity> validTargets = SpellUtils.getValidTargets(context, player, targets, targetFilter, source);
 		// there is at least one valid target and the RANDOM_TARGET flag is set,
 		// pick one randomly
 		if (validTargets.size() > 0 && desc.getBool(SpellArg.RANDOM_TARGET)) {
@@ -72,7 +84,7 @@ public abstract class Spell implements Serializable {
 	}
 
 	@Suspendable
-	private void castForPlayer(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+	protected void castForPlayer(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = desc.getTargetPlayer();
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
@@ -121,12 +133,22 @@ public abstract class Spell implements Serializable {
 	 * @param validArgs The valid arguments
 	 */
 	protected void checkArguments(Logger logger, GameContext context, Entity source, SpellDesc desc, SpellArg... validArgs) {
-		Set<SpellArg> unexpectedArgs = new HashSet<>(desc.keySet());
-		unexpectedArgs.removeAll(Arrays.asList(validArgs));
+		Set<SpellArg> unexpectedArgs = new HashSet<>(desc == null ? Collections.emptySet() : desc.keySet());
+		unexpectedArgs.removeAll(Arrays.asList(validArgs == null ? new SpellArg[0] : validArgs));
 		unexpectedArgs.removeAll(COMMON_ARGS);
 		if (unexpectedArgs.size() > 0) {
 			logger.warn("checkArguments {} {}: Unexpected arguments {}", context.getGameId(), source, unexpectedArgs);
 		}
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (SpellDesc) desc;
+	}
+
+	@Override
+	public SpellDesc getDesc() {
+		return desc;
 	}
 }
 

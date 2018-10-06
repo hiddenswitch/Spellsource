@@ -1,0 +1,27 @@
+{
+  "name": "Serpent Stance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Swap the Attack and Health of your minions, then give them +1/+1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SwapAttackAndHpSpell",
+        "target": "FRIENDLY_MINIONS"
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 1,
+        "hpBonus": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

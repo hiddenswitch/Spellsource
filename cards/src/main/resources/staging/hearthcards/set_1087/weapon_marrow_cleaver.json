@@ -1,0 +1,14 @@
+{
+  "name": "Marrow Cleaver",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 6,
+  "durability": 1,
+  "rarity": "RARE",
+  "description": "[b]Supremacy:[/b] Add a \r\ncopy of this weapon \r\nto your hand.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

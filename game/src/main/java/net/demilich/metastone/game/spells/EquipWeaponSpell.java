@@ -1,11 +1,12 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -15,6 +16,8 @@ import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Equips the specified weapon in {@link SpellArg#CARD} or chooses a random one based on the {@link
@@ -86,6 +89,7 @@ public class EquipWeaponSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.TARGET_PLAYER);
 		String cardId = (String) desc.get(SpellArg.CARD);
 		CardList results = new CardArrayList();
 		if (cardId != null) {
@@ -110,6 +114,10 @@ public class EquipWeaponSpell extends Spell {
 			}
 		} else {
 			logger.error("onCast {} {}: Neither a CARD nor a CARD_SOURCE/CARD_FILTER were specified for this spell", context.getGameId(), source);
+			return;
+		}
+
+		if (results.isEmpty()) {
 			return;
 		}
 

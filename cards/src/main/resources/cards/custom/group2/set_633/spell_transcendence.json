@@ -1,0 +1,32 @@
+{
+  "name": "Transcendence",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Draw a card. Draw an additional card for each friendly Deflect minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "AttributeFilter",
+            "attribute": "DEFLECT"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -5,7 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -18,6 +17,7 @@ public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(new TargetAcquisitionTrigger(), null, NullSpell.create());
+		setDesc(desc);
 	}
 
 	@Override
@@ -38,6 +38,10 @@ public class NoggenfoggerAura extends Aura {
 			validTargets = gc.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
 		}
 
+		if (validTargets.size() == 0) {
+			// An earlier event removed all valid targets
+			return;
+		}
 		gc.setTargetOverride(gc.getLogic().getRandom(validTargets).getReference());
 	}
 }

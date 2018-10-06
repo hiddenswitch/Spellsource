@@ -1,0 +1,23 @@
+{
+  "name": "Unnerfed Unleash the Hounds",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "For each enemy minion, summon a 1/1 Hound with Charge.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "card": "token_hound"
+  },
+  "attributes": {
+    "SPELLSOURCE_NAME": "Amate's Howl"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

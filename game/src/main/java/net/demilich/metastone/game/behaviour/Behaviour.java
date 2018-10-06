@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.behaviour;
 
-import java.util.List;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.logic.GameLogic;
+
+import java.util.List;
 
 /**
  * Behaviours specify a delegate for player action and mulligan requests.
@@ -20,7 +20,7 @@ import net.demilich.metastone.game.logic.GameLogic;
  *
  * @see AbstractBehaviour for default implementations of some of these requests.
  * @see net.demilich.metastone.game.shared.threat.GameStateValueBehaviour for an example of an artificial-intelligence
- * based behaviour.
+ * 		based behaviour.
  */
 public interface Behaviour extends Cloneable {
 	/***
@@ -38,8 +38,7 @@ public interface Behaviour extends Cloneable {
 	String getName();
 
 	/**
-	 * Use the provided context, player and first hand cards to determine which cards to discard during a mulligan
-	 * phase.
+	 * Use the provided context, player and first hand cards to determine which cards to discard during a mulligan phase.
 	 *
 	 * @param context The game context.
 	 * @param player  The player who's mulliganing.
@@ -80,7 +79,12 @@ public interface Behaviour extends Cloneable {
 	 * @see #mulligan(GameContext, Player, List) for a complete description of this method.
 	 */
 	@Suspendable
-	void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler);
+	default void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> handler) {
+		final List<Card> mulligan = mulligan(context, player, cards);
+		if (handler != null) {
+			handler.handle(mulligan);
+		}
+	}
 
 	/**
 	 * Requests an action from a player asynchronously.
@@ -88,26 +92,23 @@ public interface Behaviour extends Cloneable {
 	 * @param context      The game context where the choice is being made.
 	 * @param player       The player who is making the choice.
 	 * @param validActions The valid actions the player has to choose from.
-	 * @param handler      The callback whose argument is one of the {@code validActions} that correspond to the
-	 *                     player's choice.
+	 * @param handler      The callback whose argument is one of the {@code validActions} that correspond to the player's
+	 *                     choice.
 	 */
 	@Suspendable
-	void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler);
-
-	/**
-	 * A networked version of sending a game over message.
-	 *
-	 * @param context         The game context.
-	 * @param playerId        The player receiving this message.
-	 * @param winningPlayerId The winning player.
-	 */
-	@Suspendable
-	void onGameOverAuthoritative(GameContext context, int playerId, int winningPlayerId);
+	default void requestActionAsync(GameContext context, Player player, List<GameAction> validActions, Handler<GameAction> handler) {
+		GameAction action = requestAction(context, player, validActions);
+		if (handler != null) {
+			handler.handle(action);
+		}
+	}
 
 	/**
 	 * Determines whether this behaviour's actions were determined by a human.
 	 *
 	 * @return {@code true} if the actions are determined by a human, {@code false} otherwise.
 	 */
-	boolean isHuman();
+	default boolean isHuman() {
+		return false;
+	}
 }

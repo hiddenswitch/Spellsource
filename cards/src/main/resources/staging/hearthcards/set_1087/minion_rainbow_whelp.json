@@ -1,0 +1,28 @@
+{
+  "name": "Rainbow Whelp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "[b][b]Battlecry:[/b][/b] If you control another Dragon, restore\r\n3 Health to your hero.",
+  "battlecry": {
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

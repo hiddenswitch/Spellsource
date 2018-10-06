@@ -1,7 +1,8 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.util.Sync;
@@ -10,6 +11,10 @@ import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+
 /**
  * Created by bberman on 2/17/17.
  */
@@ -17,7 +22,7 @@ public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
 
 	private static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
-		return Sync.suspendableHandler((context) -> {
+		return suspendableHandler((SuspendableAction1<RoutingContext>) (context) -> {
 			try {
 				handler.call(context);
 			} catch (Throwable unhandled) {
@@ -28,7 +33,7 @@ public class HandlerFactory {
 
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, userId, request);
 			respond(context, result);
@@ -46,7 +51,7 @@ public class HandlerFactory {
 	public static <R> Handler<RoutingContext> handler(String paramName, AuthorizedParamHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String request = context.pathParam(paramName);
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId, request);
 			respond(context, result);
 		});
@@ -56,7 +61,7 @@ public class HandlerFactory {
 		return returnUnhandledExceptions((context) -> {
 			String param = context.pathParam(paramName);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId, param, request);
 			respond(context, result);
 		});
@@ -64,7 +69,7 @@ public class HandlerFactory {
 
 	public static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId);
 			respond(context, result);
 		});
@@ -79,6 +84,11 @@ public class HandlerFactory {
 
 	private static <R> void respond(RoutingContext context, WebResult<R> result) {
 		context.response().setStatusCode(result.responseCode());
+		if (context.response().closed()) {
+			context.fail(new IOException("Response was closed (client disconnected)"));
+			return;
+		}
+
 		if (result.succeeded()) {
 			if (result.result() == null) {
 				// Allow empty response bodies

@@ -1,0 +1,28 @@
+{
+  "name": "Lashing Monstrosity",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "description": "Taunt. At the end of your turn, deal 4 damage to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 4,
+      "howMany": 1
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

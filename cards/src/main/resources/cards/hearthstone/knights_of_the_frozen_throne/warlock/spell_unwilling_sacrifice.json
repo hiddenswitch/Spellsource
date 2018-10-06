@@ -20,6 +20,10 @@
       {
         "class": "DestroySpell",
         "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
         "randomTarget": true
       }
     ]

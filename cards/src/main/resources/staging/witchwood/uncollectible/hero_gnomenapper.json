@@ -1,0 +1,12 @@
+{
+  "name": "Gnomenapper",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "<i>A collector of gnomes. Real ones.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

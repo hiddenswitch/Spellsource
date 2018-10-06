@@ -3,9 +3,8 @@ package net.demilich.metastone.game.logic;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.AbstractBehaviour;
+import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
-import org.apache.commons.math3.exception.NullArgumentException;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -14,7 +13,7 @@ import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
-class TraceBehaviour extends AbstractBehaviour {
+class TraceBehaviour extends UtilityBehaviour {
 	private int playerId;
 	private int[][] mulligans;
 	private AtomicInteger nextAction;

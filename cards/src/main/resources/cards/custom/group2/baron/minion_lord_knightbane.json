@@ -1,0 +1,28 @@
+{
+  "name": "Lord Knightbane",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Enemy minions take double damage this game",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "AttributeAura",
+        "target": "ENEMY_MINIONS",
+        "attribute": "AURA_TAKE_DOUBLE_DAMAGE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

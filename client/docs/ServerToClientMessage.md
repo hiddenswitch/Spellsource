@@ -7,7 +7,7 @@ Name | Type | Description | Notes
 **id** | **String** | An optional ID used to disambiguate multiple client replies. Include this ID in the repliesTo field of your ClientToServerMessage if this field is not null.  |  [optional]
 **localPlayerId** | **Integer** | The ID of the player that corresponds to the local player (the recipient).  |  [optional]
 **timers** | [**Timers**](Timers.md) |  |  [optional]
-**messageType** | [**MessageType**](MessageType.md) |  |  [optional]
+**messageType** | [**MessageType**](MessageType.md) |  | 
 **changes** | [**EntityChangeSet**](EntityChangeSet.md) |  |  [optional]
 **gameState** | [**GameState**](GameState.md) |  |  [optional]
 **actions** | [**GameActions**](GameActions.md) |  |  [optional]

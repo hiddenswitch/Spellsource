@@ -21,5 +21,6 @@ public enum ValueProviderArg {
 	MIN,
 	MAX,
 	CARD_SOURCE,
-	CARD_FILTER
+	CARD_FILTER,
+	EVALUATE_ONCE
 }

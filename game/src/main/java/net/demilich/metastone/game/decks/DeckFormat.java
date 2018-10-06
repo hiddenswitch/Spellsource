@@ -1,14 +1,13 @@
 package net.demilich.metastone.game.decks;
 
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardSet;
+
 import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import com.google.common.collect.Sets;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardSet;
 
 import static net.demilich.metastone.game.cards.CardSet.*;
 
@@ -22,12 +21,11 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(EnumSet.of(
 							BASIC,
 							CLASSIC,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS
+							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
+							BOOMSDAY_PROJECT
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -49,6 +47,26 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
+							BOOMSDAY_PROJECT,
+							HALL_OF_FAME
+					))
+			);
+
+	public static final DeckFormat PAST = new DeckFormat()
+			.withName("Past")
+			.withCardSets(
+					Collections.unmodifiableSet(EnumSet.of(
+							REWARD,
+							PROMO,
+							NAXXRAMAS,
+							GOBLINS_VS_GNOMES,
+							BLACKROCK_MOUNTAIN,
+							THE_GRAND_TOURNAMENT,
+							LEAGUE_OF_EXPLORERS,
+							THE_OLD_GODS,
+							ONE_NIGHT_IN_KARAZHAN,
+							MEAN_STREETS_OF_GADGETZAN,
 							HALL_OF_FAME
 					))
 			);
@@ -72,6 +90,8 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
+							BOOMSDAY_PROJECT,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							HALL_OF_FAME,
@@ -98,9 +118,9 @@ public class DeckFormat implements Serializable, Cloneable {
 							JOURNEY_TO_UNGORO,
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
+							BOOMSDAY_PROJECT,
 							HALL_OF_FAME,
-							PROCEDURAL_PREVIEW,
-							CardSet.SPELLSOURCE,
 							CardSet.CUSTOM
 					))
 			);
@@ -111,7 +131,13 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(new HashSet<>(Arrays.asList(CardSet.values())))
 			);
 
-	private static final Map<String, DeckFormat> FORMATS = Collections.unmodifiableMap(Stream.of(STANDARD, WILD, CUSTOM, ALL)
+	private static final Map<String, DeckFormat> FORMATS = Collections.unmodifiableMap(Stream.of(
+			STANDARD,
+			WILD,
+			CUSTOM,
+			PAST,
+			SPELLSOURCE,
+			ALL)
 			.collect(Collectors.toMap(DeckFormat::getName, Function.identity())));
 
 	public static DeckFormat getFormat(String name) {
@@ -125,6 +151,8 @@ public class DeckFormat implements Serializable, Cloneable {
 				return ALL;
 			case "spellsource":
 				return SPELLSOURCE;
+			case "past":
+				return PAST;
 			case "custom":
 			default:
 				return CUSTOM;
@@ -135,24 +163,27 @@ public class DeckFormat implements Serializable, Cloneable {
 		return FORMATS;
 	}
 
-	public static DeckFormat getSmallestSupersetFormat(Set<CardSet> cardSets) {
-		DeckFormat closestFormat = DeckFormat.STANDARD;
-		int lastCloseness = Integer.MAX_VALUE;
+	public static DeckFormat getSmallestSupersetFormat(Set<CardSet> requiredSets) {
+		DeckFormat smallestFormat = DeckFormat.ALL;
+		int minExcess = smallestFormat.sets.size();
 
 		for (Map.Entry<String, DeckFormat> format : DeckFormat.formats().entrySet()) {
 			Set<CardSet> formatSets = format.getValue().getCardSets();
-			Set<CardSet> common = Sets.intersection(cardSets, formatSets);
-			int closeness = formatSets.size() - common.size();
-			if (closeness < lastCloseness) {
-				closestFormat = format.getValue();
-				lastCloseness = closeness;
+			if (!formatSets.containsAll(requiredSets)) {
+				continue;
+			}
+
+			int excess = formatSets.size() - requiredSets.size();
+			if (excess < minExcess) {
+				smallestFormat = format.getValue();
+				minExcess = excess;
 			}
 		}
 
-		return closestFormat;
+		return smallestFormat;
 	}
 
-	public static DeckFormat getSmallestSupersetFormat(List<Deck> deckPair) {
+	public static DeckFormat getSmallestSupersetFormat(List<GameDeck> deckPair) {
 		return deckPair.get(0).getFormat().equals(deckPair.get(1).getFormat())
 				? deckPair.get(0).getFormat()
 				: DeckFormat.getSmallestSupersetFormat(deckPair.stream().flatMap(deck -> deck.getCards().stream())

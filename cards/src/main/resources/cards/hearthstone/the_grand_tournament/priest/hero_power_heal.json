@@ -4,11 +4,14 @@
   "type": "HERO_POWER",
   "heroClass": "WHITE",
   "rarity": "FREE",
-  "description": "Restore 4 Health.",
+  "description": "Restore #4 Health.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "HealSpell",
-    "value": 4
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "HealSpell",
+      "value": 4
+    }
   },
   "collectible": false,
   "set": "THE_GRAND_TOURNAMENT",

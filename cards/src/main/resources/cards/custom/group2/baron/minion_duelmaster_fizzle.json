@@ -1,0 +1,35 @@
+{
+  "name": "Duelmaster Fizzle",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Battlecry: Force all minions to attack random minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DuelSpell",
+          "target": "ALL_MINIONS",
+          "secondaryTarget": "ENEMY_MINIONS_LEFT_TO_RIGHT"
+        },
+        {
+          "class": "DuelSpell",
+          "target": "ALL_MINIONS",
+          "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

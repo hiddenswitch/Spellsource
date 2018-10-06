@@ -18,7 +18,8 @@
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "WEAPON"
-      }
+      },
+      "exclusive": false
     },
     "keepAfterTransform": true
   },

@@ -1,0 +1,27 @@
+{
+  "name": "Misty Mana Tea",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "If you spent 8 or more Mana Crystals this turn, gain 4 Mana Crystals this turn only.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_PLAYER",
+      "value": 8,
+      "attribute": "MANA_SPENT_THIS_TURN",
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "GainManaSpell",
+      "value": 4,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

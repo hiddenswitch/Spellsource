@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -11,6 +8,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+
+import java.util.Map;
+import java.util.function.Predicate;
 
 public class HealSpell extends Spell {
 
@@ -24,15 +24,7 @@ public class HealSpell extends Spell {
 		arguments.put(SpellArg.TARGET, target);
 		if (randomTarget) {
 			arguments.put(SpellArg.RANDOM_TARGET, true);
-			arguments.put(SpellArg.FILTER, new Predicate<Entity>() {
-
-				@Override
-				public boolean test(Entity entity) {
-					return ((Actor) entity).isWounded();
-				}
-
-			});
-
+			arguments.put(SpellArg.FILTER, (Predicate<Entity>) entity -> ((Actor) entity).isWounded());
 		}
 		return new SpellDesc(arguments);
 	}

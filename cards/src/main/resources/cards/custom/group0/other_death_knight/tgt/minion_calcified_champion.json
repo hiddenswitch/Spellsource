@@ -1,0 +1,31 @@
+{
+  "name": "Calcified Champion",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Deathrattle: Replace all Death Knight cards in your hand with Paladin ones.",
+  "deathrattle": {
+    "class": "ReplaceCardsSpell",
+    "target": "FRIENDLY_HAND",
+    "cardFilter": {
+      "class": "CardFilter",
+      "heroClass": "GOLD"
+    },
+    "cardSource": {
+      "class": "CatalogueSource"
+    },
+    "filter": {
+      "class": "CardFilter",
+      "heroClass": "OBSIDIAN"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

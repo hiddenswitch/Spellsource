@@ -1,0 +1,19 @@
+{
+  "name": "Unnerfed Mana Wraith",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "ALL minions cost (1) more.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": 1,
+    "cardType": "MINION",
+    "targetPlayer": "BOTH"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

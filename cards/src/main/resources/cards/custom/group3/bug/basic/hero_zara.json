@@ -1,0 +1,16 @@
+{
+  "name": "Zara",
+  "heroPower": "hero_power_hatch_eggs",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Hero Power: Add two 1/1 Spiderlings to your hand.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

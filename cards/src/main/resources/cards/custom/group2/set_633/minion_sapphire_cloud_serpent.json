@@ -1,0 +1,31 @@
+{
+  "name": "Sapphire Cloud Serpent",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, draw two cards.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

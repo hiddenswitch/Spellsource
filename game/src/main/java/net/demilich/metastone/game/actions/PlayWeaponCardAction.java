@@ -1,16 +1,19 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class PlayWeaponCardAction extends PlayCardAction {
+/**
+ * An action that corresponds to playing a weapon card from the hand.
+ */
+public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry {
 	private BattlecryAction battlecry;
 
 	private PlayWeaponCardAction() {
-		setTargetReference(entityReference.NONE);
+		setTargetReference(EntityReference.NONE);
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 
@@ -27,8 +30,8 @@ public class PlayWeaponCardAction extends PlayCardAction {
 
 	@Override
 	@Suspendable
-	public void play(GameContext context, int playerId) {
-		Card weaponCard = context.getPendingCard();
+	public void innerExecute(GameContext context, int playerId) {
+		Card weaponCard = (Card) context.resolveSingleTarget(getSourceReference());
 
 		Weapon weapon = weaponCard.createWeapon();
 		if (battlecry != null) {
@@ -37,4 +40,13 @@ public class PlayWeaponCardAction extends PlayCardAction {
 		context.getLogic().equipWeapon(playerId, weapon, weaponCard, true);
 	}
 
+	@Override
+	public BattlecryAction getBattlecryAction() {
+		return battlecry;
+	}
+
+	@Override
+	public void setBattlecryAction(BattlecryAction action) {
+		battlecry = action;
+	}
 }

@@ -2,6 +2,8 @@ package net.demilich.metastone.game.spells.trigger;
 
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -13,11 +15,10 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.TargetType;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 
-public abstract class EventTrigger extends CustomCloneable implements Serializable {
+public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
 	private int owner = -1;
-	protected final EventTriggerDesc desc;
+	private EventTriggerDesc desc;
 
 	public EventTrigger(EventTriggerDesc desc) {
 		this.desc = desc;
@@ -54,26 +55,21 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 	protected abstract boolean fire(GameEvent event, Entity host);
 
 	public final boolean fires(GameEvent event, Entity host) {
-		TargetPlayer targetPlayer = desc.getTargetPlayer();
+		TargetPlayer targetPlayer = getDesc().getTargetPlayer();
 		if (targetPlayer != null && !determineTargetPlayer(event, targetPlayer, host, event.getTargetPlayerId())) {
 			return false;
 		}
-		TargetPlayer sourcePlayer = desc.getSourcePlayer();
+		TargetPlayer sourcePlayer = getDesc().getSourcePlayer();
 		if (sourcePlayer != null && !determineTargetPlayer(event, sourcePlayer, host, event.getSourcePlayerId())) {
 			return false;
 		}
 
-		TargetType hostTargetType = (TargetType) desc.get(EventTriggerArg.HOST_TARGET_TYPE);
-		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getEventTarget() == host) {
-			return false;
-		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
-			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
-			return false;
-		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {
+
+		if (!hostConditionMet(event, host)) {
 			return false;
 		}
-		Condition condition = (Condition) desc.get(EventTriggerArg.QUEUE_CONDITION);
+
+		Condition condition = (Condition) getDesc().get(EventTriggerArg.QUEUE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
 		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
 			return false;
@@ -87,6 +83,20 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		}
 		return fire(event, host);
+	}
+
+	protected boolean hostConditionMet(GameEvent event, Entity host) {
+		TargetType hostTargetType = (TargetType) getDesc().get(EventTriggerArg.HOST_TARGET_TYPE);
+		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getEventTarget() == host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {
+			return false;
+		}
+		return true;
 	}
 
 	public int getOwner() {
@@ -105,11 +115,21 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 	}
 
 	public boolean canFireCondition(GameEvent event) {
-		Condition condition = (Condition) desc.get(EventTriggerArg.FIRE_CONDITION);
+		Condition condition = (Condition) getDesc().get(EventTriggerArg.FIRE_CONDITION);
 		Player owner = event.getGameContext().getPlayer(getOwner());
 		if (condition != null && !condition.isFulfilled(event.getGameContext(), owner, event.getEventSource(), event.getEventTarget())) {
 			return false;
 		}
 		return true;
+	}
+
+	@Override
+	public EventTriggerDesc getDesc() {
+		return desc;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (EventTriggerDesc) desc;
 	}
 }

@@ -15,7 +15,8 @@
       "class": "AttributeFilter",
       "attribute": "CHARGE",
       "operation": "HAS"
-    }
+    },
+    "hpBonus": 0
   },
   "collectible": true,
   "set": "BASIC",

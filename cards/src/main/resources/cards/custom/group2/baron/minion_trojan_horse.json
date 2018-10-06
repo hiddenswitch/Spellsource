@@ -1,0 +1,31 @@
+{
+  "name": "Trojan Horse",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Has +1 Attack for each Knight in your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "WillEndSequenceTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

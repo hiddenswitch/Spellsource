@@ -1,0 +1,27 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "Equip a 1/1 Survival Knife.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "HasWeaponCondition",
+        "card": "weapon_survival_knife",
+        "invert": "true"
+      },
+      "spell": {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_survival_knife"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

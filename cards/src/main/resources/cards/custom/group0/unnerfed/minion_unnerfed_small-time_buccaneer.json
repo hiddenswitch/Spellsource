@@ -1,0 +1,31 @@
+{
+  "name": "Unnerfed Small-Time Buccaneer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Has +2 Attack while you have a weapon equipped.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BoardChangedTrigger"
+    },
+    "spell": {
+      "class": "ConditionalAttackBonusSpell",
+      "target": "SELF",
+      "value": {
+        "class": "ConditionalValueProvider",
+        "condition": {
+          "class": "HasWeaponCondition"
+        },
+        "ifFalse": 0,
+        "ifTrue": 2
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

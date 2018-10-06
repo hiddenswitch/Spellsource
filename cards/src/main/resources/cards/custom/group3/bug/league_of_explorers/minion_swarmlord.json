@@ -1,0 +1,37 @@
+{
+  "name": "Swarmlord",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "description": "Battlecry: Summon all Spiderlings from your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": 7,
+        "value2": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_MINIONS"
+        }
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.cards;
 
-import java.io.IOException;
-
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.cards.desc.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.shared.utils.ResourceInputStream;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.IOException;
 
 /**
  * A class responsible for deserializing JSON representations of cards.
@@ -17,12 +17,10 @@ public class CardParser {
 	private static Logger logger = LoggerFactory.getLogger(CardParser.class);
 
 	public static CardCatalogueRecord parseCard(JsonObject card) throws IOException {
-		// Do something horrible: Serialize to json, then read it in with GSON. :(
 		final String id = card.getString("id");
 		CardDesc desc = card.mapTo(CardDesc.class);
-
-		if (desc.id == null) {
-			desc.id = id;
+		if (desc.getId() == null) {
+			desc.setId(id);
 		}
 		return new CardCatalogueRecord(id, desc);
 	}
@@ -35,8 +33,8 @@ public class CardParser {
 		final String fileName = resourceInputStream.fileName;
 		String id = fileName.split("(\\.json)")[0];
 
-		if (desc.id == null) {
-			desc.id = id;
+		if (desc.getId() == null) {
+			desc.setId(id);
 		}
 
 		return new CardCatalogueRecord(id, desc);

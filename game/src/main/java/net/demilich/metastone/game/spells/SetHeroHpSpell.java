@@ -1,17 +1,16 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 public class SetHeroHpSpell extends Spell {
 
@@ -30,9 +29,9 @@ public class SetHeroHpSpell extends Spell {
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		if (actor.getMaxHp() < value) {
 			actor.setMaxHp(value);
-			logger.debug("{}'s Max Hp have been set to {}", actor, actor.getMaxHp());
+			logger.debug("onCast {} {}: {}'s Max Hp have been set to {}", context.getGameId(), source, actor, actor.getMaxHp());
 		}
 		actor.setHp(value);
-		logger.debug("{}'s Hp have been set to {}", actor, actor.getHp());
+		logger.debug("onCast {} {}: {}'s Hp have been set to {}", context.getGameId(), source, actor, actor.getHp());
 	}
 }

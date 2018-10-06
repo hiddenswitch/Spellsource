@@ -7,51 +7,35 @@
   "durability": 2,
   "rarity": "EPIC",
   "description": "Has Attack equal to your Armor. Can't attack heroes.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "ArmorChangedTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "SetAttackSpell",
-      "target": "FRIENDLY_WEAPON",
-      "value": {
-        "class": "AttributeValueProvider",
-        "target": "FRIENDLY_PLAYER",
-        "attribute": "ARMOR"
-      }
-    }
-  },
-  "onEquip": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddAttributeSpell",
-        "target": "FRIENDLY_HERO",
-        "attribute": "CANNOT_ATTACK_HEROES"
-      },
-      {
-        "class": "SetAttackSpell",
-        "target": "FRIENDLY_WEAPON",
-        "value": {
-          "class": "AttributeValueProvider",
-          "target": "FRIENDLY_PLAYER",
-          "attribute": "ARMOR"
-        }
-      }
-    ]
-  },
-  "onUnequip": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "RemoveAttributeSpell",
-        "target": "FRIENDLY_HERO",
-        "attribute": "CANNOT_ATTACK_HEROES"
-      }
-    ]
-  },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO",
+      "attribute": "AURA_CANNOT_ATTACK_HEROES"
+    },
+    {
+      "class": "Aura",
+      "target": "SELF",
+      "alwaysApply": true,
+      "applyEffect": {
+        "class": "SetAttributeSpell",
+        "target": "SELF",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "ARMOR"
+        },
+        "attribute": "ATTACK"
+      },
+      "removeEffect": {
+        "class": "SetAttributeSpell",
+        "target": "SELF",
+        "value": 0,
+        "attribute": "ATTACK"
+      }
+    }
+  ]
 }

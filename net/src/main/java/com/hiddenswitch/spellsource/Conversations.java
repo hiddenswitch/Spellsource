@@ -1,58 +1,68 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import com.hiddenswitch.spellsource.impl.util.ConversationRecord;
-import com.hiddenswitch.spellsource.impl.util.MessageRecord;
-import com.hiddenswitch.spellsource.util.QuickJson;
-import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClient;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMultimap;
+import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.util.*;
+import io.reactivex.disposables.Disposable;
+import org.apache.commons.lang3.RandomStringUtils;
 
-import static io.vertx.ext.sync.Sync.awaitResult;
+public interface Conversations {
 
-/**
- * Created by weller on 6/13/17.
- */
-public class Conversations {
+	static void handleConnections() throws SuspendExecution {
+		SuspendableMultimap<ConversationId, ChatMessage> conversations = SuspendableMultimap.getOrCreate("conversations");
 
-    private static final String CONVERSATIONS = "conversations";
-    private final static char ID_SEPARATOR = '$';
+		Connection.connected(connection -> {
+			connection.handler(Sync.suspendableHandler((SuspendableAction1<Envelope>) msg -> {
+				// Send a message
+				if (msg.getMethod() != null && msg.getMethod().getSendMessage() != null) {
+					EnvelopeMethodSendMessage sendMessage = msg.getMethod().getSendMessage();
+					// Sending a chat message
+					UserRecord sender = Accounts.findOne(connection.userId());
+					String conversationId = sendMessage.getConversationId();
+					if (!conversationId.contains(connection.userId())) {
+						throw new SecurityException(String.format("User %s attempted to subscribe to unauthorized conversationId %s",
+										connection.userId(),
+										conversationId));
+					}
+					// Conversation IDs should be of the form userId1,userId2
+					// TODO: Assert that it's two valid user IDs.
+					ChatMessage message = new ChatMessage()
+									.messageId("c:" + Integer.toString(conversations.size()) + ":" + RandomStringUtils.randomAlphanumeric(6))
+									.conversationId(conversationId)
+									.message(sendMessage.getMessage())
+									.senderUserId(sender.getId())
+									.senderName(sender.getUsername());
 
-    public static String getId(String id1, String id2) {
-        return id1.compareTo(id2)>0 ? id1 + ID_SEPARATOR + id2 : id2 + ID_SEPARATOR + id1;
-    }
+					conversations.put(new ConversationId(conversationId), message);
+					connection.write(new Envelope().result(new EnvelopeResult().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId()))));
+				}
 
-    public static MessageRecord insertMessage(MongoClient mongo, String originId, String authorDisplayName,
-                                              String destId, String text)
-            throws SuspendExecution, InterruptedException{
+				if (msg.getSub() != null && msg.getSub().getConversation() != null) {
+					// Subscribe to conversation
+					EnvelopeSubConversation request = msg.getSub().getConversation();
+					String conversationId = request.getConversationId();
+					ConversationId key = new ConversationId(conversationId);
 
-        //get conversation
-        ConversationRecord conversation = getCreateConversation(mongo, originId, destId);
+					AddedChangedRemoved<ConversationId, ChatMessage> observer =
+									SuspendableMultimap.subscribeToKeyInMultimap("conversations", key);
 
-        //create message record
-        MessageRecord messageRecord = new MessageRecord(originId, authorDisplayName, text, System.currentTimeMillis());
+					for (ChatMessage message : conversations.get(key)) {
+						connection.write(new Envelope().added(new EnvelopeAdded().chatMessage(message)));
+					}
 
-        //insert message record
-        MongoClientUpdateResult result = awaitResult(h -> mongo.updateCollection(CONVERSATIONS,
-                QuickJson.json("_id", conversation.getId()),
-                QuickJson.json("$push", QuickJson.json("messages", QuickJson.json(messageRecord))), h));
+					Disposable sub = observer.added().subscribe(next -> {
+						connection.write(new Envelope().added(new EnvelopeAdded().chatMessage(next.getValue())));
+					});
 
-        return messageRecord;
-    }
-
-    public static ConversationRecord getCreateConversation(MongoClient mongo, String player1, String player2)
-            throws SuspendExecution, InterruptedException{
-        String conversationId = getId(player1, player2);
-        JsonObject result = awaitResult(h -> mongo.findOne(CONVERSATIONS, QuickJson.json("_id", conversationId), QuickJson.json(), h));
-
-        ConversationRecord conversation;
-        if (result != null) {
-            conversation = QuickJson.fromJson(result, ConversationRecord.class);
-        } else {
-            final ConversationRecord newConversation = new ConversationRecord(conversationId);
-            String ignored = awaitResult(h-> mongo.insert(CONVERSATIONS, QuickJson.toJson(newConversation), h));
-            conversation = newConversation;
-        }
-        return conversation;
-    }
+					connection.endHandler(v -> {
+						sub.dispose();
+						observer.dispose();
+					});
+				}
+			}));
+		});
+	}
 }

@@ -1,5 +1,6 @@
 {
   "name": "Armor Up!",
+  "heroPower": "hero_power_tank_up",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "RED",
@@ -7,9 +8,12 @@
   "description": "Gain 2 Armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 2
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 2
+    }
   },
   "collectible": false,
   "set": "BASIC",

@@ -10,7 +10,7 @@ public class InHandFilter extends EntityFilter {
 	public InHandFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
-	
+
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		return entity.getZone() == Zones.HAND && entity.getOwner() == player.getId();

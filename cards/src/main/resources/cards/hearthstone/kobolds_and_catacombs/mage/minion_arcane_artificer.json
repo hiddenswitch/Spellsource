@@ -15,9 +15,10 @@
     },
     "spell": {
       "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
       "armorBonus": {
-        "class": "ManaCostProvider",
-        "target": "EVENT_TARGET"
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "LAST_MANA_COST"
       }
     }
   },

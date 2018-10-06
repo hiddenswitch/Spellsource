@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import java.util.List;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.List;
 
 public class AttributeCounter extends ValueProvider {
 
@@ -16,10 +16,10 @@ public class AttributeCounter extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		EntityReference source = desc.getSource();
+		EntityReference source = getDesc().getSource();
 		List<Entity> relevantEntities = context.resolveTarget(player, host, source);
 		int count = 0;
-		Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
+		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
 		for (Entity entity : relevantEntities) {
 			if (entity.hasAttribute(attribute)) {
 				count++;

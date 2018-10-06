@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RED",
   "rarity": "FREE",
-  "description": "Deal 1 damage to ALL minions.",
+  "description": "Deal $1 damage to ALL minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

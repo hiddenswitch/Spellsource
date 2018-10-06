@@ -23,6 +23,7 @@
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
         },
+        "ignoreSpellDamage": true,
         "targetPlayer": "SELF"
       }
     ]

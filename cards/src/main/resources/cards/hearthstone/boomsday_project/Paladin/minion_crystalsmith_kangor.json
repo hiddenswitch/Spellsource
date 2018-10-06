@@ -1,0 +1,18 @@
+{
+  "name": "Crystalsmith Kangor",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Divine Shield, Lifesteal. Your healing is doubled",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "HEAL_AMPLIFY_MULTIPLIER": 2,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

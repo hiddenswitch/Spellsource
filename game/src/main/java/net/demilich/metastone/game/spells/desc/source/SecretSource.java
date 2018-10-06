@@ -19,7 +19,10 @@ public class SecretSource extends CardSource implements HasCardCreationSideEffec
 		// If the player doesn't ordinarily have secrets, return GOLD secrets
 		final HeroClass playerClass = player.getHero().getHeroClass();
 		final HeroClass heroClass =
-				Sets.newHashSet(HeroClass.BLACK, HeroClass.BLUE, HeroClass.GOLD, HeroClass.GREEN)
+				Sets.newHashSet(HeroClass.BLACK,
+						HeroClass.BLUE,
+						HeroClass.GOLD,
+						HeroClass.GREEN)
 						.contains(playerClass) ?
 						playerClass :
 						HeroClass.GOLD;

@@ -1,0 +1,46 @@
+{
+  "name": "Mutant Merchant",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover a Beast, Dragon or Murloc.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+        },
+        {
+          "class": "CardFilter",
+          "race": "MURLOC",
+          "cardType": "MINION"
+        }
+      ],
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

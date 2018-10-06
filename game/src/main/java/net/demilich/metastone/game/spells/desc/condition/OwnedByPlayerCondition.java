@@ -4,7 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 public class OwnedByPlayerCondition extends Condition {
 

@@ -1,0 +1,19 @@
+{
+  "name": "Soothing Mists",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "COMMON",
+  "description": "Echo. Restore #5 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 5
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

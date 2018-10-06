@@ -24,6 +24,10 @@ public enum Environment {
 	 */
 	KILLED_MINION,
 	/**
+	 * This variable stores the number of minions that have been destroyed so far during this sequence.
+	 */
+	DESTROYED_THIS_SEQUENCE_COUNT,
+	/**
 	 * This variable, when defined, specifies that the target of a spell or physical attack should be overriden.
 	 */
 	TARGET_OVERRIDE,
@@ -31,6 +35,11 @@ public enum Environment {
 	 * This variable stores a reference to the last card played for each player
 	 */
 	LAST_CARD_PLAYED,
+	/**
+	 * This variable stores a reference to the last card played for each player before the card this attribute is written
+	 * on. Helps implement Study.
+	 */
+	LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE,
 	/**
 	 * This variable stores a stack of attackers.
 	 */
@@ -66,10 +75,6 @@ public enum Environment {
 	 */
 	DAMAGE_STACK,
 	/**
-	 * This variable stores the current card being played.
-	 */
-	PENDING_CARD,
-	/**
 	 * This variable stores a stack of entities that were output by spells. The variable can be referenced with {@link
 	 * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
 	 * <p>
@@ -95,14 +100,22 @@ public enum Environment {
 	 */
 	EVENT_VALUE_STACK,
 	/**
-	 * This implements Frostmourne, keeping track of which particular entities a particular Frostmourne has destroyed.
+	 * This implements Frostmourne and other entity tracking effects. For example, it keeps track of which particular
+	 * entities a particular Frostmourne has destroyed.
+	 *
+	 * @see net.demilich.metastone.game.spells.custom.ResurrectFromEntityStorageSpell for resurrecting minions from this
+	 * 		list.
+	 * @see net.demilich.metastone.game.spells.custom.StoreEntitySpell for adding entities to the list.
 	 */
 	ENTITY_LIST,
 	/**
-	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own
-	 * minions.
+	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own minions.
 	 */
 	LYNESSA_SUNSORROW_ENTITY_LIST,
+	/**
+	 * This entity list implements Bonefetcher, keeping track of the cards that were shuffled in each player's deck.
+	 */
+	SHUFFLED_CARDS_LIST,
 	/**
 	 * Stores a stack of event sources.
 	 */

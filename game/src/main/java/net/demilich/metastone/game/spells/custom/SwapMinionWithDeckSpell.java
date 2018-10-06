@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -8,7 +8,6 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell;
-import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
@@ -27,11 +26,10 @@ public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
 		context.getLogic().removeCard(randomCard);
 		// return target to deck (Now it's safe and won't destroy itself!)
 
-		// Summon the minion, which ALSO won't destroy itself...
-		context.getLogic().summon(player.getId(), randomCard.summon(), null, -1, false);
 
 		// If there is no minion to shuffle... Idk, blame a wizard.
 		super.onCast(context, player, desc, source, target);
+
 		// Summon the minion, which ALSO won't destroy itself...
 		context.getLogic().summon(player.getId(), randomCard.summon(), null, -1, false);
 	}

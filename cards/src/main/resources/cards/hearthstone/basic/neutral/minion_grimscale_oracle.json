@@ -15,7 +15,8 @@
     "filter": {
       "class": "RaceFilter",
       "race": "MURLOC"
-    }
+    },
+    "hpBonus": 0
   },
   "collectible": true,
   "set": "BASIC",

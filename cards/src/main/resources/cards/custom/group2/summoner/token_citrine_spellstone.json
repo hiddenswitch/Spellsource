@@ -1,0 +1,35 @@
+{
+  "name": "Citrine Spellstone",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "Destroy all minions that cost (6) or less. (Invoke 5 Mana Crystals to upgrade.)",
+  "passiveTrigger": {
+    "countUntilCast": 5,
+    "eventTrigger": {
+      "class": "InvokedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "token_greater_citrine_spellstone"
+    },
+    "countByValue": true,
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 6,
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,29 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Whenever you target this minion with a battlecry, the minion gains 10,000 hitpoints.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "BATTLECRY",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "TRIGGER_HOST",
+      "hpBonus": 100
+    }
+  },
+  "attributes": {
+    "CANNOT_ATTACK": true,
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

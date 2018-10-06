@@ -9,7 +9,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 	public AuraDescDeserializer() {
 		super(AuraDesc.class);
 	}
-	
+
 	@Override
 	protected AuraDesc createDescInstance() {
 		return new AuraDesc();
@@ -25,8 +25,10 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.ATTACK_BONUS, ParseValueType.VALUE);
 		ctx.add(AuraArg.HP_BONUS, ParseValueType.VALUE);
 		ctx.add(AuraArg.SECONDARY_TRIGGER, ParseValueType.EVENT_TRIGGER);
+		ctx.add(AuraArg.REVERT_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(AuraArg.CONDITION, ParseValueType.CONDITION);
-		ctx.add(AuraArg.CARD_ID, ParseValueType.STRING);
+		ctx.add(AuraArg.CARD, ParseValueType.STRING);
+		ctx.add(AuraArg.ALWAYS_APPLY, ParseValueType.BOOLEAN);
 	}
 
 	@Override

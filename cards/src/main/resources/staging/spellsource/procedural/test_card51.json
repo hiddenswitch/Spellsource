@@ -1,0 +1,30 @@
+{
+  "name": "Snake",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Gain +1/+1 for each friendly Totem.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "TOTEM"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

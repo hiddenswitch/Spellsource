@@ -1,10 +1,10 @@
 {
-  "name": "Greater Conjuring",
+  "name": "Totemic Slam",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Summon a Minor Creature of your choice.",
+  "description": "Summon a Totem of your choice.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 7,

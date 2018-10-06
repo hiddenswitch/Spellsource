@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "RARE",
-  "description": "Deal 1 damage to all enemy minions. Summon a random 1-Cost minion.",
+  "description": "Deal $1 damage to all enemy minions. Summon a random 1-Cost minion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

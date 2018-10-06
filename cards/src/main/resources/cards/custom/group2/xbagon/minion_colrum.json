@@ -1,0 +1,99 @@
+{
+  "name": "Colrum",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Battlecry: Transform ALL Murlocs to random non-Murloc minions (wherever they are).",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReplaceCardsSpell",
+          "target": "BOTH_DECKS",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "MURLOC",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          },
+          "filter": {
+            "class": "RaceFilter",
+            "race": "MURLOC"
+          }
+        },
+        {
+          "class": "ReplaceCardsSpell",
+          "target": "BOTH_HANDS",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "MURLOC",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          },
+          "filter": {
+            "class": "RaceFilter",
+            "race": "MURLOC"
+          }
+        },
+        {
+          "class": "TransformToRandomMinionSpell",
+          "target": "ALL_MINIONS",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "RaceFilter",
+                "race": "MURLOC",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          },
+          "filter": {
+            "class": "RaceFilter",
+            "race": "MURLOC"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

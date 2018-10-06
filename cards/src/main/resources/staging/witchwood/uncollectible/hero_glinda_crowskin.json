@@ -1,0 +1,12 @@
+{
+  "name": "Glinda Crowskin",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "VIOLET",
+  "rarity": "FREE",
+  "description": "<i>The leader of Hagatha\u2019s dark cult hides behind her loyal minions.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

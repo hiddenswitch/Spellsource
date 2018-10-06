@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "FREE",
-  "description": "Deal 4 damage to an enemy and 1 damage to all other enemies.",
+  "description": "Deal $4 damage to an enemy and $1 damage to all other enemies.",
   "targetSelection": "ENEMY_CHARACTERS",
   "spell": {
     "class": "SwipeSpell",

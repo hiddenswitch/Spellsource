@@ -1,0 +1,37 @@
+{
+  "name": "Signs of the End",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "The next spell you cast summons a random minion of equal Cost.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "LAST_MANA_COST"
+          }
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      },
+      "maxFires": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

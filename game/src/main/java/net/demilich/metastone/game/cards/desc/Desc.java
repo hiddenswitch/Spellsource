@@ -1,46 +1,45 @@
 package net.demilich.metastone.game.cards.desc;
 
-import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
-import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
-import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import org.apache.commons.lang3.builder.EqualsBuilder;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+import net.demilich.metastone.game.utils.BaseMap;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.Supplier;
+import java.util.Map;
 
 /**
- * A card or card component description base class.
- * <p>
- * This {@link Map} type has typed {@link Enum} keys and
+ * A map representing a complex type in Spellsource, like a {@link net.demilich.metastone.game.spells.Spell} or {@link
+ * net.demilich.metastone.game.spells.desc.condition.Condition}.
  *
- * @param <T>
+ * @param <T> The enum representing the parameters/arguments/fields in the abstract base class.
+ * @param <V> The abstract base class of the concrete type.
  */
 @JsonSerialize(using = DescSerializer.class)
-public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Object> implements Serializable, Cloneable {
-	protected Desc(Map<T, Object> arguments) {
-		super(arguments);
+public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends BaseMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
+	protected Desc(Map<T, Object> arguments, Class<T> keyType) {
+		super(keyType);
+		if (arguments.isEmpty()) {
+			return;
+		}
+		putAll(arguments);
 	}
 
-	protected Desc() {
-		super();
+	protected Desc(Class<T> keyType) {
+		super(keyType);
 	}
 
-	public Desc(Class<? extends V> clazz) {
-		super();
+	public Desc(Class<? extends V> clazz, Class<T> keyType) {
+		super(keyType);
 		put(getClassArg(), clazz);
 	}
 
@@ -51,15 +50,26 @@ public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Ob
 
 	protected abstract Class<? extends Desc> getDescImplClass();
 
+	/**
+	 * Per-instance memoized desc create instance.
+	 *
+	 * @return An instance of the underlying implementation of this desc.
+	 */
 	public V create() {
 		Class<? extends V> clazz = getDescClass();
 		try {
 			return clazz.getConstructor(getDescImplClass()).newInstance(this);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException
 				| NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			// Try a no-args constructor and set the desc
+			try {
+				final V v = getDescClass().getConstructor().newInstance();
+				v.setDesc(this);
+				return v;
+			} catch (InstantiationException | IllegalAccessException | NoSuchMethodException | InvocationTargetException e1) {
+				throw new RuntimeException(e1);
+			}
 		}
-		return null;
 	}
 
 	public abstract T getClassArg();
@@ -84,30 +94,18 @@ public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Ob
 		}
 		if (ValueProvider.class.isAssignableFrom(storedValue.getClass())) {
 			ValueProvider valueProvider = (ValueProvider) storedValue;
-			return valueProvider.getValue(context, player, target, host);
+			int value = valueProvider.getValue(context, player, target, host);
+			if (valueProvider.getDesc().getBool(ValueProviderArg.EVALUATE_ONCE)) {
+				this.put(arg, value);
+			}
+			return value;
 		}
 		return (int) storedValue;
 	}
 
 	@Override
 	public boolean equals(Object other) {
-		if (other == null) {
-			return false;
-		}
-		if (!Desc.class.isAssignableFrom(other.getClass())) {
-			return false;
-		}
-		Desc rhs = (Desc) other;
-		if (rhs.size() != this.size()) {
-			return false;
-		}
-		EqualsBuilder eq = new EqualsBuilder();
-		for (Map.Entry entry : this.entrySet()) {
-			final Object left = entry.getValue();
-			final Object right = this.get(entry.getKey());
-			eq.append(left, right);
-		}
-		return eq.isEquals();
+		return super.equals(other);
 	}
 
 	@Override
@@ -142,17 +140,30 @@ public abstract class Desc<T extends Enum<T>, V> extends ConcurrentHashMap<T, Ob
 	}
 
 	protected Desc<T, V> copyTo(Desc<T, V> clone) {
-		synchronized (this) {
-			for (T arg : keySet()) {
-				Object value = get(arg);
-				if (value instanceof CustomCloneable) {
-					CustomCloneable cloneable = (CustomCloneable) value;
-					clone.put(arg, cloneable.clone());
-				} else {
-					clone.put(arg, value);
-				}
+		for (T arg : keySet()) {
+			Object value = get(arg);
+			if (value instanceof CustomCloneable) {
+				CustomCloneable cloneable = (CustomCloneable) value;
+				clone.put(arg, cloneable.clone());
+			} else if (value instanceof Desc) {
+				Desc descClone = (Desc) value;
+				clone.put(arg, descClone.clone());
+			} else {
+				clone.put(arg, value);
 			}
 		}
 		return clone;
+	}
+
+	@Override
+	public Desc<T, V> getDesc() {
+		return this;
+	}
+
+	@Override
+	@SuppressWarnings("unchecked")
+	public void setDesc(Desc<?, ?> desc) {
+		this.clear();
+		this.putAll((Map) desc);
 	}
 }

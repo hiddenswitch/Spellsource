@@ -1,0 +1,39 @@
+{
+  "name": "Rylvagos",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 8,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "Your other minions have +1/+1 and Spell Damage +1.",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "BuffAura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 1,
+      "hpBonus": 1
+    },
+    {
+      "class": "Aura",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "applyEffect": {
+        "class": "ModifyAttributeSpell",
+        "value": 1,
+        "attribute": "AURA_SPELL_DAMAGE"
+      },
+      "removeEffect": {
+        "class": "ModifyAttributeSpell",
+        "value": -1,
+        "attribute": "AURA_SPELL_DAMAGE"
+      },
+      "secondaryTrigger": {
+        "class": "WillEndSequenceTrigger"
+      }
+    }
+  ]
+}

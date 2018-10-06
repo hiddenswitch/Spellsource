@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Restore 6 Health. Summon a random 6-Cost minion.",
+  "description": "Restore #6 Health. Summon a random 6-Cost minion.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

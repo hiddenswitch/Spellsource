@@ -1,20 +1,21 @@
 package net.demilich.metastone.game.shared.threat;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.heuristic.Heuristic;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.DestroySpell;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
@@ -75,7 +76,23 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 	}
 
 	private static boolean isHardRemoval(Card card) {
-		return hardRemoval.contains(card.getCardId());
+		boolean isPoisonous = card.hasAttribute(Attribute.POISONOUS)
+				|| card.hasAttribute(Attribute.AURA_POISONOUS);
+		boolean destroySpell = false;
+		if (card.getDesc().getBattlecry() != null
+				&& card.getDesc().getBattlecry().getSpell() != null) {
+			SpellDesc spell = card.getDesc().getBattlecry().getSpell();
+			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
+					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
+		}
+		if (card.getSpell() != null) {
+			SpellDesc spell = card.getSpell();
+			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
+					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
+		}
+		return hardRemoval.contains(card.getCardId())
+				|| isPoisonous
+				|| destroySpell;
 	}
 
 	private final FeatureVector weights;
@@ -90,7 +107,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 				* (minion.getAttack() - minion.getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS));
 		minionScore += weights.get(WeightedFeature.MINION_HP_FACTOR) * minion.getHp();
 
-		if (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.TAUNT)) {
+		if (minion.hasAttribute(Attribute.TAUNT) || minion.hasAttribute(Attribute.AURA_TAUNT)) {
 			switch (threatLevel) {
 				case RED:
 					minionScore += weights.get(WeightedFeature.MINION_RED_TAUNT_MODIFIER);
@@ -104,7 +121,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 			}
 		}
 
-		if (minion.hasAttribute(Attribute.WINDFURY)) {
+		if (minion.hasAttribute(Attribute.WINDFURY) || minion.hasAttribute(Attribute.AURA_WINDFURY)) {
 			minionScore += weights.get(WeightedFeature.MINION_WINDFURY_MODIFIER);
 		} else if (minion.hasAttribute(Attribute.MEGA_WINDFURY)) {
 			minionScore += 2 * weights.get(WeightedFeature.MINION_WINDFURY_MODIFIER);
@@ -116,8 +133,11 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		if (minion.hasAttribute(Attribute.SPELL_DAMAGE)) {
 			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE) * weights.get(WeightedFeature.MINION_SPELL_POWER_MODIFIER);
 		}
+		if (minion.hasAttribute(Attribute.AURA_SPELL_DAMAGE)) {
+			minionScore += minion.getAttributeValue(Attribute.AURA_SPELL_DAMAGE) * weights.get(WeightedFeature.MINION_SPELL_POWER_MODIFIER);
+		}
 
-		if (minion.hasAttribute(Attribute.STEALTH)) {
+		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
 			minionScore += weights.get(WeightedFeature.MINION_STEALTHED_MODIFIER);
 		}
 		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)) {
@@ -192,6 +212,9 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		score += questCount * weights.get(WeightedFeature.QUEST_COUNTER_VALUE);
 		score += questRewards * weights.get(WeightedFeature.QUEST_REWARD_VALUE);
+
+		score += player.getMaxMana() * weights.get(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE);
+		score += opponent.getMaxMana() * weights.get(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE);
 
 		return score;
 	}

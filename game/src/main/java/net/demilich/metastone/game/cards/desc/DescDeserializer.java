@@ -9,7 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, V> extends StdDeserializer<T> {
+public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, V extends HasDesc<T>> extends StdDeserializer<T> {
 	private LinkedHashMap<K, ParseValueType> interpreter = new LinkedHashMap<>();
 
 	protected DescDeserializer(Class<? extends T> vc) {

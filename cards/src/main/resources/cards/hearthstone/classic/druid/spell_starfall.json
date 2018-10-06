@@ -4,7 +4,7 @@
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Choose One - Deal 5 damage to a minion; or 2 damage to all enemy minions.",
+  "description": "Choose One - Deal $5 damage to a minion; or $2 damage to all enemy minions.",
   "targetSelection": "NONE",
   "chooseOneCardIds": [
     "spell_starfall_1",

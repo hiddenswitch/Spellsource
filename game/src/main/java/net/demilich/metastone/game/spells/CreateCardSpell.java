@@ -1,28 +1,29 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.*;
-import java.util.stream.Collectors;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardDescType;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.*;
+import java.util.stream.Collectors;
+
+/**
+ * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
+ * 		{@link CreateCardFromChoicesSpell} for an example.
+ */
+@Deprecated
 public class CreateCardSpell extends Spell {
 
 	Logger logger = LoggerFactory.getLogger(CreateCardSpell.class);
@@ -119,18 +120,18 @@ public class CreateCardSpell extends Spell {
 				spellList.toArray(spellArray);
 				SpellDesc spell = MetaSpell.create(target != null ? target.getReference() : null, false, spellArray);
 				CardDesc spellCardDesc = new CardDesc();
-				spellCardDesc.id = context.getLogic().generateCardId();
-				spellCardDesc.name = desc.getString(SpellArg.SECONDARY_NAME);
-				spellCardDesc.heroClass = heroClass;
-				spellCardDesc.type = CardType.SPELL;
-				spellCardDesc.rarity = rarity;
-				spellCardDesc.description = description;
-				spellCardDesc.targetSelection = targetSelection;
-				spellCardDesc.spell = spell;
+				spellCardDesc.setId(context.getLogic().generateCardId());
+				spellCardDesc.setName(desc.getString(SpellArg.SECONDARY_NAME));
+				spellCardDesc.setHeroClass(heroClass);
+				spellCardDesc.setType(CardType.SPELL);
+				spellCardDesc.setRarity(rarity);
+				spellCardDesc.setDescription(description);
+				spellCardDesc.setTargetSelection(targetSelection);
+				spellCardDesc.setSpell(spell);
 				//spellCardDesc.attributes.put(key, value);
-				spellCardDesc.set = cardSet;
-				spellCardDesc.collectible = false;
-				spellCardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, target, source, 0);
+				spellCardDesc.setSet(cardSet);
+				spellCardDesc.setCollectible(false);
+				spellCardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
 				newCard = spellCardDesc.create();
 				break;
 			case CHOOSE_ONE:
@@ -140,9 +141,7 @@ public class CreateCardSpell extends Spell {
 			default:
 				return;
 		}
-		if (newCard != null) {
-			context.addTempCard(newCard);
-			context.getLogic().receiveCard(player.getId(), newCard.clone());
-		}
+		context.addTempCard(newCard);
+		context.getLogic().receiveCard(player.getId(), newCard.clone());
 	}
 }

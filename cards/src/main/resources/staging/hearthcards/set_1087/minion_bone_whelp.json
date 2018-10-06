@@ -1,0 +1,22 @@
+{
+  "name": "Bone Whelp",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "[b][b]Deathrattle:[/b][/b] If you control another Dragon, return this minion to your hand.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

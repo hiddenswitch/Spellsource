@@ -1,0 +1,51 @@
+{
+  "name": "Luna's Other Pocket Galaxy",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "LEGENDARY",
+  "description": "Replace your deck with an endless source of random Mage cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscardCardsFromDeckSpell",
+        "value": 60,
+        "targetPlayer": "SELF"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "WillEndSequenceTrigger"
+          },
+          "spell": {
+            "class": "ShuffleToDeckSpell",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 60,
+              "value2": {
+                "class": "CardCountValueProvider",
+                "cardSource": {
+                  "class": "DeckSource",
+                  "targetPlayer": "SELF"
+                }
+              }
+            },
+            "cardFilter": {
+              "class": "CardFilter",
+              "heroClass": "BLUE"
+            },
+            "targetPlayer": "SELF"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

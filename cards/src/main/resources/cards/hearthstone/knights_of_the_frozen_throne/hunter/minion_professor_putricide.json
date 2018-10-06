@@ -9,7 +9,9 @@
   "description": "After you play a Secret, put a random Hunter Secret into the battlefield.",
   "trigger": {
     "eventTrigger": {
-      "class": "SecretPlayedTrigger"
+      "class": "AfterCardPlayedTrigger",
+      "requiredAttribute": "SECRET",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "PutRandomSecretIntoPlaySpell",

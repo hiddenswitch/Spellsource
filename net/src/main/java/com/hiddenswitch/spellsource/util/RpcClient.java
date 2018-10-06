@@ -1,8 +1,9 @@
 package com.hiddenswitch.spellsource.util;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -47,7 +48,7 @@ public interface RpcClient<T> {
 	 * </pre>
 	 * <p>
 	 * Use {@link #async(Handler)} in contexts like a conventional {@link Handler} which isn't running in a {@link
-	 * co.paralleluniverse.fibers.Fiber}. Otherwise, you're strongly encouraged to use {@link #sync()}, which is
+	 * com.github.fromage.quasi.fibers.Fiber}. Otherwise, you're strongly encouraged to use {@link #sync()}, which is
 	 * idiomatically cleaner.
 	 * <p>
 	 * Internally, this retrieves a proxy of the service configured for async calls. Pass the handler for the result
@@ -93,7 +94,7 @@ public interface RpcClient<T> {
 	<R> T async(Handler<AsyncResult<R>> handler, long timeout);
 
 	/**
-	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
+	 * Gets ready to make an idiomatically synchronous (in the sense of {@link com.github.fromage.quasi.fibers.Fiber}) call
 	 * to an API.
 	 * <p>
 	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
@@ -108,7 +109,7 @@ public interface RpcClient<T> {
 	T sync() throws SuspendExecution, InterruptedException;
 
 	/**
-	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
+	 * Gets ready to make an idiomatically synchronous (in the sense of {@link com.github.fromage.quasi.fibers.Fiber}) call
 	 * to an API as served by a specific instance.
 	 * <p>
 	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
@@ -125,9 +126,9 @@ public interface RpcClient<T> {
 	T sync(String deploymentId) throws SuspendExecution, InterruptedException, NoSuchElementException;
 
 	/**
-	 * Gets ready to make an idiomatically synchronous (in the sense of {@link co.paralleluniverse.fibers.Fiber}) call
+	 * Gets ready to make an idiomatically synchronous (in the sense of {@link com.github.fromage.quasi.fibers.Fiber}) call
 	 * to an API. Does not throw {@link SuspendExecution}, so it can be used in code that is known to be running in a
-	 * {@link co.paralleluniverse.fibers.Fiber} but not enforced to be.
+	 * {@link com.github.fromage.quasi.fibers.Fiber} but not enforced to be.
 	 * <p>
 	 * Internally, retrieves a proxy of the service configured for Fibers "sync" calls. You must be inside a Fiber
 	 * (e.g., a handler wrapped in {@link Sync#suspendableHandler(SuspendableAction1)}) to use this proxy. The methods

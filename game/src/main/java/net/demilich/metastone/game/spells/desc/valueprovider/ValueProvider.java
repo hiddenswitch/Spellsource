@@ -1,11 +1,14 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 
 import java.io.Serializable;
 
@@ -35,14 +38,13 @@ import java.io.Serializable;
  * net.demilich.metastone.game.cards.Card} affected by the {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
  * argument of a card cost modifier.</li> <li>{@code null} in {@link net.demilich.metastone.game.spells.MissilesSpell}
  * and {@link net.demilich.metastone.game.spells.HealingMissilesSpell}'s {@code getValue} calls.</li> <li>{@code null}
- * if the {@link net.demilich.metastone.game.spells.desc.filter.AttributeFilter} has a {@link
- * net.demilich.metastone.game.spells.desc.filter.FilterArg#TARGET} that evaluates to zero entities.</li> <li>{@code
- * null} in all other situations.</li> </ul>
+ * if the {@link net.demilich.metastone.game.spells.desc.filter.AttributeFilter} has a {@link EntityFilterArg#TARGET}
+ * that evaluates to zero entities.</li> <li>{@code null} in all other situations.</li> </ul>
  * <p>
  * Refer to the class hierarchy of this class for all the possible value providers.
  */
-public abstract class ValueProvider implements Serializable {
-	protected final ValueProviderDesc desc;
+public abstract class ValueProvider implements Serializable, HasDesc<ValueProviderDesc> {
+	private ValueProviderDesc desc;
 
 	public ValueProvider(ValueProviderDesc desc) {
 		this.desc = desc;
@@ -50,7 +52,7 @@ public abstract class ValueProvider implements Serializable {
 
 	@Suspendable
 	public int getValue(GameContext context, Player player, Entity target, Entity host) {
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(ValueProviderArg.TARGET_PLAYER);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(ValueProviderArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
 		}
@@ -60,8 +62,8 @@ public abstract class ValueProvider implements Serializable {
 				providingPlayer = context.getActivePlayer();
 				break;
 			case BOTH:
-				int multiplier = desc.containsKey(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
-				int offset = desc.containsKey(ValueProviderArg.OFFSET) ? desc.getInt(ValueProviderArg.OFFSET) : 0;
+				int multiplier = getDesc().containsKey(ValueProviderArg.MULTIPLIER) ? getDesc().getInt(ValueProviderArg.MULTIPLIER) : 1;
+				int offset = getDesc().containsKey(ValueProviderArg.OFFSET) ? getDesc().getInt(ValueProviderArg.OFFSET) : 0;
 				int value = 0;
 				for (Player selectedPlayer : context.getPlayers()) {
 					value += provideValue(context, selectedPlayer, target, host);
@@ -82,12 +84,22 @@ public abstract class ValueProvider implements Serializable {
 				providingPlayer = player;
 				break;
 		}
-		int multiplier = desc.containsKey(ValueProviderArg.MULTIPLIER) ? desc.getInt(ValueProviderArg.MULTIPLIER) : 1;
-		int offset = desc.getValue(ValueProviderArg.OFFSET, context, player, target, host, 0);
+		int multiplier = getDesc().containsKey(ValueProviderArg.MULTIPLIER) ? getDesc().getInt(ValueProviderArg.MULTIPLIER) : 1;
+		int offset = getDesc().getValue(ValueProviderArg.OFFSET, context, player, target, host, 0);
 		int value = provideValue(context, providingPlayer, target, host) * multiplier + offset;
 		return value;
 	}
 
 	@Suspendable
 	protected abstract int provideValue(GameContext context, Player player, Entity target, Entity host);
+
+	@Override
+	public ValueProviderDesc getDesc() {
+		return desc;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (ValueProviderDesc) desc;
+	}
 }

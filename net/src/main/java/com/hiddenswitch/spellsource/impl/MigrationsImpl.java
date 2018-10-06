@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Migrations;
 import com.hiddenswitch.spellsource.models.MigrateToRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;
@@ -15,17 +15,19 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.UpdateOptions;
 import io.vertx.ext.mongo.WriteOption;
+import io.vertx.ext.sync.SyncVerticle;
 
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.stream.IntStream;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
-public class MigrationsImpl extends AbstractService<MigrationsImpl> implements Migrations {
+public class MigrationsImpl extends SyncVerticle implements Migrations {
 	public static final String MIGRATIONS = "migrations";
 	private List<MigrationRequest> migrations = new ArrayList<>();
 	private static Logger logger = LoggerFactory.getLogger(Migrations.class);
@@ -46,8 +48,6 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 	@Override
 	@Suspendable
 	public void start() throws SuspendExecution {
-		super.start();
-
 		// Automatically migrate if we have a version specified in an environment value
 		if (System.getenv().containsKey("MIGRATE")) {
 			try {
@@ -63,7 +63,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 		}
 
 
-		registration = Rpc.register(this, Migrations.class, vertx.eventBus());
+		registration = Rpc.register(this, Migrations.class);
 	}
 
 	@Override
@@ -98,7 +98,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 		int currentVersion = control.getInteger("version");
 		if (!lock()) {
 			logger.fatal("Not migrating, control is locked.");
-			throw new RuntimeException();
+			return MigrationToResponse.failedMigration(new ConcurrentModificationException("Control is locked"));
 		}
 
 		if (null != request.getRerun()
@@ -128,7 +128,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 					currentVersion = migrations.get(i + 1).getVersion();
 				}
 			} catch (Throwable e) {
-				throw new RuntimeException(e);
+				return MigrationToResponse.failedMigration(e);
 			}
 		} else {
 			try {
@@ -137,7 +137,7 @@ public class MigrationsImpl extends AbstractService<MigrationsImpl> implements M
 					currentVersion = migrations.get(i - 1).getVersion();
 				}
 			} catch (Throwable e) {
-				throw new RuntimeException(e);
+				return MigrationToResponse.failedMigration(e);
 			}
 		}
 

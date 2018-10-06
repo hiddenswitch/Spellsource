@@ -1,0 +1,18 @@
+{
+  "name": "Explosive Rune!",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Deal $9 damage to a minion and excess damage to adjacent ones.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "ExcessDamageSpell",
+    "value": 9,
+    "secondaryTarget": "ADJACENT_TO_TARGET"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

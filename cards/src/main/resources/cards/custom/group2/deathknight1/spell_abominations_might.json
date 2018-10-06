@@ -1,0 +1,38 @@
+{
+  "name": "Icy Talon",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Give a Frozen minion +4/+4. Deal $2 damage to adjacent minions.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spell1": {
+      "class": "BuffSpell",
+      "attackBonus": 4,
+      "hpBonus": 4
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

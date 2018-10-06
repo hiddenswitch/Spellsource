@@ -1,0 +1,22 @@
+{
+  "name": "Unite It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon a Murloc. Reward: Duplicate It!",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "race": "MURLOC",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_duplicate_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,42 @@
+{
+  "name": "The Dreadtalon",
+  "baseManaCost": 9,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If your deck has no Dragons, summon a 4/4 Dragon at the start of your turn for the rest of the game.",
+  "battlecry": {
+    "condition": {
+      "class": "AllMatchFilterCondition",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "DRAGON",
+        "invert": true
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "SummonSpell",
+          "card": "token_44dragon"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

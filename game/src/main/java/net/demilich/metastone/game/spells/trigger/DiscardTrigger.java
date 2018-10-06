@@ -20,8 +20,8 @@ public class DiscardTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		DiscardEvent discardEvent = (DiscardEvent) event;
-		EntityReference target = (EntityReference) desc.get(EventTriggerArg.TARGET);
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(EventTriggerArg.TARGET_PLAYER);
+		EntityReference target = (EntityReference) getDesc().get(EventTriggerArg.TARGET);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EventTriggerArg.TARGET_PLAYER);
 
 
 		final int owner = host.getOwner();

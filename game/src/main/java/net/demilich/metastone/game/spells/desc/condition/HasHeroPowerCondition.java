@@ -17,7 +17,7 @@ public class HasHeroPowerCondition extends Condition {
 		if (heroPower.getCardId() == null) {
 			return false;
 		}
-		String cardName = (String) desc.get(ConditionArg.CARD_ID);
+		String cardName = (String) desc.get(ConditionArg.CARD);
 		return heroPower.getCardId().equalsIgnoreCase(cardName);
 	}
 

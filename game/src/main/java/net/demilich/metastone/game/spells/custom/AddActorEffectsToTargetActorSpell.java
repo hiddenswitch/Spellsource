@@ -1,13 +1,15 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -18,6 +20,14 @@ import org.slf4j.LoggerFactory;
 
 import java.util.stream.Stream;
 
+/**
+ * Copies the text written on the actor card pointed to by {@link SpellArg#SECONDARY_TARGET} to the {@code target}.
+ * <p>
+ * If a {@link SpellArg#SECONDARY_TARGET} is not specified, retrieves a random card from the specified {@link
+ * SpellArg#CARD_SOURCE} and {@link SpellArg#CARD_FILTER} or {@link SpellArg#CARDS}.
+ * <p>
+ * Casts {@link SpellArg#SPELL} with the {@link EntityReference#OUTPUT} set to the card the effects were copied from.
+ */
 public class AddActorEffectsToTargetActorSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AddActorEffectsToTargetActorSpell.class);
@@ -38,8 +48,20 @@ public class AddActorEffectsToTargetActorSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Entity sourceEntity =
-				context.resolveTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET)).get(0);
+		Entity sourceEntity;
+		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
+			sourceEntity = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+			if (sourceEntity == null) {
+				return;
+			}
+		} else {
+			CardList cards = SpellUtils.getCards(context, player, target, source, desc, 1);
+			if (cards.isEmpty()) {
+				return;
+			}
+			sourceEntity = cards.get(0);
+		}
+
 		Card sourceCard = sourceEntity.getSourceCard();
 		// Restore the race after it is changed
 		Actor targetActor = (Actor) target;
@@ -67,5 +89,9 @@ public class AddActorEffectsToTargetActorSpell extends Spell {
 		// Now apply the actual text
 		sourceCard.applyText(targetActor);
 		targetActor.setRace(originalRace);
+
+		for (SpellDesc subSpell : desc.subSpells(0)) {
+			SpellUtils.castChildSpell(context, player, subSpell, source, target, sourceCard);
+		}
 	}
 }

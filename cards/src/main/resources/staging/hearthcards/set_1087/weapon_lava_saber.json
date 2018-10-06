@@ -1,0 +1,14 @@
+{
+  "name": "Lava Saber",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "[b]Supremacy:[/b] Summon two 1/1 Whelps.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,21 +1,24 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
-import co.paralleluniverse.fibers.Suspendable;
-import org.jetbrains.annotations.NotNull;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.utils.Attribute;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.function.Predicate;
+
+/**
+ * An internal spell used to implement {@link net.demilich.metastone.game.spells.aura.BuffAura}. Behaves like a {@link
+ * BuffSpell} that uses {@link Attribute#AURA_ATTACK_BONUS} and modifies the HP in a nuanced way.
+ */
 public class AuraBuffSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AuraBuffSpell.class);
@@ -45,7 +48,7 @@ public class AuraBuffSpell extends Spell {
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
 		Actor targetActor = (Actor) target;
-		logger.debug("{} gains ({} from aura effect)", targetActor, attackBonus + "/" + hpBonus);
+		logger.debug("onCast {} {}: {} gains ({}) from aura effect", context.getGameId(), source, targetActor, attackBonus + "/" + hpBonus);
 		if (attackBonus != 0) {
 			targetActor.modifyAttribute(Attribute.AURA_ATTACK_BONUS, attackBonus);
 		}

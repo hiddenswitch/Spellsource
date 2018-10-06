@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.entities.weapons;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -9,6 +8,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class Weapon extends Actor {
 
@@ -53,7 +53,11 @@ public class Weapon extends Actor {
 	}
 
 	public int getWeaponDamage() {
-		return Math.max(0, getAttributeValue(Attribute.ATTACK) + getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS)) + getAttributeValue(Attribute.ATTACK_BONUS);
+		return Math.max(0, getAttributeValue(Attribute.ATTACK) +
+				getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS) +
+				getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS) +
+				getAttributeValue(Attribute.ATTACK_BONUS) +
+				getAttributeValue(Attribute.AURA_ATTACK_BONUS));
 	}
 
 	public boolean isActive() {
@@ -61,7 +65,7 @@ public class Weapon extends Actor {
 	}
 
 	public boolean isBroken() {
-		return !hasAttribute(Attribute.HP);
+		return !hasAttribute(Attribute.HP) || getHp() <= 0;
 	}
 
 	@Override
@@ -101,7 +105,7 @@ public class Weapon extends Actor {
 		result += getWeaponDamage() + "/" + getDurability();
 		String prefix = " ";
 		for (Attribute tag : getAttributes().keySet()) {
-			if (displayGameTag(tag)) {
+			if (false) {
 				result += prefix + tag;
 				prefix = ", ";
 			}

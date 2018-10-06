@@ -1,0 +1,12 @@
+{
+  "name": "Inciendary Break",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Choose a minion. Deal it's Attack damage to all minions around it.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

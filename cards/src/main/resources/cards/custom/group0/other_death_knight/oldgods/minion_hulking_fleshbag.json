@@ -1,0 +1,21 @@
+{
+  "name": "Hulking Fleshbag",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give your minions +2/+2.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "value": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
