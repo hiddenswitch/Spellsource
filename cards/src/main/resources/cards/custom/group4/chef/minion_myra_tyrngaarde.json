@@ -1,0 +1,32 @@
+{
+  "name": "Myra Tyrngaarde",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 5,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Battlecry: Restore Health to your hero equal to the number of missing cards in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "value1": 30,
+        "value2": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK"
+        },
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

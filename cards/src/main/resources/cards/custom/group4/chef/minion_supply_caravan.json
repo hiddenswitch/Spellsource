@@ -6,7 +6,7 @@
   "type": "MINION",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Whenever you play a card, shuffle a of it copy into your deck.",
+  "description": "Whenever you play a card, shuffle a copy of it into your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
