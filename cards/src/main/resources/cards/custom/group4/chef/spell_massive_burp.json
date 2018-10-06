@@ -5,10 +5,16 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Roast a card. Deal damage equal to its Cost to a minion.",
-  "targetSelection": "ANY",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "value": 1
+    "class": "RoastSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "ManaCostProvider",
+        "target": "OUTPUT"
+      }
+    }
   },
   "attributes": {},
   "collectible": true,

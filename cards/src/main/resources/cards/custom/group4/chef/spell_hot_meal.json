@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 1 damage.",
+  "description": "Deal $1 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
     "value": 1
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

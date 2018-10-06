@@ -4,11 +4,24 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 2 damage. (Roast 2 cards to upgrade).",
+  "description": "Deal $2 damage. (Roast 2 cards to upgrade).",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
-    "value": 1
+    "value": 2
+  },
+  "passiveTrigger": {
+    "countUntilCast": 2,
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_opal_spellstone"
+    },
+    "keepAfterTransform": false
   },
   "attributes": {},
   "collectible": true,
