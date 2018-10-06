@@ -7,9 +7,21 @@
   "description": "Fully heal your hero. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardSpell",
-    "target": "FRIENDLY_HERO",
-    "value": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP"
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

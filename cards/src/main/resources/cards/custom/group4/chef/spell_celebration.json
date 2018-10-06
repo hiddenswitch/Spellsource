@@ -7,9 +7,17 @@
   "description": "Draw 2 cards. Put a 'Hangover' card that does nothing on top of your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardSpell",
-    "target": "FRIENDLY_CHARACTERS",
-    "value": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      {
+        "class": "PutDeckTopSpell",
+        "card": "spell_hangover"
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

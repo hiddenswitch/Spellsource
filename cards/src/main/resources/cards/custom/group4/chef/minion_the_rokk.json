@@ -6,17 +6,17 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "FREE",
-  "description": "After you cast a spell on a minion, cast copies on adjacent minions (left minion first).",
+  "description": "After you cast a spell on a minion, cast copies on adjacent minions.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
+      "class": "AfterSpellCastedTrigger",
+      "targetEntityType": "MINION",
+      "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "BuffSpell",
-      "target": "SELF",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "class": "RecastSpell",
+      "target": "ADJACENT_TO_TARGET",
+      "secondaryTarget": "EVENT_SOURCE"
     }
   },
   "attributes": {},

@@ -4,11 +4,14 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Draw 2 cards. Affected by Spell Damage.",
+  "description": "Draw $2 cards. Affected by Spell Damage.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",
-    "value": 1
+    "value": {
+      "class": "SpellDamageValueProvider",
+      "value": 2
+    }
   },
   "attributes": {},
   "collectible": true,

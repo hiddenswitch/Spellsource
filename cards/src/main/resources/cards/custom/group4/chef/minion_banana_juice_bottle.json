@@ -25,7 +25,7 @@
             "value": {
               "class": "CurrentTurnValueProvider"
             },
-            "operation": "EQUALS"
+            "operation": "EQUAL"
           }
         ]
       }

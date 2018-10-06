@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.entities.minions;
 
-public enum RelativeToSource {
+public enum BoardPositionRelative {
 
 	UNDEFINED, LEFT, RIGHT
 }

@@ -14,8 +14,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Shuffles the specified {@code target} or {@link SpellArg#CARD_SOURCE} & {@link SpellArg#CARD_FILTER} cards into the
- * deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
+ * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} & {@link SpellArg#CARD_FILTER} cards
+ * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
  * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
  */

@@ -12,7 +12,7 @@ import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -520,7 +520,7 @@ public class SpellUtils {
 		if (boardPosition != UNDEFINED) {
 			return boardPosition;
 		}
-		RelativeToSource relativeBoardPosition = (RelativeToSource) desc.get(SpellArg.BOARD_POSITION_RELATIVE);
+		BoardPositionRelative relativeBoardPosition = (BoardPositionRelative) desc.get(SpellArg.BOARD_POSITION_RELATIVE);
 		if (relativeBoardPosition == null) {
 			return UNDEFINED;
 		}

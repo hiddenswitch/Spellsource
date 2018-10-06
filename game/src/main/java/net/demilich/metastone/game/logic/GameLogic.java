@@ -3355,15 +3355,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Places a card at the top of a player's deck, indicating it will be the next card to be drawn.
-	 * <p>
-	 * The top of the deck is the last element in the deck array.
+	 * Inserts a card into the specified location in the player's deck. Use {@link CardZone#size()} as the index for the
+	 * top of the deck, and {@code 0} for the bottom.
 	 *
-	 * @param player The {@link Player} whose deck should be used
-	 * @param card   The card to put at the top of the deck.
+	 * @param player
+	 * @param card
+	 * @param index
+	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link
+	 * 		#MAX_DECK_SIZE}).
 	 */
 	@Suspendable
-	public void putOnTopOfDeck(Player player, Card card) {
+	public boolean insertIntoDeck(Player player, Card card, int index) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3375,14 +3377,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				player.getDeck().add(card);
+				player.getDeck().add(index, card);
 			} else {
 				card.moveOrAddTo(context, Zones.DECK);
 			}
 
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
+			return true;
 		}
+		return false;
 	}
 
 	/**

@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "RoastCardSpell",
+      "class": "RoastSpell",
       "target": "FRIENDLY_DECK",
       "filter": {
         "class": "CardFilter",

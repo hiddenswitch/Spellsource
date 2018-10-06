@@ -14,7 +14,7 @@ import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
@@ -266,7 +266,7 @@ public class ParseUtils {
 				return array;
 			}
 			case BOARD_POSITION_RELATIVE:
-				return Enum.valueOf(RelativeToSource.class, jsonData.asText());
+				return Enum.valueOf(BoardPositionRelative.class, jsonData.asText());
 			case CARD_LOCATION:
 				return Enum.valueOf(Zones.class, jsonData.asText());
 			case OPERATION:

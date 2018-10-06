@@ -1,19 +1,18 @@
 {
-  "name": "Guerilla Hooligan",
+  "name": "Guerrilla Chef",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 1,
+  "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Battlecry: Add a Banana to hand. your",
+  "description": "Battlecry: Roast 3 cards.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "card": "spell_mirror_image"
+      "class": "RoastSpell",
+      "howMany": 3
     }
   },
   "attributes": {

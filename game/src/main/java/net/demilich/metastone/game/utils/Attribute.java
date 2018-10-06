@@ -11,6 +11,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.RoastSpell;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
@@ -894,7 +895,7 @@ public enum Attribute {
 	HAND_INDEX,
 	/**
 	 * Indicates this card was roasted (removed from the top of the deck) by a {@link
-	 * net.demilich.metastone.game.spells.RoastCardSpell} on the specified {@link Integer} turn.
+	 * RoastSpell} on the specified {@link Integer} turn.
 	 * <p>
 	 * Implements Warchef Gordo / Chef's Roast effect.
 	 */

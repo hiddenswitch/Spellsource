@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "RoastCardSpell",
+      "class": "RoastSpell",
       "target": "FRIENDLY_DECK",
       "randomTarget": true,
       "filter": {
@@ -55,15 +55,15 @@
         "spells": [
           {
             "class": "ShuffleToDeckSpell",
-            "card": "spell_bananas"
+            "card": "spell_dinosaur_chops"
           },
           {
             "class": "ShuffleToDeckSpell",
-            "card": "spell_bananas"
+            "card": "spell_proto_drake_stew"
           },
           {
             "class": "ShuffleToDeckSpell",
-            "card": "spell_bananas"
+            "card": "spell_elemental_soup"
           }
         ]
       }

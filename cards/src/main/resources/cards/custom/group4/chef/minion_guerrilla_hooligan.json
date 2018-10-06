@@ -1,19 +1,18 @@
 {
-  "name": "Guerilla Bouncer",
-  "baseManaCost": 2,
+  "name": "Guerrilla Hooligan",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 2,
+  "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Battlecry: Draw a 1-Cost card from deck. your",
+  "description": "Battlecry: Add a Banana to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DrawCardSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "value": 1
+      "class": "ReceiveCardSpell",
+      "card": "spell_bananas"
     }
   },
   "attributes": {

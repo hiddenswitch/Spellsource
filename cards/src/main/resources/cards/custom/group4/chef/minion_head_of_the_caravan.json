@@ -7,17 +7,17 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Battlecry and Deathrattle: Summon a 0/ 4 Caravan.",
+  "description": "Battlecry and Deathrattle: Summon a 0/4 Caravan.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "card": "minion_bloodfen_raptor"
+      "card": "minion_supply_caravan"
     }
   },
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "minion_bloodfen_raptor"
+    "card": "minion_supply_caravan"
   },
   "attributes": {
     "BATTLECRY": true,

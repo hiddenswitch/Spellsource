@@ -10,11 +10,32 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "DamageSpell",
-        "value": 1
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "MinionDeathTrigger"
+          },
+          "spell": {
+            "class": "CastAfterSequenceSpell",
+            "spell": {
+              "class": "RoastSpell"
+            }
+          }
+        }
       },
       {
-        "class": "DestroySpell"
+        "class": "DamageSpell",
+        "value": 3,
+        "target": "ALL_MINIONS"
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "spell_deathwing_s_dinner"
       }
     ]
   },

@@ -5,18 +5,11 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Destroy a minion. Summon a 0/5 Pile of Meat to replace it.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "SummonSpell",
-        "card": "minion_bloodfen_raptor"
-      },
-      {
-        "class": "DestroySpell"
-      }
-    ]
+    "class": "custom.DestroyAndSummonInPlaceSpell",
+    "targetPlayer": "OWNER",
+    "card": "token_pile_of_meat"
   },
   "attributes": {},
   "collectible": true,

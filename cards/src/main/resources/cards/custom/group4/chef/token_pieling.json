@@ -1,14 +1,14 @@
 {
-  "name": "Pile of Meat",
+  "name": "Pieling",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 0,
-  "baseHp": 5,
+  "baseAttack": 1,
+  "baseHp": 1,
   "rarity": "FREE",
   "description": "",
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

@@ -6,12 +6,20 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: lf your deck contains 8 or less cards, destroy a minion.",
+  "description": "Battlecry: If your deck contains 8 or fewer cards, destroy a minion.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "value2": 8,
+      "operation": "LESS_OR_EQUAL"
+    },
+    "targetSelection": "MINIONS",
     "spell": {
-      "class": "DestroySpell",
-      "target": "FRIENDLY_MINIONS"
+      "class": "DestroySpell"
     }
   },
   "attributes": {
@@ -19,9 +27,5 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "manaCostModifier": {
-    "class": "PlayerAttributeValueProvider",
-    "playerAttribute": "HAND_COUNT"
-  }
+  "fileFormatVersion": 1
 }

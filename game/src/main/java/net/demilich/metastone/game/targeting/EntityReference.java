@@ -379,7 +379,7 @@ public class EntityReference implements Serializable {
 	/**
 	 * References the card in the friendly player's hand with the lowest index in the friendly player's hand.
 	 * <p>
-	 * Implements Antique Collector.
+	 * Implements Antique Collector and Ironforge Baker.
 	 */
 	public static final EntityReference LEFTMOST_FRIENDLY_CARD_HAND = new EntityReference(-52);
 	/**

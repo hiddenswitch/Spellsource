@@ -1,17 +1,16 @@
 {
-  "name": "Spicy Elemental",
+  "name": "Deviate Ninja",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 2,
+  "baseAttack": 3,
   "baseHp": 2,
   "rarity": "FREE",
-  "race": "ELEMENTAL",
-  "description": "Charge",
+  "description": "Stealth",
   "attributes": {
-    "CHARGE": true
+    "STEALTH": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

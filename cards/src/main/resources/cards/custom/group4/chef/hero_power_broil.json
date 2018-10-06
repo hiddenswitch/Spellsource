@@ -1,11 +1,10 @@
 {
-  "name": "Cook",
+  "name": "Broil",
   "baseManaCost": 2,
-  "heroPower": "hero_power_broil",
   "type": "HERO_POWER",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 2 damage to a random enemy.",
+  "description": "Deal 3 damage to a random enemy.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
@@ -34,12 +33,12 @@
       },
       "spell1": {
         "class": "DamageSpell",
-        "value": 2
+        "value": 3
       },
       "spell2": {
         "class": "DamageSpell",
         "target": "ENEMY_CHARACTERS",
-        "value": 2,
+        "value": 3,
         "randomTarget": true
       }
     }

@@ -10,10 +10,58 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "BuffSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "class": "RoastSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "value": {
+          "class": "ManaCostProvider",
+          "target": "OUTPUT"
+        },
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "FRIENDLY_MINIONS",
+            "value": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            },
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_cthun"
+            }
+          },
+          {
+            "class": "BuffSpell",
+            "target": "FRIENDLY_HAND",
+            "value": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            },
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_cthun"
+            }
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "value": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            },
+            "attribute": "CTHUN_ATTACK_BUFF"
+          },
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "value": {
+              "class": "GameValueProvider",
+              "gameValue": "SPELL_VALUE"
+            },
+            "attribute": "CTHUN_HEALTH_BUFF"
+          }
+        ]
+      }
     }
   },
   "attributes": {

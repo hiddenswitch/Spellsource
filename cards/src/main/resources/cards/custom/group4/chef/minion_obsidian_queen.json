@@ -6,21 +6,20 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "FREE",
-  "description": "Charge Unlimited attacks each turn. Can't attack heroes.",
+  "description": "Charge. Unlimited attacks each turn. Can't attack heroes.",
   "trigger": {
     "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
-      "class": "BuffSpell",
-      "target": "SELF",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "class": "RefreshAttacksSpell",
+      "target": "SELF"
     }
   },
   "attributes": {
-    "CHARGE": true
+    "CHARGE": true,
+    "CANNOT_ATTACK_HEROES": true
   },
   "collectible": true,
   "set": "CUSTOM",

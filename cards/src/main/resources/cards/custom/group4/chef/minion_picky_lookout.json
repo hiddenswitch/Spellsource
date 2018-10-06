@@ -10,11 +10,38 @@
   "description": "Battlecry: Look at 3 cards from your deck. Pick one to Roast it. Do this 5 times.",
   "battlecry": {
     "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "value2": 1,
+      "operation": "GREATER_OR_EQUAL"
+    },
     "spell": {
-      "class": "BuffSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "class": "RecastWhileSpell",
+      "howMany": 5,
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK"
+        },
+        "value2": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spell": {
+        "class": "DiscoverSpell",
+        "exclusive": true,
+        "cardSource": {
+          "class": "DeckSource",
+          "distinct": false
+        },
+        "spell": {
+          "class": "RoastSpell"
+        }
+      }
     }
   },
   "attributes": {

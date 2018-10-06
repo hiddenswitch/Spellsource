@@ -9,13 +9,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 /**
- * Puts the specified cards ({@code target} or otherwise from {@link SpellUtils#getCards(GameContext, Player, Entity,
- * Entity, SpellDesc, int)}) on the top of the deck.
- *
- * @see ShuffleToDeckSpell to shuffle a card into the deck.
- * @see PutOnBottomOfDeckSpell to put a card on the bottom of the deck.
+ * Puts the cards from {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)} on the bottom of
+ * the player's deck.
  */
-public final class PutDeckTopSpell extends Spell {
+public final class PutOnBottomOfDeckSpell extends Spell {
 
 	@Override
 	@Suspendable
@@ -23,7 +20,7 @@ public final class PutDeckTopSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc);
 
 		for (Card card : cards) {
-			if (context.getLogic().insertIntoDeck(player, card.getCopy(), player.getDeck().size())) {
+			if (context.getLogic().insertIntoDeck(player, card.getCopy(), 0)) {
 				for (SpellDesc subSpell : desc.subSpells(0)) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 				}
