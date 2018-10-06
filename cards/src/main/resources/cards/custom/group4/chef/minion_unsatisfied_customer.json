@@ -6,13 +6,11 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Battlecry: Add the last card YOu Roasted this turn to your hand.",
+  "description": "Battlecry: Add the last card you Roasted this turn to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "card": "spell_mirror_image"
+      "class": "custom.CopyLastRoastedCardSpell"
     }
   },
   "attributes": {
