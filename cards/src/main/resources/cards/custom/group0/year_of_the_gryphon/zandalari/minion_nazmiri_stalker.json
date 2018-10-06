@@ -13,14 +13,20 @@
       "actionType": "SPELL",
       "queueCondition": {
         "class": "OwnedByPlayerCondition",
-        "target": "EVENT_TARGET"
+        "target": "EVENT_TARGET",
+        "targetPlayer": "BOTH"
       },
       "sourcePlayer": "SELF",
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
       },
-      "spell": {
+    "spell2": {
       "class": "RecastSpell",
-      "target": "ADJACENT_MINIONS",
+      "target": "SELF",
       "secondaryTarget": "EVENT_SOURCE"
       }
     }
