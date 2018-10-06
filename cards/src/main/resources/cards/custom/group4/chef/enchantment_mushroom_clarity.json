@@ -1,0 +1,44 @@
+{
+  "name": "Mushroom Clarity",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "The next time you use your hero power, it deals 2 more damage and you can choose its target.",
+  "auras": [
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "applyEffect": {
+        "class": "NullSpell",
+        "targetSelection": "ANY"
+      },
+      "filter": {
+        "class": "TargetSelectionFilter",
+        "targetSelection": "NONE"
+      }
+    },
+    {
+      "class": "HeroPowerBonusAura",
+      "target": "FRIENDLY_PLAYER",
+      "applyEffect": {
+        "class": "DamageSpell",
+        "value": 2
+      }
+    }
+  ],
+  "trigger": {
+    "eventTrigger": {
+      "class": "HeroPowerUsedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_mushroom_clarity"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

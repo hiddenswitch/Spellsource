@@ -1,0 +1,24 @@
+{
+  "name": "Supply Caravan",
+  "baseManaCost": 1,
+  "baseAttack": 0,
+  "baseHp": 4,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Whenever you play a card, shuffle a of it copy into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

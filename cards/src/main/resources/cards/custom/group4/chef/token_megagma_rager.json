@@ -1,14 +1,15 @@
 {
-  "name": "Pieling",
-  "baseManaCost": 1,
+  "name": "Megagma Rager",
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 1,
+  "baseAttack": 20,
   "baseHp": 1,
   "rarity": "FREE",
+  "race": "ELEMENTAL",
   "description": "",
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

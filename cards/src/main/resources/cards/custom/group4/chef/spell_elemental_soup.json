@@ -4,11 +4,35 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Summon 5 5/5 copies of three Elementals you played this game.",
+  "description": "Summon 5/5 copies of three Elementals you played this game.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "minion_bloodfen_raptor"
+    "cardSource": {
+      "class": "GraveyardCardsSource"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL",
+      "cardType": "MINION",
+      "attribute": "PLAYED_FROM_CARD_OR_HAND",
+      "operation": "HAS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 5
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 5
+        }
+      ]
+    },
+    "value": 3
   },
   "attributes": {},
   "collectible": true,

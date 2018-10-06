@@ -7,6 +7,18 @@
   "baseHp": 4,
   "rarity": "FREE",
   "description": "When you Roast this, deal 3 damage to all enemy minions.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 3
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

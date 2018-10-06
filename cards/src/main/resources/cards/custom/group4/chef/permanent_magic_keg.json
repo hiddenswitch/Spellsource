@@ -1,0 +1,33 @@
+{
+  "name": "Magic Keg",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Permanent. At the end of your turn, add a random Chef spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "UngoroPackRarityWeightedCardSource"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "heroClass": "TOAST"
+      }
+    }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

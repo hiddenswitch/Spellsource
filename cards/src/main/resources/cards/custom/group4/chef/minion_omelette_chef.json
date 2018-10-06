@@ -9,12 +9,48 @@
   "description": "Battlecry: Destroy a 0-Attack minion. If it's an enemy one, Silence it first.",
   "battlecry": {
     "condition": {
-      "class": "PlayedLastTurnCondition"
+      "class": "AnyMatchFilterCondition",
+      "target": "ALL_OTHER_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "ATTACK",
+        "value": 0,
+        "operation": "EQUAL"
+      }
     },
-    "targetSelection": "NONE",
+    "targetSelection": "MINIONS",
     "spell": {
-      "class": "DestroySpell",
-      "target": "ENEMY_MINIONS"
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "OPPONENT"
+      },
+      "spell1": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SilenceSpell"
+          },
+          {
+            "class": "DestroySpell",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "ATTACK",
+              "value": 0,
+              "operation": "EQUAL"
+            }
+          }
+        ]
+      },
+      "spell2": {
+        "class": "DestroySpell",
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "ATTACK",
+          "value": 0,
+          "operation": "EQUAL"
+        }
+      }
     }
   },
   "attributes": {

@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards.desc;
 
+import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
+
 /**
  * Indicates a common set of types for arguments to various {@link Desc} objects that appear in the card JSON.
  */
@@ -65,7 +67,7 @@ public enum ParseValueType {
 	 */
 	STRING_ARRAY,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.entities.minions.RelativeToSource} enum.
+	 * A string matching the name of a {@link BoardPositionRelative} enum.
 	 */
 	BOARD_POSITION_RELATIVE,
 	/**

@@ -51,6 +51,91 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDeathwingsDinner() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			Minion target = playMinionCard(context, player, "minion_boulderfist_ogre");
+			Card shouldNotBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted2 = putOnTopOfDeck(context, player, "spell_the_coin");
+			playCard(context, player, "spell_deathwing_s_dinner");
+			assertEquals(player.getDeck().size(), 1);
+			assertTrue(shouldBeRoasted1.hasAttribute(Attribute.ROASTED));
+			assertTrue(shouldBeRoasted2.hasAttribute(Attribute.ROASTED));
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+			playCardWithTarget(context, player, "spell_fireball", target);
+			assertTrue(target.isDestroyed());
+			assertTrue(shouldBeRoasted1.hasAttribute(Attribute.ROASTED));
+			assertTrue(shouldBeRoasted2.hasAttribute(Attribute.ROASTED));
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+		});
+	}
+
+	@Test
+	public void testChiliDragonbreath() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_chili_dragonbreath");
+			Minion minion = playMinionCard(context, player, "minion_blackwing_technician");
+			assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
+			assertEquals(minion.getMaxHp(), minion.getBaseHp() + 1);
+		});
+	}
+
+	@Test
+	public void testButcher() {
+		// Destroy friendly, should get butcher in the same place. Should work with full board
+		runGym((context, player, opponent) -> {
+			Minion wisp0 = playMinionCard(context, player, "minion_wisp");
+			Minion wisp1 = playMinionCard(context, player, "minion_wisp");
+			Minion wisp2 = playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			assertEquals(wisp1.getEntityLocation().getIndex(), 1);
+			playCardWithTarget(context, player, "spell_butcher", wisp1);
+			// Can't summon something in the same location as the target, yet
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_pile_of_meat");
+		});
+
+		// Destroy enemy
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion wisp0 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp1 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp2 = playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			assertEquals(wisp1.getEntityLocation().getIndex(), 1);
+			playCardWithTarget(context, player, "spell_butcher", wisp1);
+			assertEquals(opponent.getMinions().get(1).getSourceCard().getCardId(), "token_pile_of_meat");
+		});
+	}
+
+	@Test
+	public void testFogburner() {
+		runGym((context, player, opponent) -> {
+			Minion fogburner = playMinionCard(context, player, "minion_fogburner");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_volcanic_potion");
+			assertEquals(fogburner.getAttack(), fogburner.getBaseAttack() + 2, "+2 from two indirect damages");
+			assertEquals(fogburner.getMaxHp(), fogburner.getBaseHp() + 2, "+2 from two indirect damages");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion fogburner = playMinionCard(context, player, "minion_fogburner");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCardWithTarget(context, player, "spell_fireball", wisp);
+			assertEquals(fogburner.getAttack(), fogburner.getBaseAttack());
+			assertEquals(fogburner.getMaxHp(), fogburner.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testBananamancer() {
 		runGym((context, player, opponent) -> {
 			// Giving a hero bonus armor with a spell played from hand

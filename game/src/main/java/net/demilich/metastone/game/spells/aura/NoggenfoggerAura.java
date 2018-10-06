@@ -13,7 +13,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
-public final class NoggenfoggerAura extends Aura {
+public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(new TargetAcquisitionTrigger(), null, NullSpell.create());

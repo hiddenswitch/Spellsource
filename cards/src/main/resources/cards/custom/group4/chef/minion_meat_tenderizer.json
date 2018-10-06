@@ -6,14 +6,43 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Give your C'Thun +2/+ +2 (wherever it is).",
+  "description": "Battlecry: Give your C'Thun +2/+2 (wherever it is).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "BuffSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "attackBonus": 0,
-      "hpBonus": 0
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
     }
   },
   "attributes": {

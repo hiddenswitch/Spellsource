@@ -4,13 +4,21 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Restore 8 Health to hero. your Roast 3 cards.",
-  "targetSelection": "MINIONS",
+  "description": "Restore #8 Health to your Hero. Roast 3 cards.",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 8
+      },
+      {
+        "class": "RoastSpell",
+        "howMany": 3
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

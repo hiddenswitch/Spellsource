@@ -3,13 +3,14 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": null,
+  "baseAttack": 0,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Deathrattle: Summon",
+  "description": "Deathrattle: Summon two 2/2 Ghouls.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "minion_bloodfen_raptor"
+    "card": "token_ghoul",
+    "value": 2
   },
   "attributes": {
     "DEATHRATTLES": true

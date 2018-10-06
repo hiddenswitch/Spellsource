@@ -8,9 +8,20 @@
   "rarity": "FREE",
   "description": "Deathrattle: If your deck is empty, resummon this.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "target": "FRIENDLY_CHARACTERS",
-    "card": "minion_bloodfen_raptor"
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": 0,
+      "value2": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "operation": "EQUAL"
+    },
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

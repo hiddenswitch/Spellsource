@@ -1,16 +1,17 @@
 {
-  "name": "Deviate Ninja",
+  "name": "Peppery Elemental",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 3,
+  "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Stealth",
+  "race": "ELEMENTAL",
+  "description": "Taunt",
   "attributes": {
-    "STEALTH": true
+    "TAUNT": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

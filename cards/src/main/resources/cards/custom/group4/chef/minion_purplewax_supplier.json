@@ -6,25 +6,31 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Battlecry: Discover a spell. Shuffle it into deck. your It costs (5) less.",
+  "description": "Battlecry: Discover a Spell. Shuffle it into your deck. It costs (5) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "ShuffleToDeckSpell",
-          "value": 1,
-          "card": "minion_bloodfen_raptor"
-        },
-        {
           "class": "DiscoverSpell",
           "spell": {
-            "class": "ReceiveCardSpell"
+            "class": "ShuffleToDeckSpell",
+            "value": 1,
+            "spell": {
+              "class": "CardCostModifierSpell",
+              "target": "OUTPUT",
+              "cardCostModifier": {
+                "class": "CardCostModifier",
+                "value": 5,
+                "operation": "SUBTRACT",
+                "target": "SELF"
+              }
+            }
           },
           "cardFilter": {
             "class": "CardFilter",
-            "cardType": "MINION"
+            "cardType": "SPELL"
           },
           "cardSource": {
             "class": "CatalogueSource"
@@ -38,9 +44,5 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "manaCostModifier": {
-    "class": "PlayerAttributeValueProvider",
-    "playerAttribute": "HAND_COUNT"
-  }
+  "fileFormatVersion": 1
 }

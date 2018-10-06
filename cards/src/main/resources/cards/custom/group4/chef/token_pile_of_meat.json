@@ -1,15 +1,14 @@
 {
-  "name": "Megagma Rager",
-  "baseManaCost": 10,
+  "name": "Pile of Meat",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "TOAST",
-  "baseAttack": 20,
-  "baseHp": 1,
+  "baseAttack": 0,
+  "baseHp": 5,
   "rarity": "FREE",
-  "race": "ELEMENTAL",
   "description": "",
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

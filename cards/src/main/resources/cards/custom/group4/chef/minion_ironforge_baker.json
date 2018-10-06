@@ -10,10 +10,27 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ShuffleToDeckSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "value": 1,
-      "card": "minion_bloodfen_raptor"
+      "class": "MetaSpell",
+      "target": "LEFTMOST_FRIENDLY_CARD_HAND",
+      "spells": [
+        {
+          "class": "ShuffleToDeckSpell",
+          "value": 1,
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "value": 0,
+              "target": "SELF",
+              "operation": "SET"
+            }
+          }
+        },
+        {
+          "class": "RemoveCardSpell"
+        }
+      ]
     }
   },
   "attributes": {

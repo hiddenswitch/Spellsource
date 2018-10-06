@@ -7,17 +7,28 @@
   "description": "Discover a Beast, a Dragon or a Murloc.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
+    "class": "DiscoverFilteredCardSpell",
     "spell": {
-      "class": "ReceiveCardSpell"
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
     },
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
-    "cardSource": {
-      "class": "CatalogueSource"
-    }
+    "cardFilters": [
+      {
+        "class": "CardFilter",
+        "race": "BEAST",
+        "cardType": "MINION"
+      },
+      {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      },
+      {
+        "class": "CardFilter",
+        "race": "MURLOC",
+        "cardType": "MINION"
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

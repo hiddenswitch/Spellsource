@@ -63,7 +63,7 @@ public class TestBase {
 
 	protected static <T extends Card> T putOnTopOfDeck(GameContext context, Player player, String cardId) {
 		final T card = (T) CardCatalogue.getCardById(cardId);
-		context.getLogic().putOnTopOfDeck(player, card);
+		context.getLogic().insertIntoDeck(player, card, player.getDeck().size());
 		return card;
 	}
 

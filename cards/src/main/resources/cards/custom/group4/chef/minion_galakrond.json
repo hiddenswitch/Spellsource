@@ -19,11 +19,22 @@
         {
           "class": "BuffSpell",
           "target": "SELF",
-          "attackBonus": 0,
-          "hpBonus": 0
+          "attackBonus": {
+            "class": "ReduceValueProvider",
+            "target": "OTHER_FRIENDLY_MINIONS",
+            "attribute": "ATTACK",
+            "operation": "ADD"
+          },
+          "hpBonus": {
+            "class": "ReduceValueProvider",
+            "target": "OTHER_FRIENDLY_MINIONS",
+            "attribute": "HP",
+            "operation": "ADD"
+          }
         },
         {
-          "class": "DestroySpell"
+          "class": "DestroySpell",
+          "target": "OTHER_FRIENDLY_MINIONS"
         }
       ]
     }

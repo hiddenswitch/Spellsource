@@ -6,7 +6,19 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "You can now choose the target of Hero Power. your",
+  "description": "You can now choose the target of your Hero Power.",
+  "aura": {
+    "class": "TargetSelectionOverrideAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "applyEffect": {
+      "class": "NullSpell",
+      "targetSelection": "ANY"
+    },
+    "filter": {
+      "class": "TargetSelectionFilter",
+      "targetSelection": "NONE"
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

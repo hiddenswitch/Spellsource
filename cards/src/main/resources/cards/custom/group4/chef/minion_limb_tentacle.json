@@ -7,6 +7,27 @@
   "baseHp": 2,
   "rarity": "FREE",
   "description": "When you Roast this, summon it.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "RemoveAttributeSpell",
+          "attribute": "ROASTED"
+        },
+        {
+          "class": "PutMinionOnBoardFromDeckSpell",
+          "target": "SELF"
+        }
+      ]
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

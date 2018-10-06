@@ -4,14 +4,38 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 2 damage to a random enemy. Draw a card. Cast this when Roasted.",
+  "description": "Deal $2 damage to a random enemy. Draw a card. Cast this when Roasted.",
   "targetSelection": "NONE",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2,
+          "randomTarget": true,
+          "target": "ENEMY_CHARACTERS"
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": 1
+        }
+      ]
+    }
+  },
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 1
+        "value": 2,
+        "randomTarget": true,
+        "target": "ENEMY_CHARACTERS"
       },
       {
         "class": "DrawCardSpell",

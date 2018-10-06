@@ -12,7 +12,7 @@
     "target": "FRIENDLY_HERO_POWER",
     "applyEffect": {
       "class": "NullSpell",
-      "targetSelection": "ANY"
+      "targetSelection": "MINIONS"
     },
     "filter": {
       "class": "TargetSelectionFilter",

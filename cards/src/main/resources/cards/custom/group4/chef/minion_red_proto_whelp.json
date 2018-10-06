@@ -7,16 +7,24 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Battlecry: If you're holding a Dragon, draw a card you added to your deck.",
+  "description": "Battlecry: If you're holding a Dragon, draw a card that didn't start in your deck.",
   "battlecry": {
     "condition": {
-      "class": "PlayedLastTurnCondition"
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
     },
     "targetSelection": "NONE",
     "spell": {
-      "class": "DrawCardSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      "value": 1
+      "class": "FromDeckToHandSpell",
+      "cardFilter": {
+        "class": "AttributeFilter",
+        "attribute": "STARTED_IN_DECK",
+        "operation": "HAS",
+        "invert": true
+      }
     }
   },
   "attributes": {

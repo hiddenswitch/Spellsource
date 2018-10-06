@@ -1,15 +1,15 @@
 {
-  "name": "Corrupted Egg",
-  "baseManaCost": 1,
+  "name": "Chili Dragonbreath",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deathrattle: Destroy a random minion. enemy 2",
+  "description": "Deal $3 damage. Counts as a Dragon while in your hand.",
+  "race": "DRAGON",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DestroySpell",
-    "target": "ENEMY_MINIONS",
-    "randomTarget": true
+    "class": "DamageSpell",
+    "value": 3
   },
   "attributes": {},
   "collectible": true,

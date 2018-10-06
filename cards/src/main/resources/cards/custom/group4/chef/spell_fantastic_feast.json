@@ -5,12 +5,26 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Fully heal your hero. Put 2 'Hangover' cards that do nothing on top of your deck.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP"
+        }
+      },
+      {
+        "class": "PutDeckTopSpell",
+        "cards": [
+          "spell_hangover",
+          "spell_hangover"
+        ]
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

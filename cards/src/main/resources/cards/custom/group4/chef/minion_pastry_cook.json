@@ -10,12 +10,21 @@
   "description": "Battlecry: If you Roasted a card this turn, deal 2 damage.",
   "battlecry": {
     "condition": {
-      "class": "PlayedLastTurnCondition"
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_GRAVEYARD",
+      "filter": {
+        "class": "AttributeFilter",
+        "operation": "EQUAL",
+        "value": {
+          "class": "CurrentTurnValueProvider"
+        },
+        "attribute": "ROASTED"
+      }
     },
-    "targetSelection": "NONE",
+    "targetSelection": "ANY",
     "spell": {
       "class": "DamageSpell",
-      "value": 1
+      "value": 2
     }
   },
   "attributes": {

@@ -8,6 +8,17 @@
   "rarity": "FREE",
   "race": "MURLOC",
   "description": "When you Roast this, add a Meal to your hand that restores 7 Health.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_murloc_meal"
+    }
+  },
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
