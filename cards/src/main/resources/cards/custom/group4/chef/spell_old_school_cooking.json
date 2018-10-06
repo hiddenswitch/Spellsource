@@ -4,18 +4,18 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 3 damage. Add a Hot Meal to your hand that deals 1 damage.",
-  "targetSelection": "NONE",
+  "description": "Deal $3 damage. Add a Hot Meal to your hand that deals 1 damage.",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 1
+        "value": 3
       },
       {
         "class": "ReceiveCardSpell",
-        "card": "spell_mirror_image"
+        "card": "spell_hot_meal"
       }
     ]
   },

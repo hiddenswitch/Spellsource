@@ -4,16 +4,14 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Restore 7 Health.",
-  "targetSelection": "MINIONS",
+  "description": "Restore #7 Health.",
+  "targetSelection": "ANY",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "class": "HealSpell",
+    "value": 7
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

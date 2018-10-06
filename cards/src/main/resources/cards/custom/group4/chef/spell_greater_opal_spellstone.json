@@ -4,23 +4,23 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 2 damage. Add an Opal Spellstone to your hand.",
+  "description": "Deal $2 damage. Add an Opal Spellstone to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 1
+        "value": 2
       },
       {
         "class": "ReceiveCardSpell",
-        "card": "spell_mirror_image"
+        "card": "spell_opal_spellstone"
       }
     ]
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

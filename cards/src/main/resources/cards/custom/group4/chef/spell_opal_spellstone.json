@@ -4,27 +4,36 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal 2 damage. Add a Lesser Opal Spellstone to your hand. (Roast 2 cards to upgrade)",
+  "description": "Deal $2 damage. Add a Lesser Opal Spellstone to your hand. (Roast 2 cards to upgrade)",
   "targetSelection": "NONE",
+  "passiveTrigger": {
+    "countUntilCast": 2,
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_opal_spellstone"
+    },
+    "keepAfterTransform": false
+  },
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 1
+        "value": 2
       },
       {
         "class": "ReceiveCardSpell",
-        "card": "spell_mirror_image"
+        "card": "spell_lesser_opal_spellstone"
       }
     ]
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "manaCostModifier": {
-    "class": "PlayerAttributeValueProvider",
-    "playerAttribute": "HAND_COUNT"
-  }
+  "fileFormatVersion": 1
 }
