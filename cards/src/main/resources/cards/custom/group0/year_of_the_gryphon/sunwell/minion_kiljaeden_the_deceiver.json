@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Deathrattle: Summon a random minion as a 0/2 with "Deathrattle: Summon Kil'jaeden.",
+  "description": "Deathrattle: Summon a random minion as a 0/2 with \"Deathrattle: Summon Kil'jaeden.\"",
   "deathrattle": {
     "class": "SummonSpell",
     "cardFilter": {
