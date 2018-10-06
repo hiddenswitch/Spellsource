@@ -1,0 +1,16 @@
+{
+  "name": "Staggering Brew",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "COMMON",
+  "description": "Give a minion Deflect.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "DEFLECT"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

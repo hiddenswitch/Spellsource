@@ -1,0 +1,20 @@
+{
+  "name": "Cleans Crena",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon a 1/1 Shadowbeast.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_shadowbeast"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

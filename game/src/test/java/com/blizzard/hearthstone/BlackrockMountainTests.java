@@ -48,11 +48,11 @@ public class BlackrockMountainTests extends TestBase {
 	}
 
 	/**
-	 * You play a Grim Patron. Your opponent has a Knife Juggler and plays an Imp Gang Boss (the knife hits face). On
-	 * your turn, your Grim Patron attacks their Imp Gang Boss. The simultaneous damage triggers are queued in the order
-	 * [Imp Gang Boss, Grim Patron] because the defender queues first. An Imp is summoned, triggering the allied Knife
-	 * Juggler to throw a knife and mortally wound your Grim Patron. Now your Grim Patron would trigger, but it is
-	 * mortally wounded, so the trigger condition fails and you do not get a new Grim Patron.
+	 * You play a Grim Patron. Your opponent has a Knife Juggler and plays an Imp Gang Boss (the knife hits face). On your
+	 * turn, your Grim Patron attacks their Imp Gang Boss. The simultaneous damage triggers are queued in the order [Imp
+	 * Gang Boss, Grim Patron] because the defender queues first. An Imp is summoned, triggering the allied Knife Juggler
+	 * to throw a knife and mortally wound your Grim Patron. Now your Grim Patron would trigger, but it is mortally
+	 * wounded, so the trigger condition fails and you do not get a new Grim Patron.
 	 */
 	@Test
 	public void testGrimPatron() {
@@ -97,7 +97,7 @@ public class BlackrockMountainTests extends TestBase {
 		Player player = context.getPlayer1();
 		clearHand(context, player);
 
-		TestBehaviour behaviour = (TestBehaviour) player.getBehaviour();
+		TestBehaviour behaviour = (TestBehaviour) context.getBehaviours().get(player.getId());
 		final EntityReference heroReference = player.getHero().getReference();
 		behaviour.setTargetPreference(heroReference);
 		Assert.assertTrue(heroReference.getId() != -1);

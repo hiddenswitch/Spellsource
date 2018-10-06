@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "EPIC",
-  "description": "Deal 5 damage. Draw 5 cards. Gain 5 Armor. Summon a 5/5 Ghoul.",
+  "description": "Deal $5 damage. Draw 5 cards. Gain 5 Armor. Summon a 5/5 Ghoul.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

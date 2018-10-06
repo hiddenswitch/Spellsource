@@ -1,11 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -19,7 +14,13 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 public class ResurrectSpell extends Spell {
+	@SuppressWarnings("unchecked")
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -48,7 +49,23 @@ public class ResurrectSpell extends Spell {
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
 			Card card = resurrectedMinion.getSourceCard();
-			final Minion summonedMinion = card.summon();
+			final Minion summonedMinion;
+			Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE); //allow functionality to resurrect cards with certain attributes they died with
+			if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
+				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
+					summonedMinion = card.summon();
+					context.getLogic().removeAttribute(summonedMinion, Attribute.MAGNETS);
+					String[] magnets = (String[]) resurrectedMinion.getAttribute(Attribute.MAGNETS);
+					for (String magnet : magnets) {
+						Card magnetCard = context.getCardById(magnet);
+						context.getLogic().magnetize(player.getId(), magnetCard, summonedMinion);
+					}
+				} else {
+					card.setAttribute(attribute, resurrectedMinion.getAttributeValue(attribute));
+					summonedMinion = card.summon();
+				}
+			} else summonedMinion = card.summon();
+
 			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, null, -1, false);
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)

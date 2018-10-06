@@ -1,5 +1,6 @@
 {
   "name": "Shapeshift",
+  "heroPower": "hero_power_dire_shapeshift",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BROWN",
@@ -7,10 +8,13 @@
   "description": "+1 Attack this turn. +1 Armor.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 1,
-    "attackBonus": 1
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 1,
+      "attackBonus": 1
+    }
   },
   "collectible": false,
   "set": "BASIC",

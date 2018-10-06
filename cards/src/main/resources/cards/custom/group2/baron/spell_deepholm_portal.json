@@ -1,0 +1,24 @@
+{
+  "name": "Deepholm Portal",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Summon a random 3-Cost minion for both heroes.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 3
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "targetPlayer": "BOTH"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,27 @@
+{
+  "name": "Bone Shield",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Gain 3 Armor. Give your weapon +3 Durability.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 3
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_WEAPON",
+        "hpBonus": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

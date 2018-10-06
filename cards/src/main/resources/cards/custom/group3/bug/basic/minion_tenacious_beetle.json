@@ -1,0 +1,24 @@
+{
+  "name": "Tenacious Beetle",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Summon a copy of this minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

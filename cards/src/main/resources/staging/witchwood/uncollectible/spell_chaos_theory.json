@@ -1,0 +1,17 @@
+{
+  "name": "Chaos Theory",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Both players cast all spells in their hand <i>(targets chosen randomly).</i>",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Thalonclaw",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "GREEN",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: For the rest of the game, your Hunter Secrets are targetable instant spells.",
+  "battlecry": {
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_instant_hunter_secrets"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

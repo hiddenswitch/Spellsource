@@ -1,5 +1,6 @@
 {
   "name": "Dagger Mastery",
+  "heroPower": "hero_power_poisoned_dagger",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLACK",
@@ -7,15 +8,18 @@
   "description": "Equip a 1/2 Dagger.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ConditionalSpell",
-    "condition": {
-      "class": "HasWeaponCondition",
-      "cardId": "weapon_poisoned_blade",
-      "invert": "true"
-    },
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "EquipWeaponSpell",
-      "card": "weapon_wicked_knife"
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "HasWeaponCondition",
+        "card": "weapon_poisoned_blade",
+        "invert": "true"
+      },
+      "spell": {
+        "class": "EquipWeaponSpell",
+        "card": "weapon_wicked_knife"
+      }
     }
   },
   "collectible": false,

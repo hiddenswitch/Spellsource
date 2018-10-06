@@ -1,0 +1,26 @@
+{
+  "name": "Unnerfed Shieldbearer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Taunt. Enrage: +1 Attack",
+  "trigger": {
+    "eventTrigger": {
+      "class": "EnrageChangedTrigger"
+    },
+    "spell": {
+      "class": "EnrageSpell",
+      "target": "SELF",
+      "attackBonus": 1
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

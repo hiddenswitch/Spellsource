@@ -18,7 +18,7 @@ public class ConditionDescDeserializer extends DescDeserializer<ConditionDesc, C
 	@Override
 	protected void init(SerializationContext ctx) {
 		ctx.add(ConditionArg.RACE, ParseValueType.RACE);
-		ctx.add(ConditionArg.VALUE, ParseValueType.INTEGER);
+		ctx.add(ConditionArg.VALUE, ParseValueType.VALUE);
 		ctx.add(ConditionArg.VALUE1, ParseValueType.VALUE);
 		ctx.add(ConditionArg.VALUE2, ParseValueType.VALUE);
 		ctx.add(ConditionArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
@@ -28,8 +28,8 @@ public class ConditionDescDeserializer extends DescDeserializer<ConditionDesc, C
 		ctx.add(ConditionArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);
 		ctx.add(ConditionArg.CARD_TYPE, ParseValueType.CARD_TYPE);
 		ctx.add(ConditionArg.CONDITIONS, ParseValueType.CONDITION_ARRAY);
-		ctx.add(ConditionArg.CARD_ID, ParseValueType.STRING);
-		ctx.add(ConditionArg.CARD_IDS, ParseValueType.STRING_ARRAY);
+		ctx.add(ConditionArg.CARD, ParseValueType.STRING);
+		ctx.add(ConditionArg.CARDS, ParseValueType.STRING_ARRAY);
 		ctx.add(ConditionArg.FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(ConditionArg.CARD_FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(ConditionArg.HERO_CLASS, ParseValueType.HERO_CLASS);

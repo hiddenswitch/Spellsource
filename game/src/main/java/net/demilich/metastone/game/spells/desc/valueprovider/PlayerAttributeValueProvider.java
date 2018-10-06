@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import net.demilich.metastone.game.*;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.PlayerAttribute;
@@ -15,7 +16,7 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		PlayerAttribute attribute = (PlayerAttribute) desc.get(ValueProviderArg.PLAYER_ATTRIBUTE);
+		PlayerAttribute attribute = (PlayerAttribute) getDesc().get(ValueProviderArg.PLAYER_ATTRIBUTE);
 		switch (attribute) {
 			case DECK_COUNT:
 				return player.getDeck().getCount();
@@ -35,10 +36,14 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return (int) player.getStatistics().getLong(Statistic.SPELLS_CAST);
 			case CARDS_DISCARDED:
 				return (int) player.getStatistics().getLong(Statistic.CARDS_DISCARDED);
+			case INVOKED_CARDS:
+				return (int) player.getAttributes().getOrDefault(Attribute.INVOKED, 0);
 			case OVERLOADED_THIS_GAME:
 				return (int) player.getAttributes().getOrDefault(Attribute.OVERLOADED_THIS_GAME, 0);
 			case DAMAGE_THIS_TURN:
 				return (int) player.getAttributeValue(Attribute.DAMAGE_THIS_TURN);
+			case SUPREMACIES_THIS_GAME:
+				return (int) player.getAttributeValue(Attribute.SUPREMACIES_THIS_GAME);
 			default:
 				break;
 		}

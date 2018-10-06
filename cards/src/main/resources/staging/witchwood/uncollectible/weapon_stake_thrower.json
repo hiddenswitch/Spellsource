@@ -1,0 +1,14 @@
+{
+  "name": "Stake Thrower",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Windfury</b>",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -11,7 +11,7 @@ public class SpellCastedTrigger extends AbstractCardTrigger {
 
 	public SpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);
-		this.desc.put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
+		this.getDesc().put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
 	}
 
 	@Override

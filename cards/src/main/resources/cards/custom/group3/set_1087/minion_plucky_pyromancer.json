@@ -1,0 +1,26 @@
+{
+  "name": "Plucky Pyromancer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "At the end of your turn, deal 2 damage to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 2,
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

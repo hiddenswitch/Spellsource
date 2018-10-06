@@ -1,0 +1,16 @@
+{
+  "name": "Gamon",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Your Supremacy effect triggers twice.",
+  "aura": {
+    "class": "SupremaciesTriggerTwiceAura"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Plague of Murlocs",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Give your minions: \"<b>Deathrattle</b>: Summon a random Murloc.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

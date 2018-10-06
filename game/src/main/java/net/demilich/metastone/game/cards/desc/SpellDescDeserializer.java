@@ -50,9 +50,6 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.HP_BONUS, ParseValueType.VALUE);
 		ctx.add(SpellArg.IGNORE_SPELL_DAMAGE, ParseValueType.BOOLEAN);
 		ctx.add(SpellArg.MANA, ParseValueType.VALUE);
-		ctx.add(SpellArg.MANA_MODIFIER, ParseValueType.VALUE);
-		ctx.add(SpellArg.MAX_DAMAGE, ParseValueType.INTEGER);
-		ctx.add(SpellArg.MIN_DAMAGE, ParseValueType.INTEGER);
 		ctx.add(SpellArg.NAME, ParseValueType.STRING);
 		ctx.add(SpellArg.OPERATION, ParseValueType.ALGEBRAIC_OPERATION);
 		ctx.add(SpellArg.OPTIONS, ParseValueType.BOOLEAN);

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "COMMON",
-  "description": "Deal 1 damage. Summon a 1/1 Mastiff.",
+  "description": "Deal $1 damage. Summon a 1/1 Mastiff.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

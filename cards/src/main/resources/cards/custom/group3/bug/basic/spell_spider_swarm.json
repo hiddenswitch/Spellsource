@@ -1,0 +1,19 @@
+{
+  "name": "Spider Swarm",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Summon two 1/1 Spiderlings.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_spiderling",
+      "token_spiderling"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

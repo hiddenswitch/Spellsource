@@ -62,8 +62,8 @@ public class NaxxramasTests extends TestBase {
 	/**
 	 * Your opponent plays a Mad Scientist then you play Stampeding Kodo. First, the Kodo enters the board, then during
 	 * its Battlecry Phase the Mad Scientist is marked pending destroy. After the Battlecry Phase ends, a Death Phase
-	 * begins where the Mad Scientist's Deathrattle puts Mirror Entity into play. We now proceed to the After Play
-	 * Phase, where Mirror Entity is Queued and resolved, creating a copy of the Kodo.
+	 * begins where the Mad Scientist's Deathrattle puts Mirror Entity into play. We now proceed to the After Play Phase,
+	 * where Mirror Entity is Queued and resolved, creating a copy of the Kodo.
 	 */
 	@Test
 	public void testMadScientist() {

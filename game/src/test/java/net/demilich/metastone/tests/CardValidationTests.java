@@ -1,12 +1,8 @@
 package net.demilich.metastone.tests;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.lang.reflect.Array;
-import java.util.List;
-
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.CardParser;
+import net.demilich.metastone.game.shared.utils.ResourceInputStream;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.apache.commons.io.FileUtils;
@@ -16,8 +12,11 @@ import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.cards.CardParser;
-import net.demilich.metastone.game.shared.utils.ResourceInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
+import java.util.List;
 
 /**
  * This test will iterate through all the cards in the cards resources dir and invoke the CardParser.parseCard(cardFile)
@@ -60,10 +59,10 @@ public class CardValidationTests {
 	public void validateCard(File cardFile) throws FileNotFoundException {
 		try {
 			CardCatalogueRecord record = CARD_PARSER.parseCard(new ResourceInputStream(cardFile.getName(), new FileInputStream(cardFile), true));
-			Assert.assertFalse(record.getDesc().heroClass == null && (record.getDesc().heroClasses == null || record.getDesc().heroClasses.length == 0));
-			String description = record.getDesc().description;
+			Assert.assertFalse(record.getDesc().getHeroClass() == null && (record.getDesc().getHeroClasses() == null || record.getDesc().getHeroClasses().length == 0));
+			String description = record.getDesc().getDescription();
 			if (description != null) {
-				AttributeMap attributes = record.getDesc().attributes;
+				AttributeMap attributes = record.getDesc().getAttributes();
 				if (description.startsWith("Battlecry:")) {
 					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY), "A Battlecry card is missing a battlecry attribute.");
 				}

@@ -1,0 +1,49 @@
+{
+  "name": "Unholy Presence",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Passive Hero Power. Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+  "passiveTriggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ChangeHeroPowerSpell",
+        "card": "hero_power_presence",
+        "targetPlayer": "SELF"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "MinionDeathTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_ghoul",
+        "targetPlayer": "SELF"
+      }
+    }
+  ],
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "description": "Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_unholy_prescence"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

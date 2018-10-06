@@ -1,14 +1,16 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -35,10 +37,10 @@ import java.util.stream.Collectors;
  * summon.
  * <p>
  * If {@link SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_FILTER}, and {@link SpellArg#CARD_SOURCE} are
- * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link
- * Card}, it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link
- * Minion}, the target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then
- * the enchantments are copied.
+ * all omitted, the spell will try to summon a <b>copy</b> of {@code target}. If the {@code target} is a {@link Card},
+ * it is used as the card to {@link Card#summon()} from; otherwise, if the {@code target} is a {@link Minion}, the
+ * target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then the
+ * enchantments are copied.
  * <p>
  * All of the successfully summoned minions will get the {@link SpellArg#SPELL} subspell cast on each of them, where
  * {@link EntityReference#OUTPUT} will reference each summoned minion.
@@ -160,7 +162,7 @@ public class SummonSpell extends Spell {
 	 * Creates this spell to summon the specified minions relative to the source minion (used in a battlecry).
 	 *
 	 * @param relativeBoardPosition The board position.
-	 * @param cards           One or more minions to summon. Each will be summoned.
+	 * @param cards                 One or more minions to summon. Each will be summoned.
 	 * @return The spell
 	 */
 	public static SpellDesc create(RelativeToSource relativeBoardPosition, Card... cards) {
@@ -197,7 +199,7 @@ public class SummonSpell extends Spell {
 	 * Summons the specified cards for the specified player.
 	 *
 	 * @param targetPlayer The player on whose battlefield these minions should be summoned
-	 * @param cards  The minion cards
+	 * @param cards        The minion cards
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer targetPlayer, Card... cards) {
@@ -208,9 +210,9 @@ public class SummonSpell extends Spell {
 	 * Summons the specified minion cards relative to a given source for the specified player (used for a battlecry).
 	 *
 	 * @param targetPlayer          The player whose battlefield should be the destination for these minions
-	 * @param relativeBoardPosition Relative to the source minion (when played as a battlecry), where should these
-	 *                              minions be summoned?
-	 * @param cards           The cards to summon from
+	 * @param relativeBoardPosition Relative to the source minion (when played as a battlecry), where should these minions
+	 *                              be summoned?
+	 * @param cards                 The cards to summon from
 	 * @return The spell
 	 */
 	public static SpellDesc create(TargetPlayer targetPlayer, RelativeToSource relativeBoardPosition, Card... cards) {
@@ -261,6 +263,9 @@ public class SummonSpell extends Spell {
 			cards.removeIf(c -> existingCardIds.contains(c.getCardId()));
 		}
 
+		// Remove all cards that cannot be summoned (for now, all non-minion cards)
+		cards.removeIf(c -> c.getCardType() != CardType.MINION);
+
 		if (cards.size() > 0) {
 			if (desc.getBool(SpellArg.RANDOM_TARGET)
 					|| hasFilter) {
@@ -298,8 +303,17 @@ public class SummonSpell extends Spell {
 				&& !(target.getReference().equals(EntityReference.NONE))) {
 			for (int i = 0; i < count; i++) {
 				Minion minion;
-				if (target.getEntityType() == EntityType.CARD) {
+				// Is this a card? Summon it. Is this a non-battlefield minion? If so, summon from the base card too
+				if (target.getEntityType() == EntityType.CARD
+						|| (target.getEntityType() == EntityType.MINION && !target.isInPlay())) {
+					if (!target.getSourceCard().getCardType().isCardType(CardType.MINION)) {
+						logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
+						return;
+					}
 					minion = target.getSourceCard().summon();
+				} else if (target.getEntityType() != EntityType.MINION) {
+					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
+					return;
 				} else {
 					minion = ((Minion) target).getCopy();
 					minion.clearEnchantments();
@@ -318,6 +332,13 @@ public class SummonSpell extends Spell {
 						context.getLogic().addGameEventListener(player, triggerClone, minion);
 					}
 				}
+
+				//copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
+				final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
+				for (Card card : list.getCards(context, target)) {
+					list.add(minion, card);
+				}
+
 			}
 		}
 

@@ -1,0 +1,12 @@
+{
+  "name": "Wyrm's Sphere",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "[b]Discover[/b] a Dragon.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

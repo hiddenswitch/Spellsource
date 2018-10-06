@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "LEGENDARY",
-  "description": "For the rest of the game, your minions are 5/5.",
+  "description": "For the rest of the game, your minions are 4/4.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
@@ -17,12 +17,12 @@
         "spells": [
           {
             "class": "SetAttackSpell",
-            "value": 5,
+            "value": 4,
             "exclusive": false
           },
           {
             "class": "SetHpSpell",
-            "value": 5,
+            "value": 4,
             "exclusive": false
           }
         ]

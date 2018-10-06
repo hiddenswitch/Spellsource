@@ -1,0 +1,38 @@
+{
+  "name": "Cloud Serpent Hatchling",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, add a random Cloud Serpent to your hand.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "minion_crimson_cloud_serpent",
+        "minion_golden_cloud_serpent",
+        "minion_jade_cloud_serpent",
+        "minion_onyx_cloud_serpent",
+        "minion_sapphire_cloud_serpent"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

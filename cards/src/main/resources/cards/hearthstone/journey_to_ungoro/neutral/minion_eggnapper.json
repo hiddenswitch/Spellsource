@@ -16,7 +16,6 @@
   },
   "attributes": {
     "DEATHRATTLES": true,
-    "DESCRIPTION": "Deathrattle: Summon two 1/1 Wild Cats.",
     "SPELLSOURCE_NAME": "Forest Witch"
   },
   "collectible": true,

@@ -1,29 +1,29 @@
 package net.demilich.metastone.game;
 
-import java.io.Serializable;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import net.demilich.metastone.game.behaviour.DoNothingBehaviour;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.entities.*;
+import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
-import net.demilich.metastone.game.gameconfig.PlayerConfig;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+
+import java.io.Serializable;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * The {@link Player} class stores all the state that corresponds to a particular player, like a collection of {@link
@@ -61,19 +61,13 @@ public class Player extends Entity implements Serializable {
 	private int maxMana;
 	private int lockedMana;
 
-	@JsonIgnore
-	private Behaviour behaviour;
-
 	/**
 	 * Create an empty player instance.
 	 *
-	 * @return A player specified with an {@link Deck#EMPTY} and a {@link DoNothingBehaviour}.
+	 * @return A player specified with an {@link GameDeck#EMPTY} and a {@link ChooseLastBehaviour}.
 	 */
 	public static Player empty() {
-		Player player = new Player();
-		PlayerConfig config = new PlayerConfig(Deck.EMPTY, new DoNothingBehaviour());
-		player.init(config);
-		return player;
+		return new Player(GameDeck.EMPTY, "Empty player");
 	}
 
 	/**
@@ -83,14 +77,11 @@ public class Player extends Entity implements Serializable {
 	 * @param id     The player's ID, {@link net.demilich.metastone.game.targeting.IdFactory#PLAYER_1} or {@link
 	 *               net.demilich.metastone.game.targeting.IdFactory#PLAYER_2}
 	 * @param deck   The deck to initialize the player with.
-	 * @return A new player instance with the specified settings and a {@link DoNothingBehaviour}.
+	 * @return A new player instance with the specified settings and a {@link ChooseLastBehaviour}.
 	 */
-	public static Player forUser(String userId, int id, Deck deck) {
-		Player player = new Player();
-		PlayerConfig config = new PlayerConfig(deck, new DoNothingBehaviour());
-		config.setHeroCard(deck.getHeroCard());
+	public static Player forUser(String userId, int id, GameDeck deck) {
+		Player player = new Player(deck, "Player " + userId);
 		player.setId(id);
-		player.init(config);
 		player.setUserId(userId);
 		return player;
 	}
@@ -113,7 +104,6 @@ public class Player extends Entity implements Serializable {
 		this.mana = otherPlayer.mana;
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
-		this.behaviour = otherPlayer.behaviour;
 		this.getStatistics().merge(otherPlayer.getStatistics());
 
 	}
@@ -130,35 +120,20 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param deck The deck instance to use.
 	 */
-	public Player(Deck deck) {
-		this(PlayerConfig.fromDeck(deck));
+	public Player(GameDeck deck) {
+		this(deck, "New Player");
 	}
 
 	/**
-	 * Builds a player with the specified {@link PlayerConfig} object.
-	 * <p>
-	 * Since a player instance also contains match data, a {@link PlayerConfig} better models the idea of a template
-	 * from which player objects are created for possibly many games.
+	 * Creates a player from the specified deck.
 	 *
-	 * @param config A {@link PlayerConfig} instance.
+	 * @param deck The deck instance to use.
 	 */
-	public Player(PlayerConfig config) {
-		this();
-		init(config);
-	}
 
-	protected void init(PlayerConfig config) {
-		config.setDeckForPlay(config.getDeck());
-		if (config.getHeroCard() == null) {
-			config.setHeroCard(HeroClass.getHeroCard(config.getDeckForPlay().getHeroClass()));
-		}
-		config.setHeroForPlay(config.getHeroCard());
-		Deck selectedDeck = config.getDeckForPlay();
-
-		this.deck = new CardZone(getId(), Zones.DECK, selectedDeck.getCardsCopy());
-		this.setHero(config.getHeroForPlay().createHero());
-		this.setName(config.getName() + " - " + getHero().getName());
-		setBehaviour(config.getBehaviour().clone());
+	public Player(GameDeck deck, String name) {
+		this.deck = new CardZone(getId(), Zones.DECK, deck.getCardsCopy());
+		this.setHero(deck.getHeroCard().createHero());
+		this.setName(name);
 	}
 
 	/**
@@ -172,19 +147,9 @@ public class Player extends Entity implements Serializable {
 	}
 
 	/**
-	 * The behaviour that specifies what actions are taken by the player who owns this hero, minions, deck, etc. It is a
-	 * delegate.
-	 *
-	 * @return The behaviour instance.
-	 * @see Behaviour for more about this object model.
-	 */
-	public Behaviour getBehaviour() {
-		return behaviour;
-	}
-
-	/**
 	 * Retrieves the deck for this player as it is in game. This {@link CardZone} is mutated over time. This is distinct
-	 * from a {@link Deck} object, which is better interpreted as the base deck from which this object was initialized.
+	 * from a {@link GameDeck} object, which is better interpreted as the base deck from which this object was
+	 * initialized.
 	 *
 	 * @return The player's deck in game.
 	 */
@@ -242,11 +207,11 @@ public class Player extends Entity implements Serializable {
 	}
 
 	/**
-	 * Gets the player's mana locked by the Overload mechanic. The locked mana is set to the amount of mana overloaded
-	 * the previous turn.
+	 * Gets the player's mana locked by the Overload mechanic. The locked mana is set to the amount of mana overloaded the
+	 * previous turn.
 	 *
 	 * @return The amount of mana that is unusable this turn due to playing a card with {@link Attribute#OVERLOAD} last
-	 * turn.
+	 * 		turn.
 	 * @see Attribute#OVERLOAD for more about locking mana.
 	 */
 	public int getLockedMana() {
@@ -283,12 +248,12 @@ public class Player extends Entity implements Serializable {
 	}
 
 	/**
-	 * Retrieves the card IDs of the secrets owned by this player. Used to enforce that players can only have at most
-	 * one of each secret in their {@link #secretZone}.
+	 * Retrieves the card IDs of the secrets owned by this player. Used to enforce that players can only have at most one
+	 * of each secret in their {@link #secretZone}.
 	 *
 	 * @return The set of secret card IDs.
-	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, Card) to see how this method plays
-	 * into rules regarding the ability to play secrets.
+	 * @see net.demilich.metastone.game.logic.GameLogic#canPlaySecret(Player, Card) to see how this method plays into
+	 * 		rules regarding the ability to play secrets.
 	 */
 	public Set<String> getSecretCardIds() {
 		return secretZone.stream().map(Secret::getSourceCard).map(Card::getCardId).collect(Collectors.toSet());
@@ -323,21 +288,11 @@ public class Player extends Entity implements Serializable {
 	}
 
 	/**
-	 * Sets the behaviour for this player.
-	 *
-	 * @param behaviour A behaviour.
-	 * @see Behaviour for more about behaviours.
-	 */
-	public void setBehaviour(Behaviour behaviour) {
-		this.behaviour = behaviour;
-	}
-
-	/**
 	 * Sets the player's current hero. If a {@link Hero} currently exists in the hero zone, it is removed.
 	 *
 	 * @param hero The hero entity.
-	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate hero changing
-	 * method for spells.
+	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate hero changing method
+	 * 		for spells.
 	 */
 	public void setHero(Hero hero) {
 		if (heroZone.size() != 0) {
@@ -448,7 +403,7 @@ public class Player extends Entity implements Serializable {
 	 *
 	 * @param zone The key.
 	 * @return An {@link EntityZone} for the corresponding zone. For {@link Zones#PLAYER}, a new zone is created on the
-	 * fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
+	 * 		fly containing this player entity. For {@link Zones#NONE}, an empty zone is returned.
 	 */
 	public EntityZone getZone(Zones zone) {
 		switch (zone) {
@@ -499,8 +454,7 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the hero power zone stored inside the hero entity.
 	 *
 	 * @return The hero power stored by this hero.
-	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate way to change
-	 * heroes.
+	 * @see net.demilich.metastone.game.logic.GameLogic#changeHero(Player, Hero) for the appropriate way to change heroes.
 	 */
 	public EntityZone<Card> getHeroPowerZone() {
 		return getHero().getHeroPowerZone();
@@ -510,8 +464,8 @@ public class Player extends Entity implements Serializable {
 	 * Retrieves the weapon zone belonging to this player's hero entity.
 	 *
 	 * @return A weapon zone.
-	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, Card, boolean) for the
-	 * appropriate way to mutate this zone.
+	 * @see net.demilich.metastone.game.logic.GameLogic#equipWeapon(int, Weapon, Card, boolean) for the appropriate way to
+	 * 		mutate this zone.
 	 */
 	public EntityZone<Weapon> getWeaponZone() {
 		return getHero().getWeaponZone();
@@ -567,13 +521,4 @@ public class Player extends Entity implements Serializable {
 		return getHero().getSourceCard();
 	}
 
-	/**
-	 * Determines whether this player object is backed by a human player.
-	 *
-	 * @return True if the behaviour has a human making the {@link Behaviour#requestAction(GameContext, Player, List)}
-	 * decisions.
-	 */
-	public boolean isHuman() {
-		return !hasAttribute(Attribute.AI_OPPONENT) && getBehaviour().isHuman();
-	}
 }

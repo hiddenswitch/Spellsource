@@ -11,7 +11,7 @@ public class EnrageChangedEvent extends GameEvent {
 		super(context, target.getOwner(), -1);
 		this.target = target;
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return target;

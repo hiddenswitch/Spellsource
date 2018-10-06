@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -46,7 +46,7 @@ public class RandomCardTargetSpell extends Spell {
 		GameAction action;
 		Card spellCard;
 		if (card.hasChoices()) {
-			spellCard = CardCatalogue.getCardById(context.getLogic().getRandom(Arrays.asList(card.getChooseOneCardIds())));
+			spellCard = context.getCardById(context.getLogic().getRandom(Arrays.asList(card.getChooseOneCardIds())));
 		} else if (card.getCardType() == CardType.SPELL) {
 			spellCard = card;
 		} else {
@@ -62,6 +62,8 @@ public class RandomCardTargetSpell extends Spell {
 			destination = Zones.GRAVEYARD;
 		}
 
+		EntityLocation oldLocation = spellCard.getEntityLocation();
+
 		if (spellCard.getId() == IdFactory.UNASSIGNED) {
 			spellCard.setId(context.getLogic().generateId());
 		}
@@ -70,7 +72,6 @@ public class RandomCardTargetSpell extends Spell {
 		}
 
 		spellCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-
 		context.getLogic().revealCard(player, spellCard);
 
 		if (spellCard.getTargetSelection() == TargetSelection.NONE) {
@@ -81,16 +82,22 @@ public class RandomCardTargetSpell extends Spell {
 			return;
 		}
 
-		action = new PlaySpellCardAction(spellCard.getSpell(), spellCard, spellCard.getTargetSelection());
+		action = spellCard.play();
 		List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
 		EntityReference randomTarget = null;
-		if (targets != null && targets.size() != 0) {
+		// Grand Archivist must have a valid target
+		if (targets != null && !targets.isEmpty()) {
 			randomTarget = context.getLogic().getRandom(targets).getReference();
 			SpellUtils.castChildSpell(context, player, spellCard.getSpell(), source, context.resolveSingleTarget(randomTarget));
+			spellCard.moveOrAddTo(context, destination);
+			context.getLogic().removeCard(spellCard);
+		} else if (!oldLocation.equals(EntityLocation.UNASSIGNED)) {
+			spellCard.moveOrAddTo(context, oldLocation.getZone(), oldLocation.getIndex());
+		} else {
+			spellCard.moveOrAddTo(context, destination);
+			context.getLogic().removeCard(spellCard);
 		}
 
-		spellCard.moveOrAddTo(context, destination);
-		context.getLogic().removeCard(spellCard);
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 	}
 

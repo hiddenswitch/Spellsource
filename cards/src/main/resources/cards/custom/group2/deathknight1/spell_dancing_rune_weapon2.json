@@ -1,0 +1,208 @@
+{
+  "name": "Dancing Rune Weapon",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Summon a copy of your weapon as a minion with Taunt.",
+  "condition": {
+    "class": "HasWeaponCondition",
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "conditions": [
+      {
+        "class": "AnyMatchFilterCondition",
+        "target": "FRIENDLY_WEAPON",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "weapon_runeforged_blade"
+        }
+      },
+      {
+        "class": "AnyMatchFilterCondition",
+        "target": "FRIENDLY_WEAPON",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "weapon_frostscythe"
+        }
+      },
+      {
+        "class": "AnyMatchFilterCondition",
+        "target": "FRIENDLY_WEAPON",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "weapon_bloodcaked_axe"
+        }
+      },
+      {
+        "class": "AnyMatchFilterCondition",
+        "target": "FRIENDLY_WEAPON",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "weapon_ebon_blade_greatsword"
+        }
+      },
+      {
+        "class": "AnyMatchFilterCondition",
+        "target": "FRIENDLY_WEAPON",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "weapon_runic_claymore"
+        }
+      }
+    ],
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "card": "token_runeforged_blade",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "ATTACK"
+            }
+          },
+          {
+            "class": "SetHpSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "TAUNT"
+          }
+        ]
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_frostscythe",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "ATTACK"
+            }
+          },
+          {
+            "class": "SetHpSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "TAUNT"
+          }
+        ]
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_bloodcaked_axe",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "ATTACK"
+            }
+          },
+          {
+            "class": "SetHpSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "TAUNT"
+          }
+        ]
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_ebon_blade_greatsword",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "ATTACK"
+            }
+          },
+          {
+            "class": "SetHpSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "TAUNT"
+          }
+        ]
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_runic_claymore",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "ATTACK"
+            }
+          },
+          {
+            "class": "SetHpSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "FRIENDLY_WEAPON",
+              "attribute": "HP"
+            }
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "TAUNT"
+          }
+        ]
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

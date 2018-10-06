@@ -1,0 +1,24 @@
+{
+  "name": "Mad Prophet Rosea",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: The next spell you cast has \"Invoke (10): Summon Yoth'al.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_mad_prophecy"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

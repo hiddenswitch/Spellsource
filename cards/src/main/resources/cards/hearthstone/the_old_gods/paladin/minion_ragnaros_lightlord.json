@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "At the end of your turn, restore 8 Health to a damaged friendly character.",
+  "description": "At the end of your turn, restore #8 Health to a damaged friendly character.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

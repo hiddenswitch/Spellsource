@@ -1,0 +1,20 @@
+Name: Odd Paladin
+Class: Paladin
+Format: Standard
+2x Blessing of Might
+2x Fire Fly
+2x Glow-Tron
+2x Lost in the Jungle
+2x Mecharoo
+2x Righteous Protector
+2x Blood Knight
+1x Divine Favor
+1x Raid Leader
+2x Unidentified Maul
+1x Void Ripper
+2x Fungalmancer
+2x Giggling Inventor
+2x Level Up!
+2x Corridor Creeper
+2x Vinecleaver
+1x Baku the Mooneater

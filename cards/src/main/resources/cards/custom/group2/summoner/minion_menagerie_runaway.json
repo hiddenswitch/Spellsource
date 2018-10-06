@@ -1,0 +1,26 @@
+{
+  "name": "Menagerie Runaway",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "Taunt. Battlecry: Summon a 3/2 Shark with Charge.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_runaway_shark"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

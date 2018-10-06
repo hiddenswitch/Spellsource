@@ -27,8 +27,7 @@ public class ResourceLoader {
 	private static Logger logger = LoggerFactory.getLogger(ResourceLoader.class);
 
 	/**
-	 * Loads all the json files from the given rootDir into a collection of
-	 * ResourceInputStreams
+	 * Loads all the json files from the given rootDir into a collection of ResourceInputStreams
 	 *
 	 * @param rootDir        the root dir from where to start traversing to load the json files
 	 * @param fromFileSystem True if the rootDir is on the filesystem, False if the rootDir is in the Resources dir
@@ -36,7 +35,7 @@ public class ResourceLoader {
 	 * @throws URISyntaxException
 	 * @throws IOException
 	 */
-	public static Collection<ResourceInputStream> loadJsonInputStreams(String rootDir, boolean fromFileSystem)
+	public static Collection<ResourceInputStream> loadInputStreams(String rootDir, boolean fromFileSystem)
 			throws URISyntaxException, IOException {
 		if (rootDir == null) {
 			throw new RuntimeException("rootDir cannot be null");
@@ -88,8 +87,7 @@ public class ResourceLoader {
 	}
 
 	/**
-	 * Utility method to get a PathReference from a given sourceDir that's in
-	 * the Resources dir or a Jar file.
+	 * Utility method to get a PathReference from a given sourceDir that's in the Resources dir or a Jar file.
 	 *
 	 * @param sourceDir the dir of interest in the Resources dir or Jar file
 	 * @return a PathReference which contains a Path and boolean indicating the path is in a Jar fle.
@@ -135,8 +133,7 @@ public class ResourceLoader {
 	}
 
 	/**
-	 * Copy all files from the Resources sourceDir subfolder to the targetDir on
-	 * the filesystem.
+	 * Copy all files from the Resources sourceDir subfolder to the targetDir on the filesystem.
 	 *
 	 * @param sourceDir path to dir who's contents to copy
 	 * @param targetdir path to dir where we want to copy the files to
@@ -188,8 +185,7 @@ public class ResourceLoader {
 	}
 
 	/**
-	 * Data tuple which holds a path and boolean flag indicating that the path
-	 * is from a jar resource file.
+	 * Data tuple which holds a path and boolean flag indicating that the path is from a jar resource file.
 	 */
 	private static class PathReference {
 		final Path path;

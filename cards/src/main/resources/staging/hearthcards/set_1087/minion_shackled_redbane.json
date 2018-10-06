@@ -1,0 +1,20 @@
+{
+  "name": "Shackled Redbane",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "[b][b]Taunt[/b][/b]\r\nCan't attack unless you control another Dragon.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

@@ -8,7 +8,8 @@
   "passiveTrigger": {
     "countUntilCast": 1,
     "eventTrigger": {
-      "class": "SecretPlayedTrigger",
+      "class": "AfterCardPlayedTrigger",
+      "requiredAttribute": "SECRET",
       "sourcePlayer": "SELF"
     },
     "spell": {

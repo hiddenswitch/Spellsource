@@ -1,0 +1,22 @@
+{
+  "name": "Enchanted Mirror",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Summon a copy of a minion and give it +2/+2.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "attackBonus": 2,
+      "hpBonus": 2
+    },
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

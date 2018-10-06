@@ -1,18 +1,19 @@
 package net.demilich.metastone.game.actions;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An action a player can take in the game.
@@ -24,6 +25,7 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
  */
 public abstract class GameAction implements Cloneable, Serializable, Notification {
+	protected Integer chooseOneOptionIndex = null;
 	private int id = -1;
 	private TargetSelection targetRequirement = TargetSelection.NONE;
 	private ActionType actionType = ActionType.SYSTEM;
@@ -87,27 +89,30 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof GameAction) {
-			GameAction otherAction = (GameAction) other;
-			return (this.actionType == otherAction.actionType)
-					&& (this.targetRequirement == otherAction.targetRequirement)
-					&& (this.getSourceReference().equals(otherAction.getSourceReference()))
-					&& (this.getTargetReference().equals(otherAction.getTargetReference()))
-					&& (this.getId() == otherAction.getId());
-		} else {
+		if (!(other instanceof GameAction)) {
 			return false;
 		}
+
+		GameAction rhs = (GameAction) other;
+
+		return new EqualsBuilder()
+				.append(chooseOneOptionIndex, rhs.chooseOneOptionIndex)
+				.append(getTargetRequirement(), rhs.getTargetRequirement())
+				.append(getActionType(), rhs.getActionType())
+				.append(getSourceReference(), rhs.getSourceReference())
+				.append(getTargetReference(), rhs.getTargetReference())
+				.build();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-				.append(id)
-				.append(targetRequirement)
-				.append(actionType)
-				.append(source)
-				.append(targetKey)
-				.toHashCode();
+				.append(chooseOneOptionIndex)
+				.append(getTargetRequirement())
+				.append(getActionType())
+				.append(getSourceReference())
+				.append(getTargetReference())
+				.build();
 	}
 
 	public int getId() {
@@ -153,6 +158,14 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	@Override
 	public boolean isClientInterested() {
 		return true;
+	}
+
+	public Integer getChooseOneOptionIndex() {
+		return chooseOneOptionIndex;
+	}
+
+	public void setChooseOneOptionIndex(Integer chooseOneOptionIndex) {
+		this.chooseOneOptionIndex = chooseOneOptionIndex;
 	}
 
 	@Override

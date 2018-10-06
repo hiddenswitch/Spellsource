@@ -1,22 +1,28 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
+import net.demilich.metastone.game.spells.AddEnchantmentSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,13 +38,27 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * live in their respective zones {@link Zones#QUEST} and {@link Zones#SECRET}. Otherwise, unlike in Hearthstone,
  * enchantments are generally not targetable and do not "live" on cards or in zones.
  * <p>
- * Enchantments consistent of two important features: a {@link EventTrigger} built from an {@link
- * net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc}, and a {@link SpellDesc} indicating which spell
- * should be cast when the enchantment's {@link EventTrigger} and its conditions {@link EventTrigger#fire(GameEvent,
- * Entity)}.
+ * Enchantments consistent of two important features: a {@link EventTrigger} built from an {@link EventTriggerDesc}, and
+ * a {@link SpellDesc} indicating which spell should be cast when the enchantment's {@link EventTrigger} and its
+ * conditions {@link EventTrigger#fire(GameEvent, Entity)}.
  * <p>
- * Enchantments are specified by a {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} in the card
- * JSON. They can also be specified as fields in e.g., {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}.
+ * Enchantments are specified by a {@link EnchantmentDesc} in the card JSON. They can also be specified as fields in
+ * e.g., {@link AddEnchantmentSpell}.
+ * <p>
+ * The lifecycle of an enchantment looks like the following:
+ * <ul>
+ * <li>{@code onAdd}: Called when the encantment comes into play. At this moment, the number of times the
+ * enchantment has been fired is set to zero; it is not {@code expired}, and </li>
+ * <li>{@code onGameEvent}: Gives the enchantment a chance to look at a {@link GameEvent}, evaluate a {@link
+ * EventTrigger} against it, and determine whether its {@link EnchantmentDesc#spell} should be cast.</li>
+ * <li>{@code onRemove}: Expires the enchantment, ensuring it will never fire again.</li>
+ * </ul>
+ * An enchantment's lifecycle matches the entity it is hosted by, like an {@link Actor}, the {@link Player} entity (when
+ * e.g. {@link AddEnchantmentSpell} has a {@link SpellArg#TARGET} of {@link EntityReference#FRIENDLY_PLAYER}) or itself
+ * (in the case of a quest and secret). This means that {@link EntityReference#FRIENDLY_PLAYER} is a natural host for
+ * {@link Enchantment} objects that should not be removed for any reason like minion death.
+ *
+ * @see EnchantmentDesc for a description of the format of an enchantment.
  */
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
@@ -155,11 +175,22 @@ public class Enchantment extends Entity implements Trigger {
 		}
 
 		boolean spellCasts = true;
+
+		// Prevents infinite looping
+		if (maxFires != null
+				&& fires > maxFires) {
+			spellCasts = false;
+			expire();
+		}
+
 		if (countUntilCast != null && fires < countUntilCast) {
 			spellCasts = false;
 		}
 		if (spellCasts) {
-			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, null, true);
+			if (this instanceof Quest) {
+				expire();
+			}
+			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 		}
 		if (maxFires != null
 				&& fires >= maxFires) {

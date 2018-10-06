@@ -1,0 +1,25 @@
+{
+  "name": "Sharp-a-Practice 2000",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 2,
+  "durability": 5,
+  "rarity": "RARE",
+  "description": "Battlecry: Double the numbers of your Hero Power. Inspire: Lose 1 Durability",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell",
+      "target": "FRIENDLY_HERO_POWER",
+      "value": 2,
+      "operation": "MULTIPLY"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

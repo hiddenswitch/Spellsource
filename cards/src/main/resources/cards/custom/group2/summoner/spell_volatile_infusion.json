@@ -1,0 +1,36 @@
+{
+  "name": "Volatile Infusion",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "EPIC",
+  "description": "The next minion you summon gains, \"Recruit a minion whenever this takes damage.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "EVENT_TARGET",
+        "trigger": {
+          "eventTrigger": {
+            "class": "DamageReceivedTrigger",
+            "hostTargetType": "IGNORE_OTHER_TARGETS"
+          },
+          "spell": {
+            "class": "RecruitSpell"
+          }
+        }
+      },
+      "maxFires": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

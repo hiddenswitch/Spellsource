@@ -1,9 +1,9 @@
 package net.demilich.metastone.game.behaviour.heuristic;
 
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class WeightedHeuristic implements Heuristic {
 
@@ -23,16 +23,16 @@ public class WeightedHeuristic implements Heuristic {
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			minionScore += 1.5f * baseScore;
 		}
-		if (minion.hasAttribute(Attribute.SPELL_DAMAGE)) {
-			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE);
+		if (minion.hasAttribute(Attribute.SPELL_DAMAGE) || minion.hasAttribute(Attribute.AURA_SPELL_DAMAGE)) {
+			minionScore += minion.getAttributeValue(Attribute.SPELL_DAMAGE) + minion.getAttributeValue(Attribute.AURA_SPELL_DAMAGE);
 		}
 		if (minion.hasAttribute(Attribute.ENRAGED)) {
 			minionScore += 1;
 		}
-		if (minion.hasAttribute(Attribute.STEALTH)) {
+		if (minion.hasAttribute(Attribute.STEALTH) || minion.hasAttribute(Attribute.AURA_STEALTH)) {
 			minionScore += 1;
 		}
-		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS)) {
+		if (minion.hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS) || minion.hasAttribute(Attribute.AURA_UNTARGETABLE_BY_SPELLS)) {
 			minionScore += 1.5f * baseScore;
 		}
 

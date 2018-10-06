@@ -1,0 +1,44 @@
+{
+  "name": "Acherus Deathgate",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Discover an 8-cost minion in your deck. Summon a random 8-cost minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "FromDeckToHandSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 8
+        },
+        "cardSource": {
+          "class": "DeckSource",
+          "distinct": true
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 8
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

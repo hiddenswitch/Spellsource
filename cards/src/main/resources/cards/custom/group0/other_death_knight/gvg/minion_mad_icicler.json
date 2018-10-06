@@ -1,0 +1,28 @@
+{
+  "name": "Mad Icicler",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Deal 3 damage to all Frozen enemies.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 3,
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

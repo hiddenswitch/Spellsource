@@ -1,10 +1,10 @@
 package com.hiddenswitch.spellsource.common;
 
 import com.hiddenswitch.spellsource.util.CommunityDeckStringSerializer;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
@@ -29,7 +29,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		if (!deckList.startsWith("#")
 				&& !deckList.contains("\n")) {
 			try {
-				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, null, deckList);
+				return new CommunityDeckStringSerializer().toDeckCreateRequest(null, "Decklist (" + deckList + ")", deckList);
 			} catch (Throwable ex) {
 				throw new DeckListParsingException(Collections.singletonList(ex));
 			}
@@ -38,7 +38,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		DeckCreateRequest request = new DeckCreateRequest()
 				.withCardIds(new ArrayList<>());
 		// Parse with a regex
-		String regex = "(?:^(?:###*|#*\\s?[Nn]ame:)\\s?(?<name>.+)$)|(?:[Cc]lass:\\s?(?<heroClass>\\w+)$)|(?:[Hh]ero:\\s?(?<heroCard>\\w+))|(?:[Ff]ormat:\\s?(?<format>\\w+))|(?:(?<count>\\d+)x[\\s\\(\\)\\d]+(?<cardName>.+$))";
+		String regex = "(?:^(?:###*|#*\\s?[Nn]ame:)\\s?(?<name>.+)$)|(?:[Cc]lass:\\s?(?<heroClass>\\w+)$)|(?:[Hh]ero:\\s?(?<heroCard>.+$))|(?:[Ff]ormat:\\s?(?<format>\\w+))|(?:(?<count>\\d+)x(\\s?\\(\\d*\\))?\\s?(?<cardName>.+$))";
 		Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
 		Matcher matcher = pattern.matcher(deckList);
 		List<Throwable> errors = new ArrayList<>();
@@ -49,7 +49,36 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			}
 
 			if (matcher.group("heroClass") != null) {
-				final String heroClass = matcher.group("heroClass").toUpperCase();
+				String heroClass = matcher.group("heroClass").toUpperCase();
+				switch (heroClass.toLowerCase()) {
+					case "warlock":
+						heroClass = "VIOLET";
+						break;
+					case "warrior":
+						heroClass = "RED";
+						break;
+					case "priest":
+						heroClass = "WHITE";
+						break;
+					case "rogue":
+						heroClass = "BLACK";
+						break;
+					case "mage":
+						heroClass = "BLUE";
+						break;
+					case "paladin":
+						heroClass = "GOLD";
+						break;
+					case "shaman":
+						heroClass = "SILVER";
+						break;
+					case "druid":
+						heroClass = "BROWN";
+						break;
+					case "hunter":
+						heroClass = "GREEN";
+						break;
+				}
 				try {
 					request.setHeroClass(HeroClass.valueOf(heroClass));
 				} catch (IllegalArgumentException ex) {
@@ -103,8 +132,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 			}
 		}
 
-		if (request.getCardIds().size() != 30) {
-			errors.add(new IllegalArgumentException(String.format("You must specify a deck with 30 cards. You gave %d", request.getCardIds().size())));
+		if (request.getCardIds().size() == 0) {
+			errors.add(new IllegalArgumentException(String.format("You must specify a deck with at least 1 card.")));
 		}
 
 		if (request.getHeroClass() == null) {
@@ -211,8 +240,8 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		return clone;
 	}
 
-	public Deck toGameDeck() {
-		Deck deck = new Deck(getHeroClass());
+	public GameDeck toGameDeck() {
+		GameDeck deck = new GameDeck(getHeroClass());
 		deck.setName(getName());
 		if (getHeroCardId() != null) {
 			deck.setHeroCard((Card) CardCatalogue.getCardById(getHeroCardId()));

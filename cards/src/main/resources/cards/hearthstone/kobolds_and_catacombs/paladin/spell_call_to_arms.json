@@ -1,6 +1,6 @@
 {
   "name": "Call to Arms",
-  "baseManaCost": 4,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",

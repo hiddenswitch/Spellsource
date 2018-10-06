@@ -1,0 +1,43 @@
+{
+  "name": "Echoing Potion",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "Summon a 3/3 copy of the next minion you summon this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "target": "EVENT_SOURCE",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "SetAttackSpell",
+              "target": "OUTPUT",
+              "value": 3
+            },
+            {
+              "class": "SetHpSpell",
+              "target": "OUTPUT",
+              "value": 3
+            }
+          ]
+        }
+      },
+      "maxFires": 1,
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

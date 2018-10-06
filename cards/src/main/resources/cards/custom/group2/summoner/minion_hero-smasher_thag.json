@@ -1,0 +1,40 @@
+{
+  "name": "Hero-Smasher Thag",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "After this attacks the enemy hero, double its Attack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "HERO",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "TRIGGER_HOST",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 0,
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "DoubleAttackSpell"
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

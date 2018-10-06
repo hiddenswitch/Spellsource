@@ -1,0 +1,29 @@
+{
+  "name": "Black Lotus",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Your Razorpetals are Poisonous",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "queueCondition": {
+        "class": "CardPropertyCondition",
+        "target": "EVENT_SOURCE",
+        "card": "spell_razorpetal"
+      },
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_SOURCE",
+      "attribute": "POISONOUS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

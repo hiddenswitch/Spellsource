@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "COMMON",
-  "description": "Deal 3 damage to a minion. Summon a 3/3 Wolf.",
+  "description": "Deal $3 damage to a minion. Summon a 3/3 Wolf.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

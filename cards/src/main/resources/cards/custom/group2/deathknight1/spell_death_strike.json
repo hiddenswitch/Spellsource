@@ -1,0 +1,27 @@
+{
+  "name": "Death Strike",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "EPIC",
+  "description": "Lifesteal. Deal double your weapon's damage to an enemy minion.",
+  "condition": {
+    "class": "HasWeaponCondition"
+  },
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "DamageSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_WEAPON",
+      "attribute": "ATTACK",
+      "multiplier": 2
+    }
+  },
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

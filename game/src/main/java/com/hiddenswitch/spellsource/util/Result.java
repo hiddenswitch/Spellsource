@@ -10,14 +10,17 @@ import java.io.Serializable;
 public class Result<T> implements AsyncResult<T>, Serializable {
 	final T inner;
 	final Throwable error;
+
 	public Result(Throwable error, T result) {
 		this.error = error;
 		this.inner = result;
 	}
+
 	public Result(T result) {
 		this.error = null;
 		this.inner = result;
 	}
+
 	public Result(Throwable error) {
 		this.error = error;
 		this.inner = null;

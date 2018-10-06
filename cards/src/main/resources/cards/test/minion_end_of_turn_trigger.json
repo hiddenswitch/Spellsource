@@ -1,0 +1,22 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "At the end of your turn, shuffle a Bloodfen Raptor into your deck",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "minion_bloodfen_raptor"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

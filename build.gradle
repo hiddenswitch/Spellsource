@@ -4,7 +4,7 @@ buildscript {
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath('io.swagger:swagger-codegen:2.3.1')
+        classpath('io.swagger:swagger-codegen:2.3.0')
     }
 }
 
@@ -33,6 +33,34 @@ task(swagger) {
         ])
         config.setGroupId('com.hiddenswitch')
         config.setArtifactId('spellsource-client')
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
+
+
+task(swaggerClient) {
+    def input = "swagger-api.yaml"
+    def outputDir = 'clientcsharp'
+    def output = file(outputDir)
+    inputs.file(input)
+    outputs.dir(output)
+    doLast {
+        def config = new CodegenConfigurator()
+        config.setInputSpec(input)
+        config.setOutputDir(output.path)
+        config.setLang('csharp')
+        config.setAdditionalProperties([
+                'supportFiles'           : 'false',
+                'apiTests'               : 'false',
+                'modelTests'             : 'false',
+                'modelDocs'              : 'false',
+                'packageName'            : 'Spellsource.Client',
+                'targetFramework'        : 'v3.5',
+                'sourceFolder'           : 'Scripts',
+                'hideGenerationTimestamp': 'true',
+                'optionalProjectFile'    : 'false',
+                'optionalAssemblyFile'   : 'false'
+        ])
         new DefaultGenerator().opts(config.toClientOptInput()).generate()
     }
 }

@@ -1,0 +1,12 @@
+{
+  "name": "Smash-n-Run",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Destroy a minion. Give a random minion in your hand Attack equal to the destroyed minion.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

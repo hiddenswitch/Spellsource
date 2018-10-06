@@ -1,0 +1,47 @@
+{
+  "name": "Unnerfed Patches the Pirate",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "race": "PIRATE",
+  "description": "Charge. After you play a pirate, summon this minion from your deck.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "TRIGGER_HOST",
+            "invert": true
+          },
+          {
+            "class": "RaceCondition",
+            "race": "PIRATE"
+          },
+          {
+            "class": "MinionCountCondition",
+            "value": 7,
+            "operation": "LESS",
+            "targetPlayer": "SELF"
+          }
+        ]
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "PutMinionOnBoardFromDeckSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

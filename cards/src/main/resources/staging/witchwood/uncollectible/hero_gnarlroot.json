@@ -1,0 +1,12 @@
+{
+  "name": "Gnarlroot",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "<i>Gnarled, twisting roots, splintering to life.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

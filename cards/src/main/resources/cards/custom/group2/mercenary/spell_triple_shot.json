@@ -1,0 +1,23 @@
+{
+  "name": "Triple Shot",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Deal $1 damage to a minion and 3 damage to adjacent ones.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,29 @@
+{
+  "name": "Morsel",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Destroy a minion that costs (2) or less.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 2,
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell",
+    "filter": {
+      "class": "ManaCostFilter",
+      "value": 2,
+      "operation": "LESS_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

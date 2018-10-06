@@ -1,16 +1,16 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class AttributeValueProvider extends ValueProvider {
 	public static ValueProviderDesc create(Attribute attribute, EntityReference target) {
@@ -26,8 +26,8 @@ public class AttributeValueProvider extends ValueProvider {
 
 	@Override
 	protected int provideValue(GameContext context, Player player, Entity target, Entity host) {
-		EntityReference sourceReference = (EntityReference) desc.get(ValueProviderArg.TARGET);
-		Attribute attribute = (Attribute) desc.get(ValueProviderArg.ATTRIBUTE);
+		EntityReference sourceReference = (EntityReference) getDesc().get(ValueProviderArg.TARGET);
+		Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
 		List<Entity> entities = null;
 		if (sourceReference != null) {
 			entities = context.resolveTarget(player, host, sourceReference);
@@ -53,6 +53,8 @@ public class AttributeValueProvider extends ValueProvider {
 						value += source.getMaxHp();
 					} else if (attribute == Attribute.HP) {
 						value += source.getHp();
+					} else if (attribute == Attribute.BASE_MANA_COST) {
+						value += source.getSourceCard().getBaseManaCost();
 					} else {
 						value += source.getAttributeValue(attribute);
 					}
@@ -61,7 +63,6 @@ public class AttributeValueProvider extends ValueProvider {
 				}
 			}
 		}
-
 		return value;
 	}
 }

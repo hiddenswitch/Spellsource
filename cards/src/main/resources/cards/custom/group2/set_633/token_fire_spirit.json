@@ -1,0 +1,17 @@
+{
+  "name": "Fire Spirit",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

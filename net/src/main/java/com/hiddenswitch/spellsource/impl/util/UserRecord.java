@@ -16,6 +16,7 @@ import io.vertx.ext.auth.User;
 
 import java.io.Serializable;
 import java.lang.ref.WeakReference;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -26,7 +27,7 @@ import java.util.List;
  * which allows queries to see if a user is authorized to do a particular task (very lightly implemented).
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class UserRecord extends MongoRecord implements User, Serializable, ClusterSerializable {
+public class UserRecord extends MongoRecord implements User, Serializable {
 	public static final String EMAILS_ADDRESS = "emails.address";
 	public static final String SERVICES = "services";
 	public static final String RESUME = "resume";
@@ -34,13 +35,14 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 	public static final String SERVICES_RESUME_LOGIN_TOKENS = SERVICES + "." + RESUME + "." + LOGIN_TOKENS;
 	public static final String SERVICES_PASSWORD_SCRYPT = "services.password.scrypt";
 
-	private List<EmailRecord> emails;
+	private List<EmailRecord> emails = new ArrayList<>();
 	private String username;
 	private Date createdAt;
-	private List<String> decks;
-	private List<FriendRecord> friends;
-	private ServicesRecord services;
+	private List<String> decks = new ArrayList<>();
+	private List<FriendRecord> friends = new ArrayList<>();
+	private ServicesRecord services = new ServicesRecord();
 	private boolean bot;
+	private String privacyToken;
 
 	/**
 	 * A weak reference to the auth provider, automatically connected by Vertx.
@@ -164,16 +166,6 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 		return this.friends.stream().filter(friend -> friend.getFriendId().equals(friendId)).findFirst().orElse(null);
 	}
 
-	@Override
-	public void writeToBuffer(Buffer buffer) {
-		Json.encodeToBuffer(this).writeToBuffer(buffer);
-	}
-
-	@Override
-	public int readFromBuffer(int pos, Buffer buffer) {
-		throw new UnsupportedOperationException();
-	}
-
 	public Date getCreatedAt() {
 		return createdAt;
 	}
@@ -204,5 +196,13 @@ public class UserRecord extends MongoRecord implements User, Serializable, Clust
 
 	public void setUsername(String username) {
 		this.username = username;
+	}
+
+	public String getPrivacyToken() {
+		return privacyToken;
+	}
+
+	public void setPrivacyToken(String privacyToken) {
+		this.privacyToken = privacyToken;
 	}
 }

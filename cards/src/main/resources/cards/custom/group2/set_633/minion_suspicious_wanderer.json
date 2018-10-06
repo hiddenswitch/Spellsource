@@ -1,0 +1,17 @@
+{
+  "name": "Suspicious Wanderer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Echo. Deflect.",
+  "attributes": {
+    "DEFLECT": true,
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

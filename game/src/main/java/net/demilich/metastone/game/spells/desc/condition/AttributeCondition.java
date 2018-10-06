@@ -1,8 +1,5 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import java.util.List;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -10,6 +7,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.List;
 
 public class AttributeCondition extends Condition {
 
@@ -37,16 +37,16 @@ public class AttributeCondition extends Condition {
 			return entity.hasAttribute(attribute);
 		}
 
-		int targetValue = desc.getInt(ConditionArg.VALUE);
+		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, entity, source, 0);
 
 		int actualValue;
 		if (attribute == Attribute.ATTACK) {
 			if (entity instanceof Actor) {
-				actualValue = ((Actor)entity).getAttack();	
+				actualValue = ((Actor) entity).getAttack();
 			} else {
 				actualValue = entity.getAttributeValue(attribute);
 			}
-			
+
 		} else {
 			actualValue = entity.getAttributeValue(attribute);
 		}

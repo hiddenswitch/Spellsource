@@ -13,21 +13,10 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 2,
-      "card": "spell_tail_swipe",
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "heroClass": "OPPONENT",
-            "cardType": "SPELL"
-          },
-          {
-            "class": "CardFilter",
-            "rarity": "LEGENDARY",
-            "invert": true
-          }
-        ]
+        "class": "CardFilter",
+        "heroClass": "OPPONENT",
+        "cardType": "SPELL"
       }
     }
   },

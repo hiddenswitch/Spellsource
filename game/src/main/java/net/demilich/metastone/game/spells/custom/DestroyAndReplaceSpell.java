@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -14,6 +12,13 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.Map;
+
+/**
+ * Destroys all minions and replaces them with the specified {@link SpellArg#CARD}.
+ * <p>
+ * Implements Poison Seeds.
+ */
 public class DestroyAndReplaceSpell extends Spell {
 
 	public static SpellDesc create() {
@@ -40,7 +45,7 @@ public class DestroyAndReplaceSpell extends Spell {
 		}
 
 		SpellDesc destroySpell = DestroySpell.create(EntityReference.FRIENDLY_MINIONS);
-		context.getLogic().castSpell(player.getId(), destroySpell, source, null, true);
+		context.getLogic().castSpell(player.getId(), destroySpell, source, EntityReference.FRIENDLY_MINIONS, true);
 		context.getLogic().endOfSequence();
 
 		String[] treants = new String[minionCount];

@@ -1,7 +1,7 @@
 package net.demilich.metastone.game.events;
 
+import com.hiddenswitch.spellsource.common.Client;
 import com.hiddenswitch.spellsource.common.GameState;
-import com.hiddenswitch.spellsource.common.Writer;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
@@ -47,8 +47,8 @@ public interface Notification extends Serializable {
 	String getDescription(GameContext context, int playerId);
 
 	/**
-	 * Should this notification be sent in the {@link Writer#onNotification(Notification,
-	 * GameState)} pipeline altogether?
+	 * Should this notification be sent in the {@link Client#sendNotification(Notification, GameState)} pipeline
+	 * altogether?
 	 *
 	 * @return {@code false} by default.
 	 */

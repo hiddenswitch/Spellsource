@@ -1,0 +1,27 @@
+{
+  "name": "Menagerie Caretaker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Add a 1/1 Beast, Dragon, and Murloc to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "token_spiderling",
+        "token_whelpling",
+        "token_murkling"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

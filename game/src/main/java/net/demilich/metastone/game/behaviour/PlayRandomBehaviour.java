@@ -7,7 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 
 import java.util.*;
 
-public class PlayRandomBehaviour extends AbstractBehaviour {
+public class PlayRandomBehaviour extends IntelligentBehaviour {
 
 	public PlayRandomBehaviour() {
 	}

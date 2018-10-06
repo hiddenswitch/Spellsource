@@ -1,0 +1,16 @@
+{
+  "name": "Permanent Test",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

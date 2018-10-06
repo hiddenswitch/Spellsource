@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -17,15 +17,15 @@ public class JoustSpell extends Spell {
 		if (!joustEvent.isWon()) {
 			SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
 			if (spell1 != null) {
-				SpellUtils.castChildSpell(context, player, spell1, source, target);	
+				SpellUtils.castChildSpell(context, player, spell1, source, target, joustEvent.getEventTarget());
 			}
-			
+
 			return;
 		}
-		
+
 		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
 		if (spell2 != null) {
-			SpellUtils.castChildSpell(context, player, spell2, source, target);
+			SpellUtils.castChildSpell(context, player, spell2, source, target, joustEvent.getEventTarget());
 			return;
 		}
 

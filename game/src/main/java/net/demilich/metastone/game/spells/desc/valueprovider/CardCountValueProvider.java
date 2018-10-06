@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
-import net.demilich.metastone.game.spells.desc.source.HandSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
+import net.demilich.metastone.game.spells.desc.source.HandSource;
 
 public class CardCountValueProvider extends ValueProvider {
 
@@ -19,14 +19,14 @@ public class CardCountValueProvider extends ValueProvider {
 	@Override
 	@Suspendable
 	protected int provideValue(GameContext context, Player player, Entity target, Entity source) {
-		CardSource cardSource = (CardSource) desc.get(ValueProviderArg.CARD_SOURCE);
+		CardSource cardSource = (CardSource) getDesc().get(ValueProviderArg.CARD_SOURCE);
 		if (cardSource == null) {
 			cardSource = new CardSourceDesc(HandSource.class).create();
 		}
 
 		EntityFilter cardFilter;
-		if (desc.containsKey(ValueProviderArg.CARD_FILTER)) {
-			cardFilter = (EntityFilter) desc.get(ValueProviderArg.CARD_FILTER);
+		if (getDesc().containsKey(ValueProviderArg.CARD_FILTER)) {
+			cardFilter = (EntityFilter) getDesc().get(ValueProviderArg.CARD_FILTER);
 		} else {
 			cardFilter = AndFilter.create();
 		}

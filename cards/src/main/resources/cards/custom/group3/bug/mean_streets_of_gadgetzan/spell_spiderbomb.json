@@ -1,0 +1,25 @@
+{
+  "name": "Spiderbomb",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage. Summon a 1/1 Spiderling.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 3
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_spiderling"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

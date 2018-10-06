@@ -1,28 +1,47 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.Logic;
-import com.hiddenswitch.spellsource.Spellsource;
+import com.github.fromage.quasi.fibers.Fiber;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.Strand;
+import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
+import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.client.models.Emote;
+import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.client.models.EnvelopeGame;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.common.*;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.impl.server.BotsServiceBehaviour;
+import com.hiddenswitch.spellsource.impl.server.Configuration;
+import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
-import com.hiddenswitch.spellsource.util.RpcClient;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.VertxException;
-import io.vertx.ext.sync.Sync;
+import com.hiddenswitch.spellsource.models.MatchExpireRequest;
+import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.EventBus;
+import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.eventbus.MessageProducer;
+import io.vertx.core.http.HttpServerRequest;
+import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.impl.ConcurrentHashSet;
+import io.vertx.core.json.Json;
+import io.vertx.core.streams.Pump;
+import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -32,68 +51,285 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.NetworkDelegate;
 import net.demilich.metastone.game.utils.TurnState;
-import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.stream.Collectors;
+
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.toList;
 
 /**
  * A networked game context from the server's point of view.
  * <p>
- * In addition to storing game state, this class also stores references to {@link Writer} objects that (1) get notified
- * when game state changes and how, and (2) allow this class to {@link net.demilich.metastone.game.behaviour.Behaviour#requestAction(GameContext,
- * Player, List)} and {@link net.demilich.metastone.game.behaviour.Behaviour#mulligan(GameContext, Player, List)} over a
- * network.
+ * In addition to storing game state, this class also stores references to {@link Client} objects that (1) get notified
+ * when game state changes and how, and (2) allow this class to {@link Behaviour#requestAction(GameContext, Player,
+ * List)} and {@link Behaviour#mulligan(GameContext, Player, List)} over a network.
  * <p>
  * This class also automatically adds support for persistence effects written on cards using a {@link
  * PersistenceTrigger}.
  */
-public class ServerGameContext extends GameContext {
-	private final String gameId;
-	private Map<Player, Writer> listenerMap = new ConcurrentHashMap<>();
-	private final Map<CallbackId, GameplayRequest> requestCallbacks = new ConcurrentHashMap<>();
-	private boolean isRunning = true;
-	private final transient HashSet<Handler<ServerGameContext>> onGameEndHandlers = new HashSet<>();
+public class ServerGameContext extends GameContext implements Server {
+	public static final String WRITER_ADDRESS_PREFIX = "Games::writer[";
+	public static final String READER_ADDRESS_PREFIX = "Games::reader[";
+
+	private final transient ReentrantLock lock = new ReentrantLock();
+	private final transient Queue<SuspendableAction1<ServerGameContext>> onGameEndHandlers = new ConcurrentLinkedQueue<>();
+	private final transient Map<Integer, Future<Client>> clientsReady = new HashMap<>();
+	private final transient List<Client> clients = new ArrayList<>();
+	private final List<Configuration> playerConfigurations = new ArrayList<>();
+	private final List<Closeable> closeables = new ArrayList<>();
+	private final GameId gameId;
 	private final List<Trigger> gameTriggers = new ArrayList<>();
-	private final transient RpcClient<Logic> logic;
 	private final Scheduler scheduler;
-	private AtomicInteger eventCounter = new AtomicInteger(0);
-	private int timerElapsedForPlayerId;
+	private boolean isRunning = false;
+	private final AtomicInteger eventCounter = new AtomicInteger(0);
+	private transient Fiber<Void> fiber;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
-	private TimerId turnTimerId;
+	private transient TimerId turnTimerId;
+	private boolean didExpire;
 
 	/**
 	 * {@inheritDoc}
 	 * <p>
-	 * Additionally, this class uses the provided {@link RpcClient} to implement persistence effects.
 	 *
-	 * @param player1    The first player.
-	 * @param player2    The second player.
-	 * @param deckFormat The legal cards that can be played.
-	 * @param gameId     The game ID that corresponds to this game context.
-	 * @param logic      The {@link RpcClient} on which this trigger will make {@link Logic} requests.
-	 * @param scheduler  The {@link Scheduler} instance to use for scheduling game events.
+	 * @param gameId               The game ID that corresponds to this game context.
+	 * @param scheduler            The {@link Scheduler} instance to use for scheduling game events.
+	 * @param playerConfigurations The information about the players who will be connecting / playing this game context
 	 */
-	public ServerGameContext(Player player1, Player player2, DeckFormat deckFormat, String gameId, RpcClient<Logic> logic, Scheduler scheduler) {
-		// The player's IDs are set here
-		super(player1, player2, new GameLogicAsync(), deckFormat);
-		if (player1.getId() == player2.getId()
-				|| player1.getId() == IdFactory.UNASSIGNED
-				|| player2.getId() == IdFactory.UNASSIGNED) {
-			player1.setId(IdFactory.PLAYER_1);
-			player2.setId(IdFactory.PLAYER_2);
-		}
-		this.gameId = gameId;
-		this.logic = logic;
-		this.scheduler = scheduler;
+	public ServerGameContext(GameId gameId, Scheduler scheduler, List<Configuration> playerConfigurations) {
+		super();
 
+		this.gameId = gameId;
+		this.scheduler = scheduler;
+		// Save the information used to create this game
+		this.playerConfigurations.addAll(playerConfigurations);
+
+		// The deck format will be the smallest one that can contain all the cards in the decks.
+		setDeckFormat(DeckFormat.getSmallestSupersetFormat(playerConfigurations
+				.stream()
+				.map(Configuration::getDeck)
+				// These must be game decks at this point
+				.map(deck -> (GameDeck) deck)
+				.collect(toList())));
+		// Mulligans should happen simultaneously
+		setLogic(new NetworkedGameLogic());
+
+		// Persistence effects mean cards that remember things that have happened to them in other games
 		enablePersistenceEffects();
 		enableTriggers();
+
+		// Each configuration corresponds to a human or bot player
+		// To accommodate spectators or multiple-controllers-per-game-player, use additional Client objects
+		for (Configuration configuration : getPlayerConfigurations()) {
+			UserId userId = configuration.getUserId();
+
+			// Initialize the player objects
+			// This will create an actual valid deck and player object
+			Player player = Player.forUser(userId.toString(), configuration.getPlayerId(), (GameDeck) configuration.getDeck());
+			setPlayer(configuration.getPlayerId(), player);
+			// ...and import all the attributes that might be specific to the queue and its rules (typically just the
+			// DECK_ID and USER_ID attributes at the moment.
+			for (Map.Entry<Attribute, Object> kv : configuration.getPlayerAttributes().entrySet()) {
+				player.getAttributes().put(kv.getKey(), kv.getValue());
+			}
+
+			// Bots simply forward their requests to a bot service provider, that executes the bot logic on a worker thread
+			if (configuration.isBot()) {
+				player.getAttributes().put(Attribute.AI_OPPONENT, true);
+				setBehaviour(configuration.getPlayerId(), new BotsServiceBehaviour());
+				// Does not have a client representing it
+			} else {
+				// Connect to the websocket representing this user by connecting to its handler advertised on the event bus
+				EventBus bus = Vertx.currentContext().owner().eventBus();
+				MessageConsumer<Buffer> consumer = bus.consumer(getMessagesFromClientAddress(userId.toString()));
+				// By using a publisher, we do not require that there be a working connection while sending
+				MessageProducer<Buffer> producer = bus.publisher(getMessagesFromServerAddress(userId.toString()));
+
+				// We'll want to unregister and close these when this instance is disposed
+				closeables.add(consumer::unregister);
+				closeables.add(fut -> {
+					producer.close();
+					fut.handle(Future.succeededFuture());
+				});
+
+				// Create a client that handles game events and action/mulligan requests
+				UnityClientBehaviour client = new UnityClientBehaviour(this,
+						new VertxScheduler(Vertx.currentContext().owner()),
+						consumer.bodyStream(),
+						producer,
+						userId,
+						configuration.getPlayerId(),
+						configuration.getNoActivityTimeout());
+
+				// This client too needs to be closed
+				closeables.add(client);
+
+				// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
+				// and mulligan calls
+				setBehaviour(configuration.getPlayerId(), client);
+				// However, unlike a behaviour, there can be multiple clients per player ID. This will facilitate spectating.
+				getClients().add(client);
+				// This future will be completed when FIRST_MESSAGE is received from the client. And the actual unity client
+				// will only be notified to send this message when the constructor finishes.
+				Future<Client> fut = Future.future();
+				clientsReady.put(configuration.getPlayerId(), fut);
+			}
+		}
+	}
+
+	/**
+	 * Sends game traffic over the {@link com.hiddenswitch.spellsource.Connection} messaging system.
+	 *
+	 * @return A way to disconnect the machinery that makes the messaging happen for this particular server instance.
+	 */
+	public static Closeable handleConnections() {
+		Vertx vertx = Vertx.currentContext().owner();
+		EventBus bus = vertx.eventBus();
+		Set<MessageConsumer<Buffer>> consumers = new ConcurrentHashSet<>();
+		Set<MessageProducer<Buffer>> producers = new ConcurrentHashSet<>();
+
+		// Set up the connectivity for the user.
+		Handler<Connection> handler = connection -> {
+			String userId = connection.userId();
+			MessageConsumer<Buffer> consumer = bus.consumer(getMessagesFromServerAddress(userId));
+			MessageProducer<Buffer> producer = bus.publisher(getMessagesFromClientAddress(userId));
+			consumers.add(consumer);
+			producers.add(producer);
+
+			// Read messages from the client and send them to the server processing this request.
+			connection.handler(suspendableHandler(env -> {
+				if (env.getGame() != null && env.getGame().getClientToServer() != null) {
+					producer.send(Buffer.buffer(Json.encode(env.getGame().getClientToServer())));
+				}
+			}));
+
+			// Write messages from the server to the game body.
+			consumer.bodyStream().handler(suspendableHandler(serverToClientBuf -> {
+				try {
+					connection.write(new Envelope().game(
+							new EnvelopeGame().serverToClient(Json.decodeValue(serverToClientBuf, ServerToClientMessage.class))));
+				} catch (IllegalStateException ex) {
+					// TODO: We might want to signal to the server that the message it tried to send failed.
+					logger.warn("handleConnections {}: Socket disconnected for message {}", userId, serverToClientBuf);
+				}
+			}));
+
+			// When the user disconnects, make sure to remove these event bus registrations
+			connection.endHandler(suspendableHandler(v1 -> {
+				consumers.remove(consumer);
+				producers.remove(producer);
+				producer.close();
+				consumer.unregister();
+			}));
+		};
+
+		// Handle the connections here.
+		Connection.connected(handler);
+
+		// Remove all remaining handlers
+		return completionHandler -> {
+			Connection.getHandlers().remove(handler);
+			for (MessageProducer<Buffer> producer : producers) {
+				producer.close();
+			}
+
+			CompositeFuture.all(consumers.stream().map(mc -> {
+				Future<Void> future = Future.future();
+				mc.unregister(future);
+				return future;
+			}).collect(toList())).setHandler(v1 -> {
+				if (v1.succeeded()) {
+					completionHandler.handle(Future.succeededFuture());
+				} else {
+					completionHandler.handle(Future.failedFuture(v1.cause()));
+				}
+			});
+		};
+	}
+
+	/**
+	 * Creates a web socket handler to route game traffic (actions, game states, etc.) between the HTTP/WS client this
+	 * handler will create and the appropriate event bus address for game traffic.
+	 *
+	 * @return A suspendable handler.
+	 * @deprecated Game traffic should come across {@link #handleConnections()} instead.
+	 */
+	@Deprecated
+	public static Handler<RoutingContext> createWebSocketHandler() {
+		// Eventually this will be migrated to the Connection / envelope messaging scheme.
+		return context -> {
+			String userId = Accounts.userId(context);
+			Vertx vertx = context.vertx();
+			EventBus bus = vertx.eventBus();
+
+			logger.debug("createWebSocketHandler: Creating WebSocket to EventBus mapping for userId {}", userId);
+
+			ServerWebSocket socket;
+			HttpServerRequest request = context.request();
+
+			try {
+				socket = request.upgrade();
+			} catch (IllegalStateException ex) {
+				logger.error("createWebSocketHandler: Failed to upgrade with error: {}. Request={}", new ToStringBuilder(request)
+						.append("headers", request.headers().entries())
+						.append("uri", request.uri())
+						.append("userId", userId).toString());
+				throw ex;
+			}
+
+			MessageConsumer<Buffer> consumer = bus.consumer(getMessagesFromServerAddress(userId));
+			MessageProducer<Buffer> producer = bus.publisher(getMessagesFromClientAddress(userId));
+			// This pumps messages to and from the event bus, but inside a fiber
+			Pump socketToEventBus = new SuspendablePump<>(socket, producer, Integer.MAX_VALUE).start();
+			Pump eventBusToSocket = new SuspendablePump<>(consumer.bodyStream(), socket, Integer.MAX_VALUE).start();
+
+			socket.closeHandler(suspendableHandler(disconnected -> {
+				try {
+					// Include a reference in this lambda to ensure the pump lasts
+					eventBusToSocket.numberPumped();
+					producer.close();
+					consumer.unregister();
+					socketToEventBus.stop();
+				} catch (Throwable throwable) {
+					logger.warn("createWebSocketHandler socket closeHandler: Failed to clean up resources from a user {} socket due to an exception {}", userId, throwable);
+				}
+			}));
+
+		};
+	}
+
+	/**
+	 * Represents the address on the event bus to which the client sends its outgoing messages.
+	 * <p>
+	 * Messages <b>consumed</b> from this address will be arriving <b>from</b> the web socket and <b>received</b> by the
+	 * server infrastructure (typically).
+	 *
+	 * @param userId The user from whom messages will arrive
+	 * @return
+	 */
+	@NotNull
+	public static String getMessagesFromClientAddress(String userId) {
+		return READER_ADDRESS_PREFIX + userId + "]";
+	}
+
+	/**
+	 * Represents the address on the event bus to which the client receives incoming messages.
+	 * <p>
+	 * Messages <b>sent</b> to this address will be written <b>to</b> the web socket and <b>received</b> by the Unity
+	 * client.
+	 *
+	 * @param userId The user to whom messages should be delivered
+	 * @return
+	 */
+	@NotNull
+	public static String getMessagesFromServerAddress(String userId) {
+		return WRITER_ADDRESS_PREFIX + userId + "]";
 	}
 
 	/**
@@ -102,103 +338,242 @@ public class ServerGameContext extends GameContext {
 	 * @see PersistenceTrigger for more about how this method is used.
 	 */
 	private void enablePersistenceEffects() {
-		this.getGameTriggers().add(new PersistenceTrigger(logic, this, this.gameId));
+		getGameTriggers().add(new PersistenceTrigger(this, this.gameId));
 	}
 
 	/**
 	 * Enables this match to use custom networked triggers
 	 */
 	private void enableTriggers() {
-		for (com.hiddenswitch.spellsource.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
-			final Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
+		for (com.hiddenswitch.spellsource.impl.Trigger trigger : Spellsource.spellsource().getGameTriggers().values()) {
+			Map<SpellArg, Object> arguments = new SpellDesc(DelegateSpell.class);
 			arguments.put(SpellArg.NAME, trigger.getSpellId());
 			SpellDesc spell = new SpellDesc(arguments);
-			final Enchantment e = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
-			e.setOwner(0);
-			this.getGameTriggers().add(e);
+			Enchantment enchantment = new Enchantment(trigger.getEventTriggerDesc().create(), spell);
+			enchantment.setOwner(0);
+			getGameTriggers().add(enchantment);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * @return A simultaneous mulligan game logic
+	 */
 	@Override
-	public GameLogicAsync getLogic() {
-		return (GameLogicAsync) super.getLogic();
+	public NetworkedGameLogic getLogic() {
+		return (NetworkedGameLogic) super.getLogic();
 	}
 
-	public void setUpdateListener(Player player, Writer listener) {
-		listenerMap.put(player, listener);
-	}
-
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Simultaneously processes mulligans and awaits until all human players have sent a "FIRST_MESSAGE."
+	 */
 	@Override
 	@Suspendable
 	public void init() {
-		logger.debug("{} networkedPlay: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-		getLogic().contextReady();
+		logger.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
+
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
 		setActivePlayerId(getPlayer(startingPlayerId).getId());
 
-		logger.debug("{} networkedPlay: Updating active players", getGameId());
-		updateActivePlayers();
-		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
+		// Await both clients ready for 10s
+		Future bothClientsReady;
+		if (!clientsReady.values().stream().allMatch(Future::isComplete)) {
+			bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, 25000L);
+		} else {
+			bothClientsReady = Future.succeededFuture();
+		}
+		// One of the two clients did not connect in time, log a win for the player that connected
+		if (bothClientsReady == null
+				|| bothClientsReady.failed()) {
+			// Mark the players that have not connected in time as destroyed, which in updateAndGetGameOver will eventually
+			// lead to a double loss
+			for (Map.Entry<Integer, Future<Client>> entry : clientsReady.entrySet()) {
+				if (!entry.getValue().isComplete()) {
+					logger.warn("init {}: Game prematurely ended because player {} did not connect in 25s", getGameId(), entry.getKey());
+					getLogic().concede(entry.getKey());
+				}
+			}
+			isRunning = false;
+			// resume() will check if the game is over
+			return;
+		}
+
+		// When players reconnect, we don't want them to trigger these futures anymore
+		clientsReady.clear();
 
 		// Make sure the players are initialized before sending the original player updates.
 		getLogic().initializePlayer(IdFactory.PLAYER_1);
 		getLogic().initializePlayer(IdFactory.PLAYER_2);
-		logger.debug("{} networkedPlay: Players initialized", getGameId());
+		logger.trace("init {}: Players initialized", getGameId());
 
-		Future<Void> init1 = Future.future();
-		Future<Void> init2 = Future.future();
+		// Signal to the game context has made everything have valid IDs.
+		getLogic().contextReady();
+
+		logger.trace("init {}: Updating active players", getGameId());
+		for (Client client : getClients()) {
+			client.onActivePlayer(getActivePlayer());
+		}
+
+		// Record the time that we started the game in system milliseconds, in case a card wants to use this for an event-based thing.
+		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
+
+		// Simultaneous mulligan futures
+		Future<List<Card>> mulligan1 = Future.future();
+		Future<List<Card>> mulligan2 = Future.future();
 
 		// Set the mulligan timer
 		final TimerId mulliganTimerId;
-		if (getPlayers().stream().allMatch(Player::isHuman)) {
+		if (getBehaviours().stream().allMatch(Behaviour::isHuman)) {
+			// Only two human players will get timers
 			timerLengthMillis = getLogic().getMulliganTimeMillis();
 			timerStartTimeMillis = System.currentTimeMillis();
-			mulliganTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::endMulligans));
+			mulliganTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler(this::endMulligans));
 		} else {
-			logger.debug("{} networkPlay: No mulligan timer set for game because all players are not human", getGameId());
+			logger.debug("init {}: No mulligan timer set for game because all players are not human", getGameId());
 			timerLengthMillis = null;
 			timerStartTimeMillis = null;
 			mulliganTimerId = null;
 		}
 
+		// Send the clients the current game state
 		updateClientsWithGameState();
 
-		getLogic().initAsync(getActivePlayerId(), true, p -> init1.complete());
-		getLogic().initAsync(getOpponent(getActivePlayer()).getId(), false, p -> init2.complete());
+		// Simultaneous mulligans now
+		getLogic().initAsync(getActivePlayerId(), true, mulligan1::complete);
+		getLogic().initAsync(getNonActivePlayerId(), false, mulligan2::complete);
+		// If this is interrupted, it'll bubble up to the general interrupt handler
+		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligan1, mulligan2)::setHandler);
 
-		// Mulligan simultaneously now
-		try {
-			CompositeFuture done = Sync.awaitResult(h -> CompositeFuture.all(init1, init2).setHandler(h), 2 * GameLogic.DEFAULT_MULLIGAN_TIME * 1000);
-		} catch (VertxException ex) {
-			logger.error("{} init: Failed to mulligan due to unknown error: {}", getGameId(), ex);
+		// If we got this far, we should cancel the time
+		if (mulliganTimerId != null) {
+			scheduler.cancelTimer(mulliganTimerId);
 		}
 
-		finishMulliganTimer(mulliganTimerId);
+		// The timer will have completed the mulligans, that's why we don't timeout simultaneous mulligans
+		if (simultaneousMulligans == null || simultaneousMulligans.failed()) {
+			// An error occurred
+			logger.error("init {}: The mulligan phase ended prematurely", getGameId());
+		}
+
+		try {
+			startGame();
+		} catch (NullPointerException | IndexOutOfBoundsException playerNull) {
+			logger.error("init {}: Game already ended during mulligan phase.", getGameId());
+		}
+
+	}
+
+	/**
+	 * {@inheritDoc}
+	 * <p>
+	 * Starts playing in a {@link Fiber} (i.e., {@link #play(boolean)} is called with {@code true}).
+	 */
+	@Override
+	@Suspendable
+	public void play() {
+		play(true);
+	}
+
+	/**
+	 * Plays the game. {@link GameContext#play()} is eventually called.
+	 *
+	 * @param fork When {@code false}, blocks until the game is done. Otherwise, plays the game inside a {@link Fiber}
+	 */
+	@Suspendable
+	public void play(boolean fork) {
+		isRunning = true;
+		if (fork) {
+			// We're going to build this fiber with a huge stack
+			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), 512, () -> {
+				try {
+					super.play();
+				} catch (VertxException interrupted) {
+					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
+					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
+						logger.debug("resume {}: Interrupted gracefully");
+					} else {
+						logger.error("resume {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
+					}
+					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
+					// is allowed to interrupt the fiber.
+				} catch (RuntimeException other) {
+					logger.error("resume {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
+					try {
+						endGame();
+					} catch (Throwable endGameError) {
+						logger.error("resume {}: Ending the game threw an exception.", getGameId(), endGameError);
+						// TODO: Deal with any other issues
+					}
+				}
+				return null;
+			});
+
+			fiber.start();
+		} else {
+			super.play();
+		}
 	}
 
 	@Override
 	@Suspendable
 	public void startTurn(int playerId) {
-		processTurnTimers(getActivePlayerId());
+		lock.lock();
+		try {
+			// Start the turn timer
+			if (turnTimerId != null) {
+				scheduler.cancelTimer(turnTimerId);
+			}
 
-		super.startTurn(playerId);
-		GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
-		getListenerMap().get(getPlayer1()).onUpdate(state);
-		getListenerMap().get(getPlayer2()).onUpdate(state);
+			if (getBehaviours().get(getNonActivePlayerId()).isHuman()) {
+				timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
+				timerStartTimeMillis = System.currentTimeMillis();
+
+				turnTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler(ignored -> {
+					// Since executing the callback may itself trigger more action requests, we'll indicate to
+					// the NetworkDelegate (i.e., this ServerGameContext instance) that further
+					// networkRequestActions should be executed immediately.
+					Client client = getClient(playerId);
+					if (client == null) {
+						// Simply end the turn, since there were no requests pending to begin with
+						endTurn();
+					} else {
+						client.elapseTurn();
+					}
+				}));
+
+			} else {
+				timerLengthMillis = null;
+				timerStartTimeMillis = null;
+				logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
+			}
+			super.startTurn(playerId);
+			GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
+			for (Client client : getClients()) {
+				client.onUpdate(state);
+			}
+		} finally {
+			lock.unlock();
+		}
 	}
 
+	@Override
 	@Suspendable
 	public void endTurn() {
-		super.endTurn();
-		if (turnTimerId != null) {
-			scheduler.cancelTimer(turnTimerId);
+		lock.lock();
+		try {
+			super.endTurn();
+			if (turnTimerId != null) {
+				scheduler.cancelTimer(turnTimerId);
+			}
+			for (Client client : getClients()) {
+				client.onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
+			}
+		} finally {
+			lock.unlock();
 		}
-		getListenerMap().get(getPlayer1()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
-		getListenerMap().get(getPlayer2()).onTurnEnd(getActivePlayer(), getTurn(), getTurnState());
-	}
-
-	private Player getNonActivePlayer() {
-		return getOpponent(getActivePlayer());
 	}
 
 	/**
@@ -207,26 +582,25 @@ public class ServerGameContext extends GameContext {
 	 * @param ignored The ignored timer elapse result.
 	 */
 	@Suspendable
-	@SuppressWarnings("unchecked")
 	private void endMulligans(long ignored) {
-		Iterator<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().iterator();
-		while (requests.hasNext()) {
-			Map.Entry<CallbackId, GameplayRequest> next = requests.next();
-			if (next.getValue().type == GameplayRequestType.MULLIGAN) {
-				requests.remove();
-				// TODO: We should probably actually mulligan out the cards that the player checked a big X on
-				((Handler<List<Card>>) next.getValue().handler).handle(Collections.emptyList());
-			}
+		for (Client client : getClients()) {
+			client.elapseMulligan();
 		}
 	}
 
 	@Override
 	@Suspendable
 	public void resume() {
+		if (!isRunning()) {
+			return;
+		}
 		while (!updateAndGetGameOver()) {
+			if (!isRunning()) {
+				break;
+			}
 			startTurn(getActivePlayerId());
 			while (takeActionInTurn()) {
-				if (!isRunning) {
+				if (!isRunning()) {
 					break;
 				}
 			}
@@ -237,62 +611,8 @@ public class ServerGameContext extends GameContext {
 		endGame();
 	}
 
-	@Suspendable
-	private void finishMulliganTimer(TimerId mulliganTimerId) {
-		logger.debug("{} networkPlay: Received mulligans", getGameId());
-		if (mulliganTimerId != null) {
-			scheduler.cancelTimer(mulliganTimerId);
-		}
-	}
-
-	@Suspendable
-	private void processTurnTimers(int activePlayerId) {
-		// Start the turn timer
-		if (turnTimerId != null) {
-			scheduler.cancelTimer(turnTimerId);
-		}
-		timerElapsedForPlayerId = -1;
-		if (getNonActivePlayer().isHuman()) {
-			timerLengthMillis = (long) getTurnTimeForPlayer(activePlayerId);
-			timerStartTimeMillis = System.currentTimeMillis();
-
-			turnTimerId = scheduler.setTimer(timerLengthMillis, Sync.fiberHandler(this::elapseTurn));
-		} else {
-			timerLengthMillis = null;
-			timerStartTimeMillis = null;
-			logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
-		}
-	}
-
-	@Suspendable
-	protected void elapseTurn(long ignored) {
-		// Since executing the callback may itself trigger more action requests, we'll indicate to
-		// the NetworkDelegate (i.e., this ServerGameContext instance) that further
-		// networkRequestActions should be executed immediately.
-		timerElapsedForPlayerId = getActivePlayerId();
-
-		// Enumerate the pending callbacks and remove them.
-		Iterator<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().iterator();
-		while (requests.hasNext()) {
-			Map.Entry<CallbackId, GameplayRequest> next = requests.next();
-			GameplayRequest request = next.getValue();
-			if (request.type == GameplayRequestType.ACTION) {
-				requests.remove();
-				processActionForElapsedTurn(request.actions, request.handler);
-			}
-		}
-
-		// At this point, end turn should have been called.
-	}
-
 	private int getTurnTimeForPlayer(int activePlayerId) {
 		return getLogic().getTurnTimeMillis(activePlayerId);
-	}
-
-	@Suspendable
-	protected void updateActivePlayers() {
-		getListenerMap().get(getActivePlayer()).onActivePlayer(getActivePlayer());
-		getListenerMap().get(getNonActivePlayer()).onActivePlayer(getActivePlayer());
 	}
 
 	@Override
@@ -302,10 +622,11 @@ public class ServerGameContext extends GameContext {
 	}
 
 	@Suspendable
-	public void updateClientsWithGameState() {
+	private void updateClientsWithGameState() {
 		GameState state = getGameStateCopy();
-		getListenerMap().get(getPlayer1()).onUpdate(state);
-		getListenerMap().get(getPlayer2()).onUpdate(state);
+		for (Client client : getClients()) {
+			client.onUpdate(state);
+		}
 	}
 
 	@Override
@@ -313,12 +634,14 @@ public class ServerGameContext extends GameContext {
 	public void fireGameEvent(GameEvent gameEvent) {
 		eventCounter.incrementAndGet();
 		final GameState gameStateCopy = getGameStateCopy();
-		getListenerMap().get(getPlayer1()).onNotification(gameEvent, gameStateCopy);
-		getListenerMap().get(getPlayer2()).onNotification(gameEvent, gameStateCopy);
+		for (Client client : getClients()) {
+			client.sendNotification(gameEvent, gameStateCopy);
+		}
 		super.fireGameEvent(gameEvent, gameTriggers);
 		if (eventCounter.decrementAndGet() == 0) {
-			getListenerMap().get(getPlayer1()).lastEvent();
-			getListenerMap().get(getPlayer2()).lastEvent();
+			for (Client client : getClients()) {
+				client.lastEvent();
+			}
 		}
 	}
 
@@ -339,142 +662,48 @@ public class ServerGameContext extends GameContext {
 
 			if (host != null && Zones.PRIVATE.contains(host.getZone())) {
 				int owner = host.getOwner();
-				getListenerMap().get(getPlayer(owner)).onNotification(triggerFired, gameStateCopy);
+				Client client = getClient(owner);
+
+				// Don't send spurious, private notifications to bot players / players not represented by clients
+				if (client != null) {
+					client.sendNotification(triggerFired, gameStateCopy);
+				}
 				return;
 			}
 		}
 
-		getListenerMap().get(getPlayer2()).onNotification(triggerFired, gameStateCopy);
-		getListenerMap().get(getPlayer1()).onNotification(triggerFired, gameStateCopy);
+		for (Client client : getClients()) {
+			client.sendNotification(triggerFired, gameStateCopy);
+		}
 	}
 
 	@Override
+	@Suspendable
 	public void onWillPerformGameAction(int playerId, GameAction action) {
 		super.onWillPerformGameAction(playerId, action);
-
-		final GameState gameStateCopy = getGameStateCopy();
-		getListenerMap().get(getPlayer1()).onNotification(action, gameStateCopy);
-		getListenerMap().get(getPlayer2()).onNotification(action, gameStateCopy);
-	}
-
-	/**
-	 * Request an action from a {@link Writer} that corresponds to the given {@code playerId}.
-	 *
-	 * @param state    The game state to send.
-	 * @param playerId The player ID to request from.
-	 * @param actions  The valid actions to choose from.
-	 * @param callback A handler for the response.
-	 */
-	@Suspendable
-	@Override
-	public void networkRequestAction(GameState state, int playerId, List<GameAction> actions, Handler<GameAction> callback) {
-		String id = RandomStringUtils.randomAscii(8);
-		logger.debug("{} networkRequestAction: Requesting actions {} with callback {} for playerId={} userId={}", getGameId(), actions, id, playerId, getPlayer(playerId).getUserId());
-		final CallbackId callbackId = new CallbackId(id, playerId);
-		requestCallbacks.put(callbackId, new GameplayRequest(GameplayRequestType.ACTION, state, actions, callback));
-		// Send a state update for the other player too
-		getListenerMap().get(getOpponent(getPlayer(playerId))).onUpdate(state);
-
-		// The player's turn may have ended, so handle the action immediately in this case.
-		if (timerElapsedForPlayerId == playerId) {
-			getListenerMap().get(getPlayer(playerId)).onUpdate(state);
-			requestCallbacks.remove(callbackId);
-			processActionForElapsedTurn(actions, callback);
-		} else {
-			getListenerMap().get(getPlayer(playerId)).onRequestAction(id, state, actions);
+		GameState gameStateCopy = getGameStateCopy();
+		for (Client client : getClients()) {
+			client.sendNotification(action, gameStateCopy);
 		}
-
-
 	}
 
-	/**
-	 * When a player's turn ends prematurely, this method will process a player's turn, choosing {@link
-	 * ActionType#BATTLECRY} and {@link ActionType#DISCOVER} randomly and performing an {@link ActionType#END_TURN} as
-	 * soon as possible.
-	 *
-	 * @param actions  The possible {@link GameAction} for this request.
-	 * @param callback The callback for this request.
-	 */
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	private void processActionForElapsedTurn(List<GameAction> actions, Handler callback) {
-		// If the request contains an end turn action, execute it. Otherwise, choose an action
-		// at random.
-		final GameAction action = actions.stream()
-				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
-				.findFirst().orElse(getLogic().getRandom(actions));
-
-		Sync.fiberHandler((Handler<GameAction>) callback).handle(action);
-	}
-
-	/**
-	 * Request an action from the {@link Writer} that corresponds to the given {@code player}.
-	 *
-	 * @param player       The player to request from.
-	 * @param starterCards The cards the player started with.
-	 * @param callback     A handler for the response.
-	 */
 	@Override
 	@Suspendable
-	public void networkRequestMulligan(Player player, List<Card> starterCards, Handler<List<Card>> callback) {
-		logger.debug("{} networkRequestMulligan: Requesting mulligan for playerId={} userId={}", getGameId(), player.getId(), player.getUserId());
-		String id = RandomStringUtils.randomAscii(8);
-		requestCallbacks.put(new CallbackId(id, player.getId()), new GameplayRequest(GameplayRequestType.MULLIGAN, starterCards, callback));
-		getListenerMap().get(player).onMulligan(id, getGameStateCopy(), starterCards, player.getId());
-	}
-
-	/**
-	 * Handles the chosen game action from a client.
-	 *
-	 * @param messageId The ID of the message used to request the action.
-	 * @param action    The action chosen.
-	 */
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	public void onActionReceived(String messageId, GameAction action) {
-		// The action may have been removed due to the timer, so it's okay if it doesn't exist.
-		if (!requestCallbacks.containsKey(CallbackId.of(messageId))) {
-			return;
+	public void concede(int playerId) {
+		lock.lock();
+		try {
+			// TODO: Make sure we don't have to do anything special here
+			super.concede(playerId);
+		} finally {
+			lock.unlock();
 		}
-
-		logger.debug("{} onActionReceived: Received action {} for callback {}", getGameId(), action, messageId);
-		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
-		requestCallbacks.remove(CallbackId.of(messageId));
-		Sync.fiberHandler((Handler<GameAction>) handler).handle(action);
-		logger.debug("{} onActionReceived: Executed action {} for callback {}", getGameId(), action, messageId);
 	}
 
-	/**
-	 * Handles the cards that the player chose to discard.
-	 *
-	 * @param messageId      The ID of the message used to request the mulligan.
-	 * @param player         The player that requested the mulligan.
-	 * @param discardedCards The cards the player discarded.
-	 */
-	@SuppressWarnings("unchecked")
+	@Override
 	@Suspendable
-	public void onMulliganReceived(String messageId, Player player, List<Card> discardedCards) {
-		// The mulligan might have been removed due to the timer, so it's okay if it doesn't exist.
-		if (!requestCallbacks.containsKey(CallbackId.of(messageId))) {
-			return;
-		}
-
-		logger.debug("{} onMulliganReceived: Mulligan {} received from userId={}", getGameId(), discardedCards, player.getUserId());
-		final Handler handler = requestCallbacks.get(CallbackId.of(messageId)).handler;
-		requestCallbacks.remove(CallbackId.of(messageId));
-		((Handler<List<Card>>) handler).handle(discardedCards);
-	}
-
-	@Override
-	public void sendGameOver(Player recipient, Player winner) {
-		getListenerMap().get(recipient).onGameEnd(getGameStateCopy(), winner);
-	}
-
-	@Override
 	protected void notifyPlayersGameOver() {
-		for (Player player : getPlayers()) {
-			NetworkBehaviour networkBehaviour = (NetworkBehaviour) player.getBehaviour();
-			networkBehaviour.onGameOverAuthoritative(this, player.getId(), getWinner() != null ? getWinner().getId() : -1);
+		for (Client client : getClients()) {
+			client.sendGameOver(getGameStateCopy(), getWinner());
 		}
 	}
 
@@ -485,111 +714,133 @@ public class ServerGameContext extends GameContext {
 
 	@Override
 	public String getGameId() {
-		return gameId;
-	}
-
-	public Map<Player, Writer> getListenerMap() {
-		return Collections.unmodifiableMap(listenerMap);
-	}
-
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	public void onPlayerReconnected(Player player, Writer writer) {
-		// Update the client
-		setUpdateListener(player, writer);
-
-		// Don't replace the player object! We don't need it
-		// Resynchronize the game states
-		if (player.getId() == PLAYER_1) {
-
-		} else if (player.getId() == PLAYER_2) {
-
-		}
-
-		updateActivePlayers();
-		onGameStateChanged();
-		retryRequests(player);
-	}
-
-	@Suspendable
-	@SuppressWarnings("unchecked")
-	private void retryRequests(Player player) {
-		List<Map.Entry<CallbackId, GameplayRequest>> requests = requestCallbacks.entrySet().stream().filter(e -> e.getKey().playerId == player.getId()).collect(Collectors.toList());
-		if (requests.size() > 0) {
-			requestCallbacks.entrySet().removeIf(e -> e.getKey().playerId == player.getId());
-			requests.forEach(e -> {
-				final GameplayRequest request = e.getValue();
-				switch (request.type) {
-					case ACTION:
-						networkRequestAction(request.state, e.getKey().playerId, request.actions, request.handler);
-						break;
-					case MULLIGAN:
-						networkRequestMulligan(getPlayer(e.getKey().playerId), request.starterCards, request.handler);
-						break;
-					default:
-						logger.error("Unknown gameplay request was pending.");
-						break;
-				}
-			});
-		}
+		return gameId.toString();
 	}
 
 	@Override
 	@Suspendable
-	public void endGame() {
-		super.endGame();
-		onGameEndHandlers.forEach(h -> {
-			h.handle(this);
-		});
+	protected void endGame() {
+		lock.lock();
+		try {
+			isRunning = false;
+			// Close the inbound messages from the client, they should be ignored by these client instances
+			// This way, a user doesn't accidentally trigger some other kind of processing that's only going to be interrupted
+			// later. However, this does block emote processing, which is unfortunate.
+			for (Client client : getClients()) {
+				client.closeInboundMessages();
+			}
+
+			// Don't end the game more than once.
+			if (didCallEndGame()) {
+				return;
+			}
+
+			// This way the message that the game is over doesn't come before the player's connection information is removed
+			// from the server.
+			if (!didExpire) {
+				didExpire = true;
+				try {
+					Matchmaking.expireOrEndMatch(new MatchExpireRequest(getGameId()).setUsers(getUserIds()));
+				} catch (SuspendExecution | InterruptedException execution) {
+					// Ignore (only used to deal with instrumentation issues)
+				}
+			}
+
+			// Actually end the game
+			super.endGame();
+
+			// No end of game handler should be called more than once, so we're removing them one-by-one as we're processing
+			// them.
+			SuspendableAction1<ServerGameContext> handler;
+			while ((handler = onGameEndHandlers.poll()) != null) {
+				try {
+					handler.call(this);
+				} catch (SuspendExecution | InterruptedException execution) {
+					throw new RuntimeException(execution);
+				}
+			}
+
+			// Now that the game is over, we have to stop processing the game event loop. We'll check that we're not in the
+			// loop right now. If we are, we don't need to interrupt ourselves. Conceding, server shutdown and other lifecycle
+			// issues will result, eventually, in calling end game outside this game's event loop. In that case, we'll
+			// interrupt the event loop. Can the event loop itself be in the middle of calling endGame? In that case, the lock
+			// prevents two endGames from being processed simultaneously, along with other important mutating events, like
+			// other callbacks that may be processing player modifications to the game.
+			if (fiber != null && !Strand.currentStrand().equals(fiber)) {
+				fiber.interrupt();
+				fiber = null;
+			}
+
+			// Don't dispose more than once
+			if (!isDisposed()) {
+				dispose();
+			}
+		} finally {
+			lock.unlock();
+		}
+
+	}
+
+	private List<UserId> getUserIds() {
+		return getPlayerConfigurations().stream().map(Configuration::getUserId).collect(toList());
 	}
 
 	@Suspendable
-	public void handleEndGame(Handler<ServerGameContext> handler) {
+	public void handleEndGame(SuspendableAction1<ServerGameContext> handler) {
 		onGameEndHandlers.add(handler);
 	}
 
-	@Suspendable
-	public void kill() {
-		super.endGame();
-		updateAndGetGameOver();
-		isRunning = false;
-		// Clear out even more stuff
-		dispose();
-	}
-
 	@Override
+	@Suspendable
 	public void dispose() {
+		for (Closeable closeable : closeables) {
+			closeable.close(Future.future());
+		}
 		super.dispose();
-		// Clear out the request callbacks
-		requestCallbacks.clear();
-		// Clear the listeners
-		listenerMap.clear();
-		onGameEndHandlers.clear();
 	}
 
 	public List<Trigger> getGameTriggers() {
 		return gameTriggers;
 	}
 
-	public GameAction getActionForMessage(String messageId, int actionIndex) {
-		return requestCallbacks.get(CallbackId.of(messageId)).actions.get(actionIndex);
-	}
-
+	@Override
 	@Suspendable
-	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
-		// Get the player reference
-		final Optional<CallbackId> reqResult = requestCallbacks.keySet().stream().filter(ci -> ci.id.equals(messageId)).findFirst();
-		if (!reqResult.isPresent()) {
-			throw new RuntimeException();
+	public void onEmote(Client sender, int entityId, Emote.MessageEnum message) {
+		for (Client client : getClients()) {
+			client.sendEmote(entityId, message);
 		}
-		CallbackId reqId = reqResult.get();
-		GameplayRequest request = requestCallbacks.get(reqId);
-		List<Card> discardedCards = discardedCardIndices.stream().map(i -> request.starterCards.get(i)).collect(Collectors.toList());
-		onMulliganReceived(messageId, getPlayer(reqId.playerId), discardedCards);
 	}
 
-	public NetworkDelegate getNetworkDelegate() {
-		return this;
+	@Override
+	@Suspendable
+	public void onConcede(Client sender) {
+		concede(sender.getPlayerId());
+	}
+
+	@Override
+	public void onTouch(Client sender, int entityId) {
+		touch(sender, entityId, true);
+	}
+
+	@Override
+	public void onUntouch(Client sender, int entityId) {
+		touch(sender, entityId, false);
+	}
+
+	private void touch(Client sender, int entityId, boolean touching) {
+		TouchingNotification touch = new TouchingNotification(sender.getPlayerId(), entityId, touching);
+		GameState gameStateCopy = getGameStateCopy();
+
+		for (Client client : getClients()) {
+			if (client.getPlayerId() != sender.getPlayerId()) {
+				client.sendNotification(touch, gameStateCopy);
+			}
+		}
+	}
+
+	@Override
+	public boolean isGameReady() {
+		return clientsReady.values().stream().allMatch(Future::succeeded);
 	}
 
 	@Override
@@ -607,12 +858,12 @@ public class ServerGameContext extends GameContext {
 	 *
 	 * @param player The player whose deck collections should be queried.
 	 * @param name   The name of the deck to retrieve
-	 * @return A {@link Deck} with valid but not located entities, or {@code null} if the deck could not be found.
+	 * @return A {@link GameDeck} with valid but not located entities, or {@code null} if the deck could not be found.
 	 */
 	@Override
 	@Suspendable
-	public Deck getDeck(Player player, String name) {
-		GetCollectionResponse response = logic.uncheckedSync().getDeck(new LogicGetDeckRequest()
+	public GameDeck getDeck(Player player, String name) {
+		GetCollectionResponse response = Logic.getDeck(new LogicGetDeckRequest()
 				.withUserId(new UserId(player.getUserId()))
 				.withDeckName(name));
 
@@ -621,5 +872,79 @@ public class ServerGameContext extends GameContext {
 		}
 
 		return response.asDeck(player.getUserId());
+	}
+
+	@Override
+	@Suspendable
+	public void onPlayerReady(Client client) {
+		if (clientsReady.containsKey(client.getPlayerId())) {
+			@SuppressWarnings("unchecked")
+			Future<Client> fut = clientsReady.get(client.getPlayerId());
+			if (!fut.isComplete()) {
+				fut.complete(client);
+			}
+		}
+	}
+
+	@Override
+	@Suspendable
+	public void onPlayerReconnected(Client client) {
+		try {
+			lock.lock();
+			// Update the client
+			ListIterator<Client> listIterator = getClients().listIterator();
+			while (listIterator.hasNext()) {
+				Client next = listIterator.next();
+				if (next.getPlayerId() == client.getPlayerId()) {
+					listIterator.set(client);
+					next = client;
+				}
+				next.onActivePlayer(getActivePlayer());
+			}
+			onPlayerReady(client);
+			onGameStateChanged();
+		} finally {
+			lock.unlock();
+		}
+	}
+
+	public List<Client> getClients() {
+		return clients;
+	}
+
+	public Client getClient(int playerId) {
+		for (Client client : getClients()) {
+			if (client.getPlayerId() == playerId) {
+				return client;
+			}
+		}
+
+		// This player is probably a bot.
+		return null;
+	}
+
+	public List<Configuration> getPlayerConfigurations() {
+		return playerConfigurations;
+	}
+
+	public boolean isRunning() {
+		if (isRunning) {
+			return !fiber.isInterrupted() && !fiber.isTerminated();
+		}
+		return false;
+	}
+
+	@Suspendable
+	public void loseBothPlayers() {
+		getLogic().loseBothPlayers();
+		endGame();
+	}
+
+	public void setDidExpire(boolean didExpire) {
+		this.didExpire = didExpire;
+	}
+
+	public boolean getDidExpire() {
+		return didExpire;
 	}
 }

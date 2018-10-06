@@ -1,17 +1,17 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public abstract class RevertableSpell extends Spell {
+abstract class RevertableSpell extends Spell {
 
 	protected abstract SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target);
 

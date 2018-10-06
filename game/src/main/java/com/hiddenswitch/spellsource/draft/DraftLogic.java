@@ -16,10 +16,10 @@ import static java.util.stream.Collectors.toList;
  */
 public class DraftLogic {
 	private static final Logger logger = LoggerFactory.getLogger(DraftLogic.class);
-	public static final float EXPANSION_ODDS_FACTOR = 1.5f;
-	public static final float COMMON_ROLL = 0.76f;
-	private static final float RARE_ROLL = 0.20f;
-	private static final float EPIC_ROLL = 0.03f;
+	public static final float EXPANSION_ODDS_FACTOR = 16.0f;
+	public static final float COMMON_ROLL = 0.50f;
+	private static final float RARE_ROLL = 0.30f;
+	private static final float EPIC_ROLL = 0.15f;
 	private final WeakReference<DraftContext> context;
 	public static int DRAFTS = 30;
 	public static int CARDS_PER_DRAFT = 3;
@@ -55,15 +55,14 @@ public class DraftLogic {
 
 	private List<HeroClass> createHeroChoices() {
 		List<HeroClass> classes = Arrays.asList(
-				HeroClass.BROWN,
-				HeroClass.GREEN,
-				HeroClass.BLUE,
-				HeroClass.GOLD,
-				HeroClass.WHITE,
-				HeroClass.BLACK,
-				HeroClass.SILVER,
-				HeroClass.VIOLET,
-				HeroClass.RED
+				HeroClass.EGGPLANT,
+				HeroClass.ICE,
+				HeroClass.JADE,
+				HeroClass.LEATHER,
+				HeroClass.NAVY,
+				HeroClass.RUST,
+				HeroClass.OBSIDIAN,
+				HeroClass.AMBER
 		);
 
 		Collections.shuffle(classes, getRandom());
@@ -76,22 +75,17 @@ public class DraftLogic {
 		List<CardSet> equals = Arrays.asList(
 				CardSet.BASIC,
 				CardSet.CLASSIC,
-				CardSet.BLACKROCK_MOUNTAIN,
-				CardSet.GOBLINS_VS_GNOMES,
-				CardSet.LEAGUE_OF_EXPLORERS,
-				CardSet.MEAN_STREETS_OF_GADGETZAN,
-				CardSet.NAXXRAMAS,
-				CardSet.ONE_NIGHT_IN_KARAZHAN,
-				CardSet.PROMO,
-				CardSet.REWARD,
-				CardSet.THE_GRAND_TOURNAMENT,
-				CardSet.THE_OLD_GODS,
 				CardSet.JOURNEY_TO_UNGORO,
-				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE
+				CardSet.KNIGHTS_OF_THE_FROZEN_THRONE,
+				CardSet.WITCHWOOD,
+				CardSet.BOOMSDAY_PROJECT,
+				CardSet.KOBOLDS_AND_CATACOMBS,
+				CardSet.BATTLE_FOR_ASHENVALE,
+				CardSet.SANDS_OF_TIME
 		);
 
 		// Until we have enough mean streets cards, don't use it
-		CardSet latestExpansion = CardSet.latestHearthstoneExpansion();
+		CardSet latestExpansion = CardSet.CUSTOM;
 
 		Set<CardType> validCardTypes = new HashSet<>(Arrays.asList(CardType.values()));
 
@@ -144,6 +138,11 @@ public class DraftLogic {
 				"spell_inner_fire"
 		));
 
+		CardCatalogue.getAll().stream()
+				.filter(Card::isQuest)
+				.map(Card::getCardId)
+				.forEach(bannedCards::add);
+
 		for (int draft = 0; draft < DRAFTS; draft++) {
 			// Select a rarity at the appropriate frequency
 			float rarityRoll = roll();
@@ -166,6 +165,11 @@ public class DraftLogic {
 				DeckFormat format = new DeckFormat();
 				float latestExpansionOdds = EXPANSION_ODDS_FACTOR / (equals.size() + EXPANSION_ODDS_FACTOR);
 				if (cardSetRoll < latestExpansionOdds) {
+					if (latestExpansion == CardSet.CUSTOM) {
+						// Include the other two custom sets for now
+						format.addSet(CardSet.BATTLE_FOR_ASHENVALE);
+						format.addSet(CardSet.SANDS_OF_TIME);
+					}
 					format.withCardSets(latestExpansion);
 				} else {
 					format.withCardSets(equals);
@@ -188,8 +192,13 @@ public class DraftLogic {
 							&& c.isCollectible();
 				});
 
-				// Add two copies of the class cards and then the neutrals
-				CardList cards = classCards.clone().addAll(classCards).addAll(neutralCards);
+				// Total five copies of the class cards and then the neutrals
+				CardList cards = classCards.clone()
+						.addAll(classCards)
+						.addAll(classCards)
+						.addAll(classCards)
+						.addAll(classCards)
+						.addAll(neutralCards);
 
 				if (cards.getCount() == 0) {
 					logger.info("Draft pulled no cards given parameters: draft={}, rarity={}, sets={}", draft, rarity, format.getCardSets());

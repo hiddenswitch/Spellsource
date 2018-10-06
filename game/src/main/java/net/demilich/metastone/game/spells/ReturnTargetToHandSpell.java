@@ -1,24 +1,22 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityLocation;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.spells.desc.SpellArg;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
+import java.util.Map;
 
 public class ReturnTargetToHandSpell extends Spell {
 
@@ -46,6 +44,9 @@ public class ReturnTargetToHandSpell extends Spell {
 
 		SpellDesc cardSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		Player owner = context.getPlayer(target.getOwner());
+		if (desc.containsKey(SpellArg.TARGET_PLAYER)) {
+			owner = player;
+		}
 		if (owner.getHand().getCount() >= GameLogic.MAX_HAND_CARDS
 				&& Actor.class.isAssignableFrom(target.getClass())) {
 			logger.debug("onCast: {} is destroyed because {}'s hand is full", target, owner.getName());
@@ -64,22 +65,18 @@ public class ReturnTargetToHandSpell extends Spell {
 			if (target instanceof Card) {
 				returnedCard = (Card) target;
 			} else {
-				returnedCard = target.getSourceCard();
-
-				if (returnedCard.getZone() != Zones.GRAVEYARD
-						|| returnedCard.getZone() != Zones.REMOVED_FROM_PLAY
-						|| !returnedCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-					returnedCard = returnedCard.getCopy();
-				}
+				// Don't get a copy of the source card, get a copy of the BASE card.
+				returnedCard = context.getCardById(target.getSourceCard().getCardId());
 			}
 
+			// Transferred enchantments
 			returnedCard.getAttributes().putAll(map);
 			// Prevents cards from being discarded
 			if (returnedCard.getZone() == Zones.HAND
 					&& returnedCard.hasAttribute(Attribute.DISCARDED)) {
 				returnedCard.getAttributes().remove(Attribute.DISCARDED);
 			} else {
-				context.getLogic().receiveCard(target.getOwner(), returnedCard);
+				context.getLogic().receiveCard(owner.getId(), returnedCard);
 			}
 			if (cardSpell != null) {
 				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);

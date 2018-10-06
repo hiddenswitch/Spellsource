@@ -13,6 +13,21 @@ import java.util.stream.Collectors;
  * Created by bberman on 2/6/17.
  */
 public class QuickJson {
+	@SafeVarargs
+	public static <T> JsonArray array(final T... args) {
+		JsonArray arr = new JsonArray();
+		for (T arg : args) {
+			// Insert photo of Pink Wojack here going "aaaaaaAAAAAAAHHHHH"
+			if (arg.getClass().isPrimitive()
+					|| arg.getClass().isAssignableFrom(String.class)) {
+				arr.add(arg);
+			} else {
+				arr.add(JsonObject.mapFrom(arg));
+			}
+		}
+		return arr;
+	}
+
 	public static JsonObject json(final Object... args) {
 		return jsonPut(new JsonObject(), args);
 	}
@@ -24,6 +39,9 @@ public class QuickJson {
 		}
 
 		if (args.length == 1) {
+			if (args[0] instanceof JsonObject) {
+				return (JsonObject) args[0];
+			}
 			return toJson(args[0]);
 		}
 
@@ -42,7 +60,7 @@ public class QuickJson {
 
 	@SuppressWarnings("unchecked")
 	public static JsonObject toJson(final Object arg) {
-		return new JsonObject(Json.mapper.convertValue(arg, Map.class));
+		return JsonObject.mapFrom(arg);
 	}
 
 	public static <T> T fromJson(JsonObject json, Class<T> classOfT) {

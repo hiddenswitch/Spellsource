@@ -1,17 +1,20 @@
 package net.demilich.metastone.game.actions;
 
+import com.github.fromage.quasi.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.TargetSelection;
+import org.apache.commons.lang3.builder.EqualsBuilder;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.TargetSelection;
-import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 /**
  * A DiscoverAction is a card and spell tuple that corresponds to a particular card selected by the player and the spell
@@ -20,6 +23,10 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
  * Typically, discover actions have a {@link net.demilich.metastone.game.spells.ReceiveCardSpell} that puts the card in
  * {@link #getCard()} into the player's hand. But any kind of spell that takes a {@link
  * net.demilich.metastone.game.spells.desc.SpellArg#CARD} argument will work with a DiscoverAction.
+ * <p>
+ * Discover cards should never be executed directly. They are presented to the {@link Behaviour} in {@link
+ * GameLogic#requestAction(Player, List)}, so they will always be some kind of "recursive" call inside a {@link
+ * Behaviour}.
  */
 public class DiscoverAction extends GameAction {
 	private static final String DISCOVERED_NAME = "discovered";
@@ -126,11 +133,22 @@ public class DiscoverAction extends GameAction {
 	}
 
 	@Override
+	public boolean equals(Object other) {
+		boolean base = super.equals(other);
+		if (!(other instanceof DiscoverAction)) {
+			return false;
+		}
+		DiscoverAction rhs = (DiscoverAction) other;
+		return new EqualsBuilder().appendSuper(base)
+				.append(spell, rhs.spell)
+				.build();
+	}
+
+	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
 				.appendSuper(super.hashCode())
 				.append(spell)
-				.append(card)
-				.toHashCode();
+				.build();
 	}
 }

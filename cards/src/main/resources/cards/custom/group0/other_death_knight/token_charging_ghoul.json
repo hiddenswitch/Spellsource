@@ -1,0 +1,27 @@
+{
+  "name": "Charging Ghoul",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Charge. At the end of your turn, destroy this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

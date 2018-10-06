@@ -1,0 +1,20 @@
+{
+  "name": "Bee Squad",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Summon three 1/1 Bees with Charge and Poisonous.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_bee",
+      "token_bee",
+      "token_bee"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

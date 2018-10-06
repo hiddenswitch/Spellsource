@@ -1,0 +1,12 @@
+{
+  "name": "Dragon Pendant",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Give a minion +4/+4. Deal any excess damage it deals to\r\nthe enemy hero.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

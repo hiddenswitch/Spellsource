@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Destroy a friendly minion. Restore 8 Health to your hero.",
+  "description": "Destroy a friendly minion. Restore #4 Health to your hero.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
@@ -21,7 +21,7 @@
       {
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
-        "value": 8
+        "value": 4
       }
     ]
   },

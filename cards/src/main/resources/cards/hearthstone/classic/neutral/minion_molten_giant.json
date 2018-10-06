@@ -1,14 +1,15 @@
 {
   "name": "Molten Giant",
-  "baseManaCost": 25,
+  "baseManaCost": 20,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
+  "race": "ELEMENTAL",
   "description": "Costs (1) less for each damage your hero has taken.",
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "HALL_OF_FAME",
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "AlgebraicValueProvider",

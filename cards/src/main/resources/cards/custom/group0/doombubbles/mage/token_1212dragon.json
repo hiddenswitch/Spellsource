@@ -1,0 +1,14 @@
+{
+  "name": "Dragon",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 12,
+  "baseHp": 12,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

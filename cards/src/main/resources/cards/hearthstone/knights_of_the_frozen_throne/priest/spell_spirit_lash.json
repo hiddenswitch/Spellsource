@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "COMMON",
-  "description": "Lifesteal. Deal 1 damage to all minions.",
+  "description": "Lifesteal. Deal $1 damage to all minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

@@ -1,0 +1,25 @@
+{
+  "name": "Thunder Focus Brew",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "COMMON",
+  "description": "Give a minion +3 Health and 'Cannot be targeted by spells or Hero Powers.'",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "UNTARGETABLE_BY_SPELLS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Big Ol' Beetle",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 7,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

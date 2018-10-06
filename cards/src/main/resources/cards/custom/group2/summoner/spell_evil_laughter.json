@@ -1,0 +1,19 @@
+{
+  "name": "Evil Laughter",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "Draw a card for each friendly minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

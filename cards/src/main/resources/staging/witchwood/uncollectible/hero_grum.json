@@ -1,0 +1,12 @@
+{
+  "name": "Grum",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "<i>Grum likes to smash. He also likes to bash. And crash.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

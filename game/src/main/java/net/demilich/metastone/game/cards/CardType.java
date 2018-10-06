@@ -3,7 +3,6 @@ package net.demilich.metastone.game.cards;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.spells.CastFromGroupSpell;
 
 /**
  * The different types of cards.
@@ -28,8 +27,8 @@ public enum CardType {
 	 */
 	SPELL,
 	/**
-	 * A weapon puts an {@link Actor} called a {@link Weapon} into play, which gives the {@link Hero} that weapon and
-	 * its attack.
+	 * A weapon puts an {@link Actor} called a {@link Weapon} into play, which gives the {@link Hero} that weapon and its
+	 * attack.
 	 */
 	WEAPON,
 	/**
@@ -37,21 +36,27 @@ public enum CardType {
 	 */
 	HERO_POWER,
 	/**
-	 * A group card represents multiple cards that are referenced together, like the {@link CastFromGroupSpell}
-	 * mechanic.
+	 * A group card represents multiple cards that are referenced together, like the {@link
+	 * net.demilich.metastone.game.spells.CastFromGroupSpell} mechanic.
 	 */
 	GROUP,
 	/**
-	 * A choose one card is a spell card that can assume the identity of two others. The base choose one card is put
-	 * into your graveyard and returned to your hand by return hand effects. The chosen card is cast, and therefore is
-	 * the card that interacts with spell casting effects and triggers.
+	 * A choose one card is a spell card that can assume the identity of two others. The base choose one card is put into
+	 * your graveyard and returned to your hand by return hand effects. The chosen card is cast, and therefore is the card
+	 * that interacts with spell casting effects and triggers.
 	 */
-	CHOOSE_ONE;
+	CHOOSE_ONE,
+	/**
+	 * An enchantment card stores data used by effects like {@link net.demilich.metastone.game.spells.AddDeathrattleSpell}
+	 * and {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}, copying the values from it to the target.
+	 */
+	ENCHANTMENT;
 
 	/**
 	 * Indicates whether or not the instance is of the specified card type.
-	 *
+	 * <p>
 	 * Use this instead of direct comparisons to interpret a {@link #CHOOSE_ONE} card as a {@link #SPELL} card.
+	 *
 	 * @param cardType The card type to compare to.
 	 * @return {@code true} if this instance is of the {@code cardType}.
 	 */

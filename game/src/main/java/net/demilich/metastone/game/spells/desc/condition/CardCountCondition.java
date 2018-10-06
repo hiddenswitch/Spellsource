@@ -17,7 +17,6 @@ public class CardCountCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		TargetPlayer targetPlayer = desc.containsKey(ConditionArg.TARGET_PLAYER) ? (TargetPlayer) desc.get(ConditionArg.TARGET_PLAYER)
 				: TargetPlayer.SELF;
-
 		int cardCount = 0;
 		switch (targetPlayer) {
 			case BOTH:
@@ -34,6 +33,9 @@ public class CardCountCondition extends Condition {
 				break;
 			case INACTIVE:
 				cardCount = context.getOpponent(context.getActivePlayer()).getHand().getCount();
+				break;
+			case OWNER:
+				cardCount = context.getPlayer(source.getOwner()).getHand().getCount();
 				break;
 			default:
 				break;

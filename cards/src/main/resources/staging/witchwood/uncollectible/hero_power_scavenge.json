@@ -1,0 +1,17 @@
+{
+  "name": "Scavenge",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Hero Power</b> <b>Discover</b> a class spell that has been played this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

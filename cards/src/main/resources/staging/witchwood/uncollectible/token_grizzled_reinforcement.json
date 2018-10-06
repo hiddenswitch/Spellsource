@@ -1,0 +1,22 @@
+{
+  "name": "Grizzled Reinforcement",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "<b>Battlecry:</b> Summon an extra Cannon.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Fortuna Hunter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Whenever you summon a 0-Cost minion, give it +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "value": 0,
+        "attribute": "BASE_MANA_COST",
+        "operation": "EQUAL"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "attackBonus": 1,
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

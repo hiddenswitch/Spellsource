@@ -1,0 +1,24 @@
+{
+  "name": "Witchwood Harpy",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "After you cast a spell, this minion may attack again.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "RefreshAttacksSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

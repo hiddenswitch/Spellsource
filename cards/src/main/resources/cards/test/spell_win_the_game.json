@@ -1,0 +1,16 @@
+{
+  "name": "Win the Game",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ENEMY_HERO"
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

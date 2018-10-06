@@ -13,7 +13,7 @@ import java.util.stream.Stream;
  * an {@link EntityZone} because it represents an in-game zone; i.e., an entity can only be in one zone at once.
  *
  * @see CardArrayList for a {@link List} that implements {@link CardList} that does not represent a zone in the game and
- * can be used for all sorts of game logic that needs to deal with lists of cards.
+ * 		can be used for all sorts of game logic that needs to deal with lists of cards.
  */
 public class CardZone extends EntityZone<Card> implements CardList {
 	public CardZone(int player, Zones zone) {
@@ -40,8 +40,8 @@ public class CardZone extends EntityZone<Card> implements CardList {
 	}
 
 	/**
-	 * Creates a new zone and adds a clone of all the cards to it. Skips checks on the zone to prevent entities from
-	 * being in two places at once.
+	 * Creates a new zone and adds a clone of all the cards to it. Skips checks on the zone to prevent entities from being
+	 * in two places at once.
 	 *
 	 * @return The cloned {@link CardZone}.
 	 */
@@ -82,8 +82,8 @@ public class CardZone extends EntityZone<Card> implements CardList {
 	}
 
 	/**
-	 * Removes the first card in this instance and sets its location to {@link EntityLocation#UNASSIGNED}, so that it
-	 * can be added to another zone.
+	 * Removes the first card in this instance and sets its location to {@link EntityLocation#UNASSIGNED}, so that it can
+	 * be added to another zone.
 	 *
 	 * @return The card that was removed.
 	 */
@@ -99,7 +99,7 @@ public class CardZone extends EntityZone<Card> implements CardList {
 	 * @param oldCard The card to find and replace.
 	 * @param newCard The new card to replace it with.
 	 * @return {@code true} if the old card was found and replaced. {@code false} if the old card was not found and not
-	 * replaced. (You'll never find the old card and not replace it).
+	 * 		replaced. (You'll never find the old card and not replace it).
 	 */
 	@Override
 	public boolean replace(Card oldCard, Card newCard) {

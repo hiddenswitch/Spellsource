@@ -1,0 +1,16 @@
+{
+  "name": "Doomsday Guardian",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 0,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

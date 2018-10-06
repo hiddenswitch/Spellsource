@@ -1,0 +1,22 @@
+{
+  "name": "Revitalize",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Choose a minion. Restore Health to your characters equal to its Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "TARGET",
+      "attribute": "ATTACK"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

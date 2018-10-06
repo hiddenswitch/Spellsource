@@ -1,0 +1,28 @@
+{
+  "name": "Purrfect Tracker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Draw two 0-Cost cards from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 0
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

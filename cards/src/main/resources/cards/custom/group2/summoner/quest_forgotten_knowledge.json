@@ -1,0 +1,21 @@
+{
+  "name": "Forgotten Knowledge",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play 5 Secrets. Reward: Ozumat of the Depths.",
+  "quest": {
+    "class": "SecretPlayedTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 5,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_ozumat_of_the_depths"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

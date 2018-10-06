@@ -17,7 +17,7 @@ public class WeaponEquippedTrigger extends EventTrigger {
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		WeaponEquippedEvent summonEvent = (WeaponEquippedEvent) event;
-		Attribute requiredAttribute = (Attribute) desc.get(EventTriggerArg.REQUIRED_ATTRIBUTE);
+		Attribute requiredAttribute = (Attribute) getDesc().get(EventTriggerArg.REQUIRED_ATTRIBUTE);
 		if (requiredAttribute != null && !summonEvent.getWeapon().hasAttribute(requiredAttribute)) {
 			return false;
 		}

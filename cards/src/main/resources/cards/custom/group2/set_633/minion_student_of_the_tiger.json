@@ -1,0 +1,23 @@
+{
+  "name": "Student of the Tiger",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 2 damage to all enemy minions.",
+  "battlecry": {
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Emissary Drulda",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Battlecry: Transform your Knights in your hand into random Legendary minions.",
+  "battlecry": {
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "LEGENDARY",
+        "cardType": "MINION"
+      },
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_knight"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -15,6 +15,15 @@ import org.slf4j.LoggerFactory;
 
 import java.util.stream.Stream;
 
+/**
+ * Puts text from a random {@link SpellDesc#getFilteredCards(GameContext, Player, Entity)} card onto the {@code target}
+ * {@link Card}. The attack, hitpoints, race and cost of the {@code target} are retained.
+ * <p>
+ * If the {@link SpellArg#NAME} attribute is {@code "ORIGINAL"}, the {@code target}'s name is not changed. Otherwise, it
+ * is changed to the randomly chosen card's name.
+ * <p>
+ * Implements Fifi Fizzlewarp.
+ */
 public class TextifySpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(TextifySpell.class);
 

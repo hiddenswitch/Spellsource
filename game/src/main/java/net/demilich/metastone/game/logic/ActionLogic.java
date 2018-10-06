@@ -1,25 +1,27 @@
 package net.demilich.metastone.game.logic;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.utils.TurnState;
 import net.demilich.metastone.game.actions.EndTurnAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.utils.TurnState;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
@@ -46,16 +48,26 @@ public class ActionLogic implements Serializable {
 		List<GameAction> heroPowerActions = new ArrayList<GameAction>();
 		Card heroPower = player.getHero().getHeroPower();
 
-		EntityReference heroPowerReference = new EntityReference(heroPower.getId()
-		);
+		EntityReference heroPowerReference = new EntityReference(heroPower.getId());
 		if (!context.getLogic().canPlayCard(player.getId(), heroPowerReference)) {
 			return heroPowerActions;
 		}
 		if (heroPower.isChooseOne()) {
 			HasChooseOneActions chooseOneCard = heroPower;
-			for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
-				rollout(chooseOneAction, context, player, heroPowerActions);
+			int overallValue = context.getLogic().getChooseOneOverrides(player, heroPower);
+			if (overallValue != -1) {
+				if (overallValue == 2 && chooseOneCard.hasBothOptions()) {
+					GameAction chooseOneAction = chooseOneCard.playBothOptions();
+					rollout(chooseOneAction, context, player, heroPowerActions);
+				} else if (overallValue == 0 || overallValue == 1) {
+					rollout(chooseOneCard.playOptions()[overallValue], context, player, heroPowerActions);
+				}
+			} else {
+				for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
+					rollout(chooseOneAction, context, player, heroPowerActions);
+				}
 			}
+
 		} else {
 			rollout(heroPower.play(), context, player, heroPowerActions);
 		}
@@ -72,7 +84,29 @@ public class ActionLogic implements Serializable {
 				continue;
 			}
 
-			rollout(new PhysicalAttackAction(minion.getReference()), context, player, physicalAttackActions);
+			List<PhysicalAttackTargetOverrideAura> filters = context.getTriggersAssociatedWith(minion.getReference()).stream()
+					.filter(trigger -> trigger instanceof PhysicalAttackTargetOverrideAura)
+					.map(trigger -> (PhysicalAttackTargetOverrideAura) trigger).collect(Collectors.toList());
+			if (!filters.isEmpty()) {
+				Set<EntityReference> common = new HashSet<>();
+
+				for (Integer targetId : filters.get(0).getAffectedEntities()) {
+					common.add(new EntityReference(targetId));
+				}
+
+				for (int i = 1; i < filters.size(); i++) {
+					common = Sets.intersection(common, filters.get(i).getAffectedEntities().stream().map(EntityReference::new).collect(Collectors.toSet()));
+				}
+
+				for (EntityReference target : common) {
+					PhysicalAttackAction attackAction = new PhysicalAttackAction(minion.getReference());
+					attackAction.setTargetReference(target);
+					physicalAttackActions.add(attackAction);
+				}
+
+			} else {
+				rollout(new PhysicalAttackAction(minion.getReference()), context, player, physicalAttackActions);
+			}
 		}
 		return physicalAttackActions;
 	}
@@ -90,15 +124,28 @@ public class ActionLogic implements Serializable {
 
 			if (card.isChooseOne()) {
 				HasChooseOneActions chooseOneCard = card;
-				if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
-					GameAction chooseOneAction = chooseOneCard.playBothOptions();
-					rollout(chooseOneAction, context, player, playCardActions);
-				} else {
-					for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
+				int overallValue = context.getLogic().getChooseOneOverrides(player, card);
+				if (overallValue != -1) {
+					if (overallValue == 2 && chooseOneCard.hasBothOptions()) {
+						GameAction chooseOneAction = chooseOneCard.playBothOptions();
 						rollout(chooseOneAction, context, player, playCardActions);
+					} else if (overallValue == 0 || overallValue == 1) {
+						rollout(chooseOneCard.playOptions()[overallValue], context, player, playCardActions);
+					}
+				} else {
+					if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
+						GameAction chooseOneAction = chooseOneCard.playBothOptions();
+						rollout(chooseOneAction, context, player, playCardActions);
+					} else {
+						for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
+							rollout(chooseOneAction, context, player, playCardActions);
+						}
 					}
 				}
 			} else {
+				if (card.getCardType().isCardType(CardType.ENCHANTMENT)) {
+					System.out.println(context.getTrace().dump());
+				}
 				rollout(card.play(), context, player, playCardActions);
 			}
 
@@ -112,7 +159,7 @@ public class ActionLogic implements Serializable {
 		validActions.addAll(getPhysicalAttackActions(context, player));
 		validActions.addAll(getPlayCardActions(context, player));
 		if (context.getTurnState() != TurnState.TURN_ENDED) {
-			final EndTurnAction endTurnAction = new EndTurnAction();
+			final EndTurnAction endTurnAction = new EndTurnAction(player.getId());
 			endTurnAction.setSource(player.getReference());
 			validActions.add(endTurnAction);
 		}
@@ -133,8 +180,17 @@ public class ActionLogic implements Serializable {
 		return (context.getLogic().canPlayCard(player.getId(), heroPowerReference) && heroPower.getTargetSelection() == TargetSelection.AUTO);
 	}
 
+	/**
+	 * Rolls out actions. For actions that have {@code targetRequirement} values that aren't {@link TargetSelection#NONE},
+	 * returning new actions whose {@link GameAction#getTargetReference()} is a valid target.
+	 *
+	 * @param action
+	 * @param context
+	 * @param player
+	 * @param actions
+	 */
 	public void rollout(GameAction action, GameContext context, Player player, Collection<GameAction> actions) {
-		context.getLogic().processTargetModifiers(player, action);
+		context.getLogic().processTargetModifiers(action);
 		if (action.getTargetRequirement() == TargetSelection.NONE || action.getTargetRequirement() == TargetSelection.AUTO) {
 			actions.add(action);
 		} else {

@@ -1,0 +1,22 @@
+{
+  "name": "Ozumat's Nightmare",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "LEGENDARY",
+  "description": "Secret: Whenever your hero takes damage, summon a 3/3 Tentacle",
+  "targetSelection": "NONE",
+  "secret": {
+    "class": "DamageReceivedTrigger",
+    "targetEntityType": "HERO",
+    "targetPlayer": "SELF"
+  },
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_nightmare_tentacle"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "wiki": "The \"You can't lose this\" part means that when the spell triggers, it puts Ozumat's Nightmare back onto the battlefield when it triggers. It also does this when destroyed and is unaffected by your opponent trying to take control of it. This might be a pain to program, and if so, I apologise."
+}

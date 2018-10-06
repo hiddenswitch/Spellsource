@@ -18,6 +18,8 @@ public class CollectionRecord extends MongoRecord {
 	@JsonProperty
 	private DeckType deckType;
 	private List<String> friendUserIds;
+	private int wins;
+	private int totalGames;
 
 	/**
 	 * Hero class for deck collection records.
@@ -34,59 +36,7 @@ public class CollectionRecord extends MongoRecord {
 	protected CollectionRecord() {
 	}
 
-	public String getUserId() {
-		return userId;
-	}
-
-	public void setUserId(String userId) {
-		this.userId = userId;
-	}
-
-	public CollectionTypes getType() {
-		return type;
-	}
-
-	public void setType(CollectionTypes type) {
-		this.type = type;
-	}
-
-	public HeroClass getHeroClass() {
-		return heroClass;
-	}
-
-	public void setHeroClass(HeroClass heroClass) {
-		this.heroClass = heroClass;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public CollectionRecord withUserId(final String userId) {
-		this.userId = userId;
-		return this;
-	}
-
-	public CollectionRecord withType(final CollectionTypes type) {
-		this.type = type;
-		return this;
-	}
-
-	public CollectionRecord withHeroClass(final HeroClass heroClass) {
-		this.heroClass = heroClass;
-		return this;
-	}
-
-	public CollectionRecord withName(final String name) {
-		this.name = name;
-		return this;
-	}
-
-	public CollectionRecord withId(final String id) {
+	public CollectionRecord setId(final String id) {
 		this._id = id;
 		return this;
 	}
@@ -95,25 +45,8 @@ public class CollectionRecord extends MongoRecord {
 		return trashed;
 	}
 
-	public void setTrashed(boolean trashed) {
-		this.trashed = trashed;
-	}
-
-	public CollectionRecord withFriendUserIds(final List<String> friendUserIds) {
+	public CollectionRecord setFriendUserIds(final List<String> friendUserIds) {
 		this.friendUserIds = friendUserIds;
-		return this;
-	}
-
-	public List<String> getFriendUserIds() {
-		return friendUserIds;
-	}
-
-	public void setFriendUserIds(List<String> friendUserIds) {
-		this.friendUserIds = friendUserIds;
-	}
-
-	public CollectionRecord withTrashed(boolean trashed) {
-		this.trashed = trashed;
 		return this;
 	}
 
@@ -139,49 +72,115 @@ public class CollectionRecord extends MongoRecord {
 	public static CollectionRecord deck(final String userId, final String name, final HeroClass heroClass, final boolean draft) {
 		return new CollectionRecord()
 				.withDraft(draft)
-				.withUserId(userId)
-				.withName(name)
-				.withHeroClass(heroClass)
-				.withType(CollectionTypes.DECK);
+				.setUserId(userId)
+				.setName(name)
+				.setHeroClass(heroClass)
+				.setType(CollectionTypes.DECK);
 	}
 
 	public static CollectionRecord user(final String userId) {
 		return new CollectionRecord()
-				.withId(userId)
-				.withUserId(userId)
-				.withType(CollectionTypes.USER);
+				.setId(userId)
+				.setUserId(userId)
+				.setType(CollectionTypes.USER);
 	}
 
 	public static CollectionRecord alliance(String allianceId, String ownerUserId) {
 		return new CollectionRecord()
-				.withId(allianceId)
-				.withType(CollectionTypes.ALLIANCE)
-				.withUserId(ownerUserId)
-				.withFriendUserIds(Arrays.asList(ownerUserId));
+				.setId(allianceId)
+				.setType(CollectionTypes.ALLIANCE)
+				.setUserId(ownerUserId)
+				.setFriendUserIds(Arrays.asList(ownerUserId));
+	}
+
+	public int getWins() {
+		return wins;
+	}
+
+	public CollectionRecord setWins(int wins) {
+		this.wins = wins;
+		return this;
+	}
+
+	public int getTotalGames() {
+		return totalGames;
+	}
+
+	public CollectionRecord setTotalGames(int totalGames) {
+		this.totalGames = totalGames;
+		return this;
+	}
+
+	public CollectionRecord setTrashed(boolean trashed) {
+		this.trashed = trashed;
+		return this;
 	}
 
 	public DeckType getDeckType() {
 		return deckType;
 	}
 
-	public void setDeckType(DeckType deckType) {
+	public CollectionRecord setDeckType(DeckType deckType) {
 		this.deckType = deckType;
+		return this;
 	}
 
-	public void setHeroCardId(String heroCardId) {
-		this.heroCardId = heroCardId;
+	public List<String> getFriendUserIds() {
+		return friendUserIds;
 	}
 
 	public String getHeroCardId() {
 		return heroCardId;
 	}
 
-	public void setFormat(String format) {
-		this.format = format;
+	public CollectionRecord setHeroCardId(String heroCardId) {
+		this.heroCardId = heroCardId;
+		return this;
 	}
 
 	public String getFormat() {
 		return format;
+	}
+
+	public CollectionRecord setFormat(String format) {
+		this.format = format;
+		return this;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public CollectionRecord setUserId(String userId) {
+		this.userId = userId;
+		return this;
+	}
+
+	public CollectionTypes getType() {
+		return type;
+	}
+
+	public CollectionRecord setType(CollectionTypes type) {
+		this.type = type;
+		return this;
+	}
+
+	public HeroClass getHeroClass() {
+		return heroClass;
+	}
+
+	public CollectionRecord setHeroClass(HeroClass heroClass) {
+		this.heroClass = heroClass;
+		return this;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public CollectionRecord setName(String name) {
+		this.name = name;
+		return this;
 	}
 }
 

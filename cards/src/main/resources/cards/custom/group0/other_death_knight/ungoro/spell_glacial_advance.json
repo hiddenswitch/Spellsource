@@ -1,0 +1,46 @@
+{
+  "name": "Glacial Advance",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "RARE",
+  "description": "Destroy all minions. Freeze any minions summoned next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell",
+        "target": "ALL_MINIONS"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger"
+          },
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "trigger": {
+              "eventTrigger": {
+                "class": "MinionSummonedTrigger"
+              },
+              "spell": {
+                "class": "AddAttributeSpell",
+                "target": "EVENT_TARGET",
+                "attribute": "FROZEN"
+              },
+              "oneTurn": true
+            }
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -39,6 +39,7 @@ Name | Type | Description | Notes
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
+**fatigue** | [**GameEventFatigue**](GameEventFatigue.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
 
 
@@ -48,26 +49,32 @@ Name | Value
 ---- | -----
 ALL | &quot;ALL&quot;
 AFTER_PHYSICAL_ATTACK | &quot;AFTER_PHYSICAL_ATTACK&quot;
+AFTER_PLAY_CARD | &quot;AFTER_PLAY_CARD&quot;
 AFTER_SPELL_CASTED | &quot;AFTER_SPELL_CASTED&quot;
 AFTER_SUMMON | &quot;AFTER_SUMMON&quot;
 ATTRIBUTE_APPLIED | &quot;ATTRIBUTE_APPLIED&quot;
 ARMOR_GAINED | &quot;ARMOR_GAINED&quot;
 BEFORE_SUMMON | &quot;BEFORE_SUMMON&quot;
 BOARD_CHANGED | &quot;BOARD_CHANGED&quot;
+CARD_SHUFFLED | &quot;CARD_SHUFFLED&quot;
 DAMAGE | &quot;DAMAGE&quot;
 DISCARD | &quot;DISCARD&quot;
 DRAW_CARD | &quot;DRAW_CARD&quot;
 ENRAGE_CHANGED | &quot;ENRAGE_CHANGED&quot;
 ENTITY_TOUCHED | &quot;ENTITY_TOUCHED&quot;
 ENTITY_UNTOUCHED | &quot;ENTITY_UNTOUCHED&quot;
+FATIGUE | &quot;FATIGUE&quot;
 GAME_START | &quot;GAME_START&quot;
 HEAL | &quot;HEAL&quot;
 HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
+INVOKED | &quot;INVOKED&quot;
 JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;
+LOSE_DEFLECT | &quot;LOSE_DEFLECT&quot;
 MILL | &quot;MILL&quot;
 MAX_MANA | &quot;MAX_MANA&quot;
+MANA_MODIFIED | &quot;MANA_MODIFIED&quot;
 OVERLOAD | &quot;OVERLOAD&quot;
 PERFORMED_GAME_ACTION | &quot;PERFORMED_GAME_ACTION&quot;
 PHYSICAL_ATTACK | &quot;PHYSICAL_ATTACK&quot;

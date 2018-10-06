@@ -2,7 +2,7 @@
   "name": "Brrrloc",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "SILVER",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -82,11 +82,6 @@ public class SetCardSpell extends RevertableSpell {
 
 		if (cardId == null) {
 			logger.error("onCast {} {}: A null card was given for the card spell.", context.getGameId(), source);
-			return;
-		}
-
-		if (CardCatalogue.getCardById(cardId) == null) {
-			logger.error("onCast {} {}: Could not find a card with ID {}.", context.getGameId(), source, cardId);
 			return;
 		}
 

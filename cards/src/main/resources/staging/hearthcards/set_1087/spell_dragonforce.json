@@ -1,0 +1,12 @@
+{
+  "name": "Dragonforce",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Until the end of your turn, your [b]Supremacy[/b] effects also summons\r\na 4/4 Dragon.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

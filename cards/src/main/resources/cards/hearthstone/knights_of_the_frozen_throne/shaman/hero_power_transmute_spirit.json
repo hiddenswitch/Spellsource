@@ -7,14 +7,18 @@
   "description": "Hero Power: Transform a friendly minion into a random one that costs (1) more.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "TransformToRandomMinionSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "manaCost": {
-        "class": "AttributeValueProvider",
-        "target": "SPELL_TARGET",
-        "attribute": "BASE_MANA_COST",
-        "offset": 1
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "TransformToRandomMinionSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "SPELL_TARGET",
+          "attribute": "BASE_MANA_COST",
+          "offset": 1
+        }
       }
     }
   },

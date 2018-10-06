@@ -1,0 +1,34 @@
+{
+  "name": "Fangs of Ashmane",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "BROWN",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "Your hero's attack is doubled. Can't attack heroes.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO",
+      "attribute": "AURA_CANNOT_ATTACK_HEROES"
+    },
+    {
+      "class": "Aura",
+      "target": "FRIENDLY_HERO",
+      "alwaysApply": true,
+      "applyEffect": {
+        "class": "SetAttributeSpell",
+        "value": 2,
+        "attribute": "ATTACK_MULTIPLIER"
+      },
+      "removeEffect": {
+        "class": "RemoveAttributeSpell",
+        "attribute": "ATTACK_MULTIPLIER"
+      }
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Plague of Rats",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "EPIC",
+  "description": "Summon two 2/2 Poisonous Rats with Charge.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 2,
+    "card": "token_plague_rat"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

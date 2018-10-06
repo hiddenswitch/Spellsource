@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -9,9 +8,13 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Map;
 
+/**
+ * Sets the {@code target}'s {@link SpellArg#ATTRIBUTE} to the specified {@link SpellArg#VALUE}.
+ */
 public class SetAttributeSpell extends Spell {
 	public static SpellDesc create(EntityReference target, Attribute tag, Object value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetAttributeSpell.class);

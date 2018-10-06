@@ -1,0 +1,20 @@
+{
+  "name": "Reload",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Secret: When your opponent casts a spell, draw 2 cards.",
+  "secret": {
+    "class": "SpellCastedTrigger",
+    "sourcePlayer": "OPPONENT"
+  },
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 2,
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

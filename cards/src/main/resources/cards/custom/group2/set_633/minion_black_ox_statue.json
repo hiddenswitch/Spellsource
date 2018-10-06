@@ -1,0 +1,25 @@
+{
+  "name": "Black Ox Statue",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Whenever you summon a minion, give it Deflect.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BeforeMinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "DEFLECT"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

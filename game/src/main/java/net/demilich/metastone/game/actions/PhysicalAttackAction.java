@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.actions;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -9,7 +8,11 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.utils.Attribute;
 
+/**
+ * Indicates an attack between {@link #getAttackerReference()} and {@link #getTargetReference()}.
+ */
 public class PhysicalAttackAction extends GameAction {
 	private EntityReference attackerReference;
 
@@ -33,8 +36,8 @@ public class PhysicalAttackAction extends GameAction {
 			return true;
 		}
 		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);
-		if (attacker.hasAttribute(Attribute.CANNOT_ATTACK_HEROES) ||
-				(attacker.hasAttribute(Attribute.CANNOT_ATTACK_HERO_ON_SUMMON)
+		if (attacker.hasAttribute(Attribute.CANNOT_ATTACK_HEROES) || attacker.hasAttribute(Attribute.AURA_CANNOT_ATTACK_HEROES) ||
+				((attacker.hasAttribute(Attribute.RUSH) || attacker.hasAttribute(Attribute.AURA_RUSH))
 						&& attacker.hasAttribute(Attribute.SUMMONING_SICKNESS))) {
 			return false;
 		}

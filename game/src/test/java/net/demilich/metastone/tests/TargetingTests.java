@@ -1,22 +1,21 @@
 package net.demilich.metastone.tests;
 
-import java.util.List;
-
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
+import java.util.List;
 
 public class TargetingTests extends TestBase {
 

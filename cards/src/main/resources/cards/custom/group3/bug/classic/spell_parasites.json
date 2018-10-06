@@ -1,0 +1,20 @@
+{
+  "name": "Parasites",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Summon 1/1 Spiderlings equal to its Cost.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "BASE_MANA_COST"
+    },
+    "card": "token_spiderling"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

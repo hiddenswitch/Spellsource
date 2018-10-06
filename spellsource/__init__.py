@@ -1,0 +1,1 @@
+"""The Spellsource Python wrapper package"""

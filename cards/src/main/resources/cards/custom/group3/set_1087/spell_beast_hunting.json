@@ -1,0 +1,33 @@
+{
+  "name": "Beast Hunting",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Deal $6 damage. Supremacy: Restore #6 Health to your hero.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 6
+    },
+    "spell2": {
+      "class": "SupremacySpell",
+      "spell": {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 6
+      }
+    }
+  },
+  "attributes": {
+    "SUPREMACY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

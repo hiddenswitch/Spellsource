@@ -1,0 +1,12 @@
+{
+  "name": "Sazzmi Gentlehorn",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "<i>This satyr has a tendency to attract more than just rats.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

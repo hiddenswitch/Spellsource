@@ -1,9 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -11,7 +8,16 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
 
+import java.util.Map;
+
+/**
+ * Doubles the {@code target} {@link Actor}'s total attack.
+ * <p>
+ * If some amount of the actor's current attack is temporary (stored in {@link Attribute#TEMPORARY_ATTACK_BONUS}), the
+ * portion of the attack doubling that came from temporary attack is temporary too.
+ */
 public class DoubleAttackSpell extends Spell {
 
 	public static SpellDesc create() {

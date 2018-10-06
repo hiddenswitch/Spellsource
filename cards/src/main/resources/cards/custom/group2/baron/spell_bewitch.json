@@ -1,0 +1,16 @@
+{
+  "name": "Bewitch",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Transform a minion into a 2/2 Knight.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "token_knight"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

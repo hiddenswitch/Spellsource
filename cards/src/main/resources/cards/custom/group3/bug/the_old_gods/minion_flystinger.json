@@ -1,0 +1,30 @@
+{
+  "name": "Flystinger",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 1 damage for each Common minion you control.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "CardFilter",
+          "rarity": "COMMON"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

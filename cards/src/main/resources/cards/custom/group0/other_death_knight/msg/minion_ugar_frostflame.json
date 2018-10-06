@@ -1,0 +1,46 @@
+{
+  "name": "Ugar Frostflame",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Equip a weapon with stats equal to this minion's.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SetAttackSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "ATTACK"
+            }
+          },
+          {
+            "class": "SetHpSpell",
+            "target": "OUTPUT",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "HP"
+            }
+          }
+        ]
+      },
+      "card": "weapon_ugars_runeblade"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Swarm Shield",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Gain 4 Armor for each minion you control.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS",
+      "multiplier": 4
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

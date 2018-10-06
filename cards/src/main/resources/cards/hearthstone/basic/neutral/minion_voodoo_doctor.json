@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Battlecry: Restore 2 Health.",
+  "description": "Battlecry: Restore #2 Health.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

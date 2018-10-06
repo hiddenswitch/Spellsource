@@ -1,9 +1,8 @@
 package net.demilich.metastone.game.spells.desc.trigger;
 
-import java.io.Serializable;
-
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -13,8 +12,29 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+import static com.google.common.collect.Maps.immutableEntry;
+
 /**
- * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options.
+ * Data specifying a trigger, including what event it reacts to, what spell it casts, and various options. Each field in
+ * this class corresponds directly to a field that appears in the JSON whenever an {@code EnchantmentDesc} is expected.
+ * In other words, an EnchantmentDesc looks like:
+ * <pre>
+ *   {
+ *    "eventTrigger": { An object corresponding to an {@link EventTriggerDesc} }
+ *    "spell": { An object corresponding to a {@link SpellDesc} }
+ *    "oneTurn": A boolean indicating that this Enchantment lasts one turn.
+ *    "maxFires": The maximum number of times this enchantment will fire until it expires.
+ *    "countUntilCast": The minimum number of times this enchantment must fire until its spell is cast
+ *    "persistentOwner": See {@link #persistentOwner}
+ *    "keepAfterTransform": See {@link #keepAfterTransform}
+ *    "countByValue": See {@link #countByValue}
+ *   }
+ * </pre>
  * <p>
  * This object is used to create an {@link Enchantment} using its {@link #create()} function whenever entities like
  * actors come into play with a {@link net.demilich.metastone.game.cards.desc.CardDesc#trigger} specified.
@@ -36,10 +56,12 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
  * </pre>
  * Note, this is distinct from an {@link EventTriggerDesc} or {@link net.demilich.metastone.game.spells.trigger.EventTrigger},
  * which defines how to react to which events in game.
+ *
  * @see Enchantment for more about enchantments.
+ * @see net.demilich.metastone.game.cards.desc.CardDesc to see where {@link EnchantmentDesc} can typically go.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class EnchantmentDesc implements Serializable, Cloneable {
+public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Object>*/ implements Serializable, Cloneable {
 
 	public EnchantmentDesc() {
 	}
@@ -63,8 +85,8 @@ public final class EnchantmentDesc implements Serializable, Cloneable {
 	 * argument of a {@link net.demilich.metastone.game.spells.Spell#onCast(GameContext, Player, SpellDesc, Entity,
 	 * Entity)} invocation shouldn't change if the owner of the {@link Enchantment#hostReference} changes.
 	 * <p>
-	 * This implements Blessing of Wisdom, Power Word: Glory and other effects whose text would change depending on
-	 * whose perspective the text is read from.
+	 * This implements Blessing of Wisdom, Power Word: Glory and other effects whose text would change depending on whose
+	 * perspective the text is read from.
 	 */
 	public boolean persistentOwner;
 	/**
@@ -98,13 +120,28 @@ public final class EnchantmentDesc implements Serializable, Cloneable {
 	 */
 	public boolean countByValue;
 
+	public Set<Map.Entry<EnchantmentDescArg, Object>> entrySet() {
+		@SuppressWarnings("unchecked")
+		HashSet<Map.Entry<EnchantmentDescArg, Object>> entries = Sets.newHashSet(
+				immutableEntry(EnchantmentDescArg.EVENT_TRIGGER, eventTrigger),
+				immutableEntry(EnchantmentDescArg.SPELL, spell),
+				immutableEntry(EnchantmentDescArg.ONE_TURN, oneTurn),
+				immutableEntry(EnchantmentDescArg.PERSISTENT_OWNER, persistentOwner),
+				immutableEntry(EnchantmentDescArg.MAX_FIRES, maxFires),
+				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
+				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue)
+		);
+
+		return entries;
+	}
+
 	/**
 	 * Creates an enchantment represented by this configuration.
 	 * <p>
-	 * The enchantment's {@link Enchantment#setHost(Entity)} call should be applied immediately afterwards to specify
-	 * the host of this enchantment. {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link
-	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} enchantments exist in play, and by convention they
-	 * have unspecified hosts.
+	 * The enchantment's {@link Enchantment#setHost(Entity)} call should be applied immediately afterwards to specify the
+	 * host of this enchantment. {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} and {@link
+	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} enchantments exist in play, and by convention they have
+	 * unspecified hosts.
 	 *
 	 * @return The enchantment
 	 */

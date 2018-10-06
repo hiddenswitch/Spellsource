@@ -1,0 +1,18 @@
+{
+  "name": "7 damage single and 2 damage AoE",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Deal $7 damage. Deal $2 damage to all other enemies.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "SwipeSpell",
+    "value": 7,
+    "secondaryTarget": "ENEMY_CHARACTERS",
+    "secondaryValue": 2
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

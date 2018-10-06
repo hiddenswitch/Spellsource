@@ -2,15 +2,12 @@ package com.hiddenswitch.cluster.applications;
 
 import ch.qos.logback.classic.Level;
 import com.hiddenswitch.cluster.models.SimulationConfig;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.common.DeckListParsingException;
-import net.demilich.metastone.game.GameContext;
+import com.hiddenswitch.spellsource.util.Simulation;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
-import net.demilich.metastone.game.statistics.Statistic;
-import org.apache.commons.cli.*;
 import org.apache.commons.io.FileUtils;
 import org.slf4j.LoggerFactory;
 
@@ -19,7 +16,6 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Function;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -65,7 +61,7 @@ public class Simulate {
 		CardCatalogue.loadCardsFromPackage();
 
 		// Turn the decks into Deck objects
-		final Map<String, Deck> decks = deckPaths.stream()
+		Stream<String> decklists = deckPaths.stream()
 				.distinct()
 				.map(str -> str.replace("\\ ", " "))
 				// Open the files
@@ -80,42 +76,22 @@ public class Simulate {
 					}
 				})
 				// Return null if for some reason we couldn't read the files, and filter the unread ones out
-				.filter(Objects::nonNull)
-				// Convert to decklists
-				.map(deckList -> {
-					try {
-						return DeckCreateRequest.fromDeckList(deckList);
-					} catch (DeckListParsingException e) {
-						System.err.println(String.format("Deck Parsing: Failed to parse deck from decklist. \n%s", e.getMessage()));
-						return null;
-					}
-				})
-				.filter(Objects::nonNull)
-				.map(DeckCreateRequest::toGameDeck)
-				// Make a key-value dictionary of the decks
-				.collect(Collectors.toConcurrentMap(Deck::getName, Function.identity()));
+				.filter(Objects::nonNull);
+
+		final Map<String, GameDeck> decks = Simulation.getDecks(decklists.collect(Collectors.toList()));
 
 		if (decks.size() < 2) {
 			System.err.println("Simulate: Too few decks were specified. You need at least two decks to generate pairs.");
 			return;
 		}
+		// If the simulation is using two different behaviours, we want every behaviour to have had a chance to play
+		// every deck
+		boolean twoDifferentBehaviours = simulationConfig.twoDifferentBehaviours();
 
 		// Create all possible deck to deck matchups
 		final List<String[]> combinations;
-		// If the simulation is using two different behaviours, we want every behaviour to have had a chance to play
-		// every deck
-		if (simulationConfig.twoDifferentBehaviours()) {
-			// Combinations with replacement
-			combinations = decks.keySet().stream().flatMap(deck1 -> decks.keySet().stream()
-					.map(deck2 -> new String[]{deck1, deck2})).collect(Collectors.toList());
-		} else {
-			// Just include distinct combinations (combinations without replacement)
-			combinations = GameContext.getDeckCombinations(new ArrayList<>(decks.keySet()));
-		}
 
-		if (!mirrors) {
-			combinations.removeIf(pair -> pair[0].equals(pair[1]));
-		}
+		combinations = Simulation.getCombinations(mirrors, decks, twoDifferentBehaviours);
 
 		// Store the progress
 		AtomicInteger matchesComplete = new AtomicInteger(0);
@@ -125,69 +101,16 @@ public class Simulate {
 
 		// Printing progress thread
 		if (!quiet) {
-			progressThread = new Thread(() -> {
-
-				try {
-					while (matchesComplete.get() <= totalMatches) {
-						Thread.sleep(5000);
-						int matchesNow = matchesComplete.get();
-						System.err.println(String.format("Progress: %.2f%% (%d/%d matches completed)", (float) matchesNow / (float) totalMatches * 100.0f, matchesNow, totalMatches));
-					}
-				} catch (InterruptedException e) {
-					int matchesNow = matchesComplete.get();
-					System.err.println(String.format("Progress: %.2f%% (%d/%d matches completed)", (float) matchesNow / (float) totalMatches * 100.0f, matchesNow, totalMatches));
-				}
-			});
-
+			progressThread = Simulation.getMonitor(matchesComplete, totalMatches);
 			progressThread.start();
 		}
 
-		// Get the results
-		final Map<String[], SimulationResult> results = combinations.stream()
-				// Get a map of deck pairs..
-				.collect(Collectors.toMap(Function.identity(),
-						// ... to simulations, which are parallelized
-						deckKeyPair -> {
-							// Get a pair of decks
-							List<Deck> deckPair = Arrays.stream(deckKeyPair).map(decks::get).collect(Collectors.toList());
-							// Run a single simulation on the decks
-							return GameContext.simulate(deckPair, behaviourSupplier1, behaviourSupplier2, number, true, matchesComplete);
-						}));
+		final Map<String[], SimulationResult> results = Simulation.getResults(behaviourSupplier1, behaviourSupplier2, number, decks, combinations, matchesComplete);
 
-		String statsHeaders = Stream.concat(Arrays.stream(Statistic.values()).sorted()
-						.map(Enum::name)
-						.map(s -> "Player 1 " + s),
-				Arrays.stream(Statistic.values()).sorted()
-						.map(Enum::name)
-						.map(s -> "Player 2 " + s))
-				.reduce((str1, str2) -> str1 + "\t" + str2).orElseThrow(NullPointerException::new);
-
-		out.println("Deck 1\tDeck 2\tNumber of Games\t" + statsHeaders);
-
-		// Write the results to the output, or standard out if it's not specified. Output as a TSV
-		for (SimulationResult simulation : results.values()) {
-			StringBuilder row = new StringBuilder();
-			row.append(simulation.getConfig().getPlayerConfig1().getDeck().getName());
-			row.append("\t");
-			row.append(simulation.getConfig().getPlayerConfig2().getDeck().getName());
-			row.append("\t");
-			row.append(simulation.getNumberOfGames());
-			row.append("\t");
-			row.append(Stream.concat(Arrays.stream(Statistic.values()).sorted().map(s -> simulation.getPlayer1Stats().getStats().getOrDefault(s, "")),
-					Arrays.stream(Statistic.values()).sorted().map(s -> simulation.getPlayer2Stats().getStats().getOrDefault(s, "")))
-					.map(Object::toString)
-					.reduce((str1, str2) -> str1 + "\t" + str2).orElseThrow(NullPointerException::new));
-			row.append("\n");
-			out.print(row.toString());
-		}
-
-		out.flush();
-		out.close();
+		Simulation.writeResults(out, results);
 
 		if (progressThread != null) {
 			progressThread.interrupt();
 		}
-
 	}
-
 }

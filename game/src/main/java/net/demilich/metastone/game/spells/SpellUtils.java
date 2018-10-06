@@ -1,21 +1,20 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.DiscoverAction;
-import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
 import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -23,7 +22,10 @@ import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -31,13 +33,18 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
 
+import static java.util.stream.Collectors.toList;
+import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
+
 /**
  * A set of utilities to help write spells.
  */
 public class SpellUtils {
+	private static Logger logger = LoggerFactory.getLogger(SpellUtils.class);
+
 	/**
-	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on
-	 * a card.
+	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on a
+	 * card.
 	 *
 	 * @param context The game context.
 	 * @param player  The player casting the spell.
@@ -53,8 +60,185 @@ public class SpellUtils {
 		if (targetReference == null && target != null) {
 			targetReference = target.getReference();
 		}
+		if (sourceReference == null) {
+			sourceReference = EntityReference.NONE;
+		}
+		if (targetReference == null) {
+			targetReference = EntityReference.NONE;
+		}
+		// Determine casting player here
+		/*
+		if (spell.containsKey(SpellArg.TARGET_PLAYER)) {
+			CastRandomSpellSpell.DetermineCastingPlayer castingPlayer = determineCastingPlayer(context, player, source, spell.getTargetPlayer());
+			player = castingPlayer.getCastingPlayer();
+		}
+		*/
 		context.getLogic().castSpell(player.getId(), spell, sourceReference, targetReference, true);
 	}
+
+	/**
+	 * Plays a card "randomly."
+	 *
+	 * @param context
+	 * @param player
+	 * @param card
+	 * @param source
+	 * @param summonRightmost       When {@code true} and {@link Card#isActor()}, summons the card in the rightmost
+	 *                              position. Otherwise, summons it to a random position.
+	 * @param resolveBattlecry      When {@code true}, also resolves the battlecry with a random target. Otherwise, the
+	 *                              battlecry is ignored.
+	 * @param onlyWhileSourceInPlay When {@code true},
+	 * @param randomChooseOnes      When {@code true}, randomly chooses the choose-one effects. Otherwise, checks if the
+	 *                              card has had a {@link Attribute#CHOICES} made.
+	 * @param playFromHand          When {@code true}, the card is counterable, mana is deducted and played card stats are
+	 *                              incremented. Otherwise, only the effects of the card, like putting a minion into play
+	 *                              or the underlying spell effects, are executed.
+	 * @return
+	 */
+	@Suspendable
+	public static boolean playCardRandomly(GameContext context,
+	                                       Player player,
+	                                       Card card,
+	                                       Entity source,
+	                                       boolean summonRightmost,
+	                                       boolean resolveBattlecry,
+	                                       boolean onlyWhileSourceInPlay,
+	                                       boolean randomChooseOnes,
+	                                       boolean playFromHand) {
+
+		CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
+		// Stop casting battlecries if Shudderwock is transformed or destroyed
+		if (onlyWhileSourceInPlay && !determineCastingPlayer.isSourceInPlay()) {
+			return false;
+		}
+
+		Player castingPlayer = determineCastingPlayer.getCastingPlayer();
+
+		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
+
+		PlayCardAction action = null;
+		if (card.isChooseOne()) {
+			int chooseOneOverride = context.getLogic().getChooseOneOverrides(player, card);
+			if (chooseOneOverride != -1) {
+				if (chooseOneOverride == 2) {
+					action = card.playBothOptions();
+				} else {
+					action = card.playOptions()[chooseOneOverride];
+				}
+			} else if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
+				action = card.playBothOptions();
+			} else {
+				boolean doesNotContainChoice = !card.getAttributes().containsKey(Attribute.CHOICE)
+						&& card.getAttributes().containsKey(Attribute.PLAYED_FROM_HAND_OR_DECK);
+				if (randomChooseOnes || doesNotContainChoice) {
+					if (doesNotContainChoice) {
+						logger.warn("playCardRandomly {} {}: A choose one card {} played from the hand does not contain a choice. Choosing randomly.",
+								context.getGameId(), source, card);
+					}
+					PlayCardAction[] options = card.playOptions();
+					action = options[context.getLogic().random(options.length)];
+				} else if (card.getAttributes().containsKey(Attribute.CHOICE)) {
+					action = card.playOptions()[card.getAttributeValue(Attribute.CHOICE)];
+				}
+			}
+		} else {
+			action = card.play();
+		}
+
+		if (action == null) {
+			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
+			return false;
+		}
+
+		action = action.clone();
+
+		if (card.isActor()) {
+			if (!summonRightmost && card.getCardType() == CardType.MINION) {
+				int minionCount = player.getMinions().size();
+				int targetIndex = context.getLogic().random(minionCount + 1);
+				if (targetIndex == minionCount) {
+					// Summon at the rightmost spot (default)
+				} else {
+					// summon next to the specified target
+					action.setTargetReference(player.getMinions().get(targetIndex).getReference());
+				}
+			}
+
+			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
+			// Do we resolve battlecries?
+			if (resolveBattlecry) {
+				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
+				// the action from the actor that would be summoned.
+				BattlecryAction specifiedAction;
+				if (actionWithBattlecry.getBattlecryAction() == null) {
+					// Look at the actor
+					Actor actor = card.actor();
+					if (actor == null) {
+						logger.error("playCardRandom {} {}: The actor is missing from the card {}", context.getGameId(), source, card);
+						return false;
+					}
+					specifiedAction = actor.getBattlecry();
+				} else {
+					specifiedAction = actionWithBattlecry.getBattlecryAction();
+				}
+
+				if (specifiedAction != null) {
+					// We found a battlecry
+					specifiedAction = specifiedAction.clone();
+
+					// If a target is required then we'll see if there are valid targets and execute it. If a target isn't required,
+					// then the battlecry will do what it needs to do.
+					if (specifiedAction.getTargetRequirement() != null
+							&& specifiedAction.getTargetRequirement() != TargetSelection.NONE) {
+						List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), action);
+						if (targets.isEmpty()) {
+							// Don't execute the battlecry if there are no valid targets for one that requires targets but still
+							// put the actor into play
+							specifiedAction = BattlecryAction.NONE;
+						} else {
+							EntityReference battlecryTarget = context.getLogic().getRandom(targets).getReference();
+							specifiedAction.setTargetReference(battlecryTarget);
+						}
+						actionWithBattlecry.setBattlecryAction(specifiedAction);
+					}
+				}
+			} else {
+				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
+				// true but this method's parameter to not resolve battlecries will be respected
+				actionWithBattlecry.setBattlecryAction(BattlecryAction.NONE);
+			}
+		} else if (card.isSpell() || card.isHeroPower()) {
+			// This is some other kind of action that takes a target
+			if (action.getTargetRequirement() != null && action.getTargetRequirement() != TargetSelection.NONE) {
+				List<Entity> targets = context.getLogic().getValidTargets(player.getId(), action);
+				EntityReference randomTarget = null;
+				if (targets != null && !targets.isEmpty()) {
+					randomTarget = context.getLogic().getRandom(targets).getReference();
+					action.setTargetReference(randomTarget);
+				} else {
+					// Card should be revealed, but there were no valid targets so the spell isn't cast
+					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
+					return true;
+				}
+			}
+
+			// Target requirement may have been none, but the action is still valid.
+		} else {
+			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
+			return false;
+		}
+
+		// Do the deed
+		if (playFromHand) {
+			action.execute(context, player.getId());
+		} else {
+			action.innerExecute(context, player.getId());
+		}
+
+		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
+		return true;
+	}
+
 
 	/**
 	 * Given a filter {@link Operation}, return a boolean representing whether that operation is satisfied.
@@ -113,8 +297,7 @@ public class SpellUtils {
 	}
 
 	/**
-	 * Consider the {@link Environment#PENDING_CARD} and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER}
-	 * zone for the specified card
+	 * Consider the  and {@link Environment#OUTPUTS}, and the {@link Zones#DISCOVER} zone for the specified card
 	 *
 	 * @param context
 	 * @param cardId
@@ -125,8 +308,8 @@ public class SpellUtils {
 			return null;
 		}
 		Card card;
-		if (cardId.toUpperCase().equals("PENDING_CARD")) {
-			card = context.getPendingCard();
+		if (cardId.toUpperCase().equals("EVENT_SOURCE")) {
+			card = (Card) context.resolveSingleTarget(context.getEventSourceStack().peek());
 		} else if (cardId.toUpperCase().equals("OUTPUT")) {
 			card = context.getOutputCard();
 		} else {
@@ -138,12 +321,11 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified inside the {@link SpellArg#CARD} and {@link SpellArg#CARDS} arguments.
 	 *
-	 * @param context The game context to use for {@link GameContext#getPendingCard()} or {@link
-	 *                GameContext#getOutputCard()} lookups.
+	 * @param context The game context to use for  or {@link GameContext#getOutputCard()} lookups.
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.
 	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an {@code
-	 * "OUTPUT_CARD"} value corresponds to.
+	 * 		"OUTPUT_CARD"} value corresponds to.
 	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
@@ -179,19 +361,18 @@ public class SpellUtils {
 	 * This method makes a network request if required.
 	 *
 	 * @param context The game context that hosts the player and state for this request.
-	 * @param player  {@link Player#getBehaviour()} will be called to get the behaviour that will choose from the
-	 *                cards.
+	 * @param player  The player that will choose from the cards.
 	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this {@link
 	 *                SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically, this
 	 *                {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell}, or a
 	 *                {@link ChangeHeroPowerSpell}. These spells all receive cards as arguments. This argument allows a
 	 *                {@link DiscoverAction} to do more sophisticated things than just put cards into hands.
-	 * @param cards   A {@link CardList} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the
-	 *                player and shown in the discover card UI to the player.
+	 * @param cards   A {@link CardList} of cards that get copied, added to the {@link Zones#DISCOVER} zone of the player
+	 *                and shown in the discover card UI to the player.
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
-	 * DiscoverCardSpell}.
+	 * 		DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardList cards) {
@@ -255,8 +436,8 @@ public class SpellUtils {
 	 * @param spells  A list of spells from which to generate virtual cards.
 	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
 	 *                call.
-	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected
-	 * card. To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
+	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
+	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -268,26 +449,27 @@ public class SpellUtils {
 			final String name = spell.getString(SpellArg.NAME);
 			final String description = spell.getString(SpellArg.DESCRIPTION);
 			// TODO: Parse the parenthesized part of a name in a spell as a description
-			spellCardDesc.id = context.getLogic().generateCardId();
-			spellCardDesc.name = name;
+			spellCardDesc.setId(context.getLogic().generateCardId());
+			spellCardDesc.setName(name);
 			List<Entity> entities = context.resolveTarget(player, source, desc.getTarget());
 			int baseManaCost = 0;
 			if (entities != null
 					&& entities.size() > 0) {
 				baseManaCost = desc.getValue(SpellArg.MANA, context, player, entities.get(0), source, 0);
 			}
-			spellCardDesc.baseManaCost = baseManaCost;
-			spellCardDesc.description = description;
-			spellCardDesc.heroClass = HeroClass.ANY;
-			spellCardDesc.type = CardType.SPELL;
-			spellCardDesc.rarity = Rarity.FREE;
-			spellCardDesc.targetSelection = (TargetSelection) spell.getOrDefault(SpellArg.TARGET_SELECTION, desc.getOrDefault(SpellArg.TARGET_SELECTION, TargetSelection.NONE));
-			spellCardDesc.spell = spell;
-			spellCardDesc.collectible = false;
+			spellCardDesc.setBaseManaCost(baseManaCost);
+			spellCardDesc.setDescription(description);
+			spellCardDesc.setHeroClass(HeroClass.ANY);
+			spellCardDesc.setType(CardType.SPELL);
+			spellCardDesc.setRarity(Rarity.FREE);
+			spellCardDesc.setTargetSelection((TargetSelection) spell.getOrDefault(SpellArg.TARGET_SELECTION, desc.getOrDefault(SpellArg.TARGET_SELECTION, TargetSelection.NONE)));
+			spellCardDesc.setSpell(spell);
+			spellCardDesc.setCollectible(false);
 
 			Card card = spellCardDesc.create();
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());
+			context.addTempCard(card.clone());
 			card.moveOrAddTo(context, Zones.DISCOVER);
 			cards.add(card);
 
@@ -300,80 +482,36 @@ public class SpellUtils {
 		return postDiscover(context, player, cards, discoverActions);
 	}
 
-	public static List<Actor> getValidRandomTargets(List<Entity> targets) {
-		List<Actor> validTargets = new ArrayList<Actor>();
-		for (Entity entity : targets) {
-			Actor actor = (Actor) entity;
-			if (!actor.isDestroyed() || actor.getEntityType() == EntityType.HERO) {
-				validTargets.add(actor);
-			}
-
-		}
-		return validTargets;
-	}
-
-	public static List<Entity> getValidTargets(GameContext context, Player player, List<Entity> allTargets, EntityFilter filter) {
-		if (filter == null) {
-			return allTargets;
-		}
+	static List<Entity> getValidRandomTargets(List<Entity> targets) {
 		List<Entity> validTargets = new ArrayList<>();
-		for (Entity entity : allTargets) {
-			if (filter.matches(context, player, entity, null)) {
+		for (Entity entity : targets) {
+			if (entity instanceof Actor) {
+				Actor actor = (Actor) entity;
+				if (!actor.isDestroyed() || actor.getEntityType() == EntityType.HERO) {
+					validTargets.add(actor);
+				}
+			} else {
 				validTargets.add(entity);
 			}
 		}
 		return validTargets;
 	}
 
-	public static int hasHowManyOfRace(Player player, Race race) {
-		int count = 0;
-		for (Minion minion : player.getMinions()) {
-			if (minion.getRace() == race) {
-				count++;
+	public static List<Entity> getValidTargets(GameContext context, Player player, List<Entity> allTargets, EntityFilter filter, Entity host) {
+		if (filter == null) {
+			return allTargets;
+		}
+		List<Entity> validTargets = new ArrayList<>();
+		for (Entity entity : allTargets) {
+			if (filter.matches(context, player, entity, host)) {
+				validTargets.add(entity);
 			}
 		}
-		return count;
+		return validTargets;
 	}
 
 	public static boolean highlanderDeck(Player player) {
 		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
-	}
-
-	public static boolean holdsCardOfType(Player player, CardType cardType) {
-		for (Card card : player.getHand()) {
-			if (card.getCardType().isCardType(cardType)) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	public static boolean holdsMinionOfRace(Player player, Race race) {
-		for (Card card : player.getHand()) {
-			if (card.getAttribute(Attribute.RACE) == race) {
-				return true;
-			}
-		}
-		return false;
-	}
-
-	@Suspendable
-	public static int howManyMinionsDiedThisTurn(GameContext context) {
-		int currentTurn = context.getTurn();
-		int count = 0;
-		for (Player player : context.getPlayers()) {
-			for (Entity deadEntity : player.getGraveyard()) {
-				if (deadEntity.getEntityType() != EntityType.MINION) {
-					continue;
-				}
-
-				if (deadEntity.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {
-					count++;
-				}
-
-			}
-		}
-		return count;
 	}
 
 	public static int getBoardPosition(GameContext context, Player player, SpellDesc desc, Entity source) {
@@ -384,6 +522,10 @@ public class SpellUtils {
 		}
 		RelativeToSource relativeBoardPosition = (RelativeToSource) desc.get(SpellArg.BOARD_POSITION_RELATIVE);
 		if (relativeBoardPosition == null) {
+			return UNDEFINED;
+		}
+
+		if (!(source instanceof Minion)) {
 			return UNDEFINED;
 		}
 
@@ -443,16 +585,30 @@ public class SpellUtils {
 			return;
 		}
 
+		// We should never try to cast a child on output that is valid but has an unassigned location. Temporarily move it
+		// into set aside when that happens
+		boolean needsToBeRemoved = false;
+		if (output.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+			output.setId(context.getLogic().generateId());
+			output.setOwner(player.getId());
+			output.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			needsToBeRemoved = true;
+		}
+
 		context.getOutputStack().push(output.getReference());
 		castChildSpell(context, player, spell, source, target);
 		context.getOutputStack().pop();
+
+		if (needsToBeRemoved) {
+			output.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
+		}
 	}
 
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
 	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
-	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses
-	 * the target's {@link Entity#getSourceCard()} as the targeted card.
+	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
+	 * target's {@link Entity#getSourceCard()} as the targeted card.
 	 * <p>
 	 * The number of cards randomly retrieved is equal to the {@link SpellArg#VALUE} specified in the {@code desc}
 	 * argument, defaulting to 1.
@@ -471,29 +627,71 @@ public class SpellUtils {
 	/**
 	 * Retrieves the cards specified in the {@link SpellDesc}, either in the {@link SpellArg#CARD} or {@link
 	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
-	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses
-	 * the target's {@link Entity#getSourceCard()} as the targeted card.
+	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
+	 * target's {@link Entity#getSourceCard()} as the targeted card.
 	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved
 	 * @param target  The target, which can be {@code null}
 	 * @param source  The source or host {@link Entity}, typically the origin of this spell cast.
 	 * @param desc    The {@link SpellDesc} typically of the calling spell.
-	 * @param count   The number of cards to return, exclusively and randomly, from the generated card list.
+	 * @param count   The maximum number of cards to return, exclusively and randomly, from the generated card list. Or,
+	 *                returns all the cards if {@code count > cards.size()}, where {@code cards} is all the possible
+	 *                cards.
 	 * @return A list of cards.
 	 */
 	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc, int count) {
 		CardList cards = new CardArrayList(Arrays.asList(getCards(context, desc)));
 		boolean hasCardSourceOrFilter = desc.containsKey(SpellArg.CARD_SOURCE) || desc.containsKey(SpellArg.CARD_FILTER);
-		if (cards.isEmpty()
-				&& target != null) {
+		if (cards.isEmpty()) {
 			if (hasCardSourceOrFilter) {
 				cards.addAll(desc.getFilteredCards(context, player, source));
-			} else {
+			} else if (target != null) {
 				cards.add(target.getSourceCard());
 			}
 		}
-		CardList shuffled = cards.shuffle(context.getLogic().getRandom());
-		return new CardArrayList(shuffled.subList(0, count));
+
+		if (count < cards.size()) {
+			CardList result = new CardArrayList();
+			int i = count;
+			while (cards.size() > 0
+					&& i > 0) {
+				result.add(context.getLogic().removeRandom(cards));
+				i--;
+			}
+			return result;
+		} else {
+			return cards;
+		}
+	}
+
+	public static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.anyMatch(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (Aura) t)
+						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
+	}
+
+	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (T) t)
+						.filter(((Predicate<Aura>) Aura::isExpired).negate()))
+				.collect(toList());
+	}
+
+	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass) {
+		return context.getEntities()
+				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
+						.filter(auraClass::isInstance)
+						.map(t -> (Aura) t)
+						.filter(((Predicate<Aura>) Aura::isExpired).negate())
+						.map(aura -> aura.getDesc().getApplyEffect()))
+				.toArray(SpellDesc[]::new);
 	}
 }

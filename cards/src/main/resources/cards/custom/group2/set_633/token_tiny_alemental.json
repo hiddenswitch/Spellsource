@@ -1,0 +1,14 @@
+{
+  "name": "Tiny Alemental",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

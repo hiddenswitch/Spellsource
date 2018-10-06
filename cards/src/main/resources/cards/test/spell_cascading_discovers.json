@@ -1,0 +1,23 @@
+{
+  "name": "Cascading Discovers",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "RecastSpell"
+    },
+    "cards": [
+      "spell_empty_card_1",
+      "spell_empty_card_2",
+      "spell_cascades_into_choices"
+    ]
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

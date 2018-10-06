@@ -1,0 +1,17 @@
+{
+  "name": "Temporal Loop",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "<b>Hero Power</b> Start your turn over.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
+import com.hiddenswitch.spellsource.client.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.impl.WebResultImpl;
 import io.vertx.core.AsyncResult;
 
@@ -26,6 +27,22 @@ public interface WebResult<T> extends AsyncResult<T> {
 
 	static <T> WebResult<T> failed(int responseCode, Throwable cause) {
 		return new WebResultImpl<T>(responseCode, cause);
+	}
+
+	static <T> WebResult<T> notFound(String message, Object... objs) {
+		return WebResult.failed(404, new NullPointerException(String.format(message, objs)));
+	}
+
+	static <T> WebResult<T> forbidden(String message, Object... objs) {
+		return WebResult.failed(403, new SecurityException(String.format(message, objs)));
+	}
+
+	static <T> WebResult<T> unsupported(String message, Object... objs) {
+		return WebResult.failed(501, new UnsupportedOperationException(String.format(message, objs)));
+	}
+
+	static <T> WebResult<T> invalidArgument(String message, Object... objs) {
+		return WebResult.failed(400, new IllegalArgumentException(String.format(message, objs)));
 	}
 }
 

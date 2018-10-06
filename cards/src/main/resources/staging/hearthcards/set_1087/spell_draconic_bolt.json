@@ -1,0 +1,12 @@
+{
+  "name": "Draconic Bolt",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Deal 6 damage.\r\n[b]Supremacy:[/b] [b][/b]Draw \r\n2 cards.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

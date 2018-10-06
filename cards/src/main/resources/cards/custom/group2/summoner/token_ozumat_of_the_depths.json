@@ -1,0 +1,42 @@
+{
+  "name": "Ozumat of the Depths",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Ozumat's Nightmare comes into play (permanently).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "WillEndSequenceTrigger",
+              "targetPlayer": "BOTH"
+            },
+            "spell": {
+              "class": "RecastSpell",
+              "card": "token_ozumat's_nightmare"
+            }
+          }
+        },
+        {
+          "class": "RecastSpell",
+          "card": "token_ozumat's_nightmare"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

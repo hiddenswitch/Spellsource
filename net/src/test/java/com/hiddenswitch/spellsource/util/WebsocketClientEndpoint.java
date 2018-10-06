@@ -1,78 +1,64 @@
 package com.hiddenswitch.spellsource.util;
 
 import org.apache.commons.lang3.exception.ExceptionUtils;
-import org.glassfish.tyrus.client.ClientManager;
-import org.glassfish.tyrus.client.ClientProperties;
-import org.glassfish.tyrus.client.ThreadPoolConfig;
-import org.glassfish.tyrus.container.grizzly.client.GrizzlyClientProperties;
+import org.asynchttpclient.AsyncHttpClient;
+import org.asynchttpclient.DefaultAsyncHttpClientConfig;
+import org.asynchttpclient.netty.ws.NettyWebSocket;
+import org.asynchttpclient.ws.WebSocketListener;
+import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 import org.junit.Assert;
 
-import javax.websocket.*;
-import java.io.IOException;
-import java.net.URI;
 import java.nio.charset.Charset;
 
-@ClientEndpoint
-public class WebsocketClientEndpoint {
-	private Session userSession = null;
+import static org.asynchttpclient.Dsl.asyncHttpClient;
+
+
+public class WebsocketClientEndpoint implements WebSocketListener {
+	private final NettyWebSocket websocket;
 	private MessageHandler messageHandler;
+	private Runnable closeHandler;
 
 	public WebsocketClientEndpoint(String endpoint, String auth) {
 		try {
-			URI endpointURI = new URI(endpoint + "?X-Auth-Token=" + auth);
-			ClientManager client = ClientManager.createClient();
-			client.getProperties().put(ClientProperties.SHARED_CONTAINER, true);
-			client.getProperties().put(GrizzlyClientProperties.SELECTOR_THREAD_POOL_CONFIG, ThreadPoolConfig.defaultConfig().setMaxPoolSize(256));
-			client.getProperties().put(GrizzlyClientProperties.WORKER_THREAD_POOL_CONFIG, ThreadPoolConfig.defaultConfig().setMaxPoolSize(256));
-			client.connectToServer(this, endpointURI);
+			AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
+					.setWebSocketMaxFrameSize(1024 * 1024)
+					.setMaxConnections(1024));
+			websocket = client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
+					.execute(new WebSocketUpgradeHandler.Builder()
+							.addWebSocketListener(this).build()).get();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	/**
-	 * Callback hook for Connection open events.
-	 *
-	 * @param userSession the userSession which is opened.
-	 */
-	@OnOpen
-	public void onOpen(Session userSession) {
-		this.userSession = userSession;
+	@Override
+	public void onOpen(org.asynchttpclient.ws.WebSocket websocket) {
 	}
 
-	/**
-	 * Callback hook for Connection close events.
-	 *
-	 * @param userSession the userSession which is getting closed.
-	 * @param reason      the reason for connection close
-	 */
-	@OnClose
-	public void onClose(Session userSession, CloseReason reason) {
-	}
-
-	/**
-	 * Callback hook for Message Events. This method will be invoked when a client send a message.
-	 *
-	 * @param message The text message
-	 */
-	@OnMessage
-	public void onMessage(String message) {
-		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(message);
+	@Override
+	public void onClose(org.asynchttpclient.ws.WebSocket websocket, int code, String reason) {
+		if (closeHandler != null) {
+			closeHandler.run();
 		}
 	}
 
-	@OnMessage
-	public void onMessage(byte[] message) {
-		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(new String(message, Charset.defaultCharset()));
-		}
-	}
-
-	@OnError
 	public void onError(Throwable e) {
 		ExceptionUtils.printRootCauseStackTrace(e);
 		Assert.fail(e.getMessage());
+	}
+
+	@Override
+	public void onBinaryFrame(byte[] payload, boolean finalFragment, int rsv) {
+		if (this.messageHandler != null) {
+			this.messageHandler.handleMessage(new String(payload, Charset.defaultCharset()));
+		}
+	}
+
+	@Override
+	public void onTextFrame(String payload, boolean finalFragment, int rsv) {
+		if (this.messageHandler != null) {
+			this.messageHandler.handleMessage(payload);
+		}
 	}
 
 	/**
@@ -80,7 +66,7 @@ public class WebsocketClientEndpoint {
 	 *
 	 * @param msgHandler
 	 */
-	public void addMessageHandler(MessageHandler msgHandler) {
+	public void setMessageHandler(MessageHandler msgHandler) {
 		this.messageHandler = msgHandler;
 	}
 
@@ -90,24 +76,28 @@ public class WebsocketClientEndpoint {
 	 * @param message
 	 */
 	public void sendMessage(String message) {
-		this.userSession.getAsyncRemote().sendText(message);
-	}
-
-	public Session getUserSession() {
-		return userSession;
+		websocket.sendTextFrame(message);
 	}
 
 	public void close() {
-		try {
-			userSession.close();
-		} catch (IOException e) {
-			e.printStackTrace();
+		websocket.sendCloseFrame();
+		if (closeHandler != null) {
+			closeHandler.run();
 		}
+	}
+
+	public boolean isOpen() {
+		return websocket.isOpen();
 	}
 
 	@FunctionalInterface
 	public interface MessageHandler {
 
 		void handleMessage(String message);
+	}
+
+	public WebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
+		this.closeHandler = closeHandler;
+		return this;
 	}
 }

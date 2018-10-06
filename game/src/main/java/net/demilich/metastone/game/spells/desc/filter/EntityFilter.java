@@ -2,7 +2,8 @@ package net.demilich.metastone.game.spells.desc.filter;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -14,9 +15,10 @@ import java.util.function.Predicate;
 /**
  * Filters {@link Entity} objects using its {@link #test(GameContext, Player, Entity, Entity)} implementation.
  */
-public abstract class EntityFilter implements Serializable {
-	protected final EntityFilterDesc desc;
+public abstract class EntityFilter implements Serializable, HasDesc<EntityFilterDesc> {
+	private EntityFilterDesc desc;
 
+	@Override
 	public EntityFilterDesc getDesc() {
 		return desc;
 	}
@@ -25,21 +27,21 @@ public abstract class EntityFilter implements Serializable {
 		this.desc = desc;
 	}
 
-	public Object getArg(FilterArg arg) {
-		return desc.get(arg);
+	public Object getArg(EntityFilterArg arg) {
+		return getDesc().get(arg);
 	}
 
-	public boolean hasArg(FilterArg arg) {
-		return desc.containsKey(arg);
+	public boolean hasArg(EntityFilterArg arg) {
+		return getDesc().containsKey(arg);
 	}
 
-	public Predicate<Card> matcher(GameContext context, Player player, Entity host) {
+	public <T extends Entity> Predicate<T> matcher(GameContext context, Player player, Entity host) {
 		return (card) -> matches(context, player, card, host);
 	}
 
 	public boolean matches(GameContext context, Player player, Entity entity, Entity host) {
-		boolean invert = desc.getBool(FilterArg.INVERT);
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(FilterArg.TARGET_PLAYER);
+		boolean invert = getDesc().getBool(EntityFilterArg.INVERT);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EntityFilterArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
 		}
@@ -82,19 +84,24 @@ public abstract class EntityFilter implements Serializable {
 			return false;
 		}
 		EntityFilter rhs = (EntityFilter) other;
-		if ((desc == null) != (rhs.desc == null)) {
+		if ((getDesc() == null) != (rhs.getDesc() == null)) {
 			return false;
 		}
-		return desc == null || desc.equals(rhs.desc);
+		return getDesc() == null || getDesc().equals(rhs.getDesc());
 	}
 
 	protected List<Entity> getTargetedEntities(GameContext context, Player player, Entity host) {
-		EntityReference targetReference = (EntityReference) desc.get(FilterArg.TARGET);
+		EntityReference targetReference = (EntityReference) getDesc().get(EntityFilterArg.TARGET);
 		List<Entity> entities = null;
 		if (targetReference != null) {
 			entities = context.resolveTarget(player, host, targetReference);
 		}
 		return entities;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (EntityFilterDesc) desc;
 	}
 }
 

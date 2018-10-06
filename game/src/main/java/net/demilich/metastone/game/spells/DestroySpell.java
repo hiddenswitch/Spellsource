@@ -1,18 +1,47 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+import java.util.function.Predicate;
+
+/**
+ * Destroys the {@code target} {@link Actor}.
+ * <p>
+ * Actors that are destroyed in this way do not get their hitpoints reduced to zero and are not dealt any damage. They
+ * receive the {@link net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute, and during an {@link
+ * GameLogic#endOfSequence()}, they are moved to the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD} "not
+ * peacefully" (i.e., deathrattles will trigger).
+ * <p>
+ * For example, to destroy all frozen minions:
+ * <pre>
+ *   {
+ *     "class": "DestroySpell",
+ *     "target": "ALL_MINIONS",
+ *     "filter": {
+ *       "class": "AttributeFilter",
+ *       "attribute": "FROZEN",
+ *       "operation": "HAS"
+ *     }
+ *   }
+ * </pre>
+ *
+ * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link
+ * 		net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute.
+ * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
+ */
 public class DestroySpell extends Spell {
+	public static Logger logger = LoggerFactory.getLogger(DestroySpell.class);
 
 	public static SpellDesc create() {
 		return create(null);
@@ -39,7 +68,9 @@ public class DestroySpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc);
 		context.getLogic().markAsDestroyed((Actor) target);
 	}
 
 }
+

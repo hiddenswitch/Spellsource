@@ -1,0 +1,29 @@
+{
+  "name": "Hatch Eggs",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Add two 1/1 Spiderlings to your hand. They cost (0).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      }
+    },
+    "cards": [
+      "token_spiderling",
+      "token_spiderling"
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "MECH",
-  "description": "At the end of your turn, restore 6 Health to a damaged character.",
+  "description": "At the end of your turn, restore #6 Health to a damaged character.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

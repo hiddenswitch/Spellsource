@@ -1,0 +1,17 @@
+{
+  "name": "Runaway Shark",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

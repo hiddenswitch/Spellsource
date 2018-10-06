@@ -1,15 +1,15 @@
 package net.demilich.metastone.game.statistics;
 
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.weapons.Weapon;
+
 import java.io.Serializable;
 import java.util.Collections;
 import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
-
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.weapons.Weapon;
 
 public class GameStatistics implements Cloneable, Serializable {
 	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
@@ -131,7 +131,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		}
 		getCardsPlayed().get(cardId).put(turn, getCardsPlayed().get(cardId).get(turn) + 1);
 	}
-	
+
 	private void increaseMinionCount(Minion minion) {
 		String cardId = minion.getSourceCard().getCardId();
 		if (!getMinionsSummoned().containsKey(cardId)) {
@@ -169,7 +169,7 @@ public class GameStatistics implements Cloneable, Serializable {
 		updateWinRate();
 		return this;
 	}
-	
+
 	public void minionSummoned(Minion minion) {
 		add(Statistic.MINIONS_PLAYED, 1);
 

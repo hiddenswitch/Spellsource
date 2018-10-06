@@ -1,0 +1,51 @@
+{
+  "name": "Void Reaper",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Destroy a minion. Destroy every copy of it (wherever they are).",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "BOTH_DECKS",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "secondaryTarget": "TARGET"
+          }
+        },
+        {
+          "class": "RemoveCardSpell",
+          "target": "BOTH_HANDS",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "secondaryTarget": "TARGET"
+          }
+        },
+        {
+          "class": "DestroySpell",
+          "target": "ALL_MINIONS",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "secondaryTarget": "TARGET"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

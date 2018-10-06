@@ -1,0 +1,18 @@
+{
+  "name": "Colossal Spider",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Taunt. Poisonous.",
+  "attributes": {
+    "POISONOUS": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

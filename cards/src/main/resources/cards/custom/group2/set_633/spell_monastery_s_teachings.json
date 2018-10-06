@@ -1,0 +1,27 @@
+{
+  "name": "Monastery's Teachings",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Whenever you summon a minion this turn, add a 'Tiger Palm Strike' spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "card": "spell_tiger_palm_strike"
+      },
+      "oneTurn": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

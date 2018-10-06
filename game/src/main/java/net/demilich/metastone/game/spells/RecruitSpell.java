@@ -1,17 +1,23 @@
 package net.demilich.metastone.game.spells;
 
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.List;
+
+/**
+ * Recruits (summons and removes the source card of) a minion from the specified card location.
+ */
 public class RecruitSpell extends Spell {
 
 	@Override
@@ -23,13 +29,19 @@ public class RecruitSpell extends Spell {
 			cardLocation = Zones.DECK;
 		}
 		int numberToSummon = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		List<SpellDesc> subSpells = desc.subSpells(0);
 		for (int i = 0; i < numberToSummon; i++) {
-			putRandomMinionFromDeckOnBoard(context, player, cardFilter, cardLocation, source);
+			Minion minion = putRandomMinionFromDeckOnBoard(context, player, cardFilter, cardLocation, source);
+			if (minion != null) {
+				for (SpellDesc subSpell : subSpells) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, minion);
+				}
+			}
 		}
 	}
 
 	@Suspendable
-	private void putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation, Entity source) {
+	private Minion putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation, Entity source) {
 		Card card = null;
 		CardList collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
 		if (cardFilter == null) {
@@ -39,7 +51,7 @@ public class RecruitSpell extends Spell {
 		}
 
 		if (card == null) {
-			return;
+			return null;
 		}
 
 		// we need to remove the card temporarily here, because there are card interactions like Starving Buzzard + Desert Camel
@@ -48,7 +60,8 @@ public class RecruitSpell extends Spell {
 			player.getDeck().move(card, player.getSetAsideZone());
 		}
 
-		boolean summonSuccess = context.getLogic().summon(player.getId(), card.summon(), null, -1, false);
+		Minion summon = card.summon();
+		boolean summonSuccess = context.getLogic().summon(player.getId(), summon, null, -1, false);
 
 		// re-add the card here if we removed it before
 		if (cardLocation == Zones.DECK) {
@@ -57,7 +70,9 @@ public class RecruitSpell extends Spell {
 
 		if (summonSuccess) {
 			context.getLogic().removeCard(card);
+			return summon;
 		}
+		return null;
 	}
 
 }

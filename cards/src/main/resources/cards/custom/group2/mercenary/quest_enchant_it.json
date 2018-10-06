@@ -1,0 +1,28 @@
+{
+  "name": "Enchant It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Cast a spell that didn't start in your deck. Reward: Curse it!",
+  "quest": {
+    "class": "SpellCastedTrigger",
+    "queueCondition": {
+      "class": "AttributeCondition",
+      "target": "EVENT_SOURCE",
+      "attribute": "STARTED_IN_DECK",
+      "invert": true,
+      "operation": "HAS"
+    },
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_curse_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

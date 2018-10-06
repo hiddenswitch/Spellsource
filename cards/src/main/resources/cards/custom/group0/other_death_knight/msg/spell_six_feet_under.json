@@ -1,0 +1,30 @@
+{
+  "name": "Six Feet Under",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "EPIC",
+  "description": "Remove the top 6 cards of your deck. Add 6 Ghouls and Skeletons to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "howMany": 6,
+    "spells": [
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK_TOP"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "token_ghoul",
+          "token_skeleton"
+        ],
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

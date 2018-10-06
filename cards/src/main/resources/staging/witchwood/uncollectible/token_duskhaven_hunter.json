@@ -1,0 +1,16 @@
+{
+  "name": "Duskhaven Hunter",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "<b>Stealth</b> Each turn this is in your hand, swap its Attack and Health.",
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

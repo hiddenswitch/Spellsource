@@ -1,0 +1,12 @@
+{
+  "name": "Lacerate",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Deal 1 damage.\r\n[b]Supremacy:[/b] Give your hero +3 Attack this turn.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

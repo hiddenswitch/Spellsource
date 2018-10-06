@@ -24,7 +24,7 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "author": "Muhframos",
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "author": "Muhframos"
 }

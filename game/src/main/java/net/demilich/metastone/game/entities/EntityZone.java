@@ -4,7 +4,9 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.AbstractList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * EntityZone is an abstract list that enforces that (1) supports gameplay-safe cloning and (2) enforces that an {@link
@@ -15,7 +17,7 @@ import java.util.*;
  * @param <E> The subclass of {@link Entity} that is stored. For example, {@link Zones#BATTLEFIELD} can only store
  *            {@link net.demilich.metastone.game.entities.minions.Minion} entities.
  * @see net.demilich.metastone.game.cards.CardList for an interface that adds additional features for lists of cards,
- * like the {@link Zones#HAND} and the {@link Zones#DECK}.
+ * 		like the {@link Zones#HAND} and the {@link Zones#DECK}.
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable {

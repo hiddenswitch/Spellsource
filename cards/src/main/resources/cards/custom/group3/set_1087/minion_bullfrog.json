@@ -1,0 +1,27 @@
+{
+  "name": "Bullfrog",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "At the start of each turn, gain +1 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 0,
+      "hpBonus": 1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

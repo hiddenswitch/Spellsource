@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Deal 5 damage. Summon a random 5-Cost minion.",
+  "description": "Deal $5 damage. Summon a random 5-Cost minion.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

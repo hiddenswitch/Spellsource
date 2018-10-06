@@ -1,0 +1,50 @@
+{
+  "name": "Curvehorn Guardian",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Summon a 5/5 copy of the next Beast you summon.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "MinionSummonedTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "SummonSpell",
+          "target": "EVENT_SOURCE",
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "SetAttackSpell",
+                "target": "OUTPUT",
+                "value": 5
+              },
+              {
+                "class": "SetHpSpell",
+                "target": "OUTPUT",
+                "value": 5
+              }
+            ]
+          }
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.entities.heroes;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 
 public enum HeroClass {
 	ANY,
@@ -9,13 +10,21 @@ public enum HeroClass {
 	BROWN,
 	GREEN,
 	BLUE,
+	NAVY,
 	GOLD,
 	WHITE,
 	BLACK,
 	SILVER,
 	VIOLET,
 	RED,
+	JADE,
+	LEATHER,
+	EGGPLANT,
+	RUST,
+	ICE,
 	SPIRIT,
+	OBSIDIAN,
+	AMBER,
 	SELF,
 	OPPONENT,
 	INHERIT;
@@ -40,6 +49,22 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_guldan");
 			case RED:
 				return CardCatalogue.getCardById("hero_garrosh");
+			case JADE:
+				return CardCatalogue.getCardById("hero_chen_stormstout");
+			case NAVY:
+				return CardCatalogue.getCardById("hero_baron_aldus");
+			case LEATHER:
+				return CardCatalogue.getCardById("hero_quarnassio");
+			case EGGPLANT:
+				return CardCatalogue.getCardById("hero_mephilia");
+			case ICE:
+				return CardCatalogue.getCardById("hero_darion");
+			case RUST:
+				return CardCatalogue.getCardById("hero_alder_ravenwald");
+			case OBSIDIAN:
+				return CardCatalogue.getCardById("hero_nerzhul");
+			case AMBER:
+				return CardCatalogue.getCardById("hero_zara");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

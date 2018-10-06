@@ -1,0 +1,20 @@
+{
+  "name": "Party Poppers",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "COMMON",
+  "description": "Summon a 1/1 Insect for each minion that died this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "DeadMinionsThisTurn",
+      "targetPlayer": "BOTH"
+    },
+    "card": "token_insect"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

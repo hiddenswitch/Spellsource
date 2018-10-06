@@ -1,0 +1,25 @@
+{
+  "name": "Demand",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "FREE",
+  "description": "Deal $2 damage. Add a Coin to your hand.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_the_coin"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

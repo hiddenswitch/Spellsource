@@ -1,17 +1,33 @@
 package com.hiddenswitch.spellsource;
 
-import co.paralleluniverse.fibers.SuspendExecution;
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.SuspendExecution;
+import com.github.fromage.quasi.fibers.Suspendable;
+import com.google.common.collect.HashMultiset;
+import com.google.common.collect.Multiset;
+import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.impl.util.CollectionRecord;
+import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.MongoClient;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
+import net.demilich.metastone.game.cards.CardCatalogueRecord;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+import java.util.*;
+import java.util.function.Function;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 /**
  * Provides methods to manage a player's persistent inventory.
@@ -22,74 +38,265 @@ public interface Inventory {
 
 	/**
 	 * Opens a card pack for the specified user.
+	 *
 	 * @param request Specifications for which sets/how many cards/how many packs should be opened for a user.
 	 * @return Changes to the inventory due to this method.
 	 * @throws SuspendExecution
 	 * @throws InterruptedException
 	 */
-	OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws SuspendExecution, InterruptedException;
+	@NotNull
+	static OpenCardPackResponse openCardPack(OpenCardPackRequest request) throws InterruptedException, SuspendExecution {
+		QueryCardsRequest commons = new QueryCardsRequest()
+				.withFields(CardFields.ALL)
+				.withSets(CardSet.SPELLSOURCE)
+				.withRarity(Rarity.COMMON)
+				.withRandomCount((request.getCardsPerPack() - 1) * request.getNumberOfPacks());
 
-	/**
-	 * Creates a user collection, deck collection or alliance collection with various parameters.
-	 * @param request Use static methods in CreateCollectionRequest to choose from the different kinds of collections
-	 *                and their arguments for creation.
-	 * @return Complete information about the created collection.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException;
+		QueryCardsRequest allianceRares = new QueryCardsRequest()
+				.withFields(CardFields.ALL)
+				.withSets(CardSet.SPELLSOURCE)
+				.withRarity(Rarity.ALLIANCE)
+				.withRandomCount(request.getNumberOfPacks());
 
-	/**
-	 * Adds a card to the specified collection. Creates inventory records for cards that are specified by ID.
-	 * @param request A list of inventory records or card IDs to add to the specified collection.
-	 * @return The results of adding the card to the collection. If card IDs were specified, this result will contain
-	 * the inventory records of the newly created cards.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	AddToCollectionResponse addToCollection(AddToCollectionRequest request) throws SuspendExecution, InterruptedException;
+		QueryCardsResponse response = Cards.query(new QueryCardsRequest()
+				.withRequests(commons, allianceRares));
 
-	/**
-	 * Removes the inventory IDs from the specified collection. Does not delete the collection nor the inventory records
-	 * themselves.
-	 * @param request A list of inventory IDs to remove from the collection.
-	 * @return The results of the internal database update from removal.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException;
+		List<String> ids = createCardsForUser(request.getUserId(), response.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList()));
+		return new OpenCardPackResponse(ids);
+	}
 
-	/**
-	 * Donates a card from the user's collection to the alliance's collection. Typically, when a user joins an alliance,
-	 * all their cards should be donated to the alliance's collection.
-	 * @param request The cards to donate.
-	 * @return No additional information.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	DonateToCollectionResponse donateToCollection(DonateToCollectionRequest request) throws SuspendExecution, InterruptedException;
+	@Suspendable
+	static CreateCollectionResponse createCollection(CreateCollectionRequest request) throws SuspendExecution, InterruptedException {
+		final String userId = request.getUserId();
+		switch (request.getType()) {
+			case USER:
+				if (userId == null) {
+					throw new RuntimeException();
+				}
+				Long count = mongo().count(COLLECTIONS, json("_id", userId));
 
-	/**
-	 * Borrowing from a collection (typically an alliance collection) gives a user exclusive access to a card. Note,
-	 * in the current design of Spellsource, cards are not exclusively borrowed so this method will not likely be used.
-	 * There may be cards in the future that require exclusive access only.
-	 * @param request The card to borrow.
-	 * @return The number of records borrowed.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException;
+				if (count.equals(0L)) {
+					String ignore = mongo().insert(COLLECTIONS, QuickJson.toJson(CollectionRecord.user(userId)));
+				}
+				List<String> newInventoryIds = new ArrayList<>();
+				if (request.getQueryCardsRequest() != null) {
+					int copies = request.getCopies();
+					final QueryCardsResponse cardsResponse = Cards.query(request.getQueryCardsRequest());
+					List<CardDesc> cardsToAdd = cardsResponse.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList());
+					newInventoryIds.addAll(createCardsForUser(userId, cardsToAdd, copies));
+				}
+				if (request.getCardIds() != null
+						&& request.getCardIds().size() != 0) {
+					newInventoryIds.addAll(createCardsForUser(request.getCardIds(), userId));
+				}
+
+				if (request.getOpenCardPackRequest() != null) {
+					newInventoryIds.addAll(Inventory.openCardPack(request.getOpenCardPackRequest()).getCreatedInventoryIds());
+				}
+
+				return CreateCollectionResponse.user(userId, newInventoryIds);
+			case DECK:
+				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
+				record1.setHeroCardId(request.getHeroCardId());
+				record1.setFormat(request.getFormat());
+				final String deckId = mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
+
+				if (request.getInventoryIds() != null
+						&& request.getInventoryIds().size() > 0) {
+					MongoClientUpdateResult update = mongo()
+							.updateCollectionWithOptions(INVENTORY,
+									json("_id", json("$in", request.getInventoryIds())),
+									json("$addToSet", json("collectionIds", deckId)),
+									new UpdateOptions().setMulti(true));
+				}
+
+				return CreateCollectionResponse.deck(deckId);
+			case ALLIANCE:
+				CollectionRecord record2 = CollectionRecord.alliance(request.getAllianceId(), userId);
+				final String allianceId = awaitResult(h -> mongo().client().insert(COLLECTIONS, QuickJson.toJson(record2), h));
+
+				return CreateCollectionResponse.alliance(allianceId);
+			default:
+				throw new RuntimeException();
+		}
+	}
+
+	static List<String> createCardsForUser(String userId, List<CardDesc> cardsToAdd, int copies) throws InterruptedException, SuspendExecution {
+		if (userId == null) {
+			throw new NullPointerException();
+		}
+
+		List<String> userIdCollection = Collections.singletonList(userId);
+		List<JsonObject> documents = Collections.nCopies(copies, cardsToAdd)
+				.stream()
+				.flatMap(Collection::stream)
+				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.getId()))
+						.withUserId(userId)
+						.withCollectionIds(userIdCollection))
+				.map(QuickJson::toJson)
+				.collect(toList());
+
+		mongo().insertManyWithOptions(INVENTORY, documents, new BulkWriteOptions().setOrdered(false).setWriteOption(WriteOption.ACKNOWLEDGED));
+
+		return documents.stream().map(o -> o.getString("_id")).collect(toList());
+	}
+
+	static List<String> createCardsForUser(String userId, List<CardDesc> cardsToAdd) throws InterruptedException, SuspendExecution {
+		return createCardsForUser(userId, cardsToAdd, 1);
+	}
+
+	static List<String> createCardsForUser(List<String> cardIds, String userId, int copies) throws InterruptedException, SuspendExecution {
+		return createCardsForUser(userId,
+				Cards.query(new QueryCardsRequest().withCardIds(cardIds))
+						.getRecords().stream().map(CardCatalogueRecord::getDesc).collect(toList()), copies);
+	}
+
+	static List<String> createCardsForUser(List<String> cardIds, String userId) throws InterruptedException, SuspendExecution {
+		return createCardsForUser(cardIds, userId, 1);
+	}
+
+	static AddToCollectionResponse addToCollection(AddToCollectionRequest request) throws SuspendExecution, InterruptedException {
+		List<String> inventoryIds;
+		String collectionId;
+		if (request.getInventoryIds() != null) {
+			// This is a request to add specific card IDs to the specific collection
+			inventoryIds = request.getInventoryIds();
+			collectionId = request.getCollectionId();
+		} else if (request.getCardIds() != null
+				&& request.getUserId() != null
+				&& (Objects.equals(request.getCollectionId(), request.getUserId()) || request.getCollectionId() == null)) {
+			// This is a request to create cards, because the cards are being added directly to the user's collection
+			inventoryIds = createCardsForUser(request.getCardIds(), request.getUserId(), request.getCopies());
+			collectionId = request.getUserId();
+		} else if (request.getCardIds() != null
+				&& request.getUserId() != null
+				&& !Objects.equals(request.getCollectionId(), request.getUserId())) {
+			// This is a request to add specific card IDs to the specified non-user collection. Only create cards if the
+			// user doesn't already own sufficient copies.
+			collectionId = request.getCollectionId();
+			inventoryIds = new ArrayList<>();
+			// Interpret duplicate card IDs as multiple copies
+			Multiset<String> cardIds = HashMultiset.create(request.getCardIds());
+			List<JsonObject> unusedInventories = mongo().findWithOptions(INVENTORY,
+					json("userId", request.getUserId(),
+							"collectionIds", json("$ne", request.getCollectionId()),
+							"cardDesc.id", json("$in", request.getCardIds().stream().distinct().collect(toList()))),
+					new FindOptions().setFields(json("_id", 1, "cardDesc.id", 1)));
+			for (JsonObject unusedInventory : unusedInventories) {
+				final String cardId = unusedInventory.getJsonObject("cardDesc").getString("id");
+				if (cardIds.contains(cardId)) {
+					inventoryIds.add(unusedInventory.getString("_id"));
+					cardIds.remove(cardId);
+				}
+			}
+
+			final ArrayList<String> cardIds1 = new ArrayList<>(cardIds);
+			if (!cardIds1.isEmpty()) {
+				inventoryIds.addAll(createCardsForUser(cardIds1, request.getUserId()));
+			}
+		} else {
+			throw new RuntimeException();
+		}
+
+		MongoClientUpdateResult result = mongo().updateCollectionWithOptions(Inventory.INVENTORY,
+				json("_id", json("$in", inventoryIds)),
+				json("$addToSet", json("collectionIds", collectionId)),
+				new UpdateOptions().setMulti(true));
+
+		return AddToCollectionResponse.create(result, inventoryIds);
+	}
+
+	static RemoveFromCollectionResponse removeFromCollection(RemoveFromCollectionRequest request) throws SuspendExecution, InterruptedException {
+		MongoClientUpdateResult result;
+
+		if (request.getCollectionId() == null) {
+			throw new IllegalArgumentException("No collection ID specified.");
+		}
+
+		if (request.getInventoryIds() == null && request.getCardIds() == null) {
+			throw new IllegalArgumentException(String.format("No inventory or card IDs specified for removal request collectionId=%s", request.getCollectionId()));
+		}
+
+		List<String> inventoryIds = request.getInventoryIds() == null ? new ArrayList<>() : new ArrayList<>(request.getInventoryIds());
+		if (request.getCardIds() != null) {
+			// Find the corresponding inventory IDs in this collection to remove. The cards that get removed will be arbitrary. Interpret duplicates as the count
+			List<JsonObject> existingInventoryIds = mongo().findWithOptions(INVENTORY,
+					json("collectionIds", request.getCollectionId(),
+							"cardDesc.id", json("$in", request.getCardIds())),
+					new FindOptions().setFields(json("_id", 1, "cardDesc.id", 1)));
+
+			Map<String, List<JsonObject>> cardsInCollection = existingInventoryIds.stream().collect(groupingBy(jo -> jo.getJsonObject("cardDesc").getString("id")));
+			for (String cardId : request.getCardIds()) {
+				final List<JsonObject> inventoryItemsForId = cardsInCollection.getOrDefault(cardId, Collections.emptyList());
+				if (inventoryItemsForId.size() == 0) {
+					throw new IllegalArgumentException(String.format("The collectionId=%s does not contain the cardId=%s", request.getCollectionId(), cardId));
+				}
+
+				inventoryIds.add(inventoryItemsForId.remove(0).getString("_id"));
+			}
+		}
+
+		result = mongo().updateCollectionWithOptions(Inventory.INVENTORY,
+				json("_id", json("$in", inventoryIds)),
+				json("$pull", json("collectionIds", request.getCollectionId())),
+				new UpdateOptions().setMulti(true));
+
+		if (result.getDocMatched() != inventoryIds.size()) {
+			throw new ArrayStoreException(String.format("Could not find the correct number of inventoryIds=%s to remove from collectionId=%s.", request.getInventoryIds().toString(), request.getCollectionId()));
+		}
+
+		return new RemoveFromCollectionResponse(result, inventoryIds);
+	}
+
+
+	static DonateToCollectionResponse donateToCollection(DonateToCollectionRequest request) throws SuspendExecution, InterruptedException {
+		mongo().updateCollection(
+				Inventory.INVENTORY,
+				json("_id", json("$in", request.getInventoryIds())),
+				json("$set", json("allianceId", request.getAllianceId()),
+						"$addToSet", json("collectionIds", request.getAllianceId())));
+
+		return new DonateToCollectionResponse();
+	}
+
+	@Suspendable
+	static BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException {
+		List<String> collectionIds;
+		if (request.getCollectionId() != null) {
+			collectionIds = Collections.singletonList(request.getCollectionId());
+		} else if (request.getCollectionIds() != null) {
+			collectionIds = request.getCollectionIds();
+		} else {
+			throw new RuntimeException();
+		}
+
+		MongoClientUpdateResult update = mongo().updateCollectionWithOptions(INVENTORY,
+				json("collectionIds", json("$in", collectionIds)),
+				json("$set", json("borrowed", true, "borrowedByUserId", request.getUserId())),
+				new UpdateOptions().setMulti(true));
+
+		return BorrowFromCollectionResponse.response(update.getDocModified());
+	}
 
 	/**
 	 * Returns an exclusive right to use a card. The opposite of borrowing a card from a collection.
+	 *
 	 * @param request The cards to return.
 	 * @return The result of returning the cards.
 	 */
 	@Suspendable
-	ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request);
+	static ReturnToCollectionResponse returnToCollection(ReturnToCollectionRequest request) {
+		mongo().updateCollectionWithOptions(INVENTORY,
+				json("collectionIds", json("$in", request.getDeckIds())),
+				json("$set", json("borrowed", false, "borrowedByUserId", null)),
+				new UpdateOptions().setMulti(true));
+
+		return new ReturnToCollectionResponse();
+	}
 
 	/**
 	 * Gets the complete information about a user, alliance or deck collection.
+	 *
 	 * @param request Use the static methods in GetCollectionRequest for the right arguments of different collection
 	 *                queries.
 	 * @return The complete information about a collection (user, alliance or deck).
@@ -97,25 +304,115 @@ public interface Inventory {
 	 * @throws InterruptedException
 	 */
 	@Suspendable
-	GetCollectionResponse getCollection(GetCollectionRequest request);
+	static GetCollectionResponse getCollection(GetCollectionRequest request) {
+		if (request.isBatchRequest()) {
+			final List<GetCollectionResponse> responses = new ArrayList<>();
+			final List<GetCollectionRequest> requests = request.getRequests();
 
-	/**
-	 * Trashes, but does not delete, a collection.
-	 * @param request The ID of the collection to trash.
-	 * @return Side effects of trashing the collection.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	TrashCollectionResponse trashCollection(TrashCollectionRequest request) throws SuspendExecution, InterruptedException;
+			// Retrieve deck requests and process them separately
+			final List<GetCollectionRequest> deckRequests = new ArrayList<>();
+			Iterator<GetCollectionRequest> requestsIterator = requests.iterator();
+			while (requestsIterator.hasNext()) {
+				GetCollectionRequest subRequest = requestsIterator.next();
+				if (subRequest.getDeckId() != null) {
+					requestsIterator.remove();
+					deckRequests.add(subRequest);
+				} else {
+					responses.add(getCollection(subRequest));
+				}
+			}
 
-	/**
-	 * Sets the inventory IDs that correspond to the given collection.
-	 * @param setCollectionRequest The new inventory IDs that belong to this collection.
-	 * @return The collection.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException;
+			// Bulk retrieve deck inventory records and collection information
+			final List<String> deckIds = deckRequests.stream().map(GetCollectionRequest::getDeckId).collect(toList());
+			final Map<String, CollectionRecord> deckRecords = mongo().find(COLLECTIONS, json("_id", json("$in", deckIds)), CollectionRecord.class)
+					.stream().collect(toMap(CollectionRecord::getId, Function.identity()));
+
+			final Map<String, List<InventoryRecord>> deckInventories = new HashMap<>();
+			for (String deckId : deckIds) {
+				deckInventories.put(deckId, new Vector<>());
+			}
+
+			mongo().find(INVENTORY, json("collectionIds", json("$in", deckIds)), InventoryRecord.class)
+					.forEach(ir -> ir.getCollectionIds().forEach(cid -> {
+						if (deckInventories.containsKey(cid)) {
+							deckInventories.get(cid).add(ir);
+						}
+					}));
+
+			deckIds.forEach(deckId -> {
+				CollectionRecord record = deckRecords.get(deckId);
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
+			});
+
+			return GetCollectionResponse.batch(responses);
+		}
+
+		String collectionId;
+		CollectionTypes type;
+		String userId = request.getUserId();
+		if (userId != null
+				&& request.getDeckId() == null) {
+			collectionId = userId;
+			type = CollectionTypes.USER;
+		} else if (request.getDeckId() != null) {
+			collectionId = request.getDeckId();
+			type = CollectionTypes.DECK;
+		} else {
+			collectionId = null;
+			type = null;
+		}
+
+		if (collectionId == null) {
+			throw new NullPointerException("No collection was specified");
+		}
+
+		List<JsonObject> results = awaitResult(h -> mongo().client().find(INVENTORY, json("collectionIds", collectionId), h));
+		final List<InventoryRecord> inventoryRecords = results.stream().map(r -> QuickJson.fromJson(r, InventoryRecord.class)).collect(toList());
+
+		if (type == CollectionTypes.DECK) {
+			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed());
+		} else /* if (type == CollectionTypes.USER) */ {
+			return GetCollectionResponse.user(userId, inventoryRecords);
+		} /*  else {
+			return new GetCollectionResponse()
+					.withCardRecords(cardRecords);
+		} */
+	}
+
+	static TrashCollectionResponse trashCollection(TrashCollectionRequest request) throws SuspendExecution, InterruptedException {
+		final String collectionId = request.getCollectionId();
+
+		MongoClientUpdateResult result1 = awaitResult(h -> mongo().client()
+				.updateCollection(COLLECTIONS,
+						json("_id", collectionId, "trashed", false),
+						json("$set", json("trashed", true)), h));
+
+		MongoClientUpdateResult result2 = awaitResult(h -> mongo().client()
+				.updateCollectionWithOptions(INVENTORY,
+						json("collectionIds", collectionId),
+						json("$pull", json("collectionIds", collectionId)),
+						new UpdateOptions().setMulti(true), h));
+
+		return new TrashCollectionResponse(result1.getDocModified() == 1, result2.getDocModified());
+	}
+
+	static SetCollectionResponse setCollection(SetCollectionRequest setCollectionRequest) throws SuspendExecution, InterruptedException {
+		String collectionId = setCollectionRequest.getCollectionId();
+		MongoClientUpdateResult r = awaitResult(h -> mongo().client()
+				.updateCollectionWithOptions(Inventory.INVENTORY,
+						json("collectionId", collectionId, "_id", json("$nin", setCollectionRequest.getInventoryIds())),
+						json("$pull", json("collectionIds", collectionId)),
+						new UpdateOptions().setMulti(true), h));
+
+		MongoClientUpdateResult r2 = awaitResult(h -> mongo().client()
+				.updateCollectionWithOptions(Inventory.INVENTORY,
+						json("_id", json("$in", setCollectionRequest.getInventoryIds())),
+						json("$addToSet", json("collectionIds", collectionId)),
+						new UpdateOptions().setMulti(true), h));
+
+		return new SetCollectionResponse(r2, r);
+	}
 
 	@Suspendable
 	static MongoClientUpdateResult update(MongoClient client, JsonObject query, JsonObject update) {
@@ -130,5 +427,10 @@ public interface Inventory {
 	@Suspendable
 	static MongoClientUpdateResult update(MongoClient client, List<String> inventoryIds, JsonObject update) {
 		return Sync.awaitResult(h -> client.updateCollectionWithOptions(INVENTORY, json("_id", json("$in", inventoryIds)), update, new UpdateOptions().setMulti(true), h));
+	}
+
+	@Suspendable
+	static boolean isOwner(String collectionId, UserId userId) {
+		return mongo().count(Inventory.COLLECTIONS, json("_id", collectionId, "userId", userId.toString())) != 0L;
 	}
 }

@@ -25,12 +25,20 @@ public enum Attribute {
 	 */
 	BASE_MANA_COST,
 	/**
+	 * Indicates that this {@link Card} costs health instead of mana when played from the hand.
+	 */
+	COSTS_HEALTH_INSTEAD_OF_MANA,
+	/**
+	 * An Aura version of {@link #COSTS_HEALTH_INSTEAD_OF_MANA}.
+	 */
+	AURA_COSTS_HEALTH_INSTEAD_OF_MANA,
+	/**
 	 * The number of hit points the {@link Actor} currently has.
 	 */
 	HP,
 	/**
-	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base
-	 * attack value of the {@link Minion} this card would summon.
+	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base attack
+	 * value of the {@link Minion} this card would summon.
 	 */
 	ATTACK,
 	/**
@@ -56,8 +64,8 @@ public enum Attribute {
 	 */
 	HP_BONUS,
 	/**
-	 * The amount of attack added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target
-	 * the entity.
+	 * The amount of attack added by all the {@link net.demilich.metastone.game.spells.aura.Aura} effects that target the
+	 * entity.
 	 */
 	AURA_ATTACK_BONUS,
 	/**
@@ -110,8 +118,8 @@ public enum Attribute {
 	 */
 	DESTROYED,
 	/**
-	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in
-	 * their deck, whenever they attempt to draw another card.
+	 * Fatigue is a game mechanic that deals increasing damage to players who have already drawn all of the cards in their
+	 * deck, whenever they attempt to draw another card.
 	 * <p>
 	 * This attribute tracks how much damage a {@link net.demilich.metastone.game.entities.heroes.Hero} should take when
 	 * the player draws a card.
@@ -121,10 +129,10 @@ public enum Attribute {
 	FATIGUE,
 	/**
 	 * A frozen {@link Actor} cannot attack. Freezing is cleared by a {@link net.demilich.metastone.game.spells.SilenceSpell}
-	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the
-	 * minion was {@link #FROZEN}.
+	 * (when the minion is {@link #SILENCED}) or the owning player ends his turn on a different turn than when the minion
+	 * was {@link #FROZEN}.
 	 *
-	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
+	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
 	 * @see GameLogic#handleFrozen(Actor) to see where freezing is handled.
 	 */
 	FROZEN,
@@ -138,13 +146,17 @@ public enum Attribute {
 	/**
 	 * Records that an {@link Entity} was silenced. Silencing clears all attributes and effects.
 	 *
-	 * @see GameLogic#silence(int, Minion) for a complete description of the silence effect.
+	 * @see GameLogic#silence(int, Actor) for a complete description of the silence effect.
 	 */
 	SILENCED,
 	/**
 	 * An {@link Actor} with {@link #WINDFURY} has two attacks per turn.
 	 */
 	WINDFURY,
+	/**
+	 * An aura version of {@link #WINDFURY}
+	 */
+	AURA_WINDFURY,
 	/**
 	 * An {@link Actor} with {@link #MEGA_WINDFURY} has four attacks per turn.
 	 *
@@ -159,11 +171,11 @@ public enum Attribute {
 	UNLIMITED_ATTACKS,
 	/**
 	 * An {@link Actor} with {@link #TAUNT} must be targeted by opposing {@link net.demilich.metastone.game.actions.PhysicalAttackAction}
-	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt
-	 * minions and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
+	 * actions first. This means the {@link Minion} with {@link #TAUNT} acts like a shield for its other non-taunt minions
+	 * and its owning player's hero, because the opposing minions and hero must attack the taunt minion first.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#getValidTargets(GameContext, Player, GameAction) for the
-	 * complete targeting logic.
+	 * 		complete targeting logic.
 	 */
 	TAUNT,
 	/**
@@ -177,14 +189,18 @@ public enum Attribute {
 	 */
 	SPELL_DAMAGE,
 	/**
+	 * The aura version of spell damage.
+	 */
+	AURA_SPELL_DAMAGE,
+	/**
 	 * Some cards give the opponent spell damage. This attribute stores how much.
 	 */
 	OPPONENT_SPELL_DAMAGE,
 	/**
 	 * A {@link Minion} with {@link #CHARGE} can attack the same turn it enters play.
 	 *
-	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking
-	 * the same turn it is summoned.
+	 * @see #SUMMONING_SICKNESS for the attribute that a {@link Minion} otherwise has which prevents it from attacking the
+	 * 		same turn it is summoned.
 	 */
 	CHARGE,
 	/**
@@ -214,9 +230,9 @@ public enum Attribute {
 	 */
 	ENRAGED,
 	/**
-	 * An {@link Entity} with {@link #BATTLECRY} performs an action when it goes from the {@link Zones#HAND} to the
-	 * {@link Zones#BATTLEFIELD}. This attribute is used to look up / keep track of entities that have battlecries. It
-	 * does not define the battlecry itself.
+	 * An {@link Entity} with {@link #BATTLECRY} performs an action when it goes from the {@link Zones#HAND} to the {@link
+	 * Zones#BATTLEFIELD}. This attribute is used to look up / keep track of entities that have battlecries. It does not
+	 * define the battlecry itself.
 	 */
 	BATTLECRY,
 	/**
@@ -225,7 +241,7 @@ public enum Attribute {
 	 * This implements Brann Bronzebeard's text.
 	 *
 	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
-	 * battlecries.
+	 * 		battlecries.
 	 */
 	DOUBLE_BATTLECRIES,
 	/**
@@ -240,7 +256,7 @@ public enum Attribute {
 	 * This implements Baron Rivendare's text.
 	 *
 	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
-	 * complete rules for deathrattles.
+	 * 		complete rules for deathrattles.
 	 */
 	DOUBLE_DEATHRATTLES,
 	/**
@@ -251,6 +267,10 @@ public enum Attribute {
 	 * An {@link Actor} with this attribute does not take damage from the targets of its physical attacks.
 	 */
 	IMMUNE_WHILE_ATTACKING,
+	/**
+	 * An Aura version of {@link #IMMUNE_WHILE_ATTACKING}.
+	 */
+	AURA_IMMUNE_WHILE_ATTACKING,
 	/**
 	 * Marks that the {@link Actor} has a divine shield.
 	 * <p>
@@ -263,18 +283,22 @@ public enum Attribute {
 	/**
 	 * A {@link Minion} with stealth cannot be targeted by spells, hero powers or physical attacks until it attacks.
 	 * <p>
-	 * If a Stealthed minion attacks or deals any kind of damage, it will lose Stealth. This includes passive effects
-	 * such as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy
-	 * minion such as Ogre Brute, or by a Misdirection-redirected minion.
+	 * If a Stealthed minion attacks or deals any kind of damage, it will lose Stealth. This includes passive effects such
+	 * as that of Knife Juggler, and dealing combat damage in exchange, such as when being struck by a clumsy minion such
+	 * as Ogre Brute, or by a Misdirection-redirected minion.
 	 *
 	 * @see GameLogic#fight(Player, Actor, Actor, net.demilich.metastone.game.actions.PhysicalAttackAction) for the
-	 * situation where physical attacks cause a minion to lose stealth.
+	 * 		situation where physical attacks cause a minion to lose stealth.
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the situation where any kind of damage originating
-	 * from a minion causes it to lose stealth.
+	 * 		from a minion causes it to lose stealth.
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * logic behind selecting valid targets.
+	 * 		logic behind selecting valid targets.
 	 */
 	STEALTH,
+	/**
+	 * The aura version of {@link #STEALTH}
+	 */
+	AURA_STEALTH,
 	/**
 	 * A {@link net.demilich.metastone.game.cards.Card} has this attribute to help spells find secrets in the deck.
 	 * <p>
@@ -303,11 +327,23 @@ public enum Attribute {
 	 */
 	CHOOSE_ONE,
 	/**
+	 * An integer attribute indicating which choice was taken on a choose one card.
+	 * <p>
+	 * {@code -1} indicates that the choose-both option occurred.
+	 */
+	CHOICE,
+	/**
+	 * An array of integer choices, for {@link net.demilich.metastone.game.spells.CastFromGroupSpell}, to allow adaptation
+	 * choices to replay correctly.
+	 */
+	CHOICES,
+	/**
 	 * A {@link Minion} with this attribute causes both choose one options of a {@link Card} with {@link #CHOOSE_ONE} to
 	 * be played.
 	 * <p>
 	 * This implements the Fandral Staghelm card text.
 	 */
+	@Deprecated
 	BOTH_CHOOSE_ONE_OPTIONS,
 	/**
 	 * Summoning sickness prevents a {@link Minion} from attacking the same turn it is played or summoned. Minions with
@@ -317,8 +353,8 @@ public enum Attribute {
 	 * Summon effect, a put into battlefield effect, or a transform effect.
 	 *
 	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the complete summoning rules.
-	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions
-	 * enter the battlefield.
+	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
+	 * 		the battlefield.
 	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
 	 */
 	SUMMONING_SICKNESS,
@@ -327,14 +363,14 @@ public enum Attribute {
 	 * powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * complete target selection logic.
+	 * 		complete target selection logic.
 	 */
 	UNTARGETABLE_BY_SPELLS,
 	/**
 	 * Marks an {@link Actor} to be untargetable by an <b>opponent's</b> spells or hero powers.
 	 *
 	 * @see net.demilich.metastone.game.logic.TargetLogic#filterTargets(GameContext, Player, GameAction, List) for the
-	 * complete target selection logic.
+	 * 		complete target selection logic.
 	 */
 	UNTARGETABLE_BY_OPPONENT_SPELLS,
 	/**
@@ -358,7 +394,8 @@ public enum Attribute {
 	 *
 	 * @see GameLogic#damage(Player, Actor, int, Entity, boolean) for the full spell damage calculation.
 	 */
-	SPELL_AMPLIFY_MULTIPLIER,
+	SPELL_DAMAGE_AMPLIFY_MULTIPLIER,
+	HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER,
 	/**
 	 * When any friendly {@link Entity} has this attribute, all friendly healing effects that use {@link
 	 * GameLogic#heal(Player, Actor, int, Entity)} are multiplied by this attribute's value.
@@ -366,6 +403,8 @@ public enum Attribute {
 	 * This implements Prophet Velen.
 	 */
 	HEAL_AMPLIFY_MULTIPLIER,
+	SPELL_HEAL_AMPLIFY_MULTIPLIER,
+	HERO_POWER_HEAL_AMPLIFY_MULTIPLIER,
 	/**
 	 * An attribute that specifies that the attack of this {@link Minion} is equal to its hitpoints.
 	 */
@@ -386,6 +425,10 @@ public enum Attribute {
 	 * net.demilich.metastone.game.logic.TargetLogic#filterTargets (GameContext, Player, GameAction, List)}.
 	 */
 	CANNOT_ATTACK_HEROES,
+	/**
+	 * An Aura version of {@link #CANNOT_ATTACK_HEROES}
+	 */
+	AURA_CANNOT_ATTACK_HEROES,
 	/**
 	 * Whens set on any entity, friendly healing effects deal damage instead.
 	 */
@@ -412,6 +455,7 @@ public enum Attribute {
 	 * <p>
 	 * Implements Steamwheedle Sniper
 	 */
+	@Deprecated
 	HERO_POWER_CAN_TARGET_MINIONS,
 	/**
 	 * When any {@link Entity} alive has this attribute, the owning player's hero power freezes its target.
@@ -427,8 +471,8 @@ public enum Attribute {
 	HERO_POWERS_DISABLED,
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
-	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e
-	 * .g., a healing spell may heal the owning player by the amount of damage last dealt to an entity).
+	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e .g.,
+	 * a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,
 	/**
@@ -447,9 +491,9 @@ public enum Attribute {
 	 * Marks that this {@link Card} has a trigger that should be active while it is in the deck.
 	 *
 	 * @see #PASSIVE_TRIGGERS for an attribute that marks the entity has a trigger that is only active in the player's
-	 * battlefield or hand.
+	 * 		battlefield or hand.
 	 */
-	DECK_TRIGGER,
+	DECK_TRIGGERS,
 	/**
 	 * Marks that this {@link Card} has a trigger (this attribute) that should be active throughout the game.
 	 */
@@ -457,14 +501,13 @@ public enum Attribute {
 	/**
 	 * This attribute keeps track of how many times the hero power was used this turn.
 	 *
-	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card,
-	 * like a hero power card, can be played.
+	 * @see GameLogic#canPlayCard(int, EntityReference) for the implementation that determines whether or not a card, like
+	 * 		a hero power card, can be played.
 	 */
 	HERO_POWER_USAGES,
 	/**
 	 * An {@link Entity} with hero power damage contributes to the total hero power damage the player gets as a bonus to
-	 * their base hero power damage. Applies to {@link net.demilich.metastone.game.spells.DamageSpell} based hero
-	 * powers.
+	 * their base hero power damage. Applies to {@link net.demilich.metastone.game.spells.DamageSpell} based hero powers.
 	 */
 	HERO_POWER_DAMAGE,
 	/**
@@ -480,8 +523,8 @@ public enum Attribute {
 	 * <p>
 	 * Implements the C'Thun mechanic.
 	 *
-	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that
-	 * reads attributes like these and provides values to various spells.
+	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
+	 * 		attributes like these and provides values to various spells.
 	 */
 	CTHUN_ATTACK_BUFF,
 	/**
@@ -489,8 +532,8 @@ public enum Attribute {
 	 * <p>
 	 * Implements the C'Thun mechanic.
 	 *
-	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that
-	 * reads attributes like these and provides values to various spells.
+	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider for the value provider that reads
+	 * 		attributes like these and provides values to various spells.
 	 */
 	CTHUN_HEALTH_BUFF,
 	/**
@@ -525,20 +568,28 @@ public enum Attribute {
 	 */
 	TAKE_DOUBLE_DAMAGE,
 	/**
+	 * The Aura version of {@link #TAKE_DOUBLE_DAMAGE}
+	 */
+	AURA_TAKE_DOUBLE_DAMAGE,
+	/**
 	 * A {@link Minion} with this attribute cannot target a {@link Hero} the same turn it is summoned. This is typically
 	 * given to a {@link #CHARGE} minion that would be too powerful it it could target a hero.
 	 *
 	 * @see net.demilich.metastone.game.actions.PhysicalAttackAction for a complete implementation of what a minion can
-	 * attack.
+	 * 		attack.
 	 */
-	CANNOT_ATTACK_HERO_ON_SUMMON,
+	RUSH,
+	/**
+	 * Aura version of {@link #RUSH}
+	 */
+	AURA_RUSH,
 	/**
 	 * An attribute that keeps track of how much attack and hitpoints to add to the next Jade Golem that gets summoned.
 	 */
 	JADE_BUFF,
 	/**
-	 * When any {@link Entity} has this attribute, spells are cast with random targets, random discover choices are
-	 * made, physical attacks target randomly, and battlecries target randomly.
+	 * When any {@link Entity} has this attribute, spells are cast with random targets, random discover choices are made,
+	 * physical attacks target randomly, and battlecries target randomly.
 	 * <p>
 	 * Implements Yogg-Saron, Hope's End; Servant of Yogg-Saron; Mayor Noggenfogger
 	 */
@@ -565,8 +616,7 @@ public enum Attribute {
 	 */
 	PERMANENT,
 	/**
-	 * This attribute is a {@link String} that describes the inventory owner (as opposed to in-match owner) of the
-	 * card.
+	 * This attribute is a {@link String} that describes the inventory owner (as opposed to in-match owner) of the card.
 	 */
 	USER_ID,
 	/**
@@ -598,8 +648,8 @@ public enum Attribute {
 	 */
 	ALLIANCE_ID,
 	/**
-	 * Every time a player summons this {@link Minion} for the first time in their lifetime of the game, the {@link
-	 * Card} is incremented. This attribute persists between matches.
+	 * Every time a player summons this {@link Minion} for the first time in their lifetime of the game, the {@link Card}
+	 * is incremented. This attribute persists between matches.
 	 */
 	UNIQUE_CHAMPION_IDS_SIZE,
 	/**
@@ -607,8 +657,8 @@ public enum Attribute {
 	 */
 	UNIQUE_CHAMPION_IDS,
 	/**
-	 * Every time an {@link Actor} destroys a {@link Minion}, the {@link String} card ID is stored in this attribute.
-	 * This attribute persists between matches.
+	 * Every time an {@link Actor} destroys a {@link Minion}, the {@link String} card ID is stored in this attribute. This
+	 * attribute persists between matches.
 	 */
 	LAST_MINION_DESTROYED_CARD_ID,
 	/**
@@ -618,7 +668,8 @@ public enum Attribute {
 	LAST_MINION_DESTROYED_INVENTORY_ID,
 	/**
 	 * Every time an {@link Actor} damages a target, increment this attribute with the total amount of damage dealt
-	 * across <b>all games.</b>
+	 * across
+	 * <b>all games.</b>
 	 * <p>
 	 * This is a legacy mechanic. In a networked multiplayer environment, this value will persist between matches.
 	 */
@@ -638,6 +689,14 @@ public enum Attribute {
 	 */
 	DAMAGE_THIS_TURN,
 	/**
+	 * Every time a {@link Player} successfully summons a minion, this counter is incremented on the summoning player.
+	 */
+	MINIONS_SUMMONED_THIS_TURN,
+	/**
+	 * Every time a {@link Player} successfully summons a minion, this counter is incremented on both players
+	 */
+	TOTAL_MINIONS_SUMMONED_THIS_TURN,
+	/**
 	 * Whenever an {@link Actor} dies, increment this attribute by 1 if the actor had the lowest attack on the
 	 * battlefield.
 	 */
@@ -653,11 +712,19 @@ public enum Attribute {
 	 */
 	POISONOUS,
 	/**
+	 * An aura version of {@link #POISONOUS}
+	 */
+	AURA_POISONOUS,
+	/**
 	 * A shorthand implementation of the Lifesteal keyword. Indicates that the {@link Hero} of the owner of the {@link
 	 * Minion}, or {@link net.demilich.metastone.game.cards.Card} should be healed by the amount of damage dealt by that
 	 * minion.
 	 */
 	LIFESTEAL,
+	/**
+	 * An aura version of {@link #LIFESTEAL}
+	 */
+	AURA_LIFESTEAL,
 	/**
 	 * Indicates that the {@link Player}'s end turn triggers should trigger twice.
 	 * <p>
@@ -665,7 +732,7 @@ public enum Attribute {
 	 */
 	DOUBLE_END_TURN_TRIGGERS,
 	/**
-	 * Indicates that the specified spell card was casted from the hand or the deck.
+	 * Indicates that the specified card was played from the hand or the deck.
 	 */
 	PLAYED_FROM_HAND_OR_DECK,
 	/**
@@ -693,6 +760,10 @@ public enum Attribute {
 	 * Indicates the number of uses of a hero power.
 	 */
 	USED_THIS_TURN,
+	/**
+	 * On the player entity, specifies how much mana has been spent this turn.
+	 */
+	MANA_SPENT_THIS_TURN,
 	/**
 	 * Returns the {@link Card}'s {@link net.demilich.metastone.game.cards.desc.CardDesc#heroClass} field.
 	 */
@@ -732,8 +803,8 @@ public enum Attribute {
 	 */
 	GAME_STARTED,
 	/**
-	 * For entities that are in the {@link Zones#REMOVED_FROM_PLAY} zone due to a transform effect, this attribute
-	 * points to the entity that replaced this one.
+	 * For entities that are in the {@link Zones#REMOVED_FROM_PLAY} zone due to a transform effect, this attribute points
+	 * to the entity that replaced this one.
 	 */
 	TRANSFORM_REFERENCE,
 	/**
@@ -753,11 +824,91 @@ public enum Attribute {
 	 */
 	NEVER_MULLIGANS,
 	/**
+	 * Indicates the card will put a copy of itself into the player's hand after it is played.
+	 */
+	ECHO,
+	/**
+	 * The aura version of {@link #ECHO}.
+	 */
+	AURA_ECHO,
+	/**
+	 * Whenever a {@link Minion} with this attribute is first attacked, it loses this attribute and the damage dealt to it
+	 * is dealt to its owner's hero instead.
+	 */
+	DEFLECT,
+	/**
+	 * Whenever a {@link Card} with this attribute is in your hand, and you have at least the invoke amount of mana, spend
+	 * that much mana instead of its base mana cost and gain the bonus effect written on the card.
+	 */
+	INVOKE,
+	/**
+	 * The aura version of {@link #INVOKE}
+	 */
+	AURA_INVOKE,
+	/**
+	 * Indicates a card's invoke for the specified amount of mana.
+	 * <p>
+	 * On a {@link Player} entity, indicates the number of cards that were invoked.
+	 */
+	INVOKED,
+	/**
+	 * Indicates that this {@link Entity} should remove itself from play peacefully at the end of the current turn.
+	 */
+	REMOVES_SELF_AT_END_OF_TURN,
+	/**
+	 * This value indicates the turn number of the {@link Player}'s last turn.
+	 */
+	LAST_TURN,
+	/**
 	 * When {@code true}, indicates this {@link Player} entity is an AI opponent.
 	 * <p>
 	 * Implements AI-specific game logic like eliminating turn timers.
 	 */
 	AI_OPPONENT,
+	/**
+	 * When set on a card in the {@link Zones#DISCOVER}, indicates the card should be turned over and visible to the
+	 * discovering player's opponent.
+	 */
+	UNCENSORED,
+	/**
+	 * Indicates the minion should magnetize when being played left of a mech instead of summoning normally
+	 */
+	MAGNETIC,
+	/**
+	 * An array of card IDs that correspond to which cards this card was magnetized from
+	 */
+	MAGNETS,
+	/*
+	 * The position in a player's hand that a card was played from
+	 */
+	HAND_INDEX,
+	/**
+	 * Indicates an {@link Actor} will do something when it attacks and kills a minion.
+	 * <p>
+	 * Implements Alder Ravenwald / Supremacy hero.
+	 */
+	SUPREMACY,
+	/**
+	 * Implements Electra Stormsurge.
+	 */
+	SPELLS_CAST_TWICE,
+	/**
+	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 */
+	ATTACK_MULTIPLIER,
+	/**
+	 * When non-zero, multiplies the {@link #ATTACK_BONUS}, {@link #TEMPORARY_ATTACK_BONUS}, {@link #AURA_ATTACK_BONUS}
+	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount.
+	 */
+	ATTACK_BONUS_MULTIPLIER,
+	/**
+	 * Will block an entity from receiving game event triggers
+	 */
+	CANT_GAIN_ENCHANTMENTS,
+	/**
+	 * Indicates a character shouldn't naturally lose the FROZEN attribute
+	 */
+	FREEZES_PERMANENTLY,
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
@@ -772,7 +923,12 @@ public enum Attribute {
 	RESERVED_BOOLEAN_1,
 	RESERVED_BOOLEAN_2,
 	RESERVED_BOOLEAN_3,
-	RESERVED_BOOLEAN_4;
+	RESERVED_BOOLEAN_4,
+	SUPREMACIES_THIS_GAME,
+	/**
+	 * Records the {@link EntityReference} of this choose one spell card's source card.
+	 */
+	CHOICE_SOURCE;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

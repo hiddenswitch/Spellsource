@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 
-public class OneTurnCostModifier extends CardCostModifier {
+public final class OneTurnCostModifier extends CardCostModifier {
 
 	private EventTrigger turnStartTrigger = new TurnStartTrigger();
 
@@ -40,7 +40,7 @@ public class OneTurnCostModifier extends CardCostModifier {
 
 		super.onGameEvent(event);
 	}
-	
+
 	@Override
 	public boolean oneTurnOnly() {
 		return true;

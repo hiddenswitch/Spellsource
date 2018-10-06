@@ -5,15 +5,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
-
 import io.vertx.core.json.Json;
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.spells.trigger.secrets.Secret;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.spells.GameValue;
-import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.CardDescType;
 import net.demilich.metastone.game.cards.CardSet;
@@ -23,22 +15,30 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.spells.GameValue;
+import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
 import net.demilich.metastone.game.spells.desc.filter.Operation;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
-import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.TargetType;
+import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.utils.Attribute;
 
 import java.io.IOException;
 
@@ -52,6 +52,7 @@ public class ParseUtils {
 	private static DescDeserializer<EventTriggerDesc, ?, ?> triggerParser = new EventTriggerDescDeserializer();
 	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
+	@SuppressWarnings("deprecation")
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
 		try {
@@ -85,10 +86,18 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_LAST_CARD_PLAYED;
 			case "enemy_last_card_played":
 				return EntityReference.ENEMY_LAST_CARD_PLAYED;
+			case "last_card_played_before_current_sequence":
+				return EntityReference.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
+			case "friendly_last_card_played_before_current_sequence":
+				return EntityReference.FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
+			case "enemy_last_card_played_before_current_sequence":
+				return EntityReference.ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
 			case "trigger_host":
 				return EntityReference.TRIGGER_HOST;
 			case "adjacent_minions":
 				return EntityReference.ADJACENT_MINIONS;
+			case "adjacent_to_target":
+				return EntityReference.ADJACENT_TO_TARGET;
 			case "attacker_adjacent_minions":
 				return EntityReference.ATTACKER_ADJACENT_MINIONS;
 			case "friendly_set_aside":
@@ -99,6 +108,8 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_GRAVEYARD;
 			case "enemy_graveyard":
 				return EntityReference.ENEMY_GRAVEYARD;
+			case "friendly_last_died_minion":
+				return EntityReference.FRIENDLY_LAST_DIED_MINION;
 			case "all_entities":
 				return EntityReference.ALL_ENTITIES;
 			case "opposite_minions":
@@ -123,8 +134,6 @@ public class ParseUtils {
 				return EntityReference.TARGET;
 			case "spell_target":
 				return EntityReference.SPELL_TARGET;
-			case "pending_card":
-				return EntityReference.PENDING_CARD;
 			case "output":
 				return EntityReference.OUTPUT;
 			case "self":
@@ -169,6 +178,16 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_HERO_POWER;
 			case "enemy_hero_power":
 				return EntityReference.ENEMY_HERO_POWER;
+			case "enemy_minions_left_to_right":
+				return EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT;
+			case "friendly_minions_left_to_right":
+				return EntityReference.FRIENDLY_MINIONS_LEFT_TO_RIGHT;
+			case "physical_attack_targets":
+				return EntityReference.PHYSICAL_ATTACK_TARGETS;
+			case "left_adjacent_minion":
+				return EntityReference.LEFT_ADJACENT_MINION;
+			case "right_adjacent_minion":
+				return EntityReference.RIGHT_ADJACENT_MINION;
 			default:
 				return null;
 		}
@@ -277,6 +296,14 @@ public class ParseUtils {
 			}
 			case CARD_SOURCE: {
 				return sourceParser.innerDeserialize(ctxt, jsonData).create();
+			}
+			case CARD_SOURCE_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				CardSource[] array = new CardSource[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = sourceParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+				}
+				return array;
 			}
 			case AURA: {
 				return auraParser.innerDeserialize(ctxt, jsonData).create();

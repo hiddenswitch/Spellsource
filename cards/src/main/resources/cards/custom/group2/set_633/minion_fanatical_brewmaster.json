@@ -1,0 +1,24 @@
+{
+  "name": "Fanatical Brewmaster",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Deflect. Battlecry: Add a 1/2 Alemental to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "token_tiny_alemental"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

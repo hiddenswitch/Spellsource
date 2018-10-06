@@ -1,0 +1,28 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "RESERVED_BOOLEAN_2",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "RESERVED_BOOLEAN_1",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

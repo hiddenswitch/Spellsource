@@ -1,0 +1,22 @@
+{
+  "name": "Frenzied Trapper",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "<b>Battlecry:</b> Put 5 random Hunter <b>Secrets</b> into the battlefield.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

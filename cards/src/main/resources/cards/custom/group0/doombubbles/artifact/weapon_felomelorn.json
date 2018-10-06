@@ -1,0 +1,56 @@
+{
+  "name": "Felo'melorn",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "BLUE",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, cast a 'Flamestrike' from your hand or deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RevealCardSpell",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RemoveCardSpell",
+            "target": "OUTPUT"
+          },
+          {
+            "class": "DamageSpell",
+            "target": "ENEMY_MINIONS",
+            "value": {
+              "class": "SpellDamageValueProvider",
+              "value": 4
+            }
+          }
+        ]
+      },
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_flamestrike"
+      },
+      "cardSource": {
+        "class": "CombinedSource",
+        "cardSources": [
+          {
+            "class": "HandSource",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "DeckSource",
+            "targetPlayer": "SELF"
+          }
+        ]
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

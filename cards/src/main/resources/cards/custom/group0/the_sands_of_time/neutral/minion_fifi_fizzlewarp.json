@@ -1,0 +1,172 @@
+{
+  "name": "Fifi Fizzlewarp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "When the game starts, if your other minions are textless, give each one a random minion's effect.",
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "gameTriggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "AllMatchFilterCondition",
+              "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "OrFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_fifi_fizzlewarp"
+                  },
+                  {
+                    "class": "HasTextFilter",
+                    "invert": true
+                  }
+                ]
+              }
+            },
+            {
+              "class": "AllMatchFilterCondition",
+              "target": "FRIENDLY_HAND",
+              "filter": {
+                "class": "OrFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_fifi_fizzlewarp"
+                  },
+                  {
+                    "class": "HasTextFilter",
+                    "invert": true
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "RevealCardSpell",
+              "target": "SELF"
+            },
+            {
+              "class": "custom.TextifySpell",
+              "target": "FRIENDLY_DECK",
+              "cardFilter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  },
+                  {
+                    "class": "HasTextFilter"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_prince_malchezaar",
+                    "invert": true
+                  }
+                ]
+              },
+              "filter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  }
+                ]
+              }
+            },
+            {
+              "class": "custom.TextifySpell",
+              "target": "FRIENDLY_HAND",
+              "cardFilter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  },
+                  {
+                    "class": "HasTextFilter"
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_prince_malchezaar",
+                    "invert": true
+                  }
+                ]
+              },
+              "filter": {
+                "class": "AndFilter",
+                "filters": [
+                  {
+                    "class": "SpecificCardFilter",
+                    "card": "minion_fifi_fizzlewarp",
+                    "invert": true
+                  },
+                  {
+                    "class": "CardFilter",
+                    "cardType": "MINION"
+                  }
+                ]
+              }
+            },
+            {
+              "class": "AddAttributeSpell",
+              "target": "FRIENDLY_DECK",
+              "attribute": "STARTED_IN_DECK"
+            },
+            {
+              "class": "AddAttributeSpell",
+              "target": "FRIENDLY_HAND",
+              "attribute": "STARTED_IN_DECK"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

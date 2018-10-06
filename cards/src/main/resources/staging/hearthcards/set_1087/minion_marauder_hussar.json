@@ -1,0 +1,14 @@
+{
+  "name": "Marauder Hussar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Adjacent minions deals their excess damage to the enemy hero.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,6 +9,21 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.Map;
+
+/**
+ * Discards or removes all cards from {@link SpellArg#TARGET_PLAYER}'s deck, up to {@link SpellArg#VALUE} random cards.
+ * <p>
+ * To discard the caster's entire deck:
+ * <pre>
+ *   {
+ *     "class": "DiscardCardsFromDeckSpell",
+ *     "value": 60,
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
+ * TODO: Fel Reaver currently incorrectly removes random cards from the deck instead of the top cards.
+ */
 public class DiscardCardsFromDeckSpell extends Spell {
 
 	public static SpellDesc create(int howMany) {

@@ -1,0 +1,40 @@
+{
+  "name": "Devouring Devilsaur",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Destroy a minion. Restore Health to your hero equal to its Attack.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK"
+      },
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,22 @@
+Name: Mecha'thun Warlock
+Class: Warlock
+Format: Standard
+2x Kobold Librarian
+2x Mortal Coil
+1x The Soularium
+1x Bloodbloom
+1x Bloodmage Thalnos
+2x Defile
+2x Doomsayer
+2x Galvanizer
+2x Stonehill Defender
+2x Voodoo Doll
+1x Cataclysm
+2x Hellfire
+2x Lesser Amethyst Spellstone
+2x Shroom Brewer
+2x Witchwood Piper
+1x Siphon Soul
+1x Lord Godfrey
+1x Twisting Nether
+1x Mecha'thun

@@ -1,0 +1,12 @@
+{
+  "name": "The Mute",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "<i>. . .</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

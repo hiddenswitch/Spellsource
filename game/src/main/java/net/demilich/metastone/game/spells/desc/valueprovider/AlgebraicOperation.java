@@ -6,6 +6,7 @@ public enum AlgebraicOperation {
 	SUBTRACT,
 	MULTIPLY,
 	DIVIDE,
+	DIVIDE_ROUNDED,
 	SET,
 	NEGATE,
 	MODULO,
@@ -21,6 +22,11 @@ public enum AlgebraicOperation {
 					num2 = 1;
 				}
 				return num1 / num2;
+			case DIVIDE_ROUNDED:
+				if (num2 == 0) {
+					num2 = 1;
+				}
+				return Math.round((float) num1 / (float) (num2));
 			case MAXIMUM:
 				return Math.max(num1, num2);
 			case MINIMUM:

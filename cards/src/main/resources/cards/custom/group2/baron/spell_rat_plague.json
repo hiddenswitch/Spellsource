@@ -1,0 +1,25 @@
+{
+  "name": "Rat Plague",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "EPIC",
+  "description": "Shuffle three 3/3 Rats with Charge into your deck. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ShuffleToDeckSpell",
+        "value": 3,
+        "card": "token_plagued_rat"
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

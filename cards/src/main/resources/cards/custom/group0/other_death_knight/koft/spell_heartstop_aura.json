@@ -1,0 +1,17 @@
+{
+  "name": "Heartstop Aura",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "EPIC",
+  "description": "Your minions don't die from fatal damage until the start of your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_heartstopped"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

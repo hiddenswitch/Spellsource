@@ -1,0 +1,49 @@
+{
+  "name": "Hagara the Stormbinder",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Start of Game: If your deck has only class cards, your hero power unlocks your Overloaded Mana this game.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "GameStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RevealCardSpell",
+          "target": "SELF",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "HeroPowerBonusAura",
+            "target": "FRIENDLY_PLAYER",
+            "applyEffect": {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "ClearOverloadSpell"
+                },
+                {
+                  "class": "RevealCardSpell",
+                  "card": "spell_lightning_conduction"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

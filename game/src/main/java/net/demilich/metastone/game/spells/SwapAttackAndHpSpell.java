@@ -1,16 +1,17 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
-import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.Attribute;
+
+import java.util.Map;
 
 public class SwapAttackAndHpSpell extends Spell {
 
@@ -27,14 +28,27 @@ public class SwapAttackAndHpSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Minion minion = (Minion) target;
-		int attack = minion.getAttack();
-		int hp = minion.getHp();
-		minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
-		minion.getAttributes().remove(Attribute.ATTACK_BONUS);
-		minion.getAttributes().remove(Attribute.HP_BONUS);
-		minion.setAttack(hp);
-		context.getLogic().setHpAndMaxHp(minion, attack);
+		if (target instanceof Minion) {
+			Minion minion = (Minion) target;
+			int attack = minion.getAttack();
+			int hp = minion.getHp();
+			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
+			minion.getAttributes().remove(Attribute.ATTACK_BONUS);
+			minion.getAttributes().remove(Attribute.HP_BONUS);
+			minion.setAttack(hp);
+			context.getLogic().setHpAndMaxHp(minion, attack);
+		} else if (target instanceof Card) {
+			Card card = (Card) target;
+			int attack = card.getAttack();
+			int attackBonus = card.getBonusAttack();
+			int hp = card.getHp();
+			int hpBonus = card.getBonusHp();
+			card.getAttributes().put(Attribute.HP, attack);
+			card.getAttributes().put(Attribute.HP_BONUS, attackBonus);
+			card.getAttributes().put(Attribute.ATTACK, hp);
+			card.getAttributes().put(Attribute.ATTACK_BONUS, hpBonus);
+		}
+
 	}
 
 }

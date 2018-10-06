@@ -8,6 +8,8 @@ cache:
     - $HOME/.gradle/wrapper/
 jdk:
   - oraclejdk8
+services:
+  - mongodb
 script:
   - ./gradlew check --max-workers=1
 dist: trusty
@@ -22,3 +24,4 @@ branches:
 env:
   global:
     JAVA_OPTS=-Xmx2700m
+    MONGO_URL=mongodb://127.0.0.1:27017/testdb
