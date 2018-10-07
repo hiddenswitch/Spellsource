@@ -1,0 +1,45 @@
+{
+  "name": "Kil'jaeden, Deceiver",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Deathrattle: Summon a random minion as a 0/2 with \"Deathrattle: Summon Kil'jaeden.\"",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 0
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 2
+        },
+        {
+          "class": "AddDeathrattleSpell",
+          "spell": {
+            "class": "SummonSpell",
+            "card": "minion_kiljaeden_deceiver"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
