@@ -1,0 +1,33 @@
+{
+  "name": "Fang of Hethiss",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: If 3 or more minions died this turn, gain Poisonous.",
+  "battlecry": {
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "DeadMinionsThisTurn",
+        "value": 3,
+        "operation": "GREATER_OR_EQUAL",
+        "targetPlayer": "BOTH"
+      },
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "POISONOUS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
