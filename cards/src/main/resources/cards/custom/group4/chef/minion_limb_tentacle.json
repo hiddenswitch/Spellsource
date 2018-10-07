@@ -1,0 +1,35 @@
+{
+  "name": "Limb Tentacle",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "When you Roast this, summon it.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "RemoveAttributeSpell",
+          "attribute": "ROASTED"
+        },
+        {
+          "class": "PutMinionOnBoardFromDeckSpell",
+          "target": "SELF"
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

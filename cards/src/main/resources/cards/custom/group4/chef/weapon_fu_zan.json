@@ -1,0 +1,20 @@
+{
+  "name": "Fu Zan",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "TOAST",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Summon a permanent Magic Keg. It can't be removed.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "permanent_magic_keg"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

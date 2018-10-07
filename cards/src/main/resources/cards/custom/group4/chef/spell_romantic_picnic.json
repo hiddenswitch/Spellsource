@@ -1,0 +1,28 @@
+{
+  "name": "Romantic Picnic",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "Restore #7 Health to each hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 7
+      },
+      {
+        "class": "HealSpell",
+        "target": "ENEMY_HERO",
+        "value": 7
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

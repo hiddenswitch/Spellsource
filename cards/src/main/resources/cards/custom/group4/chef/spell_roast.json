@@ -1,0 +1,26 @@
+{
+  "name": "Roast",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "Deal $4 damage. Roast 3 cards.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 4
+      },
+      {
+        "class": "RoastSpell",
+        "value": 3
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

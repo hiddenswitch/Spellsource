@@ -1,0 +1,23 @@
+{
+  "name": "Idiot Sandwich",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "Deathrattle: Give adjacent minions +2/+2.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

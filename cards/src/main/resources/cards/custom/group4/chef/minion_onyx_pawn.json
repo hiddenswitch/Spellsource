@@ -1,0 +1,33 @@
+{
+  "name": "Onyx Pawn",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Battlecry: If your deck contains 15 or fewer cards, transform into a 6/6 6 Onyx Queen with Taunt.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "LESS_OR_EQUAL",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "value2": 15
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_onyx_queen"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

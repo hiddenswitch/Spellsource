@@ -9,12 +9,13 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,8 +47,8 @@ import java.util.stream.Collectors;
  * {@link EntityReference#OUTPUT} will reference each summoned minion.
  * <p>
  * The minions will be summoned in the last spot on the {@link Zones#BATTLEFIELD} unless the {@link
- * SpellArg#BOARD_POSITION_RELATIVE} argument is set. When set to {@link RelativeToSource#RIGHT}, and the {@code source}
- * of the spell is a {@link Minion}, the summoned minion will appear to the right of the {@code source}.
+ * SpellArg#BOARD_POSITION_RELATIVE} argument is set. When set to {@link BoardPositionRelative#RIGHT}, and the {@code
+ * source} of the spell is a {@link Minion}, the summoned minion will appear to the right of the {@code source}.
  * <p>
  * If {@link SpellArg#EXCLUSIVE} is specified, the spell will not summon minions whose card IDs are already on the
  * battlefield.
@@ -165,7 +166,7 @@ public class SummonSpell extends Spell {
 	 * @param cards                 One or more minions to summon. Each will be summoned.
 	 * @return The spell
 	 */
-	public static SpellDesc create(RelativeToSource relativeBoardPosition, Card... cards) {
+	public static SpellDesc create(BoardPositionRelative relativeBoardPosition, Card... cards) {
 		return create(TargetPlayer.SELF, relativeBoardPosition, cards);
 	}
 
@@ -215,7 +216,7 @@ public class SummonSpell extends Spell {
 	 * @param cards                 The cards to summon from
 	 * @return The spell
 	 */
-	public static SpellDesc create(TargetPlayer targetPlayer, RelativeToSource relativeBoardPosition, Card... cards) {
+	public static SpellDesc create(TargetPlayer targetPlayer, BoardPositionRelative relativeBoardPosition, Card... cards) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SummonSpell.class);
 		String[] cardNames = new String[cards.length];
 		for (int i = 0; i < cards.length; i++) {
@@ -258,7 +259,6 @@ public class SummonSpell extends Spell {
 			Set<String> existingCardIds = player.getMinions().stream()
 					.map(Minion::getSourceCard)
 					.map(Card::getCardId)
-					.distinct()
 					.collect(Collectors.toSet());
 			cards.removeIf(c -> existingCardIds.contains(c.getCardId()));
 		}

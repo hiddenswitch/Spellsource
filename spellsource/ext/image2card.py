@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from collections import deque
 from copy import deepcopy
 from json import loads, dumps
@@ -34,9 +35,6 @@ class PageToImages(Iterable[str]):
         super(PageToImages, self).__init__()
         self.urls = urls
         self._results = {}  # type: Dict[str, Iterable[str]]
-
-    def __len__(self):
-        return len(self.urls)
 
     def __iter__(self):
         for url in self.urls:
@@ -82,10 +80,17 @@ class Enricher(Iterable[Dict]):
 
     def __iter__(self) -> Mapping:
         for card_desc in self.card_descs:
-            yield enrich_from_description(card_dict=deepcopy(card_desc), description=card_desc['description'], hero_class=self.hero_class)
+            yield enrich_from_description(card_dict=deepcopy(card_desc),
+                                          description=card_desc['description'],
+                                          card_type=card_desc['type'],
+                                          card_attack=card_desc['baseAttack'] if 'baseAttack' in card_desc else None,
+                                          card_health=card_desc['baseHp'] if 'baseHp' in card_desc else None,
+                                          hero_class=self.hero_class)
 
 
 class RekognitionGenerator(Iterable[DetectTextResponse]):
+    _LOGGER = logging.getLogger('RekognitionGenerator')
+
     def __init__(self, *images: Union[str, Mapping, DetectTextResponse], bucket='minionate',
                  results_cache_prefix='image2card/results',
                  image_cache_prefix='image2card/images'):
@@ -127,6 +132,7 @@ class RekognitionGenerator(Iterable[DetectTextResponse]):
             try:
                 rekognition_res_s3 = self._s3.get_object(bucket=self._bucket,
                                                          key=result_key)
+                RekognitionGenerator._LOGGER.info('Found cached result in S3 for URI %s' % (repr(uri)))
             except ClientError as ex:
                 if ex.response['Error']['Code'] in ('404', 'NoSuchKey'):
                     rekognition_res_s3 = None
@@ -149,6 +155,7 @@ class RekognitionGenerator(Iterable[DetectTextResponse]):
                 # check if we already have the image
                 try:
                     self._s3.head_object(bucket=self._bucket, key=image_key)
+                    RekognitionGenerator._LOGGER.info('Found cached image in S3 for URI %s' % (repr(uri)))
                 except ClientError as ex:
                     if ex.response['Error']['Code'] not in ('404', 'NoSuchKey'):
                         raise ex
@@ -189,6 +196,8 @@ class SpellsourceCardDescGenerator(Iterable[Dict]):
         re.compile(r'[Ss]'): '5'
     }
 
+    _LOGGER = logging.getLogger('SpellsourceCardDescGenerator')
+
     def __init__(self, *detect_text_responses: DetectTextResponse):
         self.detect_text_responses = detect_text_responses  # type: Iterable[DetectTextResponse]
 
@@ -204,6 +213,12 @@ class SpellsourceCardDescGenerator(Iterable[Dict]):
             # strategy 1: use lines
             lines = [td for td in text_detections if td.type == TextTypes.LINE]  # type: List[TextDetection]
 
+            if len(lines) < 2:
+                SpellsourceCardDescGenerator._LOGGER.exception(
+                    'Invalid card detected. Insufficient lines (%d) for request %s' % (
+                        len(lines), detect_text.to_boto_dict()))
+                continue
+
             # First line is the mana line
             mana_cost = SpellsourceCardDescGenerator._to_digits(lines[0].detected_text)
 
@@ -216,6 +231,8 @@ class SpellsourceCardDescGenerator(Iterable[Dict]):
             lines_consumed = 0
             for i in range(-1, -4, -1):
                 lines_consumed += 1
+                if abs(i) > len(lines):
+                    continue
                 words_in_line = lines[i].detected_text.split(' ')
                 for word in reversed(words_in_line):
                     last_words.appendleft(word)
@@ -281,7 +298,7 @@ if __name__ == '__main__':
     parser.add_argument('-d', '--directory', required=False,
                         default='./cards/src/main/resources/staging/scraped',
                         help='The directory to save the cards to')
-    parser.add_argument('-h', '--hero-class', required=False,
+    parser.add_argument('-c', '--hero-class', required=False,
                         default='ANY',
                         help='The hero class to put into the cards')
     args = parser.parse_args()

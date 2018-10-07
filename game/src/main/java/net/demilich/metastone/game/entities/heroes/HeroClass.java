@@ -17,14 +17,15 @@ public enum HeroClass {
 	SILVER,
 	VIOLET,
 	RED,
+	SPIRIT,
 	JADE,
 	LEATHER,
 	EGGPLANT,
 	RUST,
 	ICE,
-	SPIRIT,
 	OBSIDIAN,
 	AMBER,
+	TOAST,
 	SELF,
 	OPPONENT,
 	INHERIT;
@@ -65,6 +66,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_nerzhul");
 			case AMBER:
 				return CardCatalogue.getCardById("hero_zara");
+			case TOAST:
+				return CardCatalogue.getCardById("hero_warchef_gordo");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

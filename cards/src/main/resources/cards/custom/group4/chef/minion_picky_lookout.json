@@ -1,0 +1,53 @@
+{
+  "name": "Picky Lookout",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Battlecry: Look at 3 cards from your deck. Pick one to Roast it. Do this 5 times.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "value2": 1
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecastWhileSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK"
+        },
+        "value2": 1
+      },
+      "spell": {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "RoastSpell"
+        },
+        "cardSource": {
+          "class": "DeckSource",
+          "distinct": false
+        },
+        "exclusive": true
+      },
+      "howMany": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

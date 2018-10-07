@@ -1,0 +1,26 @@
+{
+  "name": "Inedible Ghoul",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "When you Roast this, deal 3 damage to all enemy minions.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 3
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

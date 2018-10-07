@@ -67,7 +67,9 @@ public class DecksPutRequest implements Serializable {
     
     OBSIDIAN("OBSIDIAN"),
     
-    AMBER("AMBER");
+    AMBER("AMBER"),
+    
+    TOAST("TOAST");
 
     private String value;
 

@@ -14,10 +14,7 @@
     {
       "class": "TargetSelectionOverrideAura",
       "target": "FRIENDLY_HAND",
-      "applyEffect": {
-        "class": "NullSpell",
-        "targetSelection": "MINIONS"
-      },
+      "targetSelection": "MINIONS",
       "filter": {
         "class": "AndFilter",
         "filters": [
@@ -35,10 +32,7 @@
     {
       "class": "TargetSelectionOverrideAura",
       "target": "FRIENDLY_MINIONS",
-      "applyEffect": {
-        "class": "NullSpell",
-        "targetSelection": "MINIONS"
-      },
+      "targetSelection": "MINIONS",
       "filter": {
         "class": "AndFilter",
         "filters": [
