@@ -23,6 +23,7 @@
     "spell": {
       "class": "AdjacentEffectSpell",
       "spell1": {
+        "class": "NullSpell"
       },
       "spell2": {
         "class": "RecastSpell",
