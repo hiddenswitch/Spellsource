@@ -1,11 +1,11 @@
 {
   "name": "Meat Hook",
   "baseManaCost": 2,
-  "type": "MINION",
+  "type": "WEAPON",
   "heroClass": "TOAST",
-  "baseAttack": 2,
-  "baseHp": 4,
-  "rarity": "FREE",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "EPIC",
   "description": "Battlecry: Your opponent summons a random minion from their hand. Give it Taunt.",
   "battlecry": {
     "targetSelection": "NONE",

@@ -3,7 +3,7 @@
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Draw $2 cards. Affected by Spell Damage.",
   "targetSelection": "NONE",
   "spell": {

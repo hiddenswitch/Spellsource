@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 10,
   "baseHp": 10,
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Deathrattle: If your deck is empty, resummon this.",
   "deathrattle": {
     "class": "ConditionalSpell",

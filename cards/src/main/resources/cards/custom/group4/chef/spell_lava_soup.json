@@ -3,7 +3,7 @@
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "The next card you play this turn costs Roasted cards instead of mana.",
   "targetSelection": "NONE",
   "spell": {

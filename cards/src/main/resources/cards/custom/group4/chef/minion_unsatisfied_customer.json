@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 2,
   "baseHp": 2,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Battlecry: Add the last card you Roasted this turn to your hand.",
   "battlecry": {
     "targetSelection": "NONE",

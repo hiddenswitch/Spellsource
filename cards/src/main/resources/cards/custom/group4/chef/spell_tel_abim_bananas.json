@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Give a minion +2/+2. It can't attack heroes anymore.",
   "targetSelection": "MINIONS",
   "spell": {

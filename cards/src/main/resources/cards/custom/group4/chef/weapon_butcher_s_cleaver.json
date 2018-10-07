@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "damage": 3,
   "durability": 3,
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Also damages the minions next to whomever your hero attacks.",
   "trigger": {
     "eventTrigger": {

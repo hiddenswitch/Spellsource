@@ -5,7 +5,7 @@
   "baseHp": 4,
   "type": "MINION",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Whenever you play a card, shuffle a copy of it into your deck.",
   "trigger": {
     "eventTrigger": {

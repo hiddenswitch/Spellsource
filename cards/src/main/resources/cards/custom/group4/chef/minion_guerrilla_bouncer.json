@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 2,
   "baseHp": 2,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "BEAST",
   "description": "Battlecry: Draw a 1-Cost card from your deck.",
   "battlecry": {

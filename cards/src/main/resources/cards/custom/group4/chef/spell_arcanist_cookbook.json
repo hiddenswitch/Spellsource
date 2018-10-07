@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Discover a Beast, a Dragon or a Murloc.",
   "targetSelection": "NONE",
   "spell": {

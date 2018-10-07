@@ -1,11 +1,11 @@
 {
-  "name": "Cromwell",
+  "name": "Bethany Cromwell",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "TOAST",
   "baseAttack": 4,
   "baseHp": 5,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "Battlecry: Sort the cards in your deck by cost. (Lowest goes on top)",
   "battlecry": {
     "targetSelection": "NONE",

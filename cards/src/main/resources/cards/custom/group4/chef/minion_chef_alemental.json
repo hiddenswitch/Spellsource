@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 4,
   "baseHp": 4,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "ELEMENTAL",
   "description": "Battlecry: Put a 'Hangover' card on top of your deck.",
   "battlecry": {

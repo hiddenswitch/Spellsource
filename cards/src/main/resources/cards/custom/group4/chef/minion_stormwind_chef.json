@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 4,
   "baseHp": 7,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Taunt. Battlecry: Roast 5 cards.",
   "battlecry": {
     "targetSelection": "NONE",

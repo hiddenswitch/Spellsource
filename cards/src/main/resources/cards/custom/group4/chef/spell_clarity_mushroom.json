@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "The next time you use your hero power, it deals 2 more damage and you can choose its target.",
   "targetSelection": "NONE",
   "spell": {

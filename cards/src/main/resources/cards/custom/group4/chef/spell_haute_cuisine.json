@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Draw the highest-Cost card from your deck.",
   "targetSelection": "NONE",
   "spell": {

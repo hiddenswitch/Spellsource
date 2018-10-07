@@ -3,7 +3,7 @@
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "Cast copies of all spells in your deck (targets chosen randomly).",
   "targetSelection": "MINIONS",
   "spell": {

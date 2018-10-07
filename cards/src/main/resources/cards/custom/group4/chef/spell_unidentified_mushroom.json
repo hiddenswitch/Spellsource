@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "The next time you use your Hero Power, it deals 2 more damage and gains a bonus effect in your hand.",
   "targetSelection": "NONE",
   "condition": {

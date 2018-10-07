@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 3,
   "baseHp": 3,
-  "rarity": "FREE",
+  "rarity": "RARE",
   "race": "BEAST",
   "description": "Battlecry: Discover a Berserker, Chef, or Scribbler card.",
   "battlecry": {

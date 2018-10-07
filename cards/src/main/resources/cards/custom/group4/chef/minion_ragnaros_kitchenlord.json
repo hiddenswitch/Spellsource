@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 8,
   "baseHp": 8,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
   "description": "At the end of your turn, randomly draw or Roast cards until you have at least 8 in hand.",
   "trigger": {

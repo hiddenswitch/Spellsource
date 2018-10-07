@@ -3,7 +3,7 @@
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Look at the top card of deck. If it costs your (5) or more, draw it. Otherwise, Roast it.",
   "targetSelection": "NONE",
   "spell": {

@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 1,
   "baseHp": 2,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "BEAST",
   "description": "Battlecry: Add a Banana to your hand.",
   "battlecry": {

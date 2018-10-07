@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 4,
   "baseHp": 4,
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Battlecry: Shuffle the left-most card in your hand into your deck. Set its Cost to (0).",
   "battlecry": {
     "targetSelection": "NONE",

@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 5,
   "baseHp": 5,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "race": "DRAGON",
   "description": "At the end of your turn, destroy your other minions and gain their stats.",
   "trigger": {

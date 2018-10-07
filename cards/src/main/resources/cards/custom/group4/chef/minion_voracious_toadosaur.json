@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 5,
   "baseHp": 6,
-  "rarity": "FREE",
+  "rarity": "RARE",
   "race": "BEAST",
   "description": "Battlecry: If you played an Elemental last turn, shuffle 3 copies of this into your deck.",
   "battlecry": {

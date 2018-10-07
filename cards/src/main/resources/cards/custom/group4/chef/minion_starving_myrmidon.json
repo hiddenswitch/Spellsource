@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 5,
   "baseHp": 4,
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Battlecry: If your deck contains 8 or fewer cards, destroy a minion.",
   "battlecry": {
     "condition": {

@@ -4,7 +4,7 @@
   "baseManaCost": 10,
   "type": "HERO",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "Battlecry: Draw your deck. Deal 1 damage to a random enemy for each card you Roast this way.",
   "battlecry": {
     "targetSelection": "NONE",

@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 2,
   "baseHp": 6,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "After you cast a spell on a minion, cast copies on adjacent minions.",
   "trigger": {
     "eventTrigger": {

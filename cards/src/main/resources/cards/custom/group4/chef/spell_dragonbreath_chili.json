@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Deal $2 damage to a random enemy. Draw a card. Cast this when Roasted.",
   "targetSelection": "NONE",
   "deckTrigger": {

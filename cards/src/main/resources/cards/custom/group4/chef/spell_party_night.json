@@ -3,7 +3,7 @@
   "baseManaCost": 8,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Draw 10 cards.",
   "targetSelection": "NONE",
   "spell": {
