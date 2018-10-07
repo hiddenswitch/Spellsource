@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Deal $2 damage. Add a Lesser Opal Spellstone to your hand. (Roast 2 cards to upgrade)",
   "targetSelection": "ANY",
   "passiveTrigger": {

@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Fully heal a minion and give it +2/+2.",
   "targetSelection": "MINIONS",
   "spell": {

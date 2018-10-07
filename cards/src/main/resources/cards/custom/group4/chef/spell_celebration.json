@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Draw 2 cards. Put a 'Hangover' card that does nothing on top of your deck.",
   "targetSelection": "NONE",
   "spell": {

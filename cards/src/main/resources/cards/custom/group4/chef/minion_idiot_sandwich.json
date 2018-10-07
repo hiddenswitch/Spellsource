@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 2,
   "baseHp": 2,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "MURLOC",
   "description": "Deathrattle: Give adjacent minions +2/+2.",
   "deathrattle": {

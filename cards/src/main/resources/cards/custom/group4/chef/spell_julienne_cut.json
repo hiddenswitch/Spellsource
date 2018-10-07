@@ -1,9 +1,9 @@
 {
-  "name": "Julienne Gut",
+  "name": "Julienne Cut",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Destroy a minion. Summon two 1/1 copies of it to replace it.",
   "targetSelection": "MINIONS",
   "spell": {

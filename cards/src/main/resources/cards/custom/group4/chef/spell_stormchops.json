@@ -3,7 +3,7 @@
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Give a minion 'Deathrattle: Deal 3 damage to all minions'.",
   "targetSelection": "MINIONS",
   "spell": {

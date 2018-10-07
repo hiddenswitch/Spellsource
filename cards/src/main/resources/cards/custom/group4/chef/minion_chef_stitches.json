@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 5,
   "baseHp": 4,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "Your Roast effects now draw cards instead.",
   "aura": {
     "class": "SpellOverrideAura",

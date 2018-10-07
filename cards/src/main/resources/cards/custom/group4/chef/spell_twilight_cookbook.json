@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Discover a card you Roasted this game.",
   "targetSelection": "NONE",
   "spell": {

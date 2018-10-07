@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 2,
   "baseHp": 1,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Battlecry: Discover a Spell. Shuffle it into your deck. It costs (5) less.",
   "battlecry": {
     "targetSelection": "NONE",

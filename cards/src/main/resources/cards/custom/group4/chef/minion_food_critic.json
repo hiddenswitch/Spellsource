@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 1,
   "baseHp": 3,
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Battlecry: Roast a card. If it costs (3) or more, gain +1 Attack.",
   "battlecry": {
     "targetSelection": "NONE",

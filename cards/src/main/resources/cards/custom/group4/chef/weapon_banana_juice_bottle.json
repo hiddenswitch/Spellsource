@@ -1,11 +1,11 @@
 {
   "name": "Banana Juice Bottle",
   "baseManaCost": 4,
-  "type": "MINION",
+  "type": "WEAPON",
   "heroClass": "TOAST",
-  "baseAttack": 2,
-  "baseHp": 3,
-  "rarity": "FREE",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "RARE",
   "description": "Battlecry: If you played a 1-Cost spell this turn, gain +1/+1.",
   "battlecry": {
     "condition": {

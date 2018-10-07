@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 7,
   "baseHp": 7,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "BEAST",
   "description": "Battlecry: Put 2 Bananas on top of your deck.",
   "battlecry": {

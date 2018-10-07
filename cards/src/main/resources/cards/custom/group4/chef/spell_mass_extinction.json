@@ -3,7 +3,7 @@
   "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Destroy all minions except those with the lowest Attack. Instead, Adapt them.",
   "targetSelection": "NONE",
   "spell": {

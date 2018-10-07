@@ -3,7 +3,7 @@
   "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Fully heal your hero. Put 2 'Hangover' cards that do nothing on top of your deck.",
   "targetSelection": "NONE",
   "spell": {

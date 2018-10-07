@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 3,
   "baseHp": 3,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "race": "MURLOC",
   "description": "Spell Damage +3. Your spells now have random targets.",
   "aura": {

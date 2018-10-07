@@ -3,7 +3,7 @@
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Roast 7 cards. Summon a random 7-Cost minion.",
   "targetSelection": "NONE",
   "spell": {

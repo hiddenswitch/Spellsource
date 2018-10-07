@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Restore #8 Health to your Hero. Roast 3 cards.",
   "targetSelection": "NONE",
   "spell": {

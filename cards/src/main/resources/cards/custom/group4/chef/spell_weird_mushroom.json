@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Give a minion +3/+3 or destroy it (at random).",
   "targetSelection": "MINIONS",
   "spell": {

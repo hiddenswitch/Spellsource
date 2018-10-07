@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 6,
   "baseHp": 6,
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "description": "Battlecry: Roast a Dragon, a Beast or an Elemental. Shuffle the related Meal into your deck.",
   "battlecry": {
     "targetSelection": "NONE",

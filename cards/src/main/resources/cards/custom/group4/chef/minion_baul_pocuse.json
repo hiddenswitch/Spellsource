@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 7,
   "baseHp": 6,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "Battlecry: Add the last 3 cards you Roasted this game to your hand. Shuffle the rest into your deck.",
   "battlecry": {
     "targetSelection": "NONE",

@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Give a minion +2/+2 and Lifesteal. At the end of its owner's turn, it attacks an adjacent minion.",
   "targetSelection": "MINIONS",
   "spell": {

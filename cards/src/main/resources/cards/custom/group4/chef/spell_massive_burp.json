@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Roast a card. Deal damage equal to its Cost to a minion.",
   "targetSelection": "MINIONS",
   "spell": {

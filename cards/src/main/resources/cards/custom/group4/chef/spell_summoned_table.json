@@ -3,7 +3,7 @@
   "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "TOAST",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Add all cards Roasted this turn to your hand.",
   "targetSelection": "NONE",
   "spell": {

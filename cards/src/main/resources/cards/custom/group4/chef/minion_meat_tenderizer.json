@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 2,
   "baseHp": 4,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Battlecry: Give your C'Thun +2/+2 (wherever it is).",
   "battlecry": {
     "targetSelection": "NONE",

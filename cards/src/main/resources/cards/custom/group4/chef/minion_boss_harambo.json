@@ -1,11 +1,11 @@
 {
-  "name": "Harambo",
+  "name": "Boss Harambo",
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "TOAST",
   "baseAttack": 7,
   "baseHp": 7,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Battlecry: Add 10 Bananas to your hand. Excess bananas go to the bottom of your deck.",
   "battlecry": {

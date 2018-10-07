@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "baseAttack": 5,
   "baseHp": 1,
-  "rarity": "FREE",
+  "rarity": "LEGENDARY",
   "description": "Battlecry: Restore Health to your hero equal to the number of missing cards in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
