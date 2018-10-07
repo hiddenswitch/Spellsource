@@ -162,6 +162,8 @@ public class ParseUtils {
 				return EntityReference.MINIONS_TO_RIGHT;
 			case "friendly_deck":
 				return EntityReference.FRIENDLY_DECK;
+				case "friendly_deck_from_top":
+				return EntityReference.FRIENDLY_DECK_FROM_TOP;
 			case "friendly_top_card":
 				return EntityReference.FRIENDLY_TOP_CARD;
 			case "enemy_deck":

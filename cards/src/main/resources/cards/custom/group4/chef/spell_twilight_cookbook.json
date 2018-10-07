@@ -12,11 +12,12 @@
       "class": "ReceiveCardSpell"
     },
     "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
+      "class": "AttributeFilter",
+      "attribute": "ROASTED"
     },
     "cardSource": {
-      "class": "CatalogueSource"
+      "class": "GraveyardCardsSource",
+      "distinct": true
     }
   },
   "attributes": {},

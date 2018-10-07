@@ -1,0 +1,47 @@
+{
+  "name": "Mushroom Toxicity",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and adds a new random Mushroom to your hand.",
+  "auras": [
+    {
+      "class": "HeroPowerBonusAura",
+      "target": "FRIENDLY_PLAYER",
+      "applyEffect": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "DamageSpell",
+            "value": 2
+          },
+          {
+            "class": "ReceiveCardSpell",
+            "randomTarget": true,
+            "cards": [
+              "spell_clarity_mushroom",
+              "spell_healing_mushroom",
+              "spell_toxic_mushroom",
+              "spell_hallucinogenic_mushroom"
+            ]
+          }
+        ]
+      }
+    }
+  ],
+  "trigger": {
+    "eventTrigger": {
+      "class": "HeroPowerUsedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_mushroom_hallucinogenic"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

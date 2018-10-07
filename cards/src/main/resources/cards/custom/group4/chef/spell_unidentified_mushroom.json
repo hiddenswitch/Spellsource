@@ -4,22 +4,88 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Your next Hero Power deals 2 more damage. Gains a bonus effect in your hand.",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and gains a bonus effect in your hand.",
   "targetSelection": "NONE",
+  "condition": {
+    "class": "AndCondition",
+    "invert": false
+  },
   "spell": {
-    "class": "MetaSpell",
+    "class": "RandomlyCastSpell",
     "spells": [
       {
-        "class": "BuffSpell",
-        "target": "SELF",
-        "attackBonus": 0,
-        "hpBonus": 0
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_clarity_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_clarity"
+          }
+        ]
       },
       {
-        "class": "DamageSpell",
-        "value": 1
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_toxic_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_toxicity"
+          }
+        ]
+      },
+      {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_healing_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_healing"
+          }
+        ]
+      },
+      {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_hallucinogenic_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_hallucinogenic"
+          }
+        ]
       }
     ]
+  },
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "cards": [
+        "spell_clarity_mushroom",
+        "spell_hallucinogenic_mushroom",
+        "spell_healing_mushroom",
+        "spell_toxic_mushroom"
+      ]
+    }
   },
   "attributes": {},
   "collectible": true,

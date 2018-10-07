@@ -7,8 +7,17 @@
   "description": "Draw, then Roast 2 cards.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardSpell",
-    "value": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      {
+        "class": "RoastSpell",
+        "howMany": 2
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

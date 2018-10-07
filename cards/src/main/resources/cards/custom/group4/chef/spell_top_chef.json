@@ -7,11 +7,22 @@
   "description": "Look at the top card of deck. If it costs your (5) or more, draw it. Otherwise, Roast it.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DrawCardSpell",
-    "target": "FRIENDLY_CHARACTERS",
-    "value": 1,
-    "condition": {
-      "class": "PlayedLastTurnCondition"
+    "class": "RevealCardSpell",
+    "target": "FRIENDLY_TOP_CARD",
+    "spell": {
+      "class": "EitherOrSpell",
+      "target": "OUTPUT",
+      "spell1": {
+        "class": "FromDeckToHandSpell"
+      },
+      "spell2": {
+        "class": "RoastSpell"
+      },
+      "condition": {
+        "class": "ManaCostCondition",
+        "value": 5,
+        "operation": "GREATER_OR_EQUAL"
+      }
     }
   },
   "attributes": {},

@@ -1,5 +1,5 @@
 {
-  "name": "orgrimmar Portal",
+  "name": "Orgrimmar Portal",
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "TOAST",
@@ -7,9 +7,24 @@
   "description": "Roast 7 cards. Summon a random 7-Cost minion.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "card": "minion_bloodfen_raptor",
-    "randomTarget": true
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RoastSpell",
+        "howMany": 7
+      },
+      {
+        "class": "SummonSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "manaCost": 7
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

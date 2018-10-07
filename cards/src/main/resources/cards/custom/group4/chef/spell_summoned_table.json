@@ -7,9 +7,25 @@
   "description": "Add all cards Roasted this turn to your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "target": "FRIENDLY_CHARACTERS",
-    "card": "spell_mirror_image"
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_GRAVEYARD",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "AttributeFilter",
+          "attribute": "ROASTED",
+          "value": {
+            "class": "CurrentTurnValudProvider"
+          },
+          "operation": "EQUAL"
+        },
+        {
+          "class": "EntityTypeFilter",
+          "entityType": "CARD"
+        }
+      ]
+    }
   },
   "attributes": {},
   "collectible": true,
