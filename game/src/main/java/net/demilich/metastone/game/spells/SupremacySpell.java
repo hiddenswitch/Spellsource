@@ -23,7 +23,7 @@ public class SupremacySpell extends MetaSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		super.onCast(context, player, desc, source, target);
-		for (SpellDesc subSpell : SpellUtils.getBonusesFromAura(context, player.getId(), SupremacyBonusEffectAura.class)) {
+		for (SpellDesc subSpell : SpellUtils.getBonusesFromAura(context, player.getId(), SupremacyBonusEffectAura.class, source, target)) {
 			SpellUtils.castChildSpell(context, player, subSpell, source, target);
 		}
 		player.modifyAttribute(Attribute.SUPREMACIES_THIS_GAME, 1);
@@ -31,7 +31,7 @@ public class SupremacySpell extends MetaSpell {
 		boolean playerHasDoubleSupremacies = SpellUtils.hasAura(context, player.getId(), SupremaciesTriggerTwiceAura.class);
 		if (playerHasDoubleSupremacies) {
 			super.onCast(context, player, desc, source, target);
-			for (SpellDesc subSpell : SpellUtils.getBonusesFromAura(context, player.getId(), SupremacyBonusEffectAura.class)) {
+			for (SpellDesc subSpell : SpellUtils.getBonusesFromAura(context, player.getId(), SupremacyBonusEffectAura.class, source, target)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target);
 			}
 			player.modifyAttribute(Attribute.SUPREMACIES_THIS_GAME, 1);

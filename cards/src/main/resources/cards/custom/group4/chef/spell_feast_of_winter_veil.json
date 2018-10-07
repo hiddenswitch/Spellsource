@@ -1,0 +1,18 @@
+{
+  "name": "Feast of Winter Veil",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Restore #15 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 15
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

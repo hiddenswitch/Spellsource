@@ -51,6 +51,173 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testCromwell() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			putOnTopOfDeck(context, player, "minion_deathwing");
+			assertEquals(context.resolveSingleTarget(player, player, EntityReference.FRIENDLY_TOP_CARD).getSourceCard().getCardId(), "minion_deathwing");
+			playCard(context, player, "minion_cromwell");
+			assertEquals(context.resolveSingleTarget(player, player, EntityReference.FRIENDLY_TOP_CARD).getSourceCard().getCardId(), "spell_the_coin");
+		});
+	}
+
+	@Test
+	public void testLavaSoup() {
+		runGym((context, player, opponent) -> {
+			Card shouldNotBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted2 = putOnTopOfDeck(context, player, "spell_the_coin");
+			assertEquals(player.getDeck().size(), 3);
+			Card cost2Card = receiveCard(context, player, "spell_cost_2_card");
+			assertEquals(costOf(context, player, cost2Card), 2);
+			player.setMaxMana(2);
+			player.setMana(2);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			player.setMana(1);
+			assertFalse(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			playCard(context, player, "spell_lava_soup");
+			assertTrue(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			playCard(context, player, cost2Card);
+			assertEquals(player.getDeck().size(), 1);
+			assertTrue(shouldBeRoasted1.hasAttribute(Attribute.ROASTED));
+			assertTrue(shouldBeRoasted2.hasAttribute(Attribute.ROASTED));
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+		});
+
+		runGym((context, player, opponent) -> {
+			Card shouldNotBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			assertEquals(player.getDeck().size(), 1);
+			Card cost2Card = receiveCard(context, player, "spell_cost_2_card");
+			assertEquals(costOf(context, player, cost2Card), 2);
+			player.setMaxMana(2);
+			player.setMana(2);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			player.setMana(1);
+			assertFalse(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			playCard(context, player, "spell_lava_soup");
+			assertFalse(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			assertEquals(player.getDeck().size(), 1);
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+		});
+	}
+
+	@Test
+	public void testDeathwingsDinner() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			Minion target = playMinionCard(context, player, "minion_boulderfist_ogre");
+			Card shouldNotBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted2 = putOnTopOfDeck(context, player, "spell_the_coin");
+			playCard(context, player, "spell_deathwing_s_dinner");
+			assertEquals(player.getDeck().size(), 1);
+			assertTrue(shouldBeRoasted1.hasAttribute(Attribute.ROASTED));
+			assertTrue(shouldBeRoasted2.hasAttribute(Attribute.ROASTED));
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+			playCardWithTarget(context, player, "spell_fireball", target);
+			assertTrue(target.isDestroyed());
+			assertTrue(shouldBeRoasted1.hasAttribute(Attribute.ROASTED));
+			assertTrue(shouldBeRoasted2.hasAttribute(Attribute.ROASTED));
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+		});
+	}
+
+	@Test
+	public void testChiliDragonbreath() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_chili_dragonbreath");
+			Minion minion = playMinionCard(context, player, "minion_blackwing_technician");
+			assertEquals(minion.getAttack(), minion.getBaseAttack() + 1);
+			assertEquals(minion.getMaxHp(), minion.getBaseHp() + 1);
+		});
+	}
+
+	@Test
+	public void testButcher() {
+		// Destroy friendly, should get butcher in the same place. Should work with full board
+		runGym((context, player, opponent) -> {
+			Minion wisp0 = playMinionCard(context, player, "minion_wisp");
+			Minion wisp1 = playMinionCard(context, player, "minion_wisp");
+			Minion wisp2 = playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			playMinionCard(context, player, "minion_wisp");
+			assertEquals(wisp1.getEntityLocation().getIndex(), 1);
+			playCardWithTarget(context, player, "spell_butcher", wisp1);
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_pile_of_meat");
+		});
+
+		// Destroy enemy
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion wisp0 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp1 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp2 = playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			assertEquals(wisp1.getEntityLocation().getIndex(), 1);
+			playCardWithTarget(context, player, "spell_butcher", wisp1);
+			assertEquals(opponent.getMinions().get(1).getSourceCard().getCardId(), "token_pile_of_meat");
+		});
+	}
+
+	@Test
+	public void testFogburner() {
+		runGym((context, player, opponent) -> {
+			Minion fogburner = playMinionCard(context, player, "minion_fogburner");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_volcanic_potion");
+			assertEquals(fogburner.getAttack(), fogburner.getBaseAttack() + 2, "+2 from two indirect damages");
+			assertEquals(fogburner.getMaxHp(), fogburner.getBaseHp() + 2, "+2 from two indirect damages");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion fogburner = playMinionCard(context, player, "minion_fogburner");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCardWithTarget(context, player, "spell_fireball", wisp);
+			assertEquals(fogburner.getAttack(), fogburner.getBaseAttack());
+			assertEquals(fogburner.getMaxHp(), fogburner.getBaseHp());
+		});
+	}
+
+	@Test
+	public void testBananamancer() {
+		runGym((context, player, opponent) -> {
+			// Giving a hero bonus armor with a spell played from hand
+			playMinionCard(context, player, "minion_bananamancer");
+			playCard(context, player, "spell_gnash");
+			assertEquals(player.getHero().getAttack(), 4, "3 + 1 spell damage");
+			assertEquals(player.getHero().getArmor(), 4, "3 + 1 spell damage");
+		});
+
+		runGym((context, player, opponent) -> {
+			// Giving a minion a buff from a spell should buff it, from a subsequent battlecry should not
+			playMinionCard(context, player, "minion_bananamancer");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_mark_of_the_lotus");
+			assertEquals(wisp.getAttack(), wisp.getBaseAttack() + 2, "1 + 1 spell damage");
+			assertEquals(wisp.getHp(), wisp.getBaseHp() + 2, "1 + 1 spell damage");
+			playMinionCardWithBattlecry(context, player, "minion_fallen_sun_cleric", wisp);
+			assertEquals(wisp.getAttack(), wisp.getBaseAttack() + 3, "1 + 1 spell damage + 1 Sun Cleric buff");
+			assertEquals(wisp.getHp(), wisp.getBaseHp() + 3, "1 + 1 spell damage + 1 Sun Cleric buff");
+		});
+
+		runGym((context, player, opponent) -> {
+			// Give your hero 2x the mana spent in armor + 1 spell damage = 21 armor
+			playMinionCard(context, player, "minion_bananamancer");
+			player.setMaxMana(10);
+			player.setMana(10);
+			playCard(context, player, "spell_forbidden_armor");
+			assertEquals(player.getHero().getArmor(), 21, "2x the mana spent in armor + 1 spell damage = 21 armor");
+		});
+	}
+
+	@Test
 	public void testFlamewarper() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_flamewarper");

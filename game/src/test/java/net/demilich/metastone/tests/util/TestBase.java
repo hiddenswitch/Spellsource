@@ -24,6 +24,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import org.mockito.MockingDetails;
@@ -62,7 +63,7 @@ public class TestBase {
 
 	protected static <T extends Card> T putOnTopOfDeck(GameContext context, Player player, String cardId) {
 		final T card = (T) CardCatalogue.getCardById(cardId);
-		context.getLogic().putOnTopOfDeck(player, card);
+		context.getLogic().insertIntoDeck(player, card, player.getDeck().size());
 		return card;
 	}
 
@@ -468,6 +469,9 @@ public class TestBase {
 	protected static void playCard(GameContext context, Player player, Card card) {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
+		}
+		if (card.getTargetSelection() != TargetSelection.NONE && card.getTargetSelection() != null) {
+			throw new UnsupportedOperationException(String.format("This card %s requires a target.", card.getName()));
 		}
 		context.getLogic().performGameAction(player.getId(), card.play());
 	}

@@ -192,16 +192,6 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	CardList shuffle(Random random);
 
 	/**
-	 * Sorts the cards in this list by their {@link Card#getBaseManaCost()}. Typically not used in gameplay.
-	 */
-	void sortByManaCost();
-
-	/**
-	 * Sorts the cards by name.
-	 */
-	void sortByName();
-
-	/**
 	 * Gets a {@link List} that references the contents of this instance.
 	 *
 	 * @return A {@link List} whose contents are the same objects as this instance.

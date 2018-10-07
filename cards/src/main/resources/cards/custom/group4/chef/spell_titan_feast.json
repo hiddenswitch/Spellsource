@@ -1,0 +1,24 @@
+{
+  "name": "Titan Feast",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "LEGENDARY",
+  "description": "Cast copies of all spells in your deck (targets chosen randomly).",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReplayCardsSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

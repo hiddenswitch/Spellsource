@@ -30,13 +30,7 @@ public class NoggenfoggerAura extends Aura {
 		GameContext gc = originalEvent.getGameContext();
 		List<Entity> validTargets;
 
-		if (event.getAction().getActionType() == ActionType.PHYSICAL_ATTACK) {
-			// Noggenfogger ignores taunt and stealth but doesn't choose friendlies
-			Player sourcePlayer = gc.getPlayer(originalEvent.getSourcePlayerId());
-			validTargets = gc.resolveTarget(sourcePlayer, event.getAction().getSource(gc), EntityReference.ENEMY_CHARACTERS);
-		} else {
-			validTargets = gc.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
-		}
+		validTargets = getValidTargets(gc, event);
 
 		if (validTargets.size() == 0) {
 			// An earlier event removed all valid targets
@@ -44,4 +38,18 @@ public class NoggenfoggerAura extends Aura {
 		}
 		gc.setTargetOverride(gc.getLogic().getRandom(validTargets).getReference());
 	}
+
+
+	protected List<Entity> getValidTargets(GameContext context, TargetAcquisitionEvent event) {
+		List<Entity> validTargets;
+		if (event.getAction().getActionType() == ActionType.PHYSICAL_ATTACK) {
+			// Noggenfogger ignores taunt and stealth but doesn't choose friendlies
+			Player sourcePlayer = context.getPlayer(event.getSourcePlayerId());
+			validTargets = context.resolveTarget(sourcePlayer, event.getAction().getSource(context), EntityReference.ENEMY_CHARACTERS);
+		} else {
+			validTargets = context.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
+		}
+		return validTargets;
+	}
 }
+

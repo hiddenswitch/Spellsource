@@ -99,11 +99,35 @@ def from_hearthcard_to_spellsource(card, set='CUSTOM', hero_class='WHITE', **kwa
 
 
 def enrich_from_description(card_dict: Mapping,
-                            description: str,
+                            description: Optional[str] = None,
                             card_attack: Optional[Union[str, int]] = None,
                             card_health: Optional[Union[str, int]] = None,
                             card_type: Optional[str] = None,
                             hero_class: Optional[str] = None):
+    if description is None:
+        if 'description' in card_dict:
+            description = card_dict['description']
+
+    description = description.lower()
+
+    if card_type is None:
+        if 'type' in card_dict:
+            card_type = card_dict['type']
+        if 'cardType' in card_dict:
+            card_type = card_dict['cardType']
+
+    if card_attack is None:
+        if 'baseAttack' in card_dict:
+            card_attack = card_dict['baseAttack']
+        elif 'damage' in card_dict:
+            card_attack = card_dict['damage']
+
+    if card_health is None:
+        if 'baseHp' in card_dict:
+            card_health = card_dict['baseHp']
+        elif 'durability' in card_dict:
+            card_health = card_dict['durability']
+
     card_dict['attributes'] = attributes = {}
     spell = {
         'class': 'BuffSpell',

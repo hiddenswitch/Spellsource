@@ -1,0 +1,46 @@
+{
+  "name": "Mushroom Toxicity",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and has Poisonous.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HeroPowerUsedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_mushroom_toxicity"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "attribute": "AURA_POISONOUS"
+    },
+    {
+      "class": "HeroPowerBonusAura",
+      "target": "FRIENDLY_PLAYER",
+      "condition": {
+        "class": "AllMatchFilterCondition",
+        "target": "FRIENDLY_HERO_POWER",
+        "filter": {
+          "class": "TargetSelectionFilter",
+          "targetSelection": "NONE",
+          "invert": true
+        }
+      },
+      "applyEffect": {
+        "class": "DamageSpell",
+        "value": 2
+      }
+    }
+  ]
+}

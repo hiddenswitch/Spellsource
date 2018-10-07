@@ -1,0 +1,24 @@
+{
+  "name": "Halitosis",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Choose a friendly minion. Deal its Attack in damage to minions opposite it.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "OppositeEffectSpell",
+    "spell2": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "TARGET",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

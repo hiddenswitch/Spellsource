@@ -19,10 +19,7 @@ import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.shared.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
-import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.spells.aura.ChooseOneOverrideAura;
-import net.demilich.metastone.game.spells.aura.SpellOverrideAura;
-import net.demilich.metastone.game.spells.aura.TargetSelectionOverrideAura;
+import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -30,6 +27,10 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilterArg;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.OriginalValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
@@ -476,7 +477,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return false;
 		}
 		int manaCost = getModifiedManaCost(player, card);
-		if (doesCardCostHealth(player, card)
+
+		List<CardCostInsteadAura> costAuras = SpellUtils.getAuras(context, playerId, CardCostInsteadAura.class);
+		boolean cardCostOverridden = costAuras.size() > 0 && costAuras.stream().anyMatch(aura -> aura.getAffectedEntities().contains(entityReference.getId()));
+		if (cardCostOverridden) {
+			// Only play the last card cost override whose condition was met. Reverse order of play seems more intuitive here.
+			Collections.reverse(costAuras);
+			for (CardCostInsteadAura aura : costAuras) {
+				if (aura.getAffectedEntities().contains(entityReference.getId())) {
+					return aura.getCanAffordCondition().isFulfilled(context, player, card, card);
+				}
+			}
+		} else if (doesCardCostHealth(player, card)
 				&& player.getHero().getEffectiveHp() < manaCost
 				&& manaCost != 0) {
 			return false;
@@ -706,7 +718,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			source = context.resolveSingleTarget(sourceReference);
 		}
 
-		//Implement SpellOverrideAura
+		// Implement SpellOverrideAura
 		Class<? extends Spell> spellClass = spellDesc.getDescClass();
 		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
 				.filter(t -> t instanceof SpellOverrideAura)
@@ -732,7 +744,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			spellDesc = spellDesc.clone();
 			for (Aura aura : overrideAuras) {
 				for (Map.Entry<SpellArg, Object> spellArgObjectEntry : aura.getDesc().getApplyEffect().entrySet()) {
-					spellDesc.put(spellArgObjectEntry.getKey(), spellArgObjectEntry.getValue());
+					Object value = spellArgObjectEntry.getValue();
+
+					boolean originalValueProvider = value instanceof OriginalValueProvider;
+					if (originalValueProvider) {
+						if (spellDesc.containsKey(spellArgObjectEntry.getKey())) {
+							// Only override key/value pairs in the override using OriginalValueProvider if the original value exists
+							Object originalValue = spellDesc.get(spellArgObjectEntry.getKey());
+							ValueProvider newValue = (ValueProvider) value;
+							ValueProviderDesc newDesc = newValue.getDesc().clone();
+							newDesc.put(ValueProviderArg.VALUE, originalValue);
+							newValue.setDesc(newDesc);
+							value = newValue;
+						} else {
+							// If the key doesn't exist in the original SpellDesc that we're trying to retrieve with
+							// OriginalValueProvider, don't put the new key/value pair into the new SpellDesc
+							continue;
+						}
+					}
+					spellDesc.put(spellArgObjectEntry.getKey(), value);
 				}
 			}
 		}
@@ -1836,9 +1866,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	private boolean canActivateInvokeKeyword(Player player, Card card) {
 		int mana = player.getMana();
+		List<CardCostInsteadAura> auras = SpellUtils.getAuras(context, player.getId(), CardCostInsteadAura.class);
 		if (doesCardCostHealth(player, card) && player.getHero() != null) {
+			// TODO: Cards that cost health should migrate to the CardCostInsteadAura system so that order of play is respected
 			mana = player.getHero().getHp();
 		}
+
+		if (auras.size() > 0) {
+			// TODO: How should Invoke interact with card costs like this?
+			mana = auras.stream().mapToInt(aura -> aura.getAmountOfCurrency(context, player, card, card)).max().orElseThrow(RuntimeException::new);
+		}
+
 		return (card.hasAttribute(Attribute.INVOKE) && card.getAttributeValue(Attribute.INVOKE) <= mana)
 				|| (card.hasAttribute(Attribute.AURA_INVOKE) && card.getAttributeValue(Attribute.AURA_INVOKE) <= mana);
 	}
@@ -2593,22 +2631,43 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
 	 *
 	 * @param playerId        The player that is playing the card.
-	 * @param EntityReference The card that got played.
+	 * @param entityReference The card that got played.
 	 */
 	@Suspendable
-	public void playCard(int playerId, EntityReference EntityReference) {
+	public void playCard(int playerId, EntityReference entityReference) {
 		Player player = context.getPlayer(playerId);
-		Card card = (Card) context.resolveSingleTarget(EntityReference);
+		Card card = (Card) context.resolveSingleTarget(entityReference);
 
 		int modifiedManaCost = getModifiedManaCost(player, card);
 		boolean cardCostsHealth = doesCardCostHealth(player, card);
+		List<CardCostInsteadAura> costAuras = SpellUtils.getAuras(context, playerId, CardCostInsteadAura.class);
+		boolean cardCostOverridden = costAuras.size() > 0 && costAuras.stream().anyMatch(aura -> aura.getAffectedEntities().contains(entityReference.getId()));
 
 		// The modified mana cost already reflects the invoke cost
 		if (canActivateInvokeKeyword(player, card)) {
 			card.setAttribute(Attribute.INVOKED, modifiedManaCost);
 		}
 
-		if (cardCostsHealth) {
+		if (cardCostOverridden) {
+			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);
+			// Only play the last card cost override whose condition was met. Reverse order of play seems more intuitive here.
+			Collections.reverse(costAuras);
+			boolean paid = false;
+			for (CardCostInsteadAura aura : costAuras) {
+				if (!aura.getAffectedEntities().contains(entityReference.getId())) {
+					continue;
+				}
+
+				if (aura.getCanAffordCondition().isFulfilled(context, player, card, card)) {
+					castSpell(playerId, aura.getPayEffect(), card.getReference(), card.getReference(), true);
+					paid = true;
+					break;
+				}
+			}
+			if (!paid) {
+				throw new UnsupportedOperationException("A card cost was overridden, successfully played but could not actually get its cost paid.");
+			}
+		} else if (cardCostsHealth) {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);
 			damage(player, player.getHero(), modifiedManaCost, card, true);
 		} else {
@@ -2697,17 +2756,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public GameAction processTargetModifiers(GameAction action) {
 		Entity entity = action.getSource(context);
-		List<Aura> auras = context.getTriggerManager().getTriggers().stream()
-				.filter(t -> t instanceof TargetSelectionOverrideAura)
-				.map(t -> (Aura) t)
-				.filter(((Predicate<Aura>) Aura::isExpired).negate())
-				.filter(aura -> aura.getAffectedEntities().contains(entity.getId()))
-				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
-						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
-				.collect(Collectors.toList());
-		if (auras != null && !auras.isEmpty()) {
-			for (Aura aura : auras) {
-				TargetSelection targetSelection = (TargetSelection) aura.getDesc().getApplyEffect().get(SpellArg.TARGET_SELECTION);
+		List<TargetSelectionOverrideAura> auras = SpellUtils.getAuras(context, entity.getOwner(), TargetSelectionOverrideAura.class);
+		if (!auras.isEmpty()) {
+			for (TargetSelectionOverrideAura aura : auras) {
+				if (!aura.getAffectedEntities().contains(entity.getId())) {
+					continue;
+				}
+
+				TargetSelection targetSelection = aura.getTargetSelection();
 				switch (action.getActionType()) {
 					case HERO_POWER:
 					case SPELL:
@@ -3333,15 +3389,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Places a card at the top of a player's deck, indicating it will be the next card to be drawn.
-	 * <p>
-	 * The top of the deck is the last element in the deck array.
+	 * Inserts a card into the specified location in the player's deck. Use {@link CardZone#size()} as the index for the
+	 * top of the deck, and {@code 0} for the bottom.
 	 *
-	 * @param player The {@link Player} whose deck should be used
-	 * @param card   The card to put at the top of the deck.
+	 * @param player
+	 * @param card
+	 * @param index
+	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link
+	 * 		#MAX_DECK_SIZE}).
 	 */
 	@Suspendable
-	public void putOnTopOfDeck(Player player, Card card) {
+	public boolean insertIntoDeck(Player player, Card card, int index) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3353,14 +3411,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
 			if (card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				player.getDeck().add(card);
+				player.getDeck().add(index, card);
 			} else {
 				card.moveOrAddTo(context, Zones.DECK);
 			}
 
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
+			return true;
 		}
+		return false;
 	}
 
 	/**
