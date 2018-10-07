@@ -20,6 +20,7 @@
         "operation": "EQUAL"
       },
       "spell1": {
+        "class": "NullSpell"
       },
       "spell2": {
         "class": "MetaSpell",
