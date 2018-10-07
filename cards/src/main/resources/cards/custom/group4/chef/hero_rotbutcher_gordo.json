@@ -1,0 +1,53 @@
+{
+  "name": "Rotbutcher Gordo",
+  "heroPower": "hero_power_insatiable",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Battlecry: Draw your deck. Deal 1 damage to a random enemy for each card you Roast this way.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "CardCountCondition",
+            "value": 10,
+            "operation": "LESS"
+          },
+          "spell": {
+            "class": "RecastWhileSpell",
+            "condition": {
+              "class": "CardCountCondition",
+              "value": 10,
+              "operation": "LESS"
+            },
+            "spell": {
+              "class": "DrawCardSpell"
+            }
+          }
+        },
+        {
+          "class": "RoastSpell",
+          "target": "FRIENDLY_DECK_FROM_TOP",
+          "spell": {
+            "class": "MissilesSpell",
+            "target": "ENEMY_CHARACTERS",
+            "value": 1
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

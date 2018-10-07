@@ -5,14 +5,14 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "The next time you use your hero power, it deals 2 more damage and you can choose its target.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "card": "enchantment_mushroom_clarity"
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

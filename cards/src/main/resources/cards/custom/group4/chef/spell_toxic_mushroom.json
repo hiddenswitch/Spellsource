@@ -4,12 +4,12 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Your next Hero Power deals 2 more damage and has Poisonous.",
-  "targetSelection": "ANY",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and has Poisonous.",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "DamageSpell",
-    "target": "FRIENDLY_HERO",
-    "value": 1
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_mushroom_toxicity"
   },
   "attributes": {},
   "collectible": true,

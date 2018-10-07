@@ -1,22 +1,15 @@
 {
-  "name": "Mushroom Clarity",
+  "name": "Mushroom Healing",
   "baseManaCost": 0,
   "type": "ENCHANTMENT",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "The next time you use your Hero Power, it deals 2 more damage and you can choose its target.",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and has Lifesteal.",
   "auras": [
     {
-      "class": "TargetSelectionOverrideAura",
+      "class": "AttributeAura",
       "target": "FRIENDLY_HERO_POWER",
-      "applyEffect": {
-        "class": "NullSpell",
-        "targetSelection": "ANY"
-      },
-      "filter": {
-        "class": "TargetSelectionFilter",
-        "targetSelection": "NONE"
-      }
+      "attribute": "AURA_LIFESTEAL"
     },
     {
       "class": "HeroPowerBonusAura",
@@ -35,7 +28,7 @@
     "spell": {
       "class": "RemoveEnchantmentSpell",
       "target": "TRIGGER_HOST",
-      "card": "enchantment_mushroom_clarity"
+      "card": "enchantment_mushroom_healing"
     }
   },
   "collectible": false,

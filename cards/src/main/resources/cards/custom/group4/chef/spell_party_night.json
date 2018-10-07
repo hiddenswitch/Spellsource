@@ -1,5 +1,5 @@
 {
-  "name": "party Night",
+  "name": "Party Night",
   "baseManaCost": 8,
   "type": "SPELL",
   "heroClass": "TOAST",
@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",
-    "value": 1
+    "value": 10
   },
   "attributes": {},
   "collectible": true,

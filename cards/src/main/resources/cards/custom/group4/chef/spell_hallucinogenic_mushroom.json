@@ -4,23 +4,15 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Your next Hero Power deals 2 more damage. Add a new random Mushroom to your hand.",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and adds a new random Mushroom to your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DamageSpell",
-        "value": 1
-      },
-      {
-        "class": "ReceiveCardSpell",
-        "card": "spell_mirror_image"
-      }
-    ]
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_mushroom_hallucinogenic"
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

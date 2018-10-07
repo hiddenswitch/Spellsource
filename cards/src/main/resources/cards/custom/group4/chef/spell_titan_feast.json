@@ -7,14 +7,18 @@
   "description": "Cast copies of all spells in your deck (targets chosen randomly).",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_CHARACTERS",
-    "attackBonus": 0,
-    "hpBonus": 0,
-    "randomTarget": true
+    "class": "ReplayCardsSpell",
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
   },
   "attributes": {},
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

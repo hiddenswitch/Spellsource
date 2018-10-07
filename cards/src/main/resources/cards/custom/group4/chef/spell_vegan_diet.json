@@ -7,10 +7,17 @@
   "description": "Give a minion Taunt and \"Can't attack\".",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "CANNOT_ATTACK"
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,

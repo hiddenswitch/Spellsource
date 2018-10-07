@@ -5,21 +5,14 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Give a minion 'Deathrattle: Deal 3 damage to all minions'.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "BuffSpell",
-        "target": "SELF",
-        "attackBonus": 0,
-        "hpBonus": 0
-      },
-      {
-        "class": "DamageSpell",
-        "value": 1
-      }
-    ]
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3,
+      "target": "ALL_MINIONS"
+    }
   },
   "attributes": {},
   "collectible": true,

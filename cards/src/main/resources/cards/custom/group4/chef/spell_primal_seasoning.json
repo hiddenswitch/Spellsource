@@ -8,7 +8,11 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "minion_bloodfen_raptor"
+    "cards": [
+      "token_spicy_elemental",
+      "token_peppery_elemental",
+      "token_salty_elemental"
+    ]
   },
   "attributes": {},
   "collectible": true,
