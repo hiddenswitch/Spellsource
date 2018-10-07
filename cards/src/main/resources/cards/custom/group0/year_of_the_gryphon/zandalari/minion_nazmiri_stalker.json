@@ -21,13 +21,13 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-    "class": "AdjacentEffectSpell",
-    "spell1": {
+      "class": "AdjacentEffectSpell",
+      "spell1": {
       },
-    "spell2": {
-      "class": "RecastSpell",
-      "target": "SELF",
-      "secondaryTarget": "EVENT_SOURCE"
+      "spell2": {
+        "class": "RecastSpell",
+        "target": "SELF",
+        "secondaryTarget": "EVENT_SOURCE"
       }
     }
   },
