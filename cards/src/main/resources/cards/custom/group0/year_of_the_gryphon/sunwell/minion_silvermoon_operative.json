@@ -1,0 +1,49 @@
+{
+  "name": "Silvermoon Operative",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "attack": 2,
+  "health": 2,
+  "rarity": "EPIC",
+  "description": "Your copies of this minion keep their enchantments. <b>Surge</b>: Gain +2/+2 and Stealth.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "attribute": "RECEIVED_ON_TURN",
+        "value": {
+          "class": "CurrentTurnValueProvider"
+        },
+        "operation": "EQUAL"
+      },
+      "spell1": {
+      },
+      "spell2": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "attackBonus": 2,
+            "hpBonus": 2
+          },
+          {
+            "class": "AddAttributeSpell",
+            "target": "SELF",
+            "attribute": "STEALTH"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "KEEPS_ENCHANTMENTS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
