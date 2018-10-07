@@ -10,12 +10,49 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "AddAttributeSpell",
-      "target": "FRIENDLY_PLAYER",
-      "attribute": "HERO_POWER_CAN_TARGET_MINIONS",
-      "revertTrigger": {
-        "class": "TurnEndTrigger"
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "CardAura",
+            "target": "FRIENDLY_HERO_POWER",
+            "card": "hero_power_sniper_steady_shot",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "hero_power_steady_shot"
+            }
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "CardAura",
+            "target": "FRIENDLY_HERO_POWER",
+            "card": "hero_power_sniper_ballista_shot",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "hero_power_ballista_shot"
+            }
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnEndTrigger"
+            },
+            "spell": {
+              "class": "RemoveEnchantmentSpell",
+              "target": "FRIENDLY_PLAYER",
+              "card": "minion_riverside_bowman"
+            }
+          }
+        }
+      ]
     }
   },
   "attributes": {

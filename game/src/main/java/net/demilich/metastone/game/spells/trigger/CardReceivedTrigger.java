@@ -11,6 +11,10 @@ public class CardReceivedTrigger extends EventTrigger {
 		super(desc);
 	}
 
+	public static EventTrigger create() {
+		return new EventTriggerDesc(CardReceivedTrigger.class).create();
+	}
+
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		return true;

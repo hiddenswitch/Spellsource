@@ -1,0 +1,24 @@
+{
+  "name": "Guerrilla Chef",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Roast 3 cards.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RoastSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

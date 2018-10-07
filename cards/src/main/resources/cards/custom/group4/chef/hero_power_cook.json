@@ -1,0 +1,51 @@
+{
+  "name": "Cook",
+  "heroPower": "hero_power_broil",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to a random enemy.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "OrCondition",
+        "conditions": [
+          {
+            "class": "MinionOnBoardCondition",
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_skilled_cook"
+            }
+          },
+          {
+            "class": "AnyMatchFilterCondition",
+            "target": "FRIENDLY_PLAYER",
+            "filter": {
+              "class": "HasEnchantmentFilter",
+              "card": "enchantment_mushroom_clarity"
+            }
+          }
+        ]
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "target": "TARGET",
+        "value": 2
+      },
+      "spell2": {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 2,
+        "randomTarget": true
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,34 @@
+{
+  "name": "Summoned Table",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Add all cards Roasted this turn to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_GRAVEYARD",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+          "attribute": "ROASTED",
+          "operation": "EQUAL"
+        },
+        {
+          "class": "EntityTypeFilter",
+          "entityType": "CARD"
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

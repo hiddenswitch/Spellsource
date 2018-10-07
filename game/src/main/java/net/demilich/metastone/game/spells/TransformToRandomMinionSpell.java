@@ -21,12 +21,13 @@ public class TransformToRandomMinionSpell extends TransformMinionSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		CardList filteredMinions = desc.getFilteredCards(context, player, source);
-		Card randomCard = context.getLogic().getRandom(filteredMinions);
-		if (randomCard != null) {
-			SpellDesc transformMinionSpell = TransformMinionSpell.create(randomCard.getCardId());
-			super.onCast(context, player, transformMinionSpell, source, target);
+		CardList filteredMinions = SpellUtils.getCards(context, player, target, source, desc, 1);
+		if (filteredMinions.isEmpty()) {
+			return;
 		}
+		Card randomCard = filteredMinions.get(0);
+		SpellDesc transformMinionSpell = TransformMinionSpell.create(randomCard.getCardId());
+		super.onCast(context, player, transformMinionSpell, source, target);
 	}
 
 }

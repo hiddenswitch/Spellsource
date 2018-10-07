@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -339,20 +340,24 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.getOpponent(player));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_DECK)) {
 			return new ArrayList<>(player.getDeck().toList());
+		} else if (targetKey.equals(EntityReference.FRIENDLY_DECK_FROM_TOP)) {
+			ArrayList<Entity> deck = new ArrayList<>(player.getDeck().toList());
+			Collections.reverse(deck);
+			return deck;
 		} else if (targetKey.equals(EntityReference.ENEMY_DECK)) {
 			return new ArrayList<>(context.getOpponent(player).getDeck().toList());
 		} else if (targetKey.equals(EntityReference.FRIENDLY_TOP_CARD)) {
 			if (player.getDeck().size() == 0) {
 				return new ArrayList<>();
 			} else {
-				return singleTargetAsList(player.getDeck().get(0));
+				return singleTargetAsList(player.getDeck().peek());
 			}
 		} else if (targetKey.equals(EntityReference.ENEMY_TOP_CARD)) {
 			Player opponent = context.getOpponent(player);
 			if (opponent.getDeck().size() == 0) {
 				return new ArrayList<>();
 			} else {
-				return singleTargetAsList(opponent.getDeck().get(0));
+				return singleTargetAsList(opponent.getDeck().peek());
 			}
 		} else if (targetKey.equals(EntityReference.BOTH_DECKS)) {
 			ArrayList<Entity> friendly = new ArrayList<>(player.getDeck().toList());

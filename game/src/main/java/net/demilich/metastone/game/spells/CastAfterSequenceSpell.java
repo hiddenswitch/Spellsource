@@ -32,7 +32,7 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  *
  * @see ForceDeathPhaseSpell for an alternative way to "clean up" the board during a spell's execution.
  */
-public class CastAfterSequenceSpell extends Spell {
+public final class CastAfterSequenceSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

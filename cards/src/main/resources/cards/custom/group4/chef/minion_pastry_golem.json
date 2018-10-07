@@ -1,0 +1,24 @@
+{
+  "name": "Pastry Golem",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "After you Roast a card, summon a 1/1 Pieling.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_pieling"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

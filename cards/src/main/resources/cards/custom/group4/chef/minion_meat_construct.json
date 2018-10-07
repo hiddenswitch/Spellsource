@@ -1,0 +1,32 @@
+{
+  "name": "Meat Construct",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "EPIC",
+  "description": "Deathrattle: If your deck is empty, resummon this.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "EQUAL",
+      "value1": 0,
+      "value2": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      }
+    },
+    "spell": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
