@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
-    "card": "enchantment_mushroom_healing",
-    "target": "FRIENDLY_PLAYER"
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_mushroom_healing"
   },
   "attributes": {},
   "collectible": false,

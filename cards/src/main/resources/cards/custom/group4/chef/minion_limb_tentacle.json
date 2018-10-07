@@ -10,8 +10,8 @@
   "deckTrigger": {
     "eventTrigger": {
       "class": "RoastTrigger",
-      "targetPlayer": "SELF",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",

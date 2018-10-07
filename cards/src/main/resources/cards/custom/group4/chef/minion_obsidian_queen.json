@@ -18,8 +18,8 @@
     }
   },
   "attributes": {
-    "CHARGE": true,
-    "CANNOT_ATTACK_HEROES": true
+    "CANNOT_ATTACK_HEROES": true,
+    "CHARGE": true
   },
   "collectible": true,
   "set": "CUSTOM",

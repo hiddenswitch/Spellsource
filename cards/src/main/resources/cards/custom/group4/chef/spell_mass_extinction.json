@@ -12,33 +12,33 @@
       {
         "class": "CastFromGroupSpell",
         "target": "ALL_MINIONS",
+        "group": "group_adapt",
         "filter": {
           "class": "AttributeFilter",
-          "attribute": "ATTACK",
           "value": {
             "class": "ReduceValueProvider",
             "target": "ALL_MINIONS",
             "attribute": "ATTACK",
             "operation": "MINIMUM"
           },
+          "attribute": "ATTACK",
           "operation": "EQUAL"
-        },
-        "group": "group_adapt"
+        }
       },
       {
         "class": "DestroySpell",
         "target": "ALL_MINIONS",
         "filter": {
           "class": "AttributeFilter",
-          "attribute": "ATTACK",
           "value": {
             "class": "ReduceValueProvider",
             "target": "ALL_MINIONS",
             "attribute": "ATTACK",
             "operation": "MINIMUM"
           },
-          "operation": "EQUAL",
-          "invert": true
+          "attribute": "ATTACK",
+          "invert": true,
+          "operation": "EQUAL"
         }
       }
     ]

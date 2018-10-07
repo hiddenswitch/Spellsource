@@ -22,9 +22,9 @@
               "target": "OUTPUT",
               "cardCostModifier": {
                 "class": "CardCostModifier",
+                "target": "SELF",
                 "value": 5,
-                "operation": "SUBTRACT",
-                "target": "SELF"
+                "operation": "SUBTRACT"
               }
             }
           },

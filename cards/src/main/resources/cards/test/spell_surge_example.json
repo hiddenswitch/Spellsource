@@ -10,10 +10,10 @@
     "class": "ConditionalEffectSpell",
     "condition": {
       "class": "AttributeCondition",
-      "attribute": "RECEIVED_ON_TURN",
       "value": {
         "class": "CurrentTurnValueProvider"
       },
+      "attribute": "RECEIVED_ON_TURN",
       "operation": "EQUAL"
     },
     "spell1": {

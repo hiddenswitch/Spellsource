@@ -5,6 +5,20 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "The next time you use your Hero Power, it deals 2 more damage and has Poisonous.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HeroPowerUsedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_mushroom_toxicity"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "AttributeAura",
@@ -28,19 +42,5 @@
         "value": 2
       }
     }
-  ],
-  "trigger": {
-    "eventTrigger": {
-      "class": "HeroPowerUsedTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "RemoveEnchantmentSpell",
-      "target": "TRIGGER_HOST",
-      "card": "enchantment_mushroom_toxicity"
-    }
-  },
-  "collectible": false,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

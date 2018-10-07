@@ -8,13 +8,13 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ReplayCardsSpell",
-    "cardSource": {
-      "class": "DeckSource",
-      "targetPlayer": "SELF"
-    },
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "SPELL"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {},

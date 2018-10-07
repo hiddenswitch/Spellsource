@@ -12,7 +12,40 @@
     "spell": {
       "class": "RoastSpell",
       "target": "FRIENDLY_DECK",
-      "randomTarget": true,
+      "spell": {
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "race": "DRAGON",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "race": "BEAST",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "race": "ELEMENTAL",
+            "cardType": "MINION"
+          }
+        ],
+        "spells": [
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_dinosaur_chops"
+          },
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_proto_drake_stew"
+          },
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_elemental_soup"
+          }
+        ]
+      },
       "filter": {
         "class": "OrFilter",
         "filters": [
@@ -33,40 +66,7 @@
           }
         ]
       },
-      "spell": {
-        "class": "ConditionalSpell",
-        "conditions": [
-          {
-            "class": "CardPropertyCondition",
-            "cardType": "MINION",
-            "race": "DRAGON"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "cardType": "MINION",
-            "race": "BEAST"
-          },
-          {
-            "class": "CardPropertyCondition",
-            "cardType": "MINION",
-            "race": "ELEMENTAL"
-          }
-        ],
-        "spells": [
-          {
-            "class": "ShuffleToDeckSpell",
-            "card": "spell_dinosaur_chops"
-          },
-          {
-            "class": "ShuffleToDeckSpell",
-            "card": "spell_proto_drake_stew"
-          },
-          {
-            "class": "ShuffleToDeckSpell",
-            "card": "spell_elemental_soup"
-          }
-        ]
-      }
+      "randomTarget": true
     }
   },
   "attributes": {

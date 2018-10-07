@@ -1,7 +1,7 @@
 {
   "name": "Warchef Gordo",
-  "baseManaCost": 0,
   "heroPower": "hero_power_cook",
+  "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "TOAST",
   "rarity": "FREE",

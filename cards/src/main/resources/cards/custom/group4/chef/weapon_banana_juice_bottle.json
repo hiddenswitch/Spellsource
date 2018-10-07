@@ -16,15 +16,15 @@
         "filters": [
           {
             "class": "CardFilter",
-            "manaCost": 1,
-            "cardType": "SPELL"
+            "cardType": "SPELL",
+            "manaCost": 1
           },
           {
             "class": "AttributeFilter",
-            "attribute": "PLAYED_FROM_HAND_OR_DECK",
             "value": {
               "class": "CurrentTurnValueProvider"
             },
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
             "operation": "EQUAL"
           }
         ]

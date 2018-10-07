@@ -11,13 +11,13 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RecruitSpell",
-      "cardLocation": "HAND",
-      "targetPlayer": "OPPONENT",
       "spell": {
         "class": "AddAttributeSpell",
         "target": "OUTPUT",
         "attribute": "TAUNT"
-      }
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {

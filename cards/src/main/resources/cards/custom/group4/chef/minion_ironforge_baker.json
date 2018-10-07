@@ -21,8 +21,8 @@
             "target": "OUTPUT",
             "cardCostModifier": {
               "class": "CardCostModifier",
-              "value": 0,
               "target": "SELF",
+              "value": 0,
               "operation": "SET"
             }
           }

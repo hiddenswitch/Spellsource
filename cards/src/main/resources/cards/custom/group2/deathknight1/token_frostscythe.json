@@ -18,6 +18,12 @@
       "spells": [
         {
           "class": "ConditionalSpell",
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "EVENT_TARGET",
+            "attribute": "FROZEN",
+            "operation": "HAS"
+          },
           "spell": {
             "class": "DamageSpell",
             "target": "EVENT_TARGET",
@@ -26,12 +32,6 @@
               "target": "SELF",
               "attribute": "ATTACK"
             }
-          },
-          "condition": {
-            "class": "AttributeCondition",
-            "attribute": "FROZEN",
-            "target": "EVENT_TARGET",
-            "operation": "HAS"
           }
         },
         {

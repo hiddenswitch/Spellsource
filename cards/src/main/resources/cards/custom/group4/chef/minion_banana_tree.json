@@ -1,10 +1,10 @@
 {
   "name": "Banana Tree",
   "baseManaCost": 3,
-  "baseAttack": 0,
-  "baseHp": 7,
   "type": "MINION",
   "heroClass": "TOAST",
+  "baseAttack": 0,
+  "baseHp": 7,
   "rarity": "RARE",
   "description": " Taunt. After this minion takes damage, add a Banana to your hand.",
   "trigger": {

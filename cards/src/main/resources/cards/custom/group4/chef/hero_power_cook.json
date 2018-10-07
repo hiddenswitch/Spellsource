@@ -1,7 +1,7 @@
 {
   "name": "Cook",
-  "baseManaCost": 2,
   "heroPower": "hero_power_broil",
+  "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "TOAST",
   "rarity": "FREE",
@@ -33,8 +33,8 @@
       },
       "spell1": {
         "class": "DamageSpell",
-        "value": 2,
-        "target": "TARGET"
+        "target": "TARGET",
+        "value": 2
       },
       "spell2": {
         "class": "DamageSpell",

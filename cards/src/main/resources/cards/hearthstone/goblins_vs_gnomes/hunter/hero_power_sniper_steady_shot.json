@@ -9,14 +9,14 @@
   "targetSelection": "ANY",
   "spell": {
     "class": "HeroPowerSpell",
-    "filter": {
-      "class": "EntityEqualsFilter",
-      "secondaryTarget": "FRIENDLY_HERO",
-      "invert": true
-    },
     "spell": {
       "class": "DamageSpell",
       "value": 2
+    },
+    "filter": {
+      "class": "EntityEqualsFilter",
+      "invert": true,
+      "secondaryTarget": "FRIENDLY_HERO"
     }
   },
   "collectible": false,

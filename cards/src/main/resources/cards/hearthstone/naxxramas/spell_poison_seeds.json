@@ -12,14 +12,14 @@
       {
         "class": "custom.DestroyAndSummonInPlaceSpell",
         "target": "ENEMY_MINIONS",
-        "targetPlayer": "OWNER",
-        "card": "token_treant"
+        "card": "token_treant",
+        "targetPlayer": "OWNER"
       },
       {
         "class": "custom.DestroyAndSummonInPlaceSpell",
         "target": "FRIENDLY_MINIONS",
-        "targetPlayer": "OWNER",
-        "card": "token_treant"
+        "card": "token_treant",
+        "targetPlayer": "OWNER"
       }
     ]
   },

@@ -18,11 +18,11 @@
           "aura": {
             "class": "CardAura",
             "target": "FRIENDLY_HERO_POWER",
+            "card": "hero_power_sniper_steady_shot",
             "filter": {
               "class": "SpecificCardFilter",
               "card": "hero_power_steady_shot"
-            },
-            "card": "hero_power_sniper_steady_shot"
+            }
           }
         },
         {
@@ -31,11 +31,11 @@
           "aura": {
             "class": "CardAura",
             "target": "FRIENDLY_HERO_POWER",
+            "card": "hero_power_sniper_ballista_shot",
             "filter": {
               "class": "SpecificCardFilter",
               "card": "hero_power_ballista_shot"
-            },
-            "card": "hero_power_sniper_ballista_shot"
+            }
           }
         },
         {
@@ -47,8 +47,8 @@
             },
             "spell": {
               "class": "RemoveEnchantmentSpell",
-              "card": "minion_riverside_bowman",
-              "target": "FRIENDLY_PLAYER"
+              "target": "FRIENDLY_PLAYER",
+              "card": "minion_riverside_bowman"
             }
           }
         }

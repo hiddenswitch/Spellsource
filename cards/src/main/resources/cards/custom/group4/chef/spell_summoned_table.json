@@ -14,10 +14,10 @@
       "filters": [
         {
           "class": "AttributeFilter",
-          "attribute": "ROASTED",
           "value": {
             "class": "CurrentTurnValueProvider"
           },
+          "attribute": "ROASTED",
           "operation": "EQUAL"
         },
         {

@@ -1,10 +1,10 @@
 {
   "name": "Supply Caravan",
   "baseManaCost": 1,
-  "baseAttack": 0,
-  "baseHp": 4,
   "type": "MINION",
   "heroClass": "TOAST",
+  "baseAttack": 0,
+  "baseHp": 4,
   "rarity": "EPIC",
   "description": "Whenever you play a card, shuffle a copy of it into your deck.",
   "trigger": {
