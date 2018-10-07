@@ -9,26 +9,30 @@
   "description": "Battlecry: If 3 or more minions died this turn, gain Poisonous.",
   "battlecry": {
     "condition": {
-      "class": "AnyMatchFilterCondition",
-      "target": "ALL_ENTITIES",
-      "filter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "AttributeFilter",
-            "value": {
-              "class": "CurrentTurnValueProvider"
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "ALL_ENTITIES",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
             },
-            "attribute": "DIED_ON_TURN",
-            "value": 3,
-            "operation": "GREATER_OR_EQUAL"
-          }
-        ]
-      }
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "DIED_ON_TURN",
+              "operation": "GREATER_OR_EQUAL"
+            }
+          ]
+        }
+      },
+      "value2": 3
     },
     "targetSelection": "NONE",
     "spell": {
