@@ -18,7 +18,7 @@ public final class HeroPowerSpell extends MetaSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		super.onCast(context, player, desc, source, target);
-		for (SpellDesc bonusEffect : SpellUtils.getBonusesFromAura(context, player.getId(), HeroPowerBonusAura.class)) {
+		for (SpellDesc bonusEffect : SpellUtils.getBonusesFromAura(context, player.getId(), HeroPowerBonusAura.class, source, target)) {
 			SpellUtils.castChildSpell(context, player, bonusEffect, source, target);
 		}
 	}

@@ -404,6 +404,7 @@ definitions:
         - 'ICE'
         - 'OBSIDIAN'
         - 'AMBER'
+        - 'TOAST'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -870,6 +871,7 @@ definitions:
         - 'PRE_DAMAGE'
         - 'QUEST_PLAYED'
         - 'QUEST_SUCCESSFUL'
+        - 'ROASTED'
         - 'REVEAL_CARD'
         - 'SECRET_PLAYED'
         - 'SECRET_REVEALED'

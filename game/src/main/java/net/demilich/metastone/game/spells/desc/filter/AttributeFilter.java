@@ -56,6 +56,11 @@ public class AttributeFilter extends EntityFilter {
 			} else {
 				actualValue = entity.getAttributeValue(attribute);
 			}
+		}
+			else if (attribute == Attribute.INDEX) {
+			actualValue += entity.getEntityLocation().getIndex();
+			} else if (attribute == Attribute.INDEX_FROM_END) {
+			actualValue += entity.getEntityLocation().getIndex() - context.getPlayer(entity.getOwner()).getZone(entity.getZone()).size();
 		} else {
 			actualValue = entity.getAttributeValue(attribute);
 		}

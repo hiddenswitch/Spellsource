@@ -63,8 +63,8 @@ import java.util.*;
  */
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	private EntityReference targets;
-	private SpellDesc applyAuraEffect;
-	private SpellDesc removeAuraEffect;
+	protected SpellDesc applyAuraEffect;
+	protected SpellDesc removeAuraEffect;
 	private EntityFilter entityFilter;
 	private Condition condition;
 	private SortedSet<Integer> affectedEntities = new TreeSet<>();
@@ -213,6 +213,10 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	public SortedSet<Integer> getAffectedEntities() {
 		return affectedEntities;
+	}
+
+	public SpellDesc getApplyEffect() {
+		return applyAuraEffect;
 	}
 }
 

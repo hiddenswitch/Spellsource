@@ -14,6 +14,10 @@ public class DamageReceivedTrigger extends EventTrigger {
 		super(desc);
 	}
 
+	public static EventTrigger create() {
+		return new EventTriggerDesc(DamageReceivedTrigger.class).create();
+	}
+
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		DamageEvent damageEvent = (DamageEvent) event;

@@ -1,0 +1,24 @@
+{
+  "name": "Massive Burp",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Roast a card. Deal damage equal to its Cost to a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "RoastSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "TARGET",
+      "value": {
+        "class": "ManaCostProvider",
+        "target": "OUTPUT"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,48 @@
+{
+  "name": "Boss Harambo",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: Add 10 Bananas to your hand. Excess bananas go to the bottom of your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "PutOnBottomOfDeckSpell",
+          "value": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "HAND_COUNT",
+            "targetPlayer": "SELF"
+          },
+          "card": "spell_bananas"
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "value": {
+            "class": "AlgebraicValueProvider",
+            "operation": "SUBTRACT",
+            "value1": 10,
+            "value2": {
+              "class": "PlayerAttributeValueProvider",
+              "playerAttribute": "HAND_COUNT",
+              "targetPlayer": "SELF"
+            }
+          },
+          "card": "spell_the_coin"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

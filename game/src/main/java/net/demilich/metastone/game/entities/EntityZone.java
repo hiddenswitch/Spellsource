@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.entities;
 
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 /**
  * EntityZone is an abstract list that enforces that (1) supports gameplay-safe cloning and (2) enforces that an {@link
@@ -30,6 +30,15 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		this.player = player;
 	}
 
+	@NotNull
+	public static Comparator<Card> getManaCostComparator() {
+		return (card1, card2) -> {
+			Integer manaCost1 = card1.getBaseManaCost();
+			Integer manaCost2 = card2.getBaseManaCost();
+			return manaCost1.compareTo(manaCost2);
+		};
+	}
+
 	@SuppressWarnings("unchecked")
 	public EntityZone<E> clone() {
 		// Clone all the cards too
@@ -48,6 +57,15 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public E set(int index, E element) {
 		checkElement(element);
 		return setUnchecked(index, element);
+	}
+
+	@Override
+	public void sort(Comparator<? super E> c) {
+		Object[] a = this.toArray();
+		Arrays.sort(a, (Comparator) c);
+		for (int i = 0; i < a.length; i++) {
+			setUnchecked(i, (E) a[i]);
+		}
 	}
 
 	private void checkElement(E element) {

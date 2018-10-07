@@ -1,0 +1,21 @@
+{
+  "name": "Primal Seasoning",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Summon three 2/2 Elementals. One with Charge, one with Taunt, one with Poisonous.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_spicy_elemental",
+      "token_peppery_elemental",
+      "token_salty_elemental"
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

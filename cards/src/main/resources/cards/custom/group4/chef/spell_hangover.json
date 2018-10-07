@@ -1,0 +1,16 @@
+{
+  "name": "Hangover",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Do nothing.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

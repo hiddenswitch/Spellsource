@@ -1,0 +1,41 @@
+{
+  "name": "Al Dente",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Deal $3 damage to a minion. If that kills it without excess damage, return this to your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "IsDeadCondition"
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "HP"
+          },
+          "value2": 0
+        }
+      ]
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -379,7 +379,7 @@ public class EntityReference implements Serializable {
 	/**
 	 * References the card in the friendly player's hand with the lowest index in the friendly player's hand.
 	 * <p>
-	 * Implements Antique Collector.
+	 * Implements Antique Collector and Ironforge Baker.
 	 */
 	public static final EntityReference LEFTMOST_FRIENDLY_CARD_HAND = new EntityReference(-52);
 	/**
@@ -455,6 +455,10 @@ public class EntityReference implements Serializable {
 	 * References the last minion belonging to the friendly player that died.
 	 */
 	public static final EntityReference FRIENDLY_LAST_DIED_MINION = new EntityReference(-66);
+	/**
+	 * References all the cards in the player's deck, ordered from the top of the deck towards the bottom.
+	 */
+	public static final EntityReference FRIENDLY_DECK_FROM_TOP = new EntityReference(-67);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
