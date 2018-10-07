@@ -5,12 +5,11 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "The next card you play this turn costs Roasted cards instead of mana.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "SELF",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_lava_soup_flavors"
   },
   "attributes": {},
   "collectible": true,

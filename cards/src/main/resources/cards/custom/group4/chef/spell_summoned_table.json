@@ -16,7 +16,7 @@
           "class": "AttributeFilter",
           "attribute": "ROASTED",
           "value": {
-            "class": "CurrentTurnValudProvider"
+            "class": "CurrentTurnValueProvider"
           },
           "operation": "EQUAL"
         },

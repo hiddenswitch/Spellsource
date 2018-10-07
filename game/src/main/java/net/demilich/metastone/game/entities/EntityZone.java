@@ -6,10 +6,7 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
-import java.util.AbstractList;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 /**
  * EntityZone is an abstract list that enforces that (1) supports gameplay-safe cloning and (2) enforces that an {@link
@@ -60,6 +57,15 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public E set(int index, E element) {
 		checkElement(element);
 		return setUnchecked(index, element);
+	}
+
+	@Override
+	public void sort(Comparator<? super E> c) {
+		Object[] a = this.toArray();
+		Arrays.sort(a, (Comparator) c);
+		for (int i = 0; i < a.length; i++) {
+			setUnchecked(i, (E) a[i]);
+		}
 	}
 
 	private void checkElement(E element) {

@@ -684,13 +684,14 @@ public class SpellUtils {
 				.collect(toList());
 	}
 
-	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass) {
+	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass, Entity source, Entity target) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
 				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
 						.filter(auraClass::isInstance)
 						.map(t -> (Aura) t)
 						.filter(((Predicate<Aura>) Aura::isExpired).negate())
+						.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context, context.getPlayer(playerId), source, target))
 						.map(aura -> aura.getDesc().getApplyEffect()))
 				.toArray(SpellDesc[]::new);
 	}

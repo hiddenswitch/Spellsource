@@ -9,23 +9,31 @@
     {
       "class": "HeroPowerBonusAura",
       "target": "FRIENDLY_PLAYER",
+      "condition": {
+        "class": "AllMatchFilterCondition",
+        "target": "FRIENDLY_HERO_POWER",
+        "filter": {
+          "class": "TargetSelectionFilter",
+          "targetSelection": "NONE",
+          "invert": true
+        }
+      },
       "applyEffect": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "DamageSpell",
-            "value": 2
-          },
-          {
-            "class": "ReceiveCardSpell",
-            "randomTarget": true,
-            "cards": [
-              "spell_clarity_mushroom",
-              "spell_healing_mushroom",
-              "spell_toxic_mushroom",
-              "spell_hallucinogenic_mushroom"
-            ]
-          }
+        "class": "DamageSpell",
+        "value": 2
+      }
+    },
+    {
+      "class": "HeroPowerBonusAura",
+      "target": "FRIENDLY_PLAYER",
+      "applyEffect": {
+        "class": "ReceiveCardSpell",
+        "randomTarget": true,
+        "cards": [
+          "spell_clarity_mushroom",
+          "spell_healing_mushroom",
+          "spell_toxic_mushroom",
+          "spell_hallucinogenic_mushroom"
         ]
       }
     }

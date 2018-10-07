@@ -15,18 +15,17 @@
         "conditions": [
           {
             "class": "MinionOnBoardCondition",
-            "card": "minion_skilled_cook"
-          },
-          {
-            "class": "MinionOnBoardCondition",
-            "card": "minion_steamwheedle_sniper"
+            "cardFilter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_skilled_cook"
+            }
           },
           {
             "class": "AnyMatchFilterCondition",
+            "target": "FRIENDLY_PLAYER",
             "filter": {
               "class": "HasEnchantmentFilter",
-              "card": "enchantment_mushroom_clarity",
-              "target": "FRIENDLY_PLAYER"
+              "card": "enchantment_mushroom_clarity"
             }
           }
         ]

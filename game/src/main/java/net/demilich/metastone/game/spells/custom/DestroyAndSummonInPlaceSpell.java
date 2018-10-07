@@ -5,21 +5,35 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.DestroySpell;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+
+import static java.util.stream.Collectors.toMap;
 
 public final class DestroyAndSummonInPlaceSpell extends SummonSpell {
 
 	@Override
 	@Suspendable
-	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int originalIndex = target.getEntityLocation().getIndex();
-		SpellUtils.castChildSpell(context, player, DestroySpell.create(target.getReference()), source, target);
+	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		Map<Integer, Integer> targetLocations = targets.stream()
+				.collect(toMap(Entity::getId, e -> e.getEntityLocation().getIndex()));
+
+		// First do all the destroys
+		SpellDesc destroySpell = DestroySpell.create();
+		destroySpell.create().cast(context, player, destroySpell, source, targets);
+
+		// Clear the board
 		context.getLogic().endOfSequence();
-		desc = desc.clone();
-		desc.put(SpellArg.BOARD_POSITION_ABSOLUTE, Math.min(originalIndex, player.getMinions().size()));
-		super.onCast(context, player, desc, source, null);
+		// Then do all summons
+		for (Entity target : targets) {
+			SpellDesc singleSummon = desc.clone();
+			singleSummon.put(SpellArg.BOARD_POSITION_ABSOLUTE, targetLocations.get(target.getId()));
+			super.cast(context, player, singleSummon, source, Collections.singletonList(target));
+		}
 	}
 }

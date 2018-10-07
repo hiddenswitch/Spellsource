@@ -150,22 +150,6 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	}
 
 	@Override
-	public void sortByManaCost() {
-		Comparator<Card> manaComparator = (card1, card2) -> {
-			Integer manaCost1 = card1.getBaseManaCost();
-			Integer manaCost2 = card2.getBaseManaCost();
-			return manaCost1.compareTo(manaCost2);
-		};
-
-		cards.sort(manaComparator);
-	}
-
-	@Override
-	public void sortByName() {
-		cards.sort((card1, card2) -> card1.getName().compareTo(card2.getName()));
-	}
-
-	@Override
 	public List<Card> toList() {
 		return new ArrayList<>(cards);
 	}

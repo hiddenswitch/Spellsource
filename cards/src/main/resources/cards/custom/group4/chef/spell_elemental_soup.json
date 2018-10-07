@@ -15,7 +15,7 @@
       "class": "CardFilter",
       "race": "ELEMENTAL",
       "cardType": "MINION",
-      "attribute": "PLAYED_FROM_CARD_OR_HAND",
+      "attribute": "PLAYED_FROM_HAND_OR_DECK",
       "operation": "HAS"
     },
     "spell": {

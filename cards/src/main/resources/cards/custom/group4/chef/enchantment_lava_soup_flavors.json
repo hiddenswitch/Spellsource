@@ -1,0 +1,68 @@
+{
+  "name": "Lava Soup Flavors",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "The next card you play this turn costs Roasted cards instead of mana.",
+  "auras": [
+    {
+      "class": "CardCostInsteadAura",
+      "target": "FRIENDLY_HAND",
+      "amountOfCurrency": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "canAffordCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK"
+        },
+        "value2": {
+          "class": "ManaCostProvider"
+        },
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "payEffect": {
+        "class": "RoastSpell",
+        "value": {
+          "class": "ManaCostProvider"
+        }
+      }
+    }
+  ],
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_lava_soup_flavors"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "AfterCardPlayedTrigger",
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "CardPropertyCondition",
+          "target": "EVENT_SOURCE",
+          "card": "spell_lava_soup",
+          "invert": true
+        }
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_lava_soup_flavors"
+      }
+    }
+  ],
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

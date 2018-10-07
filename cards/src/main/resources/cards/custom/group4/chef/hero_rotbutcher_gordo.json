@@ -2,7 +2,7 @@
   "name": "Rotbutcher Gordo",
   "heroPower": "hero_power_insatiable",
   "baseManaCost": 10,
-  "type": "SPELL",
+  "type": "HERO",
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Battlecry: Draw your deck. Deal 1 damage to a random enemy for each card you Roast this way.",

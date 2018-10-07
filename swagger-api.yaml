@@ -870,6 +870,7 @@ definitions:
         - 'PRE_DAMAGE'
         - 'QUEST_PLAYED'
         - 'QUEST_SUCCESSFUL'
+        - 'ROASTED'
         - 'REVEAL_CARD'
         - 'SECRET_PLAYED'
         - 'SECRET_REVEALED'

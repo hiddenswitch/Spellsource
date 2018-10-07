@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RoastSpell",
-      "howMany": 5
+      "value": 5
     }
   },
   "attributes": {

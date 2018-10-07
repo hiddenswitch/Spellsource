@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.cards;
 
-import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.targeting.Zones;
@@ -119,16 +118,6 @@ public class CardZone extends EntityZone<Card> implements CardList {
 			internal.get(i).setEntityLocation(new EntityLocation(getZone(), getPlayer(), i));
 		}
 		return this;
-	}
-
-	@Override
-	public void sortByManaCost() {
-		sort(getManaCostComparator());
-	}
-
-	@Override
-	public void sortByName() {
-		sort(Comparator.comparing(Entity::getName));
 	}
 
 	@Override

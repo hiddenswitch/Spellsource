@@ -51,6 +51,57 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testCromwell() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			putOnTopOfDeck(context, player, "minion_deathwing");
+			assertEquals(context.resolveSingleTarget(player, player, EntityReference.FRIENDLY_TOP_CARD).getSourceCard().getCardId(), "minion_deathwing");
+			playCard(context, player, "minion_cromwell");
+			assertEquals(context.resolveSingleTarget(player, player, EntityReference.FRIENDLY_TOP_CARD).getSourceCard().getCardId(), "spell_the_coin");
+		});
+	}
+
+	@Test
+	public void testLavaSoup() {
+		runGym((context, player, opponent) -> {
+			Card shouldNotBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldBeRoasted2 = putOnTopOfDeck(context, player, "spell_the_coin");
+			assertEquals(player.getDeck().size(), 3);
+			Card cost2Card = receiveCard(context, player, "spell_cost_2_card");
+			assertEquals(costOf(context, player, cost2Card), 2);
+			player.setMaxMana(2);
+			player.setMana(2);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			player.setMana(1);
+			assertFalse(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			playCard(context, player, "spell_lava_soup");
+			assertTrue(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			playCard(context, player, cost2Card);
+			assertEquals(player.getDeck().size(), 1);
+			assertTrue(shouldBeRoasted1.hasAttribute(Attribute.ROASTED));
+			assertTrue(shouldBeRoasted2.hasAttribute(Attribute.ROASTED));
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+		});
+
+		runGym((context, player, opponent) -> {
+			Card shouldNotBeRoasted1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			assertEquals(player.getDeck().size(), 1);
+			Card cost2Card = receiveCard(context, player, "spell_cost_2_card");
+			assertEquals(costOf(context, player, cost2Card), 2);
+			player.setMaxMana(2);
+			player.setMana(2);
+			assertTrue(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			player.setMana(1);
+			assertFalse(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			playCard(context, player, "spell_lava_soup");
+			assertFalse(context.getLogic().canPlayCard(player.getId(), cost2Card.getReference()));
+			assertEquals(player.getDeck().size(), 1);
+			assertFalse(shouldNotBeRoasted1.hasAttribute(Attribute.ROASTED));
+		});
+	}
+
+	@Test
 	public void testDeathwingsDinner() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_wisp");
@@ -95,7 +146,6 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_wisp");
 			assertEquals(wisp1.getEntityLocation().getIndex(), 1);
 			playCardWithTarget(context, player, "spell_butcher", wisp1);
-			// Can't summon something in the same location as the target, yet
 			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_pile_of_meat");
 		});
 

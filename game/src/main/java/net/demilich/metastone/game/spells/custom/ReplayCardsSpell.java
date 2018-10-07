@@ -23,6 +23,8 @@ public class ReplayCardsSpell extends Spell {
 
 		// Should not replay itself
 		cards.remove(source.getSourceCard());
+		cards.removeIf(c -> c.getCardId().equals(source.getSourceCard().getCardId()));
+
 		player.setAttribute(Attribute.RANDOM_CHOICES);
 
 		// Replay

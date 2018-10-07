@@ -2,7 +2,7 @@
   "name": "Banana Tree",
   "baseManaCost": 3,
   "baseAttack": 0,
-  "baseHp": 7
+  "baseHp": 7,
   "type": "MINION",
   "heroClass": "TOAST",
   "rarity": "FREE",
