@@ -14,7 +14,7 @@
       "filter": {
         "class": "AttributeFilter",
         "value": 3,
-        "attribute": "COST",
+        "attribute": "BASE_MANA_COST",
         "operation": "LESS_OR_EQUAL"
       }
     }
