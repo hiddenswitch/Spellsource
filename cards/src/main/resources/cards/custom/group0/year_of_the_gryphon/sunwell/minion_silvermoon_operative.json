@@ -1,10 +1,10 @@
 {
   "name": "Silvermoon Operative",
   "baseManaCost": 4,
-  "type": "WEAPON",
+  "type": "MINION",
   "heroClass": "BLACK",
-  "attack": 2,
-  "health": 2,
+  "baseAttack": 2,
+  "baseHp": 2,
   "rarity": "EPIC",
   "description": "Your copies of this minion keep their enchantments. <b>Surge</b>: Gain +2/+2 and Stealth.",
   "battlecry": {
