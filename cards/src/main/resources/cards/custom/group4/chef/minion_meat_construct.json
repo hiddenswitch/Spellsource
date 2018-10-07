@@ -11,12 +11,12 @@
     "class": "ConditionalSpell",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "EQUAL",
       "value1": 0,
       "value2": {
         "class": "EntityCounter",
         "target": "FRIENDLY_DECK"
-      },
-      "operation": "EQUAL"
+      }
     },
     "spell": {
       "class": "ReviveMinionSpell",

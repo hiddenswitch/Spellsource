@@ -9,8 +9,8 @@
   "description": "Deathrattle: Summon two 2/2 Ghouls.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_ghoul",
-    "value": 2
+    "value": 2,
+    "card": "token_ghoul"
   },
   "attributes": {
     "DEATHRATTLES": true

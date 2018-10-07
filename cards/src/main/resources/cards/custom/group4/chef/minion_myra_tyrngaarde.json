@@ -14,12 +14,12 @@
       "target": "FRIENDLY_HERO",
       "value": {
         "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
         "value1": 30,
         "value2": {
           "class": "EntityCounter",
           "target": "FRIENDLY_DECK"
-        },
-        "operation": "SUBTRACT"
+        }
       }
     }
   },

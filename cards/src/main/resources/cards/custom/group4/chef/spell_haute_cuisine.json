@@ -8,22 +8,22 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
-    "cardSource": {
-      "class": "DeckSource"
-    },
+    "value": 1,
     "cardFilter": {
       "class": "ManaCostFilter",
       "value": {
         "class": "ReduceValueProvider",
         "target": "FRIENDLY_DECK",
+        "operation": "MAXIMUM",
         "value1": {
           "class": "ManaCostProvider"
-        },
-        "operation": "MAXIMUM"
+        }
       },
       "operation": "EQUAL"
     },
-    "value": 1
+    "cardSource": {
+      "class": "DeckSource"
+    }
   },
   "attributes": {},
   "collectible": true,

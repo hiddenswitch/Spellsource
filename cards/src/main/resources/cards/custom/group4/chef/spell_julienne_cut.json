@@ -8,7 +8,6 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.DestroyAndSummonInPlaceSpell",
-    "targetPlayer": "OWNER",
     "value": 2,
     "spell": {
       "class": "MetaSpell",
@@ -23,7 +22,8 @@
           "value": 1
         }
       ]
-    }
+    },
+    "targetPlayer": "OWNER"
   },
   "attributes": {},
   "collectible": true,

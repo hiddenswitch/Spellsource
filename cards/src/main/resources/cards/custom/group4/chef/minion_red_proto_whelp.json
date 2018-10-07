@@ -22,8 +22,8 @@
       "cardFilter": {
         "class": "AttributeFilter",
         "attribute": "STARTED_IN_DECK",
-        "operation": "HAS",
-        "invert": true
+        "invert": true,
+        "operation": "HAS"
       }
     }
   },

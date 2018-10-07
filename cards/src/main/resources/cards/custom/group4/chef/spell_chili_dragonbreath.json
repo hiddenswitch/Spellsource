@@ -4,8 +4,8 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Deal $3 damage. Counts as a Dragon while in your hand.",
   "race": "DRAGON",
+  "description": "Deal $3 damage. Counts as a Dragon while in your hand.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

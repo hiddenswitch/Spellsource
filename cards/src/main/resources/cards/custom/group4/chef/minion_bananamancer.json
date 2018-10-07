@@ -8,9 +8,6 @@
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Spell Damage +1. Spells you play that give stats bonuses are affected by Spell Damage.",
-  "attributes": {
-    "SPELL_DAMAGE": 1
-  },
   "aura": {
     "class": "SpellOverrideAura",
     "target": "FRIENDLY_PLAYER",
@@ -22,12 +19,15 @@
         "cardType": "SPELL"
       }
     },
-    "secondaryTrigger": {
-      "class": "SpellCastedTrigger"
-    },
     "applyEffect": {
       "class": "BuffSpell",
       "value": {
+        "class": "OriginalValueProvider",
+        "offset": {
+          "class": "SpellDamageValueProvider"
+        }
+      },
+      "armorBonus": {
         "class": "OriginalValueProvider",
         "offset": {
           "class": "SpellDamageValueProvider"
@@ -44,17 +44,17 @@
         "offset": {
           "class": "SpellDamageValueProvider"
         }
-      },
-      "armorBonus": {
-        "class": "OriginalValueProvider",
-        "offset": {
-          "class": "SpellDamageValueProvider"
-        }
       }
     },
     "removeEffect": {
       "class": "BuffSpell"
+    },
+    "secondaryTrigger": {
+      "class": "SpellCastedTrigger"
     }
+  },
+  "attributes": {
+    "SPELL_DAMAGE": 1
   },
   "collectible": true,
   "set": "CUSTOM",

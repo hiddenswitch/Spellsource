@@ -5,7 +5,6 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Passive Hero Power: After you play a card, shuffle a copy of it into your deck.",
-  "targetSelection": "NONE",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
@@ -24,6 +23,7 @@
     "class": "AndCondition",
     "invert": true
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {

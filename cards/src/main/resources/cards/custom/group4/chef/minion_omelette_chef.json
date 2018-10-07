@@ -13,8 +13,8 @@
       "target": "ALL_OTHER_MINIONS",
       "filter": {
         "class": "AttributeFilter",
-        "attribute": "ATTACK",
         "value": 0,
+        "attribute": "ATTACK",
         "operation": "EQUAL"
       }
     },
@@ -35,8 +35,8 @@
             "class": "DestroySpell",
             "filter": {
               "class": "AttributeFilter",
-              "attribute": "ATTACK",
               "value": 0,
+              "attribute": "ATTACK",
               "operation": "EQUAL"
             }
           }
@@ -46,8 +46,8 @@
         "class": "DestroySpell",
         "filter": {
           "class": "AttributeFilter",
-          "attribute": "ATTACK",
           "value": 0,
+          "attribute": "ATTACK",
           "operation": "EQUAL"
         }
       }

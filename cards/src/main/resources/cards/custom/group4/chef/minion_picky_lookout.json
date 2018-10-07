@@ -9,39 +9,39 @@
   "race": "PIRATE",
   "description": "Battlecry: Look at 3 cards from your deck. Pick one to Roast it. Do this 5 times.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "EntityCounter",
         "target": "FRIENDLY_DECK"
       },
-      "value2": 1,
-      "operation": "GREATER_OR_EQUAL"
+      "value2": 1
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "RecastWhileSpell",
-      "howMany": 5,
       "condition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "EntityCounter",
           "target": "FRIENDLY_DECK"
         },
-        "value2": 1,
-        "operation": "GREATER_OR_EQUAL"
+        "value2": 1
       },
       "spell": {
         "class": "DiscoverSpell",
-        "exclusive": true,
+        "spell": {
+          "class": "RoastSpell"
+        },
         "cardSource": {
           "class": "DeckSource",
           "distinct": false
         },
-        "spell": {
-          "class": "RoastSpell"
-        }
-      }
+        "exclusive": true
+      },
+      "howMany": 5
     }
   },
   "attributes": {

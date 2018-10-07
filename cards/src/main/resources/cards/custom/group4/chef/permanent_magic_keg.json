@@ -14,13 +14,13 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "cardSource": {
-        "class": "UngoroPackRarityWeightedCardSource"
-      },
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "SPELL",
-        "heroClass": "TOAST"
+        "heroClass": "TOAST",
+        "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "UngoroPackRarityWeightedCardSource"
       }
     }
   },

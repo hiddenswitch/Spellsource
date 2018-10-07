@@ -8,8 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.DestroyAndSummonInPlaceSpell",
-    "targetPlayer": "OWNER",
-    "card": "token_pile_of_meat"
+    "card": "token_pile_of_meat",
+    "targetPlayer": "OWNER"
   },
   "attributes": {},
   "collectible": true,

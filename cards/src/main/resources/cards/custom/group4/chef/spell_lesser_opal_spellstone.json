@@ -5,11 +5,6 @@
   "heroClass": "TOAST",
   "rarity": "RARE",
   "description": "Deal $2 damage. (Roast 2 cards to upgrade).",
-  "targetSelection": "ANY",
-  "spell": {
-    "class": "DamageSpell",
-    "value": 2
-  },
   "passiveTrigger": {
     "countUntilCast": 2,
     "eventTrigger": {
@@ -22,6 +17,11 @@
       "card": "spell_opal_spellstone"
     },
     "keepAfterTransform": false
+  },
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
   },
   "attributes": {},
   "collectible": true,

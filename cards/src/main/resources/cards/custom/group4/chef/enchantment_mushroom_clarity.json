@@ -5,6 +5,20 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "The next time you use your Hero Power, it deals 2 more damage and you can choose its target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HeroPowerUsedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_mushroom_clarity"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "TargetSelectionOverrideAura",
@@ -32,19 +46,5 @@
         "value": 2
       }
     }
-  ],
-  "trigger": {
-    "eventTrigger": {
-      "class": "HeroPowerUsedTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "RemoveEnchantmentSpell",
-      "target": "TRIGGER_HOST",
-      "card": "enchantment_mushroom_clarity"
-    }
-  },
-  "collectible": false,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

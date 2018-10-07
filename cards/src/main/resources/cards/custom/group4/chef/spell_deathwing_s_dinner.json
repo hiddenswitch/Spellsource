@@ -26,8 +26,8 @@
       },
       {
         "class": "DamageSpell",
-        "value": 3,
-        "target": "ALL_MINIONS"
+        "target": "ALL_MINIONS",
+        "value": 3
       },
       {
         "class": "ForceDeathPhaseSpell"

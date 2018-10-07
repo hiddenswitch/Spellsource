@@ -5,11 +5,27 @@
   "heroClass": "TOAST",
   "rarity": "COMMON",
   "description": "The next time you use your Hero Power, it deals 2 more damage and gains a bonus effect in your hand.",
-  "targetSelection": "NONE",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "cards": [
+        "spell_clarity_mushroom",
+        "spell_hallucinogenic_mushroom",
+        "spell_healing_mushroom",
+        "spell_toxic_mushroom"
+      ]
+    }
+  },
   "condition": {
     "class": "AndCondition",
     "invert": false
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "RandomlyCastSpell",
     "spells": [
@@ -70,22 +86,6 @@
         ]
       }
     ]
-  },
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "CardReceivedTrigger",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
-    },
-    "spell": {
-      "class": "custom.TransformInHandSpell",
-      "target": "SELF",
-      "cards": [
-        "spell_clarity_mushroom",
-        "spell_hallucinogenic_mushroom",
-        "spell_healing_mushroom",
-        "spell_toxic_mushroom"
-      ]
-    }
   },
   "attributes": {},
   "collectible": true,

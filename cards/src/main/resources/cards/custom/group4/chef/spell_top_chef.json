@@ -12,16 +12,16 @@
     "spell": {
       "class": "EitherOrSpell",
       "target": "OUTPUT",
+      "condition": {
+        "class": "ManaCostCondition",
+        "value": 5,
+        "operation": "GREATER_OR_EQUAL"
+      },
       "spell1": {
         "class": "FromDeckToHandSpell"
       },
       "spell2": {
         "class": "RoastSpell"
-      },
-      "condition": {
-        "class": "ManaCostCondition",
-        "value": 5,
-        "operation": "GREATER_OR_EQUAL"
       }
     }
   },

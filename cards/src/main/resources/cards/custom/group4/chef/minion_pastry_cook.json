@@ -14,11 +14,11 @@
       "target": "FRIENDLY_GRAVEYARD",
       "filter": {
         "class": "AttributeFilter",
-        "operation": "EQUAL",
         "value": {
           "class": "CurrentTurnValueProvider"
         },
-        "attribute": "ROASTED"
+        "attribute": "ROASTED",
+        "operation": "EQUAL"
       }
     },
     "targetSelection": "ANY",

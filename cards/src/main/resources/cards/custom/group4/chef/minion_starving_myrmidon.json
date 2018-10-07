@@ -10,12 +10,12 @@
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "LESS_OR_EQUAL",
       "value1": {
         "class": "EntityCounter",
         "target": "FRIENDLY_DECK"
       },
-      "value2": 8,
-      "operation": "LESS_OR_EQUAL"
+      "value2": 8
     },
     "targetSelection": "MINIONS",
     "spell": {

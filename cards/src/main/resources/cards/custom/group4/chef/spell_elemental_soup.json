@@ -8,16 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "cardSource": {
-      "class": "GraveyardCardsSource"
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "race": "ELEMENTAL",
-      "cardType": "MINION",
-      "attribute": "PLAYED_FROM_HAND_OR_DECK",
-      "operation": "HAS"
-    },
+    "value": 3,
     "spell": {
       "class": "MetaSpell",
       "target": "OUTPUT",
@@ -32,7 +23,16 @@
         }
       ]
     },
-    "value": 3
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL",
+      "attribute": "PLAYED_FROM_HAND_OR_DECK",
+      "cardType": "MINION",
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "GraveyardCardsSource"
+    }
   },
   "attributes": {},
   "collectible": true,

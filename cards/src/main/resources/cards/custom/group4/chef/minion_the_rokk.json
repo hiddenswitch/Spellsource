@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",
-      "targetEntityType": "MINION",
-      "sourcePlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "RecastSpell",

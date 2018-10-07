@@ -5,33 +5,6 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "The next card you play this turn costs Roasted cards instead of mana.",
-  "auras": [
-    {
-      "class": "CardCostInsteadAura",
-      "target": "FRIENDLY_HAND",
-      "amountOfCurrency": {
-        "class": "EntityCounter",
-        "target": "FRIENDLY_DECK"
-      },
-      "canAffordCondition": {
-        "class": "ComparisonCondition",
-        "value1": {
-          "class": "EntityCounter",
-          "target": "FRIENDLY_DECK"
-        },
-        "value2": {
-          "class": "ManaCostProvider"
-        },
-        "operation": "GREATER_OR_EQUAL"
-      },
-      "payEffect": {
-        "class": "RoastSpell",
-        "value": {
-          "class": "ManaCostProvider"
-        }
-      }
-    }
-  ],
   "triggers": [
     {
       "eventTrigger": {
@@ -47,13 +20,13 @@
     {
       "eventTrigger": {
         "class": "AfterCardPlayedTrigger",
-        "targetPlayer": "SELF",
         "fireCondition": {
           "class": "CardPropertyCondition",
           "target": "EVENT_SOURCE",
           "card": "spell_lava_soup",
           "invert": true
-        }
+        },
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "RemoveEnchantmentSpell",
@@ -64,5 +37,32 @@
   ],
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "CardCostInsteadAura",
+      "target": "FRIENDLY_HAND",
+      "amountOfCurrency": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK"
+      },
+      "canAffordCondition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK"
+        },
+        "value2": {
+          "class": "ManaCostProvider"
+        }
+      },
+      "payEffect": {
+        "class": "RoastSpell",
+        "value": {
+          "class": "ManaCostProvider"
+        }
+      }
+    }
+  ]
 }

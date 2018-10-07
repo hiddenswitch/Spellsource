@@ -2,9 +2,9 @@
   "name": "Corrupted Egg",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "TOAST",
   "baseAttack": 0,
   "baseHp": 2,
-  "heroClass": "TOAST",
   "rarity": "COMMON",
   "description": "Deathrattle: Destroy a random enemy minion.",
   "deathrattle": {

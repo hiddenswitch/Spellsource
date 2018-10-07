@@ -14,8 +14,8 @@
       "value": 10,
       "cardFilter": {
         "class": "CardFilter",
-        "manaCost": 10,
-        "invert": true
+        "invert": true,
+        "manaCost": 10
       }
     }
   },
