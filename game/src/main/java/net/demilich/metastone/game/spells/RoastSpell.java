@@ -14,7 +14,7 @@ import net.demilich.metastone.game.utils.Attribute;
 
 /**
  * Roasting a card removes the card from the top of the deck and adds the {@link Attribute#ROASTED} to it. Always
- * reveals the card.
+ * reveals the card. Roasts {@link SpellArg#VALUE} cards.
  * <p>
  * Removing the {@link Attribute#ROASTED} attribute from the {@link EntityReference#EVENT_TARGET} during a {@link
  * net.demilich.metastone.game.spells.trigger.RoastTrigger} spell; removing the attribute from the {@link
@@ -27,22 +27,22 @@ public final class RoastSpell extends RemoveCardSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
-		for (int i = 0; i < howMany; i++) {
+		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
+		for (int i = 0; i < value; i++) {
 			SpellDesc roast = desc.clone();
 			// Use the TARGET_PLAYER to indicate whose card should be roasted.
 			if (desc.containsKey(SpellArg.CARD_FILTER) && !player.getDeck().isEmpty()) {
 				EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
 				target = context.getLogic().getRandom(player.getDeck().filtered(cardFilter.matcher(context, player, source)));
-				roast.put(SpellArg.TARGET, target.getReference());
 			} else if (!desc.containsKey(SpellArg.TARGET)) {
-				roast.put(SpellArg.TARGET, EntityReference.FRIENDLY_TOP_CARD);
 				target = player.getDeck().peek();
 			}
 
 			if (target == null) {
 				return;
 			}
+
+			roast.put(SpellArg.TARGET, target.getReference());
 
 			SpellDesc addRoastAttribute = SetAttributeSpell.create(target.getReference(), Attribute.ROASTED, context.getTurn());
 			context.getLogic().revealCard(player, target.getSourceCard());

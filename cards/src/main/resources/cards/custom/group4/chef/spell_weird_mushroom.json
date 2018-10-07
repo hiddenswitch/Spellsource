@@ -4,21 +4,21 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Give a minion +3/+ +3 or destroy it (at random).",
-  "targetSelection": "NONE",
+  "description": "Give a minion +3/+3 or destroy it (at random).",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "BuffSpell",
-        "target": "SELF",
-        "attackBonus": 0,
-        "hpBonus": 0
-      },
-      {
-        "class": "DestroySpell"
-      }
-    ]
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "RandomCondition"
+    },
+    "spell1": {
+      "class": "BuffSpell",
+      "attackBonus": 3,
+      "hpBonus": 3
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
   },
   "attributes": {},
   "collectible": true,

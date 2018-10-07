@@ -460,15 +460,6 @@ public enum Attribute {
 	 */
 	DIED_ON_TURN,
 	/**
-	 * When any {@link Entity} has this attribute, the owning player's hero power can target a {@link Minion}.
-	 * <p>
-	 * This is useful for the Hunter's hero power, which ordinarily can only target the opponent's hero.
-	 * <p>
-	 * Implements Steamwheedle Sniper
-	 */
-	@Deprecated
-	HERO_POWER_CAN_TARGET_MINIONS,
-	/**
 	 * When any {@link Entity} alive has this attribute, the owning player's hero power freezes its target.
 	 * <p>
 	 * Implements Ice Walker
@@ -894,8 +885,8 @@ public enum Attribute {
 	 */
 	HAND_INDEX,
 	/**
-	 * Indicates this card was roasted (removed from the top of the deck) by a {@link
-	 * RoastSpell} on the specified {@link Integer} turn.
+	 * Indicates this card was roasted (removed from the top of the deck) by a {@link RoastSpell} on the specified {@link
+	 * Integer} turn.
 	 * <p>
 	 * Implements Warchef Gordo / Chef's Roast effect.
 	 */

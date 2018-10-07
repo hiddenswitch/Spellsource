@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Deal $2 damage. Add an Opal Spellstone to your hand.",
-  "targetSelection": "NONE",
+  "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
     "spells": [

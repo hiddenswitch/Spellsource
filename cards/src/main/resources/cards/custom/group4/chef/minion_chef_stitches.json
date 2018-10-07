@@ -9,6 +9,7 @@
   "description": "Your Roast effects now draw cards instead.",
   "aura": {
     "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
     "applyEffect": {
       "class": "DrawCardSpell"
     },

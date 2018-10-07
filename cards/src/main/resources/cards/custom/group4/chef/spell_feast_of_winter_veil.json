@@ -1,16 +1,15 @@
 {
-  "name": "Veil",
+  "name": "Feast of Winter Veil",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Feast of Winter Restore 15 Health to your hero.",
-  "targetSelection": "MINIONS",
+  "description": "Restore #15 Health to your hero.",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
+    "class": "HealSpell",
     "target": "FRIENDLY_HERO",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "value": 15
   },
   "attributes": {},
   "collectible": true,

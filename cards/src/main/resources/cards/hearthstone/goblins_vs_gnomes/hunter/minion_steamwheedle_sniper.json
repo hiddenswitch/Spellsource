@@ -7,18 +7,26 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "description": "Your Hero Power can target minions.",
-  "aura": {
-    "class": "TargetSelectionOverrideAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "applyEffect": {
-      "class": "NullSpell",
-      "targetSelection": "MINIONS"
+  "auras": [
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "hero_power_steady_shot"
+      },
+      "card": "hero_power_sniper_steady_shot"
     },
-    "filter": {
-      "class": "TargetSelectionFilter",
-      "targetSelection": "NONE"
+    {
+      "class": "CardAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "hero_power_ballista_shot"
+      },
+      "card": "hero_power_sniper_ballista_shot"
     }
-  },
+  ],
   "collectible": true,
   "set": "GOBLINS_VS_GNOMES",
   "fileFormatVersion": 1

@@ -14,6 +14,15 @@
     {
       "class": "HeroPowerBonusAura",
       "target": "FRIENDLY_PLAYER",
+      "condition": {
+        "class": "AllMatchFilterCondition",
+        "target": "FRIENDLY_HERO_POWER",
+        "filter": {
+          "class": "TargetSelectionFilter",
+          "targetSelection": "NONE",
+          "invert": true
+        }
+      },
       "applyEffect": {
         "class": "DamageSpell",
         "value": 2

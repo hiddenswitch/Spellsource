@@ -350,14 +350,14 @@ public class TargetLogic implements Serializable {
 			if (player.getDeck().size() == 0) {
 				return new ArrayList<>();
 			} else {
-				return singleTargetAsList(player.getDeck().get(0));
+				return singleTargetAsList(player.getDeck().peek());
 			}
 		} else if (targetKey.equals(EntityReference.ENEMY_TOP_CARD)) {
 			Player opponent = context.getOpponent(player);
 			if (opponent.getDeck().size() == 0) {
 				return new ArrayList<>();
 			} else {
-				return singleTargetAsList(opponent.getDeck().get(0));
+				return singleTargetAsList(opponent.getDeck().peek());
 			}
 		} else if (targetKey.equals(EntityReference.BOTH_DECKS)) {
 			ArrayList<Entity> friendly = new ArrayList<>(player.getDeck().toList());

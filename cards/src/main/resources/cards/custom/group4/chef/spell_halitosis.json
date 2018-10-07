@@ -4,12 +4,18 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Choose a friendly minion. It deals its damage to minions opposite it.",
-  "targetSelection": "ANY",
+  "description": "Choose a friendly minion. Deal its Attack in damage to minions opposite it.",
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "target": "FRIENDLY_MINIONS",
-    "value": 1
+    "class": "OppositeEffectSpell",
+    "spell2": {
+      "class": "DamageSpell",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK",
+        "target": "TARGET"
+      }
+    }
   },
   "attributes": {},
   "collectible": true,

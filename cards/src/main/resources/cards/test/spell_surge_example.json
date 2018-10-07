@@ -1,0 +1,30 @@
+{
+  "name": "Surge Example",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Deal $1 damage. Surge: Draw a card",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "attribute": "RECEIVED_ON_TURN",
+      "value": {
+        "class": "CurrentTurnValueProvider"
+      },
+      "operation": "EQUAL"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 1
+    },
+    "spell2": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

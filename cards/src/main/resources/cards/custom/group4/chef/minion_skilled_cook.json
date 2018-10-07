@@ -10,10 +10,7 @@
   "aura": {
     "class": "TargetSelectionOverrideAura",
     "target": "FRIENDLY_HERO_POWER",
-    "applyEffect": {
-      "class": "NullSpell",
-      "targetSelection": "ANY"
-    },
+    "targetSelection": "ANY",
     "filter": {
       "class": "TargetSelectionFilter",
       "targetSelection": "NONE"

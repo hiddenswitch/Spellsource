@@ -12,7 +12,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "RoastSpell",
-      "howMany": 3
+      "value": 3
     }
   },
   "attributes": {
