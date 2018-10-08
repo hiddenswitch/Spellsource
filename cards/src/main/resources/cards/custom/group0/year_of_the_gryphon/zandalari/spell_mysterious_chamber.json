@@ -13,14 +13,13 @@
       "targetPlayer": "SELF"
     },
     "cardSource": {
-      "class": "SecretSource"
+      "class": "FormatCatalogueSource",
+      "format": "ALL"
     },
     "cardFilter": {
       "class": "CardFilter",
-      "cardSource": {
-        "class": "FormatCatalogueSource",
-        "format": "ALL"
-      }
+      "attribute": "SECRET",
+      "cardType": "SPELL"
     }  
   },
   "collectible": true,
