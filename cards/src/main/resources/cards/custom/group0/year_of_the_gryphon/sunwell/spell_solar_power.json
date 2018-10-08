@@ -21,9 +21,10 @@
           "spell": {
             "class": "ReceiveCardSpell",
             "card": "EVENT_TARGET"
-          },
+          }
           "oneTurn": true
-        }
+        },
+      "exclusive": true
       }
     },
       "targetPlayer": "SELF",
