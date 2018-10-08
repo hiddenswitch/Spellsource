@@ -17,9 +17,9 @@
     "condition": {
       "class": "ComboCondition"
     },
-    "target": "ALL_OTHER_MINIONS",
     "spell": {
-      "class": "DestroySpell"
+      "class": "DestroySpell",
+      "target": "ALL_OTHER_MINIONS"
     }
   },
   "attributes": {
