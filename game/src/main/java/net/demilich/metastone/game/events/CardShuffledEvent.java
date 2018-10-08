@@ -28,3 +28,4 @@ public class CardShuffledEvent extends GameEvent implements HasCard {
 		return GameEventType.CARD_SHUFFLED;
 	}
 }
+

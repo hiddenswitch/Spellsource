@@ -1,0 +1,26 @@
+{
+  "name": "The Rokk",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "After you cast a spell on a minion, cast copies on adjacent minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "RecastSpell",
+      "target": "ADJACENT_TO_TARGET",
+      "secondaryTarget": "EVENT_SOURCE"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

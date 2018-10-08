@@ -46,5 +46,6 @@ public enum GameEventType {
 	AFTER_PLAY_CARD,
 	CARD_SHUFFLED,
 	INVOKED,
-    PRE_GAME_START;
+    PRE_GAME_START,
+	ROASTED;
 }

@@ -1,0 +1,48 @@
+{
+  "name": "Purplewax Supplier",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover a Spell. Shuffle it into your deck. It costs (5) less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ShuffleToDeckSpell",
+            "value": 1,
+            "spell": {
+              "class": "CardCostModifierSpell",
+              "target": "OUTPUT",
+              "cardCostModifier": {
+                "class": "CardCostModifier",
+                "target": "SELF",
+                "value": 5,
+                "operation": "SUBTRACT"
+              }
+            }
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          },
+          "cardSource": {
+            "class": "CatalogueSource"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

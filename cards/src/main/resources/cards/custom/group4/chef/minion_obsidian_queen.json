@@ -1,0 +1,27 @@
+{
+  "name": "Obsidian Queen",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Charge. Unlimited attacks each turn. Can't attack heroes.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "RefreshAttacksSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {
+    "CANNOT_ATTACK_HEROES": true,
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -17,7 +17,7 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class CopyLowestCostMinionSpell extends Spell {
+public final class CopyLowestCostMinionSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -41,3 +41,4 @@ public class CopyLowestCostMinionSpell extends Spell {
 		SpellUtils.castChildSpell(context, player, copyCard, source, card, card);
 	}
 }
+

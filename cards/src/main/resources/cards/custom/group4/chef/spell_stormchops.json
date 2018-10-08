@@ -1,0 +1,21 @@
+{
+  "name": "Stormchops",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Give a minion 'Deathrattle: Deal 3 damage to all minions'.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 3
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

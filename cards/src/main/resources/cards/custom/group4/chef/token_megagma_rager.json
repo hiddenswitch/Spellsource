@@ -1,0 +1,15 @@
+{
+  "name": "Megagma Rager",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 20,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

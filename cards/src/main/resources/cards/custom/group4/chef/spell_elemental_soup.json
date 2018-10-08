@@ -1,0 +1,41 @@
+{
+  "name": "Elemental Soup",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Summon 5/5 copies of three Elementals you played this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 3,
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 5
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 5
+        }
+      ]
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "ELEMENTAL",
+      "attribute": "PLAYED_FROM_HAND_OR_DECK",
+      "cardType": "MINION",
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "GraveyardCardsSource"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

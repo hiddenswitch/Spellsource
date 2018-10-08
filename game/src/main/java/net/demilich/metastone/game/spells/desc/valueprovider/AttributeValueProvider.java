@@ -41,6 +41,14 @@ public class AttributeValueProvider extends ValueProvider {
 		}
 		int value = 0;
 		for (Entity entity : entities) {
+			if (attribute == Attribute.INDEX) {
+				value = entity.getEntityLocation().getIndex();
+				continue;
+			} else if (attribute == Attribute.INDEX_FROM_END) {
+				value = entity.getEntityLocation().getIndex() - context.getPlayer(entity.getOwner()).getZone(entity.getZone()).size();
+				continue;
+			}
+
 			if (entity instanceof Card) {
 				Card card = (Card) entity;
 				value += card.getAttributeValue(attribute);
