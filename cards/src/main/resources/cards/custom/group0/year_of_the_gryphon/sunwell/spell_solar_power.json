@@ -15,12 +15,12 @@
         "target": "FRIENDLY_PLAYER",
         "trigger": {
           "eventTrigger": {
-            "class": "TurnStartTrigger",
+            "class": "TurnEndTrigger",
             "targetPlayer": "SELF"
           },
           "spell": {
             "class": "ReceiveCardSpell",
-            "card": "OUTPUT"
+            "card": "EVENT_TARGET"
           },
           "oneTurn": true
         }
