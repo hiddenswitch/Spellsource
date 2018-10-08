@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BLACK",
-  "rarity": "COMMON",
+  "rarity": "EPIC",
   "description": "Discover a Secret from any set.",
   "targetSelection": "NONE",
   "spell": {
