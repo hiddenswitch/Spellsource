@@ -10,7 +10,6 @@
     "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF",
       "spell": {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
@@ -27,6 +26,7 @@
         "oneTurn": true
       }
     },
+      "targetPlayer": "SELF",
       "cardFilter": {
         "class": "CardFilter",
         "heroClass": "SELF",
