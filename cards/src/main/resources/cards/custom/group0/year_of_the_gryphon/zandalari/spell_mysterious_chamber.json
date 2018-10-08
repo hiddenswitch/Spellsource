@@ -12,22 +12,16 @@
       "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"
     },
-    "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "cardSource": {
-            "class": "SecretSource"
-          }
-        },
-        {
-          "cardSource": {
-            "class": "FormatCatalogueSource",
-            "format": "ALL"
-          }
-        }
-      ]
+    "cardSource": {
+      "class": "SecretSource"
     }
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardSource": {
+        "class": "FormatCatalogueSource",
+        "format": "ALL"
+      }
+    }  
   },
   "collectible": true,
   "set": "CUSTOM",
