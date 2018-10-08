@@ -11,7 +11,7 @@
   "aura": {
     "class": "AttributeAura",
     "target": "HEROES",
-    "attribute": "AURA_STEALTH"
+    "attribute": "STEALTH"
   },
   "battlecry": {
     "condition": {
