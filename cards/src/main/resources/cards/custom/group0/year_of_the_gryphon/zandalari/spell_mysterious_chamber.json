@@ -2,7 +2,7 @@
   "name": "Mysterious Chamber",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "ROGUE",
+  "heroClass": "BLACK",
   "rarity": "COMMON",
   "description": "Discover a Secret from any set.",
   "targetSelection": "NONE",
