@@ -1,0 +1,21 @@
+{
+  "name": "Rotten Egg",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon two 2/2 Ghouls.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "value": 2,
+    "card": "token_ghoul"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

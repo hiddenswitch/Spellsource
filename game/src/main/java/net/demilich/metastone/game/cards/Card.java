@@ -145,6 +145,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		if (getDesc().getDeathrattle() != null) {
 			EnchantmentDesc deathrattleDesc = new EnchantmentDesc();
 			deathrattleDesc.spell = getDesc().getDeathrattle().clone();
+			// TODO: This doesn't actually trigger maybe?
 			deathrattleDesc.eventTrigger = MinionDeathTrigger.create();
 			deathrattleDesc.maxFires = 1;
 			enchantments.add(deathrattleDesc.create());

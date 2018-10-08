@@ -1,0 +1,78 @@
+{
+  "name": "Expedition Cook",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Battlecry: Roast a Dragon, a Beast or an Elemental. Shuffle the related Meal into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RoastSpell",
+      "target": "FRIENDLY_DECK",
+      "spell": {
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "race": "DRAGON",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "race": "BEAST",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardPropertyCondition",
+            "race": "ELEMENTAL",
+            "cardType": "MINION"
+          }
+        ],
+        "spells": [
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_dinosaur_chops"
+          },
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_proto_drake_stew"
+          },
+          {
+            "class": "ShuffleToDeckSpell",
+            "card": "spell_elemental_soup"
+          }
+        ]
+      },
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "race": "DRAGON",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardFilter",
+            "race": "BEAST",
+            "cardType": "MINION"
+          },
+          {
+            "class": "CardFilter",
+            "race": "ELEMENTAL",
+            "cardType": "MINION"
+          }
+        ]
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

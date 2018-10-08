@@ -5,6 +5,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 
+/**
+ * Returns {@code true} if the {@link EntityType} from {@link Entity#getEntityType()} of the {@code target} is equal to
+ * the {@link EntityFilterArg#ENTITY_TYPE} argument.
+ */
 public final class EntityTypeFilter extends EntityFilter {
 
 	public EntityTypeFilter(EntityFilterDesc desc) {

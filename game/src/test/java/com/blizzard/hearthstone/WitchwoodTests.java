@@ -29,6 +29,23 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testGentlemansTopHat() {
+		runGym((context, player, opponent) -> {
+			Minion target1 = playMinionCard(context, player, "minion_wisp");
+			playCardWithTarget(context, player, "spell_gentleman_s_top_hat", target1);
+			assertEquals(target1.getAttack(), target1.getBaseAttack() + 2);
+			Minion target2 = playMinionCard(context, player, "minion_wisp");
+			assertEquals(target2.getAttack(), target2.getBaseAttack());
+			destroy(context, target1);
+			assertEquals(target2.getAttack(), target2.getBaseAttack() + 2);
+			Minion target3 = playMinionCard(context, player, "minion_wisp");
+			assertEquals(target3.getAttack(), target3.getBaseAttack());
+			destroy(context, target2);
+			assertEquals(target3.getAttack(), target3.getBaseAttack() + 2);
+		});
+	}
+
+	@Test
 	public void testGlindaCrowskin() {
 		runGym((context, player, opponent) -> {
 			Card bloodfen = receiveCard(context, player, "minion_bloodfen_raptor");

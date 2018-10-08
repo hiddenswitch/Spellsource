@@ -1,0 +1,24 @@
+{
+  "name": "Alemental",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Put a 'Hangover' card on top of your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PutDeckTopSpell",
+      "card": "spell_hangover"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

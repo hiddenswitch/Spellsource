@@ -29,6 +29,10 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.CONDITION, ParseValueType.CONDITION);
 		ctx.add(AuraArg.CARD, ParseValueType.STRING);
 		ctx.add(AuraArg.ALWAYS_APPLY, ParseValueType.BOOLEAN);
+		ctx.add(AuraArg.CAN_AFFORD_CONDITION, ParseValueType.CONDITION);
+		ctx.add(AuraArg.AMOUNT_OF_CURRENCY, ParseValueType.VALUE);
+		ctx.add(AuraArg.PAY_EFFECT, ParseValueType.SPELL);
+		ctx.add(AuraArg.TARGET_SELECTION, ParseValueType.TARGET_SELECTION);
 	}
 
 	@Override

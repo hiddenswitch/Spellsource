@@ -32,6 +32,7 @@ EGGPLANT | &quot;EGGPLANT&quot;
 ICE | &quot;ICE&quot;
 OBSIDIAN | &quot;OBSIDIAN&quot;
 AMBER | &quot;AMBER&quot;
+TOAST | &quot;TOAST&quot;
 
 
 <a name="FormatEnum"></a>
