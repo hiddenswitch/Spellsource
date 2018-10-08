@@ -8,11 +8,18 @@
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Poisonous. Both heroes have Stealth. Combo: Destroy all other minions.",
-  "aura": {
-    "class": "AttributeAura",
-    "target": "HEROES",
-    "attribute": "STEALTH"
-  },
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO",
+      "attribute": "AURA_STEALTH"
+    },
+    {
+      "class": "AttributeAura",
+      "target": "ENEMY_HERO",
+      "attribute": "AURA_STEALTH"
+    }
+  ],
   "battlecry": {
     "condition": {
       "class": "ComboCondition"
@@ -27,6 +34,6 @@
     "POISONOUS": true
   },
   "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
