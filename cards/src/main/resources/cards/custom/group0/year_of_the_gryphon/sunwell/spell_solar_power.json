@@ -21,8 +21,8 @@
           "spell": {
             "class": "ReceiveCardSpell",
             "card": "EVENT_TARGET"
-          }
-          "oneTurn": true,
+          },
+          "oneTurn": true
         },
       "exclusive": true
       }
