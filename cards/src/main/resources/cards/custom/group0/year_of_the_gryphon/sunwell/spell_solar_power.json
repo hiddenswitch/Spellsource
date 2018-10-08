@@ -8,12 +8,16 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
+    "targetPlayer": "SELF",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
     "spell": {
       "class": "ReceiveCardSpell",
       "spell": {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
-        "exclusive": true,
         "trigger": {
           "eventTrigger": {
             "class": "TurnEndTrigger",
@@ -21,17 +25,10 @@
           },
           "spell": {
             "class": "ReceiveCardSpell",
-            "card": "EVENT_TARGET"
+            "target": "OUTPUT"
           },
           "oneTurn": true
         }
-      }
-    },
-      "targetPlayer": "SELF",
-      "cardFilter": {
-        "class": "CardFilter",
-        "heroClass": "SELF",
-        "cardType": "SPELL"
       }
     }
   },
