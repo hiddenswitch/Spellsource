@@ -18,6 +18,7 @@
     },
     "cardFilter": {
       "class": "CardFilter",
+      "heroClass": "BLACK",
       "attribute": "SECRET",
       "cardType": "SPELL"
     }  
