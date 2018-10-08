@@ -21,9 +21,9 @@
           "spell": {
             "class": "ReceiveCardSpell",
             "card": "OUTPUT"
-          }
-        },
-        "oneTurn": true
+          },
+          "oneTurn": true
+        }
       }
     },
       "targetPlayer": "SELF",
