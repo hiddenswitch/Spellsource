@@ -7,16 +7,11 @@
   "description": "Discover a spell. Add a copy of it to your hand next turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DiscoverSpell",
-        "spell": {
-          "class": "ReceiveCardSpell",
-          "targetPlayer": "SELF"
-        }
-      },
-      {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF",
+      "spell": {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
         "trigger": {
@@ -27,11 +22,18 @@
           "spell": {
             "class": "ReceiveCardSpell",
             "card": "OUTPUT"
-          },
-          "oneTurn": true
-        }
+          }
+        },
+        "oneTurn": true
       }
-    ]
+    },
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "SELF",
+        "cardType": "SPELL"
+      }
+    }
+  },
   },
   "collectible": true,
   "set": "CUSTOM",
