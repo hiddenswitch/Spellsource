@@ -13,6 +13,7 @@
       "spell": {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
+        "exclusive": true,
         "trigger": {
           "eventTrigger": {
             "class": "TurnEndTrigger",
@@ -23,8 +24,7 @@
             "card": "EVENT_TARGET"
           },
           "oneTurn": true
-        },
-      "exclusive": true
+        }
       }
     },
       "targetPlayer": "SELF",
