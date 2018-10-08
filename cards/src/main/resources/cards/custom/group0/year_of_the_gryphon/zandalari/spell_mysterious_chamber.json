@@ -14,7 +14,7 @@
     },
     "cardSource": {
       "class": "SecretSource"
-    }
+    },
     "cardFilter": {
       "class": "CardFilter",
       "cardSource": {
