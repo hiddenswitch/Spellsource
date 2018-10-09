@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -118,15 +119,19 @@ public class SpellUtils {
 
 		PlayCardAction action = null;
 		if (card.isChooseOne()) {
-			int chooseOneOverride = context.getLogic().getChooseOneOverrides(player, card);
-			if (chooseOneOverride != -1) {
-				if (chooseOneOverride == 2) {
-					action = card.playBothOptions();
-				} else {
-					action = card.playOptions()[chooseOneOverride];
+			ChooseOneOverride chooseOneOverride = context.getLogic().getChooseOneAuraOverrides(player, card);
+			if (chooseOneOverride != ChooseOneOverride.NONE) {
+				switch (chooseOneOverride) {
+					case ALWAYS_FIRST:
+						action = card.playOptions()[0];
+						break;
+					case ALWAYS_SECOND:
+						action = card.playOptions()[1];
+						break;
+					case BOTH_COMBINED:
+						action = card.playBothOptions();
+						break;
 				}
-			} else if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
-				action = card.playBothOptions();
 			} else {
 				boolean doesNotContainChoice = !card.getAttributes().containsKey(Attribute.CHOICE)
 						&& card.getAttributes().containsKey(Attribute.PLAYED_FROM_HAND_OR_DECK);
@@ -677,6 +682,8 @@ public class SpellUtils {
 	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
+				// Should respect order of play
+				.sorted(Comparator.comparingInt(Entity::getId))
 				.flatMap(m -> context.getTriggersAssociatedWith(m.getReference()).stream()
 						.filter(auraClass::isInstance)
 						.map(t -> (T) t)

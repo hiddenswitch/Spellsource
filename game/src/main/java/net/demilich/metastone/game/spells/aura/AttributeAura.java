@@ -27,8 +27,9 @@ import net.demilich.metastone.game.utils.Attribute;
  *     }
  *   }
  * </pre>
+ * @see Aura for a description of how the fields in the {@link AuraDesc} are interpreted.
  */
-public class AttributeAura extends Aura {
+public final class AttributeAura extends Aura {
 
 	public AttributeAura(AuraDesc desc) {
 		super(desc.getSecondaryTrigger() != null ? desc.getSecondaryTrigger().create() : new WillEndSequenceTrigger(),

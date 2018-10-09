@@ -13,7 +13,8 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * The Capt'n Cookie aura is a kind of Noggenfogger aura.
+ * The Capt'n Cookie aura changes to random the player selected targets of spells cast by the owner of the aura. Since
+ * it changes targeting randomly, it is considered a kind of Noggenfogger aura.
  */
 public final class CaptnCookieAura extends NoggenfoggerAura {
 
@@ -23,7 +24,7 @@ public final class CaptnCookieAura extends NoggenfoggerAura {
 
 	@Override
 	protected List<Entity> getValidTargets(GameContext context, TargetAcquisitionEvent event) {
-		if (event.getActionType() == ActionType.SPELL) {
+		if (event.getActionType() == ActionType.SPELL && event.getSourcePlayerId() == getOwner()) {
 			return super.getValidTargets(context, event);
 		}
 		return Collections.emptyList();
