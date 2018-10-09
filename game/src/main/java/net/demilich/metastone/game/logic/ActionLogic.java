@@ -4,11 +4,10 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.EndTurnAction;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.ChooseOneOverride;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -53,21 +52,7 @@ public class ActionLogic implements Serializable {
 			return heroPowerActions;
 		}
 		if (heroPower.isChooseOne()) {
-			HasChooseOneActions chooseOneCard = heroPower;
-			int overallValue = context.getLogic().getChooseOneOverrides(player, heroPower);
-			if (overallValue != -1) {
-				if (overallValue == 2 && chooseOneCard.hasBothOptions()) {
-					GameAction chooseOneAction = chooseOneCard.playBothOptions();
-					rollout(chooseOneAction, context, player, heroPowerActions);
-				} else if (overallValue == 0 || overallValue == 1) {
-					rollout(chooseOneCard.playOptions()[overallValue], context, player, heroPowerActions);
-				}
-			} else {
-				for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
-					rollout(chooseOneAction, context, player, heroPowerActions);
-				}
-			}
-
+			rolloutChooseOnesWithOverrides(context, player, heroPowerActions, heroPower);
 		} else {
 			rollout(heroPower.play(), context, player, heroPowerActions);
 		}
@@ -123,25 +108,7 @@ public class ActionLogic implements Serializable {
 			}
 
 			if (card.isChooseOne()) {
-				HasChooseOneActions chooseOneCard = card;
-				int overallValue = context.getLogic().getChooseOneOverrides(player, card);
-				if (overallValue != -1) {
-					if (overallValue == 2 && chooseOneCard.hasBothOptions()) {
-						GameAction chooseOneAction = chooseOneCard.playBothOptions();
-						rollout(chooseOneAction, context, player, playCardActions);
-					} else if (overallValue == 0 || overallValue == 1) {
-						rollout(chooseOneCard.playOptions()[overallValue], context, player, playCardActions);
-					}
-				} else {
-					if (context.getLogic().hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS) && chooseOneCard.hasBothOptions()) {
-						GameAction chooseOneAction = chooseOneCard.playBothOptions();
-						rollout(chooseOneAction, context, player, playCardActions);
-					} else {
-						for (GameAction chooseOneAction : chooseOneCard.playOptions()) {
-							rollout(chooseOneAction, context, player, playCardActions);
-						}
-					}
-				}
+				rolloutChooseOnesWithOverrides(context, player, playCardActions, card);
 			} else {
 				if (card.getCardType().isCardType(CardType.ENCHANTMENT)) {
 					System.out.println(context.getTrace().dump());
@@ -151,6 +118,27 @@ public class ActionLogic implements Serializable {
 
 		}
 		return playCardActions;
+	}
+
+	private void rolloutChooseOnesWithOverrides(GameContext context, Player player, List<GameAction> playCardActions, Card card) {
+		ChooseOneOverride override = context.getLogic().getChooseOneAuraOverrides(player, card);
+		switch (override) {
+			case BOTH_COMBINED:
+				rollout(card.playBothOptions(), context, player, playCardActions);
+				break;
+			case ALWAYS_FIRST:
+				rollout(card.playOptions()[0], context, player, playCardActions);
+				break;
+			case ALWAYS_SECOND:
+				rollout(card.playOptions()[1], context, player, playCardActions);
+				break;
+			case NONE:
+			default:
+				for (PlayCardAction action : card.playOptions()) {
+					rollout(action, context, player, playCardActions);
+				}
+				break;
+		}
 	}
 
 	@Suspendable

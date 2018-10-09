@@ -480,11 +480,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		List<CardCostInsteadAura> costAuras = SpellUtils.getAuras(context, playerId, CardCostInsteadAura.class);
 		boolean cardCostOverridden = costAuras.size() > 0 && costAuras.stream().anyMatch(aura -> aura.getAffectedEntities().contains(entityReference.getId()));
+		// Only play the last card cost override whose condition was met.
 		if (cardCostOverridden) {
-			// Only play the last card cost override whose condition was met. Reverse order of play seems more intuitive here.
+			// We're reversing the cost auras because the most recent card cost aura to come into play is most intuitively the
+			// one we're paying with.
 			Collections.reverse(costAuras);
 			for (CardCostInsteadAura aura : costAuras) {
-				if (aura.getAffectedEntities().contains(entityReference.getId())) {
+				// The card is affected by the cost condition if the card or the player casting it are affected by the aura.
+				if (aura.getAffectedEntities().contains(entityReference.getId()) || aura.getAffectedEntities().contains(playerId)) {
 					return aura.getCanAffordCondition().isFulfilled(context, player, card, card);
 				}
 			}
@@ -1742,38 +1745,32 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return actionLogic.getAutoHeroPower(context, context.getPlayer(playerId));
 	}
 
-	public int getChooseOneOverrides(Player player, final Entity source) {
-		List<Aura> overrideAuras = context.getTriggerManager().getTriggers().stream()
-				.filter(t -> t instanceof ChooseOneOverrideAura)
-				.map(t -> (Aura) t)
-				.filter(((Predicate<Aura>) Aura::isExpired).negate())
-				.filter(aura -> {
-					if (aura.getDesc().getTarget().equals(EntityReference.FRIENDLY_PLAYER)) {
-						return source.getOwner() == player.getId();
-					} else if (aura.getDesc().getTarget().equals(EntityReference.ENEMY_PLAYER)) {
-						return source.getOwner() == context.getOpponent(player).getId();
-					} else return aura.getAffectedEntities().contains(source.getId());
-				})
-				.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context,
-						context.getPlayer(aura.getOwner()), context.resolveSingleTarget(aura.getHostReference()), null))
-				.collect(Collectors.toList());
-		int overallValue = -1;
-		if (!overrideAuras.isEmpty()) {
-			for (Aura overrideAura : overrideAuras) {
-				int auraValue = overrideAura.getDesc().getApplyEffect().getValue(SpellArg.VALUE, context, player,
-						context.resolveSingleTarget(overrideAura.getHostReference()),
-						context.resolveSingleTarget(overrideAura.getHostReference()), -1);
-				if (overallValue == 2 || auraValue == -1) {
-					continue;
-				}
-				if (overallValue + auraValue == 1) {
-					overallValue = 2;
-				} else {
-					overallValue = auraValue;
-				}
+	/**
+	 * Finds {@link ChooseOneOverrideAura} auras that affect the {@code card} and indicates what choose one override is
+	 * specified.
+	 *
+	 * @param player
+	 * @param card
+	 * @return The override, or {@link ChooseOneOverride#NONE} if none is specified.
+	 */
+	public ChooseOneOverride getChooseOneAuraOverrides(Player player, final Card card) {
+		List<ChooseOneOverrideAura> auras = SpellUtils.getAuras(context, player.getId(), ChooseOneOverrideAura.class);
+		ChooseOneOverride override = ChooseOneOverride.NONE;
+		// Since it's in order of play, the last aura will take precedence by overwriting the prior auras.
+		for (ChooseOneOverrideAura aura : auras) {
+			// The aura affects the card if either it is affected by the aura or its owner is affected by the aura.
+			if (aura.getAffectedEntities().contains(card.getId()) ||
+					(aura.getAffectedEntities().contains(player.getId()) && card.getOwner() == player.getId())) {
+				override = aura.getChooseOneOverride();
 			}
 		}
-		return overallValue;
+
+		// TODO: Remove this legacy attribute for both choose one options
+		if (hasAttribute(player, Attribute.BOTH_CHOOSE_ONE_OPTIONS)) {
+			override = ChooseOneOverride.BOTH_COMBINED;
+		}
+
+		return override;
 	}
 
 	/**
@@ -2654,7 +2651,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			Collections.reverse(costAuras);
 			boolean paid = false;
 			for (CardCostInsteadAura aura : costAuras) {
-				if (!aura.getAffectedEntities().contains(entityReference.getId())) {
+				if (!aura.getAffectedEntities().contains(entityReference.getId()) && !aura.getAffectedEntities().contains(playerId)) {
 					continue;
 				}
 
@@ -2753,6 +2750,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
+	/**
+	 * Modifies the target selection of the specified action and returns it. Respects {@link TargetSelectionOverrideAura}
+	 * entities that affect the {@link GameAction#getSourceReference()} of the provided action.
+	 *
+	 * @param action
+	 * @return
+	 */
 	@Suspendable
 	public GameAction processTargetModifiers(GameAction action) {
 		Entity entity = action.getSource(context);

@@ -176,6 +176,6 @@ public enum ParseValueType {
 	 * An {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} that should be interpreted as a {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Secret}.
 	 */
-	SECRET,
+	SECRET, CHOOSE_ONE_OVERRIDE,
 
 }

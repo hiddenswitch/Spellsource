@@ -33,18 +33,26 @@ import java.util.*;
  *                "class": An Aura class. When the class is Aura, the apply and remove effects below are used. Otherwise,
  *                         for classes like BuffAura, the apply and remove effects are provided by the class.
  *               "target": An {@link EntityReference} for all the entities affected by this aura
- *               "filter": A filter on those entities
+ *               "filter": A filter on those entities. Evaluated against every {@code target} entity in the
+ *                         {@code "target"} specified.
  *          "applyEffect": A {@link SpellDesc} that corresponds to the spell to cast on a given entity when it transitions
- *                         from being affected to unaffected by this aura.
+ *                         from being unaffected to affected by this aura. The {@code target} is the entity newly under
+ *                         the influence of the aura and {@code source} is the {@link EntityReference#TRIGGER_HOST} /
+ *                         host of the aura.
  *         "removeEffect": A {@link SpellDesc} that corresponds to the spell to cast on an entity when it was previously
- *                         affected and it is now transitioning into not being affected.
+ *                         affected and it is now transitioning into not being affected. The {@code target} is the
+ *                         entity newly under the influence of the aura and {@code source} is the
+ *                         {@link EntityReference#TRIGGER_HOST} / host of the aura.
  *            "condition": A condition that is evaluated whenever the {@link BoardChangedEvent} is raised; the
  *                         {@link WillEndSequenceEvent} is raised; or "secondaryTrigger" is fired, against every entity that
  *                         could be or currently is affected by this aura. When the condition is true, the entity that is
  *                         affected remains affected; the entity that could not be affected is affected. When false, the entity
  *                         that is affected stops being affected, and an entity that is not yet affected will still not be
- *                         affected.
- *     "secondaryTrigger": Another trigger that, when fired, will cause this aura to reevaluate which entities are affected.
+ *                         affected. {@code target} in the condition will be the entity, and {@code source} will be the
+ *                         {@link EntityReference#TRIGGER_HOST} / host of the aura.
+ *     "secondaryTrigger": Another trigger that, when fired, will cause this aura to reevaluate which entities are
+ *                         affected. {@link EntityReference#EVENT_TARGET} will correspond to the
+ *                         {@link GameEvent#getTarget()} processed by that trigger.
  *   }
  * </pre>
  * <p>

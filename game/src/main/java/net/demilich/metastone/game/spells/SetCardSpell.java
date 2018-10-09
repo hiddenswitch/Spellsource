@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
  * instead the <b>source</b> of the card ID: the {@code target}'s card ID will be copied to the secondary target
  * argument.
  * <p>
+ * This spell does <b>not</b> put the enchantments, like triggers and auras, into play from the newly converted card
+ * ID.
+ * <p>
  * This spell is a {@link RevertableSpell}, so it is suitable for use in auras.
  * <p>
  * For <b>example,</b> to set the enemy's hero power's card to yours:
@@ -30,7 +33,7 @@ import org.slf4j.LoggerFactory;
  *     }
  * </pre>
  */
-public class SetCardSpell extends RevertableSpell {
+public final class SetCardSpell extends RevertableSpell {
 
 	private static Logger logger = LoggerFactory.getLogger(SetCardSpell.class);
 
