@@ -19,14 +19,12 @@
         {
           "class": "AddEnchantmentSpell",
           "card": "enchantment_frozen_deck",
-          "exclusive": true,
-          "targetPlayer": "SELF"
+          "target": "FRIENDLY_PLAYER"
         },
         {
           "class": "AddEnchantmentSpell",
           "card": "enchantment_frozen_deck",
-          "exclusive": true,
-          "targetPlayer": "OPPONENT"
+          "target": "ENEMY_PLAYER"
         }
       ]
     }
