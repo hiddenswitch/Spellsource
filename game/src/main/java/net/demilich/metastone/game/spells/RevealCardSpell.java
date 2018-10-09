@@ -12,7 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Reveals a card from a filter, {@link SpellArg#CARD} or the target if neither is specified.
+ * Reveals a card from a filter, {@link SpellArg#CARD} or the {@code target} if neither is specified.
+ * <p>
+ * Both players will see the card in their interfaces.
+ * <p>
+ * If a subspell is specified in {@link SpellArg#SPELL}, it is cast with the revealed card as the {@link
+ * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
  */
 public class RevealCardSpell extends Spell {
 

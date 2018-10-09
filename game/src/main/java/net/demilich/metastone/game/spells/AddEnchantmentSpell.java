@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Adds an {@link SpellArg#AURA} ({@link Aura}) or a {@link Enchantment} (in the {@link SpellArg#TRIGGER} due to
- * history) to the specified {@code target} and immediately puts that aura/enchantment into play (i.e., activates it).
+ * Adds an {@link SpellArg#AURA} ({@link Aura}) or a {@link Enchantment} (in the {@link SpellArg#TRIGGER}) to the
+ * specified {@code target} and immediately puts that aura/enchantment into play (i.e., activates it).
  * <p>
  * If a {@link SpellArg#CARD} is specified, the spell will interpret the card as an {@link
  * net.demilich.metastone.game.cards.CardType#ENCHANTMENT}, adding each of its triggers as specified to the {@code
@@ -29,9 +29,16 @@ import java.util.Map;
  * If no triggers are present on the card, a dummy enchantment is created for later use in the {@link
  * RemoveEnchantmentSpell} and {@link net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter}.
  * <p>
+ * Enchantments and auras are only in play if their {@link Enchantment#getHostReference()} is {@link Entity#isInPlay()}.
+ * Currently, auras and enchantments are immediately active and listening to events. However, auras only evaluate which
+ * entities they affect on the next event they react to, which is typically a {@link
+ * net.demilich.metastone.game.events.BoardChangedEvent} or {@link net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger}.
+ * Thus, auras aren't really in play until those triggers fire (or the aura's {@link
+ * net.demilich.metastone.game.spells.desc.aura.AuraArg#SECONDARY_TRIGGER} fires).
+ * <p>
  * This example implements the text, "At the start of your next turn, summon four 1/1 Silver Hand Recruits." Notice that
  * {@link EntityReference#FRIENDLY_PLAYER} is used as the target of an enchantment for effects that don't really belong
- * to specific minions.
+ * to specific actors like minions.
  * <pre>
  *   {
  *     "class": "AddEnchantmentSpell",
@@ -54,6 +61,9 @@ import java.util.Map;
  *     }
  *   }
  * </pre>
+ * <p>
+ * This powerful spell can be chained together to do counting, to put auras into play, etc. Browse cards that use the
+ * spell for more complete examples.
  *
  * @see AddDeathrattleSpell for a simple way to add a deathrattle to a minion/card.
  * @see Aura for more about what auras should look like.
@@ -108,7 +118,8 @@ public final class AddEnchantmentSpell extends Spell {
 			aura = aura.clone();
 			aura.setOwner(player.getId());
 			aura.setSourceCard(source.getSourceCard());
-			// Enchantments added this way should trigger a board changed event.
+			// Enchantments added this way don't trigger a board changed event. They come into play immediately if the owning
+			// entity is Entity#isInPlay().
 			context.getLogic().addGameEventListener(player, aura, target);
 		}
 
