@@ -14,6 +14,8 @@ import java.util.Map;
 
 /**
  * Destroys all the secrets belonging to {@link SpellArg#TARGET_PLAYER}.
+ * <p>
+ * Secrets removed in this way have their enchantments removed and are removed from play (not sent to the graveyard).
  */
 public class DestroySecretsSpell extends Spell {
 	public static Logger logger = LoggerFactory.getLogger(DestroySecretsSpell.class);

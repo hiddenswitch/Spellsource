@@ -12,7 +12,7 @@
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
-        "class": "RecastSpell",
+        "class": "PlayCardsSpell",
         "targetPlayer": "SELF"
       },
       "cardSource": {

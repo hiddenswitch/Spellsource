@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  * <p>
  * Casts {@link SpellArg#SPELL} with the {@link EntityReference#OUTPUT} set to the card the effects were copied from.
  */
-public class AddActorEffectsToTargetActorSpell extends Spell {
+public final class AddActorEffectsToTargetActorSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AddActorEffectsToTargetActorSpell.class);
 
