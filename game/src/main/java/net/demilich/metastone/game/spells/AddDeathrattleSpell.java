@@ -30,6 +30,9 @@ import java.util.Map;
  * <p>
  * All weapon removals trigger deathrattles, whether by replacement, destruction or by depleting their durability.
  * <p>
+ * Deathrattles resolve from the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. However, the {@link
+ * SpellArg#BOARD_POSITION_ABSOLUTE} argument is set to where the minion used to be.
+ * <p>
  * For example, to give a minion a the deathrattle, "Resummon this minion,":
  * <pre>
  *     {
@@ -42,19 +45,23 @@ import java.util.Map;
  * </pre>
  * <p>
  * Many jail effects, like "Battlecry: Choose a minion. Deathrattle: Summon a copy of it" require "storing" a reference
- * to an entity. This must be done in code. For this example, create a new class that extends {@link Spell} and
- * implement its {@code onCast} method to create a new deathrattle spell that summons a copy of a specific minion:
+ * to an entity. Use {@link AddDeathrattleSecondaryAsTargetSpell} for this effect. Or, to implement it in code, create a
+ * new class that extends {@link Spell} and implement its {@code onCast} method to create a new deathrattle spell. For
+ * example, to implement the text "Battlecry: Choose a minion. Deathrattle: Summon a copy of it:"
  * <pre>
+ * {@code
  *   SpellDesc summonDesc = new SpellDesc(SummonSpell.class);
  *   // The target is the minion chosen by the battlecry. It gets baked in here.
  *   summonDesc.put(SpellArg.TARGET, target.getReference());
  *   SpellDesc addDeathrattleSpell = AddDeathrattleSpell.create(EntityReference.SELF, summonDesc);
  *   SpellUtils.castChildSpell(context, player, addDeathrattleSpell, source, target);
+ * }
  * </pre>
  * Observe that the {@code target} reference gets baked in and a deathrattle is added to the casting minion by this
  * battlecry, as opposed to setting the {@code "deathrattle"} field on the minion's card JSON.
  *
- * @see AddEnchantmentSpell for a way to add any enchanment, like a trigger or an aura, to an entity.
+ * @see AddEnchantmentSpell for a way to add any enchantment, like a trigger or an aura, to an entity.
+ * @see AddDeathrattleSecondaryAsTargetSpell for a way to remember a target for the deathrattle.
  */
 public class AddDeathrattleSpell extends Spell {
 
