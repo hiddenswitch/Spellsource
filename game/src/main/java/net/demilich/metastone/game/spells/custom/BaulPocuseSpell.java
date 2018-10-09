@@ -18,7 +18,12 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class BaulPocuseSpell extends Spell {
+/**
+ * Puts the last three cards the player {@link Attribute#ROASTED} into the player's {@link
+ * net.demilich.metastone.game.targeting.Zones#HAND}). Shuffles all the other roasted cards into the player's {@link
+ * net.demilich.metastone.game.targeting.Zones#DECK}.
+ */
+public final class BaulPocuseSpell extends Spell {
 
 	@Override
 	@Suspendable

@@ -21,7 +21,9 @@ import java.util.function.Predicate;
  * <p>
  * When {@link SpellArg#IGNORE_SPELL_DAMAGE} is set to {@code true}, ignores {@link Attribute#SPELL_DAMAGE} bonuses.
  * <p>
- * The amount of damage dealt can be modified by other, prior effects using {@link ModifyDamageSpell}.
+ * The amount of damage dealt can be modified by other, prior effects using {@link ModifyDamageSpell}. This is typically
+ * done during the {@link net.demilich.metastone.game.spells.trigger.PreDamageTrigger}'s {@link
+ * net.demilich.metastone.game.events.PreDamageEvent}.
  * <p>
  * For example, "Battlecry: Deal 6 damage to all other characters:"
  * <pre>
@@ -90,6 +92,7 @@ import java.util.function.Predicate;
  * </pre>
  * Observe the way arithmetic is performed inside the {@code "value"} fields of the {@link DamageSpell}.
  *
+ * @see ModifyDamageSpell to modify damage from physical attacks, the {@link MissilesSpell} and this spell.
  * @see HealSpell to heal. Don't use negative values.
  * @see MissilesSpell to fire random missiles that calculate spell damage correctly.
  */

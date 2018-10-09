@@ -21,7 +21,7 @@
       "spell": {
         "class": "DiscoverSpell",
         "spell": {
-          "class": "RecastSpell"
+          "class": "PlayCardsSpell"
         },
         "cards": [
           "spell_invocation_of_air",

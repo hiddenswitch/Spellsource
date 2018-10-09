@@ -12,7 +12,16 @@ import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.List;
 
-public class CopyEnchantmentsSpell extends Spell {
+/**
+ * Copies enchantments from the {@link net.demilich.metastone.game.spells.desc.SpellArg#SECONDARY_TARGET} to the {@code
+ * target}.
+ * <p>
+ * Implements Doomlord Urc.
+ * <p>
+ * To copy enchantments from a card, use {@link CopyCardEnchantmentsSpell}. Note that spell reverses the interpretation
+ * of {@code target} and {@link net.demilich.metastone.game.spells.desc.SpellArg#SECONDARY_TARGET}.
+ */
+public final class CopyEnchantmentsSpell extends Spell {
 
 	@Override
 	@Suspendable

@@ -46,7 +46,7 @@ import java.util.Map;
  *
  * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for more about transformations.
  */
-public class CopyMinionSpell extends Spell {
+public final class CopyMinionSpell extends Spell {
 
 	/**
 	 * Creates this spell. The {@code target} will be passed down by a parent invocation.
@@ -69,7 +69,6 @@ public class CopyMinionSpell extends Spell {
 		clone.getAttributes().remove(Attribute.AURA_TAUNT);
 		clone.clearEnchantments();
 
-		//Minion sourceActor = (Minion) context.resolveSingleTarget(context.getSummonReferenceStack().peek());
 		Minion sourceActor = (Minion) source;
 		SpellDesc transformSpell = TransformMinionSpell.create(clone);
 		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
