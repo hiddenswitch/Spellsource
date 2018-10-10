@@ -16,7 +16,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class EnvironmentEntityList implements EnvironmentValue, Serializable {
+/**
+ * Stores a list of entities in the environment, instead of on an attribute on an entity.
+ * <p>
+ * This class behaves like a multimap of {@code source} entity keys and {@link EntityReference} values. Use {@link
+ * #getList(GameContext)} to retrieve the general entity list, or use {@link #getList(GameContext, Environment)} for an
+ * entity list named by a particular environment variable.
+ * <p>
+ * Use {@link #getCards(GameContext, Entity)} to get a list of cards associated with a specific {@code source} entity.
+ */
+public final class EnvironmentEntityList implements EnvironmentValue, Serializable {
+	/**
+	 * @param context
+	 * @return
+	 */
 	public static EnvironmentEntityList getList(GameContext context) {
 		return getList(context, Environment.ENTITY_LIST);
 	}

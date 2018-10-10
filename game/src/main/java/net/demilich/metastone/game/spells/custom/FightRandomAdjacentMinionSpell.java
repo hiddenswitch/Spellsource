@@ -11,6 +11,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * Causes the {@link EntityReference#TRIGGER_HOST} to fight a random minion adjacent to it.
+ * <p>
+ * Implements Blood Thirst.
  */
 public final class FightRandomAdjacentMinionSpell extends FightSpell {
 

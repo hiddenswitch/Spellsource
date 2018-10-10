@@ -5,7 +5,7 @@
   "heroClass": "RUST",
   "rarity": "EPIC",
   "description": "Deal $9 damage to a minion and excess damage to adjacent ones.",
-  "targetSelection": "ENEMY_MINIONS",
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "ExcessDamageSpell",
     "value": 9,
