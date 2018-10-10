@@ -7,7 +7,13 @@
   "description": "Force an enemy minion to deal its damage to the minions next to it.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
-    "class": "custom.DamageAdjacentMinionsSpell"
+    "class": "DamageSpell",
+    "target": "ADJACENT_TO_TARGET",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "ATTACK",
+      "target": "TARGET"
+    }
   },
   "collectible": true,
   "set": "CLASSIC",

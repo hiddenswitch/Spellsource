@@ -21,7 +21,14 @@ import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Map;
 
-public class DiscoverDiscardSpell extends Spell {
+/**
+ * A spell that has the same interpretation of arguments as {@link net.demilich.metastone.game.spells.DiscardSpell},
+ * except the player chooses which cards to discard. Suitable for a {@link net.demilich.metastone.game.spells.aura.SpellOverrideAura}
+ * overriding a {@link net.demilich.metastone.game.spells.DiscardSpell}.
+ * <p>
+ * Implements Scepter of Sargeras.
+ */
+public final class DiscoverDiscardSpell extends Spell {
 
 	public static final int ALL_CARDS = -1;
 
@@ -80,9 +87,6 @@ public class DiscoverDiscardSpell extends Spell {
 					discardableCards.remove(realCard);
 				}
 			}
-
 		}
-
 	}
-
 }

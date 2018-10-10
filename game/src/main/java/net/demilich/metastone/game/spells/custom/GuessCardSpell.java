@@ -30,7 +30,7 @@ import static java.util.stream.Collectors.toSet;
  * <p>
  * Implements Curious Glimmerroot.
  */
-public class GuessCardSpell extends Spell {
+public final class GuessCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(GuessCardSpell.class);
 
