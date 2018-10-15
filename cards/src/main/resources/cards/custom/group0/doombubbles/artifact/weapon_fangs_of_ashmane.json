@@ -5,7 +5,7 @@
   "heroClass": "BROWN",
   "damage": 0,
   "durability": 3,
-  "rarity": "EPIC",
+  "rarity": "LEGENDARY",
   "description": "Your hero's attack is doubled. Can't attack heroes.",
   "collectible": true,
   "set": "CUSTOM",

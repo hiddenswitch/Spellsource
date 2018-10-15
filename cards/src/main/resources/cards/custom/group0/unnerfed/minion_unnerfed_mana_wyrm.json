@@ -1,6 +1,6 @@
 {
-  "name": "Mana Wyrm",
-  "baseManaCost": 2,
+  "name": "Unnerfed Mana Wyrm",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "BLUE",
   "baseAttack": 1,
@@ -19,6 +19,6 @@
     }
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

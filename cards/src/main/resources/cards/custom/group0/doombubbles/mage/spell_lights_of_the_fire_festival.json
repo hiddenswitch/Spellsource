@@ -1,0 +1,30 @@
+{
+  "name": "Lights of the Fire Festival",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "MAGE",
+  "rarity": "RARE",
+  "description": "All minions lose Stealth. Add a Fireball, Cinderstorm and Flame Geyser to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RemoveAttributeSpell",
+        "target": "ALL_MINIONS",
+        "attribute": "STEALTH"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_fireball",
+          "spell_cinderstorm",
+          "spell_flame_geyser"
+        ]
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

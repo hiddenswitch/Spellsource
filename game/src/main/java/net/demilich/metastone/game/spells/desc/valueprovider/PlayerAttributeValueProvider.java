@@ -44,6 +44,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return (int) player.getAttributeValue(Attribute.DAMAGE_THIS_TURN);
 			case SUPREMACIES_THIS_GAME:
 				return (int) player.getAttributeValue(Attribute.SUPREMACIES_THIS_GAME);
+			case LOCKED_MANA:
+				return player.getLockedMana();
 			default:
 				break;
 		}

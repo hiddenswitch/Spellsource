@@ -1,12 +1,12 @@
 {
-  "name": "Microtech Controller",
-  "baseManaCost": 3,
+  "name": "Unnerfed Giggling Inventor",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 1,
-  "rarity": "COMMON",
-  "description": "Battlecry: Summon two 1/1 Microbots.",
+  "rarity": "RARE",
+  "description": "Battlecry: Summon two 1/2 Mechs with Taunt and Divine Shield",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,12 +15,12 @@
         {
           "class": "SummonSpell",
           "boardPositionRelative": "RIGHT",
-          "card": "token_microbot"
+          "card": "minion_annoy-o-tron"
         },
         {
           "class": "SummonSpell",
           "boardPositionRelative": "LEFT",
-          "card": "token_microbot"
+          "card": "minion_annoy-o-tron"
         }
       ]
     }
@@ -29,6 +29,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "BOOMSDAY_PROJECT",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }
