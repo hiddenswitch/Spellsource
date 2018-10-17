@@ -13,10 +13,15 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "SwapAttackOnDeathrattleSpell"
+          "class": "SwapAttackSpell"
         },
         {
-          "class": "SwapAttackSpell"
+          "class": "AddDeathrattleSpell",
+          "target": "SELF",
+          "spell": {
+            "class": "SwapAttackSpell",
+            "target": "EVENT_TARGET"
+          }
         }
       ]
     }
