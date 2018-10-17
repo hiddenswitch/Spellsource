@@ -13,10 +13,10 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "SwapAttackSpell"
+          "class": "SwapAttackOnDeathrattleSpell"
         },
         {
-          "class": "SwapAttackOnDeathrattleSpell"
+          "class": "SwapAttackSpell"
         }
       ]
     }
