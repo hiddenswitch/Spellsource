@@ -26,7 +26,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "DEATHRATTLES": true,
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "CUSTOM",
