@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Poisonous. Both heroes have Stealth. Combo: Destroy all other minions.",
+  "description": "Both heroes have Stealth. Combo: Destroy all other minions.",
   "auras": [
     {
       "class": "AttributeAura",
@@ -30,8 +30,7 @@
     }
   },
   "attributes": {
-    "COMBO": true,
-    "POISONOUS": true
+    "COMBO": true
   },
   "collectible": true,
   "set": "CUSTOM",
