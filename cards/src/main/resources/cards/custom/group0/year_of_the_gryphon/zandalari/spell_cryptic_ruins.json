@@ -19,8 +19,8 @@
           "value": 3,
           "attribute": "BASE_MANA_COST",
           "cardType": "MINION",
-          "operation": "EQUAL"
-          "manaCost": {
+          "operation": "EQUAL",
+          "baseManaCost": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
@@ -36,8 +36,8 @@
           "value": 3,
           "attribute": "BASE_ATTACK",
           "cardType": "MINION",
-          "operation": "EQUAL"
-          "manaCost": {
+          "operation": "EQUAL",
+          "baseAttaack": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
@@ -53,8 +53,8 @@
           "value": 3,
           "attribute": "BASE_HP",
           "cardType": "MINION",
-          "operation": "EQUAL"
-          "manaCost": {
+          "operation": "EQUAL",
+          "baseHp": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
