@@ -1,10 +1,10 @@
 {
   "name": "Fang of Hethiss",
-  "baseManaCost": 5,
+  "baseManaCost": 3,
   "type": "WEAPON",
   "heroClass": "BLACK",
   "damage": 1,
-  "durability": 4,
+  "durability": 3,
   "rarity": "RARE",
   "description": "Battlecry: If 3 or more minions died this turn, gain Poisonous.",
   "battlecry": {
