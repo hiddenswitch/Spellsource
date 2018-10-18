@@ -13,13 +13,20 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "CopyCardSpell",
-      "target": "SELF",
-      "value": 3
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+        "class": "CopyCardSpell",
+        "target": "SELF",
+        "value": 3
+        },
+        {
+        "class": "AddAttributeSpell",
+        "attribute": "KEEPS_ENCHANTMENTS"
+        }
+      ]
     }
   },
-  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
