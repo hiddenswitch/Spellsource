@@ -16,11 +16,11 @@
           "class": "SwapAttackSpell"
         },
         {
-          "class": "AddDeathrattleSpell",
+          "class": "AddDeathrattleSecondaryAsTargetSpell",
+          "secondaryTarget": "TARGET",
           "target": "SELF",
           "spell": {
-            "class": "SwapAttackSpell",
-            "target": "EVENT_TARGET"
+            "class": "SwapAttackSpell"
           }
         }
       ]
