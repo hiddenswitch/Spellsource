@@ -15,8 +15,7 @@
       "card": "spell_wanted",
       "value": {
         "class": "EntityCounter",
-        "target": "ENEMY_MINIONS",
-        "multiplier": 1
+        "target": "ENEMY_MINIONS"
       }
     }
   },
