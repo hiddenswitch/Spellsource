@@ -23,12 +23,13 @@
     "spell": {
       "class": "AdjacentEffectSpell",
       "spell1": {
-        "class": "NullSpell"
+        "class": "AddAttributeSpell",
+        "target": "EVENT_TARGET",
+        "attribute": "COUNTERED"
       },
       "spell2": {
         "class": "RecastSpell",
-        "target": "SELF",
-        "secondaryTarget": "EVENT_SOURCE"
+        "target": "EVENT_TARGET"
       }
     }
   },
