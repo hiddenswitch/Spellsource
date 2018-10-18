@@ -1,0 +1,21 @@
+{
+  "name": "Dreadmire Hexxer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add three 0/3 Toads with Taunt to your hand.",
+  "battlecry": {
+    "class": "ReceiveCardSpell",
+    "value": 3,
+    "card": "token_toad"
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
