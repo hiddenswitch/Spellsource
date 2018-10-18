@@ -1,0 +1,27 @@
+{
+  "name": "Voodoo Hunting",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Deal $5 damage randomly split among all enemies.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ALL_MINIONS",
+    "value": 1,
+    "spell": {
+      "target": "EVENT_TARGET",
+      "class": "TriggerDeathrattleSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DEATHRATTLES",
+        "operation": "HAS"
+      }
+    },
+    "howMany": 4
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
