@@ -15,9 +15,19 @@
           "class": "SummonSpell"
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "operation": "EQUAL",
+          "class": "AndFilter",
+          "filters": [
+            {
+            "class": "CardFilter",
+            "cardType": "MINION"
+            },
+            {
+            "class": "AttributeFilter",
+            "value": 3,
+            "attribute": "BASE_MANA_COST",
+            "operation": "EQUAL"
+            }
+          ],
           "manaCost": {
             "class": "SpellDamageValueProvider",
             "offset": 3
@@ -30,9 +40,19 @@
           "class": "SummonSpell"
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "operation": "EQUAL",
+          "class": "AndFilter",
+          "filters": [
+            {
+            "class": "CardFilter",
+            "cardType": "MINION"
+            },
+            {
+            "class": "AttributeFilter",
+            "value": 3,
+            "attribute": "BASE_ATTACK",
+            "operation": "EQUAL"
+            }
+          ],
           "attack": {
             "class": "SpellDamageValueProvider",
             "offset": 3
@@ -45,9 +65,19 @@
           "class": "SummonSpell"
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "operation": "EQUAL",
+          "class": "AndFilter",
+          "filters": [
+            {
+            "class": "CardFilter",
+            "cardType": "MINION"
+            },
+            {
+            "class": "AttributeFilter",
+            "value": 3,
+            "attribute": "BASE_HP",
+            "operation": "EQUAL"
+            },
+          ],
           "hp": {
             "class": "SpellDamageValueProvider",
             "offset": 3
