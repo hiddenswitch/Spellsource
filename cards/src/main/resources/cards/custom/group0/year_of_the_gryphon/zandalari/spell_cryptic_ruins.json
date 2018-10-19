@@ -16,7 +16,6 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "baseManaCost": 3,
           "cardType": "MINION",
           "operation": "EQUAL",
           "manaCost": {
@@ -32,7 +31,6 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "baseAttack": 3,
           "cardType": "MINION",
           "operation": "EQUAL",
           "attack": {
@@ -48,7 +46,6 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "baseHp": 3,
           "cardType": "MINION",
           "operation": "EQUAL",
           "hp": {
