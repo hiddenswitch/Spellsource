@@ -16,11 +16,10 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "value": 3,
-          "attribute": "BASE_MANA_COST",
+          "baseManaCost": 3,
           "cardType": "MINION",
           "operation": "EQUAL",
-          "baseManaCost": {
+          "manaCost": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
@@ -33,11 +32,10 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "value": 3,
-          "attribute": "BASE_ATTACK",
+          "baseAttack": 3,
           "cardType": "MINION",
           "operation": "EQUAL",
-          "baseAttaack": {
+          "attack": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
@@ -50,11 +48,10 @@
         },
         "cardFilter": {
           "class": "CardFilter",
-          "value": 3,
-          "attribute": "BASE_HP",
+          "baseHp": 3,
           "cardType": "MINION",
           "operation": "EQUAL",
-          "baseHp": {
+          "hp": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
