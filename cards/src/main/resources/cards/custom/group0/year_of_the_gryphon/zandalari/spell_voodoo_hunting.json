@@ -7,19 +7,23 @@
   "description": "Deal $1 damage to a random minion and trigger its Deathrattle. Repeat 4 times.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MissilesSpell",
+    "class": "CastRepeatedlySpell",
     "target": "ALL_MINIONS",
-    "value": 1,
     "spell": {
-      "target": "EVENT_TARGET",
-      "class": "TriggerDeathrattleSpell",
-      "filter": {
-        "class": "AttributeFilter",
-        "attribute": "DEATHRATTLES",
-        "operation": "HAS"
-      }
-    },
-    "howMany": 5
+      "class": "MetaSpell",
+      "spells": [
+        {
+        "class": "TriggerDeathrattleSpell"
+        },
+        {
+        "class": "DamageSpell",
+        "value": 1
+        }
+      ]
+    },    
+    "exclusive": true,
+    "howMany": 5,
+    "randomTarget": true
   },
   "collectible": true,
   "set": "CUSTOM",
