@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "EPIC",
-  "description": "Deal $5 damage randomly split among all enemies.",
+  "description": "Deal $1 damage to a random minion and trigger its Deathrattle. Repeat 4 times.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",
@@ -19,7 +19,7 @@
         "operation": "HAS"
       }
     },
-    "howMany": 4
+    "howMany": 5
   },
   "collectible": true,
   "set": "CUSTOM",
