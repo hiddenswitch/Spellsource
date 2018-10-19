@@ -26,8 +26,12 @@
       ]
     }
   },
+  "deathrattle": {
+    "class": "NullSpell"
+  },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "CUSTOM",
