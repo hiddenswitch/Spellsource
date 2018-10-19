@@ -27,8 +27,7 @@
       },
       "spell2": {
         "class": "RecastSpell",
-        "target": "EVENT_TARGET",
-        "secondaryTarget": "SELF"
+        "target": "ADJACENT_MINIONS"
       }
     }
   },
