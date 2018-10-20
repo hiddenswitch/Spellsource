@@ -30,7 +30,7 @@
           },
           "spell2": {
             "class": "OverrideTargetSpell",
-            "target": "EVENT_TARGET"
+            "target": "OUTPUT"
           }
         }
       ]
