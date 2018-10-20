@@ -1,0 +1,31 @@
+{
+  "name": "Nazmiri Stalker Two",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Whenever you cast a spell on a minion, cast it on the ones next to it instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "target": "EVENT_TARGET",
+        "targetPlayer": "BOTH"
+      },
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "OverrideTargetSpell",
+      "target": "ADJACENT_MINIONS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
