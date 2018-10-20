@@ -21,8 +21,19 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "OverrideTargetSpell",
-      "target": "ADJACENT_MINIONS"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AdjacentEffectSpell",
+          "spell1": {
+            "class": "NullSpell"
+          },
+          "spell2": {
+            "class": "OverrideTargetSpell",
+            "target": "SELF"
+          }
+        }
+      ]
     }
   },
   "collectible": true,
