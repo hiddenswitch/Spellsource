@@ -10,10 +10,11 @@ Format: Standard
 2x Sorcerer's Apprentice
 2x Arcane Intellect
 2x Cinderstorm
-2x Counterspell
+1x Counterspell
 2x Explosive Runes
 2x Kirin Tor Mage
 1x Stargazer Luna
 2x Cosmic Anomaly
 2x Fireball
+1x Lifedrinker
 1x Aluneth

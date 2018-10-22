@@ -22,7 +22,7 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "RecastSpell",
+      "class": "PlayCardsSpell",
       "target": "SELF",
       "secondaryTarget": "EVENT_SOURCE"
     }

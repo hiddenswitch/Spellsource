@@ -12,7 +12,7 @@
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
-        "class": "RecastSpell"
+        "class": "PlayCardsSpell"
       },
       "cards": [
         "spell_swindler_common",

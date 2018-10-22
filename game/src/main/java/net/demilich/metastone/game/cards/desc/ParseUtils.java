@@ -7,10 +7,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.cards.CardDescType;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -162,7 +159,7 @@ public class ParseUtils {
 				return EntityReference.MINIONS_TO_RIGHT;
 			case "friendly_deck":
 				return EntityReference.FRIENDLY_DECK;
-				case "friendly_deck_from_top":
+			case "friendly_deck_from_top":
 				return EntityReference.FRIENDLY_DECK_FROM_TOP;
 			case "friendly_top_card":
 				return EntityReference.FRIENDLY_TOP_CARD;
@@ -349,6 +346,8 @@ public class ParseUtils {
 				return new Secret(secretEnchantmentDesc, null);
 			case CARD_COST_MODIFIER:
 				return manaModifierParser.innerDeserialize(ctxt, jsonData);
+			case CHOOSE_ONE_OVERRIDE:
+				return Enum.valueOf(ChooseOneOverride.class, jsonData.asText());
 			default:
 				break;
 		}

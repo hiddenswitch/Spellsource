@@ -18,7 +18,13 @@ import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.stream.Stream;
 
-public class HeroPowerToSpellSpell extends Spell {
+/**
+ * Turns a hero power into a spell card. Finds the {@link HeroPowerSpell} specified on the card, regardless if it is a
+ * passive hero power or not.
+ * <p>
+ * Implements Little Helper.
+ */
+public final class HeroPowerToSpellSpell extends Spell {
 
 	@Override
 	@Suspendable

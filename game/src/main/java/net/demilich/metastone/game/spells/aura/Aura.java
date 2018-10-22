@@ -3,9 +3,11 @@ package net.demilich.metastone.game.spells.aura;
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.BoardChangedEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
@@ -27,24 +29,40 @@ import java.util.*;
  * Auras represent ongoing effects applied to certain entities and is updated whenever (1) the board changes, (2) a
  * sequence ends, (3) a special secondary trigger is fired, or (4) a condition is changed during these earlier events.
  * <p>
+ * Because auras evaluate which entities they affect on board changes and sequence endings, they aren't affecting
+ * entities the moment they "come into play" (are attached to a host that is {@link Entity#isInPlay()}). However, since
+ * a {@link BoardChangedEvent} is fired right after a minion is put on the {@link Zones#BATTLEFIELD} during a {@link
+ * net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Card, int, boolean)} call, in practice auras come
+ * into play immediately. Specifically, a minion with an aura written on it will not be affecting entities by the {@link
+ * net.demilich.metastone.game.events.BeforeSummonEvent} event, but only by the first {@link BoardChangedEvent} (which
+ * comes before any battlecries are resolved or before control is given back to the player).
+ * <p>
  * Auras have the following format (corresponding to {@link AuraDesc}):
  * <pre>
  *   {
  *                "class": An Aura class. When the class is Aura, the apply and remove effects below are used. Otherwise,
  *                         for classes like BuffAura, the apply and remove effects are provided by the class.
  *               "target": An {@link EntityReference} for all the entities affected by this aura
- *               "filter": A filter on those entities
+ *               "filter": A filter on those entities. Evaluated against every {@code target} entity in the
+ *                         {@code "target"} specified.
  *          "applyEffect": A {@link SpellDesc} that corresponds to the spell to cast on a given entity when it transitions
- *                         from being affected to unaffected by this aura.
+ *                         from being unaffected to affected by this aura. The {@code target} is the entity newly under
+ *                         the influence of the aura and {@code source} is the {@link EntityReference#TRIGGER_HOST} /
+ *                         host of the aura.
  *         "removeEffect": A {@link SpellDesc} that corresponds to the spell to cast on an entity when it was previously
- *                         affected and it is now transitioning into not being affected.
+ *                         affected and it is now transitioning into not being affected. The {@code target} is the
+ *                         entity newly under the influence of the aura and {@code source} is the
+ *                         {@link EntityReference#TRIGGER_HOST} / host of the aura.
  *            "condition": A condition that is evaluated whenever the {@link BoardChangedEvent} is raised; the
  *                         {@link WillEndSequenceEvent} is raised; or "secondaryTrigger" is fired, against every entity that
  *                         could be or currently is affected by this aura. When the condition is true, the entity that is
  *                         affected remains affected; the entity that could not be affected is affected. When false, the entity
  *                         that is affected stops being affected, and an entity that is not yet affected will still not be
- *                         affected.
- *     "secondaryTrigger": Another trigger that, when fired, will cause this aura to reevaluate which entities are affected.
+ *                         affected. {@code target} in the condition will be the entity, and {@code source} will be the
+ *                         {@link EntityReference#TRIGGER_HOST} / host of the aura.
+ *     "secondaryTrigger": Another trigger that, when fired, will cause this aura to reevaluate which entities are
+ *                         affected. {@link EntityReference#EVENT_TARGET} will correspond to the
+ *                         {@link GameEvent#getTarget()} processed by that trigger.
  *   }
  * </pre>
  * <p>

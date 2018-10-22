@@ -1,0 +1,19 @@
+Name: Combo Priest
+Class: Priest
+Format: Standard
+2x Circle of Healing
+2x Silence
+2x Inner Fire
+2x Northshire Cleric
+2x Power Word: Shield
+2x Divine Spirit
+2x Radiant Elemental
+2x Shadow Ascendant
+2x Shadow Visions
+2x Upgradeable Framebot
+2x Wild Pyromancer
+2x Acolyte of Pain
+2x Bronze Gatekeeper
+1x Mass Dispel
+2x Unpowered Steambot
+1x Lyra the Sunshard

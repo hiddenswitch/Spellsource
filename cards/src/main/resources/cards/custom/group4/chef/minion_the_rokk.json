@@ -14,7 +14,7 @@
       "targetEntityType": "MINION"
     },
     "spell": {
-      "class": "RecastSpell",
+      "class": "PlayCardsSpell",
       "target": "ADJACENT_TO_TARGET",
       "secondaryTarget": "EVENT_SOURCE"
     }

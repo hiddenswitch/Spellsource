@@ -13,6 +13,12 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
+/**
+ * Noggenfogger auras override the target acquisitions of both players whenever {@link #getValidTargets(GameContext,
+ * TargetAcquisitionEvent)} returns a non-empty list of entities.
+ * <p>
+ * This aura's {@code getValidTargets} method can be overridden to support other kinds of retargeting.
+ */
 public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
@@ -40,6 +46,15 @@ public class NoggenfoggerAura extends Aura {
 	}
 
 
+	/**
+	 * Based on the specified target acquisition event, override the target to a random one from the list returned by this
+	 * method. If the targets are empty, no override occurs.
+	 *
+	 * @param context The context
+	 * @param event   The event
+	 * @return A {@link List<Entity>} of entities to choose randomly from, or an empty list if there are no valid targets
+	 * 		/ an override should not occur.
+	 */
 	protected List<Entity> getValidTargets(GameContext context, TargetAcquisitionEvent event) {
 		List<Entity> validTargets;
 		if (event.getAction().getActionType() == ActionType.PHYSICAL_ATTACK) {

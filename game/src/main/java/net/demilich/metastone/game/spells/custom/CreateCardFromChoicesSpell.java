@@ -21,7 +21,10 @@ import net.demilich.metastone.game.utils.Attribute;
 import java.util.Collection;
 import java.util.Map;
 
-public class CreateCardFromChoicesSpell extends Spell {
+/**
+ * Creates a card from a sequence of discovers.
+ */
+public final class CreateCardFromChoicesSpell extends Spell {
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(CreateCardFromChoicesSpell.class);
 		return new SpellDesc(arguments);

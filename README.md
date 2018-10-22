@@ -21,9 +21,10 @@ Please see the Issues tab to report bugs or request functionality.
  4. [Quick Start Multiplayer](#quick-start-multiplayer)
  5. [Quick Start Contributing Cards](#quick-start-contributing-cards)
  6. [Using the Command Line Simulator](#using-the-command-line-simulator)
- 7. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
- 8. [Troubleshooting](#troubleshooting)
- 9. [Contributing Cards](#contributing-cards)
+ 7. [Automated Deckbuilding FAQ](#automated-deckbuilding-faq)
+ 8. [Getting started with Development on Windows](#getting-started-with-development-on-windows)
+ 9. [Troubleshooting](#troubleshooting)
+ 10. [Contributing Cards](#contributing-cards)
 
 ### Description
 
@@ -84,6 +85,10 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
 
  1. Build the `cluster` shadow JAR: `./gradlew cluster:shadowJar`.
  2. Execute the simulator with `java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Simulate`. Read the help there.
+ 
+### Automated Deckbuilding FAQ
+ 
+Visit the [Cluster README](cluster/README.md) for some theory on automated deckbuilding and useful scripts and extensions for performing it with Spellsource.
  
 ### Getting started with Development on Windows
 

@@ -27,7 +27,7 @@
       "spell2": {
         "class": "DiscoverSpell",
         "spell": {
-          "class": "RecastSpell"
+          "class": "PlayCardsSpell"
         },
         "cards": [
           "spell_receive_mage_secret",
