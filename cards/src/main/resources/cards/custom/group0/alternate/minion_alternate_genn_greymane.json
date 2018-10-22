@@ -8,7 +8,7 @@
   "rarity": "LEGENDARY",
   "description": "Start of Game: If your deck has only even-Cost cards, your Hero Power costs (1) less this game.",
   "collectible": true,
-  "set": "ALTERNATE",
+  "set": "ALTERNATIVE",
   "fileFormatVersion": 1,
   "gameTriggers": [
     {

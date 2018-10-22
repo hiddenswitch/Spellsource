@@ -93,9 +93,39 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							BATTLE_FOR_ASHENVALE,
-							ALTERNATE,
 							SANDS_OF_TIME,
 							HALL_OF_FAME,
+							CardSet.CUSTOM
+					))
+			);
+
+	public static final DeckFormat GREATER_CUSTOM = new DeckFormat()
+			.withName("Greater Custom")
+			.withCardSets(
+					Collections.unmodifiableSet(EnumSet.of(
+							BASIC,
+							CLASSIC,
+							REWARD,
+							PROMO,
+							NAXXRAMAS,
+							GOBLINS_VS_GNOMES,
+							BLACKROCK_MOUNTAIN,
+							THE_GRAND_TOURNAMENT,
+							LEAGUE_OF_EXPLORERS,
+							THE_OLD_GODS,
+							ONE_NIGHT_IN_KARAZHAN,
+							MEAN_STREETS_OF_GADGETZAN,
+							JOURNEY_TO_UNGORO,
+							KNIGHTS_OF_THE_FROZEN_THRONE,
+							KOBOLDS_AND_CATACOMBS,
+							WITCHWOOD,
+							BOOMSDAY_PROJECT,
+							BATTLE_FOR_ASHENVALE,
+							SANDS_OF_TIME,
+							HALL_OF_FAME,
+							ALTERNATIVE,
+							UNNERFED,
+							BLIZZARD_ADVENTURE,
 							CardSet.CUSTOM
 					))
 			);
@@ -138,6 +168,7 @@ public class DeckFormat implements Serializable, Cloneable {
 			CUSTOM,
 			PAST,
 			SPELLSOURCE,
+			GREATER_CUSTOM,
 			ALL)
 			.collect(Collectors.toMap(DeckFormat::getName, Function.identity())));
 
@@ -154,6 +185,8 @@ public class DeckFormat implements Serializable, Cloneable {
 				return SPELLSOURCE;
 			case "past":
 				return PAST;
+			case "greater custom":
+				return GREATER_CUSTOM;
 			case "custom":
 			default:
 				return CUSTOM;

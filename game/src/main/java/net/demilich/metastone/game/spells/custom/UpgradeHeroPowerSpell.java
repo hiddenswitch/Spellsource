@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
+import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -17,21 +18,11 @@ import java.util.List;
 public class UpgradeHeroPowerSpell extends ChangeHeroPowerSpell {
 
 	@Override
+	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
-		boolean alternate = desc.getBool(SpellArg.EXCLUSIVE);
 		Card heroPower = player.getHeroPowerZone().get(0);
 		if (heroPower.getDesc().heroPower != null) {
-			String cardId = heroPower.getDesc().heroPower;
-			if (alternate) {
-				try {
-					String alternateCardId = cardId.replace("hero_power_", "hero_power_alternate_");
-					context.getCardById(alternateCardId);
-					//if it doesn't find the alternate card it won't go past here
-					cardId = alternateCardId;
-				} catch (NullPointerException e) {
-				}
-			}
-			desc = desc.addArg(SpellArg.CARD, cardId);
+			desc = desc.addArg(SpellArg.CARD, heroPower.getDesc().heroPower);
 			super.cast(context, player, desc, source, targets);
 		}
 	}

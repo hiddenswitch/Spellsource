@@ -82,8 +82,7 @@ public class DraftLogic {
 				CardSet.BOOMSDAY_PROJECT,
 				CardSet.KOBOLDS_AND_CATACOMBS,
 				CardSet.BATTLE_FOR_ASHENVALE,
-				CardSet.SANDS_OF_TIME,
-				CardSet.ALTERNATE
+				CardSet.SANDS_OF_TIME
 		);
 
 		// Until we have enough mean streets cards, don't use it
@@ -171,7 +170,7 @@ public class DraftLogic {
 						// Include the other two custom sets for now
 						format.addSet(CardSet.BATTLE_FOR_ASHENVALE);
 						format.addSet(CardSet.SANDS_OF_TIME);
-						format.addSet(CardSet.ALTERNATE);
+						format.addSet(CardSet.ALTERNATIVE);
 					}
 					format.withCardSets(latestExpansion);
 				} else {
