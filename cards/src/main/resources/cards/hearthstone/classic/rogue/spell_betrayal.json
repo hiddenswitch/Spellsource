@@ -11,8 +11,8 @@
     "target": "ADJACENT_TO_TARGET",
     "value": {
       "class": "AttributeValueProvider",
-      "attribute": "ATTACK",
-      "target": "TARGET"
+      "target": "TARGET",
+      "attribute": "ATTACK"
     }
   },
   "collectible": true,

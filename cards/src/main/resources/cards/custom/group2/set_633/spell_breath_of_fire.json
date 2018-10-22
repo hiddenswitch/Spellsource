@@ -8,19 +8,41 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "PERMANENT"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "IMMUNE"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "AURA_IMMUNE"
+          }
+        ],
+        "invert": true
+      }
+    },
     "spells": [
-      {
-        "class": "DamageSpell",
-        "target": "ENEMY_HERO",
-        "value": {
-          "class": "EntityCounter",
-          "target": "ENEMY_MINIONS"
-        }
-      },
       {
         "class": "DamageSpell",
         "target": "ENEMY_MINIONS",
         "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
       }
     ]
   },

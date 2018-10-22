@@ -51,6 +51,21 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBreathOfFire() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion damaged = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			playMinionCard(context, opponent, "minion_immune_test");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "spell_breath_of_fire");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertFalse(damaged.isDestroyed());
+			assertEquals(damaged.getHp(), damaged.getMaxHp() - 1);
+		});
+	}
+
+	@Test
 	public void testCromwell() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "spell_the_coin");
