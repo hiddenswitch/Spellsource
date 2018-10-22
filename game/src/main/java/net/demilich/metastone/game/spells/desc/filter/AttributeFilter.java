@@ -20,13 +20,13 @@ public class AttributeFilter extends EntityFilter {
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
 		Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
-		Operation operation = (Operation) getDesc().get(EntityFilterArg.OPERATION);
+		ComparisonOperation operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
 
 		if (operation == null) {
-			operation = Operation.HAS;
+			operation = ComparisonOperation.HAS;
 		}
 
-		if (operation == Operation.HAS) {
+		if (operation == ComparisonOperation.HAS) {
 			return entity.hasAttribute(attribute);
 		}
 

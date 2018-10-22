@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Deal $3 damage. If the target was Frozen, Un-Freeze it and deal *6* damage instead.",
+  "description": "Deal $3 damage. If the target was Frozen, Un-Freeze it and deal $6 damage instead.",
   "targetSelection": "ANY",
   "spell": {
     "class": "EitherOrSpell",

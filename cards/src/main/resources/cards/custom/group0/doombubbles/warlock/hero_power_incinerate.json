@@ -1,0 +1,27 @@
+{
+  "name": "Incinerate",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "Deal 2 damage and take 2 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "DamageSpell",
+        "value": 2,
+        "target": "FRIENDLY_HERO"
+      }
+    ]
+  },
+  "heroPower": "hero_power_conflagrate",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

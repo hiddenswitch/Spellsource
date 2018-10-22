@@ -10,7 +10,7 @@ import java.util.Map;
 
 public class ManaCostFilter extends EntityFilter {
 
-	public static ManaCostFilter create(int manaCost, Operation operation) {
+	public static ManaCostFilter create(int manaCost, ComparisonOperation operation) {
 		Map<EntityFilterArg, Object> arguments = new EntityFilterDesc(ManaCostFilter.class);
 		arguments.put(EntityFilterArg.VALUE, manaCost);
 		arguments.put(EntityFilterArg.OPERATION, operation);
@@ -25,7 +25,7 @@ public class ManaCostFilter extends EntityFilter {
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		Card card = entity.getSourceCard();
 		int mana = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, host, 0);
-		Operation operation = (Operation) getDesc().get(EntityFilterArg.OPERATION);
+		ComparisonOperation operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
 		int actualValue = context.getLogic().getModifiedManaCost(player, card);
 		return SpellUtils.evaluateOperation(operation, actualValue, mana);
 	}

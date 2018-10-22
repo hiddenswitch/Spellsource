@@ -5,7 +5,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.desc.filter.Operation;
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 
@@ -32,8 +32,8 @@ public class AttributeCondition extends Condition {
 		}
 
 		Attribute attribute = (Attribute) desc.get(ConditionArg.ATTRIBUTE);
-		Operation operation = (Operation) desc.get(ConditionArg.OPERATION);
-		if (operation == null || operation == Operation.HAS) {
+		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
+		if (operation == null || operation == ComparisonOperation.HAS) {
 			return entity.hasAttribute(attribute);
 		}
 
