@@ -76,6 +76,6 @@
     "RESERVED_INTEGER_1": 0
   },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

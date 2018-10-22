@@ -11,7 +11,7 @@
     "CHARGE": true,
     "DIVINE_SHIELD": true
   },
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

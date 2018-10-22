@@ -40,7 +40,7 @@ public class GainStatsOfHighestCostMinionSpell extends BuffSpell {
 
 		final EntityFilter highestCostFilter = AndFilter.create(
 				CardFilter.create(CardType.MINION),
-				ManaCostFilter.create(highestCost, Operation.EQUAL)
+				ManaCostFilter.create(highestCost, ComparisonOperation.EQUAL)
 		);
 
 		final CardSource handSource = HandSource.create();

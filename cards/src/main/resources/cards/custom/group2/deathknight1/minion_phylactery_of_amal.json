@@ -25,10 +25,6 @@
               {
                 "class": "EquipWeaponSpell",
                 "card": "weapon_cold_embrace"
-              },
-              {
-                "class": "OverrideTargetSpell",
-                "target": "OUTPUT"
               }
             ]
           },

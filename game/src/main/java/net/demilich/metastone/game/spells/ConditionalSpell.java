@@ -19,6 +19,9 @@ import org.slf4j.LoggerFactory;
  * invocation's {@code target}. This means that, for example, an {@link net.demilich.metastone.game.spells.desc.condition.IsDeadCondition}
  * will be evaluated against the target of this spell.
  * <p>
+ * If a {@link SpellArg#SPELL} is specified and {@link SpellArg#EXCLUSIVE} is {@code true}, that spell is cast if
+ * <b>none</b> of the other conditions are met.
+ * <p>
  * For <b>example</b>, this spell implements, "If you're holding a Dragon, deal 3 damage to all minions":
  * <pre>
  *     {
@@ -91,7 +94,7 @@ public class ConditionalSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.SPELLS, SpellArg.CONDITIONS, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.SPELLS, SpellArg.CONDITIONS, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
 		// case 1 - only one condition
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		if (condition != null) {
@@ -105,10 +108,15 @@ public class ConditionalSpell extends Spell {
 		// case 2 - multiple conditions and multiple spells
 		Condition[] conditions = (Condition[]) desc.get(SpellArg.CONDITIONS);
 		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
+		boolean anyMet = false;
 		for (int i = 0; i < conditions.length; i++) {
 			if (conditions[i].isFulfilled(context, player, source, target)) {
+				anyMet = true;
 				SpellUtils.castChildSpell(context, player, spells[i], source, target);
 			}
+		}
+		if (!anyMet && desc.getBool(SpellArg.EXCLUSIVE) && desc.containsKey(SpellArg.SPELL)) {
+			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, target);
 		}
 	}
 

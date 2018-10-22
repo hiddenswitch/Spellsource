@@ -1,12 +1,12 @@
 {
   "name": "Gorefang",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "WEAPON",
   "heroClass": "BLACK",
-  "damage": 6,
+  "damage": 5,
   "durability": 1,
   "rarity": "LEGENDARY",
-  "description": "After your hero attacks, gain Stealth until your next turn.",
+  "description": "After your hero attacks, you gain Stealth until your next turn.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

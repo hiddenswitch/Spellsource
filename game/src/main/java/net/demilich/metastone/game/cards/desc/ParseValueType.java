@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 
 /**
@@ -75,7 +76,7 @@ public enum ParseValueType {
 	 */
 	CARD_LOCATION,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.spells.desc.filter.Operation} enum.
+	 * A string matching the name of a {@link ComparisonOperation} enum.
 	 */
 	OPERATION,
 	/**

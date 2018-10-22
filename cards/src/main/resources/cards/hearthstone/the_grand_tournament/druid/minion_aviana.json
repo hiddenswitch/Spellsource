@@ -1,6 +1,6 @@
 {
   "name": "Aviana",
-  "baseManaCost": 9,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "BROWN",
   "baseAttack": 5,

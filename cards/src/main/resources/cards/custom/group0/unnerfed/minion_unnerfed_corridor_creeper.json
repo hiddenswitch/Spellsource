@@ -19,8 +19,8 @@
       "attribute": "RESERVED_INTEGER_1"
     }
   },
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "set": "UNNERFED",
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "AttributeValueProvider",

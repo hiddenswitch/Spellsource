@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "LEGENDARY",
-  "description": "Replace your deck with an endless source of random Mage cards.",
+  "description": "Replace your deck with an endless source of random Mage spells.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -37,7 +37,8 @@
             },
             "cardFilter": {
               "class": "CardFilter",
-              "heroClass": "BLUE"
+              "heroClass": "BLUE",
+              "cardType": "SPELL"
             },
             "targetPlayer": "SELF"
           }

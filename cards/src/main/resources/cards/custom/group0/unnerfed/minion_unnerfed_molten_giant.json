@@ -7,8 +7,8 @@
   "baseHp": 10,
   "rarity": "EPIC",
   "description": "Costs (1) less for each damage your hero has taken.",
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "set": "UNNERFED",
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "AlgebraicValueProvider",

@@ -84,15 +84,15 @@ public final class CardFilter extends EntityFilter {
 
 		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
 			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
-			Operation operation = null;
+			ComparisonOperation operation = null;
 			if (getDesc().containsKey(EntityFilterArg.OPERATION)) {
-				operation = (Operation) getDesc().get(EntityFilterArg.OPERATION);
+				operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
 			}
 			if (!getDesc().containsKey(EntityFilterArg.OPERATION)
 					&& getDesc().containsKey(EntityFilterArg.VALUE)) {
-				operation = Operation.EQUAL;
+				operation = ComparisonOperation.EQUAL;
 			}
-			if (operation == Operation.HAS || operation == null) {
+			if (operation == ComparisonOperation.HAS || operation == null) {
 				return card.hasAttribute(attribute);
 			}
 

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon two 1/1 Skeletons.",
+  "description": "Battlecry: Summon two 1/1 Microbots.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
