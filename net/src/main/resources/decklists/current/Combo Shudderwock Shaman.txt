@@ -3,8 +3,8 @@ Class: Shaman
 Format: Standard
 1x Earth Shock
 2x Glacial Shard
-1x Prince Keleseth
-2x Acolyte of Pain
+2x Wild Pyromancer
+1x Acolyte of Pain
 1x Electra Stormsurge
 2x Far Sight
 1x Gluttonous Ooze

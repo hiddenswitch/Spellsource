@@ -4,18 +4,17 @@ Format: Standard
 2x Argent Squire
 2x Cold Blood
 2x Deadly Poison
+2x Dire Mole
 2x Fire Fly
-1x Mecharoo
 2x Southsea Deckhand
 2x Blood Knight
+1x Edwin VanCleef
 2x Hench-Clan Thug
 2x SI:7 Agent
-1x Vicious Fledgling
-2x Void Ripper
-1x Captain Greenskin
-1x Cobalt Scalebane
+2x Tar Creeper
 2x Fungalmancer
 2x Giggling Inventor
+1x Leeroy Jenkins
 1x Myra's Unstable Element
 2x Vilespine Slayer
 1x Baku the Mooneater
