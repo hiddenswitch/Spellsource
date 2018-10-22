@@ -109,7 +109,7 @@ public class Spellsource {
 									mongo().createCollection(DRAFTS);
 								}
 							} finally {
-								logger.info("add MigrationRequest 11: Collections created added if possible");
+								logger.info("add MigrationRequest 1: Collections created added if possible");
 							}
 
 
@@ -119,7 +119,7 @@ public class Spellsource {
 								mongo().createIndex(INVENTORY, json("collectionIds", 1));
 								mongo().createIndex(INVENTORY, json("cardDesc.id", 1));
 							} finally {
-								logger.info("add MigrationRequest 11: Indices added if possible");
+								logger.info("add MigrationRequest 1: Indices added if possible");
 							}
 
 
@@ -236,7 +236,7 @@ public class Spellsource {
 								);
 
 								String userId = jo.getString("_id");
-								logger.debug("add MigrationRequest 5: Migrating passwords and emails for userId {}", userId);
+								logger.debug("add MigrationRequest 6: Migrating passwords and emails for userId {}", userId);
 
 								Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId),
 										updateCommand);
@@ -248,7 +248,7 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							MongoClientUpdateResult result1 = changeCardId("spell_temporary_anomaly", "spell_temporal_anomaly");
 							MongoClientUpdateResult result2 = changeCardId("minion_doomlord", "minion_dreadlord");
-							logger.info("add MigrationRequest 6: Fixed {} Temporal Anomaly cards, {} Dreadlord cards", result1.getDocModified(), result2.getDocModified());
+							logger.info("add MigrationRequest 7: Fixed {} Temporal Anomaly cards, {} Dreadlord cards", result1.getDocModified(), result2.getDocModified());
 						}))
 				.add(new MigrationRequest()
 						.withVersion(8)
@@ -308,19 +308,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(10)
 						.withUp(thisVertx -> {
-							// Refresh the bot decks
-							List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("decks", 1)));
-							for (JsonObject bot : bots) {
-								for (Object obj : bot.getJsonArray("decks")) {
-									String deckId = (String) obj;
-									Decks.deleteDeck(DeckDeleteRequest.create(deckId));
-								}
-								for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
-									if (req.getFormat().equals("Standard")) {
-										Decks.createDeck(req.withUserId(bot.getString("_id")));
-									}
-								}
-							}
+							Bots.updateBotDeckList();
 						}))
 				.add(new MigrationRequest()
 						.withVersion(11)
@@ -398,7 +386,12 @@ public class Spellsource {
 									"wins", 0, "totalGames", 0
 							)), new UpdateOptions().setMulti(true));
 						}))
-				.migrateTo(20, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(21)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(21, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

@@ -1,0 +1,24 @@
+Name: Even Paladin
+Class: Paladin
+Format: Standard
+1x Acidic Swamp Ooze
+2x Amani Berserker
+1x Crystalsmith Kangor
+2x Equality
+1x Hydrologist
+2x Wild Pyromancer
+2x Blessing of Kings
+2x Consecration
+2x Corpsetaker
+2x Saronite Chain Gang
+1x The Glass Knight
+2x Truesilver Champion
+1x Avenging Wrath
+1x Genn Greymane
+1x Mossy Horror
+2x Spikeridged Steed
+1x Sunkeeper Tarim
+1x Val'anyr
+1x Windfury Harpy
+1x Dinosize
+1x The Lich King

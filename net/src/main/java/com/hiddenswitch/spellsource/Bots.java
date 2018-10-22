@@ -4,6 +4,7 @@ import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.github.fromage.quasi.strands.Strand;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
@@ -13,6 +14,7 @@ import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.Vertx;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
@@ -29,6 +31,7 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
@@ -177,5 +180,28 @@ public interface Bots {
 	 */
 	static long getDefaultBotThinkingDelay() {
 		return Long.parseLong(System.getenv().getOrDefault("SPELLSOURCE_BOT_THINKING_DELAY", System.getProperty("spellsource.bots.thinking_delay", "0")));
+	}
+
+	/**
+	 * Updates the bot's decks to be the latest in the standard decks directory.
+	 *
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
+	@Suspendable
+	static void updateBotDeckList() throws SuspendExecution, InterruptedException {
+		// Refresh the bot decks
+		List<JsonObject> bots = mongo().findWithOptions(Accounts.USERS, json("bot", true), new FindOptions().setFields(json("decks", 1)));
+		for (JsonObject bot : bots) {
+			for (Object obj : bot.getJsonArray("decks")) {
+				String deckId = (String) obj;
+				Decks.deleteDeck(DeckDeleteRequest.create(deckId));
+			}
+			for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
+				if (req.getFormat().equals("Standard")) {
+					Decks.createDeck(req.withUserId(bot.getString("_id")));
+				}
+			}
+		}
 	}
 }

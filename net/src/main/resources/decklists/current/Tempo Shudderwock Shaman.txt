@@ -2,21 +2,21 @@ Name: Tempo Shudderwock Shaman
 Class: Shaman
 Format: Standard
 2x Fire Fly
-2x Lightning Bolt
 2x Unstable Evolution
 1x Prince Keleseth
-1x Electra Stormsurge
 1x Gluttonous Ooze
 2x Lightning Storm
 2x Mind Control Tech
 2x Tar Creeper
+2x Corpsetaker
 2x Hex
 2x Saronite Chain Gang
 2x Fungalmancer
 2x Giggling Inventor
 1x Thrall, Deathseer
+1x Zilliax
 2x Corridor Creeper
+1x Al'Akir the Windlord
 1x Hagatha the Witch
-1x Kalimos, Primal Lord
 1x The Lich King
 1x Shudderwock

@@ -5,18 +5,20 @@ Format: Standard
 2x Kobold Librarian
 2x Defile
 2x Demonic Project
-2x Doomsayer
+1x Doomsayer
 2x Gnomeferatu
-2x Vulgar Homunculus
+1x Gluttonous Ooze
 1x Ironbeak Owl
 2x Stonehill Defender
 2x Hellfire
 2x Lesser Amethyst Spellstone
 2x Shroom Brewer
-1x Big Game Hunter
-2x Giggling Inventor
+1x Rotten Applebaum
+1x Skull of the Man'ari
+1x Rin, the First Disciple
 1x Siphon Soul
+1x Skulking Geist
 1x Lord Godfrey
 1x Twisting Nether
-1x Voidlord
+2x Voidlord
 1x Bloodreaver Gul'dan
