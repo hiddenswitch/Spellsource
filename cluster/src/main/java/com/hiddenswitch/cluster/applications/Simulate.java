@@ -22,18 +22,7 @@ import java.util.stream.Stream;
 
 public class Simulate {
 
-	/**
-	 * Sets the default logging level to ERROR to prevent slow log printing.
-	 */
-	private static void setLogLevelToError() {
-		ch.qos.logback.classic.Logger root = (ch.qos.logback.classic.Logger)
-				LoggerFactory.getLogger(ch.qos.logback.classic.Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
-	}
-
 	public static void main(String[] args) {
-		setLogLevelToError();
-
 		// Configure the simulation from the command line
 		final SimulationConfig simulationConfig = new SimulationConfig().fromCommandLine(args);
 
