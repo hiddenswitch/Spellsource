@@ -11,11 +11,11 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "AddDeathrattleSecondaryAsTargetSpell",
-      "secondaryTarget": "TARGET",
       "target": "SELF",
       "spell": {
         "class": "DestroySpell"
-      }
+      },
+      "secondaryTarget": "TARGET"
     }
   },
   "deathrattle": {

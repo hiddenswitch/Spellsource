@@ -18,13 +18,13 @@
         },
         {
           "class": "AddEnchantmentSpell",
-          "card": "enchantment_frozen_deck",
-          "target": "FRIENDLY_PLAYER"
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_frozen_deck"
         },
         {
           "class": "AddEnchantmentSpell",
-          "card": "enchantment_frozen_deck",
-          "target": "ENEMY_PLAYER"
+          "target": "ENEMY_PLAYER",
+          "card": "enchantment_frozen_deck"
         }
       ]
     }
