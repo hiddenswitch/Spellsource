@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReplayCardsSpell",
+      "class": "PlayCardsRandomlySpell",
       "cardFilter": {
         "class": "AndFilter",
         "filters": [

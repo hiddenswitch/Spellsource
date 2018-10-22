@@ -10,7 +10,12 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "DestroyOnDeathrattleSpell"
+      "class": "AddDeathrattleSecondaryAsTargetSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "DestroySpell"
+      },
+      "secondaryTarget": "TARGET"
     }
   },
   "deathrattle": {

@@ -12,13 +12,15 @@ import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 /**
- * Recasts the specified {@link SpellArg#CARD} or the card targeted by {@link SpellArg#SECONDARY_TARGET} onto the {@code
- * target}.
+ * Casts the specified {@link SpellArg#CARD} or the card targeted by {@link SpellArg#SECONDARY_TARGET} onto the {@code
+ * target}. Currently only tested with spell cards.
+ * <p>
+ * To cast a choose one spell card, cast the choice card.
  * <p>
  * For example, to cast Inner Fire on every minion in your deck:
  * <pre>
  *   {
- *     "class": "RecastSpell",
+ *     "class": "PlayCardsSpell",
  *     "card": "spell_inner_fire",
  *     "target": "FRIENDLY_DECK",
  *     "filter": {
@@ -28,7 +30,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  *   }
  * </pre>
  */
-public class RecastSpell extends Spell {
+public class PlayCardsSpell extends Spell {
 
 	@Override
 	@Suspendable

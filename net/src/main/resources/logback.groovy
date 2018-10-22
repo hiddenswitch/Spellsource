@@ -11,16 +11,22 @@
 //   http://www.qos.ch/shop/products/professionalSupport
 
 import ca.pjer.logback.AwsLogsAppender
+import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.PatternLayout
-import ch.qos.logback.classic.boolex.OnMarkerEvaluator
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.filter.ThresholdFilter
-import ch.qos.logback.core.filter.EvaluatorFilter
 
 import static ch.qos.logback.classic.Level.*
 
 def date = timestamp("yyyyMMdd")
 def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
+Level defaultLevel = null;
+
+if (System.getenv("SPELLSOURCE_LOGGING_LEVEL")) {
+    defaultLevel = Level.valueOf(System.getenv("SPELLSOURCE_LOGGING_LEVEL"))
+} else {
+    defaultLevel = WARN;
+}
 
 if (isAWS) {
     appender("ASYNC_AWS_LOGS", AwsLogsAppender) {
@@ -47,7 +53,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 
     filter(ThresholdFilter) {
-        level = isAWS ? WARN : TRACE
+        level = isAWS ? defaultLevel : TRACE
     }
 }
 
@@ -57,10 +63,10 @@ logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
 logger("org.reflections", ERROR)
 logger("com.github.fromage.quasi", ERROR)
-logger("net.demilich", WARN)
+logger("net.demilich", defaultLevel)
 logger("io.vertx", INFO)
 logger("com.hiddenswitch", INFO)
-logger("org.asynchttpclient", WARN)
+logger("org.asynchttpclient", defaultLevel)
 logger("com.hiddenswitch.spellsource.Matchmaking", DEBUG)
 logger("com.hiddenswitch.spellsource.Games", DEBUG)
 logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", DEBUG)

@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "RecastSpell",
+      "class": "PlayCardsSpell",
       "target": "FRIENDLY_DECK",
       "card": "spell_inner_fire",
       "filter": {

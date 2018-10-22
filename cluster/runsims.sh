@@ -3,10 +3,18 @@ set -e
 
 # Build the latest cluster code
 cd ..
-./gradlew cluster:shadowJar
+echo Rebuilding executable
+./gradlew cluster:shadowJar >/dev/null
 cd net/src/main/resources/decklists/current
 
+# Override the logging level. Useful to suppress warnings from cards that appear to have buggy behaviour, but is usually
+# just the AI playing a card in a way it would never make sense to play. For example, playing Demonic Project when
+# neither player has minions in their hands.
+export SPELLSOURCE_LOGGING_LEVEL=ERROR
+
 # Execute the simulation
-java -cp ../../../../../../cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Simulate --decks "Murloc Paladin.txt","Aggro Paladin.txt","Spiteful Priest.txt","Zoo Warlock.txt","Tempo Rogue.txt","Aggro Hunter.txt","Aggro Druid.txt","Secret Mage.txt","Cube Warlock.txt","Midrange Hunter.txt","Highlander Priest.txt","Big Priest.txt","Elemental Priest.txt","Token Shaman.txt","Dragon Priest.txt","Jade Druid.txt","Demon Warlock.txt","Big Spell Mage.txt","Miracle Rogue.txt","Exodia Mage.txt","Mill Rogue.txt" --number 10000 --output ./temporary_results.tsv
-cp ./temporary_results.tsv ../../../../../../cluster/simulations.tsv
-rm ./temporary_results.tsv
+# Gets a comma-separated list of deck file names.
+DECKS=$(ls | paste -s -d, -)
+java -cp ../../../../../../cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Simulate --decks "${DECKS}" --number 10000 --output ../temporary_results.tsv
+cp ../temporary_results.tsv ../../../../../../cluster/simulations.tsv
+rm ../temporary_results.tsv

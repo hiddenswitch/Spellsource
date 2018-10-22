@@ -29,6 +29,16 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testVoodooDoll() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion doll = playMinionCardWithBattlecry(context, player, "minion_voodoo_doll", target);
+			destroy(context, doll);
+			assertTrue(target.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testGentlemansTopHat() {
 		runGym((context, player, opponent) -> {
 			Minion target1 = playMinionCard(context, player, "minion_wisp");

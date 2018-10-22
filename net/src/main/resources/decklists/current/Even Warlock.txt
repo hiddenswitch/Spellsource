@@ -1,9 +1,9 @@
 Name: Even Warlock
 Class: Warlock
 Format: Standard
-1x Acidic Swamp Ooze
+2x Acidic Swamp Ooze
 2x Defile
-2x Doomsayer
+1x Stubborn Gastropod
 2x Sunfury Protector
 2x Vulgar Homunculus
 2x Hellfire
@@ -14,9 +14,9 @@ Format: Standard
 2x Twilight Drake
 1x Dread Infernal
 1x Genn Greymane
-1x Mossy Horror
 1x Skulking Geist
 1x The Black Knight
+1x Bonemare
 1x The Lich King
 1x Bloodreaver Gul'dan
 2x Mountain Giant

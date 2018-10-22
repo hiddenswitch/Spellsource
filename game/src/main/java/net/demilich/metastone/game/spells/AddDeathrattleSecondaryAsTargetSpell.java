@@ -11,7 +11,35 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * Gives the {@code target} the {@link SpellArg#SPELL} as a deathrattle.
  * <p>
  * Resolves the {@link SpellArg#SECONDARY_TARGET} and puts it as the {@link SpellArg#TARGET} of the {@link
- * SpellArg#SPELL} (the deathrattle).l
+ * SpellArg#SPELL} (the deathrattle).
+ * <p>
+ * This is useful for "saving" the player's choices or a state of the board. For example, to implement a battlecry,
+ * "Battlecry: Choose a minion. Deathrattle: Destroy it.":
+ * <pre>
+ *   "battlecry" {
+ *     "targetSelection": "MINIONS",
+ *     "spell": {
+ *       "class": "AddDeathrattleSecondaryAsTargetSpell",
+ *       "secondaryTarget": "TARGET",
+ *       "target": "SELF",
+ *       "spell": {
+ *         "class": "DestroySpell"
+ *       }
+ *     }
+ *   },
+ *   "deathrattle": {
+ *     "class": "NullSpell"
+ *   },
+ *   "attributes": {
+ *     "BATTLECRY": true,
+ *     "DEATHRATTLES": true
+ *   }
+ * </pre>
+ * Observe that the {@code "secondaryTarget"} is {@link net.demilich.metastone.game.targeting.EntityReference#TARGET},
+ * which is the player's chosen target (the minion). This effect then resolves {@link
+ * net.demilich.metastone.game.targeting.EntityReference#TARGET} and puts it into the {@link DestroySpell}'s {@link
+ * SpellArg#TARGET}. Observe also that the minion's {@code "deathrattle"} is a {@link NullSpell}; if other effects try
+ * to cast its deathrattle from the deck, for example, it will correctly do nothing.
  *
  * @see AddDeathrattleSpell for more about adding deathrattles.
  */

@@ -2,20 +2,19 @@ Name: Mecha'thun Druid
 Class: Druid
 Format: Standard
 2x Innervate
-1x Moonfire
-2x Barkskin
-2x Biology Project
-1x Floop's Glorious Gloop
 2x Lesser Jasper Spellstone
 2x Naturalize
 2x Wild Growth
-2x Wild Pyromancer
 2x Wrath
 2x Ferocious Howl
 2x Branching Paths
-1x Flobbidinous Floop
-1x Swipe
+2x Ironwood Golem
+2x Oaken Summons
+2x Swipe
+2x Arcane Tyrant
 2x Nourish
-2x Gadgetzan Auctioneer
+1x Starfall
+2x Spreading Plague
 1x Malfurion the Pestilent
 1x Mecha'thun
+1x Ultimate Infestation
