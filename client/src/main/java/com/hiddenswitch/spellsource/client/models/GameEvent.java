@@ -128,6 +128,8 @@ public class GameEvent implements Serializable {
     
     PRE_DAMAGE("PRE_DAMAGE"),
     
+    PRE_GAME_START("PRE_GAME_START"),
+    
     QUEST_PLAYED("QUEST_PLAYED"),
     
     QUEST_SUCCESSFUL("QUEST_SUCCESSFUL"),
@@ -158,9 +160,7 @@ public class GameEvent implements Serializable {
     
     WEAPON_EQUIPPED("WEAPON_EQUIPPED"),
     
-    WILL_END_SEQUENCE("WILL_END_SEQUENCE"),
-
-    PRE_GAME_START("PRE_GAME_START");
+    WILL_END_SEQUENCE("WILL_END_SEQUENCE");
 
     private String value;
 

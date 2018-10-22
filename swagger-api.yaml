@@ -869,6 +869,7 @@ definitions:
         - 'PHYSICAL_ATTACK'
         - 'PLAY_CARD'
         - 'PRE_DAMAGE'
+        - 'PRE_GAME_START'
         - 'QUEST_PLAYED'
         - 'QUEST_SUCCESSFUL'
         - 'ROASTED'
