@@ -10,14 +10,15 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Optional;
 
 /**
- * Casts a {@link SpellArg#SPELL} on the last {@link net.demilich.metastone.game.cards.Card} in the {@link
- * net.demilich.metastone.game.targeting.Zones#DECK} of the {@link SpellArg#TARGET_PLAYER}.
+ * Casts a {@link SpellArg#SPELL} on the last {@link Card} in the {@link Zones#DECK} of the {@link
+ * SpellArg#TARGET_PLAYER}.
  * <p>
  * The {@link net.demilich.metastone.game.targeting.EntityReference#OUTPUT} will be set to the last minion card, unless
  * none is found.
@@ -27,14 +28,14 @@ import java.util.Optional;
  *     {
  *         "class": "LastMinionCardInDeckSpell",
  *         "spell": {
- *             "class": "ReceiveCardSpell",
+ *             "class": "FromDeckToHandSpell",
  *             "target": "OUTPUT"
  *         }
  *     }
  * </pre>
  * Implements End of the Line.
  */
-public class LastMinionCardInDeckSpell extends Spell {
+public final class LastMinionCardInDeckSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(LastMinionCardInDeckSpell.class);
 
 	@Override
