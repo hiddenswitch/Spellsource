@@ -351,7 +351,7 @@ public class GatewayTest extends SpellsourceTestBase {
 
 		GetCardsResponse response1 = defaultApi.getCards(null);
 		final long count = CardCatalogue.getRecords().values().stream().filter(
-				cd -> DeckFormat.CUSTOM.isInFormat(cd.getDesc().getSet()) && cd.getDesc().type != CardType.GROUP && cd.getDesc().type != CardType.HERO_POWER && cd.getDesc().type != CardType.ENCHANTMENT).count();
+				cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getDesc().getSet()) && cd.getDesc().type != CardType.GROUP && cd.getDesc().type != CardType.HERO_POWER && cd.getDesc().type != CardType.ENCHANTMENT).count();
 		context.assertEquals((long) response1.getCards().size(), count);
 		try {
 			GetCardsResponse response2 = defaultApi.getCards(response1.getVersion());

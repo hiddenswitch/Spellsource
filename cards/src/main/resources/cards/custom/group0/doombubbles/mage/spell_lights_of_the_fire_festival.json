@@ -2,7 +2,7 @@
   "name": "Lights of the Fire Festival",
   "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "MAGE",
+  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "All minions lose Stealth. Add a Fireball, Cinderstorm and Flame Geyser to your hand.",
   "targetSelection": "NONE",
