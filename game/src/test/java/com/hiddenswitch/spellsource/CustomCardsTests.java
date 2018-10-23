@@ -51,6 +51,26 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testCrypticRuins() {
+		for (int i = 0; i < 3; i++) {
+			final int j = i;
+			runGym((context, player, opponent) -> {
+				overrideDiscover(context, player, discoverActions -> {
+					for (DiscoverAction action : discoverActions) {
+						assertEquals(action.getCard().getBaseManaCost(), 3 + j);
+					}
+					return discoverActions.get(0);
+				});
+				for (int k = 0; k < j; k++) {
+					playMinionCard(context, player, "minion_bloodmage_thalnos");
+				}
+				playCard(context, player, "spell_cryptic_ruins");
+			});
+		}
+
+	}
+
+	@Test
 	public void testBreathOfFire() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
