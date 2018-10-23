@@ -15,6 +15,10 @@
       "class": "AndFilter",
       "filters": [
         {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
           "class": "AttributeFilter",
           "value": {
             "class": "SpellDamageValueProvider",

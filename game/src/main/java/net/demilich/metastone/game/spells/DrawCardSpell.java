@@ -45,7 +45,9 @@ public class DrawCardSpell extends Spell {
 			}
 
 			SpellDesc subSpell = (SpellDesc) desc.get(SpellArg.SPELL);
-			SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			if (subSpell != null) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
+			}
 		}
 	}
 }

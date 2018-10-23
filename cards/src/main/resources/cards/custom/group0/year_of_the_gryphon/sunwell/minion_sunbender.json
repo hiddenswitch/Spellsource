@@ -1,0 +1,39 @@
+{
+  "name": "Sunbender",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Shuffle your hand into your deck. Draw that many cards.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "value": {
+        "class": "CardCountValueProvider"
+      },
+      "spells": [
+        {
+          "class": "StealCardSpell",
+          "target": "FRIENDLY_HAND",
+          "cardLocation": "DECK",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "DrawCardSpell",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
