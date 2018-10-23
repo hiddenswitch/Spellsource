@@ -4,56 +4,45 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Discover a $3-Cost, $3-Attack, and $3-Health minion (improved by Spell Damage). Summon them.",
+  "description": "Discover a $3-Cost, $3-Attack, and $3-Health minion (improved by Spell Damage). Summon it.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DiscoverSpell",
-        "spell": {
-          "class": "SummonSpell"
-        },
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "manaCost": {
-            "class": "SpellDamageValueProvider",
-            "offset": 3
-          }
-        }
-      },
-      {
-        "class": "DiscoverSpell",
-        "spell": {
-          "class": "SummonSpell"
-        },
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "BASE_ATTACK",
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "AttributeFilter",
           "value": {
             "class": "SpellDamageValueProvider",
             "offset": 3
-          }
-        }
-      },
-      {
-        "class": "DiscoverSpell",
-        "spell": {
-          "class": "SummonSpell"
+          },
+          "attribute": "BASE_MANA_COST",
+          "operation": "EQUAL"
         },
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "BASE_HP",
+        {
+          "class": "AttributeFilter",
           "value": {
             "class": "SpellDamageValueProvider",
             "offset": 3
-          }
+          },
+          "attribute": "ATTACK",
+          "operation": "EQUAL"
+        },
+        {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "SpellDamageValueProvider",
+            "offset": 3
+          },
+          "attribute": "HP",
+          "operation": "EQUAL"
         }
-      }
-    ]
+      ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
