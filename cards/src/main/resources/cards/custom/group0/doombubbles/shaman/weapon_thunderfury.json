@@ -15,22 +15,22 @@
       "conditions": [
         {
           "class": "ComparisonCondition",
+          "operation": "GREATER",
           "value1": {
             "class": "AttributeValueProvider",
             "target": "FRIEDNLY_PLAYER",
             "attribute": "OVERLOAD"
           },
-          "operation": "GREATER",
           "value2": 0
         },
         {
           "class": "ComparisonCondition",
+          "operation": "GREATER",
           "value1": {
             "class": "PlayerAttributeValueProvider",
-            "targetPlayer": "SELF",
-            "playerAttribute": "LOCKED_MANA"
+            "playerAttribute": "LOCKED_MANA",
+            "targetPlayer": "SELF"
           },
-          "operation": "GREATER",
           "value2": 0
         }
       ]

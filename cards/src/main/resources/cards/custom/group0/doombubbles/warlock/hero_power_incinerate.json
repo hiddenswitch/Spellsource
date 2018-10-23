@@ -1,5 +1,6 @@
 {
   "name": "Incinerate",
+  "heroPower": "hero_power_conflagrate",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "SILVER",
@@ -15,12 +16,11 @@
       },
       {
         "class": "DamageSpell",
-        "value": 2,
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "value": 2
       }
     ]
   },
-  "heroPower": "hero_power_conflagrate",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

@@ -1,5 +1,6 @@
 {
   "name": "Dire Beast",
+  "heroPower": "hero_power_dire_stable",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "GREEN",
@@ -18,7 +19,6 @@
       "card": "token_dire_beast"
     }
   },
-  "heroPower": "hero_power_dire_stable",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

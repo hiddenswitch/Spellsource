@@ -10,8 +10,8 @@
   "battlecry": {
     "spell": {
       "class": "custom.UpgradeHeroPowerSpell",
-      "targetPlayer": "SELF",
-      "exclusive": true
+      "exclusive": true,
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

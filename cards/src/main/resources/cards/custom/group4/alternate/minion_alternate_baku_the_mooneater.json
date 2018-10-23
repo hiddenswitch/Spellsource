@@ -82,7 +82,9 @@
             },
             {
               "class": "ConditionalSpell",
-              "exclusive": true,
+              "spell": {
+                "class": "custom.UpgradeHeroPowerSpell"
+              },
               "conditions": [
                 {
                   "class": "CardPropertyCondition",
@@ -95,6 +97,7 @@
                   "card": "hero_power_totemic_call"
                 }
               ],
+              "exclusive": true,
               "spells": [
                 {
                   "class": "ChangeHeroPowerSpell",
@@ -104,10 +107,7 @@
                   "class": "ChangeHeroPowerSpell",
                   "card": "hero_power_alternate_totemic_slam"
                 }
-              ],
-              "spell": {
-                "class": "custom.UpgradeHeroPowerSpell"
-              }
+              ]
             }
           ]
         }

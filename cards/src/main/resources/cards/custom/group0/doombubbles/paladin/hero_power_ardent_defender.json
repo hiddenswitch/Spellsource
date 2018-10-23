@@ -1,5 +1,6 @@
 {
   "name": "Ardent Defender",
+  "heroPower": "hero_power_divine_defender",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "GOLD",
@@ -20,7 +21,6 @@
       }
     ]
   },
-  "heroPower": "hero_power_divine_defender",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
