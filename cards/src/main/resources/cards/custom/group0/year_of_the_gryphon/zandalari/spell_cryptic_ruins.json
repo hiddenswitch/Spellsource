@@ -46,10 +46,8 @@
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",
-          "value": 3,
           "attribute": "BASE_HP",
-          "operation": "EQUAL",
-          "hp": {
+          "value": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
