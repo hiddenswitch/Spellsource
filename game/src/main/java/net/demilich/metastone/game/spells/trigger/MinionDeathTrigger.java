@@ -11,7 +11,10 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.TargetType;
 
-public class MinionDeathTrigger extends EventTrigger {
+/**
+ * A trigger that fires
+ */
+public final class MinionDeathTrigger extends EventTrigger {
 
 	public MinionDeathTrigger(EventTriggerDesc desc) {
 		super(desc);

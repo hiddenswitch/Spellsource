@@ -6,7 +6,10 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.utils.Attribute;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
@@ -14,6 +17,23 @@ public class AttributeFilter extends EntityFilter {
 
 	public AttributeFilter(EntityFilterDesc desc) {
 		super(desc);
+	}
+
+	@NotNull
+	private static EntityFilter create(Attribute attribute, Object value) {
+		EntityFilterDesc desc = new EntityFilterDesc(AttributeFilter.class);
+		desc.put(EntityFilterArg.ATTRIBUTE, attribute);
+		desc.put(EntityFilterArg.VALUE, value);
+		desc.put(EntityFilterArg.OPERATION, ComparisonOperation.EQUAL);
+		return new AttributeFilter(desc);
+	}
+
+	public static EntityFilter create(Attribute attribute, ValueProvider value) {
+		return create(attribute, (Object) value);
+	}
+
+	public static EntityFilter create(Attribute attribute, int value) {
+		return create(attribute, (Object) value);
 	}
 
 	@Override
@@ -56,10 +76,9 @@ public class AttributeFilter extends EntityFilter {
 			} else {
 				actualValue = entity.getAttributeValue(attribute);
 			}
-		}
-			else if (attribute == Attribute.INDEX) {
+		} else if (attribute == Attribute.INDEX) {
 			actualValue += entity.getEntityLocation().getIndex();
-			} else if (attribute == Attribute.INDEX_FROM_END) {
+		} else if (attribute == Attribute.INDEX_FROM_END) {
 			actualValue += entity.getEntityLocation().getIndex() - context.getPlayer(entity.getOwner()).getZone(entity.getZone()).size();
 		} else {
 			actualValue = entity.getAttributeValue(attribute);

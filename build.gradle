@@ -101,12 +101,5 @@ if (System.env.TRAVIS == 'true') {
             maxParallelForks = 2
             minHeapSize = '128m'
         }
-
-        test {
-            testLogging {
-                events "passed", "skipped", "failed"
-                exceptionFormat "full"
-            }
-        }
     }
 }

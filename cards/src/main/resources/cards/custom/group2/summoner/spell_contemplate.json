@@ -1,15 +1,14 @@
 {
-  "name": "Double",
-  "baseManaCost": 1,
+  "name": "Contemplate",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Copy a random card from your deck.",
+  "description": "Add a copy of the last card you played to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",
-    "target": "FRIENDLY_DECK",
-    "randomTarget": true
+    "target": "FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE"
   },
   "collectible": true,
   "set": "CUSTOM",
