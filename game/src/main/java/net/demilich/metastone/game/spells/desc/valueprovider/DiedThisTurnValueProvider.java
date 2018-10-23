@@ -17,9 +17,9 @@ import net.demilich.metastone.game.utils.Attribute;
  * Use {@link ValueProviderArg#TARGET_PLAYER} to specify which graveyards to use. For example, checks both graveyards if
  * {@link ValueProviderArg#TARGET_PLAYER} is {@link net.demilich.metastone.game.spells.TargetPlayer#BOTH}.
  */
-public final class DestroyedOnTurnValueProvider extends ValueProvider {
+public final class DiedThisTurnValueProvider extends ValueProvider {
 
-	public DestroyedOnTurnValueProvider(ValueProviderDesc desc) {
+	public DiedThisTurnValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}
 

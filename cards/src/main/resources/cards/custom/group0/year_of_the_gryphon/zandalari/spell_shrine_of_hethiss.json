@@ -1,0 +1,17 @@
+{
+  "name": "Shrine of Hethis",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "COMMON",
+  "description": "Give your minions Poisonous.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "POISONOUS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

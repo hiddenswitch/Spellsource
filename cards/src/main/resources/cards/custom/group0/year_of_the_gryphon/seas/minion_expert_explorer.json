@@ -1,0 +1,23 @@
+{
+  "name": "Expert Explorer",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "At the start of your turn, shuffle a copy of your hand into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "FRIENDLY_HAND"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

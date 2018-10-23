@@ -44,6 +44,23 @@ public class MetaSpell extends Spell {
 		SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
 		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
 		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
+		// Pass down the CARD arg if it's specified on this desc. This allows DiscoverSpells to correctly use MetaSpell.
+		if (desc.containsKey(SpellArg.CARD)) {
+			if (spell != null) {
+				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+			if (spells != null) {
+				for (int i = 0; i < spells.length; i++) {
+					spells[i] = spells[i].addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+				}
+			}
+			if (spell1 != null) {
+				spell1 = spell1.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+			if (spell2 != null) {
+				spell2 = spell2.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+		}
 		for (int i = 0; i < howMany; i++) {
 			if (spell != null) {
 				SpellUtils.castChildSpell(context, player, spell, source, target);

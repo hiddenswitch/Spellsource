@@ -5,6 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -128,71 +130,70 @@ public class BlackrockMountainTests extends TestBase {
 
 	@Test
 	public void testChromaggus() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
-		Player player = context.getPlayer1();
-		clearHand(context, player);
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "spell_The_coin");
+			shuffleToDeck(context, player, "spell_The_coin");
+			shuffleToDeck(context, player, "spell_The_coin");
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			Assert.assertEquals(player.getHand().getCount(), 0);
 
-		Assert.assertEquals(player.getHand().getCount(), 0);
+			playMinionCard(context, player, CardCatalogue.getCardById("minion_chromaggus"));
+			context.getLogic().drawCard(player.getId(), player.getHero());
+			Assert.assertEquals(player.getHand().getCount(), 2);
 
-		playMinionCard(context, player, CardCatalogue.getCardById("minion_chromaggus"));
-		context.getLogic().drawCard(player.getId(), player.getHero());
-		Assert.assertEquals(player.getHand().getCount(), 2);
+			clearHand(context, player);
 
-		clearHand(context, player);
+			Assert.assertEquals(player.getHand().getCount(), 0);
 
-		Assert.assertEquals(player.getHand().getCount(), 0);
-
-		playMinionCard(context, player, CardCatalogue.getCardById("minion_chromaggus"));
-		context.getLogic().drawCard(player.getId(), player.getHero());
-		Assert.assertEquals(player.getHand().getCount(), 3);
+			playMinionCard(context, player, CardCatalogue.getCardById("minion_chromaggus"));
+			context.getLogic().drawCard(player.getId(), player.getHero());
+			Assert.assertEquals(player.getHand().getCount(), 3);
+		});
 	}
 
 	@Test
 	public void testCoreRager() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
-		Player player = context.getPlayer1();
-		clearHand(context, player);
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "spell_the_coin");
+			Minion coreRager = playMinionCard(context, player, CardCatalogue.getCardById("minion_core_rager"));
+			Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack() + 3);
+			Assert.assertEquals(coreRager.getHp(), coreRager.getBaseHp() + 3);
 
-		Minion coreRager = playMinionCard(context, player, CardCatalogue.getCardById("minion_core_rager"));
-		Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack() + 3);
-		Assert.assertEquals(coreRager.getHp(), coreRager.getBaseHp() + 3);
+			context.getLogic().drawCard(player.getId(), player.getHero());
 
-		context.getLogic().drawCard(player.getId(), player.getHero());
-
-		coreRager = playMinionCard(context, player, CardCatalogue.getCardById("minion_core_rager"));
-		Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack());
-		Assert.assertEquals(coreRager.getHp(), coreRager.getBaseHp());
+			coreRager = playMinionCard(context, player, CardCatalogue.getCardById("minion_core_rager"));
+			Assert.assertEquals(coreRager.getAttack(), coreRager.getBaseAttack());
+			Assert.assertEquals(coreRager.getHp(), coreRager.getBaseHp());
+		});
 	}
 
 	@Test
 	public void testDarkIronSkulker() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.GREEN);
-		Player player = context.getPlayer1();
-		Player opponent = context.getOpponent(player);
+		runGym((context, player, opponent) -> {
+			Minion testMinion1 = playMinionCard(context, player, new TestMinionCard(3, 3, 0));
+			Minion injuredBlademaster = playMinionCard(context, player, CardCatalogue.getCardById("minion_injured_blademaster"));
+			Minion testMinion2 = playMinionCard(context, player, new TestMinionCard(3, 3, 0));
+			Assert.assertEquals(testMinion1.getHp(), testMinion1.getMaxHp());
+			Assert.assertEquals(injuredBlademaster.getHp(), injuredBlademaster.getMaxHp() - 4);
+			Assert.assertEquals(testMinion2.getHp(), testMinion2.getMaxHp());
 
-		Minion testMinion1 = playMinionCard(context, player, new TestMinionCard(3, 3, 0));
-		Minion injuredBlademaster = playMinionCard(context, player, CardCatalogue.getCardById("minion_injured_blademaster"));
-		Minion testMinion2 = playMinionCard(context, player, new TestMinionCard(3, 3, 0));
-		Assert.assertEquals(testMinion1.getHp(), testMinion1.getMaxHp());
-		Assert.assertEquals(injuredBlademaster.getHp(), injuredBlademaster.getMaxHp() - 4);
-		Assert.assertEquals(testMinion2.getHp(), testMinion2.getMaxHp());
+			context.getLogic().endTurn(player.getId());
 
-		context.getLogic().endTurn(player.getId());
+			Minion testMinionOpponent = playMinionCard(context, opponent, new TestMinionCard(3, 3, 0));
+			Minion injuredBlademasterOpponent = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_injured_blademaster"));
+			Assert.assertEquals(testMinionOpponent.getHp(), testMinionOpponent.getMaxHp());
+			Assert.assertEquals(injuredBlademasterOpponent.getHp(), injuredBlademasterOpponent.getMaxHp() - 4);
 
-		Minion testMinionOpponent = playMinionCard(context, opponent, new TestMinionCard(3, 3, 0));
-		Minion injuredBlademasterOpponent = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_injured_blademaster"));
-		Assert.assertEquals(testMinionOpponent.getHp(), testMinionOpponent.getMaxHp());
-		Assert.assertEquals(injuredBlademasterOpponent.getHp(), injuredBlademasterOpponent.getMaxHp() - 4);
+			Minion darkIronSkulker = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_dark_iron_skulker"));
+			Assert.assertEquals(darkIronSkulker.getHp(), darkIronSkulker.getMaxHp());
 
-		Minion darkIronSkulker = playMinionCard(context, opponent, CardCatalogue.getCardById("minion_dark_iron_skulker"));
-		Assert.assertEquals(darkIronSkulker.getHp(), darkIronSkulker.getMaxHp());
+			Assert.assertEquals(testMinionOpponent.getHp(), testMinionOpponent.getMaxHp());
+			Assert.assertEquals(injuredBlademasterOpponent.getHp(), injuredBlademasterOpponent.getMaxHp() - 4);
 
-		Assert.assertEquals(testMinionOpponent.getHp(), testMinionOpponent.getMaxHp());
-		Assert.assertEquals(injuredBlademasterOpponent.getHp(), injuredBlademasterOpponent.getMaxHp() - 4);
-
-		Assert.assertEquals(testMinion1.getHp(), testMinion1.getMaxHp() - 2);
-		Assert.assertEquals(injuredBlademaster.getHp(), injuredBlademaster.getMaxHp() - 4);
-		Assert.assertEquals(testMinion2.getHp(), testMinion2.getMaxHp() - 2);
+			Assert.assertEquals(testMinion1.getHp(), testMinion1.getMaxHp() - 2);
+			Assert.assertEquals(injuredBlademaster.getHp(), injuredBlademaster.getMaxHp() - 4);
+			Assert.assertEquals(testMinion2.getHp(), testMinion2.getMaxHp() - 2);
+		});
 	}
 
 	@Test

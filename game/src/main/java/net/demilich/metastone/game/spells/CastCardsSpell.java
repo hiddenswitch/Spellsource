@@ -20,7 +20,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * For example, to cast Inner Fire on every minion in your deck:
  * <pre>
  *   {
- *     "class": "PlayCardsSpell",
+ *     "class": "CastCardsSpell",
  *     "card": "spell_inner_fire",
  *     "target": "FRIENDLY_DECK",
  *     "filter": {
@@ -30,7 +30,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  *   }
  * </pre>
  */
-public class PlayCardsSpell extends Spell {
+public final class CastCardsSpell extends Spell {
 
 	@Override
 	@Suspendable
