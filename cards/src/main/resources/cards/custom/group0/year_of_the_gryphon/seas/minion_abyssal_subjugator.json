@@ -1,0 +1,17 @@
+{
+  "name": "Abyssal Subjugator",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Your Hero Power deals 4 extra damage.",
+  "attributes": {
+    "HERO_POWER_DAMAGE": 4
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Voodoo Hunting",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Deal $1 damage to a random minion and trigger its Deathrattle. Repeat 4 times.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CastRepeatedlySpell",
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+        "class": "TriggerDeathrattleSpell"
+        },
+        {
+        "class": "DamageSpell",
+        "value": 1
+        }
+      ]
+    },    
+    "exclusive": true,
+    "howMany": 5,
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

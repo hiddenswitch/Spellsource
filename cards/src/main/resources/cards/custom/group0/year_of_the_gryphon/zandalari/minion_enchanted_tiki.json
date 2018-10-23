@@ -1,0 +1,39 @@
+{
+  "name": "Enchanted Tiki",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Swap Attack with another minion. Deathrattle: Swap back.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SwapAttackSpell"
+        },
+        {
+          "class": "AddDeathrattleSecondaryAsTargetSpell",
+          "secondaryTarget": "TARGET",
+          "target": "SELF",
+          "spell": {
+            "class": "SwapAttackSpell"
+          }
+        }
+      ]
+    }
+  },
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
