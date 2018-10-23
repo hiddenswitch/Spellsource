@@ -1,0 +1,38 @@
+{
+  "name": "Solar Power",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "Discover a spell. Add a copy of it to your hand next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "targetPlayer": "SELF",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "target": "OUTPUT"
+          },
+          "oneTurn": true
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
