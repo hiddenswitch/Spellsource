@@ -11,6 +11,7 @@
   "battlecry": {
     "spell": {
       "class": "ReceiveLastCardSpell",
+      "value": 1,
       "cardFilter": {
         "class": "CardFilter",
         "race": "MURLOC"
@@ -18,8 +19,7 @@
       "cardSource": {
         "class": "GraveyardActorsSource",
         "targetPlayer": "SELF"
-      },
-      "value": 1
+      }
     }
   },
   "attributes": {

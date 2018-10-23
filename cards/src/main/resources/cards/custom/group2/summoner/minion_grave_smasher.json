@@ -10,12 +10,12 @@
   "deathrattle": {
     "class": "CopyCardSpell",
     "target": "FRIENDLY_DECK",
-    "randomTarget": true,
     "filter": {
       "class": "CardFilter",
       "attribute": "DEATHRATTLES",
       "operation": "HAS"
-    }
+    },
+    "randomTarget": true
   },
   "attributes": {
     "DEATHRATTLES": true
