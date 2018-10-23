@@ -1,0 +1,50 @@
+{
+  "name": "Cryptic Ruins",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Discover a $3-Cost, $3-Attack, and $3-Health minion (improved by Spell Damage). Summon it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "AttributeFilter",
+          "attribute": "BASE_MANA_COST",
+          "value": {
+            "class": "SpellDamageValueProvider",
+            "offset": 3
+          },
+          "operation": "EQUAL"
+        },
+        {
+          "class": "AttributeFilter",
+          "attribute": "ATTACK",
+          "value": {
+            "class": "SpellDamageValueProvider",
+            "offset": 3
+          },
+          "operation": "EQUAL"
+        },
+        {
+          "class": "AttributeFilter",
+          "attribute": "HP",
+          "value": {
+            "class": "SpellDamageValueProvider",
+            "offset": 3
+          },
+          "operation": "EQUAL"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
