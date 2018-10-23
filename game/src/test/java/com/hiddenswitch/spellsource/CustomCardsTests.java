@@ -40,6 +40,7 @@ import org.testng.annotations.Test;
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -135,19 +136,31 @@ public class CustomCardsTests extends TestBase {
 		for (int i = 0; i < 8; i++) {
 			final int j = i;
 			runGym((context, player, opponent) -> {
-				AtomicBoolean didDiscover = new AtomicBoolean(false);
+				AtomicInteger didDiscover = new AtomicInteger(0);
 				overrideDiscover(context, player, discoverActions -> {
-					didDiscover.compareAndSet(false, true);
 					assertTrue(discoverActions.size() > 0);
+					int spellpower = context.getLogic().applySpellpower(player, player.getHero(), 0);
+					assertTrue(spellpower >= j);
+					int whichDiscover = didDiscover.getAndIncrement();
 					for (DiscoverAction action : discoverActions) {
-						assertEquals(action.getCard().getBaseManaCost(), 3 + j);
+						switch (whichDiscover) {
+							case 0:
+								assertEquals(action.getCard().getBaseManaCost(), 3 + spellpower);
+								break;
+							case 1:
+								assertEquals(action.getCard().getAttack(), 3 + spellpower);
+								break;
+							case 2:
+								assertEquals(action.getCard().getBaseHp(), 3 + spellpower);
+								break;
+						}
 					}
 					return discoverActions.get(0);
 				});
 				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
 				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
 				playCard(context, player, "spell_cryptic_ruins");
-				assertTrue(didDiscover.get());
+				assertEquals(didDiscover.get(), 3);
 			});
 		}
 	}
