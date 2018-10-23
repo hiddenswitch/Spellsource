@@ -52,6 +52,38 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSorrowstone() {
+		runGym((context, player, opponent) -> {
+			Minion target1 = playMinionCard(context, player, "minion_wisp");
+			Minion target2 = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "secret_sorrowstone");
+			context.endTurn();
+			Minion target3 = playMinionCard(context, opponent, "minion_wisp");
+			destroy(context, target1);
+			assertEquals(player.getSecrets().size(), 1);
+			destroy(context, target2);
+			assertEquals(player.getSecrets().size(), 1);
+			destroy(context, target3);
+			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getMinions().size(), 3);
+		});
+	}
+
+	@Test
+	public void testCatacombCandlefin() {
+		runGym((context, player, opponent) -> {
+			Minion shouldNotBeSummoned1 = playMinionCard(context, player, "minion_murloc_tinyfin");
+			Minion shouldBeSummoned = playMinionCard(context, player, "minion_murloc_warleader");
+			Minion shouldNotBeSummoned2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			destroy(context, shouldNotBeSummoned1);
+			destroy(context, shouldBeSummoned);
+			destroy(context, shouldNotBeSummoned2);
+			playCard(context, player, "minion_catacomb_candlefin");
+			assertEquals(player.getHand().get(0).getCardId(), shouldBeSummoned.getSourceCard().getCardId());
+		});
+	}
+
+	@Test
 	public void testCrypticRuins() {
 		for (int i = 0; i < 8; i++) {
 			final int j = i;
@@ -667,6 +699,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testSignsOfTheEnd() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_signs_of_the_end");
 			assertEquals(player.getMinions().size(), 0);
 			playCard(context, player, "spell_the_coin");
@@ -674,6 +707,7 @@ public class CustomCardsTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_signs_of_the_end");
 			player.setMana(7);
 			playCard(context, player, "spell_earthquake");

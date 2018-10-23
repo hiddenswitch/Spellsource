@@ -1,0 +1,44 @@
+{
+  "name": "Rockslide",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Deal $1 damage to all enemy minions and summon a 0/1 Pebble with Taunt for each.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "PERMANENT",
+            "invert": true
+          }
+        ]
+      }
+    },
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "SummonSpell",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "card": "token_pebble"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

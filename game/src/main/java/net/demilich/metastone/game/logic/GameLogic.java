@@ -1287,11 +1287,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					// zone.
 					if (actorPreviousLocation.getZone() != Zones.SET_ASIDE_ZONE) {
 						context.getEnvironment().put(Environment.KILLED_MINION, target.getReference());
+						// The attributes of being destroyed and which turn something died should be correct when the KillEvent is
+						// fired.
+						applyAttribute(target, Attribute.DESTROYED);
+						target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 						KillEvent killEvent = new KillEvent(context, target);
 						context.fireGameEvent(killEvent);
 						context.getEnvironment().remove(Environment.KILLED_MINION);
-						applyAttribute(target, Attribute.DESTROYED);
-						target.setAttribute(Attribute.DIED_ON_TURN, context.getTurn());
 					}
 					break;
 				case WEAPON:

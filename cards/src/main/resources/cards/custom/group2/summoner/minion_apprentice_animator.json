@@ -6,13 +6,13 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Summon a 3/3 Helmed Horror with Taunt.",
+  "description": "Battlecry: Summon a 3/3 Golem with Taunt.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
-      "card": "token_helmed_horror"
+      "card": "token_runed_golem"
     }
   },
   "attributes": {

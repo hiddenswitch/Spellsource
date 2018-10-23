@@ -512,4 +512,14 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 		return false;
 	}
+
+	/**
+	 * The entity's index in its zone.
+	 *
+	 * @return {@link EntityLocation#UNASSIGNED} 's index if it isn't yet in a zone (typically {@code -1}), or the index
+	 * 		in the {@link #getZone()} this entity is in.
+	 */
+	public int getIndex() {
+		return getEntityLocation().getIndex();
+	}
 }

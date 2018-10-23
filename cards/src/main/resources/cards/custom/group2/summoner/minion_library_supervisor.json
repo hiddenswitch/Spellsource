@@ -1,0 +1,22 @@
+{
+  "name": "Library Supervisor",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Copy a random card from your deck.",
+  "deathrattle": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_DECK",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

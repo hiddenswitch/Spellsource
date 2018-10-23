@@ -1,0 +1,33 @@
+{
+  "name": "Conscript",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Discover a 3-Cost minion. Summon it with Taunt.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 7,
+    "operation": "LESS"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT",
+        "target": "OUTPUT"
+      }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 3
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
