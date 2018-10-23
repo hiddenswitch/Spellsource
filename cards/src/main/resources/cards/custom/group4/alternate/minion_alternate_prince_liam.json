@@ -20,7 +20,7 @@
             "rarity": "LEGENDARY",
             "cardType": "MINION"
           },
-    			"filter": {
+          "filter": {
             "class": "CardFilter",
             "manaCost": 1
           }
@@ -33,7 +33,7 @@
             "rarity": "LEGENDARY",
             "cardType": "MINION"
           },
-	       "filter": {
+          "filter": {
             "class": "CardFilter",
             "manaCost": 1
           }
