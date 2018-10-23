@@ -14,9 +14,6 @@
         "spell": {
           "class": "SummonSpell"
         },
-        "cardSource": {
-          "class": "CatalogueSource"
-        },
         "cardFilter": {
           "class": "AndFilter",
           "filters": [
@@ -34,15 +31,15 @@
               "operation": "EQUAL"
             }
           ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       },
       {
         "class": "DiscoverSpell",
         "spell": {
           "class": "SummonSpell"
-        },
-        "cardSource": {
-          "class": "CatalogueSource"
         },
         "cardFilter": {
           "class": "AndFilter",
@@ -61,15 +58,15 @@
               "operation": "EQUAL"
             }
           ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       },
       {
         "class": "DiscoverSpell",
         "spell": {
           "class": "SummonSpell"
-        },
-        "cardSource": {
-          "class": "CatalogueSource"
         },
         "cardFilter": {
           "class": "AndFilter",
@@ -88,6 +85,9 @@
               "operation": "EQUAL"
             }
           ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       }
     ]
