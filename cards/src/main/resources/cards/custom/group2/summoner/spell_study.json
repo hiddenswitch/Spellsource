@@ -10,7 +10,7 @@
     "class": "CopyCardSpell",
     "target": "FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
