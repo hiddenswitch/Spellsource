@@ -31,7 +31,9 @@
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",
-          "attack": {
+          "attribute": "BASE_ATTACK",
+          "operation": "EQUAL",
+          "value": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
@@ -45,7 +47,9 @@
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",
-          "hp": {
+          "attribute": "BASE_HP",
+          "operation": "EQUAL",
+          "value": {
             "class": "SpellDamageValueProvider",
             "offset": 3
           }
