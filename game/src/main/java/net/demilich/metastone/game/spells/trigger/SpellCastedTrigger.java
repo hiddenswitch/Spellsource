@@ -7,7 +7,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class SpellCastedTrigger extends AbstractCardTrigger {
+public final class SpellCastedTrigger extends AbstractCardTrigger {
 
 	public SpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);

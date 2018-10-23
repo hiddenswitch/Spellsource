@@ -8,18 +8,6 @@
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Both heroes have Stealth. Combo: Destroy all other minions.",
-  "auras": [
-    {
-      "class": "AttributeAura",
-      "target": "FRIENDLY_HERO",
-      "attribute": "AURA_STEALTH"
-    },
-    {
-      "class": "AttributeAura",
-      "target": "ENEMY_HERO",
-      "attribute": "AURA_STEALTH"
-    }
-  ],
   "battlecry": {
     "condition": {
       "class": "ComboCondition"
@@ -34,5 +22,17 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "AttributeAura",
+      "target": "FRIENDLY_HERO",
+      "attribute": "AURA_STEALTH"
+    },
+    {
+      "class": "AttributeAura",
+      "target": "ENEMY_HERO",
+      "attribute": "AURA_STEALTH"
+    }
+  ]
 }

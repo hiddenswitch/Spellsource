@@ -69,7 +69,7 @@ import java.util.Map;
  * @see Aura for more about what auras should look like.
  * @see Enchantment for more about what enchantments should look like.
  */
-public final class AddEnchantmentSpell extends Spell {
+public class AddEnchantmentSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AddEnchantmentSpell.class);
 
