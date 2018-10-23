@@ -9,26 +9,36 @@
   "description": "Whenever you cast a spell on a minion, cast it on the ones next to it instead.",
   "trigger": {
     "eventTrigger": {
-      "class": "TargetAcquisitionTrigger",
-      "actionType": "SPELL",
-      "queueCondition": {
-        "class": "OwnedByPlayerCondition",
-        "target": "EVENT_TARGET",
-        "targetPlayer": "BOTH"
+      "class": "SpellCastedTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "target": "TARGET",
+        "cardType": "MINION"
       },
-      "sourcePlayer": "SELF",
-      "targetEntityType": "MINION",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "AdjacentEffectSpell",
-      "spell1": {
-        "class": "NullSpell"
-      },
-      "spell2": {
-        "class": "RecastSpell",
-        "target": "ADJACENT_MINIONS"
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_SOURCE",
+          "attribute": "COUNTERED"
+        },
+        {
+          "class": "MetaSpell",
+          "target": "ADJACENT_TO_TARGET",
+          "spells": [
+            {
+              "class": "OverrideTargetSpell"
+            },
+            {
+              "class": "CastCardsSpell",
+              "secondaryTarget": "EVENT_SOURCE"
+            }
+          ]
+        }
+      ]
     }
   },
   "collectible": true,

@@ -13,7 +13,7 @@
       "class": "BuffSpell",
       "target": "SELF",
       "value": {
-        "class": "DeadMinionsThisTurn",
+        "class": "DiedThisTurnValueProvider",
         "targetPlayer": "BOTH"
       }
     }

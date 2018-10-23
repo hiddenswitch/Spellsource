@@ -13,24 +13,24 @@
         "class": "FromDeckToHandSpell",
         "cardFilter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "DIVINE_SHIELD"
+          "attribute": "DIVINE_SHIELD",
+          "cardType": "MINION"
         }
       },
       {
         "class": "FromDeckToHandSpell",
         "cardFilter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "LIFESTEAL"
+          "attribute": "LIFESTEAL",
+          "cardType": "MINION"
         }
       },
       {
         "class": "FromDeckToHandSpell",
         "cardFilter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "TAUNT"
+          "attribute": "TAUNT",
+          "cardType": "MINION"
         }
       }
     ]

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.AddEnchantmentSpell;
 import net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 

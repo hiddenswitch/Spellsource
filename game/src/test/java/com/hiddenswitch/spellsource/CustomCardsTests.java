@@ -52,6 +52,53 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testNazmiriStalker() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_nazmiri_stalker");
+			Minion target1 = playMinionCard(context, player, "minion_wisp");
+			Minion target2 = playMinionCard(context, player, "minion_wisp");
+			Minion target3 = playMinionCard(context, player, "minion_wisp");
+			// Cast a +1/+2 on a target
+			playCardWithTarget(context, player, "spell_sound_the_bells", target2);
+			assertEquals(target1.getAttack(), target1.getBaseAttack() + 1);
+			assertEquals(target1.getMaxHp(), target1.getBaseHp() + 2);
+			assertEquals(target2.getAttack(), target1.getBaseAttack());
+			assertEquals(target2.getMaxHp(), target1.getBaseHp());
+			assertEquals(target3.getAttack(), target1.getBaseAttack() + 1);
+			assertEquals(target3.getMaxHp(), target1.getBaseHp() + 2);
+		});
+	}
+
+	@Test
+	public void testSolarPower() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			overrideDiscover(context, player, "spell_the_coin");
+			playCard(context, player, "spell_solar_power");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_the_coin");
+			context.endTurn();
+			assertEquals(player.getHand().size(), 1);
+			context.endTurn();
+			assertEquals(player.getHand().size(), 2);
+			assertEquals(player.getHand().get(1).getCardId(), "spell_the_coin");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testSilvermoonOperative() {
+		runGym((context, player, opponent) -> {
+			Card silvermoonCard = receiveCard(context, player, "minion_silvermoon_operative");
+			assertEquals(silvermoonCard.getAttributeValue(Attribute.RECEIVED_ON_TURN), context.getTurn());
+			Minion silvermoon = playMinionCard(context, player, silvermoonCard);
+			assertEquals(silvermoon.getAttack(), silvermoon.getBaseAttack() + 2, "Did buff");
+		});
+	}
+
+	@Test
 	public void testSorrowstone() {
 		runGym((context, player, opponent) -> {
 			Minion target1 = playMinionCard(context, player, "minion_wisp");

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.utils.Attribute;
 
+@Deprecated
 public class DeadMinionsThisTurn extends ValueProvider {
 
 	public DeadMinionsThisTurn(ValueProviderDesc desc) {

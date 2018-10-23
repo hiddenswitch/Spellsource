@@ -8,29 +8,23 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
-    "targetPlayer": "SELF",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReceiveCardSpell"
+        },
+        {
+          "class": "custom.ReceiveCardNextTurnSpell",
+          "target": "FRIENDLY_PLAYER"
+        }
+      ]
+    },
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "SPELL"
     },
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "spell": {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "TurnEndTrigger",
-            "targetPlayer": "SELF"
-          },
-          "spell": {
-            "class": "ReceiveCardSpell",
-            "target": "OUTPUT"
-          },
-          "oneTurn": true
-        }
-      }
-    }
+    "targetPlayer": "SELF"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -8,12 +8,12 @@
   "rarity": "COMMON",
   "description": "Battlecry: If your hand is empty, deal 2 damage and draw a card.",
   "battlecry": {
-    "targetSelection": "ANY",
     "condition": {
       "class": "CardCountCondition",
       "value": 0,
       "operation": "LESS_OR_EQUAL"
     },
+    "targetSelection": "ANY",
     "spell": {
       "class": "MetaSpell",
       "spells": [

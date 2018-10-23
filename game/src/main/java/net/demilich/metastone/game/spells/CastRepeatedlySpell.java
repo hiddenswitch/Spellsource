@@ -19,7 +19,7 @@ import java.util.Map;
  * specified, the condition is evaluated after the first cast; if the condition is not {@link
  * Condition#isFulfilled(GameContext, Player, Entity, Entity)}, the casting stops.
  * <p>
- * If {@link SpellArg#EXCLUSIVE} is specified, the spell will only be recast on targets that were not previously cast on
+ * If {@link SpellArg#EXCLUSIVE} is {@code true}, the spell will only be recast on targets that were not previously cast on
  * in a prior iteration.
  * <p>
  * If this spell's invocation has a non-null {@code target}, the sub spell will be cast with a random target in this

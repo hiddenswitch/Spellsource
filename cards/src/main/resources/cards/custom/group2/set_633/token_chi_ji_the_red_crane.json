@@ -16,7 +16,7 @@
       "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "PlayCardsSpell",
+      "class": "CastCardsSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
       "secondaryTarget": "EVENT_SOURCE"
     }
