@@ -39,6 +39,7 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -52,22 +53,24 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testCrypticRuins() {
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 8; i++) {
 			final int j = i;
 			runGym((context, player, opponent) -> {
+				AtomicBoolean didDiscover = new AtomicBoolean(false);
 				overrideDiscover(context, player, discoverActions -> {
+					didDiscover.compareAndSet(false, true);
+					assertTrue(discoverActions.size() > 0);
 					for (DiscoverAction action : discoverActions) {
 						assertEquals(action.getCard().getBaseManaCost(), 3 + j);
 					}
 					return discoverActions.get(0);
 				});
-				for (int k = 0; k < j; k++) {
-					playMinionCard(context, player, "minion_bloodmage_thalnos");
-				}
+				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
 				playCard(context, player, "spell_cryptic_ruins");
+				assertTrue(didDiscover.get());
 			});
 		}
-
 	}
 
 	@Test
