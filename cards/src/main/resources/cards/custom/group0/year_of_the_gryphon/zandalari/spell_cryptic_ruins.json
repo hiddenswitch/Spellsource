@@ -33,7 +33,7 @@
           "cardType": "MINION",
           "value": 3,
           "attribute": "BASE_ATTACK",
-          "operation": "EQUAL"
+          "operation": "EQUAL",
           "attack": {
             "class": "SpellDamageValueProvider",
             "offset": 3
@@ -50,7 +50,7 @@
           "cardType": "MINION",
           "value": 3,
           "attribute": "BASE_HP",
-          "operation": "EQUAL"
+          "operation": "EQUAL",
           "hp": {
             "class": "SpellDamageValueProvider",
             "offset": 3
