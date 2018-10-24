@@ -1,0 +1,51 @@
+{
+  "name": "Surprise Attack",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage to an undamaged minion. Combo: $5 damage. Surge: Destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "value": {
+        "class": "CurrentTurnValueProvider"
+      },
+      "attribute": "RECEIVED_ON_TURN",
+      "operation": "EQUAL"
+    },
+    "spell1": {
+      "spell": {
+        "class": "DestroySpell"
+      }
+    },
+    "spell2": {
+      "spell": {
+        "class": "ComboSpell",
+        "exclusive": true,
+        "spell1": {
+          "class": "DamageSpell",
+          "value": 3,
+          "filter": {
+            "class": "DamagedFilter",
+            "invert": true
+          }
+        },
+        "spell2": {
+          "class": "DamageSpell",
+          "value": 5,
+          "filter": {
+            "class": "DamagedFilter",
+            "invert": true
+          }
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
