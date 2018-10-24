@@ -33,10 +33,7 @@
   "aura": {
     "class": "ChooseOneOverrideAura",
     "target": "FRIENDLY_PLAYER",
-    "applyEffect": {
-      "class": "NullSpell",
-      "value": 1
-    }
+    "chooseOneOverride": "ALWAYS_SECOND"
   },
   "collectible": false,
   "set": "CUSTOM",

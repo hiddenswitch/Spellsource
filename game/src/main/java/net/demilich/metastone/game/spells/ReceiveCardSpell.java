@@ -161,7 +161,7 @@ public class ReceiveCardSpell extends Spell {
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!cards.isEmpty()) {
-					card = context.getLogic().removeRandom(cards);
+					card = getAndRemoveCard(context, cards);
 				} else if (replacementCard != null) {
 					logger.debug("onCast {} {}: No cards were produced by the filter or source, so a replacement {} was used instead", context.getGameId(), source, replacementCard);
 					card = context.getCardById(replacementCard);
@@ -200,7 +200,7 @@ public class ReceiveCardSpell extends Spell {
 						continue;
 					}
 
-					final Card card = context.getLogic().removeRandom(receivableCards).getCopy();
+					final Card card = getAndRemoveCard(context, receivableCards).getCopy();
 					context.getLogic().receiveCard(player.getId(), card);
 					if (card.getZone() == Zones.HAND) {
 						SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
@@ -219,6 +219,10 @@ public class ReceiveCardSpell extends Spell {
 		} else if (!(target.getOwner() == player.getId())) {
 			logger.error("onCast {} {}: Attempting to receive a card {} owned by {}, who is not the casting player {}", context.getGameId(), source, target, context.getPlayer(target.getOwner()), player);
 		}
+	}
+
+	protected Card getAndRemoveCard(GameContext context, List<Card> cards) {
+		return context.getLogic().removeRandom(cards);
 	}
 
 	/**

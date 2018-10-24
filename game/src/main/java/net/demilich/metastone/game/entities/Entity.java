@@ -137,7 +137,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The entity's ID, or {@link IdFactoryImpl#UNASSIGNED} if it is unassigned.
 	 * @see IdFactoryImpl for the class that generates IDs.
 	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the place where minion IDs are set.
-	 * @see GameLogic#assignEntityIds(CardList, int) for the place where IDs are set for all the cards that start in the
+	 * @see GameLogic#assignEntityIds(Iterable, int) for the place where IDs are set for all the cards that start in the
 	 * 		game.
 	 * @see EntityReference for a class used to store the notion of a "target."
 	 */
@@ -214,7 +214,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Checks if the entity is destroyed. Overridden to take into account entities with hitpoints.
 	 *
 	 * @return {@code true} if it is destroyed.
-	 * @see {@link Actor#isDestroyed()} for a more complete implementation.
+	 * @see Actor#isDestroyed() for a more complete implementation.
 	 */
 	public boolean isDestroyed() {
 		return hasAttribute(Attribute.DESTROYED);
@@ -388,6 +388,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 *
 	 * @param context     The game context this entity is in.
 	 * @param destination The destination zone belonging to the player to move to.
+	 * @param index       The location in the zone to move or add to
 	 * @throws ArrayStoreException if the entity has no owner; or if the entity already exists in the destination.
 	 */
 	@SuppressWarnings("unchecked")
@@ -510,5 +511,15 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		return false;
+	}
+
+	/**
+	 * The entity's index in its zone.
+	 *
+	 * @return {@link EntityLocation#UNASSIGNED} 's index if it isn't yet in a zone (typically {@code -1}), or the index
+	 * 		in the {@link #getZone()} this entity is in.
+	 */
+	public int getIndex() {
+		return getEntityLocation().getIndex();
 	}
 }

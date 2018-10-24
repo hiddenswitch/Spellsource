@@ -1,14 +1,15 @@
 Name: Token Druid
 Class: Druid
 Format: Standard
-1x Innervate
 2x Lesser Jasper Spellstone
-2x Naturalize
-2x Power of the Wild
+1x Power of the Wild
 2x Wild Growth
 2x Savage Roar
 2x Branching Paths
+1x Flobbidinous Floop
+1x Saronite Chain Gang
 2x Soul of the Forest
+2x Strongshell Scavenger
 2x Swipe
 2x Wispering Woods
 2x Arcane Tyrant

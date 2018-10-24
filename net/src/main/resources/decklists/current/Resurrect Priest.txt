@@ -1,0 +1,23 @@
+Name: Resurrect Priest
+Class: Priest
+Format: Standard
+2x Holy Smite
+1x Bloodmage Thalnos
+2x Mind Blast
+2x Radiant Elemental
+2x Shadow Visions
+1x Shadow Word: Pain
+2x Spirit Lash
+2x Gilded Gargoyle
+1x Shadow Word: Death
+2x Eternal Servitude
+1x Lyra the Sunshard
+1x Zilliax
+2x Shadow Essence
+2x Lesser Diamond Spellstone
+1x Prophet Velen
+2x Psychic Scream
+1x The Lich King
+1x Malygos
+1x Obsidian Statue
+1x Zerek's Cloning Gallery

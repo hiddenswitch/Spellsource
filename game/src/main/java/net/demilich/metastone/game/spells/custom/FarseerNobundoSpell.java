@@ -21,7 +21,13 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.stream.Stream;
 
-public class FarseerNobundoSpell extends Spell {
+/**
+ * Creates a trigger that copies the {@code target} entity's text to {@link Race#TOTEM} minions for the rest of the
+ * game.
+ * <p>
+ * Implements Farseer Nobundo.
+ */
+public final class FarseerNobundoSpell extends Spell {
 
 	@Override
 	@Suspendable

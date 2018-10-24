@@ -1,0 +1,46 @@
+{
+  "name": "Thunderfury",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "SILVER",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "LEGENDARY",
+  "description": "Doesn't lose Durability while you are Overloaded.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "OrCondition",
+      "conditions": [
+        {
+          "class": "ComparisonCondition",
+          "operation": "GREATER",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "FRIEDNLY_PLAYER",
+            "attribute": "OVERLOAD"
+          },
+          "value2": 0
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "GREATER",
+          "value1": {
+            "class": "PlayerAttributeValueProvider",
+            "playerAttribute": "LOCKED_MANA",
+            "targetPlayer": "SELF"
+          },
+          "value2": 0
+        }
+      ]
+    },
+    "attribute": "AURA_IMMUNE",
+    "secondaryTrigger": {
+      "class": "WillEndSequenceTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

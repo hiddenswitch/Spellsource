@@ -13,8 +13,8 @@ Format: Standard
 2x Doubling Imp
 2x Fungal Enchanter
 2x Happy Ghoul
-1x Lifedrinker
+1x Tar Creeper
 2x Saronite Chain Gang
 2x Despicable Dreadlord
+1x Doomguard
 2x Fungalmancer
-1x Leeroy Jenkins

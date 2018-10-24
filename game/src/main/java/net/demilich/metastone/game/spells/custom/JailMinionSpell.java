@@ -10,7 +10,12 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.utils.Attribute;
 
-public class JailMinionSpell extends Spell {
+/**
+ * Destroys a minion, and gives the {@code source} the deathrattle, "Resummon that minion."
+ * <p>
+ * Implements Moat Lurker and Carnivorous Cube.
+ */
+public final class JailMinionSpell extends Spell {
 
 	@Override
 	@Suspendable

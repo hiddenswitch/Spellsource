@@ -31,7 +31,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.5.13',
+      version='0.5.17',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",

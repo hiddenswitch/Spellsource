@@ -16,13 +16,13 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "class": "CopyCardSpell",
-        "target": "SELF",
-        "value": 3
+          "class": "CopyCardSpell",
+          "target": "SELF",
+          "value": 3
         },
         {
-        "class": "AddAttributeSpell",
-        "attribute": "KEEPS_ENCHANTMENTS"
+          "class": "AddAttributeSpell",
+          "attribute": "KEEPS_ENCHANTMENTS"
         }
       ]
     }

@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -27,7 +28,7 @@ import java.io.Serializable;
  * objects where some analytics events have side effects on gameplay.
  * <p>
  * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
- * Handler)}.
+ * SuspendableAction1)}.
  * <p>
  * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
  * are just always running throughout a game. In Spellsource, this trigger is added by a {@link

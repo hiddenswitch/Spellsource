@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Add a copy of a card from your deck to your hand.",
+  "description": "Copy a random card from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "CopyCardSpell",

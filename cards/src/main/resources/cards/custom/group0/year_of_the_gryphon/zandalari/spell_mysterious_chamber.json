@@ -12,16 +12,16 @@
       "class": "ReceiveCardSpell",
       "targetPlayer": "SELF"
     },
-    "cardSource": {
-      "class": "FormatCatalogueSource",
-      "format": "ALL"
-    },
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "SELF",
       "attribute": "SECRET",
       "cardType": "SPELL"
-    }  
+    },
+    "cardSource": {
+      "class": "FormatCatalogueSource",
+      "format": "GREATER_CUSTOM"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

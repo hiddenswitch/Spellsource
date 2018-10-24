@@ -15,6 +15,11 @@ import java.util.Map;
 
 import static java.util.stream.Collectors.toMap;
 
+/**
+ * For each {@code target}, destroy it. Once all the targets have been destroyed, end the sequence and trigger any
+ * pending deathrattles. Then, for each destroyed target, call the summon spell specified by this {@link SpellDesc} with
+ * a {@link SpellArg#BOARD_POSITION_ABSOLUTE} of the destroyed minion's prior location.
+ */
 public final class DestroyAndSummonInPlaceSpell extends SummonSpell {
 
 	@Override

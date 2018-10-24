@@ -7,11 +7,9 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -198,6 +196,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testMasterOfEvolutionBrann() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_brann_bronzebeard");
 			playCard(context, player, "minion_master_of_evolution");

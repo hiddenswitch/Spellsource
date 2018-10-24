@@ -1,0 +1,51 @@
+{
+  "name": "Rummage",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "COMMON",
+  "description": "Copy two random cards from your deck. Invoke (7): Copy four.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell1": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CopyCardSpell",
+          "target": "FRIENDLY_DECK",
+          "randomTarget": true
+        },
+        {
+          "class": "CopyCardSpell",
+          "target": "FRIENDLY_DECK",
+          "randomTarget": true
+        }
+      ]
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CopyCardSpell",
+          "target": "FRIENDLY_DECK",
+          "randomTarget": true
+        },
+        {
+          "class": "CopyCardSpell",
+          "target": "FRIENDLY_DECK",
+          "randomTarget": true
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "INVOKE": 7
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -12,11 +12,17 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "card": "spell_wanted",
       "value": {
         "class": "EntityCounter",
-        "target": "ENEMY_MINIONS"
-      }
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "PERMANENT",
+          "invert": true,
+          "operation": "HAS"
+        }
+      },
+      "card": "spell_wanted"
     }
   },
   "attributes": {

@@ -2,7 +2,7 @@
   "name": "Prince Kael'thas",
   "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "BLUE",
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",

@@ -14,8 +14,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * long as the {@link AuraArg#CONDITION} is satisfied.
  * <p>
  * To support reevaluating the condition at different times, optionally specify an {@link AuraArg#SECONDARY_TRIGGER}
- * that fires when the condition ought to change. Otherwise, the condition is evaluated at the same time auras are,
- * which is whenever the board changes or a sequence ends. Updating auras when the sequence ends is almost always a
+ * that fires when the condition ought to change. Otherwise, the condition is evaluated at the same time all other auras
+ * are, which is whenever the board changes or a sequence ends. Updating auras when the sequence ends is almost always a
  * sufficient event to react to in order to implement an effect.
  * <p>
  * The underlying attributes used for this buff are {@link net.demilich.metastone.game.utils.Attribute#AURA_ATTACK_BONUS}
@@ -37,6 +37,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *     }
  *   }
  * </pre>
+ *
+ * @see Aura for a description of how the fields in the {@link AuraDesc} are interpreted.
  */
 public class BuffAura extends Aura {
 

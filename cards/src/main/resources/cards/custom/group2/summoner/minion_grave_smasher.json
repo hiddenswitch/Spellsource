@@ -1,0 +1,26 @@
+{
+  "name": "Grave Smasher",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Copy a random Deathrattle card from your deck.",
+  "deathrattle": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_DECK",
+    "filter": {
+      "class": "CardFilter",
+      "attribute": "DEATHRATTLES",
+      "operation": "HAS"
+    },
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

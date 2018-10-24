@@ -4,13 +4,13 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "EPIC",
-  "description": "Transform a minion into a 0/5 Statue with Taunt. Invoke (9): Transform the minions next to it.",
+  "description": "Transform a minion into a 1/3 Rubble with Taunt. Invoke (9): Transform the minions next to it.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AdjacentEffectSpell",
     "spell1": {
       "class": "TransformMinionSpell",
-      "card": "token_statue"
+      "card": "token_rubble"
     },
     "spell2": {
       "class": "ConditionalSpell",
@@ -19,7 +19,7 @@
       },
       "spell": {
         "class": "TransformMinionSpell",
-        "card": "token_statue"
+        "card": "token_rubble"
       }
     }
   },

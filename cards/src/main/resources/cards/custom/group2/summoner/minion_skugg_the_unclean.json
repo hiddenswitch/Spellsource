@@ -1,12 +1,12 @@
 {
   "name": "Skugg the Unclean",
-  "baseManaCost": 7,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "EGGPLANT",
-  "baseAttack": 7,
-  "baseHp": 5,
+  "baseAttack": 4,
+  "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: For the rest of the game, summon a 2/2 Rat with Lifesteal when you Invoke.",
+  "description": "Battlecry: For the rest of the game, summon a 2/2 Rat with Lifesteal whenever you Invoke.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

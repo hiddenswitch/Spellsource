@@ -5,10 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardArrayList;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -19,6 +17,7 @@ import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.events.TurnEndEvent;
 import net.demilich.metastone.game.events.TurnStartEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
+import net.demilich.metastone.game.events.PreGameStartEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.ChangeHeroPowerSpell;
@@ -30,6 +29,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
@@ -39,6 +39,8 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,6 +51,134 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testNazmiriStalker() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_nazmiri_stalker");
+			Minion target1 = playMinionCard(context, player, "minion_wisp");
+			Minion target2 = playMinionCard(context, player, "minion_wisp");
+			Minion target3 = playMinionCard(context, player, "minion_wisp");
+			// Cast a +1/+2 on a target
+			playCardWithTarget(context, player, "spell_sound_the_bells", target2);
+			assertEquals(target1.getAttack(), target1.getBaseAttack() + 1);
+			assertEquals(target1.getMaxHp(), target1.getBaseHp() + 2);
+			assertEquals(target2.getAttack(), target1.getBaseAttack());
+			assertEquals(target2.getMaxHp(), target1.getBaseHp());
+			assertEquals(target3.getAttack(), target1.getBaseAttack() + 1);
+			assertEquals(target3.getMaxHp(), target1.getBaseHp() + 2);
+		});
+	}
+
+	@Test
+	public void testSolarPower() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
+			overrideDiscover(context, player, "spell_the_coin");
+			playCard(context, player, "spell_solar_power");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_the_coin");
+			context.endTurn();
+			assertEquals(player.getHand().size(), 1);
+			context.endTurn();
+			assertEquals(player.getHand().size(), 2);
+			assertEquals(player.getHand().get(1).getCardId(), "spell_the_coin");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testSilvermoonOperative() {
+		runGym((context, player, opponent) -> {
+			Card silvermoonCard = receiveCard(context, player, "minion_silvermoon_operative");
+			assertEquals(silvermoonCard.getAttributeValue(Attribute.RECEIVED_ON_TURN), context.getTurn());
+			Minion silvermoon = playMinionCard(context, player, silvermoonCard);
+			assertEquals(silvermoon.getAttack(), silvermoon.getBaseAttack() + 2, "Did buff");
+		});
+	}
+
+	@Test
+	public void testSorrowstone() {
+		runGym((context, player, opponent) -> {
+			Minion target1 = playMinionCard(context, player, "minion_wisp");
+			Minion target2 = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "secret_sorrowstone");
+			context.endTurn();
+			Minion target3 = playMinionCard(context, opponent, "minion_wisp");
+			destroy(context, target1);
+			assertEquals(player.getSecrets().size(), 1);
+			destroy(context, target2);
+			assertEquals(player.getSecrets().size(), 1);
+			destroy(context, target3);
+			assertEquals(player.getSecrets().size(), 0);
+			assertEquals(player.getMinions().size(), 3);
+		});
+	}
+
+	@Test
+	public void testCatacombCandlefin() {
+		runGym((context, player, opponent) -> {
+			Minion shouldNotBeSummoned1 = playMinionCard(context, player, "minion_murloc_tinyfin");
+			Minion shouldBeSummoned = playMinionCard(context, player, "minion_murloc_warleader");
+			Minion shouldNotBeSummoned2 = playMinionCard(context, player, "minion_bloodfen_raptor");
+			destroy(context, shouldNotBeSummoned1);
+			destroy(context, shouldBeSummoned);
+			destroy(context, shouldNotBeSummoned2);
+			playCard(context, player, "minion_catacomb_candlefin");
+			assertEquals(player.getHand().get(0).getCardId(), shouldBeSummoned.getSourceCard().getCardId());
+		});
+	}
+
+	@Test
+	public void testCrypticRuins() {
+		for (int i = 0; i < 8; i++) {
+			final int j = i;
+			runGym((context, player, opponent) -> {
+				AtomicInteger didDiscover = new AtomicInteger(0);
+				overrideDiscover(context, player, discoverActions -> {
+					assertTrue(discoverActions.size() > 0);
+					int spellpower = context.getLogic().applySpellpower(player, player.getHero(), 0);
+					assertTrue(spellpower >= j);
+					int whichDiscover = didDiscover.getAndIncrement();
+					for (DiscoverAction action : discoverActions) {
+						switch (whichDiscover) {
+							case 0:
+								assertEquals(action.getCard().getBaseManaCost(), 3 + spellpower);
+								break;
+							case 1:
+								assertEquals(action.getCard().getAttack(), 3 + spellpower);
+								break;
+							case 2:
+								assertEquals(action.getCard().getBaseHp(), 3 + spellpower);
+								break;
+						}
+					}
+					return discoverActions.get(0);
+				});
+				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
+				playCard(context, player, "spell_cryptic_ruins");
+				assertEquals(didDiscover.get(), 3);
+			});
+		}
+	}
+
+	@Test
+	public void testBreathOfFire() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion damaged = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			playMinionCard(context, opponent, "minion_immune_test");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "spell_breath_of_fire");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertFalse(damaged.isDestroyed());
+			assertEquals(damaged.getHp(), damaged.getMaxHp() - 1);
+		});
+	}
 
 	@Test
 	public void testCromwell() {
@@ -629,6 +759,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testSignsOfTheEnd() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_signs_of_the_end");
 			assertEquals(player.getMinions().size(), 0);
 			playCard(context, player, "spell_the_coin");
@@ -636,6 +767,7 @@ public class CustomCardsTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_signs_of_the_end");
 			player.setMana(7);
 			playCard(context, player, "spell_earthquake");
@@ -4008,5 +4140,88 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_overtap");
 		});
 	}
+
+	@Test
+	public void testAlternateBaku() {
+		DebugContext context = createContext(HeroClass.SILVER, HeroClass.SILVER, false, DeckFormat.CUSTOM);
+		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(() -> "minion_faithful_lumi")
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_alternate_baku_the_mooneater"));
+		});
+		context.init();
+		assertEquals(context.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_alternate_totemic_slam");
+
+
+		DebugContext context2 = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		context2.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context2.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(() -> "minion_faithful_lumi")
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_alternate_baku_the_mooneater"));
+		});
+		context2.init();
+		assertEquals(context2.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_heal");
+
+	}
+
+	@Test
+	public void testAlternateGenn() {
+		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
+		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+			Stream.generate(() -> "minion_bloodfen_raptor")
+					.map(CardCatalogue::getCardById)
+					.limit(29)
+					.forEach(deck::addCard);
+			deck.addCard(CardCatalogue.getCardById("minion_alternate_genn_greymane"));
+		});
+
+		context.init();
+		Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
+		playCard(context, context.getPlayer1(), "hero_shadowreaper_anduin");
+		// Both player's hero powers should cost one
+		assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
+				.map(c -> (Card) c)
+				.filter(c -> c.getCardType() == CardType.HERO_POWER)
+				.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 1)
+				.count(), 2L);
+
+	}
+
+	@Test
+	public void testAlternateStartingHeroPowers() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "passive_dire_beast");
+			context.fireGameEvent(new PreGameStartEvent(context, player.getId()));
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_dire_beast");
+		});
+
+		int yup = 0;
+
+		for (int i = 0; i < 100; i++) {
+			DebugContext debug = createContext(HeroClass.GREEN, HeroClass.GREEN, false, DeckFormat.ALL);
+			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+				for (int j = 0; j < 10; j++) {
+					deck.addCard("minion_faithful_lumi");
+				}
+			});
+			debug.getPlayer1().getDeck().addCard(debug.getCardById("passive_dire_beast"));
+			debug.getPlayer1().getDeck().addCard(debug.getCardById("minion_baku_the_mooneater"));
+			debug.init();
+			if (debug.getPlayer1().getHeroPowerZone().get(0).getCardId().equals("hero_power_dire_stable")) {
+				yup++;
+			}
+		}
+		assertEquals(yup, 100);
+	}
+
+
 }
 

@@ -17,7 +17,7 @@ import java.util.Map;
  * Puts the specified {@link SpellArg#SECRET} (an {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc})
  * into play.
  * <p>
- * If the secret is a card, use {@link RecastSpell}.
+ * If the secret is a card, use {@link CastCardsSpell}.
  */
 public class AddSecretSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(AddSecretSpell.class);

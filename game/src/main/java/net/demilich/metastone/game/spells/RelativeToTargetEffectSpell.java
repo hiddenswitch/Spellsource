@@ -13,6 +13,16 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * This abstract class provides a way to cast spell effects on targets.
+ *
+ * <ul>
+ * <li>{@link SpellArg#SPELL1} is cast on {@code target}.</li>
+ * <li>{@link SpellArg#SPELL2} is cast on the result of {@link #getActors(GameContext, Entity)} of that {@code
+ * target}.</li>
+ * <li>{@link SpellArg#SPELL} is cast on both, only if neither of the above were specified.</li>
+ * </ul>
+ */
 public abstract class RelativeToTargetEffectSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(AdjacentEffectSpell.class);
 

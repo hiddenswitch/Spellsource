@@ -9,9 +9,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 
-public class ReplayCardsSpell extends Spell {
+public final class PlayCardsRandomlySpell extends Spell {
 
 	@Override
 	@Suspendable
@@ -24,16 +25,23 @@ public class ReplayCardsSpell extends Spell {
 		// Should not replay itself
 		cards.remove(source.getSourceCard());
 		cards.removeIf(c -> c.getCardId().equals(source.getSourceCard().getCardId()));
-
+		// TODO: While invoking play cards randomly, should not play a play cards randomly. Use an environment stack.
 		player.setAttribute(Attribute.RANDOM_CHOICES);
 
 		// Replay
 		for (int i = 0; i < cards.size(); i++) {
 			Card card = cards.get(i);
-			if (!SpellUtils.playCardRandomly(context, player, card, source, true, false, false, false, false)) {
-				break;
+			// TODO: Move the card temporarily to the set aside zone, so that effects apply to it correctly?
+
+			/*
+			card.setId(context.getLogic().generateId());
+			card.setOwner(player.getId());
+			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			*/
+			if (SpellUtils.playCardRandomly(context, player, card, source, true, false, false, false, false)) {
+				context.getLogic().revealCard(player, card);
 			}
-			context.getLogic().revealCard(player, card);
+			// context.getLogic().removeCard(card);
 		}
 
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);

@@ -19,7 +19,7 @@ import java.util.function.Predicate;
  * An internal spell used to implement {@link net.demilich.metastone.game.spells.aura.BuffAura}. Behaves like a {@link
  * BuffSpell} that uses {@link Attribute#AURA_ATTACK_BONUS} and modifies the HP in a nuanced way.
  */
-public class AuraBuffSpell extends Spell {
+public final class AuraBuffSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AuraBuffSpell.class);
 

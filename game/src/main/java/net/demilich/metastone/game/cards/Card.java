@@ -93,10 +93,8 @@ public class Card extends Entity implements HasChooseOneActions {
 			}
 		}
 
-		if ((hasAttribute(Attribute.ECHO) || hasAttribute(Attribute.AURA_ECHO))
-				&& hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN)) {
-			minion.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
-		}
+		minion.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
+
 
 		applyText(minion);
 
@@ -223,7 +221,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Gets the set that the card belongs to.
 	 *
-	 * @return
+	 * @return The card set
 	 */
 	public CardSet getCardSet() {
 		return getDesc().getSet();
@@ -232,7 +230,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Gets the card type, like Hero, Secret, Spell or Minion.
 	 *
-	 * @return
+	 * @return The card type
 	 */
 	public CardType getCardType() {
 		return getDesc().getType();
@@ -241,7 +239,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Gets the hero class that this card belongs to. Valid classes include ANY (neutral) or any of the main 9 classes.
 	 *
-	 * @return
+	 * @return The hero class
 	 */
 	public HeroClass getHeroClass() {
 		return (HeroClass) getAttributes().getOrDefault(Attribute.HERO_CLASS, getDesc().getHeroClass());
@@ -254,7 +252,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Some cards have multiple hero classes. This field stores those multiple classes when they are defined.
 	 *
-	 * @return
+	 * @return The hero classes (the gang)
 	 */
 	public HeroClass[] getHeroClasses() {
 		return getDesc().getHeroClasses();
@@ -465,7 +463,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Retrieves the card's triggers that are active while the card is in the {@link
 	 * net.demilich.metastone.game.targeting.Zones#HAND} or {@link net.demilich.metastone.game.targeting.Zones#HERO_POWER}.
 	 *
-	 * @return
+	 * @return The triggers
 	 */
 	public EnchantmentDesc[] getPassiveTriggers() {
 		return (EnchantmentDesc[]) getAttribute(Attribute.PASSIVE_TRIGGERS);
@@ -474,7 +472,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Indicates the card has effects that need to be persisted to a database between matches.
 	 *
-	 * @return
+	 * @return {@code true} if the card has effects that need to be persisted
 	 */
 	@Override
 	public boolean hasPersistentEffects() {
@@ -498,7 +496,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Retrieves the spell effects for this card. Secrets and quests automatically wrap their effects in a {@link
 	 * AddSecretSpell} and {@link AddQuestSpell}.
 	 *
-	 * @return
+	 * @return The spell
 	 */
 	public SpellDesc getSpell() {
 		if (isSecret() && getDesc().getSecret() != null) {
@@ -516,7 +514,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * This method does <b>not</b> return a reasonable answer for non-spell cards. While a minion card's target
 	 * requirement is technically friendly minions, it can be played even if there is no friendly minion on the board.
 	 *
-	 * @return
+	 * @return The target requirements
 	 */
 	public TargetSelection getTargetSelection() {
 		return (TargetSelection) getAttributes().getOrDefault(Attribute.TARGET_SELECTION, getDesc().getTargetSelection() == null ? TargetSelection.NONE : getDesc().getTargetSelection());
@@ -525,7 +523,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Indicates this card plays an actor, like a minion, weapon or hero, from the hand.
 	 *
-	 * @return
+	 * @return {@code true} if this is an actor card
 	 */
 	public boolean isActor() {
 		return getCardType() == CardType.MINION || getCardType() == CardType.WEAPON || getCardType() == CardType.HERO;
@@ -534,7 +532,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Creates an instance of the appropriate actor from this card.
 	 *
-	 * @return
+	 * @return The {@link Actor} entity or {@code null} if the card could not have produced an actor.
 	 */
 	public Actor actor() {
 		switch (getCardType()) {
@@ -553,7 +551,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	 * Retrieves the play options from choose one cards. If the card is not actually a choose one card, it returns an
 	 * empty array.
 	 *
-	 * @return
+	 * @return The play options array of length 2
 	 */
 	@Override
 	@NotNull
@@ -621,7 +619,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Retrieves the card IDs of the choices corresponding to this choose one spell.
 	 *
-	 * @return
+	 * @return The array of card IDs of the choices of length 2
 	 */
 	public String[] getChooseOneCardIds() {
 		return getDesc().getChooseOneCardIds();
@@ -630,7 +628,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Retreives the battlecries of the choices corresponding to this choose one actor.
 	 *
-	 * @return
+	 * @return The battlecry array of length 2
 	 */
 	public BattlecryDesc[] getChooseOneBattlecries() {
 		return getDesc().getChooseOneBattlecries();
@@ -639,7 +637,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Returns the action that executes both choose ones for this spell or actor card.
 	 *
-	 * @return
+	 * @return The action
 	 */
 	@Override
 	@Nullable
@@ -680,16 +678,16 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Gets the card ID of the card that executes both choose one effects for this choose one card.
 	 *
-	 * @return
+	 * @return The card ID
 	 */
 	public String getChooseBothCardId() {
 		return getDesc().getChooseBothCardId();
 	}
 
 	/**
-	 * Returns {@code true} if this card specified a choose both action.
+	 * Does this card have both choose one options?
 	 *
-	 * @return
+	 * @return {@code true} if this card specified a choose both action.
 	 */
 	@Override
 	public boolean hasBothOptions() {
@@ -718,7 +716,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		weapon.setMaxHp(getDurability());
 		weapon.setHp(weapon.getMaxDurability());
 		weapon.setBaseHp(getBaseDurability());
-
+		weapon.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);
 		applyText(weapon);
 
 		weapon.setOnEquip(getDesc().getOnEquip());
@@ -728,10 +726,12 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
-	 * Gets the weapon that is equipped as a side-effect of playing this actor from the hand, not the underlying weapon
-	 * actor represented by playing this card.
+	 * Gets the weapon that is equipped as a side-effect of playing this actor from the hand, <b>not</b> the underlying
+	 * weapon actor represented by playing this card.
+	 * <p>
+	 * Useful for determining the "attack" of a {@link CardType#HERO} while the card is in the player's hand/deck.
 	 *
-	 * @return
+	 * @return The weapon card
 	 */
 	public Card getWeapon() {
 		if (getDesc().getBattlecry() == null) {
@@ -769,10 +769,12 @@ public class Card extends Entity implements HasChooseOneActions {
 	/**
 	 * Indicates whether this spell can be cast generally, given its target selection. Does not provide logical answers
 	 * for non-spell cards (returns {@code true} in such cases).
+	 * <p>
+	 * Will return {@code true} even if the player isn't the owner of this card.
 	 *
 	 * @param context
 	 * @param player
-	 * @return
+	 * @return {@code true} if the card can be cast
 	 */
 	public boolean canBeCast(GameContext context, Player player) {
 		if (isQuest()) {

@@ -18,6 +18,11 @@ import net.demilich.metastone.game.utils.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Buffs the {@code target} with the stats of the highest cost minion in the player's hand.
+ *
+ * Implements Echo of Malfurion.
+ */
 public class GainStatsOfHighestCostMinionSpell extends BuffSpell {
 	private static Logger logger = LoggerFactory.getLogger(GainStatsOfHighestCostMinionSpell.class);
 
@@ -35,7 +40,7 @@ public class GainStatsOfHighestCostMinionSpell extends BuffSpell {
 
 		final EntityFilter highestCostFilter = AndFilter.create(
 				CardFilter.create(CardType.MINION),
-				ManaCostFilter.create(highestCost, Operation.EQUAL)
+				ManaCostFilter.create(highestCost, ComparisonOperation.EQUAL)
 		);
 
 		final CardSource handSource = HandSource.create();

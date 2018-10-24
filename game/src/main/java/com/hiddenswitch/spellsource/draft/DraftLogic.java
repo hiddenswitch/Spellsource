@@ -170,6 +170,7 @@ public class DraftLogic {
 						// Include the other two custom sets for now
 						format.addSet(CardSet.BATTLE_FOR_ASHENVALE);
 						format.addSet(CardSet.SANDS_OF_TIME);
+						format.addSet(CardSet.ALTERNATIVE);
 					}
 					format.withCardSets(latestExpansion);
 				} else {

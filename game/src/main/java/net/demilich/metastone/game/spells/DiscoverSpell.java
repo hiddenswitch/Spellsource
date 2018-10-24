@@ -150,15 +150,15 @@ import static java.util.stream.Collectors.toList;
  *          "howMany": 4
  *      }
  * </pre>
- * To cast a discovered spell instead of receiving it, change the {@link SpellArg#SPELL} to a {@link RecastSpell}. When
+ * To cast a discovered spell instead of receiving it, change the {@link SpellArg#SPELL} to a {@link CastCardsSpell}. When
  * trying to do different effects with the chosen cards, it's important to check if the {@link Spell} supports the
- * {@link SpellArg#CARD} argument (common ones like {@link RecastSpell}, {@link SummonSpell} and {@link
+ * {@link SpellArg#CARD} argument (common ones like {@link CastCardsSpell}, {@link SummonSpell} and {@link
  * ReceiveCardSpell} do:
  * <pre>
  *      {
  *          "class": "DiscoverSpell",
  *          "spell": {
- *              "class": "RecastSpell"
+ *              "class": "CastCardsSpell"
  *          },
  *          "cards": [
  *              "spell_invocation_of_air",

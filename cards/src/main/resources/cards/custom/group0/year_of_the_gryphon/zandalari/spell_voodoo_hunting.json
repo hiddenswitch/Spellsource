@@ -8,22 +8,24 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "CastRepeatedlySpell",
-    "target": "ALL_MINIONS",
     "spell": {
       "class": "MetaSpell",
+      "target": "ALL_MINIONS",
+      "randomTarget": true,
       "spells": [
         {
-        "class": "TriggerDeathrattleSpell"
+          "class": "DamageSpell",
+          "value": 1
         },
         {
-        "class": "DamageSpell",
-        "value": 1
+          "class": "TriggerDeathrattleSpell"
+        },
+        {
+          "class": "ForceDeathPhaseSpell"
         }
       ]
-    },    
-    "exclusive": true,
-    "howMany": 5,
-    "randomTarget": true
+    },
+    "howMany": 4
   },
   "collectible": true,
   "set": "CUSTOM",

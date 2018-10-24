@@ -1,6 +1,6 @@
 {
   "name": "Mana Wyrm",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "BLUE",
   "baseAttack": 1,

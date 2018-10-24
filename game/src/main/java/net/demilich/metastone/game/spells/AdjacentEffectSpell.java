@@ -38,6 +38,13 @@ import java.util.Map;
  * </pre>
  * Observe that "damaging next to" is implemented by querying this minion's attack and dealing damage to adjacent
  * minions like a damage spell.
+ *
+ * @see RelativeToTargetEffectSpell for an abstract base class that can be used to cast spells relative to a {@code
+ * 		target}.
+ * @see EntityReference#ADJACENT_MINIONS to directly target minions adjacent to the {@code source} (i.e., the result of
+ * 		{@link EntityReference#SELF}).
+ * @see EntityReference#ADJACENT_TO_TARGET to direct target minions adjacent to the resolution of {@link
+ * 		EntityReference#TARGET}, the currently selected player target.
  */
 public final class AdjacentEffectSpell extends RelativeToTargetEffectSpell {
 

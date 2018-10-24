@@ -16,7 +16,7 @@
     "spell": {
       "class": "SummonSpell",
       "spell": {
-        "class": "RecastSpell",
+        "class": "CastCardsSpell",
         "target": "OUTPUT",
         "secondaryTarget": "EVENT_SOURCE"
       },

@@ -21,13 +21,13 @@
               "targetPlayer": "BOTH"
             },
             "spell": {
-              "class": "RecastSpell",
+              "class": "CastCardsSpell",
               "card": "token_ozumat's_nightmare"
             }
           }
         },
         {
-          "class": "RecastSpell",
+          "class": "CastCardsSpell",
           "card": "token_ozumat's_nightmare"
         }
       ]

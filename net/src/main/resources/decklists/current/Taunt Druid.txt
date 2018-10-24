@@ -1,0 +1,22 @@
+Name: Taunt Druid
+Class: Druid
+Format: Standard
+2x Biology Project
+2x Claw
+2x Lesser Jasper Spellstone
+2x Naturalize
+2x Ferocious Howl
+1x Tar Creeper
+2x Witching Hour
+2x Carnivorous Cube
+2x Nourish
+1x Starfall
+1x Trogg Gloomeater
+1x Zilliax
+2x Furious Ettin
+1x Baku the Mooneater
+2x Dragonhatcher
+1x Hadronox
+1x Master Oakheart
+2x Sleepy Dragon
+1x Ysera

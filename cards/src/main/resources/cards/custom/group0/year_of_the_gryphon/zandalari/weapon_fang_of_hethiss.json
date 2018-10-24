@@ -12,25 +12,8 @@
       "class": "ComparisonCondition",
       "operation": "GREATER_OR_EQUAL",
       "value1": {
-        "class": "EntityCounter",
-        "target": "ALL_ENTITIES",
-        "filter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "CardFilter",
-              "cardType": "MINION"
-            },
-            {
-              "class": "AttributeFilter",
-              "value": {
-                "class": "CurrentTurnValueProvider"
-              },
-              "attribute": "DIED_ON_TURN",
-              "operation": "GREATER_OR_EQUAL"
-            }
-          ]
-        }
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH"
       },
       "value2": 3
     },

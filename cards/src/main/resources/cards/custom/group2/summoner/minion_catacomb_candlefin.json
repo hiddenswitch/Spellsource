@@ -7,27 +7,14 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "MURLOC",
-  "description": "Battlecry: Add a copy of a friendly Murloc that died this turn to your hand.",
+  "description": "Battlecry: Add a copy of the last friendly Murloc that died to your hand.",
   "battlecry": {
     "spell": {
-      "class": "ReceiveCardSpell",
+      "class": "ReceiveLastCardSpell",
+      "value": 1,
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "race": "MURLOC",
-            "cardType": "MINION"
-          },
-          {
-            "class": "AttributeFilter",
-            "value": {
-              "class": "CurrentTurnValueProvider"
-            },
-            "attribute": "DIED_ON_TURN",
-            "operation": "EQUAL"
-          }
-        ]
+        "class": "CardFilter",
+        "race": "MURLOC"
       },
       "cardSource": {
         "class": "GraveyardActorsSource",

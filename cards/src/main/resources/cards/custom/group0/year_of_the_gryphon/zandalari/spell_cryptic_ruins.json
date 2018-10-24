@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Discover a $3-Cost, $3-Attack, and $3-Health minion (improved by Spell Damage). Summon them.",
+  "description": "Discover $3-Cost, $3-Attack, and $3-Health minions, improved by Spell Damage. Summon the three you chose.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -15,12 +15,25 @@
           "class": "SummonSpell"
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "manaCost": {
-            "class": "SpellDamageValueProvider",
-            "offset": 3
-          }
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "SpellDamageValueProvider",
+                "offset": 3
+              },
+              "attribute": "BASE_MANA_COST",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       },
       {
@@ -29,13 +42,25 @@
           "class": "SummonSpell"
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "BASE_ATTACK",
-          "value": {
-            "class": "SpellDamageValueProvider",
-            "offset": 3
-          }
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "SpellDamageValueProvider",
+                "offset": 3
+              },
+              "attribute": "ATTACK",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       },
       {
@@ -44,13 +69,25 @@
           "class": "SummonSpell"
         },
         "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "BASE_HP",
-          "value": {
-            "class": "SpellDamageValueProvider",
-            "offset": 3
-          }
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "SpellDamageValueProvider",
+                "offset": 3
+              },
+              "attribute": "HP",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "CatalogueSource"
         }
       }
     ]

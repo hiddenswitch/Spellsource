@@ -18,7 +18,7 @@
     "spell": {
       "class": "DiscoverSpell",
       "spell": {
-        "class": "RecastSpell"
+        "class": "CastCardsSpell"
       },
       "cards": [
         "spell_dimensius_stop",

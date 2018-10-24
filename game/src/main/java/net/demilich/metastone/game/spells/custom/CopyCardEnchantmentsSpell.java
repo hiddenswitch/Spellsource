@@ -15,9 +15,17 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-public class CopyCardEnchantmentsSpell extends Spell {
+/**
+ * Copies enchantments written on the {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)}
+ * cards and the {@code target} (when specified) to the target specified in {@link
+ * net.demilich.metastone.game.spells.desc.SpellArg#SECONDARY_TARGET}.
+ * <p>
+ * Implements The Dreadblade.
+ */
+public final class CopyCardEnchantmentsSpell extends Spell {
 
 	@Override
 	@Suspendable
@@ -25,15 +33,13 @@ public class CopyCardEnchantmentsSpell extends Spell {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc, 99);
 		Entity applyingTo = source;
 		if (desc.getSecondaryTarget() != null) {
-			applyingTo = context.resolveSingleTarget(desc.getSecondaryTarget());
+			applyingTo = context.resolveSingleTarget(player, source, desc.getSecondaryTarget());
 		}
 		List<Entity> copyingFrom = new ArrayList<>();
 		if (target != null) {
 			copyingFrom.add(target);
 		}
-		for (Card card : cards) {
-			copyingFrom.add(card);
-		}
+		copyingFrom.addAll(cards);
 
 		for (Entity entity : copyingFrom) {
 			if (entity instanceof Card) {
@@ -43,18 +49,14 @@ public class CopyCardEnchantmentsSpell extends Spell {
 					triggers.add(card.getDesc().getTrigger());
 				}
 				if (card.getDesc().getTriggers() != null) {
-					for (EnchantmentDesc enchantmentDesc : card.getDesc().getTriggers()) {
-						triggers.add(enchantmentDesc);
-					}
+					triggers.addAll(Arrays.asList(card.getDesc().getTriggers()));
 				}
 				List<AuraDesc> auras = new ArrayList<>();
 				if (card.getDesc().getAura() != null) {
 					auras.add(card.getDesc().getAura());
 				}
 				if (card.getDesc().getAuras() != null) {
-					for (AuraDesc auraDesc : card.getDesc().getAuras()) {
-						auras.add(auraDesc);
-					}
+					auras.addAll(Arrays.asList(card.getDesc().getAuras()));
 				}
 
 				if (triggers.isEmpty()) {
@@ -81,10 +83,7 @@ public class CopyCardEnchantmentsSpell extends Spell {
 						context.getLogic().addGameEventListener(player, aura.create(), applyingToActor);
 					}
 				}
-
 			}
 		}
-
-
 	}
 }

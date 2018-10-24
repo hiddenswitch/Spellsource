@@ -17,10 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Created by finaris on 1/26/17.
+ * Destroys all minions except one. Then mind controls it.
  */
-
-public class DestroyAllExceptOneAndMindControlSpell extends DestroySpell {
+public final class DestroyAllExceptOneAndMindControlSpell extends DestroySpell {
 
 	public static Logger logger = LoggerFactory.getLogger(DestroyAllExceptOneSpell.class);
 

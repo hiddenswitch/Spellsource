@@ -1,17 +1,18 @@
 Name: Quest Rogue
 Class: Rogue
 Format: Standard
+2x Backstab
 2x Preparation
 2x Shadowstep
 2x Glacial Shard
 2x Southsea Deckhand
-2x Stonetusk Boar
 1x The Caverns Below
-2x Wax Elemental
+1x Lab Recruiter
 2x Novice Engineer
 2x Vicious Scalehide
 2x Youthful Brewmaster
-2x Mimic Pod
+2x Fan of Knives
+1x Mimic Pod
 1x Sonya Shadowdancer
 1x Zola the Gorgon
 2x Elven Minstrel

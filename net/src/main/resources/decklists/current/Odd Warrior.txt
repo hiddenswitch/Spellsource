@@ -1,0 +1,22 @@
+Name: Odd Warrior
+Class: Warrior
+Format: Standard
+2x Shield Slam
+1x Town Crier
+2x Frothing Berserker
+1x Gluttonous Ooze
+2x Ironbeak Owl
+2x Rabid Worgen
+2x Reckless Flurry
+1x Vicious Fledgling
+2x Brawl
+2x Carnivorous Cube
+1x Darius Crowley
+2x Dyn-o-matic
+2x Faceless Manipulator
+2x Festeroot Hulk
+2x Supercollider
+1x Zilliax
+1x Azalina Soulthief
+1x Dr. Boom, Mad Genius
+1x Baku the Mooneater

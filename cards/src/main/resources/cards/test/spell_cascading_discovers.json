@@ -9,7 +9,7 @@
   "spell": {
     "class": "DiscoverSpell",
     "spell": {
-      "class": "RecastSpell"
+      "class": "CastCardsSpell"
     },
     "cards": [
       "spell_empty_card_1",

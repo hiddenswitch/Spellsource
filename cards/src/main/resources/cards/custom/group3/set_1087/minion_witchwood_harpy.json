@@ -5,7 +5,7 @@
   "heroClass": "RUST",
   "baseAttack": 3,
   "baseHp": 6,
-  "rarity": "RARE",
+  "rarity": "EPIC",
   "description": "After you cast a spell, this minion may attack again.",
   "trigger": {
     "eventTrigger": {

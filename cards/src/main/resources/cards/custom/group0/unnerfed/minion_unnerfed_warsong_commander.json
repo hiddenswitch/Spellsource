@@ -12,7 +12,7 @@
     "target": "OTHER_FRIENDLY_MINIONS",
     "attribute": "AURA_CHARGE"
   },
-  "collectible": false,
-  "set": "CUSTOM",
+  "collectible": true,
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

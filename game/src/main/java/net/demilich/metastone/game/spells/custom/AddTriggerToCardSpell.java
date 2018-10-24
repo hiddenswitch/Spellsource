@@ -18,9 +18,18 @@ import org.slf4j.LoggerFactory;
 import java.util.Arrays;
 
 /**
- * Adds an enchantment that is active in the player's hand or deck.
+ * Adds an enchantment specified in {@link SpellArg#TRIGGER} and {@link SpellArg#TRIGGERS} to an entity that isn't in
+ * play (i.e., hand, deck, graveyard, etc.).
+ * <p>
+ * Choose the appropriate place to store the enchantment using the attribute:
+ * <ul>
+ * <li>For a trigger active in the hand, use {@code "attribute": "PASSIVE_TRIGGERS"}.</li>
+ * <li>For a trigger active in the deck, use {@code "attribute": "DECK_TRIGGERS"}.</li>
+ * <li>For a trigger active anywhere else that isn't in play, use {@code "attribute": "GAME_TRIGGERS"}.</li>
+ * <li>For a trigger active in play, use {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}.</li>
+ * </ul>
  */
-public class AddTriggerToCardSpell extends Spell {
+public final class AddTriggerToCardSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(AddTriggerToCardSpell.class);
 

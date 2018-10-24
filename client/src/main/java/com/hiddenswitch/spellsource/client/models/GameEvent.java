@@ -128,6 +128,8 @@ public class GameEvent implements Serializable {
     
     PRE_DAMAGE("PRE_DAMAGE"),
     
+    PRE_GAME_START("PRE_GAME_START"),
+    
     QUEST_PLAYED("QUEST_PLAYED"),
     
     QUEST_SUCCESSFUL("QUEST_SUCCESSFUL"),

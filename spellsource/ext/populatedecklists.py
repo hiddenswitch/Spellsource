@@ -45,7 +45,7 @@ _FILTER = {
 _TEMPOSTORM_URL = 'https://tempostorm.com/api/snapshots/findOne?'
 
 
-def _get_snapshot_url(snap_num=58):
+def _get_snapshot_url(snap_num=61):
     filter = copy.deepcopy(_FILTER)
     filter['where']['snapNum'] = snap_num
     filter_str = urllib.parse.urlencode({"filter": json.dumps(filter, indent=None, separators=[',', ':'])})
@@ -59,7 +59,7 @@ def write_decklists():
                                                        'AppleWebKit/604.4.7 (KHTML, like Gecko) Version/11.0.2 '
                                                        'Safari/604.4.7'
                                      })
-    print(_get_snapshot_url())
+    print('Updating the deck lists...')
     snapshot = json.load(urllib.request.urlopen(request))
     decks = [{'name': deck['name'],
               'heroClass': deck['deck']['playerClass'],

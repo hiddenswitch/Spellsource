@@ -29,6 +29,16 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testVoodooDoll() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
+			Minion doll = playMinionCardWithBattlecry(context, player, "minion_voodoo_doll", target);
+			destroy(context, doll);
+			assertTrue(target.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testGentlemansTopHat() {
 		runGym((context, player, opponent) -> {
 			Minion target1 = playMinionCard(context, player, "minion_wisp");
@@ -323,5 +333,29 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(player.getHand().get(2).getCardId(), "minion_wisp");
 			assertEquals(player.getHand().get(3).getCardId(), "minion_wisp");
 		});
+	}
+
+	@Test
+	public void testMalchezaarBaku() {
+		int success = 0;
+		for (int i = 0; i < 100; i++) {
+			DebugContext debug = createContext(HeroClass.BLUE, HeroClass.BLUE, false, DeckFormat.ALL);
+			debug.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
+			debug.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
+				for (int j = 0; j < 10; j++) {
+					deck.addCard("minion_pumpkin_peasant");
+				}
+			});
+			debug.getPlayer1().getDeck().addCard(debug.getCardById("minion_prince_malchezaar"));
+			debug.getPlayer1().getDeck().addCard(debug.getCardById("minion_baku_the_mooneater"));
+			debug.init();
+			if (debug.getPlayer1().getHeroPowerZone().get(0).getCardId().equals("hero_power_fireblast_rank_2")) {
+				success++;
+			}
+
+		}
+		assertEquals(success, 100);
+
+
 	}
 }

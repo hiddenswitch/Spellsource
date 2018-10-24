@@ -15,6 +15,9 @@ import net.demilich.metastone.game.utils.Attribute;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Puts a copy of the last card the player {@link Attribute#ROASTED} into the player's {@link net.demilich.metastone.game.targeting.Zones#HAND}.
+ */
 public final class CopyLastRoastedCardSpell extends CopyCardSpell {
 
 	@Override

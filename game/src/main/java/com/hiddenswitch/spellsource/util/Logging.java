@@ -33,7 +33,4 @@ public class Logging {
 		setLoggingLevelForClass(WebSocketServerHandshaker.class, Level.ERROR);
 	}
 
-	public static void setLoggingLevel() {
-		setLoggingLevel(Level.toLevel(System.getProperty("spellsource.root.logger.level"), Level.ERROR));
-	}
 }

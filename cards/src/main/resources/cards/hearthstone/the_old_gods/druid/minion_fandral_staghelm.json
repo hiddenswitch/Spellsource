@@ -10,10 +10,7 @@
   "aura": {
     "class": "ChooseOneOverrideAura",
     "target": "FRIENDLY_PLAYER",
-    "applyEffect": {
-      "class": "NullSpell",
-      "value": 2
-    }
+    "chooseOneOverride": "BOTH_COMBINED"
   },
   "collectible": true,
   "set": "THE_OLD_GODS",
