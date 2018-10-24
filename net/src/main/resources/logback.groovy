@@ -22,7 +22,7 @@ def date = timestamp("yyyyMMdd")
 def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
 Level defaultLevel = null;
 
-if (System.getenv("SPELLSOURCE_LOGGING_LEVEL")) {
+if (System.getenv().containsKey("SPELLSOURCE_LOGGING_LEVEL")) {
     defaultLevel = Level.valueOf(System.getenv("SPELLSOURCE_LOGGING_LEVEL"))
 } else {
     defaultLevel = WARN;
