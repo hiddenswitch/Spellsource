@@ -1,15 +1,11 @@
-//
-// Built on Fri Mar 09 18:42:29 CET 2018 by logback-translator
-// For more information on configuration files in Groovy
-// please see http://logback.qos.ch/manual/groovy.html
-
-// For assistance related to this tool or configuration files
-// in general, please contact the logback user mailing list at
-//    http://qos.ch/mailman/listinfo/logback-user
-
-// For professional support please see
-//   http://www.qos.ch/shop/products/professionalSupport
-
+/**
+ * Logging settings for Spellsource.
+ *
+ * To set a specific minimum logging level for all game code, set the environment variable SPELLSOURCE_LOGGING_LEVEL.
+ * For example, to see all tracing while running a server:
+ *
+ * SPELLSOURCE_LOGGING_LEVEL=TRACE gradle net:local
+ */
 import ca.pjer.logback.AwsLogsAppender
 import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.PatternLayout
