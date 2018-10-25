@@ -151,6 +151,48 @@ This message can be safely ignored.
 
 ### Contributing Cards
 
+Spellsource welcomes custom cards from the community. Almost all contributions are accepted, but they tend to be accepted at different speeds depending on a few characteristics of the contribution. The better the **engineering** and the better the **gameplay quality**, the more likely your cards will be available in the public servers sooner rather than later.
+
+With regards to **engineering**, maintainers prioritize content based on its engineering quality in this order:
+
+ 1. Fully coded in JSON with tests and placed in a Pull Request.
+ 2. Fully coded in JSON and placed in a Pull Request.
+ 3. Mostly coded in JSON and placed in a Pull Request.
+ 4. Code of any kind that's attached as a zip file in an Issue.
+ 5. Code of any kind sent to the maintainers in the Discord.
+ 6. Hearthcards gallery of content linked in an Issue.
+ 7. Spreadsheet of content linked in an Issue.
+ 8. Card text in an ordinary text format in the Discord `#suggestions` channel.
+ 9. Direct messaging the maintainers in Discord non-coded (i.e. image or text) content of any kind.
+ 10. Card images in the Discord `#suggestions` channel.
+ 
+Observe that the way you may be used to sharing a card--as an image with carefully selected art--is actually the least helpful way for the Spellsource maintainers to integrate.
+
+With regards to **gameplay quality**, maintainers prioritize content based on its gameplay quality in this order:
+
+ 1. Original hero classes (60+ cards) with some evidence of being judged positively by the community (e.g. Hearthpwn competitions, weekly /r/customhearthstone competitions).
+ 2. Original cards with some evidence of being judged positively by the community.
+ 3. Original cards using the Legacy mechanic: cards that remember things that have happened to them in prior games, like how much damage they dealt, what minions they destroyed, etc.
+ 4. Original cards with great new mechanics.
+ 5. Original cards for custom classes.
+ 6. Original cards for the Neutral class.
+ 7. Original cards for Hearthstone classes.
+ 8. Cards that adapt obscure copyrighted content. Use your best judgement for obscurity. For example, any English language television or movie content with a sequel is not considered obscure, becuase it was worth making a sequel.
+ 9. Hero classes that comprehensively adapt mainstream copyrighted content. For example, a complete House of Stark hero class adaptation for Game of Thrones.
+ 10. Cards that are adaptations of cards from all card games except Hearthstone (e.g., Magic: The Gathering).
+ 11. Cards that are adaptations of existing Hearthstone cards.
+ 12. Hearthstone obsolete content, like cards prior to being nerfed, beta cards, etc.
+ 13. Hearthstone uncollectible content, like adventure content.
+ 14. All other Hearthstone content.
+ 15. Individual cards that use copyrighted mainstream content, like mainstream Marvel and DC superheroes, big HBO TV shows, etc. Consider making a whole Hero Class instead.
+ 16. Joke and parody cards.
+ 
+The way to read this chart is to think about how your content can meet the qualifications to be as close to #1 for both measures. Fully coded original hero classes with tests will get the most QA attention and will be integrated the fastest. However, since some people are great designers and not so great programmers and vice versa, the maintainers are committed to code your content or improve your designs on the Discord.
+
+As a general policy, except in very rare instances, we say a hard no to joke cards.
+ 
+##### Programming New Cards
+
 Contributing cards consists of writing specially-crafted JSON files into the `cards` directories and writing tests for them.
 
 Additionally, to make it easier to contribute Hearthstone card functionality, the project has an automated test that accepts a URL to a community-standardized `cards.json` and checks which cards are missing. To use this feature, set the environment variable `SPELLSOURCE_CARDS_URL` to `https://api.hearthstonejson.com/v1/latest/enUS/cards.json`, or modify [CatalogueTests](game/src/test/java/com/blizzard/hearthstone/CatalogueTests.java) `getCurrentCards()` method to retrieve the latest URL.
