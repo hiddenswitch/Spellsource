@@ -29,5 +29,4 @@ public class MassTest extends TestBase {
 		GameContext context = GameContext.fromTwoRandomDecks();
 		context.play();
 	}
-
 }

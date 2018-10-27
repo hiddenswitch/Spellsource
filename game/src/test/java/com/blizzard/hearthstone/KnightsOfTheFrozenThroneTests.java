@@ -997,6 +997,5 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 						"These guys should have lifesteal even after we're not Jaina anymore");
 			}
 		});
-
 	}
 }

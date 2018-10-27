@@ -8,6 +8,7 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.util.HashMap;
@@ -33,9 +34,9 @@ public class ShuffleToDeckSpell extends Spell {
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
 			for (int i = 0; i < copies; i++) {
-				final Card copy = target.getSourceCard().getCopy();
+				Card copy = CopyCardSpell.copyCard(context, player, target.getSourceCard(), (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
 				copy.getAttributes().putAll(map);
-				if (context.getLogic().shuffleToDeck(player, copy, quiet)) {
+				if (copy.getZone() == Zones.DECK) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
 				}
 			}
@@ -48,8 +49,8 @@ public class ShuffleToDeckSpell extends Spell {
 		Map<Card, Boolean> didShuffle = new HashMap<>();
 		for (int i = 0; i < copies; i++) {
 			for (Card original : cards) {
-				Card copy = original.getCopy();
-				didShuffle.put(copy, context.getLogic().shuffleToDeck(player, copy, quiet));
+				Card copy = CopyCardSpell.copyCard(context, player, original, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+				didShuffle.put(copy, copy.getZone() == Zones.DECK);
 			}
 		}
 

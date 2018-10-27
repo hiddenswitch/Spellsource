@@ -47,7 +47,6 @@ public class JourneyToUngoroTests extends TestBase {
 				playMinionCard(context, player, "minion_stonehill_defender");
 			});
 		}
-
 	}
 
 	@Test
@@ -310,7 +309,6 @@ public class JourneyToUngoroTests extends TestBase {
 			assertEquals(player.getHand().get(0).getCardId(), "spell_crystal_core");
 		});
 
-
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_the_caverns_below");
 			for (int i = 0; i < 10; i++) {
@@ -321,7 +319,6 @@ public class JourneyToUngoroTests extends TestBase {
 				playCard(context, player, player.getHand().get(0));
 			}
 			assertTrue(player.getHand().filtered(c -> c.getCardId().equals("spell_crystal_core")).isEmpty());
-
 		});
 	}
 

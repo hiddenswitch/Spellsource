@@ -103,19 +103,11 @@ public class OneNightInKarazhanTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			clearHand(context, player);
 			clearZone(context, player.getDeck());
-			final Card acidicSwampOoze = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
-			acidicSwampOoze.setOwner(player.getId());
-			acidicSwampOoze.setId(context.getLogic().generateId());
-			player.getDeck().addCard(acidicSwampOoze);
-			final Card minionNoviceEngineer = CardCatalogue.getCardById("minion_novice_engineer");
-			context.getLogic().receiveCard(player.getId(), minionNoviceEngineer);
-			final Card malchezaarsImpl = CardCatalogue.getCardById("minion_malchezaars_imp");
-			final Card soulfire = CardCatalogue.getCardById("spell_soulfire");
-			playCard(context, player, malchezaarsImpl);
-			context.getLogic().receiveCard(player.getId(), soulfire);
-			PlayCardAction action = soulfire.play();
-			action.setTarget(context.getPlayer2().getHero());
-			context.getLogic().performGameAction(player.getId(), action);
+			putOnTopOfDeck(context, player, "minion_acidic_swamp_ooze");
+			Card minionNoviceEngineer = receiveCard(context, player, "minion_novice_engineer");
+			playCard(context, player, "minion_malchezaars_imp");
+			Card soulfire = receiveCard(context, player, "spell_soulfire");
+			playCardWithTarget(context, player, soulfire, opponent.getHero());
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_acidic_swamp_ooze", "The player should have Acidic Swamp Ooze in their hand after playing soulfire.");
 			Assert.assertEquals(minionNoviceEngineer.getZone(), Zones.GRAVEYARD, "Novice engineer should be in the graveyard.");
 		});

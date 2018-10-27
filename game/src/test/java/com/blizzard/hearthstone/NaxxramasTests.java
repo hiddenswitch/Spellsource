@@ -118,84 +118,62 @@ public class NaxxramasTests extends TestBase {
 		});
 	}
 
-
 	@Test
 	public void testPoisonSeeds() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.BLACK);
-		Player druid = context.getPlayer1();
-		Player rogue = context.getPlayer2();
-		Card chillwindYeti = CardCatalogue.getCardById("minion_chillwind_yeti");
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < GameLogic.MAX_MINIONS; i++) {
+				playMinionCard(context, player, "minion_chillwind_yeti");
+			}
 
-		for (int i = 0; i < GameLogic.MAX_MINIONS; i++) {
-			playMinionCard(context, druid, chillwindYeti);
-		}
+			context.endTurn();
+			for (int i = 0; i < 3; i++) {
+				playMinionCard(context, opponent, "minion_nerubian_egg");
+			}
+			context.endTurn();
 
-		Card nerubianEgg = CardCatalogue.getCardById("minion_nerubian_egg");
-		for (int i = 0; i < 3; i++) {
-			playMinionCard(context, rogue, nerubianEgg);
-		}
+			Assert.assertEquals(player.getMinions().size(), GameLogic.MAX_MINIONS);
+			Assert.assertEquals(opponent.getMinions().size(), 3);
 
-		Assert.assertEquals(druid.getMinions().size(), GameLogic.MAX_MINIONS);
-		Assert.assertEquals(rogue.getMinions().size(), 3);
+			playCard(context, player, "spell_poison_seeds");
 
-		Card poisonSeeds = CardCatalogue.getCardById("spell_poison_seeds");
-		playCard(context, druid, poisonSeeds);
-
-		Assert.assertEquals(druid.getMinions().size(), GameLogic.MAX_MINIONS);
-		Assert.assertEquals(rogue.getMinions().size(), 6);
-		for (Minion minion : druid.getMinions()) {
-			final String cardId = minion.getSourceCard().getCardId();
-			// TODO: Exclude these weird cards
-			Assert.assertTrue(cardId.equals("token_treant") || cardId.equals("minion_deck_death"));
-		}
+			Assert.assertEquals(player.getMinions().size(), GameLogic.MAX_MINIONS);
+			Assert.assertEquals(opponent.getMinions().size(), 6);
+			for (Minion minion : player.getMinions()) {
+				final String cardId = minion.getSourceCard().getCardId();
+				// TODO: Exclude these weird cards
+				Assert.assertTrue(cardId.equals("token_treant") || cardId.equals("minion_deck_death"));
+			}
+		});
 	}
 
 	@Test
 	public void testPoisonSeedsAuchenai() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.WHITE);
-		Player druid = context.getPlayer1();
-		Player priest = context.getPlayer2();
-
-		Card zombieChow = CardCatalogue.getCardById("minion_zombie_chow");
-		playMinionCard(context, priest, zombieChow);
-		playMinionCard(context, priest, zombieChow);
-
-		Card auchenaiSoulpriest = CardCatalogue.getCardById("minion_auchenai_soulpriest");
-		playMinionCard(context, priest, auchenaiSoulpriest);
-
-		Card pyroblast = CardCatalogue.getCardById("spell_pyroblast");
-		context.getLogic().receiveCard(druid.getId(), pyroblast);
-		GameAction gameAction = pyroblast.play();
-		gameAction.setTarget(druid.getHero());
-		context.getLogic().performGameAction(druid.getId(), gameAction);
-
-		Assert.assertEquals(druid.getHero().getHp(), GameLogic.MAX_HERO_HP - 10);
-
-		Card poisonSeeds = CardCatalogue.getCardById("spell_poison_seeds");
-		playCard(context, druid, poisonSeeds);
-
-		Assert.assertEquals(druid.getHero().getHp(), GameLogic.MAX_HERO_HP);
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, opponent, "minion_zombie_chow");
+			playMinionCard(context, opponent, "minion_zombie_chow");
+			playMinionCard(context, opponent, "minion_auchenai_soulpriest");
+			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			Assert.assertEquals(player.getHero().getHp(), GameLogic.MAX_HERO_HP - 10);
+			Card poisonSeeds = CardCatalogue.getCardById("spell_poison_seeds");
+			playCard(context, player, poisonSeeds);
+			Assert.assertEquals(player.getHero().getHp(), GameLogic.MAX_HERO_HP);
+		}, HeroClass.BROWN, HeroClass.WHITE);
 	}
 
 	@Test
 	public void testPoisonSeedsHauntedCreeper() {
-		GameContext context = createContext(HeroClass.BROWN, HeroClass.BLACK);
-		Player druid = context.getPlayer1();
-		Card hauntedCreeper = CardCatalogue.getCardById("minion_haunted_creeper");
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				playMinionCard(context, player, "minion_haunted_creeper");
+			}
+			Assert.assertEquals(player.getMinions().size(), 4);
+			playCard(context, player, "spell_poison_seeds");
 
-		for (int i = 0; i < 4; i++) {
-			playMinionCard(context, druid, hauntedCreeper);
-		}
-		Assert.assertEquals(druid.getMinions().size(), 4);
+			Assert.assertEquals(player.getMinions().size(), GameLogic.MAX_MINIONS);
 
-		Card poisonSeeds = CardCatalogue.getCardById("spell_poison_seeds");
-		playCard(context, druid, poisonSeeds);
-
-		Assert.assertEquals(druid.getMinions().size(), GameLogic.MAX_MINIONS);
-
-		for (Minion minion : druid.getMinions()) {
-			Assert.assertEquals(minion.getSourceCard().getCardId(), "token_spectral_spider");
-		}
+			for (Minion minion : player.getMinions()) {
+				Assert.assertEquals(minion.getSourceCard().getCardId(), "token_spectral_spider");
+			}
+		}, HeroClass.BROWN, HeroClass.BLACK);
 	}
-
 }

@@ -53,7 +53,7 @@ public class ChangeHeroPowerSpell extends Spell {
 		logger.debug("changeHeroPower {} {}: {}'s hero power was changed to {}", context.getGameId(), source, hero.getName(), heroPower);
 		// The old hero power should be removed from play.
 		Card oldHeroPower = hero.getHeroPower();
-		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), true);
+		context.removeTriggersAssociatedWith(oldHeroPower.getReference(), true, false);
 		oldHeroPower.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		context.getLogic().removeCard(oldHeroPower);
 		if (heroPower.getHeroClass() == HeroClass.INHERIT) {

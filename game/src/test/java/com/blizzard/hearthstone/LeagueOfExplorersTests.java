@@ -155,7 +155,6 @@ public class LeagueOfExplorersTests extends TestBase {
 		}
 	}
 
-
 	@Test
 	public void testCurseOfRafaam() {
 		runGym((context, player, opponent) -> {

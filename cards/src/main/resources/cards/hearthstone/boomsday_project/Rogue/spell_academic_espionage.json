@@ -7,21 +7,20 @@
   "description": "Shuffle 10 cards from your opponent's class into your deck. They cost (1)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ShuffleToDeckSpell",
+    "class": "custom.ShuffleWithCardCostModifierSpell",
     "value": 10,
-    "spell": {
-      "class": "CardCostModifierSpell",
-      "target": "OUTPUT",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 1,
-        "operation": "SET"
-      }
-    },
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "OPPONENT"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "target": "SELF",
+      "value": 1,
+      "operation": "SET"
     }
   },
   "collectible": true,
