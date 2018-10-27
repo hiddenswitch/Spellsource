@@ -1,0 +1,34 @@
+{
+  "name": "General Lauren",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon two Southsea Captains.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "minion_southsea_captain"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "minion_southsea_captain"
+        },
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
