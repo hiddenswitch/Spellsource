@@ -1,5 +1,8 @@
 package com.hiddenswitch.spellsource;
 
+import ch.qos.logback.classic.Level;
+import com.hiddenswitch.spellsource.util.Logging;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
@@ -10,6 +13,7 @@ import net.demilich.metastone.game.events.GameStartEvent;
 import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
@@ -21,7 +25,166 @@ import static org.testng.Assert.assertTrue;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
-	@Test()
+	@Test(invocationCount = 10)
+	@Ignore
+	public void testNoDisposalSameMemory() throws InterruptedException {
+		Logging.setLoggingLevel(Level.OFF);
+		System.gc();
+		GameContext context1 = GameContext.fromTwoRandomDecks();
+		GameContext context2 = context1.clone();
+		assertEquals(context1.getLogic().getSeed(), context2.getLogic().getSeed());
+
+		GameStateValueBehaviour behaviour1 = new GameStateValueBehaviour();
+		GameStateValueBehaviour behaviour2 = new GameStateValueBehaviour();
+		context1.setBehaviour(0, behaviour1);
+		context1.setBehaviour(1, behaviour2);
+		behaviour1.setMaxDepth(2);
+		behaviour2.setMaxDepth(2);
+		behaviour1.setForceGarbageCollection(true);
+		behaviour2.setForceGarbageCollection(true);
+		behaviour1.setTimeout(75000);
+		behaviour2.setTimeout(75000);
+		behaviour1.setParallel(false);
+		behaviour2.setParallel(false);
+		behaviour1.setDisposeNodes(false);
+		behaviour2.setDisposeNodes(false);
+
+		context1.play();
+		System.gc();
+		Thread.sleep(10000);
+		System.gc();
+		Thread.sleep(10000);
+
+		GameStateValueBehaviour behaviour3 = new GameStateValueBehaviour();
+		GameStateValueBehaviour behaviour4 = new GameStateValueBehaviour();
+		context2.setBehaviour(0, behaviour3);
+		context2.setBehaviour(1, behaviour4);
+		behaviour3.setMaxDepth(2);
+		behaviour4.setMaxDepth(2);
+		behaviour3.setForceGarbageCollection(true);
+		behaviour4.setForceGarbageCollection(true);
+		behaviour3.setTimeout(75000);
+		behaviour4.setTimeout(75000);
+		behaviour3.setParallel(false);
+		behaviour4.setParallel(false);
+		behaviour3.setDisposeNodes(false);
+		behaviour4.setDisposeNodes(false);
+
+		context2.play();
+		System.gc();
+		Thread.sleep(10000);
+		System.gc();
+		Thread.sleep(10000);
+
+		Logging.setLoggingLevel(Level.DEBUG);
+		assertEquals(context1.getTrace().getActions().toArray(new Integer[0]), context2.getTrace().getActions().toArray(new Integer[0]), "The two games should have played out identically. s");
+		long diff = Math.abs(behaviour3.getMinFreeMemory() - behaviour1.getMinFreeMemory());
+		assertTrue(diff < 1024 * 1024, String.format("When we don't dispose nodes, we should observe only a small difference in free memory. Instead the difference was %f MB", diff / (1024.0 * 1024.0)));
+	}
+
+	@Test(invocationCount = 10)
+	@Ignore
+	public void testReduceMemoryUsage() {
+		Logging.setLoggingLevel(Level.OFF);
+		System.gc();
+		GameContext context1 = GameContext.fromTwoRandomDecks();
+		GameContext context2 = context1.clone();
+		assertEquals(context1.getLogic().getSeed(), context2.getLogic().getSeed());
+
+		GameStateValueBehaviour behaviour1 = new GameStateValueBehaviour();
+		GameStateValueBehaviour behaviour2 = new GameStateValueBehaviour();
+		context1.setBehaviour(0, behaviour1);
+		context1.setBehaviour(1, behaviour2);
+		behaviour1.setMaxDepth(2);
+		behaviour2.setMaxDepth(2);
+		behaviour1.setForceGarbageCollection(true);
+		behaviour2.setForceGarbageCollection(true);
+		behaviour1.setTimeout(75000);
+		behaviour2.setTimeout(75000);
+		behaviour1.setParallel(false);
+		behaviour2.setParallel(false);
+		behaviour1.setDisposeNodes(false);
+		behaviour2.setDisposeNodes(false);
+
+		context1.play();
+		System.gc();
+
+		GameStateValueBehaviour behaviour3 = new GameStateValueBehaviour();
+		GameStateValueBehaviour behaviour4 = new GameStateValueBehaviour();
+		context2.setBehaviour(0, behaviour3);
+		context2.setBehaviour(1, behaviour4);
+		behaviour3.setMaxDepth(2);
+		behaviour4.setMaxDepth(2);
+		behaviour3.setForceGarbageCollection(true);
+		behaviour4.setForceGarbageCollection(true);
+		behaviour3.setTimeout(75000);
+		behaviour4.setTimeout(75000);
+		behaviour3.setParallel(false);
+		behaviour4.setParallel(false);
+		behaviour3.setDisposeNodes(true);
+		behaviour4.setDisposeNodes(true);
+
+		context2.play();
+		System.gc();
+
+		Logging.setLoggingLevel(Level.DEBUG);
+		assertEquals(context1.getTrace().getActions().toArray(new Integer[0]), context2.getTrace().getActions().toArray(new Integer[0]), "The two games should have played out identically. s");
+		assertTrue(behaviour3.getMinFreeMemory() > behaviour1.getMinFreeMemory(), "Disposing nodes should increase free memory.");
+	}
+
+	@Test(invocationCount = 10)
+	@Ignore
+	public void testReduceMemoryUsageDifferentOrder() {
+		Logging.setLoggingLevel(Level.OFF);
+		System.gc();
+		GameContext context1 = GameContext.fromTwoRandomDecks();
+		GameContext context2 = context1.clone();
+		assertEquals(context1.getLogic().getSeed(), context2.getLogic().getSeed());
+
+
+		GameStateValueBehaviour behaviour3 = new GameStateValueBehaviour();
+		GameStateValueBehaviour behaviour4 = new GameStateValueBehaviour();
+		context2.setBehaviour(0, behaviour3);
+		context2.setBehaviour(1, behaviour4);
+		behaviour3.setMaxDepth(2);
+		behaviour4.setMaxDepth(2);
+		behaviour3.setTimeout(75000);
+		behaviour4.setTimeout(75000);
+		behaviour3.setForceGarbageCollection(true);
+		behaviour4.setForceGarbageCollection(true);
+		behaviour3.setParallel(false);
+		behaviour4.setParallel(false);
+		behaviour3.setDisposeNodes(true);
+		behaviour4.setDisposeNodes(true);
+
+		context2.play();
+
+		System.gc();
+
+		GameStateValueBehaviour behaviour1 = new GameStateValueBehaviour();
+		GameStateValueBehaviour behaviour2 = new GameStateValueBehaviour();
+		context1.setBehaviour(0, behaviour1);
+		context1.setBehaviour(1, behaviour2);
+		behaviour1.setMaxDepth(2);
+		behaviour2.setMaxDepth(2);
+		behaviour1.setTimeout(75000);
+		behaviour2.setTimeout(75000);
+		behaviour1.setParallel(false);
+		behaviour2.setParallel(false);
+		behaviour1.setForceGarbageCollection(true);
+		behaviour2.setForceGarbageCollection(true);
+		behaviour1.setDisposeNodes(false);
+		behaviour2.setDisposeNodes(false);
+
+		context1.play();
+		System.gc();
+
+		Logging.setLoggingLevel(Level.DEBUG);
+		assertEquals(context1.getTrace().getActions().toArray(new Integer[0]), context2.getTrace().getActions().toArray(new Integer[0]), "The two games should have played out identically. s");
+		assertTrue(behaviour3.getMinFreeMemory() > behaviour1.getMinFreeMemory(), "Disposing nodes should increase free memory.");
+	}
+
+	@Test
 	public void testDiscoverActionsWithLowDepth() {
 		runGym((context, player, opponent) -> {
 			GameStateValueBehaviour checkDepth = new GameStateValueBehaviour();
