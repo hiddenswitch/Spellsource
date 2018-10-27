@@ -19,7 +19,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
     "OVERLOAD": 1
   },
   "collectible": true,
