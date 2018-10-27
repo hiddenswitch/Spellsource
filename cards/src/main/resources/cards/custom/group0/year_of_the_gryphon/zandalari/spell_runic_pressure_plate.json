@@ -1,0 +1,32 @@
+{
+  "name": "Runic Pressure Plate",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "RARE",
+  "description": "Secret: After your opponent plays a minion, deal $4 damage to it. If it survives, refresh this.",
+  "secret": {
+    "class": "MinionPlayedTrigger",
+    "targetPlayer": "OPPONENT"
+  },
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "target": "EVENT_TARGET",
+      "value": 4
+    },
+    "spell2": {
+      "class": "CastCardsSpell",
+      "targetPlayer": "SELF",
+      "card": "spell_runic_pressure_plate"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
