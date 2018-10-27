@@ -99,32 +99,28 @@ public class GoblinsVersusGnomesTests extends TestBase {
 
 	@Test
 	public void testBetrayalOnBurlyRockjawTroggDeals5Damage() {
-		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
-		Player paladin = context.getPlayer1();
+		runGym((context, player, opponent) -> {
+			Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+			playMinionCard(context, player, adjacentCard1);
 
-		Card adjacentCard1 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentCard1);
+			Card targetCard = CardCatalogue.getCardById("minion_burly_rockjaw_trogg");
+			Minion targetMinion = playMinionCard(context, player, targetCard);
 
-		Card targetCard = CardCatalogue.getCardById("minion_burly_rockjaw_trogg");
-		Minion targetMinion = playMinionCard(context, paladin, targetCard);
+			Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+			playMinionCard(context, player, adjacentCard2);
 
-		Card adjacentCard2 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentCard2);
+			context.getLogic().endTurn(player.getId());
 
-		context.getLogic().endTurn(paladin.getId());
+			Assert.assertEquals(player.getMinions().size(), 3);
+			Card betrayal = CardCatalogue.getCardById("spell_betrayal");
 
-		Assert.assertEquals(paladin.getMinions().size(), 3);
+			context.getLogic().receiveCard(opponent.getId(), betrayal);
+			GameAction action = betrayal.play();
+			action.setTarget(targetMinion);
+			context.getLogic().performGameAction(opponent.getId(), action);
 
-		Player rogue = context.getPlayer2();
-
-		Card betrayal = CardCatalogue.getCardById("spell_betrayal");
-
-		context.getLogic().receiveCard(rogue.getId(), betrayal);
-		GameAction action = betrayal.play();
-		action.setTarget(targetMinion);
-		context.getLogic().performGameAction(rogue.getId(), action);
-
-		Assert.assertEquals(paladin.getMinions().size(), 1);
+			Assert.assertEquals(player.getMinions().size(), 1);
+		}, HeroClass.GOLD, HeroClass.BLACK);
 	}
 
 	@Test
@@ -141,9 +137,6 @@ public class GoblinsVersusGnomesTests extends TestBase {
 					.count();
 			assertEquals(actionsBefore, 1);
 			assertEquals(actionsAfter, 4);
-
 		}, HeroClass.GREEN, HeroClass.GREEN);
-
-
 	}
 }

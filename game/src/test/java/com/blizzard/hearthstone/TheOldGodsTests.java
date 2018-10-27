@@ -406,7 +406,6 @@ public class TheOldGodsTests extends TestBase {
 			Assert.assertEquals(targetMinion.getAttack(), originalMinion[0].getAttack() + buff);
 			Assert.assertEquals(targetMinion.getHp(), originalMinion[0].getHp() + buff);
 		}
-
 	}
 
 	@Test
@@ -426,7 +425,6 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(player.getMinions().size(), 2);
 	}
 
-
 	@Test
 	public void testRallyingBlade() {
 		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
@@ -442,7 +440,7 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(argentSquire.getHp(), 2);
 	}
 
-	public static class YoggTestSpell1 extends Spell {
+	private static class YoggTestSpell1 extends Spell {
 		private static final CountDownLatch counter = new CountDownLatch(3);
 
 		public YoggTestSpell1() {
@@ -456,7 +454,7 @@ public class TheOldGodsTests extends TestBase {
 		}
 	}
 
-	public static class YoggTestSpell2 extends Spell {
+	private static class YoggTestSpell2 extends Spell {
 		private static final CountDownLatch counter = new CountDownLatch(3);
 
 		public YoggTestSpell2() {

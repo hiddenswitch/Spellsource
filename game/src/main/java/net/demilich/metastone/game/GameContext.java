@@ -950,13 +950,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Removes all the triggers associated with a particular {@link Entity}, typically because the entity has been
 	 * destroyed,
-	 *
-	 * @param entityReference The entity whose triggers should be removed.
+	 *  @param entityReference The entity whose triggers should be removed.
 	 * @param removeAuras     {@code true} if the entity has {@link net.demilich.metastone.game.spells.aura.Aura} triggers
-	 *                        that should be removed.
+	 * @param keepSelfCardCostModifiers
 	 */
-	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
-		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras, this);
+	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers) {
+		triggerManager.removeTriggersAssociatedWith(entityReference, removeAuras, keepSelfCardCostModifiers, this);
 	}
 
 	/**

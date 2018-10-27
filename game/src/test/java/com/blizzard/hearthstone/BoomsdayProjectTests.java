@@ -89,7 +89,8 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testTreantSynergyCards() { //dendrologist, mulchmuncher, landscaping
+	public void testTreantSynergyCards() {
+		// Dendrologist, mulchmuncher, landscaping
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_dendrologist");
 			assertEquals(player.getHand().size(), 0);
@@ -98,11 +99,12 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getHand().size(), 1);
 		});
 
-		/*
+
 		runGym(((context, player, opponent) -> {
 			receiveCard(context, player, "minion_mulchmuncher");
 			context.getLogic().modifyMaxMana(player, 4);
-			playCard(context, player, "spell_living_mana"); //these bad boys should count as treants too
+			// these bad boys should count as treants too
+			playCard(context, player, "spell_living_mana");
 			assertEquals(player.getMinions().size(), 5);
 			playCard(context, player, "spell_landscaping");
 			playCard(context, player, "spell_twisting_nether");
@@ -110,7 +112,6 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getHand().get(0).getManaCost(context, player), 3);
 			assertEquals(player.getHand().get(1).getManaCost(context, player), 3);
 		}));
-    */
 	}
 
 	@Test
@@ -179,8 +180,6 @@ public class BoomsdayProjectTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(player.getMinions().size(), 4);
 		});
-
-
 	}
 
 	@Test
@@ -216,7 +215,6 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getMinions().get(1).getSourceCard().getBaseManaCost(), 3);
 			assertEquals(player.getMinions().get(2).getSourceCard().getBaseManaCost(), 3);
 		});
-
 	}
 
 	@Test
@@ -346,8 +344,7 @@ public class BoomsdayProjectTests extends TestBase {
 			playCard(context, player, "minion_devilsaur_egg");
 			assertEquals(player.getMana(), 5);
 			context.endTurn();
-			assertEquals(player.getMinions().get(1).getName(), "Devilsaur");
-
+			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_devilsaur");
 		});
 	}
 
@@ -421,7 +418,6 @@ public class BoomsdayProjectTests extends TestBase {
 			}
 		}, HeroClass.RED, HeroClass.RED);
 
-		/* TODO: Card cost modifiers should be copied with Academic Espionage
 		runGym((context, player, opponent) -> {
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(opponent.getHero().getHeroClass(), HeroClass.RED, "class");
@@ -433,8 +429,7 @@ public class BoomsdayProjectTests extends TestBase {
 				assertEquals(costOf(context, player, card), 1, card.getName() + " mana");
 				assertTrue(card.hasHeroClass(HeroClass.RED), card.getName() + " class");
 			}
-		}, HeroClass.RED, HeroClass.BLACK);
-		*/
+		}, HeroClass.BLACK, HeroClass.RED);
 	}
 
 	@Test
@@ -450,7 +445,8 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testAugmentedElekkWeasel() { //currently only shuffles 1, we'll see how it works in real life
+	public void testAugmentedElekkWeasel() {
+		// Currently only shuffles 1, we'll see how it works in real life
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_augmented_elekk");
 			Minion weasel = playMinionCard(context, player, "minion_weasel_tunneler");
@@ -462,7 +458,8 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testAugmentedElekkScream() { //currently only shuffles 1 each, we'll see how it works in real life
+	public void testAugmentedElekkScream() {
+		// Currently only shuffles 1 each, we'll see how it works in real life
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_snowflipper_penguin");
 			playMinionCard(context, player, "minion_augmented_elekk");
@@ -490,12 +487,12 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(pogo77.getAttack(), 7);
 			assertEquals(pogo77.getHp(), 7);
 		});
-
 	}
 
 	@Test
-	public void testMyrasUnstableElement() { //make sure faldorei strider procs + element doesn't fatigue you
+	public void testMyrasUnstableElement() {
 		runGym((context, player, opponent) -> {
+			// Make sure faldorei strider procs + element doesn't fatigue you
 			for (int i = 0; i < 30; i++) {
 				shuffleToDeck(context, player, "token_shadow_of_nothing");
 			}
@@ -504,7 +501,6 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(player.getHero().getHp(), 30);
 		});
-
 	}
 
 	@Test
@@ -526,7 +522,6 @@ public class BoomsdayProjectTests extends TestBase {
 			playCard(context, player, "spell_feral_spirit");
 			assertEquals(player.getMinions().size(), 3);
 		});
-
 	}
 
 	@Test
@@ -542,7 +537,6 @@ public class BoomsdayProjectTests extends TestBase {
 			assertTrue(opponent.getHand().get(0).getRace().hasRace(Race.DEMON), opponent.getHand().get(0).getName());
 		});
 	}
-
 
 	@Test
 	public void testDrBoomMadGenius() {
@@ -564,7 +558,6 @@ public class BoomsdayProjectTests extends TestBase {
 				assertNotEquals(heroPower, player.getHero().getHeroPower().getCardId());
 			}
 		});
-
 	}
 
 	@Test
@@ -581,7 +574,6 @@ public class BoomsdayProjectTests extends TestBase {
 			for (Minion minion : player.getMinions()) {
 				assertTrue(minion.hasAttribute(Attribute.RUSH));
 			}
-
 		});
 	}
 
@@ -609,10 +601,8 @@ public class BoomsdayProjectTests extends TestBase {
 			playCard(context, player, "minion_mecha_thun");
 			destroy(context, player.getMinions().get(0));
 			assertTrue(opponent.getHero().isDestroyed());
-			//yup
 		});
 	}
-
 
 	@Test
 	public void testTheSoularium() {
@@ -631,16 +621,15 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(other.getZone(), Zones.HAND);
 			assertEquals(knight.getAttack(), knight.getBaseAttack() + 2);
 		});
-
 	}
 
 	@Test
 	public void testArcaneDynamo() {
 		for (int i = 0; i < 25; i++) {
 			runGym((context, player, opponent) -> {
+				context.setDeckFormat(DeckFormat.STANDARD);
 				playCard(context, player, "minion_arcane_dynamo");
 				assertTrue(player.getHand().get(0).getBaseManaCost() >= 5);
-
 			});
 		}
 	}
@@ -670,7 +659,6 @@ public class BoomsdayProjectTests extends TestBase {
 			playCard(context, player, "minion_subject_9");
 			assertEquals(player.getHand().size(), 3);
 		});
-
 	}
 
 	@Test
@@ -704,7 +692,6 @@ public class BoomsdayProjectTests extends TestBase {
 			playCard(context, player, "spell_flarks_boom_zooka");
 			assertEquals(ancientOne.getHp(), 21);
 		});
-
 	}
 
 	@Test
@@ -717,7 +704,6 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getMinions().get(1).getAttack(), 1);
 			assertEquals(player.getMinions().get(1).getHp(), 1);
 		});
-
 	}
 
 	@Test

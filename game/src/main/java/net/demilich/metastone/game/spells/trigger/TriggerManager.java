@@ -2,6 +2,7 @@ package net.demilich.metastone.game.spells.trigger;
 
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
@@ -161,10 +162,13 @@ public class TriggerManager implements Cloneable, Serializable {
 		trigger.expire();
 	}
 
-	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, GameContext context) {
+	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers, GameContext context) {
 		for (Trigger trigger : getListSnapshot(triggers)) {
 			if (trigger.getHostReference().equals(entityReference)) {
 				if (!removeAuras && trigger instanceof Aura) {
+					continue;
+				}
+				if (keepSelfCardCostModifiers && trigger instanceof CardCostModifier && ((CardCostModifier) trigger).targetsSelf()) {
 					continue;
 				}
 				trigger.onRemove(context);

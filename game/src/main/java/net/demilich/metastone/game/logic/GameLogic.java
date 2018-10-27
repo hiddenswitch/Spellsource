@@ -8,6 +8,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.*;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -1267,7 +1268,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
-			removeEnchantments(target, false);
+			removeEnchantments(target, false, false);
 			previousLocation.put(target, target.getEntityLocation());
 			target.moveOrAddTo(context, Zones.GRAVEYARD);
 		}
@@ -1308,7 +1309,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			resolveDeathrattles(owner, target, previousLocation.get(target));
 		}
 		for (Actor target : targets) {
-			removeEnchantments(target, true);
+			removeEnchantments(target, true, false);
 		}
 
 		context.fireGameEvent(new BoardChangedEvent(context));
@@ -1514,7 +1515,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		entity.setAttribute(Attribute.DESTROYED);
 		entity.getAttributes().remove(Attribute.DEATHRATTLES);
-		removeEnchantments(entity, true);
+		removeEnchantments(entity, true, false);
 		entity.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 	}
 
@@ -3140,19 +3141,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	@Suspendable
 	public void removeEnchantments(Entity entity) {
-		removeEnchantments(entity, true);
+		removeEnchantments(entity, true, false);
 	}
 
 	@Suspendable
-	private void removeEnchantments(Entity entity, boolean removeAuras) {
+	private void removeEnchantments(Entity entity, boolean removeAuras, boolean keepSelfCardCostModifiers) {
 		EntityReference entityReference = entity.getReference();
 		for (Trigger trigger : context.getTriggersAssociatedWith(entityReference)) {
 			if (!removeAuras && trigger instanceof Aura) {
 				continue;
 			}
+			if (keepSelfCardCostModifiers && trigger instanceof CardCostModifier && ((CardCostModifier) trigger).targetsSelf()) {
+				continue;
+			}
 			trigger.onRemove(context);
 		}
-		context.removeTriggersAssociatedWith(entityReference, removeAuras);
+		context.removeTriggersAssociatedWith(entityReference, removeAuras, keepSelfCardCostModifiers);
 	}
 
 	protected void transferKeptEnchantments(Card oldCard, Card newCard) {
@@ -3432,6 +3436,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling the
 	 * deck (i.e., changing the existing order of the cards).
+	 * <p>
+	 * Removes the enchantments on the card before shuffling it into the deck. This removes card cost modification
+	 * enchantments.
 	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
@@ -3442,6 +3449,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
+		return shuffleToDeck(player, card, quiet, false);
+	}
+
+	/**
+	 * Implements a "Shuffle into deck" text. This will select a random location for the card to go without shuffling the
+	 * deck (i.e., changing the existing order of the cards).
+	 * <p>
+	 * Removes the enchantments on the card before shuffling it into the deck. If {@code keepCardCostModifiers} is {@code
+	 * true}, those enchantments will not be removed.
+	 *
+	 * @param player                The player whose deck this card is getting shuffled into.
+	 * @param card                  The card to shuffle into that player's deck.
+	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
+	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
+	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
+	 *                              card cost modifiers).
+	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
+	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
+	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
+	 */
+	@Suspendable
+	public boolean shuffleToDeck(Player player, Card card, boolean quiet, boolean keepCardCostModifiers) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3451,7 +3481,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// Remove passive triggers
-		removeEnchantments(card);
+		removeEnchantments(card, true, keepCardCostModifiers);
 
 		int count = player.getDeck().getCount();
 		if (count < MAX_DECK_SIZE) {
@@ -3476,11 +3506,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return false;
 	}
 
+	/**
+	 * Shuffles the specified card into the player's deck.
+	 * <p>
+	 * Removes all enchantments written on the card, including card cost modifying enchantments. See the overloaded
+	 * methods to control this behaviour.
+	 *
+	 * @param player
+	 * @param card
+	 * @return {@code true} if the card was successfully shuffled into the player's deck.
+	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card) {
 		return shuffleToDeck(player, card, false);
 	}
 
+	/**
+	 * Puts into play any deck triggers ({@link CardDesc#getDeckTriggers()} written on the card.
+	 * <p>
+	 * Deck triggers are active while the card is located in the player's deck.
+	 *
+	 * @param player
+	 * @param card
+	 */
 	@Suspendable
 	public void processDeckTriggers(Player player, Card card) {
 		if (card.getDeckTriggers() != null

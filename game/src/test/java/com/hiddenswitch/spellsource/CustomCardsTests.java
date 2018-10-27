@@ -494,7 +494,7 @@ public class CustomCardsTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			// Test playing Heartstopped two turns in a row
+			// TODO: Test playing Heartstopped two turns in a row
 		});
 	}
 
@@ -752,7 +752,6 @@ public class CustomCardsTests extends TestBase {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			assertEquals(bloodfen.getAttack(), bloodfen.getBaseAttack() + 1);
 			assertEquals(bloodfen.getHp(), bloodfen.getBaseHp() + 1);
-
 		});
 	}
 
@@ -943,6 +942,7 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_energetic_mentee");
 			assertEquals(player.getMinions().size(), 1);
 		});
+
 		runGym((context, player, opponent) -> {
 			player.setMana(3);
 			playMinionCard(context, player, "minion_energetic_mentee");
@@ -1021,7 +1021,6 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testVoidReaper() {
 		runGym((context, player, opponent) -> {
-
 			for (Player p : new Player[]{player, opponent}) {
 				shuffleToDeck(context, p, "minion_bloodfen_raptor");
 				shuffleToDeck(context, p, "minion_argent_squire");
@@ -1069,6 +1068,7 @@ public class CustomCardsTests extends TestBase {
 			}
 			assertEquals(player.getHand().get(0).getCardId(), "minion_king_archibald");
 		});
+
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_forces_of_gilneas");
 			for (int i = 0; i < 5; i++) {
@@ -1077,6 +1077,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getQuests().size(), 1);
 			assertEquals(player.getHand().size(), 0);
 		});
+
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "quest_forces_of_gilneas");
 			context.endTurn();
@@ -1177,7 +1178,6 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_misty_mana_tea");
 			assertEquals(player.getMana(), 0);
 		});
-
 
 		// Test spend all your mana effects
 		runGym((context, player, opponent) -> {
@@ -3190,7 +3190,6 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-
 	@Test
 	public void testDragonlingPet() {
 		runGym((context, player, opponent) -> {
@@ -3269,7 +3268,6 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(player.hasAttribute(Attribute.SPELL_DAMAGE) ? player.getAttribute(Attribute.SPELL_DAMAGE) : 0, spellMap.get(spell));
 			});
 		}
-
 	}
 
 	@Test
@@ -3396,6 +3394,7 @@ public class CustomCardsTests extends TestBase {
 			destroy(context, vereesa);
 			assertEquals(player.getHand().get(0).getCardId(), "secret_freezing_trap");
 		});
+
 		runGym((context, player, opponent) -> {
 			List<String> secrets = Arrays.asList("freezing_trap", "misdirection", "explosive_trap",
 					"bear_trap", "rat_trap", "hidden_cache", "snipe", "snake_trap", "venomstrike_trap",
@@ -3409,6 +3408,7 @@ public class CustomCardsTests extends TestBase {
 				playCard(context, player, "spell_cataclysm");
 			}
 		});
+
 		runGym((context, player, opponent) -> {
 			receiveCard(context, player, "secret_explosive_trap");
 			receiveCard(context, player, "spell_lesser_emerald_spellstone");
@@ -3428,7 +3428,8 @@ public class CustomCardsTests extends TestBase {
 				playCard(context, player, "spell_excess_mana");
 				assertEquals(player.getDeck().size(), 60);
 			}
-			assertEquals(player.isDestroyed(), false);
+
+			assertFalse(player.isDestroyed());
 		});
 	}
 
@@ -3459,7 +3460,6 @@ public class CustomCardsTests extends TestBase {
 			}
 			assertTrue(opponent.isDestroyed());
 		});
-
 	}
 
 	@Test
@@ -3499,7 +3499,6 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_level_up");
 			player.getMinions().forEach(minion -> assertEquals(minion.getAttack(), minion.getBaseAttack() + 2));
 		});
-
 	}
 
 	@Test
@@ -3510,7 +3509,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHero().getHp(), 20);
 			assertEquals(player.getWeaponZone().get(0).getName(), "Warswords of the Valarjar");
 		});
-
 	}
 
 	@Test
@@ -3593,11 +3591,10 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(player.getHand().get(1).getCardId(), "minion_snowflipper_penguin");
 			});
 		}
-
 	}
 
 	@Test
-	public void testMore() {
+	public void testFandralStaghelmPlagueLordInteraction() {
 		runGym((context, player, opponent) -> {
 			player.setMana(2);
 			SpellUtils.castChildSpell(context, player, ChangeHeroPowerSpell.create("hero_power_plague_lord"), player, player);
@@ -3669,7 +3666,6 @@ public class CustomCardsTests extends TestBase {
 					.filter(gameAction -> gameAction.getTargetRequirement().equals(TargetSelection.ANY))
 					.count(), 2);
 		});
-
 	}
 
 	@Test
@@ -3698,7 +3694,6 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(opponent.getMinions().get(i).getHp(), 6);
 			}
 		});
-
 	}
 
 	@Test
@@ -3713,7 +3708,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(dummy.getHp(), 4);
 			assertEquals(player.getHand().size() + player.getDeck().size(), 1);
 		});
-
 	}
 
 	@Test
@@ -3724,7 +3718,6 @@ public class CustomCardsTests extends TestBase {
 				context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 			}
 		});
-
 	}
 
 	@Test
@@ -3736,7 +3729,6 @@ public class CustomCardsTests extends TestBase {
 			destroy(context, player.getWeaponZone().get(0));
 			assertEquals(player.getHero().getAttack(), 4);
 		});
-
 	}
 
 	@Test
@@ -3813,7 +3805,6 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
-
 	@Test
 	public void testTombStoneTerror() {
 		runGym((context, player, opponent) -> {
@@ -3867,10 +3858,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getDeck().size(), 0);
 			assertEquals(opponent.getHand().size(), 0);
 			assertEquals(opponent.getMinions().size(), 1);
-
 		});
-
-
 	}
 
 	@Test
@@ -3892,7 +3880,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHand().size(), 3);
 			assertEquals(player.getDeck().size(), 27);
 		});
-
 	}
 
 	@Test
@@ -3906,7 +3893,6 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(mealcatcher.hasAttribute(Attribute.DIVINE_SHIELD));
 			assertEquals(player.getDeck().size(), 0);
 		});
-
 	}
 
 	@Test
@@ -3927,7 +3913,6 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			assertEquals(player.getHand().size(), 4);
 		});
-
 	}
 
 	@Test
@@ -3936,11 +3921,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_swamp_leech");
 			Minion shifter = playMinionCard(context, player, "minion_deranged_shifter");
 			assertTrue(shifter.hasAttribute(Attribute.LIFESTEAL));
-
-
 		});
-
-
 	}
 
 	@Test
@@ -3956,7 +3937,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(flame2.getBaseAttack() + flame2.getBonusAttack(), 3);
 			assertEquals(flame1.getBaseAttack() + flame1.getBonusAttack(), 3);
 		});
-
 	}
 
 
@@ -4005,7 +3985,6 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_mass_dispel");
 			playCard(context, player, "spell_mass_dispel");
 			assertEquals(player.getHand().size(), 1);
-
 		});
 	}
 
@@ -4021,7 +4000,6 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_akarador");
 			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "minion_snowflipper_penguin");
 		});
-
 	}
 
 	@Test
@@ -4056,6 +4034,7 @@ public class CustomCardsTests extends TestBase {
 			playMinionCardWithBattlecry(context, player, "minion_boneyard_brute", dummy);
 			assertEquals(dummy.getHp(), 1);
 		});
+
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 5; i++) {
 				playCard(context, player, "minion_murloc_tinyfin");
@@ -4104,7 +4083,6 @@ public class CustomCardsTests extends TestBase {
 			playCardWithTarget(context, player, "spell_pyroblast", wurm);
 			assertEquals(opponent.getMinions().size(), 0);
 		});
-
 	}
 
 	@Test
@@ -4130,7 +4108,6 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(context.getLogic().getModifiedManaCost(player, rise), 16);
 		});
-
 	}
 
 	@Test
@@ -4155,7 +4132,6 @@ public class CustomCardsTests extends TestBase {
 		context.init();
 		assertEquals(context.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_alternate_totemic_slam");
 
-
 		DebugContext context2 = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
 		context2.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context2.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
@@ -4167,7 +4143,6 @@ public class CustomCardsTests extends TestBase {
 		});
 		context2.init();
 		assertEquals(context2.getPlayer1().getHeroPowerZone().get(0).getCardId(), "hero_power_heal");
-
 	}
 
 	@Test
@@ -4191,7 +4166,6 @@ public class CustomCardsTests extends TestBase {
 				.filter(c -> c.getCardType() == CardType.HERO_POWER)
 				.filter(c -> costOf(context, context.getPlayer(c.getOwner()), c) == 1)
 				.count(), 2L);
-
 	}
 
 	@Test
@@ -4221,7 +4195,5 @@ public class CustomCardsTests extends TestBase {
 		}
 		assertEquals(yup, 100);
 	}
-
-
 }
 
