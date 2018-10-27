@@ -1,0 +1,38 @@
+{
+  "name": "Backwater Wise",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "MURLOC",
+  "description": "Battlecry: If you control another Murloc, draw a Murloc from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "MinionOnBoardCondition",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "MURLOC"
+        }
+      },
+	  "spell": {
+	    "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MURLOC"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

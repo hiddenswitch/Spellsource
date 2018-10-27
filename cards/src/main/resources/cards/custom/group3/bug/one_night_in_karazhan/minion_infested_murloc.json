@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
+  "race": "MURLOC",
   "description": "Deathrattle: Summon a 1/1 Spiderling.",
   "deathrattle": {
     "class": "SummonSpell",
@@ -15,6 +16,6 @@
     "DEATHRATTLES": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "ONE_NIGHT_IN_KARAZHAN",
   "fileFormatVersion": 1
 }

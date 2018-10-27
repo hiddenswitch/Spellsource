@@ -10,18 +10,18 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
-      "cards": [
-        "token_spiderling",
-        "token_whelpling",
-        "token_murkling"
-      ]
+	   "class": "ReceiveCardSpell",
+	   "cards": [
+	   "token_spiderling",
+	   "token_whelpling",
+	   "token_murkling"
+	   ]
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "ONE_NIGHT_IN_KARAZHAN",
   "fileFormatVersion": 1
 }

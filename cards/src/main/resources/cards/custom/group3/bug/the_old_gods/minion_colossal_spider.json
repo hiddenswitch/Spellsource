@@ -9,10 +9,10 @@
   "race": "BEAST",
   "description": "Taunt. Poisonous.",
   "attributes": {
-    "POISONOUS": true,
     "TAUNT": true
+	"POISONOUS": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_OLD_GODS",
   "fileFormatVersion": 1
 }

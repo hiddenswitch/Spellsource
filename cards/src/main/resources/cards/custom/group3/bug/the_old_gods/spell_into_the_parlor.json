@@ -10,12 +10,12 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "MindControlSpell"
+		"class": "MindControlSpell"
       },
       {
-        "class": "AddEnchantmentSpell",
-        "trigger": {
-          "eventTrigger": {
+		"class": "AddEnchantmentSpell",
+		"trigger": {
+		  "eventTrigger": {
             "class": "TurnStartTrigger",
             "targetPlayer": "SELF"
           },
@@ -24,10 +24,10 @@
             "target": "SELF"
           }
         }
-      }
+      } 
     ]
-  },
+  },	
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_OLD_GODS",
   "fileFormatVersion": 1
 }

@@ -1,0 +1,19 @@
+{
+  "name": "Lumina, Light of the Forest",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "After you play a minion, Discover one of the same type.":
+  "aura": {  
+	"targetSelection": "NONE",
+    "spell": {
+
+    }
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

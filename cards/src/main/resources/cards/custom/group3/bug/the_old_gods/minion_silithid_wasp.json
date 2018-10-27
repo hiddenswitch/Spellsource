@@ -18,7 +18,7 @@
           "value": 1,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "cardId": "minion_cthun"
           }
         },
         {
@@ -27,7 +27,7 @@
           "value": 1,
           "filter": {
             "class": "SpecificCardFilter",
-            "card": "minion_cthun"
+            "cardId": "minion_cthun"
           }
         },
         {
@@ -49,6 +49,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_OLD_GODS",
   "fileFormatVersion": 1
 }

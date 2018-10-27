@@ -8,18 +8,18 @@
   "rarity": "LEGENDARY",
   "description": "Inspire: Add a 1/1 Bee with Charge and Poisonous to your hand.",
   "trigger": {
-    "eventTrigger": {
+	"eventTrigger": {
       "class": "InspireTrigger",
       "targetPlayer": "SELF"
     },
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "cards": [
-        "token_bee_soldier"
-      ]
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"cards": [
+		"token_bee_soldier",
+		]
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_GRAND_TOURNAMENT",
   "fileFormatVersion": 1
 }

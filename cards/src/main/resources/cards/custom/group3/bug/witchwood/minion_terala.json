@@ -1,0 +1,35 @@
+{
+  "name": "Terala, Draconic Mistress",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Transforms the minions in your hand into random Dragons.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      },
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

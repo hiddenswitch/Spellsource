@@ -13,18 +13,17 @@
       "class": "DamageSpell",
       "value": {
         "class": "EntityCounter",
-        "target": "FRIENDLY_MINIONS",
-        "filter": {
-          "class": "CardFilter",
-          "rarity": "COMMON"
-        }
-      }
+        "target": "FRIENDLY_MINIONS"
+	    "cardFilter": {
+		  "rarity": "COMMON"
+	    }
+      },
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_OLD_GODS",
   "fileFormatVersion": 1
 }

@@ -9,10 +9,10 @@
   "race": "BEAST",
   "description": "Charge. Poisonous",
   "attributes": {
-    "CHARGE": true,
+	"CHARGE": true
     "POISONOUS": true
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "set": "THE_GRAND_TOURNAMENT",
   "fileFormatVersion": 1
 }

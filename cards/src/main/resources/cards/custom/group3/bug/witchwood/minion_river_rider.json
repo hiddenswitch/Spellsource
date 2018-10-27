@@ -1,12 +1,13 @@
 {
-  "name": "Serv-Ant",
-  "baseManaCost": 1,
+  "name": "River Rider",
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 0,
-  "baseHp": 2,
-  "rarity": "COMMON",
-  "description": "Has +2 Attack while you control another Common minion.",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "MURLOC",
+  "description": "Rush. Has +2 Attack while you control a Beast.",
   "trigger": {
     "eventTrigger": {
       "class": "BoardChangedTrigger"
@@ -19,7 +20,8 @@
         "condition": {
           "class": "MinionOnBoardCondition",
           "cardFilter": {
-            "rarity": "COMMON"
+            "class": "RaceFilter",
+            "race": "BEAST"
           }
         },
         "ifFalse": 0,
@@ -27,7 +29,10 @@
       }
     }
   },
+  "attributes": {
+    "RUSH": true
+  },
   "collectible": true,
-  "set": "THE_GRAND_TOURNAMENT",
+  "set": "WITCHWOOD",
   "fileFormatVersion": 1
 }

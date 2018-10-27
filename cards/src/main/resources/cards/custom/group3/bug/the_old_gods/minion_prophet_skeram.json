@@ -10,19 +10,19 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReplaceCardsSpell",
-      "target": "FRIENDLY_HAND",
-      "card": "minion_silithid_wasp",
-      "filter": {
-        "class": "SpecificCardFilter",
-        "card": "token_spiderling"
-      }
+        "class": "custom.TransformInHandSpell",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cardId": "token_spiderling"
+        },
+        "secondaryTarget": "minion_silithid_wasp"
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_OLD_GODS",
   "fileFormatVersion": 1
 }

@@ -7,27 +7,23 @@
   "description": "Give a minion +1/+1. Summon a random 1-Cost minion.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
+	"class": "MetaSpell",
+	"spells": [
       {
-        "class": "BuffSpell",
+	    "class": "BuffSpell",
         "attackBonus": 1,
         "hpBonus": 1
-      },
-      {
+	  },
+	  {
         "class": "SummonSpell",
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",
           "manaCost": 1
-        },
-        "cardSource": {
-          "class": "UnweightedCatalogueSource"
-        }
       }
-    ]
+	]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "ONE_NIGHT_IN_KARAZHAN",
   "fileFormatVersion": 1
 }

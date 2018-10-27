@@ -7,14 +7,13 @@
   "description": "Add four random Common minions to your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "value": 4,
-    "cardFilter": {
-      "class": "CardFilter",
-      "rarity": "COMMON"
+	"class": "ReceiveCardSpell",
+	"value": 4,
+	"cardFilter": {
+		"rarity": "COMMON"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "THE_GRAND_TOURNAMENT",
   "fileFormatVersion": 1
 }

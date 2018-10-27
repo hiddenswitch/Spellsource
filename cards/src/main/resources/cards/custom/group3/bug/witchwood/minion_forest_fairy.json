@@ -1,0 +1,38 @@
+{
+  "name": "Forest Fairy",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover a copy of a 1-Attack minion in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": 1,
+        "attribute": "ATTACK",
+        "cardType": "MINION",
+		"operation": "EQUAL"
+      },
+      "cardSource": {
+        "class": "DeckSource",
+        "distinct": true,
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
