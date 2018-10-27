@@ -1,0 +1,32 @@
+{
+  "name": "Inquisitor Deilana",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your hero is healed, resurrect a friendly minion with that Cost.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ResurrectSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "LAST_HEAL"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
