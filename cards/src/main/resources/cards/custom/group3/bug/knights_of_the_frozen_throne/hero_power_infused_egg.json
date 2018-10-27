@@ -1,0 +1,26 @@
+{
+  "name": "Infused Egg",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Discover a Runeforged Spider.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+	  "class": "DiscoverSpell",
+	      "filter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+		    "token_bloodforged_spider",
+		    "token_frostforged_spider",
+		    "token_unholyforged_spider"
+		    ]
+          }
+    }
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

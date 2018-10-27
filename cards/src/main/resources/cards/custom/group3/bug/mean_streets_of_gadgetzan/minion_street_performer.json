@@ -6,26 +6,24 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "race": "BEAST",
+  "race": "BEAST"
   "description": "Deathrattle: Give two random minions in your hand +2/+2.",
   "deathrattle": {
-    "class": "MultiTargetSpell",
+    "class": "BuffSpell",
     "target": "FRIENDLY_HAND",
-    "value": 2,
-    "spell": {
-      "class": "BuffSpell",
-      "attackBonus": 2,
-      "hpBonus": 2
-    },
+    "attackBonus": 2,
     "filter": {
       "class": "CardFilter",
       "cardType": "MINION"
-    }
+    },
+    "hpBonus": 2,
+	"value": 2,
+    "randomTarget": true
   },
   "attributes": {
     "DEATHRATTLES": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1
 }

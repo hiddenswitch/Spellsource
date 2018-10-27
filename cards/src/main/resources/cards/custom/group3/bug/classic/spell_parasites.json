@@ -8,13 +8,13 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SummonSpell",
-    "value": {
-      "class": "AttributeValueProvider",
-      "attribute": "BASE_MANA_COST"
-    },
-    "card": "token_spiderling"
+	"value": {
+		"class": "ManaCostProvider",
+        "target": "OUTPUT"
+	}
+    "cards": "token_spiderling"
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

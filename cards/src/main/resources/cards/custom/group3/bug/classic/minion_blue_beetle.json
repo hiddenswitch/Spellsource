@@ -14,10 +14,10 @@
     "armorBonus": 4
   },
   "attributes": {
-    "DEATHRATTLES": true,
     "TAUNT": true
+	"DEATHRATTLES": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

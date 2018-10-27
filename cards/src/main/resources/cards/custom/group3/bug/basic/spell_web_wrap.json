@@ -5,22 +5,13 @@
   "heroClass": "AMBER",
   "rarity": "FREE",
   "description": "Return two random enemy minions to your opponent's hand.",
-  "condition": {
-    "class": "MinionCountCondition",
-    "value": 1,
-    "operation": "GREATER",
-    "targetPlayer": "OPPONENT"
-  },
   "targetSelection": "NONE",
   "spell": {
-    "class": "MultiTargetSpell",
-    "target": "ENEMY_MINIONS",
-    "value": 2,
-    "spell": {
-      "class": "ReturnTargetToHandSpell"
-    }
+    "class": "ReturnTargetToHandSpell"
+	"value": 2
+	"randomTarget": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "BASIC",
   "fileFormatVersion": 1
 }

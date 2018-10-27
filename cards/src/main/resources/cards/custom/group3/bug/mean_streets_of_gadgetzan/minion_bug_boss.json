@@ -8,16 +8,16 @@
   "rarity": "RARE",
   "description": "Battlecry: Choose a minion. All friendly minions attack it.",
   "battlecry": {
-    "targetSelection": "MINIONS",
-    "spell": {
-      "class": "FightSpell",
-      "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
-    }
+     "targetSelection": "MINIONS",
+     "spell": {
+       "class": "FightSpell",
+	   "secondaryTarget": "FRIENDLY_MINIONS"
+     },
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1
 }

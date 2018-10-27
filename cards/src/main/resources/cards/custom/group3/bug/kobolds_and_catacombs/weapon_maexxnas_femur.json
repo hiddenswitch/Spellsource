@@ -1,0 +1,31 @@
+{
+  "name": "Maexxna's Femur",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "AMBER",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "LEGENDARY",
+  "description": "After your hero attacks, summon a 1/1 Spiderling for each card in your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
+    },
+	"spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      },
+      "card": "token_spiderling"
+    },
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

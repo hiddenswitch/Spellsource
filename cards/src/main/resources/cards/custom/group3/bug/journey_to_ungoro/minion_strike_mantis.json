@@ -19,11 +19,11 @@
     },
     "spell": {
       "class": "CastFromGroupSpell",
-      "target": "TRIGGER_HOST",
+      "target": "SELF",
       "group": "group_adapt"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

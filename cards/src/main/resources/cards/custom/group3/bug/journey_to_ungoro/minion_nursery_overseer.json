@@ -6,24 +6,24 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "race": "BEAST",
+  "race": "BEAST"
   "description": "Battlecry: Transform all Spiderlings in your hand into Giant Spiders.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReplaceCardsSpell",
-      "target": "FRIENDLY_HAND",
-      "card": "minion_giant_spider",
-      "filter": {
-        "class": "SpecificCardFilter",
-        "card": "token_spiderling"
-      }
+        "class": "custom.TransformInHandSpell",
+        "target": "FRIENDLY_HAND",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cardId": "token_spiderling"
+        },
+        "secondaryTarget": "minion_giant_spider"
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

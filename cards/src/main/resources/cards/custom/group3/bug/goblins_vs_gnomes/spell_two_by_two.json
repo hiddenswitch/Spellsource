@@ -11,6 +11,6 @@
     "target": "FRIENDLY_MINIONS"
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GOBLINS_VS_GNOMES",
   "fileFormatVersion": 1
 }

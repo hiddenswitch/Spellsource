@@ -7,11 +7,12 @@
   "description": "Adapt a minion twice.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "CastFromGroupSpell",
-    "value": 2,
-    "group": "group_adapt"
-  },
+      "class": "CastFromGroupSpell",
+      "group": "group_adapt"
+	  "value": 2
+	}
+  },	
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

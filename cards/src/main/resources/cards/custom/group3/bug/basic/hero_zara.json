@@ -1,4 +1,5 @@
 {
+  "id": "hero_zara",
   "name": "Zara",
   "heroPower": "hero_power_hatch_eggs",
   "baseManaCost": 0,
@@ -11,6 +12,6 @@
     "MAX_HP": 30
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "set": "BASIC",
   "fileFormatVersion": 1
 }

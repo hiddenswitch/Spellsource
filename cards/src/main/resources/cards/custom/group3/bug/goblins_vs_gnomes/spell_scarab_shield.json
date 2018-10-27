@@ -4,27 +4,27 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Gain 4 Armor. Deal $1 damage for each Armor you have.",
+  "description": "Gain 4 Armor. Deal 1 damage for each Armor you have.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "BuffSpell",
+	"spells": [
+	  {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 4
+	  }
+	  {
+	  "class": "DamageSpell",
+      "value": {
+        "class": "AttributeValueProvider",
         "target": "FRIENDLY_HERO",
-        "armorBonus": 4
-      },
-      {
-        "class": "DamageSpell",
-        "value": {
-          "class": "AttributeValueProvider",
-          "target": "FRIENDLY_HERO",
-          "attribute": "ARMOR"
+        "attribute": "ARMOR"
         }
-      }
+	  }
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GOBLINS_VS_GNOMES",
   "fileFormatVersion": 1
 }

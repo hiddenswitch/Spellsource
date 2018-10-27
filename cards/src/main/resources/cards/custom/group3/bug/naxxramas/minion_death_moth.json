@@ -16,10 +16,10 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "minion_death_moth"
+	  "cards": "minion_death_moth"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "NAXXRAMAS".
   "fileFormatVersion": 1
 }

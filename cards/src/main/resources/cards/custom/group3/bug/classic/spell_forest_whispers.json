@@ -11,10 +11,10 @@
     "value": 1,
     "cardFilter": {
       "class": "CardFilter",
-      "race": "BEAST"
+      "race": "Beast"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

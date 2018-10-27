@@ -1,0 +1,25 @@
+{
+  "name": "Frostforged Spider",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Freeze any character damaged by this minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "FROZEN"
+    }
+  },
+  "collectible": false,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

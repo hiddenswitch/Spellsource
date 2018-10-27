@@ -10,19 +10,19 @@
   "description": "Battlecry: Adapt a friendly Common minion.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
+	"cardFilter": {
+		"rarity": "COMMON"
+    }
     "spell": {
       "class": "CastFromGroupSpell",
-      "group": "group_adapt",
-      "filter": {
-        "class": "CardFilter",
-        "rarity": "COMMON"
-      }
+	  
+      "group": "group_adapt"
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "JOURNEY_TO_UNGORO",
   "fileFormatVersion": 1
 }

@@ -1,0 +1,23 @@
+{
+  "name": "Anub'Rekhan",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Wrap a minion in webbing. Deathrattle: It escapes.",
+  "battlecry": {
+
+  },	
+  "deathrattle": {
+	
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

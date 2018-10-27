@@ -1,0 +1,23 @@
+{
+  "name": "Second Wave",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Give your minions \"Deathrattle: Recruit a minion.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+	  "class": "RecruitSpell",
+	  "cardFilter": {
+	    "class": "CardFilter",
+		"cardType": "MINION"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

@@ -6,20 +6,21 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
+  "race": "BEAST",
   "description": "Costs (1) less for each Beast that died this game.",
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "CardCountValueProvider",
     "cardFilter": {
       "class": "CardFilter",
-      "race": "BEAST",
-      "cardType": "MINION"
+      "cardType": "MINION",
+      "race": "BEAST"
     },
     "cardSource": {
       "class": "GraveyardActorsSource",
       "targetPlayer": "BOTH"
     }
-  }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
 }

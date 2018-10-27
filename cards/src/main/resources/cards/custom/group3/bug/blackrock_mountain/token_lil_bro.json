@@ -6,8 +6,8 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "FREE",
-  "race": "DRAGON",
+  "race": "DRAGON"
   "collectible": false,
-  "set": "CUSTOM",
+  "set": "BLACKROCK_MOUNTAIN",
   "fileFormatVersion": 1
 }

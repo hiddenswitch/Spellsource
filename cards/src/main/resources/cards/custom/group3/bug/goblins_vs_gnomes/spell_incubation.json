@@ -5,12 +5,13 @@
   "heroClass": "AMBER",
   "rarity": "RARE",
   "description": "Add 3 copies of a minion to your hand.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "MINION",
   "spell": {
     "class": "PutCopyInHandSpell",
-    "howMany": 3
+	"target": "OUTPUT"
+	"value": 3
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GOBLINS_VS_GNOMES",
   "fileFormatVersion": 1
 }

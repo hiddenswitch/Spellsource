@@ -4,22 +4,22 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Deal $3 damage. Summon a 1/1 Spiderling.",
+  "description": "Deal 3 damage. Summon a 1/1 Spiderling.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DamageSpell",
-        "value": 3
-      },
-      {
-        "class": "SummonSpell",
+	"spells": [
+	  {
+	    "class": "DamageSpell",
+		"value": 3
+	  },
+	  {
+	    "class": "SummonSpell",
         "card": "token_spiderling"
-      }
-    ]
+	  }
+	]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1
 }

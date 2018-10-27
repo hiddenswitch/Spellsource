@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Restore #6 Health to your hero.",
+  "description": "Restore 6 Health to your hero.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",
-    "target": "FRIENDLY_HERO",
+	"target": "FRIENDLY_HERO",
     "value": 6
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "BASIC",
   "fileFormatVersion": 1
 }

@@ -1,0 +1,19 @@
+{
+  "name": "Dea, Golden Wind",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Set all the numbers in the next card you play to 1.",
+  "battlecry": {
+	
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

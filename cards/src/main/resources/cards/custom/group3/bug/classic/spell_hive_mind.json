@@ -8,9 +8,9 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "FightSpell",
-    "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
+	"secondaryTarget": "FRIENDLY_MINIONS"
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

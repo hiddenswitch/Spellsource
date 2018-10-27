@@ -1,0 +1,14 @@
+{
+  "name": "Shiny Worm",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

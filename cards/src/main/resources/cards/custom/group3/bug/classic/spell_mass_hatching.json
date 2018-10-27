@@ -7,23 +7,14 @@
   "description": "Fill your hand with random Beasts.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
-    "value": {
-      "class": "AlgebraicValueProvider",
-      "operation": "SUBTRACT",
-      "value1": 10,
-      "value2": {
-        "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "HAND_COUNT",
-        "targetPlayer": "SELF"
-      }
-    },
-    "cardFilter": {
-      "class": "RaceFilter",
-      "race": "BEAST"
+	"class": "ReceiveCardSpell",
+	"value": 10,
+	"cardFilter": {
+	"class": "RaceFilter",
+	"race": "BEAST"
     }
-  },
+  }
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

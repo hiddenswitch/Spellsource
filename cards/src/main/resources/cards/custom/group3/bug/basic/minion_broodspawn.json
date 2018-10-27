@@ -13,12 +13,12 @@
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
-    "spell": {
-      "class": "SummonSpell",
-      "card": "minion_broodspawn"
-    }
+	"spell": {
+		"class": "SummonSpell",
+		"card": "minion_broodspawn"
+  },
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "BASIC",
   "fileFormatVersion": 1
 }

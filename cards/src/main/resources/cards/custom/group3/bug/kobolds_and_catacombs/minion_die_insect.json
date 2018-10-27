@@ -1,0 +1,23 @@
+{
+  "name": "Die Insect",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Deathrattle: Deal 8 damage to a random enemy minion.",
+  "deathrattle": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 8,
+    "howMany": 1
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

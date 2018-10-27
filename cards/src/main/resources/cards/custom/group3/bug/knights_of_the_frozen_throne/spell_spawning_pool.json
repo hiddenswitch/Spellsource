@@ -1,0 +1,15 @@
+{
+  "name": "Spawning Pool",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Discover a minion. Replace your hand with copies of it.",
+  "targetSelection": "NONE",
+  "spell": {
+	
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

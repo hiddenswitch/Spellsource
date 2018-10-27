@@ -1,5 +1,5 @@
 {
-  "name": "Weaponweaver",
+  "name": "Weapon Weaver",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
@@ -11,19 +11,19 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "AddAttributeSpell",
-      "target": "FRIENDLY_HAND",
       "attribute": "POISONOUS",
-      "filter": {
+	  "target": "FRIENDLY_HAND",
+	  "filter": {
         "class": "CardFilter",
         "cardType": "MINION"
       },
-      "randomTarget": true
+	  "randomTarget": true
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1
 }

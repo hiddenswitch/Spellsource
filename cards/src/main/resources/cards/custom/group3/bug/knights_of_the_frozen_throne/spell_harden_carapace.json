@@ -1,0 +1,27 @@
+{
+  "name": "Harden Carapace",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Gain 5 Armor. Give a minion +5 Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": 5
+      },
+      {
+
+		"class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 5
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

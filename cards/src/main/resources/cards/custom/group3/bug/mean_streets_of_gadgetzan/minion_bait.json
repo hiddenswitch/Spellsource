@@ -9,17 +9,15 @@
   "description": "Deathrattle: Summon four 1/1 Spiderlings.",
   "deathrattle": {
     "class": "SummonSpell",
-    "cards": [
-      "token_spiderling",
-      "token_spiderling",
-      "token_spiderling",
-      "token_spiderling"
-    ]
+    "card": "token_spiderling",
+	"card": "token_spiderling",
+	"card": "token_spiderling",
+	"card": "token_spiderling"
   },
   "attributes": {
     "DEATHRATTLES": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "MEAN_STREETS_OF_GADGETZAN",
   "fileFormatVersion": 1
 }

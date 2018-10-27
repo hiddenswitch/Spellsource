@@ -1,0 +1,25 @@
+{
+  "name": "Greater Amber Spellstone",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Discover a 8-Cost minion. Summon it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "value": 8,
+      "attribute": "BASE_MANA_COST",
+      "cardType": "MINION",
+      "operation": "EQUAL"
+    }
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

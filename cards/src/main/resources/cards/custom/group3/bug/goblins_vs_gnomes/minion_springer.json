@@ -10,15 +10,15 @@
   "description": "Battlecry: Return a random enemy minion to your opponent's hand.",
   "battlecry": {
     "spell": {
-      "class": "ReturnTargetToHandSpell",
-      "target": "ENEMY_MINIONS",
-      "randomTarget": true
+    "class": "ReturnTargetToHandSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GOBLINS_VS_GNOMES",
   "fileFormatVersion": 1
 }

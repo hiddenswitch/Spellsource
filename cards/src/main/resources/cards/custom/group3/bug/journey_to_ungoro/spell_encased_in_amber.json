@@ -1,0 +1,15 @@
+{
+  "name": "Encased in Amber",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Give a minion Immune until the start of your next turn. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+	
+  },	
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

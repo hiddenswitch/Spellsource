@@ -10,28 +10,19 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "RecruitSpell",
-      "value": {
-        "class": "AlgebraicValueProvider",
-        "operation": "SUBTRACT",
-        "value1": 7,
-        "value2": {
-          "class": "EntityCounter",
-          "target": "FRIENDLY_MINIONS"
-        }
-      },
-      "cardFilter": {
-        "class": "SpecificCardFilter",
-        "card": "token_spiderling"
-      },
-      "cardLocation": "HAND",
-      "targetPlayer": "SELF"
+        "class": "RecruitSpell",
+		"cardLocation": "HAND"
+        "targetPlayer": "SELF"
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cardId": "token_spiderling"
+        },
     }
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "LEAGUE_OF_EXPLORERS",
   "fileFormatVersion": 1
 }

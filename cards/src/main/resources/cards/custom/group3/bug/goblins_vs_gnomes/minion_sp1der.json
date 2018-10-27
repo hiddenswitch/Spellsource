@@ -9,14 +9,16 @@
   "race": "MECH",
   "description": "Deathrattle: Gain 8 Armor.",
   "deathrattle": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 8
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 8
+    }
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLE": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "GOBLINS_VS_GNOMES",
   "fileFormatVersion": 1
 }

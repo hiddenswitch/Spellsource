@@ -1,0 +1,15 @@
+{
+  "name": "Golden Scarab",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Discover a minion you control.",
+  "targetSelection": "NONE",
+  "spell": {
+	
+  },	
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

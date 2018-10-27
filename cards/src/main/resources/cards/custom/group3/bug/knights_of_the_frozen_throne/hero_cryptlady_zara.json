@@ -1,0 +1,49 @@
+{
+  "name": "Crpytlady Zara",
+  "heroPower": "hero_power_infused_egg",
+  "baseManaCost": 8,
+  "type": "HERO",
+  "heroClass": "AMBER",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: This game, your minions can only take 1 damage at a time on your turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "aura": {
+        "class": "AttributeAura",
+        "target": "FRIENDLY_MINIONS",
+		"trigger": {
+		  "eventTrigger": {
+            "class": "PreDamageTrigger",
+            "sourcePlayer": "BOTH",
+            "targetEntityType": "MINION",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "ModifyDamageSpell",
+            "value": 1,
+            "operation": "SET"
+          }
+        },
+      }
+	  "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
+	  "secondaryTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "BOTH"
+      }
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

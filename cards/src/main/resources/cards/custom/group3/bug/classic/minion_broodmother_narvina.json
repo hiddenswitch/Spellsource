@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "race": "BEAST",
+  "race": "BEAST"
   "description": "Whenever a minion dies, summon two 1/1 Spiderlings.",
   "trigger": {
     "eventTrigger": {
@@ -14,12 +14,12 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "SummonSpell",
-      "value": 2,
-      "card": "token_spiderling"
-    }
-  },
+	  "class": "SummonSpell",
+	  "value": 2
+	  "cards": "token_spiderling"
+	}
+  },	
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

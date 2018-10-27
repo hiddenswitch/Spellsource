@@ -7,14 +7,14 @@
   "description": "Draw two 1-Cost cards from your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "FromDeckToHandSpell",
-    "value": 2,
-    "cardFilter": {
-      "class": "CardFilter",
-      "manaCost": 1
-    }
-  },
+      "class": "FromDeckToHandSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "manaCost": 1
+	}
+  },	
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

@@ -1,0 +1,21 @@
+{
+  "name": "Morris the Worm",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Battlecry: Infect a friendly minion, giving it +2/+2. When it dies infect another random one.",
+  "battlecry": {
+    "spell": {
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
+}

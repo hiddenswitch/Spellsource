@@ -7,17 +7,17 @@
   "description": "Discover a Beast.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF"
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "race": "BEAST"
-    }
-  },
+		"class": "DiscoverSpell",
+		"spell": {
+		"class": "ReceiveCardSpell",
+			"targetPlayer": "SELF"
+		},
+		"cardFilter": {
+        "class": "CardFilter",
+        "race": "BEAST"
+      }
+  },	
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "LEAGUE_OF_EXPLORERS",
   "fileFormatVersion": 1
 }

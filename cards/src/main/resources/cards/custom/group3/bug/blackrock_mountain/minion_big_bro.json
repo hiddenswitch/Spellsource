@@ -6,20 +6,19 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "race": "DRAGON",
+  "race": "DRAGON"
   "description": "Battlecry: Add a 1/1 Whelp to your hand.",
   "battlecry": {
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "cards": [
-        "token_lil_bro"
-      ]
-    }
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"cards": [
+			"token_lil_bro"
+		]
   },
   "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "BLACKROCK_MOUNTAIN",
   "fileFormatVersion": 1
 }

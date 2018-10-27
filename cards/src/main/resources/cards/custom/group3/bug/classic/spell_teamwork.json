@@ -10,11 +10,11 @@
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
     "value": {
-      "class": "EntityCounter",
-      "target": "FRIENDLY_MINIONS"
-    }
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+      }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }

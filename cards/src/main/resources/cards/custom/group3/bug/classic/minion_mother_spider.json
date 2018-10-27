@@ -8,16 +8,19 @@
   "rarity": "RARE",
   "race": "BEAST",
   "description": "Deathrattle: Shuffle two Mother Spiders into your deck.",
-  "deathrattle": {
-    "class": "ShuffleToDeckSpell",
-    "card": "minion_mother_spider",
-    "howMany": 2,
-    "targetPlayer": "SELF"
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "minion_mother_spider",
+      "howMany": 2,
+      "targetPlayer": "SELF"
+    }
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "Deathrattle": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "CLASSIC",
   "fileFormatVersion": 1
 }
