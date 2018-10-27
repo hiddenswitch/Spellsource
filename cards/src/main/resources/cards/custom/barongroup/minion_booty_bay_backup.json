@@ -1,0 +1,29 @@
+{
+  "name": "Booty Bay Backup",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Battlecry: Give your other Pirates +1/+1.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "PIRATE"
+      },
+      "attackBonus": 1
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
