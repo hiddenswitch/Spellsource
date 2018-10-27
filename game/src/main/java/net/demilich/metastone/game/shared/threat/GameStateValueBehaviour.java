@@ -94,6 +94,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		this.featureVector = featureVector;
 		this.nameSuffix = nameSuffix;
 		this.heuristic = new ThreatBasedHeuristic(featureVector);
+		if (System.getenv().containsKey("SPELLSOURCE_GSVB_DEPTH")) {
+			this.maxDepth = Integer.parseInt(System.getenv("SPELLSOURCE_GSVB_DEPTH"));
+		}
+		if (System.getenv().containsKey("SPELLSOURCE_GSVB_TIMEOUT_MILLIS")) {
+			this.timeout = Long.parseLong(System.getenv("SPELLSOURCE_GSVB_TIMEOUT_MILLIS"));
+		}
 	}
 
 	/**
