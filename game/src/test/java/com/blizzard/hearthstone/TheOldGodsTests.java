@@ -440,7 +440,7 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(argentSquire.getHp(), 2);
 	}
 
-	private static class YoggTestSpell1 extends Spell {
+	public static class YoggTestSpell1 extends Spell {
 		private static final CountDownLatch counter = new CountDownLatch(3);
 
 		public YoggTestSpell1() {
@@ -454,7 +454,7 @@ public class TheOldGodsTests extends TestBase {
 		}
 	}
 
-	private static class YoggTestSpell2 extends Spell {
+	public static class YoggTestSpell2 extends Spell {
 		private static final CountDownLatch counter = new CountDownLatch(3);
 
 		public YoggTestSpell2() {

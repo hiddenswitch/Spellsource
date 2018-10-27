@@ -4176,7 +4176,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_dire_beast");
 		});
 
-		int yup = 0;
+		int direStables = 0;
 
 		for (int i = 0; i < 100; i++) {
 			DebugContext debug = createContext(HeroClass.GREEN, HeroClass.GREEN, false, DeckFormat.ALL);
@@ -4190,10 +4190,10 @@ public class CustomCardsTests extends TestBase {
 			debug.getPlayer1().getDeck().addCard(debug.getCardById("minion_baku_the_mooneater"));
 			debug.init();
 			if (debug.getPlayer1().getHeroPowerZone().get(0).getCardId().equals("hero_power_dire_stable")) {
-				yup++;
+				direStables++;
 			}
 		}
-		assertEquals(yup, 100);
+		assertEquals(direStables, 100);
 	}
 }
 
