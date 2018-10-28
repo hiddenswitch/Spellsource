@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Give a minion +1/+1 and Lifesteal",
+  "description": "Give a minion +1/+1 and Lifesteal. Discard a card",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -16,6 +16,10 @@
       {
         "class": "AddAttributeSpell",
         "attribute": "LIFESTEAL"
+      }
+      {
+      "class": "DiscardSpell",
+      "value": 1
       }
     ]
   },
