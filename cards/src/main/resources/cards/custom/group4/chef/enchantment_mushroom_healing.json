@@ -16,6 +16,9 @@
       "card": "enchantment_mushroom_healing"
     }
   },
+  "attributes": {
+    "HERO_POWER_DAMAGE": 2
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
@@ -24,23 +27,6 @@
       "class": "AttributeAura",
       "target": "FRIENDLY_HERO_POWER",
       "attribute": "AURA_LIFESTEAL"
-    },
-    {
-      "class": "HeroPowerBonusAura",
-      "target": "FRIENDLY_PLAYER",
-      "condition": {
-        "class": "AllMatchFilterCondition",
-        "target": "FRIENDLY_HERO_POWER",
-        "filter": {
-          "class": "TargetSelectionFilter",
-          "targetSelection": "NONE",
-          "invert": true
-        }
-      },
-      "applyEffect": {
-        "class": "DamageSpell",
-        "value": 2
-      }
     }
   ]
 }

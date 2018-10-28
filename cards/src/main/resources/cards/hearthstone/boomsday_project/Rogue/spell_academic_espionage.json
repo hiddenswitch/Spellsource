@@ -9,18 +9,18 @@
   "spell": {
     "class": "custom.ShuffleWithCardCostModifierSpell",
     "value": 10,
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "target": "SELF",
+      "value": 1,
+      "operation": "SET"
+    },
     "cardFilter": {
       "class": "CardFilter",
       "heroClass": "OPPONENT"
     },
     "cardSource": {
       "class": "UnweightedCatalogueSource"
-    },
-    "cardCostModifier": {
-      "class": "CardCostModifier",
-      "target": "SELF",
-      "value": 1,
-      "operation": "SET"
     }
   },
   "collectible": true,
