@@ -1,0 +1,37 @@
+{
+  "name": "Marlstrom 'Holiday'",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "SILVER",
+  "rarity": "RARE",
+  "description": "Each time you Overload on your next turn, deal 1 damage to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "trigger": {
+        "eventTrigger": {
+          "class": "OverloadTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "ALL_MINIONS",
+          "value": 1,
+          "expirationTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          }
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
