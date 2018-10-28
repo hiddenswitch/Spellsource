@@ -21,7 +21,12 @@ public final class ExcessDamageSpell extends DamageSpell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		SpellDesc toTarget = desc.clone();
-		SpellDesc toExcess = desc.clone();
+		SpellDesc toExcess;
+		if (desc.containsKey(SpellArg.SPELL)) {
+			 toExcess = (SpellDesc) desc.get(SpellArg.SPELL);
+		} else {
+			toExcess = desc.clone();
+		}
 		List<Entity> excessDealtTo = context.resolveTarget(player, source, desc.getSecondaryTarget());
 		int damage = context.getLogic().applySpellpower(player, source, desc.getValue(SpellArg.VALUE, context, player, target, source, 6));
 		Actor targetActor = (Actor) target;

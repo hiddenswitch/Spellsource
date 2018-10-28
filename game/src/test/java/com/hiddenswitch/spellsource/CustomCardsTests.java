@@ -4207,5 +4207,16 @@ public class CustomCardsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testWhizbangThePlunderful() {
+		runGym((context, player, opponent) -> {
+			Card card = receiveCard(context, player, "minion_king_togwaggle");
+			playCard(context, player, "minion_whizbang_the_plunderful");
+			assertEquals(card.getHp(), 8);
+			assertEquals(costOf(context, player, card), 5);
+
+		});
+	}
 }
 
