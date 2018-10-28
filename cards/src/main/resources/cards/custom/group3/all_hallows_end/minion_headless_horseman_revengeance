@@ -1,0 +1,21 @@
+{
+  "name": "Headless Horseman, Revengeance",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Taunt. Deathrattle: Summon the Headless Horseman's Head",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "permanent_headless_horsemans_head",
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
