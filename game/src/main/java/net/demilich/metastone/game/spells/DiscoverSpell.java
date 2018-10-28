@@ -150,8 +150,8 @@ import static java.util.stream.Collectors.toList;
  *          "howMany": 4
  *      }
  * </pre>
- * To cast a discovered spell instead of receiving it, change the {@link SpellArg#SPELL} to a {@link CastCardsSpell}. When
- * trying to do different effects with the chosen cards, it's important to check if the {@link Spell} supports the
+ * To cast a discovered spell instead of receiving it, change the {@link SpellArg#SPELL} to a {@link CastCardsSpell}.
+ * When trying to do different effects with the chosen cards, it's important to check if the {@link Spell} supports the
  * {@link SpellArg#CARD} argument (common ones like {@link CastCardsSpell}, {@link SummonSpell} and {@link
  * ReceiveCardSpell} do:
  * <pre>
@@ -399,6 +399,7 @@ public class DiscoverSpell extends Spell {
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
 			discover.setCard(card);
 			discover.setId(i);
+			discover.setSource(source != null ? source.getReference() : null);
 			discoverActions.add(discover);
 		}
 

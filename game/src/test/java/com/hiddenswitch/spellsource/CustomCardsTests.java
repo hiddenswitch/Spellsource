@@ -201,29 +201,31 @@ public class CustomCardsTests extends TestBase {
 		for (int i = 0; i < 8; i++) {
 			final int j = i;
 			runGym((context, player, opponent) -> {
+				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
 				AtomicInteger didDiscover = new AtomicInteger(0);
+				Card spellCard = receiveCard(context, player, "spell_the_coin");
+				int spellpower = context.getLogic().applySpellpower(player, spellCard, 3);
 				overrideDiscover(context, player, discoverActions -> {
 					assertTrue(discoverActions.size() > 0);
-					int spellpower = context.getLogic().applySpellpower(player, player.getHero(), 0);
 					assertTrue(spellpower >= j);
 					int whichDiscover = didDiscover.getAndIncrement();
 					for (DiscoverAction action : discoverActions) {
 						switch (whichDiscover) {
 							case 0:
-								assertEquals(action.getCard().getBaseManaCost(), 3 + spellpower);
+								assertEquals(action.getCard().getBaseManaCost(), spellpower);
 								break;
 							case 1:
-								assertEquals(action.getCard().getAttack(), 3 + spellpower);
+								assertEquals(action.getCard().getAttack(), spellpower);
 								break;
 							case 2:
-								assertEquals(action.getCard().getBaseHp(), 3 + spellpower);
+								assertEquals(action.getCard().getBaseHp(), spellpower);
 								break;
 						}
 					}
 					return discoverActions.get(0);
 				});
-				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
-				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
+
 				playCard(context, player, "spell_cryptic_ruins");
 				assertEquals(didDiscover.get(), 3);
 			});
@@ -1524,7 +1526,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
+	@Ignore("too many changes to test")
 	public void testANewChallenger() {
 		runGym((context, player, opponent) -> {
 			overrideRandomCard(context, "hero_nefarian");

@@ -357,7 +357,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		});
 	}
 
-	@Test(invocationCount = 10)
+	@Test
 	public void testKingTogwaggle() {
 		runGym((context, player, opponent) -> {
 			Card card1a = CardCatalogue.getCardById("spell_mirror_image");
