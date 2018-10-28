@@ -1,0 +1,22 @@
+{
+  "name": "SI:7 Traitor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Adjacent Pirates are Immune.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "ADJACENT_MINIONS",
+      "filter": {
+      "class": "RaceFilter",
+      "race": "PIRATE"
+    },
+    "attribute": "IMMUNE"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
