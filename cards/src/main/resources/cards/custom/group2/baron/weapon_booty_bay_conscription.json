@@ -10,22 +10,13 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionSummonedTrigger",
-      "fireCondition": {
-        "class": "RaceFilter",
-        "race": "PIRATE"
-        }
-      },
+      "race": "PIRATE",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "target": "EVENT_TARGET",
-          "hpBonus": 1
-        },
-      ]
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "hpBonus": 1
     }
   },
   "collectible": true,

@@ -1,4 +1,3 @@
-
 {
   "name": "Booty Bay Porter",
   "baseManaCost": 6,
@@ -7,23 +6,24 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "PIRATE"
+  "race": "PIRATE",
   "description": "Whenever a friendly Pirate dies, add two Pirates to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "SELF"
-      "filter": {
-        "class": "RaceFilter",
-        "race": "PIRATE"
-      },
+      "targetPlayer": "SELF",
+      "race": "PIRATE"
     },
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 2,
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      },
       "cardFilter": {
         "class": "RaceFilter",
         "race": "PIRATE"
+      }
     }
   },
   "collectible": true,

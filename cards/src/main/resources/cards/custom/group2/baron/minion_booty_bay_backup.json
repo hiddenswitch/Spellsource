@@ -9,6 +9,7 @@
   "race": "PIRATE",
   "description": "Battlecry: Give your other Pirates +1/+1.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
@@ -16,7 +17,7 @@
         "class": "RaceFilter",
         "race": "PIRATE"
       },
-      "attackBonus": 1
+      "attackBonus": 1,
       "hpBonus": 1
     }
   },
