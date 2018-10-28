@@ -12,9 +12,18 @@
     "class": "PhysicalAttackTargetOverrideAura",
     "target": "PHYSICAL_ATTACK_TARGETS",
     "filter": {
-      "class": "AttributeFilter",
-      "attribute": "TAUNT",
-      "operation": "HAS"
+      "class": "OrFilter",
+      "filters": [
+        {
+          "class": "AttributeFilter",
+          "attribute": "TAUNT",
+          "operation": "HAS"
+        },
+        {
+          "class": "EntityTypeFilter",
+          "entityType": "HERO"
+        }
+      ]
     }
   },
   "collectible": true,
