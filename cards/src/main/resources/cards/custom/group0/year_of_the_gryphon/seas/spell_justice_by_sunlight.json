@@ -1,0 +1,31 @@
+{
+  "name": "Justice by Sunlight",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "EPIC",
+  "description": "Give all minions Lifesteal. If you're holding a Dragon, also give them Divine Shield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "ALL_MINIONS",
+    "attribute": "LIFESTEAL"
+  },
+  "class": "ConditionalSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      },
+      "targetPlayer": "SELF"
+    },
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "ALL_MINIONS",
+    "attribute": "DIVINE_SHIELD"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
