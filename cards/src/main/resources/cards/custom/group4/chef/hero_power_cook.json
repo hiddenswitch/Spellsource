@@ -33,7 +33,7 @@
       },
       "spell1": {
         "class": "DamageSpell",
-        "target": "TARGET",
+        "target": "SPELL_TARGET",
         "value": 2
       },
       "spell2": {

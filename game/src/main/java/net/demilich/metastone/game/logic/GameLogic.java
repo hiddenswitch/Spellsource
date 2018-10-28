@@ -1882,15 +1882,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
-		int total = player.getHero().getAttributeValue(attr) + player.getAttributeValue(attr);
-		for (Entity minion : player.getMinions()) {
-			if (!minion.hasAttribute(attr)) {
-				continue;
-			}
-
-			total += minion.getAttributeValue(attr);
-		}
-		return total;
+		return context.getEntities()
+				.filter(Entity::isInPlay)
+				.filter(e -> e.getOwner() == player.getId())
+				.flatMapToInt(entity ->
+						Stream.of(entity.getAttributeValue(attr),
+								context.getTriggersAssociatedWith(entity.getReference())
+										.stream()
+										.filter(Enchantment.class::isInstance)
+										.map(Enchantment.class::cast)
+										.mapToInt(e -> e.getAttributeValue(attr)).sum())
+								.mapToInt(i -> i))
+				.sum();
 	}
 
 	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
