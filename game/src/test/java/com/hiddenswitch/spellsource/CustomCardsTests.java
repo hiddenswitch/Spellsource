@@ -64,6 +64,37 @@ public class CustomCardsTests extends TestBase {
 			useHeroPower(context, player, big.getReference());
 			assertEquals(big.getHp(), big.getMaxHp() - 4);
 		}, HeroClass.TOAST, HeroClass.TOAST);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_hallucinogenic_mushroom");
+			player.setMana(10);
+			int hp = opponent.getHero().getHp();
+			useHeroPower(context, player);
+			assertEquals(opponent.getHero().getHp(), hp - 4);
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(Arrays.asList("spell_clarity_mushroom", "spell_healing_mushroom", "spell_toxic_mushroom", "spell_hallucinogenic_mushroom").contains(player.getHand().get(0).getCardId()));
+		}, HeroClass.TOAST, HeroClass.TOAST);
+
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(10);
+			playCard(context, player, "spell_healing_mushroom");
+			player.setMana(10);
+			int hp = opponent.getHero().getHp();
+			useHeroPower(context, player);
+			assertEquals(opponent.getHero().getHp(), hp - 4);
+			assertEquals(player.getHero().getHp(), 10 + 4);
+		}, HeroClass.TOAST, HeroClass.TOAST);
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion big = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCard(context, player, "spell_toxic_mushroom");
+			player.setMana(10);
+			opponent.getHero().setAttribute(Attribute.IMMUNE);
+			useHeroPower(context, player);
+			assertTrue(big.isDestroyed());
+		}, HeroClass.TOAST, HeroClass.TOAST);
 	}
 
 	@Test

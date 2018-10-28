@@ -16,6 +16,9 @@
       "card": "enchantment_mushroom_clarity"
     }
   },
+  "attributes": {
+    "HERO_POWER_DAMAGE": 2
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
@@ -29,8 +32,5 @@
         "targetSelection": "NONE"
       }
     }
-  ],
-  "attributes": {
-    "HERO_POWER_DAMAGE": 2
-  }
+  ]
 }
