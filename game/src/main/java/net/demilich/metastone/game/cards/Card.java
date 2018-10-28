@@ -259,6 +259,15 @@ public class Card extends Entity implements HasChooseOneActions {
 	}
 
 	/**
+	 * For minions with multiple tribes. This field stores those multiple races when they are defined.
+	 *
+	 * @return The different races
+	 */
+	public Race[] getRaces() {
+		return getDesc().getRaces();
+	}
+
+	/**
 	 * Gets a copy of the card with some attributes like its attack or HP bonuses and mana cost modifiers removed. The ID
 	 * and owner is set to unassigned.
 	 * <p>
@@ -358,6 +367,29 @@ public class Card extends Entity implements HasChooseOneActions {
 	@Override
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
+	}
+
+	/**
+	 * Checks if the race specified is in its list of races when this minion has multiple races.
+	 *
+	 * @param race The {@link Race} to search.
+	 * @return <code>True</code> if this card has the specified class.
+	 */
+	public boolean hasRace(Race race) {
+		if (getRaces() != null) {
+			for (Race r : getRaces()) {
+				if (race.equals(r)) {
+					return true;
+				}
+			}
+		}
+		if (race == getRace()) {
+			return true;
+		}
+		if (race == Race.ALL) {
+			return true;
+		}
+		return false;
 	}
 
 	/**

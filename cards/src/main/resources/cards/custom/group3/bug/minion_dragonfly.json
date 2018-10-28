@@ -6,7 +6,10 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "FREE",
-  "race": "BEAST_DRAGON",
+  "race": "BEAST",
+  "races": [
+    "DRAGON"
+  ],
   "description": "Also counts as a Dragon.",
   "attributes": {},
   "collectible": true,

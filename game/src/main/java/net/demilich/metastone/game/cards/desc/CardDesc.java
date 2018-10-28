@@ -149,6 +149,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public EventTriggerDesc quest;
 	public int countUntilCast;
 	public boolean countByValue;
+	public Race[] races;
 
 
 	public CardDesc() {
@@ -688,6 +689,13 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setRace(Race race) {
 		this.race = race;
+	}
+
+	/**
+	 * For cards that have multiple races but not all races
+	 */
+	public Race[] getRaces() {
+		return races;
 	}
 
 	/**
