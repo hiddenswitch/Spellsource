@@ -7,56 +7,69 @@
   "description": "Your highest-Attack minion attacks your opponent's. If only one survives, give it +2/+2.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "TargetToSourceSecondaryToTargetSpell",
-        "target": "FRIENDLY_MINIONS",
-        "filter": {
-          "class": "HighestAttributeFilter",
-          "target": "FRIENDLY_MINIONS",
-          "attribute": "ATTACK"
-        },
-        "spell": {
-          "class": "FightSpell",
-          "filter": {
-            "class": "HighestAttributeFilter",
-            "target": "ENEMY_MINIONS",
-            "attribute": "ATTACK"
+    "class": "TargetToSourceSecondaryToTargetSpell",
+    "target": "FRIENDLY_MINIONS",
+    "filter": {
+      "class": "HighestAttributeFilter",
+      "target": "FRIENDLY_MINIONS",
+      "attribute": "ATTACK"
+    },
+    "randomTarget": true,
+    "spell": {
+      "class": "FightSpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "HighestAttributeFilter",
+        "target": "ENEMY_MINIONS",
+        "attribute": "ATTACK"
+      },
+      "randomTarget": true,
+      "spell": {
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "IsDeadCondition",
+                "target": "SPELL_TARGET"
+              },
+              {
+                "class": "IsDeadCondition",
+                "target": "OUTPUT",
+                "invert": true
+              }
+            ]
+          },
+          {
+            "class": "AndCondition",
+            "conditions": [
+              {
+                "class": "IsDeadCondition",
+                "target": "SPELL_TARGET",
+                "invert": true
+              },
+              {
+                "class": "IsDeadCondition",
+                "target": "OUTPUT"
+              }
+            ]
           }
-        }
-      },
-      {
-        "class": "ConditionalEffectSpell",
-        "condition": {
-          "class": "IsDeadCondition",
-          "target": "SPELL_TARGET"
-        },
-        "spell1": {
-          "class": "NullSpell"
-        },
-        "spell2": {
-          "class": "BuffSpell",
-          "target": "OUTPUT",
-          "value": 2
-        }
-      },
-      {
-        "class": "ConditionalEffectSpell",
-        "condition": {
-          "class": "IsDeadCondition",
-          "target": "OUTPUT"
-        },
-        "spell1": {
-          "class": "NullSpell"
-        },
-        "spell2": {
-          "class": "BuffSpell",
-          "target": "SPELL_TARGET",
-          "value": 2
-        }
+        ],
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "target": "OUTPUT",
+            "value": 2
+          },
+          {
+            "class": "BuffSpell",
+            "target": "SPELL_TARGET",
+            "value": 2
+          }
+        ]
       }
-    ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",
