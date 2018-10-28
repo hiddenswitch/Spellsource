@@ -16,6 +16,7 @@ import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
+import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 import org.jetbrains.annotations.NotNull;
@@ -286,7 +287,7 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		CardSource source = getCardSource();
 		final EntityFilter filter;
 		if (source == null) {
-			source = CatalogueSource.create();
+			source = UnweightedCatalogueSource.create();
 		}
 		if (containsKey(SpellArg.CARD_FILTER)) {
 			filter = getCardFilter();
