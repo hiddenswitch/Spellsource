@@ -29,7 +29,7 @@ import static org.junit.Assert.*;
 
 public class GeneratorTest {
 	@Test
-	@Ignore
+	@Ignore("only used to generate spell records")
 	public void testSpellRecords() throws Exception {
 		Generator generator = new Generator();
 		List<Generator.Record> spells = generator.getSpellRecords();

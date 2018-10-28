@@ -19,15 +19,14 @@
         "target": "EVENT_SOURCE",
         "spell": {
           "class": "MetaSpell",
+          "target": "OUTPUT",
           "spells": [
             {
               "class": "SetAttackSpell",
-              "target": "OUTPUT",
               "value": 3
             },
             {
               "class": "SetHpSpell",
-              "target": "OUTPUT",
               "value": 3
             }
           ]

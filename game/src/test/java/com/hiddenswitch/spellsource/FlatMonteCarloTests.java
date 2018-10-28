@@ -14,6 +14,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -23,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FlatMonteCarloTests extends TestBase {
 
 	@Test
+	@Ignore("test too slow for unused functionality")
 	public void testDecksFlatMonteCarlo() {
 		GameDeck druid = DeckCreateRequest.fromDeckList("### Druid\n" +
 				"# Class: White\n" +
@@ -77,6 +79,7 @@ public class FlatMonteCarloTests extends TestBase {
 	}
 
 	@Test
+	@Ignore("test too slow for unused functionality")
 	public void testFlatMonteCarlo() {
 		Logging.setLoggingLevel(Level.OFF);
 		runGym((context, player, opponent) -> {

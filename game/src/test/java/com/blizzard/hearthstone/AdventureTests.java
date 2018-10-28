@@ -40,7 +40,7 @@ public class AdventureTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
+	@Ignore("too many changes to test")
 	public void testNefarian() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_nefarian");

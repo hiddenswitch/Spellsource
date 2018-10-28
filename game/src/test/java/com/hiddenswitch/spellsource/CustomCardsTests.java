@@ -6,6 +6,7 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -53,6 +54,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testEchoingPotion() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_echoing_potion");
+			playCard(context, player, "minion_wisp");
+			assertEquals(player.getMinions().size(), 2);
+			Minion copy = player.getMinions().get(1);
+			assertEquals(copy.getSourceCard().getCardId(), "minion_wisp");
+			assertEquals(copy.getAttack(), 3);
+			assertEquals(copy.getMaxHp(), 3);
+		});
+	}
+
+	@Test
 	public void testMushrooms() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
@@ -91,7 +105,13 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			playCard(context, player, "spell_toxic_mushroom");
 			player.setMana(10);
-			opponent.getHero().setAttribute(Attribute.IMMUNE);
+			// Temporarily override the target of the cook hero power
+			CardDesc clone = player.getHeroPowerZone().get(0).getDesc().clone();
+			clone.setSpell(clone.getSpell().clone());
+			SpellDesc damageSpell = (SpellDesc) clone.getSpell().getSpell().get(SpellArg.SPELL2);
+			damageSpell.put(SpellArg.RANDOM_TARGET, false);
+			damageSpell.put(SpellArg.TARGET, big.getReference());
+			player.getHeroPowerZone().get(0).setDesc(clone);
 			useHeroPower(context, player);
 			assertTrue(big.isDestroyed());
 		}, HeroClass.TOAST, HeroClass.TOAST);
