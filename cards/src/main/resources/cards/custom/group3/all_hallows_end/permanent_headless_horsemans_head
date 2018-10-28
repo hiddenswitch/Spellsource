@@ -1,0 +1,29 @@
+{
+  "name": "Headless Horseman's Head",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Permanent. At the end of your turn, deal 3 damage randomly split across all enemies",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 3,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
