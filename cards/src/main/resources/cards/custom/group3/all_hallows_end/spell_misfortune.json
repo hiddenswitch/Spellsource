@@ -1,0 +1,25 @@
+{
+  "name": "Misfortune",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "COMMON",
+  "description": "Give a minion +1/+1 and Lifesteal",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "LIFESTEAL"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
