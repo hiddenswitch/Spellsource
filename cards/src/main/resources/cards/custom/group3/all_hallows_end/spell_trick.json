@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Deal 4 damage to the enemy Hero. Draw a card. Cast this when drawn",
+  "description": "Deal 4 damage to the enemy Hero. Draw a card. Cast this when drawn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -15,7 +15,7 @@
       "spells": [
         {
           "class": "DamageSpell",
-          "target": "ENEMY_HERO",
+          "target": "FRIENDLY_HERO",
           "value": 4,
           "ignoreSpellDamage": true
         },
@@ -31,7 +31,10 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "NullSpell"
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 4,
+    "ignoreSpellDamage": true
   },
   "collectible": false,
   "set": "CUSTOM",
