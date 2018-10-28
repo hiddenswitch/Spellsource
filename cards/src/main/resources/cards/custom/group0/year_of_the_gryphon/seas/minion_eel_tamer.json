@@ -8,20 +8,33 @@
   "rarity": "RARE",
   "description": "Battlecry: If you're holding a 2-Cost card, deal 2 damage to two random enemies.",
   "battlecry": {
+    "targetSelection": "NONE",
     "condition": {
-      "class": "HoldsCardCondition",
-      "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 2
-      }
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "HoldsCardCondition",
+          "cardFilter": {
+            "class": "CardFilter",
+            "manaCost": 2
+          }
+        },
+        {
+          "class": "MinionCountCondition",
+          "value": 0,
+          "operation": "GREATER",
+          "targetPlayer": "OPPONENT"
+        }
+      ]
     },
     "spell": {
-      "class": "MissilesSpell",
+      "class": "MultiTargetSpell",
       "target": "ENEMY_CHARACTERS",
       "value": 2,
-      "howMany": 2,
-      "randomTarget": true,
-      "exclusive": true
+      "spell": {
+        "class": "DamageSpell",
+        "value": 2
+      }
     }
   },
   "attributes": {
