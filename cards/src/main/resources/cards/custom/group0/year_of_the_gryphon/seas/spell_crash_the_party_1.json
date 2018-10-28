@@ -1,0 +1,25 @@
+{
+  "name": "Destroy Left-most",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "COMMON",
+  "description": "Destroy the left-most enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 0,
+      "operation": "GREATER",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "LEFTMOST_ENEMY_MINION"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
