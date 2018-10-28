@@ -2,7 +2,7 @@
   "name": "Restless Worgen",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 7,
   "rarity": "COMMON",
