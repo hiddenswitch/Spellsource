@@ -1,4 +1,4 @@
-
+{
   "name": "Undead Trickster",
   "baseManaCost": 3,
   "type": "MINION",
@@ -24,7 +24,7 @@
         "howMany": 3,
         "targetPlayer": "SELF"
           
-    },
+    }
         
   },
   "attributes": {
