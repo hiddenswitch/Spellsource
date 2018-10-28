@@ -54,6 +54,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testColosseumBehemoth() {
+		runGym((context, player, opponent) -> {
+			Minion behemoth = playMinionCard(context, player, "minion_colosseum_behemoth");
+			context.endTurn();
+			Minion bloodfenRaptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			assertTrue(context.getValidActions().stream().filter(pa -> pa.getActionType() == ActionType.PHYSICAL_ATTACK).allMatch(pa -> pa.getTargetReference().equals(opponent.getHero().getReference())));
+		});
+	}
+
+	@Test
 	public void testEchoingPotion() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_echoing_potion");
