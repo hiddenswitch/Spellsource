@@ -1,0 +1,51 @@
+{
+  "name": "Elortha no Shadra",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: Give all minions in your hand, deck, and battlefield \"Deathrattle: Resummon this.\"",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+      {
+        "class": "CastCardsSpell",
+        "target": "FRIENDLY_DECK",
+        "card": "spell_ancestral_spirit",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "CastCardsSpell",
+        "target": "FRIENDLY_HAND",
+        "card": "spell_ancestral_spirit",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      },
+      {
+        "class": "CastCardsSpell",
+        "target": "FRIENDLY_MINIONS",
+        "card": "spell_ancestral_spirit",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
