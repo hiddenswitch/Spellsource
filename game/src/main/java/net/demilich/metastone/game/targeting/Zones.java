@@ -105,7 +105,7 @@ public enum Zones {
 	 * <p>
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
-	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, SpellDesc, CardList) for more
+	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for more
 	 * 		about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */

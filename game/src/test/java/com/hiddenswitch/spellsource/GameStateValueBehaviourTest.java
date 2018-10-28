@@ -26,7 +26,7 @@ import static org.testng.Assert.assertTrue;
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test(invocationCount = 10)
-	@Ignore
+	@Ignore("gc behaviour not consistent")
 	public void testNoDisposalSameMemory() throws InterruptedException {
 		Logging.setLoggingLevel(Level.OFF);
 		System.gc();
@@ -83,7 +83,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	}
 
 	@Test(invocationCount = 10)
-	@Ignore
+	@Ignore("gc behaviour not consistent")
 	public void testReduceMemoryUsage() {
 		Logging.setLoggingLevel(Level.OFF);
 		System.gc();
@@ -133,7 +133,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	}
 
 	@Test(invocationCount = 10)
-	@Ignore
+	@Ignore("gc behaviour not consistent")
 	public void testReduceMemoryUsageDifferentOrder() {
 		Logging.setLoggingLevel(Level.OFF);
 		System.gc();
