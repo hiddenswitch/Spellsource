@@ -16,7 +16,6 @@
         "target": "SELF",
         "value": 3,
         "operation": "SUBTRACT"
-      }
     },
     "cardFilter": {
       "class": "CardFilter",
