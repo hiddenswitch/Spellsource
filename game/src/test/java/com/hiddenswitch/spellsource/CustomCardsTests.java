@@ -53,6 +53,20 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testMushrooms() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion big = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCard(context, player, "spell_clarity_mushroom");
+			player.setMana(10);
+			assertTrue(context.getValidActions().stream().anyMatch(hp -> hp.getActionType() == ActionType.HERO_POWER && hp.getTargetReference().equals(big.getReference())));
+			useHeroPower(context, player, big.getReference());
+			assertEquals(big.getHp(), big.getMaxHp() - 4);
+		}, HeroClass.TOAST, HeroClass.TOAST);
+	}
+
+	@Test
 	public void testNazmiriStalker() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_nazmiri_stalker");
