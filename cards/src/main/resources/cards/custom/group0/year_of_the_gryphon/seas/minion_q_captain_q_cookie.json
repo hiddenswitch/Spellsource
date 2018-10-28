@@ -1,0 +1,29 @@
+{
+  "name": "\"Captain\" Cookie",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "At the end of each turn, give the current player a Cookie's Recipe spell.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "ACTIVE",
+      "cards": [
+        "spell_good_food",
+        "spell_bad_food"
+      ],
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
