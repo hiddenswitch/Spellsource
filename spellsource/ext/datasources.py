@@ -16,7 +16,10 @@ class HSReplayMatchups(object):
         self._matchups_dict = json.loads(urllib.urlopen(self._data_request).read())
         self._archetypes = {str(x['id']): x for x in self._archetypes_list}
         self.data = self._matchups_dict['series']['data']
-    
+
+    def __len__(self):
+        return len(self.data)
+
     def __iter__(self):
         for player1_id, matchup in self.data.items():
             if player1_id not in self._archetypes:
