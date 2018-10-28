@@ -14,7 +14,7 @@
       "value": 3
   },
   "attributes": {
-    "DEATHRATTLE": true
+    "DEATHRATTLE": true,
     "RUSH": true
   },
   "collectible": true,
