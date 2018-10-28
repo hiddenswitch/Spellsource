@@ -15,7 +15,7 @@
       "spells": [
         {
           "class": "DamageSpell",
-          "target": "FRIENDLY_HERO",
+          "target": "ENEMY_HERO",
           "value": 4,
           "ignoreSpellDamage": true
         },
@@ -32,7 +32,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
-    "target": "FRIENDLY_HERO",
+    "target": "ENEMY_HERO",
     "value": 4,
     "ignoreSpellDamage": true
   },
