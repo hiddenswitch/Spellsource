@@ -8,6 +8,8 @@ import net.demilich.metastone.game.entities.minions.Race;
 /**
  * This not a programmers nightmare poured into a class; rather a condition if the specified target is of a certain
  * race
+ *
+ * ++doombubbles
  */
 public class RaceCondition extends Condition {
 
@@ -18,7 +20,7 @@ public class RaceCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		Race race = (Race) desc.get(ConditionArg.RACE);
-		return target.getRace().hasRace(race);
+		return target.getSourceCard().hasRace(race);
 	}
 
 }
