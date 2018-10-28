@@ -24,8 +24,8 @@
         "howMany": 3,
         "targetPlayer": "SELF"
           
-    }
-        }
+    },
+        
   },
   "attributes": {
     "BATTLECRY": true
