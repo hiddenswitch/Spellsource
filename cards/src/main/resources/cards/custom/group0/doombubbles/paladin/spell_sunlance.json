@@ -1,0 +1,20 @@
+{
+  "name": "Sunlance",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "Deal $4 damage. Any excess damage dealt is drawn as cards.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ExcessDamageSpell",
+    "value": 4,
+    "secondaryTarget": "FRIENDLY_PLAYER",
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
