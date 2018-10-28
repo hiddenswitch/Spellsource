@@ -1,0 +1,21 @@
+{
+  "name": "Pumpkin",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Restore #4 Health to your hero.",
+  "deathrattle": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 4
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
