@@ -1,0 +1,23 @@
+{
+  "name": "Costume Seller",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: Choose a friendly minion, swap it with a random minion in your hand.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "custom.SwapWithHandSpell",
+      "target": "FRIENDLY_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
