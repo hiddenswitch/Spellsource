@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
@@ -96,7 +97,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
+	@Ignore("does not consistently produce errors")
 	public void testThirtyScrollsOfWonder() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 30; i++) {
@@ -356,27 +357,26 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		});
 	}
 
-	@Test
-	@Ignore
+	@Test(invocationCount = 10)
 	public void testKingTogwaggle() {
 		runGym((context, player, opponent) -> {
-			final Card card1a = CardCatalogue.getCardById("spell_mirror_image");
-			final Card card1b = CardCatalogue.getCardById("spell_fireball");
-			final Card card2a = CardCatalogue.getCardById("minion_bloodfen_raptor");
-			final Card card2b = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
+			Card card1a = CardCatalogue.getCardById("spell_mirror_image");
+			Card card1b = CardCatalogue.getCardById("spell_fireball");
+			Card card2a = CardCatalogue.getCardById("minion_bloodfen_raptor");
+			Card card2b = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
 			Stream.of(card1a, card1b).forEach(c -> context.getLogic().shuffleToDeck(player, c));
 			Stream.of(card2a, card2b).forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
 			playCard(context, player, "minion_king_togwaggle");
 			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card1a, card1b)));
 			Assert.assertTrue(opponent.getDeck().containsCard("spell_ransom"));
 			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card2a, card2b)));
-			GameLogic spyLogic = Mockito.spy(context.getLogic());
-			context.setLogic(spyLogic);
-			Mockito.doReturn(opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new))
-					.when(spyLogic).getRandom(Mockito.any(CardList.class));
+			// Move the ransom card to the top of the deck
+			Card ransomCard = opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new);
+			ransomCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			ransomCard.moveOrAddTo(context, Zones.DECK);
 			context.endTurn();
-			Assert.assertTrue(opponent.getHand().containsCard("spell_ransom"));
-			playCard(context, opponent, opponent.getHand().get(0));
+			ransomCard = opponent.getHand().get(0);
+			playCard(context, opponent, ransomCard);
 			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card2a, card2b)));
 			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card1a, card1b)));
 		});
@@ -467,9 +467,9 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
 	public void testUnstableEvolution() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			Minion minion = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCardWithTarget(context, player, "spell_unstable_evolution", minion);
 			assertEquals(player.getHand().size(), 1);

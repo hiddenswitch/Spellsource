@@ -22,6 +22,11 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
+	public Entity getEventSource() {
+		return getSource();
+	}
+
+	@Override
 	public GameEventType getEventType() {
 		return GameEventType.SUMMON;
 	}
