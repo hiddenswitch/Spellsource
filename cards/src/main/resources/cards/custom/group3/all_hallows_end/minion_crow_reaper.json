@@ -1,7 +1,7 @@
 {
   "name": "Crow Reaper",
   "baseManaCost": 2,
-  "type": "MINION",
+  "type": "GREEN",
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 4,
