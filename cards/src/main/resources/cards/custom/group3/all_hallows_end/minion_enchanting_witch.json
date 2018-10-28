@@ -2,7 +2,7 @@
   "name": "Enchanting Witch",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "BLUE",
+  "heroClass": "SILVER",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
