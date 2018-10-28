@@ -2,7 +2,7 @@
   "name": "Stormwind Investigator",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "SILVER",
+  "heroClass": "GOLD",
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
