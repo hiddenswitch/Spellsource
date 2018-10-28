@@ -1,0 +1,31 @@
+{
+  "name": "Bwonsamdi",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "After you play a minion, give it a random Deathrattle from a minion in your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    {
+      "class": "AddDeathrattleSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+        "class": "CopyDeathrattleSpell",
+        "target": "FRIENDLY_HAND"
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
