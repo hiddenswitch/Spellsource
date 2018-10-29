@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.List;
@@ -255,17 +256,78 @@ public enum SpellArg {
 	 * damage dealt (the {@link SpellArg#VALUE}) should not be affected by spell damage.
 	 */
 	IGNORE_SPELL_DAMAGE,
+	/**
+	 * Used by the {@link CreateCardSpell} to indicate how much the card it creates should cost. Considered obsolete.
+	 */
+	@Deprecated
 	MANA,
+	/**
+	 * Used by various spells to put a name on a card or to change the name of a target card.
+	 *
+	 * @see net.demilich.metastone.game.spells.custom.TextifySpell for an example of a spell that uses this arg.
+	 */
 	NAME,
+	/**
+	 * An {@link net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation} that is typically used to do
+	 * math.
+	 * <p>
+	 * Currently only used by {@link ModifyDamageSpell}.
+	 */
 	OPERATION,
-	OPTIONS,
+	/**
+	 * Used by the {@link SetRaceSpell} to change a target minion's race.
+	 */
 	RACE,
+	/**
+	 * Used by {@link AddQuestSpell} to define a {@link net.demilich.metastone.game.spells.trigger.secrets.Quest} to put
+	 * into play.
+	 */
 	QUEST,
+	/**
+	 * When {@code true}, indicates that a random single target from the list of filtered targets should be cast on by
+	 * this spell.
+	 * <p>
+	 * {@link SummonSpell}, when given a {@link SpellArg#CARDS} argument, will interpret this arg to mean that a single
+	 * card should be chosen from the list of cards to summon.
+	 *
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the complete targeting rules and how this arg is
+	 * 		interpreted.
+	 */
 	RANDOM_TARGET,
+	/**
+	 * Used by the {@link RevertableSpell} series of spells to indicate which {@link
+	 * net.demilich.metastone.game.spells.trigger.EventTrigger} will cause the effects to be "reverted."
+	 *
+	 * @see AddAttributeSpell for an example of a spell that uses this arg.
+	 */
 	REVERT_TRIGGER,
+	/**
+	 * Used by the {@link AddSecretSpell} to define a {@link Secret} to put into play.
+	 */
 	SECRET,
+	/**
+	 * Used by the {@link RevertableSpell} series of spells to indicate another {@link
+	 * net.demilich.metastone.game.spells.trigger.EventTrigger} that will cause the effects to be "reverted."
+	 *
+	 * @see AddAttributeSpell for an example of a spell that uses this arg.
+	 */
 	SECOND_REVERT_TRIGGER,
+	/**
+	 * Used by the {@link CreateCardSpell} to name the card is creates. Considered obsolete.
+	 */
+	@Deprecated
 	SECONDARY_NAME,
+	/**
+	 * Typically interpreted as a second target for effects that have a {@code source}, a {@code target}, and another
+	 * entity that does something to the {@code target}.
+	 * <p>
+	 * The {@link net.demilich.metastone.game.targeting.EntityReference} here is typically interpreted using {@link
+	 * GameContext#resolveSingleTarget(Player, Entity, EntityReference)}, a method which returns one entity from "group
+	 * references" (i.e. {@link EntityReference#isTargetGroup()} {@code = true}).
+	 *
+	 * @see FightSpell for an example of a spell that uses this arg.
+	 * @see AddDeathrattleSecondaryAsTargetSpell for an example of a spell that uses this arg.
+	 */
 	SECONDARY_TARGET,
 	SECONDARY_VALUE,
 	SPELL,
