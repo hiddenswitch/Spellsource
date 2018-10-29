@@ -1,0 +1,19 @@
+{
+  "name": "Storm",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Deal 5 damage randomly split among minions. enemy",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 1,
+    "randomTarget": true
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

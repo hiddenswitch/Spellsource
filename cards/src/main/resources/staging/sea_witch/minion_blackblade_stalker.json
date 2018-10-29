@@ -1,0 +1,27 @@
+{
+  "name": "Blackblade Stalker",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Lifesteal Battlecry: Deal 2 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "PlayedLastTurnCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

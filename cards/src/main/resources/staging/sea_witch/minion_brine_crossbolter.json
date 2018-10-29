@@ -1,0 +1,14 @@
+{
+  "name": "Brine Crossbolter",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Reservoir (0-5): Double this weapon's Attack.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
