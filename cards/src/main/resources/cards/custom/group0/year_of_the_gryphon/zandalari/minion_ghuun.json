@@ -26,6 +26,9 @@
       }
     }
   ],
+  "attributes": {
+    "LIFESTEAL": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
