@@ -13,7 +13,7 @@
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
-      "card": "minion_giant_spider",
+      "card": "token_bug_giant_spider",
       "filter": {
         "class": "SpecificCardFilter",
         "card": "token_spiderling"
