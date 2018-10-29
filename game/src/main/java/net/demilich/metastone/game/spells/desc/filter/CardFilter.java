@@ -38,7 +38,6 @@ public final class CardFilter extends EntityFilter {
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
 
-
 		if (entity == null) {
 			return false;
 		}
@@ -135,5 +134,4 @@ public final class CardFilter extends EntityFilter {
 		return new CardFilter(arguments);
 	}
 }
-
 

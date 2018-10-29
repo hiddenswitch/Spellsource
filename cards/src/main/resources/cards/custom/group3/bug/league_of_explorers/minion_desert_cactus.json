@@ -5,7 +5,7 @@
   "heroClass": "AMBER",
   "baseAttack": 3,
   "baseHp": 7,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Damage dealt to this minion is also dealt to attackers.",
   "triggers": [
     {

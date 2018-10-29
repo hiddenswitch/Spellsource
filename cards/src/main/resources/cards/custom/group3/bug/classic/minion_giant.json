@@ -8,6 +8,7 @@
   "rarity": "EPIC",
   "description": "Costs (1) less for each Beast that died this game.",
   "collectible": true,
+  "race": "BEAST",
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "manaCostModifier": {

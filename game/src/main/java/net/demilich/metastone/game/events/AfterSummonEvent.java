@@ -22,6 +22,11 @@ public class AfterSummonEvent extends GameEvent {
 	}
 
 	@Override
+	public Entity getEventSource() {
+		return getSource();
+	}
+
+	@Override
 	public GameEventType getEventType() {
 		return GameEventType.AFTER_SUMMON;
 	}

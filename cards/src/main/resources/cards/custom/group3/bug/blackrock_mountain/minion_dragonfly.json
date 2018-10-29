@@ -5,7 +5,7 @@
   "heroClass": "AMBER",
   "baseAttack": 3,
   "baseHp": 4,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "BEAST_DRAGON",
   "description": "Also counts as a Dragon.",
   "attributes": {},
