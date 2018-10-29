@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
+  "race": "DRAGON",
   "description": "Battlecry: If you're holding a Dragon, gain +2 Health.",
   "battlecry": {
     "condition": {
