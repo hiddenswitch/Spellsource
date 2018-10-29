@@ -1,0 +1,29 @@
+{
+  "name": "Squid Ward",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Give a friendly minion +2/+2 2 and'Deathrattle: Shuffle this minion into your deck.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 0,
+        "hpBonus": 0
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "value": 1,
+        "card": "minion_bloodfen_raptor"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

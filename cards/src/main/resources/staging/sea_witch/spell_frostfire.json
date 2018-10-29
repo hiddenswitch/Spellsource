@@ -1,0 +1,26 @@
+{
+  "name": "Frostfire",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Deal 6 damage to an and Freeze it. enemy",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

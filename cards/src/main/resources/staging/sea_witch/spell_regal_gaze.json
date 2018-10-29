@@ -1,0 +1,17 @@
+{
+  "name": "Regal Gaze",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Silence a minion. Then, Freeze it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "FROZEN"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

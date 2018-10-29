@@ -1,0 +1,25 @@
+{
+  "name": "Saltspring Wand",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Add an Ocean Depths to deck. your",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
