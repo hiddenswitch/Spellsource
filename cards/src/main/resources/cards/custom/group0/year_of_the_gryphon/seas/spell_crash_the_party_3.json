@@ -3,7 +3,7 @@
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BROWN",
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "description": "Destroy your opponent's left and right-most minions.",
   "targetSelection": "NONE",
   "spell": {
