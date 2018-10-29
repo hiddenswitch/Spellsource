@@ -59,7 +59,7 @@ import java.util.List;
  * @see net.demilich.metastone.game.spells.Spell#cast(GameContext, Player, SpellDesc, Entity, List) to see more about
  * 		how group references are used in the casting of spells.
  */
-public class EntityReference implements Serializable {
+public final class EntityReference implements Serializable {
 	/**
 	 * Indicates a spell should take no target. It will receive {@code null} as its {@code target} argument.
 	 */
