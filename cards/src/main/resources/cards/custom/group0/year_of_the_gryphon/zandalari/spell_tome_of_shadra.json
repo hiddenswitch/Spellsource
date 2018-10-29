@@ -10,7 +10,7 @@
     "class": "SummonSpell",
     "value": {
       "class": "EntityCounter",
-      "target": "FRIENDLY_MINIONS"
+      "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "AttributeFilter",
         "attribute": "DEATHRATTLES"
