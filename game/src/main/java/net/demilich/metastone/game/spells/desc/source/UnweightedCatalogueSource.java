@@ -8,7 +8,17 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.util.Map;
 
-public class UnweightedCatalogueSource extends CardSource implements HasCardCreationSideEffects {
+/**
+ * Returns a list of collectible cards from the {@link net.demilich.metastone.game.decks.DeckFormat} for this game (from
+ * {@link GameContext#getDeckFormat()}) of equal probability for all classes and neutrals.
+ * <p>
+ * This is the default card source for random generation effects in all spells except {@link
+ * net.demilich.metastone.game.spells.DiscoverSpell}.
+ *
+ * @see CatalogueSource for an example of a card source that returns the caster's class cards 4x more frequently than
+ * 		neutrals, and never returns other class cards.
+ */
+public final class UnweightedCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
 	public UnweightedCatalogueSource(CardSourceDesc desc) {
 		super(desc);

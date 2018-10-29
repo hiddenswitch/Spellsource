@@ -82,6 +82,18 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 		return cards;
 	}
 
+	/**
+	 * Overridden by card source implementations to return a list of cards that usually get filtered in an {@link
+	 * net.demilich.metastone.game.spells.desc.filter.EntityFilter}.
+	 * <p>
+	 * See the implementations for examples of how, e.g. the graveyard is turned into a {@link CardList} instance by
+	 * iterating through all the actors in the graveyard and retrieving their {@link Entity#getSourceCard()}.
+	 *
+	 * @param context The game context
+	 * @param source  The entity that is the origin of this matching operation
+	 * @param player  The casting player
+	 * @return A list of cards pre-filter.
+	 */
 	@Suspendable
 	protected abstract CardList match(GameContext context, Entity source, Player player);
 
