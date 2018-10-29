@@ -3,7 +3,7 @@
   "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "AMBER",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Choose a minion. Summon a 1/1 Spiderling to attack it.",
   "targetSelection": "MINIONS",
   "spell": {

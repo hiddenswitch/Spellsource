@@ -1,0 +1,43 @@
+{
+  "name": "Boss Fight!",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Recruit your highest Cost minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
+          "class": "ManaCostFilter",
+          "value": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_DECK",
+            "filter": {
+              "class": "CardFilter",
+              "cardType": "MINION"
+            },
+            "operation": "MAXIMUM",
+            "value1": {
+              "class": "ManaCostProvider"
+            }
+          },
+          "operation": "EQUAL"
+        }
+      ]
+    },
+    "cardLocation": "DECK",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

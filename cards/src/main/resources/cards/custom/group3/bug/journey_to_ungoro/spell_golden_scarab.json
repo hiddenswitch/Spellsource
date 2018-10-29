@@ -1,0 +1,28 @@
+{
+  "name": "Golden Scarab",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "COMMON",
+  "description": "Discover a minion you control.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardSource": {
+      "class": "MinionsSource",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "AttributeFilter",
+      "attribute": "PERMANENT",
+      "invert": true,
+      "operation": "HAS"
+    }
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

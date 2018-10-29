@@ -5,7 +5,7 @@
   "heroClass": "AMBER",
   "baseAttack": 1,
   "baseHp": 1,
-  "rarity": "FREE",
+  "rarity": "EPIC",
   "race": "BEAST",
   "description": "Deathrattle: Draw a card and add a Spyder to your opponent's hand.",
   "deathrattle": {

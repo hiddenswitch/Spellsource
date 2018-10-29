@@ -18,7 +18,7 @@ import java.util.Map;
  * <p>
  * Implements Betrayal.
  */
-public class DamageAdjacentMinionsSpell extends Spell {
+public final class DamageAdjacentMinionsSpell extends Spell {
 
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(DamageAdjacentMinionsSpell.class);
@@ -34,3 +34,4 @@ public class DamageAdjacentMinionsSpell extends Spell {
 		}
 	}
 }
+
