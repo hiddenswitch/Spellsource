@@ -44,7 +44,8 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * <p>
 	 * If {@code targets.size()} is {@code 0}, this spell takes targets but none were found, so the spell is not cast.
 	 * <p>
-	 * This spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link
+	 * The {@link EntityFilter} specified in {@link SpellArg#FILTER} is applied to the list of targets to filter it.
+	 * Therefore, this spell casting code is responsible for interpreting the {@link SpellArg#FILTER} and {@link
 	 * SpellArg#RANDOM_TARGET} attributes of a {@link SpellDesc}.
 	 *
 	 * @param context

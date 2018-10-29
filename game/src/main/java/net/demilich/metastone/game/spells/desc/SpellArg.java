@@ -1,12 +1,22 @@
 package net.demilich.metastone.game.spells.desc;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.DescDeserializer;
 import net.demilich.metastone.game.entities.Actor;
+import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.*;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
+import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
+import net.demilich.metastone.game.targeting.Zones;
+
+import java.util.List;
 
 /**
  * This enum describes the keys to the {@link SpellDesc} / the keys of the dictionaries in the {@link
- * net.demilich.metastone.game.cards.desc.CardDesc} card JSON files for spells.
+ * net.demilich.metastone.game.cards.desc.CardDesc} card JSON files for spells.}
  * <p>
  * To see how a particular argument is interpreted, refer to the Java {@link net.demilich.metastone.game.spells.Spell}
  * class written in the {@link SpellArg#CLASS} field of the {@link SpellDesc}. For example, if you see the spell:
@@ -16,7 +26,9 @@ import net.demilich.metastone.game.entities.Actor;
  *     "value": 1
  *   }
  * </pre>
- * And you want to see what {@code "value"} means in this context, visit {@link net.demilich.metastone.game.spells.DrawCardSpell}.
+ * Observe that {@link SpellArg#VALUE} corresponds to the key {@code "value"} in this JSON. All the fields in the JSON
+ * in {@code camelCase} have a corresponding field name in {@code UPPER_CASE}. To see what {@code "value"} / {@link
+ * SpellArg#VALUE} means in this context, visit {@link net.demilich.metastone.game.spells.DrawCardSpell}.
  * <p>
  * Observe that every {@code SpellArg} enum value is a key in the JSON for spell effects, except {@code camelCased} and
  * surrounded by quotation marks. When you read documentation for {@link net.demilich.metastone.game.spells.Spell}
@@ -72,17 +84,17 @@ public enum SpellArg {
 	/**
 	 * This argument is added by the resolution of {@link net.demilich.metastone.game.logic.GameLogic#resolveDeathrattles(Player,
 	 * Actor)}. It stores the position of the minion before it died. This then gets used by spells like {@link
-	 * net.demilich.metastone.game.spells.SummonSpell} to summon a minion where the minion died.
+	 * SummonSpell} to summon a minion where the minion died.
 	 * <p>
 	 * It may someday be interpreted by other spells to put an entity in a particular position.
 	 *
-	 * @see net.demilich.metastone.game.spells.SummonSpell for an example of a spell that uses this arg.
+	 * @see SummonSpell for an example of a spell that uses this arg.
 	 */
 	BOARD_POSITION_ABSOLUTE,
 	/**
 	 * Typically interpreted as a position relative to the {@code source} of a spell.
 	 *
-	 * @see net.demilich.metastone.game.spells.SummonSpell for an example of a spell that uses this arg.
+	 * @see SummonSpell for an example of a spell that uses this arg.
 	 */
 	BOARD_POSITION_RELATIVE,
 	/**
@@ -91,26 +103,157 @@ public enum SpellArg {
 	 */
 	CANNOT_RECEIVE_OWNED,
 	/**
-	 * Interpreted as the card the spell is acting on.
+	 * Interpreted as the card the spell is acting on. It is typically the ID (file name of a card without the {@code
+	 * ".json"} extension) of a card.
+	 * <p>
+	 * This argument is fairly common. For a {@link SummonSpell}, it indicates which card to summon. For a {@link
+	 * ReceiveCardSpell}, it indicates which card should be put in the player's hand.
+	 * <p>
+	 * Many spells use a {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)} system to
+	 * interpret a set of arguments ({@link SpellArg#CARD} being one of them) as a way to specify "a bunch of cards."
+	 *
+	 * @see ReceiveCardSpell for an example of a spell that uses this arg.
 	 */
 	CARD,
+	/**
+	 * Describes a {@link net.demilich.metastone.game.cards.costmodifier.CardCostModifier} for the {@link
+	 * net.demilich.metastone.game.spells.CardCostModifierSpell}.
+	 */
 	CARD_COST_MODIFIER,
+	/**
+	 * Describes the kind of card created in a {@link net.demilich.metastone.game.spells.CreateCardSpell}. Considered
+	 * obsolete.
+	 */
+	@Deprecated
 	CARD_DESC_TYPE,
+	/**
+	 * An {@link net.demilich.metastone.game.spells.desc.filter.EntityFilter} that typically operates on cards. These
+	 * cards are retrieved from a {@link CardSource}, which when not specified is the {@link UnweightedCatalogueSource} by
+	 * default for random effects and {@link CatalogueSource} for discovers. Like {@link SpellArg#CARD}, it is used by
+	 * pipelines like {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)} and {@link
+	 * SpellDesc#getFilteredCards(GameContext, Player, Entity)} to generate a list of cards for some effect.
+	 * <p>
+	 * This argument shouldn't be confused with {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. Any
+	 * {@link net.demilich.metastone.game.spells.desc.filter.EntityFilter} can be on the right hand side of a {@code
+	 * "cardFilter"}.
+	 *
+	 * @see DiscoverSpell for an example of a spell that uses this arg.
+	 * @see SpellArg#CARD_SOURCE for an arg that is commonly included with this arg.
+	 * @see net.demilich.metastone.game.spells.desc.filter.EntityFilter for more about entity filters.
+	 */
 	CARD_FILTER,
+	/**
+	 * Multiple card filters that are used by effects like {@link DiscoverFilteredCardSpell}. Considered obsolete.
+	 */
+	@Deprecated
 	CARD_FILTERS,
+	/**
+	 * A value from {@link Zones} that represents a place to or from a card will be affected.
+	 *
+	 * @see RecruitSpell for an example of a spell that uses this arg.
+	 * @see StealCardSpell for an example of a spell that uses this arg.
+	 */
 	CARD_LOCATION,
+	/**
+	 * A {@link CardSource} that specifies an original list of cards that should be filtered, typically with a {@link
+	 * SpellArg#CARD_FILTER}. Common choices for a card source include {@link CatalogueSource} and {@link
+	 * UnweightedCatalogueSource}.
+	 *
+	 * @see DiscoverSpell for an example of a spell that uses this arg.
+	 * @see SpellArg#CARD_FILTER for an arg that is commonly included with this arg.
+	 * @see CardSource for more about card sources.
+	 */
 	CARD_SOURCE,
+	/**
+	 * Used by the {@link CreateCardSpell} to determine what kind of card to make. Considered obsolete.
+	 */
 	CARD_TYPE,
+	/**
+	 * An array version of {@link #CARD}. Typically interpreted as a group of cards, rather than as a random selection of
+	 * one of these cards.
+	 *
+	 * @see ReceiveCardSpell for an example of a spell that uses this arg.
+	 */
 	CARDS,
+	/**
+	 * A {@link net.demilich.metastone.game.spells.desc.condition.Condition} that is evaluated against a {@code target}.
+	 * It is typically interpreted as whether or not a spell should execute its subspell {@link SpellArg#SPELL} or do
+	 * {@link SpellArg#SPELL1} versus {@link SpellArg#SPELL2} given the result of evaluating the condition.
+	 *
+	 * @see ConditionalSpell for an example of a spell that uses this arg.
+	 */
 	CONDITION,
+	/**
+	 * The array version of {@link #CONDITION}.
+	 *
+	 * @see ConditionalSpell for an example of a spell that uses this arg.
+	 */
 	CONDITIONS,
+	/**
+	 * A piece of text that gets written on the card using the {@link SetDescriptionSpell}, or a description to appear on
+	 * a generated card in a {@link CastFromGroupSpell}.
+	 * <p>
+	 * Eventually, the value of this argument will support dynamic text generation and more advanced text manipulation.
+	 */
 	DESCRIPTION,
+	/**
+	 * A typically catch-all boolean argument.
+	 * <p>
+	 * In many cases, this arg is interpreted to mean the difference between affecting the {@code target} (when {@code
+	 * true}) versus the base card (when {@code false}). Consult the spell's documentation for its specific
+	 * interpretation.
+	 * <p>
+	 * In other cases, setting this arg to {@code true} suppresses the firing of an event. This is used by e.g. {@link
+	 * ShuffleToDeckSpell} to prevent an infinite loop of shuffles for cards like Augmented Elekk.
+	 * <p>
+	 * In other cases, setting this arg to {@code true} only causes the "secondary" effect to occur in the spell. This is
+	 * used by e.g. {@link ExcessDamageSpell} to only deal excess damage instead of both the regular and excess damage.
+	 * <p>
+	 * Finally, this arg is used by {@link SummonSpell} to only summon minions whose card ID is not already present on the
+	 * casting player's battlefield.
+	 * <p>
+	 * Use "Find Usages" to see the various ways this arg is used.
+	 */
 	EXCLUSIVE,
+	/**
+	 * An {@link net.demilich.metastone.game.spells.desc.filter.EntityFilter} that is applied to the targets returned by
+	 * the {@link #TARGET} or {@link net.demilich.metastone.game.targeting.TargetSelection} specified on the {@link
+	 * CardDesc#getTargetSelection()}. After filtering, if no targets remain, the spell is not cast; or, if the spell has
+	 * a target selection specified and no targets are available, the spell typically cannot be cast.
+	 * <p>
+	 * This arg is interpreted by the spell casting system and never by any {@link Spell} class in particular.
+	 *
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for how this arg is interpreted.
+	 */
 	FILTER,
+	/**
+	 * When {@code true}, indicates to {@link ModifyMaxManaSpell} whether it should give a player full or empty mana
+	 * crystals.
+	 */
 	FULL_MANA_CRYSTALS,
-	HERO_POWER,
+	/**
+	 * For spells where {@link #VALUE} has a separate interpretation from "copies" or "duplicates," this arg is typically
+	 * used to indicate copies or duplicates.
+	 * <p>
+	 * Because {@link #VALUE} is used by {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)}
+	 * to indicate how many random cards should be selected, this arg is typically used to indicate the number of copies
+	 * of those cards. Therefore, a good rule of thumb is that the number of cards that will be operated on by a {@link
+	 * SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc, int)} call is {@code "value" x "howMany"}
+	 * cards.
+	 *
+	 * @see MissilesSpell where this arg indicates the number of missiles.
+	 * @see DiscoverSpell where this arg indicates the number of cards that should be shown in a discover.
+	 */
 	HOW_MANY,
+	/**
+	 * Used by {@link BuffSpell} to indicate how much additional full-healed health should be given to the {@code target}
+	 * as a buff.
+	 */
 	HP_BONUS,
+	/**
+	 * Used by the {@link DamageSpell} to indicate that even though this effect is written on a spell card, the amount of
+	 * damage dealt (the {@link SpellArg#VALUE}) should not be affected by spell damage.
+	 */
 	IGNORE_SPELL_DAMAGE,
 	MANA,
 	NAME,

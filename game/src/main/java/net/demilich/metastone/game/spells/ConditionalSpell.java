@@ -119,6 +119,5 @@ public class ConditionalSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, target);
 		}
 	}
-
 }
 
