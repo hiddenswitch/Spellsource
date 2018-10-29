@@ -1,0 +1,34 @@
+{
+  "name": "Crackling Arrows",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to two random enemies. Repeat for each Secret you control.",
+  "spell": {
+    "class": "CastRepeatedlySpell",
+    "howMany": {
+      "class": "PlayerAttributeValueProvider",
+      "playerAttribute": "SECRET_COUNT",
+      "targetPlayer": "SELF"
+    },
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 0,
+      "operation": "GREATER",
+      "targetPlayer": "OPPONENT"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MultiTargetSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "spell": {
+        "class": "DamageSpell",
+        "value": 1
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
