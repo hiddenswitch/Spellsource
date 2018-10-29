@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "card": "token_spirit_panther",
+    "value": 2,
     "card": "token_spirit_panther"
   },
   "collectible": false,
