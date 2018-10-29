@@ -16,6 +16,7 @@ import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.utils.AttributeMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -489,6 +490,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return Integer.compare(this.getId(), o.getId());
 	}
 
+	@NotNull
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}

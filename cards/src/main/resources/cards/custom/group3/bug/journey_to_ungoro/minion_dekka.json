@@ -1,0 +1,47 @@
+{
+  "name": "Dekka the Primal",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever this attacks and kills a minion, gain its Attack, Health, and card text.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "attribute": "ATTACK",
+            "target": "EVENT_TARGET"
+          },
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "attribute": "HP",
+            "target": "EVENT_TARGET"
+          }
+        },
+        {
+          "class": "custom.AddActorEffectsToTargetActorSpell",
+          "secondaryTarget": "EVENT_TARGET"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

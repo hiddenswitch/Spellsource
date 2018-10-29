@@ -1,0 +1,26 @@
+{
+  "name": "Lumina, Light of the Forest",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "After you play a minion, Discover one of the same Tribe.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DiscoverSpell",
+      "cardFilter": {
+        "class": "RaceEqualsFilter",
+        "secondaryTarget": "EVENT_SOURCE"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -71,9 +71,6 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 		}
 
 		Race originalRace = targetActor.getRace();
-		if (originalRace == null) {
-			originalRace = Race.NONE;
-		}
 		// Copy the attributes onto the actor
 		AttributeMap sourceAttributes = new AttributeMap();
 		for (Attribute key : sourceCard.getAttributes().unsafeKeySet()) {

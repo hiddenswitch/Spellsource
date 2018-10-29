@@ -1,0 +1,38 @@
+{
+  "name": "Amber Spellstone",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Discover a 6-Cost minion. Summon it. (Summon 3 Beasts to upgrade.)",
+  "passiveTrigger": {
+    "countUntilCast": 3,
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "BEAST",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_greater_amber_spellstone"
+    },
+    "countByValue": true,
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "SummonSpell"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 6
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

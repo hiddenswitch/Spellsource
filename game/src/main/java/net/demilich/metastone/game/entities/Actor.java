@@ -340,6 +340,10 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		clone.getAttributes().remove(Attribute.AURA_POISONOUS);
 		clone.getAttributes().remove(Attribute.AURA_RUSH);
 		clone.getAttributes().remove(Attribute.AURA_WINDFURY);
+		clone.getAttributes().remove(Attribute.AURA_IMMUNE_WHILE_ATTACKING);
+		clone.getAttributes().remove(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
+		clone.getAttributes().remove(Attribute.AURA_SPELL_DAMAGE);
+		clone.getAttributes().remove(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
 	}

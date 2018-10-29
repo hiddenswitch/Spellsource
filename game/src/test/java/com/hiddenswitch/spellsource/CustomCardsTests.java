@@ -54,6 +54,33 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testAnubrekhan() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCardWithBattlecry(context, player, "minion_anub'rekhan", bloodfenRaptor);
+			Minion anubrekhan = player.getMinions().get(1);
+			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
+			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "permanent_cocoon");
+			destroy(context, anubrekhan);
+			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
+			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "minion_bloodfen_raptor");
+		});
+	}
+
+	@Test
+	public void testCryptladyZara() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_boulderfist_ogre");
+			playCard(context, player, "hero_cryptlady_zara");
+			playCardWithTarget(context, player, "spell_fireball", target);
+			assertEquals(target.getHp(), target.getMaxHp() - 1);
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_spirit_bomb" /*4damage*/, target);
+			assertEquals(target.getHp(), target.getMaxHp() - 1 - 4);
+		});
+	}
+
+	@Test
 	public void testColosseumBehemoth() {
 		runGym((context, player, opponent) -> {
 			Minion behemoth = playMinionCard(context, player, "minion_colosseum_behemoth");
