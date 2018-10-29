@@ -1,0 +1,24 @@
+{
+  "name": "Vashj's Plot",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "Hero Power: Discover a Secretive ability and cast it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "CastCardsSpell"
+    },
+    "cards": [
+      "spell_crackling_arrows",
+      "spell_hidden_weapon",
+      "spell_royal_guard"
+    ],
+    "howMany": 3
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
