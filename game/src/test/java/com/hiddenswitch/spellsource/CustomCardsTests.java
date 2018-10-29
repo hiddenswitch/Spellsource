@@ -6,6 +6,7 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -51,6 +52,81 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testColosseumBehemoth() {
+		runGym((context, player, opponent) -> {
+			Minion behemoth = playMinionCard(context, player, "minion_colosseum_behemoth");
+			context.endTurn();
+			Minion bloodfenRaptor = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			assertTrue(context.getValidActions().stream().filter(pa -> pa.getActionType() == ActionType.PHYSICAL_ATTACK).allMatch(pa -> pa.getTargetReference().equals(opponent.getHero().getReference())));
+		});
+	}
+
+	@Test
+	public void testEchoingPotion() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_echoing_potion");
+			playCard(context, player, "minion_wisp");
+			assertEquals(player.getMinions().size(), 2);
+			Minion copy = player.getMinions().get(1);
+			assertEquals(copy.getSourceCard().getCardId(), "minion_wisp");
+			assertEquals(copy.getAttack(), 3);
+			assertEquals(copy.getMaxHp(), 3);
+		});
+	}
+
+	@Test
+	public void testMushrooms() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion big = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCard(context, player, "spell_clarity_mushroom");
+			player.setMana(10);
+			assertTrue(context.getValidActions().stream().anyMatch(hp -> hp.getActionType() == ActionType.HERO_POWER && hp.getTargetReference().equals(big.getReference())));
+			useHeroPower(context, player, big.getReference());
+			assertEquals(big.getHp(), big.getMaxHp() - 4);
+		}, HeroClass.TOAST, HeroClass.TOAST);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_hallucinogenic_mushroom");
+			player.setMana(10);
+			int hp = opponent.getHero().getHp();
+			useHeroPower(context, player);
+			assertEquals(opponent.getHero().getHp(), hp - 4);
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(Arrays.asList("spell_clarity_mushroom", "spell_healing_mushroom", "spell_toxic_mushroom", "spell_hallucinogenic_mushroom").contains(player.getHand().get(0).getCardId()));
+		}, HeroClass.TOAST, HeroClass.TOAST);
+
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(10);
+			playCard(context, player, "spell_healing_mushroom");
+			player.setMana(10);
+			int hp = opponent.getHero().getHp();
+			useHeroPower(context, player);
+			assertEquals(opponent.getHero().getHp(), hp - 4);
+			assertEquals(player.getHero().getHp(), 10 + 4);
+		}, HeroClass.TOAST, HeroClass.TOAST);
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion big = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			context.endTurn();
+			playCard(context, player, "spell_toxic_mushroom");
+			player.setMana(10);
+			// Temporarily override the target of the cook hero power
+			CardDesc clone = player.getHeroPowerZone().get(0).getDesc().clone();
+			clone.setSpell(clone.getSpell().clone());
+			SpellDesc damageSpell = (SpellDesc) clone.getSpell().getSpell().get(SpellArg.SPELL2);
+			damageSpell.put(SpellArg.RANDOM_TARGET, false);
+			damageSpell.put(SpellArg.TARGET, big.getReference());
+			player.getHeroPowerZone().get(0).setDesc(clone);
+			useHeroPower(context, player);
+			assertTrue(big.isDestroyed());
+		}, HeroClass.TOAST, HeroClass.TOAST);
+	}
 
 	@Test
 	public void testNazmiriStalker() {
@@ -136,29 +212,31 @@ public class CustomCardsTests extends TestBase {
 		for (int i = 0; i < 8; i++) {
 			final int j = i;
 			runGym((context, player, opponent) -> {
+				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
 				AtomicInteger didDiscover = new AtomicInteger(0);
+				Card spellCard = receiveCard(context, player, "spell_the_coin");
+				int spellpower = context.getLogic().applySpellpower(player, spellCard, 3);
 				overrideDiscover(context, player, discoverActions -> {
 					assertTrue(discoverActions.size() > 0);
-					int spellpower = context.getLogic().applySpellpower(player, player.getHero(), 0);
 					assertTrue(spellpower >= j);
 					int whichDiscover = didDiscover.getAndIncrement();
 					for (DiscoverAction action : discoverActions) {
 						switch (whichDiscover) {
 							case 0:
-								assertEquals(action.getCard().getBaseManaCost(), 3 + spellpower);
+								assertEquals(action.getCard().getBaseManaCost(), spellpower);
 								break;
 							case 1:
-								assertEquals(action.getCard().getAttack(), 3 + spellpower);
+								assertEquals(action.getCard().getAttack(), spellpower);
 								break;
 							case 2:
-								assertEquals(action.getCard().getBaseHp(), 3 + spellpower);
+								assertEquals(action.getCard().getBaseHp(), spellpower);
 								break;
 						}
 					}
 					return discoverActions.get(0);
 				});
-				Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
-				bloodfenRaptor.setAttribute(Attribute.SPELL_DAMAGE, j);
+
 				playCard(context, player, "spell_cryptic_ruins");
 				assertEquals(didDiscover.get(), 3);
 			});
@@ -1459,7 +1537,7 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
+	@Ignore("too many changes to test")
 	public void testANewChallenger() {
 		runGym((context, player, opponent) -> {
 			overrideRandomCard(context, "hero_nefarian");
@@ -4176,7 +4254,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_dire_beast");
 		});
 
-		int yup = 0;
+		int direStables = 0;
 
 		for (int i = 0; i < 100; i++) {
 			DebugContext debug = createContext(HeroClass.GREEN, HeroClass.GREEN, false, DeckFormat.ALL);
@@ -4190,10 +4268,10 @@ public class CustomCardsTests extends TestBase {
 			debug.getPlayer1().getDeck().addCard(debug.getCardById("minion_baku_the_mooneater"));
 			debug.init();
 			if (debug.getPlayer1().getHeroPowerZone().get(0).getCardId().equals("hero_power_dire_stable")) {
-				yup++;
+				direStables++;
 			}
 		}
-		assertEquals(yup, 100);
+		assertEquals(direStables, 100);
 	}
 
 	@Test

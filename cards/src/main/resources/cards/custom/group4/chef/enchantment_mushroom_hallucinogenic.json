@@ -1,5 +1,5 @@
 {
-  "name": "Mushroom Toxicity",
+  "name": "Mushroom Hallucination",
   "baseManaCost": 0,
   "type": "ENCHANTMENT",
   "heroClass": "TOAST",
@@ -16,27 +16,13 @@
       "card": "enchantment_mushroom_hallucinogenic"
     }
   },
+  "attributes": {
+    "HERO_POWER_DAMAGE": 2
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "auras": [
-    {
-      "class": "HeroPowerBonusAura",
-      "target": "FRIENDLY_PLAYER",
-      "condition": {
-        "class": "AllMatchFilterCondition",
-        "target": "FRIENDLY_HERO_POWER",
-        "filter": {
-          "class": "TargetSelectionFilter",
-          "targetSelection": "NONE",
-          "invert": true
-        }
-      },
-      "applyEffect": {
-        "class": "DamageSpell",
-        "value": 2
-      }
-    },
     {
       "class": "HeroPowerBonusAura",
       "target": "FRIENDLY_PLAYER",

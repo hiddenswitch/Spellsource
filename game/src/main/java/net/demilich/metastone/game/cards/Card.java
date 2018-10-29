@@ -162,7 +162,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 
 		// If there is no enchantment, create a dummy one
-		if (enchantments.size() == 0) {
+		if (enchantments.isEmpty()) {
 			EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
 			enchantmentDesc.spell = NullSpell.create();
 			enchantmentDesc.eventTrigger = NullTrigger.create();
@@ -172,6 +172,12 @@ public class Card extends Entity implements HasChooseOneActions {
 		for (Enchantment enchantment : enchantments) {
 			enchantment.setOwner(getOwner());
 			enchantment.setSourceCard(this);
+		}
+
+		// Add the attributes to the first enchantment
+		if (getDesc().getAttributes() != null && !getDesc().getAttributes().isEmpty()) {
+			enchantments.get(0)
+					.getAttributes().putAll(getDesc().getAttributes());
 		}
 
 		return enchantments;

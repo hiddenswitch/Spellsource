@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.utils.Attribute;
 
 public class ModifyDamageSpell extends Spell {
@@ -22,8 +23,15 @@ public class ModifyDamageSpell extends Spell {
 		AlgebraicOperation operation = (AlgebraicOperation) desc.get(SpellArg.OPERATION);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		int minDamage = 0;
-		Entity damageTarget = context.resolveSingleTarget(context.getEventTargetStack().peek());
-		boolean hasTakeDoubleDamage = damageTarget.hasAttribute(Attribute.TAKE_DOUBLE_DAMAGE) || damageTarget.hasAttribute(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
+
+		// Fel's grip will modify all incoming damage when played as a spell.
+		EntityReference eventTarget = context.getEventTargetStack().peek();
+		boolean hasTakeDoubleDamage = false;
+		if (eventTarget != null) {
+			Entity damageTarget = context.resolveSingleTarget(eventTarget);
+			hasTakeDoubleDamage = damageTarget.hasAttribute(Attribute.TAKE_DOUBLE_DAMAGE) || damageTarget.hasAttribute(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
+		}
+
 		switch (operation) {
 			case ADD:
 				if (hasTakeDoubleDamage) {

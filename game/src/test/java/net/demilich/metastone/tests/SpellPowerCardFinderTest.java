@@ -22,7 +22,7 @@ import org.unitils.reflectionassert.difference.ObjectDifference;
 
 public class SpellPowerCardFinderTest extends TestBase {
 	@Test
-	@Ignore
+	@Ignore("fix made")
 	public void testShowAllCardsAffected() {
 		Logging.setLoggingLevel(Level.ERROR);
 		/*

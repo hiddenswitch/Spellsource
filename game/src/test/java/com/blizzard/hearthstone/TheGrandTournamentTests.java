@@ -55,12 +55,6 @@ public class TheGrandTournamentTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
-	public void testVarianWrynn() {
-		Assert.fail("Varian Wrynn needs to be tested.");
-	}
-
-	@Test
 	public void testDefileDreadsteedInteraction() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_dreadsteed");

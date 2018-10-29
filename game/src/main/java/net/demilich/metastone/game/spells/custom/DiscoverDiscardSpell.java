@@ -71,7 +71,7 @@ public final class DiscoverDiscardSpell extends Spell {
 						discardableCards.get(j).setAttribute(Attribute.HAND_INDEX, j);
 						currentDiscardPool.add(discardableCards.get(j));
 					}
-					DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, desc, currentDiscardPool);
+					DiscoverAction discoverAction = SpellUtils.discoverCard(context, player, source, desc, currentDiscardPool);
 					if (discoverAction == null) {
 						return;
 					}

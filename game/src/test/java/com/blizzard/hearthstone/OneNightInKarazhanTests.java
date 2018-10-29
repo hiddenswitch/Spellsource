@@ -57,12 +57,6 @@ public class OneNightInKarazhanTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
-	public void testIvoryKnight() {
-		Assert.fail("Needs test.");
-	}
-
-	@Test
 	public void testPrinceMalchezaar() {
 		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
