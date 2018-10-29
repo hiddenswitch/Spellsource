@@ -4,15 +4,11 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.desc.ISpellConditionChecker;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
-import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.Map;
 
 /**
  * Casts {@link SpellArg#SPELL1} if {@link SpellArg#CONDITION} is fulfilled, otherwise, casts {@link SpellArg#SPELL2}.
@@ -50,19 +46,6 @@ import java.util.Map;
  */
 public class EitherOrSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(EitherOrSpell.class);
-
-	public static SpellDesc create(EntityReference target, SpellDesc either, SpellDesc or, ISpellConditionChecker condition) {
-		Map<SpellArg, Object> arguments = new SpellDesc(EitherOrSpell.class);
-		arguments.put(SpellArg.SPELL1, either);
-		arguments.put(SpellArg.SPELL2, or);
-		arguments.put(SpellArg.CONDITION, condition);
-		arguments.put(SpellArg.TARGET, target);
-		return new SpellDesc(arguments);
-	}
-
-	public static SpellDesc create(SpellDesc either, SpellDesc or, ISpellConditionChecker condition) {
-		return create(null, either, or, condition);
-	}
 
 	@Override
 	@Suspendable
