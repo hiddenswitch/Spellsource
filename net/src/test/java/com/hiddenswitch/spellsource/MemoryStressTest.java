@@ -13,7 +13,7 @@ import static org.junit.Assert.assertTrue;
 
 public class MemoryStressTest extends SpellsourceTestBase {
 	@Test
-	@Ignore
+	@Ignore("does not consistently reproduce out of memory errors")
 	public void testOutOfMemoryError(TestContext context) throws InterruptedException, SuspendExecution {
 		// Repeatedly run games until OOM occurs (guessing 240 games)
 		// This was resolved by setting the BaseMap base class to HashMap instead of EnumMap, and reducing the depth of

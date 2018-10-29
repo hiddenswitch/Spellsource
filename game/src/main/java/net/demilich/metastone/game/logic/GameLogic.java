@@ -1882,15 +1882,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	private int getTotalAttributeValue(Player player, Attribute attr) {
-		int total = player.getHero().getAttributeValue(attr) + player.getAttributeValue(attr);
-		for (Entity minion : player.getMinions()) {
-			if (!minion.hasAttribute(attr)) {
-				continue;
-			}
-
-			total += minion.getAttributeValue(attr);
-		}
-		return total;
+		return context.getEntities()
+				.filter(Entity::isInPlay)
+				.filter(e -> e.getOwner() == player.getId())
+				.flatMapToInt(entity ->
+						Stream.of(entity.getAttributeValue(attr),
+								context.getTriggersAssociatedWith(entity.getReference())
+										.stream()
+										.filter(Enchantment.class::isInstance)
+										.map(Enchantment.class::cast)
+										.mapToInt(e -> e.getAttributeValue(attr)).sum())
+								.mapToInt(i -> i))
+				.sum();
 	}
 
 	private int getTotalAttributeMultiplier(Player player, Attribute attribute) {
@@ -2566,7 +2569,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see #getValidActions(int) for the way the {@link GameLogic} determines what actions a player can take.
 	 * @see Card#play() for an example of how a card generates a {@link PlayCardAction} that will eventually be sent to
 	 * 		this method.
-	 * @see SpellUtils#discoverCard(GameContext, Player, SpellDesc, CardList) for an example of how a discover mechanic
+	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover mechanic
 	 * 		generates a {@link DiscoverAction} that gets sent to this method.
 	 * @see Minion#getBattlecry() for the method that creates battlecry actions. (Note: Deathrattles never involve a
 	 * 		player decision, so deathrattles never generate a battlecry).

@@ -52,30 +52,50 @@ def _get_snapshot_url(snap_num=61):
     return _TEMPOSTORM_URL + filter_str
 
 
-def write_decklists():
-    request = urllib.request.Request(url=_get_snapshot_url(),
-                                     headers={
-                                         'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) '
-                                                       'AppleWebKit/604.4.7 (KHTML, like Gecko) Version/11.0.2 '
-                                                       'Safari/604.4.7'
-                                     })
+def _write_decklists():
     print('Updating the deck lists...')
-    snapshot = json.load(urllib.request.urlopen(request))
-    decks = [{'name': deck['name'],
-              'heroClass': deck['deck']['playerClass'],
-              'cards': [{'name': card['card']['name'], 'quantity': card['cardQuantity']}
-                        for card in deck['deck']['cards']]} for deck in snapshot['deckTiers']]
-    for deck in decks:
+    for deck in TempostormDecklists():
         filename = deck['name'] + '.txt'
         with open(
                 path.join(path.dirname(__file__), '..', '..', 'net', 'src', 'main', 'resources', 'decklists', 'current',
                           filename), 'w') as f:
-            lines = ['Name: ' + deck['name'], 'Class: ' + deck['heroClass'], 'Format: Standard']
-            lines += [str.format('{0}x {1}', card['quantity'], card['name']) for card in deck['cards']]
-            lines = '\n'.join(lines)
+            lines = _to_deck_list(deck)
             f.write(lines)
-    print(decks)
+
+
+def _to_deck_list(deck):
+    lines = ['Name: ' + deck['name'], 'Class: ' + deck['heroClass'], 'Format: Standard']
+    lines += [str.format('{0}x {1}', card['quantity'], card['name']) for card in deck['cards']]
+    lines = '\n'.join(lines)
+    return lines
+
+
+class TempostormDecklists(object):
+    def __init__(self):
+        self.request = urllib.request.Request(url=_get_snapshot_url(),
+                                              headers={
+                                                  'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) '
+                                                                'AppleWebKit/604.4.7 (KHTML, like Gecko) '
+                                                                'Version/11.0.2 '
+                                                                'Safari/604.4.7'
+                                              })
+        self.snapshot = json.load(urllib.request.urlopen(self.request))
+        self.decks = [{'name': deck['name'],
+                       'heroClass': deck['deck']['playerClass'],
+                       'cards': [{'name': card['card']['name'], 'quantity': card['cardQuantity']}
+                                 for card in deck['deck']['cards']]} for deck in self.snapshot['deckTiers']]
+
+    def __iter__(self):
+        for deck in self.decks:
+            yield deck
+
+    def __len__(self):
+        return len(self.decks)
+
+    @staticmethod
+    def to_deck_list(deck):
+        return _to_deck_list(deck)
 
 
 if __name__ == '__main__':
-    write_decklists()
+    _write_decklists()

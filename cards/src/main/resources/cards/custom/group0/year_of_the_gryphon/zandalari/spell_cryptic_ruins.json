@@ -8,6 +8,10 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
+    "value": {
+      "class": "SpellDamageValueProvider",
+      "offset": 3
+    },
     "spells": [
       {
         "class": "DiscoverSpell",
@@ -24,8 +28,8 @@
             {
               "class": "AttributeFilter",
               "value": {
-                "class": "SpellDamageValueProvider",
-                "offset": 3
+                "class": "GameValueProvider",
+                "gameValue": "SPELL_VALUE"
               },
               "attribute": "BASE_MANA_COST",
               "operation": "EQUAL"
@@ -51,8 +55,8 @@
             {
               "class": "AttributeFilter",
               "value": {
-                "class": "SpellDamageValueProvider",
-                "offset": 3
+                "class": "GameValueProvider",
+                "gameValue": "SPELL_VALUE"
               },
               "attribute": "ATTACK",
               "operation": "EQUAL"
@@ -78,8 +82,8 @@
             {
               "class": "AttributeFilter",
               "value": {
-                "class": "SpellDamageValueProvider",
-                "offset": 3
+                "class": "GameValueProvider",
+                "gameValue": "SPELL_VALUE"
               },
               "attribute": "HP",
               "operation": "EQUAL"

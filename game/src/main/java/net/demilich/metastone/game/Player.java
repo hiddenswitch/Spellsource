@@ -4,6 +4,7 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardZone;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -11,6 +12,8 @@ import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.statistics.GameStatistics;
@@ -26,10 +29,21 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * The {@link Player} class stores all the state that corresponds to a particular player, like a collection of {@link
- * EntityZone} objects, a reference to a {@link Behaviour} that gets delegated requests for actions from the {@link
- * GameContext}, and select {@link Attribute} and {@link net.demilich.metastone.game.spells.PlayerAttribute} attributes
- * as an {@link Entity} that exists in the game.
+ * The {@link Player} class stores almost the state that corresponds to a particular player, like a collection of {@link
+ * EntityZone} objects and select {@link Attribute} and {@link net.demilich.metastone.game.spells.PlayerAttribute}
+ * attributes as an {@link Entity} that exists in the game.
+ * <p>
+ * Unusually, the {@link Zones#WEAPON} and {@link Zones#HERO_POWER} zones are located on the {@link Hero} entity
+ * retrievable by {@link #getHero()}.
+ * <p>
+ * More state is discoverable on the {@link GameContext#getEnvironment()} and {@link TriggerManager#getTriggers()}
+ * fields.
+ * <p>
+ * Player entities are the appropriate {@code target} of many effects, especially text that seems to "live on" after a
+ * card is played. For example, take the card Mark of the Future, which reads: "The next minion you play gains +2/+2 and
+ * Taunt." The {@link Enchantment} (called also a {@code "trigger"} in the card JSON format described by {@link
+ * CardDesc}) that actually gives the next minion played its buff lives on the {@link EntityReference#FRIENDLY_PLAYER},
+ * not on the spell.
  *
  * @see Behaviour for more on what player entities are requests to do.
  * @see Zones for a description of the difference zones (i.e. lists) of entities that each player has.

@@ -367,6 +367,7 @@ public class SpellUtils {
 	 *
 	 * @param context The game context that hosts the player and state for this request.
 	 * @param player  The player that will choose from the cards.
+	 * @param source
 	 * @param desc    For every card the player can discover, this method will create a {@link Spell} from this {@link
 	 *                SpellDesc} and set its {@link SpellArg#CARD} argument to the discoverable card. Typically, this
 	 *                {@link SpellDesc} defines a {@link ReceiveCardSpell}, {@link ReceiveCardAndDoSomethingSpell}, or a
@@ -380,7 +381,7 @@ public class SpellUtils {
 	 * 		DiscoverCardSpell}.
 	 */
 	@Suspendable
-	public static DiscoverAction discoverCard(GameContext context, Player player, SpellDesc desc, CardList cards) {
+	public static DiscoverAction discoverCard(GameContext context, Player player, Entity source, SpellDesc desc, CardList cards) {
 		// Discovers always work with a copy of the incoming cards
 		cards = cards.getCopy();
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
@@ -395,6 +396,7 @@ public class SpellUtils {
 			DiscoverAction discover = DiscoverAction.createDiscover(spellClone);
 			discover.setCard(card);
 			discover.setId(i);
+			discover.setSource(source == null ? null : source.getReference());
 			discoverActions.add(discover);
 		}
 
@@ -481,6 +483,7 @@ public class SpellUtils {
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
 			discover.setId(i);
 			discover.setCard(card);
+			discover.setSource(source == null ? null : source.getReference());
 			discoverActions.add(discover);
 		}
 

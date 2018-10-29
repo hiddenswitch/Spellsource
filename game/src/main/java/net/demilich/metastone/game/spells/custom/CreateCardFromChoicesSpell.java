@@ -58,7 +58,7 @@ public final class CreateCardFromChoicesSpell extends Spell {
 
 		DiscoverAction[] chosen = new DiscoverAction[howMany];
 		for (int i = 0; i < howMany; i++) {
-			chosen[i] = SpellUtils.discoverCard(context, player, nullSpell, options[i]);
+			chosen[i] = SpellUtils.discoverCard(context, player, source, nullSpell, options[i]);
 		}
 
 		// According to https://us.battle.net/forums/en/hearthstone/topic/20759196602

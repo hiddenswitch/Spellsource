@@ -77,7 +77,7 @@ public final class GuessCardSpell extends Spell {
 		logger.debug("onCast {} {}: {} is correct, {} is wrong", context.getGameId(), source, correctCard, others);
 
 		cards.shuffle(context.getLogic().getRandom());
-		DiscoverAction result = SpellUtils.discoverCard(context, player, desc, cards);
+		DiscoverAction result = SpellUtils.discoverCard(context, player, source, desc, cards);
 		String cardId = result.getCard().getCardId();
 		if (cardId.equals(correctCard.getCardId())) {
 			logger.debug("onCast {} {}: Player {} chose correct card {}", context.getGameId(), source, player, correctCard);

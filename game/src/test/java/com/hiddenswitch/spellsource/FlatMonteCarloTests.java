@@ -1,6 +1,8 @@
 package com.hiddenswitch.spellsource;
 
+import ch.qos.logback.classic.Level;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
+import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
@@ -12,6 +14,7 @@ import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
@@ -21,6 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class FlatMonteCarloTests extends TestBase {
 
 	@Test
+	@Ignore("test too slow for unused functionality")
 	public void testDecksFlatMonteCarlo() {
 		GameDeck druid = DeckCreateRequest.fromDeckList("### Druid\n" +
 				"# Class: White\n" +
@@ -68,13 +72,16 @@ public class FlatMonteCarloTests extends TestBase {
 				"# 2x (6) Boulderfist Ogre\n" +
 				"#").toGameDeck();
 
+		Logging.setLoggingLevel(Level.OFF);
 		final AtomicInteger matchCounter = new AtomicInteger();
 		SimulationResult result = GameContext.simulate(Arrays.asList(druid, warrior), FlatMonteCarloBehaviour::new, PlayRandomBehaviour::new, 10, true, matchCounter);
 		Assert.assertEquals(result.getNumberOfGames(), 10);
 	}
 
 	@Test
+	@Ignore("test too slow for unused functionality")
 	public void testFlatMonteCarlo() {
+		Logging.setLoggingLevel(Level.OFF);
 		runGym((context, player, opponent) -> {
 			Card winTheGame = receiveCard(context, player, "spell_win_the_game");
 			FlatMonteCarloBehaviour behaviour = new FlatMonteCarloBehaviour(10);

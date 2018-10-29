@@ -84,7 +84,10 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected Deque<GameAction> strictPlan;
 	protected Deque<Integer> indexPlan;
 	protected int maxDepth = 2;
-	protected boolean scoreImmediately = false;
+	protected long minFreeMemory = Long.MAX_VALUE;
+	protected boolean disposeNodes = true;
+	protected boolean parallel = true;
+	protected boolean forceGarbageCollection = false;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -94,6 +97,12 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		this.featureVector = featureVector;
 		this.nameSuffix = nameSuffix;
 		this.heuristic = new ThreatBasedHeuristic(featureVector);
+		if (System.getenv().containsKey("SPELLSOURCE_GSVB_DEPTH")) {
+			this.maxDepth = Integer.parseInt(System.getenv("SPELLSOURCE_GSVB_DEPTH"));
+		}
+		if (System.getenv().containsKey("SPELLSOURCE_GSVB_TIMEOUT_MILLIS")) {
+			this.timeout = Long.parseLong(System.getenv("SPELLSOURCE_GSVB_TIMEOUT_MILLIS"));
+		}
 	}
 
 	/**
@@ -386,6 +395,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		contextStack.push(new Node(context, null, 0));
 		long start = System.currentTimeMillis();
 		while (contextStack.size() > 0) {
+			traceMemory("node start");
 			Node v = contextStack.pop();
 
 			// Is this node terminal?
@@ -411,25 +421,59 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			}
 
 			// Parallelize the expansion of nodes.
-			edges
-					.parallelStream()
-					.unordered()
-					.forEach(edge -> rollout(contextStack, playerId, v, edge, depth));
-
-			/*
-			// Non-parallel expansion of nodes
-			for (GameAction edge : edges) {
-				rollout(contextStack, playerId, v, edge, depth);
+			if (isParallel()) {
+				edges
+						.parallelStream()
+						.unordered()
+						.forEach(edge -> rollout(contextStack, playerId, v, edge, depth));
+			} else {
+				// Non-parallel expansion of nodes
+				for (GameAction edge : edges) {
+					rollout(contextStack, playerId, v, edge, depth);
+				}
 			}
-			*/
+
+
+			// We've expanded all of this node's edges, we can clear the reference to its game context
+			traceMemory("before node dispose");
+			if (disposeNodes) {
+				v.dispose();
+				if (forceGarbageCollection) {
+					System.gc();
+				}
+			}
+			traceMemory("after node dispose");
 		}
 
 		// Score the terminal nodes, find the highest score
-		Optional<Node> maxScore = terminalNodes
-				.parallelStream()
-				.peek(bc -> postProcess(playerId, bc.context))
-				.peek(bc -> bc.setScore(heuristic.getScore(bc.context, playerId)))
-				.max(Comparator.comparingDouble(Node::getScore));
+		Optional<Node> maxScore = Optional.empty();
+
+		if (isParallel()) {
+			maxScore = terminalNodes
+					.parallelStream()
+					.peek(bc -> postProcess(playerId, bc.context))
+					.peek(bc -> bc.setScore(heuristic.getScore(bc.context, playerId)))
+					.peek(Node::dispose)
+					.max(Comparator.comparingDouble(Node::getScore));
+		} else {
+			double score = Double.NEGATIVE_INFINITY;
+			for (Node node : terminalNodes) {
+				postProcess(playerId, node.context);
+				double newScore = heuristic.getScore(node.context, playerId);
+				node.setScore(newScore);
+				if (disposeNodes) {
+					node.dispose();
+					if (forceGarbageCollection) {
+						System.gc();
+					}
+				}
+				if (newScore > score) {
+					maxScore = Optional.of(node);
+					score = newScore;
+				}
+			}
+		}
+		traceMemory("after scoring terminal nodes");
 
 		if (!maxScore.isPresent()) {
 			logger.error("requestAction {} {}: A problem occurred while trying to find the max score in the terminal nodes {}", gameId, player, terminalNodes);
@@ -440,6 +484,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		Deque<GameAction> strictPlan = new ArrayDeque<>();
 		Deque<Integer> indexPlan = new ArrayDeque<>();
 		Node node = maxScore.get();
+		traceMemory("before predecessors");
 		while (node != null && node.getPredecessor() != null) {
 			for (int i = node.getActions().length - 1; i >= 0; i--) {
 				strictPlan.addFirst(node.getActions()[i]);
@@ -447,6 +492,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			}
 			node = node.getPredecessor();
 		}
+		traceMemory("after predecessors");
 
 		this.strictPlan = strictPlan;
 		this.indexPlan = indexPlan;
@@ -660,9 +706,53 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return timeout;
 	}
 
+	public boolean isDisposeNodes() {
+		return disposeNodes;
+	}
+
+	public GameStateValueBehaviour setDisposeNodes(boolean disposeNodes) {
+		this.disposeNodes = disposeNodes;
+		return this;
+	}
+
+	public boolean isForceGarbageCollection() {
+		return forceGarbageCollection;
+	}
+
+	public GameStateValueBehaviour setForceGarbageCollection(boolean forceGarbageCollection) {
+		this.forceGarbageCollection = forceGarbageCollection;
+		return this;
+	}
+
 	public GameStateValueBehaviour setTimeout(long timeout) {
 		this.timeout = timeout;
 		return this;
+	}
+
+	public boolean isParallel() {
+		return parallel;
+	}
+
+	public GameStateValueBehaviour setParallel(boolean parallel) {
+		this.parallel = parallel;
+		return this;
+	}
+
+	/**
+	 * Traces memory usage by logging whenever the maximum amount of memory has been reached and where
+	 */
+	private void traceMemory(String location) {
+		long currentMemoryUsage = Runtime.getRuntime().freeMemory();
+		if (currentMemoryUsage < minFreeMemory) {
+			if (logger.isTraceEnabled()) {
+				logger.trace("traceMemory {}: Free memory decreased from {} MB to {} MB", location, minFreeMemory / (1024 * 1024), currentMemoryUsage / (1024 * 1024));
+			}
+			minFreeMemory = currentMemoryUsage;
+		}
+	}
+
+	public long getMinFreeMemory() {
+		return minFreeMemory;
 	}
 
 	/**
@@ -712,7 +802,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * the predecessor, led to this node.
 	 */
 	static class Node {
-		private final GameContext context;
+		private GameContext context;
 		private final int depth;
 		private final Node predecessor;
 		private final GameAction[] actions;
@@ -749,6 +839,13 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		public int[] getActionIndices() {
 			return actionIndices;
+		}
+
+		public void dispose() {
+			if (context == null) {
+				throw new UnsupportedOperationException("Already cleared");
+			}
+			context = null;
 		}
 	}
 }

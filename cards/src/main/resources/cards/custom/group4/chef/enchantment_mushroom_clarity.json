@@ -16,6 +16,9 @@
       "card": "enchantment_mushroom_clarity"
     }
   },
+  "attributes": {
+    "HERO_POWER_DAMAGE": 2
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
@@ -27,23 +30,6 @@
       "filter": {
         "class": "TargetSelectionFilter",
         "targetSelection": "NONE"
-      }
-    },
-    {
-      "class": "HeroPowerBonusAura",
-      "target": "FRIENDLY_PLAYER",
-      "condition": {
-        "class": "AllMatchFilterCondition",
-        "target": "FRIENDLY_HERO_POWER",
-        "filter": {
-          "class": "TargetSelectionFilter",
-          "targetSelection": "NONE",
-          "invert": true
-        }
-      },
-      "applyEffect": {
-        "class": "DamageSpell",
-        "value": 2
       }
     }
   ]
