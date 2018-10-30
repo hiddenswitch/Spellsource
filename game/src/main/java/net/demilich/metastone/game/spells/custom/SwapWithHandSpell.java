@@ -9,6 +9,11 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.ReturnTargetToHandSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * Swaps a {@code target} minion with a random one in your hand.
+ * <p>
+ * Implements Alarm-O-Bot.
+ */
 public class SwapWithHandSpell extends ReturnTargetToHandSpell {
 
 	@Override
@@ -24,11 +29,11 @@ public class SwapWithHandSpell extends ReturnTargetToHandSpell {
 		Card randomCard = context.getLogic().getRandom(player.getHand().filtered(c -> c.getCardType() == CardType.MINION));
 		if (randomCard != null) {
 			context.getLogic().removeCard(randomCard);
+			int originalPosition = target.getIndex();
 			// return Alarm-o-bot to hand (Now it's safe and won't destroy itself!)
 			super.onCast(context, player, desc, source, target);
 			// Summon the minion, which ALSO won't destroy itself...
-			context.getLogic().summon(player.getId(), randomCard.summon(), null, -1, false);
+			context.getLogic().summon(player.getId(), randomCard.summon(), null, originalPosition == player.getMinions().size() ? -1 : originalPosition, false);
 		}
 	}
-
 }

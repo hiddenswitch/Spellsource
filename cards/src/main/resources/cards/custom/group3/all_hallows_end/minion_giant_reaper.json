@@ -1,0 +1,17 @@
+{
+  "name": "Giant Reaper",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Costs (1) less for each minion that died this turn.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DiedThisTurnValueProvider",
+    "targetPlayer": "BOTH"
+  }
+}
