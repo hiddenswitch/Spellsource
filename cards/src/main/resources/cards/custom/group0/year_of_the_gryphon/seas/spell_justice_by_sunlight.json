@@ -25,7 +25,10 @@
             "targetPlayer": "SELF"
           }
         },
-        "spell": {
+        "spell1": {
+          "class": "NullSpell"
+        },
+        "spell2": {
           "class": "AddAttributeSpell",
           "target": "ALL_MINIONS",
           "attribute": "DIVINE_SHIELD"
