@@ -12,12 +12,12 @@
       "class": "AfterMinionPlayedTrigger",
       "targetPlayer": "SELF"
     },
-    {
+    "spell": {
       "class": "AddDeathrattleSpell",
       "target": "EVENT_TARGET",
       "spell": {
         "class": "CopyDeathrattleSpell",
-        "target": "FRIENDLY_HAND"
+        "target": "FRIENDLY_HAND",
         "filter": {
           "class": "CardFilter",
           "cardType": "MINION"
