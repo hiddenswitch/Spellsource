@@ -1,5 +1,5 @@
 {
-  "name": "Marlstrom 'Holiday'",
+  "name": "Maelstrom 'Holiday'",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "SILVER",
@@ -17,25 +17,7 @@
       "spell": {
         "class": "AddEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
-        "trigger": {
-        "eventTrigger": {
-            "class": "OverloadTrigger",
-            "targetPlayer": "SELF"
-          }
-        },
-        "spell": {
-          "class": "DamageSpell",
-          "target": "ALL_MINIONS",
-          "value": 1,
-          "expirationTrigger": {
-            "class": "TurnEndTrigger",
-            "targetPlayer": "SELF"
-          }
-        }
+        "card": "enchantment_maelstrom_holiday"
       }
     }
   },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
-}
