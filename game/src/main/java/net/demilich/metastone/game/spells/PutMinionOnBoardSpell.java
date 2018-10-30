@@ -8,7 +8,15 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Summons a minion from the {@code target} card onto the board in a way that counts it as being played from the hand or
+ * deck. Does not trigger battlecries even if played from the hand.
+ *
+ * @see RecruitSpell for the more common effect of summoning from the hand or deck that doesn't count as playing from
+ * 		the hand or deck.
+ */
 public class PutMinionOnBoardSpell extends Spell {
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

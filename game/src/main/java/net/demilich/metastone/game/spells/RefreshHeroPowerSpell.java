@@ -7,6 +7,9 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Refreshes the caster's hero power so it can be used again.
+ */
 public class RefreshHeroPowerSpell extends Spell {
 
 	@Override

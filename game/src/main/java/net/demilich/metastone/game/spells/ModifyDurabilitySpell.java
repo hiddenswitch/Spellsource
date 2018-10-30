@@ -10,6 +10,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Modifies the durability of a weapon regardless of which weapon is equipped.
+ */
 public class ModifyDurabilitySpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, int durability) {

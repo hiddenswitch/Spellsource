@@ -15,6 +15,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Triggers the {@code target} entity's deathrattles.
+ */
 public class TriggerDeathrattleSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target) {

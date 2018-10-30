@@ -17,6 +17,24 @@ import net.demilich.metastone.game.spells.desc.source.DeckSource;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
 
+/**
+ * Takes {@link SpellArg#HOW_MANY} secret cards from the {@link SpellArg#CARD_SOURCE} (defaulting to a {@link
+ * DeckSource}) and puts those secrets directly into play without triggering a {@link
+ * net.demilich.metastone.game.spells.trigger.SecretPlayedTrigger}. Removes the secrets from the source if they were not
+ * generated (e.g., if they came from the deck, the secret cards are removed from the deck).
+ * <p>
+ * This <b>example</b> implements the text, "Put one of each Secret from your deck into the battlefield:"
+ * <pre>
+ *   {
+ *     "class": "PutRandomSecretIntoPlaySpell",
+ *     "cardSource": {
+ *       "class": "DeckSource"
+ *     },
+ *     "howMany": 60
+ *   },
+ * </pre>
+ * Observe {@code "howMany"} is just the maximum number of cards in the deck.
+ */
 public class PutRandomSecretIntoPlaySpell extends Spell {
 
 	private CardList findSecretCards(CardList cardList) {

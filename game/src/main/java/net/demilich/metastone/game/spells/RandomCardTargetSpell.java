@@ -19,6 +19,34 @@ import net.demilich.metastone.game.cards.Attribute;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Casts a spell card with random targets.
+ * <p>
+ * If {@link SpellArg#EXCLUSIVE} is {@code true}, removes the card from its current location.
+ * <p>
+ * For example, Grand Archivist's text "At the end of your turn, cast a spell from your deck (targets chosen
+ * randomly):"
+ * <pre>
+ *   "trigger": {
+ *     "eventTrigger": {
+ *       "class": "TurnEndTrigger",
+ *       "targetPlayer": "SELF"
+ *     },
+ *     "spell": {
+ *       "class": "RandomCardTargetSpell",
+ *       "target": "FRIENDLY_DECK",
+ *       "exclusive": true,
+ *       "filter": {
+ *         "class": "CardFilter",
+ *         "cardType": "SPELL"
+ *       },
+ *       "randomTarget": true
+ *     }
+ *   }
+ * </pre>
+ *
+ * @see net.demilich.metastone.game.spells.custom.PlayCardsRandomlySpell for a more general spell to randomly play any card.
+ */
 public class RandomCardTargetSpell extends Spell {
 	@Override
 	@Suspendable

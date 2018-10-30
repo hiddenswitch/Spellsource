@@ -12,6 +12,12 @@ import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Transforms a {@code target} card to the specified {@link SpellArg#CARD} by removing the old card and receiving a new
+ * one. Considered obsolete.
+ *
+ * @see ReplaceCardsSpell which is typically the right choice.
+ */
 public class TransformCardSpell extends Spell {
 
 	public static Logger logger = LoggerFactory.getLogger(TransformCardSpell.class);

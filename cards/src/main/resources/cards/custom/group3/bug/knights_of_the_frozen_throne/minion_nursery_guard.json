@@ -8,7 +8,7 @@
   "rarity": "RARE",
   "description": "Deathrattle: Transform the top card of your deck into a 0/2 Nerubian Egg.",
   "deathrattle": {
-    "class": "TransformCardSpell",
+    "class": "ReplaceCardsSpell",
     "target": "FRIENDLY_TOP_CARD",
     "card": "minion_nerubian_egg"
   },

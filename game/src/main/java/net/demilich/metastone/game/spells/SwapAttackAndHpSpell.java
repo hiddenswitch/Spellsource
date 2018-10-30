@@ -13,6 +13,9 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
+/**
+ * Swaps the {@code target}'s attack and hitpoints, making the target's hitpoints its attack value and vice versa.
+ */
 public class SwapAttackAndHpSpell extends Spell {
 
 	public static SpellDesc create() {

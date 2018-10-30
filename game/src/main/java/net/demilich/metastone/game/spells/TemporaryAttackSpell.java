@@ -14,6 +14,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Gives the {@code target} actor {@link SpellArg#VALUE} bonus attack until the end of the current turn.
+ */
 public class TemporaryAttackSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TemporaryAttackSpell.class);

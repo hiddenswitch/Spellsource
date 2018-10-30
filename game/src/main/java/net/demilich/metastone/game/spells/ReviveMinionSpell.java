@@ -13,6 +13,11 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Reviving a minion, unlike resurrecting it, puts a minion back into the position on the board where it died. The
+ * {@link SpellArg#HP_BONUS} field must be specified, and this amount of hitpoints is what the target minion's health is
+ * <b>set</b> to.
+ */
 public class ReviveMinionSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target) {

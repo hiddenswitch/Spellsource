@@ -15,6 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Transforms the {@code target} minion into the {@link SpellArg#CARD} or the <b>source card</b> of the entity pointed
+ * to by {@link SpellArg#SECONDARY_TARGET}.
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for the complete rules on
+ * 		transformations.
+ */
 public class TransformMinionSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TransformMinionSpell.class);

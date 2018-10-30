@@ -10,6 +10,63 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Modifies the amount of damage that is currently about to be dealt.
+ * <p>
+ * The expression for the motification is {@code DAMAGE OPERATION VALUE}. In other words, if {@link SpellArg#OPERATION}
+ * is {@link AlgebraicOperation#ADD}, the damage is 2 and the value is 4, the new damage will be {@code 2 + 4 = 6}.
+ * <p>
+ * Several triggers cast their spells at the right moment to modify damage. For <b>example</b>, a common trigger is a
+ * {@link net.demilich.metastone.game.spells.trigger.PreDamageTrigger}, for text like "Your minions can only take 1
+ * damage at a time":
+ * <pre>
+ *   {
+ *      "eventTrigger": {
+ *        "class": "PreDamageTrigger",
+ *        "fireCondition": {
+ *          "class": "OwnedByPlayerCondition",
+ *          "targetPlayer": "SELF"
+ *        },
+ *        "targetEntityType": "MINION",
+ *        "targetPlayer": "SELF"
+ *      },
+ *      "spell": {
+ *        "class": "ModifyDamageSpell",
+ *        "value": 1,
+ *        "operation": "SET"
+ *      }
+ *   }
+ * </pre>
+ * Or, for <b>example</b>, the {@link net.demilich.metastone.game.spells.trigger.FatalDamageTrigger} is useful for text
+ * like "When your hero takes fatal damage, heal for the amount instead.":
+ * <pre>
+ *   {
+ *     "eventTrigger": {
+ *       "class": "FatalDamageTrigger",
+ *       "sourcePlayer": "BOTH",
+ *       "targetEntityType": "HERO",
+ *       "targetPlayer": "SELF"
+ *     },
+ *     "spell": {
+ *       "class": "MetaSpell",
+ *       "spells": [
+ *         {
+ *           "class": "ModifyDamageSpell",
+ *           "value": 0,
+ *           "operation": "SET"
+ *         },
+ *         {
+ *           "class": "HealSpell",
+ *           "target": "FRIENDLY_HERO",
+ *           "value": {
+ *             "class": "EventValueProvider"
+ *           }
+ *         }
+ *       ]
+ *     }
+ *   }
+ * </pre>
+ */
 public class ModifyDamageSpell extends Spell {
 
 	@Override
