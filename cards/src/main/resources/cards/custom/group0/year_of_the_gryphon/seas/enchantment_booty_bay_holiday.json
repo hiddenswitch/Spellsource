@@ -1,0 +1,44 @@
+{
+  "name": "Booty Bay Holiday",
+  "type": "ENCHANTMENT",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "Draw a card whenever your hand becomes empty.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "GameStateChangedTrigger"
+      },
+      "spell": {
+        "class": "ConditionalEffectSpell",
+        "condition": {
+          "class": "CardCountCondition",
+          "value": 0,
+          "operation": "EQUAL",
+          "targetPlayer": "SELF"
+        },
+        "spell1": {
+          "class": "NullSpell"
+        },
+        "spell2": {
+          "class": "DrawCardSpell"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_booty_bay_holiday",
+        "howMany": 2
+      }
+    }
+  ],
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
