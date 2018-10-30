@@ -34,7 +34,7 @@
         "class": "RemoveEnchantmentSpell",
         "target": "FRIENDLY_PLAYER",
         "card": "enchantment_booty_bay_holiday",
-        "howMany": 2
+        "howMany": 1
       }
     }
   ],
