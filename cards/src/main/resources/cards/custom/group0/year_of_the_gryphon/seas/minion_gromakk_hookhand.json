@@ -19,7 +19,7 @@
     "hpBonus": {
       "class": "AttributeValueProvider",
       "target": "FRIENDLY_WEAPON",
-      "attribute": "DURABILITY"
+      "attribute": "HP"
     }
   },
   "attributes": {
