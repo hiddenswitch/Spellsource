@@ -13,34 +13,35 @@
     "spell": {
       "class": "MetaSpell",
       "spells": [
-      {
-        "class": "CastCardsSpell",
-        "target": "FRIENDLY_DECK",
-        "card": "spell_ancestral_spirit",
-        "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
+        {
+          "class": "CastCardsSpell",
+          "target": "FRIENDLY_DECK",
+          "card": "spell_ancestral_spirit",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "CastCardsSpell",
+          "target": "FRIENDLY_HAND",
+          "card": "spell_ancestral_spirit",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        },
+        {
+          "class": "CastCardsSpell",
+          "target": "FRIENDLY_MINIONS",
+          "card": "spell_ancestral_spirit",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
         }
-      },
-      {
-        "class": "CastCardsSpell",
-        "target": "FRIENDLY_HAND",
-        "card": "spell_ancestral_spirit",
-        "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        }
-      },
-      {
-        "class": "CastCardsSpell",
-        "target": "FRIENDLY_MINIONS",
-        "card": "spell_ancestral_spirit",
-        "filter": {
-          "class": "CardFilter",
-          "cardType": "MINION"
-        }
-      }
-    ]
+      ]
+    }
   },
   "attributes": {
     "BATTLECRY": true
