@@ -11,7 +11,11 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-abstract class RevertableSpell extends Spell {
+/**
+ * This spell is the base class for spells that can be undone by a {@link SpellArg#REVERT_TRIGGER} or {@link
+ * SpellArg#SECOND_REVERT_TRIGGER}.
+ */
+public abstract class RevertableSpell extends Spell {
 
 	protected abstract SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target);
 

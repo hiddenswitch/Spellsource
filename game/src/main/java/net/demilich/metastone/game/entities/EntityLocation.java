@@ -22,7 +22,7 @@ import java.io.Serializable;
  * and to support networking effects and diffing for game state.
  *
  * @see Entity#getEntityLocation() to look up an entity's current location.
- * @see Entity#getEntityLocation()#getIndex() to get the entity's index in an entity zone.
+ * @see Entity#getIndex()  to get the entity's index in an entity zone.
  * @see EntityZone for the {@link java.util.List} that sets this property on an {@link Entity} whenever it is the
  * 		argument to an {@link EntityZone#add(Object)} or {@link EntityZone#move(Entity, EntityZone)}.
  * @see EntityZone#move(Entity, EntityZone) for the method to use to move an entity from one entity to another when you
@@ -30,7 +30,7 @@ import java.io.Serializable;
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that moves an entity from its current zone to the newly
  * 		specified zone.
  * @see EntityZone#indexOf(Object) to get the index of the an entity in O(1) time (it just uses its {@link
- * 		Entity#getEntityLocation()#getIndex()}} method to find the index quickly).
+ * 		Entity#getIndex()}} method to find the index quickly).
  * @see Player#getZone(Zones) for the method that gets the {@link EntityZone} from a player object.
  * @see GameContext#getEntities() for a method that iterates through all the entities in all the zones in a {@link
  * 		GameContext}
@@ -101,7 +101,7 @@ public final class EntityLocation implements Serializable {
 	 * the exception of {@link #UNASSIGNED}, a {@link #player} fields with a value of {@link Entity#NO_OWNER} is an
 	 * invalid location.
 	 *
-	 * @return The player index, or {@link -1} if it has not yet been assigned.
+	 * @return The player index, or {@code -1} if it has not yet been assigned.
 	 * @see GameContext#getPlayer(int) to get the player pointed to by this index.
 	 */
 	public int getPlayer() {

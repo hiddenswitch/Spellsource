@@ -104,7 +104,6 @@ public interface Accounts {
 	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
 	 * @return The mongo client update result
 	 * @throws SuspendExecution
-	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution {
 		return mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
@@ -512,8 +511,6 @@ public interface Accounts {
 
 	/**
 	 * Configures handlers for password resetting (web URLs)
-	 *
-	 * @return
 	 */
 	static void passwordReset(Router router) {
 		String requestUrl = "/reset/passwords/request";

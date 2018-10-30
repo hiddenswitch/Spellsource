@@ -10,7 +10,7 @@ import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.junit.Test;
 
 import java.util.concurrent.ConcurrentLinkedQueue;

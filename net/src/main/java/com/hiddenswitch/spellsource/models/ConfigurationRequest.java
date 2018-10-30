@@ -7,7 +7,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;

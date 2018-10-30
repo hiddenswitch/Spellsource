@@ -20,7 +20,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;

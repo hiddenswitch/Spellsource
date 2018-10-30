@@ -6,7 +6,32 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.DescDeserializer;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.spells.*;
+import net.demilich.metastone.game.spells.AddAttributeSpell;
+import net.demilich.metastone.game.spells.AddDeathrattleSecondaryAsTargetSpell;
+import net.demilich.metastone.game.spells.AddQuestSpell;
+import net.demilich.metastone.game.spells.AddSecretSpell;
+import net.demilich.metastone.game.spells.BuffSpell;
+import net.demilich.metastone.game.spells.CastFromGroupSpell;
+import net.demilich.metastone.game.spells.ConditionalSpell;
+import net.demilich.metastone.game.spells.CreateCardSpell;
+import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.DiscoverFilteredCardSpell;
+import net.demilich.metastone.game.spells.DiscoverSpell;
+import net.demilich.metastone.game.spells.ExcessDamageSpell;
+import net.demilich.metastone.game.spells.FightSpell;
+import net.demilich.metastone.game.spells.MissilesSpell;
+import net.demilich.metastone.game.spells.ModifyDamageSpell;
+import net.demilich.metastone.game.spells.ModifyMaxManaSpell;
+import net.demilich.metastone.game.spells.ReceiveCardSpell;
+import net.demilich.metastone.game.spells.RecruitSpell;
+import net.demilich.metastone.game.spells.RevertableSpell;
+import net.demilich.metastone.game.spells.SetDescriptionSpell;
+import net.demilich.metastone.game.spells.SetRaceSpell;
+import net.demilich.metastone.game.spells.ShuffleToDeckSpell;
+import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.StealCardSpell;
+import net.demilich.metastone.game.spells.SummonSpell;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
@@ -44,11 +69,11 @@ import java.util.List;
  *   }
  * </pre>
  * Whenever a new entry is added here, a corresponding deserialization instruction must be authoered in {@link
- * net.demilich.metastone.game.cards.desc.SpellDescDeserializer#init(DescDeserializer.SerializationContext)}. If a new
+ * DescDeserializer#init(DescDeserializer.SerializationContext)}. If a new
  * type is added (the right hand side of the JSON key/value pair), a new {@link net.demilich.metastone.game.cards.desc.ParseValueType}
  * needs to be added.
  *
- * @see net.demilich.metastone.game.cards.desc.SpellDescDeserializer#init(DescDeserializer.SerializationContext) for the
+ * @see DescDeserializer#init(DescDeserializer.SerializationContext) for the
  * 		formal type of the values of these enum keys.
  */
 public enum SpellArg {
@@ -302,7 +327,8 @@ public enum SpellArg {
 	 */
 	REVERT_TRIGGER,
 	/**
-	 * Used by the {@link AddSecretSpell} to define a {@link Secret} to put into play.
+	 * Used by the {@link AddSecretSpell} to define a {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} to
+	 * put into play.
 	 */
 	SECRET,
 	/**

@@ -22,7 +22,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(SpellArg.ATTACK_BONUS, ParseValueType.VALUE);
 		ctx.add(SpellArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);
 		ctx.add(SpellArg.AURA, ParseValueType.AURA);

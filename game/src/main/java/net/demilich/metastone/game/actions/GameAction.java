@@ -3,7 +3,9 @@ package net.demilich.metastone.game.actions;
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -48,6 +50,16 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		return null;
 	}
 
+	/**
+	 * The implementation of this method actually represents the game effects of this action.
+	 * <p>
+	 * For example, the {@link PlayMinionCardAction} eventually calls {@link net.demilich.metastone.game.logic.GameLogic#summon(int,
+	 * Minion, Card, int, boolean)}.
+	 *
+	 * @param context  The game context
+	 * @param playerId The invoking player
+	 * @see PlayCardAction#execute(GameContext, int) for an important implementation for playing cards.
+	 */
 	@Suspendable
 	public abstract void execute(GameContext context, int playerId);
 

@@ -8,7 +8,7 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,8 +57,8 @@ public abstract class PlayCardAction extends GameAction {
 	/**
 	 * Plays a card from the hand. Evaluates whether the card was countered, increments combos, and deducts mana.
 	 *
-	 * @param context
-	 * @param playerId
+	 * @param context The game context
+	 * @param playerId The player who actually plays the card
 	 */
 	@Override
 	@Suspendable

@@ -5,18 +5,14 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.impl.ConnectionImpl;
+import com.hiddenswitch.spellsource.impl.EnvelopeMessageCodec;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.*;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.MessageCodec;
-import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
 import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.ReadStream;
@@ -30,6 +26,9 @@ import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
+/**
+ * Manages the real time data connection users get when they connect to the Spellsource server.
+ */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Logger logger = LoggerFactory.getLogger(Hazelcast.class);
 
@@ -212,34 +211,4 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	String userId();
 
 	Connection removeHandler(Handler<JsonObject> handler);
-
-	class EnvelopeMessageCodec implements MessageCodec<Envelope, Envelope> {
-
-		@Override
-		public void encodeToWire(Buffer buffer, Envelope envelope) {
-			JsonObject.mapFrom(envelope).writeToBuffer(buffer);
-		}
-
-		@Override
-		public Envelope decodeFromWire(int pos, Buffer buffer) {
-			JsonObject obj = new JsonObject();
-			obj.readFromBuffer(pos, buffer);
-			return obj.mapTo(Envelope.class);
-		}
-
-		@Override
-		public Envelope transform(Envelope envelope) {
-			return envelope;
-		}
-
-		@Override
-		public String name() {
-			return "envelope";
-		}
-
-		@Override
-		public byte systemCodecID() {
-			return -1;
-		}
-	}
 }

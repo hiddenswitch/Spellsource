@@ -1,13 +1,12 @@
 package net.demilich.metastone.game.spells.aura;
 
 import net.demilich.metastone.game.spells.AddAttributeSpell;
-import net.demilich.metastone.game.spells.ModifyAttributeSpell;
 import net.demilich.metastone.game.spells.RemoveAttributeSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 /**
  * Grants an {@link AuraArg#ATTRIBUTE} to the specified targets.

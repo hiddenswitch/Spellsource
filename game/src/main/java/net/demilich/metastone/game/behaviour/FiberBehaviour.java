@@ -17,6 +17,8 @@ import java.util.List;
 
 /**
  * A behaviour that will suspend until {@link #setAction(GameAction)} and {@link #setMulligan(List)} are called.
+ * <p>
+ * The underlying implementation relies on channels.
  */
 public class FiberBehaviour extends UtilityBehaviour {
 	private QueueChannel<GameAction> requestActionResult = new QueueObjectChannel<>(new SingleConsumerLinkedObjectQueue<>(), Channels.OverflowPolicy.THROW, true, true);

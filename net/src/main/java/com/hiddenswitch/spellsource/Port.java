@@ -1,5 +1,8 @@
 package com.hiddenswitch.spellsource;
 
+/**
+ * Retrieves the port from the environment.
+ */
 public interface Port {
 	/**
 	 * Gets the port we're supposed to be serving from in the environment

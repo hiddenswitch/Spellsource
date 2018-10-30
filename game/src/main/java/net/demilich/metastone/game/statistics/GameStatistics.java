@@ -11,6 +11,12 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class collects a player's actions in a game.
+ *
+ * @see #merge(GameStatistics) to collect the statistics across multiple games correctly.
+ * @see SimulationResult for
+ */
 public class GameStatistics implements Cloneable, Serializable {
 	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
 	private final Map<String, Map<Integer, Integer>> cardsPlayed = new HashMap<>();

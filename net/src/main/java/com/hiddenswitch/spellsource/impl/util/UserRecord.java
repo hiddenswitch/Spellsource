@@ -139,8 +139,6 @@ public class UserRecord extends MongoRecord implements User, Serializable {
 
 	/**
 	 * Set user's friends list
-	 *
-	 * @return
 	 */
 	public void setFriends(List<FriendRecord> friends) {
 		this.friends = friends;

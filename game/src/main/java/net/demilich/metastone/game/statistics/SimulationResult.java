@@ -1,8 +1,15 @@
 package net.demilich.metastone.game.statistics;
 
 
+import net.demilich.metastone.game.GameContext;
+
 import java.io.Serializable;
 
+/**
+ * Summarizing the results of one or more games.
+ *
+ * @see #SimulationResult(GameContext) for the method to create a simulation result from a single game.
+ */
 public class SimulationResult implements Cloneable, Serializable {
 	private final GameStatistics player1Stats = new GameStatistics();
 	private final GameStatistics player2Stats = new GameStatistics();
@@ -13,6 +20,19 @@ public class SimulationResult implements Cloneable, Serializable {
 	public SimulationResult(int numberOfGames) {
 		this.startTimestamp = System.currentTimeMillis();
 		this.numberOfGames = numberOfGames;
+	}
+
+	/**
+	 * Creates a simulation result from a single, completed ({@link GameContext#updateAndGetGameOver()} {@code == true})
+	 * game.
+	 *
+	 * @param context The context to analyze.
+	 */
+	public SimulationResult(GameContext context) {
+		this(1);
+		this.getPlayer1Stats().merge(context.getPlayer1().getStatistics());
+		this.getPlayer2Stats().merge(context.getPlayer2().getStatistics());
+		this.calculateMetaStatistics();
 	}
 
 	public SimulationResult merge(SimulationResult other) {

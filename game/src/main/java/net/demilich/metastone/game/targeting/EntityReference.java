@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.io.Serializable;
@@ -29,7 +30,7 @@ import java.util.List;
  * {@link Entity#transformResolved(GameContext)}. Resolving a target using {@link GameContext#resolveSingleTarget(EntityReference)}
  * will also always return the transformed target, regardless if it is a group reference or not.
  * <p>
- * All references omit {@link net.demilich.metastone.game.utils.Attribute#PERMANENT} actors except {@link #SELF}, {@link
+ * All references omit {@link Attribute#PERMANENT} actors except {@link #SELF}, {@link
  * #ALL_ENTITIES}, {@link #TRIGGER_HOST}, {@link #OUTPUT}, {@link #EVENT_SOURCE}, {@link #EVENT_TARGET} and {@link
  * #TRANSFORM_REFERENCE}.
  * <p>
@@ -47,7 +48,7 @@ import java.util.List;
  * Card)}) are evaluated by both players, always (this allows opponents to see card cost changes).
  * <p>
  * Or, for example, Temporus causes a spell to be cast during the turn of the opponent of the owner of Temporus. The
- * {@code source} of the spell that modifies the {@link net.demilich.metastone.game.utils.Attribute#EXTRA_TURN} of both
+ * {@code source} of the spell that modifies the {@link Attribute#EXTRA_TURN} of both
  * players is cast during the opponent's turn and in an event whose {@link net.demilich.metastone.game.spells.TargetPlayer}
  * is the opponent. But, {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc#spell} is always cast by
  * the enchantment's owner, which was the caster who originally put the enchantment into play. Therefore, the {@code
@@ -147,12 +148,12 @@ public final class EntityReference implements Serializable {
 	public static final EntityReference LEFTMOST_ENEMY_MINION = new EntityReference(-20);
 	/**
 	 * References the friendly {@link Player} entity. This entity is a useful host for enchantments and attributes like
-	 * {@link net.demilich.metastone.game.utils.Attribute#EXTRA_TURN}.
+	 * {@link Attribute#EXTRA_TURN}.
 	 */
 	public static final EntityReference FRIENDLY_PLAYER = new EntityReference(-21);
 	/**
 	 * References the enemy {@link Player} entity. This entity is a useful host for enchantments and attributes like
-	 * {@link net.demilich.metastone.game.utils.Attribute#EXTRA_TURN}.
+	 * {@link Attribute#EXTRA_TURN}.
 	 */
 	public static final EntityReference ENEMY_PLAYER = new EntityReference(-22);
 	/**

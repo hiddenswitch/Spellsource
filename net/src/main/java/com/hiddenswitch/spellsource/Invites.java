@@ -28,6 +28,9 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
 
+/**
+ * This service allows players to invite each other to private games.
+ */
 public interface Invites {
 	String INVITES = "invites";
 	JsonArray PENDING_STATUSES = new JsonArray().add(Invite.StatusEnum.UNDELIVERED.getValue()).add(Invite.StatusEnum.PENDING.getValue());

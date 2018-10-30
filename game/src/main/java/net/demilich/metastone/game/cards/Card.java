@@ -31,7 +31,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -857,8 +856,6 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	/**
 	 * Marks this card as used. Typically intended only for {@link CardType#HERO_POWER} cards.
-	 *
-	 * @return
 	 */
 	public void markUsed() {
 		getAttributes().put(Attribute.USED_THIS_TURN, hasBeenUsed() + 1);

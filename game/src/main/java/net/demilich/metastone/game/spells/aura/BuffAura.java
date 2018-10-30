@@ -1,6 +1,7 @@
 package net.demilich.metastone.game.spells.aura;
 
 import net.demilich.metastone.game.spells.AuraBuffSpell;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
@@ -18,8 +19,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * are, which is whenever the board changes or a sequence ends. Updating auras when the sequence ends is almost always a
  * sufficient event to react to in order to implement an effect.
  * <p>
- * The underlying attributes used for this buff are {@link net.demilich.metastone.game.utils.Attribute#AURA_ATTACK_BONUS}
- * and {@link net.demilich.metastone.game.utils.Attribute#AURA_HP_BONUS}.
+ * The underlying attributes used for this buff are {@link Attribute#AURA_ATTACK_BONUS}
+ * and {@link Attribute#AURA_HP_BONUS}.
  * <p>
  * For example, to give all damaged Murlocs +3/+3:
  * <pre>

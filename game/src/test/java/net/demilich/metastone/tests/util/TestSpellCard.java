@@ -9,8 +9,8 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 
 public class TestSpellCard extends Card {

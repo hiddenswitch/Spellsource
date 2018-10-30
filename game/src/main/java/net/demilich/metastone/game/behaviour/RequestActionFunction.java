@@ -10,9 +10,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 
+/**
+ * Delegates the behaviour to a function passed in the constructor of this class.
+ */
 public class RequestActionFunction extends UtilityBehaviour {
 	private final T delegate;
 
+	/**
+	 * The provided delegate will be called whenever this instance's {@link #requestAction(GameContext, Player, List)} is
+	 * called.
+	 *
+	 * @param delegate
+	 */
 	public RequestActionFunction(T delegate) {
 		this.delegate = delegate;
 	}

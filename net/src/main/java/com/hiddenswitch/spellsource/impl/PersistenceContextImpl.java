@@ -4,24 +4,19 @@ import com.github.fromage.quasi.fibers.Fiber;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Logic;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
-import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.PersistAttributeRequest;
 import com.hiddenswitch.spellsource.models.PersistAttributeResponse;
-import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.Vertx;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.spells.SetAttributeSpell;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**

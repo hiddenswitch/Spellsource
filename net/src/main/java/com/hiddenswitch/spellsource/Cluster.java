@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.Properties;
 import java.util.stream.Stream;
 
+/**
+ * Manages the Hazelcast-based clustering and in-memory state management of Spellsource game servers
+ */
 public interface Cluster {
 	static Config getConfig(int port) {
 		Config config = new Config();

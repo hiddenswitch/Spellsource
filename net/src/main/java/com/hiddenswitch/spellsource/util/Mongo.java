@@ -342,7 +342,7 @@ public class Mongo {
 		return bulkWriteWithOptions(collection, documents.stream().map(BulkOperation::createInsert).collect(Collectors.toList()), options);
 	}
 
-	/**
+	/*
 	 * Subscribes to the change stream specified by the given aggregation pipeline.
 	 * <p>
 	 * {@code pipeline} describes a Mongo "aggregation" pipeline object limited to {@code $match}, {@code $project},
@@ -385,10 +385,9 @@ public class Mongo {
 	 * @param collection   the collection
 	 * @param pipeline     the Mongo aggregation pipeline
 	 * @param watchOptions the options
-	 * @Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
-	 * WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
-	 */
-
+	@Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
+	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
+	*/
 	public void close() {
 		if (getClient() == null) {
 			return;

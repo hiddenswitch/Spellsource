@@ -10,6 +10,9 @@ import com.hiddenswitch.spellsource.util.Mongo;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
+/**
+ * Provides a way for users to friend each other.
+ */
 public interface Friends {
 	/**
 	 * Friends the specified users on behalf of the specified user.

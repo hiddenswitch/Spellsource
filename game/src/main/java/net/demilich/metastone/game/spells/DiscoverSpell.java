@@ -16,7 +16,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.*;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.toList;
  * Discover actions prompt the user to select from {@code count=}{@link SpellArg#HOW_MANY} cards, with a default of 3.
  * <p>
  * If an {@link SpellArg#ATTRIBUTE} is specified, it is added to the cards in the {@link Zones#DISCOVER}, and removed
- * when they leave. This is used with the {@link net.demilich.metastone.game.utils.Attribute#UNCENSORED} attribute to
+ * when they leave. This is used with the {@link Attribute#UNCENSORED} attribute to
  * indicate that these cards should be visible to the opponent.
  * <p>
  * The cards to prompt the user with are gathered from the {@link SpellArg#CARDS} attribute and the specified {@link

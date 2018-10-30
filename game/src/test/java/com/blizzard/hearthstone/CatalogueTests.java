@@ -7,7 +7,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardParseException;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;

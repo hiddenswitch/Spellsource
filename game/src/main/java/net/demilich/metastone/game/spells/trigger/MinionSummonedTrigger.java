@@ -7,7 +7,7 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 public class MinionSummonedTrigger extends EventTrigger {
 
