@@ -1,0 +1,19 @@
+{
+  "name": "Pumpkin Patch",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Summon two 0/1 Pumpkins.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_pumpkin",
+      "token_pumpkin"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
