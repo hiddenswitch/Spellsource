@@ -10,7 +10,7 @@
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_MINIONS",
-    "attackBonus": 1,
+    "attackBonus": 3,
     "filter": {
       "class": "SpecificCardFilter",
       "card": "minion_xavius"
