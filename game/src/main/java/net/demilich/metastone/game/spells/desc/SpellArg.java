@@ -69,12 +69,11 @@ import java.util.List;
  *   }
  * </pre>
  * Whenever a new entry is added here, a corresponding deserialization instruction must be authoered in {@link
- * DescDeserializer#init(DescDeserializer.SerializationContext)}. If a new
- * type is added (the right hand side of the JSON key/value pair), a new {@link net.demilich.metastone.game.cards.desc.ParseValueType}
- * needs to be added.
+ * DescDeserializer#init(DescDeserializer.SerializationContext)}. If a new type is added (the right hand side of the
+ * JSON key/value pair), a new {@link net.demilich.metastone.game.cards.desc.ParseValueType} needs to be added.
  *
- * @see DescDeserializer#init(DescDeserializer.SerializationContext) for the
- * 		formal type of the values of these enum keys.
+ * @see DescDeserializer#init(DescDeserializer.SerializationContext) for the formal type of the values of these enum
+ * 		keys.
  */
 public enum SpellArg {
 	/**
@@ -356,26 +355,126 @@ public enum SpellArg {
 	 */
 	SECONDARY_TARGET,
 	SECONDARY_VALUE,
+	/**
+	 * Typically the {@link SpellDesc} that is cast with {@link EntityReference#OUTPUT} set to the result of the parent
+	 * spell's effect; or, the spell that is cast when a {@link net.demilich.metastone.game.spells.desc.condition.Condition}
+	 * is met.
+	 *
+	 * @see ConditionalSpell for an example of a spell that uses this arg.
+	 */
 	SPELL,
+	/**
+	 * Like {@link #SPELL}, a {@link SpellDesc} that's typically interpreted as the "first" or primary spell.
+	 *
+	 * @see net.demilich.metastone.game.spells.AdjacentEffectSpell for an example of a spell that uses this arg.
+	 */
 	SPELL1,
+	/**
+	 * Like {@link #SPELL}, a {@link SpellDesc} that's typically interpreted as the "second" or alternative spell.
+	 *
+	 * @see DiscoverSpell for an exaple of a spell that uses this arg. There, it is cast on the cards the player did
+	 * 		<b>not</b> choose.
+	 */
 	SPELL2,
+	/**
+	 * An array of spells, used almost exclusively by {@link net.demilich.metastone.game.spells.MetaSpell} as the spells
+	 * to cast, one after another, or by {@link ConditionalSpell}, cast when the corresponding conditions in {@link
+	 * #CONDITIONS} are met.
+	 *
+	 * @see net.demilich.metastone.game.spells.MetaSpell for an example of a spell that uses this arg.
+	 * @see ConditionalSpell for an example of a spell that uses this arg.
+	 */
 	SPELLS,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_BASE_HP,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_BASE_ATTACK,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_WINDFURY,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_TAUNT,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_CHARGE,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_DIVINE_SHIELD,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_STEALTH,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_TRIGGERS,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_BATTLECRY,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_DEATHRATTLE,
+	/**
+	 * For internal use only.
+	 */
 	SUMMON_AURA,
+	/**
+	 * Specifies the {@link EntityReference} on which this spell should be cast, overriding the {@code target} received
+	 * from the parent or selected by the user.
+	 * <p>
+	 * This entity reference, when a {@link EntityReference#isTargetGroup()} group reference, is filtered by {@link
+	 * SpellArg#FILTER}. If the target turns out to be empty or the filtering removes all targets, the spell is <b>not</b>
+	 * cast.
+	 *
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for more about how this argument is used.
+	 */
 	TARGET,
+	/**
+	 * Indicates whose point of view this spell should be cast from. Typically becomes the {@code player} object in the
+	 * spell's Spell#cast(GameContext, Player, SpellDesc, Entity, List) implementation {@code onCast}.
+	 */
 	TARGET_PLAYER,
+	/**
+	 * Used by the {@link CreateCardSpell} to indicate the card's target selection. Considered obsolete.
+	 */
+	@Deprecated
 	TARGET_SELECTION,
+	/**
+	 * Specifies the {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} enchantment that should be
+	 * created, typically by the {@link net.demilich.metastone.game.spells.AddEnchantmentSpell}.
+	 *
+	 * @see net.demilich.metastone.game.spells.AddEnchantmentSpell for an example of a spell that uses this arg.
+	 */
 	TRIGGER,
+	/**
+	 * For internal use only.
+	 */
 	GROUP,
+	/**
+	 * The plural version of {@link #TRIGGER}.
+	 */
 	TRIGGERS,
+	/**
+	 * The value is either an integer or a {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider}
+	 * which is typically interpreted as the amount or copies of an action.
+	 * <p>
+	 * For most spells that generate cards using {@link SpellUtils#getCards(GameContext, Player, Entity, Entity,
+	 * SpellDesc, int)}, the value is interpreted as the number of cards to select from the randomly generated list. In
+	 * that case, {@link #HOW_MANY} is used to indicate copies.
+	 *
+	 * @see DamageSpell for an example of a spell that uses this arg to mean amount.
+	 * @see ReceiveCardSpell for an example of a spell that uses this arg to mean number of copies.
+	 */
 	VALUE
 }

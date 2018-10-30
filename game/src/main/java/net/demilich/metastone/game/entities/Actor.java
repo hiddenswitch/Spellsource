@@ -195,6 +195,16 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	}
 
 
+	/**
+	 * Indicates whether or not the actor is mortally wounded.
+	 * <p>
+	 * A mortally wounded actor hasn't necessarily been taken off the board and put into the {@link
+	 * net.demilich.metastone.game.targeting.Zones#GRAVEYARD} yet. This is useful for preventing effects from impacting
+	 * already dead minions before a {@link GameLogic#endOfSequence()} has been called.
+	 *
+	 * @return {@code true} if the minion's health is less than 1 or if the minion has the {@link Attribute#DESTROYED}
+	 * 		attribute.
+	 */
 	@Override
 	public boolean isDestroyed() {
 		if (hasAttribute(Attribute.PERMANENT)) {

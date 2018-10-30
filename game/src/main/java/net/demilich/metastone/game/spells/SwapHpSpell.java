@@ -12,6 +12,10 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
+/**
+ * Swaps the {@code target}'s hitpoints with the {@code source} actor's hitpoints. Only valid while summoning (in a
+ * battlecry).
+ */
 public class SwapHpSpell extends Spell {
 
 	public static SpellDesc create() {

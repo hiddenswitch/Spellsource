@@ -12,6 +12,10 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
+/**
+ * Swaps the {@code target}'s attack with the {@code source} actor's attack. Only valid while summoning (in a
+ * battlecry).
+ */
 public class SwapAttackSpell extends Spell {
 
 	public static SpellDesc create() {

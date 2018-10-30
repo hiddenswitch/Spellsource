@@ -19,7 +19,28 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Resurrects minions from the caster's graveyard.
+ * <p>
+ * If {@link SpellArg#EXCLUSIVE} is set to true, only unique copies are resurrected.
+ * <p>
+ * If {@link SpellArg#ATTRIBUTE} is set to {@link Attribute#MAGNETS}, the minion is resummoned with its magnetized
+ * elements.
+ * <p>
+ * If the minion was successfully summoned, {@link SpellArg#SPELL} will be cast with {@link EntityReference#OUTPUT}
+ * <b>and</b> {@code target} as the summoned minion.
+ * <p>
+ * For <b>example</b>, to resurrect <b>2 different</b> friendly minions:
+ * <pre>
+ *   {
+ *     "class": "ResurrectSpell",
+ *     "value": 2,
+ *     "exclusive": true
+ *   }
+ * </pre>
+ */
 public class ResurrectSpell extends Spell {
+
 	@SuppressWarnings("unchecked")
 	@Override
 	@Suspendable
@@ -50,7 +71,8 @@ public class ResurrectSpell extends Spell {
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
 			Card card = resurrectedMinion.getSourceCard();
 			final Minion summonedMinion;
-			Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE); //allow functionality to resurrect cards with certain attributes they died with
+			// allow functionality to resurrect cards with certain attributes they died with
+			Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 			if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
 				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
 					summonedMinion = card.summon();

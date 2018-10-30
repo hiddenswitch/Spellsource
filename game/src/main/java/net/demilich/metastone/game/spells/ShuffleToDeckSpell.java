@@ -19,6 +19,16 @@ import java.util.Map;
  * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
  * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
+ *
+ * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
+ * <pre>
+ *   {
+ *     "class": "ShuffleToDeckSpell",
+ *     "card": "token_mur'ghoul",
+ *     "howMany": 3,
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
  */
 public class ShuffleToDeckSpell extends Spell {
 

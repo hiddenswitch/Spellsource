@@ -2239,6 +2239,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * A joust describes when cards are revealed from each player's deck, and the "winner" of a joust is determined by
 	 * whoever draws a card with a higher {@link Card#getBaseManaCost()}.
+	 * <p>
+	 * From Hearthpedia:
+	 * <p>
+	 * Joust is an ability that causes a minion to be revealed at random from the deck of each player. If the player who
+	 * initiated the Joust has the higher mana cost minion, a special secondary effect will be activated, depending on the
+	 * Joust card. Once the Joust is complete, the two Jousting minions are shuffled back into their respective decks.
+	 * Jousts are triggered through other abilities, most commonly Battlecry, but at least one card uses Deathrattle to
+	 * Joust. Joust does not exist as a keyword, but is the official term for the card text, "Reveal a minion in each
+	 * deck. If yours costs more, [secondary effect]."
 	 *
 	 * @param player     The player who initiated the joust.
 	 * @param cardFilter
@@ -2569,8 +2578,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see #getValidActions(int) for the way the {@link GameLogic} determines what actions a player can take.
 	 * @see Card#play() for an example of how a card generates a {@link PlayCardAction} that will eventually be sent to
 	 * 		this method.
-	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover mechanic
-	 * 		generates a {@link DiscoverAction} that gets sent to this method.
+	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover
+	 * 		mechanic generates a {@link DiscoverAction} that gets sent to this method.
 	 * @see Minion#getBattlecry() for the method that creates battlecry actions. (Note: Deathrattles never involve a
 	 * 		player decision, so deathrattles never generate a battlecry).
 	 */

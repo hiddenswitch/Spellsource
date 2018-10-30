@@ -16,7 +16,53 @@ import net.demilich.metastone.game.targeting.Zones;
 import java.util.List;
 
 /**
- * Recruits (summons and removes the source card of) a minion from the specified card location.
+ * Recruits (summons and removes the source card of) {@link SpellArg#VALUE} minions from {@link SpellArg#CARD_LOCATION}
+ * location.
+ * <p>
+ * If a {@link SpellArg#SPELL} is specified, it is cast on the <b>minion</b> after it is summoned.
+ * <p>
+ * The card is moved to the {@link Zones#SET_ASIDE_ZONE} before the minion printed on it is summoned. This prevents
+ * enchantments from being cleared.
+ * <p>
+ * Playing cards this way does not count as playing them from the hand or deck.
+ * <p>
+ * For <b>example,</b> to do the text "Recruit 2 minions that cost (4) or less:"
+ * <pre>
+ *   {
+ *     "class": "RecruitSpell",
+ *     "value": 2,
+ *     "cardFilter": {
+ *       "class": "AndFilter",
+ *       "filters": [
+ *         {
+ *           "class": "CardFilter",
+ *           "cardType": "MINION"
+ *         },
+ *         {
+ *           "class": "ManaCostFilter",
+ *           "value": 4,
+ *           "operation": "LESS_OR_EQUAL"
+ *         }
+ *       ]
+ *     },
+ *     "cardLocation": "DECK",
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
+ * For the text "Recruit two 1-Cost minions," observe that the card means base mana cost. The only change is the filter:
+ * <pre>
+ *   {
+ *     "class": "RecruitSpell",
+ *     "value": 2,
+ *     "cardFilter": {
+ *       "class": "CardFilter",
+ *       "cardType": "MINION",
+ *       "manaCost": 1
+ *     },
+ *     "cardLocation": "DECK",
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
  */
 public class RecruitSpell extends Spell {
 
