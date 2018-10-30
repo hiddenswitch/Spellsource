@@ -7,9 +7,8 @@
   "triggers": [
     {
       "eventTrigger": {
-          "class": "OverloadTrigger",
-          "targetPlayer": "SELF"
-        }
+        "class": "OverloadTrigger",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "DamageSpell",
