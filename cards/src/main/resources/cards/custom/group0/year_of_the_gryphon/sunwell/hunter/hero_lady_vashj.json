@@ -1,7 +1,7 @@
 {
   "name": "Lady Vashj",
   "heroPower": "hero_power_vashj_s_plot",
-  "baseManaCost": 8,
+  "baseManaCost": 1,
   "type": "HERO",
   "heroClass": "GREEN",
   "rarity": "LEGENDARY",
