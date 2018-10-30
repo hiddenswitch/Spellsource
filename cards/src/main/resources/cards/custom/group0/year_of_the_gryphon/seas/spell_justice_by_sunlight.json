@@ -23,12 +23,8 @@
               "race": "DRAGON"
             },
             "targetPlayer": "SELF"
-          }
-        },
-        "spell1": {
-          "class": "NullSpell"
-        },
-        "spell2": {
+          },
+        "spell": {
           "class": "AddAttributeSpell",
           "target": "ALL_MINIONS",
           "attribute": "DIVINE_SHIELD"
