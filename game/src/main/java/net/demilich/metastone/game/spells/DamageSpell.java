@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

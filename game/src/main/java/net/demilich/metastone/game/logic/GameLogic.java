@@ -18,7 +18,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.shared.utils.MathUtils;
+import net.demilich.metastone.game.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
@@ -36,7 +36,7 @@ import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -2196,7 +2196,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Configures the player {@link Player}, {@link Hero}, and deck & hand {@link Card} entities with the correct IDs,
+	 * Configures the player {@link Player}, {@link Hero}, and deck &amp; hand {@link Card} entities with the correct IDs,
 	 * {@link EntityZone} locations and owners. Shuffles the deck.
 	 *
 	 * @param playerId The player that should be initialized.
@@ -3384,7 +3384,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player that owns the secret.
 	 * @param secret The secret that got triggered.
-	 * @see {@link Secret#onFire(int, SpellDesc, GameEvent)} for the code that handles when a secret is fired.
+	 * @see Secret#onFire(int, SpellDesc, GameEvent) for the code that handles when a secret is fired.
 	 */
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {

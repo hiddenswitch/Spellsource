@@ -2,9 +2,9 @@ package net.demilich.metastone.tests;
 
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardParser;
-import net.demilich.metastone.game.shared.utils.ResourceInputStream;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.utils.ResourceInputStream;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;

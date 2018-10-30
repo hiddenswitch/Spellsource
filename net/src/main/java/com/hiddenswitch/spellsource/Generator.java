@@ -11,7 +11,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.io.IOException;
@@ -21,6 +21,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Converts the card JSON into a table format used for various AI-based card generation algorithms.
+ */
 public class Generator {
 	static final String BATTLECRY = "BattlecryTrigger";
 	static final String DEATHRATTLE = "DeathrattleTrigger";

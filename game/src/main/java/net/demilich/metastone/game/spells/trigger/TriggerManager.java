@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * The trigger manager contains the code for managing triggers and actually processing events' effects in the game.
+ */
 public class TriggerManager implements Cloneable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
 
@@ -46,6 +49,21 @@ public class TriggerManager implements Cloneable, Serializable {
 		triggers.clear();
 	}
 
+	/**
+	 * The core implementation of firing game events.
+	 * <p>
+	 * This method processes an {@code event}, checking each trigger to see if it should respond to that particular
+	 * event.
+	 * <p>
+	 * This method also manages various environment stacks, like the {@link GameContext#getEventValueStack()} if the event
+	 * has a value (like a {@link net.demilich.metastone.game.events.DamageEvent} or the {@link
+	 * GameContext#getEventTargetStack()} that helps the {@link EntityReference#EVENT_TARGET} entity reference to work.
+	 * <p>
+	 * This method will also remove triggers that are expired.
+	 *
+	 * @param event
+	 * @param gameTriggers
+	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
 		if (event instanceof HasValue) {

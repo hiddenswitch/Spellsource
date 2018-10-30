@@ -16,7 +16,7 @@ public class EntityFilterDescDeserializer extends DescDeserializer<EntityFilterD
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 
 		ctx.add(EntityFilterArg.VALUE, ParseValueType.VALUE);
 		ctx.add(EntityFilterArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);

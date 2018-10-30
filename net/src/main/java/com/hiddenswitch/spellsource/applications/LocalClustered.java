@@ -20,6 +20,12 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * The main entry point of a local game server.
+ * <p>
+ * Starts a local services cluster, tries to migrate and broadcasts over UDP to Unity3D-based clients the IP address of
+ * this server once it's ready to be connected to.
+ */
 public class LocalClustered {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");

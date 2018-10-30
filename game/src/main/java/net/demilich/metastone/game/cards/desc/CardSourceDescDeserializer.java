@@ -16,7 +16,7 @@ public class CardSourceDescDeserializer extends DescDeserializer<CardSourceDesc,
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(CardSourceArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
 		ctx.add(CardSourceArg.COLLECTION_NAME, ParseValueType.STRING);
 		ctx.add(CardSourceArg.INVERT, ParseValueType.BOOLEAN);

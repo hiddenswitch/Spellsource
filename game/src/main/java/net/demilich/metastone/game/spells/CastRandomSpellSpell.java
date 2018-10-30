@@ -13,7 +13,7 @@ import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

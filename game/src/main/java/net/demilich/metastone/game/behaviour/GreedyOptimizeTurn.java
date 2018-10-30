@@ -90,7 +90,6 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		if (validActions.size() == 1) {
-			heuristic.onActionSelected(context, player.getId());
 			return validActions.get(0);
 		}
 
@@ -128,7 +127,6 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 		}
 		logger.debug("{} actions in total have been evaluated this turn", totalActionCount);
 		logger.debug("Selecting best action {} with score {}", bestAction, bestScore);
-		heuristic.onActionSelected(context, player.getId());
 
 		return bestAction;
 	}

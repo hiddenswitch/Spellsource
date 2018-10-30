@@ -8,7 +8,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 /**
  * Destroys a minion, and gives the {@code source} the deathrattle, "Resummon that minion."

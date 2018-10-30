@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.EnumMap;
 import java.util.Map;

@@ -40,8 +40,8 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.TurnState;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.logic.TurnState;
 import org.apache.commons.math3.util.Combinations;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -125,6 +125,48 @@ import static java.util.stream.Collectors.toList;
  * expected to provide a {@link Player} instance with a {@link Behaviour} that suits the end user's needs. Override the
  * methods of the {@link Behaviour} to model how you'd like to behave given the information incoming to those methods.
  * <p>
+ * Executing the card code is complicated, and follows the adage: Every sufficiently complex program has a poorly
+ * implemented version of common Lisp. At a high level, players take turns generating {@link GameAction} objects, whose
+ * {@link GameAction#execute(GameContext, int)} implementation does things like {@link GameLogic#castSpell(int,
+ * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int,
+ * Minion, Card, int, boolean)}. {@code "spell"} fields inside the {@link net.demilich.metastone.game.cards.desc.CardDesc}
+ * of the card currently being played get executed by looking at their {@link net.demilich.metastone.game.spells.desc.SpellArg#CLASS}
+ * and creating an instance of the corresponding subclass of {@link net.demilich.metastone.game.spells.Spell}.
+ * Subsequent "sub-spells" are called by {@link net.demilich.metastone.game.spells.SpellUtils#castChildSpell(GameContext,
+ * Player, SpellDesc, Entity, Entity)}. Various components like {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider}
+ * or {@link net.demilich.metastone.game.spells.desc.condition.Condition} are defined in the card JSON and used to
+ * provide program-like functionality.
+ * <p>
+ * To illustrate, the key parts of the call stack of a player playing the card Novice Engineer looks like this:
+ * <ol>
+ * <li>At the top of the stack: {@link GameContext#play()}. This is the main entry point
+ * for a started game and we exit this when the game is over.</li>
+ * <li>{@link GameContext#takeActionInTurn()}, which is the core step in the game loop.
+ * To get possible play actions, we called {@link Card#play()} on each card in the hand, which gives us {@link
+ * GameAction} objects. Then, we called {@link Behaviour#requestAction(GameContext, Player, List)} to get which action
+ * we wanted the player to take of the possible choices from {@link GameContext#getValidActions()}.</li>
+ * <li>{@link GameAction#execute(GameContext, int)},
+ * which actually starts the chain of effects for playing a card.</li>
+ * <li>{@link GameLogic#summon(int, Minion,
+ * Card, int, boolean)}, which summons minions.</li>
+ * <li>{@link GameLogic#resolveBattlecry(int, Actor)},
+ * which resolves the battlecry written on Novice Engineer.</li>
+ * <li>{@link GameLogic#castSpell(int, SpellDesc,
+ * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all
+ * effects</b>, not just spells. This method will create an instance of a {@link net.demilich.metastone.game.spells.DrawCardSpell}
+ * and eventually calls...</li>
+ * <li>{@link net.demilich.metastone.game.spells.Spell#cast(GameContext,
+ * Player, SpellDesc, Entity, List)}, which provides common targeting code for spell effects. The meat and bones of
+ * effects like drawing a card is done by:</li>
+ * <li>{@link net.demilich.metastone.game.spells.Spell#onCast(GameContext,
+ * Player, SpellDesc, Entity, Entity)}, the method that all 200+ spells implement to actually cause effects in game.
+ * {@link net.demilich.metastone.game.spells.DrawCardSpell} therefore gets its...</li>
+ * <li>{@link net.demilich.metastone.game.spells.DrawCardSpell#onCast(GameContext,
+ * Player, SpellDesc, Entity, Entity)} method called. In order to cause a card to be drawn, this method calls...</li>
+ * <li>{@link GameLogic#drawCard(int, Entity)},
+ * which is where the actual work of moving a card from the {@link Player#getDeck()} {@link Zones#DECK} to the hand
+ * occurs.</li>
+ * </ol>
  * The {@code runGym} methods in the {@code test} code for this module provides an great template for testing rules and
  * card behaviour using Spellsource.
  *
@@ -133,8 +175,7 @@ import static java.util.stream.Collectors.toList;
  * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
  * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
  * 		{@link Behaviour#requestAction(GameContext, Player, List)}.
- * @see net.demilich.metastone.game.behaviour.PlayRandomBehaviour for an example behaviour that just makes random
- * 		decisions when requested.
+ * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
  * 		GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
@@ -718,7 +759,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Each player holds the player's {@link AbstractBehaviour} and all of the {@link Entity} objects in the game.
 	 *
-	 * @return An {@link java.util.Collections.UnmodifiableList} of {@link Player} objects.
+	 * @return A read only list of {@link Player} objects.
 	 */
 	public List<Player> getPlayers() {
 		if (players == null) {

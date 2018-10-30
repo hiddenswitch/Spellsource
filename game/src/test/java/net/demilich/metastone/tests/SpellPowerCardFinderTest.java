@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;

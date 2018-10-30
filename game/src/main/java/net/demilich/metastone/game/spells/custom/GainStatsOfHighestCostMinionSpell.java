@@ -14,7 +14,7 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -7,7 +7,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.HasCard;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 public abstract class AbstractCardTrigger extends EventTrigger {
 	public AbstractCardTrigger(EventTriggerDesc desc) {

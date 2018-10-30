@@ -10,7 +10,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;

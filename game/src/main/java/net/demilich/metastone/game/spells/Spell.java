@@ -23,6 +23,9 @@ import java.util.*;
  * game, like a deathrattle or a triggered effect.
  * <p>
  * To browse all the possible effects, visit the deriving classes of this class.
+ * <p>
+ * These classes are the value for {@link SpellArg#CLASS}, i.e., what you write after {@code "class": ...} in the card
+ * JSON for spell objects. Each string in the {@code "class"} values corresponds exactly to a subclass of this class.
  */
 public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	private SpellDesc desc;
@@ -134,6 +137,25 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 		}
 	}
 
+	/**
+	 * Implementations of {@code onCast} are the meat-and-bones of a spell's effects. This should actually call a variety
+	 * of methods in {@link net.demilich.metastone.game.logic.GameLogic}, generate cards using {@link
+	 * SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc)}, interpret {@link SpellArg} keys in the {@code
+	 * desc}, etc.
+	 * <p>
+	 * Observe that subclasses of {@code Spell} mostly just need to implement this function. Also, observe that instances
+	 * of {@code Spell} are stateless: all the state is provided as arguments to this function.
+	 *
+	 * @param context The game context
+	 * @param player  The casting player
+	 * @param desc    The collection of {@link SpellArg} keys and values that are interpreted by the implementation of
+	 *                this function to actually cause effects in a game
+	 * @param source  The entity from which this effect is happening (typically a card or a minion if it's a battlecry).
+	 * @param target  The particular target of this invocation of the spell. When a spell hits multiple targets, like an
+	 *                AoE damage effect, this method is called once for each target in the list of targets.
+	 * @see SummonSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for an example of a complex spell
+	 * 		implementation.
+	 */
 	@Suspendable
 	protected abstract void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target);
 

@@ -11,6 +11,9 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * An experimental implementation of a Monte Carlo Tree Search behaviour. It is untested and probably incomplete.
+ */
 public class MonteCarloTreeSearchBehaviour extends IntelligentBehaviour {
 
 	private final static Logger logger = LoggerFactory.getLogger(MonteCarloTreeSearchBehaviour.class);

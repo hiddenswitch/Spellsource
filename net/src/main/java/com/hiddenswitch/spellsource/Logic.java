@@ -2,14 +2,13 @@ package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.impl.util.PersistenceContext;
 import com.hiddenswitch.spellsource.impl.util.PersistenceTrigger;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Mongo;
-import io.vertx.core.Handler;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.mongo.MongoClientUpdateResult;
@@ -17,8 +16,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -27,11 +24,10 @@ import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.KillEvent;
 import net.demilich.metastone.game.spells.TargetPlayer;
-import net.demilich.metastone.game.spells.trigger.GameStartTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -45,7 +41,7 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
  * A Logic service that handles complex game logic.
  * <p>
  * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
- * Handler)}.
+ * SuspendableAction1)}.
  */
 public interface Logic {
 	Logger logger = LoggerFactory.getLogger(Logic.class);

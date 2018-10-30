@@ -16,7 +16,7 @@ public class ValueProviderDescDeserializer extends DescDeserializer<ValueProvide
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(ValueProviderArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(ValueProviderArg.PLAYER_ATTRIBUTE, ParseValueType.PLAYER_ATTRIBUTE);
 		ctx.add(ValueProviderArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);

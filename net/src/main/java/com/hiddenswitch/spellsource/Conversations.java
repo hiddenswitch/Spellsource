@@ -9,8 +9,16 @@ import com.hiddenswitch.spellsource.util.*;
 import io.reactivex.disposables.Disposable;
 import org.apache.commons.lang3.RandomStringUtils;
 
+/**
+ * Provides the methods to help users message each other.
+ */
 public interface Conversations {
 
+	/**
+	 * Creates the ephemeral messaging state and notifies users when they receive messages.
+	 *
+	 * @throws SuspendExecution
+	 */
 	static void handleConnections() throws SuspendExecution {
 		SuspendableMultimap<ConversationId, ChatMessage> conversations = SuspendableMultimap.getOrCreate("conversations");
 
@@ -24,17 +32,17 @@ public interface Conversations {
 					String conversationId = sendMessage.getConversationId();
 					if (!conversationId.contains(connection.userId())) {
 						throw new SecurityException(String.format("User %s attempted to subscribe to unauthorized conversationId %s",
-										connection.userId(),
-										conversationId));
+								connection.userId(),
+								conversationId));
 					}
 					// Conversation IDs should be of the form userId1,userId2
 					// TODO: Assert that it's two valid user IDs.
 					ChatMessage message = new ChatMessage()
-									.messageId("c:" + Integer.toString(conversations.size()) + ":" + RandomStringUtils.randomAlphanumeric(6))
-									.conversationId(conversationId)
-									.message(sendMessage.getMessage())
-									.senderUserId(sender.getId())
-									.senderName(sender.getUsername());
+							.messageId("c:" + Integer.toString(conversations.size()) + ":" + RandomStringUtils.randomAlphanumeric(6))
+							.conversationId(conversationId)
+							.message(sendMessage.getMessage())
+							.senderUserId(sender.getId())
+							.senderName(sender.getUsername());
 
 					conversations.put(new ConversationId(conversationId), message);
 					connection.write(new Envelope().result(new EnvelopeResult().sendMessage(new EnvelopeResultSendMessage().messageId(message.getMessageId()))));
@@ -47,7 +55,7 @@ public interface Conversations {
 					ConversationId key = new ConversationId(conversationId);
 
 					AddedChangedRemoved<ConversationId, ChatMessage> observer =
-									SuspendableMultimap.subscribeToKeyInMultimap("conversations", key);
+							SuspendableMultimap.subscribeToKeyInMultimap("conversations", key);
 
 					for (ChatMessage message : conversations.get(key)) {
 						connection.write(new Envelope().added(new EnvelopeAdded().chatMessage(message)));

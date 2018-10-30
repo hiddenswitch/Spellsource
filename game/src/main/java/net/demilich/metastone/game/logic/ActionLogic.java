@@ -8,20 +8,24 @@ import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.ChooseOneOverride;
-import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.TurnState;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class turns game actions into a list of possible actions for the player.
+ *
+ * @see GameContext#getValidActions() for the entry point into the action logic.
+ * @see #rollout(GameAction, GameContext, Player, Collection) for the meat-and-bones of turning a {@link GameAction}
+ * 		instance into multiple game actions, one for each target.
+ */
 public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
 

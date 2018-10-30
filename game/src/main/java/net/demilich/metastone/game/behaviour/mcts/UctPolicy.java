@@ -2,7 +2,11 @@ package net.demilich.metastone.game.behaviour.mcts;
 
 import java.util.Random;
 
-class UctPolicy implements ITreePolicy {
+/**
+ * A selection criteria that implements upper confidence bound for selecting children given information about the parent
+ * node.
+ */
+public class UctPolicy implements TreePolicy {
 
 	private static final double EPSILON = 1e-5;
 	private static final Random random = new Random();

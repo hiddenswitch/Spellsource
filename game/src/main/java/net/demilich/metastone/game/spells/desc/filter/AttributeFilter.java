@@ -6,9 +6,8 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

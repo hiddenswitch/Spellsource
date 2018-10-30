@@ -80,8 +80,8 @@ public enum Zones {
 	 */
 	QUEST,
 	/**
-	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a corresponding
-	 * {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at a time.
+	 * The hero power zone stores the hero power for a corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}.
+	 * Only one such card can be in the zone at a time.
 	 *
 	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
 	 */
@@ -105,8 +105,8 @@ public enum Zones {
 	 * <p>
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
-	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for more
-	 * 		about how discover is implemented.
+	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList)
+	 * 		for more about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */
 	DISCOVER,

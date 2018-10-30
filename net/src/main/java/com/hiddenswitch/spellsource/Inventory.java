@@ -300,8 +300,6 @@ public interface Inventory {
 	 * @param request Use the static methods in GetCollectionRequest for the right arguments of different collection
 	 *                queries.
 	 * @return The complete information about a collection (user, alliance or deck).
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
 	 */
 	@Suspendable
 	static GetCollectionResponse getCollection(GetCollectionRequest request) {

@@ -31,7 +31,7 @@ import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.utils.TurnState;
+import net.demilich.metastone.game.logic.TurnState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +49,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
  * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from {@link
- * EventListener} into messages on a {@link ReadStream<Buffer>} and {@link WriteStream<Buffer>}, decoding the read
+ * EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read
  * buffers as {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable {

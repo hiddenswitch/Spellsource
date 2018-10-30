@@ -16,6 +16,9 @@ import io.vertx.ext.mongo.UpdateOptions;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
+/**
+ * Provides presence information to players who are each other's friends.
+ */
 public interface Presence {
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
