@@ -1,0 +1,41 @@
+{
+  "name": "Bittertide Crab",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Destroy 5 Armor from a player and gain +1/+1.",
+  "battlecry": {
+    "targetSelection": "HEROES",
+    "spell": {
+      "class": "MetaSpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "ARMOR",
+        "value": 5,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "armorBonus": -5
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 1,
+          "hpBonus": 1
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

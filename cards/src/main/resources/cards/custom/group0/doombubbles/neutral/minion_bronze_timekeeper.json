@@ -1,0 +1,37 @@
+{
+  "name": "Bronze Timekeeper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: Activate a minion's start- or end-of-turn effects.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "custom.ActivateTriggeredEffectSpell",
+          "revertTrigger": {
+            "class": "TurnEndTrigger"
+          }
+        },
+        {
+          "class": "custom.ActivateTriggeredEffectSpell",
+          "revertTrigger": {
+            "class": "TurnStartTrigger"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
