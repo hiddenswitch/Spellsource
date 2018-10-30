@@ -1,0 +1,36 @@
+{
+  "name": "Undead Trickster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Battlecry: Shuffle 3 Tricks and 3 Treats into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ShuffleToDeckSpell",
+          "card": "spell_trick",
+          "howMany": 3,
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "ShuffleToDeckSpell",
+          "card": "spell_treat",
+          "howMany": 3,
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
