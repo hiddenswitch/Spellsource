@@ -82,8 +82,14 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	/**
 	 * Creates a minion from the attributes written on the card.
+	 * <p>
+	 * By default, all the attributes written on the card except those contained in {@link #IGNORED_MINION_ATTRIBUTES} are
+	 * copied onto the minion created here. The {@link Attribute#REMOVES_SELF_AT_END_OF_TURN} attribute is also removed if
+	 * it was present on the card.
+	 * <p>
+	 * Text is applied using the {@link Card#applyText(Actor)} method, which works for all actors.
 	 *
-	 * @return
+	 * @return A new Minion instance.
 	 */
 	public Minion summon() {
 		if (getCardType() != CardType.MINION) {
@@ -112,6 +118,11 @@ public class Card extends Entity implements HasChooseOneActions {
 		return minion;
 	}
 
+	/**
+	 * Creates a hero entity from the text on the card. Works similarly to {@link #summon()}, except for heroes.
+	 *
+	 * @return A new hero instance.
+	 */
 	public Hero createHero() {
 		if (getCardType() != CardType.HERO) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an hero", this, getCardType());
@@ -130,6 +141,13 @@ public class Card extends Entity implements HasChooseOneActions {
 		return hero;
 	}
 
+	/**
+	 * Iterates through all the enchantments written on this card and instantiates them.
+	 * <p>
+	 * Deathrattles are not supported.
+	 *
+	 * @return A list of enchantments (auras, triggers, etc.)
+	 */
 	public List<Enchantment> createEnchantments() {
 		if (getCardType() != CardType.ENCHANTMENT) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an enchantment", this, getCardType());
@@ -147,6 +165,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		}
 
 		if (getDesc().getDeathrattle() != null) {
+			logger.warn("createEnchantments {}: Currently creating a deathrattle using a MinionDeathTrigger is not supported", getCardId());
 			EnchantmentDesc deathrattleDesc = new EnchantmentDesc();
 			deathrattleDesc.spell = getDesc().getDeathrattle().clone();
 			// TODO: This doesn't actually trigger maybe?
