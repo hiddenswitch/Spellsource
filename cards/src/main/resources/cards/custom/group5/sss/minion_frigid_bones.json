@@ -6,7 +6,6 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "race": "ELEMENTAL",
   "description": "Freeze any character damaged by this minion.",
   "trigger": {
     "eventTrigger": {
