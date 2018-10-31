@@ -7,7 +7,7 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 jdk:
-  - oraclejdk11
+  - oraclejdk8
 services:
   - mongodb
 script:
@@ -17,7 +17,7 @@ sudo: false
 addons:
   apt:
     packages:
-      - oracle-java11-installer
+      - oracle-java8-installer
 branches:
   only:
   - master
