@@ -17,7 +17,7 @@ sudo: false
 addons:
   apt:
     packages:
-      - oracle-java8-installer
+      - oracle-java11-installer
 branches:
   only:
   - master
