@@ -145,11 +145,11 @@ implements java.io.Serializable</pre>
  Card)</code></a>) are evaluated by both players, always (this allows opponents to see card cost changes).
  <p>
  Or, for example, Temporus causes a spell to be cast during the turn of the opponent of the owner of Temporus. The
- <code>source</code> of the spell that modifies the <a href="../../../../../net/demilich/metastone/game/cards/Attribute.html#EXTRA_TURN"><code>Attribute.EXTRA_TURN</code></a> of both
- players is cast during the opponent's turn and in an event whose <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html" title="enum in net.demilich.metastone.game.spells"><code>TargetPlayer</code></a>
- is the opponent. But, <a href="../../../../../net/demilich/metastone/game/spells/desc/trigger/EnchantmentDesc.html#spell"><code>EnchantmentDesc.spell</code></a> is always cast by
- the enchantment's owner, which was the caster who originally put the enchantment into play. Therefore, the <code>source</code> will be the same as the player who put Temporus onto the battlefield, and that's from whose point of view the
- <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_PLAYER"><code>FRIENDLY_PLAYER</code></a> and <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_PLAYER"><code>ENEMY_PLAYER</code></a> will be evaluated.</div>
+ <code>source</code> of the spell that modifies the <a href="../../../../../net/demilich/metastone/game/cards/Attribute.html#EXTRA_TURN"><code>Attribute.EXTRA_TURN</code></a> of both players is cast during the
+ opponent's turn and in an event whose <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html" title="enum in net.demilich.metastone.game.spells"><code>TargetPlayer</code></a> is the opponent. But,
+ <a href="../../../../../net/demilich/metastone/game/spells/desc/trigger/EnchantmentDesc.html#spell"><code>EnchantmentDesc.spell</code></a> is always cast by the enchantment's
+ owner, which was the caster who originally put the enchantment into play. Therefore, the <code>source</code> will be the
+ same as the player who put Temporus onto the battlefield, and that's from whose point of view the <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_PLAYER"><code>FRIENDLY_PLAYER</code></a> and <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_PLAYER"><code>ENEMY_PLAYER</code></a> will be evaluated.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../net/demilich/metastone/game/GameContext.html#resolveTarget-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.targeting.EntityReference-"><code>to see how references are
@@ -247,325 +247,331 @@ implements java.io.Serializable</pre>
 </tr>
 <tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#CURRENT_SUMMONING_MINION">CURRENT_SUMMONING_MINION</a></span></code>
+<div class="block">References the minion that is currently being summoned.</div>
+</td>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_CHARACTERS">ENEMY_CHARACTERS</a></span></code>
 <div class="block">References all the enemy characters (the opponent's hero and minions).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_DECK">ENEMY_DECK</a></span></code>
 <div class="block">References all the card's in the enemy player's deck.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_GRAVEYARD">ENEMY_GRAVEYARD</a></span></code>
 <div class="block">References the cards and actors in the enemy graveyard.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_HAND">ENEMY_HAND</a></span></code>
 <div class="block">References all the cards in the enemy player's hand./</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_HERO">ENEMY_HERO</a></span></code>
 <div class="block">References a list with a single element, the enemy's hero.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_HERO_POWER">ENEMY_HERO_POWER</a></span></code>
 <div class="block">References the card that is currently the enemey player's hero power.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_LAST_CARD_PLAYED">ENEMY_LAST_CARD_PLAYED</a></span></code>
 <div class="block">References the last card played by the opponent.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE">ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE</a></span></code>
 <div class="block">References the last card played by the opponent before this current sequence.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_MINIONS">ENEMY_MINIONS</a></span></code>
 <div class="block">References all the enemy's minions.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_MINIONS_LEFT_TO_RIGHT">ENEMY_MINIONS_LEFT_TO_RIGHT</a></span></code>
 <div class="block">References all the enemy's minions, except ordered by their location on the board instead of their order of play.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_PLAYER">ENEMY_PLAYER</a></span></code>
 <div class="block">References the enemy <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game"><code>Player</code></a> entity.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_SET_ASIDE">ENEMY_SET_ASIDE</a></span></code>
 <div class="block">References the cards and actors located in the enemy set aside zone.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_TOP_CARD">ENEMY_TOP_CARD</a></span></code>
 <div class="block">References the next card the opponent will draw, or an empty list if no cards remain in the player's deck.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#ENEMY_WEAPON">ENEMY_WEAPON</a></span></code>
 <div class="block">References the weapon of the enemy hero, or a zero-length list if one isn't equipped.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#EVENT_SOURCE">EVENT_SOURCE</a></span></code>
 <div class="block">References the <a href="../../../../../net/demilich/metastone/game/events/GameEvent.html#getEventSource--"><code>GameEvent.getEventSource()</code></a> entity when a trigger/enchantment is being evaluated.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#EVENT_TARGET">EVENT_TARGET</a></span></code>
 <div class="block">This reference retrieves the (possibly <code>null</code>) entity pointed to by <a href="../../../../../net/demilich/metastone/game/events/GameEvent.html#getEventTarget--"><code>GameEvent.getEventTarget()</code></a>.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_CHARACTERS">FRIENDLY_CHARACTERS</a></span></code>
 <div class="block">References all the friendly characters (the player's hero and minions).</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_DECK">FRIENDLY_DECK</a></span></code>
 <div class="block">References all the cards in the player's deck.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_DECK_FROM_TOP">FRIENDLY_DECK_FROM_TOP</a></span></code>
 <div class="block">References all the cards in the player's deck, ordered from the top of the deck towards the bottom.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_GRAVEYARD">FRIENDLY_GRAVEYARD</a></span></code>
 <div class="block">References the cards and actors in the friendly graveyard.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_HAND">FRIENDLY_HAND</a></span></code>
 <div class="block">References all the cards in the player's hand.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_HERO">FRIENDLY_HERO</a></span></code>
 <div class="block">References the friendly hero.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_HERO_POWER">FRIENDLY_HERO_POWER</a></span></code>
 <div class="block">References the card that is currently the friendly player's hero power.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_LAST_CARD_PLAYED">FRIENDLY_LAST_CARD_PLAYED</a></span></code>
 <div class="block">References the last card played by the friendly player.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE">FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE</a></span></code>
 <div class="block">References the last card played by the friendly player before this current sequence.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_LAST_DIED_MINION">FRIENDLY_LAST_DIED_MINION</a></span></code>
 <div class="block">References the last minion belonging to the friendly player that died.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_MINIONS">FRIENDLY_MINIONS</a></span></code>
 <div class="block">References all the player's minions.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_MINIONS_LEFT_TO_RIGHT">FRIENDLY_MINIONS_LEFT_TO_RIGHT</a></span></code>
 <div class="block">References all the friendly minions, except ordered by their location on the board instead of their order of play.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_PLAYER">FRIENDLY_PLAYER</a></span></code>
 <div class="block">References the friendly <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game"><code>Player</code></a> entity.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_SET_ASIDE">FRIENDLY_SET_ASIDE</a></span></code>
 <div class="block">References the cards and actors located in the friendly set aside zone.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_TOP_CARD">FRIENDLY_TOP_CARD</a></span></code>
 <div class="block">References the next card the friendly player will draw, or an empty list if no cards remain in the player's deck.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#FRIENDLY_WEAPON">FRIENDLY_WEAPON</a></span></code>
 <div class="block">References the <a href="../../../../../net/demilich/metastone/game/entities/weapons/Weapon.html" title="class in net.demilich.metastone.game.entities.weapons"><code>Weapon</code></a> of the friendly hero, or a zero-length
  list if one isn't equipped.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#KILLED_MINION">KILLED_MINION</a></span></code>
 <div class="block">Retrieves a reference to the minion destroyed by a <a href="../../../../../net/demilich/metastone/game/spells/DestroySpell.html" title="class in net.demilich.metastone.game.spells"><code>DestroySpell</code></a>.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#LAST_CARD_PLAYED">LAST_CARD_PLAYED</a></span></code>
 <div class="block">References the last card played by either player.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE">LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE</a></span></code>
 <div class="block">References the last card played by either player before the end of this current sequence.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#LEFT_ADJACENT_MINION">LEFT_ADJACENT_MINION</a></span></code>
 <div class="block">References the minion to the left of the <code>source</code> of this targeting resolution, or a zero-length list if
  there isn't one</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#LEFTMOST_ENEMY_MINION">LEFTMOST_ENEMY_MINION</a></span></code>
 <div class="block">References the enemy minion whose index in the minions zone is 0.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#LEFTMOST_FRIENDLY_CARD_HAND">LEFTMOST_FRIENDLY_CARD_HAND</a></span></code>
 <div class="block">References the card in the friendly player's hand with the lowest index in the friendly player's hand.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#LEFTMOST_FRIENDLY_MINION">LEFTMOST_FRIENDLY_MINION</a></span></code>
 <div class="block">References the friendly minion whose index in the minions zone is 0, which can possibly be the <code>source</code>
  minion.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#MINIONS_TO_LEFT">MINIONS_TO_LEFT</a></span></code>
 <div class="block">References the minions with an index less than the <code>source</code> minion.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#MINIONS_TO_RIGHT">MINIONS_TO_RIGHT</a></span></code>
 <div class="block">References the minions with an index greater than the <code>source</code> minion.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#NONE">NONE</a></span></code>
 <div class="block">Indicates a spell should take no target.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#OPPOSITE_MINIONS">OPPOSITE_MINIONS</a></span></code>
 <div class="block">References zero, one or two minions opposite of this <code>source</code> minion.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#OTHER_ENEMY_MINIONS">OTHER_ENEMY_MINIONS</a></span></code>
 <div class="block">References all the enemy minions excluding the source.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#OTHER_FRIENDLY_MINIONS">OTHER_FRIENDLY_MINIONS</a></span></code>
 <div class="block">References all the player's minions except the <code>source</code> of this targeting resolution.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#OUTPUT">OUTPUT</a></span></code>
 <div class="block">Use this reference to apply effects to new entities created by spells.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#PHYSICAL_ATTACK_TARGETS">PHYSICAL_ATTACK_TARGETS</a></span></code>
 <div class="block">References the enemy minions and hero which would ordinarily be targetable by a physical attack from the friendly
  player's point of view.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#RIGHT_ADJACENT_MINION">RIGHT_ADJACENT_MINION</a></span></code>
 <div class="block">References the minion to the right of the <code>source</code> of this targeting resolution, or a zero-length list if
  there isn't one</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#RIGHTMOST_ENEMY_MINION">RIGHTMOST_ENEMY_MINION</a></span></code>
 <div class="block">References the enemy minion with the largest index in the minions zone, or an empty list if the minion zone is
  empty.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#RIGHTMOST_FRIENDLY_MINION">RIGHTMOST_FRIENDLY_MINION</a></span></code>
 <div class="block">References the friendly minion with the largest index in the minions zone, or an empty list if the minion zone is
  empty.</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#SELF">SELF</a></span></code>
 <div class="block">Returns the <code>source</code> of the target resolution.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#SPELL_TARGET">SPELL_TARGET</a></span></code>
 <div class="block">This reference allows you to distinguish the target of an effect (the spell target) versus the target selected by a
  player (the <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#TARGET"><code>TARGET</code></a>).</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#TARGET">TARGET</a></span></code>
 <div class="block">When the player performs a <a href="../../../../../net/demilich/metastone/game/actions/GameAction.html" title="class in net.demilich.metastone.game.actions"><code>GameAction</code></a> that has a target choice, like a
@@ -574,13 +580,13 @@ implements java.io.Serializable</pre>
  of target overriding effects or effects in the sequence that may later destroy or transform the target.</div>
 </td>
 </tr>
-<tr class="altColor">
+<tr class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#TRANSFORM_REFERENCE">TRANSFORM_REFERENCE</a></span></code>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </td>
 </tr>
-<tr class="rowColor">
+<tr class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#TRIGGER_HOST">TRIGGER_HOST</a></span></code>
 <div class="block">References the <a href="../../../../../net/demilich/metastone/game/entities/Entity.html" title="class in net.demilich.metastone.game.entities"><code>Entity</code></a> that hosts the <a href="../../../../../net/demilich/metastone/game/spells/trigger/Enchantment.html" title="class in net.demilich.metastone.game.spells.trigger"><code>Enchantment</code></a> whose
@@ -1459,11 +1465,27 @@ public static final&nbsp;<a href="../../../../../net/demilich/metastone/game/tar
 <a name="FRIENDLY_DECK_FROM_TOP">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>FRIENDLY_DECK_FROM_TOP</h4>
 <pre>public static final&nbsp;<a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a> FRIENDLY_DECK_FROM_TOP</pre>
 <div class="block">References all the cards in the player's deck, ordered from the top of the deck towards the bottom.</div>
+</li>
+</ul>
+<a name="CURRENT_SUMMONING_MINION">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>CURRENT_SUMMONING_MINION</h4>
+<pre>public static final&nbsp;<a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html" title="class in net.demilich.metastone.game.targeting">EntityReference</a> CURRENT_SUMMONING_MINION</pre>
+<div class="block">References the minion that is currently being summoned.
+ <p>
+ This entry is valid from just before <a href="../../../../../net/demilich/metastone/game/events/BeforeSummonEvent.html" title="class in net.demilich.metastone.game.events"><code>BeforeSummonEvent</code></a> is fired and just
+ after <a href="../../../../../net/demilich/metastone/game/events/AfterSummonEvent.html" title="class in net.demilich.metastone.game.events"><code>AfterSummonEvent</code></a> is fired. Since battlecries are resolved between
+ <a href="../../../../../net/demilich/metastone/game/events/BeforeSummonEvent.html" title="class in net.demilich.metastone.game.events"><code>BeforeSummonEvent</code></a> and <a href="../../../../../net/demilich/metastone/game/events/SummonEvent.html" title="class in net.demilich.metastone.game.events"><code>SummonEvent</code></a>, this reference may change to
+ the minion being summoned by a battlecry rather than the battlecrying minion itself, depending on when this
+ reference resolved.</div>
 </li>
 </ul>
 </li>

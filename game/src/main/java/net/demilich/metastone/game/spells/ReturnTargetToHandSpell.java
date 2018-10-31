@@ -69,7 +69,12 @@ public class ReturnTargetToHandSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target == null) {
-			logger.warn("onCast: Could not return null target.");
+			logger.warn("onCast {} {}: Could not return null target.", context.getGameId(), source);
+			return;
+		}
+
+		if (target.getZone() == Zones.HAND && !target.hasAttribute(Attribute.DISCARDED)) {
+			logger.error("onCast {} {}: The target {} is already in the hand and we're not interrupting a discard.", context.getGameId(), source, target);
 			return;
 		}
 

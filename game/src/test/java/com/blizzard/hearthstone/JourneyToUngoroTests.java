@@ -496,7 +496,6 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion clutchmother = playMinionCard(context, player, clutchmotherBase);
 			assertEquals(clutchmother.getAttack(), 6);
 			assertEquals(clutchmother.getHp(), 6);
-
 		});
 	}
 

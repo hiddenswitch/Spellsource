@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9};
+var methods = {"i0":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../net/demilich/metastone/game/spells/CastFromGroupSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../net/demilich/metastone/game/spells/CastRepeatedlySpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?net/demilich/metastone/game/spells/CastRandomSpellSpell.html" target="_top">Frames</a></li>
@@ -72,7 +72,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -128,6 +128,9 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
  If <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#EXCLUSIVE"><code>SpellArg.EXCLUSIVE</code></a> is <code>true</code>, the <code>source</code> does <b>not</b> have to be in play in order for the
  spell to be cast.
  <p>
+ The <code>source</code> of the spell written on the card that is randomly chosen is the <b>entity doing the casting</b>,
+ not the card itself.
+ <p>
  For example, to implement "Whenever a player casts a spell, cast a copy of it for them with random targets.":
  <pre>
    {
@@ -162,7 +165,9 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
  randomly cast.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
-<dd><a href="../../../../../serialized-form.html#net.demilich.metastone.game.spells.CastRandomSpellSpell">Serialized Form</a></dd>
+<dd><a href="../../../../../net/demilich/metastone/game/spells/custom/PlayCardsRandomlySpell.html" title="class in net.demilich.metastone.game.spells.custom"><code>for a similar spell that works with minions,
+ 		weapons and heroes and uses the card as the source of the effects</code></a>, 
+<a href="../../../../../serialized-form.html#net.demilich.metastone.game.spells.CastRandomSpellSpell">Serialized Form</a></dd>
 </dl>
 </li>
 </ul>
@@ -170,25 +175,6 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
-<!-- ======== NESTED CLASS SUMMARY ======== -->
-<ul class="blockList">
-<li class="blockList"><a name="nested.class.summary">
-<!--   -->
-</a>
-<h3>Nested Class Summary</h3>
-<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
-<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
-<tr>
-<th class="colFirst" scope="col">Modifier and Type</th>
-<th class="colLast" scope="col">Class and Description</th>
-</tr>
-<tr class="altColor">
-<td class="colFirst"><code>static class&nbsp;</code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">CastRandomSpellSpell.DetermineCastingPlayer</a></span></code>&nbsp;</td>
-</tr>
-</table>
-</li>
-</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -221,13 +207,6 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
 <tr id="i0" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.html#create-int-">create</a></span>(int&nbsp;value)</code>&nbsp;</td>
-</tr>
-<tr id="i1" class="rowColor">
-<td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">CastRandomSpellSpell.DetermineCastingPlayer</a></code></td>
-<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.html#determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">determineCastingPlayer</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
-                      <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
-                      <a href="../../../../../net/demilich/metastone/game/entities/Entity.html" title="class in net.demilich.metastone.game.entities">Entity</a>&nbsp;source,
-                      <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html" title="enum in net.demilich.metastone.game.spells">TargetPlayer</a>&nbsp;castingTargetPlayer)</code>&nbsp;</td>
 </tr>
 </table>
 <ul class="blockList">
@@ -278,22 +257,10 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
 <a name="create-int-">
 <!--   -->
 </a>
-<ul class="blockList">
+<ul class="blockListLast">
 <li class="blockList">
 <h4>create</h4>
 <pre>public static&nbsp;<a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a>&nbsp;create(int&nbsp;value)</pre>
-</li>
-</ul>
-<a name="determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">
-<!--   -->
-</a>
-<ul class="blockListLast">
-<li class="blockList">
-<h4>determineCastingPlayer</h4>
-<pre>public static&nbsp;<a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">CastRandomSpellSpell.DetermineCastingPlayer</a>&nbsp;determineCastingPlayer(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
-                                                                                 <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
-                                                                                 <a href="../../../../../net/demilich/metastone/game/entities/Entity.html" title="class in net.demilich.metastone.game.entities">Entity</a>&nbsp;source,
-                                                                                 <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html" title="enum in net.demilich.metastone.game.spells">TargetPlayer</a>&nbsp;castingTargetPlayer)</pre>
 </li>
 </ul>
 </li>
@@ -324,7 +291,7 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../net/demilich/metastone/game/spells/CastFromGroupSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../net/demilich/metastone/game/spells/CastRepeatedlySpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?net/demilich/metastone/game/spells/CastRandomSpellSpell.html" target="_top">Frames</a></li>
@@ -348,7 +315,7 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
+<li>Nested&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

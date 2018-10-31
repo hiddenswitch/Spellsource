@@ -36,7 +36,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
 
 /**
  * A set of utilities to help write spells.
@@ -108,7 +107,7 @@ public class SpellUtils {
 	                                       boolean randomChooseOnes,
 	                                       boolean playFromHand) {
 
-		CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
+		DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
 		// Stop casting battlecries if Shudderwock is transformed or destroyed
 		if (onlyWhileSourceInPlay && !determineCastingPlayer.isSourceInPlay()) {
 			return false;
@@ -804,5 +803,86 @@ public class SpellUtils {
 						.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context, context.getPlayer(playerId), source, target))
 						.map(aura -> aura.getDesc().getApplyEffect()))
 				.toArray(SpellDesc[]::new);
+	}
+
+	/**
+	 * Tries to determine the currently casting player from the point of view of a source, considering if the source has
+	 * changed owners or if it was destroyed.
+	 *
+	 * @param context             The game context
+	 * @param player              The casting player
+	 * @param source              The source from whose point of view the casting player should be determined
+	 * @param castingTargetPlayer Whose point of view the determination should be made. For example, if {@link
+	 *                            TargetPlayer#OPPONENT} is chosen here, then the opponent of the owner of the {@code
+	 *                            source} will be used.
+	 * @return An object containing information related to who is the casting player and whether or not the source has
+	 * 		been destroyed.
+	 */
+	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
+		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
+	}
+
+	/**
+	 * An object that contains results of a {@link #determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)}
+	 * call.
+	 */
+	public static class DetermineCastingPlayer {
+		private boolean sourceDestroyed;
+		private GameContext context;
+		private Player player;
+		private Entity source;
+		private TargetPlayer castingTargetPlayer;
+		private Player castingPlayer;
+
+		public DetermineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
+			this.context = context;
+			this.player = player;
+			this.source = source;
+			this.castingTargetPlayer = castingTargetPlayer;
+		}
+
+		public boolean isSourceInPlay() {
+			return !sourceDestroyed;
+		}
+
+		public Player getCastingPlayer() {
+			return castingPlayer;
+		}
+
+		public DetermineCastingPlayer invoke() {
+			// In case Yogg changes sides, this should case who the spells are being cast for.
+			switch (castingTargetPlayer) {
+				case BOTH:
+				case OWNER:
+				default:
+					castingPlayer = context.getPlayer(source.getOwner());
+					break;
+				case SELF:
+					castingPlayer = player;
+					break;
+				case OPPONENT:
+					castingPlayer = context.getOpponent(player);
+					break;
+				case ACTIVE:
+					castingPlayer = context.getActivePlayer();
+					break;
+				case INACTIVE:
+					castingPlayer = context.getOpponent(context.getActivePlayer());
+					break;
+			}
+
+			// If Yogg is removed from the board, stop casting spells.
+			if (source != null
+					&& castingTargetPlayer == TargetPlayer.OWNER
+					&& source.getEntityType() == EntityType.MINION
+					&& (source.getZone()
+					!= Zones.BATTLEFIELD
+					|| source.isDestroyed())) {
+				sourceDestroyed = true;
+				return this;
+			}
+			sourceDestroyed = false;
+			return this;
+		}
 	}
 }

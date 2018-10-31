@@ -15,7 +15,24 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class StealRandomSecretSpell extends Spell {
+/**
+ * Steals a random secret belonging to the opponent of {@link SpellArg#TARGET_PLAYER}.
+ * <p>
+ * To steal one of the opponent's secrets:
+ * <pre>
+ *   {
+ *     "class": "StealRandomSecretSpell"
+ *   }
+ * </pre>
+ * To give the opponent one of the casting player's secrets:
+ * <pre>
+ *   {
+ *     "class": "StealRandomSecretSpell",
+ *     "targetPlayer": "OPPONENT"
+ *   }
+ * </pre>
+ */
+public final class StealRandomSecretSpell extends Spell {
 
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(StealRandomSecretSpell.class);

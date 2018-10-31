@@ -17,7 +17,7 @@
     catch(err) {
     }
 //-->
-var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":41,"i15":9,"i16":9,"i17":9};
+var methods = {"i0":9,"i1":9,"i2":9,"i3":9,"i4":9,"i5":9,"i6":9,"i7":9,"i8":9,"i9":9,"i10":9,"i11":9,"i12":9,"i13":9,"i14":9,"i15":41,"i16":9,"i17":9,"i18":9};
 var tabs = {65535:["t0","All Methods"],1:["t1","Static Methods"],8:["t4","Concrete Methods"],32:["t6","Deprecated Methods"]};
 var altColor = "altColor";
 var rowColor = "rowColor";
@@ -48,7 +48,7 @@ var activeTableTab = "activeTableTab";
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../net/demilich/metastone/game/spells/Spell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../net/demilich/metastone/game/spells/StealCardSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?net/demilich/metastone/game/spells/SpellUtils.html" target="_top">Frames</a></li>
@@ -72,7 +72,7 @@ var activeTableTab = "activeTableTab";
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>
@@ -116,6 +116,28 @@ extends java.lang.Object</pre>
 <div class="summary">
 <ul class="blockList">
 <li class="blockList">
+<!-- ======== NESTED CLASS SUMMARY ======== -->
+<ul class="blockList">
+<li class="blockList"><a name="nested.class.summary">
+<!--   -->
+</a>
+<h3>Nested Class Summary</h3>
+<table class="memberSummary" border="0" cellpadding="3" cellspacing="0" summary="Nested Class Summary table, listing nested classes, and an explanation">
+<caption><span>Nested Classes</span><span class="tabEnd">&nbsp;</span></caption>
+<tr>
+<th class="colFirst" scope="col">Modifier and Type</th>
+<th class="colLast" scope="col">Class and Description</th>
+</tr>
+<tr class="altColor">
+<td class="colFirst"><code>static class&nbsp;</code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">SpellUtils.DetermineCastingPlayer</a></span></code>
+<div class="block">An object that contains results of a <a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-"><code>determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)</code></a>
+ call.</div>
+</td>
+</tr>
+</table>
+</li>
+</ul>
 <!-- ======== CONSTRUCTOR SUMMARY ======== -->
 <ul class="blockList">
 <li class="blockList"><a name="constructor.summary">
@@ -169,6 +191,16 @@ extends java.lang.Object</pre>
 </td>
 </tr>
 <tr id="i2" class="altColor">
+<td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">SpellUtils.DetermineCastingPlayer</a></code></td>
+<td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">determineCastingPlayer</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
+                      <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
+                      <a href="../../../../../net/demilich/metastone/game/entities/Entity.html" title="class in net.demilich.metastone.game.entities">Entity</a>&nbsp;source,
+                      <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html" title="enum in net.demilich.metastone.game.spells">TargetPlayer</a>&nbsp;castingTargetPlayer)</code>
+<div class="block">Tries to determine the currently casting player from the point of view of a source, considering if the source has
+ changed owners or if it was destroyed.</div>
+</td>
+</tr>
+<tr id="i3" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/actions/DiscoverAction.html" title="class in net.demilich.metastone.game.actions">DiscoverAction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#discoverCard-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.desc.SpellDesc-net.demilich.metastone.game.cards.CardList-">discoverCard</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
             <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -179,7 +211,7 @@ extends java.lang.Object</pre>
  with that card.</div>
 </td>
 </tr>
-<tr id="i3" class="rowColor">
+<tr id="i4" class="altColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#evaluateOperation-net.demilich.metastone.game.spells.desc.filter.ComparisonOperation-int-int-">evaluateOperation</a></span>(<a href="../../../../../net/demilich/metastone/game/spells/desc/filter/ComparisonOperation.html" title="enum in net.demilich.metastone.game.spells.desc.filter">ComparisonOperation</a>&nbsp;operation,
                  int&nbsp;actualValue,
@@ -187,7 +219,7 @@ extends java.lang.Object</pre>
 <div class="block">Given a filter <a href="../../../../../net/demilich/metastone/game/spells/desc/filter/ComparisonOperation.html" title="enum in net.demilich.metastone.game.spells.desc.filter"><code>ComparisonOperation</code></a>, return a boolean representing whether that operation is satisfied.</div>
 </td>
 </tr>
-<tr id="i4" class="altColor">
+<tr id="i5" class="rowColor">
 <td class="colFirst"><code>static &lt;T extends <a href="../../../../../net/demilich/metastone/game/spells/aura/Aura.html" title="class in net.demilich.metastone.game.spells.aura">Aura</a>&gt;<br>java.util.List&lt;T&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getAuras-net.demilich.metastone.game.GameContext-int-java.lang.Class-">getAuras</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
         int&nbsp;playerId,
@@ -195,7 +227,7 @@ extends java.lang.Object</pre>
 <div class="block">Retrieves all of the unexpired, active auras that are instances of the <code>auraClass</code> hosted by <a href="../../../../../net/demilich/metastone/game/entities/Entity.html#isInPlay--"><code>Entity.isInPlay()</code></a> entities belonging to the <code>playerId</code>.</div>
 </td>
 </tr>
-<tr id="i5" class="rowColor">
+<tr id="i6" class="altColor">
 <td class="colFirst"><code>static int</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getBoardPosition-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.spells.desc.SpellDesc-net.demilich.metastone.game.entities.Entity-">getBoardPosition</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
                 <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -204,7 +236,7 @@ extends java.lang.Object</pre>
 <div class="block">Interprets the <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#BOARD_POSITION_ABSOLUTE"><code>SpellArg.BOARD_POSITION_ABSOLUTE</code></a> or <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#BOARD_POSITION_RELATIVE"><code>SpellArg.BOARD_POSITION_RELATIVE</code></a> in a <code>desc</code> given the <code>source</code> entity.</div>
 </td>
 </tr>
-<tr id="i6" class="altColor">
+<tr id="i7" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getBonusesFromAura-net.demilich.metastone.game.GameContext-int-java.lang.Class-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.entities.Entity-">getBonusesFromAura</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
                   int&nbsp;playerId,
@@ -215,14 +247,14 @@ extends java.lang.Object</pre>
  field on an aura whose condition is null or fulfilled for the given <code>source</code> and <code>target</code>.</div>
 </td>
 </tr>
-<tr id="i7" class="rowColor">
+<tr id="i8" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/cards/Card.html" title="class in net.demilich.metastone.game.cards">Card</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getCard-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.spells.desc.SpellDesc-">getCard</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
        <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a>&nbsp;spell)</code>
 <div class="block">Gets a card out of a <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc"><code>SpellDesc</code></a>.</div>
 </td>
 </tr>
-<tr id="i8" class="altColor">
+<tr id="i9" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/cards/Card.html" title="class in net.demilich.metastone.game.cards">Card</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getCardFromContextOrDiscover-net.demilich.metastone.game.GameContext-java.lang.String-">getCardFromContextOrDiscover</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
                             java.lang.String&nbsp;cardId)</code>
@@ -230,14 +262,14 @@ extends java.lang.Object</pre>
  can be found there.</div>
 </td>
 </tr>
-<tr id="i9" class="rowColor">
+<tr id="i10" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/cards/CardList.html" title="interface in net.demilich.metastone.game.cards">CardList</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getCards-net.demilich.metastone.game.cards.CardList-java.util.function.Predicate-">getCards</a></span>(<a href="../../../../../net/demilich/metastone/game/cards/CardList.html" title="interface in net.demilich.metastone.game.cards">CardList</a>&nbsp;source,
         java.util.function.Predicate&lt;<a href="../../../../../net/demilich/metastone/game/cards/Card.html" title="class in net.demilich.metastone.game.cards">Card</a>&gt;&nbsp;filter)</code>
 <div class="block">Filters a card list.</div>
 </td>
 </tr>
-<tr id="i10" class="altColor">
+<tr id="i11" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/cards/CardList.html" title="interface in net.demilich.metastone.game.cards">CardList</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getCards-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.desc.SpellDesc-">getCards</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
         <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -248,7 +280,7 @@ extends java.lang.Object</pre>
  and <a href="../../../../../net/demilich/metastone/game/spells/desc/filter/CardFilter.html" title="class in net.demilich.metastone.game.spells.desc.filter"><code>CardFilter</code></a>.</div>
 </td>
 </tr>
-<tr id="i11" class="rowColor">
+<tr id="i12" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/cards/CardList.html" title="interface in net.demilich.metastone.game.cards">CardList</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getCards-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.desc.SpellDesc-int-">getCards</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
         <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -260,14 +292,14 @@ extends java.lang.Object</pre>
  and <a href="../../../../../net/demilich/metastone/game/spells/desc/filter/CardFilter.html" title="class in net.demilich.metastone.game.spells.desc.filter"><code>CardFilter</code></a>.</div>
 </td>
 </tr>
-<tr id="i12" class="altColor">
+<tr id="i13" class="rowColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/cards/Card.html" title="class in net.demilich.metastone.game.cards">Card</a>[]</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getCards-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.spells.desc.SpellDesc-">getCards</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
         <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a>&nbsp;spell)</code>
 <div class="block">Retrieves the cards specified inside the <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#CARD"><code>SpellArg.CARD</code></a> and <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#CARDS"><code>SpellArg.CARDS</code></a> arguments.</div>
 </td>
 </tr>
-<tr id="i13" class="rowColor">
+<tr id="i14" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/actions/DiscoverAction.html" title="class in net.demilich.metastone.game.actions">DiscoverAction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getSpellDiscover-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.spells.desc.SpellDesc-java.util.List-net.demilich.metastone.game.entities.Entity-">getSpellDiscover</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
                 <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -277,7 +309,7 @@ extends java.lang.Object</pre>
 <div class="block">Requests that the player chooses from a selection of cards, then returns just the spell from the cards.</div>
 </td>
 </tr>
-<tr id="i14" class="altColor">
+<tr id="i15" class="rowColor">
 <td class="colFirst"><code>static java.util.List&lt;<a href="../../../../../net/demilich/metastone/game/entities/Entity.html" title="class in net.demilich.metastone.game.entities">Entity</a>&gt;</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#getValidTargets-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-java.util.List-net.demilich.metastone.game.spells.desc.filter.EntityFilter-net.demilich.metastone.game.entities.Entity-">getValidTargets</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
                <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -287,7 +319,7 @@ extends java.lang.Object</pre>
 <div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;</div>
 </td>
 </tr>
-<tr id="i15" class="rowColor">
+<tr id="i16" class="altColor">
 <td class="colFirst"><code>static &lt;T extends <a href="../../../../../net/demilich/metastone/game/spells/aura/Aura.html" title="class in net.demilich.metastone.game.spells.aura">Aura</a>&gt;<br>boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#hasAura-net.demilich.metastone.game.GameContext-int-java.lang.Class-">hasAura</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
        int&nbsp;playerId,
@@ -296,7 +328,7 @@ extends java.lang.Object</pre>
  unexpired, active instance of the <code>auraClass</code> aura.</div>
 </td>
 </tr>
-<tr id="i16" class="altColor">
+<tr id="i17" class="rowColor">
 <td class="colFirst"><code>static boolean</code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#playCardRandomly-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.cards.Card-net.demilich.metastone.game.entities.Entity-boolean-boolean-boolean-boolean-boolean-">playCardRandomly</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
                 <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -310,7 +342,7 @@ extends java.lang.Object</pre>
 <div class="block">Plays a card "randomly."</div>
 </td>
 </tr>
-<tr id="i17" class="rowColor">
+<tr id="i18" class="altColor">
 <td class="colFirst"><code>static <a href="../../../../../net/demilich/metastone/game/actions/DiscoverAction.html" title="class in net.demilich.metastone.game.actions">DiscoverAction</a></code></td>
 <td class="colLast"><code><span class="memberNameLink"><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.html#postDiscover-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-java.lang.Iterable-java.util.List-">postDiscover</a></span>(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
             <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
@@ -812,7 +844,7 @@ public static&nbsp;void&nbsp;castChildSpell(<a href="../../../../../net/demilich
 <a name="getBonusesFromAura-net.demilich.metastone.game.GameContext-int-java.lang.Class-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.entities.Entity-">
 <!--   -->
 </a>
-<ul class="blockListLast">
+<ul class="blockList">
 <li class="blockList">
 <h4>getBonusesFromAura</h4>
 <pre>public static&nbsp;<a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a>[]&nbsp;getBonusesFromAura(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
@@ -831,6 +863,30 @@ public static&nbsp;void&nbsp;castChildSpell(<a href="../../../../../net/demilich
 <dd><code>target</code> - </dd>
 <dt><span class="returnLabel">Returns:</span></dt>
 <dd>A list of spells</dd>
+</dl>
+</li>
+</ul>
+<a name="determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">
+<!--   -->
+</a>
+<ul class="blockListLast">
+<li class="blockList">
+<h4>determineCastingPlayer</h4>
+<pre>public static&nbsp;<a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">SpellUtils.DetermineCastingPlayer</a>&nbsp;determineCastingPlayer(<a href="../../../../../net/demilich/metastone/game/GameContext.html" title="class in net.demilich.metastone.game">GameContext</a>&nbsp;context,
+                                                                       <a href="../../../../../net/demilich/metastone/game/Player.html" title="class in net.demilich.metastone.game">Player</a>&nbsp;player,
+                                                                       <a href="../../../../../net/demilich/metastone/game/entities/Entity.html" title="class in net.demilich.metastone.game.entities">Entity</a>&nbsp;source,
+                                                                       <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html" title="enum in net.demilich.metastone.game.spells">TargetPlayer</a>&nbsp;castingTargetPlayer)</pre>
+<div class="block">Tries to determine the currently casting player from the point of view of a source, considering if the source has
+ changed owners or if it was destroyed.</div>
+<dl>
+<dt><span class="paramLabel">Parameters:</span></dt>
+<dd><code>context</code> - The game context</dd>
+<dd><code>player</code> - The casting player</dd>
+<dd><code>source</code> - The source from whose point of view the casting player should be determined</dd>
+<dd><code>castingTargetPlayer</code> - Whose point of view the determination should be made. For example, if <a href="../../../../../net/demilich/metastone/game/spells/TargetPlayer.html#OPPONENT"><code>TargetPlayer.OPPONENT</code></a> is chosen here, then the opponent of the owner of the <code>source</code> will be used.</dd>
+<dt><span class="returnLabel">Returns:</span></dt>
+<dd>An object containing information related to who is the casting player and whether or not the source has
+                been destroyed.</dd>
 </dl>
 </li>
 </ul>
@@ -862,7 +918,7 @@ public static&nbsp;void&nbsp;castChildSpell(<a href="../../../../../net/demilich
 <div class="subNav">
 <ul class="navList">
 <li><a href="../../../../../net/demilich/metastone/game/spells/Spell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Prev&nbsp;Class</span></a></li>
-<li><a href="../../../../../net/demilich/metastone/game/spells/StealCardSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
+<li><a href="../../../../../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">Next&nbsp;Class</span></a></li>
 </ul>
 <ul class="navList">
 <li><a href="../../../../../index.html?net/demilich/metastone/game/spells/SpellUtils.html" target="_top">Frames</a></li>
@@ -886,7 +942,7 @@ public static&nbsp;void&nbsp;castChildSpell(<a href="../../../../../net/demilich
 <div>
 <ul class="subNavList">
 <li>Summary:&nbsp;</li>
-<li>Nested&nbsp;|&nbsp;</li>
+<li><a href="#nested.class.summary">Nested</a>&nbsp;|&nbsp;</li>
 <li>Field&nbsp;|&nbsp;</li>
 <li><a href="#constructor.summary">Constr</a>&nbsp;|&nbsp;</li>
 <li><a href="#method.summary">Method</a></li>

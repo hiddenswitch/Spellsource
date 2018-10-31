@@ -6,13 +6,11 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.SpecificCardFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -25,6 +23,9 @@ import java.util.Map;
  * <p>
  * If {@link SpellArg#EXCLUSIVE} is {@code true}, the {@code source} does <b>not</b> have to be in play in order for the
  * spell to be cast.
+ * <p>
+ * The {@code source} of the spell written on the card that is randomly chosen is the <b>entity doing the casting</b>,
+ * not the card itself.
  * <p>
  * For example, to implement "Whenever a player casts a spell, cast a copy of it for them with random targets.":
  * <pre>
@@ -59,6 +60,9 @@ import java.util.Map;
  * "secondaryTarget"} option, to only be {@code true} for cards that are equal to {@link EntityReference#EVENT_SOURCE},
  * i.e., the card that was casted. Only one card (the card that was casted) will match, so that's the card that will be
  * randomly cast.
+ *
+ * @see net.demilich.metastone.game.spells.custom.PlayCardsRandomlySpell for a similar spell that works with minions,
+ * 		weapons and heroes and uses the card as the source of the effects
  */
 public class CastRandomSpellSpell extends Spell {
 	Logger logger = LoggerFactory.getLogger(CastRandomSpellSpell.class);
@@ -82,7 +86,7 @@ public class CastRandomSpellSpell extends Spell {
 				logger.warn("onCast {} {}: An empty number of spells were found with the filter {} and source {}", context.getGameId(), source, desc.getCardFilter(), desc.getCardSource());
 				break;
 			}
-			DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, castingTargetPlayer);
+			SpellUtils.DetermineCastingPlayer determineCastingPlayer = SpellUtils.determineCastingPlayer(context, player, source, castingTargetPlayer);
 			boolean mustBeInPlay = !desc.getBool(SpellArg.EXCLUSIVE);
 			if (mustBeInPlay && !determineCastingPlayer.isSourceInPlay()) {
 				break;
@@ -97,69 +101,5 @@ public class CastRandomSpellSpell extends Spell {
 		}
 
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
-	}
-
-	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
-		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
-	}
-
-	public static class DetermineCastingPlayer {
-		private boolean sourceDestroyed;
-		private GameContext context;
-		private Player player;
-		private Entity source;
-		private TargetPlayer castingTargetPlayer;
-		private Player castingPlayer;
-
-		public DetermineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
-			this.context = context;
-			this.player = player;
-			this.source = source;
-			this.castingTargetPlayer = castingTargetPlayer;
-		}
-
-		public boolean isSourceInPlay() {
-			return !sourceDestroyed;
-		}
-
-		public Player getCastingPlayer() {
-			return castingPlayer;
-		}
-
-		public DetermineCastingPlayer invoke() {
-			// In case Yogg changes sides, this should case who the spells are being cast for.
-			switch (castingTargetPlayer) {
-				case BOTH:
-				case OWNER:
-				default:
-					castingPlayer = context.getPlayer(source.getOwner());
-					break;
-				case SELF:
-					castingPlayer = player;
-					break;
-				case OPPONENT:
-					castingPlayer = context.getOpponent(player);
-					break;
-				case ACTIVE:
-					castingPlayer = context.getActivePlayer();
-					break;
-				case INACTIVE:
-					castingPlayer = context.getOpponent(context.getActivePlayer());
-					break;
-			}
-
-			// If Yogg is removed from the board, stop casting spells.
-			if (source != null
-					&& castingTargetPlayer == TargetPlayer.OWNER
-					&& source.getEntityType() == EntityType.MINION
-					&& (source.getZone()
-					!= Zones.BATTLEFIELD
-					|| source.isDestroyed())) {
-				sourceDestroyed = true;
-				return this;
-			}
-			sourceDestroyed = false;
-			return this;
-		}
 	}
 }

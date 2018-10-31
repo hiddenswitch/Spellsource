@@ -62,6 +62,9 @@ public final class PlayCardsRandomlySpell extends Spell {
 			Card card = cards.get(i);
 			// TODO: Move the card temporarily to the set aside zone, so that effects apply to it correctly?
 
+			if (card.equals(source)) {
+				continue;
+			}
 			/*
 			card.setId(context.getLogic().generateId());
 			card.setOwner(player.getId());

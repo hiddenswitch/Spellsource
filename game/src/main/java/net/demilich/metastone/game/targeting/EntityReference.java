@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -30,9 +31,8 @@ import java.util.List;
  * {@link Entity#transformResolved(GameContext)}. Resolving a target using {@link GameContext#resolveSingleTarget(EntityReference)}
  * will also always return the transformed target, regardless if it is a group reference or not.
  * <p>
- * All references omit {@link Attribute#PERMANENT} actors except {@link #SELF}, {@link
- * #ALL_ENTITIES}, {@link #TRIGGER_HOST}, {@link #OUTPUT}, {@link #EVENT_SOURCE}, {@link #EVENT_TARGET} and {@link
- * #TRANSFORM_REFERENCE}.
+ * All references omit {@link Attribute#PERMANENT} actors except {@link #SELF}, {@link #ALL_ENTITIES}, {@link
+ * #TRIGGER_HOST}, {@link #OUTPUT}, {@link #EVENT_SOURCE}, {@link #EVENT_TARGET} and {@link #TRANSFORM_REFERENCE}.
  * <p>
  * Friendly versus enemy references are evaluated with respect to the calling/casting player. This includes triggers
  * that are put on the opponent by effects cast by the player. In other words, regardless of "where" the {@code source}
@@ -48,12 +48,12 @@ import java.util.List;
  * Card)}) are evaluated by both players, always (this allows opponents to see card cost changes).
  * <p>
  * Or, for example, Temporus causes a spell to be cast during the turn of the opponent of the owner of Temporus. The
- * {@code source} of the spell that modifies the {@link Attribute#EXTRA_TURN} of both
- * players is cast during the opponent's turn and in an event whose {@link net.demilich.metastone.game.spells.TargetPlayer}
- * is the opponent. But, {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc#spell} is always cast by
- * the enchantment's owner, which was the caster who originally put the enchantment into play. Therefore, the {@code
- * source} will be the same as the player who put Temporus onto the battlefield, and that's from whose point of view the
- * {@link #FRIENDLY_PLAYER} and {@link #ENEMY_PLAYER} will be evaluated.
+ * {@code source} of the spell that modifies the {@link Attribute#EXTRA_TURN} of both players is cast during the
+ * opponent's turn and in an event whose {@link net.demilich.metastone.game.spells.TargetPlayer} is the opponent. But,
+ * {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc#spell} is always cast by the enchantment's
+ * owner, which was the caster who originally put the enchantment into play. Therefore, the {@code source} will be the
+ * same as the player who put Temporus onto the battlefield, and that's from whose point of view the {@link
+ * #FRIENDLY_PLAYER} and {@link #ENEMY_PLAYER} will be evaluated.
  *
  * @see net.demilich.metastone.game.GameContext#resolveTarget(Player, Entity, EntityReference) to see how references are
  * 		interpreted.
@@ -460,6 +460,16 @@ public final class EntityReference implements Serializable {
 	 * References all the cards in the player's deck, ordered from the top of the deck towards the bottom.
 	 */
 	public static final EntityReference FRIENDLY_DECK_FROM_TOP = new EntityReference(-67);
+	/**
+	 * References the minion that is currently being summoned.
+	 * <p>
+	 * This entry is valid from just before {@link net.demilich.metastone.game.events.BeforeSummonEvent} is fired and just
+	 * after {@link net.demilich.metastone.game.events.AfterSummonEvent} is fired. Since battlecries are resolved between
+	 * {@link BeforeSummonEvent} and {@link net.demilich.metastone.game.events.SummonEvent}, this reference may change to
+	 * the minion being summoned by a battlecry rather than the battlecrying minion itself, depending on when this
+	 * reference resolved.
+	 */
+	public static final EntityReference CURRENT_SUMMONING_MINION = new EntityReference(-68);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

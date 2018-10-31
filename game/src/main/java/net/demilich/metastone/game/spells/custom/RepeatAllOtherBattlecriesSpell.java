@@ -9,8 +9,8 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.spells.CastRandomSpellSpell;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -22,7 +22,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
+import static net.demilich.metastone.game.spells.SpellUtils.determineCastingPlayer;
 
 public class RepeatAllOtherBattlecriesSpell extends Spell {
 
@@ -47,7 +47,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				continue;
 			}
 
-			CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
+			SpellUtils.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
 			// Stop casting battlecries if Shudderwock is transformed or destroyed
 			if (!determineCastingPlayer.isSourceInPlay()) {
 				break;

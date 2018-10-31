@@ -18,6 +18,18 @@ import org.slf4j.LoggerFactory;
  * <p>
  * If a subspell is specified in {@link SpellArg#SPELL}, it is cast with the revealed card as the {@link
  * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}.
+ * <p>
+ * For <b>example,</b> to reveal the top card on the opponent's deck and get a copy of it:
+ * <pre>
+ *   {
+ *     "class": "RevealCardSpell",
+ *     "target": "ENEMY_TOP_CARD",
+ *     "spell": {
+ *       "class": "CopyCardSpell",
+ *       "target": "OUTPUT"
+ *     }
+ *   }
+ * </pre>
  */
 public class RevealCardSpell extends Spell {
 
