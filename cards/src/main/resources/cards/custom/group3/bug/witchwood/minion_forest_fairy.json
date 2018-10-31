@@ -20,7 +20,7 @@
         "value": 1,
         "attribute": "ATTACK",
         "cardType": "MINION",
-		"operation": "EQUAL"
+        "operation": "EQUAL"
       },
       "cardSource": {
         "class": "DeckSource",

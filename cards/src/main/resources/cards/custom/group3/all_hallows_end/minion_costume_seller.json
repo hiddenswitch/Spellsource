@@ -8,7 +8,6 @@
   "rarity": "EPIC",
   "description": "Battlecry: Choose a friendly minion. Swap it with a random minion in your hand.",
   "battlecry": {
-    "targetSelection": "FRIENDLY_MINIONS",
     "condition": {
       "class": "HoldsCardCondition",
       "cardFilter": {
@@ -16,6 +15,7 @@
         "cardType": "MINION"
       }
     },
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "custom.SwapWithHandSpell"
     }

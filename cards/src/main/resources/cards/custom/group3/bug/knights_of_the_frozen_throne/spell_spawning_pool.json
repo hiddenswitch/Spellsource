@@ -8,13 +8,13 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
     }
   },
   "collectible": true,

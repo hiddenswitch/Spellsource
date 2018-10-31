@@ -11,11 +11,11 @@
     "target": "FRIENDLY_MINIONS",
     "spell": {
       "class": "RecruitSpell",
-      "cardLocation": "DECK",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
-      }
+      },
+      "cardLocation": "DECK"
     }
   },
   "collectible": true,

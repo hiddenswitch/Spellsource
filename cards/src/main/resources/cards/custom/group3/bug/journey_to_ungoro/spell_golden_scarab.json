@@ -11,15 +11,15 @@
     "spell": {
       "class": "ReceiveCardSpell"
     },
-    "cardSource": {
-      "class": "MinionsSource",
-      "targetPlayer": "SELF"
-    },
     "cardFilter": {
       "class": "AttributeFilter",
       "attribute": "PERMANENT",
       "invert": true,
       "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "MinionsSource",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

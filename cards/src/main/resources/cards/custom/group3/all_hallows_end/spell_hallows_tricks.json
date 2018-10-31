@@ -8,11 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
-    "targetPlayer": "BOTH",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
-    },
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "OUTPUT",
@@ -22,7 +17,12 @@
         "value": 3,
         "operation": "SUBTRACT"
       }
-    }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "targetPlayer": "BOTH"
   },
   "collectible": true,
   "set": "CUSTOM",
