@@ -1,0 +1,31 @@
+{
+  "name": "Goblin Technosapper",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BRASS",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "Has +2 Attack while you have Armor.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "FRIENDLY_HERO",
+      "value": 0,
+      "attribute": "ARMOR",
+      "operation": "GREATER"
+    },
+    "attribute": "AURA_ATTACK_BONUS",
+    "value": 2,
+    "secondaryTrigger": {
+      "class": "ArmorChangedTrigger",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "FREE",
+  "fileFormatVersion": 1
+}
