@@ -37,7 +37,6 @@
               "target": "OUTPUT",
               "spell": {
                 "class": "custom.ResurrectFromEntityStorageSpell"
-                }
               }
             }    
           },
