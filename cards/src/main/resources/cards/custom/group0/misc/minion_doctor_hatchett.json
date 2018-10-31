@@ -1,0 +1,58 @@
+{
+  "name": "Doctor Hatchett",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: Put a minion from your deck into a 0/3 Egg.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RevealCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "DeckSource"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "custom.StoreEntitySpell",
+            "target": "OUTPUT"
+          },
+          {
+            "class": "SummonSpell",
+            "cardFilter": {
+              "class": "CardFilter",
+              "card": "token_egg",
+            }
+            "spell": {
+              "class": "AddDeathrattleSpell",
+              "target": "OUTPUT",
+              "spell": {
+                "class": "custom.ResurrectFromEntityStorageSpell"
+                }
+              }
+            }    
+          },
+          {
+            "class": "RemoveCardSpell",
+            "target": "OUTPUT"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
