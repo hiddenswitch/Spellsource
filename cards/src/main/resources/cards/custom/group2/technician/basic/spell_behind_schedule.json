@@ -1,0 +1,36 @@
+{
+  "name": "Behind Schedule",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BRASS",
+  "rarity": "FREE",
+  "description": "Draw 3 cards. At the start of your next turn, take 5 damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DamageSpell",
+            "target": "FRIENDLY_HERO",
+            "value": 5
+          },
+          "oneTurn": true
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
