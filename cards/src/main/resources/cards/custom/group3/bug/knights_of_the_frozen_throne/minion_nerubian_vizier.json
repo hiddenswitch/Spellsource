@@ -10,11 +10,11 @@
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_LIFESTEAL",
     "filter": {
       "class": "SpecificCardFilter",
       "card": "token_spiderling"
-    },
-    "attribute": "AURA_LIFESTEAL"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

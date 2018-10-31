@@ -10,8 +10,6 @@
   "description": "Rush. Has +2 Attack while you control a Beast.",
   "aura": {
     "class": "BuffAura",
-    "attackBonus": 2,
-    "hpBonus": 0,
     "target": "SELF",
     "condition": {
       "class": "MinionOnBoardCondition",
@@ -19,7 +17,9 @@
         "class": "RaceFilter",
         "race": "BEAST"
       }
-    }
+    },
+    "attackBonus": 2,
+    "hpBonus": 0
   },
   "attributes": {
     "RUSH": true

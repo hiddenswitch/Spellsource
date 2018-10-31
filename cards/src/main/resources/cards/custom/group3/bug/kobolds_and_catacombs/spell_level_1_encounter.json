@@ -26,7 +26,6 @@
     "cardLocation": "DECK",
     "targetPlayer": "SELF"
   },
-
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1

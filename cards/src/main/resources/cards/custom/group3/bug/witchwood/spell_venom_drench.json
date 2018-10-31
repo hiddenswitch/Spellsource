@@ -11,12 +11,12 @@
     "spells": [
       {
         "class": "DamageSpell",
-		"target": "ALL_MINIONS",
+        "target": "ALL_MINIONS",
         "value": 3
       },
       {
         "class": "AddAttributeSpell",
-		"target": "ALL_MINIONS",
+        "target": "ALL_MINIONS",
         "attribute": "POISONOUS"
       }
     ]

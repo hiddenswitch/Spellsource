@@ -9,6 +9,7 @@
   "race": "MECH",
   "description": "Battlecry: Infect a friendly minion, giving it +2/+2. When it dies infect another random one.",
   "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
       "class": "MetaSpell",
       "spells": [
@@ -22,8 +23,7 @@
           "card": "enchantment_top_hat"
         }
       ]
-    },
-    "targetSelection": "FRIENDLY_MINIONS"
+    }
   },
   "attributes": {
     "BATTLECRY": true

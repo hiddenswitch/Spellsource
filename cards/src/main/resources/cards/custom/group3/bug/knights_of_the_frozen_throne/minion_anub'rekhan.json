@@ -11,8 +11,8 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "custom.AnubRekhanSpell",
-      "secondaryTarget": "SELF",
-      "card": "permanent_cocoon"
+      "card": "permanent_cocoon",
+      "secondaryTarget": "SELF"
     }
   },
   "deathrattle": {

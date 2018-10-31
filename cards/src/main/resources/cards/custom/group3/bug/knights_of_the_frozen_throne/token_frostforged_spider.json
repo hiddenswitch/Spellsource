@@ -20,8 +20,8 @@
       "filter": {
         "class": "AttributeFilter",
         "attribute": "FROZEN",
-        "operation": "HAS",
-        "invert": true
+        "invert": true,
+        "operation": "HAS"
       }
     }
   },

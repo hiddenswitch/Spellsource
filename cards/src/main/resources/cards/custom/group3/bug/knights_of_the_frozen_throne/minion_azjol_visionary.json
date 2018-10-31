@@ -10,15 +10,15 @@
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",
-      "targetEntityType": "HERO",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "AnyMatchFilterCondition",
         "target": "FRIENDLY_MINIONS",
         "filter": {
           "class": "DamagedFilter"
         }
-      }
+      },
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "HealSpell",
@@ -27,7 +27,7 @@
         "class": "EventValueProvider"
       }
     }
-  },	
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
