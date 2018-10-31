@@ -31,7 +31,7 @@
             "cardFilter": {
               "class": "CardFilter",
               "card": "token_egg",
-            }
+            },
             "spell": {
               "class": "AddDeathrattleSpell",
               "target": "OUTPUT",
