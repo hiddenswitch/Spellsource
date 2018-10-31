@@ -80,6 +80,11 @@ public class Card extends Entity implements HasChooseOneActions {
 		setDesc(desc);
 	}
 
+	/**
+	 * Creates a minion from the attributes written on the card.
+	 *
+	 * @return
+	 */
 	public Minion summon() {
 		if (getCardType() != CardType.MINION) {
 			throw new UnsupportedOperationException("not minion");
