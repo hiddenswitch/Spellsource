@@ -187,6 +187,8 @@ public class ParseUtils {
 				return EntityReference.LEFT_ADJACENT_MINION;
 			case "right_adjacent_minion":
 				return EntityReference.RIGHT_ADJACENT_MINION;
+			case "current_summoning_minion":
+				return EntityReference.CURRENT_SUMMONING_MINION;
 			default:
 				return null;
 		}

@@ -127,7 +127,25 @@ extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" t
  Casts the <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#SPELL"><code>SpellArg.SPELL</code></a> sub-spell with the newly drawn card as the <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#OUTPUT"><code>EntityReference.OUTPUT</code></a>.
  <p>
  The method used to draw cards from the deck will trigger fatigue damage if the deck is empty. If an effect puts a
- card into the deck on the (n-1)th sub spell just before attempting the n-th draw, this spell will draw it correctly.</div>
+ card into the deck on the (n-1)th sub spell just before attempting the n-th draw, this spell will draw it correctly.
+ <p>
+ For <b>example,</b> to draw a card and set its cost to 1:
+ <pre>
+   {
+     "class": "DrawCardSpell",
+     "spell": {
+       "class": "CardCostModifierSpell",
+       "target": "OUTPUT",
+       "cardCostModifier": {
+         "class": "CardCostModifier",
+         "target": "SELF",
+         "operation": "SET",
+         "value": 1
+       }
+     }
+   }
+ </pre>
+ Observe that the target of the <code>"CardCostModifierSpell"</code> subspell is <a href="../../../../../net/demilich/metastone/game/targeting/EntityReference.html#OUTPUT"><code>EntityReference.OUTPUT</code></a>, which is the card that you actually drew.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../net/demilich/metastone/game/spells/FromDeckToHandSpell.html" title="class in net.demilich.metastone.game.spells"><code>to draw a specific card from the deck.</code></a>, 

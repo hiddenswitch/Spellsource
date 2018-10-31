@@ -416,6 +416,11 @@ public class TargetLogic implements Serializable {
 				}
 			}
 			return new ArrayList<>();
+		} else if (targetKey.equals(EntityReference.CURRENT_SUMMONING_MINION)) {
+			if (context.getSummonReferenceStack().isEmpty()) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(findEntity(context, context.getSummonReferenceStack().peekLast()));
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

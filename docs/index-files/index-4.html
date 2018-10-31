@@ -295,9 +295,12 @@
 <dd>
 <div class="block">Determines who is the first player of a list of player IDs.</div>
 </dd>
-<dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/CastRandomSpellSpell.html#determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)</a></span> - Static method in class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/CastRandomSpellSpell.html" title="class in net.demilich.metastone.game.spells">CastRandomSpellSpell</a></dt>
-<dd>&nbsp;</dd>
-<dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html#DetermineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">DetermineCastingPlayer(GameContext, Player, Entity, TargetPlayer)</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/CastRandomSpellSpell.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">CastRandomSpellSpell.DetermineCastingPlayer</a></dt>
+<dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/SpellUtils.html#determineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)</a></span> - Static method in class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/SpellUtils.html" title="class in net.demilich.metastone.game.spells">SpellUtils</a></dt>
+<dd>
+<div class="block">Tries to determine the currently casting player from the point of view of a source, considering if the source has
+ changed owners or if it was destroyed.</div>
+</dd>
+<dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html#DetermineCastingPlayer-net.demilich.metastone.game.GameContext-net.demilich.metastone.game.Player-net.demilich.metastone.game.entities.Entity-net.demilich.metastone.game.spells.TargetPlayer-">DetermineCastingPlayer(GameContext, Player, Entity, TargetPlayer)</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/SpellUtils.DetermineCastingPlayer.html" title="class in net.demilich.metastone.game.spells">SpellUtils.DetermineCastingPlayer</a></dt>
 <dd>&nbsp;</dd>
 <dt><a href="../net/demilich/metastone/game/spells/desc/valueprovider/DiedThisTurnValueProvider.html" title="class in net.demilich.metastone.game.spells.desc.valueprovider"><span class="typeNameLink">DiedThisTurnValueProvider</span></a> - Class in <a href="../net/demilich/metastone/game/spells/desc/valueprovider/package-summary.html">net.demilich.metastone.game.spells.desc.valueprovider</a></dt>
 <dd>
@@ -349,7 +352,9 @@
 </dd>
 <dt><a href="../net/demilich/metastone/game/spells/DiscoverCardSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">DiscoverCardSpell</span></a> - Class in <a href="../net/demilich/metastone/game/spells/package-summary.html">net.demilich.metastone.game.spells</a></dt>
 <dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../net/demilich/metastone/game/spells/DiscoverSpell.html" title="class in net.demilich.metastone.game.spells"><code>DiscoverSpell</code></a> with a <code>"spell": {"class": "ReceiveCardSpell"}</code> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/DiscoverCardSpell.html#DiscoverCardSpell--">DiscoverCardSpell()</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/DiscoverCardSpell.html" title="class in net.demilich.metastone.game.spells">DiscoverCardSpell</a></dt>
 <dd>
@@ -364,7 +369,9 @@
 <dd>&nbsp;</dd>
 <dt><a href="../net/demilich/metastone/game/spells/DiscoverDrawSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">DiscoverDrawSpell</span></a> - Class in <a href="../net/demilich/metastone/game/spells/package-summary.html">net.demilich.metastone.game.spells</a></dt>
 <dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../net/demilich/metastone/game/spells/DiscoverSpell.html" title="class in net.demilich.metastone.game.spells"><code>DiscoverSpell</code></a> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/DiscoverDrawSpell.html#DiscoverDrawSpell--">DiscoverDrawSpell()</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/DiscoverDrawSpell.html" title="class in net.demilich.metastone.game.spells">DiscoverDrawSpell</a></dt>
 <dd>
@@ -372,7 +379,9 @@
 &nbsp;</dd>
 <dt><a href="../net/demilich/metastone/game/spells/DiscoverFilteredCardSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">DiscoverFilteredCardSpell</span></a> - Class in <a href="../net/demilich/metastone/game/spells/package-summary.html">net.demilich.metastone.game.spells</a></dt>
 <dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">This class is currently only used for tri-class card discoveries.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/DiscoverFilteredCardSpell.html#DiscoverFilteredCardSpell--">DiscoverFilteredCardSpell()</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/DiscoverFilteredCardSpell.html" title="class in net.demilich.metastone.game.spells">DiscoverFilteredCardSpell</a></dt>
 <dd>
@@ -391,7 +400,9 @@
 &nbsp;</dd>
 <dt><a href="../net/demilich/metastone/game/spells/DiscoverRandomCardSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">DiscoverRandomCardSpell</span></a> - Class in <a href="../net/demilich/metastone/game/spells/package-summary.html">net.demilich.metastone.game.spells</a></dt>
 <dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use <a href="../net/demilich/metastone/game/spells/DiscoverSpell.html" title="class in net.demilich.metastone.game.spells"><code>DiscoverSpell</code></a> with a <a href="../net/demilich/metastone/game/spells/desc/SpellArg.html#CARD_FILTER"><code>SpellArg.CARD_FILTER</code></a> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/DiscoverRandomCardSpell.html#DiscoverRandomCardSpell--">DiscoverRandomCardSpell()</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/DiscoverRandomCardSpell.html" title="class in net.demilich.metastone.game.spells">DiscoverRandomCardSpell</a></dt>
 <dd>
@@ -451,7 +462,10 @@
 </dd>
 <dt><a href="../net/demilich/metastone/game/spells/DrawCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells"><span class="typeNameLink">DrawCardAndDoSomethingSpell</span></a> - Class in <a href="../net/demilich/metastone/game/spells/package-summary.html">net.demilich.metastone.game.spells</a></dt>
 <dd>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>
+<div class="block"><span class="deprecationComment">Use a <a href="../net/demilich/metastone/game/spells/DrawCardSpell.html" title="class in net.demilich.metastone.game.spells"><code>DrawCardSpell</code></a> with a sub spell like <code>{"class": "DrawCardSpell", "spell": {"class":
+ 		..., "target": "OUTPUT"}}</code> instead.</span></div>
+</div>
 </dd>
 <dt><span class="memberNameLink"><a href="../net/demilich/metastone/game/spells/DrawCardAndDoSomethingSpell.html#DrawCardAndDoSomethingSpell--">DrawCardAndDoSomethingSpell()</a></span> - Constructor for class net.demilich.metastone.game.spells.<a href="../net/demilich/metastone/game/spells/DrawCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells">DrawCardAndDoSomethingSpell</a></dt>
 <dd>

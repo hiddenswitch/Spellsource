@@ -94,7 +94,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/BuffWeaponSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.BuffWeaponSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/BuffWeaponSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.BuffWeaponSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/BuffSpell.html" title="class in net.demilich.metastone.game.spells"><code>BuffSpell</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="net/demilich/metastone/game/spells/CastFromGroupSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.CastFromGroupSpell</a>
@@ -226,13 +228,19 @@
 <td class="colOne"><a href="net/demilich/metastone/game/spells/desc/valueprovider/DeadMinionsThisTurn.html" title="class in net.demilich.metastone.game.spells.desc.valueprovider">net.demilich.metastone.game.spells.desc.valueprovider.DeadMinionsThisTurn</a></td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverCardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverCardSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverCardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverCardSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/DiscoverSpell.html" title="class in net.demilich.metastone.game.spells"><code>DiscoverSpell</code></a> with a <code>"spell": {"class": "ReceiveCardSpell"}</code> instead.</span></div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverDrawSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverDrawSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverDrawSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverDrawSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/DiscoverSpell.html" title="class in net.demilich.metastone.game.spells"><code>DiscoverSpell</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverFilteredCardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverFilteredCardSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverFilteredCardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverFilteredCardSpell</a>
+<div class="block"><span class="deprecationComment">This class is currently only used for tri-class card discoveries.</span></div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverOptionSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverOptionSpell</a>
@@ -241,10 +249,15 @@
 </td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverRandomCardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverRandomCardSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/DiscoverRandomCardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DiscoverRandomCardSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/DiscoverSpell.html" title="class in net.demilich.metastone.game.spells"><code>DiscoverSpell</code></a> with a <a href="net/demilich/metastone/game/spells/desc/SpellArg.html#CARD_FILTER"><code>SpellArg.CARD_FILTER</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/DrawCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DrawCardAndDoSomethingSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/DrawCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.DrawCardAndDoSomethingSpell</a>
+<div class="block"><span class="deprecationComment">Use a <a href="net/demilich/metastone/game/spells/DrawCardSpell.html" title="class in net.demilich.metastone.game.spells"><code>DrawCardSpell</code></a> with a sub spell like <code>{"class": "DrawCardSpell", "spell": {"class":
+ 		..., "target": "OUTPUT"}}</code> instead.</span></div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="net/demilich/metastone/game/spells/aura/EnrageAura.html" title="class in net.demilich.metastone.game.spells.aura">net.demilich.metastone.game.spells.aura.EnrageAura</a>
@@ -276,7 +289,9 @@
 <td class="colOne"><a href="net/demilich/metastone/game/spells/PutRandomMinionOnBoardSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.PutRandomMinionOnBoardSpell</a></td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/RandomSpellTargetSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.RandomSpellTargetSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/RandomSpellTargetSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.RandomSpellTargetSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/CastRandomSpellSpell.html" title="class in net.demilich.metastone.game.spells"><code>CastRandomSpellSpell</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="rowColor">
 <td class="colOne"><a href="net/demilich/metastone/game/spells/ReceiveCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.ReceiveCardAndDoSomethingSpell</a>
@@ -289,19 +304,37 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/RemoveCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.RemoveCardAndDoSomethingSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/RemoveCardAndDoSomethingSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.RemoveCardAndDoSomethingSpell</a>
+<div class="block"><span class="deprecationComment">Use a <a href="net/demilich/metastone/game/spells/RemoveCardSpell.html" title="class in net.demilich.metastone.game.spells"><code>RemoveCardSpell</code></a> with a sub spell like <code>{"class": "RemoveCardSpell", "spell":
+ 		{"class": ..., "target": "OUTPUT"}}</code> instead.</span></div>
+</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/RenounceClassSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.RenounceClassSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/RenounceClassSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.RenounceClassSpell</a>
+<div class="block"><span class="deprecationComment">Has no implementation.
+                <p>
+                Renounce Darkness is now implemented as a combination of other spells and effects.</span></div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/ReplaceCardLocationSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.ReplaceCardLocationSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/ReplaceCardLocationSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.ReplaceCardLocationSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/ReplaceCardsSpell.html" title="class in net.demilich.metastone.game.spells"><code>ReplaceCardsSpell</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="altColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/ReturnMinionToHandSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.ReturnMinionToHandSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/ReturnMinionToHandSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.ReturnMinionToHandSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/ReturnTargetToHandSpell.html" title="class in net.demilich.metastone.game.spells"><code>ReturnTargetToHandSpell</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/SetHeroHpSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.SetHeroHpSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/SetHeroHpSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.SetHeroHpSpell</a>
+<div class="block"><span class="deprecationComment">Use <a href="net/demilich/metastone/game/spells/SetHpSpell.html" title="class in net.demilich.metastone.game.spells"><code>SetHpSpell</code></a> instead.
+                <p>
+                Sets the target actor's HP to the specified <a href="net/demilich/metastone/game/spells/desc/SpellArg.html#VALUE"><code>SpellArg.VALUE</code></a>, including increasing the maximum HP if
+                necessary.
+                <p>
+                This spell does work for other actors besides heroes, but it is recommended to use <a href="net/demilich/metastone/game/spells/SetHpSpell.html" title="class in net.demilich.metastone.game.spells"><code>SetHpSpell</code></a> instead.</span></div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="net/demilich/metastone/game/spells/SummonCopySpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.SummonCopySpell</a>
@@ -309,7 +342,9 @@
 </td>
 </tr>
 <tr class="rowColor">
-<td class="colOne"><a href="net/demilich/metastone/game/spells/SummonNewAttackTargetSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.SummonNewAttackTargetSpell</a></td>
+<td class="colOne"><a href="net/demilich/metastone/game/spells/SummonNewAttackTargetSpell.html" title="class in net.demilich.metastone.game.spells">net.demilich.metastone.game.spells.SummonNewAttackTargetSpell</a>
+<div class="block"><span class="deprecationComment">Implemented using a <a href="net/demilich/metastone/game/spells/SummonSpell.html" title="class in net.demilich.metastone.game.spells"><code>SummonSpell</code></a> with a <a href="net/demilich/metastone/game/spells/OverrideTargetSpell.html" title="class in net.demilich.metastone.game.spells"><code>OverrideTargetSpell</code></a> as the subspell.</span></div>
+</td>
 </tr>
 <tr class="altColor">
 <td class="colOne"><a href="net/demilich/metastone/game/spells/custom/SummonOneOneCopiesSpell.html" title="class in net.demilich.metastone.game.spells.custom">net.demilich.metastone.game.spells.custom.SummonOneOneCopiesSpell</a></td>

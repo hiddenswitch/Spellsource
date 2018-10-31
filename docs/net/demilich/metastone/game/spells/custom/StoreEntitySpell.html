@@ -114,15 +114,18 @@
 extends <a href="../../../../../../net/demilich/metastone/game/spells/Spell.html" title="class in net.demilich.metastone.game.spells">Spell</a></pre>
 <div class="block">Stores the specified <a href="../../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#TARGET"><code>SpellArg.TARGET</code></a> into a list keyed by the <code>source</code> of the casting spell.
  <p>
+ If a <a href="../../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#SECONDARY_TARGET"><code>SpellArg.SECONDARY_TARGET</code></a> is specified, the <code>target</code> is
+ stored on the secondary target instead.
+ <p>
  This spell implements Primalfin Champion and Frostmourne.
  <p>
- Example:
+ For <b>example,</b> this effect stores the target of a battlecry on the minion whose battlecry is being cast:
  <pre>
      {
-         "class": "custom.StoreEntitySpell",
-         "target": "PENDING_CARD"
+         "class": "custom.StoreEntitySpell"
      }
- </pre></div>
+ </pre>
+ Here, the <code>target</code> is the target chosen by the player.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../../net/demilich/metastone/game/spells/custom/ReceiveCardsInStorageSpell.html" title="class in net.demilich.metastone.game.spells.custom"><code>for a spell that retrieves the {@link net.demilich.metastone.game.cards.Card}

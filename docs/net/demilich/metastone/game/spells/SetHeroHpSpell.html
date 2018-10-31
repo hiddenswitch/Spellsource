@@ -115,15 +115,18 @@ var activeTableTab = "activeTableTab";
 <dd>java.io.Serializable, <a href="../../../../../net/demilich/metastone/game/cards/desc/HasDesc.html" title="interface in net.demilich.metastone.game.cards.desc">HasDesc</a>&lt;<a href="../../../../../net/demilich/metastone/game/spells/desc/SpellDesc.html" title="class in net.demilich.metastone.game.spells.desc">SpellDesc</a>&gt;</dd>
 </dl>
 <hr>
-<div class="block"><span class="deprecatedLabel">Deprecated.</span></div>
+<div class="block"><span class="deprecatedLabel">Deprecated.</span>&nbsp;
+<div class="block"><span class="deprecationComment">Use <a href="../../../../../net/demilich/metastone/game/spells/SetHpSpell.html" title="class in net.demilich.metastone.game.spells"><code>SetHpSpell</code></a> instead.
+                <p>
+                Sets the target actor's HP to the specified <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#VALUE"><code>SpellArg.VALUE</code></a>, including increasing the maximum HP if
+                necessary.
+                <p>
+                This spell does work for other actors besides heroes, but it is recommended to use <a href="../../../../../net/demilich/metastone/game/spells/SetHpSpell.html" title="class in net.demilich.metastone.game.spells"><code>SetHpSpell</code></a> instead.</span></div>
+</div>
 <br>
 <pre>@Deprecated
 public class <span class="typeNameLabel">SetHeroHpSpell</span>
 extends <a href="../../../../../net/demilich/metastone/game/spells/Spell.html" title="class in net.demilich.metastone.game.spells">Spell</a></pre>
-<div class="block">Sets the target actor's HP to the specified <a href="../../../../../net/demilich/metastone/game/spells/desc/SpellArg.html#VALUE"><code>SpellArg.VALUE</code></a>, including increasing the maximum HP if
- necessary.
- <p>
- This spell does work for other actors besides heroes, but it is recommended to use <a href="../../../../../net/demilich/metastone/game/spells/SetHpSpell.html" title="class in net.demilich.metastone.game.spells"><code>SetHpSpell</code></a> instead.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../../../serialized-form.html#net.demilich.metastone.game.spells.SetHeroHpSpell">Serialized Form</a></dd>
