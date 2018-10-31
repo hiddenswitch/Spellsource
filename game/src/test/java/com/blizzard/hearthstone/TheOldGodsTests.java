@@ -34,6 +34,7 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -110,7 +111,7 @@ public class TheOldGodsTests extends TestBase {
 			context.setLogic(spyLogic);
 			AtomicInteger invocationCount = new AtomicInteger(0);
 			AtomicReference<HeroClass> chosenHeroClass = new AtomicReference<>(HeroClass.VIOLET);
-			Mockito.doAnswer(invocation -> {
+			Answer answer = invocation -> {
 				if (invocationCount.getAndIncrement() == 0) {
 					// We're choosing the hero power
 					Card chosen = (Card) invocation.callRealMethod();
@@ -123,7 +124,9 @@ public class TheOldGodsTests extends TestBase {
 				// Return a test card with the appropriate hero class to validate the card cost modification
 				return testCard.get(chosenHeroClass.get()).clone();
 
-			}).when(spyLogic).getRandom(Mockito.anyList());
+			};
+			Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
+			Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
 			playCard(context, player, "spell_renounce_darkness");
 
 			Assert.assertTrue(player.getDeck().containsCard("minion_bloodfen_raptor"));
