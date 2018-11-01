@@ -18,6 +18,7 @@ import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -28,6 +29,36 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 /**
  * Manages the real time data connection users get when they connect to the Spellsource server.
+ * <p>
+ * To set up a behaviour that uses the real time connect, use {@link Connection#connected(Handler)}, which passes you a
+ * new connection to a unique user. For <b>example</b>, this code from the {@link Presence} package notifies users of
+ * their presence.
+ * <pre>
+ *   {@code
+ *     Connection.connected(Sync.suspendableHandler(connection -> {
+ * 	  		final UserId key = new UserId(connection.userId());
+ * 	  		connection.endHandler(Sync.suspendableHandler(ignored -> {
+ * 	  			setPresence(key, PresenceEnum.OFFLINE);
+ * 	  		}));
+ *
+ * 	  		// Once the user is connected, set their status to online
+ * 	  		setPresence(key, PresenceEnum.ONLINE);
+ * 	   }));
+ * 	   ...
+ * 	   static void setPresence(String userId) {
+ * 	   	final UserId key = new UserId(userId);
+ * 	   	Connection.writeStream(userId, res -> {
+ * 	   		if (res.failed() || res.result() == null) {
+ * 	   			setPresence(key, PresenceEnum.OFFLINE);
+ * 	   		} else {
+ * 	   			setPresence(key, PresenceEnum.ONLINE);
+ * 	   		}
+ * 	   	});
+ * 	   }
+ *   }
+ * </pre>
+ * Observe the use of the {@link Connection#writeStream(UserId)}, which allows any code anywhere to send a message to a
+ * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Logger logger = LoggerFactory.getLogger(Hazelcast.class);
@@ -83,6 +114,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		});
 	}
 
+	/**
+	 * Creates a connection object for the specified user, marking this verticle as responsible for managing this user's
+	 * connection on the cluster.
+	 *
+	 * @param userId
+	 * @return
+	 * @throws SuspendExecution
+	 */
 	static Connection create(String userId) throws SuspendExecution {
 		SuspendableMap<UserId, String> connections = getConnections();
 		String id = "Connection::clusteredConsumer[" + userId + "]";
@@ -90,6 +129,12 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return new ConnectionImpl(userId).setId(id);
 	}
 
+	/**
+	 * Creates a handler for the verticle's {@link io.vertx.ext.web.Router} that upgrades the web socket and manages the
+	 * messaging over the cluster for the user.
+	 *
+	 * @return
+	 */
 	static Handler<RoutingContext> handler() {
 		return suspendableHandler((SuspendableAction1<RoutingContext>) Connection::connected);
 	}
@@ -110,11 +155,23 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return handlers;
 	}
 
+	/**
+	 * Obtains the unique lock for the user to prevent the user from calling more than one method at a time.
+	 *
+	 * @param userId
+	 * @return
+	 */
 	@Suspendable
 	static SuspendableLock methodLock(String userId) {
 		return SuspendableLock.lock("Connection::method-ordering-lock[" + userId + "]");
 	}
 
+	/**
+	 * A method that handles a routing context. For internal use only.
+	 *
+	 * @param routingContext
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	static void connected(RoutingContext routingContext) throws SuspendExecution {
 		if (routingContext.failed()) {
@@ -149,6 +206,10 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		connection.setSocket(socket);
 	}
 
+	/**
+	 * Registers the serialization codecs for messaging a client from another member of the cluster. For internal use
+	 * only.
+	 */
 	static void registerCodecs() {
 		try {
 			Vertx.currentContext().owner().eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
@@ -157,6 +218,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		}
 	}
 
+	/**
+	 * Registers the given socket to the user. For internal use only.
+	 *
+	 * @param socket
+	 */
 	void setSocket(ServerWebSocket socket);
 
 	@Override
@@ -164,6 +230,12 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return null;
 	}
 
+	/**
+	 * Sends a message to the client.
+	 *
+	 * @param data The message to send.
+	 * @return This connection
+	 */
 	@Override
 	default Connection write(Envelope data) {
 		return null;
@@ -208,6 +280,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return null;
 	}
 
+	/**
+	 * Gets the user ID of this connection.
+	 * <p>
+	 * Only authorized users can have connections.
+	 *
+	 * @return The user ID.
+	 */
+	@NotNull
 	String userId();
 
 	Connection removeHandler(Handler<JsonObject> handler);

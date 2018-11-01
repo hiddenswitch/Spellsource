@@ -27,19 +27,20 @@ import java.util.Comparator;
  * <p>
  * To create a new HTTP API endpoint:
  *
- * <ul><li>Create an operation with its associated response and optionally request schemas in {@code
+ * <ol>
+ * <li>Create an operation with its associated response and optionally request schemas in {@code
  * resources/server.yaml}. A new operation consists of an entry in the Swagger file's Definition section for its
  * response {@code R} and optionally request type {@code T}. It then consists of an entry in the Paths section. Use the
  * <a href="http://editor.swagger.io">Swagger Code Editor</a> to conveniently test and define the new code that should
- * be added to the {@code server.yaml} file. </li><li>Create an entry in this interface corresponding to the new
- * operation that returns a {@link WebResult} typed with your new response type {@code R}. Depending on which parameters
- * you supply to the method, you will imply different behaviour for the serialization and authorization boilerplate
- * provided by {@link HandlerFactory}. (1) Every method should start with an {@link RoutingContext} argument; (2) if the
- * method requires the user to be authenticated and authorized, the next argument should be {@code String userId}, or
- * omit the argument; (3) if the path is variable, e.g., {@code /v1/decks/:deckId}, the next argument should be a {@link
- * String} whose name matches the variable name, or omit the argument; (4) finally, if the method accepts a request body
- * of type {@code T}, the next argument should be {@code T request}, or omit the argument. Every supported pattern is
- * shown below:
+ * be added to the {@code server.yaml} file. </li>
+ * <li>Create an entry in this interface corresponding to the new operation that returns a {@link WebResult} typed with
+ * your new response type {@code R}. Depending on which parameters you supply to the method, you will imply different
+ * behaviour for the serialization and authorization boilerplate provided by {@link HandlerFactory}. (1) Every method
+ * should start with an {@link RoutingContext} argument; (2) if the method requires the user to be authenticated and
+ * authorized, the next argument should be {@code String userId}, or omit the argument; (3) if the path is variable,
+ * e.g., {@code /v1/decks/:deckId}, the next argument should be a {@link String} whose name matches the variable name,
+ * or omit the argument; (4) finally, if the method accepts a request body of type {@code T}, the next argument should
+ * be {@code T request}, or omit the argument. Every supported pattern is shown below:
  * <pre>
  *     {@code
  *     // [ ] Authorization, [X] Request body, [ ] Path variable.
@@ -65,12 +66,12 @@ import java.util.Comparator;
  *     // All other patterns are unsupported. Implement your own serialization, authorization, deserialization pattern
  *     // by accessing fields in the routingContext and adapting one of the HandlerFactor methods.
  *     }
- * </pre></li><li>Implement this
- * interface in {@link GatewayImpl}, or whatever {@link io.vertx.core.Verticle} or class will serve as an <a
- * href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>. This method should return
- * a {@link WebResult}.</li><li>In the body of {@link GatewayImpl#start()}, add a {@link Router#route()} call actually
- * handle the request. Idiosyncratically, you cannot chain route handlers, so adding the route typically looks like
- * this:
+ * </pre></li>
+ * <li>Implement this interface in {@link GatewayImpl}, or whatever {@link io.vertx.core.Verticle} or class will serve
+ * as an <a href="https://www.linkedin.com/pulse/api-gateway-pattern-subhash-chandran">API gateway</a>. This method
+ * should return a {@link WebResult}.</li><li>In the body of {@link GatewayImpl#start()}, add a {@link Router#route()}
+ * call actually handle the request. Idiosyncratically, you cannot chain route handlers, so adding the route typically
+ * looks like this:
  * <pre>
  *     {@code
  *     // Parse the body
@@ -110,13 +111,16 @@ import java.util.Comparator;
  *         .route("/v1/my-method/:objectId")
  *         .method(HttpMethod.POST).handler(HandlerFactory.handler(MyMethodRequest.class, "objectId", this::myMethod));
  *     }
- * </pre></li></ul>
+ * </pre></li></ol>
  */
 public interface Gateway extends Verticle {
 	static Gateway create() {
 		return new GatewayImpl(Port.port());
 	}
-	static Gateway create(int port) {return new GatewayImpl(port);}
+
+	static Gateway create(int port) {
+		return new GatewayImpl(port);
+	}
 
 	@Suspendable
 	WebResult<com.hiddenswitch.spellsource.models.MatchCancelResponse> matchmakingDelete(RoutingContext context) throws SuspendExecution;

@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/hiddenswitch/Spellsource-Server.svg?branch=master)](https://travis-ci.org/hiddenswitch/Spellsource-Server)
 [![Discord](https://img.shields.io/badge/chat-join%20us%20on%20discord-blue.svg?longCache=true&style=flat&icon=discord)](https://discord.gg/HmbESh2)
-[![Documentation](https://img.shields.io/badge/docs-java-yellow.svg?longCache=true&style=flat)](https://hiddenswitch.github.io/Spellsource-Server/)
+[![Documentation](https://img.shields.io/badge/docs-java-yellow.svg?longCache=true&style=flat)](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html)
 
 ![In-Game Screenshot](https://thumbs.gfycat.com/EverlastingGiddyBluetickcoonhound-size_restricted.gif)
 
@@ -33,7 +33,7 @@ The `Spellsource-Server` project adapts and updates `metastone`, an unmaintained
 
 The project also contains adapters for Amazon Elastic MapReduce for processor-intensive AI training. Please reach out to the developers in an issue if you'd like to learn more or to use part of our AWS budget for AI experimentation.
 
-See the complete reference [here](https://hiddenswitch.github.io/Spellsource-Server/).
+See the complete reference [here](https://hiddenswitch.github.io/Spellsource-Server/overview-summary.html).
 
 ### AI Research FAQ
 
