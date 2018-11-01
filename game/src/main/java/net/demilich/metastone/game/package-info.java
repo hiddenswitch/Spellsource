@@ -1,5 +1,5 @@
 /**
- * The core engine code for Spellsource.
+ * <b>The core engine code for Spellsource.</b>
  * <p>
  * {@link net.demilich.metastone.game.GameContext} contains the state, player delegates and state-manipulation code
  * (i.e. the {@link net.demilich.metastone.game.logic.GameLogic}). This is the starting point for interacting with the

@@ -70,7 +70,7 @@
 <div class="header">
 <h1 title="Package" class="title">Package&nbsp;com.hiddenswitch.spellsource</h1>
 <div class="docSummary">
-<div class="block">The core multiplayer code for Spellsource.</div>
+<div class="block"><b>The core multiplayer code for Spellsource.</b></div>
 </div>
 <p>See:&nbsp;<a href="#package.description">Description</a></p>
 </div>
@@ -229,7 +229,69 @@
 <!--   -->
 </a>
 <h2 title="Package com.hiddenswitch.spellsource Description">Package com.hiddenswitch.spellsource Description</h2>
-<div class="block">The core multiplayer code for Spellsource.</div>
+<div class="block"><b>The core multiplayer code for Spellsource.</b>
+ <p>
+ Spellsource uses Vertx as a REST and web socket framework, Hazelcast to share data between members of the serving
+ cluster, Quasar to make async code behave synchronously with fibers, and MongoDB as its database persistence
+ backend.
+ <p>
+ The convention is to implement as much server code as possible as a static method in an interface. Mark the method as
+ <code>Suspendable</code> or make it <code>throw SuspendExecution</code> to ensure it works as a
+ fiber. Then you can use methods like <code>Mongo.findOne(java.lang.String,
+ io.vertx.core.json.JsonObject, io.vertx.core.json.JsonObject)</code>, which appears synchronous but actually uses Quasar
+ fibers to perform an async call with Netty (the high performance way of doing things).
+ <p>
+ To easily create JSON objects, use <code>QuickJson.json(java.lang.Object...)</code>. For
+ example, to create the object:
+ <pre>
+   {
+     "$set": {
+       "test.field": "value"
+     },
+     "$inc": {
+       "other.field": 2
+     }
+   }
+ </pre>
+ Use:
+ <pre>
+   <code>
+     import static com.hiddenswitch.spellsource.util.QuickJson.*;
+
+     JsonObject obj = json("$set", json("test.field", "value"), "$inc", json("other.field", 2));
+   </code>
+ </pre>
+ Observe the <code>import static</code> line to make things as elegant as possible.
+ <p>
+ To turn async code into something that returns on its callback, use <code>Sync.awaitResult(java.util.function.Consumer)</code>.
+ For example:
+ <pre>
+   <code>
+     import static io.vertx.ext.sync.Sync.awaitResult;
+
+     MailResult mailResult = awaitResult(h -&gt; mailClient.sendMail(new MailMessage(), h));
+   </code>
+ </pre>
+ Observe that <code>"h"</code> is the callback for the async function <code>sendMail</code>.
+ <p>
+ Callbacks that should be executed as fibers can be wrapped with <code>Sync.suspendableHandler(com.github.fromage.quasi.strands.SuspendableAction1)</code>.
+ <p>
+ To easily access the Spellsource database, use <code>Mongo.mongo()</code> in a fiber:
+ <pre>
+   <code>
+     import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+
+     Record record = new Record();
+     mongo().insert("collection", JsonObject.mapFrom(record));
+     mongo().update("collection", json("_id", "12345"), json("$set", json("value", 1)));
+   </code>
+ </pre>
+ Observe the use of <code>json(...)</code> and <code>mapFrom</code>.
+ <p>
+ To add a REST method, visit <a href="../../../com/hiddenswitch/spellsource/Gateway.html" title="interface in com.hiddenswitch.spellsource"><code>Gateway</code></a> and read the documentation there.
+ <p>
+ To add a method available to the web socket channel, visit <a href="../../../com/hiddenswitch/spellsource/Connection.html" title="interface in com.hiddenswitch.spellsource"><code>Connection</code></a> and read
+ the documentation there.</div>
 <dl>
 <dt><span class="seeLabel">See Also:</span></dt>
 <dd><a href="../../../com/hiddenswitch/spellsource/Games.html" title="interface in com.hiddenswitch.spellsource"><code>for the service that creates games and converts internal game data into a
