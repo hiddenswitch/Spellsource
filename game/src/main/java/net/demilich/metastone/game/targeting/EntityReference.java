@@ -460,6 +460,9 @@ public class EntityReference implements Serializable {
 	 */
 	public static final EntityReference FRIENDLY_DECK_FROM_TOP = new EntityReference(-67);
 
+	public static final EntityReference FRIENDLY_CARDS = new EntityReference(-68);
+	public static final EntityReference ENEMY_CARDS = new EntityReference(-69);
+
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;

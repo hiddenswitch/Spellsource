@@ -1,0 +1,30 @@
+{
+  "name": "Double Next Battlecry",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "aura": {
+    "class": "DoubleBattlecriesAura",
+    "target": "FRIENDLY_CARDS",
+    "removeEffect": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_double_next_battlecry"
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_double_next_battlecry"
+    }
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

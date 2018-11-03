@@ -254,6 +254,7 @@ public enum Attribute {
 	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
 	 * 		battlecries.
 	 */
+	@Deprecated
 	DOUBLE_BATTLECRIES,
 	/**
 	 * An {@link Entity} with {@link #DEATHRATTLES} casts a spell when it is destroyed.
@@ -269,6 +270,7 @@ public enum Attribute {
 	 * @see GameLogic#resolveDeathrattles(Player, Actor, net.demilich.metastone.game.entities.EntityLocation) to see the
 	 * 		complete rules for deathrattles.
 	 */
+	@Deprecated
 	DOUBLE_DEATHRATTLES,
 	/**
 	 * An immune {@link Actor} does not take any damage.
@@ -611,6 +613,12 @@ public enum Attribute {
 	 */
 	STARTED_IN_DECK,
 	/**
+	 * An attribute given to {@link Card} entities that started in the player's opening hand
+	 * <p>
+	 * Implements Hex Lord Malacrass.
+	 */
+	STARTED_IN_HAND,
+	/**
 	 * This attribute describes a {@link Minion} that can never be targeted by spells, abilities, auras or physical
 	 * attacks but does occupy a position on the {@link Zones#BATTLEFIELD}.
 	 * <p>
@@ -737,6 +745,10 @@ public enum Attribute {
 	 * Indicates the {@link Integer} turn that the specified card was played from the hand or the deck.
 	 */
 	PLAYED_FROM_HAND_OR_DECK,
+	/**
+	 * Indicates how much Mana the player spent to play the card
+	 */
+	MANA_SPENT,
 	/**
 	 * An {@link EntityReference} that, when set, indicates which entity this copied, if the entity copied with {@link
 	 * Entity#getCopy}.
@@ -918,6 +930,10 @@ public enum Attribute {
 	 * Indicates a character shouldn't naturally lose the FROZEN attribute
 	 */
 	FREEZES_PERMANENTLY,
+	/**
+	 * Indicates how many turns an actor should have {@link Attribute#STEALTH} for
+	 */
+	STEALTH_FOR_TURNS,
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>

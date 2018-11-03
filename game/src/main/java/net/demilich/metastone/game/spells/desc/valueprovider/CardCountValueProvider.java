@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
+import net.demilich.metastone.game.utils.Attribute;
 
 public class CardCountValueProvider extends ValueProvider {
 
@@ -31,7 +32,14 @@ public class CardCountValueProvider extends ValueProvider {
 			cardFilter = AndFilter.create();
 		}
 
-		return cardSource.getCards(context, source, player)
+		if (getDesc().containsKey(ValueProviderArg.ATTRIBUTE)) {
+			Attribute atr = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
+			return cardSource.getCards(context, source, player)
+					.filtered(cardFilter.matcher(context, player, source))
+					.stream()
+					.mapToInt(c -> c.getAttributeValue(atr))
+					.sum();
+		} else return cardSource.getCards(context, source, player)
 				.filtered(cardFilter.matcher(context, player, source))
 				.getCount();
 	}

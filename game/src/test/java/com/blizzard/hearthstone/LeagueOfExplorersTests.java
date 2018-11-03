@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -19,6 +20,8 @@ import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static org.testng.Assert.assertEquals;
 
 public class LeagueOfExplorersTests extends TestBase {
 	@Test
@@ -57,36 +60,36 @@ public class LeagueOfExplorersTests extends TestBase {
 			int numberOfSpellsPlayed = 0;
 			playCard(context, player, "spell_the_coin");
 			numberOfSpellsPlayed++;
-			Assert.assertEquals(costOf(context, player, cards.get("minion_arcane_giant")), 12 - numberOfSpellsPlayed);
+			assertEquals(costOf(context, player, cards.get("minion_arcane_giant")), 12 - numberOfSpellsPlayed);
 
 			receiveCard(context, opponent, "spell_the_coin");
-			Assert.assertEquals(costOf(context, player, cards.get("minion_clockwork_giant")), 12 - 1);
+			assertEquals(costOf(context, player, cards.get("minion_clockwork_giant")), 12 - 1);
 
 			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play().withTargetReference(opponent.getHero().getReference()));
-			Assert.assertEquals(costOf(context, player, cards.get("minion_frost_giant")), 10 - 1);
+			assertEquals(costOf(context, player, cards.get("minion_frost_giant")), 10 - 1);
 
 			playCardWithTarget(context, player, "spell_fireball", player.getHero());
 			numberOfSpellsPlayed++;
-			Assert.assertEquals(costOf(context, player, cards.get("minion_molten_giant")), 20 - 6);
+			assertEquals(costOf(context, player, cards.get("minion_molten_giant")), 20 - 6);
 
-			Assert.assertEquals(costOf(context, player, cards.get("minion_mountain_giant")), 12 - player.getHand().size() + 1);
+			assertEquals(costOf(context, player, cards.get("minion_mountain_giant")), 12 - player.getHand().size() + 1);
 
 			playCard(context, player, "minion_bloodfen_raptor");
-			Assert.assertEquals(costOf(context, player, cards.get("minion_sea_giant")), 10 - 1);
+			assertEquals(costOf(context, player, cards.get("minion_sea_giant")), 10 - 1);
 
 			playCard(context, player, "spell_lightning_storm" /*Overloads 2*/);
 			numberOfSpellsPlayed++;
-			Assert.assertEquals(costOf(context, player, cards.get("minion_snowfury_giant")), 11 - 2);
+			assertEquals(costOf(context, player, cards.get("minion_snowfury_giant")), 11 - 2);
 
 			playCard(context, player, "minion_naga_sea_witch");
 
-			Assert.assertEquals(costOf(context, player, cards.get("minion_arcane_giant")), 5 - numberOfSpellsPlayed);
-			Assert.assertEquals(costOf(context, player, cards.get("minion_clockwork_giant")), 5 - 1);
-			Assert.assertEquals(costOf(context, player, cards.get("minion_frost_giant")), 5 - 1);
-			Assert.assertEquals(costOf(context, player, cards.get("minion_molten_giant")), Math.max(5 - 6, 0));
-			Assert.assertEquals(costOf(context, player, cards.get("minion_mountain_giant")), Math.max(5 - player.getHand().size() + 1, 0));
-			Assert.assertEquals(costOf(context, player, cards.get("minion_sea_giant")), 5 - 2);
-			Assert.assertEquals(costOf(context, player, cards.get("minion_snowfury_giant")), 5 - 2);
+			assertEquals(costOf(context, player, cards.get("minion_arcane_giant")), 5 - numberOfSpellsPlayed);
+			assertEquals(costOf(context, player, cards.get("minion_clockwork_giant")), 5 - 1);
+			assertEquals(costOf(context, player, cards.get("minion_frost_giant")), 5 - 1);
+			assertEquals(costOf(context, player, cards.get("minion_molten_giant")), Math.max(5 - 6, 0));
+			assertEquals(costOf(context, player, cards.get("minion_mountain_giant")), Math.max(5 - player.getHand().size() + 1, 0));
+			assertEquals(costOf(context, player, cards.get("minion_sea_giant")), 5 - 2);
+			assertEquals(costOf(context, player, cards.get("minion_snowfury_giant")), 5 - 2);
 		});
 	}
 
@@ -121,16 +124,16 @@ public class LeagueOfExplorersTests extends TestBase {
 		Card sirFinley = CardCatalogue.getCardById("minion_sir_finley_mrrgglton");
 		playCard(context, player, sirFinley);
 		// Control flow will first go to request action above, then proceed.
-		Assert.assertEquals(player.getHand().size(), handSize[0],
+		assertEquals(player.getHand().size(), handSize[0],
 				"Nothing should be added to the hand.");
-		Assert.assertEquals(player.getDiscoverZone().size(), 0,
+		assertEquals(player.getDiscoverZone().size(), 0,
 				"The discover zone should be empty");
-		Assert.assertEquals(player.getGraveyard().size(), 1,
+		assertEquals(player.getGraveyard().size(), 1,
 				"The graveyard should only Sir Finley's source card.");
-		Assert.assertEquals(discoveryCard[0].getZone(), Zones.REMOVED_FROM_PLAY,
+		assertEquals(discoveryCard[0].getZone(), Zones.REMOVED_FROM_PLAY,
 				"The discovered card should be removed from play");
 		Card currentHeroPower = player.getHeroPowerZone().get(0);
-		Assert.assertEquals(discoveryCard[0].getCardId(), currentHeroPower.getCardId(),
+		assertEquals(discoveryCard[0].getCardId(), currentHeroPower.getCardId(),
 				"But the hero power card should be the discovered hero power.");
 		Assert.assertNotEquals(currentHeroPower.getId(), oldId,
 				"The old hero power should not be the current one");
@@ -145,13 +148,13 @@ public class LeagueOfExplorersTests extends TestBase {
 		playCard(context, player, "spell_preparation");
 		playCard(context, player, "secret_ice_block");
 
-		Assert.assertEquals(player.getMinions().size(), 3);
+		assertEquals(player.getMinions().size(), 3);
 		for (Minion minion : player.getMinions()) {
 			if (minion.getSourceCard().getCardId().equalsIgnoreCase("minion_summoning_stone")) {
 				continue;
 			}
 
-			Assert.assertEquals(minion.getSourceCard().getBaseManaCost(), 0);
+			assertEquals(minion.getSourceCard().getBaseManaCost(), 0);
 		}
 	}
 
@@ -171,7 +174,19 @@ public class LeagueOfExplorersTests extends TestBase {
 			final int CURSE_OF_RAFAAM_DAMAGE = 2;
 			// first player should take exactly 2 damage (NOT 3, because the spell
 			// damage should not be applied)
-			Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - CURSE_OF_RAFAAM_DAMAGE);
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp() - CURSE_OF_RAFAAM_DAMAGE);
 		});
+	}
+
+	@Test
+	public void testNewBrannBronzebeard() {
+		runGym((context, player, opponent) -> {
+			playCard(context,player, "minion_brann_bronzebeard");
+			playCard(context, player, "minion_saronite_chain_gang");
+			assertEquals(player.getMinions().size(), 4);
+			playCard(context, player, "hero_hagatha_the_witch");
+			assertEquals(player.getMinions().size(), 0);
+		});
+
 	}
 }

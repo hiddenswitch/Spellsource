@@ -1,0 +1,21 @@
+{
+  "name": "Immortal Prelate",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "heroClass": "GOLD",
+  "rarity": "EPIC",
+  "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
+  "deathrattle": {
+    "class": "ShuffleToDeckSpell",
+    "target": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "KEEPS_ENCHANTMENTS": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

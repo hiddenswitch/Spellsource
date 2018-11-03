@@ -1,0 +1,27 @@
+{
+  "name": "Pyromaniac",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "heroClass": "BLUE",
+  "rarity": "RARE",
+  "description": "Whenever your Hero Power kills a minion, draw a card.",
+  "aura": {
+    "class": "HeroPowerBonusAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "IsDeadCondition",
+        "target": "TARGET"
+      },
+      "spell": {
+        "class": "DrawCardSpell"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

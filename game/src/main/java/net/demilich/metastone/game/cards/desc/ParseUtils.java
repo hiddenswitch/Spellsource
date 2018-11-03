@@ -187,6 +187,10 @@ public class ParseUtils {
 				return EntityReference.LEFT_ADJACENT_MINION;
 			case "right_adjacent_minion":
 				return EntityReference.RIGHT_ADJACENT_MINION;
+			case "friendly_cards":
+				return EntityReference.FRIENDLY_CARDS;
+			case "enemy_cards":
+				return EntityReference.ENEMY_CARDS;
 			default:
 				return null;
 		}
