@@ -1,0 +1,19 @@
+{
+  "name": "Bountiful Seas",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Hero Power Restore 1 Health. Shuffle a copy of 'Ocean Depths' into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 1,
+    "card": "minion_bloodfen_raptor"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

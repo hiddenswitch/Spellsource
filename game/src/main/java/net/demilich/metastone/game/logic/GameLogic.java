@@ -18,7 +18,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
-import net.demilich.metastone.game.shared.utils.MathUtils;
+import net.demilich.metastone.game.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
@@ -36,7 +36,7 @@ import net.demilich.metastone.game.spells.trigger.*;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.*;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
@@ -2196,7 +2196,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Configures the player {@link Player}, {@link Hero}, and deck & hand {@link Card} entities with the correct IDs,
+	 * Configures the player {@link Player}, {@link Hero}, and deck &amp; hand {@link Card} entities with the correct IDs,
 	 * {@link EntityZone} locations and owners. Shuffles the deck.
 	 *
 	 * @param playerId The player that should be initialized.
@@ -2239,6 +2239,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * A joust describes when cards are revealed from each player's deck, and the "winner" of a joust is determined by
 	 * whoever draws a card with a higher {@link Card#getBaseManaCost()}.
+	 * <p>
+	 * From Hearthpedia:
+	 * <p>
+	 * Joust is an ability that causes a minion to be revealed at random from the deck of each player. If the player who
+	 * initiated the Joust has the higher mana cost minion, a special secondary effect will be activated, depending on the
+	 * Joust card. Once the Joust is complete, the two Jousting minions are shuffled back into their respective decks.
+	 * Jousts are triggered through other abilities, most commonly Battlecry, but at least one card uses Deathrattle to
+	 * Joust. Joust does not exist as a keyword, but is the official term for the card text, "Reveal a minion in each
+	 * deck. If yours costs more, [secondary effect]."
 	 *
 	 * @param player     The player who initiated the joust.
 	 * @param cardFilter
@@ -2572,8 +2581,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see #getValidActions(int) for the way the {@link GameLogic} determines what actions a player can take.
 	 * @see Card#play() for an example of how a card generates a {@link PlayCardAction} that will eventually be sent to
 	 * 		this method.
-	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover mechanic
-	 * 		generates a {@link DiscoverAction} that gets sent to this method.
+	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover
+	 * 		mechanic generates a {@link DiscoverAction} that gets sent to this method.
 	 * @see Minion#getBattlecry() for the method that creates battlecry actions. (Note: Deathrattles never involve a
 	 * 		player decision, so deathrattles never generate a battlecry).
 	 */
@@ -3423,7 +3432,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player that owns the secret.
 	 * @param secret The secret that got triggered.
-	 * @see {@link Secret#onFire(int, SpellDesc, GameEvent)} for the code that handles when a secret is fired.
+	 * @see Secret#onFire(int, SpellDesc, GameEvent) for the code that handles when a secret is fired.
 	 */
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {

@@ -2,10 +2,13 @@ package com.hiddenswitch.spellsource;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class ScenarioTests extends TestBase {
@@ -27,6 +30,7 @@ public class ScenarioTests extends TestBase {
 	@Test
 	void testCurvestone() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 			playCard(context, player, "spell_discover_minion_on_curve");
 			Assert.assertEquals(player.getHand().get(0).getBaseManaCost(), 1);
 			Assert.assertEquals(player.getHand().get(0).getCardType(), CardType.MINION);
@@ -43,6 +47,7 @@ public class ScenarioTests extends TestBase {
 		for (int i = 1; i < 11; i++) {
 			int finalI = i;
 			runGym((context, player, opponent) -> {
+				context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 				for (int x = 0; x < finalI - 1; x++) {
 					context.endTurn();
 					context.endTurn();

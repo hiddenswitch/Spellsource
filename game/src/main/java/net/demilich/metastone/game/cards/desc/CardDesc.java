@@ -31,8 +31,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 
 import java.io.Serializable;
 import java.util.*;
@@ -60,16 +60,16 @@ import static com.google.common.collect.Maps.immutableEntry;
  *             "rarity": "COMMON",
  *             "race": "BEAST",
  *             "description": "Battlecry: Add a Banana to your hand.",
- *  line 56:   "battlecry": {
+ *  line 63:   "battlecry": {
  *               "targetSelection": "NONE",
  *               "spell": {
  *                 "class": "ReceiveCardSpell",
- *  line 60:       "cards": [
+ *  line 67:       "cards": [
  *                   "spell_bananas"
  *                 ]
  *               }
  *             },
- *  line 65:   "attributes": {
+ *  line 72:   "attributes": {
  *               "BATTLECRY": true
  *             },
  *             "collectible": true,
@@ -81,25 +81,27 @@ import static com.google.common.collect.Maps.immutableEntry;
  * So {@code "name"} corresponds to the {@link #name} field, {@code "battlecry"} corresponds to the {@link #battlecry}
  * field, etc.
  * <p>
- * To figure out the format of the value of complex objects like "battlecry" on line 56 in the example above, look at
+ * To figure out the format of the value of complex objects like "battlecry" on line 63 in the example above, look at
  * the <b>type</b> of the field in this class. In the case of battlecry, the type is a {@link BattlecryDesc}, and it
  * appears to also have fields that exactly correspond to the keys that appear in the JSON object that is the value of
  * "battlecry."
  * <p>
  * Some objects, like {@code "spell"}, are {@link Desc} classes: these use a corresponding "argument" enumeration to
  * determine the names and types of the fields. In the case of {@link SpellDesc}, the keys are {@link SpellArg} names,
- * except written in camelcase. In the example of Angry Primate above, the {@code "cards"} key on line 60 inside the
- * {@link SpellDesc} corresponds to the {@link SpellArg#CARDS} enum name. Observe that {@code "cards"} is just {@link
- * SpellArg#CARDS} except lowercase.
+ * except written in {@code camelCase}. In the example of Angry Primate above, the {@code "cards"} key on line 67 inside
+ * the {@link SpellDesc} corresponds to the {@link SpellArg#CARDS} enum name. Observe that {@code "cards"} is just
+ * {@link SpellArg#CARDS} except lowercase.
  * <p>
- * The only exception to this rule is the {@link AttributeMap} object located on line 65 in the example above. The keys
+ * The only exception to this rule is the {@link AttributeMap} object located on line 72 in the example above. The keys
  * (left hand part in quotation marks of the JSON object) should always be capitalized, and correspond exactly to the
  * names in {@link Attribute}.
  *
  * @see Card for the gameplay functionality of a card that consults data stored in a {@link CardDesc}.
+ * @see DescDeserializer for a walk through on how deserialization of card JSON works on complex types like spells,
+ * 		value providers, etc.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable {
+public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
 	public String id;
 	public String name;
 	public String description;
@@ -556,7 +558,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Stores notes about the card's implementation or behaviour. Use this field to explain surprising rules or to do a
-	 * Q&A.
+	 * FAQ.
 	 * <p>
 	 * This field will be migrated to support Markdown syntax in the future for better rendering controls in the client.
 	 */
@@ -959,6 +961,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	}
 
 
+	/**
+	 * This makes it possible to iterate through a CardDesc.
+	 *
+	 * @return An entry set for this instance.
+	 */
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
@@ -985,9 +992,16 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.AURAS, auras),
 				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
 				immutableEntry(CardDescArg.BASE_HP, baseHp),
+				immutableEntry(CardDescArg.DAMAGE, damage),
+				immutableEntry(CardDescArg.DURABILITY, durability),
 				immutableEntry(CardDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(CardDescArg.GROUP, group),
 				immutableEntry(CardDescArg.SPELL, spell),
-				immutableEntry(CardDescArg.CONDITION, condition)
+				immutableEntry(CardDescArg.CONDITION, condition),
+				immutableEntry(CardDescArg.SECRET, secret),
+				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
+				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
+				immutableEntry(CardDescArg.QUEST, quest)
 		);
 		return entries;
 	}

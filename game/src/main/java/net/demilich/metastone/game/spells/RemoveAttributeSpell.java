@@ -7,10 +7,16 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
+/**
+ * Removes the {@link SpellArg#ATTRIBUTE} from the specified {@code target}.
+ * <p>
+ * The removal can be reverted by specifying a {@link SpellArg#REVERT_TRIGGER} {@link
+ * net.demilich.metastone.game.spells.trigger.EventTrigger}.
+ */
 public class RemoveAttributeSpell extends RevertableSpell {
 	public static SpellDesc create(Attribute tag) {
 		return create(null, tag);

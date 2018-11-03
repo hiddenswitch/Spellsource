@@ -14,6 +14,11 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Resurrects minions from both player's graveyards.
+ * <p>
+ * Does not resurrect unique minions.
+ */
 public class ResurrectFromBothSpell extends Spell {
 
 	@Override

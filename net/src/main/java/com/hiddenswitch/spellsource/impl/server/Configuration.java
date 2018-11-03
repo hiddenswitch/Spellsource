@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.impl.server;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.impl.UserId;
 import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.io.Serializable;

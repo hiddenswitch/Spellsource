@@ -20,6 +20,9 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+/**
+ * The main entry point fo the {@code spellsource} python package's interface with the Java code.
+ */
 public class PythonBridge {
 	private static final Logger logger = LoggerFactory.getLogger(PythonBridge.class);
 	private static final Map<String, Class<? extends Behaviour>> BEHAVIOURS = Simulation.getAllBehaviours();
@@ -47,6 +50,17 @@ public class PythonBridge {
 		return behaviours.get(0);
 	}
 
+	/**
+	 * Used by the python package to actually start a simulation and receive callbacks about the simulation's progress.
+	 *
+	 * @param generator
+	 * @param deckLists
+	 * @param gamesPerBatch
+	 * @param behaviours
+	 * @param mirrors
+	 * @param reduce
+	 * @return
+	 */
 	public static long simulate(SimulationResultGenerator generator, List<String> deckLists, int gamesPerBatch, List<Supplier<Behaviour>> behaviours, boolean mirrors, boolean reduce) {
 		final Map<String, GameDeck> decks = Simulation.getDecks(deckLists);
 		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() > 2

@@ -8,6 +8,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * @deprecated Use {@link BuffSpell} instead.
+ */
 @Deprecated
 public class BuffWeaponSpell extends BuffSpell {
 	private static Logger logger = LoggerFactory.getLogger(BuffWeaponSpell.class);

@@ -29,7 +29,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
@@ -40,7 +40,6 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -52,6 +51,33 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testAnubrekhan() {
+		runGym((context, player, opponent) -> {
+			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
+			playMinionCardWithBattlecry(context, player, "minion_anub'rekhan", bloodfenRaptor);
+			Minion anubrekhan = player.getMinions().get(1);
+			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
+			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "permanent_cocoon");
+			destroy(context, anubrekhan);
+			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
+			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "minion_bloodfen_raptor");
+		});
+	}
+
+	@Test
+	public void testCryptladyZara() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_boulderfist_ogre");
+			playCard(context, player, "hero_cryptlady_zara");
+			playCardWithTarget(context, player, "spell_fireball", target);
+			assertEquals(target.getHp(), target.getMaxHp() - 1);
+			context.endTurn();
+			playCardWithTarget(context, opponent, "spell_spirit_bomb" /*4damage*/, target);
+			assertEquals(target.getHp(), target.getMaxHp() - 1 - 4);
+		});
+	}
 
 	@Test
 	public void testColosseumBehemoth() {

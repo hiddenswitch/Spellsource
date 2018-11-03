@@ -11,6 +11,18 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Takes control of a {@code target}, changing its owner to the caster.
+ * <p>
+ * Mind control destroys the minion if the new owner does not have enough space on the battlefield to take control of
+ * it.
+ * <p>
+ * A mind controlled minion gains summoning sickness.
+ *
+ * @see net.demilich.metastone.game.spells.custom.MindControlOneTurnSpell for the version that lasts one turn and does
+ * 		not add summoning sickness.
+ * @see net.demilich.metastone.game.logic.GameLogic#mindControl(Player, Minion) for the full mind control rules.
+ */
 public class MindControlSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, TargetPlayer targetPlayer, boolean randomTarget) {

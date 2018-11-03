@@ -8,6 +8,21 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.util.Map;
 
+/**
+ * Returns a list of collectible cards from the  {@link net.demilich.metastone.game.decks.DeckFormat} for this game
+ * (from {@link GameContext#getDeckFormat()}) where class cards of the casting player's class appear 4x more than
+ * neutrals, and no other class cards appear.
+ * <p>
+ * This source has {@link HasCardCreationSideEffects}, which indicates that it doesn't refer to cards inside the game
+ * but rather generates new copies on the fly.
+ * <p>
+ * This source also has the aforementioned weights indicated by {@link HasWeights}.
+ * <p>
+ * This is the default card source for {@link net.demilich.metastone.game.spells.DiscoverSpell}.
+ *
+ * @see UnweightedCatalogueSource for a card source that returns all cards in the deck format from all classes as
+ * 		frequently as neutrals.
+ */
 public class CatalogueSource extends CardSource implements HasCardCreationSideEffects, HasWeights {
 
 	public static CatalogueSource create() {

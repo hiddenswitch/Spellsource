@@ -7,19 +7,16 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.TransformMinionSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Map;
 
 /**
  * Transforms the {@code source} (casting entity) of this spell into the {@code target} {@link Minion}.
  * <p>
- * The tranformation includes all of the {@link Trigger} objects that are associated with (hosted by) the {@code
+ * The transformation includes all of the {@link Trigger} objects that are associated with (hosted by) the {@code
  * target}.
  * <p>
  * This spell can be used to interrupt summons.
@@ -61,23 +58,16 @@ public final class CopyMinionSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Minion template = (Minion) target;
-		Minion clone = template.getCopy();
-		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
-		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
-		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
-		clone.getAttributes().remove(Attribute.AURA_TAUNT);
+		Minion clone = ((Minion) target).getCopy();
 		clone.clearEnchantments();
 
-		Minion sourceActor = (Minion) source;
-		SpellDesc transformSpell = TransformMinionSpell.create(clone);
-		if (context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null) {
-			SpellUtils.castChildSpell(context, player, transformSpell, source, sourceActor);
+		boolean hadTransformReference = context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null;
+		context.getLogic().transformMinion((Minion) source, clone);
+		if (hadTransformReference) {
 			return;
 		}
-		SpellUtils.castChildSpell(context, player, transformSpell, source, sourceActor);
 
-		for (Trigger trigger : context.getTriggersAssociatedWith(template.getReference())) {
+		for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
 			Trigger triggerClone = trigger.clone();
 			context.getLogic().addGameEventListener(player, triggerClone, clone);
 		}

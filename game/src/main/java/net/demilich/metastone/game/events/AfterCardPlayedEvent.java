@@ -5,6 +5,9 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Fired after a card is played.
+ */
 public class AfterCardPlayedEvent extends GameEvent implements HasCard {
 	private Card card;
 

@@ -23,8 +23,8 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
  * This class provides a way to register and connect to verticles advertised on the Vert.x {@link EventBus}. Its
  * functionality is similar to a simple remoting or RPC framework.
  *
- * @see #register(Object, Class,) for the method to register your service on the {@link EventBus}.
- * @see #connect(Class to connect to a service available on the {@link EventBus}.
+ * @see #register(Object, Class) for the method to register your service on the {@link EventBus}.
+ * @see #connect(Class) to connect to a service available on the {@link EventBus}.
  */
 public class Rpc {
 
@@ -247,7 +247,6 @@ public class Rpc {
 	 * @param registration A registration entry return by {@link #register(Object, Class)}
 	 * @return A succeeded future when all of the registration entries have been removed.
 	 * @throws SuspendExecution
-	 * @throws InterruptedException
 	 */
 	public static CompositeFuture unregister(Registration registration) throws SuspendExecution {
 		return Sync.awaitResult(h -> unregister(registration, h));

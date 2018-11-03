@@ -11,7 +11,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -432,6 +432,11 @@ public class TargetLogic implements Serializable {
 			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
 			enemyCards.add(context.getOpponent(player).getHero());
 			return enemyCards;
+		} else if (targetKey.equals(EntityReference.CURRENT_SUMMONING_MINION)) {
+			if (context.getSummonReferenceStack().isEmpty()) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(findEntity(context, context.getSummonReferenceStack().peekLast()));
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

@@ -1,0 +1,16 @@
+{
+  "name": "Restless Worgen",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,17 @@
+{
+  "name": "Infinite Intellect",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Draw 4 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

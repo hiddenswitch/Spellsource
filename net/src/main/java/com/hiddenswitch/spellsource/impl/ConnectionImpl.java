@@ -13,6 +13,7 @@ import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -133,6 +134,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
+	@NotNull
 	public String userId() {
 		return userId;
 	}

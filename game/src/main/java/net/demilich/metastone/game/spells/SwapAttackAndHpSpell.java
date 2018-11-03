@@ -9,10 +9,13 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
+/**
+ * Swaps the {@code target}'s attack and hitpoints, making the target's hitpoints its attack value and vice versa.
+ */
 public class SwapAttackAndHpSpell extends Spell {
 
 	public static SpellDesc create() {

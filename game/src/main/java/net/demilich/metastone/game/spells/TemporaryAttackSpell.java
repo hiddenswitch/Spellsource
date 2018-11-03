@@ -8,12 +8,15 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Gives the {@code target} actor {@link SpellArg#VALUE} bonus attack until the end of the current turn.
+ */
 public class TemporaryAttackSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TemporaryAttackSpell.class);

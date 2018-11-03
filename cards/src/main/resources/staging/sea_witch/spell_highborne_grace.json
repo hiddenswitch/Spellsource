@@ -1,0 +1,19 @@
+{
+  "name": "Highborne Grace",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Restore 7 Health. Reservoir (0-15): Double the Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

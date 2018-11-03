@@ -54,3 +54,4 @@ public final class AddDeathrattleSecondaryAsTargetSpell extends AddDeathrattleSp
 		super.onCast(context, player, desc, source, target);
 	}
 }
+

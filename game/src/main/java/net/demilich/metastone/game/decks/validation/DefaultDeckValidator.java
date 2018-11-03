@@ -5,11 +5,22 @@ import net.demilich.metastone.game.cards.Rarity;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.logic.GameLogic;
 
-public class DefaultDeckValidator implements IDeckValidator {
+/**
+ * A deck validator of standard deck rules.
+ * <p>
+ * It limits the number of duplicates of legendaries to 1, duplicates of other cards to 2.
+ * <p>
+ * It requires exactly {@link GameLogic#DECK_SIZE} cards.
+ * <p>
+ * It currently permits cards of any class regardless of the hero class of the given deck.
+ * <p>
+ * The multiplayer Spellsource code contains different logic for validating decks.
+ */
+public final class DefaultDeckValidator implements DeckValidator {
 
 	@Override
 	public boolean canAddCardToDeck(Card card, GameDeck deck) {
-		if (deck.getCards().getCount() >= GameLogic.MAX_DECK_SIZE) {
+		if (deck.getCards().getCount() > GameLogic.DECK_SIZE) {
 			return false;
 		}
 		int cardInDeckCount = deck.containsHowMany(card);

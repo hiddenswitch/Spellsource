@@ -3,6 +3,11 @@ package net.demilich.metastone.game.environment;
 import java.io.Serializable;
 import java.util.ArrayDeque;
 
+/**
+ * A stack in the environment.
+ *
+ * @param <E> The object type that is held in the stack (typically primitive or immutable).
+ */
 public class EnvironmentDeque<E extends Serializable> extends ArrayDeque<E> implements EnvironmentValue, Serializable {
 	@Override
 	public EnvironmentValue getCopy() {

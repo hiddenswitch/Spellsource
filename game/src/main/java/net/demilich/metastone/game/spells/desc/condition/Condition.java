@@ -9,6 +9,12 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
 
+/**
+ * A condition is used for true or false comparisons in the {@link net.demilich.metastone.game.cards.desc.CardDesc} card
+ * JSON.
+ * <p>
+ * The core function is {@link #isFulfilled(GameContext, Player, Entity, Entity)}.
+ */
 public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
 	private ConditionDesc desc;
 

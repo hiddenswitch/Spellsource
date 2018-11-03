@@ -5,7 +5,7 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import org.junit.Ignore;
 import org.junit.Test;
 

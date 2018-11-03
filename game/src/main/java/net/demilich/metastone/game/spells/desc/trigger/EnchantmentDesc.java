@@ -6,6 +6,7 @@ import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
@@ -61,7 +62,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  * @see net.demilich.metastone.game.cards.desc.CardDesc to see where {@link EnchantmentDesc} can typically go.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Object>*/ implements Serializable, Cloneable {
+public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object> {
 
 	public EnchantmentDesc() {
 	}

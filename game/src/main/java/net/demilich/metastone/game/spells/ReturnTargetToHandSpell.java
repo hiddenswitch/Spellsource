@@ -11,13 +11,44 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Returns the {@code target} to the player's hand as a card.
+ * <p>
+ * After this effect, the card cannot be discarded by random discard effects for the rest of the sequence.
+ * <p>
+ * Actors removed this way are removed peacefully, i.e. their deathrattles are not triggered.
+ * <p>
+ * If the player's hand is full, the target minion or actor is destroyed and the deathrattle <b>is</b> triggered.
+ * <p>
+ * If the target has {@link Attribute#KEEPS_ENCHANTMENTS}, a limited number of buffs are kept. This is used primarily to
+ * implement Kingsbane.
+ * <p>
+ * The {@link SpellArg#SPELL} subspell is cast with {@link EntityReference#OUTPUT} pointing to the returned card.
+ * <p>
+ * For <b>example</b>, to return a target to hand but make it cost (2) less:
+ * <pre>
+ *   {
+ *     "class": "ReturnTargetToHandSpell",
+ *     "spell": {
+ *       "class": "CardCostModifierSpell",
+ *       "target": "OUTPUT",
+ *       "cardCostModifier": {
+ *         "class": "CardCostModifier",
+ *         "target": "SELF",
+ *         "value": 2,
+ *         "operation": "SUBTRACT"
+ *       }
+ *     }
+ *   }
+ * </pre>
+ */
 public class ReturnTargetToHandSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(ReturnTargetToHandSpell.class);
@@ -38,7 +69,12 @@ public class ReturnTargetToHandSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target == null) {
-			logger.warn("onCast: Could not return null target.");
+			logger.warn("onCast {} {}: Could not return null target.", context.getGameId(), source);
+			return;
+		}
+
+		if (target.getZone() == Zones.HAND && !target.hasAttribute(Attribute.DISCARDED)) {
+			logger.error("onCast {} {}: The target {} is already in the hand and we're not interrupting a discard.", context.getGameId(), source, target);
 			return;
 		}
 

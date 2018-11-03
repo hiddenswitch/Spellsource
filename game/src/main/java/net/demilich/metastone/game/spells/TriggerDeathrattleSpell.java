@@ -12,10 +12,17 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Triggers the {@code target} entity's deathrattles.
+ */
 public class TriggerDeathrattleSpell extends Spell {
+
+	private static Logger logger = LoggerFactory.getLogger(TriggerDeathrattleSpell.class);
 
 	public static SpellDesc create(EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(TriggerDeathrattleSpell.class);
@@ -34,10 +41,16 @@ public class TriggerDeathrattleSpell extends Spell {
 			}
 		} else if (target instanceof Card) {
 			Card card = (Card) target;
-			Stream.concat(Stream.of(card.getDesc().getDeathrattle()), card.getDeathrattleEnchantments().stream()).forEach(deathrattle -> {
-				SpellUtils.castChildSpell(context, player, deathrattle, source, target);
-			});
+			if (card.getDesc().getDeathrattle() != null) {
+				SpellUtils.castChildSpell(context, player, card.getDesc().getDeathrattle(), source, target);
+			}
+			for (SpellDesc deathrattle : card.getDeathrattleEnchantments()) {
+				SpellUtils.castChildSpell(context, player, card.getDesc().getDeathrattle(), source, target);
+			}
 
+			if (card.getDesc().getDeathrattle() == null && card.getDeathrattleEnchantments().isEmpty()) {
+				logger.warn("onCast {} {}: Tried to trigger a deathrattle on a card {} that doesn't have one.", context.getGameId(), source, card);
+			}
 		}
 
 	}

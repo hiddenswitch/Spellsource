@@ -38,7 +38,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -54,6 +54,8 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * A service that starts a game session, accepts connections from players and manages the state of the game.
+ * <p>
+ * Various static methods convert game data into a format the Unity3D client can understand.
  */
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
@@ -62,6 +64,11 @@ public interface Games extends Verticle {
 	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 
+	/**
+	 * Creates a new instance of the service that maintains a list of running games.
+	 *
+	 * @return A games instance.
+	 */
 	static Games create() {
 		return new ClusteredGames();
 	}
@@ -408,6 +415,16 @@ public interface Games extends Verticle {
 		return spell;
 	}
 
+	/**
+	 * Builds a summon action from a minion card.
+	 *
+	 * @param workingContext
+	 * @param sourceCardId
+	 * @param minionEntityIdToLocation
+	 * @param summonActions
+	 * @param playerId
+	 * @return
+	 */
 	static SummonAction getSummonAction(GameContext workingContext, Integer sourceCardId, Map<Integer, Integer> minionEntityIdToLocation, List<? extends PlayCardAction> summonActions, int playerId) {
 		SummonAction summonAction = new SummonAction()
 				.sourceId(sourceCardId)
@@ -430,6 +447,14 @@ public interface Games extends Verticle {
 		return summonAction;
 	}
 
+	/**
+	 * Builds a spell action from a spell card or a hero power card. Any play card action that accepts targets can work
+	 * for this function.
+	 *
+	 * @param sourceCardId
+	 * @param playCardActions
+	 * @return
+	 */
 	@Suspendable
 	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
 		SpellAction spellAction = new SpellAction()
@@ -601,10 +626,25 @@ public interface Games extends Verticle {
 		return SuspendableMap.getOrCreate("Games::connections");
 	}
 
+	/**
+	 * Retrieves the current game a player is part of.
+	 *
+	 * @return
+	 * @throws SuspendExecution
+	 */
 	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
 		return SuspendableMap.getOrCreate("Games::players");
 	}
 
+	/**
+	 * Immediately ends the given game, causing both players to concede.
+	 * <p>
+	 * All games ended this way end in a draw.
+	 *
+	 * @param game
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static void endGame(GameId game) throws SuspendExecution, InterruptedException {
 		try {
 			String deploymentId = getConnections().get(game).deploymentId;

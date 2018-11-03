@@ -7,10 +7,17 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
+/**
+ * Increments (or decrements, if negative) by {@link SpellArg#VALUE} the {@link SpellArg#ATTRIBUTE} on the given {@code
+ * target}.
+ * <p>
+ * Supports a {@link SpellArg#REVERT_TRIGGER}, which when triggered will call this spell with the negative of the value
+ * specified on the target.
+ */
 public class ModifyAttributeSpell extends RevertableSpell {
 	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);

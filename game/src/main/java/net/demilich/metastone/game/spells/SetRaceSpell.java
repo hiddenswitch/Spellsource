@@ -9,12 +9,24 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Sets the {@code target}'s {@link Race} to the {@link SpellArg#RACE} value.
+ * <p>
+ * For <b>example</b>, to make all minions Murlocs:
+ * <pre>
+ *   {
+ *     "class": "SetRaceSpell",
+ *     "target": "ALL_MINIONS",
+ *     "race": "MURLOC"
+ *   }
+ * </pre>
+ */
 public class SetRaceSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(SetRaceSpell.class);
 

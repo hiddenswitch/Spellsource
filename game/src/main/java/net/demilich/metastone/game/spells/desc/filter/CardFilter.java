@@ -10,7 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
 
@@ -37,7 +37,6 @@ public final class CardFilter extends EntityFilter {
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
-
 
 		if (entity == null) {
 			return false;
@@ -135,5 +134,4 @@ public final class CardFilter extends EntityFilter {
 		return new CardFilter(arguments);
 	}
 }
-
 

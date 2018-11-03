@@ -50,8 +50,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.TurnState;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.logic.TurnState;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 

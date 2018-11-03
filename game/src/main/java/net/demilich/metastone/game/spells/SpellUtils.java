@@ -14,6 +14,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -24,8 +25,8 @@ import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,7 +38,6 @@ import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
-import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
 
 /**
  * A set of utilities to help write spells.
@@ -109,7 +109,7 @@ public class SpellUtils {
 	                                       boolean randomChooseOnes,
 	                                       boolean playFromHand) {
 
-		CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
+		DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
 		// Stop casting battlecries if Shudderwock is transformed or destroyed
 		if (onlyWhileSourceInPlay && !determineCastingPlayer.isSourceInPlay()) {
 			return false;
@@ -353,6 +353,17 @@ public class SpellUtils {
 		return cards;
 	}
 
+	/**
+	 * Retrieves a reference to a newly generated card currently in the {@link Zones#DISCOVER} if the given {@code cardId}
+	 * can be found there.
+	 * <p>
+	 * This allows spells to be cast on cards while they are in the discover zone, even though the spells casting effects
+	 * on them are supposed to be executing their effects on base cards.
+	 *
+	 * @param context
+	 * @param cardId
+	 * @return
+	 */
 	public static Card getCardFromContextOrDiscover(GameContext context, String cardId) {
 		return context.getPlayers().stream()
 				.flatMap(p -> p.getDiscoverZone().stream())
@@ -405,6 +416,16 @@ public class SpellUtils {
 		return postDiscover(context, player, cards, discoverActions);
 	}
 
+	/**
+	 * Moves the card put into the {@link Zones#DISCOVER} by a {@link #discoverCard(GameContext, Player, Entity,
+	 * SpellDesc, CardList)} action back to where it came from. If it was a newly generated card it is removed from play.
+	 *
+	 * @param context
+	 * @param player
+	 * @param cards
+	 * @param discoverActions
+	 * @return
+	 */
 	@Suspendable
 	public static DiscoverAction postDiscover(GameContext context, Player player, Iterable<? extends Card> cards, List<GameAction> discoverActions) {
 		if (discoverActions.size() == 0) {
@@ -492,6 +513,13 @@ public class SpellUtils {
 		return postDiscover(context, player, cards, discoverActions);
 	}
 
+	/**
+	 * Returns a list of valid missile targets given that missiles stop hitting destroyed actors before an {@link
+	 * GameLogic#endOfSequence()} is called.
+	 *
+	 * @param targets
+	 * @return
+	 */
 	static List<Entity> getValidRandomTargets(List<Entity> targets) {
 		List<Entity> validTargets = new ArrayList<>();
 		for (Entity entity : targets) {
@@ -507,6 +535,17 @@ public class SpellUtils {
 		return validTargets;
 	}
 
+	/**
+	 * Filters a list of targets.
+	 *
+	 * @param context
+	 * @param player
+	 * @param allTargets
+	 * @param filter
+	 * @param host
+	 * @return
+	 */
+	@Deprecated
 	public static List<Entity> getValidTargets(GameContext context, Player player, List<Entity> allTargets, EntityFilter filter, Entity host) {
 		if (filter == null) {
 			return allTargets;
@@ -520,10 +559,16 @@ public class SpellUtils {
 		return validTargets;
 	}
 
-	public static boolean highlanderDeck(Player player) {
-		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
-	}
-
+	/**
+	 * Interprets the {@link SpellArg#BOARD_POSITION_ABSOLUTE} or {@link SpellArg#BOARD_POSITION_RELATIVE} in a {@code
+	 * desc} given the {@code source} entity.
+	 *
+	 * @param context
+	 * @param player
+	 * @param desc
+	 * @param source
+	 * @return An index in the {@code source} entity's {@link Zones} zone.
+	 */
 	public static int getBoardPosition(GameContext context, Player player, SpellDesc desc, Entity source) {
 		final int UNDEFINED = -1;
 		int boardPosition = desc.getValue(SpellArg.BOARD_POSITION_ABSOLUTE, context, player, null, source, UNDEFINED);
@@ -629,6 +674,8 @@ public class SpellUtils {
 	 * @param source  The source or host {@link Entity}, typically the origin of this spell cast.
 	 * @param desc    The {@link SpellDesc} typically of the calling spell.
 	 * @return A list of cards.
+	 * @see #getCards(GameContext, Player, Entity, Entity, SpellDesc, int) for a complete description of the rules of how
+	 * 		cards are generated or retrieved in this method.
 	 */
 	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc) {
 		return getCards(context, player, target, source, desc, desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
@@ -639,6 +686,26 @@ public class SpellUtils {
 	 * SpellArg#CARDS} properties or as specified by a {@link net.demilich.metastone.game.spells.desc.source.CardSource}
 	 * and {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}. If neither of those are specified, uses the
 	 * target's {@link Entity#getSourceCard()} as the targeted card.
+	 * <p>
+	 * The {@link SpellDesc} given in {@code desc} is inspected for a variety of arguments. If there is a {@link
+	 * SpellArg#CARD_SOURCE} or {@link SpellArg#CARD_FILTER} specified, the card source generates a list of cards using
+	 * {@link net.demilich.metastone.game.spells.desc.source.CardSource#match(GameContext, Entity, Player)}, and that list
+	 * is filtered using {@link EntityFilter#matches(GameContext, Player, Entity, Entity)}.
+	 * <p>
+	 * Anytime {@link SpellArg#CARD} or {@link SpellArg#CARDS} is specified, the card IDs in those args are added to the
+	 * list of cards returned by this method.
+	 * <p>
+	 * If <b>no</b> arguments are specified, the {@code target} entity's {@link Entity#getSourceCard()} is added to the
+	 * list of cards returned by this method. This means that providing a {@link SpellDesc} that contains neither {@link
+	 * SpellArg#CARD}, {@link SpellArg#CARDS}, {@link SpellArg#CARD_SOURCE} nor {@link SpellArg#CARD_FILTER} will be
+	 * interpreted as trying to retrieve the target's base card.
+	 * <p>
+	 * Cards are not generated as copies unless the {@link net.demilich.metastone.game.spells.desc.source.CardSource} has
+	 * the {@link net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects} trait and is used as an arg
+	 * in the {@code desc}.
+	 * <p>
+	 * By default, when a {@link SpellArg#CARD_FILTER} is specified and a {@link SpellArg#CARD_SOURCE} is not, the default
+	 * card source used is {@link net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource}.
 	 *
 	 * @param context The game context
 	 * @param player  The player from whose point of view these cards should be retrieved
@@ -675,6 +742,17 @@ public class SpellUtils {
 		}
 	}
 
+	/**
+	 * Determines whether any of the {@link Entity#isInPlay()} entities belonging to the {@code playerId} host an
+	 * unexpired, active instance of the {@code auraClass} aura.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @param auraClass
+	 * @param <T>
+	 * @return {@code true} if such an aura is found.
+	 * @see #getAuras(GameContext, int, Class) to retrieve the aura instances themselves.
+	 */
 	public static <T extends Aura> boolean hasAura(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
@@ -684,6 +762,16 @@ public class SpellUtils {
 						.anyMatch(((Predicate<Aura>) Aura::isExpired).negate()));
 	}
 
+	/**
+	 * Retrieves all of the unexpired, active auras that are instances of the {@code auraClass} hosted by {@link
+	 * Entity#isInPlay()} entities belonging to the {@code playerId}.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @param auraClass
+	 * @param <T>
+	 * @return A list of aura instances.
+	 */
 	public static <T extends Aura> List<T> getAuras(GameContext context, int playerId, Class<T> auraClass) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
@@ -696,6 +784,17 @@ public class SpellUtils {
 				.collect(toList());
 	}
 
+	/**
+	 * Retrieves an array of spells corresponding to the {@link net.demilich.metastone.game.spells.desc.aura.AuraArg#APPLY_EFFECT}
+	 * field on an aura whose condition is null or fulfilled for the given {@code source} and {@code target}.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @param auraClass
+	 * @param source
+	 * @param target
+	 * @return A list of spells
+	 */
 	public static SpellDesc[] getBonusesFromAura(GameContext context, int playerId, Class<? extends Aura> auraClass, Entity source, Entity target) {
 		return context.getEntities()
 				.filter(e -> e.getOwner() == playerId && e.isInPlay())
@@ -706,5 +805,86 @@ public class SpellUtils {
 						.filter(aura -> aura.getCondition() == null || aura.getCondition().isFulfilled(context, context.getPlayer(playerId), source, target))
 						.map(aura -> aura.getDesc().getApplyEffect()))
 				.toArray(SpellDesc[]::new);
+	}
+
+	/**
+	 * Tries to determine the currently casting player from the point of view of a source, considering if the source has
+	 * changed owners or if it was destroyed.
+	 *
+	 * @param context             The game context
+	 * @param player              The casting player
+	 * @param source              The source from whose point of view the casting player should be determined
+	 * @param castingTargetPlayer Whose point of view the determination should be made. For example, if {@link
+	 *                            TargetPlayer#OPPONENT} is chosen here, then the opponent of the owner of the {@code
+	 *                            source} will be used.
+	 * @return An object containing information related to who is the casting player and whether or not the source has
+	 * 		been destroyed.
+	 */
+	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
+		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();
+	}
+
+	/**
+	 * An object that contains results of a {@link #determineCastingPlayer(GameContext, Player, Entity, TargetPlayer)}
+	 * call.
+	 */
+	public static class DetermineCastingPlayer {
+		private boolean sourceDestroyed;
+		private GameContext context;
+		private Player player;
+		private Entity source;
+		private TargetPlayer castingTargetPlayer;
+		private Player castingPlayer;
+
+		public DetermineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
+			this.context = context;
+			this.player = player;
+			this.source = source;
+			this.castingTargetPlayer = castingTargetPlayer;
+		}
+
+		public boolean isSourceInPlay() {
+			return !sourceDestroyed;
+		}
+
+		public Player getCastingPlayer() {
+			return castingPlayer;
+		}
+
+		public DetermineCastingPlayer invoke() {
+			// In case Yogg changes sides, this should case who the spells are being cast for.
+			switch (castingTargetPlayer) {
+				case BOTH:
+				case OWNER:
+				default:
+					castingPlayer = context.getPlayer(source.getOwner());
+					break;
+				case SELF:
+					castingPlayer = player;
+					break;
+				case OPPONENT:
+					castingPlayer = context.getOpponent(player);
+					break;
+				case ACTIVE:
+					castingPlayer = context.getActivePlayer();
+					break;
+				case INACTIVE:
+					castingPlayer = context.getOpponent(context.getActivePlayer());
+					break;
+			}
+
+			// If Yogg is removed from the board, stop casting spells.
+			if (source != null
+					&& castingTargetPlayer == TargetPlayer.OWNER
+					&& source.getEntityType() == EntityType.MINION
+					&& (source.getZone()
+					!= Zones.BATTLEFIELD
+					|| source.isDestroyed())) {
+				sourceDestroyed = true;
+				return this;
+			}
+			sourceDestroyed = false;
+			return this;
+		}
 	}
 }

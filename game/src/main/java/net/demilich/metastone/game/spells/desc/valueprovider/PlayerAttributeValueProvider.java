@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.statistics.Statistic;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 public class PlayerAttributeValueProvider extends ValueProvider {
 

@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -19,7 +20,7 @@ import java.util.function.Predicate;
  * Destroys the {@code target} {@link Actor}.
  * <p>
  * Actors that are destroyed in this way do not get their hitpoints reduced to zero and are not dealt any damage. They
- * receive the {@link net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute, and during an {@link
+ * receive the {@link Attribute#DESTROYED} attribute, and during an {@link
  * GameLogic#endOfSequence()}, they are moved to the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD} "not
  * peacefully" (i.e., deathrattles will trigger).
  * <p>
@@ -37,7 +38,7 @@ import java.util.function.Predicate;
  * </pre>
  *
  * @see GameLogic#markAsDestroyed(Actor) for the underlying effect that adds the {@link
- * 		net.demilich.metastone.game.utils.Attribute#DESTROYED} attribute.
+ * 		Attribute#DESTROYED} attribute.
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
  */
 public class DestroySpell extends Spell {

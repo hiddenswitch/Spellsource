@@ -19,7 +19,7 @@ import java.util.List;
  * an action is requested. The {@link GameContext} is then responsible for getting the next action.
  *
  * @see AbstractBehaviour for default implementations of some of these requests.
- * @see net.demilich.metastone.game.shared.threat.GameStateValueBehaviour for an example of an artificial-intelligence
+ * @see GameStateValueBehaviour for an example of an artificial-intelligence
  * 		based behaviour.
  */
 public interface Behaviour extends Cloneable {

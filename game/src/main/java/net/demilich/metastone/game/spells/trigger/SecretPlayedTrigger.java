@@ -5,6 +5,9 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
+/**
+ * Fires when a secret is played from the hand.
+ */
 public class SecretPlayedTrigger extends EventTrigger {
 
 	public SecretPlayedTrigger(EventTriggerDesc desc) {

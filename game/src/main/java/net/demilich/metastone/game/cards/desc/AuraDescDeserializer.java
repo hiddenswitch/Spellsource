@@ -16,7 +16,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(AuraArg.FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(AuraArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(AuraArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);

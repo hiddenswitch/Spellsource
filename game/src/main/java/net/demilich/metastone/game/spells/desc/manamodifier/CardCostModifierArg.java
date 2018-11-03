@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
 public enum CardCostModifierArg {
 	/**
-	 * The {@link Class<CardCostModifier>} of this description.
+	 * The {@link Class} of this description.
 	 */
 	CLASS,
 	/**

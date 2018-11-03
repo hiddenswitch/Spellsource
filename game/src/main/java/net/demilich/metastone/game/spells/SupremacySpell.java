@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.aura.SupremaciesTriggerTwiceAura;
 import net.demilich.metastone.game.spells.aura.SupremacyBonusEffectAura;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 /**
  * Indicates that the subspells should be cast as the "Supremacy" effect.

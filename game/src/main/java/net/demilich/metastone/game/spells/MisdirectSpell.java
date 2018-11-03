@@ -11,6 +11,17 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Misdirection overrides the {@link EntityReference#ATTACKER}'s current target to another random target within {@link
+ * SpellArg#SECONDARY_TARGET}.
+ * <p>
+ * By default, another character is chosen from {@link EntityReference#ALL_CHARACTERS}.
+ * <p>
+ * The attacker itself is always excluded from the possible misdirection.
+ *
+ * @see OverrideTargetSpell for a more general target override function.
+ * @see FightSpell to cause an actor to attack a target generally.
+ */
 public class MisdirectSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(MisdirectSpell.class);
 

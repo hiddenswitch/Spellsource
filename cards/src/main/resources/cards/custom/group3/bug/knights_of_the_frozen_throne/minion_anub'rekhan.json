@@ -1,0 +1,28 @@
+{
+  "name": "Anub'Rekhan",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 8,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Wrap a minion in webbing. Deathrattle: It escapes.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "custom.AnubRekhanSpell",
+      "card": "permanent_cocoon",
+      "secondaryTarget": "SELF"
+    }
+  },
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

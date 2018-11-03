@@ -1,0 +1,26 @@
+{
+  "name": "Salt the Wound",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Deal 2 damage to all enemy minions. Reservoir (0-15): Then, Freeze all enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -105,7 +105,8 @@ public class CardCostModifierSpell extends Spell {
 
 		if (manaModifierDesc.containsKey(CardCostModifierArg.TARGET)
 				&& target != null
-				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))) {
+				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))
+				&& !manaModifierDesc.get(CardCostModifierArg.TARGET).equals(EntityReference.SELF)) {
 			logger.debug("onCast {} {}: The target of this spell, {}, and the mana cost modifier's target, {}, do not match.",
 					context.getGameId(), source, target, manaModifierDesc.get(CardCostModifierArg.TARGET));
 		}

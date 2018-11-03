@@ -15,6 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Transforms the {@code target} minion into the {@link SpellArg#CARD} or the <b>source card</b> of the entity pointed
+ * to by {@link SpellArg#SECONDARY_TARGET}.
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for the complete rules on
+ * 		transformations.
+ */
 public class TransformMinionSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TransformMinionSpell.class);
@@ -22,7 +29,7 @@ public class TransformMinionSpell extends Spell {
 	public static SpellDesc create(EntityReference target, Minion transformTarget, boolean randomTarget) {
 		Map<SpellArg, Object> arguments = new SpellDesc(TransformMinionSpell.class);
 		if (transformTarget != null) {
-			arguments.put(SpellArg.SECONDARY_TARGET, transformTarget);
+			arguments.put(SpellArg.SECONDARY_TARGET, transformTarget.getReference());
 		}
 		if (target != null) {
 			arguments.put(SpellArg.TARGET, target);
@@ -51,20 +58,11 @@ public class TransformMinionSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		if (target instanceof Hero) {
-			String heroCardName = desc.getString(SpellArg.HERO_CARD);
-			SpellDesc changeHeroSpell = ChangeHeroSpell.create(heroCardName);
-			SpellUtils.castChildSpell(context, context.getPlayer(target.getOwner()), changeHeroSpell, source, target);
-		} else {
-			String cardName = (String) desc.get(SpellArg.CARD);
-			Minion minion = (Minion) target;
-			Minion transformTarget = (Minion) desc.get(SpellArg.SECONDARY_TARGET);
-			Card templateCard = cardName != null ? context.getCardById(cardName) : null;
-
-			Minion newMinion = transformTarget != null ? transformTarget : templateCard.summon();
-			logger.debug("{} is transformed into a {}", minion, newMinion);
-			context.getLogic().transformMinion(minion, newMinion);
+		Card card = SpellUtils.getCard(context, desc);
+		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
+			card = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET)).getSourceCard();
 		}
+		context.getLogic().transformMinion((Minion) target, card.summon());
 	}
 
 }

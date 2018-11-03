@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Casts {@link SpellArg#SPELL1}. Evaluates the {@link SpellArg#CONDITION}: if it is fulfilled, casts {@link
+ * Casts {@link SpellArg#SPELL1} and evaluates the {@link SpellArg#CONDITION}: if it is fulfilled, casts {@link
  * SpellArg#SPELL2}. When {@link SpellArg#EXCLUSIVE} is {@code true}, behaves like an {@link EitherOrSpell}.
  * <p>
  * Use this spell to evaluate a condition after {@link SpellArg#SPELL1} is evaluated.
