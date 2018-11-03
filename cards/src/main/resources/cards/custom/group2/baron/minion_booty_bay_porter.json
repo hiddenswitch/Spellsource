@@ -11,18 +11,18 @@
   "trigger": {
     "eventTrigger": {
       "class": "MinionDeathTrigger",
-      "targetPlayer": "SELF",
-      "race": "PIRATE"
+      "race": "PIRATE",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "ReceiveCardSpell",
       "value": 2,
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      },
       "cardFilter": {
         "class": "RaceFilter",
         "race": "PIRATE"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
       }
     }
   },

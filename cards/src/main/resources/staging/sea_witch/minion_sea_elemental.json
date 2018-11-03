@@ -1,0 +1,27 @@
+{
+  "name": "Sea Elemental",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Whenever You add a card to your deck, gain +1/+1:",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

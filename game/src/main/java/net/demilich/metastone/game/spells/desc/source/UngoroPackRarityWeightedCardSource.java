@@ -8,7 +8,11 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.stream.Collectors;
 
-public class UngoroPackRarityWeightedCardSource extends CatalogueSource {
+/**
+ * This weighted card source returns legendaries and epics more frequently than normal and only cards from the {@link
+ * CardSet#JOURNEY_TO_UNGORO} set.
+ */
+public final class UngoroPackRarityWeightedCardSource extends CatalogueSource {
 
 	public UngoroPackRarityWeightedCardSource(CardSourceDesc desc) {
 		super(desc);

@@ -8,6 +8,9 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * @deprecated Implemented using a {@link SummonSpell} with a {@link OverrideTargetSpell} as the subspell.
+ */
 @Deprecated
 public class SummonNewAttackTargetSpell extends Spell {
 

@@ -65,7 +65,7 @@
           "target": "FRIENDLY_HERO_POWER"
         },
         "cardSource": {
-          "class": "CatalogueSource"
+          "class": "UnweightedCatalogueSource"
         },
         "filter": {
           "class": "CardFilter",

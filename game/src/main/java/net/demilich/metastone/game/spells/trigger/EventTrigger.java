@@ -16,6 +16,22 @@ import net.demilich.metastone.game.targeting.TargetType;
 
 import java.io.Serializable;
 
+/**
+ * This is the base class of all effects that react to events in the game.
+ * <p>
+ * These subclasses correspond to the {@code "class"} field on the {@code "eventTrigger"} property of the {@link
+ * net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc}. For example, {@link TurnEndTrigger} corresponds to
+ * the {@code "TurnEndTrigger"} string found in this {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc}
+ * written on a card:
+ * <pre>
+ *   "trigger": {
+ *     "eventTrigger": {
+ *       "class": "TurnEndTrigger"
+ *     },
+ *     "spell": ...
+ *   }
+ * </pre>
+ */
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
 	private int owner = -1;
 	private EventTriggerDesc desc;

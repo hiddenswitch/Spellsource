@@ -16,7 +16,7 @@
     "spell": {
       "class": "SummonSpell",
       "boardPositionRelative": "RIGHT",
-      "card": "token_nightmare_tentacle"
+      "card": "token_xavious_nightmare_tentacle"
     }
   },
   "collectible": true,

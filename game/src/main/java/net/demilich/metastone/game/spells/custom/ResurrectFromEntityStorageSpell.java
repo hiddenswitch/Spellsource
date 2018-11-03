@@ -13,6 +13,16 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Resurrects and clears the entities stored on the {@code source}.
+ * <p>
+ * Implements Frostmourne. However, Frostmourne's effect should really be adding deathrattles to it.
+ *
+ * @see CastOnCardsInStorageSpell for a more general way of performing actions on stored cards, including the base cards
+ * 		of targeted minions.
+ * @see CastOnEntitiesInStorageSpell for a more general way of performing actions on stored entities, which may be cards
+ * 		or minions in the graveyard.
+ */
 public class ResurrectFromEntityStorageSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(ResurrectFromEntityStorageSpell.class);
@@ -42,5 +52,3 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 		EnvironmentEntityList.getList(context).clear(source);
 	}
 }
-
-

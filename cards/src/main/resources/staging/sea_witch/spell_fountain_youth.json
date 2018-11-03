@@ -1,0 +1,17 @@
+{
+  "name": "Fountain Youth",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "of Deal 2 damage to all minions. Restore any that survived to full Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

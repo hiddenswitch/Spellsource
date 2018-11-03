@@ -10,11 +10,11 @@
   "aura": {
     "class": "AttributeAura",
     "target": "ADJACENT_MINIONS",
+    "attribute": "AURA_IMMUNE",
     "filter": {
       "class": "RaceFilter",
       "race": "PIRATE"
-    },
-    "attribute": "AURA_IMMUNE"
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

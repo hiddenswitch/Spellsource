@@ -9,7 +9,7 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
@@ -195,6 +195,16 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	}
 
 
+	/**
+	 * Indicates whether or not the actor is mortally wounded.
+	 * <p>
+	 * A mortally wounded actor hasn't necessarily been taken off the board and put into the {@link
+	 * net.demilich.metastone.game.targeting.Zones#GRAVEYARD} yet. This is useful for preventing effects from impacting
+	 * already dead minions before a {@link GameLogic#endOfSequence()} has been called.
+	 *
+	 * @return {@code true} if the minion's health is less than 1 or if the minion has the {@link Attribute#DESTROYED}
+	 * 		attribute.
+	 */
 	@Override
 	public boolean isDestroyed() {
 		if (hasAttribute(Attribute.PERMANENT)) {
@@ -340,6 +350,10 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		clone.getAttributes().remove(Attribute.AURA_POISONOUS);
 		clone.getAttributes().remove(Attribute.AURA_RUSH);
 		clone.getAttributes().remove(Attribute.AURA_WINDFURY);
+		clone.getAttributes().remove(Attribute.AURA_IMMUNE_WHILE_ATTACKING);
+		clone.getAttributes().remove(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
+		clone.getAttributes().remove(Attribute.AURA_SPELL_DAMAGE);
+		clone.getAttributes().remove(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
 	}

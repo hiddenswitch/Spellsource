@@ -1,0 +1,30 @@
+{
+  "name": "River Rider",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "MURLOC",
+  "description": "Rush. Has +2 Attack while you control a Beast.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "SELF",
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "attackBonus": 2,
+    "hpBonus": 0
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,40 @@
+{
+  "name": "Crpytlady Zara",
+  "heroPower": "hero_power_infused_egg",
+  "baseManaCost": 8,
+  "type": "HERO",
+  "heroClass": "AMBER",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: This game, your minions can only take 1 damage at a time on your turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "PreDamageTrigger",
+          "fireCondition": {
+            "class": "OwnedByPlayerCondition",
+            "targetPlayer": "ACTIVE"
+          },
+          "targetEntityType": "MINION",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "ModifyDamageSpell",
+          "value": 1,
+          "operation": "SET"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

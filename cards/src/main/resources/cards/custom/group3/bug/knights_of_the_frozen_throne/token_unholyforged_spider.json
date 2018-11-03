@@ -1,0 +1,17 @@
+{
+  "name": "Unholyforged Spider",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "BEAST",
+  "description": "Poisonous.",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

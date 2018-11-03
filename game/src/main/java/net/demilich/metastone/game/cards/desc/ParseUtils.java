@@ -35,7 +35,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.TargetType;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
 
 import java.io.IOException;
 
@@ -191,6 +190,8 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_CARDS;
 			case "enemy_cards":
 				return EntityReference.ENEMY_CARDS;
+			case "current_summoning_minion":
+				return EntityReference.CURRENT_SUMMONING_MINION;
 			default:
 				return null;
 		}

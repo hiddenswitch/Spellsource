@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards.desc;
 
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 
@@ -40,7 +41,7 @@ public enum ParseValueType {
 	 */
 	SPELL_ARRAY,
 	/**
-	 * A string matching the name of a {@link net.demilich.metastone.game.utils.Attribute} enum.
+	 * A string matching the name of a {@link Attribute} enum.
 	 */
 	ATTRIBUTE,
 	/**
@@ -177,6 +178,9 @@ public enum ParseValueType {
 	 * An {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc} that should be interpreted as a {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Secret}.
 	 */
-	SECRET, CHOOSE_ONE_OVERRIDE,
-
+	SECRET,
+	/**
+	 * A {@link net.demilich.metastone.game.cards.ChooseOneOverride}.
+	 */
+	CHOOSE_ONE_OVERRIDE,
 }

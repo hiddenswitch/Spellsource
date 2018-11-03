@@ -17,7 +17,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.Map;
 
 /**
- * This class is currently only used for tri-class ard discoveries.
+ * @deprecated This class is currently only used for tri-class card discoveries.
  */
 @Deprecated
 public class DiscoverFilteredCardSpell extends Spell {

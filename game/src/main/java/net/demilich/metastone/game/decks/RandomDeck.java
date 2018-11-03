@@ -5,7 +5,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
-import net.demilich.metastone.game.decks.validation.IDeckValidator;
+import net.demilich.metastone.game.decks.validation.DeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomUtils;
 
@@ -45,7 +45,7 @@ public final class RandomDeck extends GameDeck {
 	}
 
 	void populate(DeckFormat deckFormat) {
-		IDeckValidator deckValidator = new DefaultDeckValidator();
+		DeckValidator deckValidator = new DefaultDeckValidator();
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)
 				&& !card.getCardType().isCardType(CardType.HERO_POWER)

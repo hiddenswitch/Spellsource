@@ -30,8 +30,8 @@
       "value": 3
     },
     "spell2": {
-      "class": "ReturnTargetToHandSpell",
-      "target": "SELF"
+      "class": "ReceiveCardSpell",
+      "card": "spell_al_dente"
     }
   },
   "attributes": {},

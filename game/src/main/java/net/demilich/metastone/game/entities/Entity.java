@@ -3,7 +3,6 @@ package net.demilich.metastone.game.entities;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -14,8 +13,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 
@@ -489,6 +489,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return Integer.compare(this.getId(), o.getId());
 	}
 
+	@NotNull
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
 	}

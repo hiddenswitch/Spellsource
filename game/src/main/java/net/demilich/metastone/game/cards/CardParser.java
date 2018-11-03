@@ -3,7 +3,7 @@ package net.demilich.metastone.game.cards;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.shared.utils.ResourceInputStream;
+import net.demilich.metastone.game.utils.ResourceInputStream;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

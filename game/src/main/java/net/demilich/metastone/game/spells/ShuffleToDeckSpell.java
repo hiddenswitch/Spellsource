@@ -9,16 +9,26 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.AttributeMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} & {@link SpellArg#CARD_FILTER} cards
+ * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER} cards
  * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
  * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
+ *
+ * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
+ * <pre>
+ *   {
+ *     "class": "ShuffleToDeckSpell",
+ *     "card": "token_mur'ghoul",
+ *     "howMany": 3,
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
  */
 public class ShuffleToDeckSpell extends Spell {
 

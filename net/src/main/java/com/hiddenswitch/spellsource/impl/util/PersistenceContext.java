@@ -1,10 +1,9 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import com.github.fromage.quasi.fibers.Suspendable;
-import com.hiddenswitch.spellsource.Logic;
+import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Spellsource;
-import io.vertx.core.Handler;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -19,8 +18,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * net.demilich.metastone.game.GameContext} where the event was fired; and, to update inventory items corresponding to
  * an entity on the board (i.e., the card).
  *
- * @param <T> The {@link GameEvent} class that this {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
- *            Handler)} handler argument is handling.
+ * @param <T> The {@link GameEvent} class that this {@link Spellsource#persistAttribute(String, GameEventType,
+ *            Attribute, SuspendableAction1)} handler argument is handling.
  */
 public interface PersistenceContext<T extends GameEvent> {
 	/**
@@ -34,15 +33,14 @@ public interface PersistenceContext<T extends GameEvent> {
 	T event();
 
 	/**
-	 * Updates the entity (or entities) pointed to by the reference with a new value for {@link #attribute()} this
-	 * context handles.
+	 * Updates the entity (or entities) pointed to by the reference with a new value for {@link #attribute()} this context
+	 * handles.
 	 *
 	 * @param reference An {@link EntityReference}. Typically, you will use {@link EntityReference#pointTo(Entity)} to
-	 *                  create a reference that points to a specific entity; but, you may also use references like
-	 *                  {@link EntityReference#ALL_MINIONS} to update an attribute on all minions currently on the
-	 *                  board. See {@link net.demilich.metastone.game.logic.TargetLogic#resolveTargetKey(GameContext,
-	 *                  Player, Entity, EntityReference)} for the underlying logic of how an {@link EntityReference} is
-	 *                  interpreted.
+	 *                  create a reference that points to a specific entity; but, you may also use references like {@link
+	 *                  EntityReference#ALL_MINIONS} to update an attribute on all minions currently on the board. See
+	 *                  {@link net.demilich.metastone.game.logic.TargetLogic#resolveTargetKey(GameContext, Player, Entity,
+	 *                  EntityReference)} for the underlying logic of how an {@link EntityReference} is interpreted.
 	 * @param newValue  The new value for the attribute.
 	 * @return The number of inventory records that were updated.
 	 */

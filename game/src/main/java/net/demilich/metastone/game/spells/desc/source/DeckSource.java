@@ -7,6 +7,10 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
 
+/**
+ * Returns cards from the player's deck. Does <b>not</b> return copies or base cards, but references to the actual cards
+ * themselves.
+ */
 public class DeckSource extends CardSource implements Serializable {
 
 	public DeckSource(CardSourceDesc desc) {

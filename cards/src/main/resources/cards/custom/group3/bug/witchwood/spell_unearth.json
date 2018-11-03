@@ -1,0 +1,16 @@
+{
+  "name": "Unearth",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Put 3 copies of it on the top of your deck.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "PutDeckTopSpell",
+    "howMany": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

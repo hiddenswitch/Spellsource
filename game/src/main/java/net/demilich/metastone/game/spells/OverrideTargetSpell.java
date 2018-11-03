@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -10,6 +11,35 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.Map;
 
+/**
+ * Overrides the target of the next {@link net.demilich.metastone.game.logic.GameLogic#targetAcquisition(Player, Entity,
+ * GameAction)} call.
+ * <p>
+ * Overrides are always cleared at the end of evaluating a game action (not necessarily at the end of a sequence).
+ * <p>
+ * Use in combination with a {@link net.demilich.metastone.game.spells.trigger.TargetAcquisitionTrigger} to override
+ * player-chosen targets. For <b>example</b>, this code will implement the text, "Whenever a Fireball is cast, cast it
+ * instead on the enemy hero."
+ * <pre>
+ *   "trigger": {
+ *     "eventTrigger": {
+ *       "class": "TargetAcquisitionTrigger",
+ *       "actionType": "SPELL",
+ *       "fireCondition": {
+ *         "class": "CardPropertyCondition",
+ *         "target": "EVENT_SOURCE",
+ *         "card": "spell_fireball"
+ *       },
+ *       "sourcePlayer": "BOTH",
+ *       "targetPlayer": "BOTH"
+ *     },
+ *     "spell": {
+ *       "class": "OverrideTargetSpell",
+ *       "target": "ENEMY_HERO"
+ *     }
+ *   }
+ * </pre>
+ */
 public class OverrideTargetSpell extends Spell {
 
 	public static SpellDesc create() {

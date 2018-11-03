@@ -12,12 +12,22 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * This spell casts {@link SpellArg#HOW_MANY} missiles, each dealing {@link SpellArg#VALUE} damage (with spell damage)
+ * to random targets.
+ * <p>
+ * When a target becomes mortally wounded ({@link Actor#isDestroyed()} resolves to {@code true}), it is no longer
+ * eligible to receive missiles.
+ * <p>
+ * When the amount of damage a missile deals is 1, the spell damage modifier is interpreted to increase the number of
+ * missiles. In all other instances, spell damage increases the damage <b>per missile.</b>
+ */
 public class MissilesSpell extends DamageSpell {
 
 	private static Logger logger = LoggerFactory.getLogger(MissilesSpell.class);

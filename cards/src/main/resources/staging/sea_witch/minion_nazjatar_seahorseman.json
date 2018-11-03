@@ -1,0 +1,16 @@
+{
+  "name": "Nazjatar Seahorseman",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Charge Reservoir (20+): Can't attack heroes.",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

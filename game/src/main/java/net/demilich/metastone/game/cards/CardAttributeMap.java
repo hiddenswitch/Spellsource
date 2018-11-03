@@ -9,8 +9,6 @@ import io.vertx.core.impl.ConcurrentHashSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;

@@ -16,12 +16,15 @@ import io.vertx.ext.mongo.UpdateOptions;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 
+/**
+ * Provides presence information to players who are each other's friends.
+ */
 public interface Presence {
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
-		Connection.connected(Sync.suspendableHandler((SuspendableAction1<Connection>) connection -> {
+		Connection.connected(Sync.suspendableHandler(connection -> {
 			final UserId key = new UserId(connection.userId());
-			connection.endHandler(Sync.suspendableHandler((SuspendableAction1<Void>) ignored -> {
+			connection.endHandler(Sync.suspendableHandler(ignored -> {
 				setPresence(key, PresenceEnum.OFFLINE);
 			}));
 

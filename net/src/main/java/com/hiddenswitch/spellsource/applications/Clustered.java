@@ -19,6 +19,11 @@ import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 import java.time.Duration;
 import java.time.temporal.ChronoUnit;
 
+/**
+ * The main entry point of the game server.
+ *
+ * Starts a clustered service, then tries to migrate the database.
+ */
 public class Clustered {
 	public static void main(String args[]) {
 		System.setProperty("java.net.preferIPv4Stack", "true");

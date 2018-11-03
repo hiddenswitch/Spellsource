@@ -1,0 +1,16 @@
+{
+  "name": "Hungry Naga",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

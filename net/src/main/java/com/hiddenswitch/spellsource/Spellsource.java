@@ -16,7 +16,7 @@ import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -47,7 +47,7 @@ import static java.util.stream.Collectors.toSet;
  * The Spellsource Server API. Access it with {@link Spellsource#spellsource()}.
  * <p>
  * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(String,
- * GameEventType, Attribute, Handler)}.
+ * GameEventType, Attribute, SuspendableAction1)}.
  * <p>
  * It will provide more APIs for features in the future.
  *

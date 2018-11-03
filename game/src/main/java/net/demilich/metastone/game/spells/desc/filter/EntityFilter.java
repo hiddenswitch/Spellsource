@@ -39,6 +39,19 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 		return (card) -> matches(context, player, card, host);
 	}
 
+	/**
+	 * A method that calls the subclass's {@link #test(GameContext, Player, Entity, Entity)} implementation that
+	 * determines whether or not a given {@code entity} matches the filter.
+	 * <p>
+	 * {@link EntityFilterArg#TARGET_PLAYER} is interpreted as the point of view from which the {@link #test(GameContext,
+	 * Player, Entity, Entity)} call is evaluated.
+	 *
+	 * @param context
+	 * @param player
+	 * @param entity
+	 * @param host
+	 * @return {@code true} if the {@code entity} passes the filter, otherwise {@code false}.
+	 */
 	public boolean matches(GameContext context, Player player, Entity entity, Entity host) {
 		boolean invert = getDesc().getBool(EntityFilterArg.INVERT);
 		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(EntityFilterArg.TARGET_PLAYER);
@@ -73,6 +86,17 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 		return this.test(context, providingPlayer, entity, host) != invert;
 	}
 
+	/**
+	 * The subclasses of this class implement this method to actually perform the logic of the filtering. Observe that
+	 * results from filtering other entities are not available here; this function is stateless in the sense that an
+	 * earlier acceptance or rejection of an entity cannot influence the acceptance or rejection of a current entity.
+	 *
+	 * @param context
+	 * @param player
+	 * @param entity
+	 * @param host
+	 * @return
+	 */
 	protected abstract boolean test(GameContext context, Player player, Entity entity, Entity host);
 
 	@Override
