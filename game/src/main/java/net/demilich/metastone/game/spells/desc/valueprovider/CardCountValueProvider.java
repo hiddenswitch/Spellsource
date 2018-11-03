@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 public class CardCountValueProvider extends ValueProvider {
 
