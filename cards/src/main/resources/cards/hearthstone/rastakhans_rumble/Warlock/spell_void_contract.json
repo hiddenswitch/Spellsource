@@ -1,0 +1,50 @@
+{
+  "name": "Void Contract",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "EPIC",
+  "description": "Destroy half of each player's deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscardCardsFromDeckSpell",
+        "targetPlayer": "SELF",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "value1": {
+            "class": "CardCountValueProvider",
+            "cardSource": {
+              "class": "DeckSource",
+              "targetPlayer": "SELF"
+            }
+          },
+          "operation": "DIVIDE",
+          "value": 2
+        }
+      },
+      {
+        "class": "DiscardCardsFromDeckSpell",
+        "targetPlayer": "OPPONENT",
+        "value": {
+          "class": "AlgebraicValueProvider",
+          "value1": {
+            "class": "CardCountValueProvider",
+            "cardSource": {
+              "class": "DeckSource",
+              "targetPlayer": "OPPONENT"
+            }
+          },
+          "operation": "DIVIDE",
+          "value": 2
+        }
+      }
+
+    ]
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

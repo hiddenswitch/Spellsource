@@ -11,26 +11,13 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "AddAttributeSpell",
+      "class": "AddEnchantmentSpell",
       "target": "FRIENDLY_PLAYER",
-      "attribute": "DOUBLE_BATTLECRIES",
-      "revertTrigger": {
-        "class": "TurnEndTrigger"
-      },
-      "secondRevertTrigger": {
-        "class": "AfterMinionPlayedTrigger",
-        "queueCondition": {
-          "class": "AttributeCondition",
-          "attribute": "RESERVED_BOOLEAN_1",
-          "invert": true
-        },
-        "requiredAttribute": "BATTLECRY"
-      }
+      "card": "enchantment_double_next_battlecry"
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "RESERVED_BOOLEAN_1": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",

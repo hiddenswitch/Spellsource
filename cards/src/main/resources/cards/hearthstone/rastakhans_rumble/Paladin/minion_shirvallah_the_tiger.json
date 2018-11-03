@@ -1,0 +1,32 @@
+{
+  "name": "Shirvallah, The Tiger",
+  "baseManaCost": 25,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Divine Shield, Rush, Lifesteal. Costs (1) less for each Mana you've spent on spells.",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "RUSH": true,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardCountValueProvider",
+    "targetPlayer": "SELF",
+    "cardSource": {
+      "class": "GraveyardCardsSource",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "attribute": "MANA_SPENT"
+  }
+}

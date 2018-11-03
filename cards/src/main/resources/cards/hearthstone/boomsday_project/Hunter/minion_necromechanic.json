@@ -7,8 +7,9 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "description": "Your minions trigger their Deathrattles twice.",
-  "attributes": {
-    "DOUBLE_DEATHRATTLES": true
+  "aura": {
+    "class": "DoubleDeathrattlesAura",
+    "target": "FRIENDLY_MINIONS"
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",

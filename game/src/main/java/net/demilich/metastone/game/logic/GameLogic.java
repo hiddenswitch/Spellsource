@@ -2541,6 +2541,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		for (Card starterCard : starterCards) {
 			if (starterCard != null) {
+				starterCard.setAttribute(Attribute.STARTED_IN_HAND);
 				receiveCard(player.getId(), starterCard);
 			}
 		}
@@ -2548,6 +2549,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (!player.getDeck().isEmpty()) {
 			player.getDeck().shuffle(getRandom());
 		}
+
+
 
 		// second player gets the coin additionally
 		if (!begins) {
@@ -2681,6 +2684,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		player.getStatistics().cardPlayed(card, context.getTurn());
 		card.setAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK, context.getTurn());
+		card.setAttribute(Attribute.MANA_SPENT, modifiedManaCost);
 		card.setAttribute(Attribute.HAND_INDEX, card.getEntityLocation().getIndex());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
@@ -3245,6 +3249,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		battlecry.setSource(actor.getReference());
 
+
 		if (battlecry.getTargetRequirement() != TargetSelection.NONE) {
 			List<GameAction> battlecryActions = getTargetedBattlecryGameActions(battlecry, player);
 
@@ -3308,28 +3313,53 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			actor.getAttributes().put(Attribute.CHOICE, choice);
 		}
 
-		if (hasAttribute(player, Attribute.DOUBLE_BATTLECRIES) && actor.getSourceCard().hasAttribute(Attribute.BATTLECRY)) {
-			// You need DOUBLE_BATTLECRIES before your battlecry action, not after.
-			EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
-			performGameAction(playerId, battlecryAction);
-			// Make sure the battlecry is still targetable
-			// The target may have transformed
-			if (target != null
-					&& !target.isTargetGroup()) {
-				target = context.resolveSingleTarget(target).transformResolved(context).getReference();
-				battlecryAction.setTargetReference(target);
+		boolean willDouble = false;
+		List<SpellDesc> extraEffects = new ArrayList<>();
+        List<DoubleBattlecriesAura> doubleBattlecryAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleBattlecriesAura.class);
+        if (!doubleBattlecryAuras.isEmpty() && actor.hasAttribute(Attribute.BATTLECRY)) {
+            for (DoubleBattlecriesAura aura : doubleBattlecryAuras) {
+            	aura.onGameEvent(new WillEndSequenceEvent(context));
+                if (aura.getAffectedEntities().contains(actor.getId())) {
+                    willDouble = true;
+                    if (aura.extraEffect != null) {
+                    	extraEffects.add(aura.extraEffect);
+					}
+                }
+            }
+        }
+        List<DoubleCombosAura> doubleComboAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleCombosAura.class);
+        if (!doubleComboAuras.isEmpty() && actor.hasAttribute(Attribute.COMBO)) {
+            for (DoubleCombosAura aura : doubleComboAuras) {
+                if (aura.getAffectedEntities().contains(actor.getId())) {
+                    willDouble = true;
+                }
+            }
+        }
+
+        if (willDouble) {
+            EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
+            performGameAction(playerId, battlecryAction);
+            // Make sure the battlecry is still targetable
+            // The target may have transformed
+            if (target != null
+                    && !target.isTargetGroup()) {
+                target = context.resolveSingleTarget(target).transformResolved(context).getReference();
+                battlecryAction.setTargetReference(target);
+            }
+            final EntityReference target1 = target;
+            final boolean targetable = target == null
+                    || target.isTargetGroup()
+                    || getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
+            if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
+                return;
+            }
+			for (SpellDesc extraEffect : extraEffects) {
+				context.getLogic().castSpell(playerId, extraEffect, actor.getReference(), EntityReference.NONE, true);
 			}
-			final EntityReference target1 = target;
-			final boolean targetable = target == null
-					|| target.isTargetGroup()
-					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
-			if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
-				return;
-			}
-			performGameAction(playerId, battlecryAction);
-		} else {
-			performGameAction(playerId, battlecryAction);
-		}
+            performGameAction(playerId, battlecryAction);
+        } else {
+            performGameAction(playerId, battlecryAction);
+        }
 	}
 
 	/**
@@ -3363,7 +3393,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
-		boolean doubleDeathrattles = hasAttribute(player, Attribute.DOUBLE_DEATHRATTLES);
+		boolean doubleDeathrattles = false;
+		List<DoubleDeathrattlesAura> doubleDeathrattleAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleDeathrattlesAura.class);
+		if (!doubleDeathrattleAuras.isEmpty()) {
+			for (DoubleDeathrattlesAura aura : doubleDeathrattleAuras) {
+				if (aura.getAffectedEntities().contains(actor.getId())) {
+					doubleDeathrattles = true;
+				}
+			}
+		}
+
 		EntityReference sourceReference = actor.getReference();
 		// TODO: What happens if a deathrattle modifies another deathrattle?
 		// Make the list of deathrattles immutable
@@ -3645,6 +3684,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 			refreshAttacksPerRound(minion);
+			if (minion.hasAttribute(Attribute.STEALTH) && minion.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
+				int stealthForTurns = minion.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
+				if (stealthForTurns == 1) {
+					minion.getAttributes().remove(Attribute.STEALTH);
+					minion.getAttributes().remove(Attribute.STEALTH_FOR_TURNS);
+				} else minion.setAttribute(Attribute.STEALTH_FOR_TURNS, stealthForTurns - 1);
+			}
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 

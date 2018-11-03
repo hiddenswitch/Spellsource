@@ -7,8 +7,9 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "description": "Your Battlecries trigger twice.",
-  "attributes": {
-    "DOUBLE_BATTLECRIES": true
+  "aura": {
+    "class": "DoubleBattlecriesAura",
+    "target": "FRIENDLY_CARDS"
   },
   "collectible": true,
   "set": "LEAGUE_OF_EXPLORERS",
