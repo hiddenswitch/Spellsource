@@ -22,10 +22,9 @@
         "spell2": {
           "class": "SummonSpell",
           "card": "token_tauren_slime"
-        }
-		]
-      },
-    ]
+}
+}
+]
   },
   "collectible": false,
   "set": "BLIZZARD_ADVENTURE",
