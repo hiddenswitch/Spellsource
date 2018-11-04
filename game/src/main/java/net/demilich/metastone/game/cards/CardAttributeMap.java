@@ -7,13 +7,12 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import io.vertx.core.impl.ConcurrentHashSet;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.io.Serializable;
-import java.lang.reflect.Array;
 import java.util.Set;
 
 /**
@@ -111,9 +110,9 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 				case MANA_COST_MODIFIER:
 					return desc.getManaCostModifier() == null ? null : desc.getManaCostModifier().create();
 				case PASSIVE_TRIGGERS:
-					return link(desc.passiveTrigger, desc.passiveTriggers, EnchantmentDesc.class);
+					return HasEntrySet.link(desc.passiveTrigger, desc.passiveTriggers, EnchantmentDesc.class);
 				case DECK_TRIGGERS:
-					return link(desc.deckTrigger, desc.deckTriggers, EnchantmentDesc.class);
+					return HasEntrySet.link(desc.deckTrigger, desc.deckTriggers, EnchantmentDesc.class);
 				case GAME_TRIGGERS:
 					return desc.getGameTriggers();
 				case RACE:
@@ -157,23 +156,6 @@ public final class CardAttributeMap extends AttributeMap implements Cloneable, J
 		}
 
 		return super.get(key);
-	}
-
-	@NotNull
-	public <T> T[] link(T single, T[] multi, Class<? extends T> tClass) {
-		if (single == null && (multi == null || multi.length == 0)) {
-			Object o = Array.newInstance(tClass, 0);
-			@SuppressWarnings("unchecked")
-			T[] ts = (T[]) o;
-			return ts;
-		}
-		if (single != null && (multi == null || multi.length == 0)) {
-			@SuppressWarnings("unchecked")
-			T[] out = (T[]) Array.newInstance(tClass, 1);
-			out[0] = single;
-			return out;
-		}
-		return multi;
 	}
 
 	@Override

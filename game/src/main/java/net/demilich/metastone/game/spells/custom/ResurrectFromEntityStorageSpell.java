@@ -48,7 +48,5 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 			context.getLogic().removeCard(card);
 			i++;
 		}
-
-		EnvironmentEntityList.getList(context).clear(source);
 	}
 }

@@ -53,6 +53,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testLordStormsong() {
+
+	}
+
+	@Test
+	public void testKthirCorruptor() {
+
+	}
+
+	@Test
 	public void testAnubrekhan() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
