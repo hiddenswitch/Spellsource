@@ -21,6 +21,7 @@
         },
         "spell2": {
           "class": "SummonSpell",
+	  "boardPositionRelative": "RIGHT",
           "card": "token_tauren_slime"
 }
 }
