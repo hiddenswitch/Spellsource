@@ -8,8 +8,14 @@
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Your Hero Power also Freezes the target.",
-  "attributes": {
-    "HERO_POWER_FREEZES_TARGET": true
+  "aura": {
+    "class": "HeroPowerBonusAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "AddAttributeSpell",
+      "attribute": "FROZEN",
+      "target": "TARGET"
+    }
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",

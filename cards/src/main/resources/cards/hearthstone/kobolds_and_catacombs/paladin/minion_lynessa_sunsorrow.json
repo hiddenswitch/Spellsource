@@ -10,8 +10,18 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "custom.RecastMinionSpells",
-      "target": "SELF"
+      "class": "custom.CastSpellSpell",
+      "target": "SELF",
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "attribute": "CASTED_ON_FRIENDLY_MINION",
+        "operation": "HAS"
+      }
     }
   },
   "attributes": {
