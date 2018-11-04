@@ -111,6 +111,7 @@ public enum Environment {
 	/**
 	 * This entity list implements Lynessa Sunsorrow, keeping track of each spell cast a player cast on his own minions.
 	 */
+	@Deprecated
 	LYNESSA_SUNSORROW_ENTITY_LIST,
 	/**
 	 * This entity list implements Bonefetcher, keeping track of the cards that were shuffled in each player's deck.

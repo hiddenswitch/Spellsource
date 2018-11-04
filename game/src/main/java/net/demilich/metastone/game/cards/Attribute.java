@@ -475,6 +475,7 @@ public enum Attribute {
 	 * <p>
 	 * Implements Ice Walker
 	 */
+	@Deprecated
 	HERO_POWER_FREEZES_TARGET,
 	/**
 	 * When any {@link Entity} alive has this attribute, BOTH player's hero powers are disabled.
@@ -943,6 +944,11 @@ public enum Attribute {
 	 * Indicates how many turns an actor should have {@link Attribute#STEALTH} for
 	 */
 	STEALTH_FOR_TURNS,
+	/**
+	 * Indicates that the spell was played targeting a friendly minion
+	 * Implements Lynessa Sunsorrow
+	 */
+	CASTED_ON_FRIENDLY_MINION,
 	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
