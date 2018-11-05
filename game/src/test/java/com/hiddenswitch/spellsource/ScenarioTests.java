@@ -8,6 +8,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class ScenarioTests extends TestBase {
@@ -27,6 +28,7 @@ public class ScenarioTests extends TestBase {
 	}
 
 	@Test
+	@Ignore
 	void testCurvestone() {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
