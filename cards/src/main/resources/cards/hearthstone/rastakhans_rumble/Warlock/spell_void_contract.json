@@ -21,8 +21,8 @@
               "targetPlayer": "SELF"
             }
           },
-          "operation": "DIVIDE",
-          "value": 2
+          "operation": "DIVIDE_ROUNDED",
+          "value2": 2
         }
       },
       {
@@ -34,11 +34,11 @@
             "class": "CardCountValueProvider",
             "cardSource": {
               "class": "DeckSource",
-              "targetPlayer": "OPPONENT"
+              "targetPlayer": "SELF"
             }
           },
-          "operation": "DIVIDE",
-          "value": 2
+          "operation": "DIVIDE_ROUNDED",
+          "value2": 2
         }
       }
 

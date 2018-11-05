@@ -21,6 +21,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -612,8 +613,34 @@ public class SpellUtils {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
 					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
+
+			if (target instanceof Minion) {
+				Minion minion = (Minion) target;
+				if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
+					map.put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
+				}
+				map.put(Attribute.BASE_ATTACK, minion.getBaseAttack());
+				map.put(Attribute.BASE_HP, minion.getBaseHp());
+			}
 		}
+
 		return map;
+	}
+
+	static void processKeptEnchantments2(GameContext context, Entity target, Card card) {
+		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
+					.filter(target::hasAttribute).forEach(k -> card.getAttributes().put(k, target.getAttributes().get(k)));
+
+			if (target instanceof Minion) {
+				Minion minion = (Minion) target;
+				if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
+					card.getAttributes().put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
+				}
+				card.getAttributes().put(Attribute.BASE_ATTACK, minion.getBaseAttack());
+				card.getAttributes().put(Attribute.BASE_HP, minion.getBaseHp());
+			}
+		}
 	}
 
 	/**
