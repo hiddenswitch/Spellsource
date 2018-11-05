@@ -55,9 +55,9 @@
     }
   },
   "attributes": {
-    "TAUNT": true,
     "BATTLECRY": true,
-    "SPELL_DAMAGE": 2
+    "SPELL_DAMAGE": 2,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "TEST",

@@ -1,0 +1,28 @@
+{
+  "name": "Combat Inventor",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BRASS",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "At the start of your turn, gain Armor equal to this minion's Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
