@@ -785,12 +785,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			spellDesc = spellDesc.removeArg(SpellArg.FILTER);
 		}
 
+		/*
 		// This implements Ice Walker
 		if (sourceAction instanceof HeroPowerAction
 				&& targetSelection != TargetSelection.NONE
 				&& hasAttribute(player, Attribute.HERO_POWER_FREEZES_TARGET)) {
 			spellDesc = SpellDesc.join(spellDesc, AddAttributeSpell.create(Attribute.FROZEN));
 		}
+		*/
 
 		// This implements a more durable tracking of spells that were casted
 		if (sourceCard != null
@@ -807,9 +809,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				&& targetSelection != TargetSelection.NONE
 				&& targets.size() == 1
 				&& targets.get(0).getOwner() == playerId
+				&& targets.get(0).getEntityType().equals(EntityType.MINION)
 				&& !childSpell) {
-			EnvironmentEntityList.getList(context, Environment.LYNESSA_SUNSORROW_ENTITY_LIST)
-					.add(context.getPlayer(playerId), sourceCard);
+			sourceCard.setAttribute(Attribute.CASTED_ON_FRIENDLY_MINION);
 		}
 
 		if (sourceCard != null
