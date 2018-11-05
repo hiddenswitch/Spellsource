@@ -15,7 +15,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
-
+@Deprecated
 public class RecastMinionSpells extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(RecastMinionSpells.class);
