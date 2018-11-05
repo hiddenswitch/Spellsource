@@ -53,6 +53,22 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSidelineCoach() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_sideline_coach");
+			Minion attacker = playMinionCard(context, player, "minion_wisp");
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_target_dummy");
+			context.endTurn();
+			attack(context, player, attacker, defender);
+			assertEquals(attacker.getAttack(), attacker.getBaseAttack() + 1);
+			assertEquals(attacker.getMaxHp(), attacker.getBaseHp() + 1);
+			assertEquals(defender.getAttack(), defender.getBaseAttack());
+			assertEquals(defender.getMaxHp(), defender.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testDoctorHatchett() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_bloodfen_raptor");
