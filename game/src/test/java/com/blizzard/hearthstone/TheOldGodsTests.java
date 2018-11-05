@@ -75,7 +75,7 @@ public class TheOldGodsTests extends TestBase {
 			Minion mini = playMinionCard(context, player, miniCopy);
 			Assert.assertEquals(mini.getAttack(), 1);
 			Assert.assertEquals(mini.getHp(), 1);
-			playCardWithTarget(context, player, "spell_silence", mini);
+			playCard(context, player, "spell_silence", mini);
 			Assert.assertEquals(mini.getAttack(), 3);
 			Assert.assertEquals(mini.getHp(), 2);
 		});
@@ -146,7 +146,7 @@ public class TheOldGodsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_mirror_image");
 			Minion raven = playMinionCard(context, player, "minion_enchanted_raven");
-			playCardWithTarget(context, player, "spell_mark_of_yshaarj", raven);
+			playCard(context, player, "spell_mark_of_yshaarj", raven);
 			Assert.assertEquals(raven.getAttack(), 4);
 			Assert.assertEquals(raven.getHp(), 4);
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_mirror_image");
@@ -156,7 +156,7 @@ public class TheOldGodsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_mirror_image");
 			Minion notBeast = playMinionCard(context, player, "token_steward");
-			playCardWithTarget(context, player, "spell_mark_of_yshaarj", notBeast);
+			playCard(context, player, "spell_mark_of_yshaarj", notBeast);
 			Assert.assertEquals(notBeast.getAttack(), 3);
 			Assert.assertEquals(notBeast.getHp(), 3);
 			Assert.assertEquals(player.getHand().size(), 0);

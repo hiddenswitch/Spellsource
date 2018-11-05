@@ -1195,7 +1195,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				damageDealt = damageMinion(player, damage, source, (Actor) target);
 				break;
 			case HERO:
-				damageDealt = damageHero((Hero) target, damage);
+				damageDealt = damageHero((Hero) target, damage, source);
 				break;
 			default:
 				break;
@@ -1207,10 +1207,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return damageDealt;
 	}
 
-	private int damageHero(Hero hero, final int damage) {
+	@Suspendable
+	private int damageHero(Hero hero, final int damage, Entity source) {
 		if (hero.hasAttribute(Attribute.IMMUNE) || hero.hasAttribute(Attribute.AURA_IMMUNE)) {
 			return 0;
 		}
+
+		// Hero now supports having divine shield
+		if (hero.hasAttribute(Attribute.DIVINE_SHIELD)) {
+			removeAttribute(hero, Attribute.DIVINE_SHIELD);
+			context.fireGameEvent(new LoseDivineShieldEvent(context, hero, hero.getOwner(), source.getOwner()));
+			return 0;
+		}
+
 		int effectiveHp = hero.getHp() + hero.getArmor();
 		final int armorChange = hero.modifyArmor(-damage);
 		if (armorChange != 0) {
@@ -1229,7 +1238,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
 			removeAttribute(minion, Attribute.DIVINE_SHIELD);
-			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, minion.getOwner(), source.getId()));
+			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, minion.getOwner(), source.getOwner()));
 			return 0;
 		}
 		if (minion.hasAttribute(Attribute.DEFLECT)
@@ -2254,6 +2263,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param source
 	 * @return The joust event that was fired.
 	 */
+	@Suspendable
 	public JoustEvent joust(Player player, EntityFilter cardFilter, Entity source) {
 		Card ownCard;
 		CardList ownCards = player.getDeck().filtered(c -> cardFilter.matches(context, player, c, source));
@@ -2447,6 +2457,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param mana     The amount to increment or decrement the mana by.
 	 * @param spent    If {@code true}, indicates the effect modifying this mana should be considered a form of spending.
 	 */
+	@Suspendable
 	public void modifyCurrentMana(int playerId, int mana, boolean spent) {
 		Player player = context.getPlayer(playerId);
 		int newMana = Math.min(Math.max(0, player.getMana()) + mana, MAX_MANA);
@@ -2494,6 +2505,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player The player
 	 * @param delta  The amount to increment or decrement the amount of mana the player has.
 	 */
+	@Suspendable
 	public void modifyMaxMana(Player player, int delta) {
 		final int maxMana = MathUtils.clamp(player.getMaxMana() + delta, 0, GameLogic.MAX_MANA);
 		final int initialMaxMana = player.getMaxMana();
@@ -4044,6 +4056,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param quest    The quest to put into play.
 	 * @param fromHand If {@code true}, fires a {@link QuestPlayedEvent}.
 	 */
+	@Suspendable
 	public void playQuest(Player player, Quest quest, boolean fromHand) {
 		quest = quest.clone();
 		quest.setId(generateId());
@@ -4061,6 +4074,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player The player that triggered the quest. May be different than its owner.
 	 * @param quest  The quest {@link Enchantment} living inside the {@link Zones#QUEST} zone.
 	 */
+	@Suspendable
 	public void questTriggered(Player player, Quest quest) {
 		removeEnchantments(quest);
 		if (quest.isInPlay()) {
@@ -4103,6 +4117,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player       The player who is revealing the card.
 	 * @param cardToReveal The card that should be revealed.
 	 */
+	@Suspendable
 	public void revealCard(Player player, Card cardToReveal) {
 		// For now, just trigger a reveal card event.
 		context.fireGameEvent(new CardRevealedEvent(context, player.getId(), cardToReveal));

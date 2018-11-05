@@ -182,5 +182,5 @@ public enum ParseValueType {
 	/**
 	 * A {@link net.demilich.metastone.game.cards.ChooseOneOverride}.
 	 */
-	CHOOSE_ONE_OVERRIDE,
+	CHOOSE_ONE_OVERRIDE, BATTLECRY,
 }

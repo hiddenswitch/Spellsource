@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -328,6 +329,12 @@ public class ParseUtils {
 				}
 				return array;
 			}
+			case BATTLECRY:
+				try {
+					return Json.mapper.readerFor(BattlecryDesc.class).readValue(jsonData);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			case TRIGGER:
 				return getTriggerDesc(jsonData);
 			case TRIGGERS:

@@ -476,5 +476,9 @@ public enum SpellArg {
 	 * @see DamageSpell for an example of a spell that uses this arg to mean amount.
 	 * @see ReceiveCardSpell for an example of a spell that uses this arg to mean number of copies.
 	 */
-	VALUE
+	VALUE,
+	/**
+	 * Specifies a battlecry as a {@link BattlecryDesc} that will soon be added by a {@code AddBattlecrySpell}.
+	 */
+	BATTLECRY
 }
