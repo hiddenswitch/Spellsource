@@ -15,7 +15,7 @@
     "DEATHRATTLES": true,
     "KEEPS_ENCHANTMENTS": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "RASTAKHANS_RUMBLE",
   "fileFormatVersion": 1
 }

@@ -55,4 +55,47 @@ public class RastakhansRumbleTests extends TestBase {
         });
 
     }
+
+    @Test
+    public void testVoidContract() {
+        runGym((context, player, opponent) -> {
+
+            shuffleToDeck(context, player, "minion_wisp");
+            for (int i = 0; i < 15; i++) {
+                shuffleToDeck(context, player, "minion_wisp");
+                shuffleToDeck(context, opponent, "minion_wisp");
+            }
+
+
+            assertEquals(player.getDeck().size(), 16);
+            assertEquals(opponent.getDeck().size(), 15);
+            playCard(context, player, "spell_void_contract");
+            assertEquals(player.getDeck().size(), 8);
+            assertEquals(opponent.getDeck().size(), 7);
+        });
+
+    }
+
+    @Test
+    public void testBaitedArrow() {
+        runGym((context, player, opponent) -> {
+            playCard(context, opponent, "spell_kara_kazham");
+            for (int i = 0; i < 3; i++) {
+                playCardWithTarget(context, player, "spell_baited_arrow", opponent.getMinions().get(0));
+            }
+            assertEquals(player.getMinions().size(), 2);
+        });
+
+    }
+
+    @Test
+    public void testPyromaniac() {
+        runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_wisp");
+            playCard(context, player, "minion_pyromaniac");
+            Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+            useHeroPower(context, player, wisp.getReference());
+            assertEquals(player.getHand().size(), 1);
+        });
+    }
 }
