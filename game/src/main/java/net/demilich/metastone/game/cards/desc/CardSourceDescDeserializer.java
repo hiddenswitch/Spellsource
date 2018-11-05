@@ -23,6 +23,7 @@ public class CardSourceDescDeserializer extends DescDeserializer<CardSourceDesc,
 		ctx.add(CardSourceArg.SOURCE, ParseValueType.TARGET_REFERENCE);
 		ctx.add(CardSourceArg.DISTINCT, ParseValueType.BOOLEAN);
 		ctx.add(CardSourceArg.FORMAT, ParseValueType.STRING);
+		ctx.add(CardSourceArg.HERO_CLASS, ParseValueType.HERO_CLASS);
 		ctx.add(CardSourceArg.CARD_SOURCES, ParseValueType.CARD_SOURCE_ARRAY);
 	}
 

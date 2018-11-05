@@ -1,0 +1,46 @@
+{
+  "name": "Lord Stormsong",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Summon every minion that died while this minion was alive.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "custom.StoreEntitySpell",
+      "target": "EVENT_TARGET",
+      "secondaryTarget": "SELF"
+    }
+  },
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "custom.CastOnEntitiesInStorageSpell",
+        "spell": {
+          "class": "SummonSpell",
+          "target": "OUTPUT"
+        }
+      },
+      {
+        "class": "CastAfterSequenceSpell",
+        "spell": {
+          "class": "custom.ClearStorageSpell",
+          "target": "SELF"
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

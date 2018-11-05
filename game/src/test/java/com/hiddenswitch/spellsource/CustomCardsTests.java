@@ -53,13 +53,46 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
-	public void testLordStormsong() {
+	public void testDoctorHatchett() {
+		runGym((context, player, opponent) -> {
+			Card hatchett = receiveCard(context, player, "minion_doctor_hatchett");
+		});
+	}
 
+	@Test
+	public void testBwonsamdi() {
+		// Test that a deathrattle minion played from the hand doesn't get its own deathrattle copied onto it
+		runGym((context, player, opponent) -> {
+			Card bwonsamdi = receiveCard(context, player, "minion_bwonsamdi");
+		});
+	}
+
+	@Test
+	public void testVindication() {
+		runGym((context, player, opponent) -> {
+			Card vindication = receiveCard(context, player, "spell_vindication");
+		});
+	}
+
+	@Test
+	public void testTestYourMight() {
+		runGym((context, player, opponent) -> {
+			Card testYourMight = receiveCard(context, player, "spell_test_your_might");
+		});
+	}
+
+	@Test
+	public void testLordStormsong() {
+		runGym((context, player, opponent) -> {
+			Card lord = receiveCard(context, player, "minion_lord_stormsong");
+		});
 	}
 
 	@Test
 	public void testKthirCorruptor() {
-
+		runGym((context, player, opponent) -> {
+			Card kthir = receiveCard(context, player, "minion_kthir_corruptor");
+		});
 	}
 
 	@Test
@@ -185,7 +218,6 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testSolarPower() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			overrideDiscover(context, player, "spell_the_coin");
 			playCard(context, player, "spell_solar_power");
 			assertEquals(player.getHand().size(), 1);

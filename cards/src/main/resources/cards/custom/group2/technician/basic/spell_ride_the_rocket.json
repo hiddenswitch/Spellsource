@@ -1,0 +1,17 @@
+{
+  "name": "Ride the Rocket",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BRASS",
+  "rarity": "FREE",
+  "description": "Deal $7 damage to the enemy hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_HERO",
+    "value": 5
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
