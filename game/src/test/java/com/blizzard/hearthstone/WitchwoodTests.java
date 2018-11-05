@@ -42,7 +42,7 @@ public class WitchwoodTests extends TestBase {
 	public void testGentlemansTopHat() {
 		runGym((context, player, opponent) -> {
 			Minion target1 = playMinionCard(context, player, "minion_wisp");
-			playCardWithTarget(context, player, "spell_gentleman_s_top_hat", target1);
+			playCard(context, player, "spell_gentleman_s_top_hat", target1);
 			assertEquals(target1.getAttack(), target1.getBaseAttack() + 2);
 			Minion target2 = playMinionCard(context, player, "minion_wisp");
 			assertEquals(target2.getAttack(), target2.getBaseAttack());
@@ -83,7 +83,7 @@ public class WitchwoodTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Minion paragon = playMinionCard(context, player, "minion_paragon_of_light");
-			playCardWithTarget(context, player, "spell_dragon_s_strength", paragon);
+			playCard(context, player, "spell_dragon_s_strength", paragon);
 			context.endTurn();
 			context.endTurn();
 			player.getHero().setHp(10);
@@ -100,7 +100,7 @@ public class WitchwoodTests extends TestBase {
 			receiveCard(context, opponent, "minion_bloodfen_raptor");
 			Minion grizzly = playMinionCard(context, player, "minion_witchwood_grizzly");
 			assertEquals(grizzly.getHp(), grizzly.getBaseHp() - 1);
-			playCardWithTarget(context, player, "spell_silence", grizzly);
+			playCard(context, player, "spell_silence", grizzly);
 			assertEquals(grizzly.getHp(), grizzly.getBaseHp());
 		});
 	}
@@ -176,9 +176,9 @@ public class WitchwoodTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Set<String> willReplay = Sets.newHashSet("spell_never_valid_targets_black_test", "minion_black_test", "minion_play_randomly_battlecry");
 			// Fireball should not be revealed
-			playCardWithTarget(context, player, "spell_any_blue_test", opponent.getHero());
+			playCard(context, player, "spell_any_blue_test", opponent.getHero());
 			// No valid targets should not be replayed, even if there were valid targets at the time
-			playCardWithTarget(context, player, "spell_never_valid_targets_black_test", opponent.getHero());
+			playCard(context, player, "spell_never_valid_targets_black_test", opponent.getHero());
 			Assert.assertTrue(opponent.getHero().hasAttribute(Attribute.RESERVED_BOOLEAN_3));
 			opponent.getHero().getAttributes().remove(Attribute.RESERVED_BOOLEAN_3);
 			// Don't replay same color

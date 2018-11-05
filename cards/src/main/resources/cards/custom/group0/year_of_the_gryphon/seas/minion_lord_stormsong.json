@@ -23,9 +23,11 @@
     "spells": [
       {
         "class": "custom.CastOnEntitiesInStorageSpell",
+        "value": 14,
         "spell": {
           "class": "SummonSpell",
-          "target": "OUTPUT"
+          "target": "OUTPUT",
+          "targetPlayer": "OWNER"
         }
       },
       {

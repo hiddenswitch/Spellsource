@@ -488,11 +488,11 @@ public class TestBase {
 		context.getLogic().performGameAction(player.getId(), action);
 	}
 
-	protected static void playCardWithTarget(GameContext context, Player player, String cardId, Entity target) {
-		playCardWithTarget(context, player, CardCatalogue.getCardById(cardId), target);
+	protected static void playCard(GameContext context, Player player, String cardId, Entity target) {
+		playCard(context, player, CardCatalogue.getCardById(cardId), target);
 	}
 
-	protected static void playCardWithTarget(GameContext context, Player player, Card card, Entity target) {
+	protected static void playCard(GameContext context, Player player, Card card, Entity target) {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
 		}

@@ -251,7 +251,7 @@ public class CardInteractionTests extends TestBase {
 			shuffleToDeck(context, player, "spell_the_coin");
 			shuffleToDeck(context, opponent, "spell_the_coin");
 			Minion minion = playMinionCard(context, player, "minion_chillwind_yeti");
-			playCardWithTarget(context, player, "spell_blessing_of_wisdom", minion);
+			playCard(context, player, "spell_blessing_of_wisdom", minion);
 			Assert.assertEquals(cardCount, player.getHand().getCount());
 
 			attack(context, opponent, minion, opponent.getHero());

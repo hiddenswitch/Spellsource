@@ -42,7 +42,10 @@ public final class CastOnEntitiesInStorageSpell extends Spell {
 				return;
 			}
 			EntityReference entity = context.getLogic().removeRandom(entities);
-			SpellUtils.castChildSpell(context, player, spell, source, target, context.resolveSingleTarget(entity));
+			// TODO: This should really use cast child spell, but the output entities are almost always in the graveyard
+			context.getOutputStack().push(entity);
+			SpellUtils.castChildSpell(context, player, spell, source, target);
+			context.getOutputStack().pop();
 		}
 	}
 }

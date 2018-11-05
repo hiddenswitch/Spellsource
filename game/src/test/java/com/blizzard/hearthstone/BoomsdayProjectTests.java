@@ -26,7 +26,7 @@ public class BoomsdayProjectTests extends TestBase {
 			Minion shouldBeDestroyed = playMinionCard(context, opponent, "minion_wisp");
 			context.endTurn();
 			Minion wargear = playMinionCard(context, player, "minion_wargear");
-			playCardWithTarget(context, player, "minion_missile_launcher", wargear);
+			playCard(context, player, "minion_missile_launcher", wargear);
 			assertEquals(player.getMinions().size(), 1);
 			context.endTurn();
 			assertTrue(shouldBeDestroyed.isDestroyed());
@@ -132,7 +132,7 @@ public class BoomsdayProjectTests extends TestBase {
 	public void testMagnets() {
 		runGym((context, player, opponent) -> {
 			Minion mech = playMinionCard(context, player, "minion_upgradeable_framebot");
-			playCardWithTarget(context, player, "minion_spider_bomb", mech);
+			playCard(context, player, "minion_spider_bomb", mech);
 			Minion anotherMech = playMinionCard(context, player, "minion_spider_bomb");
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(player.getMinions().get(0).getName(), "Upgradeable Framebot");
@@ -140,7 +140,7 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(player.getMinions().get(0).getHp(), 7);
 			assertTrue(player.getMinions().get(0).hasAttribute(Attribute.DEATHRATTLES));
 			assertEquals(player.getMinions().get(1).getName(), "Spider Bomb");
-			playCardWithTarget(context, player, "minion_zilliax", anotherMech);
+			playCard(context, player, "minion_zilliax", anotherMech);
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(player.getMinions().get(1).getAttack(), 5, "attack");
 			assertEquals(player.getMinions().get(1).getHp(), 4, "hp");
@@ -165,7 +165,7 @@ public class BoomsdayProjectTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_venomizer");
-			playCardWithTarget(context, player, "minion_missile_launcher", player.getMinions().get(0));
+			playCard(context, player, "minion_missile_launcher", player.getMinions().get(0));
 			playCard(context, opponent, "minion_ultrasaur");
 			playCard(context, opponent, "minion_ultrasaur");
 			playCard(context, opponent, "minion_ultrasaur");
@@ -176,7 +176,7 @@ public class BoomsdayProjectTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_mecharoo");
-			playCardWithTarget(context, player, "minion_replicating_menace", player.getMinions().get(0));
+			playCard(context, player, "minion_replicating_menace", player.getMinions().get(0));
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(player.getMinions().size(), 4);
 		});
@@ -187,13 +187,13 @@ public class BoomsdayProjectTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, opponent, "token_shadow_of_nothing"); //no fatigue
 			playCard(context, player, "minion_celestial_emissary");
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), 22);
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), 16);
 			playCard(context, player, "minion_celestial_emissary");
 			context.endTurn();
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), 10);
 		});
 	}
@@ -226,9 +226,9 @@ public class BoomsdayProjectTests extends TestBase {
 			Card fireball1 = receiveCard(context, player, "spell_fireball");
 			Card fireball2 = receiveCard(context, player, "spell_fireball");
 			playCard(context, player, "minion_stargazer_luna");
-			playCardWithTarget(context, player, fireball2, opponent.getHero());
+			playCard(context, player, fireball2, opponent.getHero());
 			assertEquals(player.getHand().getCount(), 2);
-			playCardWithTarget(context, player, fireball1, opponent.getHero());
+			playCard(context, player, fireball1, opponent.getHero());
 			assertEquals(player.getHand().getCount(), 1);
 		});
 	}
@@ -252,14 +252,14 @@ public class BoomsdayProjectTests extends TestBase {
 	@Test
 	public void testCrystalsmithKangor() {
 		runGym((context, player, opponent) -> {
-			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_pyroblast", player.getHero());
 			assertEquals(player.getHero().getHp(), 20);
 			Minion kangor = playMinionCard(context, player, "minion_crystalsmith_kangor");
 			attack(context, player, kangor, opponent.getHero());
 			assertEquals(player.getHero().getHp(), 22);
 			useHeroPower(context, player, player.getHero().getReference());
 			assertEquals(player.getHero().getHp(), 26);
-			playCardWithTarget(context, player, "spell_drain_life", opponent.getHero());
+			playCard(context, player, "spell_drain_life", opponent.getHero());
 			assertEquals(player.getHero().getHp(), 30);
 		}, HeroClass.WHITE, HeroClass.RED);
 	}
@@ -295,7 +295,7 @@ public class BoomsdayProjectTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_pyroblast", player.getHero());
 			Minion defender1 = playMinionCard(context, player, "minion_omega_medic");
 			assertEquals(player.getHero().getHp(), 20);
 			context.getLogic().modifyMaxMana(player, 10);
@@ -320,16 +320,16 @@ public class BoomsdayProjectTests extends TestBase {
 		});
 
 		runGym((context, player, opponent) -> {
-			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
-			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_pyroblast", player.getHero());
 			assertEquals(player.getMaxMana(), 1);
 			assertEquals(player.getHero().getHp(), 10);
 			playCard(context, player, "minion_omega_mind");
-			playCardWithTarget(context, player, "spell_pyroblast", opponent.getHero());
+			playCard(context, player, "spell_pyroblast", opponent.getHero());
 			assertEquals(player.getHero().getHp(), 10);
 			context.getLogic().modifyMaxMana(player, 10);
 			playCard(context, player, "minion_omega_mind");
-			playCardWithTarget(context, player, "spell_pyroblast", opponent.getHero());
+			playCard(context, player, "spell_pyroblast", opponent.getHero());
 			assertEquals(player.getHero().getHp(), 20);
 		});
 
@@ -352,12 +352,12 @@ public class BoomsdayProjectTests extends TestBase {
 	public void testZerekMasterCloner() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_zerek_master_cloner");
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(player.getMinions().size(), 0);
 
 			Minion zerek = playMinionCard(context, player, "minion_zerek_master_cloner");
-			playCardWithTarget(context, player, "spell_power_word_shield", zerek);
+			playCard(context, player, "spell_power_word_shield", zerek);
 			assertTrue(zerek.hasAttribute(Attribute.RESERVED_BOOLEAN_4));
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(player.getMinions().size(), 1);
@@ -365,7 +365,7 @@ public class BoomsdayProjectTests extends TestBase {
 
 		runGym((context, player, opponent) -> { //I'm assuming that this is the way Zerek is supposed to work?
 			Minion zerek = playMinionCard(context, player, "minion_zerek_master_cloner");
-			playCardWithTarget(context, player, "spell_power_word_replicate", zerek);
+			playCard(context, player, "spell_power_word_replicate", zerek);
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(player.getMinions().size(), 2);
 		});
@@ -436,9 +436,9 @@ public class BoomsdayProjectTests extends TestBase {
 	public void testAugmentedElekk() {
 		runGym((context, player, opponent) -> {
 			Minion elekk = playMinionCard(context, player, "minion_augmented_elekk");
-			playCardWithTarget(context, player, "minion_lab_recruiter", elekk);
+			playCard(context, player, "minion_lab_recruiter", elekk);
 			assertEquals(player.getDeck().size(), 6);
-			playCardWithTarget(context, opponent, "spell_gang_up", elekk);
+			playCard(context, opponent, "spell_gang_up", elekk);
 			assertEquals(opponent.getDeck().size(), 3);
 			assertEquals(player.getDeck().size(), 6);
 		});
@@ -507,10 +507,10 @@ public class BoomsdayProjectTests extends TestBase {
 	public void testElectraStormsurge() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_electra_stormsurge");
-			playCardWithTarget(context, player, "spell_lava_burst", opponent.getHero());
+			playCard(context, player, "spell_lava_burst", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), 20);
 			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 4);
-			playCardWithTarget(context, player, "spell_lava_burst", opponent.getHero());
+			playCard(context, player, "spell_lava_burst", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), 15);
 			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 6);
 		});
@@ -722,9 +722,9 @@ public class BoomsdayProjectTests extends TestBase {
 	public void testTestSubjectCombo() {
 		runGym((context, player, opponent) -> {
 			Minion subject = playMinionCard(context, player, "minion_boomsday_test_subject");
-			playCardWithTarget(context, player, "spell_divine_spirit", subject);
-			playCardWithTarget(context, player, "spell_vivid_nightmare", subject);
-			playCardWithTarget(context, player, "spell_topsy_turvy", player.getMinions().get(1));
+			playCard(context, player, "spell_divine_spirit", subject);
+			playCard(context, player, "spell_vivid_nightmare", subject);
+			playCard(context, player, "spell_topsy_turvy", player.getMinions().get(1));
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getHand().size(), 3);
 		});
