@@ -1180,16 +1180,24 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				damage = applyAmplify(player, damage, Attribute.HERO_POWER_DAMAGE_AMPLIFY_MULTIPLIER);
 			}
 		}
-		int damageDealt = 0;
+
 		if (target.hasAttribute(Attribute.TAKE_DOUBLE_DAMAGE) || target.hasAttribute(Attribute.AURA_TAKE_DOUBLE_DAMAGE)) {
 			damage *= 2;
 		}
+
+		// Dealing zero base damage should never cause any effects
+		if (damage == 0) {
+			return 0;
+		}
+
 		context.getDamageStack().push(damage);
 		context.fireGameEvent(new PreDamageEvent(context, target, source, damage));
 		damage = context.getDamageStack().pop();
 		if (damage > 0) {
 			source.getAttributes().remove(Attribute.STEALTH);
 		}
+
+		int damageDealt = 0;
 		switch (target.getEntityType()) {
 			case MINION:
 				damageDealt = damageMinion(player, damage, source, (Actor) target);

@@ -21,6 +21,18 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class LeagueOfExplorersTests extends TestBase {
+
+	@Test
+	public void testAnimatedArmor() {
+		// Dealing zero damage should not cause Animated Armor to deal one damage instead
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_animated_armor");
+			playCard(context, player, "weapon_wicked_knife");
+			attack(context, player, player.getHero(), opponent.getHero());
+			Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp(), "Should not have changed 0 damage to 1");
+		});
+	}
+
 	@Test
 	public void testNagaSeaWitch() {
 		// Test basic cards
