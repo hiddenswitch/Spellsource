@@ -59,7 +59,7 @@ public class AdvancedMechanicTests extends TestBase {
 			int hp = player.getHero().getHp();
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
-			playCardWithTarget(context, player, "spell_fireball", deflect);
+			playCard(context, player, "spell_fireball", deflect);
 			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
 			assertFalse(deflect.isDestroyed());
 			assertEquals(player.getHero().getHp(), hp - 6);
@@ -329,7 +329,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(attacker.getAttack(), BASE_ATTACK + ENRAGE_ATTACK_BONUS);
 
 			// heal - enrage attack bonus should be gone
-			playCardWithTarget(context, player, "spell_greater_healing_potion", attacker);
+			playCard(context, player, "spell_greater_healing_potion", attacker);
 			assertEquals(attacker.getAttack(), BASE_ATTACK);
 			assertFalse(attacker.hasAttribute(Attribute.ENRAGED));
 
@@ -339,7 +339,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 
 			// attack should be set to 1
-			playCardWithTarget(context, player, "spell_humility", attacker);
+			playCard(context, player, "spell_humility", attacker);
 			assertEquals(attacker.getAttack(), 1);
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 		});

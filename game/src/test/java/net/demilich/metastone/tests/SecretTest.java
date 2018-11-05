@@ -188,7 +188,7 @@ public class SecretTest extends TestBase {
 		playCard(context, player, "secret_ice_block");
 		context.endTurn();
 
-		playCardWithTarget(context, opponent, CardCatalogue.getCardById("spell_bash"), player.getHero());
+		playCard(context, opponent, CardCatalogue.getCardById("spell_bash"), player.getHero());
 		// Ice block should not have triggered, as the Mage had enough armor to
 		// prevent fatal damage
 		Assert.assertEquals(player.getSecrets().size(), 1);
@@ -206,7 +206,7 @@ public class SecretTest extends TestBase {
 		Minion minion = playMinionCard(context, player, CardCatalogue.getCardById("minion_murloc_raider"));
 		Assert.assertEquals(player.getSecrets().size(), 1);
 		context.endTurn();
-		playCardWithTarget(context, opponent, CardCatalogue.getCardById("spell_bash"), minion);
+		playCard(context, opponent, CardCatalogue.getCardById("spell_bash"), minion);
 
 		Assert.assertEquals(player.getSecrets().size(), 0);
 	}
