@@ -15,7 +15,7 @@
     },
     "spell": {
       "class": "BuffSpell",
-      "target": "EVENT_TARGET",
+      "target": "ATTACKER",
       "attackBonus": 1,
       "hpBonus": 1
     }
