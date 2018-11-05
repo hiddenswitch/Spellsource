@@ -1,0 +1,29 @@
+{
+  "name": "Rastakhan's Blessing",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "COMMON",
+  "description": "Give a minion +6 Attack, Taunt, and \"Can't attack heroes\".",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 6
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "CANNOT_ATTACK_HEROES"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

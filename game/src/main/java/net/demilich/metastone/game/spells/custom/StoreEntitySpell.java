@@ -45,8 +45,8 @@ public class StoreEntitySpell extends Spell {
 			storageSource = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
 		final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-		logger.debug("onCast {} {}: The {} entity added {} to its stored entity list. The list currently contains: {}", context.getGameId(), source, target, storageSource, list.getReferences(context, storageSource));
 		list.add(storageSource, target);
+		logger.debug("onCast {} {}: The {} entity added {} to its stored entity list. The list now contains: {}", context.getGameId(), source, storageSource, target, list.getReferences(context, storageSource));
 	}
 }
 

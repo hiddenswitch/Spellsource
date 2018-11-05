@@ -16,7 +16,9 @@ import java.util.Map;
 /**
  * Reviving a minion, unlike resurrecting it, puts a minion back into the position on the board where it died. The
  * {@link SpellArg#HP_BONUS} field must be specified, and this amount of hitpoints is what the target minion's health is
- * <b>set</b> to.
+ * set to. The minion is summoned from the base card.
+ * <p>
+ * If a {@link SpellArg#SPELL} is specified, cast it on the newly revived minion as {@link EntityReference#OUTPUT}.
  */
 public class ReviveMinionSpell extends Spell {
 
@@ -44,6 +46,9 @@ public class ReviveMinionSpell extends Spell {
 			minion.setHp(hpAdjustment);
 		}
 		context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
+		if (desc.containsKey(SpellArg.SPELL)) {
+			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, minion);
+		}
 	}
 
 }

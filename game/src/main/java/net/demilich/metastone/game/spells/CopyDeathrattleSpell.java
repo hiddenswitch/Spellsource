@@ -22,6 +22,9 @@ import java.util.Map;
  * Copies the {@code target} actor's deathrattles onto the {@code source} (i.e., result of {@link EntityReference#SELF})
  * of this spell.
  * <p>
+ * If {@link SpellArg#SECONDARY_TARGET} is specified, use that as the {@code source} actor instead of the actual {@code
+ * source}.
+ * <p>
  * If the target is a {@link Card}, the deathrattles specified on the card are put on the {@code source} actor. If the
  * target is an actor, its currently active deathrattles (i.e., excluding those that were silenced, including those
  * added by other cards) are copied.
@@ -39,6 +42,9 @@ public class CopyDeathrattleSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Actor copyTo = (Actor) source;
+		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
+			copyTo = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+		}
 		List<SpellDesc> deathrattles = new ArrayList<>();
 		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, 99);
 		if (!impliedCards.isEmpty()) {
@@ -58,7 +64,6 @@ public class CopyDeathrattleSpell extends Spell {
 		}
 		for (SpellDesc deathrattle : deathrattles) {
 			copyTo.addDeathrattle(deathrattle.clone());
-
 		}
 	}
 

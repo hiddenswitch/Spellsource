@@ -28,6 +28,12 @@ public class SetDescriptionSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(SetDescriptionSpell.class);
 
+	public static SpellDesc create(String description) {
+		SpellDesc spellDesc = new SpellDesc(SetDescriptionSpell.class);
+		spellDesc.put(SpellArg.DESCRIPTION, description);
+		return spellDesc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

@@ -8,7 +8,6 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 public class ScenarioTests extends TestBase {
@@ -22,7 +21,7 @@ public class ScenarioTests extends TestBase {
 			Assert.assertEquals(bloodfen.getDeathrattles().size(), 1);
 			Assert.assertEquals(bearshark.getDeathrattles().size(), 0);
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_assassinate", bloodfen);
+			playCard(context, opponent, "spell_assassinate", bloodfen);
 			Assert.assertEquals(player.getMinions().get(0).getSourceCard().getBaseManaCost(), 1);
 		});
 	}

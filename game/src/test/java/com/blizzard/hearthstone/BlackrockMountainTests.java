@@ -204,7 +204,7 @@ public class BlackrockMountainTests extends TestBase {
 			Minion dragonEgg = playMinionCard(context, player, "minion_dragon_egg");
 			assertEquals(getSummonedMinion(player.getMinions()), dragonEgg);
 
-			playCardWithTarget(context, player, "spell_fireball", dragonEgg);
+			playCard(context, player, "spell_fireball", dragonEgg);
 			assertEquals(getSummonedMinion(player.getMinions()).getSourceCard().getCardId(), TOKEN);
 		});
 	}
@@ -221,7 +221,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertEquals(dragonkin1.getAttack(), dragonkin2.getAttack());
 			assertEquals(dragonkin1.getHp(), dragonkin2.getHp());
 
-			playCardWithTarget(context, player, "spell_gang_up", dragonkin1);
+			playCard(context, player, "spell_gang_up", dragonkin1);
 			assertEquals(dragonkin1.getAttack(), dragonkin2.getAttack() + ATTACK_BONUS);
 			assertEquals(dragonkin1.getHp(), dragonkin2.getHp() + HP_BONUS);
 		});
@@ -255,7 +255,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertEquals(opponent.getMinions().size(), 3);
 			context.endTurn();
 
-			playCardWithTarget(context, player, "spell_cone_of_cold", impGangBoss);
+			playCard(context, player, "spell_cone_of_cold", impGangBoss);
 			assertEquals(opponent.getMinions().size(), 4);
 			assertTrue(firstYeti.hasAttribute(Attribute.FROZEN));
 			assertTrue(impGangBoss.hasAttribute(Attribute.FROZEN));
@@ -272,7 +272,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertTrue(player.getHand().isEmpty());
 			context.endTurn();
 
-			playCardWithTarget(context, opponent, "spell_assassinate", emperorThaurissan);
+			playCard(context, opponent, "spell_assassinate", emperorThaurissan);
 			receiveCard(context, player, "minion_chillwind_yeti");
 			context.endTurn();
 

@@ -47,7 +47,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
-			playCardWithTarget(context, player, "spell_polymorph", auctioneer);
+			playCard(context, player, "spell_polymorph", auctioneer);
 			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_mirror_image");
@@ -67,7 +67,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
-			playCardWithTarget(context, player, "spell_assassinate", auctioneer);
+			playCard(context, player, "spell_assassinate", auctioneer);
 			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 		});
 	}
@@ -134,7 +134,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getSecrets().size(), 1);
 
 			playCard(context, opponent, "weapon_wicked_knife");
-			playCardWithTarget(context, opponent, "spell_sap", taunt);
+			playCard(context, opponent, "spell_sap", taunt);
 			attack(context, opponent, opponent.getHero(), player.getHero());
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(opponent.getHero().getHp(), opponentHpBefore - 2);
@@ -179,7 +179,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_spellbender");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			playCard(context, opponent, "spell_fireball", player.getHero());
 			assertEquals(player.getSecrets().size(), 1);
 		});
 
@@ -187,7 +187,7 @@ public class ClassicTests extends TestBase {
 			playCard(context, player, "secret_spellbender");
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", bloodfen);
+			playCard(context, opponent, "spell_fireball", bloodfen);
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(player.getMinions().size(), 1);
 			Assert.assertFalse(bloodfen.isDestroyed());
@@ -219,7 +219,7 @@ public class ClassicTests extends TestBase {
 	public void testShadowstep() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playCardWithTarget(context, player, "spell_shadowstep", bloodfen);
+			playCard(context, player, "spell_shadowstep", bloodfen);
 			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
 		});
 	}
@@ -232,7 +232,7 @@ public class ClassicTests extends TestBase {
 			playCard(context, player, "spell_preparation");
 			assertEquals(costOf(context, player, inHand1), 1);
 			assertEquals(costOf(context, player, inHand2), 1);
-			playCardWithTarget(context, player, inHand1, opponent.getHero());
+			playCard(context, player, inHand1, opponent.getHero());
 			assertEquals(costOf(context, player, inHand2), 4);
 		});
 	}
@@ -440,7 +440,7 @@ public class ClassicTests extends TestBase {
 	public void testElvenArcher() {
 		runGym((context, player, opponent) -> {
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
-			playCardWithTarget(context, player, "minion_elven_archer", opponent.getHero());
+			playCard(context, player, "minion_elven_archer", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 1);
 		}, HeroClass.RED, HeroClass.SILVER);
 	}
@@ -462,14 +462,14 @@ public class ClassicTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
 			playCard(context, player, "spell_arcane_missiles");
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3);
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6);
 
 			playCard(context, player, "minion_kobold_geomancer");
 
 			playCard(context, player, "spell_arcane_missiles");
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4);
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4 - 7);
 		}, HeroClass.BLUE, HeroClass.RED);
 	}
