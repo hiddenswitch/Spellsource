@@ -1,0 +1,312 @@
+from os import makedirs
+from os.path import join
+
+import click
+
+from .ext.updatedbf import write_dbf_json
+from .ext.populatedecklists import write_decklists
+from .ext.hearthcards import write_set_stubs
+from .ext.admin import Admin
+from .ext.cardformatter import fix_cards, fix_card
+from .ext.datasources import HSReplayMatchups
+from tqdm import tqdm
+
+
+@click.group()
+def _cli():
+    pass
+
+
+@_cli.command()
+@click.argument('username')
+@click.option('--profile_name', default='default', help='the profile name to use in the printed credentials file',
+              show_default=True)
+def create_user(username, profile='default'):
+    """
+    Creates an AWS user named USERNAME.
+
+    The user is created in the calling user's AWS account. Prints the credentials file that should go
+    into ~/.aws/credentials.
+
+    For example, this call will print:
+
+    \b
+    [default]
+    aws_access_key_id = ABCDEFGHJI12345790
+    aws_secret_access_key = abcdefghab+cdefghabcdefgh/00000000000==
+
+    Thus, to create the user doctorpangloss and save the credentials for later use, run the command:
+
+    \b
+      spellsource create-user doctorpangloss --profile_name=spellsource >> ~/.aws/credentials
+
+    Then, to use this profile for an aws command:
+
+    \b
+      aws s3api list-buckets --profile=spellsource
+
+    The following policies are added by default: AWSElasticBeanstalkFullAccess, AmazonRekognitionFullAccess and
+    AmazonS3FullAccess.
+    """
+    click.echo(Admin.create_user(username=username, profile_name=profile))
+
+
+@_cli.command()
+@click.option('--path', default='./cards/src/main/resources/cards',
+              help='the filepath to walk for card JSON', show_default=True)
+def format_cards(path):
+    """
+    Formats JSON card files.
+    """
+    fix_cards(path)
+
+
+@_cli.command()
+def hs_replay_matchups():
+    """
+    Prints a table of HSReplay matchups in TSV format.
+
+    To save this output to "matchups.tsv", perform the command:
+
+    \b
+      spellsource hs-replay-matchups > matchups.tsv
+
+    """
+    click.echo(HSReplayMatchups().to_tsv())
+
+
+@_cli.command()
+@click.argument('set')
+@click.option('--directory', default='./cards/src/main/resources/staging/hearthcards',
+              help='the path to save the stubs to', show_default=True)
+@click.option('--hero-class', default='ANY', help='the hero class to write onto the cards', show_default=True)
+def hearthcards_stubs(set_id, directory, hero_class):
+    """
+    Creates stubs from the Hearthcards.
+
+    The stubs will be generated from a set or hero class with the identifier SET_ID. For example, if the address bar
+    for your set or hero class shows
+    http://www.hearthcards.net/setsandclasses/#2249-Monk, the SET_ID will be 2249. You will then use the command:
+
+    \b
+      spellsource hearthcards-stubs 2249
+
+    This will create a folder full of stubs at ./cards/src/main/resources/staging/hearthcards/set_2249. Remember to move
+    this directory to the custom cards folder when you're ready to execute the cards against the server.
+
+    You'll need to add your HERO_CLASS to HeroClass.java and modify that file to return the appropriate hero card for
+    the class. The way to do that should be self-explanatory in the HeroClass.java file.
+    """
+    write_set_stubs(set_id, dest_dir=directory, hero_class=hero_class)
+
+
+@_cli.command()
+@click.argument('url')
+@click.option('--directory', default='./cards/src/main/resources/staging/scraped',
+              help='the directory to save the cards to', show_default=True)
+@click.option('--hero-class', default='ANY', help='the hero class to put into the cards', show_default=True)
+def image_stubs(url, directory, hero_class):
+    """
+    Converts images to card stubs.
+
+    Loads image or website located at URL and parses it, creating stubs in DIRECTORY. If the URL is a website,
+    every relatively card-looking image will be parsed if possible. While any website can be
+    used, the following are specially supported:
+
+    \b
+     - hearthpwn.com/forums: Only looks in the forum post bodies.
+
+    Imgur albums are currently not supported.
+
+    This call may take a while. Results are cached remotely.
+
+    Make sure you have saved your AWS credentials to use this service. If you have not, or do not have credentials,
+    this service will fail to convert cards. Contact the administrators on the Discord for a contributor's user
+    account by visiting playspellsource.com.
+    """
+    from .ext import image2card
+    from .ext.cards import name_to_id, write_card
+
+    if 'imgur.com/a/' in url:
+        click.echo('Imgur albums are currently not supported.')
+        return
+
+    makedirs(directory, exist_ok=True)
+    if len(url) > 4 and url[-4:] in ('.png', '.jpg'):
+        iterable = image2card.Enricher(
+            *image2card.SpellsourceCardDescGenerator(*image2card.RekognitionGenerator(url)),
+            hero_class=hero_class)
+    else:
+        iterable = image2card.Enricher(*image2card.SpellsourceCardDescGenerator(
+            *tqdm(
+                image2card.RekognitionGenerator(
+                    *image2card.PageToImages(url)))), hero_class=hero_class)
+    for card_desc in iterable:
+        id = name_to_id(card_desc['name'], card_desc['type'])
+        write_card(fix_card(card_desc), join(directory, id + '.json'))
+
+
+@_cli.command()
+@click.argument('snap_num')
+def update_decklists(snap_num):
+    """
+    Updates the deck lists from Tempostorm.
+
+    Uses snapshot number SNAP_NUM. Visit http://tempostorm.com to find the latest snapshot number.
+
+    This method should be called from the Spellsource-Server directory to ensure the deck list is written in the
+    right place. To update the bot's decks, make sure to add an appropriate migration in Spellsource.java.
+    """
+    write_decklists(int(snap_num))
+
+
+@_cli.command()
+def update_dbf():
+    """
+    Updates Hearthstone IDs.
+
+    Uses data from the community hearthstone_data Python package. The DBF IDs are used to convert deck strings into
+    something readable.
+
+    This method should be called from the Spellsource-Server directory to ensure the updated DBF file is saved in the
+    right place.
+    """
+    write_dbf_json()
+
+
+@_cli.command()
+@click.argument('decks', nargs=-1)
+@click.option('--number', default=1, show_default=True, type=click.INT, help='the number of games to simulate')
+@click.option('--behaviours', type=click.Tuple([str, str]), default='PlayRandomBehaviour PlayRandomBehaviour',
+              show_default=True,
+              help='the behaviours to use for this simulation, suggested choices are PlayRandomBehaviour and '
+                   'GameStateValueBehaviour. If the behaviours differ, each matchup will be played with each '
+                   'behaviour as each player (useful for comparing AIs to one another)')
+@click.option('--mirrors', type=click.BOOL, default=False, show_default=True, help='whether to include mirror matchups')
+@click.option('--reduce', type=click.BOOL, default=True, show_default=True,
+              help='whether to add up the statistics for all matchups, otherwise report each individually')
+def simulate(decks,
+             number: int,
+             behaviours=(),
+             mirrors: bool = False,
+             reduce: bool = True):
+    """
+    Run a simulation using AIs of a given deck matchup.
+
+    DECKS can be a space-separated list of:
+
+    \b
+     - Hearthstone deck strings
+     - Community deck strings
+     - File paths, containing Hearthstone deck strings or community deck strings
+
+    A community deck format string looks like this:
+
+    \b
+    Name: Big Druid
+    Class: Druid
+    Format: Standard
+    2x Biology Project
+    1x Lesser Jasper Spellstone
+    2x Naturalize
+    2x Wild Growth
+    1x Drakkari Enchanter
+    1x Greedy Sprite
+    2x Branching Paths
+    2x Bright-Eyed Scout
+    2x Nourish
+    2x Spreading Plague
+    1x Malfurion the Pestilent
+    1x Gloop Sprayer
+    2x Primordial Drake
+    1x The Lich King
+    2x Dragonhatcher
+    1x Hadronox
+    1x Master Oakheart
+    2x Sleepy Dragon
+    1x Ysera
+    1x Tyrantus
+
+    This will simulate 10 games using the advanced GameStateValueBehaviour AI between two decks specified as files.
+
+    \b
+      spellsource simulate 'Aggro Mage.txt' 'Big Druid.txt' --number 10 --behaviours GameStateValueBehaviour
+      GameStateValueBehaviour
+
+
+    Returns the results as a JSON array. For example, for the result above:
+
+    \b
+    [
+      {
+        "decks":[
+          "APM Priest",
+          "Aggro Mage"
+        ],
+        "numberOfGames":10,
+        "results":[
+          {
+            "WIN_RATE":0.5,
+            "GAMES_WON":5,
+            "GAMES_LOST":5,
+            "DAMAGE_DEALT":376,
+            "HEALING_DONE":277,
+            "MANA_SPENT":669,
+            "CARDS_PLAYED":346,
+            "TURNS_TAKEN":150,
+            "CARDS_DRAWN":197,
+            "FATIGUE_DAMAGE":35,
+            "MINIONS_PLAYED":243,
+            "SPELLS_CAST":165,
+            "HERO_POWER_USED":82
+          },
+          {
+            "WIN_RATE":0.5,
+            "GAMES_WON":5,
+            "GAMES_LOST":5,
+            "DAMAGE_DEALT":834,
+            "HEALING_DONE":18,
+            "MANA_SPENT":769,
+            "CARDS_PLAYED":346,
+            "TURNS_TAKEN":155,
+            "CARDS_DRAWN":250,
+            "FATIGUE_DAMAGE":188,
+            "MINIONS_PLAYED":209,
+            "SPELLS_CAST":141,
+            "HERO_POWER_USED":95,
+            "WEAPONS_EQUIPPED":7,
+            "WEAPONS_PLAYED":7
+          }
+        ]
+      }
+    ]
+
+    The first item (index 0) of the results array is always the first item in the decks array and corresponds to the
+    first behaviour specified.
+    """
+    from .context import Context
+    from .utils import simulate
+    from os.path import isfile
+    import sys
+
+    decks = list(decks)
+    for i, deck in enumerate(decks):
+        if isfile(deck):
+            with open(deck, 'r') as deck_file:
+                decks[i] = deck_file.read()
+
+    deck_strings = ', '.join(decks)
+    click.echo(f'Using decks {deck_strings}', file=sys.stderr)
+    behaviour_strings = ', '.join(behaviours)
+    click.echo(f'Using behaviours {behaviour_strings}', file=sys.stderr)
+
+    with Context() as context:
+        sim = simulate(context, decks=decks, number=number, behaviours=behaviours, mirrors=mirrors, reduce=reduce)
+        results = list(tqdm(sim, file=sys.stderr))
+
+        from json import dumps
+        click.echo(dumps(results))
+
+
+def main():
+    _cli()

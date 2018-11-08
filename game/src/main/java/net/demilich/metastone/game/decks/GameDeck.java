@@ -92,10 +92,6 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 		return cards.getCount() == GameLogic.MAX_DECK_SIZE;
 	}
 
-	public boolean isMetaDeck() {
-		return getHeroClass() == HeroClass.DECK_COLLECTION;
-	}
-
 	public boolean isTooBig() {
 		return cards.getCount() > GameLogic.DECK_SIZE;
 	}
