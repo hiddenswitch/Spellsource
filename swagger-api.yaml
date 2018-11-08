@@ -290,16 +290,27 @@ definitions:
     type: 'object'
     properties:
       _id:
+        description: The user ID
         type: 'string'
       name:
+        description: The username that is displayed to toher players
+        type: 'string'
+      privacyToken:
+        description: |
+          The token that is appended to the end of the user's name to allow friending without sharing an e-mail address.
         type: 'string'
       email:
+        description: The user's email address
         type: 'string'
       friends:
+        description: |
+          The user's friends at the moment of receiving this account document. This may be out of date as the latest
+          friends information will come from receiving friend documents.
         type: 'array'
         items:
           $ref: '#/definitions/Friend'
       decks:
+        description: A list of decks belonging to the player
         type: 'array'
         items:
           $ref: '#/definitions/InventoryCollection'
@@ -2331,6 +2342,10 @@ paths:
       security:
       - TokenSecurity: []
       parameters:
+      - name: inviteId
+        in: path
+        required: true
+        type: 'string'
       - name: request
         in: body
         required: true
@@ -2360,6 +2375,11 @@ paths:
       operationId: getInvite
       security:
       - TokenSecurity: []
+      parameters:
+      - name: inviteId
+        in: path
+        required: true
+        type: 'string'
       responses:
         "200":
           description: |
@@ -2376,6 +2396,10 @@ paths:
       security:
       - TokenSecurity: []
       parameters:
+      - name: inviteId
+        in: path
+        required: true
+        type: 'string'
       responses:
         "200":
           description: |

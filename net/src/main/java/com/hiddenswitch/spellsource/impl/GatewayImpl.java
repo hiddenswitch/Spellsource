@@ -40,6 +40,9 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.array;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -290,6 +293,34 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/friends/:friendId")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("friendId", this::unFriend));
+
+		router.route("/invites")
+				.handler(bodyHandler);
+		router.route("/invites")
+				.handler(authHandler);
+		router.route("/invites")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::getInvites));
+
+		router.route("/invites")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(InvitePostRequest.class, this::postInvite));
+
+		router.route("/invites/:inviteId")
+				.handler(authHandler);
+		router.route("/invites/:inviteId")
+				.handler(bodyHandler);
+		router.route("/invites/:inviteId")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(AcceptInviteRequest.class, "inviteId", this::acceptInvite));
+
+		router.route("/invites/:inviteId")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("inviteId", this::getInvite));
+
+		router.route("/invites/:inviteId")
+				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler("inviteId", this::deleteInvite));
 
 		router.route("/drafts")
 				.handler(bodyHandler);
@@ -613,13 +644,44 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			DraftRecord record = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withCardIndex(request.getCardIndex()));
-
 			return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));
 		} catch (NullPointerException unexpectedRequest) {
 			return WebResult.failed(400, unexpectedRequest);
 		} catch (Exception ignored) {
 			return WebResult.failed(400, new UnsupportedOperationException("You must choose a card index, or the draft has been completed."));
 		}
+	}
+
+	@Override
+	public WebResult<AcceptInviteResponse> acceptInvite(RoutingContext context, String userId, String inviteId, AcceptInviteRequest request) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(Invites.accept(new InviteId(inviteId), request, (UserRecord) context.user()));
+	}
+
+	@Override
+	public WebResult<InviteResponse> getInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
+		Invite invite = mongo().findOne(Invites.INVITES, json("_id", inviteId), Invite.class);
+		if (invite == null) {
+			return WebResult.notFound("This invite was not found");
+		}
+		return WebResult.succeeded(new InviteResponse().invite(invite));
+	}
+
+	@Override
+	public WebResult<InviteResponse> deleteInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(Invites.deleteInvite(new InviteId(inviteId), (UserRecord) context.user()));
+	}
+
+	@Override
+	public WebResult<InviteResponse> postInvite(RoutingContext context, String userId, InvitePostRequest request) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(Invites.invite(request, (UserRecord) context.user()));
+	}
+
+	@Override
+	public WebResult<InviteGetResponse> getInvites(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(new InviteGetResponse()
+				.invites(mongo().find(Invites.INVITES,
+						json("$or", array(json("toUserId", userId), json("fromUserId", userId))),
+						Invite.class)));
 	}
 
 	@Override
@@ -687,7 +749,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
 				.inMatch(Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
-				.name(displayName + "#" + record.getPrivacyToken());
+				.name(displayName + "#" + record.getPrivacyToken())
+				.privacyToken(record.getPrivacyToken());
 	}
 
 
