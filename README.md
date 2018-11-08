@@ -43,7 +43,28 @@ Please visit [this FAQ](docs/faq.ipynb) for an example of interactively playing 
 
 The `spellsource` package creates a bridge with the Java-based `Spellsource-Server` engine. It provides a direct 1-to-1 mapping with the Java API.
 
-This requires **Python 3** and **Java 8 or higher**. To get started:
+You can explore commands available in the package using this command:
+
+```
+$ spellsource --help
+
+Usage: spellsource [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --help  Show this message and exit.
+
+Commands:
+  create-user         Creates an AWS user named USERNAME.
+  format-cards        Formats JSON card files.
+  hearthcards-stubs   Creates stubs from the Hearthcards.
+  hs-replay-matchups  Prints a table of HSReplay matchups in TSV format.
+  image-stubs         Converts images to card stubs.
+  simulate            Run a simulation using AIs of a given deck matchup.
+  update-dbf          Updates Hearthstone IDs.
+  update-decklists    Updates the deck lists from Tempostorm.
+```
+
+You can also use the `spellsource` package programmatically. This requires **Python 3** and **Java 8 or higher**. To get started:
 
  1. Install the Java JDK from [Oracle's website](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html).
  2. `pip3 install spellsource` to install the latest version of the package.

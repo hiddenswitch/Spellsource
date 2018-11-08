@@ -26,7 +26,10 @@ class PageToImages(Iterable[str]):
 
         def start_requests(self):
             for url in self.start_urls:
-                yield Request(url=url, callback=self.parse)
+                yield Request(url=url, callback=self.parse, headers={
+                    'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, '
+                                  'like Gecko) Version/12.0 Safari/605.1.15'
+                })
 
         def parse(self, response: TextResponse):
             yield PageToImages.to_images(response=response)
@@ -283,34 +286,3 @@ class SpellsourceCardDescGenerator(Iterable[Dict]):
             return int(line)
         except:
             return None
-
-
-if __name__ == '__main__':
-    import argparse
-    from .cards import name_to_id, write_card
-    from .cardformatter import fix_card
-    from os import makedirs
-    from os.path import join
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-u', '--url', required=True,
-                        help='The URL that is an image or a page whose images should be scraped')
-    parser.add_argument('-d', '--directory', required=False,
-                        default='./cards/src/main/resources/staging/scraped',
-                        help='The directory to save the cards to')
-    parser.add_argument('-c', '--hero-class', required=False,
-                        default='ANY',
-                        help='The hero class to put into the cards')
-    args = parser.parse_args()
-    assert 'url' in args
-    url = args.url
-    makedirs(args.directory, exist_ok=True)
-    iterable = None
-    if len(url) > 4 and url[-4:] in ('.png', '.jpg'):
-        iterable = Enricher(*SpellsourceCardDescGenerator(*RekognitionGenerator(url)), hero_class=args.hero_class)
-    else:
-        iterable = Enricher(*SpellsourceCardDescGenerator(*RekognitionGenerator(*PageToImages(url))),
-                            hero_class=args.hero_class)
-    for card_desc in iterable:
-        id = name_to_id(card_desc['name'], card_desc['type'])
-        write_card(fix_card(card_desc), join(args.directory, id + '.json'))
