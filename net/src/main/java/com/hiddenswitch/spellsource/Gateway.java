@@ -157,6 +157,16 @@ public interface Gateway extends Verticle {
 
 	WebResult<DraftState> draftsChooseCard(RoutingContext context, String userId, DraftsChooseCardRequest request) throws SuspendExecution, InterruptedException;
 
+	WebResult<AcceptInviteResponse> acceptInvite(RoutingContext context, String userId, String inviteId, AcceptInviteRequest request) throws SuspendExecution, InterruptedException;
+
+	WebResult<InviteResponse> getInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException;
+
+	WebResult<InviteResponse> deleteInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException;
+
+	WebResult<InviteResponse> postInvite(RoutingContext context, String userId, InvitePostRequest request) throws SuspendExecution, InterruptedException;
+
+	WebResult<InviteGetResponse> getInvites(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+
 	WebResult<Void> healthCheck(RoutingContext context) throws SuspendExecution, InterruptedException;
 
 	WebResult<com.hiddenswitch.spellsource.models.ChangePasswordResponse> changePassword(RoutingContext context, String userId, ChangePasswordRequest request) throws SuspendExecution, InterruptedException;

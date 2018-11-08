@@ -93,10 +93,6 @@ public class UnityClient {
 		return this;
 	}
 
-	public UnityClient loginWithUserAccount(String username) {
-		return loginWithUserAccount(username, "testpass");
-	}
-
 	public void gameOverHandler(Handler<UnityClient> handler) {
 		onGameOver = handler;
 	}
@@ -137,7 +133,7 @@ public class UnityClient {
 		return fut;
 	}
 
-	private void ensureConnected() {
+	public void ensureConnected() {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
@@ -145,7 +141,7 @@ public class UnityClient {
 				realtime.setMessageHandler(message -> {
 					try {
 						messagingLock.lock();
-						logger.debug("play: Handling realtime message for userId " + getUserId());
+						logger.debug("ensureConnected: Handling realtime message for userId {}", getUserId());
 						Envelope env = Json.decodeValue(message, Envelope.class);
 
 						if (env.getResult() != null && env.getResult().getEnqueue() != null) {
@@ -161,6 +157,8 @@ public class UnityClient {
 						if (env.getGame() != null && env.getGame().getServerToClient() != null) {
 							handleServerToClientMessage(env.getGame().getServerToClient());
 						}
+
+						handleMessage(env);
 					} finally {
 						messagingLock.unlock();
 					}
@@ -169,6 +167,14 @@ public class UnityClient {
 		} finally {
 			messagingLock.unlock();
 		}
+	}
+
+	protected void handleMessage(Envelope env) {
+
+	}
+
+	public void sendMessage(Envelope env) {
+		this.realtime.sendMessage(serialize(env));
 	}
 
 	@Suspendable

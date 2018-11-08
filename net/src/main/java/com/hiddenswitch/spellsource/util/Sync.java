@@ -62,6 +62,13 @@ public class Sync {
 	}
 
 	@Suspendable
+	public static <T, R> R invoke(ThrowingFunction<T, R> func1, T arg1) {
+		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+			done.complete(func1.apply(arg1));
+		}, false, h));
+	}
+
+	@Suspendable
 	public static <T1, T2, R> R invoke(BiFunction<T1, T2, R> func2, T1 arg1, T2 arg2) {
 		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
 			done.complete(func2.apply(arg1, arg2));
@@ -83,4 +90,19 @@ public class Sync {
 		return awaitResult(h -> func.accept(arg1, arg2, h));
 	}
 
+
+	@FunctionalInterface
+	public interface ThrowingFunction<T, R> extends Function<T, R> {
+
+		@Override
+		default R apply(T t) {
+			try {
+				return applyThrows(t);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		R applyThrows(T t) throws Exception;
+	}
 }
