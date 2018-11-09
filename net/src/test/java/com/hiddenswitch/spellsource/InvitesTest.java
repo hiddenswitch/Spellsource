@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.github.fromage.quasi.strands.Strand;
 import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
+import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.util.UnityClient;
@@ -98,7 +99,7 @@ public class InvitesTest extends SpellsourceTestBase {
 
 	@Test
 	@Suspendable
-	public void testSenderRejectsFriend(TestContext testContext) {
+	public void testRecipientRejectsFriend(TestContext testContext) {
 		sync(() -> {
 			CountDownLatch rejected = new CountDownLatch(1);
 			AtomicInteger inviteChecks = new AtomicInteger(2);
@@ -160,6 +161,72 @@ public class InvitesTest extends SpellsourceTestBase {
 			sleep(1000L);
 			assertEquals(0, inviteChecks.get());
 
+			GetAccountsResponse updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
+			GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
+			assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
+			assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
+		});
+	}
+
+	@Test
+	@Suspendable
+	public void testSenderCancelsFriend(TestContext testContext) {
+		sync(() -> {
+			CountDownLatch receivedInvite = new CountDownLatch(1);
+			CountDownLatch inviteChecks = new CountDownLatch(2);
+			AtomicReference<String> recipientId = new AtomicReference<>();
+			UnityClient sender = new UnityClient(testContext) {
+				@Override
+				protected void handleMessage(Envelope env) {
+					if (env.getAdded() != null && env.getAdded().getFriend() != null) {
+						fail("Should not have friended");
+					}
+				}
+			};
+			sender.ensureConnected();
+
+			UnityClient recipient = new UnityClient(testContext) {
+				@Override
+				protected void handleMessage(Envelope env) {
+					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
+						Invite invite = env.getAdded().getInvite();
+						if (invite.getFriendId() != null) {
+							if (invite.getStatus() == Invite.StatusEnum.PENDING) {
+								inviteChecks.countDown();
+								receivedInvite.countDown();
+							} else if (invite.getStatus() == Invite.StatusEnum.CANCELLED) {
+								// Should not be able to cancel
+								try {
+									// Accepting the invite should fail
+									this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
+									fail("Should not be able to accept cancelled invite");
+								} catch (ApiException didFail) {
+									assertEquals(didFail.getCode(), 418);
+									inviteChecks.countDown();
+								}
+							}
+						}
+					}
+				}
+			};
+			recipient.ensureConnected();
+
+			sender.createUserAccount();
+			recipient.createUserAccount();
+			recipientId.set(recipient.getUserId().toString());
+			assertTrue(recipient.getAccount().getName().contains("#"));
+
+			InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
+					.friend(true)
+					// Get name contains the privacy token
+					.toUserNameWithToken(recipient.getAccount().getName())
+					.message("Would you be my friend?"));
+
+			assertEquals(Invite.StatusEnum.UNDELIVERED, inviteResponse.getInvite().getStatus());
+			receivedInvite.await();
+			InviteResponse cancelResponse = invoke(sender.getApi()::deleteInvite, inviteResponse.getInvite().getId());
+			assertEquals(Invite.StatusEnum.CANCELLED, cancelResponse.getInvite().getStatus());
+			inviteChecks.await();
 			GetAccountsResponse updatedRecipient = invoke(recipient.getApi()::getAccount, recipient.getUserId().toString());
 			GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
 			assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
