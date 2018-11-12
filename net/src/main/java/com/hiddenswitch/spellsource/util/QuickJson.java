@@ -52,7 +52,12 @@ public class QuickJson {
 		JsonObject j = existing;
 
 		for (int i = 0; i < args.length; i += 2) {
-			j.put((String) args[i], args[i + 1]);
+			Object value = args[i + 1];
+			if (value != null && value.getClass().isEnum()) {
+				// Serialize as a string when converting an enum value to a JSON object.
+				value = value.toString();
+			}
+			j.put((String) args[i], value);
 		}
 
 		return j;

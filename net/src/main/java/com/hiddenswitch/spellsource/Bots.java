@@ -41,6 +41,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public interface Bots {
 	Logger LOGGER = LoggerFactory.getLogger(Bots.class);
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
+	String TAKING_BOT_LOCK_NAME = "Matchmaking::takingBot";
 
 	/**
 	 * Decide which cards to mulligan given a starting hand.

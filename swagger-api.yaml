@@ -51,11 +51,13 @@ definitions:
             $ref: '#/definitions/Match'
       changed:
         description: |
-          Indicates that a record's fields have changed. In this model, the new document is a full replacement.
+          Indicates that a record's fields have changed.
         type: 'object'
         properties:
           friend:
             $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
       removed:
         description: |
           Indicates that a record has been removed from the client's ephemeral collections.
@@ -68,6 +70,10 @@ definitions:
           matchId:
             description: |
               The unique ID of the match that should be removed.
+            type: 'string'
+          friendId:
+            description: |
+              The unique ID of the friend that should be removed,
             type: 'string'
       sub:
         description: |
@@ -1789,6 +1795,11 @@ definitions:
         description: |
           The queue that the player would like to 1v1 inside of. These may differ from the competitive queues.
         type: 'string'
+      deckId:
+        description: |
+          The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is
+          automatically enqueued.
+        type: 'string'
       toUserId:
         description: |
           The user who should receive the invite
@@ -1822,6 +1833,10 @@ definitions:
     description: |
       Accepts an invite to a match or a friend invite.
     properties:
+      awaitGameStart:
+        type: 'boolean'
+        description: |
+          When true, specifies that the method call should only return when the game is actually ready to join
       match:
         $ref: '#/definitions/MatchmakingQueuePutRequest'
   AcceptInviteResponse:

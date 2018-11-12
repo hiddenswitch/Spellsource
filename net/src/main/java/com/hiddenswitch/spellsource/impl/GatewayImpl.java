@@ -11,10 +11,7 @@ import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.impl.util.DraftRecord;
-import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
-import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
-import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
@@ -103,6 +100,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// Send game traffic over the Connection nowadays.
 		serverMessaging = ServerGameContext.handleConnections();
 
+		// Enable friend list updates via envelope messaging channel
+		Friends.handleConnections();
+
 		// Enable presence
 		Presence.handleConnections();
 
@@ -165,6 +165,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// TODO: This obviously isn't working for the load balancer / cookies coming from the client
 		router.route().handler(CookieHandler.create());
 
+		// Add body handling to all routes
+		router.route().handler(bodyHandler);
+
 		// Add "content-type=application/json" to all responses
 		router.route().handler(context -> {
 			if (!context.request().uri().contains(websocketPath)) {
@@ -209,8 +212,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler("targetUserId", this::getAccount));
 
 		router.route("/accounts")
-				.handler(bodyHandler);
-		router.route("/accounts")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(LoginRequest.class, this::login));
 		router.route("/accounts")
@@ -223,8 +224,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
 
-		router.route("/accounts-password")
-				.handler(bodyHandler);
 		router.route("/accounts-password")
 				.handler(authHandler);
 		router.route("/accounts-password")
@@ -240,8 +239,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(this::getCards));
 
 		router.route("/decks")
-				.handler(bodyHandler);
-		router.route("/decks")
 				.handler(authHandler);
 		router.route("/decks")
 				.method(HttpMethod.PUT)
@@ -250,8 +247,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(this::decksGetAll));
 
-		router.route("/decks/:deckId")
-				.handler(bodyHandler);
 		router.route("/decks/:deckId")
 				.handler(authHandler);
 		router.route("/decks/:deckId")
@@ -279,23 +274,17 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(this::matchmakingDelete));
 
 		router.route("/friends")
-				.handler(bodyHandler);
-		router.route("/friends")
 				.handler(authHandler);
 		router.route("/friends")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(FriendPutRequest.class, this::friendPut));
 
 		router.route("/friends/:friendId")
-				.handler(bodyHandler);
-		router.route("/friends/:friendId")
 				.handler(authHandler);
 		router.route("/friends/:friendId")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("friendId", this::unFriend));
 
-		router.route("/invites")
-				.handler(bodyHandler);
 		router.route("/invites")
 				.handler(authHandler);
 		router.route("/invites")
@@ -308,8 +297,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		router.route("/invites/:inviteId")
 				.handler(authHandler);
-		router.route("/invites/:inviteId")
-				.handler(bodyHandler);
+
 		router.route("/invites/:inviteId")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(AcceptInviteRequest.class, "inviteId", this::acceptInvite));
@@ -323,8 +311,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler("inviteId", this::deleteInvite));
 
 		router.route("/drafts")
-				.handler(bodyHandler);
-		router.route("/drafts")
 				.handler(authHandler);
 		router.route("/drafts")
 				.method(HttpMethod.GET)
@@ -335,23 +321,17 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
 
 		router.route("/drafts/hero")
-				.handler(bodyHandler);
-		router.route("/drafts/hero")
 				.handler(authHandler);
 		router.route("/drafts/hero")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
 
 		router.route("/drafts/cards")
-				.handler(bodyHandler);
-		router.route("/drafts/cards")
 				.handler(authHandler);
 		router.route("/drafts/cards")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
-		router.route("/invites")
-				.handler(bodyHandler);
 		router.route("/invites")
 				.handler(authHandler);
 		router.route("/invites")
@@ -744,6 +724,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		final List<GetCollectionResponse> responses = deckCollections.getResponses();
 		return new Account()
 				.id(record.getId())
+				.friends(record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList()))
 				.decks((responses != null && responses.size() > 0) ? responses.stream()
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())

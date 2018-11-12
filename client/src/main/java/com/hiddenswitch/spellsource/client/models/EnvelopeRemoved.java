@@ -35,6 +35,9 @@ public class EnvelopeRemoved implements Serializable {
   @JsonProperty("matchId")
   private String matchId = null;
 
+  @JsonProperty("friendId")
+  private String friendId = null;
+
   public EnvelopeRemoved inviteId(String inviteId) {
     this.inviteId = inviteId;
     return this;
@@ -71,6 +74,24 @@ public class EnvelopeRemoved implements Serializable {
     this.matchId = matchId;
   }
 
+  public EnvelopeRemoved friendId(String friendId) {
+    this.friendId = friendId;
+    return this;
+  }
+
+   /**
+   * The unique ID of the friend that should be removed, 
+   * @return friendId
+  **/
+  @ApiModelProperty(value = "The unique ID of the friend that should be removed, ")
+  public String getFriendId() {
+    return friendId;
+  }
+
+  public void setFriendId(String friendId) {
+    this.friendId = friendId;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -82,12 +103,13 @@ public class EnvelopeRemoved implements Serializable {
     }
     EnvelopeRemoved envelopeRemoved = (EnvelopeRemoved) o;
     return Objects.equals(this.inviteId, envelopeRemoved.inviteId) &&
-        Objects.equals(this.matchId, envelopeRemoved.matchId);
+        Objects.equals(this.matchId, envelopeRemoved.matchId) &&
+        Objects.equals(this.friendId, envelopeRemoved.friendId);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(inviteId, matchId);
+    return Objects.hash(inviteId, matchId, friendId);
   }
 
 
@@ -98,6 +120,7 @@ public class EnvelopeRemoved implements Serializable {
     
     sb.append("    inviteId: ").append(toIndentedString(inviteId)).append("\n");
     sb.append("    matchId: ").append(toIndentedString(matchId)).append("\n");
+    sb.append("    friendId: ").append(toIndentedString(friendId)).append("\n");
     sb.append("}");
     return sb.toString();
   }

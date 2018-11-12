@@ -18,20 +18,24 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.hiddenswitch.spellsource.client.models.Friend;
+import com.hiddenswitch.spellsource.client.models.Invite;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * Indicates that a record&#39;s fields have changed. In this model, the new document is a full replacement. 
+ * Indicates that a record&#39;s fields have changed. 
  */
-@ApiModel(description = "Indicates that a record's fields have changed. In this model, the new document is a full replacement. ")
+@ApiModel(description = "Indicates that a record's fields have changed. ")
 
 public class EnvelopeChanged implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("friend")
   private Friend friend = null;
+
+  @JsonProperty("invite")
+  private Invite invite = null;
 
   public EnvelopeChanged friend(Friend friend) {
     this.friend = friend;
@@ -51,6 +55,24 @@ public class EnvelopeChanged implements Serializable {
     this.friend = friend;
   }
 
+  public EnvelopeChanged invite(Invite invite) {
+    this.invite = invite;
+    return this;
+  }
+
+   /**
+   * Get invite
+   * @return invite
+  **/
+  @ApiModelProperty(value = "")
+  public Invite getInvite() {
+    return invite;
+  }
+
+  public void setInvite(Invite invite) {
+    this.invite = invite;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -61,12 +83,13 @@ public class EnvelopeChanged implements Serializable {
       return false;
     }
     EnvelopeChanged envelopeChanged = (EnvelopeChanged) o;
-    return Objects.equals(this.friend, envelopeChanged.friend);
+    return Objects.equals(this.friend, envelopeChanged.friend) &&
+        Objects.equals(this.invite, envelopeChanged.invite);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(friend);
+    return Objects.hash(friend, invite);
   }
 
 
@@ -76,6 +99,7 @@ public class EnvelopeChanged implements Serializable {
     sb.append("class EnvelopeChanged {\n");
     
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
+    sb.append("    invite: ").append(toIndentedString(invite)).append("\n");
     sb.append("}");
     return sb.toString();
   }

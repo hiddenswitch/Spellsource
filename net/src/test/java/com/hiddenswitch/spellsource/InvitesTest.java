@@ -1,15 +1,20 @@
 package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.Strand;
 import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
+import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -30,33 +35,32 @@ public class InvitesTest extends SpellsourceTestBase {
 			AtomicReference<String> recipientId = new AtomicReference<>();
 			UnityClient sender = new UnityClient(testContext) {
 				@Override
-				protected void handleMessage(Envelope env) {
-					if (env.getAdded() != null && env.getAdded().getFriend() != null) {
-						assertNotNull(env.getAdded().getFriend().getFriendId());
-						assertEquals(env.getAdded().getFriend().getFriendId(), recipientId.get());
+				protected void handleMessage(Envelope message) {
+					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
+						assertNotNull(message.getAdded().getFriend().getFriendId());
+						assertEquals(message.getAdded().getFriend().getFriendId(), recipientId.get());
 						didReceiveFriend.countDown();
 					}
 
-					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
-						Invite invite = env.getAdded().getInvite();
-						// Confirm the invite statuses are updated correctly
-						if (didReceiveFriend.getCount() == 1L && friended.getCount() == 1L) {
-							assertEquals(Invite.StatusEnum.UNDELIVERED, invite.getStatus());
-							inviteChecks.decrementAndGet();
-						} else if (friended.getCount() == 0L) {
-							assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
-							inviteChecks.decrementAndGet();
-						}
+					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+						Invite invite = message.getAdded().getInvite();
+						assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(invite.getStatus()));
+						inviteChecks.decrementAndGet();
+					}
+
+					if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+						Invite invite = message.getChanged().getInvite();
+						assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
+						inviteChecks.decrementAndGet();
 					}
 				}
 			};
-			sender.ensureConnected();
 
 			UnityClient recipient = new UnityClient(testContext) {
 				@Override
-				protected void handleMessage(Envelope env) {
-					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
-						Invite invite = env.getAdded().getInvite();
+				protected void handleMessage(Envelope message) {
+					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+						Invite invite = message.getAdded().getInvite();
 						try {
 							if (invite.getFriendId() != null) {
 								assertEquals(Invite.StatusEnum.PENDING, invite.getStatus());
@@ -67,12 +71,20 @@ public class InvitesTest extends SpellsourceTestBase {
 							fail(ex.getMessage());
 						}
 					}
+
+					if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+						Invite invite = message.getChanged().getInvite();
+						assertEquals(Invite.StatusEnum.ACCEPTED, invite.getStatus());
+					}
 				}
 			};
-			recipient.ensureConnected();
 
 			sender.createUserAccount();
 			recipient.createUserAccount();
+
+			recipient.ensureConnected();
+			sender.ensureConnected();
+
 			recipientId.set(recipient.getUserId().toString());
 			assertTrue(recipient.getAccount().getName().contains("#"));
 
@@ -82,7 +94,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					.toUserNameWithToken(recipient.getAccount().getName())
 					.message("Would you be my friend?"));
 
-			assertEquals(Invite.StatusEnum.UNDELIVERED, inviteResponse.getInvite().getStatus());
+			assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
 			friended.await();
 			didReceiveFriend.await();
 			sleep(1000L);
@@ -106,31 +118,31 @@ public class InvitesTest extends SpellsourceTestBase {
 			AtomicReference<String> recipientId = new AtomicReference<>();
 			UnityClient sender = new UnityClient(testContext) {
 				@Override
-				protected void handleMessage(Envelope env) {
-					if (env.getAdded() != null && env.getAdded().getFriend() != null) {
+				protected void handleMessage(Envelope message) {
+					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
 						fail("Should not have friended");
 					}
 
-					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
-						Invite invite = env.getAdded().getInvite();
+					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+						Invite invite = message.getAdded().getInvite();
 						// Confirm the invite statuses are updated correctly
-						if (rejected.getCount() == 1L) {
-							assertEquals(Invite.StatusEnum.UNDELIVERED, invite.getStatus());
-							inviteChecks.decrementAndGet();
-						} else if (rejected.getCount() == 0L) {
-							assertEquals(Invite.StatusEnum.REJECTED, invite.getStatus());
-							inviteChecks.decrementAndGet();
-						}
+						assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(invite.getStatus()));
+						inviteChecks.decrementAndGet();
+					}
+
+					if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+						Invite invite = message.getChanged().getInvite();
+						assertEquals(Invite.StatusEnum.REJECTED, invite.getStatus());
+						inviteChecks.decrementAndGet();
 					}
 				}
 			};
-			sender.ensureConnected();
 
 			UnityClient recipient = new UnityClient(testContext) {
 				@Override
-				protected void handleMessage(Envelope env) {
-					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
-						Invite invite = env.getAdded().getInvite();
+				protected void handleMessage(Envelope message) {
+					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+						Invite invite = message.getAdded().getInvite();
 						try {
 							if (invite.getFriendId() != null) {
 								assertEquals(Invite.StatusEnum.PENDING, invite.getStatus());
@@ -143,10 +155,13 @@ public class InvitesTest extends SpellsourceTestBase {
 					}
 				}
 			};
-			recipient.ensureConnected();
 
 			sender.createUserAccount();
 			recipient.createUserAccount();
+
+			sender.ensureConnected();
+			recipient.ensureConnected();
+
 			recipientId.set(recipient.getUserId().toString());
 			assertTrue(recipient.getAccount().getName().contains("#"));
 
@@ -156,7 +171,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					.toUserNameWithToken(recipient.getAccount().getName())
 					.message("Would you be my friend?"));
 
-			assertEquals(Invite.StatusEnum.UNDELIVERED, inviteResponse.getInvite().getStatus());
+			assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
 			rejected.await();
 			sleep(1000L);
 			assertEquals(0, inviteChecks.get());
@@ -177,19 +192,18 @@ public class InvitesTest extends SpellsourceTestBase {
 			AtomicReference<String> recipientId = new AtomicReference<>();
 			UnityClient sender = new UnityClient(testContext) {
 				@Override
-				protected void handleMessage(Envelope env) {
-					if (env.getAdded() != null && env.getAdded().getFriend() != null) {
+				protected void handleMessage(Envelope message) {
+					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
 						fail("Should not have friended");
 					}
 				}
 			};
-			sender.ensureConnected();
 
 			UnityClient recipient = new UnityClient(testContext) {
 				@Override
-				protected void handleMessage(Envelope env) {
-					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
-						Invite invite = env.getAdded().getInvite();
+				protected void handleMessage(Envelope message) {
+					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
+						Invite invite = message.getAdded().getInvite();
 						if (invite.getFriendId() != null) {
 							if (invite.getStatus() == Invite.StatusEnum.PENDING) {
 								inviteChecks.countDown();
@@ -209,10 +223,14 @@ public class InvitesTest extends SpellsourceTestBase {
 					}
 				}
 			};
-			recipient.ensureConnected();
+
 
 			sender.createUserAccount();
 			recipient.createUserAccount();
+
+			sender.ensureConnected();
+			recipient.ensureConnected();
+
 			recipientId.set(recipient.getUserId().toString());
 			assertTrue(recipient.getAccount().getName().contains("#"));
 
@@ -222,7 +240,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					.toUserNameWithToken(recipient.getAccount().getName())
 					.message("Would you be my friend?"));
 
-			assertEquals(Invite.StatusEnum.UNDELIVERED, inviteResponse.getInvite().getStatus());
+			assertTrue(Sets.newHashSet(Invite.StatusEnum.UNDELIVERED, Invite.StatusEnum.PENDING).contains(inviteResponse.getInvite().getStatus()));
 			receivedInvite.await();
 			InviteResponse cancelResponse = invoke(sender.getApi()::deleteInvite, inviteResponse.getInvite().getId());
 			assertEquals(Invite.StatusEnum.CANCELLED, cancelResponse.getInvite().getStatus());
@@ -231,6 +249,73 @@ public class InvitesTest extends SpellsourceTestBase {
 			GetAccountsResponse updatedSender = invoke(sender.getApi()::getAccount, sender.getUserId().toString());
 			assertEquals(0, updatedRecipient.getAccounts().get(0).getFriends().size());
 			assertEquals(0, updatedSender.getAccounts().get(0).getFriends().size());
+		});
+	}
+
+	@Test
+	public void testPrivateGameInvite(TestContext context) {
+		sync(() -> {
+			CountDownLatch receivedInvite = new CountDownLatch(1);
+			// Create the users
+			UnityClient sender = new UnityClient(context) {
+				@Override
+				protected void handleMessage(Envelope env) {
+					handleGameMessages(env);
+				}
+			};
+			UnityClient recipient = new UnityClient(context) {
+				@Override
+				protected void handleMessage(Envelope env) {
+					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
+						receivedInvite.countDown();
+					}
+
+					handleGameMessages(env);
+				}
+			};
+
+			sender.createUserAccount();
+			recipient.createUserAccount();
+
+			sender.ensureConnected();
+			recipient.ensureConnected();
+
+			// Friend them coercively
+			Friends.putFriend(Accounts.get(sender.getUserId()), new FriendPutRequest().friendId(recipient.getUserId().toString()).usernameWithToken(recipient.getAccount().getName()));
+
+			// Send a 1v1 invite
+			InviteResponse inviteResponse = invoke(sender.getApi()::postInvite, new InvitePostRequest()
+					.queueId("customQueueId")
+					// Start the queue automatically
+					.deckId(sender.getAccount().getDecks().get(0).getId())
+					// Get name contains the privacy token
+					.toUserNameWithToken(recipient.getAccount().getName())
+					.message("Would you be my friend?"));
+
+			assertEquals("The sender was queued automatically because the sender specified a deckId", inviteResponse.getInvite().getQueueId(), Matchmaking.userToQueue().get(sender.getUserId()));
+			receivedInvite.await();
+
+			// Accept the invite with a deck ID, which should enqueue automatically
+			AcceptInviteResponse acceptInviteResponse = invoke(recipient.getApi()::acceptInvite, inviteResponse.getInvite().getId(), new AcceptInviteRequest()
+					.match(new MatchmakingQueuePutRequest()
+							.queueId(inviteResponse.getInvite().getQueueId())
+							.deckId(recipient.getAccount().getDecks().get(0).getId())));
+
+			sleep(2000L);
+			assertTrue("Both players should be in a game now", Games.getGames().containsKey(recipient.getUserId()));
+			assertTrue("Both players should be in a game now", Games.getGames().containsKey(sender.getUserId()));
+
+			sender.play();
+			recipient.play();
+
+			// The players should be in a game, and play it.
+			recipient.waitUntilDone();
+			sender.waitUntilDone();
+
+			// Check that the queue has been destroyed.
+			assertFalse("The queue should be destroyed", SuspendableQueue.exists(inviteResponse.getInvite().getQueueId()));
+			assertFalse("Neither players should be in a game now", Games.getGames().containsKey(recipient.getUserId()));
+			assertFalse("Neither players should be in a game now", Games.getGames().containsKey(sender.getUserId()));
 		});
 	}
 }
