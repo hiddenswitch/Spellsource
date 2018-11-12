@@ -4,19 +4,17 @@ import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.Invite.StatusEnum;
-import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.InviteId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.MatchmakingRequest;
-import com.hiddenswitch.spellsource.util.Sync;
-import io.vertx.core.Handler;
+import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
+import io.vertx.core.Closeable;
 import io.vertx.core.Vertx;
-import io.vertx.core.buffer.Buffer;
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonArray;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.mongo.UpdateOptions;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Calendar;
@@ -114,15 +112,38 @@ public interface Invites {
 		} else if (request.getQueueId() != null) {
 			// This is a matchmaking queue request
 			// Create a new queue just for this invite.
+			request.setQueueId(RandomStringUtils.randomAlphanumeric(10));
 			// Right now, anyone can wait in any queue, but this is probably the most convenient.
-			String customQueueId = request.getQueueId() + "-" + inviteId;
+			// TODO: Destroy the user's missing queues
+			String customQueueId = user.getUsername() + "-" + inviteId + "-" + request.getQueueId();
 			invite.queueId(customQueueId);
-			// TODO: How do we blow up empty old queues?
+
+			// The matchmaker will close itself automatically if no one joins after 4s or the
+			Closeable matchmaker = Matchmaking.startMatchmaker(customQueueId, new MatchmakingQueueConfiguration()
+					.setAwaitingLobbyTimeout(30000L)
+					.setBotOpponent(false)
+					.setEmptyLobbyTimeout(4000L)
+					.setLobbySize(2)
+					.setName(String.format("%s's private match", user.getUsername()))
+					.setOnce(true)
+					.setPrivateLobby(true)
+					.setRanked(false)
+					.setStillConnectedTimeout(2000L)
+					.setStartsAutomatically(true)
+					.setRules(new CardDesc[0]));
+
+			// A user that starts a private lobby queues automatically in this method if their request includes a deckId
+			if (request.getDeckId() != null) {
+				Matchmaking.enqueue(new MatchmakingRequest()
+						.setQueueId(customQueueId)
+						.withUserId(user.getId())
+						.withDeckId(request.getDeckId()));
+			}
 		}
 
 		mongo().insert(INVITES, mapFrom(invite));
 
-		updateInvite(invite);
+		sendInvite(invite);
 
 		return new InviteResponse()
 				.invite(invite);
@@ -136,7 +157,7 @@ public interface Invites {
 	 * @param invite
 	 * @throws SuspendExecution
 	 */
-	static void updateInvite(@NotNull Invite invite) throws SuspendExecution {
+	static void sendInvite(@NotNull Invite invite) throws SuspendExecution {
 		// Notify both users of the new invite, but only wait to see if the recipient is around to actually receive it right
 		// now. We'll update the record immediately and only insert it into the db with the proper status
 		WriteStream<Envelope> toUserConnection = Connection.writeStream(invite.getToUserId());
@@ -188,6 +209,15 @@ public interface Invites {
 		if (!invite.getToUserId().equals(recipient.getId())) {
 			throw new SecurityException("You did not have access to change this invite.");
 		}
+		if (request.getMatch() != null) {
+			if (request.getMatch().getDeckId() == null) {
+				throw new NullPointerException("No deckId specified.");
+			}
+			if (request.getMatch().getQueueId() != null && !request.getMatch().getQueueId().equals(invite.getQueueId())) {
+				throw new IllegalArgumentException("Invalid queueId specified. Leave this field empty or use the invite's queueId");
+			}
+		}
+
 		switch (invite.getStatus()) {
 			case PENDING:
 			case UNDELIVERED:
@@ -206,12 +236,17 @@ public interface Invites {
 
 		AcceptInviteResponse res = new AcceptInviteResponse();
 		res.invite(invite);
+		Envelope env = new Envelope();
 		if (invite.getFriendId() != null) {
 			// Make them friends, regardless if they are already friends.
 			res.friend(Friends.putFriend(recipient, new FriendPutRequest().friendId(invite.getFriendId())));
 		} else if (invite.getQueueId() != null) {
 			try {
-				Matchmaking.enqueue(new MatchmakingRequest(request.getMatch(), recipient.getId()));
+				// Regardless of what the client specified as its queueId, use the one from the invite
+				MatchmakingQueuePutRequest match = request.getMatch();
+				match.queueId(invite.getQueueId());
+				Matchmaking.enqueue(new MatchmakingRequest(match, recipient.getId()));
+				env.result(new EnvelopeResult().enqueue(new MatchmakingQueuePutResponse()));
 				res.match(new MatchmakingQueuePutResponse());
 			} catch (IllegalStateException alreadyInMatch) {
 				// Reject the invite if the player was already in a match.
@@ -224,7 +259,21 @@ public interface Invites {
 
 		// Only actually accept the invite if the actions suceeded.
 		mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", StatusEnum.ACCEPTED.getValue())));
-		updateInvite(invite);
+
+		env.changed(new EnvelopeChanged().invite(invite));
+		WriteStream<Envelope> recipientConnection = Connection.writeStream(recipient.getId());
+		if (recipientConnection != null) {
+			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+			recipientConnection.write(env);
+		}
+
+		WriteStream<Envelope> senderConnection = Connection.writeStream(invite.getFromUserId());
+		if (senderConnection != null) {
+			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+			senderConnection.write(new Envelope().changed(new EnvelopeChanged().invite(invite)));
+		}
+
+		// TODO: Only yield to the caller when the game has started?
 
 		return res;
 	}
@@ -271,7 +320,19 @@ public interface Invites {
 
 		mongo().updateCollection(INVITES, json("_id", invite.getId()), json("$set", json("status", status)));
 
-		updateInvite(invite);
+		Envelope env = new Envelope().changed(new EnvelopeChanged().invite(invite));
+		WriteStream<Envelope> recipientConnection = Connection.writeStream(invite.getToUserId());
+		if (recipientConnection != null) {
+			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+			recipientConnection.write(env);
+		}
+
+		WriteStream<Envelope> senderConnection = Connection.writeStream(invite.getFromUserId());
+		if (senderConnection != null) {
+			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+			senderConnection.write(env);
+		}
+
 		return new InviteResponse().invite(invite);
 	}
 }

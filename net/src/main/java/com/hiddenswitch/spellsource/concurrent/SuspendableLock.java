@@ -16,6 +16,8 @@ import com.hiddenswitch.spellsource.util.Hazelcast;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
+import org.jetbrains.annotations.Contract;
+import org.jetbrains.annotations.NotNull;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
@@ -38,8 +40,18 @@ public interface SuspendableLock {
 	ReentrantLock LOCK_SERIALIZATION = new ReentrantLock();
 	String LOCK_SEMAPHORE_PREFIX = "__vertx.";
 
+	/**
+	 * Obtains a lock using a Hazelcast cluster.
+	 *
+	 * @param name    The unique identifier of this lock
+	 * @param timeout How long to wait for the lock. If the timeout is 0, the method waits indefinitely
+	 * @return A lock that has been acquired.
+	 * @throws VertxException with an inner cause of {@link TimeoutException} if the lock acquisition has timed out,
+	 *                        otherwise the Hazelcast cluster experienced an error.
+	 */
 	@Suspendable
-	static SuspendableLock lock(String name, long timeout) {
+	@NotNull
+	static SuspendableLock lock(@NotNull String name, long timeout) {
 		HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
 
 		// Lock accesses to getSemaphore
@@ -107,6 +119,12 @@ public interface SuspendableLock {
 		return lock(name, -1);
 	}
 
+	/**
+	 * Destroys the lock, freeing up the resources it used in the cluster.
+	 */
+	@Suspendable
+	void destroy();
+
 	class HazelcastLock implements SuspendableLock {
 		private final ISemaphore semaphore;
 
@@ -151,6 +169,15 @@ public interface SuspendableLock {
 				lock.unlock();
 			}
 			*/
+		}
+
+		@Override
+		@Suspendable
+		public void destroy() {
+			Vertx.currentContext().executeBlocking(fut -> {
+				semaphore.destroy();
+				fut.complete();
+			}, false, null);
 		}
 	}
 

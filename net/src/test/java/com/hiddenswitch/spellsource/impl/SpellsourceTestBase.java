@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.impl;
 
-import ch.qos.logback.classic.Level;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.github.fromage.quasi.strands.SuspendableRunnable;
@@ -12,9 +11,7 @@ import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
-import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
@@ -91,7 +88,7 @@ public abstract class SpellsourceTestBase {
 		vertx.exceptionHandler(context.exceptionHandler());
 		// Cleanup anything else that might be going on
 		sync(() -> {
-			for (UserId key : Matchmaking.currentQueue().keySet()) {
+			for (UserId key : Matchmaking.userToQueue().keySet()) {
 				Matchmaking.dequeue(key);
 			}
 
