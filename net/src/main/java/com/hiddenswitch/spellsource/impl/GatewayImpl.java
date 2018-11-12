@@ -75,19 +75,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		final AuthHandler authHandler = SpellsourceAuthHandler.create();
 		final BodyHandler bodyHandler = BodyHandler.create();
 
-		// Handle game messaging here
-		final String websocketPath = "/" + Games.WEBSOCKET_PATH + "-clustered";
-
-		router.route(websocketPath)
-				.method(HttpMethod.GET)
-				.handler(authHandler);
-
-		// Enables the gateway to handle incoming game sockets.
-		// TODO: This is now a legacy connectivity channel.
-		router.route(websocketPath)
-				.method(HttpMethod.GET)
-				.handler(ServerGameContext.createWebSocketHandler());
-
 		// Handle all realtime messaging here
 		router.route("/realtime")
 				.method(HttpMethod.GET)
@@ -170,7 +157,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		// Add "content-type=application/json" to all responses
 		router.route().handler(context -> {
-			if (!context.request().uri().contains(websocketPath)) {
+			if (!context.request().uri().contains("/realtime")) {
 				context.response().putHeader("Content-Type", "application/json");
 			}
 			context.next();
