@@ -1,0 +1,81 @@
+package com.hiddenswitch.spellsource;
+
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.desc.CardDescArg;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
+import net.demilich.metastone.game.spells.*;
+import net.demilich.metastone.game.spells.desc.BattlecryDescArg;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.condition.ConditionArg;
+import net.demilich.metastone.game.spells.desc.condition.OrCondition;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDescArg;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
+import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
+import net.demilich.metastone.game.spells.trigger.AfterSpellCastedTrigger;
+import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
+import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
+import net.demilich.metastone.game.targeting.TargetSelection;
+import org.junit.Assert;
+import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
+
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class BfsTests {
+
+	@BeforeClass
+	public static void loadCards() {
+		CardCatalogue.loadCardsFromPackage();
+	}
+
+	@Test
+	public void testAccurateBfs() {
+		Card card = CardCatalogue.getCardById("minion_test_carddesc");
+
+		List<HasEntrySet.BfsNode<Enum, Object>> nodes = card.getDesc().bfs().build().collect(Collectors.toList());
+
+		assertContains(nodes, CardDescArg.NAME, "Name");
+		assertContains(nodes, CardDescArg.BASE_MANA_COST, 3);
+		assertContains(nodes, CardDescArg.TYPE, CardType.MINION);
+		assertContains(nodes, CardDescArg.HERO_CLASS, HeroClass.GOLD);
+		assertContains(nodes, CardDescArg.BASE_ATTACK, 2);
+		assertContains(nodes, CardDescArg.BASE_HP, 1);
+		assertContains(nodes, CardDescArg.RARITY, Rarity.COMMON);
+		assertContains(nodes, CardDescArg.DESCRIPTION, "Test");
+		assertContains(nodes, EventTriggerArg.CLASS, AfterSpellCastedTrigger.class);
+		assertContains(nodes, EventTriggerArg.CLASS, TurnEndTrigger.class);
+		assertContains(nodes, EventTriggerArg.CLASS, TurnStartTrigger.class);
+		assertContains(nodes, SpellArg.CLASS, MissilesSpell.class);
+		assertContains(nodes, SpellArg.CLASS, ConditionalSpell.class);
+		assertContains(nodes, SpellArg.CLASS, SummonSpell.class);
+		assertContains(nodes, SpellArg.CLASS, DrawCardSpell.class);
+		assertContains(nodes, SpellArg.CLASS, HealSpell.class);
+		assertContains(nodes, ConditionArg.CLASS, OrCondition.class);
+		assertContains(nodes, ValueProviderArg.CLASS, AttributeValueProvider.class);
+		assertContains(nodes, SpellArg.VALUE, 5);
+		assertContains(nodes, ValueProviderArg.ATTRIBUTE, Attribute.STEALTH);
+		assertContains(nodes, Attribute.TAUNT, true);
+		assertContains(nodes, Attribute.BATTLECRY, true);
+		assertContains(nodes, Attribute.SPELL_DAMAGE, 2);
+		assertContains(nodes, CardDescArg.COLLECTIBLE, true);
+		assertContains(nodes, CardDescArg.SET, CardSet.TEST);
+		assertContains(nodes, BattlecryDescArg.TARGET_SELECTION, TargetSelection.MINIONS);
+		assertContains(nodes, CardDescArg.ATTRIBUTES, card.getDesc().getAttributes());
+		assertContains(nodes, CardDescArg.TRIGGERS, card.getDesc().getTrigger());
+		assertContains(nodes, EnchantmentDescArg.EVENT_TRIGGER, card.getDesc().getTrigger().eventTrigger);
+
+	}
+
+	public static void assertContains(List<HasEntrySet.BfsNode<Enum, Object>> nodes, Enum key, Object value) {
+		for (HasEntrySet.BfsNode<Enum, Object> node : nodes) {
+			if (node.getKey().equals(key) && node.getValue().equals(value)) {
+				return;
+			}
+		}
+
+		Assert.fail(String.format("Nodelist does not contain %s %s", key.toString(), value.toString()));
+	}
+}

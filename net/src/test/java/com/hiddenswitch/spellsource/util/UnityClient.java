@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource.util;
 
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
 import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
 import com.google.common.collect.Sets;
-import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.Port;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
@@ -18,8 +18,6 @@ import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.*;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -93,10 +91,6 @@ public class UnityClient {
 		return this;
 	}
 
-	public UnityClient loginWithUserAccount(String username) {
-		return loginWithUserAccount(username, "testpass");
-	}
-
 	public void gameOverHandler(Handler<UnityClient> handler) {
 		onGameOver = handler;
 	}
@@ -137,30 +131,17 @@ public class UnityClient {
 		return fut;
 	}
 
-	private void ensureConnected() {
+	public void ensureConnected() {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
 				realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 				realtime.setMessageHandler(message -> {
+					logger.debug("ensureConnected: Handling realtime message for userId {}", getUserId());
 					try {
 						messagingLock.lock();
-						logger.debug("play: Handling realtime message for userId " + getUserId());
-						Envelope env = Json.decodeValue(message, Envelope.class);
 
-						if (env.getResult() != null && env.getResult().getEnqueue() != null) {
-							if (matchmakingFut.get().isCancelled()) {
-								context.fail(new IllegalStateException("matchmaking was cancelled"));
-							}
-
-							// Might have been cancelled
-							context.assertFalse(matchmakingFut.get().isDone());
-							matchmakingFut.get().complete(null);
-						}
-
-						if (env.getGame() != null && env.getGame().getServerToClient() != null) {
-							handleServerToClientMessage(env.getGame().getServerToClient());
-						}
+						this.handleMessage(Json.decodeValue(message, Envelope.class));
 					} finally {
 						messagingLock.unlock();
 					}
@@ -169,6 +150,100 @@ public class UnityClient {
 		} finally {
 			messagingLock.unlock();
 		}
+	}
+
+	protected void handleMessage(Envelope env) {
+		handleMatchmaking(env);
+		handleGameMessages(env);
+	}
+
+	protected void handleMatchmaking(Envelope env) {
+		if (env.getResult() != null && env.getResult().getEnqueue() != null) {
+			if (matchmakingFut.get().isCancelled()) {
+				context.fail(new IllegalStateException("matchmaking was cancelled"));
+			}
+
+			// Might have been cancelled
+			context.assertFalse(matchmakingFut.get().isDone());
+			matchmakingFut.get().complete(null);
+		}
+	}
+
+	protected void handleGameMessages(Envelope env) {
+		if (env.getGame() != null && env.getGame().getServerToClient() != null) {
+			ServerToClientMessage message = env.getGame().getServerToClient();
+			messagingLock.lock();
+			try {
+				for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
+					if (handler != null) {
+						handler.accept(message);
+					}
+				}
+
+				logger.debug("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
+				switch (message.getMessageType()) {
+					case ON_TURN_END:
+						if (turnsToPlay.getAndDecrement() <= 0
+								&& shouldDisconnect) {
+							disconnect();
+						}
+						break;
+					case ON_UPDATE:
+						assertValidStateAndChanges(message);
+						break;
+					case ON_GAME_EVENT:
+						context.assertNotNull(message.getEvent());
+						assertValidStateAndChanges(message);
+						break;
+					case ON_MULLIGAN:
+						onMulligan(message);
+						if (turnsToPlay.get() == 0 && shouldDisconnect) {
+							// don't respond to the mulligan attempt
+							disconnect();
+							gameOverLatch.countDown();
+							break;
+						}
+						context.assertNotNull(message.getStartingCards());
+						context.assertTrue(message.getStartingCards().size() > 0);
+						realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
+								.messageType(MessageType.UPDATE_MULLIGAN)
+								.repliesTo(message.getId())
+								.discardedCardIndices(Collections.singletonList(0))))));
+						break;
+					case ON_REQUEST_ACTION:
+						if (!onRequestAction(message)) {
+							break;
+						}
+						assertValidActions(message);
+						assertValidStateAndChanges(message);
+						context.assertNotNull(message.getGameState());
+						context.assertNotNull(message.getChanges());
+						context.assertNotNull(message.getActions());
+						respondRandomAction(message);
+						break;
+					case ON_GAME_END:
+						// The game has ended.
+						this.gameOver = true;
+						// TODO: Should we disconnect realtime here?
+						if (shouldDisconnect) {
+							disconnect();
+						}
+						gameOverLatch.countDown();
+						if (onGameOver != null) {
+							onGameOver.handle(this);
+						}
+						logger.debug("play: UserId " + getUserId() + " received game end message.");
+						break;
+				}
+				logger.debug("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
+			} finally {
+				messagingLock.unlock();
+			}
+		}
+	}
+
+	public void sendMessage(Envelope env) {
+		this.realtime.sendMessage(serialize(env));
 	}
 
 	@Suspendable
@@ -209,76 +284,6 @@ public class UnityClient {
 	private void sendStartGameMessage() {
 		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 				.messageType(MessageType.FIRST_MESSAGE)))));
-	}
-
-	private void handleServerToClientMessage(ServerToClientMessage message) {
-		messagingLock.lock();
-		try {
-			for (java.util.function.Consumer<ServerToClientMessage> handler : handlers) {
-				if (handler != null) {
-					handler.accept(message);
-				}
-			}
-
-			logger.debug("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
-			switch (message.getMessageType()) {
-				case ON_TURN_END:
-					if (turnsToPlay.getAndDecrement() <= 0
-							&& shouldDisconnect) {
-						disconnect();
-					}
-					break;
-				case ON_UPDATE:
-					assertValidStateAndChanges(message);
-					break;
-				case ON_GAME_EVENT:
-					context.assertNotNull(message.getEvent());
-					assertValidStateAndChanges(message);
-					break;
-				case ON_MULLIGAN:
-					onMulligan(message);
-					if (turnsToPlay.get() == 0 && shouldDisconnect) {
-						// don't respond to the mulligan attempt
-						disconnect();
-						gameOverLatch.countDown();
-						break;
-					}
-					context.assertNotNull(message.getStartingCards());
-					context.assertTrue(message.getStartingCards().size() > 0);
-					realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
-							.messageType(MessageType.UPDATE_MULLIGAN)
-							.repliesTo(message.getId())
-							.discardedCardIndices(Collections.singletonList(0))))));
-					break;
-				case ON_REQUEST_ACTION:
-					if (!onRequestAction(message)) {
-						break;
-					}
-					assertValidActions(message);
-					assertValidStateAndChanges(message);
-					context.assertNotNull(message.getGameState());
-					context.assertNotNull(message.getChanges());
-					context.assertNotNull(message.getActions());
-					respondRandomAction(message);
-					break;
-				case ON_GAME_END:
-					// The game has ended.
-					this.gameOver = true;
-					// TODO: Should we disconnect realtime here?
-					if (shouldDisconnect) {
-						disconnect();
-					}
-					gameOverLatch.countDown();
-					if (onGameOver != null) {
-						onGameOver.handle(this);
-					}
-					logger.debug("play: UserId " + getUserId() + " received game end message.");
-					break;
-			}
-			logger.debug("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
-		} finally {
-			messagingLock.unlock();
-		}
 	}
 
 	public void respondRandomAction(ServerToClientMessage message) {

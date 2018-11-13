@@ -391,7 +391,13 @@ public class Spellsource {
 						.withUp(thisVertx -> {
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(21, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(22)
+						.withUp(thisVertx -> {
+							// Needs to include the fromUserId too
+							mongo().createIndex(Invites.INVITES, json("fromUserId", 1));
+						}))
+				.migrateTo(22, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

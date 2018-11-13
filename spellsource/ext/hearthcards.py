@@ -383,22 +383,3 @@ def write_set_stubs(set_id: int, dest_dir: str, hero_class: str):
                    filepath=os.path.join(basedir, name_to_id(
                        out_card['name'],
                        out_card['type']) + '.json'))
-
-
-if __name__ == '__main__':
-    import argparse
-
-    parser = argparse.ArgumentParser()
-    parser.add_argument('-s', '--set', required=True,
-                        help='The set to generate stubs for based on the Hearthcards set ID')
-    parser.add_argument('-d', '--directory', required=False,
-                        default='./cards/src/main/resources/staging/hearthcards',
-                        help='The directory to save the cards to')
-    parser.add_argument('-c', '--hero-class', required=False,
-                        default='SILVER',
-                        help='The hero class to write into the cards')
-    args = parser.parse_args()
-    assert 'set' in args
-    set_id = int(args.set)
-    assert set_id is not None and set_id != 0
-    write_set_stubs(set_id, dest_dir=args.directory, hero_class=args.hero_class)

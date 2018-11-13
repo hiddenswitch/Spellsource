@@ -9,6 +9,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * Casts the subspell after the sequence has ended.
@@ -42,6 +43,18 @@ public final class CastAfterSequenceSpell extends Spell {
 		if (desc.containsKey(SpellArg.CARD) && !spell.containsKey(SpellArg.CARD)) {
 			spell = spell.clone();
 			spell.put(SpellArg.CARD, desc.get(SpellArg.CARD));
+		}
+
+		// If the subspell contains a target key of SELF, resolve it now.
+		if (spell.containsKey(SpellArg.TARGET) && spell.get(SpellArg.TARGET).equals(EntityReference.SELF)) {
+			spell = spell.addArg(SpellArg.TARGET, source.getReference());
+		}
+
+		// Likewise with SPELL_TARGET
+		if (spell.containsKey(SpellArg.TARGET)
+				&& spell.get(SpellArg.TARGET).equals(EntityReference.SPELL_TARGET)
+				&& target != null) {
+			spell = spell.addArg(SpellArg.TARGET, target.getReference());
 		}
 
 		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();

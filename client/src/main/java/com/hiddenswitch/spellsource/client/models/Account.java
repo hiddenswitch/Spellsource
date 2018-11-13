@@ -38,6 +38,9 @@ public class Account implements Serializable {
   @JsonProperty("name")
   private String name = null;
 
+  @JsonProperty("privacyToken")
+  private String privacyToken = null;
+
   @JsonProperty("email")
   private String email = null;
 
@@ -59,10 +62,10 @@ public class Account implements Serializable {
   }
 
    /**
-   * Get id
+   * The user ID
    * @return id
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The user ID")
   public String getId() {
     return id;
   }
@@ -77,10 +80,10 @@ public class Account implements Serializable {
   }
 
    /**
-   * Get name
+   * The username that is displayed to toher players
    * @return name
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The username that is displayed to toher players")
   public String getName() {
     return name;
   }
@@ -89,16 +92,34 @@ public class Account implements Serializable {
     this.name = name;
   }
 
+  public Account privacyToken(String privacyToken) {
+    this.privacyToken = privacyToken;
+    return this;
+  }
+
+   /**
+   * The token that is appended to the end of the user&#39;s name to allow friending without sharing an e-mail address. 
+   * @return privacyToken
+  **/
+  @ApiModelProperty(value = "The token that is appended to the end of the user's name to allow friending without sharing an e-mail address. ")
+  public String getPrivacyToken() {
+    return privacyToken;
+  }
+
+  public void setPrivacyToken(String privacyToken) {
+    this.privacyToken = privacyToken;
+  }
+
   public Account email(String email) {
     this.email = email;
     return this;
   }
 
    /**
-   * Get email
+   * The user&#39;s email address
    * @return email
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The user's email address")
   public String getEmail() {
     return email;
   }
@@ -121,10 +142,10 @@ public class Account implements Serializable {
   }
 
    /**
-   * Get friends
+   * The user&#39;s friends at the moment of receiving this account document. This may be out of date as the latest friends information will come from receiving friend documents. 
    * @return friends
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "The user's friends at the moment of receiving this account document. This may be out of date as the latest friends information will come from receiving friend documents. ")
   public List<Friend> getFriends() {
     return friends;
   }
@@ -147,10 +168,10 @@ public class Account implements Serializable {
   }
 
    /**
-   * Get decks
+   * A list of decks belonging to the player
    * @return decks
   **/
-  @ApiModelProperty(value = "")
+  @ApiModelProperty(value = "A list of decks belonging to the player")
   public List<InventoryCollection> getDecks() {
     return decks;
   }
@@ -207,6 +228,7 @@ public class Account implements Serializable {
     Account account = (Account) o;
     return Objects.equals(this.id, account.id) &&
         Objects.equals(this.name, account.name) &&
+        Objects.equals(this.privacyToken, account.privacyToken) &&
         Objects.equals(this.email, account.email) &&
         Objects.equals(this.friends, account.friends) &&
         Objects.equals(this.decks, account.decks) &&
@@ -216,7 +238,7 @@ public class Account implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, name, email, friends, decks, inMatch, personalCollection);
+    return Objects.hash(id, name, privacyToken, email, friends, decks, inMatch, personalCollection);
   }
 
 
@@ -227,6 +249,7 @@ public class Account implements Serializable {
     
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
+    sb.append("    privacyToken: ").append(toIndentedString(privacyToken)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    friends: ").append(toIndentedString(friends)).append("\n");
     sb.append("    decks: ").append(toIndentedString(decks)).append("\n");

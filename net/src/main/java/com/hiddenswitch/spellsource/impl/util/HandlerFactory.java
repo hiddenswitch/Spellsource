@@ -25,6 +25,14 @@ public class HandlerFactory {
 		return suspendableHandler((SuspendableAction1<RoutingContext>) (context) -> {
 			try {
 				handler.call(context);
+			} catch (NullPointerException notFound) {
+				respond(context, WebResult.notFound("Not found (%s)", notFound.getMessage()));
+			} catch (SecurityException notAuthorized) {
+				respond(context, WebResult.forbidden("Forbidden (%s)", notAuthorized.getMessage()));
+			} catch (IllegalStateException illegalState) {
+				respond(context, WebResult.illegalState("Illegal state (%s)", illegalState.getMessage()));
+			} catch (IllegalArgumentException illegalArgument) {
+				respond(context, WebResult.invalidArgument("Illegal argument (%s)", illegalArgument.getMessage()));
 			} catch (Throwable unhandled) {
 				respond(context, WebResult.failed(500, unhandled));
 			}

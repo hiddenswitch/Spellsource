@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.cards;
 
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
@@ -27,7 +28,7 @@ import java.util.Set;
  * @see Attribute for more about valid attributes here.
  */
 //@JsonDeserialize(using = AttributeMapDeserializer.class)
-public class AttributeMap extends BaseMap<Attribute, Object> implements Serializable, Cloneable {
+public class AttributeMap extends BaseMap<Attribute, Object> implements Serializable, Cloneable, HasEntrySet<Attribute, Object> {
 	public AttributeMap() {
 		super(Attribute.class);
 	}

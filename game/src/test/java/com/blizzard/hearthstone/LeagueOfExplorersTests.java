@@ -24,6 +24,18 @@ import java.util.stream.Stream;
 import static org.testng.Assert.assertEquals;
 
 public class LeagueOfExplorersTests extends TestBase {
+
+	@Test
+	public void testAnimatedArmor() {
+		// Dealing zero damage should not cause Animated Armor to deal one damage instead
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_animated_armor");
+			playCard(context, player, "weapon_wicked_knife");
+			attack(context, player, player.getHero(), opponent.getHero());
+			Assert.assertEquals(player.getHero().getHp(), player.getHero().getMaxHp(), "Should not have changed 0 damage to 1");
+		});
+	}
+
 	@Test
 	public void testNagaSeaWitch() {
 		// Test basic cards
@@ -40,7 +52,7 @@ public class LeagueOfExplorersTests extends TestBase {
 			Assert.assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 5));
 			context.endTurn();
 			Assert.assertFalse(opponent.getHand().stream().anyMatch(c -> costOf(context, opponent, c) == 5));
-			playCardWithTarget(context, opponent, "spell_fireball", nagaSeaWitch);
+			playCard(context, opponent, "spell_fireball", nagaSeaWitch);
 			context.endTurn();
 			Assert.assertFalse(player.getHand().stream().anyMatch(c -> costOf(context, player, c) == 5));
 		});
@@ -68,7 +80,7 @@ public class LeagueOfExplorersTests extends TestBase {
 			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play().withTargetReference(opponent.getHero().getReference()));
 			assertEquals(costOf(context, player, cards.get("minion_frost_giant")), 10 - 1);
 
-			playCardWithTarget(context, player, "spell_fireball", player.getHero());
+			playCard(context, player, "spell_fireball", player.getHero());
 			numberOfSpellsPlayed++;
 			assertEquals(costOf(context, player, cards.get("minion_molten_giant")), 20 - 6);
 

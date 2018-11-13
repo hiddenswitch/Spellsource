@@ -303,6 +303,8 @@ public class SummonSpell extends Spell {
 				&& !(target.getReference().equals(EntityReference.NONE))) {
 			for (int i = 0; i < count; i++) {
 				Minion minion;
+				// Keep track if we ultimately summoned from the base card, because we shouldn't copy triggers in that case.
+				boolean fromBase = false;
 				// Is this a card? Summon it. Is this a non-battlefield minion? If so, summon from the base card too
 				if (target.getEntityType() == EntityType.CARD
 						|| (target.getEntityType() == EntityType.MINION && !target.isInPlay())) {
@@ -310,6 +312,7 @@ public class SummonSpell extends Spell {
 						logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
 						return;
 					}
+					fromBase = true;
 					minion = target.getSourceCard().summon();
 				} else if (target.getEntityType() != EntityType.MINION) {
 					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
@@ -325,20 +328,19 @@ public class SummonSpell extends Spell {
 					return;
 				}
 				summonedMinions.add(minion);
-				if (target instanceof Actor) {
+				if (!fromBase) {
 					List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference());
 					for (Trigger trigger : triggers) {
 						Trigger triggerClone = trigger.clone();
 						context.getLogic().addGameEventListener(player, triggerClone, minion);
 					}
-				}
 
-				//copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
-				final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-				for (Card card : list.getCards(context, target)) {
-					list.add(minion, card);
+					// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
+					final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
+					for (Card card : list.getCards(context, target)) {
+						list.add(minion, card);
+					}
 				}
-
 			}
 		}
 

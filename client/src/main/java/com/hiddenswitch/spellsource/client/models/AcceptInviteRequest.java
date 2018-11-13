@@ -30,8 +30,29 @@ import java.io.Serializable;
 public class AcceptInviteRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
+  @JsonProperty("awaitGameStart")
+  private Boolean awaitGameStart = null;
+
   @JsonProperty("match")
   private MatchmakingQueuePutRequest match = null;
+
+  public AcceptInviteRequest awaitGameStart(Boolean awaitGameStart) {
+    this.awaitGameStart = awaitGameStart;
+    return this;
+  }
+
+   /**
+   * When true, specifies that the method call should only return when the game is actually ready to join 
+   * @return awaitGameStart
+  **/
+  @ApiModelProperty(value = "When true, specifies that the method call should only return when the game is actually ready to join ")
+  public Boolean isAwaitGameStart() {
+    return awaitGameStart;
+  }
+
+  public void setAwaitGameStart(Boolean awaitGameStart) {
+    this.awaitGameStart = awaitGameStart;
+  }
 
   public AcceptInviteRequest match(MatchmakingQueuePutRequest match) {
     this.match = match;
@@ -61,12 +82,13 @@ public class AcceptInviteRequest implements Serializable {
       return false;
     }
     AcceptInviteRequest acceptInviteRequest = (AcceptInviteRequest) o;
-    return Objects.equals(this.match, acceptInviteRequest.match);
+    return Objects.equals(this.awaitGameStart, acceptInviteRequest.awaitGameStart) &&
+        Objects.equals(this.match, acceptInviteRequest.match);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(match);
+    return Objects.hash(awaitGameStart, match);
   }
 
 
@@ -75,6 +97,7 @@ public class AcceptInviteRequest implements Serializable {
     StringBuilder sb = new StringBuilder();
     sb.append("class AcceptInviteRequest {\n");
     
+    sb.append("    awaitGameStart: ").append(toIndentedString(awaitGameStart)).append("\n");
     sb.append("    match: ").append(toIndentedString(match)).append("\n");
     sb.append("}");
     return sb.toString();

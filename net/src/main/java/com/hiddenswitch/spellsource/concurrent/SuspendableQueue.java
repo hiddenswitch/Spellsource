@@ -88,4 +88,15 @@ public interface SuspendableQueue<V> {
 	@Suspendable
 	default void destroy() {
 	}
+
+	/**
+	 * To the best of the cluster's knowledge, does the specified queue exist?
+	 *
+	 * @param name
+	 * @return {@code true} if it does
+	 */
+	@Suspendable
+	static boolean exists(String name) {
+		return SuspendableArrayQueue.getArrayQueues().containsKey(name);
+	}
 }
