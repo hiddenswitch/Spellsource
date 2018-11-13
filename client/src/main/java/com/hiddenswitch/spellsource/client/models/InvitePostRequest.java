@@ -35,6 +35,9 @@ public class InvitePostRequest implements Serializable {
   @JsonProperty("queueId")
   private String queueId = null;
 
+  @JsonProperty("deckId")
+  private String deckId = null;
+
   @JsonProperty("toUserId")
   private String toUserId = null;
 
@@ -78,6 +81,24 @@ public class InvitePostRequest implements Serializable {
 
   public void setQueueId(String queueId) {
     this.queueId = queueId;
+  }
+
+  public InvitePostRequest deckId(String deckId) {
+    this.deckId = deckId;
+    return this;
+  }
+
+   /**
+   * The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is automatically enqueued. 
+   * @return deckId
+  **/
+  @ApiModelProperty(value = "The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is automatically enqueued. ")
+  public String getDeckId() {
+    return deckId;
+  }
+
+  public void setDeckId(String deckId) {
+    this.deckId = deckId;
   }
 
   public InvitePostRequest toUserId(String toUserId) {
@@ -146,6 +167,7 @@ public class InvitePostRequest implements Serializable {
     InvitePostRequest invitePostRequest = (InvitePostRequest) o;
     return Objects.equals(this.friend, invitePostRequest.friend) &&
         Objects.equals(this.queueId, invitePostRequest.queueId) &&
+        Objects.equals(this.deckId, invitePostRequest.deckId) &&
         Objects.equals(this.toUserId, invitePostRequest.toUserId) &&
         Objects.equals(this.toUserNameWithToken, invitePostRequest.toUserNameWithToken) &&
         Objects.equals(this.message, invitePostRequest.message);
@@ -153,7 +175,7 @@ public class InvitePostRequest implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(friend, queueId, toUserId, toUserNameWithToken, message);
+    return Objects.hash(friend, queueId, deckId, toUserId, toUserNameWithToken, message);
   }
 
 
@@ -164,6 +186,7 @@ public class InvitePostRequest implements Serializable {
     
     sb.append("    friend: ").append(toIndentedString(friend)).append("\n");
     sb.append("    queueId: ").append(toIndentedString(queueId)).append("\n");
+    sb.append("    deckId: ").append(toIndentedString(deckId)).append("\n");
     sb.append("    toUserId: ").append(toIndentedString(toUserId)).append("\n");
     sb.append("    toUserNameWithToken: ").append(toIndentedString(toUserNameWithToken)).append("\n");
     sb.append("    message: ").append(toIndentedString(message)).append("\n");

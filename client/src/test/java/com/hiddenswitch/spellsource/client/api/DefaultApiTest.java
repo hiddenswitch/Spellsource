@@ -70,8 +70,9 @@ public class DefaultApiTest {
      */
     @Test
     public void acceptInviteTest() throws ApiException {
+        String inviteId = null;
         AcceptInviteRequest request = null;
-        AcceptInviteResponse response = api.acceptInvite(request);
+        AcceptInviteResponse response = api.acceptInvite(inviteId, request);
 
         // TODO: test validations
     }
@@ -198,7 +199,8 @@ public class DefaultApiTest {
      */
     @Test
     public void deleteInviteTest() throws ApiException {
-        InviteResponse response = api.deleteInvite();
+        String inviteId = null;
+        InviteResponse response = api.deleteInvite(inviteId);
 
         // TODO: test validations
     }
@@ -356,7 +358,8 @@ public class DefaultApiTest {
      */
     @Test
     public void getInviteTest() throws ApiException {
-        InviteResponse response = api.getInvite();
+        String inviteId = null;
+        InviteResponse response = api.getInvite(inviteId);
 
         // TODO: test validations
     }

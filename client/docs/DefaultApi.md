@@ -33,7 +33,7 @@ Method | HTTP request | Description
 
 <a name="acceptInvite"></a>
 # **acceptInvite**
-> AcceptInviteResponse acceptInvite(request)
+> AcceptInviteResponse acceptInvite(inviteId, request)
 
 
 
@@ -57,9 +57,10 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String inviteId = "inviteId_example"; // String | 
 AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
 try {
-    AcceptInviteResponse result = apiInstance.acceptInvite(request);
+    AcceptInviteResponse result = apiInstance.acceptInvite(inviteId, request);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#acceptInvite");
@@ -71,6 +72,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **inviteId** | **String**|  |
  **request** | [**AcceptInviteRequest**](AcceptInviteRequest.md)|  |
 
 ### Return type
@@ -460,7 +462,7 @@ Name | Type | Description  | Notes
 
 <a name="deleteInvite"></a>
 # **deleteInvite**
-> InviteResponse deleteInvite()
+> InviteResponse deleteInvite(inviteId)
 
 
 
@@ -484,8 +486,9 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String inviteId = "inviteId_example"; // String | 
 try {
-    InviteResponse result = apiInstance.deleteInvite();
+    InviteResponse result = apiInstance.deleteInvite(inviteId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#deleteInvite");
@@ -494,7 +497,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **inviteId** | **String**|  |
 
 ### Return type
 
@@ -992,7 +998,7 @@ No authorization required
 
 <a name="getInvite"></a>
 # **getInvite**
-> InviteResponse getInvite()
+> InviteResponse getInvite(inviteId)
 
 
 
@@ -1016,8 +1022,9 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String inviteId = "inviteId_example"; // String | 
 try {
-    InviteResponse result = apiInstance.getInvite();
+    InviteResponse result = apiInstance.getInvite(inviteId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#getInvite");
@@ -1026,7 +1033,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **inviteId** | **String**|  |
 
 ### Return type
 

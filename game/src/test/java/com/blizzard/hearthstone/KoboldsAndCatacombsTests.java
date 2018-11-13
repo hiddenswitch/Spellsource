@@ -71,7 +71,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			assertEquals(costOf(context, player, card), card.getBaseManaCost() - 1);
-			playCardWithTarget(context, player, "spell_fireball", player.getHero());
+			playCard(context, player, "spell_fireball", player.getHero());
 			card = (Card) card.transformResolved(context);
 			assertEquals(card.getCardId(), "spell_greater_amethyst_spellstone");
 			assertEquals(costOf(context, player, card), card.getBaseManaCost() - 1);
@@ -144,7 +144,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	public void testDiamondSpellstone() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playCardWithTarget(context, player, "spell_fireball", bloodfen);
+			playCard(context, player, "spell_fireball", bloodfen);
 			playCard(context, player, "spell_diamond_spellstone");
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
@@ -159,8 +159,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		 */
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_saronite_chain_gang");
-			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(1));
-			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(0));
+			playCard(context, player, "spell_fireball", player.getMinions().get(1));
+			playCard(context, player, "spell_fireball", player.getMinions().get(0));
 			playCard(context, player, "spell_diamond_spellstone");
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_saronite_chain_gang");
@@ -168,9 +168,9 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_doppelgangster");
-			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(2));
-			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(1));
-			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(0));
+			playCard(context, player, "spell_fireball", player.getMinions().get(2));
+			playCard(context, player, "spell_fireball", player.getMinions().get(1));
+			playCard(context, player, "spell_fireball", player.getMinions().get(0));
 			playCard(context, player, "spell_diamond_spellstone");
 			assertEquals(player.getMinions().size(), 3);
 			Assert.assertTrue(player.getMinions().stream().allMatch(m -> m.getSourceCard().getCardId().equals("minion_doppelgangster")));
@@ -200,7 +200,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "secret_cheat_death");
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", bloodfen);
+			playCard(context, opponent, "spell_fireball", bloodfen);
 			assertEquals(costOf(context, player, player.getHand().get(0)), bloodfen.getSourceCard().getBaseManaCost() - 2);
 		});
 	}
@@ -349,7 +349,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			Assert.assertFalse(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
-			playCardWithTarget(context, opponent, "spell_fireball", kobold);
+			playCard(context, opponent, "spell_fireball", kobold);
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			Assert.assertTrue(context.getValidActions().stream().anyMatch(a -> a.getTargetReference() != null && a.getTargetReference().equals(player.getHero().getReference())));
@@ -470,10 +470,10 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			Minion minion = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playCardWithTarget(context, player, "spell_unstable_evolution", minion);
+			playCard(context, player, "spell_unstable_evolution", minion);
 			assertEquals(player.getHand().size(), 1);
 			for (int i = 0; i < 5; i++) {
-				playCardWithTarget(context, player, player.getHand().get(0), minion.transformResolved(context));
+				playCard(context, player, player.getHand().get(0), minion.transformResolved(context));
 			}
 			assertEquals(minion.transformResolved(context).getSourceCard().getBaseManaCost(), 8);
 			context.endTurn();
@@ -545,7 +545,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			context.endTurn();
 			playCard(context, player, "weapon_kingsbane");
 			playCard(context, player, "spell_envenom_weapon");
-			playCardWithTarget(context, player, "spell_doomerang", bloodfen);
+			playCard(context, player, "spell_doomerang", bloodfen);
 			Assert.assertTrue(bloodfen.isDestroyed(), "The raptor should be destroyed because the Kingsbane had poisonous.");
 			playCard(context, player, player.getHand().get(0));
 			Assert.assertTrue(player.getHero().getWeapon().hasAttribute(Attribute.POISONOUS));
@@ -627,7 +627,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_sonya_shadowdancer");
-			playCardWithTarget(context, player, "spell_fireball", player.getMinions().get(0));
+			playCard(context, player, "spell_fireball", player.getMinions().get(0));
 			final Card card = player.getHand().get(0);
 			assertEquals(costOf(context, player, card), 1);
 			player.setMaxMana(10);
@@ -710,7 +710,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertEquals(player.getHero().getWeaponZone().size(), 0);
 			context.getLogic().performGameAction(player.getId(), bloodfenCard.play());
 			context.endTurn();
-			playCardWithTarget(context, player, "spell_assassinate", player.getMinions().get(0));
+			playCard(context, player, "spell_assassinate", player.getMinions().get(0));
 			assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_valanyr");
 		});
 	}
@@ -722,11 +722,11 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
 			context.endTurn();
 			Stream.of("spell_divine_strength").forEach(cardId -> {
-				playCardWithTarget(context, opponent, cardId, silverHand1);
+				playCard(context, opponent, cardId, silverHand1);
 			});
 			context.endTurn();
 			Stream.of("spell_divine_strength", "spell_divine_strength").forEach(cardId -> {
-				playCardWithTarget(context, player, cardId, silverHand1);
+				playCard(context, player, cardId, silverHand1);
 			});
 			Minion lynessaSunsorrow = playMinionCard(context, player, "minion_lynessa_sunsorrow");
 			assertEquals(lynessaSunsorrow.getAttack(), 1 + 2);
@@ -738,7 +738,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
 
 			Stream.of("spell_level_up", "spell_divine_strength").forEach(cardId -> {
-				playCardWithTarget(context, player, cardId, silverHand1);
+				playCard(context, player, cardId, silverHand1);
 			});
 			Minion lynessaSunsorrow = playMinionCard(context, player, "minion_lynessa_sunsorrow");
 			assertEquals(lynessaSunsorrow.getAttack(), 1 + 1);
@@ -751,11 +751,11 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
 			Minion silverHand2 = playMinionCard(context, player, "token_silver_hand_recruit");
 			Stream.of("spell_divine_strength").forEach(cardId -> {
-				playCardWithTarget(context, player, cardId, silverHand1);
+				playCard(context, player, cardId, silverHand1);
 			});
 
 			Stream.of("spell_shadowstep").forEach(cardId -> {
-				playCardWithTarget(context, player, cardId, silverHand2);
+				playCard(context, player, cardId, silverHand2);
 			});
 			playCard(context, player, "minion_lynessa_sunsorrow");
 			// Note the silver hand recruit is in index 0 in the hand
@@ -768,7 +768,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Minion silverHand1 = playMinionCard(context, player, "token_silver_hand_recruit");
 
 			Stream.of("spell_divine_strength").forEach(cardId -> {
-				playCardWithTarget(context, player, cardId, silverHand1);
+				playCard(context, player, cardId, silverHand1);
 			});
 
 			GameAction heroPowerAction = player.getHeroPowerZone().get(0).play();
@@ -937,7 +937,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "spell_claw");
 			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			playCard(context, opponent, "spell_fireball", player.getHero());
 			context.endTurn();
 			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
 		});
@@ -948,7 +948,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			Assert.assertTrue(ironwoodGolem.canAttackThisTurn());
-			playCardWithTarget(context, player, "spell_fireball", player.getHero());
+			playCard(context, player, "spell_fireball", player.getHero());
 			Assert.assertFalse(ironwoodGolem.canAttackThisTurn());
 		});
 	}
@@ -991,7 +991,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 
 			assertEquals(player.getDeck().stream().map(Card::getCardId).filter(c -> c.equals("minion_astral_tiger")).count(), 0L);
 			Minion astralTiger = playMinionCard(context, player, "minion_astral_tiger");
-			playCardWithTarget(context, player, "spell_play_dead", astralTiger);
+			playCard(context, player, "spell_play_dead", astralTiger);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_astral_tiger");
 			assertEquals(player.getDeck().stream().map(Card::getCardId).filter(c -> c.equals("minion_astral_tiger")).count(), 1L);
 		});
@@ -999,7 +999,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			assertEquals(player.getDeck().stream().map(Card::getCardId).filter(c -> c.equals("minion_malorne")).count(), 0L);
 			Minion malorne = playMinionCard(context, player, "minion_malorne");
-			playCardWithTarget(context, player, "spell_play_dead", malorne);
+			playCard(context, player, "spell_play_dead", malorne);
 			assertEquals(player.getMinions().size(), 0);
 			assertEquals(player.getDeck().stream().map(Card::getCardId).filter(c -> c.equals("minion_malorne")).count(), 1L);
 		});
@@ -1011,7 +1011,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "minion_arcane_artificer");
 			playCard(context, player, "minion_sorcerers_apprentice");
 			playCard(context, player, "minion_sorcerers_apprentice");
-			playCardWithTarget(context, player, "spell_pyroblast", opponent.getHero());
+			playCard(context, player, "spell_pyroblast", opponent.getHero());
 			assertEquals(player.getHero().getArmor(), 8);
 		});
 

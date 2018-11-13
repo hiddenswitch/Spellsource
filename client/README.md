@@ -78,9 +78,10 @@ public class DefaultApiExample {
         //TokenSecurity.setApiKeyPrefix("Token");
 
         DefaultApi apiInstance = new DefaultApi();
+        String inviteId = "inviteId_example"; // String | 
         AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
         try {
-            AcceptInviteResponse result = apiInstance.acceptInvite(request);
+            AcceptInviteResponse result = apiInstance.acceptInvite(inviteId, request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#acceptInvite");
@@ -93,7 +94,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://api-3.hiddenswitch.com*
+All URIs are relative to *https://api-3.hiddenswitch.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -162,6 +163,7 @@ Class | Method | HTTP request | Description
  - [Envelope](docs/Envelope.md)
  - [EnvelopeAdded](docs/EnvelopeAdded.md)
  - [EnvelopeChanged](docs/EnvelopeChanged.md)
+ - [EnvelopeGame](docs/EnvelopeGame.md)
  - [EnvelopeMethod](docs/EnvelopeMethod.md)
  - [EnvelopeMethodDequeue](docs/EnvelopeMethodDequeue.md)
  - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)

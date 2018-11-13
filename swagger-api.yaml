@@ -51,11 +51,13 @@ definitions:
             $ref: '#/definitions/Match'
       changed:
         description: |
-          Indicates that a record's fields have changed. In this model, the new document is a full replacement.
+          Indicates that a record's fields have changed.
         type: 'object'
         properties:
           friend:
             $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
       removed:
         description: |
           Indicates that a record has been removed from the client's ephemeral collections.
@@ -68,6 +70,10 @@ definitions:
           matchId:
             description: |
               The unique ID of the match that should be removed.
+            type: 'string'
+          friendId:
+            description: |
+              The unique ID of the friend that should be removed,
             type: 'string'
       sub:
         description: |
@@ -290,16 +296,27 @@ definitions:
     type: 'object'
     properties:
       _id:
+        description: The user ID
         type: 'string'
       name:
+        description: The username that is displayed to toher players
+        type: 'string'
+      privacyToken:
+        description: |
+          The token that is appended to the end of the user's name to allow friending without sharing an e-mail address.
         type: 'string'
       email:
+        description: The user's email address
         type: 'string'
       friends:
+        description: |
+          The user's friends at the moment of receiving this account document. This may be out of date as the latest
+          friends information will come from receiving friend documents.
         type: 'array'
         items:
           $ref: '#/definitions/Friend'
       decks:
+        description: A list of decks belonging to the player
         type: 'array'
         items:
           $ref: '#/definitions/InventoryCollection'
@@ -1778,6 +1795,11 @@ definitions:
         description: |
           The queue that the player would like to 1v1 inside of. These may differ from the competitive queues.
         type: 'string'
+      deckId:
+        description: |
+          The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is
+          automatically enqueued.
+        type: 'string'
       toUserId:
         description: |
           The user who should receive the invite
@@ -1811,6 +1833,10 @@ definitions:
     description: |
       Accepts an invite to a match or a friend invite.
     properties:
+      awaitGameStart:
+        type: 'boolean'
+        description: |
+          When true, specifies that the method call should only return when the game is actually ready to join
       match:
         $ref: '#/definitions/MatchmakingQueuePutRequest'
   AcceptInviteResponse:
@@ -2331,6 +2357,10 @@ paths:
       security:
       - TokenSecurity: []
       parameters:
+      - name: inviteId
+        in: path
+        required: true
+        type: 'string'
       - name: request
         in: body
         required: true
@@ -2360,6 +2390,11 @@ paths:
       operationId: getInvite
       security:
       - TokenSecurity: []
+      parameters:
+      - name: inviteId
+        in: path
+        required: true
+        type: 'string'
       responses:
         "200":
           description: |
@@ -2376,6 +2411,10 @@ paths:
       security:
       - TokenSecurity: []
       parameters:
+      - name: inviteId
+        in: path
+        required: true
+        type: 'string'
       responses:
         "200":
           description: |

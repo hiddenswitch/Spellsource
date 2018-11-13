@@ -181,7 +181,7 @@ public interface Draft {
 	@Suspendable
 	static Closeable startDraftQueue() throws SuspendExecution {
 		return Matchmaking.startMatchmaker("draft", new MatchmakingQueueConfiguration()
-				.setWaitsForHost(false)
+				.setStartsAutomatically(true)
 				.setStillConnectedTimeout(1000L)
 				.setRules(new CardDesc[0])
 				.setRanked(true)

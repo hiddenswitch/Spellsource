@@ -231,7 +231,7 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 
 	@NotNull
 	@Suspendable
-	private SuspendableMap<String, SuspendableArrayQueueHeader> getArrayQueues() {
+	public static SuspendableMap<String, SuspendableArrayQueueHeader> getArrayQueues() {
 		return SuspendableMap.getOrCreate("SuspendableArrayQueue::arrayQueues");
 	}
 

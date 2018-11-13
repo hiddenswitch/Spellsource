@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.hiddenswitch.spellsource.Matchmaking;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
 import java.io.Serializable;
@@ -12,8 +11,10 @@ public class MatchmakingQueueConfiguration implements Serializable {
 	private boolean botOpponent;
 	private boolean ranked;
 	private boolean privateLobby;
-	private boolean waitsForHost;
+	private boolean startsAutomatically = true;
 	private long stillConnectedTimeout = 2000L;
+	private long emptyLobbyTimeout = 0L;
+	private long awaitingLobbyTimeout = 0L;
 	private boolean once;
 
 	public String getName() {
@@ -70,12 +71,12 @@ public class MatchmakingQueueConfiguration implements Serializable {
 		return this;
 	}
 
-	public boolean isWaitsForHost() {
-		return waitsForHost;
+	public boolean isStartsAutomatically() {
+		return startsAutomatically;
 	}
 
-	public MatchmakingQueueConfiguration setWaitsForHost(boolean waitsForHost) {
-		this.waitsForHost = waitsForHost;
+	public MatchmakingQueueConfiguration setStartsAutomatically(boolean startsAutomatically) {
+		this.startsAutomatically = startsAutomatically;
 		return this;
 	}
 
@@ -90,6 +91,47 @@ public class MatchmakingQueueConfiguration implements Serializable {
 
 	public boolean isOnce() {
 		return once;
+	}
+
+	/**
+	 * The amount of time a queue will await empty until it closes and destroys itself
+	 *
+	 * @return
+	 */
+	public long getEmptyLobbyTimeout() {
+		return emptyLobbyTimeout;
+	}
+
+	/**
+	 * When set to 0, never times out.
+	 *
+	 * @param emptyLobbyTimeout
+	 * @return
+	 */
+	public MatchmakingQueueConfiguration setEmptyLobbyTimeout(long emptyLobbyTimeout) {
+		this.emptyLobbyTimeout = emptyLobbyTimeout;
+		return this;
+	}
+
+	/**
+	 * The amount of time a queue with one or more players in it will wait for another player until it closes and destroy
+	 * itself.
+	 *
+	 * @return
+	 */
+	public long getAwaitingLobbyTimeout() {
+		return awaitingLobbyTimeout;
+	}
+
+	/**
+	 * When set to 0, never times out.
+	 *
+	 * @param awaitingLobbyTimeout
+	 * @return
+	 */
+	public MatchmakingQueueConfiguration setAwaitingLobbyTimeout(long awaitingLobbyTimeout) {
+		this.awaitingLobbyTimeout = awaitingLobbyTimeout;
+		return this;
 	}
 
 	public MatchmakingQueueConfiguration setOnce(boolean once) {

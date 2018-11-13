@@ -261,13 +261,17 @@ public interface Inventory {
 
 	@Suspendable
 	static BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException {
+		if (request.getUserId() == null) {
+			throw new IllegalArgumentException("Must specify a userId");
+		}
+
 		List<String> collectionIds;
 		if (request.getCollectionId() != null) {
 			collectionIds = Collections.singletonList(request.getCollectionId());
 		} else if (request.getCollectionIds() != null) {
 			collectionIds = request.getCollectionIds();
 		} else {
-			throw new RuntimeException();
+			throw new IllegalArgumentException("Must specify collectionIds");
 		}
 
 		MongoClientUpdateResult update = mongo().updateCollectionWithOptions(INVENTORY,

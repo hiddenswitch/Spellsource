@@ -1,0 +1,19 @@
+{
+  "name": "Egg",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -79,12 +79,18 @@ public class DefaultApi {
   /**
    * 
    * Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this method will enter you into the special invite matchmaking queue. 
+   * @param inviteId  (required)
    * @param request  (required)
    * @return AcceptInviteResponse
    * @throws ApiException if fails to make API call
    */
-  public AcceptInviteResponse acceptInvite(AcceptInviteRequest request) throws ApiException {
+  public AcceptInviteResponse acceptInvite(String inviteId, AcceptInviteRequest request) throws ApiException {
     Object localVarPostBody = request;
+    
+    // verify the required parameter 'inviteId' is set
+    if (inviteId == null) {
+      throw new ApiException(400, "Missing the required parameter 'inviteId' when calling acceptInvite");
+    }
     
     // verify the required parameter 'request' is set
     if (request == null) {
@@ -92,7 +98,8 @@ public class DefaultApi {
     }
     
     // create path and map variables
-    String localVarPath = "/invites/{inviteId}";
+    String localVarPath = "/invites/{inviteId}"
+      .replaceAll("\\{" + "inviteId" + "\\}", apiClient.escapeString(inviteId.toString()));
 
     // query params
     List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -417,14 +424,21 @@ public class DefaultApi {
   /**
    * 
    * When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite. 
+   * @param inviteId  (required)
    * @return InviteResponse
    * @throws ApiException if fails to make API call
    */
-  public InviteResponse deleteInvite() throws ApiException {
+  public InviteResponse deleteInvite(String inviteId) throws ApiException {
     Object localVarPostBody = null;
     
+    // verify the required parameter 'inviteId' is set
+    if (inviteId == null) {
+      throw new ApiException(400, "Missing the required parameter 'inviteId' when calling deleteInvite");
+    }
+    
     // create path and map variables
-    String localVarPath = "/invites/{inviteId}";
+    String localVarPath = "/invites/{inviteId}"
+      .replaceAll("\\{" + "inviteId" + "\\}", apiClient.escapeString(inviteId.toString()));
 
     // query params
     List<Pair> localVarQueryParams = new ArrayList<Pair>();
@@ -824,14 +838,21 @@ public class DefaultApi {
   /**
    * 
    * Retrieves information about a specific invite, as long as this user is either the sender or recipient. 
+   * @param inviteId  (required)
    * @return InviteResponse
    * @throws ApiException if fails to make API call
    */
-  public InviteResponse getInvite() throws ApiException {
+  public InviteResponse getInvite(String inviteId) throws ApiException {
     Object localVarPostBody = null;
     
+    // verify the required parameter 'inviteId' is set
+    if (inviteId == null) {
+      throw new ApiException(400, "Missing the required parameter 'inviteId' when calling getInvite");
+    }
+    
     // create path and map variables
-    String localVarPath = "/invites/{inviteId}";
+    String localVarPath = "/invites/{inviteId}"
+      .replaceAll("\\{" + "inviteId" + "\\}", apiClient.escapeString(inviteId.toString()));
 
     // query params
     List<Pair> localVarQueryParams = new ArrayList<Pair>();

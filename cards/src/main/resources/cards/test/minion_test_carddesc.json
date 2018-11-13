@@ -1,0 +1,65 @@
+{
+  "name": "Name",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Test",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger"
+    },
+    "spell": {
+      "class": "MissilesSpell"
+    }
+  },
+  "passiveTriggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "ConditionalSpell",
+        "conditions": [
+          {
+            "class": "OrCondition"
+          }
+        ],
+        "spells": [
+          {
+            "class": "SummonSpell",
+            "value": {
+              "class": "AttributeValueProvider",
+              "attribute": "STEALTH"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger"
+      },
+      "spell": {
+        "class": "DrawCardSpell"
+      }
+    }
+  ],
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "HealSpell",
+      "value": 5
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "SPELL_DAMAGE": 2,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

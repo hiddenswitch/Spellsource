@@ -77,11 +77,13 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			borrowableGameIds.add(configuration.getDeck().getDeckId());
 		}
 
+		/*
 		if (borrowableGameIds.size() > 0) {
 			Inventory.borrowFromCollection(
 					new BorrowFromCollectionRequest()
 							.withCollectionIds(borrowableGameIds));
 		}
+		*/
 
 		CreateGameSessionResponse pending = CreateGameSessionResponse.pending(deploymentID());
 		SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
