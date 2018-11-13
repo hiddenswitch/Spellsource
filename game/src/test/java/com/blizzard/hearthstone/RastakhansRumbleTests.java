@@ -98,4 +98,21 @@ public class RastakhansRumbleTests extends TestBase {
             assertEquals(player.getHand().size(), 1);
         });
     }
+
+    @Test
+    public void testTicketScalper() {
+        runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_wisp");
+            shuffleToDeck(context, player, "minion_wisp");
+            shuffleToDeck(context, player, "minion_wisp");
+            shuffleToDeck(context, player, "minion_wisp");
+            Minion ticket = playMinionCard(context, player, "minion_ticket_scalper");
+            Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+            Minion ultrasaur = playMinionCard(context, opponent, "minion_ultrasaur");
+            attack(context, player, ticket, wisp);
+            assertEquals(player.getHand().size(), 2);
+            attack(context, player, ticket, ultrasaur);
+            assertEquals(player.getHand().size(), 2);
+        });
+    }
 }
