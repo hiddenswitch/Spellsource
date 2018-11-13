@@ -17,6 +17,7 @@ public class OverkillSpell extends DamageSpell {
         if (target instanceof Minion) {
             Minion minion = (Minion) target;
             if (minion.getHp() < 0 && minion.isDestroyed()) {
+                //fire an overkill event?
                 SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
                 context.getLogic().castSpell(player.getId(), spell, source.getReference(), target.getReference(), true);
             }

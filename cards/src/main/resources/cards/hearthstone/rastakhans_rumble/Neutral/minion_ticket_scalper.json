@@ -1,0 +1,29 @@
+{
+  "name": "Ticket Scalper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Overkill: Draw 2 cards.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "OverkillSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 2
+      }
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
