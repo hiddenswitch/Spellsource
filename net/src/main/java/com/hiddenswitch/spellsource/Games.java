@@ -632,7 +632,7 @@ public interface Games extends Verticle {
 	 * @return
 	 * @throws SuspendExecution
 	 */
-	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
+	static SuspendableMap<UserId, GameId> getUsersInGames() throws SuspendExecution {
 		return SuspendableMap.getOrCreate("Games::players");
 	}
 

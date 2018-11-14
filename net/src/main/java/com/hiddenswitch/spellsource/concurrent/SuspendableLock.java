@@ -137,8 +137,11 @@ public interface SuspendableLock {
 		public void release() {
 
 			Vertx.currentContext().executeBlocking(fut -> {
-				semaphore.release();
-				fut.complete();
+				try {
+					semaphore.release();
+				} finally {
+					fut.complete();
+				}
 			}, false, null);
 
 			// Releasing a semaphore instance will go fast, but below is the asynchronous implementation
@@ -175,8 +178,11 @@ public interface SuspendableLock {
 		@Suspendable
 		public void destroy() {
 			Vertx.currentContext().executeBlocking(fut -> {
-				semaphore.destroy();
-				fut.complete();
+				try {
+					semaphore.destroy();
+				} finally {
+					fut.complete();
+				}
 			}, false, null);
 		}
 	}

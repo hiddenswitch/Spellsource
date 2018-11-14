@@ -6,15 +6,11 @@ import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
-import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
-import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
-import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -292,7 +288,7 @@ public class InvitesTest extends SpellsourceTestBase {
 					.toUserNameWithToken(recipient.getAccount().getName())
 					.message("Would you be my friend?"));
 
-			assertEquals("The sender was queued automatically because the sender specified a deckId", inviteResponse.getInvite().getQueueId(), Matchmaking.userToQueue().get(sender.getUserId()));
+			assertEquals("The sender was queued automatically because the sender specified a deckId", inviteResponse.getInvite().getQueueId(), Matchmaking.getUsersInQueues().get(sender.getUserId()));
 			receivedInvite.await();
 
 			// Accept the invite with a deck ID, which should enqueue automatically
@@ -302,8 +298,8 @@ public class InvitesTest extends SpellsourceTestBase {
 							.deckId(recipient.getAccount().getDecks().get(0).getId())));
 
 			sleep(2000L);
-			assertTrue("Both players should be in a game now", Games.getGames().containsKey(recipient.getUserId()));
-			assertTrue("Both players should be in a game now", Games.getGames().containsKey(sender.getUserId()));
+			assertTrue("Both players should be in a game now", Games.getUsersInGames().containsKey(recipient.getUserId()));
+			assertTrue("Both players should be in a game now", Games.getUsersInGames().containsKey(sender.getUserId()));
 
 			sender.play();
 			recipient.play();
@@ -314,8 +310,8 @@ public class InvitesTest extends SpellsourceTestBase {
 
 			// Check that the queue has been destroyed.
 			assertFalse("The queue should be destroyed", SuspendableQueue.exists(inviteResponse.getInvite().getQueueId()));
-			assertFalse("Neither players should be in a game now", Games.getGames().containsKey(recipient.getUserId()));
-			assertFalse("Neither players should be in a game now", Games.getGames().containsKey(sender.getUserId()));
+			assertFalse("Neither players should be in a game now", Games.getUsersInGames().containsKey(recipient.getUserId()));
+			assertFalse("Neither players should be in a game now", Games.getUsersInGames().containsKey(sender.getUserId()));
 		});
 	}
 }

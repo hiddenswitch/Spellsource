@@ -137,7 +137,7 @@ public interface Bots {
 		List<String> bots = getBotIds();
 
 		Collections.shuffle(bots);
-		SuspendableMap<UserId, GameId> games = Games.getGames();
+		SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
 		for (String id : bots) {
 			UserId key = new UserId(id);
