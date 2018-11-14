@@ -22,6 +22,7 @@ public interface SuspendableQueue<V> {
 	 * cluster may not be created.
 	 * @see #get(String) for an unbounded version of this method.
 	 */
+	@Suspendable
 	static <V> SuspendableQueue<V> get(String name, int capacity) throws SuspendExecution {
 //		return SuspendableLinkedQueue.getOrCreate(name, capacity <= 0 ? Integer.MAX_VALUE : capacity);
 		return new SuspendableArrayQueue<>(name, capacity);
@@ -35,7 +36,7 @@ public interface SuspendableQueue<V> {
 	 * @return
 	 * @see #get(String, int) for more options.
 	 */
-
+	@Suspendable
 	static <V> SuspendableQueue<V> get(String name) throws SuspendExecution {
 		return new SuspendableArrayQueue<>(name);
 //		return SuspendableLinkedQueue.getOrCreate(name);
@@ -54,6 +55,7 @@ public interface SuspendableQueue<V> {
 	 * @throws InterruptedException
 	 * @throws SuspendExecution
 	 */
+	@Suspendable
 	V poll(long timeout) throws InterruptedException, SuspendExecution;
 
 	/**

@@ -61,7 +61,7 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
  * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
-	Logger logger = LoggerFactory.getLogger(Hazelcast.class);
+	Logger LOGGER = LoggerFactory.getLogger(Hazelcast.class);
 
 	@Suspendable
 	static SuspendableMap<UserId, String> getConnections() {
