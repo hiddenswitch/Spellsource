@@ -1,10 +1,11 @@
 package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.Invite.StatusEnum;
 import com.hiddenswitch.spellsource.impl.InviteId;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.MatchmakingRequest;
 import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
@@ -12,17 +13,19 @@ import io.vertx.core.Closeable;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.streams.WriteStream;
+import io.vertx.ext.mongo.MongoClientUpdateResult;
 import io.vertx.ext.mongo.UpdateOptions;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
@@ -31,14 +34,27 @@ import static io.vertx.core.json.JsonObject.mapFrom;
  * This service allows players to invite each other to private games.
  */
 public interface Invites {
+	Logger LOGGER = LoggerFactory.getLogger(Invites.class);
 	String INVITES = "invites";
 	JsonArray PENDING_STATUSES = new JsonArray().add(StatusEnum.UNDELIVERED.getValue()).add(StatusEnum.PENDING.getValue());
+	long MAX_PENDING_FRIEND_COUNT = 10;
+	long MAX_PENDING_MATCHMAKING_INVITES = 1;
+	long DEFAULT_EXPIRY_TIME = 15 * 60 * 1000L;
 
 
+	/**
+	 * Sends clients undelivered invites and marks them as pending.
+	 *
+	 * @throws SuspendExecution
+	 */
 	static void handleConnections() throws SuspendExecution {
-		Connection.connected(suspendableHandler((SuspendableAction1<Connection>) connection -> {
+		Connection.connected(suspendableHandler(connection -> {
+			// Expire old invites as sender or recipient
+			String userId = connection.userId();
+			expireInvites(userId);
+
 			// Notify recipients of all pending invites.
-			List<Invite> invites = mongo().find(INVITES, json("toUserId", connection.userId(), "status", json("$in", PENDING_STATUSES)), Invite.class);
+			List<Invite> invites = mongo().find(INVITES, json("toUserId", userId, "status", json("$in", PENDING_STATUSES)), Invite.class);
 			for (Invite invite : invites) {
 				if (invite.getStatus() == StatusEnum.UNDELIVERED) {
 					invite.status(StatusEnum.PENDING);
@@ -58,95 +74,214 @@ public interface Invites {
 		}));
 	}
 
+	/**
+	 * Expires invites related to the given user
+	 *
+	 * @param expire
+	 */
+	@Suspendable
+	static void expireInvites(String expire) {
+		long time = System.currentTimeMillis();
+		List<Invite> shouldBeExpiredInvites = mongo().find(INVITES, json(
+				"toUserId", expire,
+				"status", json("$in", PENDING_STATUSES),
+				"expiresAt", json("$lt", time)
+		), Invite.class);
+		int totalExpied = shouldBeExpiredInvites.size();
+
+		// Cache retrieved connections
+		Map<String, WriteStream<Envelope>> connections = new HashMap<>();
+		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
+			WriteStream<Envelope> fromConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getFromUserId(), Connection::writeStream);
+			if (fromConnection != null) {
+				fromConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
+			}
+		}
+
+		shouldBeExpiredInvites = mongo().find(INVITES, json(
+				"fromUserId", expire,
+				"status", json("$in", PENDING_STATUSES),
+				"expiresAt", json("$lt", time)
+		), Invite.class);
+		totalExpied += shouldBeExpiredInvites.size();
+		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
+			WriteStream<Envelope> toConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getToUserId(), Connection::writeStream);
+			if (toConnection != null) {
+				toConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
+			}
+		}
+
+		MongoClientUpdateResult updateResult = mongo().updateCollectionWithOptions(INVITES,
+				json("$and", array(json(
+						"status", json("$in", PENDING_STATUSES),
+						"expiresAt", json("$lt", time)),
+						json("$or", array(
+								json("fromUserId", expire),
+								json("toUserId", expire)
+						)))), json(
+						"$set", json("status", StatusEnum.TIMEOUT)
+				), new UpdateOptions().setMulti(true));
+
+		if (updateResult.getDocModified() != totalExpied) {
+			LOGGER.warn("handleConnections {}: Expired {} documents but should have expired {}", expire, updateResult.getDocModified(), totalExpied);
+		}
+	}
+
+	/**
+	 * Invites a user to be a friend, a match, or both.
+	 *
+	 * @param request
+	 * @param user
+	 * @return
+	 * @throws SuspendExecution
+	 */
 	static InviteResponse invite(InvitePostRequest request, UserRecord user) throws SuspendExecution {
 		UserRecord toUser;
-		if (request.getToUserId() != null) {
-			// Check if the other player is a friend
-			toUser = Accounts.get(request.getToUserId());
-			// Throws null pointer exception and will be handled above
-			if (!toUser.isFriend(user.getId())) {
-				throw new SecurityException("Not friends");
+		Closeable matchmaker = null;
+		boolean queued = false;
+
+		try {
+			if (request.getToUserId() != null) {
+				// Check if the other player is a friend
+				toUser = Accounts.get(request.getToUserId());
+				// Throws null pointer exception and will be handled above
+				if (!toUser.isFriend(user.getId())) {
+					throw new SecurityException("Not friends");
+				}
+			} else if (request.getToUserNameWithToken() != null) {
+				try {
+					String[] tokens = request.getToUserNameWithToken().split("#");
+					toUser = mongo().findOne(Accounts.USERS, json("username", tokens[0], "privacyToken", tokens[1]), UserRecord.class);
+					// Throws null pointer exception, should be handled in parent
+					// Users found this way do not need to be friends
+				} catch (IndexOutOfBoundsException ex) {
+					throw new RuntimeException("Invalid token and username specification. Should look like username#1234");
+				}
+			} else {
+				throw new IllegalArgumentException("No user ID or username with token specified.");
 			}
-		} else if (request.getToUserNameWithToken() != null) {
-			try {
-				String[] tokens = request.getToUserNameWithToken().split("#");
-				toUser = mongo().findOne(Accounts.USERS, json("username", tokens[0], "privacyToken", tokens[1]), UserRecord.class);
-				// Throws null pointer exception, should be handled in parent
-				// Users found this way do not need to be friends
-			} catch (IndexOutOfBoundsException ex) {
-				throw new RuntimeException("Invalid token and username specification. Should look like username#1234");
+
+			// Users can only have 1 outgoing matchmaking invite and 10 outgoing friend invites
+			if (request.isFriend()) {
+				long friendCount = mongo().count(INVITES,
+						json("fromUserId", user.getId(),
+								"status", json("$in", PENDING_STATUSES),
+								"expiresAt", json("$gt", System.currentTimeMillis()),
+								"friendId", toUser.getId()));
+
+				if (friendCount >= MAX_PENDING_FRIEND_COUNT) {
+					throw new IllegalStateException(String.format("Cannot have more than %d pending friend invites.", MAX_PENDING_FRIEND_COUNT));
+				}
 			}
-		} else {
-			throw new IllegalArgumentException("No user ID or username with token specified.");
+
+			if (request.getQueueId() != null) {
+				long matchmakingInviteCount = mongo().count(INVITES,
+						json("fromUserId", user.getId(),
+								"status", json("$in", PENDING_STATUSES),
+								"expiresAt", json("$gt", System.currentTimeMillis()),
+								"queueId", json("$ne", null)));
+
+				if (matchmakingInviteCount >= MAX_PENDING_MATCHMAKING_INVITES) {
+					throw new IllegalStateException(String.format("Cannot have more than %d pending matchmaking invites.", MAX_PENDING_MATCHMAKING_INVITES));
+				}
+			}
+
+			InviteId inviteId = InviteId.create();
+
+			// Configure expiration
+			Calendar expiryTime = Calendar.getInstance();
+			expiryTime.setTime(new Date());
+			expiryTime.add(Calendar.MINUTE, 15);
+
+			Vertx vertx = Vertx.currentContext().owner();
+
+			// Set timer to expire the invite after 15 minutes
+			vertx.setTimer(DEFAULT_EXPIRY_TIME, suspendableHandler(timerId -> {
+				// If the invite hasn't been acted on, expire it
+				mongo().updateCollection(INVITES,
+						json("_id", inviteId.toString(), "status", json("$in", PENDING_STATUSES)),
+						json("$set", json("status", StatusEnum.TIMEOUT.getValue())));
+			}));
+
+			Invite invite = new Invite()
+					.id(inviteId.toString())
+					.fromName(user.getUsername())
+					.fromUserId(user.getId())
+					.toUserId(toUser.getId())
+					.message(request.getMessage())
+					.expiresAt(expiryTime.getTimeInMillis())
+					.status(StatusEnum.UNDELIVERED);
+
+			if (request.isFriend()) {
+				// This is a friend request
+				invite.setFriendId(user.getId());
+			}
+
+			if (request.getQueueId() != null) {
+				// Assert that the player isn't currently in a match.
+
+				UserId userId = new UserId(user.getId());
+				if (Matchmaking.getUsersInQueues().containsKey(userId)) {
+					throw new IllegalStateException("User is currently in a queue already. Dequeue first");
+				}
+
+				if (Games.getUsersInGames().containsKey(userId)) {
+					throw new IllegalStateException("User is currently in a game already. That game must be ended first.");
+				}
+
+				// This is (potentially also) a matchmaking queue request
+				// Create a new queue just for this invite.
+				request.setQueueId(RandomStringUtils.randomAlphanumeric(10));
+				// Right now, anyone can wait in any queue, but this is probably the most convenient.
+				// TODO: Destroy the user's missing queues
+				String customQueueId = user.getUsername() + "-" + inviteId + "-" + request.getQueueId();
+				invite.queueId(customQueueId);
+
+				// The matchmaker will close itself automatically if no one joins after 4s or the
+				matchmaker = Matchmaking.startMatchmaker(customQueueId, new MatchmakingQueueConfiguration()
+						.setAwaitingLobbyTimeout(30000L)
+						.setBotOpponent(false)
+						.setEmptyLobbyTimeout(4000L)
+						.setLobbySize(2)
+						.setName(String.format("%s's private match", user.getUsername()))
+						.setOnce(true)
+						.setPrivateLobby(true)
+						.setRanked(false)
+						.setStillConnectedTimeout(2000L)
+						.setStartsAutomatically(true)
+						.setRules(new CardDesc[0]));
+
+				// If this point forward throws an exception, the matchmaker will be cleaned up.
+				// A user that starts a private lobby queues automatically in this method if their request includes a deckId
+				if (request.getDeckId() != null) {
+					queued = Matchmaking.enqueue(new MatchmakingRequest()
+							.setQueueId(customQueueId)
+							.withUserId(user.getId())
+							.withDeckId(request.getDeckId()));
+				}
+			}
+
+			mongo().insert(INVITES, mapFrom(invite));
+
+			sendInvite(invite);
+
+			return new InviteResponse()
+					.invite(invite);
+		} catch (Throwable all) {
+			// Make sure to clean up resources
+			if (matchmaker != null) {
+				matchmaker.close((ignored) -> {
+				});
+			}
+
+			// If we queued, make sure to dequeue.
+			if (queued) {
+				Matchmaking.dequeue(new UserId(user.getId()));
+			}
+
+			// Rethrowing
+			throw all;
 		}
-
-		InviteId inviteId = InviteId.create();
-
-		// Configure expiration
-		Calendar expiryTime = Calendar.getInstance();
-		expiryTime.setTime(new Date());
-		expiryTime.add(Calendar.MINUTE, 15);
-
-		Vertx vertx = Vertx.currentContext().owner();
-
-		// Set timer to expire the invite after 15 minutes
-		vertx.setTimer(15 * 60 * 1000L, suspendableHandler(timerId -> {
-			// If the invite hasn't been acted on, expire it
-			mongo().updateCollection(INVITES,
-					json("_id", inviteId.toString(), "status", json("$in", PENDING_STATUSES)),
-					json("$set", json("status", StatusEnum.TIMEOUT.getValue())));
-		}));
-
-		Invite invite = new Invite()
-				.id(inviteId.toString())
-				.fromName(user.getUsername())
-				.fromUserId(user.getId())
-				.toUserId(toUser.getId())
-				.message(request.getMessage())
-				.expiresAt(expiryTime.getTimeInMillis())
-				.status(StatusEnum.UNDELIVERED);
-
-		if (request.isFriend() != null) {
-			// This is a friend request
-			invite.setFriendId(user.getId());
-		} else if (request.getQueueId() != null) {
-			// This is a matchmaking queue request
-			// Create a new queue just for this invite.
-			request.setQueueId(RandomStringUtils.randomAlphanumeric(10));
-			// Right now, anyone can wait in any queue, but this is probably the most convenient.
-			// TODO: Destroy the user's missing queues
-			String customQueueId = user.getUsername() + "-" + inviteId + "-" + request.getQueueId();
-			invite.queueId(customQueueId);
-
-			// The matchmaker will close itself automatically if no one joins after 4s or the
-			Closeable matchmaker = Matchmaking.startMatchmaker(customQueueId, new MatchmakingQueueConfiguration()
-					.setAwaitingLobbyTimeout(30000L)
-					.setBotOpponent(false)
-					.setEmptyLobbyTimeout(4000L)
-					.setLobbySize(2)
-					.setName(String.format("%s's private match", user.getUsername()))
-					.setOnce(true)
-					.setPrivateLobby(true)
-					.setRanked(false)
-					.setStillConnectedTimeout(2000L)
-					.setStartsAutomatically(true)
-					.setRules(new CardDesc[0]));
-
-			// A user that starts a private lobby queues automatically in this method if their request includes a deckId
-			if (request.getDeckId() != null) {
-				Matchmaking.enqueue(new MatchmakingRequest()
-						.setQueueId(customQueueId)
-						.withUserId(user.getId())
-						.withDeckId(request.getDeckId()));
-			}
-		}
-
-		mongo().insert(INVITES, mapFrom(invite));
-
-		sendInvite(invite);
-
-		return new InviteResponse()
-				.invite(invite);
 	}
 
 	/**
@@ -240,7 +375,9 @@ public interface Invites {
 		if (invite.getFriendId() != null) {
 			// Make them friends, regardless if they are already friends.
 			res.friend(Friends.putFriend(recipient, new FriendPutRequest().friendId(invite.getFriendId())));
-		} else if (invite.getQueueId() != null) {
+		}
+
+		if (invite.getQueueId() != null) {
 			try {
 				// Regardless of what the client specified as its queueId, use the one from the invite
 				MatchmakingQueuePutRequest match = request.getMatch();

@@ -30,7 +30,7 @@ public class InvitePostRequest implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("friend")
-  private Boolean friend = null;
+  private Boolean friend = false;
 
   @JsonProperty("queueId")
   private String queueId = null;
