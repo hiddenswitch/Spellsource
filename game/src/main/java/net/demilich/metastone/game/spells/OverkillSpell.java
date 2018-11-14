@@ -16,7 +16,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * <p>
  *
  * <b>Example:</b> on a minion with "Overkill: Draw 2 Cards"
- * "trigger": {
+ *   "trigger": {
  *     "eventTrigger": {
  *       "class": "AfterPhysicalAttackTrigger",
  *       "hostTargetType": "IGNORE_OTHER_SOURCES",
@@ -33,7 +33,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  *   },
  *
  * <b>Example:</b> on a Spell with "Deal 3 damage. Overkill: Summon a 5/5 Devilsaur."
- * "spell": {
+ *   "spell": {
  *     "class": "OverkillSpell",
  *     "value": 3,
  *     "spell": {
