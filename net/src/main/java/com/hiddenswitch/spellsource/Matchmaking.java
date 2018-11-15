@@ -44,7 +44,7 @@ public interface Matchmaking extends Verticle {
 	 * @throws InterruptedException
 	 */
 	static CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
-		GameId gameId = Games.getGames().get(new UserId(request.getUserId()));
+		GameId gameId = Games.getUsersInGames().get(new UserId(request.getUserId()));
 		if (gameId != null) {
 			return CurrentMatchResponse.response(gameId.toString());
 		} else {
@@ -80,14 +80,14 @@ public interface Matchmaking extends Verticle {
 				throw new IllegalStateException("There should be two users in a match expire request.");
 			}
 
-			SuspendableMap<UserId, GameId> games = Games.getGames();
+			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 			for (UserId userId : request.getUsers()) {
 				games.remove(userId);
 			}
 
 			if (LOGGER.isTraceEnabled()) {
 				Collection<UserId> values = games.keySet();
-				Collection<UserId> usersQueued = Matchmaking.userToQueue().keySet();
+				Collection<UserId> usersQueued = Matchmaking.getUsersInQueues().keySet();
 				LOGGER.debug("expireOrEndMatch: Users with games n={} {}", values.size(), values);
 				LOGGER.debug("expireOrEndMatch: Users queued n={} {}", usersQueued.size(), usersQueued);
 			}
@@ -115,20 +115,22 @@ public interface Matchmaking extends Verticle {
 	 * Enqueues the user with the specified request.
 	 *
 	 * @param request The matchmaking request
+	 * @return {@code true} if the user had successfully enqueued.
 	 */
 	@Suspendable
-	static void enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
+	static boolean enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
 		SuspendableLock lock = null;
 		LOGGER.trace("enqueue {}: Enqueueing {}", request.getUserId(), request);
+		boolean succeeded = false;
 		try {
 			lock = Connection.methodLock(request.getUserId());
 			// Check if the user is already in a game
 			UserId userId = new UserId(request.getUserId());
-			if (Games.getGames().containsKey(userId)) {
+			if (Games.getUsersInGames().containsKey(userId)) {
 				throw new IllegalStateException("User is already in a game");
 			}
 
-			SuspendableMap<UserId, String> currentQueue = userToQueue();
+			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
 			boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
 			if (alreadyQueued) {
 				throw new IllegalStateException("User is already enqueued in a different queue.");
@@ -138,15 +140,17 @@ public interface Matchmaking extends Verticle {
 			if (!queue.offer(new MatchmakingQueueEntry()
 					.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
 					.setUserId(request.getUserId())
-					.setRequest(request), false)) {
+					.setRequest(request), succeeded)) {
 				throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
 			}
 			LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
+			succeeded = true;
 		} finally {
 			if (lock != null) {
 				lock.release();
 			}
 		}
+		return succeeded;
 	}
 
 	/**
@@ -156,7 +160,7 @@ public interface Matchmaking extends Verticle {
 	 */
 	@NotNull
 	@Suspendable
-	static SuspendableMap<UserId, String> userToQueue() {
+	static SuspendableMap<UserId, String> getUsersInQueues() {
 		return SuspendableMap.getOrCreate("Matchmaking::currentQueue");
 	}
 
@@ -164,7 +168,7 @@ public interface Matchmaking extends Verticle {
 	static void dequeue(UserId userId) throws SuspendExecution {
 		SuspendableLock lock = Connection.methodLock(userId.toString());
 		try {
-			SuspendableMap<UserId, String> currentQueue = userToQueue();
+			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
 			String queueId = currentQueue.remove(userId);
 			if (queueId != null) {
 				SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
@@ -216,7 +220,7 @@ public interface Matchmaking extends Verticle {
 			try {
 				lock = SuspendableLock.lock("Matchmaking::queues[" + queueId + "]");
 				queue = SuspendableQueue.get(queueId);
-				SuspendableMap<UserId, String> userToQueue = userToQueue();
+				SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
 
 				List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
 
@@ -311,9 +315,8 @@ public interface Matchmaking extends Verticle {
 //					if (queueConfiguration.isStartsAutomatically())
 					LOGGER.trace("startMatchmaker {}: Creating game", queueId);
 					for (int i = 0; i < thisMatchRequests.size(); i += 2) {
-						int thisIndex = i;
-						MatchmakingRequest user1 = thisMatchRequests.get(thisIndex);
-						MatchmakingRequest user2 = thisMatchRequests.get(thisIndex + 1);
+						MatchmakingRequest user1 = thisMatchRequests.get(i);
+						MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
 
 						// This is a standard two player competitive match
 						ConfigurationRequest request =
@@ -372,6 +375,11 @@ public interface Matchmaking extends Verticle {
 		};
 	}
 
+	/**
+	 * Returns the message that indicates that a game is ready to play.
+	 *
+	 * @return
+	 */
 	static Envelope gameReadyMessage() {
 		return new Envelope()
 				.result(new EnvelopeResult()

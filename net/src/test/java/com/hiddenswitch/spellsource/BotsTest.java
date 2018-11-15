@@ -120,7 +120,7 @@ public class BotsTest extends SpellsourceTestBase {
 			Sync.invoke0(playAndWait);
 			List<String> botIds = Bots.getBotIds();
 			assertEquals("Only one bot document should have been created", botIds.size(), 1);
-			SuspendableMap<UserId, GameId> games = Games.getGames();
+			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
 			for (String id : botIds) {
 				assertFalse(games.containsKey(new UserId(id)));

@@ -63,7 +63,8 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Logger logger = LoggerFactory.getLogger(Hazelcast.class);
 
-	static SuspendableMap<UserId, String> getConnections() throws SuspendExecution {
+	@Suspendable
+	static SuspendableMap<UserId, String> getConnections() {
 		return SuspendableMap.getOrCreate("Connection::connections");
 	}
 
@@ -78,7 +79,8 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @param userId The user ID whose connection should be retrieved
 	 * @return A connection object.
 	 */
-	static WriteStream<Envelope> writeStream(String userId) throws SuspendExecution {
+	@Suspendable
+	static WriteStream<Envelope> writeStream(String userId) {
 		SuspendableMap<UserId, String> connections = getConnections();
 		String handlerId = connections.get(new UserId(userId));
 		if (handlerId == null) {

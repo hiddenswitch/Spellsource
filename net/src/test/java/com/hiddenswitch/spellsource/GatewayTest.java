@@ -11,14 +11,12 @@ import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.models.ConfigurationRequest;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.CompositeFuture;
 import io.vertx.core.Future;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -27,14 +25,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
 import java.util.Deque;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -253,7 +248,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				}
 			}, client.getAccount().getId());
 			assertFalse(account.getAccounts().get(0).isInMatch());
-			SuspendableMap<UserId, GameId> games = Games.getGames();
+			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
 			context.assertFalse(hasUser);
 
@@ -292,7 +287,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		sync(() -> {
 			// wait 10 seconds
 			Strand.sleep(10000L);
-			assertNull(Games.getGames().get(new UserId(userId)));
+			assertNull(Games.getUsersInGames().get(new UserId(userId)));
 
 			Boolean done = Sync.invoke(() -> {
 				UnityClient client2 = new UnityClient(context, token);
@@ -376,7 +371,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		client2.createUserAccount();
 		java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
 		Thread.sleep(2000L);
-		sync(() -> context.assertFalse(Games.getGames().containsKey(new UserId(client1.getAccount().getId()))));
+		sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))));
 		other.cancel(true);
 		Thread.sleep(2000L);
 	}

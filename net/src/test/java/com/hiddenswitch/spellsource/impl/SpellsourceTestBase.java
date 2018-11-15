@@ -88,7 +88,7 @@ public abstract class SpellsourceTestBase {
 		vertx.exceptionHandler(context.exceptionHandler());
 		// Cleanup anything else that might be going on
 		sync(() -> {
-			for (UserId key : Matchmaking.userToQueue().keySet()) {
+			for (UserId key : Matchmaking.getUsersInQueues().keySet()) {
 				Matchmaking.dequeue(key);
 			}
 

@@ -87,7 +87,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 
 		CreateGameSessionResponse pending = CreateGameSessionResponse.pending(deploymentID());
 		SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
-		SuspendableMap<UserId, GameId> games = Games.getGames();
+		SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 		CreateGameSessionResponse connection = connections.putIfAbsent(request.getGameId(), pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
