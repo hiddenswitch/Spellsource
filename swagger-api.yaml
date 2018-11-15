@@ -1790,6 +1790,7 @@ definitions:
       friend:
         description: |
           When true, indicates that this request is a friend invitation.
+        default: false
         type: 'boolean'
       queueId:
         description: |

@@ -22,19 +22,29 @@ public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
 
 	private static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
-		return suspendableHandler((SuspendableAction1<RoutingContext>) (context) -> {
+		return suspendableHandler((context) -> {
+			Throwable t = null;
 			try {
 				handler.call(context);
 			} catch (NullPointerException notFound) {
+				t = notFound;
 				respond(context, WebResult.notFound("Not found (%s)", notFound.getMessage()));
 			} catch (SecurityException notAuthorized) {
+				t = notAuthorized;
 				respond(context, WebResult.forbidden("Forbidden (%s)", notAuthorized.getMessage()));
 			} catch (IllegalStateException illegalState) {
+				t = illegalState;
 				respond(context, WebResult.illegalState("Illegal state (%s)", illegalState.getMessage()));
 			} catch (IllegalArgumentException illegalArgument) {
+				t = illegalArgument;
 				respond(context, WebResult.invalidArgument("Illegal argument (%s)", illegalArgument.getMessage()));
 			} catch (Throwable unhandled) {
+				t = unhandled;
 				respond(context, WebResult.failed(500, unhandled));
+			} finally {
+				if (t != null) {
+					logger.error("handler error", t);
+				}
 			}
 		});
 	}

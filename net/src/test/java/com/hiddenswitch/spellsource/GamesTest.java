@@ -1,20 +1,11 @@
 package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.strands.Strand;
-import com.hiddenswitch.spellsource.client.models.GameActions;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
-import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.models.ConfigurationRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.behaviour.Behaviour;
-import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.logic.GameLogic;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Supplier;
 
 public class GamesTest extends SpellsourceTestBase {
 	private static Logger logger = LoggerFactory.getLogger(GamesTest.class);
@@ -47,7 +37,7 @@ public class GamesTest extends SpellsourceTestBase {
 		sync(() -> {
 			Strand.sleep(100L);
 			// Game should still be running
-			context.assertTrue(Games.getGames().containsKey(new UserId(client.getAccount().getId())));
+			context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 			Strand.sleep(100L);
 		});
 		// Reconnect
@@ -87,7 +77,7 @@ public class GamesTest extends SpellsourceTestBase {
 		sync(() -> {
 			Strand.sleep(100L);
 			// Game should still be running
-			context.assertTrue(Games.getGames().containsKey(new UserId(client.getAccount().getId())));
+			context.assertTrue(Games.getUsersInGames().containsKey(new UserId(client.getAccount().getId())));
 			Strand.sleep(100L);
 		});
 		// Reconnect
