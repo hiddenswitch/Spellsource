@@ -1,0 +1,28 @@
+{
+  "name": "Tower Titan",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Taunt. Deathrattle: Add three 2/2 Knights to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "token_knight",
+      "token_knight",
+      "token_knight"
+    ],
+
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
