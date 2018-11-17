@@ -1,0 +1,38 @@
+{
+  "name": "Rhunok, the Bear",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "After you target another friendly minion with a spell, summon a copy of it with Taunt.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "queueCondition": {
+        "class": "OwnedByPlayerCondition",
+        "target": "EVENT_TARGET",
+        "targetPlayer": "SELF"
+      },
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+    "class": "SummonSpell",
+    "spell": {
+       "target": "OUTPUT",
+       "class": "AddAttributeSpell",
+       "attribute": "TAUNT"
+    },
+    "targetPlayer": "SELF"
+  },
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
