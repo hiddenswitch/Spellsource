@@ -1,0 +1,24 @@
+{
+  "name": "Victory Royale",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "EPIC",
+  "description": "Discover cards until your hand is full.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecastWhileSpell",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 9,
+      "operation": "LESSER_OR_EQUAL",
+      "targetPlayer": "OWNER"
+    },
+    "spell": {
+    "class": "DiscoverSpell",
+    },
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
