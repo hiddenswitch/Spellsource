@@ -1,0 +1,37 @@
+{
+  "name": "Prophet Wa'ran",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Shuffle 5/5 copies of all minions into your deck.",
+  "battlecry": {
+  "targetSelection": "ALL_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    },
+    "spells": [
+      {
+        "class": "ShuffleToDeckSpell",
+        "spell": {
+          {
+            "class": "SetAttackSpell",
+            "value": 5,
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 5,
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
