@@ -12,6 +12,8 @@ import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.EnvelopeGame;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.common.*;
+import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -21,6 +23,8 @@ import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
 import com.hiddenswitch.spellsource.models.MatchExpireRequest;
+import com.hiddenswitch.spellsource.models.MatchExpireResponse;
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -60,6 +64,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitEvent;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -507,6 +512,9 @@ public class ServerGameContext extends GameContext implements Server {
 						logger.error("resume {}: Ending the game threw an exception.", getGameId(), endGameError);
 						// TODO: Deal with any other issues
 					}
+				} finally {
+					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
+					releaseUsers();
 				}
 				return null;
 			});
@@ -739,11 +747,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// from the server.
 			if (!didExpire) {
 				didExpire = true;
-				try {
-					Matchmaking.expireOrEndMatch(new MatchExpireRequest(getGameId()).setUsers(getUserIds()));
-				} catch (SuspendExecution | InterruptedException execution) {
-					// Ignore (only used to deal with instrumentation issues)
-				}
+				releaseUsers();
 			}
 
 			// Actually end the game
@@ -771,14 +775,45 @@ public class ServerGameContext extends GameContext implements Server {
 				fiber = null;
 			}
 
-			// Don't dispose more than once
-			if (!isDisposed()) {
-				dispose();
-			}
+
+			dispose();
+
 		} finally {
 			lock.unlock();
 		}
+	}
 
+	@Suspendable
+	public void releaseUsers() {
+		GameId gameId = new GameId(getGameId());
+		if (Fiber.isCurrentFiber()) {
+			SuspendableMap<UserId, GameId> games = null;
+			try {
+				games = Games.getUsersInGames();
+			} catch (SuspendExecution suspendExecution) {
+				throw new RuntimeException(suspendExecution);
+			}
+
+			for (UserId userId : getUserIds()) {
+				games.remove(userId, gameId);
+			}
+		} else {
+			@Nullable Context context = Vertx.currentContext();
+			if (context == null) {
+				return;
+			}
+			UserId[] userIds = getUserIds().toArray(new UserId[0]);
+			context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
+				if (res.failed()) {
+					return;
+				}
+
+				for (UserId userId : userIds) {
+					res.result().removeIfPresent(userId, gameId, Future.future());
+				}
+			});
+		}
+		getPlayerConfigurations().clear();
 	}
 
 	private List<UserId> getUserIds() {
@@ -793,10 +828,40 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void dispose() {
-		for (Closeable closeable : closeables) {
-			closeable.close(Future.future());
+		Iterator<Closeable> iter = closeables.iterator();
+		while (iter.hasNext()) {
+			try {
+				Closeable closeable = iter.next();
+				Void res = awaitResult(closeable::close);
+			} catch (Throwable any) {
+				logger.error("dispose", any);
+			} finally {
+				iter.remove();
+			}
 		}
 		super.dispose();
+	}
+
+	@Override
+	protected void finalize() throws Throwable {
+		super.finalize();
+		// We'll do the same thing as disposed, except we won't do it in a fiber and only if we're in a vertx context
+		@Nullable Context context = Vertx.currentContext();
+		if (context == null) {
+			return;
+		}
+		Iterator<Closeable> iter = closeables.iterator();
+		while (iter.hasNext()) {
+			try {
+				Closeable closeable = iter.next();
+				closeable.close(Future.future());
+			} catch (Throwable any) {
+				logger.error("dispose", any);
+			} finally {
+				iter.remove();
+			}
+		}
+		releaseUsers();
 	}
 
 	public List<Trigger> getGameTriggers() {
@@ -936,8 +1001,12 @@ public class ServerGameContext extends GameContext implements Server {
 
 	@Suspendable
 	public void loseBothPlayers() {
-		getLogic().loseBothPlayers();
-		endGame();
+		try {
+			getLogic().loseBothPlayers();
+			endGame();
+		} finally {
+			releaseUsers();
+		}
 	}
 
 	public void setDidExpire(boolean didExpire) {

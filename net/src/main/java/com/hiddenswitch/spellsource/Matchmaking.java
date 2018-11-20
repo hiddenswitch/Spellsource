@@ -4,6 +4,8 @@ import com.github.fromage.quasi.fibers.Fiber;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
+import com.github.fromage.quasi.strands.concurrent.CyclicBarrier;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.*;
 import com.hiddenswitch.spellsource.impl.DeckId;
@@ -50,65 +52,6 @@ public interface Matchmaking extends Verticle {
 		} else {
 			return CurrentMatchResponse.response(null);
 		}
-	}
-
-	/**
-	 * Ends a match and allows the user to re-enter the queue.
-	 * <p>
-	 * The Games service, which also has an end game session function, is distinct from this one. This method allows the
-	 * user to enter the queue again (typically users can only be in one queue at a time, either playing a game inside the
-	 * matchmaking queue or waiting to be matched into a game). Typical users should not be able to play multiple games at
-	 * once.
-	 *
-	 * @param request The user or game ID to exit from a match.
-	 * @return Information about the expiration/cancellation requested.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static MatchExpireResponse expireOrEndMatch(MatchExpireRequest request) throws SuspendExecution, InterruptedException {
-		// Not clear if this must be a global lock...
-		SuspendableLock lock = SuspendableLock.lock("Matchmaking::expireOrEndMatch");
-
-		try {
-			LOGGER.debug("expireOrEndMatch: Expiring match {}", request.getGameId());
-
-			if (request.getUsers() == null) {
-				throw new NullPointerException("Request does not contain users specified");
-			}
-
-			if (request.getUsers().size() != 2) {
-				throw new IllegalStateException("There should be two users in a match expire request.");
-			}
-
-			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
-			for (UserId userId : request.getUsers()) {
-				games.remove(userId);
-			}
-
-			if (LOGGER.isTraceEnabled()) {
-				Collection<UserId> values = games.keySet();
-				Collection<UserId> usersQueued = Matchmaking.getUsersInQueues().keySet();
-				LOGGER.debug("expireOrEndMatch: Users with games n={} {}", values.size(), values);
-				LOGGER.debug("expireOrEndMatch: Users queued n={} {}", usersQueued.size(), usersQueued);
-			}
-		} finally {
-			lock.release();
-		}
-
-		/*
-		// End the game in alliance mode
-		Logic.endGame(new EndGameRequest()
-				.withPlayers(new EndGameRequest.Player()
-								.withDeckId(decks.get(0).toString()),
-						new EndGameRequest.Player()
-								.withDeckId(decks.get(1).toString())));
-
-		if (logger.isDebugEnabled()) {
-			logger.debug("expireOrEndMatch: Called Logic::endGame");
-		}
-		*/
-
-		return new MatchExpireResponse();
 	}
 
 	/**
@@ -213,8 +156,9 @@ public interface Matchmaking extends Verticle {
 
 	@Suspendable
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration queueConfiguration) throws SuspendExecution {
+		CountDownLatch awaitReady = new CountDownLatch(1);
 		Fiber<Void> fiber = getContextScheduler().newFiber(() -> {
-			// There should only be one matchmaker per queue per cluster
+			// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
 			SuspendableLock lock = null;
 			SuspendableQueue<MatchmakingQueueEntry> queue = null;
 			try {
@@ -227,6 +171,7 @@ public interface Matchmaking extends Verticle {
 				// Dequeue requests
 				do {
 					LOGGER.trace("startMatchmaker {}: Awaiting {} users", queueId, queueConfiguration.getLobbySize());
+					awaitReady.countDown();
 
 					while (thisMatchRequests.size() < queueConfiguration.getLobbySize()) {
 						MatchmakingQueueEntry request;
@@ -362,9 +307,17 @@ public interface Matchmaking extends Verticle {
 			return null;
 		});
 
+		// We don't join on the fiber (we don't wait until the queue has actually started), we return immediately.
 		fiber.start();
 
 		AtomicReference<Fiber<Void>> thisFiber = new AtomicReference<>(fiber);
+		if (queueConfiguration.isJoin()) {
+			try {
+				awaitReady.await();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
+		}
 		return completionHandler -> {
 			// Don't interrupt twice if something else makes this fiber end early.
 			if (thisFiber.get().isAlive() && thisFiber.get().isInterrupted()) {

@@ -20,6 +20,7 @@ import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
+import net.demilich.metastone.game.logic.GameStatus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		}
 
 		Logic.triggers();
-		List<String> borrowableGameIds = new ArrayList<>();
 		// Get the collection data from the configurations that are not yet populated with valid cards
 		for (Configuration configuration : request.getConfigurations()) {
 			if (configuration.getDeck() instanceof CollectionDeck) {
@@ -74,16 +74,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			playerAttributes.put(Attribute.DECK_ID, configuration.getDeck().getDeckId());
 
 			configuration.setPlayerAttributes(playerAttributes);
-			borrowableGameIds.add(configuration.getDeck().getDeckId());
 		}
-
-		/*
-		if (borrowableGameIds.size() > 0) {
-			Inventory.borrowFromCollection(
-					new BorrowFromCollectionRequest()
-							.withCollectionIds(borrowableGameIds));
-		}
-		*/
 
 		CreateGameSessionResponse pending = CreateGameSessionResponse.pending(deploymentID());
 		SuspendableMap<GameId, CreateGameSessionResponse> connections = Games.getConnections();
@@ -91,24 +82,34 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		CreateGameSessionResponse connection = connections.putIfAbsent(request.getGameId(), pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
-
 			Games.LOGGER.debug("createGameSession: DeploymentId {} is responsible for deploying this match.", deploymentID());
-			ServerGameContext session = new ServerGameContext(request.getGameId(),
-					new VertxScheduler(Vertx.currentContext().owner()), request.getConfigurations());
+			ServerGameContext context = new ServerGameContext(
+					request.getGameId(),
+					new VertxScheduler(Vertx.currentContext().owner()),
+					request.getConfigurations());
 
-			for (Configuration configuration : request.getConfigurations()) {
-				games.put(configuration.getUserId(), request.getGameId());
+			try {
+				for (Configuration configuration : request.getConfigurations()) {
+					games.put(configuration.getUserId(), request.getGameId());
+				}
+
+				// Deal with ending the game
+				context.handleEndGame(this::onGameOver);
+
+				CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), context);
+				connections.replace(request.getGameId(), response);
+				contexts.put(request.getGameId(), context);
+				// Plays the game context in its own fiber
+				context.play();
+				return response;
+			} catch (RuntimeException any) {
+				// If an error occurred, make sure to remove users from the games we just put them into.
+				for (Configuration configuration : request.getConfigurations()) {
+					games.remove(configuration.getUserId(), request.getGameId());
+				}
+				connections.remove(request.getGameId());
+				throw any;
 			}
-
-			// Deal with ending the game
-			session.handleEndGame(this::onGameOver);
-
-			CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), session);
-			// Plays the game context in its own fiber
-			session.play();
-			connections.replace(request.getGameId(), response);
-			contexts.put(request.getGameId(), session);
-			return response;
 		} else {
 			Games.LOGGER.debug("createGameSession: Repeat createGameSessionRequest suspected because actually deploymentId " + connection.deploymentId + " is responsible for deploying this match.");
 			// Otherwise, return its state, whatever it is
@@ -140,21 +141,21 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			return;
 		}
 		Games.LOGGER.debug("endGame {}", gameId);
-		ServerGameContext session = contexts.remove(gameId);
+		ServerGameContext gameContext = contexts.remove(gameId);
 		Games.getConnections().remove(gameId);
 
 		UserId winner = null;
 		try {
-			session.updateAndGetGameOver();
-			if (session.getWinner() != null && session.getWinner().getUserId() != null) {
-				winner = new UserId(session.getWinner().getUserId());
+			gameContext.updateAndGetGameOver();
+			if (gameContext.getWinner() != null && gameContext.getWinner().getUserId() != null) {
+				winner = new UserId(gameContext.getWinner().getUserId());
 			}
 			// Save the wins/losses
 			if (winner != null) {
 				String userIdWinner = winner.toString();
-				String userIdLoser = session.getOpponent(session.getWinner()).getUserId();
-				String deckIdWinner = (String) session.getWinner().getAttribute(Attribute.DECK_ID);
-				String deckIdLoser = (String) session.getOpponent(session.getWinner()).getAttribute(Attribute.DECK_ID);
+				String userIdLoser = gameContext.getOpponent(gameContext.getWinner()).getUserId();
+				String deckIdWinner = (String) gameContext.getWinner().getAttribute(Attribute.DECK_ID);
+				String deckIdLoser = (String) gameContext.getOpponent(gameContext.getWinner()).getAttribute(Attribute.DECK_ID);
 				// Check if this deck was a draft deck
 				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
 						json("$inc", json("totalGames", 1, "wins", 1))).getDocModified() > 0L) {
@@ -181,8 +182,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			LOGGER.error("endGame {}: Could not get winner due to {}", gameId, ex.getMessage(), ex);
 		}
 
-		if (session.isRunning()) {
-			session.loseBothPlayers();
+		// If the game is still running when this is called, make sure to force end the game
+		if (gameContext.getStatus() == GameStatus.RUNNING) {
+			gameContext.loseBothPlayers();
 		}
 	}
 

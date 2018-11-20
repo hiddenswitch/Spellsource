@@ -1,5 +1,5 @@
 from os import makedirs
-from os.path import join
+from os.path import join, abspath
 
 import click
 
@@ -306,6 +306,45 @@ def simulate(decks,
 
         from json import dumps
         click.echo(dumps(results))
+
+
+@_cli.command()
+@click.argument('path-to-pem-file', type=click.STRING)
+@click.argument('remote-host', type=click.STRING)
+@click.option('--db-path', type=click.STRING, default='.mongo', show_default=True,
+              help='the path to restore the database to, i.e. as an argument for --db-path')
+def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '.mongo'):
+    """
+    Replicates mongo databases.
+
+    Connects to the database located at REMOTE_HOST and authenticated with PATH_TO_PEM_FILE.
+
+    To start a database using the replicated one, use the following command:
+
+    \b
+      mongod --db-path DB_PATH
+    """
+    Admin.replicate_mongo_db(abspath(path_to_pem_file), remote_host, abspath(db_path))
+    click.echo(abspath(db_path))
+
+
+@_cli.command()
+@click.argument('username-or-email')
+@click.argument('password')
+@click.option('--db-uri', default='mongodb://localhost:27017', show_default=True,
+              help='the URI to the mongo instance with the metastone database')
+def change_password(username_or_email: str, password: str, db_uri: str):
+    """
+    Changes a Spellsource user's password.
+
+    Connects to DB_URI, and changes password of the user found with USERNAME_OR_EMAIL to PASSWORD. Prints the email
+    address and username of the user whose password was changed.
+    """
+    record = Admin.change_user_password(db_uri, username_or_email, password)
+    if record is None:
+        raise SystemExit(1)
+    click.echo(record['emails'][0]['address'])
+    click.echo(record['username'])
 
 
 def main():

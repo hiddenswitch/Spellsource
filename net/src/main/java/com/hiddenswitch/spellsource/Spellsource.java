@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
@@ -397,7 +398,17 @@ public class Spellsource {
 							// Needs to include the fromUserId too
 							mongo().createIndex(Invites.INVITES, json("fromUserId", 1));
 						}))
-				.migrateTo(22, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(23)
+						.withUp(thisVertx -> {
+							// Remove all cards that don't exist
+							CardCatalogue.loadCardsFromPackage();
+							JsonArray allCardIds = array(CardCatalogue.getRecords().keySet().toArray());
+							MongoClientDeleteResult removed = Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+									json("$nin", allCardIds)));
+							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
+						}))
+				.migrateTo(23, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
