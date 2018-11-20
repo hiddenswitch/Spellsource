@@ -59,10 +59,10 @@ import static java.util.stream.Collectors.toList;
  */
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
-	String WEBSOCKET_PATH = "games";
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
+	String GAMES_PLAYERS_MAP = "Games::players";
 
 	/**
 	 * Creates a new instance of the service that maintains a list of running games.
@@ -633,7 +633,7 @@ public interface Games extends Verticle {
 	 * @throws SuspendExecution
 	 */
 	static SuspendableMap<UserId, GameId> getUsersInGames() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games::players");
+		return SuspendableMap.getOrCreate(GAMES_PLAYERS_MAP);
 	}
 
 	/**
