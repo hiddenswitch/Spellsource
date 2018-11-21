@@ -1,0 +1,50 @@
+{
+  "name": "Spirit of the Tiger",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "Stealth for 1 turn. Whenever you cast a spell, summon a Tiger with stats equal to its cost.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "CreateSummonSpell",
+      "name": "Tiger",
+      "spell": {
+        "class": "NullSpell"
+      },
+      "attackBonus": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "LAST_MANA_COST",
+        "targetPlayer": "SELF"
+      },
+      "hpBonus": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "LAST_MANA_COST",
+        "targetPlayer": "SELF"
+      },
+      "mana": {
+        "class": "AlgebraicValueProvider",
+        "operation": "MINIMUM",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST",
+          "targetPlayer": "SELF"
+        },
+        "value2": 10
+      }
+    }
+  },
+  "attributes": {
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

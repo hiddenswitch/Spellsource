@@ -46,6 +46,10 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return (int) player.getAttributeValue(Attribute.SUPREMACIES_THIS_GAME);
 			case LOCKED_MANA:
 				return player.getLockedMana();
+			case HERO_POWER_DAMAGE_DEALT:
+				return (int) player.getStatistics().getLong(Statistic.HERO_POWER_DAMAGE_DEALT);
+			case HEALING_DONE:
+				return (int) player.getStatistics().getLong(Statistic.HEALING_DONE);
 			default:
 				break;
 		}

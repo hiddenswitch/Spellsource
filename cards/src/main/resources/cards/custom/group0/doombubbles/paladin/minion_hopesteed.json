@@ -1,0 +1,27 @@
+{
+  "name": "Hopesteed",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Divine Shield. After this loses Divine Shield, gain Divinie Shield.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseDivineShieldTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "DIVINE_SHIELD"
+    }
+  },
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

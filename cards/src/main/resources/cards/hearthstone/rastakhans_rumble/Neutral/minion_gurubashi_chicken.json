@@ -1,13 +1,13 @@
 {
-  "name": "Ticket Scalper",
-  "baseManaCost": 4,
+  "name": "Gurubashi Chicken",
+  "baseManaCost": 1,
   "type": "MINION",
-  "baseAttack": 5,
-  "baseHp": 3,
+  "baseAttack": 1,
+  "baseHp": 1,
   "heroClass": "ANY",
   "rarity": "COMMON",
-  "race": "PIRATE",
-  "description": "Overkill: Draw 2 cards.",
+  "race": "BEAST",
+  "description": "Overkill: Gain +5 attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -17,8 +17,9 @@
     "spell": {
       "class": "OverkillSpell",
       "spell": {
-        "class": "DrawCardSpell",
-        "value": 2
+        "class": "BuffSpell",
+        "target": "SELF",
+        "attackBonus": 5
       }
     }
   },

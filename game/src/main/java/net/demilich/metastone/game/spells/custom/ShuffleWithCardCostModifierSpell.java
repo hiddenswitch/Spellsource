@@ -4,6 +4,7 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.CardCostModifierSpell;
@@ -12,6 +13,8 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
+
+import java.util.Arrays;
 
 /**
  * Generates the cards retrieved by {@link SpellUtils#getCards(GameContext, Player, Entity, Entity, SpellDesc)} rules,
@@ -29,6 +32,10 @@ public final class ShuffleWithCardCostModifierSpell extends CardCostModifierSpel
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc);
+		if (target != null && target instanceof Card) {
+			cards = new CardArrayList();
+			cards.add(target.getSourceCard().getCopy());
+		}
 		for (Card card : cards) {
 			card.setOwner(player.getId());
 			card.setId(context.getLogic().generateId());

@@ -67,5 +67,13 @@ public enum PlayerAttribute {
 	/**
 	 * The current amount of overloaded/locked mana the player has.
 	 */
-	LOCKED_MANA
+	LOCKED_MANA,
+	/**
+	 * The total damage dealt by the player's hero power this game
+	 */
+	HERO_POWER_DAMAGE_DEALT,
+	/**
+	 * The total healing done by friendly sources
+	 */
+	HEALING_DONE
 }

@@ -1,0 +1,67 @@
+{
+  "name": "Trophy Huntress",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Battlecry: Deal 1 damage to a Murloc; 2 damage to a Beast; or 3 damage to a Dragon.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ConditionalSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 1
+        },
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "DamageSpell",
+          "value": 3
+        }
+      ],
+      "conditions": [
+        {
+          "class": "RaceCondition",
+          "race": "MURLOC"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "BEAST"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DRAGON"
+        }
+      ],
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "RaceFilter",
+            "race": "MURLOC"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "BEAST"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "DRAGON"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

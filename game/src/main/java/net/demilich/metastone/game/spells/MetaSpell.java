@@ -71,7 +71,9 @@ public class MetaSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
+		if (desc.containsKey(SpellArg.VALUE)) {
+			context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
+		}
 		// Manually obtain sub spells for performance reasons, this is accessed very often
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
@@ -111,7 +113,9 @@ public class MetaSpell extends Spell {
 				SpellUtils.castChildSpell(context, player, spell2, source, target);
 			}
 		}
-		context.getSpellValueStack().pollLast();
+		if (desc.containsKey(SpellArg.VALUE)) {
+			context.getSpellValueStack().pollLast();
+		}
 	}
 
 }

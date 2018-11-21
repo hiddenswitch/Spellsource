@@ -5,6 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -21,6 +23,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toCollection;
 
 public class TargetLogic implements Serializable {
 	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
@@ -423,6 +427,13 @@ public class TargetLogic implements Serializable {
 			friendlyCards.addAll(player.getMinions());
 			friendlyCards.addAll(player.getSetAsideZone());
 			friendlyCards.add(player.getHero());
+			friendlyCards.addAll(player
+					.getGraveyard()
+					.stream()
+					.filter(e -> e instanceof Card)
+					.map(e -> (Card) e)
+					.filter(c -> c.hasAttribute(Attribute.BEING_PLAYED))
+					.collect(toCollection(CardArrayList::new)));
 			return friendlyCards;
 		} else if (targetKey.equals(EntityReference.ENEMY_CARDS)) {
 			List<Entity> enemyCards = new ArrayList<>();
@@ -431,6 +442,12 @@ public class TargetLogic implements Serializable {
 			enemyCards.addAll(context.getOpponent(player).getMinions());
 			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
 			enemyCards.add(context.getOpponent(player).getHero());
+			enemyCards.addAll(context.getOpponent(player).getGraveyard()
+					.stream()
+					.filter(e -> e instanceof Card)
+					.map(e -> (Card) e)
+					.filter(c -> c.hasAttribute(Attribute.BEING_PLAYED))
+					.collect(toCollection(CardArrayList::new)));
 			return enemyCards;
 		} else if (targetKey.equals(EntityReference.CURRENT_SUMMONING_MINION)) {
 			if (context.getSummonReferenceStack().isEmpty()) {
