@@ -75,7 +75,7 @@ public class TraceTests {
 		GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
 		context1.play();
 		Trace trace = context1.getTrace();
-		GameContext context2 = trace.replayContext(false);
+		GameContext context2 = trace.replayContext(false, null);
 		Assert.assertEquals(context1.getTurn(), context2.getTurn());
 	}
 
@@ -83,7 +83,7 @@ public class TraceTests {
 	@Ignore("out of date")
 	public void testFinleyShouldNotChangeHeroPowerToMinion() {
 		Trace noHeroPower = getTrace("noheropower");
-		GameContext context = noHeroPower.replayContext(false);
+		GameContext context = noHeroPower.replayContext(false, null);
 	}
 
 
@@ -91,21 +91,21 @@ public class TraceTests {
 	@Ignore("out of date")
 	public void testSuccessfulMagnetize() {
 		Trace trace = getTrace("magnetize1");
-		GameContext context = trace.replayContext(false);
+		GameContext context = trace.replayContext(false, null);
 	}
 
 	@Test
 	@Ignore("out of date")
 	public void testShudderwockInteraction() {
 		Trace trace = getTrace("shudderwockinteraction");
-		GameContext context = trace.replayContext(false);
+		GameContext context = trace.replayContext(false, null);
 	}
 
 	@Test
 	@Ignore("out of date")
 	public void testShouldNotSummonEvilLaughter() {
 		Trace summoningEvilLaughter = getTrace("summoningevillaughter");
-		GameContext context = summoningEvilLaughter.replayContext(false);
+		GameContext context = summoningEvilLaughter.replayContext(false, null);
 	}
 
 	@Test
@@ -122,7 +122,7 @@ public class TraceTests {
 			context1.play();
 			Trace trace = context1.getTrace();
 			try {
-				GameContext context2 = trace.replayContext(false);
+				GameContext context2 = trace.replayContext(false, null);
 				Assert.assertEquals(context1.getTurn(), context2.getTurn());
 			} catch (Throwable ex) {
 				// Inspect the trace and observe which cards were played that could have caused the error
