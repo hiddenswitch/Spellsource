@@ -4,8 +4,10 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.logic.TargetLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * This spell implements the new Overkill mechanic introduced in Rastakhan's Rumble
@@ -50,6 +52,9 @@ public class OverkillSpell extends DamageSpell {
         if (desc.containsKey(SpellArg.VALUE)) {
             //allow the OverkillSpell to serve as a damage spell as well
             super.onCast(context, player, desc, source, target);
+        }
+        if (target == null) {
+            target = context.getTargetLogic().resolveTargetKey(context, player, source, EntityReference.EVENT_TARGET).get(0);
         }
         if (target instanceof Minion) {
             Minion minion = (Minion) target;

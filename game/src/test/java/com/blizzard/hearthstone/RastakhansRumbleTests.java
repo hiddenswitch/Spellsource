@@ -81,7 +81,7 @@ public class RastakhansRumbleTests extends TestBase {
         runGym((context, player, opponent) -> {
             playCard(context, opponent, "spell_kara_kazham");
             for (int i = 0; i < 3; i++) {
-                playCardWithTarget(context, player, "spell_baited_arrow", opponent.getMinions().get(0));
+                playCard(context, player, "spell_baited_arrow", opponent.getMinions().get(0));
             }
             assertEquals(player.getMinions().size(), 2);
         });
@@ -114,5 +114,101 @@ public class RastakhansRumbleTests extends TestBase {
             attack(context, player, ticket, ultrasaur);
             assertEquals(player.getHand().size(), 2);
         });
+    }
+
+    @Test
+    public void testSpiritOfTheDead() {
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "minion_spirit_of_the_dead");
+            Minion wisp = playMinionCard(context, player, "minion_wisp");
+            destroy(context, wisp);
+            assertEquals(player.getDeck().size(), 1);
+            assertEquals(costOf(context, player, player.getDeck().get(0)), 1);
+        });
+
+    }
+
+    @Test
+    public void testBwonsamdiTheDead() {
+        runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_wisp");
+            shuffleToDeck(context, player, "minion_wisp");
+            shuffleToDeck(context, player, "minion_faithful_lumi");
+            playCard(context, player, "minion_spirit_of_the_dead");
+            for (int i = 0; i < 5; i++) {
+                shuffleToDeck(context, player, "minion_faithful_lumi");
+                Minion wisp = playMinionCard(context, player, "minion_wisp");
+                destroy(context, wisp);
+            }
+
+            playCard(context, player, "minion_bwonsamdi_the_dead");
+            assertEquals(player.getHand().size(), 10);
+            assertEquals(player.getDeck().size(), 3);
+        });
+
+    }
+
+    @Test
+    public void testZentimo() {
+        runGym((context, player, opponent) -> {
+            Minion ultra1 = playMinionCard(context, opponent, "minion_ultrasaur");
+            Minion ultra2 = playMinionCard(context, opponent, "minion_ultrasaur");
+            Minion ultra3 = playMinionCard(context, opponent, "minion_ultrasaur");
+            playCard(context, player, "minion_zentimo");
+            playCard(context, player, "spell_hex", ultra2);
+            for (int i = 0; i < 3; i++) {
+                assertEquals(opponent.getMinions().get(i).getSourceCard().getCardId(), "token_frog", i + "");
+            }
+        });
+    }
+
+    @Test
+    public void testSpiritOfTheDragonhawk() {
+        runGym((context, player, opponent) -> {
+            Minion ultra1 = playMinionCard(context, opponent, "minion_ultrasaur");
+            Minion ultra2 = playMinionCard(context, opponent, "minion_ultrasaur");
+            Minion ultra3 = playMinionCard(context, opponent, "minion_ultrasaur");
+            playCard(context, player, "minion_spirit_of_the_dragonhawk");
+            useHeroPower(context, player, ultra2.getReference());
+            for (int i = 0; i < 3; i++) {
+                assertEquals(opponent.getMinions().get(i).getHp(), 13, i + "");
+            }
+
+        });
+    }
+
+    @Test
+    public void testDaringFireEater() {
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "minion_daring_fire_eater");
+            useHeroPower(context, player, opponent.getHero().getReference());
+            useHeroPower(context, player, opponent.getHero().getReference());
+            assertEquals(opponent.getHero().getHp(), 26);
+        });
+
+    }
+
+    @Test
+    public void testGralTheShark() {
+        runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_ultrasaur");
+            Minion gral = playMinionCard(context, player, "minion_gral_the_shark");
+            assertEquals(gral.getAttack(), 9);
+            assertEquals(gral.getHp(), 16);
+            destroy(context, gral);
+            assertEquals(player.getHand().size(), 1);
+        });
+        runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_ultrasaur");
+            shuffleToDeck(context, player, "minion_ultrasaur");
+            shuffleToDeck(context, player, "minion_ultrasaur");
+            playMinionCard(context, player, "minion_spirit_of_the_shark");
+            Minion gral = playMinionCard(context, player, "minion_gral_the_shark");
+            assertEquals(gral.getAttack(), 16);
+            assertEquals(gral.getHp(), 30);
+            destroy(context, gral);
+            assertEquals(player.getHand().size(), 2);
+        });
+
     }
 }

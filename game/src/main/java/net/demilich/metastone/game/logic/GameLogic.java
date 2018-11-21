@@ -814,6 +814,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			sourceCard.setAttribute(Attribute.CASTED_ON_FRIENDLY_MINION);
 		}
 
+		if (targetSelection != TargetSelection.NONE && targets.size() == 1
+				&& targets.get(0).getEntityType().equals(EntityType.MINION) && !childSpell) {
+			boolean willTargetAdjacent = false;
+			for (SpellTargetsAdjacentAura aura : SpellUtils.getAuras(context, playerId, SpellTargetsAdjacentAura.class)) {
+				aura.onGameEvent(new WillEndSequenceEvent(context));
+				if (aura.getAffectedEntities().contains(sourceCard.getId())) {
+					willTargetAdjacent = true;
+				}
+			}
+			if (willTargetAdjacent) {
+				SpellDesc adjacentSpellDesc = AdjacentEffectSpell.create(targetReference, NullSpell.create(), spellDesc);
+				castSpell(playerId, adjacentSpellDesc, sourceReference, targetReference, true);
+			}
+		}
+
+
 		if (sourceCard != null
 				&& sourceCard.getCardType().isCardType(CardType.SPELL)
 				&& !childSpell) {
@@ -1118,6 +1134,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// Auchenai Soulpriest
 		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage);
 		resolveDamageEvent(player, target, source, damageDealt);
+		if (source.getEntityType() == EntityType.CARD) {
+			Card card = (Card) source;
+			if (card.isHeroPower()) {
+				player.getStatistics().heroPowerDamage(damageDealt);
+			}
+		}
 		return damageDealt;
 	}
 
@@ -1673,6 +1695,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (weapon != null && weapon.isActive() && !weapon.hasAttribute(Attribute.IMMUNE)) {
 				modifyDurability(hero.getWeapon(), -1);
 			}
+			context.getPlayer(hero.getOwner()).modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
+		} else {
+			attacker.modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
 		}
 		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
 		if (attacker.isDestroyed() && !attackerWasDestroyed) {

@@ -1,0 +1,55 @@
+{
+  "name": "Miniature Gunner",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "At the end of your turn, if this attacked, gain Windfury. If this attacked twice, gain Mega-Windfury",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "HasAttackedCondition",
+            "target": "SELF"
+          },
+          {
+            "class": "AttributeCondition",
+            "attribute": "NUMBER_OF_ATTACKS",
+            "operation": "EQUAL",
+            "value": 0
+          }
+        ]
+      },
+      "spell": {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "operation": "HAS",
+          "attribute": "WINDFURY"
+        },
+        "spell1": {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "MEGA_WINDFURY"
+        },
+        "spell2": {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "WINDFURY"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

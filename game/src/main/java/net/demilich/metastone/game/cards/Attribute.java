@@ -950,6 +950,14 @@ public enum Attribute {
 	 */
 	CASTED_ON_FRIENDLY_MINION,
 	/**
+	 * Tracks the amount of times an actor has attacked over the course of a game
+	 */
+	ATTACKS_THIS_GAME,
+	/**
+	 * Tracks a card being in the progress of playing
+	 */
+	BEING_PLAYED,
+	/**
 	 * Allows spell effects to count and keep track of things, interpreted however they'd like.
 	 * <p>
 	 */

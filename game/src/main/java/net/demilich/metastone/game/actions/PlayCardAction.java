@@ -64,7 +64,7 @@ public abstract class PlayCardAction extends GameAction {
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		Card card = (Card) context.resolveSingleTarget(getEntityReference());
-
+		card.setAttribute(Attribute.BEING_PLAYED);
 		context.getLogic().playCard(playerId, getEntityReference());
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
@@ -78,7 +78,7 @@ public abstract class PlayCardAction extends GameAction {
 				context.getLogic().receiveCard(playerId, copy);
 			}
 		}
-
+		card.getAttributes().remove(Attribute.BEING_PLAYED);
 		context.getLogic().afterCardPlayed(playerId, getEntityReference());
 	}
 

@@ -1,0 +1,38 @@
+{
+  "name": "Jan'alai, the Dragonhawk",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "BLUE",
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: If your Hero Power dealt 8 damage this game, summon Ragnaros the Firelord.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_ragnaros_the_firelord",
+        "boardPositionRelative": "RIGHT"
+      },
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "SELF",
+          "playerAttribute": "HERO_POWER_DAMAGE_DEALT"
+        },
+        "operation": "GREATER_OR_EQUAL",
+        "value2": 8
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

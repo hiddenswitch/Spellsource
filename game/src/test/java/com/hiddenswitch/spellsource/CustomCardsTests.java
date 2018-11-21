@@ -4469,17 +4469,25 @@ public class CustomCardsTests extends TestBase {
 			Minion jelly = playMinionCard(context, player, "minion_green_jelly");
 			playMinionCardWithBattlecry(context, player, "minion_bronze_timekeeper", jelly);
 			assertEquals(player.getMinions().size(), 3);
-
-
 		});
 
 		runGym((context, player, opponent) -> {
 			Minion rag = playMinionCard(context, player, "minion_ragnaros_the_firelord");
 			playCard(context, player, "minion_drakkari_enchanter");
 			playCard(context, player, "minion_brann_bronzebeard");
-			playCardWithTarget(context, player, "minion_bronze_timekeeper", rag);
+			playMinionCardWithBattlecry(context, player, "minion_bronze_timekeeper", rag);
 			assertEquals(opponent.getHero().getHp(), -2);
+
 		});
+	}
+
+	@Test
+	public void testTrophyHuntress() {
+		runGym((context, player, opponent) -> {
+
+
+		});
+
 	}
 }
 

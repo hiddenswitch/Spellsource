@@ -51,7 +51,11 @@ public class AttributeValueProvider extends ValueProvider {
 
 			if (entity instanceof Card) {
 				Card card = (Card) entity;
-				value += card.getAttributeValue(attribute);
+				if (attribute == Attribute.ATTACK) {
+					value += card.getDesc().baseAttack + card.getBonusAttack();
+				} else if (attribute == Attribute.HP) {
+					value += card.getDesc().baseHp + card.getBonusHp();
+				} else value += card.getAttributeValue(attribute);
 			} else {
 				if (entity instanceof Actor) {
 					Actor source = (Actor) entity;

@@ -34,6 +34,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.ARMOR_GAINED, armor);
 	}
 
+	public void heroPowerDamage(int damage) {
+		add(Statistic.HERO_POWER_DAMAGE_DEALT, damage);
+	}
+
 	public void cardDrawn() {
 		add(Statistic.CARDS_DRAWN, 1);
 	}

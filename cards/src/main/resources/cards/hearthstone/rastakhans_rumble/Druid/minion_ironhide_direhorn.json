@@ -1,13 +1,13 @@
 {
-  "name": "Ticket Scalper",
-  "baseManaCost": 4,
+  "name": "Ironhide Direhorn",
+  "baseManaCost": 7,
   "type": "MINION",
-  "baseAttack": 5,
-  "baseHp": 3,
-  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "heroClass": "BROWN",
   "rarity": "COMMON",
-  "race": "PIRATE",
-  "description": "Overkill: Draw 2 cards.",
+  "race": "BEAST",
+  "description": "Overkill: Summon a 5/5 Ironhide Runt.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -17,8 +17,8 @@
     "spell": {
       "class": "OverkillSpell",
       "spell": {
-        "class": "DrawCardSpell",
-        "value": 2
+        "class": "SummonSpell",
+        "card": "token_ironhide_runt"
       }
     }
   },

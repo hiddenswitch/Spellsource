@@ -1,0 +1,44 @@
+{
+  "name": "Zandalari Templar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "Battlecry: If you've restored 10 Health this game, gain +4/+4 and Taunt.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "PlayerAttributeValueProvider",
+        "targetPlayer": "SELF",
+        "playerAttribute": "HEALING_DONE"
+      },
+      "operation": "GREATER_OR_EQUAL",
+      "value2": 10
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 4,
+          "hpBonus": 4
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

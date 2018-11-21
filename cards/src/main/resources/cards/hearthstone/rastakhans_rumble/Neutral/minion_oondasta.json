@@ -1,0 +1,35 @@
+{
+  "name": "Oondasta",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Rush. Overkill: Summon a Beast from your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "OverkillSpell",
+      "spell": {
+        "class": "RecruitSpell",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        },
+        "cardLocation": "HAND"
+      }
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
