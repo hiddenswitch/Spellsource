@@ -17,58 +17,48 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.Account;
+import com.hiddenswitch.spellsource.client.models.GameStatePair;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+import java.util.ArrayList;
+import java.util.List;
 import java.io.Serializable;
 
 /**
- * LoginResponse
+ * Description of a (possibly partially complete) match. Useful for viewing said match in retrospect. 
  */
+@ApiModel(description = "Description of a (possibly partially complete) match. Useful for viewing said match in retrospect. ")
 
-public class LoginResponse implements Serializable {
+public class Replay implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("account")
-  private Account account = null;
+  @JsonProperty("gameStates")
+  private List<GameStatePair> gameStates = null;
 
-  @JsonProperty("loginToken")
-  private String loginToken = null;
+  public Replay gameStates(List<GameStatePair> gameStates) {
+    this.gameStates = gameStates;
+    return this;
+  }
 
-  public LoginResponse account(Account account) {
-    this.account = account;
+  public Replay addGameStatesItem(GameStatePair gameStatesItem) {
+    if (this.gameStates == null) {
+      this.gameStates = new ArrayList<>();
+    }
+    this.gameStates.add(gameStatesItem);
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Get gameStates
+   * @return gameStates
   **/
   @ApiModelProperty(value = "")
-  public Account getAccount() {
-    return account;
+  public List<GameStatePair> getGameStates() {
+    return gameStates;
   }
 
-  public void setAccount(Account account) {
-    this.account = account;
-  }
-
-  public LoginResponse loginToken(String loginToken) {
-    this.loginToken = loginToken;
-    return this;
-  }
-
-   /**
-   * Get loginToken
-   * @return loginToken
-  **/
-  @ApiModelProperty(value = "")
-  public String getLoginToken() {
-    return loginToken;
-  }
-
-  public void setLoginToken(String loginToken) {
-    this.loginToken = loginToken;
+  public void setGameStates(List<GameStatePair> gameStates) {
+    this.gameStates = gameStates;
   }
 
 
@@ -80,24 +70,22 @@ public class LoginResponse implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginResponse loginResponse = (LoginResponse) o;
-    return Objects.equals(this.account, loginResponse.account) &&
-        Objects.equals(this.loginToken, loginResponse.loginToken);
+    Replay replay = (Replay) o;
+    return Objects.equals(this.gameStates, replay.gameStates);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(account, loginToken);
+    return Objects.hash(gameStates);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginResponse {\n");
+    sb.append("class Replay {\n");
     
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
-    sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
+    sb.append("    gameStates: ").append(toIndentedString(gameStates)).append("\n");
     sb.append("}");
     return sb.toString();
   }
