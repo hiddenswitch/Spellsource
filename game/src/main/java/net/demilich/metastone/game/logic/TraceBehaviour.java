@@ -9,8 +9,10 @@ import net.demilich.metastone.game.cards.Card;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 class TraceBehaviour extends UtilityBehaviour {
@@ -18,12 +20,26 @@ class TraceBehaviour extends UtilityBehaviour {
 	private int[][] mulligans;
 	private AtomicInteger nextAction;
 	private List<Integer> actions;
+	private Optional<Consumer<GameContext>> recorder;
 
-	TraceBehaviour(int playerId, int[][] mulligans, AtomicInteger nextAction, List<Integer> actions) {
-		this.playerId = playerId;
+	/**
+	 * @param playerId The player that this behaviour is "playing" for.
+	 * @param mulligans The list of mulligans from the traced game.
+	 * @param nextAction The index of the next action to take (shared between two {@link TraceBehaviour}s).
+	 * @param actions The list of action (indices) from the traced game.
+	 * @param recorder [Optional] consumer to be called on every {@link GameContext} before each action is taken.
+	 */
+	TraceBehaviour(
+			int playerId,
+			int[][] mulligans,
+			AtomicInteger nextAction,
+			List<Integer> actions,
+			Optional<Consumer<GameContext>> recorder) {
+		this.actions = actions;
 		this.mulligans = mulligans;
 		this.nextAction = nextAction;
-		this.actions = actions;
+		this.playerId = playerId;
+		this.recorder = recorder;
 	}
 
 	@Override
@@ -34,6 +50,9 @@ class TraceBehaviour extends UtilityBehaviour {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
+		if (recorder.isPresent()) {
+			recorder.get().accept(context);
+		}
 		if (playerId != player.getId()) {
 			return Collections.emptyList();
 		}
@@ -44,6 +63,9 @@ class TraceBehaviour extends UtilityBehaviour {
 
 	@Override
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
+		if (recorder.isPresent()) {
+			recorder.get().accept(context);
+		}
 		if (playerId != player.getId()) {
 			return null;
 		}
