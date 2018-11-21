@@ -17,58 +17,59 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.Account;
+import com.hiddenswitch.spellsource.client.models.EntityChangeSet;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * LoginResponse
+ * The forward and backword deltas (change sets) required (along with player &#x60;GameState&#x60;s) to transition the client battlefield. 
  */
+@ApiModel(description = "The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield. ")
 
-public class LoginResponse implements Serializable {
+public class ReplayDelta implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("account")
-  private Account account = null;
+  @JsonProperty("backward")
+  private EntityChangeSet backward = null;
 
-  @JsonProperty("loginToken")
-  private String loginToken = null;
+  @JsonProperty("forward")
+  private EntityChangeSet forward = null;
 
-  public LoginResponse account(Account account) {
-    this.account = account;
+  public ReplayDelta backward(EntityChangeSet backward) {
+    this.backward = backward;
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Backward delta. 
+   * @return backward
   **/
-  @ApiModelProperty(value = "")
-  public Account getAccount() {
-    return account;
+  @ApiModelProperty(value = "Backward delta. ")
+  public EntityChangeSet getBackward() {
+    return backward;
   }
 
-  public void setAccount(Account account) {
-    this.account = account;
+  public void setBackward(EntityChangeSet backward) {
+    this.backward = backward;
   }
 
-  public LoginResponse loginToken(String loginToken) {
-    this.loginToken = loginToken;
+  public ReplayDelta forward(EntityChangeSet forward) {
+    this.forward = forward;
     return this;
   }
 
    /**
-   * Get loginToken
-   * @return loginToken
+   * Forward delta. 
+   * @return forward
   **/
-  @ApiModelProperty(value = "")
-  public String getLoginToken() {
-    return loginToken;
+  @ApiModelProperty(value = "Forward delta. ")
+  public EntityChangeSet getForward() {
+    return forward;
   }
 
-  public void setLoginToken(String loginToken) {
-    this.loginToken = loginToken;
+  public void setForward(EntityChangeSet forward) {
+    this.forward = forward;
   }
 
 
@@ -80,24 +81,24 @@ public class LoginResponse implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginResponse loginResponse = (LoginResponse) o;
-    return Objects.equals(this.account, loginResponse.account) &&
-        Objects.equals(this.loginToken, loginResponse.loginToken);
+    ReplayDelta replayDelta = (ReplayDelta) o;
+    return Objects.equals(this.backward, replayDelta.backward) &&
+        Objects.equals(this.forward, replayDelta.forward);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(account, loginToken);
+    return Objects.hash(backward, forward);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginResponse {\n");
+    sb.append("class ReplayDelta {\n");
     
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
-    sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
+    sb.append("    backward: ").append(toIndentedString(backward)).append("\n");
+    sb.append("    forward: ").append(toIndentedString(forward)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: 2.0.0
+  version: 2.1.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -1867,7 +1867,42 @@ definitions:
         format: 'int64'
         description: |
           A timestamp for when this game was created (approximate).
-      # TODO: Add the names of the players, additional information like that
+  Replay:
+    description: |
+      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+      Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`.
+    type: 'object'
+    properties:
+      gameStates:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayGameStates'
+      deltas:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayDelta'
+  ReplayDelta:
+    description: |
+      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+    type: 'object'
+    properties:
+      backward:
+        description: |
+          Backward delta.
+        $ref: '#/definitions/EntityChangeSet'
+      forward:
+        description: |
+          Forward delta.
+        $ref: '#/definitions/EntityChangeSet'
+  ReplayGameStates:
+    description: |
+      A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
+    type: 'object'
+    properties:
+      first:
+        $ref: '#/definitions/GameState'
+      second:
+        $ref: '#/definitions/GameState'
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
