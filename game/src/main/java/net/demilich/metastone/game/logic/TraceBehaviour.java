@@ -58,7 +58,18 @@ class TraceBehaviour extends UtilityBehaviour {
 		}
 		return Arrays.stream(mulligans[player.getId()])
 				.boxed()
-				.map(i -> cards.stream().filter(c -> c.getId() == i).findFirst().orElseThrow(NullPointerException::new)).collect(Collectors.toList());
+				.map(i -> {
+					Optional<Card> card = cards
+							.stream()
+							.filter(c -> c.getId() == i)
+							.findFirst();
+					if (card.isPresent()) {
+						return card.get();
+					} else {
+						throw new NullPointerException();
+					}
+				})
+				.collect(Collectors.toList());
 	}
 
 	@Override
