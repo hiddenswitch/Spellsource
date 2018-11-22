@@ -211,4 +211,14 @@ public class RastakhansRumbleTests extends TestBase {
         });
 
     }
+
+    @Test
+    public void testBlastWave() {
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "spell_stand_against_darkness");
+            playCard(context, player, "spell_blast_wave");
+            assertEquals(player.getHand().size(), 5);
+        });
+
+    }
 }

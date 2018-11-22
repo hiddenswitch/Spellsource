@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "EPIC",
-  "description": "Deal 3 damage to a random enemy. Repeat for each of your Pirates.",
+  "description": "Deal $3 damage to a random enemy. Repeat for each of your Pirates.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

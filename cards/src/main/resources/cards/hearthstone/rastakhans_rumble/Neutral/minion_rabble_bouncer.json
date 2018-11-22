@@ -1,0 +1,20 @@
+{
+  "name": "Rabble Bouncer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Taunt Costs (1) less for each enemy minion",
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "ENEMY_MINIONS"
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

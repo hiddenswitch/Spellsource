@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,6 +42,12 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 		for (Entity deadEntity : graveyardSnapshot) {
 			if (deadEntity.getEntityType() != EntityType.MINION) {
 				continue;
+			}
+			if (desc.containsKey(SpellArg.FILTER)) {
+				EntityFilter filter = (EntityFilter) desc.get(SpellArg.FILTER);
+				if (!filter.matches(context, player, deadEntity, source)) {
+					continue;
+				}
 			}
 			Minion deadMinion = (Minion) deadEntity;
 			if (deadMinion.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {

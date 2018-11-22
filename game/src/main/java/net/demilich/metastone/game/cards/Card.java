@@ -320,6 +320,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
 		copy.getAttributes().remove(Attribute.HP_BONUS);
 		copy.getAttributes().remove(Attribute.STARTED_IN_HAND);
+		copy.getAttributes().remove(Attribute.BEING_PLAYED);
 		// Always use the origin copy if it isn't none
 		if (hasAttribute(Attribute.COPIED_FROM)) {
 			copy.getAttributes().put(Attribute.COPIED_FROM, getAttribute(Attribute.COPIED_FROM));

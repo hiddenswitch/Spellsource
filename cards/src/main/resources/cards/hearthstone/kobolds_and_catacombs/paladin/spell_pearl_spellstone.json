@@ -9,9 +9,7 @@
     "countUntilCast": 3,
     "eventTrigger": {
       "class": "HealingTrigger",
-      "sourcePlayer": "SELF",
-      "targetEntityType": "HERO",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",

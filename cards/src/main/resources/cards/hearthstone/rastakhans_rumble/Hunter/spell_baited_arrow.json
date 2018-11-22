@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "COMMON",
-  "description": "Deal 3 damage. Overkill: Summon a 5/5 Devilsaur.",
+  "description": "Deal $3 damage. Overkill: Summon a 5/5 Devilsaur.",
   "targetSelection": "ANY",
   "spell": {
     "class": "OverkillSpell",
