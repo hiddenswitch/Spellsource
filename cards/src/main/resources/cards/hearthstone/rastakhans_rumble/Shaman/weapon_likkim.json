@@ -1,25 +1,26 @@
 {
-  "name": "Thunderfury",
-  "baseManaCost": 3,
+  "name": "Likkim",
+  "baseManaCost": 2,
   "type": "WEAPON",
+  "damage": 1,
+  "durability": 3,
   "heroClass": "SILVER",
-  "damage": 3,
-  "durability": 2,
-  "rarity": "LEGENDARY",
-  "description": "Doesn't lose Durability while you are Overloaded.",
+  "rarity": "RARE",
+  "description": "Has +2 Attack while you have Overloaded Mana Crystals.",
   "aura": {
-    "class": "AttributeAura",
+    "class": "BuffAura",
     "target": "SELF",
+    "attackBonus": 2,
+    "hpBonus": 0,
     "condition": {
       "class": "OverloadedCondition",
       "targetPlayer": "SELF"
     },
-    "attribute": "AURA_IMMUNE",
     "secondaryTrigger": {
       "class": "WillEndSequenceTrigger"
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "RASTAKHANS_RUMBLE",
   "fileFormatVersion": 1
 }

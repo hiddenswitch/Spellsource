@@ -1,0 +1,28 @@
+{
+  "name": "Masked Contender",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Battlecry: If you control a Secret, play a Secret from your deck.",
+  "battlecry": {
+    "condition": {
+      "class": "ControlsSecretCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PutRandomSecretIntoPlaySpell",
+      "cardSource": {
+        "class": "DeckSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

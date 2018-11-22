@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Discard your lowest cost card. Deal 2 damage to all minions.",
+  "description": "Discard your lowest cost card. Deal $2 damage to all minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

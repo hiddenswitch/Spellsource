@@ -48,7 +48,7 @@
     "class": "DamageSpell",
     "target": "FRIENDLY_HERO",
     "value": 3,
-    "ignoreSpellDamge": true
+    "ignoreSpellDamage": true
   },
   "collectible": false,
   "set": "RASTAKHANS_RUMBLE",

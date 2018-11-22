@@ -1,0 +1,32 @@
+{
+  "name": "Soup Vendor",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "description": "Whenever you restore 3 or more Health to your hero, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HealingTrigger",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "SELF",
+      "targetEntityType": "HERO",
+      "queueCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EventValueProvider"
+        },
+        "operation": "GREATER_OR_EQUAL",
+        "value2": 3
+      }
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
