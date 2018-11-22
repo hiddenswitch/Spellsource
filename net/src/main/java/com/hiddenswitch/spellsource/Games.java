@@ -13,7 +13,6 @@ import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
-import javafx.util.Pair;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
