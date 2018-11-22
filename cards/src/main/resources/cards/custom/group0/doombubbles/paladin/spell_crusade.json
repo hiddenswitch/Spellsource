@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",
-  "description": "Deal $1 damage to a random enemy for each Silver Hand Recruit you've summoned this game.",
+  "description": "Deal 1 damage to a random enemy for each Silver Hand Recruit you've summoned this game.[]",
   "targetSelection": "ANY",
   "spell": {
     "class": "MissilesSpell",
@@ -20,5 +20,24 @@
   },
   "collectible": false,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        "($",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "MinionSummonValueProvider",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "token_silver_hand_recruit"
+            }
+          }
+        },
+        " damage!)"
+      ]
+    }
+  ]
 }

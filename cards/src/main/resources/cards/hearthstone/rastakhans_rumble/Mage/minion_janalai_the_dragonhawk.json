@@ -7,7 +7,7 @@
   "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Battlecry: If your Hero Power dealt 8 damage this game, summon Ragnaros the Firelord.",
+  "description": "Battlecry: If your Hero Power dealt 8 damage this game, summon Ragnaros the Firelord.[]",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -34,5 +34,41 @@
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "SELF",
+          "playerAttribute": "HERO_POWER_DAMAGE_DEALT"
+        },
+        "operation": "GREATER_OR_EQUAL",
+        "value2": 8
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "value1": 8,
+              "operation": "SUBTRACT",
+              "value2": {
+                "class": "PlayerAttributeValueProvider",
+                "targetPlayer": "SELF",
+                "playerAttribute": "HERO_POWER_DAMAGE_DEALT"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
 }

@@ -17,7 +17,7 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "token_pirate",
+      "card": "token_swabbi",
       "boardPositionRelative": "RIGHT"
     }
   },

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "RARE",
-  "description": "Add 2 random Mage spells to your hand. (Play 2 Elementals to upgrade.)",
+  "description": "Add 2 random Mage spells to your hand. (Play [2] Elemental[s] to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 2,
     "eventTrigger": {
@@ -36,5 +36,32 @@
   },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "SpellstoneValueProvider"
+          }
+        },
+        " more"
+      ]
+    },
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "SpellstoneValueProvider"
+        },
+        "operation": "EQUAL",
+        "value2": 1
+      },
+      "description1": "",
+      "description2":"s"
+    }
+  ]
 }

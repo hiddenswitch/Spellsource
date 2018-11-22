@@ -136,7 +136,7 @@ public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, 
 	}
 
 	protected class SerializationContext {
-		protected SerializationContext add(K key, ParseValueType vt) {
+		public SerializationContext add(K key, ParseValueType vt) {
 			interpreter.put(key, vt);
 			return this;
 		}

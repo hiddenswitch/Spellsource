@@ -5,6 +5,8 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -1153,6 +1155,20 @@ public class Card extends Entity implements HasChooseOneActions {
 
 	public boolean isHeroPower() {
 		return getCardType().isCardType(CardType.HERO_POWER);
+	}
+
+	public DynamicDescriptionDesc[] getDynamicDescription() {
+		return desc.getDynamicDescription();
+	}
+
+	public String[] evaluateDescriptions(GameContext context, Player player) {
+		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
+		String[] strings = new String[dynamicDescriptionDescs.length];
+
+		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
+			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
+		}
+		return strings;
 	}
 
 
