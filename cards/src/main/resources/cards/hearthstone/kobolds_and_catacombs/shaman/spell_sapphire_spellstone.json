@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "RARE",
-  "description": "Summon 2 copies of a friendly minion. (Overload 3 Mana Crystals to upgrade.)",
+  "description": "Summon 2 copies of a friendly minion. (Overload [3] Mana Crystal[s] to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 3,
     "eventTrigger": {
@@ -26,5 +26,32 @@
   },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "SpellstoneValueProvider"
+          }
+        },
+        " more"
+      ]
+    },
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "SpellstoneValueProvider"
+        },
+        "operation": "EQUAL",
+        "value2": 1
+      },
+      "description1": "",
+      "description2":"s"
+    }
+  ]
 }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "Summon a 2/2 Spirit with Taunt. (Restore 3 Health to upgrade.)",
+  "description": "Summon a 2/2 Spirit with Taunt. (Restore [3] Health to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 3,
     "eventTrigger": {
@@ -26,5 +26,19 @@
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "SpellstoneValueProvider"
+          }
+        },
+        " more"
+      ]
+    }
+  ]
 }

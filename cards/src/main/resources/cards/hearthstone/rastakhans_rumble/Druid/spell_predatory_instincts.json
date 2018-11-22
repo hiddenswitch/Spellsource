@@ -1,0 +1,27 @@
+{
+  "name": "Predatory Instincts",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Draw a Beast from your deck and double its Health",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "BEAST"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

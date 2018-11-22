@@ -1,0 +1,21 @@
+{
+  "name": "Saronite Taskmaster",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon a 0/3 Free Agent with Taunt for your opponent.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_free_agent",
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

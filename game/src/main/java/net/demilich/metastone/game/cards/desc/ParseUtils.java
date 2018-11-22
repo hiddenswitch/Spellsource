@@ -8,6 +8,7 @@ import com.google.common.base.CaseFormat;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.dynamicdescription.*;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -47,6 +48,7 @@ public class ParseUtils {
 	private static DescDeserializer<CardSourceDesc, ?, ?> sourceParser = new CardSourceDescDeserializer();
 	private static DescDeserializer<ConditionDesc, ?, ?> conditionParser = new ConditionDescDeserializer();
 	private static DescDeserializer<EventTriggerDesc, ?, ?> triggerParser = new EventTriggerDescDeserializer();
+	private static DescDeserializer<DynamicDescriptionDesc, ?, ?> dynamicDescriptionParser = new DynamicDescriptionDeserializer();
 	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
 	@SuppressWarnings("deprecation")
@@ -360,6 +362,24 @@ public class ParseUtils {
 				return manaModifierParser.innerDeserialize(ctxt, jsonData);
 			case CHOOSE_ONE_OVERRIDE:
 				return Enum.valueOf(ChooseOneOverride.class, jsonData.asText());
+			case DYNAMIC_DESCRIPTION:
+				if (jsonData.toString().startsWith("\"")) {
+					DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
+					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.toString().replace("\"", ""));
+					return descriptionDesc;
+				}
+				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData);
+			case DYNAMIC_DESCRIPTION_ARRAY:
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				DynamicDescription[] array2 = new DynamicDescription[jsonArray.size()];
+				for (int i = 0; i < array2.length; i++) {
+					if (jsonArray.get(i).toString().startsWith("\"")) {
+						DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
+						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).toString().replace("\"", ""));
+						array2[i] = descriptionDesc.create();
+					} else array2[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+				}
+				return array2;
 			default:
 				break;
 		}

@@ -1,29 +1,29 @@
 {
-  "name": "Lesser Diamond Spellstone",
-  "baseManaCost": 7,
+  "name": "Lesser Onyx Spellstone",
+  "baseManaCost": 5,
   "type": "SPELL",
-  "heroClass": "WHITE",
+  "heroClass": "BLACK",
   "rarity": "RARE",
-  "description": "Resurrect 2 different friendly minions. (Cast [4] spell[s] to upgrade.)",
+  "description": "Destroy 1 random enemy minion. (Play [3] Deathrattle card[s] to upgrade.)",
   "passiveTrigger": {
-    "countUntilCast": 4,
+    "countUntilCast": 3,
     "eventTrigger": {
-      "class": "AfterSpellCastedTrigger",
+      "class": "CardPlayedTrigger",
+      "requiredAttribute": "DEATHRATTLES",
       "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_diamond_spellstone"
+      "card": "spell_onyx_spellstone"
     },
-    "countByValue": false,
     "keepAfterTransform": false
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "ResurrectSpell",
-    "value": 2,
-    "exclusive": true
+    "class": "DestroySpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
@@ -52,7 +52,7 @@
         "value2": 1
       },
       "description1": "",
-      "description2":"s"
+      "description2": "s"
     }
   ]
 }

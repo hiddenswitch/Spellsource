@@ -6,7 +6,7 @@
   "baseHp": 4,
   "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "Battlecry: If you've restored 10 Health this game, gain +4/+4 and Taunt.",
+  "description": "Battlecry: If you've restored 10 Health this game, gain +4/+4 and Taunt.[]",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
@@ -40,5 +40,41 @@
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "targetPlayer": "SELF",
+          "playerAttribute": "HEALING_DONE"
+        },
+        "operation": "GREATER_OR_EQUAL",
+        "value2": 10
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "value1": 10,
+              "operation": "SUBTRACT",
+              "value2": {
+                "class": "PlayerAttributeValueProvider",
+                "targetPlayer": "SELF",
+                "playerAttribute": "HEALING_DONE"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
 }

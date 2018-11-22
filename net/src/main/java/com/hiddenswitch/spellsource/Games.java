@@ -1119,6 +1119,18 @@ public interface Games extends Verticle {
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.BATTLEFIELD) {
+				if (description.contains("[") && card.getDynamicDescription() != null) {
+					int i = 0;
+					String[] descriptions = card.evaluateDescriptions(workingContext, owningPlayer);
+					while (description.contains("[")) {
+						int start = description.indexOf("[");
+						int end = description.indexOf("]");
+						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+					}
+				}
+			}
+
 			// Handle spell damage
 			if (card.isSpell()) {
 				// Find the $ damages
@@ -1212,13 +1224,15 @@ public interface Games extends Verticle {
 				}
 			}
 
+
 		} else {
 			entityState.playable(false);
 			entityState.manaCost(card.getBaseManaCost());
 			owningPlayer = Player.empty();
 		}
 
-		entity.description(description.replace("$", "").replace("#", ""));
+		entity.description(description.replace("$", "").replace("#", "")
+				.replace("[", "").replace("]", ""));
 
 		entityState.owner(card.getOwner());
 		entityState.cardSet(Objects.toString(card.getCardSet()));

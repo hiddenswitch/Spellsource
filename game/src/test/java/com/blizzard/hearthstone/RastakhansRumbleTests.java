@@ -8,6 +8,9 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.desc.valueprovider.SpellstoneValueProvider;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
@@ -220,5 +223,40 @@ public class RastakhansRumbleTests extends TestBase {
             assertEquals(player.getHand().size(), 5);
         });
 
+    }
+
+    @Test
+    public void testJanalaiTheDragonhawk() {
+        runGym((context, player, opponent) -> {
+            Card janalai = receiveCard(context, player, "minion_janalai_the_dragonhawk");
+            for (int i = 0; i < 8; i++) {
+                useHeroPower(context, player, opponent.getHero().getReference());
+                for (String s : janalai.evaluateDescriptions(context, player)) {
+                    System.out.println(s);
+                }
+            }
+
+
+            Card spellstone = receiveCard(context, player, "spell_lesser_pearl_spellstone");
+            for (String s : spellstone.evaluateDescriptions(context, player)) {
+                System.out.println(s);
+            }
+            playCard(context, player, "minion_voodoo_doctor", opponent.getHero());
+            for (String s : spellstone.evaluateDescriptions(context, player)) {
+                System.out.println(s);
+            }
+
+        });
+    }
+
+    @Test
+    public void testPredatoryInstincts() {
+        runGym((context, player, opponent) -> {
+            Card grizzly = shuffleToDeck(context, player, "minion_witchwood_grizzly");
+            playCard(context, player, "spell_predatory_instincts");
+            Minion grizzlyNow = playMinionCard(context, player, grizzly);
+            assertEquals(grizzlyNow.getHp(), 24);
+
+        });
     }
 }

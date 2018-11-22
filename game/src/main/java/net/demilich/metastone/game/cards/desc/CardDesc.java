@@ -9,6 +9,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -152,7 +153,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int countUntilCast;
 	public boolean countByValue;
 	public Race[] races;
-
+	public DynamicDescriptionDesc[] dynamicDescription;
 
 	public CardDesc() {
 		super();
@@ -1001,7 +1002,8 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.SECRET, secret),
 				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
 				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
-				immutableEntry(CardDescArg.QUEST, quest)
+				immutableEntry(CardDescArg.QUEST, quest),
+				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription)
 		);
 		return entries;
 	}
@@ -1056,5 +1058,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		}));
 
 		return stream;
+	}
+
+	public DynamicDescriptionDesc[] getDynamicDescription() {
+		return dynamicDescription;
 	}
 }

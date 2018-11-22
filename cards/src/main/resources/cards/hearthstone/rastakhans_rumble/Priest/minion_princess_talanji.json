@@ -1,0 +1,30 @@
+{
+  "name": "Princess Talanji",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "heroClass": "WHITE",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon all minions from your hand that didn't start in your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "STARTED_IN_DECK",
+        "operation": "HAS",
+        "invert": true
+      },
+      "cardLocation": "HAND",
+      "value": 10
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

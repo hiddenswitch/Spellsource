@@ -32,5 +32,6 @@ public enum CardDescArg {
 	QUEST,
 	GROUP,
 	DAMAGE,
-	DURABILITY;
+	DURABILITY,
+	DYNAMIC_DESCRIPTION;
 }
