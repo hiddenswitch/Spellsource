@@ -49,8 +49,8 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 
 /**
  * Represents a behaviour that converts requests from {@link ActionListener} and game event updates from {@link
- * EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read
- * buffers as {@link ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
+ * EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read buffers as {@link
+ * ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable {
 	private static Logger logger = LoggerFactory.getLogger(UnityClientBehaviour.class);
@@ -168,6 +168,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				for (ActivityMonitor activityMonitor : activityMonitors) {
 					activityMonitor.activity();
 				}
+				// Server is responsible for replying
+				sendMessage(new ServerToClientMessage().messageType(MessageType.PINGPONG));
 				break;
 			case FIRST_MESSAGE:
 				lastStateSent = null;
@@ -186,7 +188,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				}
 				break;
 			case UPDATE_ACTION:
-				// Indicates the player has made a chocie about which action to take.
+				// Indicates the player has made a choice about which action to take.
 				if (server == null) {
 					throw new RuntimeException();
 				}
@@ -408,7 +410,9 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		try {
 			sendMessage(getWriter(), message);
 		} catch (NullPointerException writerNull) {
+			// TODO: What is the significance of this exception?
 		} catch (IOException connectionLost) {
+			// This would indicate a lost connection to the eventBus, which seems serious enough to be a real exception
 			throw new RuntimeException(connectionLost);
 		}
 	}

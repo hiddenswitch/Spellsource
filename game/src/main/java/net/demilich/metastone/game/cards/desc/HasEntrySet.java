@@ -67,6 +67,7 @@ public interface HasEntrySet<T extends Enum<T>, V> {
 		V value;
 		BfsNode<T, V> parent;
 		int depth = 0;
+		private transient Stream.Builder<BfsNode<T, V>> predecessors;
 
 		boolean isArrayNode() {
 			return value != null && (value.getClass().isArray() || value instanceof List);
@@ -93,6 +94,19 @@ public interface HasEntrySet<T extends Enum<T>, V> {
 
 		public int getDepth() {
 			return depth;
+		}
+
+		public Stream<BfsNode<T, V>> predecessors() {
+			if (predecessors == null) {
+				predecessors = Stream.builder();
+				BfsNode<T, V> predecessor = parent;
+				while (predecessor != null) {
+					predecessors.add(predecessor);
+					predecessor = predecessor.parent;
+				}
+			}
+
+			return predecessors.build();
 		}
 	}
 
