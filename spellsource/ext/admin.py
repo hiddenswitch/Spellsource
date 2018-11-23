@@ -36,8 +36,9 @@ class Admin(object):
         collection = client.get_database(db_name).get_collection(
             'accounts.users')  # type: pymongo.collection.Collection
         return collection.find_one_and_update(
-            {'$or': [{'username': username_or_email}, {'emails.address', username_or_email}]},
-            {'$set': {'services.password.scrypt', secured_password}},
+            {'$or': [{'username': {'$regex': f'^{username_or_email}$', '$options': 'i'}},
+                     {'emails.address': {'$regex': f'^{username_or_email}$', '$options': 'i'}}]},
+            {'$set': {'services.password.scrypt': secured_password}},
             return_document=pymongo.ReturnDocument.AFTER)
 
     @staticmethod

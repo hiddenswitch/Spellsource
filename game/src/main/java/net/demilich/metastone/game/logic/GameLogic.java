@@ -3301,12 +3301,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public GameAction requestAction(Player player, List<GameAction> actions) {
 		if (actions == null
 				|| actions.size() == 0) {
-			return null;
+			throw new NullPointerException("No actions specified");
 		}
 		for (int i = 0; i < actions.size(); i++) {
 			actions.get(i).setId(i);
 		}
 		GameAction action = context.getBehaviours().get(player.getId()).requestAction(context, player, actions);
+		if (action == null) {
+			throw new NullPointerException("Behaviour did not return action");
+		}
 		context.getTrace().addAction(action.getId(), action);
 		return action;
 	}

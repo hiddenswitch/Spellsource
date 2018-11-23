@@ -4,6 +4,8 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.impl.server.ClientConnectionHandler;
 
+import java.util.Random;
+
 /**
  * An interface that specifies a server instance that's capable of processing {@link Client} actions.
  */
@@ -28,4 +30,10 @@ public interface Server extends ClientConnectionHandler {
 	 * to the game session.
 	 */
 	boolean isGameReady();
+
+	/**
+	 * Gets the server's random instance
+	 * @return
+	 */
+	Random getRandom();
 }

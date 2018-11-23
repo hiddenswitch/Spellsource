@@ -3,16 +3,20 @@ package com.hiddenswitch.spellsource.common;
 import com.github.fromage.quasi.fibers.Fiber;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.StrandLocalRandom;
 import com.github.fromage.quasi.strands.SuspendableAction1;
+import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.client.models.MessageType;
-import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.Scheduler;
-import io.vertx.core.*;
+import com.hiddenswitch.spellsource.util.NoOpLock;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Closeable;
+import io.vertx.core.Future;
+import io.vertx.core.Handler;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.json.Json;
 import io.vertx.core.streams.ReadStream;
@@ -22,6 +26,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
@@ -37,6 +42,7 @@ import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -58,11 +64,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final Queue<ServerToClientMessage> messageBuffer = new ConcurrentLinkedQueue<>();
 	private final AtomicInteger eventCounter = new AtomicInteger();
 	private final AtomicInteger callbackIdCounter = new AtomicInteger();
-	private final List<GameplayRequest> requests = new ArrayList<>();
+	private final Deque<GameplayRequest> requests = new ConcurrentLinkedDeque<>();
 	private final List<ActivityMonitor> activityMonitors = new ArrayList<>();
 	private final UserId userId;
 	private final int playerId;
 	private final Scheduler scheduler;
+	private final ReentrantLock requestsLock = new NoOpLock();
 	private ReadStream<Buffer> reader;
 	private WriteStream<Buffer> writer;
 	private Server server;
@@ -70,6 +77,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private com.hiddenswitch.spellsource.common.GameState lastStateSent;
 	private Deque<GameEvent> powerHistory = new ArrayDeque<>();
 	private boolean inboundMessagesClosed;
+	private boolean elapsed;
 
 
 	public UnityClientBehaviour(Server server,
@@ -95,9 +103,17 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Suspendable
 	private void noActivity(ActivityMonitor activityMonitor) {
-		elapseMulligan();
-		elapseTurn();
+		elapseAwaitingRequests();
 		server.onConcede(this);
+	}
+
+	public boolean isElapsed() {
+		return elapsed;
+	}
+
+	public UnityClientBehaviour setElapsed(boolean elapsed) {
+		this.elapsed = elapsed;
+		return this;
 	}
 
 	/**
@@ -105,48 +121,40 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Override
 	@Suspendable
-	public void elapseTurn() {
-		Iterator<GameplayRequest> requestsIter = this.getRequests().iterator();
-		while (requestsIter.hasNext()) {
-			GameplayRequest request = requestsIter.next();
-			if (request.getType() == GameplayRequestType.ACTION) {
-				requestsIter.remove();
-
-				@SuppressWarnings("unchecked")
-				Handler<GameAction> callback = (Handler<GameAction>) request.getCallback();
-
-				processActionForElapsedTurn(request.getActions(), callback::handle);
+	public void elapseAwaitingRequests() {
+		requestsLock.lock();
+		elapsed = true;
+		try {
+			// Prevent concurrent modification by locking access to this iterator
+			GameplayRequest request;
+			while ((request = requests.poll()) != null) {
+				if (request.getType() == GameplayRequestType.ACTION) {
+					@SuppressWarnings("unchecked")
+					Handler<GameAction> callback = (Handler<GameAction>) request.getCallback();
+					processActionForElapsedTurn(request.getActions(), callback::handle);
+				} else if (request.getType() == GameplayRequestType.MULLIGAN) {
+					@SuppressWarnings("unchecked")
+					Handler<List<Card>> handler = (Handler<List<Card>>) request.getCallback();
+					handler.handle(new ArrayList<>());
+				}
 			}
-		}
-	}
-
-	/**
-	 * Elapses this client's mulligan, typically due to a timeout.
-	 */
-	@Override
-	@Suspendable
-	public void elapseMulligan() {
-		Iterator<GameplayRequest> requestsIter = this.getRequests().iterator();
-		while (requestsIter.hasNext()) {
-			GameplayRequest request = requestsIter.next();
-			if (request.getType() == GameplayRequestType.MULLIGAN) {
-				requestsIter.remove();
-
-				@SuppressWarnings("unchecked")
-				Handler<List<Card>> handler = (Handler<List<Card>>) request.getCallback();
-				handler.handle(new ArrayList<>());
-			}
+		} finally {
+			requestsLock.unlock();
 		}
 	}
 
 	private GameplayRequest getRequest(String messageId) {
-		for (GameplayRequest request : getRequests()) {
-			if (request.getCallbackId().equals(messageId)) {
-				return request;
+		requestsLock.lock();
+		try {
+			for (GameplayRequest request : getRequests()) {
+				if (request.getCallbackId().equals(messageId)) {
+					return request;
+				}
 			}
+			return null;
+		} finally {
+			requestsLock.unlock();
 		}
-
-		return null;
 	}
 
 	/**
@@ -238,18 +246,23 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Suspendable
 	protected void retryRequests() {
-		for (GameplayRequest request : getRequests()) {
-			switch (request.getType()) {
-				case ACTION:
-					onRequestAction(request.getCallbackId(), lastStateSent, request.getActions());
-					break;
-				case MULLIGAN:
-					onMulligan(request.getCallbackId(), lastStateSent, request.getStarterCards(), playerId);
-					break;
-				default:
-					logger.error("Unknown gameplay request was pending.");
-					break;
+		requestsLock.lock();
+		try {
+			for (GameplayRequest request : getRequests()) {
+				switch (request.getType()) {
+					case ACTION:
+						onRequestAction(request.getCallbackId(), lastStateSent, request.getActions());
+						break;
+					case MULLIGAN:
+						onMulligan(request.getCallbackId(), lastStateSent, request.getStarterCards(), playerId);
+						break;
+					default:
+						logger.error("Unknown gameplay request was pending.");
+						break;
+				}
 			}
+		} finally {
+			requestsLock.unlock();
 		}
 	}
 
@@ -269,32 +282,42 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void mulliganAsync(GameContext context, Player player, List<Card> cards, Handler<List<Card>> next) {
 		String id = Integer.toString(callbackIdCounter.getAndIncrement());
-		getRequests().add(new GameplayRequest()
-				.setCallbackId(id)
-				.setType(GameplayRequestType.MULLIGAN)
-				.setStarterCards(cards)
-				.setCallback(next));
-		onMulligan(id, context.getGameStateCopy(), cards, playerId);
+		requestsLock.lock();
+		try {
+			getRequests().add(new GameplayRequest()
+					.setCallbackId(id)
+					.setType(GameplayRequestType.MULLIGAN)
+					.setStarterCards(cards)
+					.setCallback(next));
+			onMulligan(id, context.getGameStateCopy(), cards, playerId);
+		} finally {
+			requestsLock.unlock();
+		}
 	}
 
 	@Suspendable
 	public void onMulliganReceived(String messageId, List<Integer> discardedCardIndices) {
-		GameplayRequest request = getRequest(messageId);
-		if (request == null) {
-			// The game may have ended, a mulligan is being received twice, or the game was conceded.
-			return;
+		requestsLock.lock();
+		try {
+			GameplayRequest request = getRequest(messageId);
+			if (request == null) {
+				// The game may have ended, a mulligan is being received twice, or the game was conceded.
+				return;
+			}
+
+			getRequests().remove(request);
+			List<Card> discardedCards = discardedCardIndices
+					.stream()
+					.map(i -> request.getStarterCards().get(i))
+					.collect(toList());
+
+			@SuppressWarnings("unchecked")
+			Handler<List<Card>> callback = request.getCallback();
+
+			callback.handle(discardedCards);
+		} finally {
+			requestsLock.unlock();
 		}
-
-		getRequests().remove(request);
-		List<Card> discardedCards = discardedCardIndices
-				.stream()
-				.map(i -> request.getStarterCards().get(i))
-				.collect(toList());
-
-		@SuppressWarnings("unchecked")
-		Handler<List<Card>> callback = request.getCallback();
-
-		callback.handle(discardedCards);
 	}
 
 	@Override
@@ -306,29 +329,35 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Override
 	@Suspendable
 	public void requestActionAsync(GameContext context, Player player, List<GameAction> actions, Handler<GameAction> callback) {
-		String id = Integer.toString(callbackIdCounter.getAndIncrement());
-		GameplayRequest request = new GameplayRequest()
-				.setCallbackId(id)
-				.setType(GameplayRequestType.ACTION)
-				.setActions(actions)
-				.setCallback(callback);
+		requestsLock.lock();
+		try {
+			String id = Integer.toString(callbackIdCounter.getAndIncrement());
+			GameplayRequest request = new GameplayRequest()
+					.setCallbackId(id)
+					.setType(GameplayRequestType.ACTION)
+					.setActions(actions)
+					.setCallback(callback);
 
-		// The player's turn may have ended, so handle the action immediately in this case.
-		if (isTimerElapsed()) {
-			processActionForElapsedTurn(actions, callback::handle);
-		} else {
-			// Send a state update for the other player too
-			GameState state = context.getGameStateCopy();
-			onUpdate(state);
+			// The player's turn may have ended, so handle the action immediately in this case.
+			if (isElapsed()) {
+				processActionForElapsedTurn(actions, callback::handle);
+			} else {
+				// Send a state update for the other player too
+				GameState state = context.getGameStateCopy();
+				onUpdate(state);
+				for (Behaviour behaviour : context.getBehaviours()) {
+					if (!behaviour.equals(this) && behaviour instanceof UnityClientBehaviour) {
+						// TODO: Perhaps delegate this to the ServerGameContext
+						((UnityClientBehaviour) behaviour).onUpdate(state);
+					}
+				}
 
-			getRequests().add(request);
-			onRequestAction(id, state, actions);
+				getRequests().add(request);
+				onRequestAction(id, state, actions);
+			}
+		} finally {
+			requestsLock.unlock();
 		}
-	}
-
-	private boolean isTimerElapsed() {
-		// TODO
-		return false;
 	}
 
 
@@ -348,6 +377,10 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 				.filter(ga -> ga.getActionType() == ActionType.END_TURN)
 				.findFirst().orElse(getRandom(actions));
 
+		if (action == null) {
+			throw new IllegalStateException("No action was returned");
+		}
+
 		if (Fiber.isCurrentFiber()) {
 			try {
 				callback.call(action);
@@ -360,8 +393,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private GameAction getRandom(List<GameAction> actions) {
-		// TODO
-		return null;
+		// Consume a game logic random if possible, otherwise generate a random number
+		if (server.getRandom() != null) {
+			return actions.get(server.getRandom().nextInt(actions.size()));
+		}
+		return actions.get(StrandLocalRandom.current().nextInt(actions.size()));
 	}
 
 
@@ -374,24 +410,29 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	@Suspendable
 	public void onActionReceived(String messageId, int actionIndex) {
 		// The action may have been removed due to the timer or because the game ended, so it's okay if it doesn't exist.
-		GameplayRequest request = getRequest(messageId);
-		if (request == null) {
-			return;
-		}
+		requestsLock.lock();
+		try {
+			GameplayRequest request = getRequest(messageId);
+			if (request == null) {
+				return;
+			}
 
-		getRequests().remove(request);
-		GameAction action = request.getActions().get(actionIndex);
+			getRequests().remove(request);
+			GameAction action = request.getActions().get(actionIndex);
 
-		@SuppressWarnings("unchecked")
-		Handler<GameAction> callback = request.getCallback();
+			@SuppressWarnings("unchecked")
+			Handler<GameAction> callback = request.getCallback();
 
-		if (!Fiber.isCurrentFiber()) {
-			Sync.getContextScheduler().newFiber(() -> {
+			if (!Fiber.isCurrentFiber()) {
+				Sync.getContextScheduler().newFiber(() -> {
+					callback.handle(action);
+					return null;
+				}).start();
+			} else {
 				callback.handle(action);
-				return null;
-			}).start();
-		} else {
-			callback.handle(action);
+			}
+		} finally {
+			requestsLock.unlock();
 		}
 	}
 
@@ -728,7 +769,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		}
 	}
 
-	public List<GameplayRequest> getRequests() {
+	public Deque<GameplayRequest> getRequests() {
 		return requests;
 	}
 

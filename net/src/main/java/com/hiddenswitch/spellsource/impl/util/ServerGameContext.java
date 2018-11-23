@@ -12,7 +12,6 @@ import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.EnvelopeGame;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.common.*;
-import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.TimerId;
@@ -22,8 +21,6 @@ import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
-import com.hiddenswitch.spellsource.models.MatchExpireRequest;
-import com.hiddenswitch.spellsource.models.MatchExpireResponse;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
@@ -533,29 +530,41 @@ public class ServerGameContext extends GameContext implements Server {
 			// Start the turn timer
 			if (turnTimerId != null) {
 				scheduler.cancelTimer(turnTimerId);
+				turnTimerId = null;
+			}
+
+			for (Behaviour behaviour : getBehaviours()) {
+				if (behaviour instanceof UnityClientBehaviour) {
+					((UnityClientBehaviour) behaviour).setElapsed(false);
+				}
 			}
 
 			if (getBehaviours().get(getNonActivePlayerId()).isHuman()) {
 				timerLengthMillis = (long) getTurnTimeForPlayer(getActivePlayerId());
 				timerStartTimeMillis = System.currentTimeMillis();
 
-				turnTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler(ignored -> {
-					// Since executing the callback may itself trigger more action requests, we'll indicate to
-					// the NetworkDelegate (i.e., this ServerGameContext instance) that further
-					// networkRequestActions should be executed immediately.
-					Client client = getClient(playerId);
-					if (client == null) {
-						// Simply end the turn, since there were no requests pending to begin with
-						endTurn();
-					} else {
-						client.elapseTurn();
-					}
-				}));
+				if (turnTimerId == null) {
+					turnTimerId = scheduler.setTimer(timerLengthMillis, suspendableHandler(ignored -> {
+						// Since executing the callback may itself trigger more action requests, we'll indicate to
+						// the NetworkDelegate (i.e., this ServerGameContext instance) that further
+						// networkRequestActions should be executed immediately.
+						Client client = getClient(playerId);
+						if (client == null) {
+							// Simply end the turn, since there were no requests pending to begin with
+							endTurn();
+						} else {
+							client.elapseAwaitingRequests();
+						}
+					}));
+				} else {
+					logger.warn("startTurn {}: Timer set twice!", getGameId());
+				}
+
 
 			} else {
 				timerLengthMillis = null;
 				timerStartTimeMillis = null;
-				logger.debug("{} networkedPlay: Not setting timer because opponent is not human.", getGameId());
+				logger.debug("startTurn {}: Not setting timer because opponent is not human.", getGameId());
 			}
 			super.startTurn(playerId);
 			GameState state = new GameState(this, TurnState.TURN_IN_PROGRESS);
@@ -592,7 +601,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	private void endMulligans(long ignored) {
 		for (Client client : getClients()) {
-			client.elapseMulligan();
+			client.elapseAwaitingRequests();
 		}
 	}
 
@@ -906,6 +915,11 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	public boolean isGameReady() {
 		return clientsReady.values().stream().allMatch(Future::succeeded);
+	}
+
+	@Override
+	public Random getRandom() {
+		return getLogic().getRandom();
 	}
 
 	@Override

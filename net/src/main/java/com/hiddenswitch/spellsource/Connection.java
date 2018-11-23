@@ -196,16 +196,21 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		Deque<Handler<Connection>> handlers = getHandlers();
 		Connection connection = create(userId);
 
-		// All handlers should run simultaneously
-		for (Handler<Connection> handler : handlers) {
-			Vertx.currentContext().runOnContext(v -> handler.handle(connection));
+
+		try {
+			ServerWebSocket socket = routingContext.request().upgrade();
+			connection.setSocket(socket);
+			// The lock gets released when the user disconnects
+			connection.endHandler(v -> lock.release());
+			// All handlers should run simultaneously
+			for (Handler<Connection> handler : handlers) {
+				Vertx.currentContext().runOnContext(v -> handler.handle(connection));
+			}
+		} catch (Throwable any) {
+			lock.release();
+			connection.close(Future.future());
 		}
 
-		// The lock gets released when the user disconnects
-		connection.endHandler(v -> lock.release());
-
-		ServerWebSocket socket = routingContext.request().upgrade();
-		connection.setSocket(socket);
 	}
 
 	/**
