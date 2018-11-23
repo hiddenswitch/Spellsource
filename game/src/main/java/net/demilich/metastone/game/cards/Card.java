@@ -411,7 +411,7 @@ public class Card extends Entity implements HasChooseOneActions {
 	public boolean hasRace(Race race) {
 		if (getRaces() != null) {
 			for (Race r : getRaces()) {
-				if (race.equals(r)) {
+				if (race == r) {
 					return true;
 				}
 			}
@@ -419,7 +419,7 @@ public class Card extends Entity implements HasChooseOneActions {
 		if (race == getRace()) {
 			return true;
 		}
-		if (race == Race.ALL) {
+		if (race == Race.ALL || getRace() == Race.ALL) {
 			return true;
 		}
 		return false;
