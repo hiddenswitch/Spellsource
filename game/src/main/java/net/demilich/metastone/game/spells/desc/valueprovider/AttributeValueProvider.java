@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells.desc.valueprovider;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -51,9 +52,9 @@ public class AttributeValueProvider extends ValueProvider {
 
 			if (entity instanceof Card) {
 				Card card = (Card) entity;
-				if (attribute == Attribute.ATTACK) {
+				if (attribute == Attribute.ATTACK && card.getCardType() == CardType.MINION) {
 					value += card.getDesc().baseAttack + card.getBonusAttack();
-				} else if (attribute == Attribute.HP) {
+				} else if (attribute == Attribute.HP && card.getCardType() == CardType.MINION) {
 					value += card.getDesc().baseHp + card.getBonusHp();
 				} else value += card.getAttributeValue(attribute);
 			} else {
