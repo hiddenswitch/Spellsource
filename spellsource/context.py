@@ -56,7 +56,7 @@ class Context(contextlib.AbstractContextManager):
                               ('targeting', 'net.demilich.metastone.game.targeting.*'),
                               ('utils', 'net.demilich.metastone.game.utils.*'),
                               ('behaviour', 'net.demilich.metastone.game.behaviour.*'),
-                              ('spellsource', 'com.hiddenswitch.spellsource')):
+                              ('spellsource', 'com.hiddenswitch.spellsource.*')):
             view = self._gateway.new_jvm_view(name)
             java_import(view, package)
             setattr(self, name, view)

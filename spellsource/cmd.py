@@ -342,6 +342,7 @@ def change_password(username_or_email: str, password: str, db_uri: str):
     """
     record = Admin.change_user_password(db_uri, username_or_email, password)
     if record is None:
+        click.echo('User %s not found' % username_or_email, err=True)
         raise SystemExit(1)
     click.echo(record['emails'][0]['address'])
     click.echo(record['username'])
