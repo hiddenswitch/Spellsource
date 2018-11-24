@@ -1,0 +1,28 @@
+  "name": "Sorceress Eka",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon all minions from your hand.",
+  "battlecry": {
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 6,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardLocation": "HAND"
+  },
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
