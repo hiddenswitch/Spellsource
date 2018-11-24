@@ -1,0 +1,29 @@
+{
+  "name": "Hunting Terradon",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a minion. Summon it for both players",
+  "battlecry": {
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+      "class": "SummonSpell",
+      "targetPlayer": "BOTH"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
