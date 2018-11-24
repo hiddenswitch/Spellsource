@@ -1,12 +1,12 @@
 {
-  "name": "Timewalker Stormlord",
+  "name": "Ninjarcher",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Whenever you draw a card, deal 1 damage to a random enemy minion.",
+  "description": "Whenever you draw a card, deal 1 damage to a random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "DamageSpell",
-      "target": "ENEMY_MINION",
+      "target": "ENEMY_CHARACTERS",
       "value": 1,
       "randomTarget": true
     }
