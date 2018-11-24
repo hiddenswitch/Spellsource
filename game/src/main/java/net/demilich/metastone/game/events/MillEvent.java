@@ -17,4 +17,9 @@ public final class MillEvent extends DiscardEvent {
 	public boolean isClientInterested() {
 		return true;
 	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		return String.format("%s milled %s", context.getPlayer(playerId).getName(), getCard().getName());
+	}
 }

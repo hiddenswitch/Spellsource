@@ -677,7 +677,7 @@ public class ServerGameContext extends GameContext implements Server {
 					.findFirst()
 					.orElse(null);
 
-			if (host != null && Zones.PRIVATE.contains(host.getZone())) {
+			if (host != null && Zones.PRIVATE.contains(host.getZone()) && host.getSourceCard() != null && !host.getSourceCard().getDesc().revealsSelf()) {
 				int owner = host.getOwner();
 				Client client = getClient(owner);
 
