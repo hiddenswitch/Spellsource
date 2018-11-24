@@ -28,6 +28,10 @@
             "class": "SpecificCardFilter",
             "card": "minion_hex_lord_malacrass",
             "invert": true
+          },
+          {
+            "class": "EntityTypeFilter",
+            "entityType": "CARD"
           }
         ]
       }

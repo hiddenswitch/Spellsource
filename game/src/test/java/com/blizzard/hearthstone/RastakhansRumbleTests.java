@@ -259,4 +259,43 @@ public class RastakhansRumbleTests extends TestBase {
 
         });
     }
+
+    @Test
+    public void testGriftah() {
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "minion_griftah");
+            assertEquals(player.getHand().size(), 1);
+            assertEquals(opponent.getHand().size(), 1);
+        });
+    }
+
+    @Test
+    public void testMastersCall() {
+        runGym((context, player, opponent) -> {
+            for (int i = 0; i < 10; i++) {
+                shuffleToDeck(context, player, "minion_snowflipper_penguin");
+            }
+            playCard(context, player, "spell_masters_call");
+            assertEquals(player.getHand().size(), 3);
+        });
+
+        runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_wisp");
+            shuffleToDeck(context, player, "minion_snowflipper_penguin");
+            shuffleToDeck(context, player, "minion_snowflipper_penguin");
+            playCard(context, player, "spell_masters_call");
+
+            assertEquals(player.getHand().size(), 1);
+        });
+
+        //TODO should Master's Call draw all options if it's two beasts and not three?
+        //for now, yes
+        runGym((context, player, opponent) -> {
+            for (int i = 0; i < 2; i++) {
+                shuffleToDeck(context, player, "minion_snowflipper_penguin");
+            }
+            playCard(context, player, "spell_masters_call");
+            assertEquals(player.getHand().size(), 2);
+        });
+    }
 }

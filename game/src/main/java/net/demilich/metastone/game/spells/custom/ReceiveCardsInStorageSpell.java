@@ -29,6 +29,8 @@ public final class ReceiveCardsInStorageSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardList cards = EnvironmentEntityList.getList(context).getCards(context, source).shuffle(context.getLogic().getRandom());
 		cards.forEach(c -> context.getLogic().receiveCard(player.getId(), c.getCopy(), source));
-		EnvironmentEntityList.getList(context).clear(source);
+		if (desc.containsKey(SpellArg.EXCLUSIVE)) {
+			EnvironmentEntityList.getList(context).clear(source);
+		}
 	}
 }

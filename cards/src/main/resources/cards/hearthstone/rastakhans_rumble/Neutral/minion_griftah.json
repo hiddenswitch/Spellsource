@@ -1,0 +1,113 @@
+{
+  "name": "Griftah",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Discover two cards. Give one to your opponent at random.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscoverSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "ANY"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "RESERVED_BOOLEAN_4"
+            }
+          }
+        },
+        {
+          "class": "DiscoverSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "ANY"
+          },
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "RESERVED_BOOLEAN_4"
+            }
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "OrCondition",
+            "conditions": [
+              {
+                "class": "RandomCondition"
+              },
+              {
+                "class": "ComparisonCondition",
+                "value1": {
+                  "class": "CardCountValueProvider",
+                  "cardSource": {
+                    "class": "CombinedSource",
+                    "cardSources": [
+                      {
+                        "class": "HandSource",
+                        "targetPlayer": "SELF"
+                      },
+                      {
+                        "class": "HandSource",
+                        "targetPlayer": "OPPONENT"
+                      }
+                    ]
+                  },
+                  "cardFilter": {
+                    "class": "CardFilter",
+                    "attribute": "RESERVED_BOOLEAN_4",
+                    "operation": "HAS"
+                  }
+                },
+                "operation": "GREATER_OR_EQUAL",
+                "value2": 2
+              }
+            ]
+          },
+          "spell": {
+            "class": "StealCardSpell",
+            "targetPlayer": "OPPONENT",
+            "target": "FRIENDLY_HAND",
+            "cardLocation": "HAND",
+            "randomTarget": true,
+            "filter": {
+              "class": "CardFilter",
+              "attribute": "RESERVED_BOOLEAN_4",
+              "operation": "HAS"
+            }
+          }
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "FRIENDLY_HAND",
+          "attribute": "RESERVED_BOOLEAN_4"
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "target": "ENEMY_HAND",
+          "attribute": "RESERVED_BOOLEAN_4"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,73 @@
+{
+  "name": "Master's Call",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "EPIC",
+  "description": "Discover a minion from your deck. Draw all three cards if they are three Beasts.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "attribute": "RESERVED_BOOLEAN_5",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "targetPlayer": "SELF"
+    },
+    "exclusive": true,
+    "spell1": {
+      "class": "FromDeckToHandSpell"
+    },
+    "spell2": {
+      "class": "ConditionalSpell",
+      "spell": {
+        "class": "FromDeckToHandSpell"
+      },
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "ALL_ENTITIES",
+          "filter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "EntityTypeFilter",
+                "entityType": "CARD"
+              },
+              {
+                "class": "CardFilter",
+                "race": "BEAST",
+                "attribute": "RESERVED_BOOLEAN_5"
+              }
+            ]
+          }
+        },
+        "operation": "EQUAL",
+        "value2": {
+          "class": "EntityCounter",
+          "target": "ALL_ENTITIES",
+          "filter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "EntityTypeFilter",
+                "entityType": "CARD"
+              },
+              {
+                "class": "CardFilter",
+                "attribute": "RESERVED_BOOLEAN_5"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
