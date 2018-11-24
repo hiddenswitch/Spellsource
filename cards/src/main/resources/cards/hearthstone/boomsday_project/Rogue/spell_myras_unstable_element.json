@@ -7,14 +7,34 @@
   "description": "Draw the rest of your deck.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "RecastWhileSpell",
-    "condition": {
-      "class": "DeckContainsCondition"
-    },
-    "spell": {
-      "class": "DrawCardSpell"
-    },
-    "howMany": 60
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "DeckContainsCondition"
+            },
+            {
+              "class": "CardCountCondition",
+              "targetPlayer": "SELF",
+              "value": 10,
+              "operation": "LESS"
+            }
+          ]
+        },
+        "spell": {
+          "class": "DrawCardSpell"
+        },
+        "howMany": 60
+      },
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK"
+      }
+    ]
   },
   "collectible": true,
   "set": "BOOMSDAY_PROJECT",
