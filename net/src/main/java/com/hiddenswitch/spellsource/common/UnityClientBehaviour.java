@@ -37,6 +37,11 @@ import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
+import net.demilich.metastone.game.spells.RevealCardSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -514,10 +519,16 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			message.event(Games.getClientEvent((net.demilich.metastone.game.events.GameEvent) event, playerId));
 		} else if (TriggerFired.class.isAssignableFrom(eventClass)) {
 			TriggerFired triggerEvent = (TriggerFired) event;
-			message.event(new GameEvent()
+			GameEvent clientTriggerEvent = new GameEvent()
 					.eventType(GameEvent.EventTypeEnum.TRIGGER_FIRED)
 					.triggerFired(new GameEventTriggerFired()
-							.triggerSourceId(triggerEvent.getEnchantment().getHostReference().getId())));
+							.triggerSourceId(triggerEvent.getEnchantment().getHostReference().getId()));
+			net.demilich.metastone.game.entities.Entity source = triggerEvent.getSource(workingContext);
+			if (source != null && source.getSourceCard() != null && source.getSourceCard().getDesc().revealsSelf()) {
+				// Cards that reveal themselves should populate the trigger information here
+				clientTriggerEvent.getTriggerFired().triggerSource(Games.getEntity(workingContext, source, playerId));
+			}
+			message.event(clientTriggerEvent);
 		} else if (GameAction.class.isAssignableFrom(eventClass)) {
 			final net.demilich.metastone.game.entities.Entity sourceEntity = event.getSource(workingContext);
 			com.hiddenswitch.spellsource.client.models.Entity source = Games.getEntity(workingContext, sourceEntity, playerId);

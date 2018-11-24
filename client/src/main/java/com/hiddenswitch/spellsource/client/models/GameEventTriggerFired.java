@@ -17,6 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.hiddenswitch.spellsource.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
@@ -33,6 +34,9 @@ public class GameEventTriggerFired implements Serializable {
 
   @JsonProperty("triggerSourceId")
   private Integer triggerSourceId = null;
+
+  @JsonProperty("triggerSource")
+  private Entity triggerSource = null;
 
   public GameEventTriggerFired description(String description) {
     this.description = description;
@@ -70,6 +74,24 @@ public class GameEventTriggerFired implements Serializable {
     this.triggerSourceId = triggerSourceId;
   }
 
+  public GameEventTriggerFired triggerSource(Entity triggerSource) {
+    this.triggerSource = triggerSource;
+    return this;
+  }
+
+   /**
+   * Get triggerSource
+   * @return triggerSource
+  **/
+  @ApiModelProperty(value = "")
+  public Entity getTriggerSource() {
+    return triggerSource;
+  }
+
+  public void setTriggerSource(Entity triggerSource) {
+    this.triggerSource = triggerSource;
+  }
+
 
   @Override
   public boolean equals(java.lang.Object o) {
@@ -81,12 +103,13 @@ public class GameEventTriggerFired implements Serializable {
     }
     GameEventTriggerFired gameEventTriggerFired = (GameEventTriggerFired) o;
     return Objects.equals(this.description, gameEventTriggerFired.description) &&
-        Objects.equals(this.triggerSourceId, gameEventTriggerFired.triggerSourceId);
+        Objects.equals(this.triggerSourceId, gameEventTriggerFired.triggerSourceId) &&
+        Objects.equals(this.triggerSource, gameEventTriggerFired.triggerSource);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(description, triggerSourceId);
+    return Objects.hash(description, triggerSourceId, triggerSource);
   }
 
 
@@ -97,6 +120,7 @@ public class GameEventTriggerFired implements Serializable {
     
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    triggerSourceId: ").append(toIndentedString(triggerSourceId)).append("\n");
+    sb.append("    triggerSource: ").append(toIndentedString(triggerSource)).append("\n");
     sb.append("}");
     return sb.toString();
   }

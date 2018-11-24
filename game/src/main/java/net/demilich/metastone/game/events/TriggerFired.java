@@ -8,6 +8,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import java.util.List;
 
 public class TriggerFired implements Notification {
+
 	private final Enchantment enchantment;
 	private final EntityReference eventTarget;
 
@@ -15,7 +16,6 @@ public class TriggerFired implements Notification {
 		this.enchantment = enchantment;
 		this.eventTarget = context.getEventTargetStack().peek();
 	}
-
 
 	public Enchantment getEnchantment() {
 		return enchantment;
