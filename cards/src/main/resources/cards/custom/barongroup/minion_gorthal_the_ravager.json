@@ -1,0 +1,30 @@
+{
+  "name": "Gor'thal the Ravager",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "race": "BEAST"
+  "description": "Whenever you play a minion, put a minion from your deck into the battlefield.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "BeforeMinionPlayedTrigger",
+      "targetPlayer": "SELF"
+    },
+    },
+    "spell": {
+      "class": "RecruitSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
