@@ -7,8 +7,7 @@
   "description": "Destroy an undamaged minion.",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "DamageSpell",
-    "value": 2,
+    "class": "DestroySpell",
     "filter": {
       "class": "DamagedFilter",
       "invert": true

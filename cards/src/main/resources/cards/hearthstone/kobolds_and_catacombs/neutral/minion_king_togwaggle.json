@@ -36,7 +36,7 @@
           "targetPlayer": "OPPONENT"
         },
         {
-          "class": "ShuffleToDeckSpell",
+          "class": "ReceiveCardSpell",
           "card": "spell_ransom",
           "targetPlayer": "OPPONENT"
         }

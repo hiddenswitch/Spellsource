@@ -965,6 +965,7 @@ public enum Attribute {
 	RESERVED_INTEGER_2,
 	RESERVED_INTEGER_3,
 	RESERVED_INTEGER_4,
+	RESERVED_INTEGER_5,
 	/**
 	 * Allows spell effects to mark things, interpreted however they'd like.
 	 */
@@ -972,6 +973,7 @@ public enum Attribute {
 	RESERVED_BOOLEAN_2,
 	RESERVED_BOOLEAN_3,
 	RESERVED_BOOLEAN_4,
+	RESERVED_BOOLEAN_5,
 	SUPREMACIES_THIS_GAME,
 	/**
 	 * Records the {@link EntityReference} of this choose one spell card's source card.

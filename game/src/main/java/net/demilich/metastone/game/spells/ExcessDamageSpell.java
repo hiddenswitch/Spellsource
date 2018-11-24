@@ -41,7 +41,7 @@ public final class ExcessDamageSpell extends DamageSpell {
 			super.onCast(context, player, toTarget, source, target);
 		}
 		for (Entity excessTarget : excessDealtTo) {
-			super.onCast(context, player, toExcess, source, excessTarget);
+			SpellUtils.castChildSpell(context, player, toExcess, source, excessTarget);
 		}
 	}
 }

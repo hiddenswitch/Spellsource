@@ -969,7 +969,7 @@ public interface Games extends Verticle {
 		Card card = actor.getSourceCard();
 		EntityState entityState = new EntityState();
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.description(actor.getDescription().replace("#", ""))
+				.description(actor.getDescription().replace("#", "").replace("[","").replace("]",""))
 				.name(actor.getName())
 				.id(actor.getId())
 				.cardId(card.getCardId());

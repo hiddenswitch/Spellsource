@@ -1,0 +1,25 @@
+{
+  "name": "Stampeding Roar",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Summon a random Beast from your hand and give it Rush.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    },
+    "cardLocation": "HAND",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "RUSH"
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,31 @@
+{
+  "name": "Crowd Roaster",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 7,
+  "baseHp": 4,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, deal 7 damage to an enemy minion.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 7
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
