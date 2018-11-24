@@ -1,0 +1,43 @@
+
+{
+  "name": "Mutating Boa",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Adapt. Whenever you summon a Knight, give it that Adaptation.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CastFromGroupSpell",
+      "target": "SELF",
+      "group": "group_adapt"
+    }
+      "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "queueCondition": {
+        "class": "AllMatchFilterCondition",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+        }
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+//dunno
+      }
+    }
+  },
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}
