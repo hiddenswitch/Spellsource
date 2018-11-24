@@ -340,7 +340,11 @@ def change_password(username_or_email: str, password: str, db_uri: str):
     Connects to DB_URI, and changes password of the user found with USERNAME_OR_EMAIL to PASSWORD. Prints the email
     address and username of the user whose password was changed.
     """
-    record = Admin.change_user_password(db_uri, username_or_email, password)
+    try:
+        record = Admin.change_user_password(db_uri, username_or_email, password)
+    except ConnectionRefusedError as ex:
+        click.echo('Connection refused to mongo. Check your db_uri %s' % db_uri, err=True)
+        raise SystemExit(1)
     if record is None:
         click.echo('User %s not found' % username_or_email, err=True)
         raise SystemExit(1)

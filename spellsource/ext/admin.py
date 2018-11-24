@@ -29,10 +29,11 @@ class Admin(object):
         :param db_name:
         :return:
         """
+        # Connect to mongo first to get an early connection failure message
+        client = pymongo.MongoClient(mongo_uri, connectTimeoutMS=4000)
         with Context() as context:
             Accounts = context.spellsource.Accounts
             secured_password = Accounts.securedPassword(password)  # type: str
-        client = pymongo.MongoClient(mongo_uri)
         collection = client.get_database(db_name).get_collection(
             'accounts.users')  # type: pymongo.collection.Collection
         return collection.find_one_and_update(
