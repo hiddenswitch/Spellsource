@@ -3,7 +3,13 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-#### Server Version: 0.6.3, Client Version: 2.0.9
+Thanks for playing Spellsource today! Release notes are below.
+
+#### Server Version: 0.6.3, Client Version: 2.0.10
+
+A quick fix was released to roll back Unity version to 2018.1.9f. This ensures the client gets build automatically.
+
+Changes since 0.6.3-2.0.9 (Saturday, November 24th, 2018):
 
 ###### Known Issues:
 
