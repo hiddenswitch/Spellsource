@@ -1,6 +1,6 @@
 {
   "name": "Battlefield",
-  "baseManaCost": 1,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
