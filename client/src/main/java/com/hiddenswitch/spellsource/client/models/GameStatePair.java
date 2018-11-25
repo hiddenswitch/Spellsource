@@ -17,58 +17,59 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.Account;
+import com.hiddenswitch.spellsource.client.models.GameState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
 
 /**
- * LoginResponse
+ * A pair of game states. Used to capture a game from each player&#39;s point of view (useful for example in replays). 
  */
+@ApiModel(description = "A pair of game states. Used to capture a game from each player's point of view (useful for example in replays). ")
 
-public class LoginResponse implements Serializable {
+public class GameStatePair implements Serializable {
   private static final long serialVersionUID = 1L;
 
-  @JsonProperty("account")
-  private Account account = null;
+  @JsonProperty("first")
+  private GameState first = null;
 
-  @JsonProperty("loginToken")
-  private String loginToken = null;
+  @JsonProperty("second")
+  private GameState second = null;
 
-  public LoginResponse account(Account account) {
-    this.account = account;
+  public GameStatePair first(GameState first) {
+    this.first = first;
     return this;
   }
 
    /**
-   * Get account
-   * @return account
+   * Get first
+   * @return first
   **/
   @ApiModelProperty(value = "")
-  public Account getAccount() {
-    return account;
+  public GameState getFirst() {
+    return first;
   }
 
-  public void setAccount(Account account) {
-    this.account = account;
+  public void setFirst(GameState first) {
+    this.first = first;
   }
 
-  public LoginResponse loginToken(String loginToken) {
-    this.loginToken = loginToken;
+  public GameStatePair second(GameState second) {
+    this.second = second;
     return this;
   }
 
    /**
-   * Get loginToken
-   * @return loginToken
+   * Get second
+   * @return second
   **/
   @ApiModelProperty(value = "")
-  public String getLoginToken() {
-    return loginToken;
+  public GameState getSecond() {
+    return second;
   }
 
-  public void setLoginToken(String loginToken) {
-    this.loginToken = loginToken;
+  public void setSecond(GameState second) {
+    this.second = second;
   }
 
 
@@ -80,24 +81,24 @@ public class LoginResponse implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    LoginResponse loginResponse = (LoginResponse) o;
-    return Objects.equals(this.account, loginResponse.account) &&
-        Objects.equals(this.loginToken, loginResponse.loginToken);
+    GameStatePair gameStatePair = (GameStatePair) o;
+    return Objects.equals(this.first, gameStatePair.first) &&
+        Objects.equals(this.second, gameStatePair.second);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(account, loginToken);
+    return Objects.hash(first, second);
   }
 
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class LoginResponse {\n");
+    sb.append("class GameStatePair {\n");
     
-    sb.append("    account: ").append(toIndentedString(account)).append("\n");
-    sb.append("    loginToken: ").append(toIndentedString(loginToken)).append("\n");
+    sb.append("    first: ").append(toIndentedString(first)).append("\n");
+    sb.append("    second: ").append(toIndentedString(second)).append("\n");
     sb.append("}");
     return sb.toString();
   }

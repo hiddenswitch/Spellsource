@@ -1,6 +1,6 @@
 swagger: "2.0"
 info:
-  version: 2.0.0
+  version: 2.1.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -1869,6 +1869,24 @@ definitions:
         format: 'int64'
         description: |
           A timestamp for when this game was created (approximate).
+  GameStatePair:
+    description: |
+      A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
+    type: 'object'
+    properties:
+      first:
+        $ref: '#/definitions/GameState'
+      second:
+        $ref: '#/definitions/GameState'
+  Replay:
+    description: |
+      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+    type: 'object'
+    properties:
+      gameStates:
+        type: 'array'
+        items:
+          $ref: '#/definitions/GameStatePair'
       # TODO: Add the names of the players, additional information like that
 responses:
   InternalServerError:

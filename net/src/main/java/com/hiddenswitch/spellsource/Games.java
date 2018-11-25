@@ -1330,4 +1330,34 @@ public interface Games extends Verticle {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
 	}
 
+	/**
+	 * Generates a client-readable {@link Replay} object (for use with the client replay functionality).
+	 *
+	 * @param originalCtx The context for which to generate a replay.
+	 * @return
+	 */
+	static Replay replayFromGameContext(GameContext originalCtx) {
+		Replay replay = new Replay();
+		// Replay the game from a trace while capturing the {@link Replay} object.
+		GameContext replayCtx = originalCtx.getTrace().replayContext(
+				false,
+				Optional.of((GameContext ctx) -> {
+					// We record each game state by dumping the {@link GameState} objects from each player's point of
+					// view into the replay.
+					GameStatePair gameStatePair = new GameStatePair();
+					gameStatePair.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
+					gameStatePair.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
+                    replay.addGameStatesItem(gameStatePair);
+				})
+		);
+
+		// Append the final game state (from each player's point of view).
+		GameStatePair gameStatePair = new GameStatePair();
+		gameStatePair.first(getGameState(replayCtx, replayCtx.getPlayer1(), replayCtx.getPlayer2()));
+		gameStatePair.second(getGameState(replayCtx, replayCtx.getPlayer2(), replayCtx.getPlayer1()));
+		replay.addGameStatesItem(gameStatePair);
+
+		return replay;
+	}
+
 }
