@@ -1,0 +1,18 @@
+{
+  "name": "Wardruid Loti",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Posonous, Stealth",
+  "attributes": {
+    "STEALTH": true,
+    "POISONOUS": true
+  },
+  "collectible": false,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
