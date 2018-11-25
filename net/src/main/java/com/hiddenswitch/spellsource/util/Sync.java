@@ -39,6 +39,13 @@ public class Sync {
 	}
 
 	@Suspendable
+	public static <R> R invoke(ThrowingSupplier<R> func0) {
+		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+			done.complete(func0.get());
+		}, false, h));
+	}
+
+	@Suspendable
 	public static <T> void invoke0(Consumer<T> func1, T arg1) {
 		Void res = awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
 			func1.accept(arg1);
@@ -97,6 +104,20 @@ public class Sync {
 		return awaitResult(h -> func.accept(arg1, arg2, h));
 	}
 
+
+	@FunctionalInterface
+	public interface ThrowingSupplier<R> extends Supplier<R> {
+		@Override
+		default R get() {
+			try {
+				return getThrows();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		R getThrows() throws Exception;
+	}
 
 	@FunctionalInterface
 	public interface ThrowingFunction<T, R> extends Function<T, R> {
