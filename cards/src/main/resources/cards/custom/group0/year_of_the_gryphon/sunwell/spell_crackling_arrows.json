@@ -22,9 +22,9 @@
     },
     "howMany": {
       "class": "PlayerAttributeValueProvider",
+      "offset": 1,
       "playerAttribute": "SECRET_COUNT",
-      "targetPlayer": "SELF",
-      "offset": 1
+      "targetPlayer": "SELF"
     }
   },
   "collectible": false,
