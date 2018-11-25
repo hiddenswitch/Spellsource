@@ -1,6 +1,6 @@
 {
   "name": "Deadeyed Ravager",
-  "baseManaCost": 9,
+  "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 8,
