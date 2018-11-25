@@ -16,11 +16,12 @@ import java.util.Map;
 
 /**
  * Casts the specified {@link SpellArg#SPELL} for {@link SpellArg#HOW_MANY} times. If a {@link SpellArg#CONDITION} is
- * specified, the condition is evaluated after the first cast; if the condition is not {@link
- * Condition#isFulfilled(GameContext, Player, Entity, Entity)}, the casting stops.
+ * specified, the condition is evaluated after the first cast; if the condition is <b>fulfilled</b> according to {@link
+ * Condition#isFulfilled(GameContext, Player, Entity, Entity)}, the casting stops. This works the opposite of what you
+ * may expect.
  * <p>
- * If {@link SpellArg#EXCLUSIVE} is {@code true}, the spell will only be recast on targets that were not previously cast on
- * in a prior iteration.
+ * If {@link SpellArg#EXCLUSIVE} is {@code true}, the spell will only be recast on targets that were not previously cast
+ * on in a prior iteration.
  * <p>
  * If this spell's invocation has a non-null {@code target}, the sub spell will be cast with a random target in this
  * spell's {@link SpellArg#TARGET} property. This surprising behaviour reflects a consequence of legacy Metastone code.
@@ -46,7 +47,7 @@ public class CastRepeatedlySpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.HOW_MANY, SpellArg.CONDITION);
+		checkArguments(logger, context, source, desc, SpellArg.HOW_MANY, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
 		int iterations = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);

@@ -10,7 +10,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "EquipWeaponSpell",
-      "card": "weapon_shadowmourne"
+      "card": "weapon_serpent_spine_bow"
     }
   },
   "attributes": {
