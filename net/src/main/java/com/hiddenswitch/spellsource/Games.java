@@ -1341,14 +1341,14 @@ public interface Games extends Verticle {
 		// Replay the game from a trace while capturing the {@link Replay} object.
 		GameContext replayCtx = originalCtx.getTrace().replayContext(
 				false,
-				Optional.of((GameContext ctx) -> {
+				(GameContext ctx) -> {
 					// We record each game state by dumping the {@link GameState} objects from each player's point of
 					// view into the replay.
 					GameStatePair gameStatePair = new GameStatePair();
 					gameStatePair.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
 					gameStatePair.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
                     replay.addGameStatesItem(gameStatePair);
-				})
+				}
 		);
 
 		// Append the final game state (from each player's point of view).

@@ -6,6 +6,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -25,9 +26,9 @@ import java.util.function.Consumer;
  * @see #dump() to create a string you can save and later load.
  * @see #load(String) to recreate this object from a dumped string.
  * @see #replayContext(boolean, Optional<Consumer<GameContext>>) to replay a context after loading it from a string.
- * 	    Provide {@code skipLastAction: true} as the argument if the last action throws an exception (useful for
- * 	    debugging). Provide {@code recorder} is useful if you'd like to process each {@link GameContext} (useful for
- * 	    recording replays).
+ * 		Provide {@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging).
+ * 		Provide {@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording
+ * 		replays).
  * @see #getRawActions() to iterate through the actions that were taken in the game. This is <b>not</b> restored by the
  * 		trace, while the integer actions themselves in {@link #getActions()} are.
  */
@@ -73,7 +74,23 @@ public class Trace implements Serializable, Cloneable {
 		rawActions.add(action);
 	}
 
-	public GameContext replayContext(boolean skipLastAction, Optional<Consumer<GameContext>> recorder) {
+	public GameContext replayContext() {
+		return replayContext(false, null);
+	}
+
+	public GameContext replayContext(boolean skipLastAction) {
+		return replayContext(skipLastAction, null);
+	}
+
+	/**
+	 * Creates a game context and replays it using data from this trace. A {@link Consumer} can be optionally specified
+	 * that receives the game context before every action taken by either player.
+	 *
+	 * @param skipLastAction
+	 * @param beforeRequestActionHandler
+	 * @return
+	 */
+	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler) {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
@@ -83,9 +100,9 @@ public class Trace implements Serializable, Cloneable {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
 		stateRestored.setBehaviour(
-				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, recorder));
+				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
 		stateRestored.setBehaviour(
-				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, recorder));
+				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
 		GameLogic logic = new GameLogic((IdFactoryImpl) stateRestored.getLogic().getIdFactory(), getSeed());
 		logic.setContext(stateRestored);
 		stateRestored.setLogic(logic);

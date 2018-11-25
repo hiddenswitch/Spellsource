@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
+import ch.qos.logback.classic.Level;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.io.Resources;
+import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -70,13 +72,15 @@ public class TraceTests {
 
 	@Test
 	public void testTraceValid() {
-		Player player1 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 1");
-		Player player2 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 2");
-		GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
-		context1.play();
-		Trace trace = context1.getTrace();
-		GameContext context2 = trace.replayContext(false, null);
-		Assert.assertEquals(context1.getTurn(), context2.getTurn());
+		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
+			Player player1 = new Player(new RandomDeck(), "Player 1");
+			Player player2 = new Player(new RandomDeck(), "Player 2");
+			GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.CUSTOM);
+			context1.play();
+			Trace trace = context1.getTrace();
+			GameContext context2 = trace.replayContext(false, null);
+			Assert.assertEquals(context1.getTurn(), context2.getTurn());
+		});
 	}
 
 	@Test
