@@ -34,7 +34,7 @@ import java.util.function.Consumer;
  */
 public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
-	private GameState gameState;
+	private GameState startState;
 	private long seed;
 	private int catalogueVersion;
 	private int[][] mulligans;
@@ -42,11 +42,11 @@ public class Trace implements Serializable, Cloneable {
 	private transient List<GameAction> rawActions = new ArrayList<>();
 
 	public void setStartState(GameState gameState) {
-		this.gameState = gameState;
+		this.startState = gameState;
 	}
 
-	public GameState getGameState() {
-		return gameState;
+	public GameState getStartState() {
+		return startState;
 	}
 
 	public void setSeed(long seed) {
@@ -94,7 +94,7 @@ public class Trace implements Serializable, Cloneable {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = GameContext.fromState(gameState);
+		GameContext stateRestored = GameContext.fromState(startState);
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
@@ -132,8 +132,8 @@ public class Trace implements Serializable, Cloneable {
 	public Trace clone() {
 		try {
 			Trace clone = (Trace) super.clone();
-			if (gameState != null) {
-				clone.gameState = gameState.clone();
+			if (startState != null) {
+				clone.startState = startState.clone();
 			}
 			if (mulligans != null) {
 				int[][] mulliganCopy = new int[mulligans.length][];

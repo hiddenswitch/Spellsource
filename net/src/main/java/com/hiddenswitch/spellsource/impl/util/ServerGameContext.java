@@ -376,9 +376,9 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	public void init() {
 		logger.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-
+		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
-		setActivePlayerId(getPlayer(startingPlayerId).getId());
+		setActivePlayerId(startingPlayerId);
 
 		// Await both clients ready for 10s
 		Future bothClientsReady;
@@ -423,8 +423,8 @@ public class ServerGameContext extends GameContext implements Server {
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 
 		// Simultaneous mulligan futures
-		Future<List<Card>> mulligan1 = Future.future();
-		Future<List<Card>> mulligan2 = Future.future();
+		Future<List<Card>> mulligansActive = Future.future();
+		Future<List<Card>> mulligansNonActive = Future.future();
 
 		// Set the mulligan timer
 		final TimerId mulliganTimerId;
@@ -444,10 +444,10 @@ public class ServerGameContext extends GameContext implements Server {
 		updateClientsWithGameState();
 
 		// Simultaneous mulligans now
-		getLogic().initAsync(getActivePlayerId(), true, mulligan1::complete);
-		getLogic().initAsync(getNonActivePlayerId(), false, mulligan2::complete);
+		getLogic().initAsync(getActivePlayerId(), true, mulligansActive::complete);
+		getLogic().initAsync(getNonActivePlayerId(), false, mulligansNonActive::complete);
 		// If this is interrupted, it'll bubble up to the general interrupt handler
-		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligan1, mulligan2)::setHandler);
+		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive, mulligansNonActive)::setHandler);
 
 		// If we got this far, we should cancel the time
 		if (mulliganTimerId != null) {
@@ -459,6 +459,8 @@ public class ServerGameContext extends GameContext implements Server {
 			// An error occurred
 			logger.error("init {}: The mulligan phase ended prematurely", getGameId());
 		}
+
+		traceMulligans(mulligansActive.result(), mulligansNonActive.result());
 
 		try {
 			startGame();
@@ -825,6 +827,11 @@ public class ServerGameContext extends GameContext implements Server {
 		getPlayerConfigurations().clear();
 	}
 
+	/**
+	 * Gets the user IDs of the players in this game context. Includes the AI player
+	 *
+	 * @return A list of user IDs.
+	 */
 	private List<UserId> getUserIds() {
 		return getPlayerConfigurations().stream().map(Configuration::getUserId).collect(toList());
 	}

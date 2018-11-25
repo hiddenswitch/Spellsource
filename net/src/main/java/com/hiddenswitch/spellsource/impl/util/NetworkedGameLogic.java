@@ -37,7 +37,7 @@ public class NetworkedGameLogic extends GameLogic {
 
 		if (isMulliganEnabled()) {
 			behaviour.mulliganAsync(context, player, firstHand.getStarterCards(), (List<Card> discardedCards) -> {
-				logger.debug("Discarded cards from {}: {}", player.getName(), discardedCards.stream().map(Card::toString).reduce((a, b) -> a + ", " + b));
+				logger.debug("mulliganAsync {}: Discarded cards from {}: {}", context.getGameId(), player.getName(), discardedCards.stream().map(Card::toString).reduce((a, b) -> a + ", " + b));
 				handleMulligan(player, begins, firstHand, discardedCards);
 				callback.handle(discardedCards);
 			});

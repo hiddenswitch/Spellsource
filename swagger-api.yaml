@@ -1892,7 +1892,45 @@ definitions:
         type: 'array'
         items:
           $ref: '#/definitions/GameStatePair'
-      # TODO: Add the names of the players, additional information like that
+  GetGameRecordIdsResponse:
+    description: |
+      Retrieves an array of game IDs played by this player. Eventually will require paging.
+    type: 'object'
+    properties:
+      gameIds:
+        description: |
+          All the game IDs ever played by this player
+        type: 'array'
+        items:
+          type: 'string'
+  GetGameRecordResponse:
+    description: |
+      Information about a game.
+
+      Statistics about the game will be stored at a later point in time.
+    type: 'object'
+    properties:
+      replay:
+        $ref: '#/definitions/Replay'
+      isBotGame:
+        type: 'boolean'
+        description: |
+          True if this game was played against a bot (or was played entirely by bots)
+      completedAtLocalized:
+        type: 'string'
+        description: |
+          The date and time when this game was finished in the client's local time.
+      completedAt:
+        type: 'integer'
+        format: 'int64'
+        description: |
+          A timestamp for when this game was finished (approximate).
+      playerNames:
+        description: |
+          The names of the players in this game, without their privacy tokens
+        type: 'array'
+        items:
+          type: 'string'
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
@@ -2455,3 +2493,41 @@ paths:
         "418":
           description: |
             The invite is already in an expired state.
+  /games:
+    get:
+      description: |
+        Retrieves a list of game IDs corresponding to all the games this player played.
+      operationId: getGameRecordIds
+      security:
+      - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            A list of game IDs
+          schema:
+            $ref: '#/definitions/GetGameRecordIdsResponse'
+  /games/{gameId}:
+    get:
+      description: |
+        Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
+        against other players only receive this player's point of view.
+      operationId: getGameRecord
+      security:
+      - TokenSecurity: []
+      parameters:
+      - name: gameId
+        in: path
+        required: true
+        type: 'string'
+      responses:
+        "200":
+          description: |
+            A game record.
+          schema:
+            $ref: '#/definitions/GetGameRecordResponse'
+        "404":
+          description: |
+            The game with the specified ID was not found
+        "403":
+          description: |
+            You are not permitted to view this game

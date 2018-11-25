@@ -18,9 +18,12 @@ import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.models.MatchCancelResponse;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.Closeable;
+import io.vertx.core.http.HttpHeaders;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
@@ -32,10 +35,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
+import java.util.*;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
@@ -697,6 +700,55 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		return WebResult.succeeded(new GetCardsResponse()
 				.cards(Cards.getCards())
 				.version(cardsVersion));
+	}
+
+	@Override
+	public WebResult<GetGameRecordResponse> getGameRecord(RoutingContext context, String userId, String gameId) throws SuspendExecution, InterruptedException {
+		GameRecord record = mongo().findOne(Games.GAMES, json("_id", gameId), GameRecord.class);
+		if (record == null) {
+			return WebResult.notFound("No game with the specified ID was found.");
+		}
+
+		if (record.getPlayerUserIds().stream().noneMatch(s -> s.equals(userId))) {
+			return WebResult.forbidden("Cannot view a game you didn't participate in.");
+		}
+
+		// TODO: Use the user's actual localized time zone, maybe as for it as a parameter?
+		String createdAtLocalized = record.getCreatedAt()
+				.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+
+		Replay replay = record.getReplay();
+
+		// Censor non-bot games
+		if (!record.isBotGame()) {
+			int opponentId = userId.equals(record.getPlayerUserIds().get(0)) ? 1 : 0;
+			for (int i = 0; i < replay.getGameStates().size(); i++) {
+				GameStatePair pair = replay.getGameStates().get(i);
+				if (opponentId == 0) {
+					pair.first(null);
+				} else {
+					pair.second(null);
+				}
+			}
+		}
+
+		return WebResult.succeeded(new GetGameRecordResponse()
+				.playerNames(record.getPlayerNames())
+				.replay(replay)
+				.isBotGame(record.isBotGame())
+				.completedAt(record.getCreatedAt().getTime())
+				.completedAtLocalized(createdAtLocalized));
+	}
+
+	@Override
+	public WebResult<GetGameRecordIdsResponse> getGameRecordIds(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		List<JsonObject> ids = mongo().findWithOptions(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, userId), new FindOptions().setFields(json(MongoRecord.ID, 1)));
+		return WebResult.succeeded(
+				new GetGameRecordIdsResponse()
+						.gameIds(ids.stream().map(j -> j.getString(MongoRecord.ID))
+								.collect(toList())));
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {

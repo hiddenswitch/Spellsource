@@ -63,6 +63,7 @@ public interface Games extends Verticle {
 	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	String GAMES_PLAYERS_MAP = "Games::players";
+	String GAMES = "games";
 
 	/**
 	 * Creates a new instance of the service that maintains a list of running games.
@@ -1347,7 +1348,7 @@ public interface Games extends Verticle {
 					GameStatePair gameStatePair = new GameStatePair();
 					gameStatePair.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
 					gameStatePair.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
-                    replay.addGameStatesItem(gameStatePair);
+					replay.addGameStatesItem(gameStatePair);
 				}
 		);
 

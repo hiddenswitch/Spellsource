@@ -8,12 +8,13 @@ import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
+import com.hiddenswitch.spellsource.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
@@ -22,12 +23,14 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.logic.GameStatus;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static io.vertx.core.json.JsonObject.mapFrom;
 
 public class ClusteredGames extends SyncVerticle implements Games {
 	private Registration registration;
@@ -134,6 +137,13 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		endGame(monitor.getGameId());
 	}
 
+	/**
+	 * Handles a game that ends by any means. Records metadata, like wins and losses.
+	 *
+	 * @param gameId
+	 * @throws InterruptedException
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	private void endGame(GameId gameId) throws InterruptedException, SuspendExecution {
 		if (!contexts.containsKey(gameId)) {
@@ -157,23 +167,23 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				String deckIdWinner = (String) gameContext.getWinner().getAttribute(Attribute.DECK_ID);
 				String deckIdLoser = (String) gameContext.getOpponent(gameContext.getWinner()).getAttribute(Attribute.DECK_ID);
 				// Check if this deck was a draft deck
-				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
+				if (mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
 						json("$inc", json("totalGames", 1, "wins", 1))).getDocModified() > 0L) {
-					Mongo.mongo().updateCollection(Draft.DRAFTS, json("_id", userIdWinner), json("$inc", json("publicDraftState.wins", 1)));
+					mongo().updateCollection(Draft.DRAFTS, json("_id", userIdWinner), json("$inc", json("publicDraftState.wins", 1)));
 					LOGGER.trace("endGame {}: Marked {} as winner in draft", gameId, userIdWinner);
 				} else {
-					Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner),
+					mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner),
 							json("$inc", json("totalGames", 1, "wins", 1)));
 					LOGGER.trace("endGame {}: Marked {} as winner in other", gameId, userIdWinner);
 				}
 
 				// Check if this deck was a draft deck
-				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser, "deckType", DeckType.DRAFT.toString()),
+				if (mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser, "deckType", DeckType.DRAFT.toString()),
 						json("$inc", json("totalGames", 1))).getDocModified() > 0L) {
-					Mongo.mongo().updateCollection(Draft.DRAFTS, json("_id", userIdLoser), json("$inc", json("publicDraftState.losses", 1)));
+					mongo().updateCollection(Draft.DRAFTS, json("_id", userIdLoser), json("$inc", json("publicDraftState.losses", 1)));
 					LOGGER.trace("endGame {}: Marked {} as loser in draft", gameId, userIdLoser);
 				} else {
-					Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser),
+					mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser),
 							json("$inc", json("totalGames", 1)));
 					LOGGER.trace("endGame {}: Marked {} as loser in other", gameId, userIdLoser);
 				}
@@ -185,6 +195,20 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		// If the game is still running when this is called, make sure to force end the game
 		if (gameContext.getStatus() == GameStatus.RUNNING) {
 			gameContext.loseBothPlayers();
+		}
+
+		// Record the outcome of the game
+		try {
+			GameRecord gameRecord = new GameRecord(gameId.toString())
+					.setCreatedAt(new Date())
+					.setBotGame(gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot))
+					.setPlayerUserIds(gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(Collectors.toList()))
+					.setDeckIds(gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList()))
+					.setPlayerNames(gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList()));
+			gameRecord.setReplay(Games.replayFromGameContext(gameContext));
+			mongo().insert(Games.GAMES, mapFrom(gameRecord));
+		} catch (Throwable ex) {
+			LOGGER.error("endGame {}: Could not save a replay due to {}", gameId, ex.getMessage(), ex);
 		}
 	}
 

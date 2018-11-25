@@ -899,14 +899,21 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().initializePlayer(PLAYER_2);
 		List<Card> mulligans1 = getLogic().init(getActivePlayerId(), true);
 		List<Card> mulligans2 = getLogic().init(getOpponent(getActivePlayer()).getId(), false);
-		int[][] tracedMulligans = new int[2][];
-		tracedMulligans[getActivePlayerId()] = mulligans1.stream().mapToInt(Card::getId).toArray();
-		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligans2.stream().mapToInt(Card::getId).toArray();
-		trace.setMulligans(tracedMulligans);
+		traceMulligans(mulligans1, mulligans2);
 		startGame();
 	}
 
-	private void startTrace() {
+	protected void traceMulligans(List<Card> mulligansActive, List<Card> mulligansNonActive) {
+		int[][] tracedMulligans = new int[2][];
+		tracedMulligans[getActivePlayerId()] = mulligansActive.stream().mapToInt(Card::getId).toArray();
+		tracedMulligans[getOpponent(getActivePlayer()).getId()] = mulligansNonActive.stream().mapToInt(Card::getId).toArray();
+		trace.setMulligans(tracedMulligans);
+	}
+
+	/**
+	 * Ensures that the game state is traced / recorded
+	 */
+	protected void startTrace() {
 		trace.setStartState(getGameStateCopy());
 		trace.setSeed(getLogic().getSeed());
 		trace.setCatalogueVersion(CardCatalogue.getVersion());

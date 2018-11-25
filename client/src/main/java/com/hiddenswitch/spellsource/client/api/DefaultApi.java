@@ -40,6 +40,8 @@ import com.hiddenswitch.spellsource.client.models.FriendPutResponse;
 import com.hiddenswitch.spellsource.client.models.GetAccountsRequest;
 import com.hiddenswitch.spellsource.client.models.GetAccountsResponse;
 import com.hiddenswitch.spellsource.client.models.GetCardsResponse;
+import com.hiddenswitch.spellsource.client.models.GetGameRecordIdsResponse;
+import com.hiddenswitch.spellsource.client.models.GetGameRecordResponse;
 import com.hiddenswitch.spellsource.client.models.InviteGetResponse;
 import com.hiddenswitch.spellsource.client.models.InvitePostRequest;
 import com.hiddenswitch.spellsource.client.models.InviteResponse;
@@ -833,6 +835,85 @@ public class DefaultApi {
     String[] localVarAuthNames = new String[] {  };
 
     GenericType<GetCardsResponse> localVarReturnType = new GenericType<GetCardsResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * 
+   * Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games against other players only receive this player&#39;s point of view. 
+   * @param gameId  (required)
+   * @return GetGameRecordResponse
+   * @throws ApiException if fails to make API call
+   */
+  public GetGameRecordResponse getGameRecord(String gameId) throws ApiException {
+    Object localVarPostBody = null;
+    
+    // verify the required parameter 'gameId' is set
+    if (gameId == null) {
+      throw new ApiException(400, "Missing the required parameter 'gameId' when calling getGameRecord");
+    }
+    
+    // create path and map variables
+    String localVarPath = "/games/{gameId}"
+      .replaceAll("\\{" + "gameId" + "\\}", apiClient.escapeString(gameId.toString()));
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<GetGameRecordResponse> localVarReturnType = new GenericType<GetGameRecordResponse>() {};
+    return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
+      }
+  /**
+   * 
+   * Retrieves a list of game IDs corresponding to all the games this player played. 
+   * @return GetGameRecordIdsResponse
+   * @throws ApiException if fails to make API call
+   */
+  public GetGameRecordIdsResponse getGameRecordIds() throws ApiException {
+    Object localVarPostBody = null;
+    
+    // create path and map variables
+    String localVarPath = "/games";
+
+    // query params
+    List<Pair> localVarQueryParams = new ArrayList<Pair>();
+    List<Pair> localVarCollectionQueryParams = new ArrayList<Pair>();
+    Map<String, String> localVarHeaderParams = new HashMap<String, String>();
+    Map<String, Object> localVarFormParams = new HashMap<String, Object>();
+
+
+    
+    
+    final String[] localVarAccepts = {
+      "application/json"
+    };
+    final String localVarAccept = apiClient.selectHeaderAccept(localVarAccepts);
+
+    final String[] localVarContentTypes = {
+      "application/json"
+    };
+    final String localVarContentType = apiClient.selectHeaderContentType(localVarContentTypes);
+
+    String[] localVarAuthNames = new String[] { "TokenSecurity" };
+
+    GenericType<GetGameRecordIdsResponse> localVarReturnType = new GenericType<GetGameRecordIdsResponse>() {};
     return apiClient.invokeAPI(localVarPath, "GET", localVarQueryParams, localVarCollectionQueryParams, localVarPostBody, localVarHeaderParams, localVarFormParams, localVarAccept, localVarContentType, localVarAuthNames, localVarReturnType);
       }
   /**
