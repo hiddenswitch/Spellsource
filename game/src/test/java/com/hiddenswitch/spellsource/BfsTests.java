@@ -17,18 +17,32 @@ import net.demilich.metastone.game.spells.trigger.AfterSpellCastedTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import org.junit.Assert;
+import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class BfsTests {
 
 	@BeforeClass
 	public static void loadCards() {
 		CardCatalogue.loadCardsFromPackage();
+	}
+
+	@Test
+	public void testAccurateSummoningBattlecry() {
+		Card card = CardCatalogue.getCardById("minion_dragonling_mechanic");
+		Stream.Builder<HasEntrySet.BfsNode<Enum, Object>> bfs = card.getDesc().bfs();
+
+		boolean shouldMatch = bfs.build()
+				.anyMatch(node -> node.getKey().equals(SpellArg.CLASS)
+						&& SummonSpell.class.isAssignableFrom((Class) node.getValue())
+						&& node.predecessors().anyMatch(pred -> pred.getKey().equals(BattlecryDescArg.SPELL)));
+
+		Assert.assertTrue(shouldMatch, "Dragonling Mechanic should match");
 	}
 
 	@Test

@@ -42,6 +42,8 @@ public interface Bots {
 	Logger LOGGER = LoggerFactory.getLogger(Bots.class);
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
 	String TAKING_BOT_LOCK_NAME = "Matchmaking::takingBot";
+	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<List<Integer>>() {
+	};
 
 	/**
 	 * Decide which cards to mulligan given a starting hand.
@@ -65,7 +67,7 @@ public interface Bots {
 	 */
 	@Suspendable
 	static RequestActionResponse requestAction(RequestActionRequest request) {
-		RequestActionResponse response = new RequestActionResponse();
+		RequestActionResponse response;
 		// Use execute blocking to yield here
 		LOGGER.debug("requestAction: Requesting action from behaviour.");
 		final Behaviour behaviour = getBehaviour().get();
@@ -76,12 +78,11 @@ public interface Bots {
 			GameId gameId = request.gameId;
 			Buffer buf = map.get(gameId);
 			if (buf != null) {
-				List<Integer> indexPlan = Json.decodeValue(buf, new TypeReference<List<Integer>>() {
-				});
+				List<Integer> indexPlan = Json.decodeValue(buf, LIST_INTEGER_TYPE);
 				gsvb.setIndexPlan(new ArrayDeque<>(indexPlan));
 			}
 
-			delegateRequestAction(request, response, gsvb);
+			response = delegateRequestAction(request, gsvb);
 
 			// Save the new index plan
 			Deque<Integer> indexPlan = gsvb.getIndexPlan();
@@ -91,14 +92,15 @@ public interface Bots {
 				map.remove(gameId);
 			}
 		} else {
-			delegateRequestAction(request, response, behaviour);
+			response = delegateRequestAction(request, behaviour);
 		}
 
 		return response;
 	}
 
 	@Suspendable
-	static void delegateRequestAction(RequestActionRequest request, RequestActionResponse response, Behaviour behaviour) {
+	static RequestActionResponse delegateRequestAction(RequestActionRequest request, Behaviour behaviour) {
+		RequestActionResponse response = new RequestActionResponse();
 		final GameContext context = new GameContext();
 		context.setLogic(new GameLogic());
 		context.setDeckFormat(request.format);
@@ -125,11 +127,11 @@ public interface Bots {
 
 			LOGGER.debug("requestAction: Bot successfully chose action");
 			response.gameAction = result;
-
 		} catch (Throwable t) {
 			LOGGER.error("requestAction: Bot failed to choose an action due to an exception", t);
-			throw t;
+			response.gameAction = request.validActions.get(0);
 		}
+		return response;
 	}
 
 	static UserId pollBotId() throws SuspendExecution, InterruptedException {

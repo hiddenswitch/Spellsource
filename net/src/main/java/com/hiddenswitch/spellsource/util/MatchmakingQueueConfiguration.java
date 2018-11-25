@@ -16,6 +16,7 @@ public class MatchmakingQueueConfiguration implements Serializable {
 	private long emptyLobbyTimeout = 0L;
 	private long awaitingLobbyTimeout = 0L;
 	private boolean once;
+	private boolean join;
 
 	public String getName() {
 		return name;
@@ -136,6 +137,20 @@ public class MatchmakingQueueConfiguration implements Serializable {
 
 	public MatchmakingQueueConfiguration setOnce(boolean once) {
 		this.once = once;
+		return this;
+	}
+
+	/**
+	 * Should the matchmaking creation invocation wait until the matchmaker is actually ready?
+	 *
+	 * @return
+	 */
+	public boolean isJoin() {
+		return join;
+	}
+
+	public MatchmakingQueueConfiguration setJoin(boolean join) {
+		this.join = join;
 		return this;
 	}
 }

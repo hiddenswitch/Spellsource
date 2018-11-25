@@ -28,6 +28,10 @@ import java.time.temporal.ChronoUnit;
  */
 public class LocalClustered {
 	public static void main(String args[]) {
+		startServer(Future.future());
+	}
+
+	public static void startServer(Future<String> broadcasterDeployment) {
 		System.setProperty("java.net.preferIPv4Stack", "true");
 		System.setProperty("org.mongodb.async.type", "netty");
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
@@ -56,7 +60,7 @@ public class LocalClustered {
 					Logging.root().error("Migration failed", then2.cause());
 				} else {
 					Spellsource.spellsource().deployAll(vertx, andThen -> {
-						vertx.deployVerticle(Broadcaster.create(), Future.future());
+						vertx.deployVerticle(Broadcaster.create(), broadcasterDeployment);
 						System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
 					});
 				}

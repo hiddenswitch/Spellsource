@@ -1079,6 +1079,8 @@ definitions:
             description: |
               The entity ID corresponding to the source of the trigger that got fired.
             type: 'integer'
+          triggerSource:
+            $ref: '#/definitions/Entity'
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:

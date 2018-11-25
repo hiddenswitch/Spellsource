@@ -506,8 +506,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 						|| node.context.updateAndGetGameOver()
 						|| (System.currentTimeMillis() - startTime > getTimeout())
 						// Technically allows the bot to play through its extra turns
-						|| node.context.getActivePlayerId() != playerId
-						|| node.context.isDisposed());
+						|| node.context.getActivePlayerId() != playerId);
 	}
 
 	/**
