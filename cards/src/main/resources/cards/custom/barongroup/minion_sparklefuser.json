@@ -3,7 +3,7 @@
   "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "NAVY",
-  "baseAttack": 2,
+  "baseAttack": 4,
   "baseHp": 7,
   "rarity": "EPIC",
   "description": "Adjacent minions have Lifesteal and Poisonous.",
