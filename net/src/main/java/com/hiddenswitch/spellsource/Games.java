@@ -59,10 +59,10 @@ import static java.util.stream.Collectors.toList;
  */
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
-	String WEBSOCKET_PATH = "games";
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
 	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
+	String GAMES_PLAYERS_MAP = "Games::players";
 
 	/**
 	 * Creates a new instance of the service that maintains a list of running games.
@@ -633,7 +633,7 @@ public interface Games extends Verticle {
 	 * @throws SuspendExecution
 	 */
 	static SuspendableMap<UserId, GameId> getUsersInGames() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games::players");
+		return SuspendableMap.getOrCreate(GAMES_PLAYERS_MAP);
 	}
 
 	/**
@@ -1014,7 +1014,7 @@ public interface Games extends Verticle {
 				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
 		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
-		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE) || actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
+		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
 		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.AURA_IMMUNE));
 		entityState.stealth(actor.hasAttribute(Attribute.STEALTH) || actor.hasAttribute(Attribute.AURA_STEALTH));
 		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) || actor.hasAttribute(Attribute.AURA_TAUNT));

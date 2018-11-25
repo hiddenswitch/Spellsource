@@ -17,6 +17,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ComboSpell;
+import net.demilich.metastone.game.spells.RevealCardSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -30,6 +31,7 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
@@ -1058,6 +1060,23 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		}));
 
 		return stream;
+	}
+
+	/**
+	 * Indicates whether, based on the code written on this card, this card ever reveals itself.
+	 *
+	 * @return {@code true} if any spell written on the card is a {@link net.demilich.metastone.game.spells.RevealCardSpell}
+	 * 		with target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}
+	 */
+	public boolean revealsSelf() {
+		return bfs().build().anyMatch(node -> {
+			Object val = node.getValue();
+			if (val instanceof SpellDesc) {
+				SpellDesc spell = (SpellDesc) val;
+				return RevealCardSpell.class.isAssignableFrom(spell.getDescClass()) && spell.getTarget().equals(EntityReference.SELF);
+			}
+			return false;
+		});
 	}
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {

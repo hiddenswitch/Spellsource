@@ -8,10 +8,7 @@ import java.util.List;
 
 public interface ActionListener {
 	@Suspendable
-	void elapseTurn();
-
-	@Suspendable
-	void elapseMulligan();
+	void elapseAwaitingRequests();
 
 	@Suspendable
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);

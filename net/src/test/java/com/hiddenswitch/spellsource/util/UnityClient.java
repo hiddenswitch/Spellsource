@@ -464,15 +464,4 @@ public class UnityClient {
 		super.finalize();
 	}
 
-	protected static class NoOpLock extends ReentrantLock {
-		@Override
-		public void lock() {
-			return;
-		}
-
-		@Override
-		public void unlock() {
-			return;
-		}
-	}
 }
