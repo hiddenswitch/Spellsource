@@ -1,6 +1,6 @@
 {
   "name": "Faceless Duplicator",
-  "baseManaCost": 9,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 6,
