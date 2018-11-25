@@ -11,6 +11,7 @@ GEM
     eventmachine (1.2.7)
     ffi (1.9.25)
     forwardable-extended (2.6.0)
+    htmlentities (4.3.4)
     http_parser.rb (0.6.0)
     i18n (0.9.5)
       concurrent-ruby (~> 1.0)
@@ -35,6 +36,9 @@ GEM
       jekyll (~> 3.3)
     jekyll-watch (2.1.2)
       listen (~> 3.0)
+    jekyll_pages_api (0.1.6)
+      htmlentities (~> 4.3)
+      jekyll (>= 2.0, < 4.0)
     kramdown (1.17.0)
     liquid (4.0.1)
     listen (3.1.5)
@@ -67,6 +71,7 @@ PLATFORMS
 DEPENDENCIES
   jekyll (~> 3.8.4)
   jekyll-feed (~> 0.6)
+  jekyll_pages_api
   minima (~> 2.0)
   tzinfo-data
 
