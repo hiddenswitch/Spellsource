@@ -7,16 +7,19 @@
   "description": "Hero Power: Discover a Secretive ability and cast it.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "DiscoverSpell",
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "CastCardsSpell"
-    },
-    "cards": [
-      "spell_crackling_arrows",
-      "spell_hidden_weapon",
-      "spell_royal_guard"
-    ],
-    "howMany": 3
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CastCardsSpell"
+      },
+      "cards": [
+        "spell_crackling_arrows",
+        "spell_hidden_weapon",
+        "spell_royal_guard"
+      ],
+      "howMany": 3
+    }
   },
   "collectible": false,
   "set": "CUSTOM",

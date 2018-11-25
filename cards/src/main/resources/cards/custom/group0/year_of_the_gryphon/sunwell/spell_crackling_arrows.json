@@ -5,26 +5,24 @@
   "heroClass": "GREEN",
   "rarity": "FREE",
   "description": "Deal 1 damage to two random enemies. Repeat for each Secret you control.",
+  "targetSelection": "NONE",
   "spell": {
-    "class": "CastRepeatedlySpell",
+    "class": "RecastWhileSpell",
     "condition": {
       "class": "MinionCountCondition",
       "value": 0,
       "operation": "GREATER",
       "targetPlayer": "OPPONENT"
     },
-    "targetSelection": "NONE",
     "spell": {
-      "class": "MultiTargetSpell",
+      "class": "MissilesSpell",
       "target": "ENEMY_CHARACTERS",
-      "value": 2,
-      "spell": {
-        "class": "DamageSpell",
-        "value": 1
-      }
+      "value": 1,
+      "howMany": 2
     },
     "howMany": {
       "class": "PlayerAttributeValueProvider",
+      "offset": 1,
       "playerAttribute": "SECRET_COUNT",
       "targetPlayer": "SELF"
     }

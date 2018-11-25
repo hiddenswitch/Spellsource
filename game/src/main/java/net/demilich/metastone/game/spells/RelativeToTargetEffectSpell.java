@@ -29,7 +29,7 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2);
 		EntityReference sourceReference = source != null ? source.getReference() : null;
 		List<Actor> adjacentMinions = getActors(context, target);
 		SpellDesc primary;
@@ -41,14 +41,14 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 			secondary = primary;
 		} else {
 			primary = (SpellDesc) desc.get(SpellArg.SPELL1);
-			if (primary != null) {
-				context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
-			}
-
 			secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
 			if (secondary == null) {
 				secondary = primary;
 			}
+		}
+
+		if (primary != null) {
+			context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
 		}
 
 		for (Entity adjacent : adjacentMinions) {
