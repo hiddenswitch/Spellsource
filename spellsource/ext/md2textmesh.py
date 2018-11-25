@@ -215,7 +215,8 @@ class TextMeshRenderer(BaseRenderer):
 
     @staticmethod
     def escape_html(raw):
-        return html.escape(html.unescape(raw)).replace('&#x27;', "'")
+        return raw
+        # return html.escape(html.unescape(raw)).replace('&#x27;', "'")
 
     @staticmethod
     def escape_url(raw):
