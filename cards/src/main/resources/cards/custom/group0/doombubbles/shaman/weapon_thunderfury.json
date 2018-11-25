@@ -4,7 +4,7 @@
   "type": "WEAPON",
   "heroClass": "SILVER",
   "damage": 3,
-  "durability": 2,
+  "durability": 1,
   "rarity": "LEGENDARY",
   "description": "Doesn't lose Durability while you are Overloaded.",
   "aura": {

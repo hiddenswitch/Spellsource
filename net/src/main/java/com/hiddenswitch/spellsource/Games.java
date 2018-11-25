@@ -1119,7 +1119,7 @@ public interface Games extends Verticle {
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 
-			if (card.getZone() == Zones.HAND || card.getZone() == Zones.BATTLEFIELD) {
+			if (card.getZone() == Zones.HAND) {
 				if (description.contains("[") && card.getDynamicDescription() != null) {
 					int i = 0;
 					String[] descriptions = card.evaluateDescriptions(workingContext, owningPlayer);
@@ -1129,7 +1129,7 @@ public interface Games extends Verticle {
 						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
 					}
 				}
-			}
+			} else description = description.replace("[","").replace("]","");
 
 			// Handle spell damage
 			if (card.isSpell()) {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Deal 2 damage. Overkill: Summon a basic Totem.",
+  "description": "Deal $2 damage. Overkill: Summon a basic Totem.",
   "targetSelection": "ANY",
   "spell": {
     "class": "OverkillSpell",
