@@ -1,0 +1,29 @@
+{
+  "name": "Black Plague",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Plague every minion. They take 3 damage when they attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "ALL_MINIONS",
+    "trigger": {
+      "eventTrigger": {
+        "class": "PhysicalAttackTrigger",
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
+      },
+      "spell": {
+      "class": "DamageSpell",
+      "target": "SELF",
+      "value": 3
+      },
+      "persistentOwner": true
+    }
+
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
