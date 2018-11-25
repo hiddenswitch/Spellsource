@@ -8,31 +8,29 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Battlecry: Adapt. Whenever you summon a Knight, give it that Adaptation.",
+  "description": "Battlecry: Adapt this minion and all Knights in your hand.",
   "battlecry": {
-    "targetSelection": "NONE",
     "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
       "class": "CastFromGroupSpell",
       "target": "SELF",
       "group": "group_adapt"
-    }
-      "trigger": {
-    "eventTrigger": {
-      "class": "AfterMinionSummonedTrigger",
-      "queueCondition": {
-        "class": "AllMatchFilterCondition",
-        "filter": {
-          "class": "SpecificCardFilter",
-          "card": "token_knight"
-        }
+          }
+        },
+        {
+      "class": "CastFromGroupSpell",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_knight"
       },
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-//dunno
-      }
+      "group": "group_adapt"
+          }
+        }
+      ]
     }
-  },
   },
   "attributes": {
     "BATTLECRY": true
