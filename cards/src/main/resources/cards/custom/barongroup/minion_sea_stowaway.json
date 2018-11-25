@@ -1,0 +1,31 @@
+{
+  "name": "Sea Stowaway",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Battlecry: Discover a Pirate.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "PIRATE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
