@@ -3,7 +3,7 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-#### Server Version: 6.1.2, Client Version: 2.0.9
+#### Server Version: 6.1.3, Client Version: 2.0.9
 
 ###### Known Issues:
 
