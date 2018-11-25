@@ -2356,7 +2356,7 @@ paths:
           schema:
             $ref: '#/definitions/InviteGetResponse'
         default:
-          $ref: '#/definitions/InternalServerError'
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Send an invite.
