@@ -53,6 +53,62 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testElaborateSchemeGloatInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "secret_elaborate_scheme");
+			Card gloat = putOnTopOfDeck(context, player, "secret_gloat");
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHand().size(), 2);
+			assertEquals(player.getSecrets().size(), 1);
+			assertEquals(player.getSecrets().get(0).getSourceCard().getCardId(), "secret_gloat");
+		});
+	}
+
+	@Test
+	public void testCracklingArrows() {
+		runGym((context, player, opponent) -> {
+			List<Minion> minions = new ArrayList<>();
+			context.endTurn();
+			for (int i = 0; i < 6; i++) {
+				minions.add(playMinionCard(context, opponent, "minion_wisp"));
+			}
+			context.endTurn();
+			int opponentHealth = opponent.getHero().getHp();
+			playCard(context, player, "secret_avenge");
+			playCard(context, player, "secret_counterspell");
+			assertEquals(player.getSecrets().size(), 2);
+			playCard(context, player, "spell_crackling_arrows");
+			assertEquals(player.getSecrets().size(), 2);
+			// 2 secrets + 1 minimum call = spell cast 3 times, all 6 minions should be dead
+			int count = 0;
+			for (Minion minion : minions) {
+				if (minion.isDestroyed()) {
+					count++;
+				}
+			}
+			assertEquals(6, count + opponentHealth - opponent.getHero().getHp());
+		});
+	}
+
+	@Test
+	public void testGiantBarbecue() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion target3 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			context.endTurn();
+			playCard(context, player, "spell_giant_barbecue", target2);
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			assertTrue(target3.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testSidelineCoach() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_sideline_coach");

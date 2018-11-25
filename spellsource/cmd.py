@@ -1,3 +1,4 @@
+import typing
 from os import makedirs
 from os.path import join, abspath
 
@@ -350,6 +351,24 @@ def change_password(username_or_email: str, password: str, db_uri: str):
         raise SystemExit(1)
     click.echo(record['emails'][0]['address'])
     click.echo(record['username'])
+
+
+@_cli.command()
+@click.argument('file', type=click.File())
+@click.option('--front-matter', default=True, show_default=True, help='skips the front matter in the input file')
+def markdown_to_textmesh(file: typing.TextIO, front_matter: bool = True):
+    """
+    Renders a Markdown file to TextMesh markup.
+    """
+    input = file.readlines()
+    if front_matter:
+        input = input[5:]
+    from spellsource.ext.md2textmesh import TextMeshRenderer
+    from mistletoe import Document
+    with TextMeshRenderer() as renderer:
+        # skips front matter
+        rendered = renderer.render(Document(input))
+    click.echo(rendered)
 
 
 def main():
