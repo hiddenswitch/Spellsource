@@ -1,5 +1,5 @@
 
-# ReplayDelta
+# ReplayDeltas
 
 ## Properties
 Name | Type | Description | Notes

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @ApiModel(description = "The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
-public class ReplayDelta implements Serializable {
+public class ReplayDeltas implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("backward")
@@ -38,7 +38,7 @@ public class ReplayDelta implements Serializable {
   @JsonProperty("forward")
   private EntityChangeSet forward = null;
 
-  public ReplayDelta backward(EntityChangeSet backward) {
+  public ReplayDeltas backward(EntityChangeSet backward) {
     this.backward = backward;
     return this;
   }
@@ -56,7 +56,7 @@ public class ReplayDelta implements Serializable {
     this.backward = backward;
   }
 
-  public ReplayDelta forward(EntityChangeSet forward) {
+  public ReplayDeltas forward(EntityChangeSet forward) {
     this.forward = forward;
     return this;
   }
@@ -83,9 +83,9 @@ public class ReplayDelta implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    ReplayDelta replayDelta = (ReplayDelta) o;
-    return Objects.equals(this.backward, replayDelta.backward) &&
-        Objects.equals(this.forward, replayDelta.forward);
+    ReplayDeltas replayDeltas = (ReplayDeltas) o;
+    return Objects.equals(this.backward, replayDeltas.backward) &&
+        Objects.equals(this.forward, replayDeltas.forward);
   }
 
   @Override
@@ -97,7 +97,7 @@ public class ReplayDelta implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class ReplayDelta {\n");
+    sb.append("class ReplayDeltas {\n");
     
     sb.append("    backward: ").append(toIndentedString(backward)).append("\n");
     sb.append("    forward: ").append(toIndentedString(forward)).append("\n");

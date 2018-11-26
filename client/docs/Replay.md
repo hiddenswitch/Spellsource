@@ -5,7 +5,7 @@
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
 **gameStates** | [**List&lt;ReplayGameStates&gt;**](ReplayGameStates.md) |  |  [optional]
-**deltas** | [**List&lt;ReplayDelta&gt;**](ReplayDelta.md) |  |  [optional]
+**deltas** | [**List&lt;ReplayDeltas&gt;**](ReplayDeltas.md) |  |  [optional]
 
 
 

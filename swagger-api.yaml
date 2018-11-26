@@ -709,6 +709,11 @@ definitions:
         $ref: '#/definitions/Emote'
       gameOver:
         $ref: '#/definitions/GameOver'
+      isReplayMessage:
+        description: |
+          True iff this message is a part of a replay.
+        type: 'boolean'
+        default: False
       startingCards:
         description: |
           Used for a mulligan request. An array of entities representing the cards you may mulligan.
@@ -1955,8 +1960,8 @@ definitions:
       deltas:
         type: 'array'
         items:
-          $ref: '#/definitions/ReplayDelta'
-  ReplayDelta:
+          $ref: '#/definitions/ReplayDeltas'
+  ReplayDeltas:
     description: |
       The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
     type: 'object'
