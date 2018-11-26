@@ -45,9 +45,13 @@ public class CopyDeathrattleSpell extends Spell {
 		if (desc.containsKey(SpellArg.SECONDARY_TARGET)) {
 			copyTo = context.resolveSingleTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
 		}
+		int max = (int) desc.getOrDefault(SpellArg.HOW_MANY, 99);
 		List<SpellDesc> deathrattles = new ArrayList<>();
-		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, 99);
+		CardList impliedCards = SpellUtils.getCards(context, player, target, source, desc, max);
 		if (!impliedCards.isEmpty()) {
+			if (desc.containsKey(SpellArg.RANDOM_TARGET)) {
+				impliedCards.shuffle(context.getLogic().getRandom());
+			}
 			for (Card impliedCard : impliedCards) {
 				if (impliedCard.getDesc().getDeathrattle() != null) {
 					deathrattles.add(impliedCard.getDesc().getDeathrattle());

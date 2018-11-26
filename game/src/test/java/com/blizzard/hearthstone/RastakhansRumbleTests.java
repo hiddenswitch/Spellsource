@@ -298,4 +298,23 @@ public class RastakhansRumbleTests extends TestBase {
             assertEquals(player.getHand().size(), 2);
         });
     }
+
+    @Test
+    public void testDaUndatakah() {
+        runGym((context, player, opponent) -> {
+            playCard(context, player, "minion_leper_gnome");
+            playCard(context, player, "minion_hoarding_dragon");
+            playCard(context, player, "minion_drygulch_jailor");
+            playCard(context, player, "spell_twisting_nether");
+            assertEquals(opponent.getHero().getHp(), 28);
+            assertEquals(opponent.getHand().size(), 2);
+            assertEquals(player.getHand().size(), 3);
+            playCard(context, player, "minion_da_undatakah");
+            playCard(context, player, "spell_twisting_nether");
+            assertEquals(opponent.getHero().getHp(), 26);
+            assertEquals(opponent.getHand().size(), 4);
+            assertEquals(player.getHand().size(), 6);
+
+        });
+    }
 }
