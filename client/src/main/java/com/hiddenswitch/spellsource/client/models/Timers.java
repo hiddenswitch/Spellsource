@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Information about timers. This helps the client render the countdown clock. 
  */
 @ApiModel(description = "Information about timers. This helps the client render the countdown clock. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Timers implements Serializable {
   private static final long serialVersionUID = 1L;

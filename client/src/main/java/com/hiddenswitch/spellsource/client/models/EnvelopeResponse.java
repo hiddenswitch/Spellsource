@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.DefaultMethodResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * When populated by the client and sent to the server, indicates a response to a request from the server. 
  */
 @ApiModel(description = "When populated by the client and sent to the server, indicates a response to a request from the server. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeResponse implements Serializable {
   private static final long serialVersionUID = 1L;

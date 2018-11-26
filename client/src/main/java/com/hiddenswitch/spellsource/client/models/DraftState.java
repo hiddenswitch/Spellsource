@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Describes the current state of a draft, including the deck in progress, the new choices, and the hero choices. 
  */
 @ApiModel(description = "Describes the current state of a draft, including the deck in progress, the new choices, and the hero choices. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DraftState implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -22,11 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * This request allows a user to specify a decklist or deck properies for creating a new deck. Whenever a deck list is specified (non-null and not equal to the empty string), the deck list will be preferred. Decks created without a deck list may have no properties specified, and the deck will still be successfully created. 
  */
 @ApiModel(description = "This request allows a user to specify a decklist or deck properies for creating a new deck. Whenever a deck list is specified (non-null and not equal to the empty string), the deck list will be preferred. Decks created without a deck list may have no properties specified, and the deck will still be successfully created. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;

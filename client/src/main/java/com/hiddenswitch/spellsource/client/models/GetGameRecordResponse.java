@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Information about a game.  Statistics about the game will be stored at a later point in time. 
  */
 @ApiModel(description = "Information about a game.  Statistics about the game will be stored at a later point in time. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GetGameRecordResponse implements Serializable {
   private static final long serialVersionUID = 1L;

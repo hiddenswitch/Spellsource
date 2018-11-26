@@ -16,11 +16,13 @@ package com.hiddenswitch.spellsource.client.models;
 import java.util.Objects;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * An empty response signifying your password was correctly changed 
  */
 @ApiModel(description = "An empty response signifying your password was correctly changed ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class ChangePasswordResponse implements Serializable {
   private static final long serialVersionUID = 1L;

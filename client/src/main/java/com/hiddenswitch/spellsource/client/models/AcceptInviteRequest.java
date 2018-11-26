@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutRequest;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Accepts an invite to a match or a friend invite. 
  */
 @ApiModel(description = "Accepts an invite to a match or a friend invite. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class AcceptInviteRequest implements Serializable {
   private static final long serialVersionUID = 1L;

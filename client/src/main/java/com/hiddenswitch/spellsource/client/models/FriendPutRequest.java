@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Adds two users to each other&#39;s friends list. 
  */
 @ApiModel(description = "Adds two users to each other's friends list. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class FriendPutRequest implements Serializable {
   private static final long serialVersionUID = 1L;

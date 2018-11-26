@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A pair combining a target (entity ID) and the correponding action for that target. 
  */
 @ApiModel(description = "A pair combining a target (entity ID) and the correponding action for that target. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class TargetActionPair implements Serializable {
   private static final long serialVersionUID = 1L;

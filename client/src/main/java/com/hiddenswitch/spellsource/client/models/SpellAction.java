@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A spell action or battlecry. 
  */
 @ApiModel(description = "A spell action or battlecry. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class SpellAction implements Serializable {
   private static final long serialVersionUID = 1L;

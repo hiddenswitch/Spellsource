@@ -19,11 +19,13 @@ import io.swagger.annotations.ApiModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * An abbreviated description of changes since the last change set this client received. 
  */
 @ApiModel(description = "An abbreviated description of changes since the last change set this client received. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EntityChangeSet extends ArrayList<EntityChangeSetInner> implements Serializable {
   private static final long serialVersionUID = 1L;

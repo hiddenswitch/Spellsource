@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.MatchmakingQueueItemRequires;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A queue the user can enter to play a match in. 
  */
 @ApiModel(description = "A queue the user can enter to play a match in. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class MatchmakingQueueItem implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -22,11 +22,13 @@ import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Stores a ClientToServerMessage or a ServerToClientMessage. Allows envelopes to carry game messages. 
  */
 @ApiModel(description = "Stores a ClientToServerMessage or a ServerToClientMessage. Allows envelopes to carry game messages. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeGame implements Serializable {
   private static final long serialVersionUID = 1L;

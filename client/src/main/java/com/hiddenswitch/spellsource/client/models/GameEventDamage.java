@@ -22,10 +22,12 @@ import com.hiddenswitch.spellsource.client.models.Entity;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * GameEventDamage
  */
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GameEventDamage implements Serializable {
   private static final long serialVersionUID = 1L;

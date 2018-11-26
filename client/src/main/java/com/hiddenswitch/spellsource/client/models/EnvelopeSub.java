@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.EnvelopeSubConversation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * When populated by the client and sent to the server, subscribes to data of the specified kind. 
  */
 @ApiModel(description = "When populated by the client and sent to the server, subscribes to data of the specified kind. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeSub implements Serializable {
   private static final long serialVersionUID = 1L;

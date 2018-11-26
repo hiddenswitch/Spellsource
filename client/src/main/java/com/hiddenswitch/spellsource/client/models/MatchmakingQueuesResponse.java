@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Represents a list of queues. 
  */
 @ApiModel(description = "Represents a list of queues. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class MatchmakingQueuesResponse implements Serializable {
   private static final long serialVersionUID = 1L;

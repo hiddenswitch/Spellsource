@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * The deck that was created by a deck put request. 
  */
 @ApiModel(description = "The deck that was created by a deck put request. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksPutResponse implements Serializable {
   private static final long serialVersionUID = 1L;

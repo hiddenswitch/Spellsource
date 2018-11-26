@@ -43,6 +43,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.function.BiConsumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -1339,24 +1340,29 @@ public interface Games extends Verticle {
 	 */
 	static Replay replayFromGameContext(GameContext originalCtx) {
 		Replay replay = new Replay();
+		Deque<GameStatePair> items = new ConcurrentLinkedDeque<>();
 		// Replay the game from a trace while capturing the {@link Replay} object.
 		GameContext replayCtx = originalCtx.getTrace().replayContext(
 				false,
 				(GameContext ctx) -> {
 					// We record each game state by dumping the {@link GameState} objects from each player's point of
 					// view into the replay.
-					GameStatePair gameStatePair = new GameStatePair();
-					gameStatePair.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
-					gameStatePair.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
-					replay.addGameStatesItem(gameStatePair);
+					try {
+						GameStatePair gameStatePair = new GameStatePair();
+						gameStatePair.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
+						gameStatePair.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
+						items.push(gameStatePair);
+					} catch (Throwable any) {
+						LOGGER.error("replayFromGameContext: {}", any);
+					}
 				}
 		);
-
 		// Append the final game state (from each player's point of view).
 		GameStatePair gameStatePair = new GameStatePair();
 		gameStatePair.first(getGameState(replayCtx, replayCtx.getPlayer1(), replayCtx.getPlayer2()));
 		gameStatePair.second(getGameState(replayCtx, replayCtx.getPlayer2(), replayCtx.getPlayer1()));
-		replay.addGameStatesItem(gameStatePair);
+		items.push(gameStatePair);
+		replay.setGameStates(new ArrayList<>(items));
 
 		return replay;
 	}

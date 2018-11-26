@@ -3,7 +3,6 @@ package net.demilich.metastone.game;
 import ch.qos.logback.classic.Level;
 import com.github.fromage.quasi.fibers.Fiber;
 import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.Strand;
 import com.github.fromage.quasi.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
@@ -884,22 +883,31 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Initializes a game.
 	 * <p>
 	 * Typically, this determines the beginner with {@link GameLogic#determineBeginner(int...)}; then it sets the active
-	 * player; then it calls {@link GameLogic#initializePlayer(int)} for both players, and then it asks both players for
-	 * their mulligans using {@link GameLogic#init(int, boolean)}.
+	 * player; then it calls {@link GameLogic#initializePlayerAndMoveMulliganToSetAside(int, boolean)} for both players,
+	 * and then it asks both players for their mulligans using {@link GameLogic#init(int, boolean)}.
 	 */
 	@Suspendable
 	public void init() {
 		getLogic().contextReady();
 		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
-		setActivePlayerId(getPlayer(startingPlayerId).getId());
+		init(startingPlayerId);
+	}
+
+	@Suspendable
+	protected void init(int startingPlayerId) {
+		setActivePlayerId(startingPlayerId);
 		logger.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
-		getLogic().initializePlayer(PLAYER_1);
-		getLogic().initializePlayer(PLAYER_2);
-		List<Card> mulligans1 = getLogic().init(getActivePlayerId(), true);
-		List<Card> mulligans2 = getLogic().init(getOpponent(getActivePlayer()).getId(), false);
-		traceMulligans(mulligans1, mulligans2);
+		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
+		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
+		List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		List<Card> discardedCardsActive = getBehaviours().get(getActivePlayerId()).mulligan(this, getActivePlayer(), firstHandActive);
+		List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		List<Card> discardedCardsNonActive = getBehaviours().get(getNonActivePlayerId()).mulligan(this, getNonActivePlayer(), firstHandNonActive);
+		getLogic().handleMulligan(getActivePlayer(), true, discardedCardsActive);
+		getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
+		traceMulligans(discardedCardsActive, discardedCardsNonActive);
 		startGame();
 	}
 
@@ -1348,8 +1356,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public void concede(int playerId) {
 		// Make sure IDs are assigned before we try to repeatedly destroy hero
 		if (getEntities().anyMatch(e -> e.getId() == IdFactory.UNASSIGNED)) {
-			getLogic().initializePlayer(0);
-			getLogic().initializePlayer(1);
+			getLogic().initializePlayerAndMoveMulliganToSetAside(0, true);
+			getLogic().initializePlayerAndMoveMulliganToSetAside(1, false);
 		}
 
 		getLogic().concede(playerId);

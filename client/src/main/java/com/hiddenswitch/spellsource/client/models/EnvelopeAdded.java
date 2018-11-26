@@ -24,11 +24,13 @@ import com.hiddenswitch.spellsource.client.models.Match;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Indicates one of the records should be added to the client&#39;s ephemeral collections. 
  */
 @ApiModel(description = "Indicates one of the records should be added to the client's ephemeral collections. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeAdded implements Serializable {
   private static final long serialVersionUID = 1L;

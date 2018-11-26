@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
@@ -14,6 +15,7 @@ import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -132,11 +134,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		}
 	}
 
-	@Suspendable
-	private void endGame(ActivityMonitor monitor) throws InterruptedException, SuspendExecution {
-		endGame(monitor.getGameId());
-	}
-
 	/**
 	 * Handles a game that ends by any means. Records metadata, like wins and losses.
 	 *
@@ -206,7 +203,10 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					.setDeckIds(gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList()))
 					.setPlayerNames(gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList()));
 			gameRecord.setReplay(Games.replayFromGameContext(gameContext));
+			// TODO: This should live somewhere more central
+			Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 			mongo().insert(Games.GAMES, mapFrom(gameRecord));
+			LOGGER.info("endGame {}: Saved replay", gameId);
 		} catch (Throwable ex) {
 			LOGGER.error("endGame {}: Could not save a replay due to {}", gameId, ex.getMessage(), ex);
 		}

@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * An object that indicates the player has a pending invitation to a game. 
  */
 @ApiModel(description = "An object that indicates the player has a pending invitation to a game. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Invite implements Serializable {
   private static final long serialVersionUID = 1L;

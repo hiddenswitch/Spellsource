@@ -275,6 +275,18 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("friendId", this::unFriend));
 
+		router.route("/games/:gameId")
+				.handler(authHandler);
+		router.route("/games/:gameId")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("gameId", this::getGameRecord));
+
+		router.route("/games")
+				.handler(authHandler);
+		router.route("/games")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::getGameRecordIds));
+
 		router.route("/invites")
 				.handler(authHandler);
 		router.route("/invites")
