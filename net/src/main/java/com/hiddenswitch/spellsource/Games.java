@@ -44,7 +44,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -1345,7 +1344,12 @@ public interface Games extends Verticle {
 	static EntityChangeSet computeChangeSet(
 			com.hiddenswitch.spellsource.common.GameState gameStateOld,
 			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
-		final MapDifference<Integer, EntityLocation> difference = gameStateOld.to(gameStateNew);
+		MapDifference<Integer, EntityLocation> difference;
+		if (gameStateOld == null) {
+			difference = gameStateNew.start();
+		} else {
+			difference = gameStateOld.to(gameStateNew);
+		}
 
 		EntityChangeSet changes = new EntityChangeSet();
 		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
