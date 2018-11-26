@@ -1942,7 +1942,34 @@ definitions:
         format: 'int64'
         description: |
           A timestamp for when this game was created (approximate).
-  GameStatePair:
+  Replay:
+    description: |
+      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+      Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`.
+    type: 'object'
+    properties:
+      gameStates:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayGameStates'
+      deltas:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayDelta'
+  ReplayDelta:
+    description: |
+      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+    type: 'object'
+    properties:
+      backward:
+        description: |
+          Backward delta.
+        $ref: '#/definitions/EntityChangeSet'
+      forward:
+        description: |
+          Forward delta.
+        $ref: '#/definitions/EntityChangeSet'
+  ReplayGameStates:
     description: |
       A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
     type: 'object'
@@ -1951,15 +1978,6 @@ definitions:
         $ref: '#/definitions/GameState'
       second:
         $ref: '#/definitions/GameState'
-  Replay:
-    description: |
-      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
-    type: 'object'
-    properties:
-      gameStates:
-        type: 'array'
-        items:
-          $ref: '#/definitions/GameStatePair'
   GetGameRecordIdsResponse:
     description: |
       Retrieves an array of game IDs played by this player. Eventually will require paging.
@@ -2451,7 +2469,7 @@ paths:
           schema:
             $ref: '#/definitions/InviteGetResponse'
         default:
-          $ref: '#/definitions/InternalServerError'
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Send an invite.

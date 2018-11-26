@@ -17,7 +17,8 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.GameStatePair;
+import com.hiddenswitch.spellsource.client.models.ReplayDelta;
+import com.hiddenswitch.spellsource.client.models.ReplayGameStates;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
@@ -26,23 +27,26 @@ import java.io.Serializable;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
- * Description of a (possibly partially complete) match. Useful for viewing said match in retrospect. 
+ * Description of a (possibly partially complete) match. Useful for viewing said match in retrospect. Note: If there are &#x60;n&#x60; elements in &#x60;gameStates&#x60; then there should be &#x60;n-1&#x60; elements in &#x60;deltas&#x60;. 
  */
-@ApiModel(description = "Description of a (possibly partially complete) match. Useful for viewing said match in retrospect. ")
+@ApiModel(description = "Description of a (possibly partially complete) match. Useful for viewing said match in retrospect. Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`. ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Replay implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("gameStates")
-  private List<GameStatePair> gameStates = null;
+  private List<ReplayGameStates> gameStates = null;
 
-  public Replay gameStates(List<GameStatePair> gameStates) {
+  @JsonProperty("deltas")
+  private List<ReplayDelta> deltas = null;
+
+  public Replay gameStates(List<ReplayGameStates> gameStates) {
     this.gameStates = gameStates;
     return this;
   }
 
-  public Replay addGameStatesItem(GameStatePair gameStatesItem) {
+  public Replay addGameStatesItem(ReplayGameStates gameStatesItem) {
     if (this.gameStates == null) {
       this.gameStates = new ArrayList<>();
     }
@@ -55,12 +59,38 @@ public class Replay implements Serializable {
    * @return gameStates
   **/
   @ApiModelProperty(value = "")
-  public List<GameStatePair> getGameStates() {
+  public List<ReplayGameStates> getGameStates() {
     return gameStates;
   }
 
-  public void setGameStates(List<GameStatePair> gameStates) {
+  public void setGameStates(List<ReplayGameStates> gameStates) {
     this.gameStates = gameStates;
+  }
+
+  public Replay deltas(List<ReplayDelta> deltas) {
+    this.deltas = deltas;
+    return this;
+  }
+
+  public Replay addDeltasItem(ReplayDelta deltasItem) {
+    if (this.deltas == null) {
+      this.deltas = new ArrayList<>();
+    }
+    this.deltas.add(deltasItem);
+    return this;
+  }
+
+   /**
+   * Get deltas
+   * @return deltas
+  **/
+  @ApiModelProperty(value = "")
+  public List<ReplayDelta> getDeltas() {
+    return deltas;
+  }
+
+  public void setDeltas(List<ReplayDelta> deltas) {
+    this.deltas = deltas;
   }
 
 
@@ -73,12 +103,13 @@ public class Replay implements Serializable {
       return false;
     }
     Replay replay = (Replay) o;
-    return Objects.equals(this.gameStates, replay.gameStates);
+    return Objects.equals(this.gameStates, replay.gameStates) &&
+        Objects.equals(this.deltas, replay.deltas);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(gameStates);
+    return Objects.hash(gameStates, deltas);
   }
 
 
@@ -88,6 +119,7 @@ public class Replay implements Serializable {
     sb.append("class Replay {\n");
     
     sb.append("    gameStates: ").append(toIndentedString(gameStates)).append("\n");
+    sb.append("    deltas: ").append(toIndentedString(deltas)).append("\n");
     sb.append("}");
     return sb.toString();
   }

@@ -737,7 +737,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		if (!record.isBotGame()) {
 			int opponentId = userId.equals(record.getPlayerUserIds().get(0)) ? 1 : 0;
 			for (int i = 0; i < replay.getGameStates().size(); i++) {
-				GameStatePair pair = replay.getGameStates().get(i);
+				ReplayGameStates pair = replay.getGameStates().get(i);
 				if (opponentId == 0) {
 					pair.first(null);
 				} else {

@@ -29,7 +29,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 @ApiModel(description = "A pair of game states. Used to capture a game from each player's point of view (useful for example in replays). ")
 @JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
-public class GameStatePair implements Serializable {
+public class ReplayGameStates implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("first")
@@ -38,7 +38,7 @@ public class GameStatePair implements Serializable {
   @JsonProperty("second")
   private GameState second = null;
 
-  public GameStatePair first(GameState first) {
+  public ReplayGameStates first(GameState first) {
     this.first = first;
     return this;
   }
@@ -56,7 +56,7 @@ public class GameStatePair implements Serializable {
     this.first = first;
   }
 
-  public GameStatePair second(GameState second) {
+  public ReplayGameStates second(GameState second) {
     this.second = second;
     return this;
   }
@@ -83,9 +83,9 @@ public class GameStatePair implements Serializable {
     if (o == null || getClass() != o.getClass()) {
       return false;
     }
-    GameStatePair gameStatePair = (GameStatePair) o;
-    return Objects.equals(this.first, gameStatePair.first) &&
-        Objects.equals(this.second, gameStatePair.second);
+    ReplayGameStates replayGameStates = (ReplayGameStates) o;
+    return Objects.equals(this.first, replayGameStates.first) &&
+        Objects.equals(this.second, replayGameStates.second);
   }
 
   @Override
@@ -97,7 +97,7 @@ public class GameStatePair implements Serializable {
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
-    sb.append("class GameStatePair {\n");
+    sb.append("class ReplayGameStates {\n");
     
     sb.append("    first: ").append(toIndentedString(first)).append("\n");
     sb.append("    second: ").append(toIndentedString(second)).append("\n");

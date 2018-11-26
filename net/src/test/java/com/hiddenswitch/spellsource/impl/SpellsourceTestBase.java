@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.github.fromage.quasi.strands.SuspendableRunnable;
@@ -15,6 +16,7 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxOptions;
+import io.vertx.core.json.Json;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
@@ -45,6 +47,7 @@ public abstract class SpellsourceTestBase {
 
 	@BeforeClass
 	public static void setUp(TestContext context) {
+		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
 			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701));
