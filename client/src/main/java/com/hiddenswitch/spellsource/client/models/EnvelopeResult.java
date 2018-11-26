@@ -23,11 +23,13 @@ import com.hiddenswitch.spellsource.client.models.MatchmakingQueuePutResponse;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * When populated on the server and sent to the client, indicates that a method call had a specific result. 
  */
 @ApiModel(description = "When populated on the server and sent to the client, indicates that a method call had a specific result. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeResult implements Serializable {
   private static final long serialVersionUID = 1L;

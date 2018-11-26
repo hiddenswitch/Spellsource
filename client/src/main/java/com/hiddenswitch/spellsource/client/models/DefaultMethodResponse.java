@@ -16,11 +16,13 @@ package com.hiddenswitch.spellsource.client.models;
 import java.util.Objects;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Indicates a default, successful response. 
  */
 @ApiModel(description = "Indicates a default, successful response. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DefaultMethodResponse implements Serializable {
   private static final long serialVersionUID = 1L;

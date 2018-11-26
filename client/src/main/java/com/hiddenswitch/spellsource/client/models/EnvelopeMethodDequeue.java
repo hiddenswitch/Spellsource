@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Leave the specified queue 
  */
 @ApiModel(description = "Leave the specified queue ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeMethodDequeue implements Serializable {
   private static final long serialVersionUID = 1L;

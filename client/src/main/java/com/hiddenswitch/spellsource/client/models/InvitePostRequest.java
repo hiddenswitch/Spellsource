@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Requests to send an invite to play a 1v1 match, to friend a player, or both. 
  */
 @ApiModel(description = "Requests to send an invite to play a 1v1 match, to friend a player, or both. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class InvitePostRequest implements Serializable {
   private static final long serialVersionUID = 1L;

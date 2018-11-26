@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A summon action that originates from a specific card. 
  */
 @ApiModel(description = "A summon action that originates from a specific card. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class SummonAction implements Serializable {
   private static final long serialVersionUID = 1L;

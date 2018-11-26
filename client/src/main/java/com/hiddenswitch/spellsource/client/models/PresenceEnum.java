@@ -16,9 +16,11 @@ package com.hiddenswitch.spellsource.client.models;
 import java.util.Objects;
 import io.swagger.annotations.ApiModel;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Indicates the current status of a friend. 

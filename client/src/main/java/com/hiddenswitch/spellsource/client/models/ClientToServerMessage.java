@@ -25,10 +25,12 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * ClientToServerMessage
  */
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class ClientToServerMessage implements Serializable {
   private static final long serialVersionUID = 1L;

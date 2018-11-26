@@ -49,7 +49,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.logic.TurnState;
@@ -407,8 +406,8 @@ public class ServerGameContext extends GameContext implements Server {
 		clientsReady.clear();
 
 		// Make sure the players are initialized before sending the original player updates.
-		getLogic().initializePlayer(IdFactory.PLAYER_1);
-		getLogic().initializePlayer(IdFactory.PLAYER_2);
+		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
+		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
 		logger.trace("init {}: Players initialized", getGameId());
 
 		// Signal to the game context has made everything have valid IDs.
@@ -421,10 +420,6 @@ public class ServerGameContext extends GameContext implements Server {
 
 		// Record the time that we started the game in system milliseconds, in case a card wants to use this for an event-based thing.
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
-
-		// Simultaneous mulligan futures
-		Future<List<Card>> mulligansActive = Future.future();
-		Future<List<Card>> mulligansNonActive = Future.future();
 
 		// Set the mulligan timer
 		final TimerId mulliganTimerId;
@@ -444,8 +439,14 @@ public class ServerGameContext extends GameContext implements Server {
 		updateClientsWithGameState();
 
 		// Simultaneous mulligans now
-		getLogic().initAsync(getActivePlayerId(), true, mulligansActive::complete);
-		getLogic().initAsync(getNonActivePlayerId(), false, mulligansNonActive::complete);
+		Future<List<Card>> mulligansActive = Future.future();
+		Future<List<Card>> mulligansNonActive = Future.future();
+
+		List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, mulligansActive::complete);
+		getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, mulligansNonActive::complete);
+
 		// If this is interrupted, it'll bubble up to the general interrupt handler
 		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive, mulligansNonActive)::setHandler);
 
@@ -459,6 +460,11 @@ public class ServerGameContext extends GameContext implements Server {
 			// An error occurred
 			logger.error("init {}: The mulligan phase ended prematurely", getGameId());
 		}
+
+		List<Card> discardedCardsActive = mulligansActive.result();
+		List<Card> discardedCardsNonActive = mulligansNonActive.result();
+		getLogic().handleMulligan(getActivePlayer(), true, discardedCardsActive);
+		getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
 
 		traceMulligans(mulligansActive.result(), mulligansNonActive.result());
 
@@ -824,7 +830,6 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			});
 		}
-		getPlayerConfigurations().clear();
 	}
 
 	/**

@@ -23,11 +23,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * The invites where this user is either the sender or recipient. 
  */
 @ApiModel(description = "The invites where this user is either the sender or recipient. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class InviteGetResponse implements Serializable {
   private static final long serialVersionUID = 1L;

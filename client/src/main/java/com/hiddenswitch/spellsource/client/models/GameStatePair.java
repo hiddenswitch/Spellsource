@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.GameState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A pair of game states. Used to capture a game from each player&#39;s point of view (useful for example in replays). 
  */
 @ApiModel(description = "A pair of game states. Used to capture a game from each player's point of view (useful for example in replays). ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GameStatePair implements Serializable {
   private static final long serialVersionUID = 1L;

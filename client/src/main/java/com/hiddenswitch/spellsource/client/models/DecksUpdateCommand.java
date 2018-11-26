@@ -24,11 +24,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * This command contains a variable number of changes to apply to a deck. Whenever multiple fields are set, the server will try to resolve their effects in the least surprising way possible.  Specifically, if setInventoryIds is set, it will override all other changes to the inventory. Otherwise, removals will be evaluated first, preferring inventory ID removals over card ID removals, followed by adds. 
  */
 @ApiModel(description = "This command contains a variable number of changes to apply to a deck. Whenever multiple fields are set, the server will try to resolve their effects in the least surprising way possible.  Specifically, if setInventoryIds is set, it will override all other changes to the inventory. Otherwise, removals will be evaluated first, preferring inventory ID removals over card ID removals, followed by adds. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksUpdateCommand implements Serializable {
   private static final long serialVersionUID = 1L;

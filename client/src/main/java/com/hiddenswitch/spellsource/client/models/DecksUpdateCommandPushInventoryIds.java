@@ -22,11 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Adds the specified inventory IDs to the deck in this command. Duplicate inventory IDs will cause the update to be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules, duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn&#39;t neutral or the same as the deck&#39;s hero class marks the deck as invalid. 
  */
 @ApiModel(description = "Adds the specified inventory IDs to the deck in this command. Duplicate inventory IDs will cause the update to be rejected. If the user does not own these inventory IDs, the deck becomes invalid. Under standard rules, duplicate card IDs also make the deck invalid. Finally, adding cards whose hero class isn't neutral or the same as the deck's hero class marks the deck as invalid. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksUpdateCommandPushInventoryIds implements Serializable {
   private static final long serialVersionUID = 1L;

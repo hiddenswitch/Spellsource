@@ -25,11 +25,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A prompt to choose from specified options. 
  */
 @ApiModel(description = "A prompt to choose from specified options. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class ChooseOneOptions implements Serializable {
   private static final long serialVersionUID = 1L;

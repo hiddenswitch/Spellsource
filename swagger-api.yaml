@@ -1421,6 +1421,7 @@ definitions:
       id:
         description: The entity's ID in the game.
         type: 'integer'
+        format: 'int32'
         default: -1
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
@@ -1461,158 +1462,210 @@ definitions:
       gold:
         description: Render this entity with a "gold" effect.
         type: 'boolean'
+        default: false
       boardPosition:
         description: The index of the entity in its zone.
         type: 'integer'
+        format: 'int32'
+        default: 0
       owner:
         description: An integer corresponding to the entity's owner.
         type: 'integer'
+        format: 'int32'
+        default: 0
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
       baseHp:
         description: The base hitpoints of the entity.
         type: 'integer'
+        format: 'int32'
+        default: 0
       hp:
         description: |
           The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
         type: 'integer'
+        format: 'int32'
+        default: 0
       durability:
         description: The durability (number of uses) that the weapon still has.
         type: 'integer'
+        format: 'int32'
+        default: 0
       maxHp:
         description: The maximum number of hitpoints this entity can have.
         type: 'integer'
+        format: 'int32'
+        default: 0
       baseAttack:
         description: The entity's base attack value.
         type: 'integer'
+        format: 'int32'
+        default: 0
       attack:
         description: |
           The entity's current attack value. Conventionally, this value should be rendered on the attack token.
         type: 'integer'
+        format: 'int32'
+        default: 0
       baseManaCost:
         description: |
           The entity's base mana cost.
         type: 'integer'
+        format: 'int32'
+        default: 0
       manaCost:
         description: |
           The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
         type: 'integer'
+        format: 'int32'
+        default: 0
       armor:
         description: |
           The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
         type: 'integer'
+        format: 'int32'
+        default: 0
       destroyed:
         description: |
           When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
           still in a zone other than the graveyard; render a death icon over the entity when it is so marked.
         type: 'boolean'
+        default: false
       summoningSickness:
         description: |
           When true, the entity cannot attack this turn because it has "summoning sickness," or a disability related
           to the first turn the entity came into play. Typically rendered with snooze icons.
         type: 'boolean'
+        default: false
       frozen:
         description: |
           When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
           it would normally be able to attack.
         type: 'boolean'
+        default: false
       uncensored:
         description: |
           When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
           shown to the opponent.
         type: 'boolean'
+        default: false
       deflect:
         description: |
           When true, the entity's first incoming hit will hit its owner rather than itself.
         type: 'boolean'
+        default: false
       silenced:
         description: |
           Indicates that the entity was silenced.
         type: 'boolean'
+        default: false
       windfury:
         description: |
           Indicates the entity can attack twice a turn.
         type: 'boolean'
+        default: false
       permanent:
         description: |
           Indicates the entity is an on-battlefield permanent.
         type: 'boolean'
+        default: false
       collectible:
         description: |
           Indicates the card is collectible - valid for putting into decks.
         type: 'boolean'
+        default: false
       taunt:
         description: |
           Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's
           physical attack action targeting.
         type: 'boolean'
+        default: false
       spellDamage:
         description: |
           Indicates the amount of additional spell damage this entity gives its owning player.
         type: 'integer'
+        format: 'int32'
+        default: 0
       charge:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+        default: false
       rush:
         description: |
           When true, the entity can attack a minion the same turn it is summoned.
         type: 'boolean'
+        default: false
       lifesteal:
         description: |
           When true, the entity heals its owner when it deals damage.
         type: 'boolean'
+        default: false
       poisonous:
         description: |
           When true, the entity will destroy any target it damages.
         type: 'boolean'
+        default: false
       enraged:
         description: |
           When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
         type: 'boolean'
+        default: false
       battlecry:
         description: |
           When true, this entity has an effect that gets triggered when it is played from the hand.
         type: 'boolean'
+        default: false
       deathrattles:
         description: |
           When true, this entity has an effect that gets triggered when it is destroyed.
         type: 'boolean'
+        default: false
       immune:
         description: |
           Indicates the entity does not take damage.
         type: 'boolean'
+        default: false
       divineShield:
         description: |
           When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage.
         type: 'boolean'
+        default: false
       stealth:
         description: |
           When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
         type: 'boolean'
+        default: false
       combo:
         description: |
           Indicates this minion has a combo effect.
         type: 'boolean'
+        default: false
       overload:
         description: |
           Indicates the amount of mana that would be locked if this card were played.
         type: 'integer'
+        format: 'int32'
+        default: 0
       chooseOne:
         description: |
           Indicates this card has a choose-one effect.
         type: 'boolean'
+        default: false
       untargetableBySpells:
         description: |
           Indicates this entity cannot be targeted by spells.
         type: 'boolean'
+        default: false
       cannotAttack:
         description: When true, indicates this minion cannot attack, even though it normally can.
         type: 'boolean'
+        default: false
       underAura:
         description: When true, indicates this minion is benefiting from the aura of another effect.
         type: 'boolean'
+        default: false
       customRenderer:
         type: 'string'
       customData:
@@ -1620,21 +1673,30 @@ definitions:
       playable:
         description: When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
         type: 'boolean'
+        default: false
       conditionMet:
         description: When true, indicates that a condition written on the card is met and the player should be informed.
         type: 'boolean'
+        default: false
       mana:
         description: The player's current mana.
         type: 'integer'
+        format: 'int32'
+        default: 0
       maxMana:
         description: The player's maximum amount of mana.
         type: 'integer'
+        format: 'int32'
+        default: 0
       lockedMana:
         description: The amount of mana that was locked due to overload.
         type: 'integer'
+        format: 'int32'
+        default: 0
       hostsTrigger:
         description: When true, indicates this entity has an effect that triggers on game events.
         type: 'boolean'
+        default: false
       note:
         description: A renderable note attached to this entity.
         type: 'string'
@@ -1651,14 +1713,19 @@ definitions:
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
+        default: false
       fires:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'
+        format: 'int32'
+        default: 0
       countUntilCast:
         description: |
           The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
           triggered.
         type: 'integer'
+        format: 'int32'
+        default: 0
       cardSet:
         description: |
           The card expansion set this entity belongs to.
@@ -1680,6 +1747,7 @@ definitions:
           other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
           turn 0.
         type: 'boolean'
+        default: false
   DraftsChooseCardRequest:
     type: 'object'
     required:

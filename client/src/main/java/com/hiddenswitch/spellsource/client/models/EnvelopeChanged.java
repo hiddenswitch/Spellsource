@@ -22,11 +22,13 @@ import com.hiddenswitch.spellsource.client.models.Invite;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Indicates that a record&#39;s fields have changed. 
  */
 @ApiModel(description = "Indicates that a record's fields have changed. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeChanged implements Serializable {
   private static final long serialVersionUID = 1L;

@@ -14,13 +14,8 @@ public class DebugContext extends GameContext {
 
 	@Override
 	public void init() {
-		getLogic().contextReady();
-		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
-		setActivePlayerId(getPlayer(PLAYER_1).getId());
-		getLogic().initializePlayer(PLAYER_1);
-		getLogic().initializePlayer(PLAYER_2);
-		getLogic().init(getActivePlayerId(), true);
-		getLogic().init(getNonActivePlayerId(), false);
+		super.init(0);
+		startTurn(0);
 	}
 
 	public void endTurn() {

@@ -22,11 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Adds the specified card IDs to the deck with this command. If the player doesn&#39;t own the card IDs, the current Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules, the deck becomes invalid if the number of duplicates exceeds 2; or, if the hero class isn&#39;t neutral or the same as the deck&#39;s hero class. 
  */
 @ApiModel(description = "Adds the specified card IDs to the deck with this command. If the player doesn't own the card IDs, the current Spellsource inventory rules will grant the cards to the user. Duplicates are allowed. Under standard rules, the deck becomes invalid if the number of duplicates exceeds 2; or, if the hero class isn't neutral or the same as the deck's hero class. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class DecksUpdateCommandPushCardIds implements Serializable {
   private static final long serialVersionUID = 1L;

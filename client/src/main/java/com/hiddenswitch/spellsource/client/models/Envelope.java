@@ -29,11 +29,13 @@ import com.hiddenswitch.spellsource.client.models.EnvelopeSub;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * A container for data to and from the server. This envelope is the type of every message sent through the /realtime websocket endpoint. 
  */
 @ApiModel(description = "A container for data to and from the server. This envelope is the type of every message sent through the /realtime websocket endpoint. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Envelope implements Serializable {
   private static final long serialVersionUID = 1L;

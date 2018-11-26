@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * An emote that should play from the specified entity. 
  */
 @ApiModel(description = "An emote that should play from the specified entity. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Emote implements Serializable {
   private static final long serialVersionUID = 1L;

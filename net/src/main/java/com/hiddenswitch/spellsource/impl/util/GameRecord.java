@@ -1,12 +1,13 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hiddenswitch.spellsource.client.models.Replay;
 import com.hiddenswitch.spellsource.impl.GameId;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Records information about a game. Currently, this contains the replay data and is keyed by game ID.
@@ -15,7 +16,8 @@ import java.util.Objects;
  * has successfully started (i.e., both players have connected and sent their first messages).
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class GameRecord extends MongoRecord {
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
+public class GameRecord extends MongoRecord implements Serializable {
 	public static final String PLAYER_USER_IDS = "playerUserIds";
 
 	private Replay replay;
@@ -24,6 +26,10 @@ public class GameRecord extends MongoRecord {
 	private List<String> playerNames;
 	private List<String> deckIds;
 	private boolean isBotGame;
+
+	public GameRecord() {
+		super();
+	}
 
 	public GameRecord(GameId gameId) {
 		super(gameId.toString());

@@ -21,11 +21,13 @@ import com.hiddenswitch.spellsource.client.models.EntityLocation;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * The entity state contains all the mutable values of an entity. In the future, the server will provide a list of exact changes to this state. 
  */
 @ApiModel(description = "The entity state contains all the mutable values of an entity. In the future, the server will provide a list of exact changes to this state. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EntityState implements Serializable {
   private static final long serialVersionUID = 1L;
@@ -40,124 +42,124 @@ public class EntityState implements Serializable {
   private String portrait = null;
 
   @JsonProperty("gold")
-  private Boolean gold = null;
+  private Boolean gold = false;
 
   @JsonProperty("boardPosition")
-  private Integer boardPosition = null;
+  private Integer boardPosition = 0;
 
   @JsonProperty("owner")
-  private Integer owner = null;
+  private Integer owner = 0;
 
   @JsonProperty("heroClass")
   private String heroClass = null;
 
   @JsonProperty("baseHp")
-  private Integer baseHp = null;
+  private Integer baseHp = 0;
 
   @JsonProperty("hp")
-  private Integer hp = null;
+  private Integer hp = 0;
 
   @JsonProperty("durability")
-  private Integer durability = null;
+  private Integer durability = 0;
 
   @JsonProperty("maxHp")
-  private Integer maxHp = null;
+  private Integer maxHp = 0;
 
   @JsonProperty("baseAttack")
-  private Integer baseAttack = null;
+  private Integer baseAttack = 0;
 
   @JsonProperty("attack")
-  private Integer attack = null;
+  private Integer attack = 0;
 
   @JsonProperty("baseManaCost")
-  private Integer baseManaCost = null;
+  private Integer baseManaCost = 0;
 
   @JsonProperty("manaCost")
-  private Integer manaCost = null;
+  private Integer manaCost = 0;
 
   @JsonProperty("armor")
-  private Integer armor = null;
+  private Integer armor = 0;
 
   @JsonProperty("destroyed")
-  private Boolean destroyed = null;
+  private Boolean destroyed = false;
 
   @JsonProperty("summoningSickness")
-  private Boolean summoningSickness = null;
+  private Boolean summoningSickness = false;
 
   @JsonProperty("frozen")
-  private Boolean frozen = null;
+  private Boolean frozen = false;
 
   @JsonProperty("uncensored")
-  private Boolean uncensored = null;
+  private Boolean uncensored = false;
 
   @JsonProperty("deflect")
-  private Boolean deflect = null;
+  private Boolean deflect = false;
 
   @JsonProperty("silenced")
-  private Boolean silenced = null;
+  private Boolean silenced = false;
 
   @JsonProperty("windfury")
-  private Boolean windfury = null;
+  private Boolean windfury = false;
 
   @JsonProperty("permanent")
-  private Boolean permanent = null;
+  private Boolean permanent = false;
 
   @JsonProperty("collectible")
-  private Boolean collectible = null;
+  private Boolean collectible = false;
 
   @JsonProperty("taunt")
-  private Boolean taunt = null;
+  private Boolean taunt = false;
 
   @JsonProperty("spellDamage")
-  private Integer spellDamage = null;
+  private Integer spellDamage = 0;
 
   @JsonProperty("charge")
-  private Boolean charge = null;
+  private Boolean charge = false;
 
   @JsonProperty("rush")
-  private Boolean rush = null;
+  private Boolean rush = false;
 
   @JsonProperty("lifesteal")
-  private Boolean lifesteal = null;
+  private Boolean lifesteal = false;
 
   @JsonProperty("poisonous")
-  private Boolean poisonous = null;
+  private Boolean poisonous = false;
 
   @JsonProperty("enraged")
-  private Boolean enraged = null;
+  private Boolean enraged = false;
 
   @JsonProperty("battlecry")
-  private Boolean battlecry = null;
+  private Boolean battlecry = false;
 
   @JsonProperty("deathrattles")
-  private Boolean deathrattles = null;
+  private Boolean deathrattles = false;
 
   @JsonProperty("immune")
-  private Boolean immune = null;
+  private Boolean immune = false;
 
   @JsonProperty("divineShield")
-  private Boolean divineShield = null;
+  private Boolean divineShield = false;
 
   @JsonProperty("stealth")
-  private Boolean stealth = null;
+  private Boolean stealth = false;
 
   @JsonProperty("combo")
-  private Boolean combo = null;
+  private Boolean combo = false;
 
   @JsonProperty("overload")
-  private Integer overload = null;
+  private Integer overload = 0;
 
   @JsonProperty("chooseOne")
-  private Boolean chooseOne = null;
+  private Boolean chooseOne = false;
 
   @JsonProperty("untargetableBySpells")
-  private Boolean untargetableBySpells = null;
+  private Boolean untargetableBySpells = false;
 
   @JsonProperty("cannotAttack")
-  private Boolean cannotAttack = null;
+  private Boolean cannotAttack = false;
 
   @JsonProperty("underAura")
-  private Boolean underAura = null;
+  private Boolean underAura = false;
 
   @JsonProperty("customRenderer")
   private String customRenderer = null;
@@ -166,22 +168,22 @@ public class EntityState implements Serializable {
   private String customData = null;
 
   @JsonProperty("playable")
-  private Boolean playable = null;
+  private Boolean playable = false;
 
   @JsonProperty("conditionMet")
-  private Boolean conditionMet = null;
+  private Boolean conditionMet = false;
 
   @JsonProperty("mana")
-  private Integer mana = null;
+  private Integer mana = 0;
 
   @JsonProperty("maxMana")
-  private Integer maxMana = null;
+  private Integer maxMana = 0;
 
   @JsonProperty("lockedMana")
-  private Integer lockedMana = null;
+  private Integer lockedMana = 0;
 
   @JsonProperty("hostsTrigger")
-  private Boolean hostsTrigger = null;
+  private Boolean hostsTrigger = false;
 
   @JsonProperty("note")
   private String note = null;
@@ -233,13 +235,13 @@ public class EntityState implements Serializable {
   private CardTypeEnum cardType = null;
 
   @JsonProperty("tribe")
-  private String tribe = null;
+  private String tribe = "false";
 
   @JsonProperty("fires")
-  private Integer fires = null;
+  private Integer fires = 0;
 
   @JsonProperty("countUntilCast")
-  private Integer countUntilCast = null;
+  private Integer countUntilCast = 0;
 
   @JsonProperty("cardSet")
   private String cardSet = null;
@@ -291,7 +293,7 @@ public class EntityState implements Serializable {
   private RarityEnum rarity = null;
 
   @JsonProperty("gameStarted")
-  private Boolean gameStarted = null;
+  private Boolean gameStarted = false;
 
   public EntityState location(EntityLocation location) {
     this.location = location;

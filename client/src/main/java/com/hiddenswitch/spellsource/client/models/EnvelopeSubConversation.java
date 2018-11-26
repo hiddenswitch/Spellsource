@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Subscribe to messages in a specific conversation. Receives all past messages, followed by any new ones. 
  */
 @ApiModel(description = "Subscribe to messages in a specific conversation. Receives all past messages, followed by any new ones. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeSubConversation implements Serializable {
   private static final long serialVersionUID = 1L;

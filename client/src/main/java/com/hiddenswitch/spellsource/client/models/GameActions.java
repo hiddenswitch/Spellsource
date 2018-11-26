@@ -27,11 +27,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * An object representing all valid game actions in this action request. 
  */
 @ApiModel(description = "An object representing all valid game actions in this action request. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GameActions implements Serializable {
   private static final long serialVersionUID = 1L;

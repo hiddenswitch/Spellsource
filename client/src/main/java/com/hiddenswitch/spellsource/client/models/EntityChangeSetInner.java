@@ -21,10 +21,12 @@ import com.hiddenswitch.spellsource.client.models.EntityState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * EntityChangeSetInner
  */
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EntityChangeSetInner implements Serializable {
   private static final long serialVersionUID = 1L;

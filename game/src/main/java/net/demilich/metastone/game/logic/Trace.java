@@ -99,18 +99,21 @@ public class Trace implements Serializable, Cloneable {
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
+		int[][] mulligans1 = new int[2][];
+		int[][] mulligans2 = new int[2][];
+		mulligans1[0] = Arrays.copyOf(mulligans[0], mulligans[0].length);
+		mulligans1[1] = Arrays.copyOf(mulligans[1], mulligans[1].length);
+		mulligans2[0] = Arrays.copyOf(mulligans[0], mulligans[0].length);
+		mulligans2[1] = Arrays.copyOf(mulligans[1], mulligans[1].length);
 		stateRestored.setBehaviour(
-				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
+				0, new TraceBehaviour(0, mulligans1, nextAction, behaviourActions, beforeRequestActionHandler));
 		stateRestored.setBehaviour(
-				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
+				1, new TraceBehaviour(1, mulligans2, nextAction, behaviourActions, beforeRequestActionHandler));
 		GameLogic logic = new GameLogic((IdFactoryImpl) stateRestored.getLogic().getIdFactory(), getSeed());
 		logic.setContext(stateRestored);
 		stateRestored.setLogic(logic);
 		stateRestored.init();
-		try {
-			stateRestored.resume();
-		} catch (CancellationException ex) {
-		}
+		stateRestored.resume();
 		CardCatalogue.setVersion(originalCatalogueVersion);
 		return stateRestored;
 	}

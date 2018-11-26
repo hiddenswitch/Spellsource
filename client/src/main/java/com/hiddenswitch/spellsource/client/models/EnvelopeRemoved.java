@@ -20,11 +20,13 @@ import com.fasterxml.jackson.annotation.JsonValue;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Indicates that a record has been removed from the client&#39;s ephemeral collections. 
  */
 @ApiModel(description = "Indicates that a record has been removed from the client's ephemeral collections. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class EnvelopeRemoved implements Serializable {
   private static final long serialVersionUID = 1L;

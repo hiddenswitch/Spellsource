@@ -21,16 +21,18 @@ import com.hiddenswitch.spellsource.client.models.EntityState;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Entity
  */
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class Entity implements Serializable {
   private static final long serialVersionUID = 1L;
 
   @JsonProperty("id")
-  private Integer id = null;
+  private Integer id = -1;
 
   @JsonProperty("cardId")
   private String cardId = null;

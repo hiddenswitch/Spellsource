@@ -22,11 +22,13 @@ import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.io.Serializable;
+import com.fasterxml.jackson.annotation.JsonInclude;
 
 /**
  * Retrieves an array of game IDs played by this player. Eventually will require paging. 
  */
 @ApiModel(description = "Retrieves an array of game IDs played by this player. Eventually will require paging. ")
+@JsonInclude(JsonInclude.Include.NON_DEFAULT)
 
 public class GetGameRecordIdsResponse implements Serializable {
   private static final long serialVersionUID = 1L;
