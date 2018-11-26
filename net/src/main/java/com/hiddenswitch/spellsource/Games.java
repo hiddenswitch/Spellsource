@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
+import com.google.common.collect.Maps;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
@@ -1343,7 +1344,12 @@ public interface Games extends Verticle {
 	static EntityChangeSet computeChangeSet(
 			com.hiddenswitch.spellsource.common.GameState gameStateOld,
 			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
-		final MapDifference<Integer, EntityLocation> difference = gameStateOld.to(gameStateNew);
+		MapDifference<Integer, EntityLocation> difference;
+		if (gameStateOld == null) {
+			difference = gameStateNew.start();
+		} else {
+			difference = gameStateOld.to(gameStateNew);
+		}
 
 		EntityChangeSet changes = new EntityChangeSet();
 		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
