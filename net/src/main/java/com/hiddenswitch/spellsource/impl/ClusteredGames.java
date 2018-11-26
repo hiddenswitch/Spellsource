@@ -203,8 +203,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 					.setDeckIds(gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList()))
 					.setPlayerNames(gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList()));
 			gameRecord.setReplay(Games.replayFromGameContext(gameContext));
-			// TODO: This should live somewhere more central
-			Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 			mongo().insert(Games.GAMES, mapFrom(gameRecord));
 			LOGGER.info("endGame {}: Saved replay", gameId);
 		} catch (Throwable ex) {

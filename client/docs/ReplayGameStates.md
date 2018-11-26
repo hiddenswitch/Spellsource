@@ -1,5 +1,5 @@
 
-# GameStatePair
+# ReplayGameStates
 
 ## Properties
 Name | Type | Description | Notes

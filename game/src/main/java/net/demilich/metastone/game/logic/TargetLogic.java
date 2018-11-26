@@ -95,8 +95,7 @@ public class TargetLogic implements Serializable {
 			return environmentResult;
 		}
 
-		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId)
-				.findFirst();
+		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId).findFirst();
 		if (entity.isPresent()) {
 			return entity.get();
 		} else {

@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
@@ -44,7 +45,9 @@ import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -1333,6 +1336,43 @@ public interface Games extends Verticle {
 	}
 
 	/**
+	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
+	 *
+	 * @param gameStateOld
+	 * @param gameStateNew
+	 * @return
+	 */
+	static EntityChangeSet computeChangeSet(
+			com.hiddenswitch.spellsource.common.GameState gameStateOld,
+			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
+		final MapDifference<Integer, EntityLocation> difference = gameStateOld.to(gameStateNew);
+
+		EntityChangeSet changes = new EntityChangeSet();
+		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
+				.id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.C)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue().rightValue())))
+				.p0(new EntityState()
+						.location(Games.toClientLocation(i.getValue().leftValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.A)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.R)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		return changes;
+	}
+
+	/**
 	 * Generates a client-readable {@link Replay} object (for use with the client replay functionality).
 	 *
 	 * @param originalCtx The context for which to generate a replay.
@@ -1340,29 +1380,34 @@ public interface Games extends Verticle {
 	 */
 	static Replay replayFromGameContext(GameContext originalCtx) {
 		Replay replay = new Replay();
-		Deque<GameStatePair> items = new ConcurrentLinkedDeque<>();
+		AtomicReference<com.hiddenswitch.spellsource.common.GameState> gameStateOld = new AtomicReference<>();
+		Consumer<GameContext> augmentReplayWithCtx = (GameContext ctx) -> {
+			// We record each game state by dumping the {@link GameState} objects from each player's point of
+			// view and any state transitions into the replay.
+			ReplayGameStates gameStates = new ReplayGameStates();
+			gameStates.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
+			gameStates.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
+			replay.addGameStatesItem(gameStates);
+
+			if (gameStateOld.get() != null) {
+				com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
+				ReplayDelta delta = new ReplayDelta();
+				delta.forward(computeChangeSet(gameStateOld.get(), gameStateNew));
+				delta.backward(computeChangeSet(gameStateNew, gameStateOld.get()));
+				replay.addDeltasItem(delta);
+			}
+
+			gameStateOld.set(ctx.getGameStateCopy());
+		};
+
 		// Replay the game from a trace while capturing the {@link Replay} object.
 		GameContext replayCtx = originalCtx.getTrace().replayContext(
 				false,
-				(GameContext ctx) -> {
-					// We record each game state by dumping the {@link GameState} objects from each player's point of
-					// view into the replay.
-					try {
-						GameStatePair gameStatePair = new GameStatePair();
-						gameStatePair.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
-						gameStatePair.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
-						items.push(gameStatePair);
-					} catch (Throwable any) {
-						LOGGER.error("replayFromGameContext: {}", any);
-					}
-				}
+				augmentReplayWithCtx
 		);
-		// Append the final game state (from each player's point of view).
-		GameStatePair gameStatePair = new GameStatePair();
-		gameStatePair.first(getGameState(replayCtx, replayCtx.getPlayer1(), replayCtx.getPlayer2()));
-		gameStatePair.second(getGameState(replayCtx, replayCtx.getPlayer2(), replayCtx.getPlayer1()));
-		items.push(gameStatePair);
-		replay.setGameStates(new ArrayList<>(items));
+
+		// Append the final game states / deltas.
+		augmentReplayWithCtx.accept(replayCtx);
 
 		return replay;
 	}

@@ -722,37 +722,8 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	private EntityChangeSet getChangeSet(com.hiddenswitch.spellsource.common.GameState current) {
-		final MapDifference<Integer, net.demilich.metastone.game.entities.EntityLocation> difference;
-		if (lastStateSent == null) {
-			difference = current.start();
-		} else {
-			difference = lastStateSent.to(current);
-		}
-
-		EntityChangeSet changes = new EntityChangeSet();
-		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
-				.id(i.getKey())
-				.op(EntityChangeSetInner.OpEnum.C)
-				.p1(new EntityState()
-						.location(Games.toClientLocation(i.getValue().rightValue())))
-				.p0(new EntityState()
-						.location(Games.toClientLocation(i.getValue().leftValue()))))
-				.forEach(changes::add);
-
-		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
-				.op(EntityChangeSetInner.OpEnum.A)
-				.p1(new EntityState()
-						.location(Games.toClientLocation(i.getValue()))))
-				.forEach(changes::add);
-
-		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
-				.op(EntityChangeSetInner.OpEnum.R)
-				.p1(new EntityState()
-						.location(Games.toClientLocation(i.getValue()))))
-				.forEach(changes::add);
-
+		EntityChangeSet changes = Games.computeChangeSet(lastStateSent, current);
 		lastStateSent = current;
-
 		return changes;
 	}
 
