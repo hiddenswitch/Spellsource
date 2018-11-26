@@ -68,6 +68,9 @@ public class ServerToClientMessage implements Serializable {
   @JsonProperty("gameOver")
   private GameOver gameOver = null;
 
+  @JsonProperty("isReplayMessage")
+  private Boolean isReplayMessage = false;
+
   @JsonProperty("startingCards")
   private List<Entity> startingCards = null;
 
@@ -236,6 +239,24 @@ public class ServerToClientMessage implements Serializable {
     this.gameOver = gameOver;
   }
 
+  public ServerToClientMessage isReplayMessage(Boolean isReplayMessage) {
+    this.isReplayMessage = isReplayMessage;
+    return this;
+  }
+
+   /**
+   * True iff this message is a part of a replay. 
+   * @return isReplayMessage
+  **/
+  @ApiModelProperty(value = "True iff this message is a part of a replay. ")
+  public Boolean isIsReplayMessage() {
+    return isReplayMessage;
+  }
+
+  public void setIsReplayMessage(Boolean isReplayMessage) {
+    this.isReplayMessage = isReplayMessage;
+  }
+
   public ServerToClientMessage startingCards(List<Entity> startingCards) {
     this.startingCards = startingCards;
     return this;
@@ -299,13 +320,14 @@ public class ServerToClientMessage implements Serializable {
         Objects.equals(this.actions, serverToClientMessage.actions) &&
         Objects.equals(this.emote, serverToClientMessage.emote) &&
         Objects.equals(this.gameOver, serverToClientMessage.gameOver) &&
+        Objects.equals(this.isReplayMessage, serverToClientMessage.isReplayMessage) &&
         Objects.equals(this.startingCards, serverToClientMessage.startingCards) &&
         Objects.equals(this.event, serverToClientMessage.event);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, localPlayerId, timers, messageType, changes, gameState, actions, emote, gameOver, startingCards, event);
+    return Objects.hash(id, localPlayerId, timers, messageType, changes, gameState, actions, emote, gameOver, isReplayMessage, startingCards, event);
   }
 
 
@@ -323,6 +345,7 @@ public class ServerToClientMessage implements Serializable {
     sb.append("    actions: ").append(toIndentedString(actions)).append("\n");
     sb.append("    emote: ").append(toIndentedString(emote)).append("\n");
     sb.append("    gameOver: ").append(toIndentedString(gameOver)).append("\n");
+    sb.append("    isReplayMessage: ").append(toIndentedString(isReplayMessage)).append("\n");
     sb.append("    startingCards: ").append(toIndentedString(startingCards)).append("\n");
     sb.append("    event: ").append(toIndentedString(event)).append("\n");
     sb.append("}");

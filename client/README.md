@@ -229,7 +229,7 @@ Class | Method | HTTP request | Description
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
  - [PresenceEnum](docs/PresenceEnum.md)
  - [Replay](docs/Replay.md)
- - [ReplayDelta](docs/ReplayDelta.md)
+ - [ReplayDeltas](docs/ReplayDeltas.md)
  - [ReplayGameStates](docs/ReplayGameStates.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
  - [SpellAction](docs/SpellAction.md)

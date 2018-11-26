@@ -17,7 +17,7 @@ import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import com.hiddenswitch.spellsource.client.models.ReplayDelta;
+import com.hiddenswitch.spellsource.client.models.ReplayDeltas;
 import com.hiddenswitch.spellsource.client.models.ReplayGameStates;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -39,7 +39,7 @@ public class Replay implements Serializable {
   private List<ReplayGameStates> gameStates = null;
 
   @JsonProperty("deltas")
-  private List<ReplayDelta> deltas = null;
+  private List<ReplayDeltas> deltas = null;
 
   public Replay gameStates(List<ReplayGameStates> gameStates) {
     this.gameStates = gameStates;
@@ -67,12 +67,12 @@ public class Replay implements Serializable {
     this.gameStates = gameStates;
   }
 
-  public Replay deltas(List<ReplayDelta> deltas) {
+  public Replay deltas(List<ReplayDeltas> deltas) {
     this.deltas = deltas;
     return this;
   }
 
-  public Replay addDeltasItem(ReplayDelta deltasItem) {
+  public Replay addDeltasItem(ReplayDeltas deltasItem) {
     if (this.deltas == null) {
       this.deltas = new ArrayList<>();
     }
@@ -85,11 +85,11 @@ public class Replay implements Serializable {
    * @return deltas
   **/
   @ApiModelProperty(value = "")
-  public List<ReplayDelta> getDeltas() {
+  public List<ReplayDeltas> getDeltas() {
     return deltas;
   }
 
-  public void setDeltas(List<ReplayDelta> deltas) {
+  public void setDeltas(List<ReplayDeltas> deltas) {
     this.deltas = deltas;
   }
 
