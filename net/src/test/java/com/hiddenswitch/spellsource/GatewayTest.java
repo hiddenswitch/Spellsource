@@ -26,6 +26,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -153,71 +154,6 @@ public class GatewayTest extends SpellsourceTestBase {
 		client.matchmakeQuickPlay(null);
 		client.waitUntilDone();
 		assertTrue(client.isGameOver());
-	}
-
-	@Test(timeout = 165000L)
-	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
-		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 2;
-		final int checkpointTotal = count * 6;
-
-		CountDownLatch latch = new CountDownLatch(count);
-		ExecutorService testExecutor = Executors.newFixedThreadPool(count);
-
-		Deque<String> verticles = new ConcurrentLinkedDeque<>();
-		// Deploy processorCount-1 more gateways
-		CompositeFuture.all(Stream.generate(() -> {
-			Future<String> fut = Future.future();
-			vertx.deployVerticle(Gateway.create(), v1 -> {
-				verticles.add(v1.result());
-				fut.complete();
-			});
-			return fut;
-		}).limit(processorCount - 1).collect(Collectors.toList())).setHandler(v1 -> {
-			AtomicInteger checkpoints = new AtomicInteger(0);
-			for (int i = 0; i < count; i++) {
-				testExecutor.submit(() -> {
-					try {
-						UnityClient client = new UnityClient(context);
-						client.createUserAccount(null);
-						String userId = client.getAccount().getId();
-						logger.trace("testSimultaneousGames: {} 1st Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.matchmakeConstructedPlay(null);
-						logger.trace("testSimultaneousGames: {} 1st Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.waitUntilDone();
-						assertTrue(client.isGameOver());
-						assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
-						logger.trace("testSimultaneousGames: {} 1st Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-
-						// Try two games in a row
-						logger.trace("testSimultaneousGames: {} 2nd Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.matchmakeConstructedPlay(null);
-						logger.trace("testSimultaneousGames: {} 2nd Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.waitUntilDone();
-						assertTrue(client.isGameOver());
-						assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
-						logger.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-
-						latch.countDown();
-					} catch (ApiException t) {
-						context.exceptionHandler().handle(t);
-					}
-				});
-			}
-		});
-
-		// Random games can take quite a long time to finish so be patient...
-		latch.await(165L, TimeUnit.SECONDS);
-		assertEquals(0L, latch.getCount());
-		testExecutor.shutdown();
-
-
-		CompositeFuture.all(verticles.stream().map(deploymentId -> {
-			Future<Void> fut = Future.future();
-			vertx.undeploy(deploymentId, fut);
-			return fut;
-		}).collect(Collectors.toList())).setHandler(context.asyncAssertSuccess());
-
 	}
 
 

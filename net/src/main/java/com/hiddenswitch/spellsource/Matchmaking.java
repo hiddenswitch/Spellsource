@@ -157,7 +157,7 @@ public interface Matchmaking extends Verticle {
 	@Suspendable
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration queueConfiguration) throws SuspendExecution {
 		CountDownLatch awaitReady = new CountDownLatch(1);
-		Fiber<Void> fiber = getContextScheduler().newFiber(() -> {
+		Fiber<Void> fiber = new Fiber<>("Matchmaking::queues[" + queueId + "]", getContextScheduler(), () -> {
 			// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
 			SuspendableLock lock = null;
 			SuspendableQueue<MatchmakingQueueEntry> queue = null;

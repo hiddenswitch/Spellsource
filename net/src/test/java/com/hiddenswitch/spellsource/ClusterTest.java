@@ -28,7 +28,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	public void testArrayQueueOverCluster(TestContext context) {
 		Async latch = context.async(3);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702));
+		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
 				.setWorkerPoolSize(99)
@@ -79,7 +79,7 @@ public class ClusterTest extends SpellsourceTestBase {
 		int count = 10;
 		Async latch = context.async(count);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702));
+		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
 				.setBlockedThreadCheckInterval(30000L)

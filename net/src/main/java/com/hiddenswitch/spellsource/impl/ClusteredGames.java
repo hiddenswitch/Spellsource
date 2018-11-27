@@ -100,7 +100,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				connections.replace(request.getGameId(), response);
 				contexts.put(request.getGameId(), context);
 				// Plays the game context in its own fiber
-				context.play();
+				context.play(true);
 				return response;
 			} catch (RuntimeException any) {
 				// If an error occurred, make sure to remove users from the games we just put them into.

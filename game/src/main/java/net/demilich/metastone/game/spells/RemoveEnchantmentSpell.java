@@ -27,7 +27,7 @@ public final class RemoveEnchantmentSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD);
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.HOW_MANY);
 		CardList cards = SpellUtils.getCards(context, player, null, source, desc);
 		if (cards.isEmpty()) {
 			return;

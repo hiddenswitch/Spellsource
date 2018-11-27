@@ -5,15 +5,24 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### Server Version: 0.6.3, Client Version: 2.0.10
+#### 0.6.4-2.0.10 (Monday, November 26th, 2018)
 
-A quick fix was released to roll back Unity version to 2018.1.9f. This ensures the client gets build automatically.
-
-Changes since 0.6.3-2.0.9 (Saturday, November 24th, 2018):
+Some connectivity issues ought to be improved. Please report "Networking" errors in the Discord.
 
 ###### Known Issues:
 
- - Some situations with drawing cards from the deck can cause the game to hang.
+ - Some situations with drawing cards from the deck can cause the game to hang. If this happens to you, please note what you were doing and report it in the Discord.
+ - Repeatedly playing King Toggwaggle will cause the game to hang.
+
+###### Content Fixes:
+
+ - Chromie now draws cards instead of moving them directly from the deck. Thus, Chromie's swap counts as a true draw.
+ - Lord Stormsong's deathrattle is less buggy.
+ - Purrfect Tracker and other filtered deck draw effects interact with "Cast this when drawn" effects should no longer cause crashes.
+ - Bright Eyed Scout and other card cost modification effects that occur on draw should no longer cause crashes.
+ - Totemic Slam now interacts with Fandral Staghelm, for fun.
+
+Changes since 0.6.3-2.0.9 (Saturday, November 24th, 2018):
 
 ###### Content Fixes:
 
