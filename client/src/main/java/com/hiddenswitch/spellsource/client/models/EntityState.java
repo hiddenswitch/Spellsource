@@ -45,40 +45,40 @@ public class EntityState implements Serializable {
   private Boolean gold = false;
 
   @JsonProperty("boardPosition")
-  private Integer boardPosition = 0;
+  private Integer boardPosition = null;
 
   @JsonProperty("owner")
-  private Integer owner = 0;
+  private Integer owner = null;
 
   @JsonProperty("heroClass")
   private String heroClass = null;
 
   @JsonProperty("baseHp")
-  private Integer baseHp = 0;
+  private Integer baseHp = null;
 
   @JsonProperty("hp")
-  private Integer hp = 0;
+  private Integer hp = null;
 
   @JsonProperty("durability")
-  private Integer durability = 0;
+  private Integer durability = null;
 
   @JsonProperty("maxHp")
-  private Integer maxHp = 0;
+  private Integer maxHp = null;
 
   @JsonProperty("baseAttack")
-  private Integer baseAttack = 0;
+  private Integer baseAttack = null;
 
   @JsonProperty("attack")
-  private Integer attack = 0;
+  private Integer attack = null;
 
   @JsonProperty("baseManaCost")
-  private Integer baseManaCost = 0;
+  private Integer baseManaCost = null;
 
   @JsonProperty("manaCost")
-  private Integer manaCost = 0;
+  private Integer manaCost = null;
 
   @JsonProperty("armor")
-  private Integer armor = 0;
+  private Integer armor = null;
 
   @JsonProperty("destroyed")
   private Boolean destroyed = false;
@@ -111,7 +111,7 @@ public class EntityState implements Serializable {
   private Boolean taunt = false;
 
   @JsonProperty("spellDamage")
-  private Integer spellDamage = 0;
+  private Integer spellDamage = null;
 
   @JsonProperty("charge")
   private Boolean charge = false;
@@ -147,7 +147,7 @@ public class EntityState implements Serializable {
   private Boolean combo = false;
 
   @JsonProperty("overload")
-  private Integer overload = 0;
+  private Integer overload = null;
 
   @JsonProperty("chooseOne")
   private Boolean chooseOne = false;
@@ -174,13 +174,13 @@ public class EntityState implements Serializable {
   private Boolean conditionMet = false;
 
   @JsonProperty("mana")
-  private Integer mana = 0;
+  private Integer mana = null;
 
   @JsonProperty("maxMana")
-  private Integer maxMana = 0;
+  private Integer maxMana = null;
 
   @JsonProperty("lockedMana")
-  private Integer lockedMana = 0;
+  private Integer lockedMana = null;
 
   @JsonProperty("hostsTrigger")
   private Boolean hostsTrigger = false;
@@ -235,13 +235,13 @@ public class EntityState implements Serializable {
   private CardTypeEnum cardType = null;
 
   @JsonProperty("tribe")
-  private String tribe = "false";
+  private String tribe = null;
 
   @JsonProperty("fires")
-  private Integer fires = 0;
+  private Integer fires = null;
 
   @JsonProperty("countUntilCast")
-  private Integer countUntilCast = 0;
+  private Integer countUntilCast = null;
 
   @JsonProperty("cardSet")
   private String cardSet = null;

@@ -1472,12 +1472,10 @@ definitions:
         description: The index of the entity in its zone.
         type: 'integer'
         format: 'int32'
-        default: 0
       owner:
         description: An integer corresponding to the entity's owner.
         type: 'integer'
         format: 'int32'
-        default: 0
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
@@ -1485,52 +1483,43 @@ definitions:
         description: The base hitpoints of the entity.
         type: 'integer'
         format: 'int32'
-        default: 0
       hp:
         description: |
           The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
         type: 'integer'
         format: 'int32'
-        default: 0
       durability:
         description: The durability (number of uses) that the weapon still has.
         type: 'integer'
         format: 'int32'
-        default: 0
       maxHp:
         description: The maximum number of hitpoints this entity can have.
         type: 'integer'
         format: 'int32'
-        default: 0
       baseAttack:
         description: The entity's base attack value.
         type: 'integer'
         format: 'int32'
-        default: 0
       attack:
         description: |
           The entity's current attack value. Conventionally, this value should be rendered on the attack token.
         type: 'integer'
         format: 'int32'
-        default: 0
       baseManaCost:
         description: |
           The entity's base mana cost.
         type: 'integer'
         format: 'int32'
-        default: 0
       manaCost:
         description: |
           The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
         type: 'integer'
         format: 'int32'
-        default: 0
       armor:
         description: |
           The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
         type: 'integer'
         format: 'int32'
-        default: 0
       destroyed:
         description: |
           When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
@@ -1591,7 +1580,6 @@ definitions:
           Indicates the amount of additional spell damage this entity gives its owning player.
         type: 'integer'
         format: 'int32'
-        default: 0
       charge:
         description: |
           When true, the entity can attack the same turn it is summoned.
@@ -1652,7 +1640,6 @@ definitions:
           Indicates the amount of mana that would be locked if this card were played.
         type: 'integer'
         format: 'int32'
-        default: 0
       chooseOne:
         description: |
           Indicates this card has a choose-one effect.
@@ -1687,17 +1674,14 @@ definitions:
         description: The player's current mana.
         type: 'integer'
         format: 'int32'
-        default: 0
       maxMana:
         description: The player's maximum amount of mana.
         type: 'integer'
         format: 'int32'
-        default: 0
       lockedMana:
         description: The amount of mana that was locked due to overload.
         type: 'integer'
         format: 'int32'
-        default: 0
       hostsTrigger:
         description: When true, indicates this entity has an effect that triggers on game events.
         type: 'boolean'
@@ -1718,19 +1702,16 @@ definitions:
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
-        default: false
       fires:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'
         format: 'int32'
-        default: 0
       countUntilCast:
         description: |
           The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
           triggered.
         type: 'integer'
         format: 'int32'
-        default: 0
       cardSet:
         description: |
           The card expansion set this entity belongs to.
