@@ -503,7 +503,7 @@ public class Spellsource {
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
 		// Use up all the event loops
-		for (int i = 0; i < Runtime.getRuntime().availableProcessors() * 2; i++)
+		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
 			for (Verticle verticle : services()) {
 				final Future<String> future = Future.future();
 				vertx.deployVerticle(verticle, future);
