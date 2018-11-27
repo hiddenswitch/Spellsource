@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.util;
 
-import io.netty.channel.DefaultEventLoopGroup;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;

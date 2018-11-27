@@ -77,7 +77,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	@Test(timeout = 45000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		// Connect to existing cluster
-		int count = 2 * (Runtime.getRuntime().availableProcessors() - (Runtime.getRuntime().availableProcessors() + 1) % 2);
+		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2);
 		Async latch = context.async(count);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
@@ -111,7 +111,7 @@ public class ClusterTest extends SpellsourceTestBase {
 								context.assertTrue(client.isGameOver());
 								client.disconnect();
 								latch.countDown();
-							})).limit(count).forEach(Thread::start);
+							})).limit(count).forEachOrdered(Thread::start);
 				}));
 
 			}));
