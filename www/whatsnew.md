@@ -7,6 +7,8 @@ Thanks for playing Spellsource today! Release notes are below.
 
 #### 0.6.4-2.0.10 (Monday, November 26th, 2018)
 
+Overall server performance has been improved by better using computer resources.
+
 Some connectivity issues ought to be improved. Please report "Networking" errors in the Discord.
 
 ###### Known Issues:
