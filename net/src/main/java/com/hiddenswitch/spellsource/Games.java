@@ -1400,13 +1400,15 @@ public interface Games extends Verticle {
 			gameStates.second(gameStateSecond);
 			replay.addGameStatesItem(gameStates);
 
+			com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
+			ReplayDeltas delta = new ReplayDeltas();
+			delta.forward(computeChangeSet(gameStateOld.get(), gameStateNew));
 			if (gameStateOld.get() != null) {
-				com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
-				ReplayDelta delta = new ReplayDelta();
-				delta.forward(computeChangeSet(gameStateOld.get(), gameStateNew));
+				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
+				// backward populated.
 				delta.backward(computeChangeSet(gameStateNew, gameStateOld.get()));
-				replay.addDeltasItem(delta);
 			}
+			replay.addDeltasItem(delta);
 
 			gameStateOld.set(ctx.getGameStateCopy());
 		};
