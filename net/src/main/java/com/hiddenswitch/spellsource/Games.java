@@ -4,6 +4,7 @@ import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -1389,8 +1390,14 @@ public interface Games extends Verticle {
 			// We record each game state by dumping the {@link GameState} objects from each player's point of
 			// view and any state transitions into the replay.
 			ReplayGameStates gameStates = new ReplayGameStates();
-			gameStates.first(getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2()));
-			gameStates.second(getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1()));
+			GameState gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
+			// NOTE: It seems difficult to get Swagger codegen to actually respect a default empty array so instead we
+			// set one manually.
+			gameStateFirst.setPowerHistory(new ArrayList<>());
+			GameState gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
+			gameStateSecond.setPowerHistory(new ArrayList<>());
+			gameStates.first(gameStateFirst);
+			gameStates.second(gameStateSecond);
 			replay.addGameStatesItem(gameStates);
 
 			if (gameStateOld.get() != null) {
