@@ -5,22 +5,24 @@ import com.hazelcast.config.*;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
 /**
  * Manages the Hazelcast-based clustering and in-memory state management of Spellsource game servers
  */
 public interface Cluster {
-	static Config getConfig(int port) {
+	static Config getConfig(int... ports) {
 		Config config = new Config();
 		config.setNetworkConfig(new NetworkConfig()
-				.setPort(port)
+				.setPort(ports[0])
 				.setJoin(new JoinConfig()
 						.setMulticastConfig(new MulticastConfig()
 								.setEnabled(false))
 						.setTcpIpConfig(new TcpIpConfig()
 								.setEnabled(true)
-								.setMembers(Arrays.asList("localhost:5701", "localhost:5702")))));
+								.setMembers(IntStream.of(ports).mapToObj((int port) -> String.format("localhost:%d", port)).collect(Collectors.toList())))));
 		appendVertxConfig(config);
 		return config;
 	}

@@ -83,6 +83,12 @@ test {
     systemProperty "spellsource.port", "8080"
     systemProperty "vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory"
     useJUnit()
+
+    if (System.properties.containsKey("exclude-tests")) {
+        def toExclude = System.properties.getProperty("exclude-tests").split(",");
+        exclude(toExclude)
+    }
+
     testLogging {
         events "failed"
     }
@@ -123,18 +129,6 @@ task(localWindows, dependsOn: 'classes', type: JavaExec) {
     }
     systemProperty "spellsource.port", "8080"
     systemProperty "mongo.url", "mongodb://localhost:27017"
-    main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
-    classpath = sourceSets.main.runtimeClasspath
-}
-
-task(localCluster, dependsOn: 'classes', type: JavaExec) {
-    doFirst {
-        println "mongod must be running for this task."
-        println "Automatic discovery of Hazelcast hosts is not configured."
-    }
-
-    systemProperty "spellsource.port", "8080"
     main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
     jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
     classpath = sourceSets.main.runtimeClasspath

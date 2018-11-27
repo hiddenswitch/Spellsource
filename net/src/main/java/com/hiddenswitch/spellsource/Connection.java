@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.github.fromage.quasi.strands.Strand;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.impl.ConnectionImpl;
@@ -18,12 +19,14 @@ import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
@@ -87,8 +90,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			return null;
 		}
 
-		MessageProducer<Envelope> producer = Vertx.currentContext().owner().eventBus().publisher(handlerId);
-		return producer;
+		return Vertx.currentContext().owner().eventBus().publisher(handlerId);
 	}
 
 	static WriteStream<Envelope> writeStream(UserId userId) throws SuspendExecution {
@@ -126,9 +128,10 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 */
 	static Connection create(String userId) throws SuspendExecution {
 		SuspendableMap<UserId, String> connections = getConnections();
-		String id = "Connection::clusteredConsumer[" + userId + "]";
-		connections.put(new UserId(userId), id);
-		return new ConnectionImpl(userId).setId(id);
+		String eventBusAddress = "Connection::clusteredConsumer[" + userId + "]-[" + RandomStringUtils.randomAlphanumeric(16) + "]";
+		ConnectionImpl connection = new ConnectionImpl(userId, eventBusAddress);
+		connections.put(new UserId(userId), eventBusAddress);
+		return connection;
 	}
 
 	/**
@@ -187,18 +190,26 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		if (userId == null) {
 			routingContext.fail(403);
-			routingContext.next();
 			return;
 		}
 
-		SuspendableLock lock = SuspendableLock.lock("Connection::realtime[" + userId + "]");
+		SuspendableLock lock;
+		ServerWebSocket socket;
+
+		// By the time we try to upgrade the socket, the request might have been closed anyway
+		try {
+			lock = SuspendableLock.lock("Connection::realtime[" + userId + "]", 2000L);
+			socket = routingContext.request().upgrade();
+		} catch (Throwable any) {
+			LOGGER.error("connected {}: {}", userId, any.getMessage(), any);
+			routingContext.fail(403);
+			return;
+		}
 
 		Deque<Handler<Connection>> handlers = getHandlers();
 		Connection connection = create(userId);
 
-
 		try {
-			ServerWebSocket socket = routingContext.request().upgrade();
 			connection.setSocket(socket);
 			// The lock gets released when the user disconnects
 			connection.endHandler(v -> lock.release());
@@ -206,11 +217,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			for (Handler<Connection> handler : handlers) {
 				Vertx.currentContext().runOnContext(v -> handler.handle(connection));
 			}
+			connection.exceptionHandler(ex -> {
+				LOGGER.error("connection exceptionHandler {}: {}", userId, ex.getMessage(), ex);
+			});
 		} catch (Throwable any) {
-			lock.release();
+			LOGGER.error("connected {}: {}", userId, any.getMessage(), any);
+			// This closes the socket and cleans up its handlers
 			connection.close(Future.future());
 		}
-
 	}
 
 	/**
@@ -297,5 +311,5 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	@NotNull
 	String userId();
 
-	Connection removeHandler(Handler<JsonObject> handler);
+	Connection removeHandler(Handler<Envelope> handler);
 }

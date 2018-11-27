@@ -4,6 +4,7 @@ import com.github.fromage.quasi.strands.Strand;
 import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
+import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
@@ -28,7 +29,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	public void testArrayQueueOverCluster(TestContext context) {
 		Async latch = context.async(3);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702));
+		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
 				.setWorkerPoolSize(99)
@@ -73,13 +74,13 @@ public class ClusterTest extends SpellsourceTestBase {
 		}));
 	}
 
-	@Test(timeout = 90000L)
+	@Test(timeout = 45000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		// Connect to existing cluster
-		int count = 10;
+		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2);
 		Async latch = context.async(count);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702));
+		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
 				.setBlockedThreadCheckInterval(30000L)
@@ -92,14 +93,24 @@ public class ClusterTest extends SpellsourceTestBase {
 					// Distribute clients to the two gateways
 					Stream.generate(() -> Stream.of(8080, 9090)).flatMap(Function.identity())
 							.map(port -> new Thread(() -> {
-								UnityClient client = new UnityClient(context, port);
+								UnityClient client = new UnityClient(context, port) {
+									@Override
+									protected int getActionIndex(ServerToClientMessage message) {
+										// Always return end turn so that we end the game in a fatigue duel
+										if (message.getActions().getEndTurn() != null) {
+											return message.getActions().getEndTurn();
+										} else {
+											return super.getActionIndex(message);
+										}
+									}
+								};
 								client.createUserAccount();
 								client.matchmakeConstructedPlay(null);
 								client.waitUntilDone();
 								context.assertTrue(client.isGameOver());
 								client.disconnect();
 								latch.countDown();
-							})).limit(count).forEach(Thread::start);
+							})).limit(count).forEachOrdered(Thread::start);
 				}));
 
 			}));
