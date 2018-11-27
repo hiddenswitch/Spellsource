@@ -51,6 +51,7 @@ public abstract class SpellsourceTestBase {
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
+					.setPreferNativeTransport(true)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
