@@ -32,6 +32,7 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.impl.ConcurrentHashSet;
 import io.vertx.core.json.Json;
 import io.vertx.core.streams.Pump;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -476,7 +477,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void play() {
-		play(true);
+		play(false);
 	}
 
 	/**
@@ -489,34 +490,40 @@ public class ServerGameContext extends GameContext implements Server {
 		isRunning = true;
 		if (fork) {
 			// We're going to build this fiber with a huge stack
-			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), 512, () -> {
+			if (fiber != null) {
+				throw new UnsupportedOperationException("Cannot play with a fork twice!");
+			}
+			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), Sync.getContextScheduler(), 512, () -> {
 				try {
+					logger.debug("play {}: Starting forked game", gameId);
 					super.play();
 				} catch (VertxException interrupted) {
 					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
-						logger.debug("resume {}: Interrupted gracefully");
+						logger.debug("play {}: Interrupted gracefully");
 					} else {
-						logger.error("resume {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
+						logger.error("play {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
 					}
 					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
 					// is allowed to interrupt the fiber.
 				} catch (RuntimeException other) {
-					logger.error("resume {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
+					logger.error("play {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
 					try {
 						endGame();
 					} catch (Throwable endGameError) {
-						logger.error("resume {}: Ending the game threw an exception.", getGameId(), endGameError);
+						logger.error("play {}: Ending the game threw an exception.", getGameId(), endGameError);
 						// TODO: Deal with any other issues
 					}
 				} finally {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
-					releaseUsers();
+					UserId[] userIds = getPlayerConfigurations().stream().map(Configuration::getUserId).toArray(UserId[]::new);
+					Vertx.currentContext().runOnContext((ctx) -> ServerGameContext.releaseUsers(gameId, userIds));
 				}
 				return null;
 			});
 
 			fiber.start();
+			logger.debug("play {}: Fiber started", gameId);
 		} else {
 			super.play();
 		}
@@ -807,22 +814,25 @@ public class ServerGameContext extends GameContext implements Server {
 				games.remove(userId, gameId);
 			}
 		} else {
-			@Nullable Context context = Vertx.currentContext();
-			if (context == null) {
+			UserId[] userIds = getUserIds().toArray(new UserId[0]);
+			releaseUsers(gameId, userIds);
+		}
+	}
+
+	private static void releaseUsers(GameId gameId, UserId[] userIds) {
+		@Nullable Context context = Vertx.currentContext();
+		if (context == null) {
+			return;
+		}
+		context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
+			if (res.failed()) {
 				return;
 			}
-			UserId[] userIds = getUserIds().toArray(new UserId[0]);
-			context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
-				if (res.failed()) {
-					return;
-				}
 
-				for (UserId userId : userIds) {
-					res.result().removeIfPresent(userId, gameId, Future.future());
-				}
-			});
-		}
-		getPlayerConfigurations().clear();
+			for (UserId userId : userIds) {
+				res.result().removeIfPresent(userId, gameId, Future.future());
+			}
+		});
 	}
 
 	private List<UserId> getUserIds() {

@@ -47,7 +47,7 @@ public abstract class SpellsourceTestBase {
 	public static void setUp(TestContext context) {
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701));
+			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701, 5702));
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()

@@ -147,6 +147,8 @@ public class UnityClient {
 					}
 				});
 			}
+		} catch (Throwable any) {
+			logger.error("ensureConnected: ", any);
 		} finally {
 			messagingLock.unlock();
 		}
@@ -256,7 +258,7 @@ public class UnityClient {
 	protected void matchmakeAndPlay(String deckId, String queueId) {
 		Future<Void> matchmaking = matchmake(deckId, queueId);
 		try {
-			matchmaking.get(30000L, TimeUnit.MILLISECONDS);
+			matchmaking.get(90000L, TimeUnit.MILLISECONDS);
 			play();
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
@@ -295,13 +297,17 @@ public class UnityClient {
 		context.assertTrue(actionCount > 0);
 		// There should always be an end turn, choose one, discover or battlecry action
 		// Pick a random action
-		int random = random(actionCount);
+		int action = getActionIndex(message);
 		context.assertNotNull(realtime);
 		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 				.messageType(MessageType.UPDATE_ACTION)
 				.repliesTo(message.getId())
-				.actionIndex(random)))));
-		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(random));
+				.actionIndex(action)))));
+		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(action));
+	}
+
+	protected int getActionIndex(ServerToClientMessage message) {
+		return random(message.getActions().getCompatibility().size());
 	}
 
 	protected boolean onRequestAction(ServerToClientMessage message) {
@@ -463,5 +469,4 @@ public class UnityClient {
 		disconnect();
 		super.finalize();
 	}
-
 }
