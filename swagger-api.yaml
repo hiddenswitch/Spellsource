@@ -1702,7 +1702,6 @@ definitions:
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
-        default: false
       fires:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'

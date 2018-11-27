@@ -235,7 +235,7 @@ public class EntityState implements Serializable {
   private CardTypeEnum cardType = null;
 
   @JsonProperty("tribe")
-  private String tribe = "false";
+  private String tribe = null;
 
   @JsonProperty("fires")
   private Integer fires = null;
