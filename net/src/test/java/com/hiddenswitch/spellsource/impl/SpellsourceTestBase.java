@@ -50,7 +50,7 @@ public abstract class SpellsourceTestBase {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701));
+			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701, 5702));
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
@@ -122,7 +122,7 @@ public abstract class SpellsourceTestBase {
 			}));
 		});
 		try {
-			latch.await(30L, TimeUnit.SECONDS);
+			latch.await(28L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			fail();
 		}

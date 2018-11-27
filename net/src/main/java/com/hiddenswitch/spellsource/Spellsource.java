@@ -509,14 +509,14 @@ public class Spellsource {
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final Verticle[] verticles = services();
-
 		List<Future> futures = new ArrayList<>();
-		for (Verticle verticle : verticles) {
-			final Future<String> future = Future.future();
-			vertx.deployVerticle(verticle, future);
-			futures.add(future);
-		}
+		// Use up all the event loops
+		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
+			for (Verticle verticle : services()) {
+				final Future<String> future = Future.future();
+				vertx.deployVerticle(verticle, future);
+				futures.add(future);
+			}
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}

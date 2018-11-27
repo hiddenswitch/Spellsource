@@ -1398,11 +1398,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId The player who should draw a card.
 	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
 	 *                 beginning of a turn
-	 * @return The card that was drawn.
+	 * @return The card that was drawn, or null if the deck was empty.
 	 * @see #receiveCard(int, Card) for the full rules on receiving cards into the hand.
 	 */
 	@Suspendable
-	public Card drawCard(int playerId, Entity source) {
+	public @Nullable Card drawCard(int playerId, Entity source) {
 		Player player = context.getPlayer(playerId);
 		CardList deck = player.getDeck();
 		if (checkAndDealFatigue(player)) {

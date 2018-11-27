@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
@@ -12,12 +13,15 @@ import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.Hazelcast;
+import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
@@ -26,12 +30,15 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.logic.GameStatus;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.defer;
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
 
 public class ClusteredGames extends SyncVerticle implements Games {
@@ -87,7 +94,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		CreateGameSessionResponse connection = connections.putIfAbsent(request.getGameId(), pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
-			Games.LOGGER.debug("createGameSession: DeploymentId {} is responsible for deploying this match.", deploymentID());
+			Games.LOGGER.debug("createGameSession: deploymentID={} hazelcastNodeId={} is responsible for deploying this match.", deploymentID(), Hazelcast.getClusterManager().getNodeID());
 			ServerGameContext context = new ServerGameContext(
 					request.getGameId(),
 					new VertxScheduler(Vertx.currentContext().owner()),
@@ -105,7 +112,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				connections.replace(request.getGameId(), response);
 				contexts.put(request.getGameId(), context);
 				// Plays the game context in its own fiber
-				context.play();
+				context.play(true);
 				return response;
 			} catch (RuntimeException any) {
 				// If an error occurred, make sure to remove users from the games we just put them into.
@@ -194,17 +201,27 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			gameContext.loseBothPlayers();
 		}
 
-		// Record the outcome of the game
 		try {
-			GameRecord gameRecord = new GameRecord(gameId.toString())
-					.setCreatedAt(new Date())
-					.setBotGame(gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot))
-					.setPlayerUserIds(gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(Collectors.toList()))
-					.setDeckIds(gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList()))
-					.setPlayerNames(gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList()));
-			gameRecord.setReplay(Games.replayFromGameContext(gameContext));
-			mongo().insert(Games.GAMES, mapFrom(gameRecord));
-			LOGGER.info("endGame {}: Saved replay", gameId);
+			// Let's kick this off to be nonblocking of ending the game here, since things are sensitive to this timing
+			boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
+			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(Collectors.toList());
+			List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList());
+			List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList());
+			defer(v -> {
+				try {
+					GameRecord gameRecord = new GameRecord(gameId.toString())
+							.setCreatedAt(new Date())
+							.setBotGame(botGame)
+							.setPlayerUserIds(userIds)
+							.setDeckIds(deckIds)
+							.setPlayerNames(playerNames);
+					gameRecord.setReplay(Games.replayFromGameContext(gameContext));
+					mongo().insert(Games.GAMES, mapFrom(gameRecord));
+					LOGGER.info("endGame {}: Saved replay", gameId);
+				} catch (Throwable any) {
+					LOGGER.error("endGame {}: Could not save a replay due to {}", gameId, any.getMessage(), any);
+				}
+			});
 		} catch (Throwable ex) {
 			LOGGER.error("endGame {}: Could not save a replay due to {}", gameId, ex.getMessage(), ex);
 		}

@@ -17,6 +17,11 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public class Sync {
 	@Suspendable
+	public static void defer(SuspendableAction1<Void> handler) {
+		Vertx.currentContext().runOnContext(suspendableHandler(handler));
+	}
+
+	@Suspendable
 	public static <T> Handler<T> suspendableHandler(SuspendableAction1<T> handler) {
 		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
