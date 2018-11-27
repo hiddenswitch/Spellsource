@@ -12,7 +12,9 @@ Some connectivity issues ought to be improved. Please report "Networking" errors
 ###### Known Issues:
 
  - Some situations with drawing cards from the deck can cause the game to hang. If this happens to you, please note what you were doing and report it in the Discord.
- - Repeatedly playing King Toggwaggle will cause the game to hang.
+ - Repeatedly playing King Togwaggle will cause the game to hang.
+
+For an ongoing list of issues, see https://github.com/hiddenswitch/Spellsource-Server/issues
 
 ###### Content Fixes:
 

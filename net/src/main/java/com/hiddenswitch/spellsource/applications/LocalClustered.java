@@ -44,6 +44,7 @@ public class LocalClustered {
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(clusterManager)
 				.setClusterHost(Gateway.getHostAddress())
+				.setPreferNativeTransport(true)
 				.setBlockedThreadCheckInterval(RpcClient.DEFAULT_TIMEOUT)
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)

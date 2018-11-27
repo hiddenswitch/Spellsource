@@ -74,15 +74,16 @@ public class ClusterTest extends SpellsourceTestBase {
 		}));
 	}
 
-	@Test(timeout = 90000L)
+	@Test(timeout = 45000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		// Connect to existing cluster
-		int count = 10;
+		int count = 2 * (Runtime.getRuntime().availableProcessors() - (Runtime.getRuntime().availableProcessors() + 1) % 2);
 		Async latch = context.async(count);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
+				.setPreferNativeTransport(true)
 				.setBlockedThreadCheckInterval(30000L)
 				.setWarningExceptionTime(30000L), context.asyncAssertSuccess(newVertxInstance -> {
 			// Deploy a second gateway

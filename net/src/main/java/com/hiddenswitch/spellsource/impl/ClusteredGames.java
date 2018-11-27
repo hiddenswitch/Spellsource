@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
+import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -82,7 +83,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		CreateGameSessionResponse connection = connections.putIfAbsent(request.getGameId(), pending);
 		// If we're the ones deploying this match...
 		if (connection == null) {
-			Games.LOGGER.debug("createGameSession: DeploymentId {} is responsible for deploying this match.", deploymentID());
+			Games.LOGGER.debug("createGameSession: deploymentID={} hazelcastNodeId={} is responsible for deploying this match.", deploymentID(), Hazelcast.getClusterManager().getNodeID());
 			ServerGameContext context = new ServerGameContext(
 					request.getGameId(),
 					new VertxScheduler(Vertx.currentContext().owner()),

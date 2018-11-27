@@ -47,7 +47,11 @@ public class ConnectionImpl implements Connection {
 		socket.handler(buf -> {
 			Envelope decoded = Json.decodeValue(buf, Envelope.class);
 			for (Handler<Envelope> handler : handlers) {
-				handler.handle(decoded);
+				try {
+					handler.handle(decoded);
+				} catch (Throwable any) {
+					LOGGER.error("socket handler " + userId, any);
+				}
 			}
 		});
 
