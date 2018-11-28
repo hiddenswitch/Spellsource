@@ -53,7 +53,7 @@ import java.util.*;
  * 		casts for {@link net.demilich.metastone.game.entities.Actor} objects.
  * @see CardDesc for the class that is the base of the serialized representation of cards.
  */
-public class Card extends Entity implements HasChooseOneActions {
+public class Card extends Entity implements HasChooseOneActions, HasDeathrattleEnchantments {
 	private static Logger logger = LoggerFactory.getLogger(Card.class);
 
 	protected static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
@@ -319,8 +319,12 @@ public class Card extends Entity implements HasChooseOneActions {
 		Card copy = clone();
 		copy.setId(IdFactory.UNASSIGNED);
 		copy.setOwner(IdFactory.UNASSIGNED);
-		copy.getAttributes().remove(Attribute.ATTACK_BONUS);
-		copy.getAttributes().remove(Attribute.HP_BONUS);
+		// Copies lose their attribute enchantments
+		if (!hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			copy.deathrattleEnchantments.clear();
+			copy.getAttributes().remove(Attribute.ATTACK_BONUS);
+			copy.getAttributes().remove(Attribute.HP_BONUS);
+		}
 		copy.getAttributes().remove(Attribute.STARTED_IN_HAND);
 		copy.getAttributes().remove(Attribute.BEING_PLAYED);
 		// Always use the origin copy if it isn't none
@@ -999,11 +1003,13 @@ public class Card extends Entity implements HasChooseOneActions {
 		return getAttributeValue(Attribute.BASE_HP);
 	}
 
+	@Override
 	public void addDeathrattle(SpellDesc deathrattle) {
 		// TODO: Should Forlorn Stalker affect cards with deathrattle added this way?
 		deathrattleEnchantments.add(deathrattle);
 	}
 
+	@Override
 	public List<SpellDesc> getDeathrattleEnchantments() {
 		return deathrattleEnchantments;
 	}
