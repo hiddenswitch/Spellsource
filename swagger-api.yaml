@@ -1,6 +1,11 @@
+# Spellsource auto-generated client for Unity and Java specification using swagger
+# Run ./client.sh after modifying this file
+# Examine build.gradle for more about how swagger-codegen is invoked for C# and Java
+# Note a typo in the java template in the exact version of swagger-codegen that is required causes the
+# client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 2.0.0
+  version: 2.1.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -704,6 +709,11 @@ definitions:
         $ref: '#/definitions/Emote'
       gameOver:
         $ref: '#/definitions/GameOver'
+      isReplayMessage:
+        description: |
+          True iff this message is a part of a replay.
+        type: 'boolean'
+        default: False
       startingCards:
         description: |
           Used for a mulligan request. An array of entities representing the cards you may mulligan.
@@ -1416,6 +1426,7 @@ definitions:
       id:
         description: The entity's ID in the game.
         type: 'integer'
+        format: 'int32'
         default: -1
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
@@ -1456,158 +1467,197 @@ definitions:
       gold:
         description: Render this entity with a "gold" effect.
         type: 'boolean'
+        default: false
       boardPosition:
         description: The index of the entity in its zone.
         type: 'integer'
+        format: 'int32'
       owner:
         description: An integer corresponding to the entity's owner.
         type: 'integer'
+        format: 'int32'
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
       baseHp:
         description: The base hitpoints of the entity.
         type: 'integer'
+        format: 'int32'
       hp:
         description: |
           The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
         type: 'integer'
+        format: 'int32'
       durability:
         description: The durability (number of uses) that the weapon still has.
         type: 'integer'
+        format: 'int32'
       maxHp:
         description: The maximum number of hitpoints this entity can have.
         type: 'integer'
+        format: 'int32'
       baseAttack:
         description: The entity's base attack value.
         type: 'integer'
+        format: 'int32'
       attack:
         description: |
           The entity's current attack value. Conventionally, this value should be rendered on the attack token.
         type: 'integer'
+        format: 'int32'
       baseManaCost:
         description: |
           The entity's base mana cost.
         type: 'integer'
+        format: 'int32'
       manaCost:
         description: |
           The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
         type: 'integer'
+        format: 'int32'
       armor:
         description: |
           The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
         type: 'integer'
+        format: 'int32'
       destroyed:
         description: |
           When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
           still in a zone other than the graveyard; render a death icon over the entity when it is so marked.
         type: 'boolean'
+        default: false
       summoningSickness:
         description: |
           When true, the entity cannot attack this turn because it has "summoning sickness," or a disability related
           to the first turn the entity came into play. Typically rendered with snooze icons.
         type: 'boolean'
+        default: false
       frozen:
         description: |
           When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
           it would normally be able to attack.
         type: 'boolean'
+        default: false
       uncensored:
         description: |
           When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
           shown to the opponent.
         type: 'boolean'
+        default: false
       deflect:
         description: |
           When true, the entity's first incoming hit will hit its owner rather than itself.
         type: 'boolean'
+        default: false
       silenced:
         description: |
           Indicates that the entity was silenced.
         type: 'boolean'
+        default: false
       windfury:
         description: |
           Indicates the entity can attack twice a turn.
         type: 'boolean'
+        default: false
       permanent:
         description: |
           Indicates the entity is an on-battlefield permanent.
         type: 'boolean'
+        default: false
       collectible:
         description: |
           Indicates the card is collectible - valid for putting into decks.
         type: 'boolean'
+        default: false
       taunt:
         description: |
           Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's
           physical attack action targeting.
         type: 'boolean'
+        default: false
       spellDamage:
         description: |
           Indicates the amount of additional spell damage this entity gives its owning player.
         type: 'integer'
+        format: 'int32'
       charge:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+        default: false
       rush:
         description: |
           When true, the entity can attack a minion the same turn it is summoned.
         type: 'boolean'
+        default: false
       lifesteal:
         description: |
           When true, the entity heals its owner when it deals damage.
         type: 'boolean'
+        default: false
       poisonous:
         description: |
           When true, the entity will destroy any target it damages.
         type: 'boolean'
+        default: false
       enraged:
         description: |
           When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
         type: 'boolean'
+        default: false
       battlecry:
         description: |
           When true, this entity has an effect that gets triggered when it is played from the hand.
         type: 'boolean'
+        default: false
       deathrattles:
         description: |
           When true, this entity has an effect that gets triggered when it is destroyed.
         type: 'boolean'
+        default: false
       immune:
         description: |
           Indicates the entity does not take damage.
         type: 'boolean'
+        default: false
       divineShield:
         description: |
           When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage.
         type: 'boolean'
+        default: false
       stealth:
         description: |
           When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
         type: 'boolean'
+        default: false
       combo:
         description: |
           Indicates this minion has a combo effect.
         type: 'boolean'
+        default: false
       overload:
         description: |
           Indicates the amount of mana that would be locked if this card were played.
         type: 'integer'
+        format: 'int32'
       chooseOne:
         description: |
           Indicates this card has a choose-one effect.
         type: 'boolean'
+        default: false
       untargetableBySpells:
         description: |
           Indicates this entity cannot be targeted by spells.
         type: 'boolean'
+        default: false
       cannotAttack:
         description: When true, indicates this minion cannot attack, even though it normally can.
         type: 'boolean'
+        default: false
       underAura:
         description: When true, indicates this minion is benefiting from the aura of another effect.
         type: 'boolean'
+        default: false
       customRenderer:
         type: 'string'
       customData:
@@ -1615,21 +1665,27 @@ definitions:
       playable:
         description: When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
         type: 'boolean'
+        default: false
       conditionMet:
         description: When true, indicates that a condition written on the card is met and the player should be informed.
         type: 'boolean'
+        default: false
       mana:
         description: The player's current mana.
         type: 'integer'
+        format: 'int32'
       maxMana:
         description: The player's maximum amount of mana.
         type: 'integer'
+        format: 'int32'
       lockedMana:
         description: The amount of mana that was locked due to overload.
         type: 'integer'
+        format: 'int32'
       hostsTrigger:
         description: When true, indicates this entity has an effect that triggers on game events.
         type: 'boolean'
+        default: false
       note:
         description: A renderable note attached to this entity.
         type: 'string'
@@ -1649,11 +1705,13 @@ definitions:
       fires:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'
+        format: 'int32'
       countUntilCast:
         description: |
           The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
           triggered.
         type: 'integer'
+        format: 'int32'
       cardSet:
         description: |
           The card expansion set this entity belongs to.
@@ -1675,6 +1733,7 @@ definitions:
           other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
           turn 0.
         type: 'boolean'
+        default: false
   DraftsChooseCardRequest:
     type: 'object'
     required:
@@ -1869,7 +1928,81 @@ definitions:
         format: 'int64'
         description: |
           A timestamp for when this game was created (approximate).
-      # TODO: Add the names of the players, additional information like that
+  Replay:
+    description: |
+      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+      Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`.
+    type: 'object'
+    properties:
+      gameStates:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayGameStates'
+      deltas:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayDeltas'
+  ReplayDeltas:
+    description: |
+      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+    type: 'object'
+    properties:
+      backward:
+        description: |
+          Backward delta.
+        $ref: '#/definitions/EntityChangeSet'
+      forward:
+        description: |
+          Forward delta.
+        $ref: '#/definitions/EntityChangeSet'
+  ReplayGameStates:
+    description: |
+      A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
+    type: 'object'
+    properties:
+      first:
+        $ref: '#/definitions/GameState'
+      second:
+        $ref: '#/definitions/GameState'
+  GetGameRecordIdsResponse:
+    description: |
+      Retrieves an array of game IDs played by this player. Eventually will require paging.
+    type: 'object'
+    properties:
+      gameIds:
+        description: |
+          All the game IDs ever played by this player
+        type: 'array'
+        items:
+          type: 'string'
+  GetGameRecordResponse:
+    description: |
+      Information about a game.
+
+      Statistics about the game will be stored at a later point in time.
+    type: 'object'
+    properties:
+      replay:
+        $ref: '#/definitions/Replay'
+      isBotGame:
+        type: 'boolean'
+        description: |
+          True if this game was played against a bot (or was played entirely by bots)
+      completedAtLocalized:
+        type: 'string'
+        description: |
+          The date and time when this game was finished in the client's local time.
+      completedAt:
+        type: 'integer'
+        format: 'int64'
+        description: |
+          A timestamp for when this game was finished (approximate).
+      playerNames:
+        description: |
+          The names of the players in this game, without their privacy tokens
+        type: 'array'
+        items:
+          type: 'string'
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
@@ -2191,7 +2324,6 @@ paths:
             Either you are already friends, or you attempted to set a friend ID directly.
         default:
           $ref: '#/responses/InternalServerError'
-
   /friends/{friendId}:
     delete:
       description: |
@@ -2323,7 +2455,7 @@ paths:
           schema:
             $ref: '#/definitions/InviteGetResponse'
         default:
-          $ref: '#/definitions/InternalServerError'
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Send an invite.
@@ -2433,3 +2565,41 @@ paths:
         "418":
           description: |
             The invite is already in an expired state.
+  /games:
+    get:
+      description: |
+        Retrieves a list of game IDs corresponding to all the games this player played.
+      operationId: getGameRecordIds
+      security:
+      - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            A list of game IDs
+          schema:
+            $ref: '#/definitions/GetGameRecordIdsResponse'
+  /games/{gameId}:
+    get:
+      description: |
+        Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
+        against other players only receive this player's point of view.
+      operationId: getGameRecord
+      security:
+      - TokenSecurity: []
+      parameters:
+      - name: gameId
+        in: path
+        required: true
+        type: 'string'
+      responses:
+        "200":
+          description: |
+            A game record.
+          schema:
+            $ref: '#/definitions/GetGameRecordResponse'
+        "404":
+          description: |
+            The game with the specified ID was not found
+        "403":
+          description: |
+            You are not permitted to view this game

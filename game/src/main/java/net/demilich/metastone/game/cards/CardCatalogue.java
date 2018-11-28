@@ -1,5 +1,7 @@
 package net.demilich.metastone.game.cards;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -157,6 +159,8 @@ public class CardCatalogue {
 	 * cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
 	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
+		// TODO: Set this somewhere better
+		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		synchronized (cards) {
 			if (!cards.isEmpty()) {
 				return;

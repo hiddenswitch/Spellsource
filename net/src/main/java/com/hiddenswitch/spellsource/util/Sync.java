@@ -17,6 +17,11 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public class Sync {
 	@Suspendable
+	public static void defer(SuspendableAction1<Void> handler) {
+		Vertx.currentContext().runOnContext(suspendableHandler(handler));
+	}
+
+	@Suspendable
 	public static <T> Handler<T> suspendableHandler(SuspendableAction1<T> handler) {
 		FiberScheduler scheduler = io.vertx.ext.sync.Sync.getContextScheduler();
 		return p -> new Fiber<Void>(scheduler, () -> handler.call(p)).start();
@@ -33,6 +38,13 @@ public class Sync {
 
 	@Suspendable
 	public static <R> R invoke(Supplier<R> func0) {
+		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
+			done.complete(func0.get());
+		}, false, h));
+	}
+
+	@Suspendable
+	public static <R> R invoke(ThrowingSupplier<R> func0) {
 		return awaitResult(h -> Vertx.currentContext().executeBlocking(done -> {
 			done.complete(func0.get());
 		}, false, h));
@@ -97,6 +109,20 @@ public class Sync {
 		return awaitResult(h -> func.accept(arg1, arg2, h));
 	}
 
+
+	@FunctionalInterface
+	public interface ThrowingSupplier<R> extends Supplier<R> {
+		@Override
+		default R get() {
+			try {
+				return getThrows();
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
+		}
+
+		R getThrows() throws Exception;
+	}
 
 	@FunctionalInterface
 	public interface ThrowingFunction<T, R> extends Function<T, R> {

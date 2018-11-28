@@ -16,10 +16,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class TargetLogic implements Serializable {
@@ -98,9 +95,12 @@ public class TargetLogic implements Serializable {
 			return environmentResult;
 		}
 
-		return context.getEntities().filter(e -> e.getId() == targetId)
-				.findFirst()
-				.orElseThrow(() -> new NullPointerException("Target not found exception: " + targetKey));
+		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId).findFirst();
+		if (entity.isPresent()) {
+			return entity.get();
+		} else {
+		    throw new NullPointerException("Target not found exception: " + targetKey);
+		}
 	}
 
 	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {

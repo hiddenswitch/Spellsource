@@ -10,6 +10,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.*;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 import java.util.List;
@@ -151,13 +152,13 @@ public class Mongo {
 	@Suspendable
 	public <T> List<T> find(String collection, JsonObject query, Class<T> returnClass) {
 		final List<JsonObject> objs = awaitResult(h -> getClient().find(collection, query, h));
-		return QuickJson.fromJson(objs, returnClass);
+		return fromJson(objs, returnClass);
 	}
 
 	@Suspendable
 	public <T> List<T> findWithOptions(String collection, JsonObject query, FindOptions options, Class<T> returnClass) {
 		final List<JsonObject> objs = awaitResult(h -> getClient().findWithOptions(collection, query, options, h));
-		return QuickJson.fromJson(objs, returnClass);
+		return fromJson(objs, returnClass);
 	}
 
 	@Suspendable
@@ -182,7 +183,7 @@ public class Mongo {
 		if (obj == null) {
 			return null;
 		}
-		return QuickJson.fromJson(obj, returnClass);
+		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable
@@ -191,7 +192,7 @@ public class Mongo {
 		if (obj == null) {
 			return null;
 		}
-		return QuickJson.fromJson(obj, returnClass);
+		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable
@@ -289,7 +290,7 @@ public class Mongo {
 	@Suspendable
 	public <T extends MongoRecord> T findOneAndUpdate(String collection, JsonObject query, JsonObject update, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> getClient().findOneAndUpdate(collection, query, update, then -> h.handle(then.otherwiseEmpty())));
-		return QuickJson.fromJson(obj, returnClass);
+		return fromJson(obj, returnClass);
 	}
 
 

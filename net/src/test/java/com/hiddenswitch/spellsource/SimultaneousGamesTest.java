@@ -37,8 +37,8 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 			assertEquals(games.size(), 0);
 		});
 
-		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 2;
+//		final int processorCount = Runtime.getRuntime().availableProcessors();
+		final int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2);
 		final int checkpointTotal = count * 6;
 
 		CountDownLatch latch = new CountDownLatch(count);

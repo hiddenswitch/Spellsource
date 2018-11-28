@@ -22,7 +22,6 @@ public class WebsocketClientEndpoint implements WebSocketListener {
 		try {
 			AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
 					.setWebSocketMaxFrameSize(1024 * 1024)
-					.setMaxConnectionsPerHost(1024)
 					.setMaxConnections(1024));
 			websocket = client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
 					.execute(new WebSocketUpgradeHandler.Builder()
