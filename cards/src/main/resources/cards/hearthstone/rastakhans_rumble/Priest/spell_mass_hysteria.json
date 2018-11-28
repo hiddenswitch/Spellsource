@@ -1,0 +1,21 @@
+{
+  "name": "Mass Hysteria",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Force each minion to attack another random minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TargetToSourceSecondaryToTargetSpell",
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "FightSpell",
+      "target": "OTHER_MINIONS",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Krag'wa, the Frog",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "heroClass": "SILVER",
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: Return all spells you played last turn to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "attribute": "PLAYED_FROM_HAND_OR_DECK",
+        "operation": "EQUAL",
+        "value": {
+          "class": "LastTurnValueProvider"
+        }
+      },
+      "value": -1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

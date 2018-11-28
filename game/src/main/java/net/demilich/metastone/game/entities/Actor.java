@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.entities;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -15,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -178,6 +180,14 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	@Override
 	public List<Enchantment> getEnchantments() {
 		return new ArrayList<>(enchantments);
+	}
+
+	public List<Enchantment> getEnchantmentsFromContext(GameContext context) {
+		return context.getTriggersAssociatedWith(this.getReference()).stream()
+				.filter(trigger -> trigger instanceof Enchantment)
+				.map(trigger -> (Enchantment) trigger)
+				.filter(enchantment -> !enchantment.isExpired())
+				.collect(Collectors.toList());
 	}
 
 	@Override

@@ -4,6 +4,7 @@ import com.github.fromage.quasi.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -38,6 +39,8 @@ import java.util.List;
  * Note that the {@link EntityReference#OUTPUT} refers to the newly copied minion. Since the copied minion is in the
  * {@link SpellArg#SECONDARY_TARGET} specifier, the copied minion is the attacker. The {@code target} is implied to be
  * the selected target of the spell, i.e., the original minion.
+ * <p>
+ * {@link SpellArg#EXCLUSIVE to not use up the attacker's attack with this spell}
  */
 public class FightSpell extends Spell {
 
@@ -86,9 +89,14 @@ public class FightSpell extends Spell {
 				((Hero) resolvedSource).activateWeapon(true);
 			}
 
+			int numberOfAttacksBefore = resolvedSource.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
+
 			context.getLogic().fight(player, (Actor) resolvedSource, (Actor) target, null);
 			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, resolvedSource);
+			}
+			if (desc.containsKey(SpellArg.EXCLUSIVE)) {
+				resolvedSource.setAttribute(Attribute.NUMBER_OF_ATTACKS, numberOfAttacksBefore);
 			}
 
 			if (resolvedSource instanceof Hero) {
