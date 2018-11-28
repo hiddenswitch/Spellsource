@@ -5,11 +5,14 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.6.4-2.0.10 (Monday, November 26th, 2018)
+#### 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
 
-Overall server performance has been improved by better using computer resources.
+Thanks to a great contribution from @tehgdogg, replay functionality has been added for debugging and development purposes. Your games will be recorded and used to fix bugs when they occur. Currently, it is not possible to retrieve a replay from the client. Please reach out on Discord if you want a replay of a specific game.
 
-Some connectivity issues ought to be improved. Please report "Networking" errors in the Discord.
+###### Usability Fixes:
+
+ - The Stats button (the eyeball iconed button in the battlefield) now renders the deck and hand sizes correctly.
+ - May have fixed some crashes related to missing null checks on weapon loading.
 
 ###### Known Issues:
 
@@ -17,6 +20,12 @@ Some connectivity issues ought to be improved. Please report "Networking" errors
  - Repeatedly playing King Togwaggle will cause the game to hang.
 
 For an ongoing list of issues, see https://github.com/hiddenswitch/Spellsource-Server/issues
+
+###### Changes Since 0.6.4-2.0.10 (Monday, November 26th, 2018)
+
+Overall server performance has been improved by better using computer resources.
+
+Some connectivity issues ought to be improved. Please report "Networking" errors in the Discord.
 
 ###### Content Fixes:
 
