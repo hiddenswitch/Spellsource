@@ -47,7 +47,7 @@ public class ParseUtils {
 	private static DescDeserializer<AuraDesc, ?, ?> auraParser = new AuraDescDeserializer();
 	private static DescDeserializer<CardSourceDesc, ?, ?> sourceParser = new CardSourceDescDeserializer();
 	private static DescDeserializer<ConditionDesc, ?, ?> conditionParser = new ConditionDescDeserializer();
-	private static DescDeserializer<EventTriggerDesc, ?, ?> triggerParser = new EventTriggerDescDeserializer();
+	private static DescDeserializer<EventTriggerDesc, ?, ?> eventTriggerParser = new EventTriggerDescDeserializer();
 	private static DescDeserializer<DynamicDescriptionDesc, ?, ?> dynamicDescriptionParser = new DynamicDescriptionDeserializer();
 	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
@@ -351,7 +351,15 @@ public class ParseUtils {
 				return enchantmentDescs;
 			case EVENT_TRIGGER:
 				// Does not expect a concrete instance!
-				return triggerParser.innerDeserialize(ctxt, jsonData);
+				return eventTriggerParser.innerDeserialize(ctxt, jsonData);
+			case EVENT_TRIGGER_ARRAY:
+				ArrayNode eventTriggerArray = (ArrayNode) jsonData;
+				EventTriggerDesc[] eventTriggerDescs = new EventTriggerDesc[eventTriggerArray.size()];
+				// Does not expect a concrete instance!
+				for (int i = 0; i < eventTriggerArray.size(); i++) {
+					eventTriggerDescs[i] = eventTriggerParser.innerDeserialize(ctxt, eventTriggerArray.get(i));
+				}
+				return eventTriggerDescs;
 			case QUEST:
 				EnchantmentDesc questEnchantmentDesc = getTriggerDesc(jsonData);
 				return new Quest(questEnchantmentDesc, null);
