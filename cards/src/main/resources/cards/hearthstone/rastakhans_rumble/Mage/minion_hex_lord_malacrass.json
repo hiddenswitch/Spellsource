@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "CopyCardSpell",
-      "target": "ALL_ENTITIES",
+      "target": "FRIENDLY_HAND",
       "filter": {
         "class": "AndFilter",
         "filters": [
