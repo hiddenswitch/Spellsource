@@ -2,7 +2,9 @@ package com.hiddenswitch.spellsource;
 
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
+import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -43,7 +45,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -63,6 +67,7 @@ public interface Games extends Verticle {
 	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
 	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	String GAMES_PLAYERS_MAP = "Games::players";
+	String GAMES = "games";
 
 	/**
 	 * Creates a new instance of the service that maintains a list of running games.
@@ -1342,6 +1347,96 @@ public interface Games extends Verticle {
 	 */
 	static long getDefaultNoActivityTimeout() {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
+	}
+
+	/**
+	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
+	 *
+	 * @param gameStateOld
+	 * @param gameStateNew
+	 * @return
+	 */
+	static EntityChangeSet computeChangeSet(
+			com.hiddenswitch.spellsource.common.GameState gameStateOld,
+			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
+		MapDifference<Integer, EntityLocation> difference;
+		if (gameStateOld == null) {
+			difference = gameStateNew.start();
+		} else {
+			difference = gameStateOld.to(gameStateNew);
+		}
+
+		EntityChangeSet changes = new EntityChangeSet();
+		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
+				.id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.C)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue().rightValue())))
+				.p0(new EntityState()
+						.location(Games.toClientLocation(i.getValue().leftValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.A)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.R)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		return changes;
+	}
+
+	/**
+	 * Generates a client-readable {@link Replay} object (for use with the client replay functionality).
+	 *
+	 * @param originalCtx The context for which to generate a replay.
+	 * @return
+	 */
+	static Replay replayFromGameContext(GameContext originalCtx) {
+		Replay replay = new Replay();
+		AtomicReference<com.hiddenswitch.spellsource.common.GameState> gameStateOld = new AtomicReference<>();
+		Consumer<GameContext> augmentReplayWithCtx = (GameContext ctx) -> {
+			// We record each game state by dumping the {@link GameState} objects from each player's point of
+			// view and any state transitions into the replay.
+			ReplayGameStates gameStates = new ReplayGameStates();
+			GameState gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
+			// NOTE: It seems difficult to get Swagger codegen to actually respect a default empty array so instead we
+			// set one manually.
+			gameStateFirst.setPowerHistory(new ArrayList<>());
+			GameState gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
+			gameStateSecond.setPowerHistory(new ArrayList<>());
+			gameStates.first(gameStateFirst);
+			gameStates.second(gameStateSecond);
+			replay.addGameStatesItem(gameStates);
+
+			com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
+			ReplayDeltas delta = new ReplayDeltas();
+			delta.forward(computeChangeSet(gameStateOld.get(), gameStateNew));
+			if (gameStateOld.get() != null) {
+				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
+				// backward populated.
+				delta.backward(computeChangeSet(gameStateNew, gameStateOld.get()));
+			}
+			replay.addDeltasItem(delta);
+
+			gameStateOld.set(ctx.getGameStateCopy());
+		};
+
+		// Replay the game from a trace while capturing the {@link Replay} object.
+		GameContext replayCtx = originalCtx.getTrace().replayContext(
+				false,
+				augmentReplayWithCtx
+		);
+
+		// Append the final game states / deltas.
+		augmentReplayWithCtx.accept(replayCtx);
+
+		return replay;
 	}
 
 }

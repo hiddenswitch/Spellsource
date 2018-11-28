@@ -20,6 +20,7 @@ task(swagger) {
         def config = new CodegenConfigurator()
         config.setInputSpec(input)
         config.setOutputDir(output.path)
+        config.setTemplateDir('swagger-templates/java')
         config.setLang('java')
         config.setAdditionalProperties([
                 'invokerPackage'         : 'com.hiddenswitch.spellsource.client',

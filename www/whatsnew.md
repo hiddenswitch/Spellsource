@@ -3,11 +3,39 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-#### Server Version: 0.6.3, Client Version: 2.0.9
+Thanks for playing Spellsource today! Release notes are below.
+
+#### 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
+
+Thanks to a great contribution from @tehgdogg, replay functionality has been added for debugging and development purposes. Your games will be recorded and used to fix bugs when they occur. Currently, it is not possible to retrieve a replay from the client. Please reach out on Discord if you want a replay of a specific game.
+
+###### Usability Fixes:
+
+ - The Stats button (the eyeball iconed button in the battlefield) now renders the deck and hand sizes correctly.
+ - May have fixed some crashes related to missing null checks on weapon loading.
 
 ###### Known Issues:
 
- - Some situations with drawing cards from the deck can cause the game to hang.
+ - Some situations with drawing cards from the deck can cause the game to hang. If this happens to you, please note what you were doing and report it in the Discord.
+ - Repeatedly playing King Togwaggle will cause the game to hang.
+
+For an ongoing list of issues, see https://github.com/hiddenswitch/Spellsource-Server/issues
+
+###### Changes Since 0.6.4-2.0.10 (Monday, November 26th, 2018)
+
+Overall server performance has been improved by better using computer resources.
+
+Some connectivity issues ought to be improved. Please report "Networking" errors in the Discord.
+
+###### Content Fixes:
+
+ - Chromie now draws cards instead of moving them directly from the deck. Thus, Chromie's swap counts as a true draw.
+ - Lord Stormsong's deathrattle is less buggy.
+ - Purrfect Tracker and other filtered deck draw effects interact with "Cast this when drawn" effects should no longer cause crashes.
+ - Bright Eyed Scout and other card cost modification effects that occur on draw should no longer cause crashes.
+ - Totemic Slam now interacts with Fandral Staghelm, for fun.
+
+Changes since 0.6.3-2.0.9 (Saturday, November 24th, 2018):
 
 ###### Content Fixes:
 

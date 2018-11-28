@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
+import ch.qos.logback.classic.Level;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.io.Resources;
+import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -27,10 +29,7 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -70,20 +69,22 @@ public class TraceTests {
 
 	@Test
 	public void testTraceValid() {
-		Player player1 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 1");
-		Player player2 = new Player(new RandomDeck(HeroClass.BLACK, DeckFormat.STANDARD), "Player 2");
-		GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
-		context1.play();
-		Trace trace = context1.getTrace();
-		GameContext context2 = trace.replayContext(false);
-		Assert.assertEquals(context1.getTurn(), context2.getTurn());
+		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
+			Player player1 = new Player(new RandomDeck(), "Player 1");
+			Player player2 = new Player(new RandomDeck(), "Player 2");
+			GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.CUSTOM);
+			context1.play();
+			Trace trace = context1.getTrace();
+			GameContext context2 = trace.replayContext(false, null);
+			Assert.assertEquals(context1.getTurn(), context2.getTurn());
+		});
 	}
 
 	@Test
 	@Ignore("out of date")
 	public void testFinleyShouldNotChangeHeroPowerToMinion() {
 		Trace noHeroPower = getTrace("noheropower");
-		GameContext context = noHeroPower.replayContext(false);
+		GameContext context = noHeroPower.replayContext(false, null);
 	}
 
 
@@ -91,21 +92,21 @@ public class TraceTests {
 	@Ignore("out of date")
 	public void testSuccessfulMagnetize() {
 		Trace trace = getTrace("magnetize1");
-		GameContext context = trace.replayContext(false);
+		GameContext context = trace.replayContext(false, null);
 	}
 
 	@Test
 	@Ignore("out of date")
 	public void testShudderwockInteraction() {
 		Trace trace = getTrace("shudderwockinteraction");
-		GameContext context = trace.replayContext(false);
+		GameContext context = trace.replayContext(false, null);
 	}
 
 	@Test
 	@Ignore("out of date")
 	public void testShouldNotSummonEvilLaughter() {
 		Trace summoningEvilLaughter = getTrace("summoningevillaughter");
-		GameContext context = summoningEvilLaughter.replayContext(false);
+		GameContext context = summoningEvilLaughter.replayContext(false, null);
 	}
 
 	@Test
@@ -122,7 +123,7 @@ public class TraceTests {
 			context1.play();
 			Trace trace = context1.getTrace();
 			try {
-				GameContext context2 = trace.replayContext(false);
+				GameContext context2 = trace.replayContext(false, null);
 				Assert.assertEquals(context1.getTurn(), context2.getTurn());
 			} catch (Throwable ex) {
 				// Inspect the trace and observe which cards were played that could have caused the error

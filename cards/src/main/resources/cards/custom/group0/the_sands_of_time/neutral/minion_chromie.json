@@ -19,7 +19,7 @@
           "targetPlayer": "SELF"
         },
         {
-          "class": "ReceiveCardSpell",
+          "class": "DrawCardSpell",
           "value": {
             "class": "AlgebraicValueProvider",
             "operation": "MINIMUM",
@@ -30,9 +30,6 @@
               }
             },
             "value2": 10
-          },
-          "cardSource": {
-            "class": "DeckSource"
           }
         },
         {

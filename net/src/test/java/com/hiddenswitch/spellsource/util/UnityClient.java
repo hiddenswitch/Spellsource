@@ -17,6 +17,7 @@ import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.unit.TestContext;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -147,6 +148,9 @@ public class UnityClient {
 					}
 				});
 			}
+		} catch (Throwable any) {
+			logger.error("ensureConnected: ", any);
+			context.fail(any);
 		} finally {
 			messagingLock.unlock();
 		}
@@ -246,8 +250,13 @@ public class UnityClient {
 		this.realtime.sendMessage(serialize(env));
 	}
 
+	/**
+	 * Quick plays against an AI.
+	 *
+	 * @param deckId A deck to use, or {@code null} to use any deck
+	 */
 	@Suspendable
-	public void matchmakeQuickPlay(String deckId) {
+	public void matchmakeQuickPlay(@Nullable String deckId) {
 		String queueId = "quickPlay";
 		matchmakeAndPlay(deckId, queueId);
 	}
@@ -256,7 +265,7 @@ public class UnityClient {
 	protected void matchmakeAndPlay(String deckId, String queueId) {
 		Future<Void> matchmaking = matchmake(deckId, queueId);
 		try {
-			matchmaking.get(30000L, TimeUnit.MILLISECONDS);
+			matchmaking.get(25000L, TimeUnit.MILLISECONDS);
 			play();
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);
@@ -295,15 +304,25 @@ public class UnityClient {
 		context.assertTrue(actionCount > 0);
 		// There should always be an end turn, choose one, discover or battlecry action
 		// Pick a random action
-		int random = random(actionCount);
+		int action = getActionIndex(message);
 		context.assertNotNull(realtime);
 		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
 				.messageType(MessageType.UPDATE_ACTION)
 				.repliesTo(message.getId())
-				.actionIndex(random)))));
-		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(random));
+				.actionIndex(action)))));
+		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(action));
 	}
 
+	protected int getActionIndex(ServerToClientMessage message) {
+		return random(message.getActions().getCompatibility().size());
+	}
+
+	/**
+	 * A handler for every request action received by this UnityClient.
+	 *
+	 * @param message The message received
+	 * @return {@code true} if the client should keep playing.
+	 */
 	protected boolean onRequestAction(ServerToClientMessage message) {
 		return true;
 	}
@@ -463,5 +482,4 @@ public class UnityClient {
 		disconnect();
 		super.finalize();
 	}
-
 }

@@ -14,6 +14,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
+import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
 import io.vertx.core.streams.WriteStream;
 import net.demilich.metastone.game.cards.desc.CardDesc;
@@ -109,8 +110,9 @@ public interface Matchmaking extends Verticle {
 
 	@Suspendable
 	static void dequeue(UserId userId) throws SuspendExecution {
-		SuspendableLock lock = Connection.methodLock(userId.toString());
+		SuspendableLock lock = null; // Connection.methodLock(userId.toString());
 		try {
+			lock = Connection.methodLock(userId.toString());
 			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
 			String queueId = currentQueue.remove(userId);
 			if (queueId != null) {
@@ -123,7 +125,9 @@ public interface Matchmaking extends Verticle {
 				LOGGER.trace("dequeue {}: User was not enqueued", userId);
 			}
 		} finally {
-			lock.release();
+			if (lock != null){
+				lock.release();
+			}
 		}
 	}
 
@@ -157,12 +161,13 @@ public interface Matchmaking extends Verticle {
 	@Suspendable
 	static Closeable startMatchmaker(String queueId, MatchmakingQueueConfiguration queueConfiguration) throws SuspendExecution {
 		CountDownLatch awaitReady = new CountDownLatch(1);
-		Fiber<Void> fiber = getContextScheduler().newFiber(() -> {
+		Fiber<Void> fiber = new Fiber<>("Matchmaking::queues[" + queueId + "]", getContextScheduler(), () -> {
 			// There should only be one matchmaker per queue per cluster. The lock here will make this invocation
 			SuspendableLock lock = null;
 			SuspendableQueue<MatchmakingQueueEntry> queue = null;
 			try {
 				lock = SuspendableLock.lock("Matchmaking::queues[" + queueId + "]");
+				LOGGER.info("startMatchmaker {}: Hazelcast node ID={} is running this queue", queueId, Hazelcast.getClusterManager().getNodeID());
 				queue = SuspendableQueue.get(queueId);
 				SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
 
@@ -344,12 +349,13 @@ public interface Matchmaking extends Verticle {
 
 	static void handleConnections() {
 		Connection.connected(connection -> {
+			LOGGER.trace("handleConnections {}: Matchmaking ready", connection.userId());
 			// If the user disconnects, dequeue them immediately.
-			connection.endHandler(suspendableHandler((SuspendableAction1<Void>) v -> {
+			connection.endHandler(suspendableHandler(v -> {
 				dequeue(new UserId(connection.userId()));
 			}));
 
-			connection.handler(suspendableHandler((SuspendableAction1<Envelope>) msg -> {
+			connection.handler(suspendableHandler(msg -> {
 				EnvelopeMethod method = msg.getMethod();
 
 				if (method != null) {

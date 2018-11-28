@@ -40,6 +40,10 @@ public final class ShuffleWithCardCostModifierSpell extends CardCostModifierSpel
 			card.setOwner(player.getId());
 			card.setId(context.getLogic().generateId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			desc = desc.clone();
+			desc.remove(SpellArg.CARD_FILTER);
+			desc.remove(SpellArg.CARD_SOURCE);
+			desc.remove(SpellArg.VALUE);
 			super.onCast(context, player, desc, source, card);
 			context.getLogic().shuffleToDeck(player, card, false, true);
 		}

@@ -27,18 +27,19 @@ public class ConnectionImpl implements Connection {
 	private final List<Handler<Void>> drainHandlers = new ArrayList<>();
 	private final List<Handler<Envelope>> handlers = new ArrayList<>();
 	private final List<Handler<Void>> endHandlers = new ArrayList<>();
-	private String id;
+	private final String eventBusAddress;
 
-	public ConnectionImpl(String userId) {
+	public ConnectionImpl(String userId, String eventBusAddress) {
 		this.userId = userId;
-
+		this.eventBusAddress = eventBusAddress;
 	}
 
 	@Override
 	public void setSocket(ServerWebSocket socket) {
 		this.socket = socket;
-
-		MessageConsumer<Envelope> consumer = Vertx.currentContext().owner().eventBus().consumer(id);
+		String userId = this.userId;
+		String eventBusAddress = getEventBusAddress();
+		MessageConsumer<Envelope> consumer = Vertx.currentContext().owner().eventBus().consumer(eventBusAddress);
 		consumer.handler(msg -> {
 			socket.write(Buffer.buffer(Json.encode(msg.body())));
 		});
@@ -46,7 +47,11 @@ public class ConnectionImpl implements Connection {
 		socket.handler(buf -> {
 			Envelope decoded = Json.decodeValue(buf, Envelope.class);
 			for (Handler<Envelope> handler : handlers) {
-				handler.handle(decoded);
+				try {
+					handler.handle(decoded);
+				} catch (Throwable any) {
+					LOGGER.error("socket handler " + userId, any);
+				}
 			}
 		});
 
@@ -62,16 +67,27 @@ public class ConnectionImpl implements Connection {
 			}
 		});
 
-		socket.endHandler(suspendableHandler((SuspendableAction1<Void>) v -> {
+		socket.endHandler(suspendableHandler((SuspendableAction1<Void>) v1 -> {
+			Connection.LOGGER.debug("connection endHandler {}: Closing", userId);
 			for (Handler<Void> handler : endHandlers) {
-				handler.handle(v);
+				handler.handle(v1);
 			}
 			exceptionHandlers.clear();
 			drainHandlers.clear();
 			handlers.clear();
 			endHandlers.clear();
 			consumer.unregister();
-			Connection.getConnections().remove(new UserId(userId));
+			Connection.LOGGER.debug("connection endHandler {}: Close complete, removing handler from event bus", userId);
+			Connection.getConnections(connections -> {
+				if (connections.failed()) {
+					Connection.LOGGER.error("connection endHandler {}: Failed to unregister connection: {}", userId, connections.cause());
+					return;
+				}
+
+				connections.result().removeIfPresent(new UserId(userId), eventBusAddress, v2 -> {
+					Connection.LOGGER.debug("connection endHandler {}: Connection closed: {}", userId, v2.result());
+				});
+			});
 		}));
 	}
 
@@ -89,7 +105,9 @@ public class ConnectionImpl implements Connection {
 
 	@Override
 	public void end() {
-		socket.end();
+		if (socket != null) {
+			socket.end();
+		}
 	}
 
 	@Override
@@ -140,7 +158,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public Connection removeHandler(Handler<JsonObject> handler) {
+	public Connection removeHandler(Handler<Envelope> handler) {
 		handlers.remove(handler);
 		return this;
 	}
@@ -153,15 +171,9 @@ public class ConnectionImpl implements Connection {
 		} catch (Throwable t) {
 			completionHandler.handle(Future.failedFuture(t));
 		}
-
 	}
 
-	public ConnectionImpl setId(String id) {
-		this.id = id;
-		return this;
-	}
-
-	public String getId() {
-		return id;
+	public String getEventBusAddress() {
+		return eventBusAddress;
 	}
 }

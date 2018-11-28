@@ -5,11 +5,13 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageCodec;
 import io.vertx.core.json.JsonObject;
 
+import static io.vertx.core.json.JsonObject.mapFrom;
+
 public class EnvelopeMessageCodec implements MessageCodec<Envelope, Envelope> {
 
 	@Override
 	public void encodeToWire(Buffer buffer, Envelope envelope) {
-		JsonObject.mapFrom(envelope).writeToBuffer(buffer);
+		mapFrom(envelope).writeToBuffer(buffer);
 	}
 
 	@Override
