@@ -111,7 +111,11 @@ public class CardCostModifierSpell extends Spell {
 					context.getGameId(), source, target, manaModifierDesc.get(CardCostModifierArg.TARGET));
 		}
 		// The target is the host of the mana cost modifier.
-		context.getLogic().addGameEventListener(player, manaModifierDesc.create(), target == null ? player : target);
+		CardCostModifier cardCostModifier = manaModifierDesc.create();
+		if (source != null && source.getSourceCard() != null) {
+			cardCostModifier.setSourceCardId(source.getSourceCard().getCardId());
+		}
+		context.getLogic().addGameEventListener(player, cardCostModifier, target == null ? player : target);
 	}
 
 }
