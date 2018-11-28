@@ -74,7 +74,7 @@ class TraceBehaviour extends UtilityBehaviour {
 	}
 
 	@Override
-	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
+	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) throws CancellationException {
 		if (recorder != null) {
 			recorder.accept(context);
 		}
