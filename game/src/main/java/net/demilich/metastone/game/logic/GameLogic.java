@@ -325,11 +325,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = context.getPlayer(playerId);
 
 		player.modifyAttribute(Attribute.COMBO, 1);
-		Entity card = context.tryFind(entityReference);
-		if (card != null && card.hasAttribute(Attribute.INVOKED)) {
+		Card card = (Card) context.tryFind(entityReference);
+		if (card == null) {
+			return;
+		}
+		if (card.hasAttribute(Attribute.INVOKED)) {
 			// Increment the number of invoked cards that were played
 			player.modifyAttribute(Attribute.INVOKED, 1);
 			context.fireGameEvent(new InvokedEvent(context, playerId, (Card) card, card.getAttributeValue(Attribute.INVOKED)));
+		}
+
+		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			card.getDeathrattleEnchantments().clear();
 		}
 
 		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, entityReference));
@@ -1426,7 +1433,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see #receiveCard(int, Card) for the full rules on receiving cards into the hand.
 	 */
 	@Suspendable
-	public @Nullable Card drawCard(int playerId, Entity source) {
+	public @Nullable
+	Card drawCard(int playerId, Entity source) {
 		Player player = context.getPlayer(playerId);
 		CardList deck = player.getDeck();
 		if (checkAndDealFatigue(player)) {
@@ -2608,7 +2616,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 
-
 		// second player gets the coin additionally
 		if (!begins) {
 			Card theCoin = CardCatalogue.getCardById("spell_the_coin");
@@ -3375,51 +3382,51 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		boolean willDouble = false;
 		List<SpellDesc> extraEffects = new ArrayList<>();
-        List<DoubleBattlecriesAura> doubleBattlecryAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleBattlecriesAura.class);
-        if (!doubleBattlecryAuras.isEmpty() && actor.hasAttribute(Attribute.BATTLECRY)) {
-            for (DoubleBattlecriesAura aura : doubleBattlecryAuras) {
-            	aura.onGameEvent(new WillEndSequenceEvent(context));
-                if (aura.getAffectedEntities().contains(actor.getId())) {
-                    willDouble = true;
-                    if (aura.extraEffect != null) {
-                    	extraEffects.add(aura.extraEffect);
+		List<DoubleBattlecriesAura> doubleBattlecryAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleBattlecriesAura.class);
+		if (!doubleBattlecryAuras.isEmpty() && actor.hasAttribute(Attribute.BATTLECRY)) {
+			for (DoubleBattlecriesAura aura : doubleBattlecryAuras) {
+				aura.onGameEvent(new WillEndSequenceEvent(context));
+				if (aura.getAffectedEntities().contains(actor.getId())) {
+					willDouble = true;
+					if (aura.extraEffect != null) {
+						extraEffects.add(aura.extraEffect);
 					}
-                }
-            }
-        }
-        List<DoubleCombosAura> doubleComboAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleCombosAura.class);
-        if (!doubleComboAuras.isEmpty() && actor.hasAttribute(Attribute.COMBO)) {
-            for (DoubleCombosAura aura : doubleComboAuras) {
-                if (aura.getAffectedEntities().contains(actor.getId())) {
-                    willDouble = true;
-                }
-            }
-        }
+				}
+			}
+		}
+		List<DoubleCombosAura> doubleComboAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleCombosAura.class);
+		if (!doubleComboAuras.isEmpty() && actor.hasAttribute(Attribute.COMBO)) {
+			for (DoubleCombosAura aura : doubleComboAuras) {
+				if (aura.getAffectedEntities().contains(actor.getId())) {
+					willDouble = true;
+				}
+			}
+		}
 
-        if (willDouble) {
-            EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
-            performGameAction(playerId, battlecryAction);
-            // Make sure the battlecry is still targetable
-            // The target may have transformed
-            if (target != null
-                    && !target.isTargetGroup()) {
-                target = context.resolveSingleTarget(target).transformResolved(context).getReference();
-                battlecryAction.setTargetReference(target);
-            }
-            final EntityReference target1 = target;
-            final boolean targetable = target == null
-                    || target.isTargetGroup()
-                    || getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
-            if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
-                return;
-            }
+		if (willDouble) {
+			EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
+			performGameAction(playerId, battlecryAction);
+			// Make sure the battlecry is still targetable
+			// The target may have transformed
+			if (target != null
+					&& !target.isTargetGroup()) {
+				target = context.resolveSingleTarget(target).transformResolved(context).getReference();
+				battlecryAction.setTargetReference(target);
+			}
+			final EntityReference target1 = target;
+			final boolean targetable = target == null
+					|| target.isTargetGroup()
+					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
+			if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
+				return;
+			}
 			for (SpellDesc extraEffect : extraEffects) {
 				context.getLogic().castSpell(playerId, extraEffect, actor.getReference(), EntityReference.NONE, true);
 			}
-            performGameAction(playerId, battlecryAction);
-        } else {
-            performGameAction(playerId, battlecryAction);
-        }
+			performGameAction(playerId, battlecryAction);
+		} else {
+			performGameAction(playerId, battlecryAction);
+		}
 	}
 
 	/**

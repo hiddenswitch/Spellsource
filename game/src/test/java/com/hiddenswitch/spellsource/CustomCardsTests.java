@@ -53,6 +53,23 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testElorthaNoShadra() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_ice_rager");
+			playCard(context, player, "minion_elortha_no_shadra");
+			context.getLogic().drawCard(player.getId(), player);
+			Minion iceRager = playMinionCard(context, player, player.getHand().get(0));
+			assertEquals(iceRager.getDeathrattles().size(), 1);
+			destroy(context, iceRager);
+			assertEquals(player.getMinions().size(), 2);
+			Minion revived = player.getMinions().get(1);
+			destroy(context, revived);
+			assertTrue(revived.isDestroyed());
+			assertEquals(player.getMinions().size(), 1);
+		});
+	}
+
+	@Test
 	public void testPurrfectTrackerSeaforiumBombInteraction() {
 		for (int i = 0; i < 100; i++) {
 			runGym((context, player, opponent) -> {
