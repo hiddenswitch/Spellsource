@@ -15,9 +15,16 @@
       "targetPlayer": "SELF"
     },
     "attribute": "AURA_IMMUNE",
-    "secondaryTrigger": {
-      "class": "WillEndSequenceTrigger"
-    }
+    "triggers": [
+      {
+        "class": "OverloadTrigger",
+        "targetPlayer": "SELF"
+      },
+      {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "BOTH"
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

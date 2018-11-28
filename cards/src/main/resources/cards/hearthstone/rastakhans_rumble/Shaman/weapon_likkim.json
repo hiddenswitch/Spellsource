@@ -13,12 +13,15 @@
     "attackBonus": 2,
     "hpBonus": 0,
     "condition": {
-      "class": "OverloadedCondition",
+      "class": "OverloadedManaCrystalsCondition",
       "targetPlayer": "SELF"
     },
-    "secondaryTrigger": {
-      "class": "WillEndSequenceTrigger"
-    }
+    "triggers": [
+      {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "BOTH"
+      }
+    ]
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",

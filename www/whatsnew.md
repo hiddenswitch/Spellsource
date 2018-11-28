@@ -19,6 +19,7 @@ Thanks to a great contribution from @doombubbles, new custom cards and a signifi
  - King Togwaggle now puts Ransom in the opponent's hand.
  - Elortha no Shanda now does not cause infinite deathrattle loops.
  - Dinosaur Chops is now uncollectible.
+ - Thunderfury now is immune and does not reduce durability while you are overloaded.
 
 ###### Changes Since 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
 

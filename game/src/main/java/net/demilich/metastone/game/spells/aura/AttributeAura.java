@@ -38,5 +38,6 @@ public final class AttributeAura extends Aura {
 				(EntityFilter) desc.get(AuraArg.FILTER),
 				desc.getCondition());
 		setDesc(desc);
+		includeExtraTriggers(desc);
 	}
 }

@@ -9,7 +9,7 @@ public class OverloadEvent extends GameEvent implements HasValue {
 	private int manaCrystalsOverloaded;
 
 	public OverloadEvent(GameContext context, int playerId, Card card, int manaCrystalsOverloaded) {
-		super(context, playerId, -1);
+		super(context, playerId, playerId);
 		this.manaCrystalsOverloaded = manaCrystalsOverloaded;
 		this.card = card;
 	}
