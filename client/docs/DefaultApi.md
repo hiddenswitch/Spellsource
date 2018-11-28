@@ -22,6 +22,8 @@ Method | HTTP request | Description
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**getCards**](DefaultApi.md#getCards) | **GET** /cards | 
+[**getGameRecord**](DefaultApi.md#getGameRecord) | **GET** /games/{gameId} | 
+[**getGameRecordIds**](DefaultApi.md#getGameRecordIds) | **GET** /games | 
 [**getInvite**](DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 [**getInvites**](DefaultApi.md#getInvites) | **GET** /invites | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
@@ -990,6 +992,112 @@ Name | Type | Description  | Notes
 ### Authorization
 
 No authorization required
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getGameRecord"></a>
+# **getGameRecord**
+> GetGameRecordResponse getGameRecord(gameId)
+
+
+
+Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games against other players only receive this player&#39;s point of view. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String gameId = "gameId_example"; // String | 
+try {
+    GetGameRecordResponse result = apiInstance.getGameRecord(gameId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getGameRecord");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **gameId** | **String**|  |
+
+### Return type
+
+[**GetGameRecordResponse**](GetGameRecordResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getGameRecordIds"></a>
+# **getGameRecordIds**
+> GetGameRecordIdsResponse getGameRecordIds()
+
+
+
+Retrieves a list of game IDs corresponding to all the games this player played. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    GetGameRecordIdsResponse result = apiInstance.getGameRecordIds();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getGameRecordIds");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetGameRecordIdsResponse**](GetGameRecordIdsResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
 
 ### HTTP request headers
 

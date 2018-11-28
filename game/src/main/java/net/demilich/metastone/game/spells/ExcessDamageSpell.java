@@ -38,10 +38,12 @@ public final class ExcessDamageSpell extends DamageSpell {
 		toExcess.put(SpellArg.VALUE, damageToExcess);
 		toExcess.put(SpellArg.IGNORE_SPELL_DAMAGE, true);
 		if (!desc.getBool(SpellArg.EXCLUSIVE)) {
+			toTarget.remove(SpellArg.SECONDARY_TARGET);
 			super.onCast(context, player, toTarget, source, target);
 		}
 		for (Entity excessTarget : excessDealtTo) {
-			SpellUtils.castChildSpell(context, player, toExcess, source, excessTarget);
+			toExcess.remove(SpellArg.SECONDARY_TARGET);
+			super.onCast(context, player, toExcess, source, excessTarget);
 		}
 	}
 }

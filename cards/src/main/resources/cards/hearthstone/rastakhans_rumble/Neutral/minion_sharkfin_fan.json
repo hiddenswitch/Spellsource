@@ -17,7 +17,7 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "token_swabbi",
+      "card": "token_swabbie",
       "boardPositionRelative": "RIGHT"
     }
   },

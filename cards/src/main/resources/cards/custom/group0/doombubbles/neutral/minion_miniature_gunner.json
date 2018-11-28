@@ -19,10 +19,11 @@
         "conditions": [
           {
             "class": "HasAttackedCondition",
-            "target": "SELF"
+            "target": "TRIGGER_HOST"
           },
           {
             "class": "AttributeCondition",
+            "target": "TRIGGER_HOST",
             "attribute": "NUMBER_OF_ATTACKS",
             "operation": "EQUAL",
             "value": 0
@@ -34,16 +35,17 @@
         "condition": {
           "class": "AttributeCondition",
           "operation": "HAS",
-          "attribute": "WINDFURY"
+          "attribute": "WINDFURY",
+          "target": "TRIGGER_HOST"
         },
         "spell1": {
           "class": "AddAttributeSpell",
-          "target": "SELF",
+          "target": "TRIGGER_HOST",
           "attribute": "MEGA_WINDFURY"
         },
         "spell2": {
           "class": "AddAttributeSpell",
-          "target": "SELF",
+          "target": "TRIGGER_HOST",
           "attribute": "WINDFURY"
         }
       }

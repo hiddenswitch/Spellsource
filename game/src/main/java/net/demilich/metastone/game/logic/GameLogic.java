@@ -325,11 +325,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = context.getPlayer(playerId);
 
 		player.modifyAttribute(Attribute.COMBO, 1);
-		Entity card = context.tryFind(entityReference);
-		if (card != null && card.hasAttribute(Attribute.INVOKED)) {
+		Card card = (Card) context.tryFind(entityReference);
+		if (card == null) {
+			return;
+		}
+		if (card.hasAttribute(Attribute.INVOKED)) {
 			// Increment the number of invoked cards that were played
 			player.modifyAttribute(Attribute.INVOKED, 1);
 			context.fireGameEvent(new InvokedEvent(context, playerId, (Card) card, card.getAttributeValue(Attribute.INVOKED)));
+		}
+
+		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			card.getDeathrattleEnchantments().clear();
 		}
 
 		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, entityReference));
@@ -1424,11 +1431,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param playerId The player who should draw a card.
 	 * @param source   The card that is the origin of the drawing effect, or {@code null} if this is the draw from the
 	 *                 beginning of a turn
-	 * @return The card that was drawn.
+	 * @return The card that was drawn, or null if the deck was empty.
 	 * @see #receiveCard(int, Card) for the full rules on receiving cards into the hand.
 	 */
 	@Suspendable
-	public Card drawCard(int playerId, Entity source) {
+	public @Nullable
+	Card drawCard(int playerId, Entity source) {
 		Player player = context.getPlayer(playerId);
 		CardList deck = player.getDeck();
 		if (checkAndDealFatigue(player)) {
@@ -2197,21 +2205,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Starts a game for the given player by requesting a mulligan and setting up all the {@link
-	 * net.demilich.metastone.game.spells.trigger.GameStartTrigger} and {@link Attribute#DECK_TRIGGERS} cards.
-	 *
-	 * @param playerId The player to start the game for.
-	 * @param begins   {@code true} if this player is starting the game and should start with {@link #STARTER_CARDS}
-	 *                 cards. {@code false} if this player is not starting the game and should get {@link #STARTER_CARDS}
-	 *                 + 1 cards.
-	 */
-	@Suspendable
-	public List<Card> init(int playerId, boolean begins) {
-		List<Card> discardedCards = mulligan(context.getPlayer(playerId), begins);
-		return discardedCards;
-	}
-
-	/**
 	 * Activates all the appropriate enchantments for a player who has mulliganned, and gives that player the player's
 	 * {@link GameStartEvent}.
 	 *
@@ -2246,10 +2239,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * {@link EntityZone} locations and owners. Shuffles the deck.
 	 *
 	 * @param playerId The player that should be initialized.
+	 * @param begins
 	 * @return The initialized {@link Player} object.
 	 */
 	@Suspendable
-	public Player initializePlayer(int playerId) {
+	public Player initializePlayerAndMoveMulliganToSetAside(int playerId, boolean begins) {
 		Player player = context.getPlayer(playerId);
 
 		if (player.getId() == IdFactory.UNASSIGNED) {
@@ -2270,6 +2264,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Stream.concat(player.getDeck().stream(),
 				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
 
+		// Deck is now shuffled
 		player.getDeck().shuffle(getRandom());
 		// TODO: Should we really be doing this here?
 		if (player.getHero().hasEnchantment()) {
@@ -2279,6 +2274,30 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		processGameTriggers(player, hero.getHeroPower());
 		processPassiveTriggers(player, hero.getHeroPower());
+
+		// Populate both player's hands here first to prevent consuming random resources
+		int numberOfStarterCards = begins ? STARTER_CARDS : STARTER_CARDS + 1;
+
+		// The player's starting hand should always contain the quest.
+		// Since our server could theoretically allow you to have a deck with multiple quests, they will
+		// all start here.
+		List<Card> starterCards = player.getDeck().stream()
+				.filter(card -> card.hasAttribute(Attribute.QUEST))
+				.filter(card -> !card.hasAttribute(Attribute.NEVER_MULLIGANS))
+				.limit(numberOfStarterCards)
+				.collect(toList());
+
+		// Cards are now in the set aside zone
+		starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
+
+		for (int j = starterCards.size(); j < numberOfStarterCards && !player.getDeck().isEmpty(); j++) {
+			Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
+			if (randomCard != null) {
+				player.getDeck().move(randomCard, player.getSetAsideZone());
+				starterCards.add(randomCard);
+			}
+		}
+
 		return player;
 	}
 
@@ -2557,24 +2576,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected List<Card> mulligan(Player player, boolean begins) {
-		FirstHand firstHand = new FirstHand(player, begins).invoke();
-
-		List<Card> discardedCards = context.getBehaviours().get(player.getId()).mulligan(context, player, firstHand.getStarterCards());
-
-		handleMulligan(player, begins, firstHand, discardedCards);
-		return discardedCards;
-	}
-
-	@Suspendable
-	protected void handleMulligan(Player player, boolean begins, FirstHand firstHand, List<Card> discardedCards) {
+	public void handleMulligan(Player player, boolean begins, List<Card> discardedCards) {
 		// Get the entity ids of the discarded cards and then replace the discarded cards with them
 		final Map<Integer, Entity> setAsideZone = player.getSetAsideZone().stream().collect(Collectors.toMap(Entity::getId, Function.identity()));
 		discardedCards = discardedCards.stream().map(Card::getId).map(setAsideZone::get).map(e -> (Card) e).collect(toList());
 
 		// The starter cards have been put into the setAsideZone
-		List<Card> starterCards = firstHand.getStarterCards();
-		int numberOfStarterCards = firstHand.getNumberOfStarterCards();
+		List<Card> starterCards = player.getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		int numberOfStarterCards = begins ? STARTER_CARDS : STARTER_CARDS + 1;
 
 		// remove player selected cards from starter cards
 		for (Card discardedCard : discardedCards) {
@@ -2592,7 +2601,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			starterCards.add(randomCard);
 		}
 
-		// put the networkRequestMulligan cards back in the deck
+		// put the mulligan cards back in the deck
 		for (Card discardedCard : discardedCards) {
 			player.getSetAsideZone().move(discardedCard, player.getDeck());
 		}
@@ -2607,7 +2616,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (!player.getDeck().isEmpty()) {
 			player.getDeck().shuffle(getRandom());
 		}
-
 
 
 		// second player gets the coin additionally
@@ -3376,51 +3384,51 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		boolean willDouble = false;
 		List<SpellDesc> extraEffects = new ArrayList<>();
-        List<DoubleBattlecriesAura> doubleBattlecryAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleBattlecriesAura.class);
-        if (!doubleBattlecryAuras.isEmpty() && actor.hasAttribute(Attribute.BATTLECRY)) {
-            for (DoubleBattlecriesAura aura : doubleBattlecryAuras) {
-            	aura.onGameEvent(new WillEndSequenceEvent(context));
-                if (aura.getAffectedEntities().contains(actor.getId())) {
-                    willDouble = true;
-                    if (aura.extraEffect != null) {
-                    	extraEffects.add(aura.extraEffect);
+		List<DoubleBattlecriesAura> doubleBattlecryAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleBattlecriesAura.class);
+		if (!doubleBattlecryAuras.isEmpty() && actor.hasAttribute(Attribute.BATTLECRY)) {
+			for (DoubleBattlecriesAura aura : doubleBattlecryAuras) {
+				aura.onGameEvent(new WillEndSequenceEvent(context));
+				if (aura.getAffectedEntities().contains(actor.getId())) {
+					willDouble = true;
+					if (aura.extraEffect != null) {
+						extraEffects.add(aura.extraEffect);
 					}
-                }
-            }
-        }
-        List<DoubleCombosAura> doubleComboAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleCombosAura.class);
-        if (!doubleComboAuras.isEmpty() && actor.hasAttribute(Attribute.COMBO)) {
-            for (DoubleCombosAura aura : doubleComboAuras) {
-                if (aura.getAffectedEntities().contains(actor.getId())) {
-                    willDouble = true;
-                }
-            }
-        }
+				}
+			}
+		}
+		List<DoubleCombosAura> doubleComboAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleCombosAura.class);
+		if (!doubleComboAuras.isEmpty() && actor.hasAttribute(Attribute.COMBO)) {
+			for (DoubleCombosAura aura : doubleComboAuras) {
+				if (aura.getAffectedEntities().contains(actor.getId())) {
+					willDouble = true;
+				}
+			}
+		}
 
-        if (willDouble) {
-            EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
-            performGameAction(playerId, battlecryAction);
-            // Make sure the battlecry is still targetable
-            // The target may have transformed
-            if (target != null
-                    && !target.isTargetGroup()) {
-                target = context.resolveSingleTarget(target).transformResolved(context).getReference();
-                battlecryAction.setTargetReference(target);
-            }
-            final EntityReference target1 = target;
-            final boolean targetable = target == null
-                    || target.isTargetGroup()
-                    || getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
-            if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
-                return;
-            }
+		if (willDouble) {
+			EntityReference target = battlecryAction.getPredefinedSpellTargetOrUserTarget();
+			performGameAction(playerId, battlecryAction);
+			// Make sure the battlecry is still targetable
+			// The target may have transformed
+			if (target != null
+					&& !target.isTargetGroup()) {
+				target = context.resolveSingleTarget(target).transformResolved(context).getReference();
+				battlecryAction.setTargetReference(target);
+			}
+			final EntityReference target1 = target;
+			final boolean targetable = target == null
+					|| target.isTargetGroup()
+					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
+			if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
+				return;
+			}
 			for (SpellDesc extraEffect : extraEffects) {
 				context.getLogic().castSpell(playerId, extraEffect, actor.getReference(), EntityReference.NONE, true);
 			}
-            performGameAction(playerId, battlecryAction);
-        } else {
-            performGameAction(playerId, battlecryAction);
-        }
+			performGameAction(playerId, battlecryAction);
+		} else {
+			performGameAction(playerId, battlecryAction);
+		}
 	}
 
 	/**
@@ -4093,11 +4101,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		throw new RuntimeException("Cannot call GameLogic::mulliganAsync from a non-async GameLogic instance.");
 	}
 
-	@Suspendable
-	public void initAsync(int playerId, boolean begins, Handler<List<Card>> callback) {
-		throw new RuntimeException("Cannot call GameLogic::initAsync from a non-async GameLogic instance.");
-	}
-
 	public Random getRandom() {
 		return random;
 	}
@@ -4287,51 +4290,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			for (AuraDesc aura : card.getDesc().getAuras()) {
 				addGameEventListener(player, aura.create(), card);
 			}
-		}
-	}
-
-	protected class FirstHand {
-		private Player player;
-		private boolean begins;
-		private int numberOfStarterCards;
-		private List<Card> starterCards;
-
-		public FirstHand(Player player, boolean begins) {
-			this.player = player;
-			this.begins = begins;
-		}
-
-		public int getNumberOfStarterCards() {
-			return numberOfStarterCards;
-		}
-
-		public List<Card> getStarterCards() {
-			return starterCards;
-		}
-
-		public FirstHand invoke() {
-			numberOfStarterCards = begins ? STARTER_CARDS : STARTER_CARDS + 1;
-			starterCards = new ArrayList<>();
-
-			// The player's starting hand should always contain the quest.
-			// Since our server could theoretically allow you to have a deck with multiple quests, they will
-			// all start here.
-			starterCards.addAll(player.getDeck().stream()
-					.filter(card -> card.hasAttribute(Attribute.QUEST))
-					.filter(card -> !card.hasAttribute(Attribute.NEVER_MULLIGANS))
-					.limit(numberOfStarterCards)
-					.collect(toList()));
-
-			starterCards.forEach(card -> player.getDeck().move(card, player.getSetAsideZone()));
-
-			for (int j = starterCards.size(); j < numberOfStarterCards && !player.getDeck().isEmpty(); j++) {
-				Card randomCard = getRandom(player.getDeck().filtered(c -> !c.hasAttribute(Attribute.NEVER_MULLIGANS)));
-				if (randomCard != null) {
-					player.getDeck().move(randomCard, player.getSetAsideZone());
-					starterCards.add(randomCard);
-				}
-			}
-			return this;
 		}
 	}
 

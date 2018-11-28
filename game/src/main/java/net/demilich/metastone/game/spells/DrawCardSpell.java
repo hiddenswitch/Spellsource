@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -59,7 +60,7 @@ public class DrawCardSpell extends Spell {
 		for (int i = 0; i < cardCount; i++) {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 
-			if (card == null) {
+			if (card == null || card.getZone() != Zones.HAND) {
 				continue;
 			}
 

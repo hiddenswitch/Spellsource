@@ -3,6 +3,7 @@ package net.demilich.metastone.game.entities;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -26,7 +27,7 @@ import java.util.stream.Collectors;
  * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON}),
  * {@link net.demilich.metastone.game.events.BoardChangedEvent} will be raised.
  */
-public abstract class Actor extends Entity implements HasEnchantments {
+public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
 	private Card sourceCard;
 	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
@@ -334,6 +335,11 @@ public abstract class Actor extends Entity implements HasEnchantments {
 		}
 
 		return null;
+	}
+
+	@Override
+	public List<SpellDesc> getDeathrattleEnchantments() {
+		return getDeathrattles();
 	}
 
 	@Override

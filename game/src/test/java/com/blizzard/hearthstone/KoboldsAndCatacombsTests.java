@@ -128,6 +128,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			final int i = j;
 			final int expectedCost = Math.min(10, i);
 			runGym((context, player, opponent) -> {
+				context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC, CardSet.CLASSIC));
 				context.getLogic().gainArmor(player, i);
 				playCard(context, player, "minion_geosculptor_yip");
 				context.endTurn();

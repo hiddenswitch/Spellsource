@@ -15,7 +15,7 @@ public class MassTest extends TestBase {
 	@BeforeTest
 	private void loggerSetup() {
 		Logger root = (Logger) LoggerFactory.getLogger(Logger.ROOT_LOGGER_NAME);
-		root.setLevel(Level.ERROR);
+		root.setLevel(Level.WARN);
 	}
 
 	@Test

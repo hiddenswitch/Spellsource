@@ -51,6 +51,8 @@ import static java.util.stream.Collectors.toSet;
  * GameEventType, Attribute, SuspendableAction1)}.
  * <p>
  * It will provide more APIs for features in the future.
+ * <p>
+ * When adding new collections, this class stores the migrations where index creation is appropriate.
  *
  * @see com.hiddenswitch.spellsource.applications.LocalClustered for the entry point of the executable.
  */
@@ -408,7 +410,13 @@ public class Spellsource {
 									json("$nin", allCardIds)));
 							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
 						}))
-				.migrateTo(23, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(24)
+						.withUp(thisVertx -> {
+							mongo().createCollection(Games.GAMES);
+							mongo().createIndex(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, 1));
+						}))
+				.migrateTo(24, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -501,14 +509,14 @@ public class Spellsource {
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final Verticle[] verticles = services();
-
 		List<Future> futures = new ArrayList<>();
-		for (Verticle verticle : verticles) {
-			final Future<String> future = Future.future();
-			vertx.deployVerticle(verticle, future);
-			futures.add(future);
-		}
+		// Use up all the event loops
+		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
+			for (Verticle verticle : services()) {
+				final Future<String> future = Future.future();
+				vertx.deployVerticle(verticle, future);
+				futures.add(future);
+			}
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}

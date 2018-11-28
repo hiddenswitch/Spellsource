@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -e
 mkdir -pv "clientcsharp"
-./gradlew swagger
-./gradlew swaggerClient
+rm -rf "./client/"
+./gradlew swagger --offline
+./gradlew swaggerClient --offline
+
 INPUT_DIR="clientcsharp"
 OUTPUT_DIR="../Spellsource-Client/Assets/Plugins/Client"
 rm -rf $OUTPUT_DIR

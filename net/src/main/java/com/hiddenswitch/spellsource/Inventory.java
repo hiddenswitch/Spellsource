@@ -76,7 +76,7 @@ public interface Inventory {
 				Long count = mongo().count(COLLECTIONS, json("_id", userId));
 
 				if (count.equals(0L)) {
-					String ignore = mongo().insert(COLLECTIONS, QuickJson.toJson(CollectionRecord.user(userId)));
+					String ignore = mongo().insert(COLLECTIONS, JsonObject.mapFrom(CollectionRecord.user(userId)));
 				}
 				List<String> newInventoryIds = new ArrayList<>();
 				if (request.getQueryCardsRequest() != null) {
@@ -99,7 +99,7 @@ public interface Inventory {
 				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
 				record1.setHeroCardId(request.getHeroCardId());
 				record1.setFormat(request.getFormat());
-				final String deckId = mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
+				final String deckId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record1));
 
 				if (request.getInventoryIds() != null
 						&& request.getInventoryIds().size() > 0) {
@@ -113,7 +113,7 @@ public interface Inventory {
 				return CreateCollectionResponse.deck(deckId);
 			case ALLIANCE:
 				CollectionRecord record2 = CollectionRecord.alliance(request.getAllianceId(), userId);
-				final String allianceId = awaitResult(h -> mongo().client().insert(COLLECTIONS, QuickJson.toJson(record2), h));
+				final String allianceId = awaitResult(h -> mongo().client().insert(COLLECTIONS, JsonObject.mapFrom(record2), h));
 
 				return CreateCollectionResponse.alliance(allianceId);
 			default:
@@ -133,7 +133,7 @@ public interface Inventory {
 				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.getId()))
 						.withUserId(userId)
 						.withCollectionIds(userIdCollection))
-				.map(QuickJson::toJson)
+				.map(arg -> JsonObject.mapFrom(arg))
 				.collect(toList());
 
 		mongo().insertManyWithOptions(INVENTORY, documents, new BulkWriteOptions().setOrdered(false).setWriteOption(WriteOption.ACKNOWLEDGED));

@@ -6,7 +6,6 @@ import io.vertx.core.json.JsonObject;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -42,7 +41,7 @@ public class QuickJson {
 			if (args[0] instanceof JsonObject) {
 				return (JsonObject) args[0];
 			}
-			return toJson(args[0]);
+			return JsonObject.mapFrom(args[0]);
 		}
 
 		if (args.length % 2 != 0) {
@@ -61,11 +60,6 @@ public class QuickJson {
 		}
 
 		return j;
-	}
-
-	@SuppressWarnings("unchecked")
-	public static JsonObject toJson(final Object arg) {
-		return JsonObject.mapFrom(arg);
 	}
 
 	public static <T> T fromJson(JsonObject json, Class<T> classOfT) {

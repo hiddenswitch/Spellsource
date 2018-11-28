@@ -7,25 +7,11 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Battlecry: Activate a minion's start- or end-of-turn effects.",
+  "description": "Battlecry: Activate a minion's start- and end-of-turn effects.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "custom.ActivateTriggeredEffectSpell",
-          "revertTrigger": {
-            "class": "TurnEndTrigger"
-          }
-        },
-        {
-          "class": "custom.ActivateTriggeredEffectSpell",
-          "revertTrigger": {
-            "class": "TurnStartTrigger"
-          }
-        }
-      ]
+      "class": "custom.ActivateTriggeredEffectSpell"
     }
   },
   "attributes": {

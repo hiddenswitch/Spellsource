@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityLocation;
 import net.demilich.metastone.game.spells.CardCostModifierSpell;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
@@ -32,14 +33,18 @@ public final class ShuffleWithCardCostModifierSpell extends CardCostModifierSpel
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		CardList cards = SpellUtils.getCards(context, player, target, source, desc);
-		if (target != null && target instanceof Card) {
-			cards = new CardArrayList();
-			cards.add(target.getSourceCard().getCopy());
-		}
 		for (Card card : cards) {
+			if (!card.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
+				card = card.getCopy();
+			}
 			card.setOwner(player.getId());
 			card.setId(context.getLogic().generateId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+			desc = desc.clone();
+			desc.remove(SpellArg.CARD_FILTER);
+			desc.remove(SpellArg.CARD_SOURCE);
+			desc.remove(SpellArg.VALUE);
+			desc.remove(SpellArg.TARGET);
 			super.onCast(context, player, desc, source, card);
 			context.getLogic().shuffleToDeck(player, card, false, true);
 		}

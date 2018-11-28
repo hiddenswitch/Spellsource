@@ -116,6 +116,8 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getCards**](docs/DefaultApi.md#getCards) | **GET** /cards | 
+*DefaultApi* | [**getGameRecord**](docs/DefaultApi.md#getGameRecord) | **GET** /games/{gameId} | 
+*DefaultApi* | [**getGameRecordIds**](docs/DefaultApi.md#getGameRecordIds) | **GET** /games | 
 *DefaultApi* | [**getInvite**](docs/DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 *DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
@@ -205,6 +207,8 @@ Class | Method | HTTP request | Description
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [GetCardsResponse](docs/GetCardsResponse.md)
+ - [GetGameRecordIdsResponse](docs/GetGameRecordIdsResponse.md)
+ - [GetGameRecordResponse](docs/GetGameRecordResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
  - [Invite](docs/Invite.md)
  - [InviteGetResponse](docs/InviteGetResponse.md)
@@ -224,6 +228,9 @@ Class | Method | HTTP request | Description
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
  - [PresenceEnum](docs/PresenceEnum.md)
+ - [Replay](docs/Replay.md)
+ - [ReplayDeltas](docs/ReplayDeltas.md)
+ - [ReplayGameStates](docs/ReplayGameStates.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
  - [SpellAction](docs/SpellAction.md)
  - [SpellsourceException](docs/SpellsourceException.md)
