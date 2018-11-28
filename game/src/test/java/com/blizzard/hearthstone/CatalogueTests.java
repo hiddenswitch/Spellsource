@@ -36,7 +36,7 @@ public class CatalogueTests {
 		CardCatalogue.loadCardsFromPackage();
 		URL url = new URL(getCurrentCards());
 		URLConnection connection = url.openConnection();
-		connection.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+		connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15");
 		String cards = IOUtils.toString(connection.getInputStream());
 
 

@@ -400,6 +400,31 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
 		});
+
+		// Should destroy Doomsayer
+		/*
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion doomsayer = playMinionCard(context, opponent, "minion_doomsayer");
+			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			context.endTurn();
+			opponent.getHero().setHp(8);
+			for (int i = 0; i < 7; i++) {
+				playMinionCard(context, player, "minion_stonetusk_boar");
+			}
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setMaxDepth(8);
+			behaviour.setParallel(false);
+			behaviour.setTimeout(75000L);
+			context.setBehaviour(player.getId(), behaviour);
+
+			while (context.takeActionInTurn()) {
+			}
+
+			assertTrue(doomsayer.isDestroyed());
+			assertEquals(player.getMinions().size(), 7);
+		});
+		*/
 	}
 
 	@Test

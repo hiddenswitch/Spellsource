@@ -173,6 +173,10 @@ public interface Gateway extends Verticle {
 
 	WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException;
 
+	WebResult<GetGameRecordResponse> getGameRecord(RoutingContext context, String userId, String gameId) throws SuspendExecution, InterruptedException;
+
+	WebResult<GetGameRecordIdsResponse> getGameRecordIds(RoutingContext context, String userId) throws SuspendExecution, InterruptedException;
+
 	/**
 	 * Heuristically retrieves the primary networking interface for this device.
 	 *

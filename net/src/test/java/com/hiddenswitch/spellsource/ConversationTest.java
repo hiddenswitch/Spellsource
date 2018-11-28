@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
@@ -17,9 +18,7 @@ public class ConversationTest extends SpellsourceTestBase {
 
 	@Test
 	public void testConversationRealtime(TestContext context) {
-		Async async = context.async();
 		sync(() -> {
-
 			CreateAccountResponse user1 = createRandomAccount();
 			CreateAccountResponse user2 = createRandomAccount();
 
@@ -27,6 +26,7 @@ public class ConversationTest extends SpellsourceTestBase {
 			// User 1 client
 			final HttpClientOptions options = new HttpClientOptions().setDefaultPort(8080).setDefaultHost("localhost");
 			final String conversationId = user1.getUserId() + "," + user2.getUserId();
+			CountDownLatch latch = new CountDownLatch(1);
 			vertx.createHttpClient(options).websocket("/realtime?X-Auth-Token=" + user1.getLoginToken().getToken(), handler -> {
 				// Subscribe
 				handler.write(Buffer.buffer(Json.encode(
@@ -42,11 +42,12 @@ public class ConversationTest extends SpellsourceTestBase {
 				handler.handler(incoming -> {
 					Envelope envelope = decodeValue(incoming, Envelope.class);
 					context.assertEquals(envelope.getAdded().getChatMessage().getMessage(), "hello");
-					async.complete();
+					latch.countDown();
 				});
 				// Subscribe
 				handler.write(Buffer.buffer(Json.encode(new Envelope().sub(new EnvelopeSub().conversation(new EnvelopeSubConversation().conversationId(conversationId))))));
 			});
+			latch.await();
 		});
 	}
 }

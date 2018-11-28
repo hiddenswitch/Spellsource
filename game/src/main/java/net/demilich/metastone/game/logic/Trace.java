@@ -6,13 +6,16 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
 
 /**
  * Stores information about a game context that allows you to reproduce exactly what happened in the match.
@@ -22,14 +25,16 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @see #dump() to create a string you can save and later load.
  * @see #load(String) to recreate this object from a dumped string.
- * @see #replayContext(boolean) to replay a context after loading it from a string. Provide {@code skipLastAction: true}
- * 		as the argument if the last action throws an exception (useful for debugging).
+ * @see #replayContext(boolean, Consumer<GameContext>) to replay a context after loading it from a string.
+ * 		Provide {@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging).
+ * 		Provide {@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording
+ * 		replays).
  * @see #getRawActions() to iterate through the actions that were taken in the game. This is <b>not</b> restored by the
- * 		trace, while the integer actions themselves in {@link #getActions()} are.
+ * 	    trace, while the integer actions themselves in {@link #getActions()} are.
  */
 public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
-	private GameState gameState;
+	private GameState startState;
 	private long seed;
 	private int catalogueVersion;
 	private int[][] mulligans;
@@ -37,11 +42,11 @@ public class Trace implements Serializable, Cloneable {
 	private transient List<GameAction> rawActions = new ArrayList<>();
 
 	public void setStartState(GameState gameState) {
-		this.gameState = gameState;
+		this.startState = gameState;
 	}
 
-	public GameState getGameState() {
-		return gameState;
+	public GameState getStartState() {
+		return startState;
 	}
 
 	public void setSeed(long seed) {
@@ -69,18 +74,35 @@ public class Trace implements Serializable, Cloneable {
 		rawActions.add(action);
 	}
 
+	public GameContext replayContext() {
+		return replayContext(false, null);
+	}
 
 	public GameContext replayContext(boolean skipLastAction) {
+		return replayContext(skipLastAction, null);
+	}
+
+	/**
+	 * Creates a game context and replays it using data from this trace. A {@link Consumer} can be optionally specified
+	 * that receives the game context before every action taken by either player.
+	 *
+	 * @param skipLastAction
+	 * @param beforeRequestActionHandler
+	 * @return
+	 */
+	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler) {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = GameContext.fromState(gameState);
+		GameContext stateRestored = GameContext.fromState(startState);
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
 		}
-		stateRestored.setBehaviour(0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions));
-		stateRestored.setBehaviour(1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions));
+		stateRestored.setBehaviour(
+				0, new TraceBehaviour(0, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
+		stateRestored.setBehaviour(
+				1, new TraceBehaviour(1, mulligans, nextAction, behaviourActions, beforeRequestActionHandler));
 		GameLogic logic = new GameLogic((IdFactoryImpl) stateRestored.getLogic().getIdFactory(), getSeed());
 		logic.setContext(stateRestored);
 		stateRestored.setLogic(logic);
@@ -88,6 +110,7 @@ public class Trace implements Serializable, Cloneable {
 		try {
 			stateRestored.resume();
 		} catch (CancellationException ex) {
+			// DO NOT REMOVE, resume throws cancellation on purpose.
 		}
 		CardCatalogue.setVersion(originalCatalogueVersion);
 		return stateRestored;
@@ -110,8 +133,8 @@ public class Trace implements Serializable, Cloneable {
 	public Trace clone() {
 		try {
 			Trace clone = (Trace) super.clone();
-			if (gameState != null) {
-				clone.gameState = gameState.clone();
+			if (startState != null) {
+				clone.startState = startState.clone();
 			}
 			if (mulligans != null) {
 				int[][] mulliganCopy = new int[mulligans.length][];

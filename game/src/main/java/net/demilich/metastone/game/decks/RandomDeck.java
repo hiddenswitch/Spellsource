@@ -32,19 +32,38 @@ public final class RandomDeck extends GameDeck {
 		populate(deckFormat);
 	}
 
+	/**
+	 * Creates a random deck with a random hero class in the specified deck format and a balance of 50% Class cards and
+	 * Neutral cards.
+	 *
+	 * @param deckFormat
+	 */
+	public RandomDeck(DeckFormat deckFormat) {
+		this(getRandomHeroClass(), deckFormat);
+	}
 
 	/**
 	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the {@link
 	 * DeckFormat#CUSTOM} format.
 	 */
 	public RandomDeck() {
-		final List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
-		final HeroClass randomHeroClass = baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
-		setHeroClass(randomHeroClass);
-		populate(DeckFormat.CUSTOM);
+		this(getRandomHeroClass(), DeckFormat.CUSTOM);
 	}
 
-	void populate(DeckFormat deckFormat) {
+	/**
+	 * Creates a random deck with the specified hero class and a balance of 50% Class cards and Neutral cards in the
+	 * {@link DeckFormat#CUSTOM} format.
+	 */
+	public RandomDeck(HeroClass heroClass) {
+		this(heroClass, DeckFormat.CUSTOM);
+	}
+
+	private static HeroClass getRandomHeroClass() {
+		List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
+		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+	}
+
+	private void populate(DeckFormat deckFormat) {
 		DeckValidator deckValidator = new DefaultDeckValidator();
 		CardList classCards = CardCatalogue.query(deckFormat, card -> card.isCollectible()
 				&& !card.getCardType().isCardType(CardType.HERO)

@@ -11,7 +11,11 @@ jdk:
 services:
   - mongodb
 script:
-  - travis_wait 30 ./gradlew check --max-workers=1
+  - travis_wait 5  ./gradlew cards:test
+  - travis_wait 5  ./gradlew  game:test
+  - travis_wait 15 ./gradlew   net:test -Dexclude-tests="**/SimultaneousGamesTest.class,**/ClusterTest.class"
+  - travis_wait 10 ./gradlew   net:test --tests=com.hiddenswitch.spellsource.SimultaneousGamesTest.testSimultaneousGames
+  - travis_wait 10 ./gradlew   net:test --tests=com.hiddenswitch.spellsource.ClusterTest
 dist: trusty
 sudo: false
 addons:

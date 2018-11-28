@@ -51,6 +51,7 @@ public final class AddDeathrattleSecondaryAsTargetSpell extends AddDeathrattleSp
 		desc = desc.clone();
 		SpellDesc deathrattle = desc.getSpell();
 		deathrattle.put(SpellArg.TARGET, context.resolveSingleTarget(player, source, desc.getSecondaryTarget()).getReference());
+		desc.remove(SpellArg.SECONDARY_TARGET);
 		super.onCast(context, player, desc, source, target);
 	}
 }

@@ -53,6 +53,64 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testElorthaNoShadra() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_ice_rager");
+			playCard(context, player, "minion_elortha_no_shadra");
+			context.getLogic().drawCard(player.getId(), player);
+			Minion iceRager = playMinionCard(context, player, player.getHand().get(0));
+			assertEquals(iceRager.getDeathrattles().size(), 1);
+			destroy(context, iceRager);
+			assertEquals(player.getMinions().size(), 2);
+			Minion revived = player.getMinions().get(1);
+			destroy(context, revived);
+			assertTrue(revived.isDestroyed());
+			assertEquals(player.getMinions().size(), 1);
+		});
+	}
+
+	@Test
+	public void testPurrfectTrackerSeaforiumBombInteraction() {
+		for (int i = 0; i < 100; i++) {
+			runGym((context, player, opponent) -> {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+				putOnTopOfDeck(context, player, "spell_seaforium_bomb");
+				playCard(context, player, "minion_purrfect_tracker");
+			});
+		}
+	}
+
+	@Test
+	public void testBrightEyedScoutInteractions() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "weapon_unidentified_maul");
+			playCard(context, player, "minion_bright_eyed_scout");
+			assertEquals(costOf(context, player, player.getHand().get(0)), 5);
+		});
+
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			putOnTopOfDeck(context, player, "spell_seaforium_bomb");
+			playCard(context, player, "minion_bright_eyed_scout");
+			// The coin should be in your hand, and its cost should not have been changed
+			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			receiveCard(context, opponent, "spell_the_coin");
+			shuffleToDeck(context, player, "minion_chameleos");
+			playCard(context, player, "minion_bright_eyed_scout");
+			context.endTurn();
+			context.endTurn();
+			// It's the coin now
+			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
+		});
+	}
+
+	@Test
 	public void testElaborateSchemeGloatInteraction() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_elaborate_scheme");
@@ -227,6 +285,26 @@ public class CustomCardsTests extends TestBase {
 			destroy(context, diedWhileAlive2);
 			destroy(context, stormsong);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), diedWhileAlive1.getSourceCard().getCardId());
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), diedWhileAlive2.getSourceCard().getCardId());
+			assertEquals(player.getMinions().size(), 1, "Should contain resurrected Bloodfen");
+			assertEquals(opponent.getMinions().size(), 1, "Should contain Treant");
+		});
+
+		// Test with transformation
+		runGym((context, player, opponent) -> {
+			Minion diedWhileNotAlive = playMinionCard(context, player, "minion_wisp");
+			Minion transformedWhileAlive = playMinionCard(context, player, "minion_bloodfen_raptor");
+			context.endTurn();
+			Minion diedWhileAlive2 = playMinionCard(context, opponent, "token_treant");
+			context.endTurn();
+			destroy(context, diedWhileNotAlive);
+			Minion stormsong = playMinionCard(context, player, "minion_lord_stormsong");
+			playCard(context, player, "spell_polymorph", transformedWhileAlive);
+			transformedWhileAlive = (Minion) transformedWhileAlive.transformResolved(context);
+			destroy(context, transformedWhileAlive);
+			destroy(context, diedWhileAlive2);
+			destroy(context, stormsong);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), transformedWhileAlive.getSourceCard().getCardId());
 			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), diedWhileAlive2.getSourceCard().getCardId());
 			assertEquals(player.getMinions().size(), 1, "Should contain resurrected Bloodfen");
 			assertEquals(opponent.getMinions().size(), 1, "Should contain Treant");

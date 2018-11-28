@@ -32,6 +32,7 @@ import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.impl.ConcurrentHashSet;
 import io.vertx.core.json.Json;
 import io.vertx.core.streams.Pump;
+import io.vertx.ext.sync.Sync;
 import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -49,7 +50,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.logic.TurnState;
@@ -376,9 +376,9 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	public void init() {
 		logger.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
-
+		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
-		setActivePlayerId(getPlayer(startingPlayerId).getId());
+		setActivePlayerId(startingPlayerId);
 
 		// Await both clients ready for 10s
 		Future bothClientsReady;
@@ -407,8 +407,8 @@ public class ServerGameContext extends GameContext implements Server {
 		clientsReady.clear();
 
 		// Make sure the players are initialized before sending the original player updates.
-		getLogic().initializePlayer(IdFactory.PLAYER_1);
-		getLogic().initializePlayer(IdFactory.PLAYER_2);
+		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
+		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
 		logger.trace("init {}: Players initialized", getGameId());
 
 		// Signal to the game context has made everything have valid IDs.
@@ -421,10 +421,6 @@ public class ServerGameContext extends GameContext implements Server {
 
 		// Record the time that we started the game in system milliseconds, in case a card wants to use this for an event-based thing.
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
-
-		// Simultaneous mulligan futures
-		Future<List<Card>> mulligan1 = Future.future();
-		Future<List<Card>> mulligan2 = Future.future();
 
 		// Set the mulligan timer
 		final TimerId mulliganTimerId;
@@ -444,10 +440,16 @@ public class ServerGameContext extends GameContext implements Server {
 		updateClientsWithGameState();
 
 		// Simultaneous mulligans now
-		getLogic().initAsync(getActivePlayerId(), true, mulligan1::complete);
-		getLogic().initAsync(getNonActivePlayerId(), false, mulligan2::complete);
+		Future<List<Card>> mulligansActive = Future.future();
+		Future<List<Card>> mulligansNonActive = Future.future();
+
+		List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
+		getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, mulligansActive::complete);
+		getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, mulligansNonActive::complete);
+
 		// If this is interrupted, it'll bubble up to the general interrupt handler
-		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligan1, mulligan2)::setHandler);
+		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive, mulligansNonActive)::setHandler);
 
 		// If we got this far, we should cancel the time
 		if (mulliganTimerId != null) {
@@ -459,6 +461,13 @@ public class ServerGameContext extends GameContext implements Server {
 			// An error occurred
 			logger.error("init {}: The mulligan phase ended prematurely", getGameId());
 		}
+
+		List<Card> discardedCardsActive = mulligansActive.result();
+		List<Card> discardedCardsNonActive = mulligansNonActive.result();
+		getLogic().handleMulligan(getActivePlayer(), true, discardedCardsActive);
+		getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
+
+		traceMulligans(mulligansActive.result(), mulligansNonActive.result());
 
 		try {
 			startGame();
@@ -476,7 +485,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Override
 	@Suspendable
 	public void play() {
-		play(true);
+		play(false);
 	}
 
 	/**
@@ -489,34 +498,40 @@ public class ServerGameContext extends GameContext implements Server {
 		isRunning = true;
 		if (fork) {
 			// We're going to build this fiber with a huge stack
-			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), 512, () -> {
+			if (fiber != null) {
+				throw new UnsupportedOperationException("Cannot play with a fork twice!");
+			}
+			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), Sync.getContextScheduler(), 512, () -> {
 				try {
+					logger.debug("play {}: Starting forked game", gameId);
 					super.play();
 				} catch (VertxException interrupted) {
 					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
-						logger.debug("resume {}: Interrupted gracefully");
+						logger.debug("play {}: Interrupted gracefully");
 					} else {
-						logger.error("resume {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
+						logger.error("play {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
 					}
 					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
 					// is allowed to interrupt the fiber.
 				} catch (RuntimeException other) {
-					logger.error("resume {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
+					logger.error("play {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
 					try {
 						endGame();
 					} catch (Throwable endGameError) {
-						logger.error("resume {}: Ending the game threw an exception.", getGameId(), endGameError);
+						logger.error("play {}: Ending the game threw an exception.", getGameId(), endGameError);
 						// TODO: Deal with any other issues
 					}
 				} finally {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
-					releaseUsers();
+					UserId[] userIds = getPlayerConfigurations().stream().map(Configuration::getUserId).toArray(UserId[]::new);
+					Vertx.currentContext().runOnContext((ctx) -> ServerGameContext.releaseUsers(gameId, userIds));
 				}
 				return null;
 			});
 
 			fiber.start();
+			logger.debug("play {}: Fiber started", gameId);
 		} else {
 			super.play();
 		}
@@ -807,24 +822,32 @@ public class ServerGameContext extends GameContext implements Server {
 				games.remove(userId, gameId);
 			}
 		} else {
-			@Nullable Context context = Vertx.currentContext();
-			if (context == null) {
-				return;
-			}
 			UserId[] userIds = getUserIds().toArray(new UserId[0]);
-			context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
-				if (res.failed()) {
-					return;
-				}
-
-				for (UserId userId : userIds) {
-					res.result().removeIfPresent(userId, gameId, Future.future());
-				}
-			});
+			releaseUsers(gameId, userIds);
 		}
-		getPlayerConfigurations().clear();
 	}
 
+	private static void releaseUsers(GameId gameId, UserId[] userIds) {
+		@Nullable Context context = Vertx.currentContext();
+		if (context == null) {
+			return;
+		}
+		context.owner().sharedData().<UserId, GameId>getAsyncMap(Games.GAMES_PLAYERS_MAP, res -> {
+			if (res.failed()) {
+				return;
+			}
+
+			for (UserId userId : userIds) {
+				res.result().removeIfPresent(userId, gameId, Future.future());
+			}
+		});
+	}
+
+	/**
+	 * Gets the user IDs of the players in this game context. Includes the AI player
+	 *
+	 * @return A list of user IDs.
+	 */
 	private List<UserId> getUserIds() {
 		return getPlayerConfigurations().stream().map(Configuration::getUserId).collect(toList());
 	}

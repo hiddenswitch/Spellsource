@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
+      "class": "CopyCardSpell",
       "target": "ALL_ENTITIES",
       "filter": {
         "class": "AndFilter",

@@ -11,9 +11,7 @@ import com.hiddenswitch.spellsource.util.QuickJson;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mail.MailClient;
@@ -22,12 +20,9 @@ import io.vertx.ext.mail.MailMessage;
 import io.vertx.ext.mail.MailResult;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.web.Cookie;
-import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -49,6 +44,7 @@ import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.*;
+import static io.vertx.core.json.JsonObject.mapFrom;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 
@@ -238,7 +234,7 @@ public interface Accounts {
 		passwordRecord.setScrypt(scrypt);
 		record.getServices().setPassword(passwordRecord);
 
-		mongo().insert(USERS, toJson(record));
+		mongo().insert(USERS, mapFrom(record));
 
 		response.setUserId(userId);
 		response.setLoginToken(forUser);
@@ -416,7 +412,7 @@ public interface Accounts {
 				json("$push",
 						json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS,
 								json("$each",
-										Collections.singletonList(toJson(hashedLoginTokenRecord)),
+										Collections.singletonList(mapFrom(hashedLoginTokenRecord)),
 										"$slice",
 										sliceLastFiveElements))));
 
@@ -621,7 +617,7 @@ public interface Accounts {
 							String token = RandomStringUtils.randomAlphanumeric(64).toLowerCase();
 							PasswordResetRecord record = new PasswordResetRecord(token);
 							record.setUserId(userRecord.getId());
-							mongo().insert(RESET_TOKENS, JsonObject.mapFrom(record));
+							mongo().insert(RESET_TOKENS, mapFrom(record));
 							MailClient mailClient = MailClient.createShared(Vertx.currentContext().owner(),
 									new MailConfig()
 											.setHostname(System.getenv().getOrDefault("SMTP_HOST", "smtp.mailgun.org"))

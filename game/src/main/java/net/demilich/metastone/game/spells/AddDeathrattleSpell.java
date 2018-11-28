@@ -92,7 +92,7 @@ public class AddDeathrattleSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.CARD);
 		List<SpellDesc> deathrattles = desc.subSpells(0);
 		Card[] cards = SpellUtils.getCards(context, desc);
 		if (cards.length != 0) {
