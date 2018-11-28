@@ -24,6 +24,8 @@ import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static io.vertx.core.json.JsonObject.mapFrom;
+
 /**
  * The main entry point fo the {@code spellsource} python package's interface with the Java code.
  */
@@ -85,8 +87,8 @@ public class PythonBridge {
 											deckKeyPair[1])))
 									.put("numberOfGames", simulationResult.getNumberOfGames())
 									.put("results", new JsonArray(Arrays.asList(
-											JsonObject.mapFrom(simulationResult.getPlayer1Stats().getStats()),
-											JsonObject.mapFrom(simulationResult.getPlayer2Stats().getStats()))))
+											mapFrom(simulationResult.getPlayer1Stats().getStats()),
+											mapFrom(simulationResult.getPlayer2Stats().getStats()))))
 									.encode());
 						});
 					} catch (InterruptedException e) {

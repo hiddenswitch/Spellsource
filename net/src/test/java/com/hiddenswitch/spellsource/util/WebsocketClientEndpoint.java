@@ -80,9 +80,12 @@ public class WebsocketClientEndpoint implements WebSocketListener {
 	}
 
 	public void close() {
-		websocket.sendCloseFrame();
-		if (closeHandler != null) {
-			closeHandler.run();
+		try {
+			websocket.sendCloseFrame();
+			if (closeHandler != null) {
+				closeHandler.run();
+			}
+		} catch (Throwable any) {
 		}
 	}
 

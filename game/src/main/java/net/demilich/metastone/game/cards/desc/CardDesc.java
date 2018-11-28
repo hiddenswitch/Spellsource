@@ -495,7 +495,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
-	 * GameLogic#handleMulligan(Player, boolean, GameLogic.FirstHand, List)}, in the {@link
+	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link
 	 * GameLogic#startGameForPlayer(Player)} phase.
 	 * <p>
 	 * Note that the {@link net.demilich.metastone.game.events.GameStartEvent} is raised twice, once for each player, so
