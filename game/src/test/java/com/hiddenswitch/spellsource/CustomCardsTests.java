@@ -4623,5 +4623,15 @@ public class CustomCardsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testEnchantments() {
+		runGym((context, player, opponent) -> {
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_blessing_of_wisdom", wisp);
+			assertEquals(wisp.getEnchantmentsFromContext(context).size(), 1);
+
+		});
+	}
 }
 
