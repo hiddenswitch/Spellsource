@@ -83,7 +83,6 @@ public class ClusterTest extends SpellsourceTestBase {
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
-				.setPreferNativeTransport(true)
 				.setBlockedThreadCheckInterval(30000L)
 				.setWarningExceptionTime(30000L), context.asyncAssertSuccess(newVertxInstance -> {
 			// Deploy a second gateway

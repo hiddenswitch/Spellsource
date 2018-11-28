@@ -1,13 +1,16 @@
 package com.hiddenswitch.spellsource.impl;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.github.fromage.quasi.fibers.SuspendExecution;
 import com.github.fromage.quasi.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
 import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
+import com.hiddenswitch.spellsource.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Hazelcast;
@@ -15,7 +18,10 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
+import io.vertx.core.json.Json;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
@@ -23,12 +29,17 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.AttributeMap;
 import net.demilich.metastone.game.logic.GameStatus;
 
-import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.stream.Collectors;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.defer;
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.core.json.JsonObject.mapFrom;
 
 public class ClusteredGames extends SyncVerticle implements Games {
 	private Registration registration;
@@ -130,11 +141,13 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		}
 	}
 
-	@Suspendable
-	private void endGame(ActivityMonitor monitor) throws InterruptedException, SuspendExecution {
-		endGame(monitor.getGameId());
-	}
-
+	/**
+	 * Handles a game that ends by any means. Records metadata, like wins and losses.
+	 *
+	 * @param gameId
+	 * @throws InterruptedException
+	 * @throws SuspendExecution
+	 */
 	@Suspendable
 	private void endGame(GameId gameId) throws InterruptedException, SuspendExecution {
 		if (!contexts.containsKey(gameId)) {
@@ -158,23 +171,23 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				String deckIdWinner = (String) gameContext.getWinner().getAttribute(Attribute.DECK_ID);
 				String deckIdLoser = (String) gameContext.getOpponent(gameContext.getWinner()).getAttribute(Attribute.DECK_ID);
 				// Check if this deck was a draft deck
-				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
+				if (mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner, "deckType", DeckType.DRAFT.toString()),
 						json("$inc", json("totalGames", 1, "wins", 1))).getDocModified() > 0L) {
-					Mongo.mongo().updateCollection(Draft.DRAFTS, json("_id", userIdWinner), json("$inc", json("publicDraftState.wins", 1)));
+					mongo().updateCollection(Draft.DRAFTS, json("_id", userIdWinner), json("$inc", json("publicDraftState.wins", 1)));
 					LOGGER.trace("endGame {}: Marked {} as winner in draft", gameId, userIdWinner);
 				} else {
-					Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner),
+					mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdWinner),
 							json("$inc", json("totalGames", 1, "wins", 1)));
 					LOGGER.trace("endGame {}: Marked {} as winner in other", gameId, userIdWinner);
 				}
 
 				// Check if this deck was a draft deck
-				if (Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser, "deckType", DeckType.DRAFT.toString()),
+				if (mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser, "deckType", DeckType.DRAFT.toString()),
 						json("$inc", json("totalGames", 1))).getDocModified() > 0L) {
-					Mongo.mongo().updateCollection(Draft.DRAFTS, json("_id", userIdLoser), json("$inc", json("publicDraftState.losses", 1)));
+					mongo().updateCollection(Draft.DRAFTS, json("_id", userIdLoser), json("$inc", json("publicDraftState.losses", 1)));
 					LOGGER.trace("endGame {}: Marked {} as loser in draft", gameId, userIdLoser);
 				} else {
-					Mongo.mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser),
+					mongo().updateCollection(Inventory.COLLECTIONS, json("_id", deckIdLoser),
 							json("$inc", json("totalGames", 1)));
 					LOGGER.trace("endGame {}: Marked {} as loser in other", gameId, userIdLoser);
 				}
@@ -186,6 +199,31 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		// If the game is still running when this is called, make sure to force end the game
 		if (gameContext.getStatus() == GameStatus.RUNNING) {
 			gameContext.loseBothPlayers();
+		}
+
+		try {
+			// Let's kick this off to be nonblocking of ending the game here, since things are sensitive to this timing
+			boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
+			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(Collectors.toList());
+			List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList());
+			List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList());
+			defer(v -> {
+				try {
+					GameRecord gameRecord = new GameRecord(gameId.toString())
+							.setCreatedAt(new Date())
+							.setBotGame(botGame)
+							.setPlayerUserIds(userIds)
+							.setDeckIds(deckIds)
+							.setPlayerNames(playerNames);
+					gameRecord.setReplay(Games.replayFromGameContext(gameContext));
+					mongo().insert(Games.GAMES, mapFrom(gameRecord));
+					LOGGER.info("endGame {}: Saved replay", gameId);
+				} catch (Throwable any) {
+					LOGGER.error("endGame {}: Could not save a replay due to {}", gameId, any.getMessage(), any);
+				}
+			});
+		} catch (Throwable ex) {
+			LOGGER.error("endGame {}: Could not save a replay due to {}", gameId, ex.getMessage(), ex);
 		}
 	}
 
