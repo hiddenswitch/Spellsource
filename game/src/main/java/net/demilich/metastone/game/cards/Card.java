@@ -66,6 +66,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 
 	private CardDesc desc;
 	private List<SpellDesc> deathrattleEnchantments = new ArrayList<>();
+	private List<EnchantmentDesc> storedEnchantments = new ArrayList<>();
 
 	protected Card() {
 		attributes = new CardAttributeMap(this);
@@ -117,6 +118,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		minion.setBaseHp(getBaseHp());
 		minion.setHp(minion.getMaxHp());
 
+		if (storedEnchantments != null) {
+			for (EnchantmentDesc storedEnchantment : storedEnchantments) {
+				minion.addEnchantment(storedEnchantment.create());
+			}
+		}
 		return minion;
 	}
 
@@ -165,6 +171,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				enchantments.add(trigger.create());
 			}
 		}
+
 
 		if (getDesc().getDeathrattle() != null) {
 			logger.warn("createEnchantments {}: Currently creating a deathrattle using a MinionDeathTrigger is not supported", getCardId());
@@ -222,7 +229,9 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
+		clone.storedEnchantments = new ArrayList<>();
 		deathrattleEnchantments.forEach(de -> clone.deathrattleEnchantments.add(de.clone()));
+		clone.storedEnchantments.addAll(storedEnchantments);
 		return clone;
 	}
 
@@ -1010,9 +1019,17 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		deathrattleEnchantments.add(deathrattle);
 	}
 
+	public void addStoredEnchantment(EnchantmentDesc enchantmentDesc) {
+		storedEnchantments.add(enchantmentDesc);
+	}
+
 	@Override
 	public List<SpellDesc> getDeathrattleEnchantments() {
 		return deathrattleEnchantments;
+	}
+
+	public List<EnchantmentDesc> getStoredEnchantments() {
+		return storedEnchantments;
 	}
 
 	public boolean hasTrigger() {
