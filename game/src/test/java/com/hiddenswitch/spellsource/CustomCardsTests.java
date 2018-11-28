@@ -4611,17 +4611,27 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_brann_bronzebeard");
 			playMinionCardWithBattlecry(context, player, "minion_bronze_timekeeper", rag);
 			assertEquals(opponent.getHero().getHp(), -2);
-
 		});
 	}
 
 	@Test
 	public void testTrophyHuntress() {
 		runGym((context, player, opponent) -> {
-
-
+			context.endTurn();
+			Minion murloc = playMinionCard(context, opponent, "minion_murloc_tinyfin");
+			Minion beast = playMinionCard(context, opponent, "minion_snowflipper_penguin");
+			Minion dragon = playMinionCard(context, opponent, "token_whelp");
+			for (Minion minion : opponent.getMinions()) {
+				context.getLogic().setHpAndMaxHp(minion, 4);
+			}
+			context.endTurn();
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", murloc);
+			assertEquals(murloc.getHp(), murloc.getMaxHp() - 1);
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", beast);
+			assertEquals(beast.getHp(), beast.getMaxHp() - 2);
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", dragon);
+			assertEquals(dragon.getHp(), dragon.getMaxHp() - 3);
 		});
-
 	}
 }
 

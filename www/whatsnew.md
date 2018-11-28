@@ -5,7 +5,21 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
+#### 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
+
+Thanks to a great contribution from @doombubbles, new custom cards and a significant number of Rastakhan's Rumble cards have been added to the game.
+
+###### Content Additions:
+
+ - The custom cards Owlkin Hatchling, Overclock, Bittertide Crab, Bronze Timekeeper, Dr. Doom, Finley the Explorer, Jastor Gallywyx, Miniature Gunner, Southsea Giant, Trophy Huntress, Whizbang the Plunderful, T'Paartos the Lightforged, and the much loathed Hopesteed.
+ - 97 Rastakhan's Rumble cards. The remainder will be released soon.
+ 
+###### Content Fixes:
+
+ - King Togwaggle now puts Ransom in the opponent's hand.
+ - Elortha no Shanda now does not cause infinite deathrattle loops.
+
+###### Changes Since 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
 
 Thanks to a great contribution from @tehgdogg, replay functionality has been added for debugging and development purposes. Your games will be recorded and used to fix bugs when they occur. Currently, it is not possible to retrieve a replay from the client. Please reach out on Discord if you want a replay of a specific game.
 
