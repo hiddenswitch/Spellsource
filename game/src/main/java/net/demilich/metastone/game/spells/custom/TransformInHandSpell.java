@@ -13,6 +13,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -25,6 +26,7 @@ public class TransformInHandSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Card card = (Card) target;
 		boolean startedInDeck = card.hasAttribute(Attribute.STARTED_IN_DECK);
+		boolean startedInHand = card.hasAttribute(Attribute.STARTED_IN_HAND);
 		boolean removesAtEndOfTurn = card.hasAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
 
 		if (!(player.getZone(card.getZone()) instanceof CardZone)) {
@@ -54,8 +56,16 @@ public class TransformInHandSpell extends Spell {
 			replaced.setAttribute(Attribute.STARTED_IN_DECK);
 		}
 
+		if (startedInHand) {
+			replaced.setAttribute(Attribute.STARTED_IN_HAND);
+		}
+
 		if (removesAtEndOfTurn) {
 			replaced.setAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
+		}
+
+		if (replaced.getZone() == Zones.HAND && desc.getSpell() != null) {
+			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, replaced);
 		}
 	}
 

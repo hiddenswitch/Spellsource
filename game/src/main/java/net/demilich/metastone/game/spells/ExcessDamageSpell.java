@@ -7,7 +7,9 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,30 +22,37 @@ public final class ExcessDamageSpell extends DamageSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		SpellDesc toTarget = desc.clone();
 		SpellDesc toExcess;
-		if (desc.containsKey(SpellArg.SPELL)) {
-			 toExcess = (SpellDesc) desc.get(SpellArg.SPELL);
+		if (desc.getSpell() != null) {
+			toExcess = desc.getSpell().clone();
 		} else {
-			toExcess = desc.clone();
+			toExcess = DamageSpell.create();
 		}
-		List<Entity> excessDealtTo = context.resolveTarget(player, source, desc.getSecondaryTarget());
+		List<Entity> excessDealtTo;
+		excessDealtTo = context.resolveTarget(player, source, desc.getSecondaryTarget());
 		int damage = context.getLogic().applySpellpower(player, source, desc.getValue(SpellArg.VALUE, context, player, target, source, 6));
 		Actor targetActor = (Actor) target;
 		int hp = targetActor.getHp();
 		int damageToTarget = Math.max(0, Math.min(damage, hp));
 		int damageToExcess = Math.min(damage, Math.max(0, damage - hp));
-		toTarget.put(SpellArg.VALUE, damageToTarget);
+
+		SpellDesc toTarget = DamageSpell.create(target.getReference(), damageToTarget);
 		toTarget.put(SpellArg.IGNORE_SPELL_DAMAGE, true);
+
 		toExcess.put(SpellArg.VALUE, damageToExcess);
 		toExcess.put(SpellArg.IGNORE_SPELL_DAMAGE, true);
+
 		if (!desc.getBool(SpellArg.EXCLUSIVE)) {
 			toTarget.remove(SpellArg.SECONDARY_TARGET);
 			super.onCast(context, player, toTarget, source, target);
 		}
-		for (Entity excessTarget : excessDealtTo) {
-			toExcess.remove(SpellArg.SECONDARY_TARGET);
-			super.onCast(context, player, toExcess, source, excessTarget);
+
+		if (excessDealtTo != null) {
+			for (Entity excessTarget : excessDealtTo) {
+				SpellUtils.castChildSpell(context, player, toExcess, source, excessTarget);
+			}
+		} else {
+			SpellUtils.castChildSpell(context, player, toExcess, source, null);
 		}
 	}
 }
