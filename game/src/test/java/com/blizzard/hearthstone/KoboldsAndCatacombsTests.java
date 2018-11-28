@@ -368,14 +368,12 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Stream.of(card2a, card2b).forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
 			playCard(context, player, "minion_king_togwaggle");
 			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card1a, card1b)));
-			Assert.assertTrue(opponent.getDeck().containsCard("spell_ransom"));
+			Assert.assertTrue(opponent.getHand().containsCard("spell_ransom"));
 			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card2a, card2b)));
-			// Move the ransom card to the top of the deck
-			Card ransomCard = opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new);
-			ransomCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
-			ransomCard.moveOrAddTo(context, Zones.DECK);
+			// Put a coin on the top of the opponent's deck so that they don't draw one of the shuffled-in cards
+			putOnTopOfDeck(context, opponent, "spell_the_coin");
 			context.endTurn();
-			ransomCard = opponent.getHand().get(0);
+			Card ransomCard = opponent.getHand().filtered(c -> c.getCardId().equals("spell_ransom")).get(0);
 			playCard(context, opponent, ransomCard);
 			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card2a, card2b)));
 			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card1a, card1b)));
