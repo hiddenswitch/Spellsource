@@ -26,7 +26,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  *     },
  *     "spell": {
  *       "class": "OverkillSpell",
- *       "target": "EVENT_TARGET",
  *       "spell": {
  *         "class": "DrawCardSpell",
  *         "value": 2
