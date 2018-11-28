@@ -49,7 +49,8 @@ import java.util.List;
  *     "targetPlayer": "SELF"
  *   }
  * </pre>
- * For the text "Recruit two 1-Cost minions," observe that the card means base mana cost. The only change is the filter:
+ * For the text "Recruit two 1-Cost minions," observe that the card means base mana cost. The only change is the
+ * filter:
  * <pre>
  *   {
  *     "class": "RecruitSpell",
@@ -93,7 +94,7 @@ public class RecruitSpell extends Spell {
 		if (cardFilter == null) {
 			card = context.getLogic().getRandom(collection.filtered(f -> f.getCardType() == CardType.MINION));
 		} else {
-			card = context.getLogic().getRandom(collection.filtered(c -> cardFilter.matches(context, player, c, source)));
+			card = context.getLogic().getRandom(collection.filtered(c -> c.getCardType() == CardType.MINION && cardFilter.matches(context, player, c, source)));
 		}
 
 		if (card == null) {

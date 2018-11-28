@@ -12,10 +12,19 @@
     "spell": {
       "class": "RecruitSpell",
       "cardFilter": {
-        "class": "CardFilter",
-        "attribute": "STARTED_IN_DECK",
-        "operation": "HAS",
-        "invert": true
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "attribute": "STARTED_IN_DECK",
+            "operation": "HAS",
+            "invert": true
+          },
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        ]
       },
       "cardLocation": "HAND",
       "value": 10

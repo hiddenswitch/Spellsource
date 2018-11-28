@@ -48,6 +48,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	private boolean expired;
 	private int owner;
 	private EntityReference hostReference;
+	private String sourceCardId;
 	/**
 	 * The default target reference is the {@link EntityReference#FRIENDLY_HAND}.
 	 */
@@ -338,5 +339,15 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
 		this.desc = (CardCostModifierDesc) desc;
+	}
+
+
+	public String getSourceCardId() {
+		return sourceCardId;
+	}
+
+	public CardCostModifier setSourceCardId(String sourceCardId) {
+		this.sourceCardId = sourceCardId;
+		return this;
 	}
 }
