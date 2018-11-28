@@ -41,9 +41,12 @@ class Context(contextlib.AbstractContextManager):
         self._is_closed = False
         try:
             self._gateway = Context._start_gateway()
-        except:
+        except FileNotFoundError:
             self.status = Context.STATUS_FAILED
-            return
+            raise FileNotFoundError('Could not find the JAR file that stores the Spellsource Engine. Did you run gradle build?')
+        except Exception as ex:
+            self.status = Context.STATUS_FAILED
+            raise ex
 
         for name, package in (('game', 'net.demilich.metastone.game.*'),
                               ('entities', 'net.demilich.metastone.game.entities.*'),
