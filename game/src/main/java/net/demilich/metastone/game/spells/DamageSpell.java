@@ -133,6 +133,10 @@ public class DamageSpell extends Spell {
 		return create(null, damageModfier);
 	}
 
+	public static SpellDesc create() {
+		return new SpellDesc(DamageSpell.class);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

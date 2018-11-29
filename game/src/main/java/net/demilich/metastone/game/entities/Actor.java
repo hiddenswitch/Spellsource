@@ -349,6 +349,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		clone.setId(IdFactory.UNASSIGNED);
 		clone.setOwner(IdFactory.UNASSIGNED);
 		clone.getAttributes().put(Attribute.COPIED_FROM, this.getReference());
+		clone.getAttributes().remove(Attribute.TRANSFORM_REFERENCE);
 		// Clear aura buffs when copying an actor
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);

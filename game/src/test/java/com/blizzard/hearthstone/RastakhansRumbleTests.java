@@ -2,14 +2,29 @@ package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
 import static org.testng.Assert.assertTrue;
 
 public class RastakhansRumbleTests extends TestBase {
+
+	@Test
+	public void testSunlance() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_wisp");
+			for (int i = 0; i < 4; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "spell_sunlance", target);
+			assertEquals(player.getHand().size(), 3);
+			assertEquals(player.getDeck().size(), 1);
+		});
+	}
 
 	@Test
 	public void testSpiritOfTheShark() {
@@ -41,21 +56,29 @@ public class RastakhansRumbleTests extends TestBase {
 	@Test
 	public void testHexLordMalacrass() {
 		runGym((context, player, opponent) -> {
+			player.getRemovedFromPlay().clear();
+			Card startsInHand = receiveCard(context, player, "minion_bloodfen_raptor");
+			startsInHand.getAttributes().put(Attribute.STARTED_IN_HAND, true);
+			Card doesntStartInHand = receiveCard(context, player, "spell_the_coin");
+			playCard(context, player, "spell_demonic_project");
+			int handSize = player.getHand().size();
 			playCard(context, player, "minion_hex_lord_malacrass");
+			assertEquals(player.getHand().size(), handSize + 1);
+			startsInHand = startsInHand.transformResolved(context).getSourceCard();
+			assertNotEquals(startsInHand.getCardId(), "minion_bloodfen_raptor");
+			assertEquals(player.getHand().get(2).getCardId(), startsInHand.getCardId(),
+					"Following rules on transforming cards, Hex Lord Malacrass should put another copy of the demon into your hand");
 		});
-
 	}
 
 	@Test
 	public void testVoidContract() {
 		runGym((context, player, opponent) -> {
-
 			shuffleToDeck(context, player, "minion_wisp");
 			for (int i = 0; i < 15; i++) {
 				shuffleToDeck(context, player, "minion_wisp");
 				shuffleToDeck(context, opponent, "minion_wisp");
 			}
-
 
 			assertEquals(player.getDeck().size(), 16);
 			assertEquals(opponent.getDeck().size(), 15);
@@ -162,8 +185,7 @@ public class RastakhansRumbleTests extends TestBase {
 			for (int i = 0; i < 3; i++) {
 				assertEquals(opponent.getMinions().get(i).getHp(), 13, i + "");
 			}
-
-		});
+		}, HeroClass.BLUE, HeroClass.BLUE);
 	}
 
 	@Test
