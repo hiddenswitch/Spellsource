@@ -201,7 +201,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			lock = SuspendableLock.lock("Connection::realtime[" + userId + "]", 2000L);
 			socket = routingContext.request().upgrade();
 		} catch (Throwable any) {
-			LOGGER.error("connected {}: {}", userId, any.getMessage(), any);
+			LOGGER.error("connected {}: {}", userId, any.getMessage());
 			routingContext.fail(403);
 			return;
 		}
