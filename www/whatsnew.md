@@ -5,7 +5,13 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
+#### 0.6.7-2.0.11 (Thursday, November 29th, 2018)
+
+###### Content Fixes:
+
+ - Rotbutcher Gordo is no longer a Standard set / Knights of the Frozen Throne card.
+
+###### Changes Since 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
 
 Thanks to a great contribution from @doombubbles, new custom cards and a significant number of Rastakhan's Rumble cards have been added to the game.
 
