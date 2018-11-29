@@ -6,16 +6,19 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Divine Shield. After this loses Divine Shield, gain Divinie Shield.",
+  "description": "Divine Shield. After this loses Divine Shield, gain Divine Shield.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDivineShieldTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
-      "class": "AddAttributeSpell",
-      "target": "SELF",
-      "attribute": "DIVINE_SHIELD"
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "DIVINE_SHIELD"
+      }
     }
   },
   "attributes": {

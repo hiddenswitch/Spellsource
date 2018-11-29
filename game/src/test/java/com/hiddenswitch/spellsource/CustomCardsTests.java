@@ -53,6 +53,28 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testThunderfury() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_thunderfury");
+			player.getHero().getWeapon().setMaxHp(4);
+			player.getHero().getWeapon().setHp(4);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getMaxDurability() - 1);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getMaxDurability() - 2);
+			playCard(context, player, "spell_test_overload");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getMaxDurability() - 2);
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 0);
+			assertFalse(player.getHero().getWeapon().hasAttribute(Attribute.AURA_IMMUNE));
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHero().getWeapon().getDurability(), player.getHero().getWeapon().getMaxDurability() - 3);
+		});
+	}
+
+	@Test
 	public void testElorthaNoShadra() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_ice_rager");
@@ -4611,17 +4633,27 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_brann_bronzebeard");
 			playMinionCardWithBattlecry(context, player, "minion_bronze_timekeeper", rag);
 			assertEquals(opponent.getHero().getHp(), -2);
-
 		});
 	}
 
 	@Test
 	public void testTrophyHuntress() {
 		runGym((context, player, opponent) -> {
-
-
+			context.endTurn();
+			Minion murloc = playMinionCard(context, opponent, "minion_murloc_tinyfin");
+			Minion beast = playMinionCard(context, opponent, "minion_snowflipper_penguin");
+			Minion dragon = playMinionCard(context, opponent, "token_whelp");
+			for (Minion minion : opponent.getMinions()) {
+				context.getLogic().setHpAndMaxHp(minion, 4);
+			}
+			context.endTurn();
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", murloc);
+			assertEquals(murloc.getHp(), murloc.getMaxHp() - 1);
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", beast);
+			assertEquals(beast.getHp(), beast.getMaxHp() - 2);
+			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", dragon);
+			assertEquals(dragon.getHp(), dragon.getMaxHp() - 3);
 		});
-
 	}
 
 	@Test

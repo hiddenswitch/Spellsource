@@ -16,6 +16,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
@@ -118,6 +119,18 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 
 	protected Aura(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell) {
 		super(primaryTrigger, secondaryTrigger, spell, false);
+	}
+
+	protected void includeExtraTriggers(AuraDesc desc) {
+		if (desc == null) {
+			return;
+		}
+		if (desc.containsKey(AuraArg.TRIGGERS)) {
+			EventTriggerDesc[] moreTriggers = (EventTriggerDesc[]) desc.get(AuraArg.TRIGGERS);
+			for (EventTriggerDesc trigger : moreTriggers) {
+				triggers.add(trigger.create());
+			}
+		}
 	}
 
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
