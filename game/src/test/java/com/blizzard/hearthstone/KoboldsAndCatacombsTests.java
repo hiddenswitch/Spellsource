@@ -368,10 +368,10 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			Stream.of(card2a, card2b).forEach(c -> context.getLogic().shuffleToDeck(opponent, c));
 			playCard(context, player, "minion_king_togwaggle");
 			Assert.assertTrue(opponent.getDeck().containsAll(Arrays.asList(card1a, card1b)));
-			Assert.assertTrue(opponent.getDeck().containsCard("spell_ransom"));
+			Assert.assertTrue(opponent.getHand().containsCard("spell_ransom"));
 			Assert.assertTrue(player.getDeck().containsAll(Arrays.asList(card2a, card2b)));
 			// Move the ransom card to the top of the deck
-			Card ransomCard = opponent.getDeck().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new);
+			Card ransomCard = opponent.getHand().stream().filter(c -> c.getCardId().equals("spell_ransom")).findFirst().orElseThrow(AssertionError::new);
 			ransomCard.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			ransomCard.moveOrAddTo(context, Zones.DECK);
 			context.endTurn();

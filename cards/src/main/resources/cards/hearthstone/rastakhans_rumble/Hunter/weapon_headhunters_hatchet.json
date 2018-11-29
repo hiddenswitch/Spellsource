@@ -1,0 +1,31 @@
+{
+  "name": "Headhunter's Hatchet",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "damage": 2,
+  "durability": 2,
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Battlecry: If you control a Beast, gain +1 Durability.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

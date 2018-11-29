@@ -1,0 +1,24 @@
+{
+  "name": "Scarab Egg",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Deathrattle: Summon three 1/1 Scarabs.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_snake",
+      "token_snake",
+      "token_snake"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
