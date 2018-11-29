@@ -335,4 +335,15 @@ public class RastakhansRumbleTests extends TestBase {
             assertEquals(player.getHand().size(), 1);
         });
     }
+
+    @Test
+	public void testDrakkariTrickster() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_wisp");
+			shuffleToDeck(context, opponent, "minion_wisp");
+			playCard(context, player, "minion_drakkari_trickster");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(opponent.getHand().size(), 1);
+		});
+	}
 }

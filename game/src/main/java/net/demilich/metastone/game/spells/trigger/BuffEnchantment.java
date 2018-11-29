@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import com.sun.tools.internal.xjc.util.NullStream;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;

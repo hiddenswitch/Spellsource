@@ -1,0 +1,29 @@
+{
+  "name": "Stolen Steel",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "COMMON",
+  "description": "Discover a weapon (from another class).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "WEAPON"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "SELF",
+          "invert": true
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

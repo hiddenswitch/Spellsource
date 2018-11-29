@@ -57,6 +57,10 @@ public class FightSpell extends Spell {
 			return;
 		}
 
+		if (target == null) {
+			return;
+		}
+
 		// Only attack sources that aren't destroyed
 		if (!target.isInPlay() || target.isDestroyed()) {
 			logger.warn("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);

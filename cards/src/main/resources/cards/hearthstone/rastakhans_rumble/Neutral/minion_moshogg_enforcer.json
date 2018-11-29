@@ -1,0 +1,17 @@
+{
+  "name": "Mosh'ogg Enforcer",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 14,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "description": "Taunt. Divine Shield.",
+  "attributes": {
+    "TAUNT": true,
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

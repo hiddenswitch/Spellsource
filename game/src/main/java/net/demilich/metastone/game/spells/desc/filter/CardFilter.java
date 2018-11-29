@@ -97,7 +97,7 @@ public final class CardFilter extends EntityFilter {
 
 			int targetValue;
 			if (entities == null) {
-				targetValue = getDesc().getInt(EntityFilterArg.VALUE);
+				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, null, 0);
 			} else {
 				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), null, 0);
 			}
