@@ -172,6 +172,17 @@ public class WitchwoodTests extends TestBase {
 	}
 
 	@Test
+	public void testShudderwockHagathaTheWitchInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_boulderfist_ogre");
+			playCard(context, player, "hero_hagatha_the_witch");
+			assertEquals(minion.getHp(), minion.getMaxHp() - 3);
+			playCard(context, player, "minion_shudderwock");
+			assertEquals(minion.getHp(), minion.getMaxHp() - 6);
+		});
+	}
+
+	@Test
 	public void testTessGreymane() {
 		runGym((context, player, opponent) -> {
 			Set<String> willReplay = Sets.newHashSet("spell_never_valid_targets_black_test", "minion_black_test", "minion_play_randomly_battlecry");
