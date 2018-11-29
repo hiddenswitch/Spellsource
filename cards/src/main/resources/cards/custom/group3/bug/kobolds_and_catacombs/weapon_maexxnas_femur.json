@@ -26,6 +26,6 @@
     }
   },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

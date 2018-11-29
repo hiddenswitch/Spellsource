@@ -9,7 +9,7 @@ Thanks for playing Spellsource today! Release notes are below.
 
 ###### Content Fixes:
 
- - Rotbutcher Gordo is no longer a Standard set / Knights of the Frozen Throne card.
+ - Rotbutcher Gordo and about a dozen other cards are no longer in the Wild set.
 
 ###### Changes Since 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
 
