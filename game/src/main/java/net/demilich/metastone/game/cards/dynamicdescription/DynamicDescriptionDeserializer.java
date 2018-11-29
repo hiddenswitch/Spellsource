@@ -2,9 +2,6 @@ package net.demilich.metastone.game.cards.dynamicdescription;
 
 import net.demilich.metastone.game.cards.desc.DescDeserializer;
 import net.demilich.metastone.game.cards.desc.ParseValueType;
-import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription;
-import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionArg;
-import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 
 public class DynamicDescriptionDeserializer extends DescDeserializer<DynamicDescriptionDesc, DynamicDescriptionArg, DynamicDescription> {
 
@@ -29,7 +26,6 @@ public class DynamicDescriptionDeserializer extends DescDeserializer<DynamicDesc
         ctx.add(DynamicDescriptionArg.DESCRIPTION1, ParseValueType.DYNAMIC_DESCRIPTION);
         ctx.add(DynamicDescriptionArg.DESCRIPTION2, ParseValueType.DYNAMIC_DESCRIPTION);
         ctx.add(DynamicDescriptionArg.DESCRIPTIONS, ParseValueType.DYNAMIC_DESCRIPTION_ARRAY);
-
     }
 
     @Override

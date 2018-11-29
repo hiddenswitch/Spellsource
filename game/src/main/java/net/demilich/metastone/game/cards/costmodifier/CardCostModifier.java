@@ -115,7 +115,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		try {
 			host = context.resolveSingleTarget(hostReference);
 		} catch (NullPointerException notFound) {
-			logger.error("appliesTo: The card cost modifier with desc {}'s host reference {} is not found", getDesc(), hostReference);
+			logger.error(String.format("appliesTo: The card cost modifier from %s with desc %s has a host reference %s which could not be found", getSourceCardId(), getDesc().toString(), hostReference == null ? "(null)" : hostReference.toString()));
 			expire();
 			return false;
 		}

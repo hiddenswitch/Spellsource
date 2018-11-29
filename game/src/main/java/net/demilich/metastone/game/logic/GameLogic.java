@@ -1702,7 +1702,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (attacker.getEntityType() == EntityType.HERO) {
 			Hero hero = (Hero) attacker;
 			Weapon weapon = hero.getWeapon();
-			if (weapon != null && weapon.isActive() && !weapon.hasAttribute(Attribute.IMMUNE)) {
+			if (weapon != null && weapon.isActive() && !weapon.hasAttribute(Attribute.IMMUNE) && !weapon.hasAttribute(Attribute.AURA_IMMUNE)) {
 				modifyDurability(hero.getWeapon(), -1);
 			}
 			context.getPlayer(hero.getOwner()).modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
@@ -3735,11 +3735,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int mana = Math.min(player.getMaxMana() - player.getLockedMana(), MAX_MANA);
 		player.setMana(mana);
 		context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
-
-		String manaString = player.getMana() + "/" + player.getMaxMana();
-		if (player.getLockedMana() > 0) {
-			manaString += " (" + player.getLockedMana() + " locked by overload)";
-		}
 
 		player.getAttributes().remove(Attribute.OVERLOAD);
 		for (Minion minion : player.getMinions()) {
