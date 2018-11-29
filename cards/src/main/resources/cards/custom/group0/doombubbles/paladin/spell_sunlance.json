@@ -9,7 +9,7 @@
   "spell": {
     "class": "ExcessDamageSpell",
     "value": 4,
-    "secondaryTarget": "FRIENDLY_PLAYER",
+    "secondaryTarget": "NONE",
     "spell": {
       "class": "DrawCardSpell"
     }
