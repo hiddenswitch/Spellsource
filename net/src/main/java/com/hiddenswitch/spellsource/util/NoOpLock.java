@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 
 public class NoOpLock extends ReentrantLock {
 	@Override

@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -14,7 +14,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.github.fromage.quasi.strands.Strand.sleep;
+import static co.paralleluniverse.strands.Strand.sleep;
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static org.junit.Assert.*;
 
@@ -31,6 +31,7 @@ public class InvitesTest extends SpellsourceTestBase {
 			AtomicReference<String> recipientId = new AtomicReference<>();
 			UnityClient sender = new UnityClient(testContext) {
 				@Override
+				@Suspendable
 				protected void handleMessage(Envelope message) {
 					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
 						assertNotNull(message.getAdded().getFriend().getFriendId());
@@ -54,6 +55,7 @@ public class InvitesTest extends SpellsourceTestBase {
 
 			UnityClient recipient = new UnityClient(testContext) {
 				@Override
+				@Suspendable
 				protected void handleMessage(Envelope message) {
 					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
 						Invite invite = message.getAdded().getInvite();
@@ -114,6 +116,7 @@ public class InvitesTest extends SpellsourceTestBase {
 			AtomicReference<String> recipientId = new AtomicReference<>();
 			UnityClient sender = new UnityClient(testContext) {
 				@Override
+				@Suspendable
 				protected void handleMessage(Envelope message) {
 					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
 						fail("Should not have friended");
@@ -188,6 +191,7 @@ public class InvitesTest extends SpellsourceTestBase {
 			AtomicReference<String> recipientId = new AtomicReference<>();
 			UnityClient sender = new UnityClient(testContext) {
 				@Override
+				@Suspendable
 				protected void handleMessage(Envelope message) {
 					if (message.getAdded() != null && message.getAdded().getFriend() != null) {
 						fail("Should not have friended");
@@ -197,23 +201,26 @@ public class InvitesTest extends SpellsourceTestBase {
 
 			UnityClient recipient = new UnityClient(testContext) {
 				@Override
+				@Suspendable
 				protected void handleMessage(Envelope message) {
+					if (message.getChanged() != null && message.getChanged().getInvite() != null) {
+						Invite invite = message.getChanged().getInvite();
+						testContext.assertEquals(Invite.StatusEnum.CANCELLED, invite.getStatus());
+						try {
+							// Accepting the invite should fail
+							this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
+							fail("Should not be able to accept cancelled invite");
+						} catch (ApiException didFail) {
+							assertEquals(didFail.getCode(), 418);
+							inviteChecks.countDown();
+						}
+					}
 					if (message.getAdded() != null && message.getAdded().getInvite() != null) {
 						Invite invite = message.getAdded().getInvite();
 						if (invite.getFriendId() != null) {
 							if (invite.getStatus() == Invite.StatusEnum.PENDING) {
 								inviteChecks.countDown();
 								receivedInvite.countDown();
-							} else if (invite.getStatus() == Invite.StatusEnum.CANCELLED) {
-								// Should not be able to cancel
-								try {
-									// Accepting the invite should fail
-									this.getApi().acceptInvite(invite.getId(), new AcceptInviteRequest());
-									fail("Should not be able to accept cancelled invite");
-								} catch (ApiException didFail) {
-									assertEquals(didFail.getCode(), 418);
-									inviteChecks.countDown();
-								}
 							}
 						}
 					}

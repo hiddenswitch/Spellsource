@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
@@ -508,6 +508,7 @@ public class Spellsource {
 	 * @param vertx       A vertx instance.
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
+	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
 		List<Future> futures = new ArrayList<>();
 		// Use up all the event loops

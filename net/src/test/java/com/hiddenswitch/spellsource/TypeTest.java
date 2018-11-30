@@ -7,7 +7,7 @@ import org.junit.Test;
 
 import java.util.stream.Stream;
 
-public class TypeTests {
+public class TypeTest {
 	@Test
 	public void testGameEvents() {
 		Stream.of(GameEventType.values())

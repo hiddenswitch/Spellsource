@@ -1,7 +1,8 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.fromage.quasi.strands.Strand;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.GameRecord;
@@ -38,6 +39,7 @@ public class ReplayTest extends SpellsourceTestBase {
 
 			UnityClient player = new UnityClient(context) {
 				@Override
+				@Suspendable
 				protected boolean onRequestAction(ServerToClientMessage message) {
 					receivedStates.add(message.getGameState());
 					return true;
@@ -49,7 +51,7 @@ public class ReplayTest extends SpellsourceTestBase {
 			player.waitUntilDone();
 
 			// Sleep to let the replay actually get saved
-			Strand.sleep(1000);
+			Strand.sleep(3000);
 
 			GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
 			context.assertEquals(gameIds.getGameIds().size(), 1);

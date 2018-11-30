@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.strands.Strand;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -45,7 +45,7 @@ public class GamesTest extends SpellsourceTestBase {
 		client.play();
 		client.waitUntilDone();
 		context.assertTrue(client.isGameOver());
-		context.assertEquals(mulligans.get(), 2);
+		context.assertEquals(mulligans.get(), 1);
 	}
 
 	@Test

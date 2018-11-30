@@ -1,12 +1,11 @@
 package com.hiddenswitch.spellsource.common;
 
-import com.github.fromage.quasi.fibers.Fiber;
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.StrandLocalRandom;
-import com.github.fromage.quasi.strands.SuspendableAction1;
-import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
-import com.google.common.collect.MapDifference;
+import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.StrandLocalRandom;
+import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -37,11 +36,6 @@ import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.TurnState;
-import net.demilich.metastone.game.spells.RevealCardSpell;
-import net.demilich.metastone.game.spells.desc.SpellArg;
-import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -64,7 +58,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
 public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable {
-	private static Logger logger = LoggerFactory.getLogger(UnityClientBehaviour.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 
 	private final Queue<ServerToClientMessage> messageBuffer = new ConcurrentLinkedQueue<>();
 	private final AtomicInteger eventCounter = new AtomicInteger();
@@ -170,11 +164,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	 */
 	@Suspendable
 	protected void handleWebSocketMessage(Buffer messageBuffer) throws SuspendExecution {
+		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
+
 		if (inboundMessagesClosed) {
+			LOGGER.debug("handleWebSocketMessage {} {} {}: Message of type {} was received despite inbound messages closed", playerId, userId, server.getGameId(), message.getMessageType());
 			return;
 		}
-
-		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
 
 		switch (message.getMessageType()) {
 			case PINGPONG:
@@ -191,6 +186,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 					activityMonitor.activity();
 				}
 
+				LOGGER.debug("handleWebSocketMessage {} {} {}: Received first message", playerId, userId, server.getGameId());
 				if (server.isGameReady()) {
 					// Replace the client
 					server.onPlayerReconnected(this);
@@ -262,7 +258,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 						onMulligan(request.getCallbackId(), lastStateSent, request.getStarterCards(), playerId);
 						break;
 					default:
-						logger.error("Unknown gameplay request was pending.");
+						LOGGER.error("Unknown gameplay request was pending.");
 						break;
 				}
 			}
@@ -745,7 +741,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			reader = null;
 			writer = null;
 		} catch (Throwable ignore) {
-			logger.error("close {}", getUserId(), ignore);
+			LOGGER.error("close {}", getUserId(), ignore);
 		} finally {
 			completionHandler.handle(Future.succeededFuture());
 		}

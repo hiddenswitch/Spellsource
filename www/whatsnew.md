@@ -5,13 +5,22 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.6.7-2.0.11 (Thursday, November 29th, 2018)
+#### 0.7.0-2.0.12 (Friday, November 30th, 2018)
+
+Server improvements should lead to greater reliability of connections.
+
+In the next release, signing on in a new session will disconnect the previous session. 
+
+###### Usability Fixes:
+
+ - Adding and removing cards from decks works again. 2.0.11 and earlier, like the iOS and Android builds, still have this issue. Your patience for a new build, which requires a review process from Apple, is appreciated.
 
 ###### Content Fixes:
 
- - Rotbutcher Gordo and about a dozen other cards are no longer in the Wild set.
+ - Rotbutcher Gordo and about a dozen other custom cards are no longer appear incorrectly in the Wild filter in your Collection view.
+ - Hopesteed is collectible.
 
-###### Changes Since 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
+##### 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
 
 Thanks to a great contribution from @doombubbles, new custom cards and a significant number of Rastakhan's Rumble cards have been added to the game.
 
@@ -28,7 +37,7 @@ Thanks to a great contribution from @doombubbles, new custom cards and a signifi
  - Thunderfury now is immune and does not reduce durability while you are overloaded.
  - Shudderwock now triggers Hagatha the Witch and other hero battlecries.
 
-###### Changes Since 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
+**0.6.5-2.0.11** (Tuesday, November 27th, 2018)
 
 Thanks to a great contribution from @tehgdogg, replay functionality has been added for debugging and development purposes. Your games will be recorded and used to fix bugs when they occur. Currently, it is not possible to retrieve a replay from the client. Please reach out on Discord if you want a replay of a specific game.
 
@@ -44,7 +53,7 @@ Thanks to a great contribution from @tehgdogg, replay functionality has been add
 
 For an ongoing list of issues, see https://github.com/hiddenswitch/Spellsource-Server/issues
 
-###### Changes Since 0.6.4-2.0.10 (Monday, November 26th, 2018)
+**0.6.4-2.0.10** (Monday, November 26th, 2018)
 
 Overall server performance has been improved by better using computer resources.
 
@@ -58,7 +67,7 @@ Some connectivity issues ought to be improved. Please report "Networking" errors
  - Bright Eyed Scout and other card cost modification effects that occur on draw should no longer cause crashes.
  - Totemic Slam now interacts with Fandral Staghelm, for fun.
 
-Changes since 0.6.3-2.0.9 (Saturday, November 24th, 2018):
+**0.6.3-2.0.9** (Saturday, November 24th, 2018):
 
 ###### Content Fixes:
 

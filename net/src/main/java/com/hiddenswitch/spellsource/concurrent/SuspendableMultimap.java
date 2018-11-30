@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource.concurrent;
 
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.ListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.collect.Multiset;

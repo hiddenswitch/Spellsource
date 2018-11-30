@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.EventBus;

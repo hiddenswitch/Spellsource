@@ -1,9 +1,11 @@
 package com.hiddenswitch.spellsource.impl;
 
+import co.paralleluniverse.strands.Strand;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.strands.SuspendableAction1;
-import com.github.fromage.quasi.strands.SuspendableRunnable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
@@ -37,6 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(VertxUnitRunner.class)
@@ -46,6 +50,7 @@ public abstract class SpellsourceTestBase {
 	protected static Vertx vertx;
 
 	@BeforeClass
+	@Suspendable
 	public static void setUp(TestContext context) {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
@@ -98,6 +103,11 @@ public abstract class SpellsourceTestBase {
 			for (GameId games : Games.getConnections().keySet()) {
 				Games.endGame(games);
 			}
+
+			/*
+			for (UserId connected : Connection.getConnections().keySet()) {
+				Void t = awaitResult(h -> Connection.close(connected.toString(), h));
+			}*/
 		});
 	}
 
@@ -113,19 +123,22 @@ public abstract class SpellsourceTestBase {
 		return api;
 	}
 
+	@Suspendable
 	public static void sync(SuspendableRunnable action) {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
 			vertx.runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
+				Strand.sleep(4000);
 				action.run();
 				latch.countDown();
 			}));
 		});
 		try {
-			latch.await(28L, TimeUnit.SECONDS);
+			latch.await(90L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			fail();
 		}
+		assertEquals(0L, latch.getCount());
 	}
 
 	@AfterClass

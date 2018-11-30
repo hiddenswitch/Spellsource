@@ -8,13 +8,13 @@
   </parent>
 
   <artifactId>vertx-sync</artifactId>
-  <version>3.5.1</version>
+  <version>3.6.0</version>
 
   <properties>
-    <stack.version>3.5.1</stack.version>
+    <stack.version>3.6.0</stack.version>
 
-    <quasar-core.version>0.7.9</quasar-core.version>
-    <quasar-maven-plugin.version>0.7.9</quasar-maven-plugin.version>
+    <quasar-core.version>0.8.0</quasar-core.version>
+    <quasar-maven-plugin.version>0.8.0</quasar-maven-plugin.version>
   </properties>
 
   <dependencyManagement>

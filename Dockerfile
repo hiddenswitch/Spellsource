@@ -1,20 +1,52 @@
-#
-# Oracle Java 8 Dockerfile and...
-#
-# https://github.com/dockerfile/java
-# https://github.com/dockerfile/java/tree/master/oracle-java8
-#
+FROM phusion/baseimage:0.11
 
+RUN apt-get update && apt-get install -y --no-install-recommends \
+		bzip2 \
+		unzip \
+		xz-utils \
+	&& rm -rf /var/lib/apt/lists/*
 
-# Use phusion/baseimage as base image. To make your builds
-# reproducible, make sure you lock down to a specific version, not
-# to `latest`! See
-# https://github.com/phusion/baseimage-docker/blob/master/Changelog.md
-# for a list of version numbers.
-FROM phusion/baseimage:0.9.22
+# Default to UTF-8 file.encoding
+ENV LANG C.UTF-8
 
+# add a simple script that can auto-detect the appropriate JAVA_HOME value
+# based on whether the JDK or only the JRE is installed
+RUN { \
+		echo '#!/bin/sh'; \
+		echo 'set -e'; \
+		echo; \
+		echo 'dirname "$(dirname "$(readlink -f "$(which javac || which java)")")"'; \
+	} > /usr/local/bin/docker-java-home \
+	&& chmod +x /usr/local/bin/docker-java-home
+
+# do some fancy footwork to create a JAVA_HOME that's cross-architecture-safe
+RUN ln -svT "/usr/lib/jvm/java-11-openjdk-$(dpkg --print-architecture)" /docker-java-home
+ENV JAVA_HOME /docker-java-home
+
+ENV JAVA_VERSION 11.0.1
+
+RUN set -ex; \
+	\
+# deal with slim variants not having man page directories (which causes "update-alternatives" to fail)
+	if [ ! -d /usr/share/man/man1 ]; then \
+		mkdir -p /usr/share/man/man1; \
+	fi; \
+	\
+	apt-get update; \
+	apt-get install -y --no-install-recommends \
+		openjdk-11-jdk \
+	; \
+	rm -rf /var/lib/apt/lists/*; \
+	\
+# verify that "docker-java-home" returns what we expect
+	[ "$(readlink -f "$JAVA_HOME")" = "$(docker-java-home)" ]; \
+	\
+# update-alternatives so that future installs of other OpenJDK versions don't change /usr/bin/java
+	update-alternatives --get-selections | awk -v home="$(readlink -f "$JAVA_HOME")" 'index($3, home) == 1 { $2 = "manual"; print | "update-alternatives --set-selections" }'; \
+# ... and verify that it actually worked for one of the alternatives we care about
+	update-alternatives --query java | grep -q 'Status: manual'
 ADD ./net/build/libs/net-1.3.0-all.jar /data/net-1.3.0-all.jar
-ADD ./net/lib/quasar-core-0.7.9-jdk8.jar /data/quasar-core-0.7.9-jdk8.jar
+ADD ./net/lib/quasar-core-0.8.0.jar /data/quasar-core-0.8.0.jar
 
 # Ad the daemon for the main java process
 
@@ -22,27 +54,11 @@ RUN mkdir /etc/service/java
 COPY server.sh /etc/service/java/run
 RUN chmod +x /etc/service/java/run
 
-# Install Java.
-ENV     JAVA_VERSION_MAJOR=8
-ENV     JAVA_VERSION_MINOR=161
-
-RUN mkdir -p /usr/lib/jvm \
-          && cd /usr/lib/jvm \
-          && curl -s -L -O -k "www.hiddenswitch.com/jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz" \
-          && tar xf jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
-          && rm jdk-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz \
-          && update-alternatives --install "/usr/bin/java" "java" "/usr/lib/jvm/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR}/bin/java" 1
-
 # Define working directory.
 WORKDIR /data
 
-# Define commonly used JAVA_HOME variable
-ENV JAVA_HOME /usr/lib/jvm/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR}
-
 EXPOSE 80
 
-# Clean up APT when done.
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]

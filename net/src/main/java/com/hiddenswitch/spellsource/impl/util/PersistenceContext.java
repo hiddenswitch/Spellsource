@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
