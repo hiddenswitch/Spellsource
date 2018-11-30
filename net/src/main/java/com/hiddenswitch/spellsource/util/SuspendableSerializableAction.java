@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableAction1;
 
 import java.io.Serializable;
 

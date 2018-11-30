@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.common;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.events.Notification;

@@ -1,10 +1,11 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.Semaphore;
 import com.hazelcast.concurrent.semaphore.SemaphoreProxy;
 import com.hazelcast.concurrent.semaphore.SemaphoreService;
 import com.hazelcast.concurrent.semaphore.operations.AcquireOperation;
+import com.hazelcast.concurrent.semaphore.operations.ReleaseOperation;
 import com.hazelcast.core.ExecutionCallback;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ISemaphore;
@@ -16,8 +17,9 @@ import com.hiddenswitch.spellsource.util.Hazelcast;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
-import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
@@ -37,8 +39,20 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * with its fibers implementation.
  */
 public interface SuspendableLock {
-	ReentrantLock LOCK_SERIALIZATION = new ReentrantLock();
+	Semaphore LOCK_SERIALIZATION = new Semaphore(1);
 	String LOCK_SEMAPHORE_PREFIX = "__vertx.";
+	Logger LOGGER = LoggerFactory.getLogger(SuspendableLock.class);
+
+
+	/**
+	 * Obtains a lock that doesn't do anything.
+	 *
+	 * @return
+	 */
+	@NotNull
+	static SuspendableLock noOpLock() {
+		return new NoOpLock();
+	}
 
 	/**
 	 * Obtains a lock using a Hazelcast cluster.
@@ -55,14 +69,14 @@ public interface SuspendableLock {
 		HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
 
 		// Lock accesses to getSemaphore
-		ReentrantLock lock = LOCK_SERIALIZATION;
+		Semaphore lock = LOCK_SERIALIZATION;
 		ISemaphore iSemaphore;
-		lock.lock();
+		lock.acquireUninterruptibly();
 		try {
 			// This will typically happen pretty fast, so it's okay to use a blocking thread for this.
 			iSemaphore = invoke(hazelcastInstance::getSemaphore, LOCK_SEMAPHORE_PREFIX + name);
 		} finally {
-			lock.unlock();
+			lock.release();
 		}
 
 		HazelcastInstanceImpl finalInstance = getHazelcastInstance(hazelcastInstance);
@@ -76,29 +90,22 @@ public interface SuspendableLock {
 					.setPartitionId(partitionId)
 					.setServiceName(SemaphoreService.SERVICE_NAME);
 
-
-			ReentrantLock lockA = LOCK_SERIALIZATION;
-			lockA.lock();
-			try {
-				operationService.asyncInvokeOnPartition(acquireOperation.getServiceName(),
-						acquireOperation, acquireOperation.getPartitionId(), new ExecutionCallback<Boolean>() {
-							@Override
-							public void onResponse(Boolean locked) {
-								if (locked) {
-									fut1.handle(Future.succeededFuture(new HazelcastLock(iSemaphore)));
-								} else {
-									fut1.handle(Future.failedFuture(new VertxException("timed out", new TimeoutException(name))));
-								}
+			operationService.asyncInvokeOnPartition(acquireOperation.getServiceName(),
+					acquireOperation, acquireOperation.getPartitionId(), new ExecutionCallback<Boolean>() {
+						@Override
+						public void onResponse(Boolean locked) {
+							if (locked) {
+								fut1.handle(Future.succeededFuture(new HazelcastLock(iSemaphore)));
+							} else {
+								fut1.handle(Future.failedFuture(new VertxException("timed out", new TimeoutException(name))));
 							}
+						}
 
-							@Override
-							public void onFailure(Throwable t) {
-								fut1.handle(Future.failedFuture(new VertxException(name, t)));
-							}
-						});
-			} finally {
-				lockA.unlock();
-			}
+						@Override
+						public void onFailure(Throwable t) {
+							fut1.handle(Future.failedFuture(new VertxException(name, t)));
+						}
+					});
 		});
 
 	}
@@ -136,6 +143,7 @@ public interface SuspendableLock {
 		@Suspendable
 		public void release() {
 
+			/*
 			Vertx.currentContext().executeBlocking(fut -> {
 				try {
 					semaphore.release();
@@ -145,33 +153,30 @@ public interface SuspendableLock {
 			}, false, null);
 
 			// Releasing a semaphore instance will go fast, but below is the asynchronous implementation
+*/
 
-			/*
 			HazelcastInstanceImpl hazelcastInstance = getHazelcastInstance(Hazelcast.getHazelcastInstance());
 			GetPartitionAndService getPartitionAndService = new GetPartitionAndService(semaphore, hazelcastInstance).invoke();
 			int partitionId = getPartitionAndService.getPartitionId();
 			InternalOperationService operationService = getPartitionAndService.getOperationService();
-			ComparisonOperation operation = new ReleaseOperation(semaphore.getName(), 1)
-					.setPartitionId(partitionId)
-					.setServiceName(SemaphoreService.SERVICE_NAME);
+			ReleaseOperation operation = new ReleaseOperation(semaphore.getName(), 1);
+			operation.setPartitionId(partitionId);
+			operation.setServiceName(SemaphoreService.SERVICE_NAME);
 
-			ReentrantLock lock = LOCK_SERIALIZATION.computeIfAbsent(hazelcastInstance, (ignored) -> new ReentrantLock());
-			lock.lock();
-			try {
-				operationService.asyncInvokeOnPartition(operation.getServiceName(),
-						operation, operation.getPartitionId(), new ExecutionCallback<Boolean>() {
-							@Override
-							public void onResponse(Boolean response) {
+			operationService.asyncInvokeOnPartition(operation.getServiceName(),
+					operation, operation.getPartitionId(), new ExecutionCallback<Boolean>() {
+						@Override
+						public void onResponse(Boolean response) {
+							if (response != null && !response) {
+								LOGGER.error("asyncInvokeOnPartition: Failed to unlock {}", semaphore.getName());
 							}
+						}
 
-							@Override
-							public void onFailure(Throwable t) {
-							}
-						});
-			} finally {
-				lock.unlock();
-			}
-			*/
+						@Override
+						public void onFailure(Throwable t) {
+							LOGGER.error("asyncInvokeOnPartition: ", t);
+						}
+					});
 		}
 
 		@Override
@@ -184,6 +189,18 @@ public interface SuspendableLock {
 					fut.complete();
 				}
 			}, false, null);
+		}
+	}
+
+	class NoOpLock implements SuspendableLock {
+
+		@Override
+		public void release() {
+		}
+
+		@Override
+		public void destroy() {
+
 		}
 	}
 

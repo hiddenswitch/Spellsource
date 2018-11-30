@@ -1,6 +1,6 @@
 package io.vertx.ext.sync.impl;
 
-import com.github.fromage.quasi.fibers.FiberAsync;
+import co.paralleluniverse.fibers.FiberAsync;
 import io.vertx.core.Handler;
 
 /**

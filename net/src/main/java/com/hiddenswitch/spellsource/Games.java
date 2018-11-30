@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.models.GameEvent;
@@ -677,7 +677,7 @@ public interface Games extends Verticle {
 	}
 
 	/**
-	 * Creates a game session on this instance.
+	 * Creates a game session on this instance. Returns once the game is ready to receive first messages
 	 *
 	 * @param request Information needed to start a game.
 	 * @return Information for the users to connect to the game.
@@ -1427,14 +1427,18 @@ public interface Games extends Verticle {
 			gameStateOld.set(ctx.getGameStateCopy());
 		};
 
-		// Replay the game from a trace while capturing the {@link Replay} object.
-		GameContext replayCtx = originalCtx.getTrace().replayContext(
-				false,
-				augmentReplayWithCtx
-		);
+		try {
+			// Replay the game from a trace while capturing the {@link Replay} object.
+			GameContext replayCtx = originalCtx.getTrace().replayContext(
+					false,
+					augmentReplayWithCtx
+			);
 
-		// Append the final game states / deltas.
-		augmentReplayWithCtx.accept(replayCtx);
+			// Append the final game states / deltas.
+			augmentReplayWithCtx.accept(replayCtx);
+		} catch (Throwable any) {
+			return null;
+		}
 
 		return replay;
 	}

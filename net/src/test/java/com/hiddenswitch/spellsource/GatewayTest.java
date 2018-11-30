@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.strands.Strand;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -34,6 +34,7 @@ import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.*;
 
@@ -169,20 +170,10 @@ public class GatewayTest extends SpellsourceTestBase {
 
 			Strand.sleep(3000L);
 			// 1 turn was played, concede
-
-			Future<Void> gameOver = Future.future();
-			client.gameOverHandler(ignored -> gameOver.complete());
-			Sync.invoke0(client::concede);
+			client.concede();
 			// You must wait until you receive the end game message to be confident you can requeue
-			awaitResult(gameOver::setHandler);
-			client.gameOverHandler(null);
-			GetAccountsResponse account = Sync.invoke(targetUserId -> {
-				try {
-					return client.getApi().getAccount(targetUserId);
-				} catch (ApiException e) {
-					throw new AssertionError(e);
-				}
-			}, client.getAccount().getId());
+			client.waitUntilDone();
+			GetAccountsResponse account = invoke(client.getApi()::getAccount, client.getAccount().getId());
 			assertFalse(account.getAccounts().get(0).isInMatch());
 			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
@@ -190,7 +181,6 @@ public class GatewayTest extends SpellsourceTestBase {
 
 			// Can go into another game
 			Sync.invoke0(() -> {
-				client.disconnect();
 				try {
 					Strand.sleep(200L);
 				} catch (SuspendExecution | InterruptedException execution) {
@@ -225,7 +215,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			Strand.sleep(10000L);
 			assertNull(Games.getUsersInGames().get(new UserId(userId)));
 
-			Boolean done = Sync.invoke(() -> {
+			Boolean done = invoke(() -> {
 				UnityClient client2 = new UnityClient(context, token);
 				try {
 					return client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
@@ -238,7 +228,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Should not have received end game message
-		assertFalse(client.isGameOver());
+		assertFalse(client.receivedGameOverMessage());
 	}
 
 	@Test(timeout = 45000L)
@@ -248,6 +238,14 @@ public class GatewayTest extends SpellsourceTestBase {
 		AtomicInteger counter = new AtomicInteger();
 		AtomicLong startTime = new AtomicLong();
 		UnityClient client = new UnityClient(context) {
+			@Override
+			protected int getActionIndex(ServerToClientMessage message) {
+				if (message.getActions().getEndTurn() != null) {
+					return message.getActions().getEndTurn();
+				}
+				return super.getActionIndex(message);
+			}
+
 			@Override
 			protected boolean onRequestAction(ServerToClientMessage message) {
 				logger.trace("testGameDoesntCloseAfterActivity: Sending request {}", counter.get());

@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
+import io.vertx.core.Handler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
@@ -13,19 +14,23 @@ import java.nio.charset.Charset;
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 
-public class WebsocketClientEndpoint implements WebSocketListener {
-	private final NettyWebSocket websocket;
-	private MessageHandler messageHandler;
+public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket {
+	private NettyWebSocket websocket;
+	private Handler<String> messageHandler;
 	private Runnable closeHandler;
+	private int webSocketMaxFrameSize = 65536;
 
-	public WebsocketClientEndpoint(String endpoint, String auth) {
+	public NettyWebsocketClientEndpoint(String endpoint, String auth) {
 		try {
 			AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
-					.setWebSocketMaxFrameSize(1024 * 1024)
+					.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
 					.setMaxConnections(1024));
-			websocket = client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
+			client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
 					.execute(new WebSocketUpgradeHandler.Builder()
-							.addWebSocketListener(this).build()).get();
+							.addWebSocketListener(this).build()).toCompletableFuture().handle((ws, t) -> {
+				websocket = ws;
+				return ws;
+			});
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -50,14 +55,14 @@ public class WebsocketClientEndpoint implements WebSocketListener {
 	@Override
 	public void onBinaryFrame(byte[] payload, boolean finalFragment, int rsv) {
 		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(new String(payload, Charset.defaultCharset()));
+			this.messageHandler.handle(new String(payload, Charset.defaultCharset()));
 		}
 	}
 
 	@Override
 	public void onTextFrame(String payload, boolean finalFragment, int rsv) {
 		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(payload);
+			this.messageHandler.handle(payload);
 		}
 	}
 
@@ -66,7 +71,8 @@ public class WebsocketClientEndpoint implements WebSocketListener {
 	 *
 	 * @param msgHandler
 	 */
-	public void setMessageHandler(MessageHandler msgHandler) {
+	@Override
+	public void setMessageHandler(Handler<String> msgHandler) {
 		this.messageHandler = msgHandler;
 	}
 
@@ -75,10 +81,32 @@ public class WebsocketClientEndpoint implements WebSocketListener {
 	 *
 	 * @param message
 	 */
+	@Override
 	public void sendMessage(String message) {
-		websocket.sendTextFrame(message);
+		boolean isFirst = true;
+		try {
+			while (message.length() > webSocketMaxFrameSize) {
+				String substring = message.substring(0, webSocketMaxFrameSize);
+				if (isFirst) {
+					isFirst = false;
+					websocket.sendTextFrame(substring, false, 0).await();
+				} else {
+					websocket.sendContinuationFrame(substring, false, 0).await();
+				}
+				message = message.substring(webSocketMaxFrameSize);
+			}
+
+			if (isFirst) {
+				websocket.sendTextFrame(message).await();
+			} else {
+				websocket.sendContinuationFrame(message, true, 0).await();
+			}
+		} catch (InterruptedException ex) {
+			throw new AssertionError(ex);
+		}
 	}
 
+	@Override
 	public void close() {
 		try {
 			websocket.sendCloseFrame();
@@ -89,17 +117,13 @@ public class WebsocketClientEndpoint implements WebSocketListener {
 		}
 	}
 
+	@Override
 	public boolean isOpen() {
 		return websocket.isOpen();
 	}
 
-	@FunctionalInterface
-	public interface MessageHandler {
-
-		void handleMessage(String message);
-	}
-
-	public WebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
+	@Override
+	public NettyWebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
 		this.closeHandler = closeHandler;
 		return this;
 	}

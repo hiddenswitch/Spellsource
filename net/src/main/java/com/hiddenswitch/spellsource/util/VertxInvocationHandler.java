@@ -1,16 +1,16 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.VertxException;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
+import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
 import io.vertx.ext.sync.Sync;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,6 +31,7 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * @see java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler) for more about proxies.
  */
 class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
+	private static Logger LOGGER = LoggerFactory.getLogger(VertxInvocationHandler.class);
 	final String deploymentId;
 	final String name;
 	final EventBus eb;
@@ -45,6 +46,17 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		this.sync = sync;
 		this.next = next;
 		this.timeout = RpcClient.DEFAULT_TIMEOUT;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("deploymentId", deploymentId)
+				.append("name", name)
+				.append("sync", sync)
+				.append("next", next != null ? next.toString() : null)
+				.append("timeout", timeout)
+				.toString();
 	}
 
 	@Override
@@ -85,9 +97,15 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 
 		if (sync) {
 			final RpcOptions.Serialization finalSerialization = serialization;
-			result = awaitFiber(done -> {
-				call(methodName, args, deliveryOptions, finalSerialization, done, method);
-			});
+			try {
+				result = awaitFiber(done -> {
+					call(methodName, args, deliveryOptions, finalSerialization, done, method);
+				});
+			} catch (VertxException any) {
+				LOGGER.error("vertxInvocationHandler invoke {}: DeploymentIds={}", this.toString(), Vertx.currentContext().owner().deploymentIDs());
+				throw any;
+			}
+
 		} else {
 			call(methodName, args, deliveryOptions, serialization, next, method);
 		}

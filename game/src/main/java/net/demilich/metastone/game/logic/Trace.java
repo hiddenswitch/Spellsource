@@ -25,12 +25,11 @@ import java.util.function.Consumer;
  *
  * @see #dump() to create a string you can save and later load.
  * @see #load(String) to recreate this object from a dumped string.
- * @see #replayContext(boolean, Consumer<GameContext>) to replay a context after loading it from a string.
- * 		Provide {@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging).
- * 		Provide {@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording
- * 		replays).
+ * @see #replayContext(boolean, Consumer<GameContext>) to replay a context after loading it from a string. Provide
+ * 		{@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging). Provide
+ * 		{@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  * @see #getRawActions() to iterate through the actions that were taken in the game. This is <b>not</b> restored by the
- * 	    trace, while the integer actions themselves in {@link #getActions()} are.
+ * 		trace, while the integer actions themselves in {@link #getActions()} are.
  */
 public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
@@ -106,8 +105,8 @@ public class Trace implements Serializable, Cloneable {
 		GameLogic logic = new GameLogic((IdFactoryImpl) stateRestored.getLogic().getIdFactory(), getSeed());
 		logic.setContext(stateRestored);
 		stateRestored.setLogic(logic);
-		stateRestored.init();
 		try {
+			stateRestored.init();
 			stateRestored.resume();
 		} catch (CancellationException ex) {
 			// DO NOT REMOVE, resume throws cancellation on purpose.

@@ -1,20 +1,18 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.Strand;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.impl.ConnectionImpl;
 import com.hiddenswitch.spellsource.impl.EnvelopeMessageCodec;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.*;
-import io.vertx.core.eventbus.MessageProducer;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.json.JsonObject;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
@@ -27,8 +25,10 @@ import org.slf4j.LoggerFactory;
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * Manages the real time data connection users get when they connect to the Spellsource server.
@@ -64,7 +64,7 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
  * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
-	Logger LOGGER = LoggerFactory.getLogger(Hazelcast.class);
+	Logger LOGGER = LoggerFactory.getLogger(Connection.class);
 
 	@Suspendable
 	static SuspendableMap<UserId, String> getConnections() {
@@ -135,13 +135,34 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	/**
+	 * Closes the connection, if the user has one.
+	 *
+	 * @param userId
+	 * @param handler
+	 */
+	static void close(String userId, Handler<AsyncResult<Void>> handler) {
+		getConnections(v1 -> {
+			v1.result().get(new UserId(userId), v2 -> {
+				Vertx.currentContext().owner().eventBus().send(v2.result() + "::closer", Buffer.buffer("close"), res -> {
+					if (res.failed()) {
+						handler.handle(Future.failedFuture(res.cause()));
+						return;
+					}
+
+					handler.handle(Future.succeededFuture());
+				});
+			});
+		});
+	}
+
+	/**
 	 * Creates a handler for the verticle's {@link io.vertx.ext.web.Router} that upgrades the web socket and manages the
 	 * messaging over the cluster for the user.
 	 *
 	 * @return
 	 */
 	static Handler<RoutingContext> handler() {
-		return suspendableHandler((SuspendableAction1<RoutingContext>) Connection::connected);
+		return suspendableHandler(Connection::connected);
 	}
 
 	static void connected(Handler<Connection> handler) {
@@ -196,9 +217,35 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		SuspendableLock lock;
 		ServerWebSocket socket;
 
+		/*
+		try {
+			LOGGER.debug("connection {}: Awaiting lock", userId);
+			lock.set(SuspendableLock.lock("Connection::realtime[" + userId + "]", 2800));
+		} catch (VertxException timeout) {
+			if (timeout.getCause() instanceof TimeoutException) {
+				LOGGER.debug("connection {}: Disconnecting other session", userId);
+				try {
+					// close and try again
+					Void res = awaitResult(h -> Connection.close(userId, h));
+					lock.set(SuspendableLock.lock("Connection::realtime[" + userId + "]", 4500));
+				} catch (Throwable any) {
+					routingContext.fail(418);
+					return;
+				}
+			}
+		} catch (Throwable any) {
+			LOGGER.error("connected {}: {}", userId, any.getMessage());
+			routingContext.fail(418);
+			return;
+		}
+
+		*/
+
 		// By the time we try to upgrade the socket, the request might have been closed anyway
 		try {
-			lock = SuspendableLock.lock("Connection::realtime[" + userId + "]", 2000L);
+			LOGGER.debug("connection {}: Awaiting lock", userId);
+			lock = SuspendableLock.lock("Connection::realtime[" + userId + "]", 2800);
+			LOGGER.debug("connection {}: Upgrading socket", userId);
 			socket = routingContext.request().upgrade();
 		} catch (Throwable any) {
 			LOGGER.error("connected {}: {}", userId, any.getMessage());
@@ -206,13 +253,19 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			return;
 		}
 
+		LOGGER.debug("connection {}: Socket upgraded", userId);
+
 		Deque<Handler<Connection>> handlers = getHandlers();
 		Connection connection = create(userId);
 
+		LOGGER.debug("connection {}: Connection created", userId);
 		try {
-			connection.setSocket(socket);
+			Void ready = awaitResult(h -> connection.setSocket(socket, h));
 			// The lock gets released when the user disconnects
-			connection.endHandler(v -> lock.release());
+			connection.endHandler(suspendableHandler(v -> {
+				lock.release();
+				LOGGER.debug("connection {}: Lock released", userId);
+			}));
 			// All handlers should run simultaneously
 			for (Handler<Connection> handler : handlers) {
 				Vertx.currentContext().runOnContext(v -> handler.handle(connection));
@@ -220,6 +273,11 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			connection.exceptionHandler(ex -> {
 				LOGGER.error("connection exceptionHandler {}: {}", userId, ex.getMessage(), ex);
 			});
+			LOGGER.debug("connection {}: Connection ready", userId);
+			// Sleep for safety, since it appears there are issues with event bus registrations right now
+			Strand.sleep(2800);
+			// Send an envelope to indicate that the connection is ready.
+			connection.write(new Envelope());
 		} catch (Throwable any) {
 			LOGGER.error("connected {}: {}", userId, any.getMessage(), any);
 			// This closes the socket and cleans up its handlers
@@ -243,8 +301,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * Registers the given socket to the user. For internal use only.
 	 *
 	 * @param socket
+	 * @param readyHandler
 	 */
-	void setSocket(ServerWebSocket socket);
+	void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler);
 
 	@Override
 	default Connection exceptionHandler(Handler<Throwable> handler) {

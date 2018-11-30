@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.common;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.Emote;
 import com.hiddenswitch.spellsource.impl.server.ClientConnectionHandler;
 
@@ -36,4 +36,6 @@ public interface Server extends ClientConnectionHandler {
 	 * @return
 	 */
 	Random getRandom();
+
+	String getGameId();
 }

@@ -3,7 +3,7 @@ package net.demilich.metastone.game.spells;
 import java.util.Map;
 import java.util.stream.Stream;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;

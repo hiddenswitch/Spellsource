@@ -31,7 +31,7 @@ class CompileSpellsource(install):
 
 
 setup(name='spellsource',
-      version='0.6.6',
+      version='0.7.0',
       description='The Spellsource card game engine, supports Hearthstone AI and simulation',
       long_description=README,
       long_description_content_type="text/markdown",
@@ -42,7 +42,7 @@ setup(name='spellsource',
           ("share/spellsource/cards",
            list(_cards_in_directory(os.path.join(SRC_PATH, 'cards', 'src', 'main', 'resources', 'cards')))),
           ("share/spellsource", [os.path.join(SRC_PATH, 'net', 'build', 'libs', 'net-1.3.0-all.jar'),
-                                 os.path.join(SRC_PATH, 'net', 'lib', 'quasar-core-0.7.9-jdk8.jar'),
+                                 os.path.join(SRC_PATH, 'net', 'lib', 'quasar-core-0.8.0.jar'),
                                  os.path.join(SRC_PATH, 'docs', 'hearthcards.pkl')]),
       ],
       include_package_data=True,

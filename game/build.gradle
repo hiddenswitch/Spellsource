@@ -7,7 +7,7 @@ dependencies {
     compile group: 'org.apache.commons', name: 'commons-math3', version: '3.4'
     compile group: 'org.apache.commons', name: 'commons-collections4', version: '4.1'
     compile group: 'commons-io', name: 'commons-io', version: '2.4'
-    compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
 
     testCompile project(':cards')
 
@@ -28,7 +28,7 @@ test {
 
 task scanSuspendables {
     doLast {
-        ant.taskdef(name: 'scanSuspendables', classname: 'com.github.fromage.quasi.fibers.instrument.SuspendablesScanner',
+        ant.taskdef(name: 'scanSuspendables', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner',
                 classpath: "build/classes/main:build/resources/main:${configurations.runtime.asPath}")
         ant.scanSuspendables(
                 auto: true,
