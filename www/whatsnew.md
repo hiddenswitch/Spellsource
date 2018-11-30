@@ -5,7 +5,17 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.0-2.0.12 (Friday, November 30th, 2018)
+#### 0.7.1-2.0.12 (Friday November 30th, 2018)
+
+Thanks again to a contribution from @doombubbles, the remaining Rastkhan's Rumble cards have been completed.
+
+Immortal Prelate is still under development.
+
+###### Content Additions:
+
+ - All Rastakhan's Rumble cards except Immortal Prelate have been added.
+
+##### 0.7.0-2.0.12 (Friday, November 30th, 2018)
 
 Server improvements should lead to greater reliability of connections.
 
@@ -20,7 +30,7 @@ In the next release, signing on in a new session will disconnect the previous se
  - Rotbutcher Gordo and about a dozen other custom cards are no longer appear incorrectly in the Wild filter in your Collection view.
  - Hopesteed is collectible.
 
-##### 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
+**0.6.6-2.0.11** (Wednesay, November 28th, 2018)
 
 Thanks to a great contribution from @doombubbles, new custom cards and a significant number of Rastakhan's Rumble cards have been added to the game.
 

@@ -8,7 +8,7 @@
   "rarity": "EPIC",
   "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
   "deathrattle": {
-    "class": "ShuffleToDeckWithEnchantmentsSpell",
+    "class": "NullSpell",
     "target": "SELF"
   },
   "attributes": {
