@@ -54,19 +54,24 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  create-user         Creates an AWS user named USERNAME.
-  format-cards        Formats JSON card files.
-  hearthcards-stubs   Creates stubs from the Hearthcards.
-  hs-replay-matchups  Prints a table of HSReplay matchups in TSV format.
-  image-stubs         Converts images to card stubs.
-  simulate            Run a simulation using AIs of a given deck matchup.
-  update-dbf          Updates Hearthstone IDs.
-  update-decklists    Updates the deck lists from Tempostorm.
+  change-password       Changes a Spellsource user's password.
+  create-user           Creates an AWS user named USERNAME.
+  format-cards          Formats JSON card files.
+  hearthcards-stubs     Creates stubs from the Hearthcards.
+  hs-replay-matchups    Prints a table of HSReplay matchups in TSV format.
+  image-stubs           Converts images to card stubs.
+  markdown-to-textmesh  Renders a Markdown file to TextMesh markup.
+  replicate-database    Replicates mongo databases.
+  simulate              Run a simulation using AIs of a given deck matchup.
+  update-dbf            Updates Hearthstone IDs.
+  update-decklists      Updates the deck lists from Tempostorm.
 ```
 
-You can also use the `spellsource` package programmatically. This requires **Python 3** and **Java 8 or higher**. To get started:
+You can also use the `spellsource` package programmatically. This requires **Python 3** and **Java 8 or higher** (only **Java 11** tested). To get started:
 
- 1. Install the Java JDK from [Oracle's website](http://www.oracle.com/technetwork/java/javase/downloads/jdk10-downloads-4416644.html).
+ 1. Install a Java JDK.
+    - On Windows: Visit [this link](https://github.com/ojdkbuild/ojdkbuild) for the latest OpenJDK builds, which we test on. Choose a `java-11 ... msi` link, like [this one](https://github.com/ojdkbuild/ojdkbuild/releases/download/11.0.1-1/java-11-openjdk-11.0.1.13-1.ojdkbuild.windows.x86_64.msi).
+    - On macOS: Install `brew`, then `brew cask install java`.
  2. `pip3 install spellsource` to install the latest version of the package.
  3. Start a game and play it with the specified bots:
  
