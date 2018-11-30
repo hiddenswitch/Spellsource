@@ -53,6 +53,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSunlance() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_wisp");
+			for (int i = 0; i < 4; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "spell_sunlance", target);
+			assertEquals(player.getHand().size(), 3);
+			assertEquals(player.getDeck().size(), 1);
+		});
+	}
+
+	@Test
 	public void testThunderfury() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "weapon_thunderfury");

@@ -13,15 +13,20 @@
       "sourcePlayer": "BOTH",
       "targetEntityType": "MINION",
       "targetPlayer": "SELF",
-      "queueCondition": {
-        "class": "CardPropertyCondition",
-        "target": "EVENT_TARGET",
-        "card": "minion_snapjaw_shellfighter",
-        "invert": true
-      },
       "fireCondition": {
-        "class": "EventTargetMatchesReferenceCondition",
-        "target": "ADJACENT_MINIONS"
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "card": "minion_snapjaw_shellfighter",
+            "invert": true
+          },
+          {
+            "class": "EventTargetMatchesReferenceCondition",
+            "target": "ADJACENT_MINIONS"
+          }
+        ]
       }
     },
     "spell": {
@@ -29,7 +34,7 @@
       "spells": [
         {
           "class": "DamageSpell",
-          "target": "SELF"
+          "target": "TRIGGER_HOST"
         },
         {
           "class": "ModifyDamageSpell",
