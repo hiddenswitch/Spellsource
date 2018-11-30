@@ -16,7 +16,7 @@ apply plugin: 'com.github.johnrengelman.shadow'
 
 configurations.all {
     resolutionStrategy {
-        force 'com.hazelcast:hazelcast:3.10.2'
+        force 'com.hazelcast:hazelcast:3.11'
     }
 }
 
@@ -49,15 +49,15 @@ dependencies {
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
     compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
-    compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-web', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.5.1'
-    compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.5.1'
+    compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-web-client', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-service-discovery', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-web', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-auth-common', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.6.0'
+    compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.6.0'
     compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.7'
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
@@ -70,7 +70,7 @@ dependencies {
 
     testCompile group: 'junit', name: 'junit', version: '4.+'
     testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
-    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.5.1'
+    testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9'
@@ -83,7 +83,7 @@ tasks.withType(JavaExec) {
 }
 
 test {
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
+    jvmArgs("-javaagent:${configurations.quasar.iterator().next()}=mb", "--add-modules", "java.se", "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.nio=ALL-UNNAMED", "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.management/sun.management=ALL-UNNAMED", "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED")
     systemProperty "spellsource.port", "8080"
     systemProperty "vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory"
     useJUnit()

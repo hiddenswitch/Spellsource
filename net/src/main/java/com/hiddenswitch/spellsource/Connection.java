@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.*;
+import io.vertx.core.buffer.Buffer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.ReadStream;
@@ -23,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.TimeoutException;
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -132,13 +135,34 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	}
 
 	/**
+	 * Closes the connection, if the user has one.
+	 *
+	 * @param userId
+	 * @param handler
+	 */
+	static void close(String userId, Handler<AsyncResult<Void>> handler) {
+		getConnections(v1 -> {
+			v1.result().get(new UserId(userId), v2 -> {
+				Vertx.currentContext().owner().eventBus().send(v2.result() + "::closer", Buffer.buffer("close"), res -> {
+					if (res.failed()) {
+						handler.handle(Future.failedFuture(res.cause()));
+						return;
+					}
+
+					handler.handle(Future.succeededFuture());
+				});
+			});
+		});
+	}
+
+	/**
 	 * Creates a handler for the verticle's {@link io.vertx.ext.web.Router} that upgrades the web socket and manages the
 	 * messaging over the cluster for the user.
 	 *
 	 * @return
 	 */
 	static Handler<RoutingContext> handler() {
-		return suspendableHandler((SuspendableAction1<RoutingContext>) Connection::connected);
+		return suspendableHandler(Connection::connected);
 	}
 
 	static void connected(Handler<Connection> handler) {
@@ -192,6 +216,30 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		SuspendableLock lock;
 		ServerWebSocket socket;
+
+		/*
+		try {
+			LOGGER.debug("connection {}: Awaiting lock", userId);
+			lock.set(SuspendableLock.lock("Connection::realtime[" + userId + "]", 2800));
+		} catch (VertxException timeout) {
+			if (timeout.getCause() instanceof TimeoutException) {
+				LOGGER.debug("connection {}: Disconnecting other session", userId);
+				try {
+					// close and try again
+					Void res = awaitResult(h -> Connection.close(userId, h));
+					lock.set(SuspendableLock.lock("Connection::realtime[" + userId + "]", 4500));
+				} catch (Throwable any) {
+					routingContext.fail(418);
+					return;
+				}
+			}
+		} catch (Throwable any) {
+			LOGGER.error("connected {}: {}", userId, any.getMessage());
+			routingContext.fail(418);
+			return;
+		}
+
+		*/
 
 		// By the time we try to upgrade the socket, the request might have been closed anyway
 		try {

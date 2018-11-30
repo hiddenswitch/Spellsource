@@ -7,9 +7,13 @@ Thanks for playing Spellsource today! Release notes are below.
 
 #### 0.6.7-2.0.11 (Thursday, November 29th, 2018)
 
+Server improvements should lead to greater reliability of connections.
+
+In the next release, signing on in a new session will disconnect the previous session.
+
 ###### Content Fixes:
 
- - Rotbutcher Gordo and about a dozen other cards are no longer in the Wild set.
+ - Rotbutcher Gordo and about a dozen other custom cards are no longer appear incorrectly in the Wild filter in your Collection view.
 
 ###### Changes Since 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
 

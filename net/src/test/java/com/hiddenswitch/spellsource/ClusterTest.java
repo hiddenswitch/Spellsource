@@ -42,7 +42,7 @@ public class ClusterTest extends SpellsourceTestBase {
 
 			// Connect to existing cluster
 			vertx.runOnContext(v1 -> {
-				vertx.runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
+				vertx.runOnContext(suspendableHandler(v2 -> {
 					SuspendableQueue<String> queue = SuspendableQueue.get("test-1000");
 					queue.offer("ok");
 					Strand.sleep(5000L);
@@ -55,7 +55,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			});
 
 			newVertxInstance.getOrCreateContext().runOnContext(v2 -> {
-				newVertxInstance.runOnContext(suspendableHandler((SuspendableAction1<Void>) v3 -> {
+				newVertxInstance.runOnContext(suspendableHandler(v3 -> {
 					SuspendableQueue<String> queue = SuspendableQueue.get("test-1000");
 					String ok = queue.take();
 					context.assertEquals(ok, "ok");

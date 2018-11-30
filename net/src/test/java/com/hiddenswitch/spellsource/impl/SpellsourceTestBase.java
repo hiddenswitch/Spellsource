@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
+import co.paralleluniverse.strands.Strand;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
@@ -38,6 +39,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+import static io.vertx.ext.sync.Sync.awaitResult;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
 @RunWith(VertxUnitRunner.class)
@@ -56,8 +59,6 @@ public abstract class SpellsourceTestBase {
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
-					.setWarningExceptionTime(90000L)
-					.setMaxEventLoopExecuteTime(90000L)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
@@ -102,6 +103,11 @@ public abstract class SpellsourceTestBase {
 			for (GameId games : Games.getConnections().keySet()) {
 				Games.endGame(games);
 			}
+
+			/*
+			for (UserId connected : Connection.getConnections().keySet()) {
+				Void t = awaitResult(h -> Connection.close(connected.toString(), h));
+			}*/
 		});
 	}
 
@@ -117,10 +123,12 @@ public abstract class SpellsourceTestBase {
 		return api;
 	}
 
+	@Suspendable
 	public static void sync(SuspendableRunnable action) {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
 			vertx.runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
+				Strand.sleep(4000);
 				action.run();
 				latch.countDown();
 			}));
@@ -130,6 +138,7 @@ public abstract class SpellsourceTestBase {
 		} catch (InterruptedException e) {
 			fail();
 		}
+		assertEquals(0L, latch.getCount());
 	}
 
 	@AfterClass

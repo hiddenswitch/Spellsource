@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
+import io.vertx.core.Handler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.asynchttpclient.AsyncHttpClient;
 import org.asynchttpclient.DefaultAsyncHttpClientConfig;
@@ -14,8 +15,8 @@ import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 
 public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket {
-	private final NettyWebSocket websocket;
-	private TestWebsocket.MessageHandler messageHandler;
+	private NettyWebSocket websocket;
+	private Handler<String> messageHandler;
 	private Runnable closeHandler;
 	private int webSocketMaxFrameSize = 65536;
 
@@ -24,9 +25,12 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 			AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
 					.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
 					.setMaxConnections(1024));
-			websocket = client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
+			client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
 					.execute(new WebSocketUpgradeHandler.Builder()
-							.addWebSocketListener(this).build()).get();
+							.addWebSocketListener(this).build()).toCompletableFuture().handle((ws, t) -> {
+				websocket = ws;
+				return ws;
+			});
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -51,14 +55,14 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 	@Override
 	public void onBinaryFrame(byte[] payload, boolean finalFragment, int rsv) {
 		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(new String(payload, Charset.defaultCharset()));
+			this.messageHandler.handle(new String(payload, Charset.defaultCharset()));
 		}
 	}
 
 	@Override
 	public void onTextFrame(String payload, boolean finalFragment, int rsv) {
 		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(payload);
+			this.messageHandler.handle(payload);
 		}
 	}
 
@@ -68,7 +72,7 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 	 * @param msgHandler
 	 */
 	@Override
-	public void setMessageHandler(TestWebsocket.MessageHandler msgHandler) {
+	public void setMessageHandler(Handler<String> msgHandler) {
 		this.messageHandler = msgHandler;
 	}
 

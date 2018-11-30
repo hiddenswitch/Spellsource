@@ -59,7 +59,7 @@ logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
 logger("org.reflections", ERROR)
 logger("co.paralleluniverse", ERROR)
-logger("net.demilich", defaultLevel)
+logger("net.demilich", WARN)
 logger("io.vertx", INFO)
 
 // Production group
