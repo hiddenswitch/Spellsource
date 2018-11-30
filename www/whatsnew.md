@@ -11,9 +11,14 @@ Server improvements should lead to greater reliability of connections.
 
 In the next release, signing on in a new session will disconnect the previous session.
 
+###### Usability Fixes:
+
+ - Removing cards from a deck works again.
+
 ###### Content Fixes:
 
  - Rotbutcher Gordo and about a dozen other custom cards are no longer appear incorrectly in the Wild filter in your Collection view.
+ - Hopesteed is collectible.
 
 ###### Changes Since 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
 
