@@ -62,20 +62,23 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	protected List<EventTrigger> triggers = new ArrayList<>();
-	private SpellDesc spell;
-	private EntityReference hostReference;
-	private boolean oneTurn;
-	private boolean expired;
-	private boolean persistentOwner;
-	private Integer maxFires;
-	private int fires;
-	private boolean keepAfterTransform;
-	private Card sourceCard;
-	private Integer countUntilCast;
-	private boolean countByValue;
+	protected SpellDesc spell;
+	protected EntityReference hostReference;
+	protected boolean oneTurn;
+	protected boolean expired;
+	protected boolean persistentOwner;
+	protected Integer maxFires;
+	protected int fires;
+	protected boolean keepAfterTransform;
+	protected Card sourceCard;
+	protected Integer countUntilCast;
+	protected boolean countByValue;
+
+	protected boolean usesSpellTrigger;
 
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
+		usesSpellTrigger = true;
 		if (primaryTrigger != null) {
 			this.triggers.add(primaryTrigger);
 		}
@@ -87,6 +90,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public Enchantment(List<EventTrigger> triggers, SpellDesc spell) {
+		usesSpellTrigger = true;
 		this.triggers.addAll(triggers);
 		this.spell = spell;
 	}
@@ -97,6 +101,10 @@ public class Enchantment extends Entity implements Trigger {
 
 	public Enchantment(EventTrigger trigger, SpellDesc spell, boolean oneTime) {
 		this(trigger, null, spell, oneTime);
+	}
+
+	public Enchantment() {
+
 	}
 
 	@Override
@@ -140,6 +148,9 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public boolean interestedIn(GameEventType eventType) {
+		if (!usesSpellTrigger) {
+			return false;
+		}
 		for (EventTrigger trigger : triggers) {
 			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
 				return true;
@@ -167,6 +178,9 @@ public class Enchantment extends Entity implements Trigger {
 	 */
 	@Suspendable
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
+		if (!usesSpellTrigger) {
+			return false;
+		}
 		if (countByValue && event instanceof HasValue) {
 			fires += ((HasValue) event).getValue();
 		} else {
@@ -201,7 +215,7 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
-		if (expired) {
+		if (expired || !usesSpellTrigger) {
 			return;
 		}
 

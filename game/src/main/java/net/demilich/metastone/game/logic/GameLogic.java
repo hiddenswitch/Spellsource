@@ -1316,7 +1316,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		reversed.sort((a, b) -> -Integer.compare(a.getEntityLocation().getIndex(), b.getEntityLocation().getIndex()));
 
 		for (Actor target : reversed) {
-			removeEnchantments(target, false, false);
+			if (!target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+				removeEnchantments(target, false, false);
+			}
 			previousLocation.put(target, target.getEntityLocation());
 			target.moveOrAddTo(context, Zones.GRAVEYARD);
 		}
@@ -3908,6 +3910,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		if (card.getDeathrattleEnchantments().size() > 0) {
 			card.getDeathrattleEnchantments().forEach(targetMinion::addDeathrattle);
+		}
+		if (card.getStoredEnchantments().size() > 0) {
+			card.getStoredEnchantments().forEach(ed -> context.getLogic().addGameEventListener(player, ed.create(), targetMinion));
 		}
 		if (card.getDesc().getTrigger() != null) {
 			addGameEventListener(player, card.getDesc().getTrigger().create(), targetMinion);

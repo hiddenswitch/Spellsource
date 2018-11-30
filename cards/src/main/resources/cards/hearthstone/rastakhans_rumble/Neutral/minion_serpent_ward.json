@@ -1,0 +1,25 @@
+{
+  "name": "Serpent Ward",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "heroClass": "ANY",
+  "rarity": "RARE",
+  "race": "TOTEM",
+  "description": "At the end of your turn, deal 2 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2,
+      "target": "ENEMY_HERO"
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

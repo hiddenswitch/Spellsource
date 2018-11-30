@@ -1,0 +1,24 @@
+{
+  "name": "Bloodclaw",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "damage": 2,
+  "durability": 2,
+  "heroClass": "GOLD",
+  "rarity": "COMMON",
+  "description": "Battlecry: Deal 5 damage to your hero.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 5,
+      "target": "FRIENDLY_HERO"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

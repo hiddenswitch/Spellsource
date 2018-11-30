@@ -141,11 +141,6 @@ public class ReceiveCardSpell extends Spell {
 			logger.warn("onCast {} {}: Suspicious call that was receive a VALUE computed to be 0, which is not the default. The VALUE arg is {}", context.getGameId(), source, desc.get(SpellArg.VALUE));
 		}
 
-		if (count < -1) {
-			logger.error("onCast {} {}: A negative number of cards was specified by the VALUE.", context.getGameId(), source);
-			return;
-		}
-
 		// If a card is being received from a filter, we're creating new cards
 		if (desc.containsKey(SpellArg.CARD_FILTER)
 				|| desc.containsKey(SpellArg.CARD_SOURCE)) {
@@ -158,6 +153,9 @@ public class ReceiveCardSpell extends Spell {
 
 			CardList cards = desc.getFilteredCards(context, player, source).getCopy();
 			String replacementCard = (String) desc.get(SpellArg.CARD);
+			if (count == -1) {
+				count = cards.getCount();
+			}
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!cards.isEmpty()) {
@@ -175,6 +173,10 @@ public class ReceiveCardSpell extends Spell {
 				}
 			}
 		} else if (desc.containsKey(SpellArg.CARD) || desc.containsKey(SpellArg.CARDS)) {
+			if (count < -1) {
+				logger.error("onCast {} {}: A negative number of cards was specified by the VALUE.", context.getGameId(), source);
+				return;
+			}
 			// If a card isn't received from a filter, it's coming from a description
 			// These cards should always be copies
 			boolean chooseRandomly = (boolean) desc.getOrDefault(SpellArg.RANDOM_TARGET, false);

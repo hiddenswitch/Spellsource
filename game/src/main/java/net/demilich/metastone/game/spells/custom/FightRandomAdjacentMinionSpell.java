@@ -21,6 +21,9 @@ public final class FightRandomAdjacentMinionSpell extends FightSpell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		desc = desc.clone();
 		Entity triggerHost = context.resolveSingleTarget(player, source, EntityReference.TRIGGER_HOST);
+		if (triggerHost == null) {
+			return;
+		}
 		desc.put(SpellArg.SECONDARY_TARGET, triggerHost.getReference());
 		target = context.getLogic().getRandom(context.getAdjacentMinions(triggerHost.getReference()));
 		if (target != null) {

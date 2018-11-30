@@ -1,0 +1,25 @@
+{
+  "name": "Halazzi, the Lynx",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "heroClass": "GREEN",
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: Fill your hand with 1/1 Lynxes that have Rush.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "token_lynx",
+      "value": 10
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
