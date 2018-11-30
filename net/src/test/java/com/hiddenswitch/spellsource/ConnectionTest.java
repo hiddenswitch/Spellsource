@@ -12,10 +12,10 @@ import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
-import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitEvent;
 
 public class ConnectionTest extends SpellsourceTestBase {
+	
 	@Test
 	public void testConnectionNoAuthFails(TestContext testContext) {
 		sync(() -> {
