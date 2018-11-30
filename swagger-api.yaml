@@ -1420,8 +1420,6 @@ definitions:
           $ref: '#/definitions/ChooseOneOptions'
   Entity:
     type: 'object'
-    required:
-    - 'id'
     properties:
       id:
         description: The entity's ID in the game.
