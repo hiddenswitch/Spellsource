@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.strands.Strand;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.strands.Strand;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;

@@ -1,9 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import com.github.fromage.quasi.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Connection;
 import com.hiddenswitch.spellsource.client.models.Envelope;
-import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
@@ -12,7 +10,6 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
@@ -35,7 +32,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public void setSocket(ServerWebSocket socket) {
+	public void setSocket(ServerWebSocket socket, Handler<AsyncResult<Void>> readyHandler) {
 		this.socket = socket;
 		String userId = this.userId;
 		String eventBusAddress = getEventBusAddress();
@@ -67,7 +64,7 @@ public class ConnectionImpl implements Connection {
 			}
 		});
 
-		socket.endHandler(suspendableHandler((SuspendableAction1<Void>) v1 -> {
+		socket.endHandler(suspendableHandler(v1 -> {
 			Connection.LOGGER.debug("connection endHandler {}: Closing", userId);
 			for (Handler<Void> handler : endHandlers) {
 				handler.handle(v1);
@@ -89,6 +86,10 @@ public class ConnectionImpl implements Connection {
 				});
 			});
 		}));
+
+		if (readyHandler != null) {
+			consumer.completionHandler(readyHandler);
+		}
 	}
 
 	@Override

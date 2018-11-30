@@ -9,6 +9,9 @@ buildscript {
 }
 
 apply plugin: 'application'
+
+mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
+
 apply plugin: 'com.github.johnrengelman.shadow'
 
 configurations.all {
@@ -17,11 +20,11 @@ configurations.all {
     }
 }
 
+
 shadowJar {
     zip64 true
 }
 
-mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
 
 configurations {
     quasar
@@ -39,7 +42,7 @@ repositories {
 }
 
 dependencies {
-    quasar files("lib/quasar-core-0.7.9-jdk8.jar")
+    quasar files("lib/quasar-core-0.8.0.jar")
 
     compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.1.0'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
@@ -72,6 +75,7 @@ dependencies {
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9'
     testCompile group: 'org.apache.curator', name: 'curator-test', version: '3.3.0'
+    testCompile group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.6'
 }
 
 tasks.withType(JavaExec) {

@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.Migrations;
 import com.hiddenswitch.spellsource.models.MigrateToRequest;
 import com.hiddenswitch.spellsource.models.MigrationRequest;

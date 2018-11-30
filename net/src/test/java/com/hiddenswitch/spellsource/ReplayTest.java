@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.fromage.quasi.strands.Strand;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.util.GameRecord;

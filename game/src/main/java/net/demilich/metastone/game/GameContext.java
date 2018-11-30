@@ -1,9 +1,9 @@
 package net.demilich.metastone.game;
 
 import ch.qos.logback.classic.Level;
-import com.github.fromage.quasi.fibers.Fiber;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableCallable;
+import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableCallable;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import io.vertx.core.Vertx;
@@ -187,7 +187,7 @@ import static java.util.stream.Collectors.toList;
 public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
-	protected static Logger logger = LoggerFactory.getLogger(GameContext.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
 	private Player[] players = new Player[2];
 	private Behaviour[] behaviours = new Behaviour[2];
 	private GameLogic logic;
@@ -393,7 +393,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 		// Expire the game just once here
 		getTriggerManager().expireAll();
-		logger.debug("endGame {}: Game is now ending", getGameId());
+		LOGGER.debug("endGame {}: Game is now ending", getGameId());
 		setWinner(getLogic().getWinner(getActivePlayer(), getOpponent(getActivePlayer())));
 		notifyPlayersGameOver();
 		calculateStatistics();
@@ -408,12 +408,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	protected void calculateStatistics() {
 		if (getWinner() != null) {
-			logger.debug("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
+			LOGGER.debug("calculateStatistics {}: Game finished after {}, turns, the winner is {}", getGameId(), getTurn(), getWinner().getName());
 			getWinner().getStatistics().gameWon();
 			Player loser = getOpponent(getWinner());
 			loser.getStatistics().gameLost();
 		} else {
-			logger.debug("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
+			LOGGER.debug("calculateStatistics {}: Game finished after {} turns in a draw", getGameId(), getTurn());
 			getPlayer1().getStatistics().gameLost();
 			getPlayer2().getStatistics().gameLost();
 		}
@@ -424,7 +424,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void endTurn() {
-		logger.debug("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
+		LOGGER.debug("{} endTurn: Ending turn {}", getGameId(), getActivePlayer().getId());
 		getLogic().endTurn(getActivePlayerId());
 		setActivePlayerId(getLogic().getNextActivePlayerId());
 		setTurnState(TurnState.TURN_ENDED);
@@ -897,7 +897,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	protected void init(int startingPlayerId) {
 		setActivePlayerId(startingPlayerId);
-		logger.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
+		LOGGER.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
@@ -959,7 +959,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void play() {
-		logger.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
+		LOGGER.debug("play {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		if (Arrays.stream(behaviours).anyMatch(FiberBehaviour.class::isInstance)) {
 			Fiber<Void> f;
 			SuspendableCallable<Void> innerPlay = () -> {
@@ -993,7 +993,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	public boolean takeActionInTurn() {
 		setActionsThisTurn(getActionsThisTurn() + 1);
 		if (getActionsThisTurn() > 99) {
-			logger.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
+			LOGGER.warn("{} takeActionInTurn: Turn has been forcefully ended after {} actions", getGameId(), getActionsThisTurn());
 			endTurn();
 			return false;
 		}
@@ -1129,12 +1129,12 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			}
 			List<Entity> entities = resolveTarget(player, source, reference);
 			if (entities == null) {
-				logger.warn("getTargetOverride {} {}: Key {} resolved to no target entities", getGameId(), source, reference);
+				LOGGER.warn("getTargetOverride {} {}: Key {} resolved to no target entities", getGameId(), source, reference);
 				return null;
 			}
 
 			if (entities.size() == 0) {
-				logger.warn("getTargetOverride {} {}: Key {} resolved to empty entities list", getGameId(), source, reference);
+				LOGGER.warn("getTargetOverride {} {}: Key {} resolved to empty entities list", getGameId(), source, reference);
 				return null;
 			}
 
@@ -1168,7 +1168,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 */
 	@Suspendable
 	public void startTurn(int playerId) {
-		logger.debug("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
+		LOGGER.debug("{} startTurn: Starting turn {} for playerId={}", getGameId(), getTurn() + 1, playerId);
 		setTurn(getTurn() + 1);
 		getLogic().startTurn(playerId);
 		setActionsThisTurn(0);
@@ -1608,7 +1608,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			try {
 				newGame.play();
 			} catch (Throwable t) {
-				logger.error("simulation: {}", t);
+				LOGGER.error("simulation: {}", t);
 				return null;
 			}
 
@@ -1804,7 +1804,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @param loggingLevel A preferred logging level.
 	 */
 	public void setLoggingLevel(Level loggingLevel) {
-		((ch.qos.logback.classic.Logger) logger).setLevel(loggingLevel);
+		((ch.qos.logback.classic.Logger) LOGGER).setLevel(loggingLevel);
 	}
 
 	/**
@@ -1825,11 +1825,11 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public Logger getLogger() {
-		return logger;
+		return LOGGER;
 	}
 
 	public void setLogger(Logger logger) {
-		this.logger = logger;
+		this.LOGGER = logger;
 	}
 
 	/**

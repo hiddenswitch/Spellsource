@@ -162,7 +162,7 @@ class Context(contextlib.AbstractContextManager):
         port = launch_gateway(port=0,
                               classpath=Context.find_resource_path('net-1.3.0-all.jar'),
                               javaopts=[
-                                  '-javaagent:' + Context.find_resource_path('quasar-core-0.7.9-jdk8.jar') + '=mb'],
+                                  '-javaagent:' + Context.find_resource_path('quasar-core-0.8.0.jar') + '=mb'],
                               die_on_exit=True)
 
         # connect python side to Java side with Java dynamic port and start python

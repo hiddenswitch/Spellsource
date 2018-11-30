@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -70,7 +70,11 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	public void start() throws RuntimeException, SuspendExecution {
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		io.vertx.core.logging.LoggerFactory.initialise();
-		server = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(port));
+		server = vertx.createHttpServer(new HttpServerOptions()
+				.setHost("0.0.0.0")
+				.setPort(port)
+				.setMaxWebsocketFrameSize(65536)
+				.setMaxWebsocketMessageSize(100 * 65536));
 		Router router = Router.router(vertx);
 
 		logger.info("start: Configuring router on instance {}", this.deploymentID());

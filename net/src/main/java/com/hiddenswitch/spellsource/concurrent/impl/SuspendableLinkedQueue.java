@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.concurrent.impl;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.*;
 import io.vertx.core.VertxException;
 import org.apache.commons.lang3.RandomStringUtils;

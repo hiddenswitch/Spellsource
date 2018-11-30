@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
-import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
+import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.Port;
 import com.hiddenswitch.spellsource.client.ApiClient;
@@ -26,16 +26,18 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public class UnityClient {
-	private static Logger logger = LoggerFactory.getLogger(UnityClient.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(UnityClient.class);
+	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
 	public static String basePath = BASE + Integer.toString(Port.port());
+	private int id;
 	private ApiClient apiClient;
 	private DefaultApi api;
 	private volatile boolean gameOver;
 	private Handler<UnityClient> onGameOver;
 	private Account account;
 	private TestContext context;
-	private WebsocketClientEndpoint realtime;
+	private TestWebsocket realtime;
 	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
@@ -45,6 +47,7 @@ public class UnityClient {
 	protected CountDownLatch gameOverLatch;
 	// No op lock for now
 	protected ReentrantLock messagingLock = new NoOpLock();
+	protected CountDownLatch receivedAtLeastOneMessage;
 
 
 	public UnityClient(TestContext context) {
@@ -52,6 +55,7 @@ public class UnityClient {
 		thisUrl = basePath;
 		apiClient.setBasePath(basePath);
 		api = new DefaultApi(apiClient);
+		id = ids.getAndIncrement();
 		this.context = context;
 	}
 
@@ -85,7 +89,7 @@ public class UnityClient {
 			account = car.getAccount();
 			context.assertNotNull(account);
 			context.assertTrue(account.getDecks().size() > 0);
-			logger.debug("createUserAccount: Created account " + car.getAccount().getId());
+			LOGGER.debug("createUserAccount {} {}: Created account", id, car.getAccount().getId());
 		} catch (ApiException e) {
 			context.fail(e.getMessage());
 		}
@@ -116,7 +120,7 @@ public class UnityClient {
 		matchmakingFut.set(fut);
 		ensureConnected();
 		context.assertTrue(realtime.isOpen());
-		logger.info("matchmake {}: Sending enqueue", getAccount().getId());
+		LOGGER.info("matchmake {} {}: Sending enqueue", id, getAccount().getId());
 		try {
 			messagingLock.lock();
 			realtime.sendMessage(Json.encode(new Envelope()
@@ -136,9 +140,11 @@ public class UnityClient {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
-				realtime = new WebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
+				receivedAtLeastOneMessage = new CountDownLatch(1);
+				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
 				realtime.setMessageHandler(message -> {
-					logger.debug("ensureConnected: Handling realtime message for userId {}", getUserId());
+					LOGGER.trace("ensureConnected {}: Handling realtime message for userId {}", id, getUserId());
+					receivedAtLeastOneMessage.countDown();
 					try {
 						messagingLock.lock();
 
@@ -147,9 +153,10 @@ public class UnityClient {
 						messagingLock.unlock();
 					}
 				});
+				receivedAtLeastOneMessage.await();
 			}
 		} catch (Throwable any) {
-			logger.error("ensureConnected: ", any);
+			LOGGER.error("ensureConnected: ", any);
 			context.fail(any);
 		} finally {
 			messagingLock.unlock();
@@ -184,7 +191,7 @@ public class UnityClient {
 					}
 				}
 
-				logger.debug("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
+				LOGGER.trace("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 				switch (message.getMessageType()) {
 					case ON_TURN_END:
 						if (turnsToPlay.getAndDecrement() <= 0
@@ -236,10 +243,10 @@ public class UnityClient {
 						if (onGameOver != null) {
 							onGameOver.handle(this);
 						}
-						logger.debug("play: UserId " + getUserId() + " received game end message.");
+						LOGGER.debug("play {} {}: received game end message.", id, getUserId());
 						break;
 				}
-				logger.debug("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
+				LOGGER.trace("play: Done handling message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 			} finally {
 				messagingLock.unlock();
 			}
@@ -283,21 +290,22 @@ public class UnityClient {
 	public void play() {
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
-		logger.debug("play: Playing userId " + getUserId());
+		LOGGER.debug("play {} {}: Playing", id, getUserId());
 
 		ensureConnected();
-		logger.debug("play: UserId " + getUserId() + " sent first message.");
 		sendStartGameMessage();
 	}
 
 	private void sendStartGameMessage() {
-		realtime.sendMessage(serialize(new Envelope().game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
-				.messageType(MessageType.FIRST_MESSAGE)))));
+		realtime.sendMessage(serialize(new Envelope()
+				.game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
+						.messageType(MessageType.FIRST_MESSAGE)))));
+		LOGGER.debug("sendStartGameMessage {} {}: sent first message.", id, getUserId());
 	}
 
 	public void respondRandomAction(ServerToClientMessage message) {
 		if (realtime == null) {
-			logger.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
+			LOGGER.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
 			return;
 		}
 		final int actionCount = message.getActions().getCompatibility().size();
@@ -310,7 +318,7 @@ public class UnityClient {
 				.messageType(MessageType.UPDATE_ACTION)
 				.repliesTo(message.getId())
 				.actionIndex(action)))));
-		logger.debug("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(action));
+		LOGGER.trace("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(action));
 	}
 
 	protected int getActionIndex(ServerToClientMessage message) {
@@ -432,7 +440,7 @@ public class UnityClient {
 
 	@Suspendable
 	public UnityClient waitUntilDone() {
-		logger.debug("waitUntilDone: UserId " + getUserId() + " is waiting");
+		LOGGER.debug("waitUntilDone {} {}: is waiting", id, getUserId());
 		try {
 			gameOverLatch.await(90L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {

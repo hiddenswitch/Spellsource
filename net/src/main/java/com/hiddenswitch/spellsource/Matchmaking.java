@@ -1,11 +1,12 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.Fiber;
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
-import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
-import com.github.fromage.quasi.strands.concurrent.CyclicBarrier;
+import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
+import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
+import co.paralleluniverse.strands.concurrent.CyclicBarrier;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.concurrent.*;
 import com.hiddenswitch.spellsource.impl.DeckId;
@@ -25,6 +26,7 @@ import org.slf4j.LoggerFactory;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 
+import static com.hiddenswitch.spellsource.util.Sync.defer;
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitEvent;
@@ -125,7 +127,7 @@ public interface Matchmaking extends Verticle {
 				LOGGER.trace("dequeue {}: User was not enqueued", userId);
 			}
 		} finally {
-			if (lock != null){
+			if (lock != null) {
 				lock.release();
 			}
 		}
@@ -171,24 +173,27 @@ public interface Matchmaking extends Verticle {
 				queue = SuspendableQueue.get(queueId);
 				SuspendableMap<UserId, String> userToQueue = getUsersInQueues();
 
-				List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
-
 				// Dequeue requests
 				do {
+					List<MatchmakingRequest> thisMatchRequests = new ArrayList<>();
 					LOGGER.trace("startMatchmaker {}: Awaiting {} users", queueId, queueConfiguration.getLobbySize());
 					awaitReady.countDown();
 
 					while (thisMatchRequests.size() < queueConfiguration.getLobbySize()) {
 						MatchmakingQueueEntry request;
 						if (queueConfiguration.getEmptyLobbyTimeout() > 0L && thisMatchRequests.isEmpty()) {
+							LOGGER.debug("startMatchmaker {}: Polling with empty lobby", queueId);
 							request = queue.poll(queueConfiguration.getEmptyLobbyTimeout());
 						} else if (queueConfiguration.getAwaitingLobbyTimeout() > 0L && !thisMatchRequests.isEmpty()) {
+							LOGGER.debug("startMatchmaker {}: Polling with awaiting lobby", queueId);
 							request = queue.poll(queueConfiguration.getAwaitingLobbyTimeout());
 						} else {
+							LOGGER.debug("startMatchmaker {}: Taking, have {}", queueId, thisMatchRequests.size());
 							request = queue.take();
 						}
 
 						if (request == null) {
+							LOGGER.debug("startMatchmaker {}: Queue timed out", queueId);
 							// The request timed out.
 							// Remove any awaiting users, then break
 							for (MatchmakingRequest existingRequest : thisMatchRequests) {
@@ -216,82 +221,82 @@ public interface Matchmaking extends Verticle {
 						}
 					}
 
-					GameId gameId = GameId.create();
+					// We've successfully dequeued, we can defer
+					defer(v -> {
+						GameId gameId = GameId.create();
 
-					// Is this a bot game?
-					if (queueConfiguration.isBotOpponent()) {
-						// Actually creating the game can happen without joining
-						// Create a bot game.
-						MatchmakingRequest user = thisMatchRequests.get(0);
-						SuspendableLock botLock = SuspendableLock.lock(Bots.TAKING_BOT_LOCK_NAME);
+						// Is this a bot game?
+						if (queueConfiguration.isBotOpponent()) {
+							// Actually creating the game can happen without joining
+							// Create a bot game.
+							MatchmakingRequest user = thisMatchRequests.get(0);
+							SuspendableLock botLock = SuspendableLock.lock(Bots.TAKING_BOT_LOCK_NAME);
 
-						try {
-							// TODO: Move this lock into pollBotId
-							// The player has been waiting too long. Match to an AI.
-							// Retrieve a bot and use it to play against the opponent
-							UserRecord bot = Accounts.get(Bots.pollBotId());
+							try {
+								// TODO: Move this lock into pollBotId
+								// The player has been waiting too long. Match to an AI.
+								// Retrieve a bot and use it to play against the opponent
+								UserRecord bot = Accounts.get(Bots.pollBotId());
 
-							DeckId botDeckId = user.getBotDeckId() == null
-									? new DeckId(Bots.getRandomDeck(bot))
-									: new DeckId(user.getBotDeckId());
+								DeckId botDeckId = user.getBotDeckId() == null
+										? new DeckId(Bots.getRandomDeck(bot))
+										: new DeckId(user.getBotDeckId());
 
-							Games.createGame(ConfigurationRequest.botMatch(
-									gameId,
-									new UserId(user.getUserId()),
-									new UserId(bot.getId()),
-									new DeckId(user.getDeckId()),
-									botDeckId));
-						} finally {
-							botLock.release();
-						}
+								Games.createGame(ConfigurationRequest.botMatch(
+										gameId,
+										new UserId(user.getUserId()),
+										new UserId(bot.getId()),
+										new DeckId(user.getDeckId()),
+										botDeckId));
+							} finally {
+								botLock.release();
+							}
 
-						WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
+							WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
 
-						if (connection != null) {
-							connection.write(gameReadyMessage());
-						}
-
-						userToQueue.remove(new UserId(user.getUserId()));
-
-						thisMatchRequests.clear();
-						continue;
-					}
-
-					// Create a game for every pair
-					if (thisMatchRequests.size() % 2 != 0) {
-						throw new AssertionError("thisMatchRequests.size()");
-					}
-
-//					if (queueConfiguration.isStartsAutomatically())
-					LOGGER.trace("startMatchmaker {}: Creating game", queueId);
-					for (int i = 0; i < thisMatchRequests.size(); i += 2) {
-						MatchmakingRequest user1 = thisMatchRequests.get(i);
-						MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
-
-						// This is a standard two player competitive match
-						ConfigurationRequest request =
-								ConfigurationRequest.versusMatch(gameId,
-										new UserId(user1.getUserId()),
-										new DeckId(user1.getDeckId()),
-										new UserId(user2.getUserId()),
-										new DeckId(user2.getDeckId()));
-						Games.createGame(request);
-
-						LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
-
-						for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
-							@SuppressWarnings("unchecked")
-							WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
 							if (connection != null) {
 								connection.write(gameReadyMessage());
 							}
+
+							userToQueue.remove(new UserId(user.getUserId()));
+							return;
 						}
 
-						userToQueue.remove(new UserId(user1.getUserId()));
-						userToQueue.remove(new UserId(user2.getUserId()));
-					}
+						// Create a game for every pair
+						if (thisMatchRequests.size() % 2 != 0) {
+							throw new AssertionError("thisMatchRequests.size()");
+						}
 
-					thisMatchRequests.clear();
+						LOGGER.trace("startMatchmaker {}: Creating game", queueId);
+						for (int i = 0; i < thisMatchRequests.size(); i += 2) {
+							MatchmakingRequest user1 = thisMatchRequests.get(i);
+							MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
+
+							// This is a standard two player competitive match
+							ConfigurationRequest request =
+									ConfigurationRequest.versusMatch(gameId,
+											new UserId(user1.getUserId()),
+											new DeckId(user1.getDeckId()),
+											new UserId(user2.getUserId()),
+											new DeckId(user2.getDeckId()));
+							Games.createGame(request);
+
+							LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
+
+							for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
+								@SuppressWarnings("unchecked")
+								WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
+								if (connection != null) {
+									connection.write(gameReadyMessage());
+								} else {
+									LOGGER.warn("startMatchmaker {}: Tried to retrieve a connection for a user but it was null", queueId);
+								}
+							}
+
+							userToQueue.remove(new UserId(user1.getUserId()));
+							userToQueue.remove(new UserId(user2.getUserId()));
+						}
+					});
 				} while (/*Queues that run once are typically private games*/!queueConfiguration.isOnce());
 			} catch (VertxException | InterruptedException ex) {
 				// Cancelled

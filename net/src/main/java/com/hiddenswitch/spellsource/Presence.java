@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
 import com.hiddenswitch.spellsource.client.models.EnvelopeChanged;
 import com.hiddenswitch.spellsource.client.models.Friend;
