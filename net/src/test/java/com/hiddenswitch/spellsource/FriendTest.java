@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -120,9 +121,9 @@ public class FriendTest extends SpellsourceTestBase {
 
 	@Test
 	public void testDoesNotifyPresence(TestContext context) {
-		Async async = context.async();
 		sync(() -> {
 			Collection<WebSocket> sockets = new ConcurrentLinkedDeque<>();
+			CountDownLatch latch = new CountDownLatch(1);
 			try {
 				CreateAccountResponse account1 = createRandomAccount();
 				CreateAccountResponse account2 = createRandomAccount();
@@ -141,18 +142,19 @@ public class FriendTest extends SpellsourceTestBase {
 							case ONLINE:
 								context.assertTrue(didGetOffline.compareAndSet(false, false));
 								context.assertTrue(didGetOnline.compareAndSet(false, true));
+								latch.countDown();
 								break;
 							case OFFLINE:
 								context.assertTrue(didGetOnline.compareAndSet(true, false));
 								context.assertTrue(didGetOffline.compareAndSet(false, true));
-								async.complete();
+								latch.countDown();
 								break;
 						}
 					}
 				});
 
 				Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
-				Long tick = awaitEvent(t -> vertx.setTimer(5001L, t));
+				latch.await();
 			} finally {
 				for (WebSocket socket : sockets) {
 					socket.close();

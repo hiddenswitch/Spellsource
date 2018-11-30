@@ -41,7 +41,7 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 			assertEquals(games.size(), 0);
 		});
 
-		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * 2;
+		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2) * 3;
 		int checkpointTotal = count * 6;
 
 		CountDownLatch latch = new CountDownLatch(count);
@@ -80,7 +80,7 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 					assertTrue(client.isGameOver());
 					assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
 					logger.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-
+					logger.info("testSimultaneousGames: {} finished", userId);
 					latch.countDown();
 				} catch (ApiException t) {
 					context.exceptionHandler().handle(t);

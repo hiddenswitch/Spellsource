@@ -522,7 +522,7 @@ public class ServerGameContext extends GameContext implements Server {
 				} catch (VertxException interrupted) {
 					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
-						LOGGER.debug("play {}: Interrupted gracefully");
+						LOGGER.debug("play {}: Interrupted gracefully", getGameId());
 					} else {
 						LOGGER.error("play {}: Possibly interrupted by {}", getGameId(), interrupted.getMessage(), interrupted);
 					}

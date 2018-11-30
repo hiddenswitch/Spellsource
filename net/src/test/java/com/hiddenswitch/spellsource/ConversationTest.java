@@ -9,17 +9,18 @@ import io.vertx.core.http.HttpClientOptions;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.TestContext;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static io.vertx.core.json.Json.decodeValue;
 
 public class ConversationTest extends SpellsourceTestBase {
 
 	@Test
+	@Ignore
 	public void testConversationRealtime(TestContext context) {
 		sync(() -> {
 			Collection<WebSocket> sockets = new ConcurrentLinkedDeque<>();

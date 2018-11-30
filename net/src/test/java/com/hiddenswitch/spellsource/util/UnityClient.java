@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.Sets;
@@ -19,13 +20,18 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-public class UnityClient {
+import static io.vertx.ext.sync.Sync.fiberHandler;
+
+public class UnityClient implements AutoCloseable {
 	private static Logger LOGGER = LoggerFactory.getLogger(UnityClient.class);
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
@@ -48,6 +54,7 @@ public class UnityClient {
 	// No op lock for now
 	protected ReentrantLock messagingLock = new NoOpLock();
 	protected CountDownLatch receivedAtLeastOneMessage;
+	private boolean receivedGameOverMessage;
 
 
 	public UnityClient(TestContext context) {
@@ -136,15 +143,17 @@ public class UnityClient {
 		return fut;
 	}
 
+	@Suspendable
 	public void ensureConnected() {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
-				receivedAtLeastOneMessage = new CountDownLatch(1);
+//				receivedAtLeastOneMessage = new CountDownLatch(1);
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
-				realtime.setMessageHandler(message -> {
+				Strand.sleep(2000);
+				realtime.setMessageHandler((String message) -> {
 					LOGGER.trace("ensureConnected {}: Handling realtime message for userId {}", id, getUserId());
-					receivedAtLeastOneMessage.countDown();
+//					receivedAtLeastOneMessage.countDown();
 					try {
 						messagingLock.lock();
 
@@ -153,7 +162,8 @@ public class UnityClient {
 						messagingLock.unlock();
 					}
 				});
-				receivedAtLeastOneMessage.await();
+//				Strand.sleep(2000);
+//				receivedAtLeastOneMessage.await();
 			}
 		} catch (Throwable any) {
 			LOGGER.error("ensureConnected: ", any);
@@ -163,11 +173,13 @@ public class UnityClient {
 		}
 	}
 
+	@Suspendable
 	protected void handleMessage(Envelope env) {
 		handleMatchmaking(env);
 		handleGameMessages(env);
 	}
 
+	@Suspendable
 	protected void handleMatchmaking(Envelope env) {
 		if (env.getResult() != null && env.getResult().getEnqueue() != null) {
 			if (matchmakingFut.get().isCancelled()) {
@@ -180,6 +192,7 @@ public class UnityClient {
 		}
 	}
 
+	@Suspendable
 	protected void handleGameMessages(Envelope env) {
 		if (env.getGame() != null && env.getGame().getServerToClient() != null) {
 			ServerToClientMessage message = env.getGame().getServerToClient();
@@ -189,6 +202,19 @@ public class UnityClient {
 					if (handler != null) {
 						handler.accept(message);
 					}
+				}
+				if (turnsToPlay.get() <= 0) {
+					if (!gameOver && onGameOver != null) {
+						onGameOver.handle(this);
+					}
+					if (!gameOver) {
+						gameOverLatch.countDown();
+					}
+					gameOver = true;
+					if (shouldDisconnect) {
+						disconnect();
+					}
+					return;
 				}
 
 				LOGGER.trace("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
@@ -234,6 +260,7 @@ public class UnityClient {
 						break;
 					case ON_GAME_END:
 						// The game has ended.
+						this.receivedGameOverMessage = true;
 						this.gameOver = true;
 						// TODO: Should we disconnect realtime here?
 						if (shouldDisconnect) {
@@ -253,6 +280,7 @@ public class UnityClient {
 		}
 	}
 
+	@Suspendable
 	public void sendMessage(Envelope env) {
 		this.realtime.sendMessage(serialize(env));
 	}
@@ -287,7 +315,9 @@ public class UnityClient {
 		matchmakeAndPlay(deckId, queueId);
 	}
 
+	@Suspendable
 	public void play() {
+		this.receivedGameOverMessage = false;
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
 		LOGGER.debug("play {} {}: Playing", id, getUserId());
@@ -296,6 +326,7 @@ public class UnityClient {
 		sendStartGameMessage();
 	}
 
+	@Suspendable
 	private void sendStartGameMessage() {
 		realtime.sendMessage(serialize(new Envelope()
 				.game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
@@ -303,6 +334,7 @@ public class UnityClient {
 		LOGGER.debug("sendStartGameMessage {} {}: sent first message.", id, getUserId());
 	}
 
+	@Suspendable
 	public void respondRandomAction(ServerToClientMessage message) {
 		if (realtime == null) {
 			LOGGER.warn("respondRandomAction {} {}: Connection was forcibly disconnected.", getUserId(), message.getId());
@@ -321,6 +353,7 @@ public class UnityClient {
 		LOGGER.trace("play: UserId " + getUserId() + " sent action with ID " + Integer.toString(action));
 	}
 
+	@Suspendable
 	protected int getActionIndex(ServerToClientMessage message) {
 		return random(message.getActions().getCompatibility().size());
 	}
@@ -331,10 +364,12 @@ public class UnityClient {
 	 * @param message The message received
 	 * @return {@code true} if the client should keep playing.
 	 */
+	@Suspendable
 	protected boolean onRequestAction(ServerToClientMessage message) {
 		return true;
 	}
 
+	@Suspendable
 	protected void onMulligan(ServerToClientMessage message) {
 	}
 
@@ -345,10 +380,12 @@ public class UnityClient {
 		return new UserId(getAccount().getId());
 	}
 
+	@Suspendable
 	protected void assertValidActions(ServerToClientMessage message) {
 
 	}
 
+	@Suspendable
 	public void disconnect() {
 		try {
 			messagingLock.lock();
@@ -486,8 +523,11 @@ public class UnityClient {
 	}
 
 	@Override
-	protected void finalize() throws Throwable {
+	public void close() throws Exception {
 		disconnect();
-		super.finalize();
+	}
+
+	public boolean receivedGameOverMessage() {
+		return receivedGameOverMessage;
 	}
 }

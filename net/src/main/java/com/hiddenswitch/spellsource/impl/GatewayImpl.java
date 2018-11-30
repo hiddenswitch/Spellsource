@@ -343,7 +343,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		router.route("/invites")
 				.method(HttpMethod.POST);
 
-		server.requestHandler(router::accept);
+		server.requestHandler(router);
 		HttpServer listening = awaitResult(server::listen);
 
 		logger.info("start: Router configured.");

@@ -1,6 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
 import com.neovisionaries.ws.client.*;
+import io.vertx.core.Handler;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,7 +15,7 @@ public class SocketsWebsocketClientEndpoint extends WebSocketAdapter implements 
 	private static WebSocketFactory webSocketFactory = new WebSocketFactory()
 			.setSocketFactory(SocketFactory.getDefault());
 	private final WebSocket websocket;
-	private TestWebsocket.MessageHandler messageHandler;
+	private Handler<String> messageHandler;
 	private Runnable closeHandler;
 
 	public SocketsWebsocketClientEndpoint(String endpoint, String auth) {
@@ -47,14 +48,14 @@ public class SocketsWebsocketClientEndpoint extends WebSocketAdapter implements 
 	@Override
 	public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
 		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(new String(binary, Charset.defaultCharset()));
+			this.messageHandler.handle(new String(binary, Charset.defaultCharset()));
 		}
 	}
 
 	@Override
 	public void onTextMessage(WebSocket websocket, String text) throws Exception {
 		if (this.messageHandler != null) {
-			this.messageHandler.handleMessage(text);
+			this.messageHandler.handle(text);
 		}
 	}
 
@@ -64,9 +65,10 @@ public class SocketsWebsocketClientEndpoint extends WebSocketAdapter implements 
 	 * @param msgHandler
 	 */
 	@Override
-	public void setMessageHandler(TestWebsocket.MessageHandler msgHandler) {
+	public void setMessageHandler(Handler<String> msgHandler) {
 		this.messageHandler = msgHandler;
 	}
+
 	/**
 	 * Send a message.
 	 *

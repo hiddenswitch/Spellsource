@@ -1,9 +1,12 @@
 package com.hiddenswitch.spellsource.util;
 
-import java.util.concurrent.Future;
+import co.paralleluniverse.fibers.Suspendable;
+import io.vertx.core.Handler;
+
+import java.util.function.Consumer;
 
 public interface TestWebsocket {
-	void setMessageHandler(TestWebsocket.MessageHandler msgHandler);
+	void setMessageHandler(Handler<String> msgHandler);
 
 	void sendMessage(String message);
 
@@ -12,9 +15,4 @@ public interface TestWebsocket {
 	boolean isOpen();
 
 	TestWebsocket setCloseHandler(Runnable closeHandler);
-
-	@FunctionalInterface
-	interface MessageHandler {
-		void handleMessage(String message);
-	}
 }

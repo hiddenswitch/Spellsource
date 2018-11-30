@@ -45,7 +45,7 @@ public class GamesTest extends SpellsourceTestBase {
 		client.play();
 		client.waitUntilDone();
 		context.assertTrue(client.isGameOver());
-		context.assertEquals(mulligans.get(), 2);
+		context.assertEquals(mulligans.get(), 1);
 	}
 
 	@Test
