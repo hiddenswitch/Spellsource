@@ -13,6 +13,8 @@ import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import org.junit.Test;
 
+import java.util.Collection;
+import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import static io.vertx.ext.sync.Sync.awaitEvent;
@@ -120,34 +122,42 @@ public class FriendTest extends SpellsourceTestBase {
 	public void testDoesNotifyPresence(TestContext context) {
 		Async async = context.async();
 		sync(() -> {
-			CreateAccountResponse account1 = createRandomAccount();
-			CreateAccountResponse account2 = createRandomAccount();
-			WebSocket ws1 = awaitEvent(h -> vertx.createHttpClient().websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), h));
-			WebSocket ws2 = awaitEvent(h -> vertx.createHttpClient().websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), h));
-			AtomicBoolean didGetOnline = new AtomicBoolean();
-			AtomicBoolean didGetOffline = new AtomicBoolean();
-			ws2.handler(buf -> {
-				Envelope msg = Json.decodeValue(buf, Envelope.class);
+			Collection<WebSocket> sockets = new ConcurrentLinkedDeque<>();
+			try {
+				CreateAccountResponse account1 = createRandomAccount();
+				CreateAccountResponse account2 = createRandomAccount();
+				WebSocket ws1 = awaitEvent(h -> vertx.createHttpClient().websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), h));
+				sockets.add(ws1);
+				WebSocket ws2 = awaitEvent(h -> vertx.createHttpClient().websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), h));
+				sockets.add(ws2);
+				AtomicBoolean didGetOnline = new AtomicBoolean();
+				AtomicBoolean didGetOffline = new AtomicBoolean();
+				ws2.handler(buf -> {
+					Envelope msg = Json.decodeValue(buf, Envelope.class);
 
-				if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
-					Friend friend = msg.getChanged().getFriend();
-					switch (friend.getPresence()) {
-						case ONLINE:
-							context.assertTrue(didGetOffline.compareAndSet(false, false));
-							context.assertTrue(didGetOnline.compareAndSet(false, true));
-							break;
-						case OFFLINE:
-							context.assertTrue(didGetOnline.compareAndSet(true, false));
-							context.assertTrue(didGetOffline.compareAndSet(false, true));
-							async.complete();
-							break;
+					if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
+						Friend friend = msg.getChanged().getFriend();
+						switch (friend.getPresence()) {
+							case ONLINE:
+								context.assertTrue(didGetOffline.compareAndSet(false, false));
+								context.assertTrue(didGetOnline.compareAndSet(false, true));
+								break;
+							case OFFLINE:
+								context.assertTrue(didGetOnline.compareAndSet(true, false));
+								context.assertTrue(didGetOffline.compareAndSet(false, true));
+								async.complete();
+								break;
+						}
 					}
-				}
-			});
+				});
 
-			Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
-			Long tick = awaitEvent(t -> vertx.setTimer(5001L, t));
-			ws1.close();
+				Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
+				Long tick = awaitEvent(t -> vertx.setTimer(5001L, t));
+			} finally {
+				for (WebSocket socket : sockets) {
+					socket.close();
+				}
+			}
 		});
 	}
 }

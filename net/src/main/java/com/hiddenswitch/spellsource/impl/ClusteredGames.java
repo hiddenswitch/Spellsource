@@ -1,9 +1,11 @@
 package com.hiddenswitch.spellsource.impl;
 
+import co.paralleluniverse.strands.Strand;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.client.models.Replay;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
@@ -18,6 +20,7 @@ import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
+import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
@@ -40,6 +43,7 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.defer;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
+import static java.util.stream.Collectors.toList;
 
 public class ClusteredGames extends SyncVerticle implements Games {
 	private Registration registration;
@@ -50,6 +54,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		CardCatalogue.loadCardsFromPackage();
 
 		registration = Rpc.register(this, Games.class);
+		LOGGER.info("start: Consumers={}", registration.getMessageConsumers().stream().map(MessageConsumer::address).collect(toList()));
 	}
 
 	@Override
@@ -113,6 +118,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				contexts.put(request.getGameId(), context);
 				// Plays the game context in its own fiber
 				context.play(true);
+				context.awaitHandlersReady();
+				// TODO: Explore why we still don't have the registrations ready
+				Strand.sleep(4000);
 				return response;
 			} catch (RuntimeException any) {
 				// If an error occurred, make sure to remove users from the games we just put them into.
@@ -151,7 +159,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	@Suspendable
 	private void endGame(GameId gameId) throws InterruptedException, SuspendExecution {
 		if (!contexts.containsKey(gameId)) {
-			Games.LOGGER.debug("endGame {}: This deployment with deploymentId {} does not contain the gameId", gameId, deploymentID());
+			Games.LOGGER.debug("endGame {}: This deployment with deploymentId {} does not contain the gameId, or this game has already been ended", gameId, deploymentID());
 			return;
 		}
 		Games.LOGGER.debug("endGame {}", gameId);
@@ -204,9 +212,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		try {
 			// Let's kick this off to be nonblocking of ending the game here, since things are sensitive to this timing
 			boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
-			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(Collectors.toList());
-			List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(Collectors.toList());
-			List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(Collectors.toList());
+			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
+			List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
+			List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(toList());
 			defer(v -> {
 				try {
 					GameRecord gameRecord = new GameRecord(gameId.toString())
@@ -215,7 +223,11 @@ public class ClusteredGames extends SyncVerticle implements Games {
 							.setPlayerUserIds(userIds)
 							.setDeckIds(deckIds)
 							.setPlayerNames(playerNames);
-					gameRecord.setReplay(Games.replayFromGameContext(gameContext));
+					Replay replay = Games.replayFromGameContext(gameContext);
+					if (replay == null) {
+						LOGGER.error("endGame {}: Could not save replay due to error restoring the game state", gameId);
+					}
+					gameRecord.setReplay(replay);
 					mongo().insert(Games.GAMES, mapFrom(gameRecord));
 					LOGGER.info("endGame {}: Saved replay", gameId);
 				} catch (Throwable any) {

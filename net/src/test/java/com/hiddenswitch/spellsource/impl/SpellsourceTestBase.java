@@ -1,9 +1,10 @@
 package com.hiddenswitch.spellsource.impl;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.strands.SuspendableAction1;
-import com.github.fromage.quasi.strands.SuspendableRunnable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableRunnable;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
@@ -46,6 +47,7 @@ public abstract class SpellsourceTestBase {
 	protected static Vertx vertx;
 
 	@BeforeClass
+	@Suspendable
 	public static void setUp(TestContext context) {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
@@ -54,6 +56,8 @@ public abstract class SpellsourceTestBase {
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
+					.setWarningExceptionTime(90000L)
+					.setMaxEventLoopExecuteTime(90000L)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
@@ -122,7 +126,7 @@ public abstract class SpellsourceTestBase {
 			}));
 		});
 		try {
-			latch.await(28L, TimeUnit.SECONDS);
+			latch.await(90L, TimeUnit.SECONDS);
 		} catch (InterruptedException e) {
 			fail();
 		}

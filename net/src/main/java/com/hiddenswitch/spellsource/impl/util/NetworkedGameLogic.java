@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.impl.util;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.ext.sync.Sync;

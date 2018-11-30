@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.logic;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
 import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;

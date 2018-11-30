@@ -1,5 +1,5 @@
 dependencies {
-    compile files("lib/quasar-core-0.7.9-jdk8.jar")
+    compile files("lib/quasar-core-0.8.0.jar")
     compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'
     compile group: 'io.vertx', name: 'vertx-core', version: '3.5.1'
     compile group: 'io.vertx', name: 'vertx-docgen', version: '3.5.1'
@@ -19,9 +19,9 @@ dependencies {
 }
 
 tasks.withType(JavaExec) {
-    jvmArgs "-javaagent:lib/quasar-core-0.7.9-jdk8.jar=mb"
+    jvmArgs "-javaagent:lib/quasar-core-0.8.0.jar=mb"
 }
 
 test {
-    jvmArgs "-javaagent:lib/quasar-core-0.7.9-jdk8.jar=mb"
+    jvmArgs "-javaagent:lib/quasar-core-0.8.0.jar=mb"
 }

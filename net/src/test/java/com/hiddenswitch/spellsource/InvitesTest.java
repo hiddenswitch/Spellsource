@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.concurrent.CountDownLatch;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -14,7 +14,7 @@ import org.junit.Test;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
-import static com.github.fromage.quasi.strands.Strand.sleep;
+import static co.paralleluniverse.strands.Strand.sleep;
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static org.junit.Assert.*;
 

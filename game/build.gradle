@@ -28,7 +28,7 @@ test {
 
 task scanSuspendables {
     doLast {
-        ant.taskdef(name: 'scanSuspendables', classname: 'com.github.fromage.quasi.fibers.instrument.SuspendablesScanner',
+        ant.taskdef(name: 'scanSuspendables', classname: 'co.paralleluniverse.fibers.instrument.SuspendablesScanner',
                 classpath: "build/classes/main:build/resources/main:${configurations.runtime.asPath}")
         ant.scanSuspendables(
                 auto: true,

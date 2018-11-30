@@ -6,7 +6,7 @@
  * backend.
  * <p>
  * The convention is to implement as much server code as possible as a static method in an interface. Mark the method as
- * {@link com.github.fromage.quasi.fibers.Suspendable} or make it {@code throw SuspendExecution} to ensure it works as a
+ * {@link co.paralleluniverse.fibers.Suspendable} or make it {@code throw SuspendExecution} to ensure it works as a
  * fiber. Then you can use methods like {@link com.hiddenswitch.spellsource.util.Mongo#findOne(java.lang.String,
  * io.vertx.core.json.JsonObject, io.vertx.core.json.JsonObject)}, which appears synchronous but actually uses Quasar
  * fibers to perform an async call with Netty (the high performance way of doing things).
@@ -44,7 +44,7 @@
  * </pre>
  * Observe that {@code "h"} is the callback for the async function {@code sendMail}.
  * <p>
- * Callbacks that should be executed as fibers can be wrapped with {@link com.hiddenswitch.spellsource.util.Sync#suspendableHandler(com.github.fromage.quasi.strands.SuspendableAction1)}.
+ * Callbacks that should be executed as fibers can be wrapped with {@link com.hiddenswitch.spellsource.util.Sync#suspendableHandler(co.paralleluniverse.strands.SuspendableAction1)}.
  * <p>
  * To easily access the Spellsource database, use {@link com.hiddenswitch.spellsource.util.Mongo#mongo()} in a fiber:
  * <pre>

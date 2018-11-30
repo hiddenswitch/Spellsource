@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.impl.SuspendableVertxCounter;
 import io.vertx.core.Vertx;
 import io.vertx.core.shareddata.Counter;
