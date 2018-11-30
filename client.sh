@@ -2,8 +2,8 @@
 set -e
 mkdir -pv "clientcsharp"
 rm -rf "./client/"
-./gradlew swagger --offline
-./gradlew swaggerClient --offline
+gradle swagger
+gradle swaggerClient
 
 INPUT_DIR="clientcsharp"
 OUTPUT_DIR="../Spellsource-Client/Assets/Plugins/Client"
