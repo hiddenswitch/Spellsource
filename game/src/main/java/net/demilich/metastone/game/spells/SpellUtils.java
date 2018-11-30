@@ -609,6 +609,17 @@ public class SpellUtils {
 		return null;
 	}
 
+	/**
+	 * When the target {@link Attribute#KEEPS_ENCHANTMENTS}, populates the provided {@link AttributeMap} with the
+	 * keyword-based enchantments to keep.
+	 * <p>
+	 * This ought to include taunt, divine shield, stealth etc. but does not, because it is primarily designed for
+	 * Kingsbane (weapons aren't stealthed).
+	 *
+	 * @param target
+	 * @param map
+	 * @return
+	 */
 	static AttributeMap processKeptEnchantments(Entity target, AttributeMap map) {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
@@ -627,7 +638,7 @@ public class SpellUtils {
 		return map;
 	}
 
-	static void processKeptEnchantments2(GameContext context, Entity target, Card card) {
+	static void processKeptEnchantments(GameContext context, Entity target, Card card) {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
 					.filter(target::hasAttribute).forEach(k -> card.getAttributes().put(k, target.getAttributes().get(k)));

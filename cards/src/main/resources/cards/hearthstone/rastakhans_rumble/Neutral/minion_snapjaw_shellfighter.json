@@ -1,0 +1,50 @@
+{
+  "name": "Snapjaw Shellfighter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "description": "Whenever an adjacent minion takes damage, this minion takes it instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "CardPropertyCondition",
+            "target": "EVENT_TARGET",
+            "card": "minion_snapjaw_shellfighter",
+            "invert": true
+          },
+          {
+            "class": "EventTargetMatchesReferenceCondition",
+            "target": "ADJACENT_MINIONS"
+          }
+        ]
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "TRIGGER_HOST"
+        },
+        {
+          "class": "ModifyDamageSpell",
+          "value": 0,
+          "operation": "SET"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

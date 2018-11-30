@@ -1,0 +1,28 @@
+{
+  "name": "Treespeaker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "heroClass": "BROWN",
+  "rarity": "EPIC",
+  "description": "Battlecry: Transform your Treants into 5/5 Ancients.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "treant"
+      },
+      "card": "token_ancient"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

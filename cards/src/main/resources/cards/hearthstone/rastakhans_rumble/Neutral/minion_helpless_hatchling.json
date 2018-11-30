@@ -1,0 +1,33 @@
+{
+  "name": "Helpless Hatchling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "heroClass": "ANY",
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Reduce the Cost of a Beast in your hand by (1).",
+  "deathrattle": {
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_HAND",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "target": "SELF",
+      "value": 1,
+      "operation": "SUBTRACT"
+    },
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "BEAST"
+    },
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

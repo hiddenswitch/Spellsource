@@ -1,0 +1,24 @@
+{
+  "name": "Blood Troll Sapper",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 8,
+  "heroClass": "VIOLET",
+  "rarity": "COMMON",
+  "description": "After a friendly minion dies, deal 2 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2,
+      "target": "ENEMY_HERO"
+    }
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}
