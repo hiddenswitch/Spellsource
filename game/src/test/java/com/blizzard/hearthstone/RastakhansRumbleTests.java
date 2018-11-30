@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.*;
@@ -324,6 +325,7 @@ public class RastakhansRumbleTests extends TestBase {
 	}
 
 	@Test
+	@Ignore("card needs to be re-enabled")
 	public void testImmortalPrelate() {
 		runGym((context, player, opponent) -> {
 			Minion ip = playMinionCard(context, player, "minion_immortal_prelate");
