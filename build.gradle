@@ -13,14 +13,16 @@ import io.swagger.codegen.DefaultGenerator
 
 task(swagger) {
     def input = "swagger-api.yaml"
-    inputs.file(input)
     def output = file('client')
+    def templateDir = file('swagger-templates/java')
+    
+    inputs.file(input)
     outputs.dir(output)
     doLast {
         def config = new CodegenConfigurator()
         config.setInputSpec(input)
         config.setOutputDir(output.path)
-        config.setTemplateDir('swagger-templates/java')
+        config.setTemplateDir(templateDir.absolutePath)
         config.setLang('java')
         config.setAdditionalProperties([
                 'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
