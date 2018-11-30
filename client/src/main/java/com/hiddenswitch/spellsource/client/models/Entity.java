@@ -105,7 +105,7 @@ public class Entity implements Serializable {
    * The entity&#39;s ID in the game.
    * @return id
   **/
-  @ApiModelProperty(required = true, value = "The entity's ID in the game.")
+  @ApiModelProperty(value = "The entity's ID in the game.")
   public Integer getId() {
     return id;
   }
