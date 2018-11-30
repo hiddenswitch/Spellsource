@@ -12,6 +12,7 @@ gradle net:test --tests=com.hiddenswitch.spellsource.AccountsTest
 gradle net:test --tests=com.hiddenswitch.spellsource.BotsTest
 gradle net:test --tests=com.hiddenswitch.spellsource.BroadcastTest
 gradle net:test --tests=com.hiddenswitch.spellsource.CardsTest
+# This is too spotty on automation, even though it does pass.
 # gradle net:test --tests=com.hiddenswitch.spellsource.ClusterTest
 gradle net:test --tests=com.hiddenswitch.spellsource.ConnectionTest
 gradle net:test --tests=com.hiddenswitch.spellsource.ConversationTest
