@@ -21,13 +21,13 @@
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",
-          "attribute": "RUSH",
-          "spell": {
-            "class": "BuffSpell",
-            "target": "OUTPUT",
-            "attackBonus": 5,
-            "hpBonus": 5
-          }
+          "attribute": "RUSH"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "OUTPUT",
+          "attackBonus": 5,
+          "hpBonus": 5
         }
       }
     }
