@@ -5,7 +5,11 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.1-2.0.12 (Friday November 30th, 2018)
+#### 0.7.2-2.0.12 (Saturday, December 1st, 2018)
+
+Server improvements should lead to even more reliable connections.
+
+##### 0.7.1-2.0.12 (Friday November 30th, 2018)
 
 Thanks again to a contribution from @doombubbles, the remaining Rastkhan's Rumble cards have been completed.
 
@@ -15,7 +19,7 @@ Immortal Prelate is still under development.
 
  - All Rastakhan's Rumble cards except Immortal Prelate have been added.
 
-##### 0.7.0-2.0.12 (Friday, November 30th, 2018)
+**0.7.0-2.0.12** (Friday, November 30th, 2018)
 
 Server improvements should lead to greater reliability of connections.
 
