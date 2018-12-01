@@ -419,6 +419,7 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(25)
 						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
 							changeCardId("spell_lesser_oynx_spellstone", "spell_lesser_onyx_spellstone");
 						}))
 				.migrateTo(25, then2 ->
@@ -572,7 +573,9 @@ public class Spellsource {
 
 	@Suspendable
 	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
-		if (CardCatalogue.getCardById(newId) == null) {
+		try {
+			CardCatalogue.getCardById(newId);
+		} catch (Throwable any) {
 			logger.error("changeCardId: Cannot change {} to {} because the new ID does not exist", oldId, newId);
 			return new MongoClientUpdateResult();
 		}

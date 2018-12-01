@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.models.CreateAccountResponse;
 import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Vertx;
+import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.Json;
 import io.vertx.ext.unit.Async;
@@ -127,32 +128,37 @@ public class FriendTest extends SpellsourceTestBase {
 			try {
 				CreateAccountResponse account1 = createRandomAccount();
 				CreateAccountResponse account2 = createRandomAccount();
-				WebSocket ws1 = awaitEvent(h -> vertx.createHttpClient().websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), h));
-				sockets.add(ws1);
-				WebSocket ws2 = awaitEvent(h -> vertx.createHttpClient().websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), h));
-				sockets.add(ws2);
+				HttpClient httpClient = Vertx.currentContext().owner().createHttpClient();
 				AtomicBoolean didGetOnline = new AtomicBoolean();
 				AtomicBoolean didGetOffline = new AtomicBoolean();
-				ws2.handler(buf -> {
-					Envelope msg = Json.decodeValue(buf, Envelope.class);
+				CountDownLatch atLeastConnected = new CountDownLatch(1);
 
-					if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
-						Friend friend = msg.getChanged().getFriend();
-						switch (friend.getPresence()) {
-							case ONLINE:
-								context.assertTrue(didGetOffline.compareAndSet(false, false));
-								context.assertTrue(didGetOnline.compareAndSet(false, true));
-								latch.countDown();
-								break;
-							case OFFLINE:
-								context.assertTrue(didGetOnline.compareAndSet(true, false));
-								context.assertTrue(didGetOffline.compareAndSet(false, true));
-								latch.countDown();
-								break;
+				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account1.getLoginToken().getToken(), sockets::add);
+
+				httpClient.websocket(8080, "localhost", "/realtime?X-Auth-Token=" + account2.getLoginToken().getToken(), ws2 -> {
+					sockets.add(ws2);
+
+					ws2.handler(buf -> {
+						Envelope msg = Json.decodeValue(buf, Envelope.class);
+						atLeastConnected.countDown();
+						if (msg.getChanged() != null && msg.getChanged().getFriend() != null) {
+							Friend friend = msg.getChanged().getFriend();
+							switch (friend.getPresence()) {
+								case ONLINE:
+									context.assertTrue(didGetOffline.compareAndSet(false, false));
+									context.assertTrue(didGetOnline.compareAndSet(false, true));
+									latch.countDown();
+									break;
+								case OFFLINE:
+									context.assertTrue(didGetOnline.compareAndSet(true, false));
+									context.assertTrue(didGetOffline.compareAndSet(false, true));
+									latch.countDown();
+									break;
+							}
 						}
-					}
+					});
 				});
-
+				atLeastConnected.await();
 				Friends.putFriend(Accounts.findOne(account1.getUserId()), new FriendPutRequest().usernameWithToken(account2.getRecord().getUsername() + "#" + account2.getRecord().getPrivacyToken()));
 				latch.await();
 			} finally {

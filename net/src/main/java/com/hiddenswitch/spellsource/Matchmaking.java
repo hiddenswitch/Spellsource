@@ -65,11 +65,11 @@ public interface Matchmaking extends Verticle {
 	 */
 	@Suspendable
 	static boolean enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
-		SuspendableLock lock = null;
+//		SuspendableLock lock = null;
 		LOGGER.trace("enqueue {}: Enqueueing {}", request.getUserId(), request);
 		boolean succeeded = false;
 		try {
-			lock = Connection.methodLock(request.getUserId());
+//			lock = Connection.methodLock(request.getUserId());
 			// Check if the user is already in a game
 			UserId userId = new UserId(request.getUserId());
 			if (Games.getUsersInGames().containsKey(userId)) {
@@ -92,9 +92,9 @@ public interface Matchmaking extends Verticle {
 			LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
 			succeeded = true;
 		} finally {
-			if (lock != null) {
-				lock.release();
-			}
+//			if (lock != null) {
+//				lock.release();
+//			}
 		}
 		return succeeded;
 	}
@@ -112,9 +112,9 @@ public interface Matchmaking extends Verticle {
 
 	@Suspendable
 	static void dequeue(UserId userId) throws SuspendExecution {
-		SuspendableLock lock = null; // Connection.methodLock(userId.toString());
+//		SuspendableLock lock = null; // Connection.methodLock(userId.toString());
 		try {
-			lock = Connection.methodLock(userId.toString());
+//			lock = Connection.methodLock(userId.toString());
 			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
 			String queueId = currentQueue.remove(userId);
 			if (queueId != null) {
@@ -127,9 +127,9 @@ public interface Matchmaking extends Verticle {
 				LOGGER.trace("dequeue {}: User was not enqueued", userId);
 			}
 		} finally {
-			if (lock != null) {
-				lock.release();
-			}
+//			if (lock != null) {
+//				lock.release();
+//			}
 		}
 	}
 
@@ -199,10 +199,8 @@ public interface Matchmaking extends Verticle {
 							for (MatchmakingRequest existingRequest : thisMatchRequests) {
 								userToQueue.remove(new UserId(existingRequest.getUserId()));
 								WriteStream<Envelope> connection = Connection.writeStream(existingRequest.getUserId());
-								if (connection != null) {
-									// Notify the user they were dequeued
-									connection.write(new Envelope().result(new EnvelopeResult().dequeue(new DefaultMethodResponse())));
-								}
+								// Notify the user they were dequeued
+								connection.write(new Envelope().result(new EnvelopeResult().dequeue(new DefaultMethodResponse())));
 							}
 							// queue.destroy() is dealt with outside of here
 							break;
@@ -254,9 +252,7 @@ public interface Matchmaking extends Verticle {
 
 							WriteStream<Envelope> connection = Connection.writeStream(user.getUserId());
 
-							if (connection != null) {
-								connection.write(gameReadyMessage());
-							}
+							connection.write(gameReadyMessage());
 
 							userToQueue.remove(new UserId(user.getUserId()));
 							return;
@@ -286,11 +282,7 @@ public interface Matchmaking extends Verticle {
 							for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
 								@SuppressWarnings("unchecked")
 								WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
-								if (connection != null) {
-									connection.write(gameReadyMessage());
-								} else {
-									LOGGER.warn("startMatchmaker {}: Tried to retrieve a connection for a user but it was null", queueId);
-								}
+								connection.write(gameReadyMessage());
 							}
 
 							userToQueue.remove(new UserId(user1.getUserId()));

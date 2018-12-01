@@ -79,17 +79,15 @@ public interface Friends {
 
 		// Update both users with the new friend records
 		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
-		if (userConnection != null) {
-			userConnection.write(new Envelope().added(new EnvelopeAdded().friend(friendRecord.toFriendDto())));
-		}
+		userConnection.write(new Envelope().added(new EnvelopeAdded().friend(friendRecord.toFriendDto())));
+
 		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
-		if (friendConnection != null) {
-			friendConnection.write(new Envelope().added(new EnvelopeAdded().friend(friendOfFriendRecord.toFriendDto())));
-		}
+		friendConnection.write(new Envelope().added(new EnvelopeAdded().friend(friendOfFriendRecord.toFriendDto())));
+
 
 		// Update presence for both users
-		Presence.setPresence(userId);
-		Presence.setPresence(friendId);
+		Presence.updatePresence(userId);
+		Presence.updatePresence(friendId);
 		return new FriendPutResponse().friend(friendRecord.toFriendDto());
 	}
 
@@ -123,13 +121,9 @@ public interface Friends {
 
 		// Update both users with the new friend records
 		WriteStream<Envelope> userConnection = Connection.writeStream(userId);
-		if (userConnection != null) {
-			userConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendRecord.getFriendId())));
-		}
+		userConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendRecord.getFriendId())));
 		WriteStream<Envelope> friendConnection = Connection.writeStream(friendId);
-		if (friendConnection != null) {
-			friendConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendOfFriendRecord.getFriendId())));
-		}
+		friendConnection.write(new Envelope().removed(new EnvelopeRemoved().friendId(friendOfFriendRecord.getFriendId())));
 
 		return new UnfriendResponse().deletedFriend(friendRecord.toFriendDto());
 	}
