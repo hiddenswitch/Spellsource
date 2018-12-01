@@ -416,7 +416,12 @@ public class Spellsource {
 							mongo().createCollection(Games.GAMES);
 							mongo().createIndex(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, 1));
 						}))
-				.migrateTo(24, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(25)
+						.withUp(thisVertx -> {
+							changeCardId("spell_lesser_oynx_spellstone", "spell_lesser_onyx_spellstone");
+						}))
+				.migrateTo(25, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
