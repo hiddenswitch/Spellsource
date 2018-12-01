@@ -974,7 +974,7 @@ public interface Games extends Verticle {
 		Card card = actor.getSourceCard();
 		EntityState entityState = new EntityState();
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.description(actor.getDescription().replace("#", "").replace("[","").replace("]",""))
+				.description(actor.getDescription().replace("#", "").replace("[", "").replace("]", ""))
 				.name(actor.getName())
 				.id(actor.getId())
 				.cardId(card.getCardId());
@@ -1134,7 +1134,7 @@ public interface Games extends Verticle {
 						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
 					}
 				}
-			} else description = description.replace("[","").replace("]","");
+			} else description = description.replace("[", "").replace("]", "");
 
 			// Handle spell damage
 			if (card.isSpell()) {
@@ -1437,7 +1437,7 @@ public interface Games extends Verticle {
 			// Append the final game states / deltas.
 			augmentReplayWithCtx.accept(replayCtx);
 		} catch (Throwable any) {
-			return null;
+			LOGGER.error("replayFromGameContext {}:", originalCtx.getGameId(), any);
 		}
 
 		return replay;

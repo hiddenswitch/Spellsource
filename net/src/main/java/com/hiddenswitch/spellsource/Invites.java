@@ -93,9 +93,7 @@ public interface Invites {
 		Map<String, WriteStream<Envelope>> connections = new HashMap<>();
 		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
 			WriteStream<Envelope> fromConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getFromUserId(), Connection::writeStream);
-			if (fromConnection != null) {
-				fromConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
-			}
+			fromConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
 		}
 
 		shouldBeExpiredInvites = mongo().find(INVITES, json(
@@ -106,9 +104,7 @@ public interface Invites {
 		totalExpied += shouldBeExpiredInvites.size();
 		for (Invite shouldBeExpiredInvite : shouldBeExpiredInvites) {
 			WriteStream<Envelope> toConnection = connections.computeIfAbsent(shouldBeExpiredInvite.getToUserId(), Connection::writeStream);
-			if (toConnection != null) {
-				toConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
-			}
+			toConnection.write(new Envelope().changed(new EnvelopeChanged().invite(new Invite().id(shouldBeExpiredInvite.getId()).status(StatusEnum.TIMEOUT))));
 		}
 
 		MongoClientUpdateResult updateResult = mongo().updateCollectionWithOptions(INVITES,
@@ -249,6 +245,7 @@ public interface Invites {
 						.setRanked(false)
 						.setStillConnectedTimeout(2000L)
 						.setStartsAutomatically(true)
+						.setJoin(true)
 						.setRules(new CardDesc[0]));
 
 				// If this point forward throws an exception, the matchmaker will be cleaned up.
@@ -296,27 +293,18 @@ public interface Invites {
 		// Notify both users of the new invite, but only wait to see if the recipient is around to actually receive it right
 		// now. We'll update the record immediately and only insert it into the db with the proper status
 		WriteStream<Envelope> toUserConnection = Connection.writeStream(invite.getToUserId());
-		if (toUserConnection != null) {
-			if (invite.getStatus() == StatusEnum.UNDELIVERED) {
-				invite.status(StatusEnum.PENDING);
-			}
-			toUserConnection.write(
-					new Envelope().added(new EnvelopeAdded().invite(invite))
-			);
+		if (invite.getStatus() == StatusEnum.UNDELIVERED) {
+			invite.status(StatusEnum.PENDING);
 		}
+		toUserConnection.write(
+				new Envelope().added(new EnvelopeAdded().invite(invite))
+		);
 
 		// The sender can receive this invite at any time through the channel since they will receive it in their post
 		// response also.
-		Connection.writeStream(invite.getFromUserId(), res -> {
-			WriteStream<Envelope> conn = res.result();
-			if (conn == null) {
-				return;
-			}
-
-			conn.write(
-					new Envelope().added(new EnvelopeAdded().invite(invite))
-			);
-		});
+		Connection.writeStream(invite.getFromUserId()).write(
+				new Envelope().added(new EnvelopeAdded().invite(invite))
+		);
 	}
 
 	/**
@@ -399,16 +387,12 @@ public interface Invites {
 
 		env.changed(new EnvelopeChanged().invite(invite));
 		WriteStream<Envelope> recipientConnection = Connection.writeStream(recipient.getId());
-		if (recipientConnection != null) {
-			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
-			recipientConnection.write(env);
-		}
+		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+		recipientConnection.write(env);
 
 		WriteStream<Envelope> senderConnection = Connection.writeStream(invite.getFromUserId());
-		if (senderConnection != null) {
-			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
-			senderConnection.write(new Envelope().changed(new EnvelopeChanged().invite(invite)));
-		}
+		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+		senderConnection.write(new Envelope().changed(new EnvelopeChanged().invite(invite)));
 
 		// TODO: Only yield to the caller when the game has started?
 
@@ -459,16 +443,12 @@ public interface Invites {
 
 		Envelope env = new Envelope().changed(new EnvelopeChanged().invite(invite));
 		WriteStream<Envelope> recipientConnection = Connection.writeStream(invite.getToUserId());
-		if (recipientConnection != null) {
-			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
-			recipientConnection.write(env);
-		}
+		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+		recipientConnection.write(env);
 
 		WriteStream<Envelope> senderConnection = Connection.writeStream(invite.getFromUserId());
-		if (senderConnection != null) {
-			// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
-			senderConnection.write(env);
-		}
+		// Notify the client they've been enqueued by accepting. This should shortly lead to the game starting.
+		senderConnection.write(env);
 
 		return new InviteResponse().invite(invite);
 	}

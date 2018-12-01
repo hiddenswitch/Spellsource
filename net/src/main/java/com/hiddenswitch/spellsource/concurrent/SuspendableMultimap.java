@@ -12,8 +12,12 @@ import com.hiddenswitch.spellsource.concurrent.impl.LocalMultimap;
 import com.hiddenswitch.spellsource.concurrent.impl.RxEntryListenerAdaptor;
 import com.hiddenswitch.spellsource.concurrent.impl.SingleKeyAddedChangedRemoved;
 import com.hiddenswitch.spellsource.concurrent.impl.SuspendableHazelcastMultimap;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.*;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
+import io.vertx.core.spi.cluster.AsyncMultiMap;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -50,6 +54,7 @@ public interface SuspendableMultimap<K, V> extends AddedChangedRemoved<K, V> {
 			return new SingleKeyAddedChangedRemoved<>(key, map);
 		}
 	}
+
 	// Query Operations
 
 	/**

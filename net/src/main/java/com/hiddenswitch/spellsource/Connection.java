@@ -3,29 +3,24 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
-import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.impl.ConnectionImpl;
 import com.hiddenswitch.spellsource.impl.EnvelopeMessageCodec;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
-import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
+import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.http.ServerWebSocket;
-import io.vertx.core.shareddata.AsyncMap;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
 import java.util.concurrent.ConcurrentLinkedDeque;
-import java.util.concurrent.TimeoutException;
-import java.util.concurrent.atomic.AtomicReference;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -60,20 +55,11 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  * 	   }
  *   }
  * </pre>
- * Observe the use of the {@link Connection#writeStream(UserId)}, which allows any code anywhere to send a message to a
+ * Observe the use of the {@link Connection#writeStream(String)}}, which allows any code anywhere to send a message to a
  * connected client. The {@link #write(Envelope)} method can also be used in the {@code connected} handler.
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Logger LOGGER = LoggerFactory.getLogger(Connection.class);
-
-	@Suspendable
-	static SuspendableMap<UserId, String> getConnections() {
-		return SuspendableMap.getOrCreate("Connection::connections");
-	}
-
-	static void getConnections(Handler<AsyncResult<AsyncMap<UserId, String>>> handler) {
-		SuspendableMap.getOrCreate("Connection::connections", handler);
-	}
 
 	/**
 	 * Retrieves a valid reference to write to a connection from anywhere, as long as the event bus on the other node is
@@ -82,40 +68,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @param userId The user ID whose connection should be retrieved
 	 * @return A connection object.
 	 */
-	@Suspendable
-	static WriteStream<Envelope> writeStream(String userId) {
-		SuspendableMap<UserId, String> connections = getConnections();
-		String handlerId = connections.get(new UserId(userId));
-		if (handlerId == null) {
-			return null;
-		}
-
-		return Vertx.currentContext().owner().eventBus().publisher(handlerId);
+	static @NotNull
+	WriteStream<Envelope> writeStream(@NotNull String userId) {
+		return Vertx.currentContext().owner().eventBus().publisher(toBusAddress(userId), new DeliveryOptions().setCodecName("envelope"));
 	}
 
-	static WriteStream<Envelope> writeStream(UserId userId) throws SuspendExecution {
+	static @NotNull
+	WriteStream<Envelope> writeStream(@NotNull UserId userId) {
 		return writeStream(userId.toString());
-	}
-
-	static void writeStream(String userId, Handler<AsyncResult<WriteStream<Envelope>>> handler) {
-		getConnections(r1 -> {
-			if (r1.failed()) {
-				handler.handle(Future.failedFuture(r1.cause()));
-			} else {
-				r1.result().get(new UserId(userId), r2 -> {
-					if (r2.failed()) {
-						handler.handle(Future.failedFuture(r2.cause()));
-					} else {
-						String handlerId = r2.result();
-						if (handlerId != null) {
-							handler.handle(Future.succeededFuture(Vertx.currentContext().owner().eventBus().publisher(handlerId)));
-						} else {
-							handler.handle(Future.succeededFuture());
-						}
-					}
-				});
-			}
-		});
 	}
 
 	/**
@@ -124,14 +84,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 *
 	 * @param userId
 	 * @return
-	 * @throws SuspendExecution
 	 */
-	static Connection create(String userId) throws SuspendExecution {
-		SuspendableMap<UserId, String> connections = getConnections();
-		String eventBusAddress = "Connection::clusteredConsumer[" + userId + "]-[" + RandomStringUtils.randomAlphanumeric(16) + "]";
-		ConnectionImpl connection = new ConnectionImpl(userId, eventBusAddress);
-		connections.put(new UserId(userId), eventBusAddress);
-		return connection;
+	static Connection create(String userId) {
+		String eventBusAddress = toBusAddress(userId);
+		return new ConnectionImpl(userId, eventBusAddress);
+	}
+
+	static String toBusAddress(String userId) {
+		return "Connection::clusteredConsumer[" + userId + "]";
 	}
 
 	/**
@@ -141,17 +101,13 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @param handler
 	 */
 	static void close(String userId, Handler<AsyncResult<Void>> handler) {
-		getConnections(v1 -> {
-			v1.result().get(new UserId(userId), v2 -> {
-				Vertx.currentContext().owner().eventBus().send(v2.result() + "::closer", Buffer.buffer("close"), res -> {
-					if (res.failed()) {
-						handler.handle(Future.failedFuture(res.cause()));
-						return;
-					}
+		Vertx.currentContext().owner().eventBus().send(Connection.toBusAddress(userId) + "::closer", Buffer.buffer("close"), res -> {
+			if (res.failed()) {
+				handler.handle(Future.failedFuture(res.cause()));
+				return;
+			}
 
-					handler.handle(Future.succeededFuture());
-				});
-			});
+			handler.handle(Future.succeededFuture());
 		});
 	}
 
@@ -214,37 +170,10 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			return;
 		}
 
-		SuspendableLock lock;
 		ServerWebSocket socket;
-
-		/*
-		try {
-			LOGGER.debug("connection {}: Awaiting lock", userId);
-			lock.set(SuspendableLock.lock("Connection::realtime[" + userId + "]", 2800));
-		} catch (VertxException timeout) {
-			if (timeout.getCause() instanceof TimeoutException) {
-				LOGGER.debug("connection {}: Disconnecting other session", userId);
-				try {
-					// close and try again
-					Void res = awaitResult(h -> Connection.close(userId, h));
-					lock.set(SuspendableLock.lock("Connection::realtime[" + userId + "]", 4500));
-				} catch (Throwable any) {
-					routingContext.fail(418);
-					return;
-				}
-			}
-		} catch (Throwable any) {
-			LOGGER.error("connected {}: {}", userId, any.getMessage());
-			routingContext.fail(418);
-			return;
-		}
-
-		*/
 
 		// By the time we try to upgrade the socket, the request might have been closed anyway
 		try {
-			LOGGER.debug("connection {}: Awaiting lock", userId);
-			lock = SuspendableLock.lock("Connection::realtime[" + userId + "]", 2800);
 			LOGGER.debug("connection {}: Upgrading socket", userId);
 			socket = routingContext.request().upgrade();
 		} catch (Throwable any) {
@@ -261,26 +190,25 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		LOGGER.debug("connection {}: Connection created", userId);
 		try {
 			Void ready = awaitResult(h -> connection.setSocket(socket, h));
-			// The lock gets released when the user disconnects
 			connection.endHandler(suspendableHandler(v -> {
-				lock.release();
-				LOGGER.debug("connection {}: Lock released", userId);
+				LOGGER.debug("connection {}: Connection closed", userId);
 			}));
+			connection.exceptionHandler(ex -> {
+				LOGGER.error("connection exceptionHandler {}: {}", userId, ex.getMessage(), ex);
+			});
 			// All handlers should run simultaneously
 			for (Handler<Connection> handler : handlers) {
 				Vertx.currentContext().runOnContext(v -> handler.handle(connection));
 			}
-			connection.exceptionHandler(ex -> {
-				LOGGER.error("connection exceptionHandler {}: {}", userId, ex.getMessage(), ex);
-			});
+
 			LOGGER.debug("connection {}: Connection ready", userId);
 			// Sleep for safety, since it appears there are issues with event bus registrations right now
-			Strand.sleep(2800);
+			Strand.sleep(500);
 			// Send an envelope to indicate that the connection is ready.
 			connection.write(new Envelope());
 		} catch (Throwable any) {
 			LOGGER.error("connected {}: {}", userId, any.getMessage(), any);
-			// This closes the socket and cleans up its handlers
+			// This also closes the socket and cleans up its handlers
 			connection.close(Future.future());
 		}
 	}
@@ -317,7 +245,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * @return This connection
 	 */
 	@Override
-	default Connection write(Envelope data) {
+	default Connection write(@NotNull Envelope data) {
 		return null;
 	}
 

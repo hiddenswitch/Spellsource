@@ -409,6 +409,7 @@ public class BoomsdayProjectTests extends TestBase {
 	@Test
 	public void testAcademicEspionage() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(opponent.getHero().getHeroClass(), HeroClass.RED, "class");
 			playCard(context, player, "spell_academic_espionage");
@@ -419,6 +420,7 @@ public class BoomsdayProjectTests extends TestBase {
 		}, HeroClass.RED, HeroClass.RED);
 
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.BASIC));
 			assertEquals(player.getDeck().size(), 0);
 			assertEquals(opponent.getHero().getHeroClass(), HeroClass.RED, "class");
 			playCard(context, player, "minion_augmented_elekk");

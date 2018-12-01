@@ -39,8 +39,8 @@ public class ConnectionImpl implements Connection {
 		consumer.handler(msg -> {
 			socket.write(Buffer.buffer(Json.encode(msg.body())));
 		});
-		MessageConsumer<Buffer> closerConusmer = eventBus.consumer(getEventBusCloserAddress());
-		closerConusmer.handler(msg -> {
+		MessageConsumer<Buffer> closeConsumer = eventBus.consumer(getEventBusCloserAddress());
+		closeConsumer.handler(msg -> {
 			try {
 				socket.closeHandler(then -> {
 					msg.reply(Buffer.buffer("closed"));
@@ -85,25 +85,15 @@ public class ConnectionImpl implements Connection {
 			handlers.clear();
 			endHandlers.clear();
 			consumer.unregister();
-			closerConusmer.unregister();
+			closeConsumer.unregister();
 			Connection.LOGGER.debug("connection endHandler {}: Close complete, removing handler from event bus", userId);
-			Connection.getConnections(connections -> {
-				if (connections.failed()) {
-					Connection.LOGGER.error("connection endHandler {}: Failed to unregister connection: {}", userId, connections.cause());
-					return;
-				}
-
-				connections.result().removeIfPresent(new UserId(userId), eventBusAddress, v2 -> {
-					Connection.LOGGER.debug("connection endHandler {}: Connection closed: {}", userId, v2.result());
-				});
-			});
 		}));
 
 		if (readyHandler != null) {
 			Future<Void> v1 = Future.future();
 			Future<Void> v2 = Future.future();
 			consumer.completionHandler(v1);
-			closerConusmer.completionHandler(v2);
+			closeConsumer.completionHandler(v2);
 			CompositeFuture.join(v1, v2).setHandler(v -> {
 				readyHandler.handle(v.succeeded() ? Future.succeededFuture() : Future.failedFuture(v.cause()));
 			});
@@ -117,7 +107,7 @@ public class ConnectionImpl implements Connection {
 	}
 
 	@Override
-	public Connection write(Envelope data) {
+	public Connection write(@NotNull Envelope data) {
 		socket.write(Buffer.buffer(Json.encode(data)));
 		return this;
 	}
