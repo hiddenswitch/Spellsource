@@ -9,6 +9,10 @@ echo Building
 ./gradlew clean >/dev/null
 ./gradlew net:shadowJar >/dev/null
 
+cd www
+./deploy.sh
+cd ..
+
 # Package the two necessary files into the right places into a zip file
 zip artifact.zip \
     ./Dockerfile \
