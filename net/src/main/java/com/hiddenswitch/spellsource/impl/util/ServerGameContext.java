@@ -396,8 +396,9 @@ public class ServerGameContext extends GameContext implements Server {
 
 		// Await both clients ready for 10s
 		Future bothClientsReady;
+		long timeout = 10000L;
 		if (!clientsReady.values().stream().allMatch(Future::isComplete)) {
-			bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, 10000L);
+			bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, timeout);
 		} else {
 			bothClientsReady = Future.succeededFuture();
 		}
@@ -408,7 +409,7 @@ public class ServerGameContext extends GameContext implements Server {
 			// lead to a double loss
 			for (Map.Entry<Integer, Future<Client>> entry : clientsReady.entrySet()) {
 				if (!entry.getValue().isComplete()) {
-					LOGGER.warn("init {}: Game prematurely ended because player {} did not connect in 25s", getGameId(), entry.getKey());
+					LOGGER.warn("init {}: Game prematurely ended because player {} did not connect in {}ms", getGameId(), entry.getKey(), timeout);
 					getLogic().concede(entry.getKey());
 				}
 			}
