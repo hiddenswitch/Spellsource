@@ -19,8 +19,7 @@ ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.AccountsTest
 ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.BotsTest
 ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.BroadcastTest
 ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.CardsTest
-# This is too spotty on automation, even though it does pass.
-# ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ClusterTest
+${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ClusterTest
 ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ConnectionTest
 ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ConversationTest
 ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.DeckParsingTest
