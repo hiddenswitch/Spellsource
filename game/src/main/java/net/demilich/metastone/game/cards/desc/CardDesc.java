@@ -1073,7 +1073,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 			Object val = node.getValue();
 			if (val instanceof SpellDesc) {
 				SpellDesc spell = (SpellDesc) val;
-				return RevealCardSpell.class.isAssignableFrom(spell.getDescClass()) && spell.getTarget().equals(EntityReference.SELF);
+				return RevealCardSpell.class.isAssignableFrom(spell.getDescClass())
+						&& spell.getTarget() != null
+						&& spell.getTarget().equals(EntityReference.SELF);
 			}
 			return false;
 		});

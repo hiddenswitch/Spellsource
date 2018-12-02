@@ -398,7 +398,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 		// Await both clients ready for 10s
 		Future bothClientsReady;
-		long timeout = 10000L;
+		long timeout = 25000L;
 		if (!clientsReady.values().stream().allMatch(Future::isComplete)) {
 			bothClientsReady = awaitResult(CompositeFuture.join(new ArrayList<>(clientsReady.values()))::setHandler, timeout);
 		} else {
@@ -641,7 +641,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	public void resume() {
 		if (!isRunning()) {
-			return;
+			endGame();
 		}
 		while (!updateAndGetGameOver()) {
 			if (!isRunning()) {

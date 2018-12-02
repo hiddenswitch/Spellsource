@@ -5,7 +5,17 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018)
+#### 0.7.4-2.0.12 (Sunday, December 2nd, 2018)
+
+###### Usability Fixes:
+
+ - The client now has 25 seconds to connect to a game, instead of just 10 seconds.
+
+###### Content Fixes:
+
+ - Cards that reveal cards but do not supply a target, like Spiteful Summoner, no longer cause the game to crash.
+
+##### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018)
 
 Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spellsource!
 
@@ -23,7 +33,7 @@ Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spel
  - A Second Heart is now a weapon.
  - Supreme Thief now reads, "Battlecry: Replace your deck with a copy of your opponent's."
 
-##### 0.7.2-2.0.12 (#1 for Saturday, December 1st, 2018)
+**0.7.2-2.0.12** (#1 for Saturday, December 1st, 2018)
 
 Server improvements should lead to even more reliable connections.
 
