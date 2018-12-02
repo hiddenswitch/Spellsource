@@ -14,6 +14,7 @@ Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spel
  - The Hero card Rafaam, Supreme Thief and its power, I think I will take it!
  - The "Giants" series containing Articus, the Giant; Castle Giant; Crystal Giant; Fiendish Giant; Gentleman's Giant; Holy Giant; Mossy Giant; Reckless Giant; Sand Giant; Ticking Giant; Tree Giant
  - The custom cards A Second Heart; Arcane Construct; Automedic Androne; Death's Messenger; and Golemuxx, Forest Guardian.
+ - Second Heart is now a Warlock card.
  
 ###### Content Fixes:
 
