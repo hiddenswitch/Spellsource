@@ -1,0 +1,20 @@
+{
+  "name": "Ticking Giant",
+  "baseManaCost": 30,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Cost (1) less for each damage both heroes have taken.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "targetPlayer": "BOTH",
+    "target": "FRIENDLY_HERO",
+    "attribute": "TOTAL_DAMAGE_RECEIVED"
+  }
+}

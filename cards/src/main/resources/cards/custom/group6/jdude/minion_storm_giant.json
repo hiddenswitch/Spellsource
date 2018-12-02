@@ -1,0 +1,18 @@
+{
+  "name": "Storm Giant",
+  "baseManaCost": 20,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Cost (1) less for each card you've drawn this game.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "CARDS_DRAWN"
+  }
+}

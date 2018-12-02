@@ -5,11 +5,25 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.2-2.0.12 (Saturday, December 1st, 2018)
+#### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018)
+
+Thanks to a contribution from @Jdude, new cards have been added to Spellsource!
+
+###### Content Additions:
+
+ - The Hero card Rafaam, Supreme Thief and its power, I think I will take it!
+ - The "Giants" series containing Articus, the Giant; Castle Giant; Crystal Giant; Fiendish Giant; Gentleman's Giant; Holy Giant; Mossy Giant; Reckless Giant; Sand Giant; Ticking Giant; Tree Giant
+ - The custom cards A Second Heart; Arcane Construct; Automedic Androne; Death's Messenger; and Golemuxx, Forest Guardian.
+ 
+###### Content Fixes:
+
+ - Wartbringer can now select a target for its damage.
+
+##### 0.7.2-2.0.12 (#1 for Saturday, December 1st, 2018)
 
 Server improvements should lead to even more reliable connections.
 
-##### 0.7.1-2.0.12 (Friday November 30th, 2018)
+**0.7.1-2.0.12** (Friday November 30th, 2018)
 
 Thanks again to a contribution from @doombubbles, the remaining Rastkhan's Rumble cards have been completed.
 

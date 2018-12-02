@@ -1,0 +1,37 @@
+{
+  "name": "Automedic Androne",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "All healing is converted into Armor (for the target's Hero).",
+  "auras": [
+    {
+      "class": "SpellOverrideAura",
+      "target": "FRIENDLY_PLAYER",
+      "applyEffect": {
+        "class": "GainArmorSpell"
+      },
+      "removeEffect": {
+        "class": "HealSpell"
+      }
+    },
+    {
+      "class": "SpellOverrideAura",
+      "target": "ENEMY_PLAYER",
+      "applyEffect": {
+        "class": "GainArmorSpell"
+      },
+      "removeEffect": {
+        "class": "HealSpell"
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -139,5 +139,5 @@ public class BuffSpell extends Spell {
 			}
 		}
 	}
-
 }
+

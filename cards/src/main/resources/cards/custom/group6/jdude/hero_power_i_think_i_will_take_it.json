@@ -1,0 +1,38 @@
+{
+  "name": "I think I will take it!",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "Give a minion \"Deathrattle: Shuffle this into your deck\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "ACTIVE"
+      },
+      "spell1": {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "ShuffleMinionToDeckSpell",
+          "target": "SELF",
+          "targetPlayer": "OPPONENT"
+        }
+      },
+      "spell2": {
+        "class": "AddDeathrattleSpell",
+        "spell": {
+          "class": "ShuffleMinionToDeckSpell",
+          "target": "SELF",
+          "targetPlayer": "OWNER"
+        }
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

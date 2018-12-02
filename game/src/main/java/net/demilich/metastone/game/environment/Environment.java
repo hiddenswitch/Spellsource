@@ -14,6 +14,10 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  */
 public enum Environment {
 	/**
+	 * This variable stores the player that was chosen as the starting player
+	 */
+	STARTING_PLAYER,
+	/**
 	 * This variable stores the minions that are pending a summon.
 	 * <p>
 	 * This implements Faceless Manipulator.

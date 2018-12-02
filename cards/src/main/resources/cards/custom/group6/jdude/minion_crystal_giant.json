@@ -1,0 +1,29 @@
+{
+  "name": "Crystal Giant",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Costs (1) less for each unused mana crystal",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AlgebraicValueProvider",
+    "value1": {
+      "class": "PlayerAttributeValueProvider",
+      "playerAttribute": "MAX_MANA",
+      "targetPlayer": "SELF"
+    },
+    "value2": {
+      "class": "PlayerAttributeValueProvider",
+      "playerAttribute": "MANA",
+      "targetPlayer": "SELF"
+    },
+    "operation": "MINIMUM"
+  }
+}

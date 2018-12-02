@@ -1471,9 +1471,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			int fatigue = player.hasAttribute(Attribute.FATIGUE) ? player.getAttributeValue(Attribute.FATIGUE) : 0;
 			fatigue++;
 			player.setAttribute(Attribute.FATIGUE, fatigue);
-			damage(player, hero, fatigue, hero);
-			context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
-			player.getStatistics().fatigueDamage(fatigue);
+			if (!player.hasAttribute(Attribute.DISABLE_FATIGUE)) {
+				damage(player, hero, fatigue, hero);
+				context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
+				player.getStatistics().fatigueDamage(fatigue);
+			}
 			return true;
 		}
 		return false;
@@ -2181,6 +2183,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Implements Happy Ghoul
 			target.modifyAttribute(Attribute.HEALING_THIS_TURN, healing);
 			target.setAttribute(Attribute.LAST_HEAL, healing);
+			// Implements Crystal Giant
+			player.modifyAttribute(Attribute.TIMES_HEALED, 1);
+			target.modifyAttribute(Attribute.TIMES_HEALED, 1);
 			context.fireGameEvent(healEvent);
 			player.getStatistics().heal(healing);
 		}

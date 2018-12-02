@@ -53,6 +53,37 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testAutomedicAndrone() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_automedic_androne");
+			player.getHero().setHp(10);
+			playCard(context, player, "spell_healing_touch", player.getHero());
+			assertEquals(player.getHero().getHp(), 10);
+			assertEquals(player.getHero().getArmor(), 8);
+			context.endTurn();
+			opponent.getHero().setHp(10);
+			playCard(context, opponent, "spell_healing_touch", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), 10);
+			assertEquals(opponent.getHero().getArmor(), 8);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_tyrantus");
+			playMinionCard(context, player, "minion_automedic_androne");
+			target.setHp(3);
+			playCard(context, player, "spell_healing_touch", target);
+			assertEquals(target.getHp(), 3);
+			assertEquals(player.getHero().getArmor(), 8);
+			context.endTurn();
+			target = playMinionCard(context, opponent, "minion_tyrantus");
+			target.setHp(3);
+			playCard(context, opponent, "spell_healing_touch", target);
+			assertEquals(target.getHp(), 3);
+			assertEquals(opponent.getHero().getArmor(), 8);
+		});
+	}
+
+	@Test
 	public void testSunlance() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_wisp");
