@@ -73,6 +73,10 @@ public enum PlayerAttribute {
 	 */
 	HERO_POWER_DAMAGE_DEALT,
 	/**
+	 * The total number of cards the player has drawn
+	 */
+	CARDS_DRAWN,
+	/**
 	 * The total healing done by friendly sources
 	 */
 	HEALING_DONE

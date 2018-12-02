@@ -32,6 +32,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return player.getMaxMana();
 			case SECRET_COUNT:
 				return player.getSecrets().size();
+			case CARDS_DRAWN:
+				return (int) player.getStatistics().getLong(Statistic.CARDS_DRAWN);
 			case SPELLS_CAST:
 				return (int) player.getStatistics().getLong(Statistic.SPELLS_CAST);
 			case CARDS_DISCARDED:

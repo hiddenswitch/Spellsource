@@ -945,8 +945,7 @@ public enum Attribute {
 	 */
 	STEALTH_FOR_TURNS,
 	/**
-	 * Indicates that the spell was played targeting a friendly minion
-	 * Implements Lynessa Sunsorrow
+	 * Indicates that the spell was played targeting a friendly minion Implements Lynessa Sunsorrow
 	 */
 	CASTED_ON_FRIENDLY_MINION,
 	/**
@@ -978,7 +977,17 @@ public enum Attribute {
 	/**
 	 * Records the {@link EntityReference} of this choose one spell card's source card.
 	 */
-	CHOICE_SOURCE;
+	CHOICE_SOURCE,
+	/**
+	 * When set on the {@link Player} entity, that player no longer takes fatigue damage.
+	 */
+	DISABLE_FATIGUE,
+	/**
+	 * Indicates how many times the target {@link Actor} has been healed.
+	 *
+	 * When set on the {@link Player} entity, indicates how many friendly characters have been healed total.
+	 */
+	TIMES_HEALED;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

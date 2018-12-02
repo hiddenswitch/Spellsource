@@ -1,0 +1,17 @@
+{
+  "name": "Gentleman's Giant",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Costs (1) less each turn you don't play a card.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "TurnsNoCardPlayedValueProvider"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "Articus, Dragon Giant",
+  "baseManaCost": 20,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 12,
+  "baseHp": 12,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Taunt. Costs (1) less for each card in both players hands.",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "targetPlayer": "BOTH",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

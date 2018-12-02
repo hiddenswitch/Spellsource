@@ -897,6 +897,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	protected void init(int startingPlayerId) {
 		setActivePlayerId(startingPlayerId);
+		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
 		LOGGER.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
 		getPlayers().forEach(p -> p.getAttributes().put(Attribute.GAME_START_TIME_MILLIS, (int) (System.currentTimeMillis() % Integer.MAX_VALUE)));
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);

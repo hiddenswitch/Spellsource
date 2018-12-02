@@ -1,4 +1,5 @@
 import typing
+from itertools import chain
 from os import makedirs
 from os.path import join, abspath
 
@@ -102,16 +103,16 @@ def hearthcards_stubs(set_id, directory, hero_class):
 
 
 @_cli.command()
-@click.argument('url')
+@click.argument('files_or_urls', nargs=-1)
 @click.option('--directory', default='./cards/src/main/resources/staging/scraped',
               help='the directory to save the cards to', show_default=True)
 @click.option('--hero-class', default='ANY', help='the hero class to put into the cards', show_default=True)
-def image_stubs(url, directory, hero_class):
+def image_stubs(files_or_urls: typing.Iterable[str], directory, hero_class):
     """
     Converts images to card stubs.
 
-    Loads image or website located at URL and parses it, creating stubs in DIRECTORY. If the URL is a website,
-    every relatively card-looking image will be parsed if possible. While any website can be
+    Loads image or website located at each url or path in FILES_OR_URLS and parses it, creating stubs in DIRECTORY. If
+    the path is a website, every relatively card-looking image will be parsed if possible. While any website can be
     used, the following are specially supported:
 
     \b
@@ -128,21 +129,24 @@ def image_stubs(url, directory, hero_class):
     from .ext import image2card
     from .ext.cards import name_to_id, write_card
 
-    if 'imgur.com/a/' in url:
+    if 'imgur.com/a/' in files_or_urls:
         click.echo('Imgur albums are currently not supported.')
         return
 
     makedirs(directory, exist_ok=True)
-    if len(url) > 4 and url[-4:] in ('.png', '.jpg'):
-        iterable = image2card.Enricher(
-            *image2card.SpellsourceCardDescGenerator(*image2card.RekognitionGenerator(url)),
-            hero_class=hero_class)
-    else:
-        iterable = image2card.Enricher(*image2card.SpellsourceCardDescGenerator(
-            *tqdm(
-                image2card.RekognitionGenerator(
-                    *image2card.PageToImages(url)))), hero_class=hero_class)
-    for card_desc in iterable:
+
+    images = [url for url in files_or_urls if len(url) > 4 and url[-4:] in ('.png', '.jpg')]
+    websites = [url for url in files_or_urls if len(url) > 4 and url[-4:] not in ('.png', '.jpg')]
+
+    images_iterable = image2card.Enricher(
+        *image2card.SpellsourceCardDescGenerator(*image2card.RekognitionGenerator(*images)),
+        hero_class=hero_class)
+
+    websites_iterable = image2card.Enricher(*image2card.SpellsourceCardDescGenerator(
+        *tqdm(
+            image2card.RekognitionGenerator(
+                *image2card.PageToImages(*websites)))), hero_class=hero_class)
+    for card_desc in chain(images_iterable, websites_iterable):
         id = name_to_id(card_desc['name'], card_desc['type'])
         write_card(fix_card(card_desc), join(directory, id + '.json'))
 

@@ -186,6 +186,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		increaseMinionCount(minion);
 	}
 
+	public long getTurnsTaken() {
+		return getLong(Statistic.TURNS_TAKEN);
+	}
+
 	public void set(Statistic key, Object value) {
 		stats.put(key, value);
 	}

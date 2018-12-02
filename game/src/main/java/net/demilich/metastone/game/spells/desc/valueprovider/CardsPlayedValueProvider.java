@@ -28,5 +28,5 @@ public class CardsPlayedValueProvider extends ValueProvider {
 		}
 		return count;
 	}
-
 }
+

@@ -1,0 +1,22 @@
+{
+  "name": "Reckless Giant",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Cost (1) less for each weapon played this game.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardsPlayedValueProvider",
+    "targetPlayer": "BOTH",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    }
+  }
+}

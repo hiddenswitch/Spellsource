@@ -1,0 +1,23 @@
+{
+  "name": "Sand Giant",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Cost (1) less for each Elemental you've played this game.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardsPlayedValueProvider",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "race": "ELEMENTAL"
+    }
+  }
+}

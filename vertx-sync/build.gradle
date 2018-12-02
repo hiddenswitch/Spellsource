@@ -1,5 +1,5 @@
 dependencies {
-    compile files("lib/quasar-core-0.8.0.jar")
+    compile group: 'co.paralleluniverse', name: 'quasar-core', version: '0.8.0'
     compile group: 'com.google.guava', name: 'guava', version: '26.0-jre'
     compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
     // Docgen appears to be missing from maven?

@@ -40,6 +40,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
@@ -392,6 +393,7 @@ public class ServerGameContext extends GameContext implements Server {
 		LOGGER.trace("init {}: Game starts {} {} vs {} {}", getGameId(), getPlayer1().getName(), getPlayer1().getUserId(), getPlayer2().getName(), getPlayer2().getUserId());
 		startTrace();
 		int startingPlayerId = getLogic().determineBeginner(PLAYER_1, PLAYER_2);
+		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
 		setActivePlayerId(startingPlayerId);
 
 		// Await both clients ready for 10s
