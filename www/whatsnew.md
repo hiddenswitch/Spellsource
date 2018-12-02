@@ -7,7 +7,7 @@ Thanks for playing Spellsource today! Release notes are below.
 
 #### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018)
 
-Thanks to a contribution from @Jdude, new cards have been added to Spellsource!
+Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spellsource!
 
 ###### Content Additions:
 
@@ -18,8 +18,9 @@ Thanks to a contribution from @Jdude, new cards have been added to Spellsource!
 ###### Content Fixes:
 
  - Wartbringer can now select a target for its damage.
- - Akali the Rhino now buffs the card it draws.
+ - Thanks @doombubbles: Akali the Rhino now buffs the card it draws.
  - A Second Heart is now a weapon.
+ - Supreme Thief now reads, "Battlecry: Replace your deck with a copy of your opponent's."
 
 ##### 0.7.2-2.0.12 (#1 for Saturday, December 1st, 2018)
 
