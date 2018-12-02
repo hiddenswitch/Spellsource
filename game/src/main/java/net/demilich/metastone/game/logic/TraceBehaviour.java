@@ -50,12 +50,15 @@ class TraceBehaviour extends UtilityBehaviour {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
+	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) throws CancellationException {
 		if (recorder != null) {
 			recorder.accept(context);
 		}
 		if (playerId != player.getId()) {
 			return Collections.emptyList();
+		}
+		if (mulligans == null) {
+			throw new CancellationException();
 		}
 		return Arrays.stream(mulligans[player.getId()])
 				.boxed()
@@ -82,6 +85,9 @@ class TraceBehaviour extends UtilityBehaviour {
 			return null;
 		}
 		int i = nextAction.getAndIncrement();
+		if (actions == null) {
+			throw new CancellationException();
+		}
 		if (i >= actions.size()) {
 			throw new CancellationException();
 		}

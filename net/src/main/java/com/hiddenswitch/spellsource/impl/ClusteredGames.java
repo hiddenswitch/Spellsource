@@ -67,6 +67,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			throw new IllegalArgumentException("Cannot create a game session without specifying a gameId.");
 		}
 
+		// Loads persistence game triggers that implement legacy functionality. In other words, ensures that game contexts
+		// will contain the event-listening enchantments that interact with network services like the database to store
+		// stuff about cards.
 		Logic.triggers();
 		// Get the collection data from the configurations that are not yet populated with valid cards
 		for (Configuration configuration : request.getConfigurations()) {
@@ -120,7 +123,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				context.play(true);
 				context.awaitHandlersReady();
 				// TODO: Explore why we still don't have the registrations ready
-				Strand.sleep(4000);
+				Strand.sleep(200);
 				return response;
 			} catch (RuntimeException any) {
 				// If an error occurred, make sure to remove users from the games we just put them into.

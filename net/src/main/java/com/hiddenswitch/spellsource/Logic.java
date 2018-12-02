@@ -46,6 +46,10 @@ import static com.hiddenswitch.spellsource.util.QuickJson.json;
 public interface Logic {
 	Logger logger = LoggerFactory.getLogger(Logic.class);
 
+	/**
+	 * Initializes custom networked attributes in network-only games (i.e. {@link com.hiddenswitch.spellsource.impl.util.ServerGameContext})
+	 * like Legacy effects.
+	 */
 	static void triggers() {
 		Spellsource.spellsource().persistAttribute(
 				"last-minion-destroyed-1",
