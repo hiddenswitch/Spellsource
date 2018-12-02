@@ -1,10 +1,10 @@
 {
   "name": "A Second Heart",
   "baseManaCost": 3,
-  "type": "MINION",
+  "type": "WEAPON",
   "heroClass": "ANY",
-  "baseAttack": 0,
-  "baseHp": 2,
+  "damage": 0,
+  "durability": 2,
   "rarity": "LEGENDARY",
   "description": "Start of Your Turn: Gain +1 Durability. Instead of dying, set your Hero's Health to this Durability and destroy this weapon.",
   "triggers": [
