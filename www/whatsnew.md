@@ -18,6 +18,7 @@ Thanks to a contribution from @Jdude, new cards have been added to Spellsource!
 ###### Content Fixes:
 
  - Wartbringer can now select a target for its damage.
+ - Akali the Rhino now buffs the card it draws.
 
 ##### 0.7.2-2.0.12 (#1 for Saturday, December 1st, 2018)
 
