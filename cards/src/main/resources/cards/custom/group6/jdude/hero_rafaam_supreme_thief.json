@@ -5,16 +5,25 @@
   "type": "HERO",
   "heroClass": "WHITE",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Steal your opponent's deck. (Shuffles a copy)",
+  "description": "Battlecry: Replace your deck with a copy of your opponent's.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ShuffleToDeckSpell",
-      "cardSource": {
-        "class": "DeckSource",
-        "targetPlayer": "OPPONENT"
-      },
-      "value": 60
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell",
+          "target": "FRIENDLY_DECK"
+        },
+        {
+          "class": "ShuffleToDeckSpell",
+          "cardSource": {
+            "class": "DeckSource",
+            "targetPlayer": "OPPONENT"
+          },
+          "value": 60
+        }
+      ]
     }
   },
   "attributes": {
