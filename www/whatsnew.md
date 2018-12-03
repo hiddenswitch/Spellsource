@@ -18,6 +18,9 @@ Important improvements to the server fix issues introduced in September.
 ###### Content Fixes:
 
  - Cards that reveal cards but do not supply a target, like Spiteful Summoner, no longer cause the game to crash.
+ - Grave Shambler now gains +1/+1 (thanks @doombubbles)
+ - High Priestess Jeklik now keeps hand buffs (thanks @doombubbles)
+ - Pearl Spellstone now has the right cost (thanks @doombubbles)
 
 ##### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018)
 
