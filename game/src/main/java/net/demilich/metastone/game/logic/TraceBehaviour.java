@@ -92,6 +92,6 @@ class TraceBehaviour extends UtilityBehaviour {
 			throw new CancellationException();
 		}
 		Integer j = actions.get(i);
-		return validActions.stream().filter(f -> f.getId() == j).findFirst().orElseThrow(NullPointerException::new);
+		return validActions.stream().filter(f -> f.getId() == j).findFirst().orElseThrow(CancellationException::new);
 	}
 }

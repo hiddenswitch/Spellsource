@@ -69,7 +69,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	private final int playerId;
 	private final Scheduler scheduler;
 	private final ReentrantLock requestsLock = new NoOpLock();
-	private ReadStream<Buffer> reader;
 	private WriteStream<Buffer> writer;
 	private Server server;
 
@@ -87,7 +86,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	                            int playerId,
 	                            long noActivityTimeout) {
 		this.scheduler = scheduler;
-		this.reader = reader;
 		this.writer = writer;
 		this.userId = userId;
 		this.playerId = playerId;
@@ -167,7 +165,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		ClientToServerMessage message = Json.decodeValue(messageBuffer, ClientToServerMessage.class);
 
 		if (inboundMessagesClosed) {
-			LOGGER.debug("handleWebSocketMessage {} {} {}: Message of type {} was received despite inbound messages closed", playerId, userId, server.getGameId(), message.getMessageType());
+			LOGGER.error("handleWebSocketMessage {} {} {}: Message of type {} was received despite inbound messages closed", playerId, userId, server.getGameId(), message.getMessageType());
 			return;
 		}
 
@@ -738,7 +736,6 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			requests.clear();
 			messageBuffer.clear();
 			server = null;
-			reader = null;
 			writer = null;
 		} catch (Throwable ignore) {
 			LOGGER.error("close {}", getUserId(), ignore);

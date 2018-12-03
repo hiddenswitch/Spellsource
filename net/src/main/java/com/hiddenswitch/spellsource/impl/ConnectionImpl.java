@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl;
 
 import com.hiddenswitch.spellsource.Connection;
 import com.hiddenswitch.spellsource.client.models.Envelope;
+import com.hiddenswitch.spellsource.client.models.MessageType;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.EventBus;
@@ -76,7 +77,7 @@ public class ConnectionImpl implements Connection {
 		});
 
 		socket.endHandler(suspendableHandler(v1 -> {
-			Connection.LOGGER.debug("connection endHandler {}: Closing", userId);
+			LOGGER.debug("connection endHandler {}: Closing", userId);
 			for (Handler<Void> handler : endHandlers) {
 				handler.handle(v1);
 			}
@@ -86,7 +87,7 @@ public class ConnectionImpl implements Connection {
 			endHandlers.clear();
 			consumer.unregister();
 			closeConsumer.unregister();
-			Connection.LOGGER.debug("connection endHandler {}: Close complete, removing handler from event bus", userId);
+			LOGGER.debug("connection endHandler {}: Close complete, removing handler from event bus", userId);
 		}));
 
 		if (readyHandler != null) {

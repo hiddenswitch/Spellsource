@@ -108,7 +108,8 @@ public class BotsTest extends SpellsourceTestBase {
 		NoArgs playAndWait = () -> {
 			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
-			assertTrue(client.isGameOver());
+			context.assertTrue(client.isGameOver());
+			context.assertTrue(client.getTurnsPlayed() > 0);
 			try {
 				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
 			} catch (ApiException e) {

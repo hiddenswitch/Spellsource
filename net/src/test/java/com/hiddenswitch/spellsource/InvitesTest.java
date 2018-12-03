@@ -262,11 +262,29 @@ public class InvitesTest extends SpellsourceTestBase {
 			// Create the users
 			UnityClient sender = new UnityClient(context) {
 				@Override
+				protected int getActionIndex(ServerToClientMessage message) {
+					if (message.getActions().getEndTurn() != null){
+						return message.getActions().getEndTurn();
+					} else {
+						return super.getActionIndex(message);
+					}
+				}
+
+				@Override
 				protected void handleMessage(Envelope env) {
 					handleGameMessages(env);
 				}
 			};
 			UnityClient recipient = new UnityClient(context) {
+				@Override
+				protected int getActionIndex(ServerToClientMessage message) {
+					if (message.getActions().getEndTurn() != null){
+						return message.getActions().getEndTurn();
+					} else {
+						return super.getActionIndex(message);
+					}
+				}
+
 				@Override
 				protected void handleMessage(Envelope env) {
 					if (env.getAdded() != null && env.getAdded().getInvite() != null) {
@@ -314,6 +332,8 @@ public class InvitesTest extends SpellsourceTestBase {
 			// The players should be in a game, and play it.
 			recipient.waitUntilDone();
 			sender.waitUntilDone();
+			context.assertTrue(recipient.getTurnsPlayed() > 0);
+			context.assertTrue(sender.getTurnsPlayed() > 0);
 
 			// Check that the queue has been destroyed.
 			assertFalse("The queue should be destroyed", SuspendableQueue.exists(inviteResponse.getInvite().getQueueId()));

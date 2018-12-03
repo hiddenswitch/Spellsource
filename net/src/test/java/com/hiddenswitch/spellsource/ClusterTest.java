@@ -107,6 +107,7 @@ public class ClusterTest extends SpellsourceTestBase {
 								client.createUserAccount();
 								client.matchmakeConstructedPlay(null);
 								client.waitUntilDone();
+								context.assertTrue(client.getTurnsPlayed() > 0);
 								context.assertTrue(client.isGameOver());
 								client.disconnect();
 								latch.countDown();

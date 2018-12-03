@@ -5,11 +5,15 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.4-2.0.12 (Sunday, December 2nd, 2018)
+#### 0.7.4-2.0.12 (Monday, December 3rd, 2018)
+
+Important improvements to the server fix issues introduced in September.
 
 ###### Usability Fixes:
 
- - The client now has 25 seconds to connect to a game, instead of just 10 seconds.
+ - Trying to matchmake twice or more during a Spellsource session will be more reliable.
+ - First connections to a newly started match should be more reliable.
+ - The client now has 12 seconds to connect to a game, instead of just 10 seconds.
 
 ###### Content Fixes:
 

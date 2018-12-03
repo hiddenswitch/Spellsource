@@ -19,6 +19,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
+import static org.junit.Assert.assertTrue;
 
 public class ReplayTest extends SpellsourceTestBase {
 
@@ -49,21 +50,22 @@ public class ReplayTest extends SpellsourceTestBase {
 			player.createUserAccount();
 			player.matchmakeQuickPlay(null);
 			player.waitUntilDone();
+			context.assertTrue(player.getTurnsPlayed() > 0);
 
 			// Sleep to let the replay actually get saved
-			Strand.sleep(3000);
+			Strand.sleep(4000);
 
 			GetGameRecordIdsResponse gameIds = invoke(player.getApi()::getGameRecordIds);
 			context.assertEquals(gameIds.getGameIds().size(), 1);
 			GetGameRecordResponse gameRecordResponse = invoke(player.getApi()::getGameRecord, gameIds.getGameIds().get(0));
+			context.assertNotNull(gameRecordResponse.getReplay());
 
+			/*
 			// Check that every state we received was in this response
 			Set<GameState> firsts = gameRecordResponse.getReplay().getGameStates().stream().map(ReplayGameStates::getFirst).collect(Collectors.toSet());
 			Set<GameState> seconds = gameRecordResponse.getReplay().getGameStates().stream().map(ReplayGameStates::getSecond).collect(Collectors.toSet());
 
 			// TODO: Use the stricter criteria when ready.
-
-			/*
 			for (GameState receivedState : receivedStates) {
 				context.assertTrue(firsts.contains(receivedState) || seconds.contains(receivedState));
 			}

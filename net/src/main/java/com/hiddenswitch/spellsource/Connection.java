@@ -202,8 +202,6 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			}
 
 			LOGGER.debug("connection {}: Connection ready", userId);
-			// Sleep for safety, since it appears there are issues with event bus registrations right now
-			Strand.sleep(500);
 			// Send an envelope to indicate that the connection is ready.
 			connection.write(new Envelope());
 		} catch (Throwable any) {
