@@ -154,6 +154,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		client.createUserAccount(null);
 		client.matchmakeQuickPlay(null);
 		client.waitUntilDone();
+		assertTrue(client.getTurnsPlayed() > 0);
 		assertTrue(client.isGameOver());
 	}
 
@@ -191,6 +192,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				client.getTurnsToPlay().set(999);
 				client.matchmakeQuickPlay(null);
 				client.waitUntilDone();
+				context.assertTrue(client.getTurnsPlayed() > 0);
 				context.assertTrue(client.isGameOver());
 			});
 		});
@@ -270,6 +272,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		client.matchmakeQuickPlay(null);
 		client.waitUntilDone();
 		assertTrue(System.currentTimeMillis() - startTime.get() > 8000L);
+		assertTrue(client.getTurnsPlayed() > 0);
 		assertTrue(client.isGameOver());
 	}
 

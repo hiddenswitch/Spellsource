@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
+import io.vertx.ext.unit.junit.Repeat;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.junit.Assert;
 import org.junit.Test;
@@ -68,8 +69,9 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 					client.matchmakeConstructedPlay(null);
 					logger.trace("testSimultaneousGames: {} 1st Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.waitUntilDone();
-					assertTrue(client.isGameOver());
-					assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
+					context.assertTrue(client.getTurnsPlayed() > 0);
+					context.assertTrue(client.isGameOver());
+					context.assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
 					logger.trace("testSimultaneousGames: {} 1st Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 
 					// Try two games in a row
@@ -77,8 +79,9 @@ public class SimultaneousGamesTest extends SpellsourceTestBase {
 					client.matchmakeConstructedPlay(null);
 					logger.trace("testSimultaneousGames: {} 2nd Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					client.waitUntilDone();
-					assertTrue(client.isGameOver());
-					assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
+					context.assertTrue(client.getTurnsPlayed() > 0);
+					context.assertTrue(client.isGameOver());
+					context.assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
 					logger.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
 					logger.info("testSimultaneousGames: {} finished", userId);
 					latch.countDown();

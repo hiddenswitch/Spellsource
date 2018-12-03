@@ -65,38 +65,29 @@ public interface Matchmaking extends Verticle {
 	 */
 	@Suspendable
 	static boolean enqueue(MatchmakingRequest request) throws SuspendExecution, NullPointerException, IllegalStateException {
-//		SuspendableLock lock = null;
 		LOGGER.trace("enqueue {}: Enqueueing {}", request.getUserId(), request);
-		boolean succeeded = false;
-		try {
-//			lock = Connection.methodLock(request.getUserId());
-			// Check if the user is already in a game
-			UserId userId = new UserId(request.getUserId());
-			if (Games.getUsersInGames().containsKey(userId)) {
-				throw new IllegalStateException("User is already in a game");
-			}
-
-			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
-			boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
-			if (alreadyQueued) {
-				throw new IllegalStateException("User is already enqueued in a different queue.");
-			}
-
-			SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId());
-			if (!queue.offer(new MatchmakingQueueEntry()
-					.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
-					.setUserId(request.getUserId())
-					.setRequest(request), succeeded)) {
-				throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
-			}
-			LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
-			succeeded = true;
-		} finally {
-//			if (lock != null) {
-//				lock.release();
-//			}
+		// Check if the user is already in a game
+		UserId userId = new UserId(request.getUserId());
+		if (Games.getUsersInGames().containsKey(userId)) {
+			throw new IllegalStateException("User is already in a game");
 		}
-		return succeeded;
+
+		SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
+		boolean alreadyQueued = currentQueue.putIfAbsent(userId, request.getQueueId()) != null;
+		if (alreadyQueued) {
+			throw new IllegalStateException("User is already enqueued in a different queue.");
+		}
+
+		SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(request.getQueueId());
+		if (!queue.offer(new MatchmakingQueueEntry()
+				.setCommand(MatchmakingQueueEntry.Command.ENQUEUE)
+				.setUserId(request.getUserId())
+				.setRequest(request), false)) {
+			throw new NullPointerException(String.format("queueId=%s not found", request.getQueueId()));
+		}
+		LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
+
+		return true;
 	}
 
 	/**
@@ -112,24 +103,16 @@ public interface Matchmaking extends Verticle {
 
 	@Suspendable
 	static void dequeue(UserId userId) throws SuspendExecution {
-//		SuspendableLock lock = null; // Connection.methodLock(userId.toString());
-		try {
-//			lock = Connection.methodLock(userId.toString());
-			SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
-			String queueId = currentQueue.remove(userId);
-			if (queueId != null) {
-				SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
-				queue.offer(new MatchmakingQueueEntry()
-						.setCommand(MatchmakingQueueEntry.Command.CANCEL)
-						.setUserId(userId.toString()), false);
-				LOGGER.trace("dequeue {}: Successfully dequeued", userId);
-			} else {
-				LOGGER.trace("dequeue {}: User was not enqueued", userId);
-			}
-		} finally {
-//			if (lock != null) {
-//				lock.release();
-//			}
+		SuspendableMap<UserId, String> currentQueue = getUsersInQueues();
+		String queueId = currentQueue.remove(userId);
+		if (queueId != null) {
+			SuspendableQueue<MatchmakingQueueEntry> queue = SuspendableQueue.get(queueId);
+			queue.offer(new MatchmakingQueueEntry()
+					.setCommand(MatchmakingQueueEntry.Command.CANCEL)
+					.setUserId(userId.toString()), false);
+			LOGGER.trace("dequeue {}: Successfully dequeued", userId);
+		} else {
+			LOGGER.trace("dequeue {}: User was not enqueued", userId);
 		}
 	}
 

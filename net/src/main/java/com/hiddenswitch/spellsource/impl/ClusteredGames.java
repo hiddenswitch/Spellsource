@@ -1,30 +1,22 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.strands.Strand;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.Replay;
-import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.server.Configuration;
 import com.hiddenswitch.spellsource.impl.server.VertxScheduler;
-import com.hiddenswitch.spellsource.impl.util.ActivityMonitor;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
 import com.hiddenswitch.spellsource.impl.util.GameRecord;
 import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.Hazelcast;
-import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.Registration;
 import com.hiddenswitch.spellsource.util.Rpc;
 import io.vertx.core.Vertx;
 import io.vertx.core.eventbus.MessageConsumer;
-import io.vertx.core.json.Json;
-import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.SyncVerticle;
-import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
@@ -36,12 +28,10 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static com.hiddenswitch.spellsource.util.Sync.defer;
-import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
 import static java.util.stream.Collectors.toList;
 
@@ -121,9 +111,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				contexts.put(request.getGameId(), context);
 				// Plays the game context in its own fiber
 				context.play(true);
-				context.awaitHandlersReady();
-				// TODO: Explore why we still don't have the registrations ready
-				Strand.sleep(200);
+				context.awaitReadyForConnections();
 				return response;
 			} catch (RuntimeException any) {
 				// If an error occurred, make sure to remove users from the games we just put them into.

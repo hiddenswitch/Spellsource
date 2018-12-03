@@ -44,6 +44,7 @@ public class GamesTest extends SpellsourceTestBase {
 		client.getTurnsToPlay().set(999);
 		client.play();
 		client.waitUntilDone();
+		context.assertTrue(client.getTurnsPlayed() > 0);
 		context.assertTrue(client.isGameOver());
 		context.assertEquals(mulligans.get(), 1);
 	}
@@ -83,6 +84,7 @@ public class GamesTest extends SpellsourceTestBase {
 		// Reconnect
 		client.play();
 		client.waitUntilDone();
+		context.assertTrue(client.getTurnsPlayed() > 0);
 		context.assertTrue(client.isGameOver());
 	}
 }

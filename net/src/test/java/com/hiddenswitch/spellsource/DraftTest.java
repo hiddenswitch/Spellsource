@@ -94,9 +94,12 @@ public class DraftTest extends SpellsourceTestBase {
 
 		final String deckId = state.getDeckId();
 
-		UnityClient client = new UnityClient(context).loginWithUserAccount(name, "testpass");
+		UnityClient client = new UnityClient(context);
+		client.loginWithUserAccount(name, "testpass");
+		client.ensureConnected();
 		client.matchmakeQuickPlay(deckId);
 		client.waitUntilDone();
+		context.assertTrue(client.getTurnsPlayed() > 0);
 
 		DraftState newState = null;
 		try {

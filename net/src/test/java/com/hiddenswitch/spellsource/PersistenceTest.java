@@ -54,6 +54,7 @@ public class PersistenceTest extends SpellsourceTestBase {
 			}
 			client.matchmakeQuickPlay(decksPutResponse.getDeckId());
 			client.waitUntilDone();
+			assertTrue(client.getTurnsPlayed() > 0);
 			assertTrue(client.isGameOver());
 			done.complete();
 		}, context.asyncAssertSuccess(also -> {

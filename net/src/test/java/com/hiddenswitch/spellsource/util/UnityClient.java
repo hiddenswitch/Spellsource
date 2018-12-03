@@ -5,6 +5,7 @@ import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.Sets;
+import com.hiddenswitch.spellsource.Matchmaking;
 import com.hiddenswitch.spellsource.Port;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
@@ -43,7 +44,7 @@ public class UnityClient implements AutoCloseable {
 	private Handler<UnityClient> onGameOver;
 	private Account account;
 	private TestContext context;
-	private TestWebsocket realtime;
+	private NettyWebsocketClientEndpoint realtime;
 	private AtomicReference<CompletableFuture<Void>> matchmakingFut = new AtomicReference<>(new CompletableFuture<>());
 	private AtomicInteger turnsToPlay = new AtomicInteger(999);
 	private List<java.util.function.Consumer<ServerToClientMessage>> handlers = new ArrayList<>();
@@ -55,6 +56,7 @@ public class UnityClient implements AutoCloseable {
 	protected ReentrantLock messagingLock = new NoOpLock();
 	protected CountDownLatch receivedAtLeastOneMessage;
 	private boolean receivedGameOverMessage;
+	private AtomicInteger turnsPlayed = new AtomicInteger();
 
 
 	public UnityClient(TestContext context) {
@@ -148,12 +150,9 @@ public class UnityClient implements AutoCloseable {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
-//				receivedAtLeastOneMessage = new CountDownLatch(1);
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
-				Strand.sleep(2000);
 				realtime.setMessageHandler((String message) -> {
 					LOGGER.trace("ensureConnected {}: Handling realtime message for userId {}", id, getUserId());
-//					receivedAtLeastOneMessage.countDown();
 					try {
 						messagingLock.lock();
 
@@ -162,8 +161,7 @@ public class UnityClient implements AutoCloseable {
 						messagingLock.unlock();
 					}
 				});
-//				Strand.sleep(2000);
-//				receivedAtLeastOneMessage.await();
+				realtime.getNettyWebSocketCompletableFuture().join();
 			}
 		} catch (Throwable any) {
 			LOGGER.error("ensureConnected: ", any);
@@ -181,7 +179,7 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	protected void handleMatchmaking(Envelope env) {
-		if (env.getResult() != null && env.getResult().getEnqueue() != null) {
+		if (env.equals(Matchmaking.gameReadyMessage())) {
 			if (matchmakingFut.get().isCancelled()) {
 				context.fail(new IllegalStateException("matchmaking was cancelled"));
 			}
@@ -220,6 +218,7 @@ public class UnityClient implements AutoCloseable {
 				LOGGER.trace("play: Starting to handle message for userId " + getUserId() + " of type " + message.getMessageType().toString());
 				switch (message.getMessageType()) {
 					case ON_TURN_END:
+						turnsPlayed.incrementAndGet();
 						if (turnsToPlay.getAndDecrement() <= 0
 								&& shouldDisconnect) {
 							disconnect();
@@ -320,6 +319,7 @@ public class UnityClient implements AutoCloseable {
 		this.receivedGameOverMessage = false;
 		this.gameOver = false;
 		this.gameOverLatch = new CountDownLatch(1);
+		this.turnsPlayed = new AtomicInteger();
 		LOGGER.debug("play {} {}: Playing", id, getUserId());
 
 		ensureConnected();
@@ -328,9 +328,7 @@ public class UnityClient implements AutoCloseable {
 
 	@Suspendable
 	private void sendStartGameMessage() {
-		realtime.sendMessage(serialize(new Envelope()
-				.game(new EnvelopeGame().clientToServer(new ClientToServerMessage()
-						.messageType(MessageType.FIRST_MESSAGE)))));
+		sendMessage(new Envelope().game(new EnvelopeGame().clientToServer(Matchmaking.gameReadyMessage().getResult().getEnqueue().getUnityConnection().getFirstMessage())));
 		LOGGER.debug("sendStartGameMessage {} {}: sent first message.", id, getUserId());
 	}
 
@@ -529,5 +527,9 @@ public class UnityClient implements AutoCloseable {
 
 	public boolean receivedGameOverMessage() {
 		return receivedGameOverMessage;
+	}
+
+	public int getTurnsPlayed() {
+		return turnsPlayed.get();
 	}
 }

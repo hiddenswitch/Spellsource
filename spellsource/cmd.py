@@ -182,7 +182,7 @@ def update_dbf():
 @_cli.command()
 @click.argument('decks', nargs=-1)
 @click.option('--number', default=1, show_default=True, type=click.INT, help='the number of games to simulate')
-@click.option('--behaviours', type=click.Tuple([str, str]), default='PlayRandomBehaviour PlayRandomBehaviour',
+@click.option('--behaviours', type=click.Tuple([str, str]), default=('PlayRandomBehaviour','PlayRandomBehaviour'),
               show_default=True,
               help='the behaviours to use for this simulation, suggested choices are PlayRandomBehaviour and '
                    'GameStateValueBehaviour. If the behaviours differ, each matchup will be played with each '

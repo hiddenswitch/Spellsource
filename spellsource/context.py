@@ -43,7 +43,7 @@ class Context(contextlib.AbstractContextManager):
             self._gateway = Context._start_gateway()
         except FileNotFoundError:
             self.status = Context.STATUS_FAILED
-            raise FileNotFoundError('Could not find the JAR file that stores the Spellsource Engine. Did you run gradle build?')
+            raise FileNotFoundError('Could not find the JAR file that stores the Spellsource Engine. Did you run gradle net:shadowJar?')
         except Exception as ex:
             self.status = Context.STATUS_FAILED
             raise ex

@@ -10,6 +10,7 @@ import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 import org.junit.Assert;
 
 import java.nio.charset.Charset;
+import java.util.concurrent.CompletableFuture;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
@@ -19,18 +20,17 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 	private Handler<String> messageHandler;
 	private Runnable closeHandler;
 	private int webSocketMaxFrameSize = 65536;
+	private final CompletableFuture<NettyWebSocket> nettyWebSocketCompletableFuture;
 
 	public NettyWebsocketClientEndpoint(String endpoint, String auth) {
 		try {
 			AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
 					.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
 					.setMaxConnections(1024));
-			client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
+			nettyWebSocketCompletableFuture = client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
 					.execute(new WebSocketUpgradeHandler.Builder()
-							.addWebSocketListener(this).build()).toCompletableFuture().handle((ws, t) -> {
-				websocket = ws;
-				return ws;
-			});
+							.addWebSocketListener(this).build()).toCompletableFuture();
+			websocket = nettyWebSocketCompletableFuture.get();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -126,5 +126,9 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 	public NettyWebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
 		this.closeHandler = closeHandler;
 		return this;
+	}
+
+	public CompletableFuture<NettyWebSocket> getNettyWebSocketCompletableFuture() {
+		return nettyWebSocketCompletableFuture;
 	}
 }
