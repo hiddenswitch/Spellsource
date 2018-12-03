@@ -11,6 +11,7 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -34,6 +35,9 @@ public class CreateSummonSpell extends Spell {
 		CardDesc cardDesc = new CardDesc();
 		cardDesc.setId(context.getLogic().generateCardId());
 		cardDesc.setName(desc.getString(SpellArg.NAME));
+		if (desc.containsKey(SpellArg.RACE)) {
+			cardDesc.setRace((Race) desc.get(SpellArg.RACE));
+		}
 		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
 		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
 		cardDesc.setHeroClass(HeroClass.ANY);

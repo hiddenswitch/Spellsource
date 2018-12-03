@@ -10,11 +10,22 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "sourcePlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "queueCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "LAST_MANA_COST",
+          "targetPlayer": "SELF"
+        },
+        "operation": "GREATER",
+        "value2": 0
+      }
     },
     "spell": {
       "class": "CreateSummonSpell",
       "name": "Tiger",
+      "race": "BEAST",
       "spell": {
         "class": "NullSpell"
       },
