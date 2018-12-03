@@ -1,6 +1,6 @@
 {
   "name": "Greater Pearl Spellstone",
-  "baseManaCost": 5,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
