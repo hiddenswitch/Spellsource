@@ -9,6 +9,10 @@ Thanks for playing Spellsource today! Release notes are below.
 
 Important improvements to the server fix issues introduced in September.
 
+###### Content Additions:
+
+ - Deathstalker Morgl, a Shaman hero with Build-A-Beast.
+
 ###### Usability Fixes:
 
  - Trying to matchmake twice or more during a Spellsource session will be more reliable.
