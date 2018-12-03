@@ -40,6 +40,18 @@ public class RastakhansRumbleTests extends TestBase {
 	}
 
 	@Test
+	public void testSpiritOfTheTiger() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_wisp");
+			playCard(context, player, "minion_spirit_of_the_tiger");
+			playCard(context, player, "minion_cult_master");
+			playCard(context, player, "spell_the_coin");
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testHexLordMalacrass() {
 		runGym((context, player, opponent) -> {
 			player.getRemovedFromPlay().clear();
@@ -347,6 +359,19 @@ public class RastakhansRumbleTests extends TestBase {
 			playCard(context, player, "minion_drakkari_trickster");
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(opponent.getHand().size(), 1);
+		});
+	}
+
+	@Test
+	public void testHighPriestessJeklik() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "minion_high_priestess_jeklik");
+			playCard(context, player, "spell_soul_infusion");
+			playCard(context, player, "spell_soulfire", opponent.getHero());
+			Minion j1 = playMinionCard(context, player, player.getHand().get(1));
+			Minion j2 = playMinionCard(context, player, player.getHand().get(0));
+			assertEquals(j1.getHp(), 6);
+			assertEquals(j2.getHp(), 6);
 		});
 	}
 }

@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -113,7 +114,15 @@ public class CopyCardSpell extends Spell {
 				.map(CardCostModifier::clone)
 				.peek(c -> c.setHost(clone))
 				.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
-
+		if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
+			clone.setAttribute(Attribute.ATTACK_BONUS, inCard.getAttribute(Attribute.ATTACK_BONUS));
+		}
+		if (inCard.hasAttribute(Attribute.HP_BONUS)) {
+			clone.setAttribute(Attribute.HP_BONUS, inCard.getAttribute(Attribute.HP_BONUS));
+		}
+		if (inCard.hasAttribute(Attribute.DEATHRATTLES)) {
+			clone.setAttribute(Attribute.DEATHRATTLES, inCard.getAttribute(Attribute.DEATHRATTLES));
+		}
 		return clone;
 	}
 
