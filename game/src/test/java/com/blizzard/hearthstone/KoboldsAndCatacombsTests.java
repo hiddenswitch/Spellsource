@@ -29,6 +29,20 @@ import static org.testng.Assert.assertTrue;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testLeylineManipulatorSimulacrumInteraction() {
+		runGym((context, player, opponent) -> {
+			Card raptor = shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			raptor.getAttributes().put(Attribute.STARTED_IN_DECK, true);
+			context.endTurn();
+			context.endTurn();
+			playCard(context, player, "spell_simulacrum");
+			playCard(context, player, "minion_leyline_manipulator");
+			assertEquals(costOf(context, player, player.getHand().get(0)), raptor.getBaseManaCost());
+			assertEquals(costOf(context, player, player.getHand().get(1)), raptor.getBaseManaCost() - 2);
+		});
+	}
+
+	@Test
 	public void testBladedGauntlet() {
 		runGym((context, player, opponent) -> {
 			// Prevent fatigue damage
