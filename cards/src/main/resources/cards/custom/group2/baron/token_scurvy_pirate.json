@@ -1,0 +1,17 @@
+{
+  "name": "Scurvy Sailor",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "PIRATE",
+  "description": "<b>Rush</b>",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

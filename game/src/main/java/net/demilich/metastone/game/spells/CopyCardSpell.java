@@ -21,8 +21,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
- * Copies a {@code target} card. Includes card cost modifiers that are hosted by the card (typically ones that target
- * {@link net.demilich.metastone.game.targeting.EntityReference#SELF}.
+ * Copies a {@code target}'s source card. Includes card cost modifiers that are hosted by the card (typically ones that
+ * target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}.
  * <p>
  * Casts the {@link SpellArg#SPELL} sub-spell on each newly generated card as the {@link
  * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}. To copy a card in your opponent's hand:

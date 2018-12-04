@@ -1,6 +1,6 @@
 {
   "name": "Spellforce",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",

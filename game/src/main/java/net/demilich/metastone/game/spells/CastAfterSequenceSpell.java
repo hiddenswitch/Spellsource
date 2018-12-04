@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Casts the subspell after the sequence has ended.
@@ -34,6 +36,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * @see ForceDeathPhaseSpell for an alternative way to "clean up" the board during a spell's execution.
  */
 public final class CastAfterSequenceSpell extends Spell {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(CastAfterSequenceSpell.class);
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -45,16 +50,18 @@ public final class CastAfterSequenceSpell extends Spell {
 			spell.put(SpellArg.CARD, desc.get(SpellArg.CARD));
 		}
 
-		// If the subspell contains a target key of SELF, resolve it now.
-		if (spell.containsKey(SpellArg.TARGET) && spell.get(SpellArg.TARGET).equals(EntityReference.SELF)) {
-			spell = spell.addArg(SpellArg.TARGET, source.getReference());
-		}
-
-		// Likewise with SPELL_TARGET
+		// Special casing spell target
 		if (spell.containsKey(SpellArg.TARGET)
 				&& spell.get(SpellArg.TARGET).equals(EntityReference.SPELL_TARGET)
 				&& target != null) {
 			spell = spell.addArg(SpellArg.TARGET, target.getReference());
+		} else if (spell.containsKey(SpellArg.TARGET) && spell.getTarget().isTargetGroup()) {
+			// If the subspell contains a group target that resolves to a single target, resolve it now.
+			try {
+				spell = spell.addArg(SpellArg.TARGET, context.resolveSingleTarget(player, source, spell.getTarget()).getReference());
+			} catch (ArrayStoreException notSingleTarget) {
+				LOGGER.warn("onCast {} {}: Passed a non-single-target target group {}, not resolving", context.getGameId(), source, spell.getTarget());
+			}
 		}
 
 		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();

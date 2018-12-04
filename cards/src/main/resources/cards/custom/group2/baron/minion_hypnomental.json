@@ -1,0 +1,28 @@
+{
+  "name": "Hypnomental",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry and Deathrattle: Summon a 0/2 Defender with Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_defender"
+    }
+  },
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_defender"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

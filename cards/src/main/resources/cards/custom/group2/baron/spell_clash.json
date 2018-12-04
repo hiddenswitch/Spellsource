@@ -1,0 +1,21 @@
+{
+  "name": "Clash!",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Summon four 3/1 Duelers with Rush.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_dueler",
+      "token_dueler",
+      "token_dueler",
+      "token_dueler"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

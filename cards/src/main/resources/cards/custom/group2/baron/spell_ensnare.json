@@ -1,0 +1,32 @@
+{
+  "name": "Ensnare",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Summon all minions from your hand that cost (2) or less.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": 7,
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "MINION"
+        },
+        {
+          "class": "ManaCostFilter",
+          "value": 2,
+          "operation": "LESS_OR_EQUAL"
+        }
+      ]
+    },
+    "cardLocation": "HAND",
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

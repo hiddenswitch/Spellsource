@@ -1,0 +1,41 @@
+{
+  "name": "Soulclencher",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Give your Knights in your battlefield and hand +2/+2.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+        },
+        "hpBonus": 2
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HAND",
+        "attackBonus": 2,
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+        },
+        "hpBonus": 2
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

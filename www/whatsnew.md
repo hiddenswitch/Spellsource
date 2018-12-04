@@ -5,7 +5,21 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.4-2.0.12 (Monday, December 3rd, 2018)
+#### 0.7.5-2.0.12 (Tuesday, December 4)
+
+Thanks to a great contribution from @Pircival, we have new Baron cards!
+
+###### Content Additions:
+
+ - New Neutral card: Lord Cookie
+ - New Baron cards: Bog Mutant; Deadeyed Ravager; Faceless Duplicator; Fleeting Firebug; Gorthal the Ravager; Hunting Terradon; Hypnomental; Landsieged Drake; Moon Gliadiator; Mutating Boa; Ninjarcher; Prophet Wa'Ran; Refracting Golem; Rhu8nok the Bear; Royal Protector; Sea Stowaway; Sorceress Eka; Soulclencher; Sparkfuser; Tower Titan; Unstable Artifact; Battlefield; Birds of a Feather; Black Plague; Call for Backup; Clash; Duplimancy; Ensare; Fend Off; Loa's Blessing; Scurvy Sights; Victory Royale; Weak Point; and Spirit of the Bear.
+ 
+###### Content Fixes:
+
+ - Duelmaster Fizzle (and the similar, new effect written on Fend Off) now works.
+ - Effects that take place after sequences are more reliable.
+
+###### 0.7.4-2.0.12 (Monday, December 3rd, 2018)
 
 Important improvements to the server fix issues introduced in September.
 
@@ -26,7 +40,7 @@ Important improvements to the server fix issues introduced in September.
  - High Priestess Jeklik now keeps hand buffs (thanks @doombubbles)
  - Pearl Spellstone now has the right cost (thanks @doombubbles)
 
-##### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018)
+**0.7.3-2.0.12** (#2 for Saturday, December 1st, 2018)
 
 Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spellsource!
 

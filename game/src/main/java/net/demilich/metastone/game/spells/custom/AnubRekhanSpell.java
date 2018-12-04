@@ -7,7 +7,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.AddDeathrattleSpell;
-import net.demilich.metastone.game.spells.RevealCardSpell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TransformMinionSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -36,4 +35,3 @@ public final class AnubRekhanSpell extends AddDeathrattleSpell {
 		super.onCast(context, player, AddDeathrattleSpell.create(revertDeathrattle), source, deathrattleHost);
 	}
 }
-
