@@ -9,13 +9,16 @@ Thanks for playing Spellsource today! Release notes are below.
 
 Thanks to a great contribution from @Pircival, we have new Baron cards!
 
+The following cards have been added or changed: Bog Mutant; Deadeyed Ravager; Faceless Duplicator; Fleeting Firebug; Gorthal the Ravager; Hunting Terradon; Hypnomental; Landsieged Drake; Moon Gliadiator; Mutating Boa; Ninjarcher; Prophet Wa'Ran; Refracting Golem; Rhu8nok the Bear; Royal Protector; Sea Stowaway; Sorceress Eka; Soulclencher; Sparkfuser; Tower Titan; Unstable Artifact; Battlefield; Birds of a Feather; Black Plague; Call for Backup; Clash; Duplimancy; Ensare; Fend Off; Loa's Blessing; Scurvy Sights; Victory Royale; Weak Point; and Spirit of the Bear.
+
 ###### Content Additions:
 
  - New Neutral card: Lord Cookie
- - New Baron cards: Bog Mutant; Deadeyed Ravager; Faceless Duplicator; Fleeting Firebug; Gorthal the Ravager; Hunting Terradon; Hypnomental; Landsieged Drake; Moon Gliadiator; Mutating Boa; Ninjarcher; Prophet Wa'Ran; Refracting Golem; Rhu8nok the Bear; Royal Protector; Sea Stowaway; Sorceress Eka; Soulclencher; Sparkfuser; Tower Titan; Unstable Artifact; Battlefield; Birds of a Feather; Black Plague; Call for Backup; Clash; Duplimancy; Ensare; Fend Off; Loa's Blessing; Scurvy Sights; Victory Royale; Weak Point; and Spirit of the Bear.
+ - New Baron cards.
  
 ###### Content Fixes:
 
+ - Balance changes to older Baron cards.
  - Duelmaster Fizzle (and the similar, new effect written on Fend Off) now works.
  - Effects that take place after sequences are more reliable.
 
