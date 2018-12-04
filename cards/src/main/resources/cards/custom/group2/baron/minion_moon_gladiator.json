@@ -1,0 +1,31 @@
+{
+  "name": "Moon Gladiator",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "<b>Rush</b>. <b>Overkill:</b> Deal 2 damage to all enemy minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "OverkillSpell",
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 2
+      }
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

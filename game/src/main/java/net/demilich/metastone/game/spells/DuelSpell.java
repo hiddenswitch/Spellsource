@@ -30,11 +30,6 @@ public final class DuelSpell extends FightSpell {
 		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
 		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
 
-		if (validAttackers.size() == 1 && validDefenders.size() == 1) {
-			logger.debug("onCast {} {}: Only one attacker and defender, no dueling occurs", context.getGameId(), source);
-			return;
-		}
-
 		for (Entity attacker : validAttackers) {
 			if (!(attacker instanceof Actor)) {
 				logger.error("onCast {} {}: Tried to duel attacker {} which is not an actor.", context.getGameId(), source, attacker);
@@ -56,7 +51,10 @@ public final class DuelSpell extends FightSpell {
 			}
 
 			context.getSpellTargetStack().push(defender.getReference());
-			castForPlayer(context, player, desc, attacker, defender);
+			SpellDesc fight = new SpellDesc(FightSpell.class);
+			fight.put(SpellArg.TARGET, defender.getReference());
+			fight.put(SpellArg.SECONDARY_TARGET, attacker.getReference());
+			castForPlayer(context, player, fight, attacker, defender);
 			context.getSpellTargetStack().pop();
 		}
 	}

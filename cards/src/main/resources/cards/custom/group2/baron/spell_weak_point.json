@@ -1,0 +1,25 @@
+{
+  "name": "Keg Smash",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Choose a minion. When it takes damage, destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "TRIGGER_HOST"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM"
+}

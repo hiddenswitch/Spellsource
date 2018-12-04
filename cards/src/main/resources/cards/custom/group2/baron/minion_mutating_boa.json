@@ -1,0 +1,39 @@
+{
+  "name": "Mutating Boa",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Battlecry: Adapt this minion and all Knights in your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CastFromGroupSpell",
+          "target": "SELF",
+          "group": "group_adapt"
+        },
+        {
+          "class": "CastFromGroupSpell",
+          "target": "FRIENDLY_HAND",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "token_knight"
+          },
+          "group": "group_adapt"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

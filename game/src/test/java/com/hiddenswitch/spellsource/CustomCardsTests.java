@@ -53,6 +53,57 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTikrakazzLordJaraxxusInteraction() {
+		runGym((context, player, opponent) -> {
+			// Adapting Lord Jaraxxus in this phase shouldn't cause an exception, because changing heroes the way the Lord
+			// does seems to put the minion into the removed from play zone.
+			playCard(context, player, "minion_tikrakazz");
+			playCard(context, player, "minion_lord_jaraxxus");
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_jaraxxus");
+			playCard(context, player, "minion_lord_jaraxxus");
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_jaraxxus");
+		});
+	}
+
+	@Test
+	public void testFendOff() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 2; i++) {
+				playMinionCard(context, player, "minion_dire_mole");
+			}
+			context.endTurn();
+			for (int i = 0; i < 3; i++) {
+				Minion enemy = playMinionCard(context, opponent, "minion_dire_mole");
+				context.getLogic().setHpAndMaxHp(enemy, 10);
+			}
+			context.endTurn();
+			playCard(context, player, "spell_fend_off");
+			for (Minion source : player.getMinions()) {
+				assertEquals(source.getHp(), source.getMaxHp() - 1, "Should take 1 damage from attacking a random target");
+			}
+			assertEquals(opponent.getMinions().stream().mapToInt(m -> m.getMaxHp() - m.getHp()).sum(), player.getMinions().stream().mapToInt(Minion::getAttack).sum(), "Each source minion should have attacked");
+		});
+	}
+
+	@Test
+	public void testRhunokTheBear() {
+		runGym((context, player, opponent) -> {
+			Minion bear = playMinionCard(context, player, "minion_rhunok_the_bear");
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_bananas", bear);
+			assertEquals(player.getMinions().size(), 2);
+			playCard(context, player, "spell_bananas", wisp);
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "minion_wisp", "Wisp copied");
+			Minion wispCopy = player.getMinions().get(2);
+			assertEquals(wispCopy.getAttack(), wispCopy.getBaseAttack() + 1, "Keeps buffs since it was copied AFTER the spell was cast");
+			assertEquals(wispCopy.getMaxHp(), wispCopy.getBaseHp() + 1, "Keeps buffs since it was copied AFTER the spell was cast");
+			assertTrue(wispCopy.hasAttribute(Attribute.TAUNT), "Gained taunt");
+		});
+	}
+
+
+	@Test
 	public void testRafaamSupremeThief() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_the_coin");
