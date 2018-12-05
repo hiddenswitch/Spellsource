@@ -19,7 +19,7 @@
       "operation": "HAS"
     },
     "cardSource": {
-      "class": "GraveyardActorsSource",
+      "class": "GraveyardCardsSource",
       "targetPlayer": "SELF"
     }
   },

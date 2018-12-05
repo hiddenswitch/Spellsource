@@ -11,6 +11,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.BoardChangedEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;

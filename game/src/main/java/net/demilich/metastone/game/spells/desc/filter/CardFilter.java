@@ -81,6 +81,11 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
+		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
+		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+			return false;
+		}
+
 		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
 			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
 			ComparisonOperation operation = null;
@@ -104,11 +109,6 @@ public final class CardFilter extends EntityFilter {
 
 			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
-		}
-
-		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
-		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
-			return false;
 		}
 
 		return true;

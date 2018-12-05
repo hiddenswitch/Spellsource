@@ -30,7 +30,8 @@ public class ResurrectFromBothSpell extends Spell {
 		bothGraveyards.addAll(player.getGraveyard());
 		bothGraveyards.addAll(context.getOpponent(player).getGraveyard());
 		for (Entity deadEntity : bothGraveyards) {
-			if (deadEntity.getEntityType() == EntityType.MINION) {
+			if (deadEntity.getEntityType() == EntityType.MINION
+					&& !deadEntity.isRemovedPeacefully()) {
 				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}

@@ -53,6 +53,25 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testAncestralLegacy() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_murloc_tidehunter");
+			assertEquals(player.getMinions().size(), 2);
+			playCard(context, player, "spell_doom");
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(player.getGraveyard().size(), 4, "Should contain Doom, Murloc Tidehunter the card, Murloc Tidehunter the minion and Murloc Scout the minion.");
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.size(), 1);
+				assertEquals(discoverActions.get(0).getCard().getCardId(), "minion_murloc_tidehunter");
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_ancestral_legacy");
+			assertEquals(player.getHand().size(), 1 );
+			assertEquals(player.getHand().get(0).getCardId(), "minion_murloc_tidehunter");
+		});
+	}
+
+	@Test
 	public void testTikrakazzLordJaraxxusInteraction() {
 		runGym((context, player, opponent) -> {
 			// Adapting Lord Jaraxxus in this phase shouldn't cause an exception, because changing heroes the way the Lord
@@ -1404,9 +1423,11 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testParadoxNoggenfoggerAssassinateInteraction() {
 		runGym((context, player, opponent) -> {
-			Minion paradox = playMinionCard(context, player, "minion_paradox");
 			Minion noggenfogger = playMinionCard(context, player, "minion_mayor_noggenfogger");
+			Minion paradox = playMinionCard(context, player, "minion_paradox");
+			assertTrue(paradox.isInPlay());
 			playCard(context, player, "spell_assassinate", paradox);
+			assertTrue(paradox.isDestroyed());
 		});
 	}
 

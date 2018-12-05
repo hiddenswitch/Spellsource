@@ -29,6 +29,27 @@ import static org.testng.Assert.assertTrue;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testPsychicScreamTwilightsCallInteraction() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion deathrattleMinion = playMinionCard(context, opponent, "minion_loot_hoarder");
+			context.endTurn();
+			playCard(context, player, "spell_psychic_scream");
+			// Give the opponent something to draw on the start of their next turn
+			putOnTopOfDeck(context, opponent, "spell_the_coin");
+			assertEquals(opponent.getDeck().get(0).getCardId(), deathrattleMinion.getSourceCard().getCardId(), "Deathrattle Minion should be at the bottom of the opponent's deck");
+			context.endTurn();
+			playCard(context, opponent, "spell_twilights_call");
+			assertEquals(opponent.getMinions().size(), 0, "Deathrattle Minion should not have been summoned");
+			assertEquals(player.getDeck().size(), 0);
+			assertEquals(opponent.getDeck().size(), 1);
+			assertEquals(opponent.getDeck().get(0).getCardId(), deathrattleMinion.getSourceCard().getCardId());
+			assertEquals(opponent.getHand().size(), 1);
+			assertEquals(opponent.getHand().get(0).getCardId(), "spell_the_coin");
+		});
+	}
+
+	@Test
 	public void testLeylineManipulatorSimulacrumInteraction() {
 		runGym((context, player, opponent) -> {
 			Card raptor = shuffleToDeck(context, player, "minion_bloodfen_raptor");
@@ -1033,7 +1054,13 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	@Test
 	public void testWanderingMonster() {
 		runGym((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat().withCardSets(CardSet.CLASSIC, CardSet.BASIC));
+			// Always summon a 3 3/3 so that there's nothing with a deathrattle that will mess things up
+			context.setDeckFormat(new DeckFormat() {
+				@Override
+				public boolean isInFormat(Card card) {
+					return card.getCardId().equals("minion_mind_control_tech");
+				}
+			});
 			playCard(context, player, "secret_wandering_monster");
 			context.endTurn();
 			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");

@@ -107,6 +107,8 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
 			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE_CARD && event.getEventSource() == host.getSourceCard()) {
+			return false;
 		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_OTHER_SOURCES && event.getEventSource() != host) {

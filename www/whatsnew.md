@@ -5,11 +5,27 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.5-2.0.12 (Tuesday, December 4)
+#### 0.7.6-2.0.12 (Wednesday, December 5th)
+
+This release has various bug fixes helpfully reported by the community. It also includes some overall improvements to common game effects.
+
+###### Content Fixes:
+
+ - Paradox, a Sands of Time minion, behaves correctly, removing itself after a card has been played, rather than before.
+ - Ancestral Legacy now only discovers from Minions you actually played.
+ - Resurrection and graveyard counting effects now don't count minions that have been removed peacefully. This fixes reported issues with Psychic Scream and Twilight's Call, for example. Other affected cards include Slain Party, Fallen Champions hero power, Anyfin Can Happen, Swarm, Titanstrike, Truthguard, Commander Garrosh, Echo of Anduin, Inquisitor Deilana, Resurrect, Endless Army, Hadronox, Bloodreaver Guldan, the Diamond spellstones, Kazakus tokens, Onyx Bishop, N'Zoth the Curroptor, Witching Hour, Reanimate, Pay Respects, Feugen, Stalagg, and Doomcaller.
+ - Leyline Manipulator now reduces minions cost that are copied by Simulacrum, or by any card-copying effect. All card copy effects now correctly mark the copies as not started in the deck or hand. This affects about 58 additional cards.
+ - Card sets were specified after attribute lookups for discover and card receiving effects. This affected A New Challenger, Average Joe and the Ungoro Pack.
+ 
+###### Other Fixes:
+
+ - Wandering Monster now uses Misdirect's exact effect and its test is improved.
+
+###### 0.7.5-2.0.12 (Tuesday, December 4th)
 
 Thanks to a great contribution from @Pircival, we have new Baron cards!
 
-The following cards have been added or changed: Bog Mutant; Deadeyed Ravager; Faceless Duplicator; Fleeting Firebug; Gorthal the Ravager; Hunting Terradon; Hypnomental; Landsieged Drake; Moon Gliadiator; Mutating Boa; Ninjarcher; Prophet Wa'Ran; Refracting Golem; Rhu8nok the Bear; Royal Protector; Sea Stowaway; Sorceress Eka; Soulclencher; Sparkfuser; Tower Titan; Unstable Artifact; Battlefield; Birds of a Feather; Black Plague; Call for Backup; Clash; Duplimancy; Ensare; Fend Off; Loa's Blessing; Scurvy Sights; Victory Royale; Weak Point; and Spirit of the Bear.
+The following cards have been added or changed: Bog Mutant; Deadeyed Ravager; Faceless Duplicator; Fleeting Firebug; Gorthal the Ravager; Hunting Terradon; Hypnomental; Landsieged Drake; Moon Gliadiator; Mutating Boa; Ninjarcher; Prophet Wa'Ran; Refracting Golem; Rhunok the Bear; Royal Protector; Sea Stowaway; Sorceress Eka; Soulclencher; Sparkfuser; Tower Titan; Unstable Artifact; Battlefield; Birds of a Feather; Black Plague; Call for Backup; Clash; Duplimancy; Ensare; Fend Off; Loa's Blessing; Scurvy Sights; Victory Royale; Weak Point; and Spirit of the Bear.
 
 ###### Content Additions:
 
@@ -22,7 +38,7 @@ The following cards have been added or changed: Bog Mutant; Deadeyed Ravager; Fa
  - Duelmaster Fizzle (and the similar, new effect written on Fend Off) now works.
  - Effects that take place after sequences are more reliable.
 
-###### 0.7.4-2.0.12 (Monday, December 3rd, 2018)
+**0.7.4-2.0.12** (Monday, December 3rd, 2018)
 
 Important improvements to the server fix issues introduced in September.
 

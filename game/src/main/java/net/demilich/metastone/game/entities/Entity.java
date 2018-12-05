@@ -523,4 +523,13 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	public int getIndex() {
 		return getEntityLocation().getIndex();
 	}
+
+	/**
+	 * Is this entity removed peacefully?
+	 *
+	 * @return {@code true} if it's in the graveyard and didn't die violently, otherwise false.
+	 */
+	public boolean isRemovedPeacefully() {
+		return getZone() == Zones.GRAVEYARD && !hasAttribute(Attribute.DIED_ON_TURN);
+	}
 }

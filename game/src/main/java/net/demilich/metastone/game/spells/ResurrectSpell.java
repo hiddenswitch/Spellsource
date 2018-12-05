@@ -4,12 +4,17 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
@@ -47,15 +52,17 @@ public class ResurrectSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Minion> deadMinions = new ArrayList<>();
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		List<Entity> graveyard = new ArrayList<Entity>();
-		graveyard.addAll(player.getGraveyard());
+		List<Entity> graveyard = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyard) {
-			if (deadEntity.getEntityType() == EntityType.MINION) {
+			if (deadEntity.getEntityType() == EntityType.MINION
+					// Check that this died on a turn to indicate whether or not it was removed peacefully
+					&& !deadEntity.isRemovedPeacefully()) {
 				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}
 			}
 		}
+
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		// Implements unusual Diamond Spellstone unique minions behaviour
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
