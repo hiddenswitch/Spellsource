@@ -1309,7 +1309,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public void destroy(Actor... targets) {
 		// Reverse the targets
-		Map<Actor, EntityLocation> previousLocation = new HashMap<>();
+		Map<Actor, EntityLocation> previousLocations = new HashMap<>();
 
 		List<Actor> reversed = new ArrayList<>(Arrays.asList(targets));
 
@@ -1319,13 +1319,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (!target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
 				removeEnchantments(target, false, false);
 			}
-			previousLocation.put(target, target.getEntityLocation());
+			previousLocations.put(target, target.getEntityLocation());
 			target.moveOrAddTo(context, Zones.GRAVEYARD);
 		}
 
 		for (int i = 0; i < targets.length; i++) {
 			Actor target = targets[i];
-			EntityLocation actorPreviousLocation = previousLocation.get(target);
+			EntityLocation actorPreviousLocation = previousLocations.get(target);
 			Player owner = context.getPlayer(target.getOwner());
 			switch (target.getEntityType()) {
 				case HERO:
@@ -1356,7 +1356,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					break;
 			}
 
-			resolveDeathrattles(owner, target, previousLocation.get(target));
+			resolveDeathrattles(owner, target, previousLocations.get(target));
 		}
 		for (Actor target : targets) {
 			removeEnchantments(target, true, false);

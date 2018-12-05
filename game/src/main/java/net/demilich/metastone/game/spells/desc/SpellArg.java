@@ -354,6 +354,10 @@ public enum SpellArg {
 	 * @see AddDeathrattleSecondaryAsTargetSpell for an example of a spell that uses this arg.
 	 */
 	SECONDARY_TARGET,
+	/**
+	 * Only used by Swipe spell (deprecated)
+	 */
+	@Deprecated
 	SECONDARY_VALUE,
 	/**
 	 * Typically the {@link SpellDesc} that is cast with {@link EntityReference#OUTPUT} set to the result of the parent

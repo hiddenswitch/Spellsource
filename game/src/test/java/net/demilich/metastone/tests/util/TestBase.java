@@ -496,6 +496,9 @@ public class TestBase {
 		if (card.getZone() != Zones.HAND) {
 			context.getLogic().receiveCard(player.getId(), card);
 		}
+		if (!target.isInPlay()) {
+			throw new UnsupportedOperationException("cannot target not in play entities");
+		}
 		GameAction action = card.play();
 		action.setTarget(target);
 		context.getLogic().performGameAction(player.getId(), action);

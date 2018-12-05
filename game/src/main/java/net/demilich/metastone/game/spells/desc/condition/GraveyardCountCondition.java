@@ -17,7 +17,7 @@ public class GraveyardCountCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		int count = 0;
 		for (Entity deadEntity : player.getGraveyard()) {
-			if (deadEntity instanceof Minion) {
+			if (deadEntity instanceof Minion && !deadEntity.isRemovedPeacefully()) {
 				count++;
 			}
 		}

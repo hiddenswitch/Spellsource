@@ -12,6 +12,7 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 import java.util.Objects;
+import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toCollection;
 
@@ -38,6 +39,8 @@ public class GraveyardActorsSource extends CardSource implements HasCardCreation
 				.getGraveyard()
 				.stream()
 				.filter(e -> e instanceof Actor)
+				// Must be actors that actually died
+				.filter(e -> !e.isRemovedPeacefully())
 				.map(actor -> {
 					Card sourceCard = actor.getSourceCard();
 					if (sourceCard == null) {

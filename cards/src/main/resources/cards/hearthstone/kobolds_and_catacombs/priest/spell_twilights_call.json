@@ -28,10 +28,6 @@
       "attribute": "DEATHRATTLES",
       "cardType": "MINION",
       "operation": "HAS"
-    },
-    "cardSource": {
-      "class": "GraveyardActorsSource",
-      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

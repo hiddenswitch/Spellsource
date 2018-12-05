@@ -21,7 +21,7 @@ public class GraveyardContainsCondition extends Condition {
 		}
 		for (Entity deadEntity : player.getGraveyard()) {
 			Card card = null;
-			if (deadEntity instanceof Actor) {
+			if (deadEntity instanceof Actor && !deadEntity.isRemovedPeacefully()) {
 				Actor actor = (Actor) deadEntity;
 				card = actor.getSourceCard();
 			} else {

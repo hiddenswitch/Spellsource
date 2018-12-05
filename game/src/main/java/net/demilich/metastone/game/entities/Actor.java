@@ -12,6 +12,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 

@@ -20,7 +20,7 @@ public class DeadMinionsThisTurn extends ValueProvider {
 		int currentTurn = context.getTurn();
 		int count = 0;
 		for (Entity deadEntity : player.getGraveyard()) {
-			if (deadEntity.getEntityType() != EntityType.MINION) {
+			if (deadEntity.getEntityType() != EntityType.MINION || deadEntity.isRemovedPeacefully()) {
 				continue;
 			}
 
