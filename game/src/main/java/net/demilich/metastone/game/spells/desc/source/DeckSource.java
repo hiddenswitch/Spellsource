@@ -17,6 +17,10 @@ public class DeckSource extends CardSource implements Serializable {
 		super(desc);
 	}
 
+	public static CardSource create() {
+		return new CardSourceDesc(DeckSource.class).create();
+	}
+
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
 		return player.getDeck();
