@@ -143,6 +143,13 @@ public abstract class SpellsourceTestBase {
 
 	@AfterClass
 	public static void tearDown(TestContext context) {
-		// Don't shut these things down at the end.
+		if (initialized.compareAndSet(true, false)) {
+			final Async async = context.async();
+			vertx.close(context.asyncAssertSuccess(then -> {
+				hazelcastInstance.shutdown();
+
+				async.complete();
+			}));
+		}
 	}
 }
