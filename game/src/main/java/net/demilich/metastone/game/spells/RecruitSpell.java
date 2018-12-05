@@ -10,7 +10,13 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.DeckSource;
+import net.demilich.metastone.game.spells.desc.source.HandSource;
+import net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects;
 import net.demilich.metastone.game.targeting.Zones;
 
 import java.util.List;
@@ -70,15 +76,10 @@ public class RecruitSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
-		if (cardLocation == null) {
-			cardLocation = Zones.DECK;
-		}
 		int numberToSummon = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		List<SpellDesc> subSpells = desc.subSpells(0);
 		for (int i = 0; i < numberToSummon; i++) {
-			Minion minion = putRandomMinionFromDeckOnBoard(context, player, cardFilter, cardLocation, source);
+			Minion minion = putMinionOntoBoard(context, player, source, desc);
 			if (minion != null) {
 				for (SpellDesc subSpell : subSpells) {
 					SpellUtils.castChildSpell(context, player, subSpell, source, target, minion);
@@ -88,14 +89,33 @@ public class RecruitSpell extends Spell {
 	}
 
 	@Suspendable
-	private Minion putRandomMinionFromDeckOnBoard(GameContext context, Player player, EntityFilter cardFilter, Zones cardLocation, Entity source) {
-		Card card = null;
-		CardList collection = cardLocation == Zones.HAND ? player.getHand() : player.getDeck();
-		if (cardFilter == null) {
-			card = context.getLogic().getRandom(collection.filtered(f -> f.getCardType() == CardType.MINION));
+	private Minion putMinionOntoBoard(GameContext context, Player player, Entity source, SpellDesc desc) {
+		Card card;
+		CardSource cardSource;
+		EntityFilter cardFilter;
+
+		if (desc.getCardSource() == null) {
+			Zones cardLocation = (Zones) desc.get(SpellArg.CARD_LOCATION);
+			if (cardLocation == null || cardLocation == Zones.DECK) {
+				cardSource = DeckSource.create();
+			} else {
+				cardSource = HandSource.create();
+			}
 		} else {
-			card = context.getLogic().getRandom(collection.filtered(c -> c.getCardType() == CardType.MINION && cardFilter.matches(context, player, c, source)));
+			cardSource = desc.getCardSource();
 		}
+
+		if (cardSource instanceof HasCardCreationSideEffects) {
+			throw new UnsupportedOperationException("Cannot recruit from sources that have card creation side effects.");
+		}
+
+		if (desc.getCardFilter() == null) {
+			cardFilter = CardFilter.create(CardType.MINION);
+		} else {
+			cardFilter = AndFilter.create(CardFilter.create(CardType.MINION), desc.getCardFilter());
+		}
+
+		card = context.getLogic().getRandom(cardSource.getCards(context, source, player).filtered(cardFilter.matcher(context, player, source)));
 
 		if (card == null) {
 			return null;
@@ -103,7 +123,8 @@ public class RecruitSpell extends Spell {
 
 		// we need to remove the card temporarily here, because there are card interactions like Starving Buzzard + Desert Camel
 		// which could result in the card being drawn while a minion is summoned
-		if (cardLocation == Zones.DECK) {
+		Zones originalZone = card.getZone();
+		if (originalZone == Zones.DECK) {
 			player.getDeck().move(card, player.getSetAsideZone());
 		}
 
@@ -111,7 +132,7 @@ public class RecruitSpell extends Spell {
 		boolean summonSuccess = context.getLogic().summon(player.getId(), summon, null, -1, false);
 
 		// re-add the card here if we removed it before
-		if (cardLocation == Zones.DECK) {
+		if (originalZone == Zones.DECK) {
 			player.getSetAsideZone().move(card, player.getDeck());
 		}
 
@@ -119,7 +140,7 @@ public class RecruitSpell extends Spell {
 			context.getLogic().removeCard(card);
 			return summon;
 		}
+
 		return null;
 	}
-
 }

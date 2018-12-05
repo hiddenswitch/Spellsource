@@ -17,6 +17,7 @@ This release has various bug fixes helpfully reported by the community. It also 
  - Resurrection and graveyard counting effects now don't count minions that have been removed peacefully. This fixes reported issues with Psychic Scream and Twilight's Call, for example. Other affected cards include Slain Party, Fallen Champions hero power, Anyfin Can Happen, Swarm, Titanstrike, Truthguard, Commander Garrosh, Echo of Anduin, Inquisitor Deilana, Resurrect, Endless Army, Hadronox, Bloodreaver Guldan, the Diamond spellstones, Kazakus tokens, Onyx Bishop, N'Zoth the Curroptor, Witching Hour, Reanimate, Pay Respects, Feugen, Stalagg, and Doomcaller.
  - Leyline Manipulator now reduces minions cost that are copied by Simulacrum, or by any card-copying effect. All card copy effects now correctly mark the copies as not started in the deck or hand. This affects about 58 additional cards.
  - Card sets were specified after attribute lookups for discover and card receiving effects. This affected A New Challenger, Average Joe and the Ungoro Pack.
+ - Coffin Crasher now correctly recruits from hand. Some cards also written like Coffin Crasher work now.
  
 ###### Other Fixes:
 

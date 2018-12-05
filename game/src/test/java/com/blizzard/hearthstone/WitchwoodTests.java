@@ -29,6 +29,18 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testCoffinCrasher() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_loot_hoarder");
+			receiveCard(context, player, "minion_runic_egg");
+			Minion coffinCrasher = playMinionCard(context, player, "minion_coffin_crasher");
+			destroy(context, coffinCrasher);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_runic_egg");
+		});
+	}
+
+	@Test
 	public void testVoodooDoll() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
