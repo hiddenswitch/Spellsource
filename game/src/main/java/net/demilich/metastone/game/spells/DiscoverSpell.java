@@ -370,27 +370,25 @@ public class DiscoverSpell extends Spell {
 			return;
 		}
 
-		// Always copy the choices.
-		choices = choices.getCopy();
-
 		List<GameAction> discoverActions = new ArrayList<>();
 		for (int i = 0; i < choices.size(); i++) {
-			Card card = choices.get(i);
-			card.setId(context.getLogic().generateId());
-			card.setOwner(player.getId());
-			card.moveOrAddTo(context, Zones.DISCOVER);
+			Card originalCard = choices.get(i);
+			Card copy = originalCard.getCopy();
+			copy.setId(context.getLogic().generateId());
+			copy.setOwner(player.getId());
+			copy.moveOrAddTo(context, Zones.DISCOVER);
 
 			// For each discover, it calls the chosenSpell on its card and notChosenSpell on the other cards
 			List<SpellDesc> notChosenSpells;
 			SpellDesc chosenSpell;
 			final Stream<Card> otherCards = Stream.concat(choices.subList(0, i).stream(), choices.subList(i + 1, choices.size()).stream());
 			if (exclusive) {
-				chosenSpell = chosenSpellTemplate.addArg(SpellArg.TARGET, card.getCopySource());
+				chosenSpell = chosenSpellTemplate.addArg(SpellArg.TARGET, originalCard.getReference());
 				notChosenSpells = otherCards
-						.map(Card::getCopySource)
+						.map(Card::getReference)
 						.map(cid -> otherSpell.addArg(SpellArg.TARGET, cid)).collect(toList());
 			} else {
-				chosenSpell = chosenSpellTemplate.addArg(SpellArg.CARD, card.getCardId());
+				chosenSpell = chosenSpellTemplate.addArg(SpellArg.CARD, originalCard.getCardId());
 				notChosenSpells = otherCards
 						.map(Card::getCardId)
 						.map(cid -> otherSpell.addArg(SpellArg.CARD, cid)).collect(toList());
@@ -403,10 +401,11 @@ public class DiscoverSpell extends Spell {
 			final SpellDesc spell = SpellDesc.join(chosenSpell, notChosenSpellsArray);
 
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
-			discover.setCard(card);
+			discover.setCard(copy);
 			discover.setId(i);
 			discover.setSource(source != null ? source.getReference() : null);
 			discoverActions.add(discover);
+			choices.set(i, copy);
 		}
 
 		Attribute attribute = desc.getAttribute();
