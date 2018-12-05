@@ -12,6 +12,7 @@ This release has various bug fixes helpfully reported by the community. It also 
 ###### Content Fixes:
 
  - Discovers that use class weightings (most discovers) no longer show duplicates. This affects between 100-160 cards.
+ - Unlicensed Apothecary now triggers for all minions being played, not just deathrattle minions as it was incorrectly coded.
  - Ancestral Plane and other cards that discover cards inside decks and do stuff with them now interacts correctly with Psychic Scream and other cards that shuffle specific targets into the deck. 
  - Paradox, a Sands of Time minion, behaves correctly, removing itself after a card has been played, rather than before.
  - Ancestral Legacy now only discovers from Minions you actually played.
