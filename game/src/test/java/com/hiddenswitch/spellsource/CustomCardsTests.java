@@ -40,6 +40,7 @@ import org.testng.annotations.Test;
 
 import java.util.*;
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -51,6 +52,32 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testAncestralPlaneGrumbleTheWorldshakerInteraction() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_grumble_worldshaker");
+			context.endTurn();
+			playCard(context, opponent, "spell_psychic_scream");
+			assertEquals(player.getDeck().get(0).getCardId(), "minion_grumble_worldshaker");
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			context.endTurn();
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_the_coin", "Should draw the Coin");
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getDeck().get(0).getCardId(), "minion_grumble_worldshaker");
+			AtomicBoolean didDiscover = new AtomicBoolean();
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.size(), 1);
+				assertEquals(discoverActions.get(0).getCard().getCardId(), "minion_grumble_worldshaker");
+				assertTrue(didDiscover.compareAndSet(false, true), "should discover once");
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_ancestral_plane");
+			assertTrue(didDiscover.get());
+			assertEquals(player.getHand().get(1).getCardId(), "minion_grumble_worldshaker");
+		});
+	}
 
 	@Test
 	public void testLuminaLightOfTheforest() {
