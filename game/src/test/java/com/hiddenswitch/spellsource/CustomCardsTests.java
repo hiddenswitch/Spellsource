@@ -2677,6 +2677,30 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testFifiFizzlewarpUnlicensedApothecaryInteraction() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
+			OverrideHandle<Card> handle = overrideRandomCard(context, "minion_unlicensed_apothecary");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			handle.stop();
+			context.getLogic().drawCard(player.getId(), player);
+			context.getLogic().discardCard(player, fifi);
+			Card unlicensedApothecaryText = player.getHand().get(0);
+			assertEquals(unlicensedApothecaryText.getCardId(), "minion_unlicensed_apothecary");
+			Card boulderfist = CardCatalogue.getCardById("minion_boulderfist_ogre");
+			assertEquals(unlicensedApothecaryText.getAttack(), boulderfist.getBaseAttack());
+			assertEquals(unlicensedApothecaryText.getHp(), boulderfist.getBaseHp());
+			int triggersBefore = context.getTriggerManager().getTriggers().size();
+			playCard(context, player, unlicensedApothecaryText);
+			assertEquals(context.getTriggerManager().getTriggers().size(), triggersBefore + 1, "Should have put Unlicensed Apothecary text into play");
+			int playerHp = player.getHero().getHp();
+			playCard(context, player, "minion_wisp");
+			assertEquals(player.getHero().getHp(), playerHp - 5, "Should have triggered Unlicensed Apothecary text");
+		});
+	}
+
+	@Test
 	public void testFifiFizzlewarp() {
 		// Test that cards that have `-filtered battlecries work correctly after Fifi Fizzlewarp
 		runGym((context, player, opponent) -> {
