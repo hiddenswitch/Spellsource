@@ -33,8 +33,8 @@ import static java.util.stream.Collectors.toList;
  * Discover actions prompt the user to select from {@code count=}{@link SpellArg#HOW_MANY} cards, with a default of 3.
  * <p>
  * If an {@link SpellArg#ATTRIBUTE} is specified, it is added to the cards in the {@link Zones#DISCOVER}, and removed
- * when they leave. This is used with the {@link Attribute#UNCENSORED} attribute to
- * indicate that these cards should be visible to the opponent.
+ * when they leave. This is used with the {@link Attribute#UNCENSORED} attribute to indicate that these cards should be
+ * visible to the opponent.
  * <p>
  * The cards to prompt the user with are gathered from the {@link SpellArg#CARDS} attribute and the specified {@link
  * CardSource} and {@link CardFilter} in {@link SpellArg#CARD_SOURCE} and {@link SpellArg#CARD_FILTER}. When the number
@@ -344,7 +344,13 @@ public class DiscoverSpell extends Spell {
 			}
 
 			for (int i = 0; i < count; i++) {
-				choices.add(context.getLogic().removeRandom(weightedOptions));
+				if (weightedOptions.isEmpty()) {
+					break;
+				}
+				Card chosen = context.getLogic().removeRandom(weightedOptions);
+				// Remove all appearances of the option, because weighted discovers are always supposed to show distinct choices
+				weightedOptions.remove(chosen, Integer.MAX_VALUE);
+				choices.add(chosen);
 			}
 		} else {
 			// If the number of cards is greater than can be fit, do a random pick. Otherwise, keep it in the order
