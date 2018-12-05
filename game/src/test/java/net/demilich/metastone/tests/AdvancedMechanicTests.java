@@ -3,6 +3,7 @@ package net.demilich.metastone.tests;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
@@ -10,6 +11,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -32,6 +34,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -221,6 +224,26 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(size.get(), 4 - 3, "There should be one discover option left out");
 			assertEquals(player.getDiscoverZone().size(), 0);
 			assertEquals(player.getRemovedFromPlay().size(), 3, "Only generated cards should have been removed from play.");
+		});
+
+		// Doesn't show duplicates due to class card weighting
+		factory.run((context, player, opponent) -> {
+			context.setDeckFormat(new DeckFormat() {
+				@Override
+				public boolean isInFormat(Card card) {
+					if (card.getCardId().equals("minion_blue_test")) {
+						return true;
+					}
+
+					return card.getCardId().equals("minion_neutral_test");
+				}
+			});
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).distinct().count(), 2L);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_test_discover3");
+			assertEquals(player.getHand().size(), 1);
 		});
 	}
 

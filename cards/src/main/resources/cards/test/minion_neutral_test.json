@@ -2,7 +2,7 @@
   "name": "",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "BLUE",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",

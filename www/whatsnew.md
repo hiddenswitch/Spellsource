@@ -11,6 +11,7 @@ This release has various bug fixes helpfully reported by the community. It also 
 
 ###### Content Fixes:
 
+ - Discovers that use class weightings (most discovers) no longer show duplicates. This affects between 100-160 cards. 
  - Paradox, a Sands of Time minion, behaves correctly, removing itself after a card has been played, rather than before.
  - Ancestral Legacy now only discovers from Minions you actually played.
  - Resurrection and graveyard counting effects now don't count minions that have been removed peacefully. This fixes reported issues with Psychic Scream and Twilight's Call, for example. Other affected cards include Slain Party, Fallen Champions hero power, Anyfin Can Happen, Swarm, Titanstrike, Truthguard, Commander Garrosh, Echo of Anduin, Inquisitor Deilana, Resurrect, Endless Army, Hadronox, Bloodreaver Guldan, the Diamond spellstones, Kazakus tokens, Onyx Bishop, N'Zoth the Curroptor, Witching Hour, Reanimate, Pay Respects, Feugen, Stalagg, and Doomcaller.
