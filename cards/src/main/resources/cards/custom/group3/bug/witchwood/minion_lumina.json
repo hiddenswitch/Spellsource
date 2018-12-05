@@ -10,13 +10,23 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD"
     },
     "spell": {
       "class": "DiscoverSpell",
       "cardFilter": {
-        "class": "RaceEqualsFilter",
-        "secondaryTarget": "EVENT_SOURCE"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "RaceEqualsFilter",
+            "secondaryTarget": "EVENT_SOURCE"
+          },
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          }
+        ]
       }
     }
   },

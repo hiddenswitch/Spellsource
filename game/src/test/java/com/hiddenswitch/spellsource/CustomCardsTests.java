@@ -53,6 +53,64 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testLuminaLightOfTheforest() {
+		// Test that Lumina doesn't trigger off herself
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, player, discoverActions -> {
+				fail("should not discover");
+				return discoverActions.get(0);
+			});
+			playMinionCard(context, player, "minion_lumina");
+		});
+
+		// Test that Lumina only discovers minions and not spells
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.size(), 1);
+				assertEquals(discoverActions.get(0).getCard().getCardType(), CardType.MINION);
+				return discoverActions.get(0);
+			});
+			context.setDeckFormat(new DeckFormat() {
+				@Override
+				public boolean isInFormat(Card card) {
+					if (card.getCardId().equals("minion_wisp")) {
+						return true;
+					}
+
+					return card.getCardId().equals("spell_mirror_image");
+				}
+			});
+			playMinionCard(context, player, "minion_lumina");
+			playMinionCard(context, player, "minion_wisp");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_wisp");
+		});
+
+		// Test that Lumina discovers minions of the same tribe
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.size(), 1);
+				assertEquals(discoverActions.get(0).getCard().getCardType(), CardType.MINION);
+				return discoverActions.get(0);
+			});
+			context.setDeckFormat(new DeckFormat() {
+				@Override
+				public boolean isInFormat(Card card) {
+					if (card.getCardId().equals("minion_bloodfen_raptor")) {
+						return true;
+					}
+
+					return card.getCardId().equals("spell_mirror_image");
+				}
+			});
+			playMinionCard(context, player, "minion_lumina");
+			playMinionCard(context, player, "minion_bloodfen_raptor");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
+		});
+	}
+
+	@Test
 	public void testAncestralLegacy() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_murloc_tidehunter");
@@ -66,7 +124,7 @@ public class CustomCardsTests extends TestBase {
 				return discoverActions.get(0);
 			});
 			playCard(context, player, "spell_ancestral_legacy");
-			assertEquals(player.getHand().size(), 1 );
+			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "minion_murloc_tidehunter");
 		});
 	}

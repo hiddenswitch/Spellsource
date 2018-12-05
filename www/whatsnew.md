@@ -18,6 +18,7 @@ This release has various bug fixes helpfully reported by the community. It also 
  - Leyline Manipulator now reduces minions cost that are copied by Simulacrum, or by any card-copying effect. All card copy effects now correctly mark the copies as not started in the deck or hand. This affects about 58 additional cards.
  - Card sets were specified after attribute lookups for discover and card receiving effects. This affected A New Challenger, Average Joe and the Ungoro Pack.
  - Coffin Crasher now correctly recruits from hand. Some cards also written like Coffin Crasher work now.
+ - Lumina, Light of the Forest now discovers only minions and does not trigger off herself.
  
 ###### Other Fixes:
 
