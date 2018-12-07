@@ -183,6 +183,8 @@ public interface Accounts {
 
 	/**
 	 * Creates an account.
+	 * <p>
+	 * The first user created on the database will gain the {@link Authorities#ADMINISTRATIVE} authority.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
@@ -236,6 +238,11 @@ public interface Accounts {
 		PasswordRecord passwordRecord = new PasswordRecord();
 		passwordRecord.setScrypt(scrypt);
 		record.getServices().setPassword(passwordRecord);
+
+		// The first user on the server is automatically the administrator
+		if (mongo().count(USERS, json()) == 0L) {
+			record.getRoles().add(Authorities.ADMINISTRATIVE.name());
+		}
 
 		mongo().insert(USERS, mapFrom(record));
 
@@ -526,7 +533,7 @@ public interface Accounts {
 				.method(HttpMethod.GET)
 				.handler(routingContext -> {
 					routingContext.response().setStatusCode(303);
-					routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequest.html");
+					routingContext.response().putHeader("Location", "passwordresetrequest.html");
 					routingContext.response().end();
 				});
 
@@ -536,20 +543,20 @@ public interface Accounts {
 					routingContext.response().setStatusCode(303);
 
 					if (routingContext.queryParam("token").size() != 1) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
 					String token = routingContext.queryParam("token").get(0);
 					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
 					if (System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
 
 					routingContext.addCookie(Cookie.cookie("token", token));
-					routingContext.response().putHeader("Location", "/reset/passwords/passwordreset.html");
+					routingContext.response().putHeader("Location", "passwordreset.html");
 					routingContext.response().end();
 				}));
 
@@ -566,14 +573,14 @@ public interface Accounts {
 					String password2 = routingContext.request().getFormAttribute("password2");
 
 					if (!password1.equals(password2) || !Accounts.isValidPassword(password1)) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordsdidnotmatch.html");
+						routingContext.response().putHeader("Location", "passwordsdidnotmatch.html");
 						routingContext.response().end();
 						return;
 					}
 
 					Cookie cookie = routingContext.getCookie("token");
 					if (cookie == null) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
@@ -581,7 +588,7 @@ public interface Accounts {
 					String token = cookie.getValue();
 					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
 					if (passwordResetRecord == null || System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
@@ -589,9 +596,9 @@ public interface Accounts {
 					try {
 						Accounts.changePassword(ChangePasswordRequest.request(new UserId(passwordResetRecord.getUserId()), password1));
 						mongo().removeDocument(RESET_TOKENS, json("_id", token));
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetted.html");
+						routingContext.response().putHeader("Location", "passwordresetted.html");
 					} catch (Throwable throwable) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 					} finally {
 						routingContext.removeCookie("token");
 						routingContext.response().end();
@@ -613,7 +620,7 @@ public interface Accounts {
 						UserRecord userRecord = mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
 
 						// End the request first to prevent the timing of the function from leaking whether or not an account exists.
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequestsent.html");
+						routingContext.response().putHeader("Location", "passwordresetrequestsent.html");
 						routingContext.response().end();
 
 						if (userRecord != null) {
@@ -639,7 +646,7 @@ public interface Accounts {
 							}
 						}
 					} else {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequestinvalid.html");
+						routingContext.response().putHeader("Location", "passwordresetrequestinvalid.html");
 						routingContext.response().end();
 					}
 				}));
