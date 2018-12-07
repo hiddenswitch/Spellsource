@@ -1,8 +1,6 @@
 package com.hiddenswitch.spellsource;
 
 import com.hazelcast.config.*;
-import org.bitsofinfo.hazelcast.discovery.consul.ConsulDiscoveryConfiguration;
-import org.bitsofinfo.hazelcast.discovery.consul.ConsulDiscoveryStrategyFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,20 +51,13 @@ public interface Cluster {
 		if (!System.getenv().getOrDefault("HAZELCAST_URLS", "").isEmpty()) {
 			List<String> urls = Arrays.asList(System.getenv("HAZELCAST_URLS").split(","));
 
-			int port;
-			try {
-				port = Integer.parseInt(urls.get(0).split(":")[1]);
-			} catch (Throwable any) {
-				port = hazelcastClusterPort;
-			}
-
 			networkConfig
 					.setJoin(new JoinConfig()
 							.setMulticastConfig(new MulticastConfig().setEnabled(false))
 							.setTcpIpConfig(new TcpIpConfig()
 									.setEnabled(true)
 									.setMembers(urls)));
-		} else if (System.getenv().containsKey("CONSUL_URL")) {
+		} /* else if (System.getenv().containsKey("CONSUL_URL")) {
 			URL consulUrl;
 			try {
 				consulUrl = new URL(System.getenv("CONSUL_URL"));
@@ -92,7 +83,7 @@ public interface Cluster {
 					.setMulticastConfig(new MulticastConfig()
 							.setEnabled(false))
 					.setDiscoveryConfig(discoveryConfig));
-		} else {
+		} */ else {
 			// From https://github.com/hazelcast/hazelcast-aws
 			// Although this probably hasn't been working
 			DiscoveryStrategyConfig awsDiscoveryStrategy = new DiscoveryStrategyConfig("com.hazelcast.aws.AwsDiscoveryStrategy");
