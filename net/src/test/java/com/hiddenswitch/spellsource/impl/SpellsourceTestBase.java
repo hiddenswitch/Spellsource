@@ -55,7 +55,7 @@ public abstract class SpellsourceTestBase {
 		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		if (initialized.compareAndSet(false, true)) {
 			Bots.BEHAVIOUR.set(PlayRandomBehaviour::new);
-			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701, 5702));
+			hazelcastInstance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701, 5702));
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
@@ -119,7 +119,7 @@ public abstract class SpellsourceTestBase {
 	public static DefaultApi getApi() {
 		DefaultApi api = new DefaultApi();
 		api.setApiClient(new ApiClient());
-		api.getApiClient().setBasePath(UnityClient.basePath);
+		api.getApiClient().setBasePath(UnityClient.BASE_PATH);
 		return api;
 	}
 

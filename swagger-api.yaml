@@ -23,6 +23,7 @@ info:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: api-3.hiddenswitch.com
+basePath: /api/v2
 schemes:
 - https
 consumes:

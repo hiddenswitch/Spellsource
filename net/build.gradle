@@ -8,26 +8,37 @@ buildscript {
     }
 }
 
+def hazelcastJvmArgs = ["--add-modules", "java.se",
+                        "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
+                        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                        "--add-opens", "java.base/java.nio=ALL-UNNAMED",
+                        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
+                        "--add-opens", "java.management/sun.management=ALL-UNNAMED",
+                        "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED"]
+
+def localMainClassName = 'com.hiddenswitch.spellsource.applications.LocalClustered'
+
+def debugSystemProperties = ["spellsource.port"                        : "8080",
+                             "spellsource.root.logger.level"           : "DEBUG",
+                             "games.defaultNoActivityTimeout"          : "999999000",
+                             "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory"]
+
 apply plugin: 'application'
-
 mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
-
 apply plugin: 'com.github.johnrengelman.shadow'
 
 configurations.all {
     resolutionStrategy {
         force 'com.hazelcast:hazelcast:3.11'
+        force 'org.apache.commons:commons-lang3:3.5'
+        force 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+        force 'com.fasterxml.jackson.core:annotations:2.9.0'
+        force 'com.fasterxml.jackson.core:databind:2.9.7'
     }
 }
 
-
 shadowJar {
     zip64 true
-}
-
-
-configurations {
-    quasar
 }
 
 repositories {
@@ -42,12 +53,13 @@ repositories {
 }
 
 dependencies {
-    quasar files("lib/quasar-core-0.8.0.jar")
-
-    compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.1.0'
+    compile group: 'com.hazelcast', name: 'hazelcast', version: '3.11'
+    compile group: 'com.hazelcast', name: 'hazelcast-aws', version: '2.3'
+    compile group: 'org.bitsofinfo', name: 'hazelcast-consul-discovery-spi', version: '1.0-RC9'
+    compile group: 'org.apache.cxf', name: 'cxf-rt-rs-client', version: '3.0.3'
+    compile group: 'org.apache.cxf', name: 'cxf-rt-transports-http-hc', version: '3.0.3'
     compile group: 'joda-time', name: 'joda-time', version: '2.9.9'
     compile group: 'com.lambdaworks', name: 'scrypt', version: '1.4.0'
-    compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.4'
     compile group: 'commons-validator', name: 'commons-validator', version: '1.4.1'
     compile group: 'io.vertx', name: 'vertx-core', version: '3.6.0'
     compile group: 'io.vertx', name: 'vertx-mongo-client', version: '3.6.0'
@@ -58,6 +70,7 @@ dependencies {
     compile group: 'io.vertx', name: 'vertx-hazelcast', version: '3.6.0'
     compile group: 'io.vertx', name: 'vertx-rx-java2', version: '3.6.0'
     compile group: 'io.vertx', name: 'vertx-mail-client', version: '3.6.0'
+    compile group: 'su.nlq', name: 'vertx-prometheus-metrics', version: '3.6.0'
     compile group: 'net.sf.py4j', name: 'py4j', version: '0.10.7'
     compile group: 'de.flapdoodle.embed', name: 'de.flapdoodle.embed.mongo', version: '2.0.3'
     compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
@@ -74,23 +87,16 @@ dependencies {
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
     testCompile group: 'org.jboss.resteasy', name: 'resteasy-client', version: '3.1.0.Final'
     testCompile group: 'org.asynchttpclient', name: 'async-http-client', version: '2.4.9'
-    testCompile group: 'org.apache.curator', name: 'curator-test', version: '3.3.0'
     testCompile group: 'com.neovisionaries', name: 'nv-websocket-client', version: '2.6'
 }
 
-tasks.withType(JavaExec) {
-    jvmArgs "-javaagent:${configurations.quasar.iterator().next()}=mb"
-}
-
 test {
-    jvmArgs("-javaagent:${configurations.quasar.iterator().next()}=mb", "--add-modules", "java.se", "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.nio=ALL-UNNAMED", "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.management/sun.management=ALL-UNNAMED", "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED")
-    systemProperty "spellsource.port", "8080"
-    systemProperty "vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory"
+    setSystemProperties(debugSystemProperties)
+    setJvmArgs(hazelcastJvmArgs)
     useJUnit()
 
     if (System.properties.containsKey("exclude-tests")) {
-        def toExclude = System.properties.getProperty("exclude-tests").split(",");
-        exclude(toExclude)
+        exclude(System.properties.getProperty("exclude-tests").split(","))
     }
 
     testLogging {
@@ -99,20 +105,16 @@ test {
 }
 
 task(runDebug, dependsOn: 'classes', type: JavaExec) {
-    systemProperty "spellsource.port", "8080"
-    systemProperty "spellsource.root.logger.level", "DEBUG"
-    systemProperty "games.defaultNoActivityTimeout", "999999000"
-    main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
+    setSystemProperties(debugSystemProperties)
+    main = localMainClassName
+    setJvmArgs(hazelcastJvmArgs + ["-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005"] as List<String>)
     classpath = sourceSets.main.runtimeClasspath
-    jvmArgs("-Xdebug", "-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=5005", "-javaagent:${configurations.quasar.iterator().next()}=mb", "--add-modules", "java.se", "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.nio=ALL-UNNAMED", "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.management/sun.management=ALL-UNNAMED", "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED")
 }
 
 task(local, dependsOn: 'classes', type: JavaExec) {
-    systemProperty "spellsource.port", "8080"
-    systemProperty "spellsource.root.logger.level", "DEBUG"
-    systemProperty "games.defaultNoActivityTimeout", "999999000"
-    main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
-    jvmArgs("-javaagent:${configurations.quasar.iterator().next()}=mb", "--add-modules", "java.se", "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.nio=ALL-UNNAMED", "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.management/sun.management=ALL-UNNAMED", "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED")
+    setSystemProperties(debugSystemProperties)
+    main = localMainClassName
+    setJvmArgs(hazelcastJvmArgs)
     classpath = sourceSets.main.runtimeClasspath
 }
 
@@ -131,9 +133,8 @@ task(localWindows, dependsOn: 'classes', type: JavaExec) {
         println "  Server is ready."
         println "Otherwise, you will see an error. Make sure mongod is running, as this is the most common mistake you will make."
     }
-    systemProperty "spellsource.port", "8080"
-    systemProperty "mongo.url", "mongodb://localhost:27017"
-    main = 'com.hiddenswitch.spellsource.applications.LocalClustered'
-    jvmArgs("-javaagent:${configurations.quasar.iterator().next()}=mb", "--add-modules", "java.se", "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED", "--add-opens", "java.base/java.lang=ALL-UNNAMED", "--add-opens", "java.base/java.nio=ALL-UNNAMED", "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED", "--add-opens", "java.management/sun.management=ALL-UNNAMED", "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED")
+    setSystemProperties(debugSystemProperties)
+    main = localMainClassName
+    setJvmArgs(hazelcastJvmArgs)
     classpath = sourceSets.main.runtimeClasspath
 }

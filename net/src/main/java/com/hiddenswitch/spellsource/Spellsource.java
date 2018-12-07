@@ -422,7 +422,15 @@ public class Spellsource {
 							CardCatalogue.loadCardsFromPackage();
 							changeCardId("spell_lesser_oynx_spellstone", "spell_lesser_onyx_spellstone");
 						}))
-				.migrateTo(25, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(26)
+						.withUp(thisVertx -> {
+							// DoctorPangloss is the first and only admin user
+							mongo().updateCollectionWithOptions(Accounts.USERS, json(), json("$set", json(UserRecord.ROLES, array())), new UpdateOptions().setMulti(true));
+							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
+							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
+						}))
+				.migrateTo(26, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

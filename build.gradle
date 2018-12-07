@@ -1,96 +1,50 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url 'https://plugins.gradle.org/m2/' }
-    }
-    dependencies {
-        classpath('io.swagger:swagger-codegen:2.3.0')
-    }
-}
-
-import io.swagger.codegen.config.CodegenConfigurator
-import io.swagger.codegen.DefaultGenerator
-
-task(swagger) {
-    def input = "swagger-api.yaml"
-    def output = file('client')
-    def templateDir = file('swagger-templates/java')
-    
-    inputs.file(input)
-    outputs.dir(output)
-    doLast {
-        def config = new CodegenConfigurator()
-        config.setInputSpec(input)
-        config.setOutputDir(output.path)
-        config.setTemplateDir(templateDir.absolutePath)
-        config.setLang('java')
-        config.setAdditionalProperties([
-                'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
-                'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
-                'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
-                'library'                : 'jersey1',
-                'serializableModel'      : 'true',
-                'dateLibrary'            : 'java8',
-                'artifactId'             : 'client',
-                'hideGenerationTimestamp': 'true'
-        ])
-        config.setGroupId('com.hiddenswitch')
-        config.setArtifactId('spellsource-client')
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
-    }
-}
-
-
-task(swaggerClient) {
-    def input = "swagger-api.yaml"
-    def outputDir = 'clientcsharp'
-    def output = file(outputDir)
-    inputs.file(input)
-    outputs.dir(output)
-    doLast {
-        def config = new CodegenConfigurator()
-        config.setInputSpec(input)
-        config.setOutputDir(output.path)
-        config.setLang('csharp')
-        config.setAdditionalProperties([
-                'supportFiles'           : 'false',
-                'apiTests'               : 'false',
-                'modelTests'             : 'false',
-                'modelDocs'              : 'false',
-                'packageName'            : 'Spellsource.Client',
-                'targetFramework'        : 'v3.5',
-                'sourceFolder'           : 'Scripts',
-                'hideGenerationTimestamp': 'true',
-                'optionalProjectFile'    : 'false',
-                'optionalAssemblyFile'   : 'false'
-        ])
-        new DefaultGenerator().opts(config.toClientOptInput()).generate()
-    }
-}
+apply from: 'client.gradle'
 
 subprojects {
-    repositories {
-        mavenCentral()
-        maven { url 'https://jitpack.io' }
-    }
-
     apply plugin: 'java'
     apply plugin: 'eclipse'
     apply plugin: 'idea'
 
     sourceCompatibility = 1.8
-
-    project.version = '1.3.0'
-
-    compileJava {
-        options.encoding = 'UTF-8'
-        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+    project.version = '0.7.6'
+    
+    repositories {
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 
     dependencies {
-        compile 'org.jetbrains:annotations-java5:15.0'
-        compile 'de.ruedigermoeller:fst:2.56'
-        runtime 'org.codehaus.groovy:groovy:2.3.0'
+        compile group: 'org.jetbrains', name: 'annotations-java5', version: '15.0'
+        compile group: 'de.ruedigermoeller', name: 'fst', version: '2.56'
+        compile group: 'co.paralleluniverse', name: 'quasar-core', version: '0.8.0'
+        runtime group: 'org.codehaus.groovy', name: 'groovy', version: '2.5.+'
+    }
+
+    compileJava.dependsOn processResources
+    compileJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+
+        doLast {
+            ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.compile.asPath)
+            ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
+                fileset(dir: sourceSets.main.output.classesDirs.asPath)
+            }
+        }
+    }
+
+    compileTestJava.dependsOn processTestResources
+    compileTestJava {
+        options.encoding = 'UTF-8'
+        options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"
+
+        doLast {
+            ant.taskdef(name: 'instrumentation', classname: 'co.paralleluniverse.fibers.instrument.InstrumentationTask', classpath: configurations.testCompile.asPath)
+            ant.instrumentation(allowMonitors: 'true', allowBlocking: 'true') {
+                fileset(dir: sourceSets.main.output.classesDirs.asPath)
+                fileset(dir: sourceSets.test.output.classesDirs.asPath)
+            }
+        }
     }
 }
 

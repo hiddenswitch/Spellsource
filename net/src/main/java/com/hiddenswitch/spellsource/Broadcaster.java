@@ -48,3 +48,4 @@ public interface Broadcaster extends Verticle {
 	 */
 	String getResponsePrefix();
 }
+

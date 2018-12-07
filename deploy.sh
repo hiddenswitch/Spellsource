@@ -17,8 +17,7 @@ cd ..
 zip artifact.zip \
     ./Dockerfile \
     ./Dockerrun.aws.json \
-    ./net/build/libs/net-1.3.0-all.jar \
-    ./net/lib/quasar-core-0.8.0.jar \
+    ./net/build/libs/net-0.7.6-all.jar \
     ./server.sh >/dev/null
 
 eb use metastone-dev >/dev/null

@@ -123,7 +123,7 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-1.3.0-all.jar'):
+    def find_resource_path(filename='net-0.7.6-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -160,9 +160,14 @@ class Context(contextlib.AbstractContextManager):
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         port = launch_gateway(port=0,
-                              classpath=Context.find_resource_path('net-1.3.0-all.jar'),
-                              javaopts=[
-                                  '-javaagent:' + Context.find_resource_path('quasar-core-0.8.0.jar') + '=mb'],
+                              classpath=Context.find_resource_path('net-0.7.6-all.jar'),
+                              javaopts=["--add-modules", "java.se",
+                                        "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
+                                        "--add-opens", "java.base/java.lang=ALL-UNNAMED",
+                                        "--add-opens", "java.base/java.nio=ALL-UNNAMED",
+                                        "--add-opens", "java.base/sun.nio.ch=ALL-UNNAMED",
+                                        "--add-opens", "java.management/sun.management=ALL-UNNAMED",
+                                        "--add-opens", "jdk.management/com.sun.management.internal=ALL-UNNAMED"],
                               die_on_exit=True)
 
         # connect python side to Java side with Java dynamic port and start python

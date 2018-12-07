@@ -113,7 +113,7 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
 ### Using the Command Line Simulator
 
  1. Build the `cluster` shadow JAR: `./gradlew cluster:shadowJar`.
- 2. Execute the simulator with `java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Simulate`. Read the help there.
+ 2. Execute the simulator with `java -cp cluster/build/libs/cluster-0.7.6-all.jar com.hiddenswitch.cluster.applications.Simulate`. Read the help there.
  
 ### Automated Deckbuilding FAQ
  

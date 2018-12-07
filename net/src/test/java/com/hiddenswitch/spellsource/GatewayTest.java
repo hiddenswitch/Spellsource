@@ -13,8 +13,6 @@ import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -25,14 +23,11 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Deque;
-import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
@@ -55,7 +50,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			final int j = i;
 
 			Thread t = new Thread(() -> {
-				ApiClient client = new ApiClient().setBasePath(UnityClient.basePath);
+				ApiClient client = new ApiClient().setBasePath(UnityClient.BASE_PATH);
 				DefaultApi api = new DefaultApi(client);
 				String random = RandomStringUtils.randomAlphanumeric(36) + Integer.toString(j);
 				try {
@@ -100,7 +95,7 @@ public class GatewayTest extends SpellsourceTestBase {
 
 		vertx.runOnContext(v -> {
 			vertx.executeBlocking(fut -> {
-				DefaultApi api = new DefaultApi(new ApiClient().setBasePath(UnityClient.basePath));
+				DefaultApi api = new DefaultApi(new ApiClient().setBasePath(UnityClient.BASE_PATH));
 				CreateAccountResponse car = null;
 				try {
 					car = api.createAccount(new CreateAccountRequest()
