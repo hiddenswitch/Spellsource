@@ -8,6 +8,7 @@ import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
+import com.hiddenswitch.spellsource.util.Logging;
 import com.hiddenswitch.spellsource.util.Mongo;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Vertx;
@@ -29,7 +30,7 @@ public class ClusterTest extends SpellsourceTestBase {
 	public void testArrayQueueOverCluster(TestContext context) {
 		Async latch = context.async(3);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
+		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
 				.setWorkerPoolSize(99)
@@ -50,6 +51,7 @@ public class ClusterTest extends SpellsourceTestBase {
 					Strand.sleep(1000L);
 					String ok3 = queue.take();
 					context.assertEquals(ok3, "ok3");
+					context.assertEquals(com.hiddenswitch.spellsource.util.Hazelcast.getClusterManager().getNodes().size(), 2);
 					latch.countDown();
 				}));
 			});
@@ -74,13 +76,13 @@ public class ClusterTest extends SpellsourceTestBase {
 		}));
 	}
 
-	@Test(timeout = 45000L)
+	@Test(timeout = 90000L)
 	public void testMultiHostMultiClientCluster(TestContext context) {
 		// Connect to existing cluster
 		int count = Math.max((Runtime.getRuntime().availableProcessors() / 2 - 1) * 2, 2);
 		Async latch = context.async(count);
 		AtomicReference<Vertx> newVertx = new AtomicReference<>();
-		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5702, 5701));
+		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5702, 5701));
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(new HazelcastClusterManager(instance))
 				.setBlockedThreadCheckInterval(30000L)
@@ -117,6 +119,7 @@ public class ClusterTest extends SpellsourceTestBase {
 			}));
 		}));
 		latch.awaitSuccess();
+		Logging.root().info("ClusterTest: Successful");
 		newVertx.get().close(context.asyncAssertSuccess(v1 -> {
 			instance.shutdown();
 		}));

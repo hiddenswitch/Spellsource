@@ -1,5 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.DeckListParsingException;
 import net.demilich.metastone.game.GameContext;
@@ -136,18 +138,18 @@ public class Simulation {
 	}
 
 	@NotNull
-	public static Thread getMonitor(AtomicInteger counter, int total) {
-		return new Thread(() -> {
+	public static Strand getMonitor(AtomicInteger counter, int total) {
+		return Strand.of(new Thread(() -> {
 			try {
 				while (counter.get() <= total) {
-					Thread.sleep(5000);
+					Strand.sleep(5000);
 					int matchesNow = counter.get();
 					System.err.println(String.format("Progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
 				}
-			} catch (InterruptedException e) {
+			} catch (InterruptedException | SuspendExecution e) {
 				int matchesNow = counter.get();
 				System.err.println(String.format("Progress: %.2f%% (%d/%d completed)", (float) matchesNow / (float) total * 100.0f, matchesNow, total));
 			}
-		});
+		}));
 	}
 }

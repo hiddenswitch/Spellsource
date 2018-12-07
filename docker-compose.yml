@@ -1,0 +1,46 @@
+version: '3.7'
+services:
+  loadbalancer:
+    restart: always
+    image: traefik
+    command: --api --docker
+    ports:
+    - 80:80
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+    - "traefik.port=8080"
+    - "traefik.frontend.rule=PathPrefixStrip:/admin/traefik/"
+  game:
+    restart: always
+    build: .
+    environment:
+    - MONGO_URL=mongodb://mongo:27017/metastone
+    - HAZELCAST_URLS=spellsource-server_game_1:5701
+    - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
+    labels:
+    - "traefik.frontend.rule=PathPrefixStrip:/api/v2/"
+    - "traefik.backend.loadbalancer.stickiness=true"
+    - "traefik.backend.healthcheck.path=/"
+  mongo:
+    restart: always
+    # Latest version fully supported by Spellsource
+    image: "mongo:3.4.1"
+    volumes:
+    - mongodata:/data/db
+    labels:
+    - "traefik.enable=false"
+  hazelcastmancenter:
+    image: hazelcast/management-center
+    volumes:
+    - mancenterdata:/data/mancenter
+    environment:
+    - MC_CONTEXT=/admin/mancenter
+    - MANCENTER_DATA=/data/manceter
+    - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
+    labels:
+    - "traefik.port=8080"
+    - "traefik.frontend.rule=PathPrefix:/admin/mancenter/"
+volumes:
+  mongodata:
+  mancenterdata:

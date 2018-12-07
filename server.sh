@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
 if [[ -z "${SPELLSOURCE_APPLICATION}" ]]; then
-  APPLICATION="Clustered"
-else
-  APPLICATION="${SPELLSOURCE_APPLICATION}"
+  SPELLSOURCE_APPLICATION="Clustered"
+fi
+
+if [[ -z "${SPELLSOURCE_VERSION}" ]]; then
+  SPELLSOURCE_VERSION=0.7.6
 fi
 
 # Executes the fat jar of the network server using the Embedded application by default
@@ -14,5 +16,4 @@ java --add-modules java.se \
   --add-opens java.base/sun.nio.ch=ALL-UNNAMED \
   --add-opens java.management/sun.management=ALL-UNNAMED \
   --add-opens jdk.management/com.sun.management.internal=ALL-UNNAMED \
-  -javaagent:/data/quasar-core-0.8.0.jar=mb \
-  -cp /data/net-1.3.0-all.jar com.hiddenswitch.spellsource.applications.$APPLICATION
+  -cp /data/net-${SPELLSOURCE_VERSION}-all.jar com.hiddenswitch.spellsource.applications.${SPELLSOURCE_APPLICATION}

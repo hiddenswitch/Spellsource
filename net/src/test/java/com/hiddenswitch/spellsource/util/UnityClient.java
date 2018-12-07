@@ -1,7 +1,6 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.concurrent.CountDownLatch;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
 import com.google.common.collect.Sets;
@@ -30,13 +29,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
-import static io.vertx.ext.sync.Sync.fiberHandler;
-
 public class UnityClient implements AutoCloseable {
 	private static Logger LOGGER = LoggerFactory.getLogger(UnityClient.class);
 	private static AtomicInteger ids = new AtomicInteger(0);
 	public static final String BASE = "http://localhost:";
-	public static String basePath = BASE + Integer.toString(Port.port());
+	public static String BASE_PATH = BASE + Integer.toString(Port.port());
 	private int id;
 	private ApiClient apiClient;
 	private DefaultApi api;
@@ -61,8 +58,8 @@ public class UnityClient implements AutoCloseable {
 
 	public UnityClient(TestContext context) {
 		apiClient = new ApiClient();
-		thisUrl = basePath;
-		apiClient.setBasePath(basePath);
+		thisUrl = BASE_PATH;
+		apiClient.setBasePath(BASE_PATH);
 		api = new DefaultApi(apiClient);
 		id = ids.getAndIncrement();
 		this.context = context;
@@ -299,7 +296,7 @@ public class UnityClient implements AutoCloseable {
 	protected void matchmakeAndPlay(String deckId, String queueId) {
 		Future<Void> matchmaking = matchmake(deckId, queueId);
 		try {
-			matchmaking.get(25000L, TimeUnit.MILLISECONDS);
+			matchmaking.get(35000L, TimeUnit.MILLISECONDS);
 			play();
 		} catch (InterruptedException | ExecutionException ex) {
 			matchmaking.cancel(true);

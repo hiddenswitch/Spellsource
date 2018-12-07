@@ -45,10 +45,9 @@ RUN set -ex; \
 	update-alternatives --get-selections | awk -v home="$(readlink -f "$JAVA_HOME")" 'index($3, home) == 1 { $2 = "manual"; print | "update-alternatives --set-selections" }'; \
 # ... and verify that it actually worked for one of the alternatives we care about
 	update-alternatives --query java | grep -q 'Status: manual'
-ADD ./net/build/libs/net-1.3.0-all.jar /data/net-1.3.0-all.jar
-ADD ./net/lib/quasar-core-0.8.0.jar /data/quasar-core-0.8.0.jar
 
-# Ad the daemon for the main java process
+ENV SPELLSOURCE_VERSION=0.7.6
+ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}-all.jar /data/net-${SPELLSOURCE_VERSION}-all.jar
 
 RUN mkdir /etc/service/java
 COPY server.sh /etc/service/java/run
@@ -57,8 +56,13 @@ RUN chmod +x /etc/service/java/run
 # Define working directory.
 WORKDIR /data
 
-EXPOSE 80
+ENV PORT=80
+ENV HAZELCAST_PORT=5701
+ENV VERTX_CLUSTER_PORT=5710
 
+EXPOSE $PORT
+EXPOSE $HAZELCAST_PORT
+EXPOSE $VERTX_CLUSTER_PORT
 
 # Use baseimage-docker's init system.
 CMD ["/sbin/my_init"]

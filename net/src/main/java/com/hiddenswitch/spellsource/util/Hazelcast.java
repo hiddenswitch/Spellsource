@@ -14,6 +14,5 @@ public class Hazelcast {
 	public static HazelcastClusterManager getClusterManager() {
 		return (HazelcastClusterManager) ((VertxInternal) (Vertx.currentContext().owner())).getClusterManager();
 	}
-
 }
 

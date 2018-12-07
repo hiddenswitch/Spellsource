@@ -19,6 +19,9 @@ import java.util.Set;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
+/**
+ * A HTTP header based authentication method that uses login tokens to authorize users.
+ */
 public class SpellsourceAuthHandler implements AuthHandler {
 	private SpellsourceAuthHandler() {
 	}

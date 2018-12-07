@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.util.PasswordResetRecord;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.json.JsonArray;
@@ -39,6 +40,8 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -640,5 +643,28 @@ public interface Accounts {
 						routingContext.response().end();
 					}
 				}));
+	}
+
+	/**
+	 * Represents authorities and ways to add and remove them from {@link UserRecord} instances.
+	 * <p>
+	 * Used with {@link com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler#addAuthority(String)} and {@link
+	 * io.vertx.ext.auth.User#isAuthorized(String, Handler)}.
+	 */
+	enum Authorities {
+		/**
+		 * Indicates this user is administative
+		 */
+		ADMINISTRATIVE((user) -> user.getRoles() != null && user.getRoles().contains("ADMINISTRATIVE"));
+
+		private final Function<UserRecord, Boolean> has;
+
+		Authorities(Function<UserRecord, Boolean> has) {
+			this.has = has;
+		}
+
+		public boolean has(UserRecord record) {
+			return this.has.apply(record);
+		}
 	}
 }

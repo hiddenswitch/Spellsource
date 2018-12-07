@@ -1,0 +1,69 @@
+buildscript {
+    repositories {
+        mavenCentral()
+        maven { url 'https://plugins.gradle.org/m2/' }
+    }
+    dependencies {
+        classpath('io.swagger:swagger-codegen:2.3.0')
+    }
+}
+
+import io.swagger.codegen.config.CodegenConfigurator
+import io.swagger.codegen.DefaultGenerator
+
+task(swagger) {
+    def input = "swagger-api.yaml"
+    def output = file('client')
+    def templateDir = file('swagger-templates/java')
+
+    inputs.file(input)
+    outputs.dir(output)
+    doLast {
+        def config = new CodegenConfigurator()
+        config.setInputSpec(input)
+        config.setOutputDir(output.path)
+        config.setTemplateDir(templateDir.absolutePath)
+        config.setLang('java')
+        config.setAdditionalProperties([
+                'invokerPackage'         : 'com.hiddenswitch.spellsource.client',
+                'modelPackage'           : 'com.hiddenswitch.spellsource.client.models',
+                'apiPackage'             : 'com.hiddenswitch.spellsource.client.api',
+                'library'                : 'jersey1',
+                'serializableModel'      : 'true',
+                'dateLibrary'            : 'java8',
+                'artifactId'             : 'client',
+                'hideGenerationTimestamp': 'true'
+        ])
+        config.setGroupId('com.hiddenswitch')
+        config.setArtifactId('spellsource-client')
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}
+
+
+task(swaggerClient) {
+    def input = "swagger-api.yaml"
+    def outputDir = 'clientcsharp'
+    def output = file(outputDir)
+    inputs.file(input)
+    outputs.dir(output)
+    doLast {
+        def config = new CodegenConfigurator()
+        config.setInputSpec(input)
+        config.setOutputDir(output.path)
+        config.setLang('csharp')
+        config.setAdditionalProperties([
+                'supportFiles'           : 'false',
+                'apiTests'               : 'false',
+                'modelTests'             : 'false',
+                'modelDocs'              : 'false',
+                'packageName'            : 'Spellsource.Client',
+                'targetFramework'        : 'v3.5',
+                'sourceFolder'           : 'Scripts',
+                'hideGenerationTimestamp': 'true',
+                'optionalProjectFile'    : 'false',
+                'optionalAssemblyFile'   : 'false'
+        ])
+        new DefaultGenerator().opts(config.toClientOptInput()).generate()
+    }
+}

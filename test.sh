@@ -38,6 +38,7 @@ ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.TypeTest
 
 if [[ "$CI" != "true" ]] ; then
   echo "Running local only tests"
+  sleep 4
   ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ClusterTest
   ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.SimultaneousGamesTest
 fi

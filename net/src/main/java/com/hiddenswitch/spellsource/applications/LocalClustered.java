@@ -1,6 +1,5 @@
 package com.hiddenswitch.spellsource.applications;
 
-import ch.qos.logback.classic.Level;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
@@ -30,7 +29,12 @@ import java.time.temporal.ChronoUnit;
  */
 public class LocalClustered {
 	public static void main(String args[]) {
-		startServer(Future.future());
+		Future<String> serverStarted = Future.future();
+		startServer(serverStarted);
+		serverStarted.setHandler(done -> {
+			System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
+		});
+		// Daemonized
 	}
 
 	public static void startServer(Future<String> broadcasterDeployment) {
@@ -42,7 +46,7 @@ public class LocalClustered {
 
 		// Set significantly longer timeouts
 		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
-		final HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getConfig(5701));
+		final HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getTcpDiscoverabilityConfig(5701));
 		ClusterManager clusterManager = new HazelcastClusterManager(instance);
 		Vertx.clusteredVertx(new VertxOptions()
 				.setClusterManager(clusterManager)
@@ -58,13 +62,17 @@ public class LocalClustered {
 			final Vertx vertx = then.result();
 
 			Mongo.mongo().connectWithEnvironment(vertx);
-			Spellsource.spellsource().migrate(vertx, then2 -> {
-				if (then2.failed()) {
-					Logging.root().error("Migration failed", then2.cause());
+			Spellsource.spellsource().migrate(vertx, v1 -> {
+				if (v1.failed()) {
+					Logging.root().error("Migration failed", v1.cause());
 				} else {
-					Spellsource.spellsource().deployAll(vertx, andThen -> {
+					Spellsource.spellsource().deployAll(vertx, v2 -> {
+						if (v2.failed()) {
+							Logging.root().error("Deployment failed", v2.cause());
+							System.exit(1);
+							return;
+						}
 						vertx.deployVerticle(Broadcaster.create(), broadcasterDeployment);
-						System.out.println("***** SERVER IS READY. START THE CLIENT. *****");
 					});
 				}
 			});
