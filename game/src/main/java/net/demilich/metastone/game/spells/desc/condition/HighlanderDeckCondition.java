@@ -13,8 +13,7 @@ public class HighlanderDeckCondition extends Condition {
 
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
-		return player.getDeck().stream().map(Card::getCardId).distinct().count() == player.getDeck().getCount();
+		return player.getDeck().stream().map(Card::getCardId).distinct().count() == (long) player.getDeck().getCount();
 	}
-
 }
 
