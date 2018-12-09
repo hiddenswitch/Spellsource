@@ -1,6 +1,7 @@
 package com.hiddenswitch.cluster.applications;
 
 import ch.qos.logback.classic.Level;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Logging;
@@ -131,7 +132,7 @@ public class Cuckoo {
 		EvolutionStatistics<Double, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
 
 		int totalMatches = generations * NUMBER_OF_GAMES_IN_BATCH * populationSize;
-		Thread monitor = Simulation.getMonitor(counter, totalMatches);
+		Strand monitor = Simulation.getMonitor(counter, totalMatches);
 		monitor.start();
 
 		Genotype<DoubleGene> result =
