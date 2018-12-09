@@ -5,6 +5,12 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
+#### 0.7.7-2.0.12 (Saturday, December 8th)
+
+This release has server improvements that should reduce the number of dropped games.
+
+Please report any issues you experience in the Discord, especially when playing against the bot.
+
 #### 0.7.6-2.0.12 (Wednesday, December 5th)
 
 This release has various bug fixes helpfully reported by the community. It also includes some overall improvements to common game effects.
