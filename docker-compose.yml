@@ -30,6 +30,16 @@ services:
     - mongodata:/data/db
     labels:
     - "traefik.enable=false"
+  portainer:
+    restart: always
+    image: portainer/portainer
+    command: -H unix:///var/run/docker.sock --no-auth --no-analytics
+    volumes:
+    - /var/run/docker.sock:/var/run/docker.sock
+    - portainerdata:/data
+    labels:
+    - "traefik.frontend.rule=ReplacePathRegex: ^/admin/portainer(.*) $$1"
+    - "traefik.port=9000"
   hazelcastmancenter:
     image: hazelcast/management-center
     volumes:
@@ -44,3 +54,4 @@ services:
 volumes:
   mongodata:
   mancenterdata:
+  portainerdata:
