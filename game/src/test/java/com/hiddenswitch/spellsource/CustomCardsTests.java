@@ -8,6 +8,7 @@ import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -97,16 +98,7 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(discoverActions.get(0).getCard().getCardType(), CardType.MINION);
 				return discoverActions.get(0);
 			});
-			context.setDeckFormat(new DeckFormat() {
-				@Override
-				public boolean isInFormat(Card card) {
-					if (card.getCardId().equals("minion_wisp")) {
-						return true;
-					}
-
-					return card.getCardId().equals("spell_mirror_image");
-				}
-			});
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_wisp", "spell_mirror_image"));
 			playMinionCard(context, player, "minion_lumina");
 			playMinionCard(context, player, "minion_wisp");
 			assertEquals(player.getHand().size(), 1);
@@ -120,21 +112,12 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(discoverActions.get(0).getCard().getCardType(), CardType.MINION);
 				return discoverActions.get(0);
 			});
-			context.setDeckFormat(new DeckFormat() {
-				@Override
-				public boolean isInFormat(Card card) {
-					if (card.getCardId().equals("minion_bloodfen_raptor")) {
-						return true;
-					}
-
-					return card.getCardId().equals("spell_mirror_image");
-				}
-			});
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_bloodfen_raptor", "spell_mirror_image"));
 			playMinionCard(context, player, "minion_lumina");
 			playMinionCard(context, player, "minion_bloodfen_raptor");
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "minion_bloodfen_raptor");
-		});
+		}, HeroClass.BLUE, HeroClass.BLUE);
 	}
 
 	@Test

@@ -294,3 +294,4 @@ public class DeckFormat implements Serializable, Cloneable {
 		return (DeckFormat) super.clone();
 	}
 }
+
