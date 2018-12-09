@@ -17,6 +17,7 @@ import com.hiddenswitch.spellsource.util.Hazelcast;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
+import io.vertx.core.shareddata.Lock;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,7 @@ import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitFiber;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * A suspendable, cluster-wide lock.
@@ -66,48 +68,13 @@ public interface SuspendableLock {
 	@Suspendable
 	@NotNull
 	static SuspendableLock lock(@NotNull String name, long timeout) {
-		HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
+		return VertxLock.lock(name, timeout);
+	}
 
-		// Lock accesses to getSemaphore
-		Semaphore lock = LOCK_SERIALIZATION;
-		ISemaphore iSemaphore;
-		lock.acquireUninterruptibly();
-		try {
-			// This will typically happen pretty fast, so it's okay to use a blocking thread for this.
-			iSemaphore = invoke(hazelcastInstance::getSemaphore, LOCK_SEMAPHORE_PREFIX + name);
-		} finally {
-			lock.release();
-		}
-
-		HazelcastInstanceImpl finalInstance = getHazelcastInstance(hazelcastInstance);
-
-		return awaitFiber(fut1 -> {
-			GetPartitionAndService getPartitionAndService = new GetPartitionAndService(iSemaphore, finalInstance).invoke();
-			int partitionId = getPartitionAndService.getPartitionId();
-			InternalOperationService operationService = getPartitionAndService.getOperationService();
-
-			Operation acquireOperation = new AcquireOperation(LOCK_SEMAPHORE_PREFIX + name, 1, timeout)
-					.setPartitionId(partitionId)
-					.setServiceName(SemaphoreService.SERVICE_NAME);
-
-			operationService.asyncInvokeOnPartition(acquireOperation.getServiceName(),
-					acquireOperation, acquireOperation.getPartitionId(), new ExecutionCallback<Boolean>() {
-						@Override
-						public void onResponse(Boolean locked) {
-							if (locked) {
-								fut1.handle(Future.succeededFuture(new HazelcastLock(iSemaphore)));
-							} else {
-								fut1.handle(Future.failedFuture(new VertxException("timed out", new TimeoutException(name))));
-							}
-						}
-
-						@Override
-						public void onFailure(Throwable t) {
-							fut1.handle(Future.failedFuture(new VertxException(name, t)));
-						}
-					});
-		});
-
+	@Suspendable
+	@NotNull
+	static SuspendableLock lock(String name) {
+		return VertxLock.lock(name);
 	}
 
 	static HazelcastInstanceImpl getHazelcastInstance(HazelcastInstance hazelcastInstance) {
@@ -121,16 +88,45 @@ public interface SuspendableLock {
 	@Suspendable
 	void release();
 
-	@Suspendable
-	static SuspendableLock lock(String name) {
-		return lock(name, -1);
-	}
 
 	/**
 	 * Destroys the lock, freeing up the resources it used in the cluster.
 	 */
 	@Suspendable
 	void destroy();
+
+	class VertxLock implements SuspendableLock {
+		private final Lock lock;
+
+		public VertxLock(Lock lock) {
+			this.lock = lock;
+		}
+
+		@Suspendable
+		@NotNull
+		static VertxLock lock(String name, long timeout) {
+			Lock lock = awaitResult(h -> Vertx.currentContext().owner().sharedData().getLockWithTimeout(name, timeout, h));
+			return new VertxLock(lock);
+		}
+
+		@Suspendable
+		@NotNull
+		static VertxLock lock(String name) {
+			Lock lock = awaitResult(h -> Vertx.currentContext().owner().sharedData().getLock(name, h));
+			return new VertxLock(lock);
+		}
+
+		@Override
+		@Suspendable
+		public void release() {
+			lock.release();
+		}
+
+		@Override
+		@Suspendable
+		public void destroy() {
+		}
+	}
 
 	class HazelcastLock implements SuspendableLock {
 		private final ISemaphore semaphore;
@@ -189,6 +185,67 @@ public interface SuspendableLock {
 					fut.complete();
 				}
 			}, false, null);
+		}
+
+		/**
+		 * Obtains a lock using a Hazelcast cluster.
+		 *
+		 * @param name    The unique identifier of this lock
+		 * @param timeout How long to wait for the lock. If the timeout is 0, the method waits indefinitely
+		 * @return A lock that has been acquired.
+		 * @throws VertxException with an inner cause of {@link TimeoutException} if the lock acquisition has timed out,
+		 *                        otherwise the Hazelcast cluster experienced an error.
+		 */
+		@Suspendable
+		@NotNull
+		static SuspendableLock lock(@NotNull String name, long timeout) {
+			HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
+
+			// Lock accesses to getSemaphore
+			Semaphore lock = LOCK_SERIALIZATION;
+			ISemaphore iSemaphore;
+			lock.acquireUninterruptibly();
+			try {
+				// This will typically happen pretty fast, so it's okay to use a blocking thread for this.
+				iSemaphore = invoke(hazelcastInstance::getSemaphore, LOCK_SEMAPHORE_PREFIX + name);
+			} finally {
+				lock.release();
+			}
+
+			HazelcastInstanceImpl finalInstance = getHazelcastInstance(hazelcastInstance);
+
+			return awaitFiber(fut1 -> {
+				GetPartitionAndService getPartitionAndService = new GetPartitionAndService(iSemaphore, finalInstance).invoke();
+				int partitionId = getPartitionAndService.getPartitionId();
+				InternalOperationService operationService = getPartitionAndService.getOperationService();
+
+				Operation acquireOperation = new AcquireOperation(LOCK_SEMAPHORE_PREFIX + name, 1, timeout)
+						.setPartitionId(partitionId)
+						.setServiceName(SemaphoreService.SERVICE_NAME);
+
+				operationService.asyncInvokeOnPartition(acquireOperation.getServiceName(),
+						acquireOperation, acquireOperation.getPartitionId(), new ExecutionCallback<Boolean>() {
+							@Override
+							public void onResponse(Boolean locked) {
+								if (locked) {
+									fut1.handle(Future.succeededFuture(new HazelcastLock(iSemaphore)));
+								} else {
+									fut1.handle(Future.failedFuture(new VertxException("timed out", new TimeoutException(name))));
+								}
+							}
+
+							@Override
+							public void onFailure(Throwable t) {
+								fut1.handle(Future.failedFuture(new VertxException(name, t)));
+							}
+						});
+			});
+
+		}
+
+		@Suspendable
+		static SuspendableLock lock(String name) {
+			return lock(name, -1);
 		}
 	}
 

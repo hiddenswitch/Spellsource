@@ -8,7 +8,7 @@ import net.demilich.metastone.game.events.GameEvent;
  * An interface that specifies the boundary between a {@link net.demilich.metastone.game.GameContext} and a networking
  * channel like a websocket or a plain TCP socket.
  */
-public interface Client extends ActionListener, GameEventListener {
+public interface Client extends ActionListener, GameEventListener, HasElapsableTurns {
 
 	/**
 	 * Send an emote to a client. By default, there's no implementation except for Unity clients.

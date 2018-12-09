@@ -98,12 +98,12 @@ test {
     setJvmArgs(hazelcastJvmArgs)
     useJUnit()
 
+    testLogging {
+        events 'PASSED', 'FAILED', 'SKIPPED'
+    }
+    
     if (System.properties.containsKey("exclude-tests")) {
         exclude(System.properties.getProperty("exclude-tests").split(","))
-    }
-
-    testLogging {
-        events "failed"
     }
 }
 

@@ -74,7 +74,7 @@ logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
 logger("com.hiddenswitch.spellsource.Gateway", INFO)
 
 // Test group
-logger("com.hiddenswitch.spellsource.util.UnityClient", INFO)
+logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
 logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", TRACE)
 logger("com.neovisionaries.ws.client", WARN)
 logger("org.asynchttpclient", WARN)

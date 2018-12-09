@@ -57,7 +57,7 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  * EventListener} into messages on a {@link ReadStream} and {@link WriteStream}, decoding the read buffers as {@link
  * ClientToServerMessage} and encoding the sent buffers with {@link ServerToClientMessage}.
  */
-public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable {
+public class UnityClientBehaviour extends UtilityBehaviour implements Client, Closeable, HasElapsableTurns {
 	private static Logger LOGGER = LoggerFactory.getLogger(UnityClientBehaviour.class);
 
 	private final Queue<ServerToClientMessage> messageBuffer = new ConcurrentLinkedQueue<>();
@@ -104,10 +104,12 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 		server.onConcede(this);
 	}
 
+	@Override
 	public boolean isElapsed() {
 		return elapsed;
 	}
 
+	@Override
 	public UnityClientBehaviour setElapsed(boolean elapsed) {
 		this.elapsed = elapsed;
 		return this;
@@ -732,6 +734,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 			for (ActivityMonitor activityMonitor : activityMonitors) {
 				activityMonitor.cancel();
 			}
+			activityMonitors.clear();
 
 			requests.clear();
 			messageBuffer.clear();

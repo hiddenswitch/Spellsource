@@ -11,7 +11,9 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
+import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.http.ServerWebSocket;
+import io.vertx.core.impl.VertxInternal;
 import io.vertx.core.streams.ReadStream;
 import io.vertx.core.streams.WriteStream;
 import io.vertx.ext.web.RoutingContext;
@@ -20,10 +22,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Deque;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
+import static java.util.stream.Collectors.toList;
 
 /**
  * Manages the real time data connection users get when they connect to the Spellsource server.
@@ -60,6 +65,7 @@ import static io.vertx.ext.sync.Sync.awaitResult;
  */
 public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>, Closeable {
 	Logger LOGGER = LoggerFactory.getLogger(Connection.class);
+	Map<String, Boolean> CODECS_REGISTERED = new ConcurrentHashMap<>();
 
 	/**
 	 * Retrieves a valid reference to write to a connection from anywhere, as long as the event bus on the other node is
@@ -121,14 +127,14 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		return suspendableHandler(Connection::connected);
 	}
 
-	static void connected(Handler<Connection> handler) {
+	static void connected(SetupHandler handler) {
 		getHandlers().add(handler);
 	}
 
-	static Deque<Handler<Connection>> getHandlers() {
+	static Deque<SetupHandler> getHandlers() {
 		Vertx vertx = Vertx.currentContext().owner();
 		final Context context = vertx.getOrCreateContext();
-		Deque<Handler<Connection>> handlers = context.get("Connection::handlers");
+		Deque<SetupHandler> handlers = context.get("Connection::handlers");
 
 		if (handlers == null) {
 			handlers = new ConcurrentLinkedDeque<>();
@@ -176,7 +182,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 		try {
 			LOGGER.debug("connection {}: Upgrading socket", userId);
 			socket = routingContext.request().upgrade();
-		} catch (Throwable any) {
+		} catch (RuntimeException any) {
 			LOGGER.error("connected {}: {}", userId, any.getMessage());
 			routingContext.fail(403);
 			return;
@@ -184,7 +190,7 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 
 		LOGGER.debug("connection {}: Socket upgraded", userId);
 
-		Deque<Handler<Connection>> handlers = getHandlers();
+		Deque<SetupHandler> handlers = getHandlers();
 		Connection connection = create(userId);
 
 		LOGGER.debug("connection {}: Connection created", userId);
@@ -196,10 +202,12 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 			connection.exceptionHandler(ex -> {
 				LOGGER.error("connection exceptionHandler {}: {}", userId, ex.getMessage(), ex);
 			});
-			// All handlers should run simultaneously
-			for (Handler<Connection> handler : handlers) {
-				Vertx.currentContext().runOnContext(v -> handler.handle(connection));
-			}
+			// All handlers should run simultaneously but we'll wait until the handlers have run
+			CompositeFuture r2 = awaitResult(h -> CompositeFuture.all(handlers.stream().map(setupHandler -> {
+				Future<Void> fut = Future.future();
+				Vertx.currentContext().runOnContext(v -> setupHandler.handle(connection, fut));
+				return fut;
+			}).collect(toList())).setHandler(h));
 
 			LOGGER.debug("connection {}: Connection ready", userId);
 			// Send an envelope to indicate that the connection is ready.
@@ -216,10 +224,9 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	 * only.
 	 */
 	static void registerCodecs() {
-		try {
-			Vertx.currentContext().owner().eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
-		} catch (IllegalStateException alreadyRegistered) {
-			// Ignored
+		Vertx owner = Vertx.currentContext().owner();
+		if (CODECS_REGISTERED.putIfAbsent(((VertxInternal) owner).getNodeID(), true) == null) {
+			owner.eventBus().registerDefaultCodec(Envelope.class, new EnvelopeMessageCodec());
 		}
 	}
 
@@ -297,4 +304,16 @@ public interface Connection extends ReadStream<Envelope>, WriteStream<Envelope>,
 	String userId();
 
 	Connection removeHandler(Handler<Envelope> handler);
+
+	@FunctionalInterface
+	interface SetupHandler extends Handler<Connection> {
+		@Override
+		@Suspendable
+		default void handle(Connection event) {
+			handle(event, Future.future());
+		}
+
+		@Suspendable
+		void handle(Connection connection, Handler<AsyncResult<Void>> completionHandler);
+	}
 }

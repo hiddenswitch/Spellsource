@@ -48,7 +48,7 @@ public class UnityClient implements AutoCloseable {
 	private String loginToken;
 	private String thisUrl;
 	private boolean shouldDisconnect = false;
-	protected CountDownLatch gameOverLatch;
+	protected CountDownLatch gameOverLatch = new CountDownLatch(1);
 	// No op lock for now
 	protected ReentrantLock messagingLock = new NoOpLock();
 	protected CountDownLatch receivedAtLeastOneMessage;
@@ -129,12 +129,12 @@ public class UnityClient implements AutoCloseable {
 		LOGGER.info("matchmake {} {}: Sending enqueue", id, getAccount().getId());
 		try {
 			messagingLock.lock();
-			realtime.sendMessage(Json.encode(new Envelope()
+			sendMessage(new Envelope()
 					.method(new EnvelopeMethod()
 							.methodId(RandomStringUtils.randomAlphanumeric(10))
 							.enqueue(new MatchmakingQueuePutRequest()
 									.queueId(queueId)
-									.deckId(deckId)))));
+									.deckId(deckId))));
 		} finally {
 			messagingLock.unlock();
 		}
@@ -147,9 +147,13 @@ public class UnityClient implements AutoCloseable {
 		try {
 			messagingLock.lock();
 			if (realtime == null) {
+				LOGGER.debug("ensureConnected {}: Connecting...", id);
 				realtime = new NettyWebsocketClientEndpoint(api.getApiClient().getBasePath().replace("http://", "ws://") + "/realtime", loginToken);
+				CountDownLatch firstMessage = new CountDownLatch(1);
+				LOGGER.debug("ensureConnected {}: Connected", id);
 				realtime.setMessageHandler((String message) -> {
 					LOGGER.trace("ensureConnected {}: Handling realtime message for userId {}", id, getUserId());
+					firstMessage.countDown();
 					try {
 						messagingLock.lock();
 
@@ -158,7 +162,9 @@ public class UnityClient implements AutoCloseable {
 						messagingLock.unlock();
 					}
 				});
-				realtime.getNettyWebSocketCompletableFuture().join();
+				realtime.connect();
+				firstMessage.await(3000, TimeUnit.MILLISECONDS);
+				context.assertTrue(firstMessage.getCount() <= 0);
 			}
 		} catch (Throwable any) {
 			LOGGER.error("ensureConnected: ", any);
@@ -387,6 +393,8 @@ public class UnityClient implements AutoCloseable {
 			if (realtime != null && realtime.isOpen()) {
 				realtime.close();
 				realtime = null;
+			} else {
+				LOGGER.warn("disconnect {}: realtime was null={}, and open {}", id, realtime == null, realtime != null && realtime.isOpen());
 			}
 		} finally {
 			messagingLock.unlock();
