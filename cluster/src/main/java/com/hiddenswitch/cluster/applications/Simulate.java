@@ -1,6 +1,7 @@
 package com.hiddenswitch.cluster.applications;
 
 import ch.qos.logback.classic.Level;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.cluster.models.SimulationConfig;
 import com.hiddenswitch.spellsource.util.Simulation;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -86,7 +87,7 @@ public class Simulate {
 		AtomicInteger matchesComplete = new AtomicInteger(0);
 		final int totalMatches = number * combinations.size();
 
-		Thread progressThread = null;
+		Strand progressThread = null;
 
 		// Printing progress thread
 		if (!quiet) {
