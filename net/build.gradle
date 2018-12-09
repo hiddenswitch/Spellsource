@@ -97,6 +97,7 @@ test {
     setSystemProperties(debugSystemProperties)
     setJvmArgs(hazelcastJvmArgs)
     useJUnit()
+    maxParallelForks = 1
 
     testLogging {
         events 'PASSED', 'FAILED', 'SKIPPED'
