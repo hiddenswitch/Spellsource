@@ -10,6 +10,7 @@ import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.MatchmakingRequest;
 import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
 import io.vertx.core.Closeable;
+import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.streams.WriteStream;
@@ -27,6 +28,7 @@ import java.util.stream.Collectors;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.defer;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.core.json.JsonObject.mapFrom;
 
@@ -45,33 +47,39 @@ public interface Invites {
 	/**
 	 * Sends clients undelivered invites and marks them as pending.
 	 *
-	 * @throws SuspendExecution
 	 */
-	static void handleConnections() throws SuspendExecution {
-		Connection.connected(suspendableHandler(connection -> {
-			// Expire old invites as sender or recipient
-			String userId = connection.userId();
-			expireInvites(userId);
+	static void handleConnections() {
+		Connection.connected((connection, fut) -> {
+			defer(v -> {
+				try {
+					// Expire old invites as sender or recipient
+					String userId = connection.userId();
+					expireInvites(userId);
 
-			// Notify recipients of all pending invites.
-			List<Invite> invites = mongo().find(INVITES, json("toUserId", userId, "status", json("$in", PENDING_STATUSES)), Invite.class);
-			for (Invite invite : invites) {
-				if (invite.getStatus() == StatusEnum.UNDELIVERED) {
-					invite.status(StatusEnum.PENDING);
+					// Notify recipients of all pending invites.
+					List<Invite> invites = mongo().find(INVITES, json("toUserId", userId, "status", json("$in", PENDING_STATUSES)), Invite.class);
+					for (Invite invite : invites) {
+						if (invite.getStatus() == StatusEnum.UNDELIVERED) {
+							invite.status(StatusEnum.PENDING);
+						}
+
+						connection.write(new Envelope().added(new EnvelopeAdded().invite(invite)));
+					}
+
+					// Set undelivered to pending
+					JsonArray ids = new JsonArray(invites.stream().map(Invite::getId).collect(Collectors.toList()));
+					// State may have changed in between, only mess with the undelivered/pending ones
+					mongo().updateCollectionWithOptions(INVITES,
+							json("_id", json("$in", ids), "status", json("$in", PENDING_STATUSES)),
+							json("$set",
+									json("status", StatusEnum.PENDING.getValue())),
+							new UpdateOptions().setMulti(true));
+					fut.handle(Future.succeededFuture());
+				} catch (RuntimeException any) {
+					fut.handle(Future.failedFuture(any));
 				}
-
-				connection.write(new Envelope().added(new EnvelopeAdded().invite(invite)));
-			}
-
-			// Set undelivered to pending
-			JsonArray ids = new JsonArray(invites.stream().map(Invite::getId).collect(Collectors.toList()));
-			// State may have changed in between, only mess with the undelivered/pending ones
-			mongo().updateCollectionWithOptions(INVITES,
-					json("_id", json("$in", ids), "status", json("$in", PENDING_STATUSES)),
-					json("$set",
-							json("status", StatusEnum.PENDING.getValue())),
-					new UpdateOptions().setMulti(true));
-		}));
+			});
+		});
 	}
 
 	/**
@@ -264,7 +272,7 @@ public interface Invites {
 
 			return new InviteResponse()
 					.invite(invite);
-		} catch (Throwable all) {
+		} catch (RuntimeException any) {
 			// Make sure to clean up resources
 			if (matchmaker != null) {
 				matchmaker.close((ignored) -> {
@@ -277,7 +285,7 @@ public interface Invites {
 			}
 
 			// Rethrowing
-			throw all;
+			throw any;
 		}
 	}
 

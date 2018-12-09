@@ -1,11 +1,10 @@
 package com.hiddenswitch.spellsource.impl;
 
-import co.paralleluniverse.strands.Strand;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.SuspendableRunnable;
+import co.paralleluniverse.strands.concurrent.CountDownLatch;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hazelcast.core.Hazelcast;
 import com.hazelcast.core.HazelcastInstance;
 import com.hiddenswitch.spellsource.*;
@@ -33,13 +32,11 @@ import org.junit.runner.RunWith;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
@@ -59,6 +56,8 @@ public abstract class SpellsourceTestBase {
 			final Async async = context.async();
 
 			Vertx.clusteredVertx(new VertxOptions()
+					.setBlockedThreadCheckInterval(999999)
+					.setBlockedThreadCheckIntervalUnit(TimeUnit.SECONDS)
 					.setClusterManager(new HazelcastClusterManager(hazelcastInstance)), context.asyncAssertSuccess(vertx -> {
 				SpellsourceTestBase.vertx = vertx;
 				Spellsource.spellsource().migrate(vertx, context.asyncAssertSuccess(v1 -> {
@@ -127,8 +126,7 @@ public abstract class SpellsourceTestBase {
 	public static void sync(SuspendableRunnable action) {
 		CountDownLatch latch = new CountDownLatch(1);
 		vertx.runOnContext(v1 -> {
-			vertx.runOnContext(suspendableHandler((SuspendableAction1<Void>) v2 -> {
-				Strand.sleep(4000);
+			vertx.runOnContext(suspendableHandler(v2 -> {
 				action.run();
 				latch.countDown();
 			}));
@@ -143,6 +141,7 @@ public abstract class SpellsourceTestBase {
 
 	@AfterClass
 	public static void tearDown(TestContext context) {
+		/*
 		if (initialized.compareAndSet(true, false)) {
 			final Async async = context.async();
 			vertx.close(context.asyncAssertSuccess(then -> {
@@ -151,5 +150,6 @@ public abstract class SpellsourceTestBase {
 				async.complete();
 			}));
 		}
+		*/
 	}
 }

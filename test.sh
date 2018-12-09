@@ -15,30 +15,4 @@ fi
 
 ${GRADLE_CMD} cards:test
 ${GRADLE_CMD} game:test
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.AccountsTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.BotsTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.BroadcastTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.CardsTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ConnectionTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ConversationTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.DeckParsingTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.DeckTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.DraftTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.FriendTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.GamesTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.GatewayTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.InventoryTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.InvitesTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.LogicTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ModelsTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.PersistenceTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.PythonBridgeTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ReplayTest
-${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.TypeTest
-
-if [[ "$CI" != "true" ]] ; then
-  echo "Running local only tests"
-  sleep 4
-  ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.ClusterTest
-  ${GRADLE_CMD} net:test --tests=com.hiddenswitch.spellsource.SimultaneousGamesTest
-fi
+${GRADLE_CMD} net:test

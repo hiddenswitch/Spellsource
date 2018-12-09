@@ -185,6 +185,18 @@ public class ServerGameContext extends GameContext implements Server {
 				// This client too needs to be closed
 				closeables.add(client);
 
+				// Once the game is disposed, there should be no more client instances referenced here
+				closeables.add(fut -> {
+					getClients().clear();
+					CompositeFuture.join(getBehaviours().stream().filter(Closeable.class::isInstance).map(Closeable.class::cast).map(c -> {
+						Future<Void> future = Future.future();
+						c.close(future);
+						return future;
+					}).collect(toList())).setHandler(h -> fut.handle(h.succeeded() ? Future.succeededFuture() : Future.failedFuture(h.cause())));
+					setBehaviour(0, null);
+					setBehaviour(1, null);
+				});
+
 				// The client implements the behaviour interface since it is supposed to be able to respond to requestAction
 				// and mulligan calls
 				setBehaviour(configuration.getPlayerId(), client);
@@ -207,7 +219,7 @@ public class ServerGameContext extends GameContext implements Server {
 		Set<MessageConsumer<Buffer>> consumers = new ConcurrentHashSet<>();
 
 		// Set up the connectivity for the user.
-		Handler<Connection> handler = suspendableHandler(connection -> {
+		Connection.SetupHandler handler = (connection, fut) -> {
 			Vertx vertx = Vertx.currentContext().owner();
 			EventBus bus = vertx.eventBus();
 			String userId = connection.userId();
@@ -247,9 +259,8 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 			}));
 
-			// Wait until we're ready to actually read games messages
-			Void t = awaitResult(consumer::completionHandler);
-		});
+			consumer.completionHandler(fut);
+		};
 
 		// Handle the connections here.
 		Connection.connected(handler);
@@ -498,6 +509,7 @@ public class ServerGameContext extends GameContext implements Server {
 					// Regardless of what happens that causes an event loop exception, make certain the user is released from their game
 					UserId[] userIds = getPlayerConfigurations().stream().map(Configuration::getUserId).toArray(UserId[]::new);
 					Vertx.currentContext().runOnContext((ctx) -> ServerGameContext.releaseUsers(gameId, userIds));
+					dispose();
 				}
 				return null;
 			});
@@ -521,8 +533,8 @@ public class ServerGameContext extends GameContext implements Server {
 			}
 
 			for (Behaviour behaviour : getBehaviours()) {
-				if (behaviour instanceof UnityClientBehaviour) {
-					((UnityClientBehaviour) behaviour).setElapsed(false);
+				if (behaviour instanceof HasElapsableTurns) {
+					((HasElapsableTurns) behaviour).setElapsed(false);
 				}
 			}
 
@@ -535,7 +547,7 @@ public class ServerGameContext extends GameContext implements Server {
 						// Since executing the callback may itself trigger more action requests, we'll indicate to
 						// the NetworkDelegate (i.e., this ServerGameContext instance) that further
 						// networkRequestActions should be executed immediately.
-						Client client = getClient(playerId);
+						HasElapsableTurns client = getClient(playerId);
 						if (client == null) {
 							// Simply end the turn, since there were no requests pending to begin with
 							endTurn();
@@ -739,12 +751,9 @@ public class ServerGameContext extends GameContext implements Server {
 				return;
 			}
 
-			// This way the message that the game is over doesn't come before the player's connection information is removed
-			// from the server.
-			if (!didExpire) {
-				didExpire = true;
-				releaseUsers();
-			}
+			// We have to release the users before we call end game, because that way when the client receives the end game
+			// message, their model of the world is that they're no longer in a game.
+			releaseUsers();
 
 			// Actually end the game
 			super.endGame();
@@ -770,10 +779,9 @@ public class ServerGameContext extends GameContext implements Server {
 				fiber.interrupt();
 				fiber = null;
 			}
-
-
-			dispose();
 		} finally {
+			releaseUsers();
+			dispose();
 			lock.unlock();
 		}
 	}
@@ -781,7 +789,7 @@ public class ServerGameContext extends GameContext implements Server {
 	@Suspendable
 	public void releaseUsers() {
 		GameId gameId = new GameId(getGameId());
-		if (Fiber.isCurrentFiber()) {
+		if (Fiber.isCurrentFiber() && Vertx.currentContext() != null) {
 			SuspendableMap<UserId, GameId> games = null;
 			try {
 				games = Games.getUsersInGames();
@@ -823,7 +831,6 @@ public class ServerGameContext extends GameContext implements Server {
 		return getPlayerConfigurations().stream().map(Configuration::getUserId).collect(toList());
 	}
 
-	@Suspendable
 	public void handleEndGame(SuspendableAction1<ServerGameContext> handler) {
 		onGameEndHandlers.add(handler);
 	}
@@ -974,6 +981,12 @@ public class ServerGameContext extends GameContext implements Server {
 				}
 				next.onActivePlayer(getActivePlayer());
 			}
+
+			if (client instanceof Behaviour) {
+				// Update the behaviour
+				setBehaviour(client.getPlayerId(), (Behaviour) client);
+			}
+
 			onPlayerReady(client);
 			onGameStateChanged();
 		} finally {

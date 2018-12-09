@@ -597,7 +597,7 @@ public interface Accounts {
 						Accounts.changePassword(ChangePasswordRequest.request(new UserId(passwordResetRecord.getUserId()), password1));
 						mongo().removeDocument(RESET_TOKENS, json("_id", token));
 						routingContext.response().putHeader("Location", "passwordresetted.html");
-					} catch (Throwable throwable) {
+					} catch (RuntimeException any) {
 						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 					} finally {
 						routingContext.removeCookie("token");

@@ -6,6 +6,7 @@ import com.hiddenswitch.spellsource.client.models.ServerToClientMessage;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
+import com.hiddenswitch.spellsource.util.Hazelcast;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.Repeat;

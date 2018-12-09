@@ -142,11 +142,15 @@ public class GatewayTest extends SpellsourceTestBase {
 
 	}
 
-	@Test(timeout = 15000L)
+	@Test(timeout = 32000L)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
-		// Just run once
+		// Play twice
 		UnityClient client = new UnityClient(context);
 		client.createUserAccount(null);
+		client.matchmakeQuickPlay(null);
+		client.waitUntilDone();
+		assertTrue(client.getTurnsPlayed() > 0);
+		assertTrue(client.isGameOver());
 		client.matchmakeQuickPlay(null);
 		client.waitUntilDone();
 		assertTrue(client.getTurnsPlayed() > 0);

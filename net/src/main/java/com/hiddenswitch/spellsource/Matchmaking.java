@@ -328,7 +328,7 @@ public interface Matchmaking extends Verticle {
 	}
 
 	static void handleConnections() {
-		Connection.connected(connection -> {
+		Connection.connected((connection, fut) -> {
 			LOGGER.trace("handleConnections {}: Matchmaking ready", connection.userId());
 			// If the user disconnects, dequeue them immediately.
 			connection.endHandler(suspendableHandler(v -> {
@@ -361,6 +361,7 @@ public interface Matchmaking extends Verticle {
 					}
 				}
 			}));
+			fut.handle(Future.succeededFuture());
 		});
 	}
 }

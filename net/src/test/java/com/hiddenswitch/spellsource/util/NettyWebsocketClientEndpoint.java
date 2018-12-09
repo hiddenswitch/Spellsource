@@ -8,31 +8,57 @@ import org.asynchttpclient.netty.ws.NettyWebSocket;
 import org.asynchttpclient.ws.WebSocketListener;
 import org.asynchttpclient.ws.WebSocketUpgradeHandler;
 import org.junit.Assert;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeoutException;
 
 import static org.asynchttpclient.Dsl.asyncHttpClient;
 
 
 public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebsocket {
+	private static Logger LOGGER = LoggerFactory.getLogger(NettyWebsocketClientEndpoint.class);
+	private final String endpoint;
+	private final String auth;
 	private NettyWebSocket websocket;
 	private Handler<String> messageHandler;
 	private Runnable closeHandler;
 	private int webSocketMaxFrameSize = 65536;
-	private final CompletableFuture<NettyWebSocket> nettyWebSocketCompletableFuture;
+	private final AsyncHttpClient client;
 
 	public NettyWebsocketClientEndpoint(String endpoint, String auth) {
+		this.endpoint = endpoint;
+		this.auth = auth;
 		try {
-			AsyncHttpClient client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
+			client = asyncHttpClient(new DefaultAsyncHttpClientConfig.Builder()
 					.setWebSocketMaxFrameSize(webSocketMaxFrameSize)
+					.setHandshakeTimeout(3000)
+					.setConnectTimeout(3000)
 					.setMaxConnections(1024));
-			nettyWebSocketCompletableFuture = client.prepareGet(endpoint + "?X-Auth-Token=" + auth)
-					.execute(new WebSocketUpgradeHandler.Builder()
-							.addWebSocketListener(this).build()).toCompletableFuture();
-			websocket = nettyWebSocketCompletableFuture.get();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
+		}
+	}
+
+	public void connect() {
+		int retries = 3;
+		while (websocket == null && retries > 0) {
+			CompletableFuture<NettyWebSocket> res = client.prepareGet(this.endpoint + "?X-Auth-Token=" + this.auth)
+					.execute(new WebSocketUpgradeHandler.Builder()
+							.addWebSocketListener(this).build()).toCompletableFuture();
+			try {
+				websocket = res.get();
+				return;
+			} catch (ExecutionException timeout) {
+				// Retry connecting
+				LOGGER.warn("connect: Retrying to connect {} more times", retries - 1);
+			} catch (InterruptedException e) {
+				return;
+			}
+			retries--;
 		}
 	}
 
@@ -109,7 +135,9 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 	@Override
 	public void close() {
 		try {
-			websocket.sendCloseFrame();
+			if (websocket != null) {
+				websocket.sendCloseFrame();
+			}
 			if (closeHandler != null) {
 				closeHandler.run();
 			}
@@ -119,16 +147,12 @@ public class NettyWebsocketClientEndpoint implements WebSocketListener, TestWebs
 
 	@Override
 	public boolean isOpen() {
-		return websocket.isOpen();
+		return websocket != null && websocket.isOpen();
 	}
 
 	@Override
 	public NettyWebsocketClientEndpoint setCloseHandler(Runnable closeHandler) {
 		this.closeHandler = closeHandler;
 		return this;
-	}
-
-	public CompletableFuture<NettyWebSocket> getNettyWebSocketCompletableFuture() {
-		return nettyWebSocketCompletableFuture;
 	}
 }

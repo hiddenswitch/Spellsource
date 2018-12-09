@@ -402,6 +402,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	@Suspendable
 	protected void notifyPlayersGameOver() {
 		for (int i = 0; i < behaviours.length; i++) {
+			if (behaviours[i] == null) {
+				continue;
+			}
 			behaviours[i].onGameOver(this, i, getWinner() != null ? getWinner().getId() : -1);
 		}
 	}

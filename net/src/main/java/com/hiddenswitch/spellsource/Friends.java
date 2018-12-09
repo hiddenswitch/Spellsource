@@ -5,9 +5,11 @@ import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.impl.util.FriendRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Mongo;
+import io.vertx.core.Future;
 import io.vertx.core.streams.WriteStream;
 
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.defer;
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
 /**
@@ -18,12 +20,19 @@ public interface Friends {
 	 * Sends the player their friend list as "added" on their first connection
 	 */
 	static void handleConnections() {
-		Connection.connected(suspendableHandler(connection -> {
-			UserRecord user = Accounts.findOne(connection.userId());
-			for (FriendRecord friend : user.getFriends()) {
-				connection.write(new Envelope().added(new EnvelopeAdded().friend(friend.toFriendDto())));
-			}
-		}));
+		Connection.connected((connection, fut) -> {
+			defer(v -> {
+				try {
+					UserRecord user = Accounts.findOne(connection.userId());
+					for (FriendRecord friend : user.getFriends()) {
+						connection.write(new Envelope().added(new EnvelopeAdded().friend(friend.toFriendDto())));
+					}
+					fut.handle(Future.succeededFuture());
+				} catch (RuntimeException any) {
+					fut.handle(Future.failedFuture(any));
+				}
+			});
+		});
 	}
 
 	/**

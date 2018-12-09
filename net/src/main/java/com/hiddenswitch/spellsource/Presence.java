@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.defer;
 
 /**
  * Provides presence information to players who are each other's friends.
@@ -26,25 +27,33 @@ public interface Presence {
 
 	static void handleConnections() {
 		// A node that is updating presences may not be the same node that has a user that needs to be notified
-		Connection.connected(Sync.suspendableHandler(connection -> {
-			final UserId key = new UserId(connection.userId());
-			connection.endHandler(Sync.suspendableHandler(ignored -> {
-				SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + connection.userId() + "]");
-				if (connections.decrementAndGet() == 0L) {
-					updatePresence(key, PresenceEnum.OFFLINE);
-				}
-			}));
+		Connection.connected((connection, fut) -> {
+			defer(v -> {
+				try {
+					UserId key = new UserId(connection.userId());
+					connection.endHandler(Sync.suspendableHandler(ignored -> {
+						SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + connection.userId() + "]");
+						if (connections.decrementAndGet() == 0L) {
+							updatePresence(key, PresenceEnum.OFFLINE);
+						}
+					}));
 
-			SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + connection.userId() + "]");
-			// Once the user is connected, set their status to online
-			long numConnections = connections.incrementAndGet();
-			if (numConnections == 1L) {
-				updatePresence(key, PresenceEnum.ONLINE);
-			}
-			if (numConnections > 20L) {
-				LOGGER.warn("handleConnections: User has {} connections", numConnections);
-			}
-		}));
+					SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + connection.userId() + "]");
+					// Once the user is connected, set their status to online
+					long numConnections = connections.incrementAndGet();
+					if (numConnections == 1L) {
+						updatePresence(key, PresenceEnum.ONLINE);
+					}
+					if (numConnections > 20L) {
+						LOGGER.warn("handleConnections: User has {} connections", numConnections);
+					}
+					fut.handle(Future.succeededFuture());
+				} catch (RuntimeException any) {
+					fut.handle(Future.failedFuture(any));
+				}
+			});
+
+		});
 	}
 
 	static void updatePresence(UserId userId, PresenceEnum presence) {

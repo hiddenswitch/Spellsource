@@ -134,7 +134,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		final GameId gameOverId = new GameId(session.getGameId());
 		// The players should not accidentally wind back up in games
 		try {
-			endGame(gameOverId);
+			removeGameAndRecordReplay(gameOverId);
 		} catch (InterruptedException | SuspendExecution e) {
 			throw new RuntimeException(e);
 		}
@@ -148,7 +148,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	 * @throws SuspendExecution
 	 */
 	@Suspendable
-	private void endGame(GameId gameId) throws InterruptedException, SuspendExecution {
+	private void removeGameAndRecordReplay(GameId gameId) throws InterruptedException, SuspendExecution {
 		if (!contexts.containsKey(gameId)) {
 			Games.LOGGER.debug("endGame {}: This deployment with deploymentId {} does not contain the gameId, or this game has already been ended", gameId, deploymentID());
 			return;
@@ -247,7 +247,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		final GameId key = new GameId(request.getGameId());
 		if (contexts.containsKey(key)) {
 			Games.LOGGER.debug("endGameSession: Ending the game session for gameId " + request.getGameId());
-			endGame(new GameId(request.getGameId()));
+			removeGameAndRecordReplay(new GameId(request.getGameId()));
 		} else {
 			Games.LOGGER.debug("endGameSession: This instance does not contain the gameId " + request.getGameId()
 					+ ". Redirecting your request to the correct deployment.");
@@ -278,7 +278,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		final GameId key = new GameId(request.getGameId());
 		if (contexts.containsKey(key)) {
 			Games.LOGGER.debug("concedeGameSession: Conceding game for gameId " + request.getGameId());
-			endGame(new GameId(request.getGameId()));
+			removeGameAndRecordReplay(new GameId(request.getGameId()));
 		} else {
 			Games.LOGGER.debug("concedeGameSession: This instance does not contain the gameId " + request.getGameId()
 					+ ". Redirecting your request to the correct deployment.");
@@ -302,7 +302,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 		Rpc.unregister(registration);
 		Games.LOGGER.debug("stop: Activity monitors unregistered");
 		for (GameId gameId : contexts.keySet()) {
-			endGame(new GameId(gameId.toString()));
+			removeGameAndRecordReplay(new GameId(gameId.toString()));
 		}
 		Games.LOGGER.debug("stop: Sessions killed");
 	}
