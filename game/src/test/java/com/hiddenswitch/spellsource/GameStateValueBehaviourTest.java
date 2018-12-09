@@ -7,6 +7,8 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
@@ -241,6 +243,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testBrannSpiteful() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_faceless_behemoth"));
 			Card brann = receiveCard(context, player, "minion_brann_bronzebeard");
 			Card spiteful = receiveCard(context, player, "minion_spiteful_summoner");
 			putOnTopOfDeck(context, player, "spell_ultimate_infestation");

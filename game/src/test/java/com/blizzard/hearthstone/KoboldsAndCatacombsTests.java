@@ -6,6 +6,7 @@ import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -1055,12 +1056,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	public void testWanderingMonster() {
 		runGym((context, player, opponent) -> {
 			// Always summon a 3 3/3 so that there's nothing with a deathrattle that will mess things up
-			context.setDeckFormat(new DeckFormat() {
-				@Override
-				public boolean isInFormat(Card card) {
-					return card.getCardId().equals("minion_mind_control_tech");
-				}
-			});
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_mind_control_tech"));
 			playCard(context, player, "secret_wandering_monster");
 			context.endTurn();
 			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");

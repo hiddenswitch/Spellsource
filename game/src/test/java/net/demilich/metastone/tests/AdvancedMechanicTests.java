@@ -12,6 +12,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -228,16 +229,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		// Doesn't show duplicates due to class card weighting
 		factory.run((context, player, opponent) -> {
-			context.setDeckFormat(new DeckFormat() {
-				@Override
-				public boolean isInFormat(Card card) {
-					if (card.getCardId().equals("minion_blue_test")) {
-						return true;
-					}
-
-					return card.getCardId().equals("minion_neutral_test");
-				}
-			});
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_blue_test", "minion_neutral_test"));
 			overrideDiscover(context, player, discoverActions -> {
 				assertEquals(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).distinct().count(), 2L);
 				return discoverActions.get(0);
