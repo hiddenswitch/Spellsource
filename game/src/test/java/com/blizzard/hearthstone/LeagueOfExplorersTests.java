@@ -26,6 +26,17 @@ import static org.testng.Assert.assertEquals;
 public class LeagueOfExplorersTests extends TestBase {
 
 	@Test
+	public void testRenoJackson() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "spell_the_coin");
+			shuffleToDeck(context, player, "spell_mirror_image");
+			player.getHero().setHp(1);
+			playCard(context, player, "minion_reno_jackson");
+			assertEquals(player.getHero().getHp(), 30);
+		});
+	}
+
+	@Test
 	public void testAnimatedArmor() {
 		// Dealing zero damage should not cause Animated Armor to deal one damage instead
 		runGym((context, player, opponent) -> {
@@ -193,7 +204,7 @@ public class LeagueOfExplorersTests extends TestBase {
 	@Test
 	public void testNewBrannBronzebeard() {
 		runGym((context, player, opponent) -> {
-			playCard(context,player, "minion_brann_bronzebeard");
+			playCard(context, player, "minion_brann_bronzebeard");
 			playCard(context, player, "minion_saronite_chain_gang");
 			assertEquals(player.getMinions().size(), 4);
 			playCard(context, player, "hero_hagatha_the_witch");
