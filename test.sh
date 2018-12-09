@@ -7,6 +7,7 @@ echo "Clearing database testdb"
 mongo testdb --eval "printjson(db.dropDatabase())" > /dev/null
 echo "Running tests"
 
+# Configure the gradle command
 if [[ "$CI" = "true" ]] ; then
   export GRADLE_CMD="./gradlew"
 else
@@ -15,4 +16,10 @@ fi
 
 ${GRADLE_CMD} cards:test
 ${GRADLE_CMD} game:test
-${GRADLE_CMD} net:test
+
+# Only run the net test on a host that's capable of running such an intense integration
+if [[ "$CI" != "true" ]] ; then
+  echo "Running local only tests"
+  sleep 4
+  ${GRADLE_CMD} net:test
+fi
