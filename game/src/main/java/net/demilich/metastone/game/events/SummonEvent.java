@@ -40,11 +40,6 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
-	public String toString() {
-		return "[Summon Event MINION " + minion + " from SOURCE " + source + "]";
-	}
-
-	@Override
 	public boolean isClientInterested() {
 		return true;
 	}

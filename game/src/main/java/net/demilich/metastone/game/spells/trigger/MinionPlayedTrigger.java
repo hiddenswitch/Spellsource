@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class MinionPlayedTrigger extends MinionSummonedTrigger {
+public final class MinionPlayedTrigger extends MinionSummonedTrigger {
 	public MinionPlayedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
@@ -19,6 +19,7 @@ public class MinionPlayedTrigger extends MinionSummonedTrigger {
 		if (summonEvent.getSource() == null) {
 			return false;
 		}
+
 		return super.fire(summonEvent, host);
 	}
 

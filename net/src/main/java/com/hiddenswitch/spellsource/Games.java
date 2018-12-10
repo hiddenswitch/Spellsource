@@ -563,7 +563,8 @@ public interface Games extends Verticle {
 			Card card = heroPowerUsedEvent.getHeroPower();
 			clientEvent.heroPowerUsed(new GameEventHeroPowerUsed()
 					.heroPower(getEntity(workingContext, card, playerId)));
-		} else if (event instanceof SummonEvent) {
+			// Only send exactly the before summon event data
+		} else if (event.getClass().equals(BeforeSummonEvent.class)) {
 			SummonEvent summonEvent = (SummonEvent) event;
 
 			clientEvent.summon(new GameEventBeforeSummon()
