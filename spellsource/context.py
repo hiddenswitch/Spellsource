@@ -37,7 +37,14 @@ class Context(contextlib.AbstractContextManager):
     STATUS_FAILED = 2
     _LINE_BUFFERED = 1
 
-    def __init__(self):
+    def __init__(self, port=0):
+        """
+        Initializes a context by starting the Java gateway.
+
+        Make sure you have java on your PATH, especially on Windows.
+        :param port: When non-zero, forces the gateway to start on a specific port. Cannot start more than 1 context
+        per port.
+        """
         self._is_closed = False
         if os.name == 'nt' and 'java' not in os.environ['PATH']:
             # As a friendly gesture, append the OpenJDK bin build that is specified in the readme.
@@ -46,7 +53,7 @@ class Context(contextlib.AbstractContextManager):
                 os.environ['PATH'] += ';' + _OPEN_JDK_11_0_1
 
         try:
-            self._gateway = Context._start_gateway()
+            self._gateway = Context._start_gateway(port=port)
         except FileNotFoundError:
             self.status = Context.STATUS_FAILED
             raise FileNotFoundError(
@@ -162,10 +169,10 @@ class Context(contextlib.AbstractContextManager):
         raise FileNotFoundError()
 
     @staticmethod
-    def _start_gateway() -> JavaGateway:
+    def _start_gateway(port=0) -> JavaGateway:
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
-        port = launch_gateway(port=0,
+        port = launch_gateway(port=port,
                               classpath=Context.find_resource_path('net-0.7.8-all.jar'),
                               javaopts=["--add-modules", "java.se",
                                         "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
