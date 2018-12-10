@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -123,16 +124,17 @@ public class EquipWeaponSpell extends Spell {
 
 		Weapon weapon = context.getLogic().getRandom(results).createWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
-		for (SpellDesc spellDesc : desc.subSpells(0)) {
-			if (weapon.isDestroyed()) {
-				logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
-				continue;
+		weapon = player.getHero().getWeapon();
+		if (weapon != null && weapon.getZone() == Zones.WEAPON) {
+			for (SpellDesc spellDesc : desc.subSpells(0)) {
+				if (weapon.isDestroyed()) {
+					logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
+					continue;
+				}
+
+				SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
 			}
-
-			SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
 		}
-
-
 	}
 
 
