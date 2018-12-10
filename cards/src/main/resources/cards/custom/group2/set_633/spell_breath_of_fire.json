@@ -39,6 +39,7 @@
       {
         "class": "DamageSpell",
         "target": "ENEMY_HERO",
+        "ignoreSpellDamage": true,
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"

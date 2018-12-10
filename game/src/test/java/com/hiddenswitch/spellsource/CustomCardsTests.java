@@ -773,6 +773,18 @@ public class CustomCardsTests extends TestBase {
 			assertFalse(damaged.isDestroyed());
 			assertEquals(damaged.getHp(), damaged.getMaxHp() - 1);
 		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion damaged = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			playMinionCard(context, opponent, "minion_immune_test");
+			context.endTurn();
+			player.setAttribute(Attribute.SPELL_DAMAGE, 1);
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "spell_breath_of_fire");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertTrue(damaged.isDestroyed());
+		});
 	}
 
 	@Test

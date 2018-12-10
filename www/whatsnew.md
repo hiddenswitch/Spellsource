@@ -20,6 +20,7 @@ This release includes bug fixes reported by the community.
  - Fifi Fizzlewarp no longer writes a Permanent's text on a minion.
  - Permanents more robustly do not trigger any kind of summoning-based card text.
  - Echo of Thrall, War Trebuchet, Ship's Cannon, Spiritsinger Umbra, and Unlicensed Apothecary no longer trigger off themselves.
+ - Breath of Fire now ignores spell damage when damaging the Hero.
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 
