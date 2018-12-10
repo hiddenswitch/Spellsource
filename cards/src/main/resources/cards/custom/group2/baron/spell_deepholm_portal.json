@@ -5,7 +5,7 @@
   "heroClass": "NAVY",
   "rarity": "COMMON",
   "description": "Summon a random 3-Cost minion for both heroes.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "cardFilter": {
