@@ -85,7 +85,7 @@ class Context(contextlib.AbstractContextManager):
         self.Weapon = self.entities.Weapons.Weapon
         self.Minion = self.entities.minions.Minion
         self.Hero = self.entities.heroes.Hero
-        self.Attribute = self.utils.Attribute
+        self.Attribute = self.cards.Attribute
         self.ActionType = self.actions
         self.Rarity = self.cards.Rarity
         self.CardType = self.cards.CardType
