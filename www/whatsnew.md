@@ -15,6 +15,7 @@ This release includes bug fixes reported by the community.
  - Arcane Keysmith no longer discovers secrets that you already have.
  - Little Helper is now officially a battlecry minion.
  - Darius Crowley no longer survives lethal damage from its effect. Student of the Ox, which has an effect with a similar consequence, **does** survive lethal damage from its effect on purpose.
+ - Shudderwock and other random card casting effects now stop casting when they are removed from play due to a transform effect, like Thrall Deathseer.
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 
