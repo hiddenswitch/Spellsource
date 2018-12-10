@@ -16,6 +16,7 @@ This release includes bug fixes reported by the community.
  - Little Helper is now officially a battlecry minion.
  - Darius Crowley no longer survives lethal damage from its effect. Student of the Ox, which has an effect with a similar consequence, **does** survive lethal damage from its effect on purpose.
  - Shudderwock and other random card casting effects now stop casting when they are removed from play due to a transform effect, like Thrall Deathseer.
+ - Ugar Frostflame no longer prompts the player for a target for its battlecry (it shouldn't require a target).
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 

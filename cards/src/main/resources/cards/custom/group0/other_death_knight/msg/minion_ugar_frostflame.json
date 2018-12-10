@@ -8,7 +8,7 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Equip a weapon with stats equal to this minion's.",
   "battlecry": {
-    "targetSelection": "MINIONS",
+    "targetSelection": "NONE",
     "spell": {
       "class": "EquipWeaponSpell",
       "spell": {
