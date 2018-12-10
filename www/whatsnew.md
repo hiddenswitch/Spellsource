@@ -5,7 +5,7 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.8-2.0.12 (Sunday, December 9th)
+#### 0.7.8-2.0.12 (Monday, December 10th)
 
 This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
 
