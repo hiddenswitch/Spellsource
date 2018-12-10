@@ -30,6 +30,31 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testDariusCrowley() {
+		runGym((context, player, opponent) -> {
+			Minion darius = playMinionCard(context, player, "minion_darius_crowley");
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_wisp");
+			context.endTurn();
+			attack(context, player, darius, target);
+			assertFalse(darius.isDestroyed());
+			assertTrue(target.isDestroyed());
+			assertEquals(darius.getAttack(), darius.getBaseAttack() + 2);
+			assertEquals(darius.getMaxHp(), darius.getBaseHp() + 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion darius = playMinionCard(context, player, "minion_darius_crowley");
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_wisp");
+			target.setAttack(4);
+			context.endTurn();
+			attack(context, player, darius, target);
+			assertTrue(darius.isDestroyed(), "Darius Crowley should not be able to survive lethal damage with its effect of gaining +2/+2");
+		});
+	}
+
+	@Test
 	public void testArcaneKeysmith() {
 		runGym((context, player, opponent) -> {
 			context.setDeckFormat(new FixedCardsDeckFormat("secret_duplicate", "secret_counterspell"));
