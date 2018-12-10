@@ -2660,6 +2660,22 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testFifiFizzlewarpPermanentsInteraction() {
+		// Should not choose a permanent to write on a card
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("permanent_test"));
+			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			context.getLogic().drawCard(player.getId(), player);
+			context.getLogic().discardCard(player, fifi);
+
+			Card shouldNotBePermanent = player.getHand().get(0);
+			assertFalse(shouldNotBePermanent.hasAttribute(Attribute.PERMANENT));
+		});
+	}
+
+	@Test
 	public void testFifiFizzlewarpUnlicensedApothecaryInteraction() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");

@@ -6,11 +6,11 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "",
+  "description": "Permanent.",
   "attributes": {
     "PERMANENT": true
   },
-  "collectible": false,
+  "collectible": true,
   "set": "TEST",
   "fileFormatVersion": 1
 }
