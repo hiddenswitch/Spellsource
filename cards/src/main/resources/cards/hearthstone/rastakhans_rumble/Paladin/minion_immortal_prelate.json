@@ -6,16 +6,16 @@
   "baseHp": 3,
   "heroClass": "GOLD",
   "rarity": "EPIC",
-  "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
+  "description": "(WIP) Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
   "deathrattle": {
-    "class": "NullSpell",
+    "class": "ShuffleToDeckSpell",
     "target": "SELF"
   },
   "attributes": {
     "DEATHRATTLES": true,
     "KEEPS_ENCHANTMENTS": true
   },
-  "collectible": false,
+  "collectible": true,
   "set": "RASTAKHANS_RUMBLE",
   "fileFormatVersion": 1
 }
