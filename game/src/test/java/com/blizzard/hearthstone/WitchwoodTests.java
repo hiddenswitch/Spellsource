@@ -2,10 +2,7 @@ package com.blizzard.hearthstone;
 
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.CardZone;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
@@ -13,13 +10,13 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -180,6 +177,26 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(chameleos.getCardId(), "minion_bloodfen_raptor");
 			assertEquals(costOf(context, player, chameleos), bloodfenRaptor.getBaseManaCost(), "Chameleos should have Bloodfen Raptor base cost.");
 			assertEquals(costOf(context, opponent, corridorCreeper), corridorCreeper.getBaseManaCost() - 1, "Corridor Creeper should still have minus 1 cost");
+		});
+	}
+
+	@Test
+	public void testShudderwockEvolutionInteraction() {
+		runGym((context, player, opponent) -> {
+			// Make sure there are minions for novice and shudderwock to transform into
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_cost_4_test", "minion_cost_11_test"));
+			playCard(context, player, "hero_thrall_deathseer");
+			playMinionCard(context, player, "minion_novice_engineer");
+			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
+			context.getLogic().setRandom(new Random() {
+				@Override
+				protected int next(int bits) {
+					return 1;
+				}
+			});
+			playCard(context, player, "minion_shudderwock");
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
 		});
 	}
 

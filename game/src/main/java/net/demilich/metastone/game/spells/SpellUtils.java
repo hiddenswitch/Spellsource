@@ -890,7 +890,7 @@ public class SpellUtils {
 		}
 
 		public DetermineCastingPlayer invoke() {
-			// In case Yogg changes sides, this should case who the spells are being cast for.
+			// In case the minion changes sides, this should case who the spells are being cast for.
 			switch (castingTargetPlayer) {
 				case BOTH:
 				case OWNER:
@@ -911,7 +911,7 @@ public class SpellUtils {
 					break;
 			}
 
-			// If Yogg is removed from the board, stop casting spells.
+			// If the minion is removed from the board, stop casting spells.
 			if (source != null
 					&& castingTargetPlayer == TargetPlayer.OWNER
 					&& source.getEntityType() == EntityType.MINION
@@ -921,6 +921,13 @@ public class SpellUtils {
 				sourceDestroyed = true;
 				return this;
 			}
+
+			// If the minion is transformed, stop casting spells
+			if (source != source.transformResolved(context)) {
+				sourceDestroyed = true;
+				return this;
+			}
+
 			sourceDestroyed = false;
 			return this;
 		}

@@ -14,7 +14,7 @@
       "targetPlayer": "SELF"
     }
   },
-  "attribute": {
+  "attributes": {
     "BATTLECRY": true
   },
   "collectible": true,
