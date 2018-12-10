@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
-public class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
+public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 
 	public CavernsBelowTrigger(EventTriggerDesc desc) {
 		super(desc);

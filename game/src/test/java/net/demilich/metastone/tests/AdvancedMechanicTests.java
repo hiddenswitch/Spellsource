@@ -46,6 +46,17 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testPermanentDoesntTriggerSummons() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_test_permanents_dont_trigger_summons");
+			playCard(context, player, "permanent_test");
+			assertEquals(minion.getAttack(), minion.getBaseAttack(), "Should not have buffed");
+			playCard(context, player, "minion_neutral_test");
+			assertEquals(minion.getAttack(), minion.getBaseAttack() + 1, "Should have buffed");
+		});
+	}
+
+	@Test
 	public void testSecrets() {
 		runGym((context, player, opponent) -> {
 			// Player cannot play multiples of the same secrets

@@ -18,6 +18,8 @@ This release includes bug fixes reported by the community.
  - Shudderwock and other random card casting effects now stop casting when they are removed from play due to a transform effect, like Thrall Deathseer.
  - Ugar Frostflame, Deepholm Portal, and Fists of Fury no longer prompt the player for targets.
  - Fifi Fizzlewarp no longer writes a Permanent's text on a minion.
+ - Permanents more robustly do not trigger any kind of summoning-based card text.
+ - Echo of Thrall, War Trebuchet, Ship's Cannon, Spiritsinger Umbra, and Unlicensed Apothecary no longer trigger off themselves.
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 

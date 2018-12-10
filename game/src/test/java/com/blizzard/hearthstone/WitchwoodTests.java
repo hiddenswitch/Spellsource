@@ -27,6 +27,16 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testBewitchPermanentsInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_hagatha_the_witch");
+			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_bewitch");
+			playCard(context, player, "permanent_test");
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testDariusCrowley() {
 		runGym((context, player, opponent) -> {
 			Minion darius = playMinionCard(context, player, "minion_darius_crowley");
