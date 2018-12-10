@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "MINION",
   "baseAttack": 0,
-  "baseHp": 3,
+  "baseHp": 2,
   "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Deathrattle: Summon three 1/1 Scarabs.",

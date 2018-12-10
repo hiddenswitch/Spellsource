@@ -7,7 +7,20 @@ Thanks for playing Spellsource today! Release notes are below.
 
 #### 0.7.8-2.0.12 (Sunday, December 9th)
 
-This release includes bug fixes reported by the community.
+This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
+
+###### Known Issues:
+
+ - Immortal Prelate does not include its enchantments when it is shuffled into the deck.
+ - Choose One cards do not work correctly in the client.
+
+###### Content Additions:
+
+ - The classic cards Icicle, Tome of Intellect, Pilfer and Call of the Void have been added.
+
+###### Usability Fixes:
+
+ - Using a deck string that includes R.R. cards now correctly matches cards.
 
 ###### Content Fixes:
 
@@ -21,6 +34,7 @@ This release includes bug fixes reported by the community.
  - Permanents more robustly do not trigger any kind of summoning-based card text.
  - Echo of Thrall, War Trebuchet, Ship's Cannon, Spiritsinger Umbra, and Unlicensed Apothecary no longer trigger off themselves.
  - Breath of Fire now ignores spell damage when damaging the Hero.
+ - Untamed Beastmaster, Rumbletusk Shaker, Haunting Visions, Shriek, and Poisoned Dagger now have correct names.
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 

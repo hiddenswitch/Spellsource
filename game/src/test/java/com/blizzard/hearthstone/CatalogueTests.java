@@ -1,13 +1,10 @@
 package com.blizzard.hearthstone;
 
+import com.hiddenswitch.spellsource.client.models.CardRecord;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.cards.Attribute;
 import org.apache.commons.io.IOUtils;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
@@ -23,7 +20,7 @@ import java.util.List;
 public class CatalogueTests {
 
 	private static String getCurrentCards() {
-		String testedUrl = "https://api.hearthstonejson.com/v1/27358/enUS/cards.json";
+		String testedUrl = "https://api.hearthstonejson.com/v1/27845/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
 		if (overrideUrl != null && !overrideUrl.equals("")) {
 			testedUrl = overrideUrl;
@@ -62,15 +59,24 @@ public class CatalogueTests {
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testHasCard(JsonObject cardObject) {
-		final Card card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±", "\\u00f1"));
+		Card card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±", "\\u00f1"));
 		Assert.assertNotNull(card);
 	}
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
-		Card card;
+		Card card = null;
 		try {
-			card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±", "\\u00f1"));
+			for (CardCatalogueRecord record : CardCatalogue.getRecords().values()) {
+				if (record.getDesc().getSet().isHearthstoneSet()
+						&& record.getDesc().isCollectible()
+						&& record.getDesc().getName().equals(cardObject.getString("name").replace("Ã±", "\\u00f1"))) {
+					card = record.getDesc().create();
+				}
+			}
+			if (card == null) {
+				throw new NullPointerException("not found");
+			}
 		} catch (NullPointerException ex) {
 			Assert.fail(String.format("Could not find card with name %s", cardObject.getString("name")));
 			return;

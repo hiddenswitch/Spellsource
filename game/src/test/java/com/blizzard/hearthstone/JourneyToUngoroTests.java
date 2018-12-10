@@ -14,6 +14,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
@@ -243,6 +244,28 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_crystal_core");
 			checkMinion.accept(minion1);
+		});
+	}
+
+	@Test
+	public void testTheCavernsBelowReturnTargetToHandInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			Minion returnTarget = playMinionCard(context, player, "minion_neutral_test");
+			Quest caverns = player.getQuests().get(0);
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 1);
+			assertEquals(player.getHand().size(), 0);
+			playMinionCardWithBattlecry(context, player, "minion_ancient_brewmaster", returnTarget);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 1);
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 2, "Two neutral tests played.");
+			// Bounce again
+			playMinionCardWithBattlecry(context, player, "minion_ancient_brewmaster", player.getMinions().get(1));
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 3, "Three neutral tests played.");
+			assertEquals(caverns.getFires(), 3, "Fires should be reported accurately.");
 		});
 	}
 
