@@ -39,11 +39,19 @@ class Context(contextlib.AbstractContextManager):
 
     def __init__(self):
         self._is_closed = False
+        if os.name == 'nt' and 'java' not in os.environ['PATH']:
+            # As a friendly gesture, append the OpenJDK bin build that is specified in the readme.
+            _OPEN_JDK_11_0_1 = 'C:\\Program Files\\ojdkbuild\\java-11-openjdk-11.0.1-1\\bin'
+            if os.path.exists(_OPEN_JDK_11_0_1):
+                os.environ['PATH'] += ';' + _OPEN_JDK_11_0_1
+
         try:
             self._gateway = Context._start_gateway()
         except FileNotFoundError:
             self.status = Context.STATUS_FAILED
-            raise FileNotFoundError('Could not find the JAR file that stores the Spellsource Engine. Did you run gradle net:shadowJar?')
+            raise FileNotFoundError(
+                'Could not find the java executable. Is Java installed? On Windows, is java.exe somewhere in your '
+                'PATH?')
         except Exception as ex:
             self.status = Context.STATUS_FAILED
             raise ex
@@ -130,25 +138,23 @@ class Context(contextlib.AbstractContextManager):
         paths = []
         paths.append(filename)
         # local
-        paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../net/build/libs/" + filename))
-        paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../docs/" + filename))
-        paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../net/lib/" + filename))
-        paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), '../share/spellsource/' + filename))
-        paths.append(os.path.join(sys.prefix, 'share/spellsource/' + filename))
-        # pip install py4j # On Ubuntu 16.04, where virtualenvpath=/usr/local
+        dirname = os.path.dirname(os.path.realpath(__file__))
+        paths.append(os.path.join(dirname, '..', 'net', 'build', 'libs', filename))
+        paths.append(os.path.join(dirname, '..', 'docs', filename))
+        paths.append(os.path.join(dirname, '..', 'net', 'lib', filename))
+        paths.append(os.path.join(dirname, '..', 'share', 'spellsource', filename))
+        paths.append(os.path.join(sys.prefix, 'share', 'spellsource', filename))
+        # pip install py4j
+        #  On Ubuntu 16.04, where virtualenvpath=/usr/local
         #   this file is here:
         #     virtualenvpath/lib/pythonX/dist-packages/spellsource/java_gateway.py
         #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
-        # pip install --user py4j # On Ubuntu 16.04, where virtualenvepath=~/.local
+        # pip install --user py4j
+        #  On Ubuntu 16.04, where virtualenvepath=~/.local
         #   this file is here:
         #     virtualenvpath/lib/pythonX/site-packages/spellsource/java_gateway.py
         #   the jar file is here: virtualenvpath/share/spellsource/py4j.jar
-        paths.append(os.path.join(os.path.dirname(
-            os.path.realpath(__file__)), "../../../../share/spellsource/" + filename))
+        paths.append(os.path.join(dirname, '..', '..', '..', '..', 'share', 'spellsource', filename))
 
         for path in paths:
             if os.path.exists(path):
