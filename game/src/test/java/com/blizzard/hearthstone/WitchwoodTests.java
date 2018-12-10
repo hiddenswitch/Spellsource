@@ -7,6 +7,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -27,6 +28,21 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class WitchwoodTests extends TestBase {
+
+	@Test
+	public void testArcaneKeysmith() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("secret_duplicate", "secret_counterspell"));
+			playCard(context, player, "secret_duplicate");
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.size(), 1, "The discover should not show Duplicate, because it's already in play");
+				assertEquals(discoverActions.get(0).getCard().getCardId(), "secret_counterspell");
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_arcane_keysmith");
+			assertEquals(player.getSecrets().size(), 2, "Both Counterspell and Duplicate should be in play now.");
+		}, HeroClass.BLUE, HeroClass.BLUE);
+	}
 
 	@Test
 	public void testCoffinCrasher() {

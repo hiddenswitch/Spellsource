@@ -12,6 +12,7 @@ This release includes bug fixes reported by the community.
 ###### Content Fixes:
 
  - Prince Malchezaar no longer shuffles in legendaries that are already in your hand or deck. This also fixes an interaction with Reno Jackson.
+ - Arcane Keysmith no longer discovers secrets that you already have.
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 
