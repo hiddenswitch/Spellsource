@@ -12,6 +12,13 @@ class BasicTest(unittest.TestCase):
             context_entered = True
         self.assertTrue(context_entered)
 
+    def test_start_jvm_with_port(self):
+        context_entered = False
+        with Context(port=9090) as ctx:
+            self.assertEqual(ctx.status, Context.STATUS_READY)
+            context_entered = True
+        self.assertTrue(context_entered)
+
     def test_create_game_context(self):
         with Context() as ctx:
             self.assertEqual(ctx.status, Context.STATUS_READY)
