@@ -11,13 +11,13 @@ class BasicTest(unittest.TestCase):
             self.assertEqual(ctx.status, Context.STATUS_READY)
             context_entered = True
         self.assertTrue(context_entered)
-    
+
     def test_create_game_context(self):
         with Context() as ctx:
             self.assertEqual(ctx.status, Context.STATUS_READY)
             gc = ctx.game.GameContext.fromTwoRandomDecks()
             self.assertEqual(gc.getPlayer1().getId(), 0)
-    
+
     def test_behaviour(self):
         with Context() as ctx:
             gc = ctx.game.GameContext.fromTwoRandomDecks()
@@ -27,7 +27,7 @@ class BasicTest(unittest.TestCase):
             gc.setBehaviour(1, behaviour2.wrap(ctx))
             gc.play()
             self.assertTrue(gc.updateAndGetGameOver())
-    
+
     def test_advanced_behaviour(self):
         with Context() as ctx:
             gc = ctx.game.GameContext.fromTwoRandomDecks()
@@ -35,14 +35,19 @@ class BasicTest(unittest.TestCase):
             behaviour2 = PlayRandomBehaviour()
             gc.setBehaviour(0, behaviour1.wrap(ctx))
             gc.setBehaviour(1, behaviour2.wrap(ctx))
-            gc.play()
-            self.assertTrue(gc.updateAndGetGameOver())
-    
+            # We'll just play one turn turns
+            gc.init()
+            gc.setActivePlayerId(0)
+            gc.startTurn(0)
+            while gc.takeActionInTurn():
+                pass
+            self.assertTrue(gc.getActionsThisTurn() > 0)
+
     def test_simulation(self):
         with Context() as ctx:
             # Simulation function
             from spellsource.utils import simulate
-            
+
             DECK_1 = '''### Control Warlock First
             # Class: VIOLET
             # Format: Standard
@@ -90,10 +95,11 @@ class BasicTest(unittest.TestCase):
             # 1x (8) Twisting Nether
             # 2x (9) Voidlord
             # 1x (10) Bloodreaver Gul'dan'''
-            
+
             per_game_stats = list(simulate(context=ctx, decks=(DECK_1, DECK_2), number=10,
                                            behaviours=('PlayRandomBehaviour', 'PlayRandomBehaviour')))
             self.assertTrue(len(per_game_stats) > 0)
+
     def test_notebook(self):
         from tqdm import tqdm
         from spellsource.context import Context
