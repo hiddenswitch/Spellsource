@@ -5,13 +5,21 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.7-2.0.12 (Saturday, December 8th)
+#### 0.7.8-2.0.12 (Sunday, December 9th)
+
+This release includes bug fixes reported by the community.
+
+###### Content Fixes:
+
+ - Prince Malchezaar no longer shuffles in legendaries that are already in your hand or deck. This also fixes an interaction with Reno Jackson.
+
+###### 0.7.7-2.0.12 (Saturday, December 8th)
 
 This release has server improvements that should reduce the number of dropped games.
 
 Please report any issues you experience in the Discord, especially when playing against the bot.
 
-#### 0.7.6-2.0.12 (Wednesday, December 5th)
+**0.7.6-2.0.12** (Wednesday, December 5th)
 
 This release has various bug fixes helpfully reported by the community. It also includes some overall improvements to common game effects.
 
@@ -32,7 +40,7 @@ This release has various bug fixes helpfully reported by the community. It also 
 
  - Wandering Monster now uses Misdirect's exact effect and its test is improved.
 
-###### 0.7.5-2.0.12 (Tuesday, December 4th)
+**0.7.5-2.0.12** (Tuesday, December 4th)
 
 Thanks to a great contribution from @Pircival, we have new Baron cards!
 

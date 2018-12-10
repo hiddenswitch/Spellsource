@@ -38,16 +38,17 @@
                     "cardType": "MINION"
                   },
                   {
-                    "class": "OrFilter",
+                    "class": "AndFilter",
                     "filters": [
                       {
-                        "class": "InDeckFilter"
+                        "class": "DeckContainsFilter",
+                        "invert": true
                       },
                       {
-                        "class": "InHandFilter"
+                        "class": "HandContainsFilter",
+                        "invert": true
                       }
-                    ],
-                    "invert": true
+                    ]
                   },
                   {
                     "class": "OrFilter",
