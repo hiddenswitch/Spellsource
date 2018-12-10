@@ -14,6 +14,7 @@ This release includes bug fixes reported by the community.
  - Prince Malchezaar no longer shuffles in legendaries that are already in your hand or deck. This also fixes an interaction with Reno Jackson.
  - Arcane Keysmith no longer discovers secrets that you already have.
  - Little Helper is now officially a battlecry minion.
+ - Darius Crowley no longer survives lethal damage from its effect. Student of the Ox, which has an effect with a similar consequence, **does** survive lethal damage from its effect on purpose.
 
 ###### 0.7.7-2.0.12 (Saturday, December 8th)
 
