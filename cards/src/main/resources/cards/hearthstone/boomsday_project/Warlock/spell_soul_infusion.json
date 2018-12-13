@@ -7,8 +7,7 @@
   "description": "Give the left-most minion in your hand +2/+2.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "LEFTMOST_FRIENDLY_CARD_HAND",
+    "class": "custom.BuffLeftmostMinionInHandSpell",
     "value": 2
   },
   "collectible": true,
