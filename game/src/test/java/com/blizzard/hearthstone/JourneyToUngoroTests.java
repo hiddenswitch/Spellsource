@@ -134,6 +134,16 @@ public class JourneyToUngoroTests extends TestBase {
 							&& ga.getSourceReference().equals(devilsaur.getReference())
 							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
 		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_charged_devilsaur");
+			playCard(context, player, "spell_gather_your_party");
+			Minion devilsaur = player.getMinions().get(0);
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType() == ActionType.PHYSICAL_ATTACK
+							&& ga.getSourceReference().equals(devilsaur.getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+		});
 	}
 
 	@Test
