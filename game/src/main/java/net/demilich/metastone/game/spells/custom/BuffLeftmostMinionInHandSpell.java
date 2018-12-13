@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.spells.AddDeathrattleSpell;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
@@ -29,3 +30,4 @@ public final class BuffLeftmostMinionInHandSpell extends BuffSpell {
 		super.cast(context, player, desc, source, Collections.singletonList(minions.get(0)));
 	}
 }
+

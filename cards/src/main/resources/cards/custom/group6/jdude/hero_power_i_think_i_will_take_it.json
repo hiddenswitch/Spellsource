@@ -9,27 +9,7 @@
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
-      "class": "EitherOrSpell",
-      "condition": {
-        "class": "OwnedByPlayerCondition",
-        "targetPlayer": "ACTIVE"
-      },
-      "spell1": {
-        "class": "AddDeathrattleSpell",
-        "spell": {
-          "class": "ShuffleMinionToDeckSpell",
-          "target": "SELF",
-          "targetPlayer": "OPPONENT"
-        }
-      },
-      "spell2": {
-        "class": "AddDeathrattleSpell",
-        "spell": {
-          "class": "ShuffleMinionToDeckSpell",
-          "target": "SELF",
-          "targetPlayer": "OWNER"
-        }
-      }
+      "class": "custom.RafaamThiefSpell"
     }
   },
   "collectible": false,

@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -62,6 +63,10 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 				return host.getOwner() == targetPlayerId;
 			case SELF:
 				return getOwner() == targetPlayerId;
+			case PLAYER_1:
+				return targetPlayerId == GameContext.PLAYER_1;
+			case PLAYER_2:
+				return targetPlayerId == GameContext.PLAYER_2;
 			default:
 				break;
 		}

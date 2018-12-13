@@ -25,6 +25,10 @@ public class OwnedByPlayerCondition extends Condition {
 				return target.getOwner() != player.getId();
 			case SELF:
 				return target.getOwner() == player.getId();
+			case PLAYER_1:
+				return target.getOwner() == GameContext.PLAYER_1;
+			case PLAYER_2:
+				return target.getOwner() == GameContext.PLAYER_2;
 			default:
 				break;
 

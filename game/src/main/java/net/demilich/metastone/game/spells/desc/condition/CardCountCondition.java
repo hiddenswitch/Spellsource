@@ -37,6 +37,11 @@ public class CardCountCondition extends Condition {
 			case OWNER:
 				cardCount = context.getPlayer(source.getOwner()).getHand().getCount();
 				break;
+			case PLAYER_1:
+				cardCount = context.getPlayer1().getHand().getCount();
+				break;
+			case PLAYER_2:
+				cardCount = context.getPlayer2().getHand().getCount();
 			default:
 				break;
 
