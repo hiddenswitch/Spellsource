@@ -5,22 +5,23 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.9-2.0.12 (Wednesday, December 12th)
+#### 0.7.9-2.0.13 (Wednesday, December 12th)
 
 This release fixes a critical issue where the bot is capable of corrupting your game.
-
-###### Usability Fixes:
-
- - Quest counters now increase when playing against the bot. A great deal of other subtle issues playing against the bot should also be resolved.
-
-###### 0.7.8-2.0.12 (Monday, December 10th)
-
-This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
 
 ###### Known Issues:
 
  - Immortal Prelate does not include its enchantments when it is shuffled into the deck.
  - Choose One cards do not work correctly in the client.
+
+###### Usability Fixes:
+
+ - Quest counters now increase when playing against the bot. A great deal of other subtle issues playing against the bot should also be resolved.
+ - The client now handles resolution changes more elegantly.
+
+###### 0.7.8-2.0.12 (Monday, December 10th)
+
+This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
 
 ###### Content Additions:
 
