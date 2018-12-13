@@ -2719,6 +2719,21 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testFifiFizzlewarpShouldTriggerWithSpells() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_loot_hoarder"));
+			putOnTopOfDeck(context, player, "spell_mirror_image");
+			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
+			Card fifi = receiveCard(context, player, "minion_fifi_fizzlewarp");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			context.getLogic().discardCard(player, fifi);
+			context.getLogic().drawCard(player.getId(), player);
+			Card shouldHaveLootHoarder = player.getHand().get(0);
+			assertEquals(shouldHaveLootHoarder.getCardId(), "minion_loot_hoarder");
+		});
+	}
+
+	@Test
 	public void testFifiFizzlewarpUnlicensedApothecaryInteraction() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
