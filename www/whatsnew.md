@@ -24,6 +24,7 @@ This release includes bug fixes reported by the community.
  - Lesser Pearl Spellstone and other effects that trigger based on who is doing the health restoring (as opposed to what is getting its health restored) now work.
  - Dilute Soul now interacts with Scepter of Sargeras.
  - Tracking and Ancestral Plane now look at the top three cards of your deck, instead of random ones.
+ - Soulwarden now copies discarded cards instead of moving them out of the graveyard.
 
 ###### 0.7.9-2.0.13 (Wednesday, December 12th)
 

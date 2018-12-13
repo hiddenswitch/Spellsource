@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
+      "class": "CopyCardSpell",
       "value": 3,
       "cardSource": {
         "class": "GraveyardCardsSource",
@@ -21,7 +21,6 @@
         "attribute": "DISCARDED",
         "operation": "HAS"
       }
-
     }
   },
   "attributes": {
