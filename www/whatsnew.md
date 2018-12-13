@@ -19,6 +19,7 @@ This release includes bug fixes reported by the community.
  - Soul Infusion now works.
  - I think I will take it!, the Rafaam, Supreme Thief hero power, now correctly shuffles the target minion into the caster's deck.
  - Skeletal Smith now has proper capitalization.
+ - Ninjarcher now deals 2 damage instead of 1 when cards are drawn.
 
 ###### 0.7.9-2.0.13 (Wednesday, December 12th)
 
