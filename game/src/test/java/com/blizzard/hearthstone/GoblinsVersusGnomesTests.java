@@ -1,7 +1,5 @@
 package com.blizzard.hearthstone;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -22,6 +20,19 @@ public class GoblinsVersusGnomesTests extends TestBase {
 			playCard(context, player, "minion_blingtron_3000");
 			Assert.assertEquals(player.getWeaponZone().size(), 1);
 			Assert.assertEquals(opponent.getWeaponZone().size(), 1);
+		});
+	}
+
+	@Test
+	public void testMalganis() {
+		runGym((context, player, opponent) -> {
+			Minion malganis = playMinionCard(context, player, "minion_malganis");
+			int playerHp = player.getHero().getHp();
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), playerHp);
+			destroy(context, malganis);
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), playerHp - 6);
 		});
 	}
 
