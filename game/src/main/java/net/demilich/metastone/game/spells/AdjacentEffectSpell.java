@@ -46,7 +46,7 @@ import java.util.Map;
  * @see EntityReference#ADJACENT_TO_TARGET to direct target minions adjacent to the resolution of {@link
  * 		EntityReference#TARGET}, the currently selected player target.
  */
-public final class AdjacentEffectSpell extends RelativeToTargetEffectSpell {
+public class AdjacentEffectSpell extends RelativeToTargetEffectSpell {
 
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(AdjacentEffectSpell.class);
@@ -68,8 +68,7 @@ public final class AdjacentEffectSpell extends RelativeToTargetEffectSpell {
 	}
 
 	@Override
-	protected List<Actor> getActors(GameContext context, Entity target) {
+	protected List<Actor> getActors(GameContext context, SpellDesc desc, Entity source, Entity target) {
 		return context.getAdjacentMinions(target.getReference());
 	}
-
 }

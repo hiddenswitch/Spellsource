@@ -55,6 +55,26 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testIdiotSandwich() {
+		runGym((context, player, opponent) -> {
+			Minion notBuffed1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion left = playMinionCard(context, player, "minion_neutral_test");
+			Minion idiot = playMinionCard(context, player, "minion_idiot_sandwich");
+			Minion right = playMinionCard(context, player, "minion_neutral_test");
+			Minion notBuffed2 = playMinionCard(context, player, "minion_neutral_test");
+			destroy(context, idiot);
+			assertEquals(left.getAttack(), left.getBaseAttack() + 2);
+			assertEquals(left.getMaxHp(), left.getBaseHp() + 2);
+			assertEquals(right.getAttack(), right.getBaseAttack() + 2);
+			assertEquals(right.getMaxHp(), right.getBaseHp() + 2);
+			for (Minion notBuffed : new Minion[]{notBuffed1, notBuffed2}) {
+				assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
+				assertEquals(notBuffed.getMaxHp(), notBuffed.getBaseHp());
+			}
+		});
+	}
+
+	@Test
 	public void testAncestralPlaneGrumbleTheWorldshakerInteraction() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_grumble_worldshaker");
