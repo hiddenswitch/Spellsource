@@ -20,6 +20,9 @@
         "attribute": "DEATHRATTLES",
         "operation": "HAS"
       },
+      "spell": {
+        "class": "RevealCardSpell"
+      },
       "howMany": 3,
       "randomTarget": true
     }

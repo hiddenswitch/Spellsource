@@ -20,6 +20,7 @@ This release includes bug fixes reported by the community.
  - I think I will take it!, the Rafaam, Supreme Thief hero power, now correctly shuffles the target minion into the caster's deck.
  - Skeletal Smith now has proper capitalization.
  - Ninjarcher now deals 2 damage instead of 1 when cards are drawn.
+ - Da Undatakah now shows you which Deathrattles it gained.
 
 ###### 0.7.9-2.0.13 (Wednesday, December 12th)
 

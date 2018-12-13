@@ -309,7 +309,9 @@ public class RastakhansRumbleTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), 28);
 			assertEquals(opponent.getHand().size(), 2);
 			assertEquals(player.getHand().size(), 3);
+			Minion shouldRevealCard = playMinionCard(context, player, "minion_reveal_cards_test");
 			playCard(context, player, "minion_da_undatakah");
+			assertEquals(shouldRevealCard.getAttributeValue(Attribute.RESERVED_INTEGER_1), 3, "Should have revealed 3 cards (see implementation of minion_reveal_cards_test");
 			playCard(context, player, "spell_twisting_nether");
 			assertEquals(opponent.getHero().getHp(), 26);
 			assertEquals(opponent.getHand().size(), 4);
