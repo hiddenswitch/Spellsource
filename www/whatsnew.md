@@ -22,6 +22,7 @@ This release includes bug fixes reported by the community.
  - Ninjarcher now deals 2 damage instead of 1 when cards are drawn.
  - Da Undatakah now shows you which Deathrattles it gained.
  - Lesser Pearl Spellstone and other effects that trigger based on who is doing the health restoring (as opposed to what is getting its health restored) now work.
+ - Dilute Soul now interacts with Scepter of Sargeras.
 
 ###### 0.7.9-2.0.13 (Wednesday, December 12th)
 

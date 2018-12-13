@@ -4271,6 +4271,28 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testScepterOfSargerasDiluteSoulInteraction() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_the_coin");
+			receiveCard(context, player, "minion_neutral_test");
+			receiveCard(context, player, "minion_red_test");
+			playCard(context, player, "weapon_scepter_of_sargeras");
+			AtomicInteger discovers = new AtomicInteger();
+			overrideDiscover(context, player, discoverActions -> {
+				discovers.incrementAndGet();
+				assertEquals(discoverActions.size(), 3);
+				return discoverActions.stream().filter(c -> c.getCard().getCardId().equals("spell_the_coin")).findFirst().orElseThrow(AssertionError::new);
+			});
+			playCard(context, player, "spell_dilute_soul");
+			assertEquals(discovers.get(), 1);
+			assertEquals(player.getHand().size(), 2);
+			context.endTurn();
+			assertEquals(player.getHand().size(), 4);
+			assertEquals(player.getHand().stream().filter(c -> c.getCardId().equals("spell_the_coin")).count(), 2L);
+		});
+	}
+
+	@Test
 	public void testScepterOfSargeras() {
 		for (int i = 0; i < 10; i++) {
 			runGym((context, player, opponent) -> {
