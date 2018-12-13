@@ -64,6 +64,7 @@ public class Quest extends Enchantment {
 	}
 
 	@Override
+	@Suspendable
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		final boolean spellFired = super.onFire(ownerId, spell, event);
 		if (isInPlay() && spellFired) {

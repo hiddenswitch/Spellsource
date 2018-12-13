@@ -157,7 +157,7 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 	}
 
 	/**
-	 * Handles a web socket message (message from the {@link #reader}), decoding it into a {@link ClientToServerMessage}.
+	 * Handles a web socket message (message from the event bus), decoding it into a {@link ClientToServerMessage}.
 	 *
 	 * @param messageBuffer The buffer containing the JSON of the message.
 	 * @throws SuspendExecution
@@ -449,18 +449,11 @@ public class UnityClientBehaviour extends UtilityBehaviour implements Client, Cl
 
 	@Suspendable
 	private void sendMessage(ServerToClientMessage message) {
-		try {
-			sendMessage(getWriter(), message);
-		} catch (NullPointerException writerNull) {
-			// TODO: What is the significance of this exception?
-		} catch (IOException connectionLost) {
-			// This would indicate a lost connection to the eventBus, which seems serious enough to be a real exception
-			throw new RuntimeException(connectionLost);
-		}
+		sendMessage(getWriter(), message);
 	}
 
 	@Suspendable
-	private void sendMessage(WriteStream<Buffer> socket, ServerToClientMessage message) throws IOException {
+	private void sendMessage(WriteStream<Buffer> socket, ServerToClientMessage message) {
 		// Always include the playerId in the message
 		message.setLocalPlayerId(playerId);
 		socket.write(Buffer.buffer(Json.encode(message)));

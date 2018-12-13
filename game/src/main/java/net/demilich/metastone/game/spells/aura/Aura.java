@@ -167,6 +167,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Suspendable
+	@Override
 	public void onGameEvent(GameEvent event) {
 		GameContext context = event.getGameContext();
 		Player owner = context.getPlayer(getOwner());

@@ -82,6 +82,10 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	@Override
 	public Entity clone() {
 		Entity clone = (Entity) super.clone();
+		// The attributes need to be cloned
+		if (attributes != null) {
+			clone.attributes = attributes.clone();
+		}
 		return clone;
 	}
 

@@ -73,8 +73,7 @@ public class Enchantment extends Entity implements Trigger {
 	protected Card sourceCard;
 	protected Integer countUntilCast;
 	protected boolean countByValue;
-
-	protected boolean usesSpellTrigger;
+	protected boolean usesSpellTrigger = true;
 
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
@@ -165,6 +164,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
+	@Suspendable
 	public void onAdd(GameContext context) {
 	}
 

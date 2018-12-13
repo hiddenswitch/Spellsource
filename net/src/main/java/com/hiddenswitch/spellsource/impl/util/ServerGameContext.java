@@ -6,7 +6,10 @@ import co.paralleluniverse.fibers.Suspendable;
 import co.paralleluniverse.strands.Strand;
 import co.paralleluniverse.strands.SuspendableAction1;
 import co.paralleluniverse.strands.concurrent.ReentrantLock;
-import com.hiddenswitch.spellsource.*;
+import com.hiddenswitch.spellsource.Connection;
+import com.hiddenswitch.spellsource.Games;
+import com.hiddenswitch.spellsource.Logic;
+import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.common.*;
 import com.hiddenswitch.spellsource.common.GameState;
@@ -21,23 +24,18 @@ import com.hiddenswitch.spellsource.models.GetCollectionResponse;
 import com.hiddenswitch.spellsource.models.LogicGetDeckRequest;
 import io.vertx.codegen.annotations.Nullable;
 import io.vertx.core.*;
-import io.vertx.core.Future;
 import io.vertx.core.buffer.Buffer;
-import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
 import io.vertx.core.eventbus.MessageProducer;
-import io.vertx.core.http.HttpServerRequest;
-import io.vertx.core.http.ServerWebSocket;
 import io.vertx.core.impl.ConcurrentHashSet;
 import io.vertx.core.json.Json;
-import io.vertx.core.streams.Pump;
 import io.vertx.ext.sync.Sync;
-import io.vertx.ext.web.RoutingContext;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -47,25 +45,25 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.TouchingNotification;
 import net.demilich.metastone.game.events.TriggerFired;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.logic.TurnState;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
-import java.util.concurrent.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Stream;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
-import static io.vertx.ext.sync.Sync.awaitEvent;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -904,11 +902,10 @@ public class ServerGameContext extends GameContext implements Server {
 
 	private void touch(Client sender, int entityId, boolean touching) {
 		TouchingNotification touch = new TouchingNotification(sender.getPlayerId(), entityId, touching);
-		GameState gameStateCopy = getGameStateCopy();
 
 		for (Client client : getClients()) {
 			if (client.getPlayerId() != sender.getPlayerId()) {
-				client.sendNotification(touch, gameStateCopy);
+				client.sendNotification(touch, null);
 			}
 		}
 	}
