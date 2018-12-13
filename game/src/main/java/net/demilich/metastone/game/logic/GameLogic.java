@@ -4096,11 +4096,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new HeroPowerUsedEvent(context, playerId, power));
 	}
 
-	@Suspendable
-	protected void mulliganAsync(Player player, boolean begins, Handler<List<Card>> callback) {
-		throw new RuntimeException("Cannot call GameLogic::mulliganAsync from a non-async GameLogic instance.");
-	}
-
 	public Random getRandom() {
 		return random;
 	}

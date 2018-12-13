@@ -425,8 +425,16 @@ public class ServerGameContext extends GameContext implements Server {
 
 		List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
 		List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
-		getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, mulligansActive::complete);
-		getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, mulligansNonActive::complete);
+		if (firstHandActive.isEmpty()) {
+			mulligansActive.complete(Collections.emptyList());
+		} else {
+			getBehaviours().get(getActivePlayerId()).mulliganAsync(this, getActivePlayer(), firstHandActive, mulligansActive::complete);
+		}
+		if (firstHandNonActive.isEmpty()) {
+			mulligansNonActive.complete(Collections.emptyList());
+		} else {
+			getBehaviours().get(getNonActivePlayerId()).mulliganAsync(this, getNonActivePlayer(), firstHandNonActive, mulligansNonActive::complete);
+		}
 
 		// If this is interrupted, it'll bubble up to the general interrupt handler
 		CompositeFuture simultaneousMulligans = awaitResult(CompositeFuture.join(mulligansActive, mulligansNonActive)::setHandler);
