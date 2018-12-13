@@ -18,7 +18,7 @@ import java.util.List;
  *
  * <ul>
  * <li>{@link SpellArg#SPELL1} is cast on {@code target}.</li>
- * <li>{@link SpellArg#SPELL2} is cast on the result of {@link #getActors(GameContext, Entity)} of that {@code
+ * <li>{@link SpellArg#SPELL2} is cast on the result of {@link #getActors(GameContext, SpellDesc, Entity, Entity)} of that {@code
  * target}.</li>
  * <li>{@link SpellArg#SPELL} is cast on both, only if neither of the above were specified.</li>
  * </ul>
@@ -31,7 +31,7 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2);
 		EntityReference sourceReference = source != null ? source.getReference() : null;
-		List<Actor> adjacentMinions = getActors(context, target);
+		List<Actor> adjacentMinions = getActors(context, desc, source, target);
 		SpellDesc primary;
 		SpellDesc secondary;
 		if (desc.containsKey(SpellArg.SPELL) &&
@@ -56,5 +56,5 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 		}
 	}
 
-	protected abstract List<Actor> getActors(GameContext context, Entity target);
+	protected abstract List<Actor> getActors(GameContext context, SpellDesc desc, Entity source, Entity target);
 }

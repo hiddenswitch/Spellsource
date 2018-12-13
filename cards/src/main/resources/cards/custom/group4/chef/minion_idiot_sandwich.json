@@ -9,10 +9,13 @@
   "race": "MURLOC",
   "description": "Deathrattle: Give adjacent minions +2/+2.",
   "deathrattle": {
-    "class": "BuffSpell",
-    "target": "ADJACENT_MINIONS",
-    "attackBonus": 2,
-    "hpBonus": 2
+    "class": "custom.AdjacentDeathrattleSpell",
+    "target": "SELF",
+    "spell2": {
+      "class": "BuffSpell",
+      "attackBonus": 2,
+      "hpBonus": 2
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

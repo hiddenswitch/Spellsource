@@ -25,6 +25,7 @@ This release includes bug fixes reported by the community.
  - Dilute Soul now interacts with Scepter of Sargeras.
  - Tracking and Ancestral Plane now look at the top three cards of your deck, instead of random ones.
  - Soulwarden now copies discarded cards instead of moving them out of the graveyard.
+ - Idiot Sandwich now works.
 
 ###### 0.7.9-2.0.13 (Wednesday, December 12th)
 
