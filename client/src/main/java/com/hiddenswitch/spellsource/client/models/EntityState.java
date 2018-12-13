@@ -238,10 +238,10 @@ public class EntityState implements Serializable {
   private String tribe = null;
 
   @JsonProperty("fires")
-  private Integer fires = null;
+  private Integer fires = 0;
 
   @JsonProperty("countUntilCast")
-  private Integer countUntilCast = null;
+  private Integer countUntilCast = 0;
 
   @JsonProperty("cardSet")
   private String cardSet = null;

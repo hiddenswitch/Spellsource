@@ -36,4 +36,9 @@ public abstract class BaseMap<K extends Enum<K>, V> extends EnumMap<K, V> {
 		return val;
 	}
 	*/
+
+	@Override
+	public BaseMap<K, V> clone() {
+		return (BaseMap<K, V>) super.clone();
+	}
 }

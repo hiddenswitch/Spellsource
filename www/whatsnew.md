@@ -5,7 +5,15 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below.
 
-#### 0.7.8-2.0.12 (Monday, December 10th)
+#### 0.7.9-2.0.12 (Wednesday, December 12th)
+
+This release fixes a critical issue where the bot is capable of corrupting your game.
+
+###### Usability Fixes:
+
+ - Quest counters now increase when playing against the bot. A great deal of other subtle issues playing against the bot should also be resolved.
+
+###### 0.7.8-2.0.12 (Monday, December 10th)
 
 This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
 
@@ -36,7 +44,7 @@ This release includes bug fixes reported by the community, new Classic cards and
  - Breath of Fire now ignores spell damage when damaging the Hero.
  - Untamed Beastmaster, Rumbletusk Shaker, Haunting Visions, Shriek, and Poisoned Dagger now have correct names.
 
-###### 0.7.7-2.0.12 (Saturday, December 8th)
+**0.7.7-2.0.12** (Saturday, December 8th)
 
 This release has server improvements that should reduce the number of dropped games.
 

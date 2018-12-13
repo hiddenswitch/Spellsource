@@ -231,18 +231,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	}
 
 	@Override
-	public DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request) {
-		GameId key = new GameId(request.getGameId());
-		if (contexts.containsKey(key)) {
-			Games.LOGGER.debug("describeGameSession: Describing gameId " + request.getGameId());
-			return DescribeGameSessionResponse.fromGameContext(contexts.get(key));
-		} else {
-			Games.LOGGER.debug("describeGameSession: This game session does not contain the gameId " + request.getGameId());
-			return new DescribeGameSessionResponse();
-		}
-	}
-
-	@Override
 	public EndGameSessionResponse endGameSession(EndGameSessionRequest request) throws InterruptedException, SuspendExecution {
 		final GameId key = new GameId(request.getGameId());
 		if (contexts.containsKey(key)) {

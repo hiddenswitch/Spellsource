@@ -46,7 +46,7 @@ RUN set -ex; \
 # ... and verify that it actually worked for one of the alternatives we care about
 	update-alternatives --query java | grep -q 'Status: manual'
 
-ENV SPELLSOURCE_VERSION=0.7.8
+ENV SPELLSOURCE_VERSION=0.7.9
 ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}-all.jar /data/net-${SPELLSOURCE_VERSION}-all.jar
 
 RUN mkdir /etc/service/java

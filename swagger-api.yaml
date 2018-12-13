@@ -23,7 +23,6 @@ info:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
 host: api-3.hiddenswitch.com
-basePath: /api/v2
 schemes:
 - https
 consumes:
@@ -1705,12 +1704,14 @@ definitions:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'
         format: 'int32'
+        default: 0
       countUntilCast:
         description: |
           The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
           triggered.
         type: 'integer'
         format: 'int32'
+        default: 0
       cardSet:
         description: |
           The card expansion set this entity belongs to.

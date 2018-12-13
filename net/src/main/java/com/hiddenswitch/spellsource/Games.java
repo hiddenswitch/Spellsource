@@ -4,7 +4,6 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
-import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -689,15 +688,6 @@ public interface Games extends Verticle {
 	CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException;
 
 	/**
-	 * Gets the current game state of a requested game ID. In the future, this method should punt the request to the next
-	 * Games service instance if it can't find the given session.
-	 *
-	 * @param request The game ID to describe.
-	 * @return The game state of the requested game.
-	 */
-	DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request);
-
-	/**
 	 * Possibly prematurely ends the game session. Typically this is done due to timeouts or some external action that
 	 * would concede a game (like a ban or profanity). This will send the correct game over notifications to the bots/
 	 * players who are connected to this game.
@@ -743,32 +733,6 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution;
-
-	/**
-	 * Gets a complete view of the game for the specified user, respecting security (i.e., information about the user's
-	 * opponent's deck, hand and secrets is not leaked).
-	 *
-	 * @param gameId The game to get client state for.
-	 * @param userId The user ID whose point of view this state should be generated for.
-	 * @return A client view game state.
-	 */
-	default GameState getClientGameState(String gameId, String userId) {
-		DescribeGameSessionResponse gameSession = describeGameSession(DescribeGameSessionRequest.create(gameId));
-		com.hiddenswitch.spellsource.common.GameState state = gameSession.getState();
-		GameContext workingContext = new GameContext();
-		workingContext.setGameState(state);
-		Player local;
-		Player opponent;
-		if (state.player1.getUserId().equals(userId)) {
-			local = state.player1;
-			opponent = state.player2;
-		} else {
-			local = state.player2;
-			opponent = state.player1;
-		}
-
-		return getGameState(workingContext, local, opponent);
-	}
 
 	/**
 	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
@@ -1066,9 +1030,13 @@ public interface Games extends Verticle {
 					.description("Secret")
 					.cardId("hidden");
 		}
-		Entity.EntityTypeEnum entityType = Entity.EntityTypeEnum.SECRET;
-		if (enchantment instanceof Quest) {
+		Entity.EntityTypeEnum entityType;
+		if (enchantment instanceof Secret) {
+			entityType = Entity.EntityTypeEnum.SECRET;
+		} else if (enchantment instanceof Quest) {
 			entityType = Entity.EntityTypeEnum.QUEST;
+		} else {
+			entityType = Entity.EntityTypeEnum.ENCHANTMENT;
 		}
 
 		entity.getState()

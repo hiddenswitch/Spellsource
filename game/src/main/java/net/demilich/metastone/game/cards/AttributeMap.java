@@ -39,9 +39,7 @@ public class AttributeMap extends BaseMap<Attribute, Object> implements Serializ
 
 	@Override
 	public AttributeMap clone() {
-		AttributeMap map = new AttributeMap();
-		map.putAll(this);
-		return map;
+		return (AttributeMap) super.clone();
 	}
 
 	@Override

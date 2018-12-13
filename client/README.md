@@ -94,7 +94,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://api-3.hiddenswitch.com/api/v2*
+All URIs are relative to *https://api-3.hiddenswitch.com*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
