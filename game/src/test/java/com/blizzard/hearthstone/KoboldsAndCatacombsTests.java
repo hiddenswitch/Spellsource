@@ -30,6 +30,16 @@ import static org.testng.Assert.assertTrue;
 public class KoboldsAndCatacombsTests extends TestBase {
 
 	@Test
+	public void testLesserPearlSpellstone() {
+		runGym((context, player, opponent) -> {
+			Card spellstone = receiveCard(context, player, "spell_lesser_pearl_spellstone");
+			opponent.getHero().setHp(29);
+			playCard(context, player, "spell_healing_touch", opponent.getHero());
+			assertEquals(spellstone.transformResolved(context).getSourceCard().getCardId(), "spell_pearl_spellstone");
+		});
+	}
+
+	@Test
 	public void testPsychicScreamTwilightsCallInteraction() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

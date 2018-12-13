@@ -9,7 +9,7 @@ public final class HealEvent extends GameEvent implements HasValue {
 	private final int healing;
 
 	public HealEvent(GameContext context, int playerId, Entity target, int healing) {
-		super(context, playerId, -1);
+		super(context, target.getOwner(), playerId);
 		this.target = target;
 		this.healing = healing;
 	}

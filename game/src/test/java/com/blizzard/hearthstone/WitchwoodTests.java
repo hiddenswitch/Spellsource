@@ -27,6 +27,17 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testTheGlassKnight() {
+		runGym((context, player, opponent) -> {
+			Minion glassKnight = playMinionCard(context, player, "minion_the_glass_knight");
+			playCard(context, player, "spell_fireball", glassKnight);
+			player.getHero().setHp(29);
+			playCard(context, player, "spell_healing_touch", player.getHero());
+			assertTrue(glassKnight.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+	}
+
+	@Test
 	public void testBewitchPermanentsInteraction() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_hagatha_the_witch");
