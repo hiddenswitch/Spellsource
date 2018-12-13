@@ -906,9 +906,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_1, startingPlayerId == PLAYER_1);
 		getLogic().initializePlayerAndMoveMulliganToSetAside(PLAYER_2, startingPlayerId == PLAYER_2);
 		List<Card> firstHandActive = getActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
-		List<Card> discardedCardsActive = getBehaviours().get(getActivePlayerId()).mulligan(this, getActivePlayer(), firstHandActive);
+		List<Card> discardedCardsActive = getActivePlayer().getSetAsideZone().isEmpty()
+				? Collections.emptyList() :
+				getBehaviours().get(getActivePlayerId()).mulligan(this, getActivePlayer(), firstHandActive);
 		List<Card> firstHandNonActive = getNonActivePlayer().getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
-		List<Card> discardedCardsNonActive = getBehaviours().get(getNonActivePlayerId()).mulligan(this, getNonActivePlayer(), firstHandNonActive);
+		List<Card> discardedCardsNonActive = getNonActivePlayer().getSetAsideZone().isEmpty()
+				? Collections.emptyList()
+				: getBehaviours().get(getNonActivePlayerId()).mulligan(this, getNonActivePlayer(), firstHandNonActive);
 		getLogic().handleMulligan(getActivePlayer(), true, discardedCardsActive);
 		getLogic().handleMulligan(getNonActivePlayer(), false, discardedCardsNonActive);
 		traceMulligans(discardedCardsActive, discardedCardsNonActive);
