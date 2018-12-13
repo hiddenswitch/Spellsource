@@ -33,7 +33,7 @@ import static java.util.stream.Collectors.toList;
 /**
  * Manages the real time data connection users get when they connect to the Spellsource server.
  * <p>
- * To set up a behaviour that uses the real time connect, use {@link Connection#connected(Handler)}, which passes you a
+ * To set up a behaviour that uses the real time connect, use {@link Connection#connected(SetupHandler)}, which passes you a
  * new connection to a unique user. For <b>example</b>, this code from the {@link Presence} package notifies users of
  * their presence.
  * <pre>

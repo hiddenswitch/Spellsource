@@ -7,7 +7,7 @@ import net.demilich.metastone.game.cards.Card;
 import java.util.List;
 
 /**
- * Created by bberman on 12/5/16.
+ * Indicates a kind of request for the client.
  */
 public class GameplayRequest {
 	private String callbackId;

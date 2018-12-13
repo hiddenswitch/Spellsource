@@ -6,29 +6,32 @@ import net.demilich.metastone.game.cards.desc.EventTriggerDescDeserializer;
 
 import java.util.Map;
 
+/**
+ * The serialized version of a dynamic description.
+ */
 @JsonDeserialize(using = DynamicDescriptionDeserializer.class)
 public class DynamicDescriptionDesc extends Desc<DynamicDescriptionArg, DynamicDescription> {
 
-    public DynamicDescriptionDesc() {
-        super(DynamicDescriptionArg.class);
-    }
+	public DynamicDescriptionDesc() {
+		super(DynamicDescriptionArg.class);
+	}
 
-    public DynamicDescriptionDesc(Class<? extends DynamicDescription> desctiptionClass) {
-        super(desctiptionClass, DynamicDescriptionArg.class);
-    }
+	public DynamicDescriptionDesc(Class<? extends DynamicDescription> desctiptionClass) {
+		super(desctiptionClass, DynamicDescriptionArg.class);
+	}
 
-    @Override
-    protected Class<? extends Desc> getDescImplClass() {
-        return DynamicDescriptionDesc.class;
-    }
+	@Override
+	protected Class<? extends Desc> getDescImplClass() {
+		return DynamicDescriptionDesc.class;
+	}
 
-    @Override
-    public DynamicDescriptionArg getClassArg() {
-        return DynamicDescriptionArg.CLASS;
-    }
+	@Override
+	public DynamicDescriptionArg getClassArg() {
+		return DynamicDescriptionArg.CLASS;
+	}
 
-    @Override
-    public Desc<DynamicDescriptionArg, DynamicDescription> clone() {
-        return (DynamicDescriptionDesc) copyTo(new DynamicDescriptionDesc(getDescClass()));
-    }
+	@Override
+	public Desc<DynamicDescriptionArg, DynamicDescription> clone() {
+		return (DynamicDescriptionDesc) copyTo(new DynamicDescriptionDesc(getDescClass()));
+	}
 }

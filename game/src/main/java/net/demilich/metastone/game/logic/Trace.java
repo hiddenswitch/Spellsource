@@ -25,7 +25,7 @@ import java.util.function.Consumer;
  *
  * @see #dump() to create a string you can save and later load.
  * @see #load(String) to recreate this object from a dumped string.
- * @see #replayContext(boolean, Consumer<GameContext>) to replay a context after loading it from a string. Provide
+ * @see #replayContext(boolean, Consumer) to replay a context after loading it from a string. Provide
  * 		{@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging). Provide
  * 		{@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  * @see #getRawActions() to iterate through the actions that were taken in the game. This is <b>not</b> restored by the

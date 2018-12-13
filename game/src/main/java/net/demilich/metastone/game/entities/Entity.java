@@ -92,7 +92,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Gets the specified attribute.
 	 * <p>
-	 * Attributes are {@link Integer}, {@link String}, {@link String[]} or {@link Enum} types.
+	 * Attributes are {@link Integer}, {@link String}, {@link String} array or {@link Enum} types.
 	 *
 	 * @param attribute The attribute to look up.
 	 * @return The value of the attribute.

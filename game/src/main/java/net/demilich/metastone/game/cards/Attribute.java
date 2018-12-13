@@ -660,7 +660,7 @@ public enum Attribute {
 	 */
 	CHAMPION_ID,
 	/**
-	 * This {@link String[]} are the collections this card belongs to, like the deck, user and alliances.
+	 * This {@link String} array is the collections this card belongs to, like the deck, user and alliances.
 	 */
 	COLLECTION_IDS,
 	/**
