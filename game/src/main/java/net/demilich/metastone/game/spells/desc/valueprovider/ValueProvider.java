@@ -79,6 +79,12 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 			case OWNER:
 				providingPlayer = context.getPlayer(host.getOwner());
 				break;
+			case PLAYER_1:
+				providingPlayer = context.getPlayer1();
+				break;
+			case PLAYER_2:
+				providingPlayer = context.getPlayer2();
+				break;
 			case SELF:
 			default:
 				providingPlayer = player;

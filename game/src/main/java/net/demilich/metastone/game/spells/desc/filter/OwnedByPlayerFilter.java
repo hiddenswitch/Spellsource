@@ -28,6 +28,10 @@ public class OwnedByPlayerFilter extends EntityFilter {
 				return entity.getOwner() == player.getId();
 			case OWNER:
 				return entity.getOwner() == host.getOwner();
+			case PLAYER_1:
+				return entity.getOwner() == GameContext.PLAYER_1;
+			case PLAYER_2:
+				return entity.getOwner() == GameContext.PLAYER_2;
 			default:
 				break;
 

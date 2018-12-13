@@ -132,6 +132,12 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 			case INACTIVE:
 				onCast(context, context.getOpponent(context.getActivePlayer()), desc, source, target);
 				break;
+			case PLAYER_1:
+				onCast(context, context.getPlayer1(), desc, source, target);
+				break;
+			case PLAYER_2:
+				onCast(context, context.getPlayer2(), desc, source, target);
+				break;
 			default:
 				break;
 		}

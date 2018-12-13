@@ -906,6 +906,12 @@ public class SpellUtils {
 				case ACTIVE:
 					castingPlayer = context.getActivePlayer();
 					break;
+				case PLAYER_1:
+					castingPlayer = context.getPlayer1();
+					break;
+				case PLAYER_2:
+					castingPlayer = context.getPlayer2();
+					break;
 				case INACTIVE:
 					castingPlayer = context.getOpponent(context.getActivePlayer());
 					break;

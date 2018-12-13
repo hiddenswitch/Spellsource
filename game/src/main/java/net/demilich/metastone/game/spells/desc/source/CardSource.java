@@ -59,6 +59,12 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 				case OPPONENT:
 					providingPlayer = context.getOpponent(player);
 					break;
+				case PLAYER_1:
+					providingPlayer = context.getPlayer1();
+					break;
+				case PLAYER_2:
+					providingPlayer = context.getPlayer2();
+					break;
 				case OWNER:
 				case SELF:
 				default:

@@ -25,6 +25,10 @@ public class AttributeExistsCondition extends Condition {
 					return context.getLogic().hasAttribute(context.getActivePlayer(), attribute);
 				case INACTIVE:
 					return context.getLogic().hasAttribute(context.getOpponent(context.getActivePlayer()), attribute);
+				case PLAYER_1:
+					return context.getLogic().hasAttribute(context.getPlayer1(), attribute);
+				case PLAYER_2:
+					return context.getLogic().hasAttribute(context.getPlayer2(), attribute);
 				default:
 					break;
 			}

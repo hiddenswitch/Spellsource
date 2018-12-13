@@ -28,5 +28,13 @@ public enum TargetPlayer {
 	/**
 	 * The player whose turn it is not.
 	 */
-	INACTIVE
+	INACTIVE,
+	/**
+	 * The first player.
+	 */
+	PLAYER_1,
+	/**
+	 * The second player.
+	 */
+	PLAYER_2
 }

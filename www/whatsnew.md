@@ -17,6 +17,7 @@ This release includes bug fixes reported by the community.
 ###### Content Fixes:
 
  - Soul Infusion now works.
+ - I think I will take it!, the Rafaam, Supreme Thief hero power, now correctly shuffles the target minion into the caster's deck.
 
 ###### 0.7.9-2.0.13 (Wednesday, December 12th)
 

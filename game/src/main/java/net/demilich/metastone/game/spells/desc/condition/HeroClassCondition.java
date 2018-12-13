@@ -29,6 +29,10 @@ public class HeroClassCondition extends Condition {
 				return context.getOpponent(context.getActivePlayer()).getHero().getSourceCard().hasHeroClass(heroClass);
 			case OWNER:
 				return context.getPlayer(target.getOwner()).getHero().getSourceCard().hasHeroClass(heroClass);
+			case PLAYER_1:
+				return context.getPlayer1().getHero().getSourceCard().hasHeroClass(heroClass);
+			case PLAYER_2:
+				return context.getPlayer2().getHero().getSourceCard().hasHeroClass(heroClass);
 			case SELF:
 			default:
 				return player.getHero().getSourceCard().hasHeroClass(heroClass);

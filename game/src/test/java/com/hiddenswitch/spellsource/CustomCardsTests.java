@@ -201,6 +201,37 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(opponent.getDeck().size(), 1);
 			assertEquals(opponent.getDeck().get(0).getCardId(), "minion_wisp");
 		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "hero_rafaam_supreme_thief");
+			useHeroPower(context, player, target.getReference());
+			destroy(context, target);
+			assertEquals(player.getDeck().get(0).getCardId(), "minion_neutral_test");
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "hero_rafaam_supreme_thief");
+			playCard(context, player, "spell_mind_control", target);
+			useHeroPower(context, player, target.getReference());
+			destroy(context, target);
+			assertEquals(player.getDeck().get(0).getCardId(), "minion_neutral_test");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "hero_rafaam_supreme_thief");
+			useHeroPower(context, player, target.getReference());
+			context.endTurn();
+			playCard(context, opponent, "spell_mind_control", target);
+			destroy(context, target);
+			assertEquals(player.getDeck().get(0).getCardId(), "minion_neutral_test");
+		});
 	}
 
 	@Test
