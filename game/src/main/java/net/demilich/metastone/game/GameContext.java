@@ -885,9 +885,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Initializes a game.
 	 * <p>
-	 * Typically, this determines the beginner with {@link GameLogic#determineBeginner(int...)}; then it sets the active
-	 * player; then it calls {@link GameLogic#initializePlayerAndMoveMulliganToSetAside(int, boolean)} for both players,
-	 * and then it asks both players for their mulligans using {@link GameLogic#init(int, boolean)}.
+	 * This function will choose a starting player, then move cards into the mulligan (set aside) zone, ask for mulligans,
+	 * and start the game. {@link #resume()} will start the first turn.
 	 */
 	@Suspendable
 	public void init() {

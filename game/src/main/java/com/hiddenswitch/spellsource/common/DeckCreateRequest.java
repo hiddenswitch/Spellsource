@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Represents a request to create a game with the specified deck list.
+ */
 public class DeckCreateRequest implements Serializable, Cloneable {
 	private String userId;
 	private String name;

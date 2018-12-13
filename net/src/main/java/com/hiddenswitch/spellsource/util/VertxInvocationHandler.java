@@ -28,7 +28,6 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  *
  * @param <T> The service to which this invocation handler makes calls.
  * @see InvocationHandler for more about proxies.
- * @see java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler) for more about proxies.
  */
 class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 	private static Logger LOGGER = LoggerFactory.getLogger(VertxInvocationHandler.class);

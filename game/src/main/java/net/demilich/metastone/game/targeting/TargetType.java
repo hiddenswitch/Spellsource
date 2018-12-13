@@ -2,9 +2,9 @@ package net.demilich.metastone.game.targeting;
 
 /**
  * The possible values for an enchantment's "hostTargetType".
- *
- * @see {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#HOST_TARGET_TYPE} for more about host
- * 		target types.
+ * <p>
+ * See {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#HOST_TARGET_TYPE} for more about host
+ * target types.
  */
 public enum TargetType {
 	/**
