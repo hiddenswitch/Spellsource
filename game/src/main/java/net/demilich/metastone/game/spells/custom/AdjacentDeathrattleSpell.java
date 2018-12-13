@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -26,6 +27,9 @@ public final class AdjacentDeathrattleSpell extends AdjacentEffectSpell {
 			int index = desc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE, -1);
 			if (index == -1) {
 				return TargetLogic.withoutPermanents(adjacentMinions);
+			}
+			if (index >= minions.size()) {
+				return Collections.emptyList();
 			}
 			minions.add(index, null);
 			int left = index - 1;
