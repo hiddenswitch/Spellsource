@@ -20,6 +20,22 @@ import static org.testng.Assert.*;
 public class BoomsdayProjectTests extends TestBase {
 
 	@Test
+	public void testSoulInfusion() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_the_coin");
+			Card minion = receiveCard(context, player, "minion_neutral_test");
+			Card notBuffed = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_soul_infusion");
+			Minion target = playMinionCard(context, player, minion);
+			Minion notBuffedTarget = playMinionCard(context, player, notBuffed);
+			assertEquals(target.getAttack(), target.getBaseAttack() + 2);
+			assertEquals(target.getMaxHp(), target.getBaseHp() + 2);
+			assertEquals(notBuffedTarget.getAttack(), notBuffedTarget.getBaseAttack());
+			assertEquals(notBuffedTarget.getMaxHp(), notBuffedTarget.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testMissileLauncher() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
