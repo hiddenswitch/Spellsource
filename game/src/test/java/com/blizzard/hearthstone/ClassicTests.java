@@ -1,6 +1,7 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
@@ -39,6 +40,8 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class ClassicTests extends TestBase {
 
@@ -341,6 +344,32 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getMaxMana(), 7);
 			assertEquals(player.getMana(), 2);
 			assertEquals(player.getHand().size(), 3);
+		});
+	}
+
+	public void testTrackingTopOfDeck() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			overrideDiscover(context, player, discoverActions -> {
+				assertFalse(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).allMatch(c -> c.equals("spell_the_coin")));
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_tracking");
+		});
+
+		// Make sure that tracking works with two or fewer cards
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 2; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			overrideDiscover(context, player, discoverActions -> {
+				assertTrue(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).allMatch(c -> c.equals("spell_the_coin")));
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_tracking");
 		});
 	}
 
