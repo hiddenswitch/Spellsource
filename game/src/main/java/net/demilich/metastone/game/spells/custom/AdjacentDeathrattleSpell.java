@@ -26,7 +26,7 @@ public final class AdjacentDeathrattleSpell extends AdjacentEffectSpell {
 			List<Minion> minions = new ArrayList<>(context.getPlayer(target.getOwner()).getMinions());
 			int index = desc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE, -1);
 			if (index == -1) {
-				return TargetLogic.withoutPermanents(adjacentMinions);
+				return Collections.emptyList();
 			}
 			if (index >= minions.size()) {
 				return Collections.emptyList();
@@ -40,6 +40,8 @@ public final class AdjacentDeathrattleSpell extends AdjacentEffectSpell {
 			if (right > -1 && right < minions.size()) {
 				adjacentMinions.add(minions.get(right));
 			}
+			// Exclude minions that are already destroyed.
+			adjacentMinions.removeIf(Actor::isDestroyed);
 			return TargetLogic.withoutPermanents(adjacentMinions);
 
 		} else {
