@@ -87,6 +87,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected boolean disposeNodes = true;
 	protected boolean parallel = true;
 	protected boolean forceGarbageCollection = false;
+	protected boolean throwOnInvalidPlan = false;
 
 	public GameStateValueBehaviour() {
 		this(FeatureVector.getFittest(), "Botty McBotface");
@@ -353,7 +354,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 					return gameAction;
 				} else {
 					// The plan is invalid, set it to null and continue.
-					logger.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
+					if (throwOnInvalidPlan) {
+						throw new IllegalStateException("invalid plan");
+					} else {
+						logger.warn("requestAction {} {}: Plan was invalidated, validActions={}, planAction={}", gameId, player, validActions, planAction);
+					}
 					strictPlan = null;
 					indexPlan = null;
 				}
@@ -733,6 +738,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 	public GameStateValueBehaviour setParallel(boolean parallel) {
 		this.parallel = parallel;
+		return this;
+	}
+
+	public boolean isThrowOnInvalidPlan() {
+		return throwOnInvalidPlan;
+	}
+
+	public GameStateValueBehaviour setThrowOnInvalidPlan(boolean throwOnInvalidPlan) {
+		this.throwOnInvalidPlan = throwOnInvalidPlan;
 		return this;
 	}
 

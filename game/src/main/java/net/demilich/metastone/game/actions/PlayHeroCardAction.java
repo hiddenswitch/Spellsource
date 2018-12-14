@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.actions;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,37 +12,45 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Hero, boolean)}. Since it is played from the hand, battlecries are resolved.
  */
 public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
-	protected BattlecryAction battlecryAction;
+	protected BattlecryAction battlecry;
 
 	public PlayHeroCardAction(EntityReference card) {
 		super(card);
 		setActionType(ActionType.HERO);
-		battlecryAction = null;
+		battlecry = null;
 	}
 
-	public PlayHeroCardAction(EntityReference EntityReference, BattlecryAction battlecryAction) {
+	public PlayHeroCardAction(EntityReference EntityReference, BattlecryAction battlecry) {
 		super(EntityReference);
 		setActionType(ActionType.HERO);
-		this.battlecryAction = battlecryAction;
+		this.battlecry = battlecry;
 	}
 
 	@Override
+	public PlayHeroCardAction clone() {
+		PlayHeroCardAction clone = (PlayHeroCardAction) super.clone();
+		clone.battlecry = battlecry != null ? battlecry.clone() : null;
+		return clone;
+	}
+
+	@Override
+	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		Card heroCard = (Card) context.resolveSingleTarget(getSourceReference());
 		Hero hero = heroCard.createHero();
-		if (battlecryAction != null) {
-			hero.setBattlecry(battlecryAction);
+		if (battlecry != null) {
+			hero.setBattlecry(battlecry);
 		}
 		context.getLogic().changeHero(context.getPlayer(playerId), hero, true);
 	}
 
 	@Override
-	public BattlecryAction getBattlecryAction() {
-		return battlecryAction;
+	public BattlecryAction getBattlecry() {
+		return battlecry;
 	}
 
 	@Override
-	public void setBattlecryAction(BattlecryAction action) {
-		battlecryAction = action;
+	public void setBattlecry(BattlecryAction action) {
+		battlecry = action;
 	}
 }

@@ -15,6 +15,7 @@ import java.io.Serializable;
  * is also called.
  */
 public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
+
 	private final String choiceCardId;
 
 	private HeroPowerAction() {
@@ -35,6 +36,11 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	}
 
 	@Override
+	public HeroPowerAction clone() {
+		return (HeroPowerAction) super.clone();
+	}
+
+	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		innerExecute(context, playerId);
@@ -44,7 +50,7 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, getSpell(), entityReference, getTargetReference(), getTargetRequirement(), false, this);
+		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}
 
 	@Override

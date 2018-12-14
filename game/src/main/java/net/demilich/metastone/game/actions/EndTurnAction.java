@@ -26,14 +26,14 @@ public class EndTurnAction extends GameAction {
 	}
 
 	@Override
-	@Suspendable
-	public void execute(GameContext context, int playerId) {
-		context.endTurn();
+	public EndTurnAction clone() {
+		return (EndTurnAction) super.clone();
 	}
 
 	@Override
-	public String toString() {
-		return String.format("[%s]", getActionType());
+	@Suspendable
+	public void execute(GameContext context, int playerId) {
+		context.endTurn();
 	}
 
 	@Override

@@ -7,7 +7,7 @@
   "description": "Copy 3 cards from your opponent's deck and add them to your hand.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
+    "class": "CopyCardSpell",
     "value": 3,
     "cardSource": {
       "class": "DeckSource",

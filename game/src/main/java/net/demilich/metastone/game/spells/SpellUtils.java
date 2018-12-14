@@ -20,9 +20,6 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
@@ -178,7 +175,7 @@ public class SpellUtils {
 				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
 				// the action from the actor that would be summoned.
 				BattlecryAction specifiedAction;
-				if (actionWithBattlecry.getBattlecryAction() == null) {
+				if (actionWithBattlecry.getBattlecry() == null) {
 					// Look at the actor
 					Actor actor = card.actor();
 					if (actor == null) {
@@ -187,7 +184,7 @@ public class SpellUtils {
 					}
 					specifiedAction = actor.getBattlecry();
 				} else {
-					specifiedAction = actionWithBattlecry.getBattlecryAction();
+					specifiedAction = actionWithBattlecry.getBattlecry();
 				}
 
 				if (specifiedAction != null) {
@@ -207,13 +204,13 @@ public class SpellUtils {
 							EntityReference battlecryTarget = context.getLogic().getRandom(targets).getReference();
 							specifiedAction.setTargetReference(battlecryTarget);
 						}
-						actionWithBattlecry.setBattlecryAction(specifiedAction);
+						actionWithBattlecry.setBattlecry(specifiedAction);
 					}
 				}
 			} else {
 				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
 				// true but this method's parameter to not resolve battlecries will be respected
-				actionWithBattlecry.setBattlecryAction(BattlecryAction.NONE);
+				actionWithBattlecry.setBattlecry(BattlecryAction.NONE);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
 			// This is some other kind of action that takes a target
@@ -410,7 +407,7 @@ public class SpellUtils {
 			DiscoverAction discover = DiscoverAction.createDiscover(spellClone);
 			discover.setCard(card);
 			discover.setId(i);
-			discover.setSource(source == null ? null : source.getReference());
+			discover.setSourceReference(source == null ? null : source.getReference());
 			discoverActions.add(discover);
 		}
 
@@ -507,7 +504,7 @@ public class SpellUtils {
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
 			discover.setId(i);
 			discover.setCard(card);
-			discover.setSource(source == null ? null : source.getReference());
+			discover.setSourceReference(source == null ? null : source.getReference());
 			discoverActions.add(discover);
 		}
 

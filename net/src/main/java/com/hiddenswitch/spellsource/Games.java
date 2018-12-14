@@ -153,7 +153,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& !(ga instanceof PlayChooseOneCardAction))
 				.map(ga -> (PlaySpellCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceCardEntityId().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> {
@@ -170,7 +170,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& ga instanceof PlayChooseOneCardAction)
 				.map(ga -> (PlayChooseOneCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addSpellsItem))
@@ -182,7 +182,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
@@ -228,7 +228,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
@@ -238,7 +238,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO)
 				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
@@ -249,7 +249,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO)
 				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
@@ -301,7 +301,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
 				.filter(ga -> ga.getChooseOneOptionIndex() == null)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSpellAction(kv.getKey(), kv.getValue())).findFirst();
@@ -313,7 +313,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
 				.filter(ga -> ga.getChooseOneOptionIndex() != null)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addHeroPowersItem))
@@ -323,7 +323,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.EQUIP_WEAPON)
 				.map(ga -> (PlayWeaponCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId))
@@ -390,7 +390,7 @@ public interface Games extends Verticle {
 	 */
 	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
 		ChooseOneOptions spell = new ChooseOneOptions();
-		EntityLocation sourceCardLocation = ((Card) workingContext.resolveSingleTarget(choices.get(0).getEntityReference())).getEntityLocation();
+		EntityLocation sourceCardLocation = workingContext.resolveSingleTarget(choices.get(0).getSourceReference()).getEntityLocation();
 		spell.cardInHandId(sourceId);
 
 		Map<String, List<T>> intermediate = choices.stream()

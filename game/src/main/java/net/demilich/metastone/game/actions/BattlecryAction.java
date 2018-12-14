@@ -12,7 +12,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Collections;
 import java.util.List;
@@ -21,7 +20,8 @@ import java.util.List;
  * Battlecry actions occur when {@link net.demilich.metastone.game.entities.Actor} entities are played from cards and
  * have battlecries. A battlecry is a possibly targeted effect.
  */
-public class BattlecryAction extends GameAction {
+public final class BattlecryAction extends GameAction {
+
 	public static final BattlecryAction NONE = new BattlecryAction(NullSpell.create());
 	private static final String BATTLECRY_NAME = "Battlecry";
 	private final SpellDesc spell;
@@ -56,6 +56,11 @@ public class BattlecryAction extends GameAction {
 	protected BattlecryAction(SpellDesc spell) {
 		this.spell = spell;
 		setActionType(ActionType.BATTLECRY);
+	}
+
+	@Override
+	public BattlecryAction clone() {
+		return (BattlecryAction) super.clone();
 	}
 
 	/**
@@ -94,18 +99,6 @@ public class BattlecryAction extends GameAction {
 			return true;
 		}
 		return getEntityFilter().matches(context, player, entity, getSource(context));
-	}
-
-	/**
-	 * Clones this action. Does not recursively clone the spell.
-	 *
-	 * @return A cloned instance
-	 */
-	@Override
-	public BattlecryAction clone() {
-		BattlecryAction clone = BattlecryAction.createBattlecry(getSpell(), getTargetRequirement());
-		clone.setSource(getSourceReference());
-		return clone;
 	}
 
 	/**
@@ -150,13 +143,6 @@ public class BattlecryAction extends GameAction {
 
 	public void setCondition(Condition condition) {
 		this.condition = condition;
-	}
-
-	@Override
-	public String toString() {
-		return new ToStringBuilder(this)
-				.appendSuper(super.toString())
-				.toString();
 	}
 
 	@Override

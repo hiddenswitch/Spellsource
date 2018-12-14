@@ -9,7 +9,12 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class PlayHeroCardChooseOneAction extends PlayHeroCardAction {
 
-	public PlayHeroCardChooseOneAction(Card heroCard, EntityReference EntityReference) {
-		super(EntityReference);
+	public PlayHeroCardChooseOneAction(Card heroCard, EntityReference entityReference) {
+		super(entityReference);
+	}
+
+	@Override
+	public PlayHeroCardChooseOneAction clone() {
+		return (PlayHeroCardChooseOneAction) super.clone();
 	}
 }

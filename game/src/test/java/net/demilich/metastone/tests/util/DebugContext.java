@@ -14,7 +14,7 @@ public class DebugContext extends GameContext {
 
 	@Override
 	public void init() {
-		super.init(0);
+		super.init();
 		startTurn(getActivePlayerId());
 	}
 
@@ -22,5 +22,4 @@ public class DebugContext extends GameContext {
 		super.endTurn();
 		startTurn(getActivePlayerId());
 	}
-
 }
