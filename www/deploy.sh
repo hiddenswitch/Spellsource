@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+set -e
 echo "Getting the latest versions of dependencies"
 if ! type jekyll >/dev/null; then
   gem install jekyll >/dev/null
