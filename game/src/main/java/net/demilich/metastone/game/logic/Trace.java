@@ -148,4 +148,8 @@ public class Trace implements Serializable, Cloneable {
 			return null;
 		}
 	}
+
+	public List<String> getLog() {
+		return log;
+	}
 }

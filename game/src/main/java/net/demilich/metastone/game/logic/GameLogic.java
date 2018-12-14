@@ -1024,7 +1024,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.fireGameEvent(new WillEndSequenceEvent(context));
 		}
 
-		// Only perfor at most END_OF_SEQUENCE_MAX_DEPTH times. This limits the number of deathrattles to evaluate.
+		// Only perform at most END_OF_SEQUENCE_MAX_DEPTH times. This limits the number of deathrattles to evaluate.
 		if (sequenceDepth > END_OF_SEQUENCE_MAX_DEPTH) {
 			throw new RuntimeException("Infinite death checking loop");
 		}
