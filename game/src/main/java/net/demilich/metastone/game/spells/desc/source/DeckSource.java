@@ -25,6 +25,5 @@ public class DeckSource extends CardSource implements Serializable {
 	protected CardList match(GameContext context, Entity source, Player player) {
 		return player.getDeck();
 	}
-
 }
 

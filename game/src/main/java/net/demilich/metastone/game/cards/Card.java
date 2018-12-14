@@ -5,7 +5,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescription;
 import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -649,9 +648,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				for (int i = 0; i < getChooseOneCardIds().length; i++) {
 					String cardId = getChooseOneCardIds()[i];
 					Card card = CardCatalogue.getCardById(cardId);
-					if (card == null) {
-						throw new NullPointerException("card");
-					}
 					PlayCardAction cardAction;
 
 					if (getCardType() == CardType.CHOOSE_ONE || getCardType() == CardType.SPELL) {
@@ -680,7 +676,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 						option = new PlayMinionCardAction(getReference(), battlecry);
 					} else if (getCardType() == CardType.HERO) {
 						option = new PlayHeroCardAction(getReference());
-						((HasBattlecry) option).setBattlecryAction(battlecry);
+						((HasBattlecry) option).setBattlecry(battlecry);
 					} else if (getCardType() == CardType.WEAPON) {
 						option = new PlayWeaponCardAction(getReference(), battlecry);
 					} else {
@@ -734,7 +730,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				break;
 			case CHOOSE_ONE:
 			case SPELL:
-				Card card = (Card) CardCatalogue.getCardById(getChooseBothCardId());
+				Card card = CardCatalogue.getCardById(getChooseBothCardId());
 				action = new PlayChooseOneCardAction(card.getSpell(), this, getChooseBothCardId(), card.getTargetSelection());
 				break;
 			case WEAPON:

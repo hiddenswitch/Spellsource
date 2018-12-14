@@ -13,6 +13,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * Indicates the choice of a choose one card. The {@link Card#getCardId()} is stored in {@link #getChoiceCardId()}.
  */
 public class PlayChooseOneCardAction extends PlayCardAction implements HasChoiceCard {
+
 	protected SpellDesc spell;
 	protected final String chosenCard;
 
@@ -21,8 +22,13 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);
-		this.entityReference = chooseOneCard.getReference();
+		setSourceReference(chooseOneCard.getReference());
 		this.chosenCard = chosenCard;
+	}
+
+	@Override
+	public PlayChooseOneCardAction clone() {
+		return (PlayChooseOneCardAction) super.clone();
 	}
 
 	@Override
@@ -33,7 +39,7 @@ public class PlayChooseOneCardAction extends PlayCardAction implements HasChoice
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
-		context.getLogic().castChooseOneSpell(playerId, spell, entityReference, getTargetReference(), chosenCard, this);
+		context.getLogic().castChooseOneSpell(playerId, spell, getSourceReference(), getTargetReference(), chosenCard, this);
 	}
 
 	public SpellDesc getSpell() {

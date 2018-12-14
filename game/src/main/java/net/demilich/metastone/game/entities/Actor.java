@@ -12,7 +12,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.cards.Attribute;
-import net.demilich.metastone.game.targeting.Zones;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
@@ -134,7 +133,7 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 	BattlecryAction getBattlecry() {
 		BattlecryAction action = (BattlecryAction) getAttribute(Attribute.BATTLECRY);
 		if (action != null) {
-			action.setSource(getReference());
+			action.setSourceReference(getReference());
 		}
 		return action;
 	}

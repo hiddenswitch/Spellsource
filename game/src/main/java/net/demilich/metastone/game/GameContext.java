@@ -896,8 +896,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		init(startingPlayerId);
 	}
 
+	/**
+	 * Initialized the game with the specified starting player. When called by itself, does not initialize the trace.
+	 *
+	 * @param startingPlayerId
+	 */
 	@Suspendable
-	protected void init(int startingPlayerId) {
+	public void init(int startingPlayerId) {
 		setActivePlayerId(startingPlayerId);
 		getEnvironment().put(Environment.STARTING_PLAYER, startingPlayerId);
 		LOGGER.debug("{} init: Initializing game with starting player {}", getGameId(), getActivePlayer().getUserId());
@@ -1021,7 +1026,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			throw new NullPointerException("nextAction");
 		}
 
-		trace.addAction(nextAction.getId(), nextAction);
+		trace.addAction(nextAction.getId(), nextAction, this);
 		performAction(getActivePlayerId(), nextAction);
 
 		return nextAction.getActionType() != ActionType.END_TURN;

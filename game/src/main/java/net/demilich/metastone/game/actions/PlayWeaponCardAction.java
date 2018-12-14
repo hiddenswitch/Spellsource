@@ -29,6 +29,13 @@ public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry
 	}
 
 	@Override
+	public PlayWeaponCardAction clone() {
+		PlayWeaponCardAction clone = (PlayWeaponCardAction) super.clone();
+		clone.battlecry = battlecry != null ? battlecry.clone() : null;
+		return clone;
+	}
+
+	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		Card weaponCard = (Card) context.resolveSingleTarget(getSourceReference());
@@ -41,12 +48,12 @@ public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry
 	}
 
 	@Override
-	public BattlecryAction getBattlecryAction() {
+	public BattlecryAction getBattlecry() {
 		return battlecry;
 	}
 
 	@Override
-	public void setBattlecryAction(BattlecryAction action) {
+	public void setBattlecry(BattlecryAction action) {
 		battlecry = action;
 	}
 }

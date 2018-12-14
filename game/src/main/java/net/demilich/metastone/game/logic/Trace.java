@@ -12,7 +12,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.concurrent.CancellationException;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Consumer;
@@ -25,11 +24,9 @@ import java.util.function.Consumer;
  *
  * @see #dump() to create a string you can save and later load.
  * @see #load(String) to recreate this object from a dumped string.
- * @see #replayContext(boolean, Consumer) to replay a context after loading it from a string. Provide
- * 		{@code skipLastAction: true} as the argument if the last action throws an exception (useful for debugging). Provide
- * 		{@code recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
- * @see #getRawActions() to iterate through the actions that were taken in the game. This is <b>not</b> restored by the
- * 		trace, while the integer actions themselves in {@link #getActions()} are.
+ * @see #replayContext(boolean, Consumer) to replay a context after loading it from a string. Provide {@code
+ * 		skipLastAction: true} as the argument if the last action throws an exception (useful for debugging). Provide {@code
+ * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
 	private static final long serialVersionUID = 1L;
@@ -38,7 +35,7 @@ public class Trace implements Serializable, Cloneable {
 	private int catalogueVersion;
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
-	private transient List<GameAction> rawActions = new ArrayList<>();
+	private transient List<String> log = new ArrayList<>();
 
 	public void setStartState(GameState gameState) {
 		this.startState = gameState;
@@ -68,9 +65,13 @@ public class Trace implements Serializable, Cloneable {
 		return actions;
 	}
 
-	public void addAction(int actionId, GameAction action) {
+	public void addAction(int actionId, GameAction action, GameContext context) {
 		actions.add(actionId);
-		rawActions.add(action);
+		if (context == null) {
+			log.add(action.toString());
+		} else {
+			log.add(action.getDescription(context, context.getActivePlayerId()));
+		}
 	}
 
 	public GameContext replayContext() {
@@ -117,7 +118,6 @@ public class Trace implements Serializable, Cloneable {
 
 	public String dump() {
 		return Serialization.serializeBase64(this);
-
 	}
 
 	public static Trace load(String trace) {
@@ -147,9 +147,5 @@ public class Trace implements Serializable, Cloneable {
 		} catch (Exception ex) {
 			return null;
 		}
-	}
-
-	public List<GameAction> getRawActions() {
-		return rawActions;
 	}
 }

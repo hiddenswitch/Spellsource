@@ -18,7 +18,9 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.cards.Attribute;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -47,9 +49,10 @@ public final class CreateCardFromChoicesSpell extends Spell {
 		int discoverHowMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 3);
 		for (int i = 0; i < howMany; i++) {
 			options[i] = new CardArrayList();
-			Collection<Card> cards = sourceCards.get(i);
-			cards.stream().filter(new RandomSubsetSelector(cards.size(), discoverHowMany, context.getLogic().getRandom()))
-					.forEach(options[i]::addCard);
+			List<Card> cards = new ArrayList<>(sourceCards.get(i));
+			for (int j = 0; j < discoverHowMany && !cards.isEmpty(); j++) {
+				options[i].add(context.getLogic().removeRandom(cards));
+			}
 		}
 
 		SpellDesc nullSpell = NullSpell.create();

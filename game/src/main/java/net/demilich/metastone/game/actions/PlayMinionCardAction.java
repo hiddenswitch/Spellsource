@@ -27,9 +27,9 @@ import java.util.Collection;
  * will retrieve the battlecry that appears once the minion is summoned. Choose one minion cards override the battlecry
  * using {@link #PlayMinionCardAction(net.demilich.metastone.game.targeting.EntityReference, BattlecryAction)}.
  */
-public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry {
+public final class PlayMinionCardAction extends PlayCardAction implements HasBattlecry {
 
-	private BattlecryAction overrideBattlecry;
+	private BattlecryAction battlecry;
 
 	private PlayMinionCardAction() {
 		super(null);
@@ -41,11 +41,18 @@ public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry
 		this(EntityReference, null);
 	}
 
-	public PlayMinionCardAction(EntityReference EntityReference, BattlecryAction overrideBattlecry) {
-		super(EntityReference);
-		this.overrideBattlecry = overrideBattlecry;
+	public PlayMinionCardAction(EntityReference minionCard, BattlecryAction battlecry) {
+		super(minionCard);
+		this.battlecry = battlecry;
 		setTargetRequirement(TargetSelection.FRIENDLY_MINIONS);
 		setActionType(ActionType.SUMMON);
+	}
+
+	@Override
+	public PlayMinionCardAction clone() {
+		PlayMinionCardAction clone = (PlayMinionCardAction) super.clone();
+		clone.battlecry = battlecry != null ? battlecry.clone() : null;
+		return clone;
 	}
 
 	@Override
@@ -54,8 +61,8 @@ public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		Actor nextTo = (Actor) (getTargetReference() != null ? context.resolveSingleTarget(getTargetReference()) : null);
 		Minion minion = card.summon();
-		if (overrideBattlecry != null) {
-			minion.setBattlecry(overrideBattlecry);
+		if (battlecry != null) {
+			minion.setBattlecry(battlecry);
 		}
 		Player player = context.getPlayer(playerId);
 		int index = player.getMinions().indexOf(nextTo);
@@ -68,12 +75,12 @@ public class PlayMinionCardAction extends PlayCardAction implements HasBattlecry
 	}
 
 	@Override
-	public BattlecryAction getBattlecryAction() {
-		return overrideBattlecry;
+	public BattlecryAction getBattlecry() {
+		return battlecry;
 	}
 
 	@Override
-	public void setBattlecryAction(BattlecryAction action) {
-		overrideBattlecry = action;
+	public void setBattlecry(BattlecryAction action) {
+		battlecry = action;
 	}
 }

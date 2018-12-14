@@ -229,6 +229,10 @@ public class DeckFormat implements Serializable, Cloneable {
 				.map(Card::getCardSet).collect(Collectors.toSet()));
 	}
 
+	public static DeckFormat getSmallestSupersetFormat(GameDeck... decks) {
+		return getSmallestSupersetFormat(Arrays.asList(decks));
+	}
+
 	public DeckFormat() {
 		sets = new HashSet<>();
 	}

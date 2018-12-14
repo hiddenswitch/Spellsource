@@ -6,7 +6,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.ChooseOneOverride;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -114,9 +113,6 @@ public class ActionLogic implements Serializable {
 			if (card.isChooseOne()) {
 				rolloutChooseOnesWithOverrides(context, player, playCardActions, card);
 			} else {
-				if (card.getCardType().isCardType(CardType.ENCHANTMENT)) {
-					System.out.println(context.getTrace().dump());
-				}
 				rollout(card.play(), context, player, playCardActions);
 			}
 
@@ -152,7 +148,7 @@ public class ActionLogic implements Serializable {
 		validActions.addAll(getPlayCardActions(context, player));
 		if (context.getTurnState() != TurnState.TURN_ENDED) {
 			final EndTurnAction endTurnAction = new EndTurnAction(player.getId());
-			endTurnAction.setSource(player.getReference());
+			endTurnAction.setSourceReference(player.getReference());
 			validActions.add(endTurnAction);
 		}
 

@@ -2,7 +2,6 @@ package net.demilich.metastone.game.logic;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Multiset;
-import io.vertx.core.Handler;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
@@ -152,7 +151,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	private final ActionLogic actionLogic = new ActionLogic();
 	private IdFactoryImpl idFactory;
 	private long seed = createSeed();
-	private Random random = new Random(seed);
+	private XORShiftRandom random = new XORShiftRandom(seed);
 
 	/**
 	 * Ensures {@link GameLogic} has a valid, unique seed in this JVM instance.
@@ -254,7 +253,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public GameLogic(long seed) {
 		this();
 		this.seed = seed;
-		random = new Random(seed);
+		random = new XORShiftRandom(seed);
 	}
 
 	/**
@@ -266,7 +265,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public GameLogic(IdFactoryImpl idFactory, long seed) {
 		this(idFactory);
 		this.seed = seed;
-		random = new Random(seed);
+		random = new XORShiftRandom(seed);
 	}
 
 	/**
@@ -1090,6 +1089,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Override
 	public GameLogic clone() {
 		GameLogic clone = new GameLogic(idFactory.clone(), getSeed());
+		clone.random = random.clone();
 		clone.context = context;
 		return clone;
 	}
@@ -3318,7 +3318,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
-		battlecry.setSource(actor.getReference());
+		battlecry.setSourceReference(actor.getReference());
 
 
 		if (battlecry.getTargetRequirement() != TargetSelection.NONE) {
@@ -3357,7 +3357,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		if (action == null) {
 			throw new NullPointerException("Behaviour did not return action");
 		}
-		context.getTrace().addAction(action.getId(), action);
+		context.getTrace().addAction(action.getId(), action, context);
 		return action;
 	}
 
@@ -4100,7 +4100,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return random;
 	}
 
-	public void setRandom(Random random) {
+	public void setRandom(XORShiftRandom random) {
 		this.random = random;
 	}
 

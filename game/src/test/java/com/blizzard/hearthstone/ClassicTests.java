@@ -283,31 +283,25 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), death);
 			player.setMaxMana(5);
 			player.setMana(5);
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(pain.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(death.getReference())));
 
 			context.endTurn();
 			playCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(pain.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(death.getReference())));
 			context.endTurn();
 			playCard(context, opponent, "minion_sea_giant");
 			context.endTurn();
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(pain.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(death.getReference())));
 		});
 	}
 

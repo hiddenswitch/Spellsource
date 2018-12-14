@@ -35,18 +35,24 @@ import java.util.List;
 public abstract class PlayCardAction extends GameAction {
 
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
-	protected EntityReference entityReference;
 
 	protected PlayCardAction() {
+		super();
 	}
 
-	public PlayCardAction(EntityReference EntityReference) {
-		this.entityReference = EntityReference;
+	public PlayCardAction(EntityReference cardReference) {
+		this();
+		setSourceReference(cardReference);
+	}
+
+	@Override
+	public PlayCardAction clone() {
+		return (PlayCardAction) super.clone();
 	}
 
 	@Override
 	public boolean canBeExecutedOn(GameContext context, Player player, Entity entity) {
-		Card card = (Card) context.resolveSingleTarget(getEntityReference());
+		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		if (card.isSpell()) {
 			return card.canBeCastOn(context, player, entity);
 		}
@@ -57,15 +63,15 @@ public abstract class PlayCardAction extends GameAction {
 	/**
 	 * Plays a card from the hand. Evaluates whether the card was countered, increments combos, and deducts mana.
 	 *
-	 * @param context The game context
+	 * @param context  The game context
 	 * @param playerId The player who actually plays the card
 	 */
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		Card card = (Card) context.resolveSingleTarget(getEntityReference());
+		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		card.setAttribute(Attribute.BEING_PLAYED);
-		context.getLogic().playCard(playerId, getEntityReference());
+		context.getLogic().playCard(playerId, getSourceReference());
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
 			// Fixes Glinda Crowskin, whose aura stopped being applied once the card was played and moved to the graveyard
@@ -79,11 +85,7 @@ public abstract class PlayCardAction extends GameAction {
 			}
 		}
 		card.getAttributes().remove(Attribute.BEING_PLAYED);
-		context.getLogic().afterCardPlayed(playerId, getEntityReference());
-	}
-
-	public EntityReference getEntityReference() {
-		return entityReference;
+		context.getLogic().afterCardPlayed(playerId, getSourceReference());
 	}
 
 	/**
@@ -105,15 +107,9 @@ public abstract class PlayCardAction extends GameAction {
 	@Suspendable
 	public abstract void innerExecute(GameContext context, int playerId);
 
-
-	@Override
-	public String toString() {
-		return String.format("%s Card: %s Target: %s", getActionType(), entityReference, getTargetReference());
-	}
-
 	@Override
 	public Entity getSource(GameContext context) {
-		return (Card) context.resolveSingleTarget(getEntityReference());
+		return (Card) context.resolveSingleTarget(getSourceReference());
 	}
 
 	@Override
@@ -123,23 +119,13 @@ public abstract class PlayCardAction extends GameAction {
 	}
 
 	@Override
-	public EntityReference getSourceReference() {
-		return entityReference;
-	}
-
-	@Override
 	public String getDescription(GameContext context, int playerId) {
-		Card playedCard = (Card) context.resolveSingleTarget(getEntityReference());
+		Card playedCard = (Card) context.resolveSingleTarget(getSourceReference());
 		String cardName = playedCard != null ? playedCard.getName() : "an unknown card";
 		if (playedCard.getCardType() == CardType.SPELL
 				&& playedCard.isSecret()) {
 			cardName = "a secret";
 		}
 		return String.format("%s played %s.", context.getActivePlayer().getName(), cardName);
-	}
-
-	@Override
-	public PlayCardAction clone() {
-		return (PlayCardAction) super.clone();
 	}
 }

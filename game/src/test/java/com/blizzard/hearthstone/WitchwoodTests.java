@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
@@ -209,7 +210,7 @@ public class WitchwoodTests extends TestBase {
 			playCard(context, player, "hero_thrall_deathseer");
 			playMinionCard(context, player, "minion_novice_engineer");
 			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
-			context.getLogic().setRandom(new Random() {
+			context.getLogic().setRandom(new XORShiftRandom(0L) {
 				@Override
 				protected int next(int bits) {
 					return 1;

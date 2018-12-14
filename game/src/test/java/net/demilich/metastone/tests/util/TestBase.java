@@ -14,6 +14,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
@@ -288,6 +289,18 @@ public class TestBase {
 		consumer.run(context, player, opponent);
 	}
 
+	public static void runGym(GymConsumer consumer, GameDeck deck1, GameDeck deck2) {
+		GameContext context = new DebugContext(new Player(deck1), new Player(deck2), new GameLogic() {
+			@Override
+			public int determineBeginner(int... playerIds) {
+				return 0;
+			}
+		}, DeckFormat.getSmallestSupersetFormat(deck1, deck2));
+		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
+		context.init();
+		consumer.run(context, context.getActivePlayer(), context.getOpponent(context.getActivePlayer()));
+	}
+
 	@Suspendable
 	public static void runGym(GymConsumer consumer) {
 		runGym(consumer, HeroClass.BLUE, HeroClass.BLUE);
@@ -413,8 +426,12 @@ public class TestBase {
 		Player player1 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 1");
 		Player player2 = new Player(Deck.getRandomDeck(hero2, deckFormat), "Player 2");
 
-		GameLogic logic = new GameLogic();
-		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
+		DebugContext context = new DebugContext(player1, player2, new GameLogic() {
+			@Override
+			public int determineBeginner(int... playerIds) {
+				return GameContext.PLAYER_1;
+			}
+		}, deckFormat);
 		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
 		if (shouldInit) {
 			context.init();

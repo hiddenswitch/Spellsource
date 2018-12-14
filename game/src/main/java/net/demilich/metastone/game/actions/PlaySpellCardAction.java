@@ -28,16 +28,20 @@ public class PlaySpellCardAction extends PlayCardAction {
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);
-		this.entityReference = card.getReference();
+	}
+
+	@Override
+	public PlaySpellCardAction clone() {
+		return (PlaySpellCardAction) super.clone();
 	}
 
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
 		if (context.getLogic().hasAttribute(context.getPlayer(playerId), Attribute.SPELLS_CAST_TWICE)) {
-			context.getLogic().castSpell(playerId, spell, entityReference, getTargetReference(), getTargetRequirement(), false, this);
+			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 		}
-		context.getLogic().castSpell(playerId, spell, entityReference, getTargetReference(), getTargetRequirement(), false, this);
+		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}
 
 	public SpellDesc getSpell() {
@@ -48,10 +52,6 @@ public class PlaySpellCardAction extends PlayCardAction {
 		this.spell = spell;
 	}
 
-	public EntityReference getSourceCardEntityId() {
-		return entityReference;
-	}
-
 	@Override
 	public String getDescription(GameContext context, int playerId) {
 		if (getTargetReference() == null
@@ -59,8 +59,9 @@ public class PlaySpellCardAction extends PlayCardAction {
 			return super.getDescription(context, playerId);
 		}
 
-		final Card source = (Card) context.resolveSingleTarget(getEntityReference());
+		final Card source = (Card) context.resolveSingleTarget(getSourceReference());
 		final Entity target = context.resolveSingleTarget(getTargetReference());
 		return String.format("%s played %s on %s", context.getActivePlayer().getName(), source.getName(), target.getName());
 	}
 }
+

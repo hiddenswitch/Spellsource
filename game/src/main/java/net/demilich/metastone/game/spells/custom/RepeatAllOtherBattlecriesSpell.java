@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.actions.BattlecryAsPlaySpellCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
@@ -78,12 +79,11 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				continue;
 			}
 			action = action.clone();
-			action.setSource(source.getReference());
+			action.setSourceReference(source.getReference());
 			EntityReference battlecryTarget;
 			if (action.getTargetRequirement() != TargetSelection.NONE) {
 				// Compute the battlecry's valid targets as though it was a spell, so that the battlecry can target Shudderwock
-				PlaySpellCardAction spellCardAction = new PlaySpellCardAction(battlecryDesc.spell, card, battlecryDesc.targetSelection);
-				spellCardAction.setSource(action.getSourceReference());
+				PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), battlecryDesc.spell, card, battlecryDesc.targetSelection);
 				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), spellCardAction);
 				if (targets.isEmpty()) {
 					context.getLogic().revealCard(player, card);

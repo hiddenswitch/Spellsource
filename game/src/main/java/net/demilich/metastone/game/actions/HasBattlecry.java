@@ -6,7 +6,7 @@ package net.demilich.metastone.game.actions;
  * Choose-one effects on actors are implemented as choosing their battlecry.
  */
 public interface HasBattlecry {
-	BattlecryAction getBattlecryAction();
+	BattlecryAction getBattlecry();
 
-	void setBattlecryAction(BattlecryAction action);
+	void setBattlecry(BattlecryAction action);
 }

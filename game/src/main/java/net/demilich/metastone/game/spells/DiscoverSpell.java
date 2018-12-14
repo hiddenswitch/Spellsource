@@ -17,11 +17,16 @@ import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.*;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -303,7 +308,6 @@ public class DiscoverSpell extends Spell {
 		// Apply the weights
 		final boolean isWeighted = (cardSource instanceof HasWeights)
 				|| (specificCards.size() == 0 && cardSource == null && hasFilter);
-
 		// Compute weights if weighting is implied
 		if (isWeighted) {
 			if (cardSource == null) {
@@ -355,7 +359,7 @@ public class DiscoverSpell extends Spell {
 		} else {
 			// If the number of cards is greater than can be fit, do a random pick. Otherwise, keep it in the order
 			// that was specified
-			if (count == allCards.size()) {
+			if (count >= allCards.size()) {
 				choices.addAll(allCards);
 			} else {
 				for (int i = 0; i < count; i++) {
@@ -403,7 +407,7 @@ public class DiscoverSpell extends Spell {
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
 			discover.setCard(copy);
 			discover.setId(i);
-			discover.setSource(source != null ? source.getReference() : null);
+			discover.setSourceReference(source != null ? source.getReference() : null);
 			discoverActions.add(discover);
 			choices.set(i, copy);
 		}
