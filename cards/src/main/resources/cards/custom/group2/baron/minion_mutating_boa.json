@@ -2,7 +2,7 @@
   "name": "Mutating Boa",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "EPIC",

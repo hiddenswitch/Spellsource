@@ -2,7 +2,7 @@
   "name": "Sea Stowaway",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
