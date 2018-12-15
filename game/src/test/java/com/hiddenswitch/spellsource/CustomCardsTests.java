@@ -55,6 +55,20 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFissureLordXahdorahInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion xahDorah = playMinionCard(context, player, "minion_lord_xah_dorah");
+			context.endTurn();
+			Minion warGolem = playMinionCard(context, opponent, "minion_war_golem");
+			context.endTurn();
+			useHeroPower(context, player, xahDorah.getReference());
+			assertEquals(xahDorah.getAttack(), xahDorah.getBaseAttack() + 1);
+			playCard(context, player, "spell_fissure");
+			assertTrue(warGolem.isDestroyed());
+		}, HeroClass.RUST, HeroClass.RUST);
+	}
+
+	@Test
 	public void testIdiotSandwich() {
 		runGym((context, player, opponent) -> {
 			Minion notBuffed1 = playMinionCard(context, player, "minion_neutral_test");
