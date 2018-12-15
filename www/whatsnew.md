@@ -14,6 +14,10 @@ This release includes bug fixes reported by the community.
  - Choose Ones like Wrath no longer immediately cast on the minion that happened to be under the cursor when the selection was made.
  - Creating a deck a second time no longer requires reselecting a format and class. The deck name is also automatically populated with a useful default.
  - The Hero Power no longer has attack and health values.
+ 
+###### Content Fixes:
+
+ - Sorrowstone now works correctly.
 
 ###### 0.8.0-2.0.13 (Thursday, December 13th)
 
