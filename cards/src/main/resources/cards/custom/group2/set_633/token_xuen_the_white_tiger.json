@@ -3,13 +3,24 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 10,
-  "baseHp": 4,
+  "baseAttack": 11,
+  "baseHp": 3,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Charge. Deflect. Can't attack heroes.",
+  "description": "Charge. Deflect. Whenever this attacks a minion, deal 4 Damage to all other enemy minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "OTHER_ENEMY_MINIONS",
+      "value": 1
+    }
+  },
   "attributes": {
-    "CANNOT_ATTACK_HEROES": true,
     "CHARGE": true,
     "DEFLECT": true
   },
