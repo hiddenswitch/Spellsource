@@ -2,7 +2,7 @@
   "name": "Lord Cookie",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "NAVY",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
