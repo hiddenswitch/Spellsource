@@ -138,7 +138,7 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-0.8.0-all.jar'):
+    def find_resource_path(filename='net-0.8.1-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -173,7 +173,7 @@ class Context(contextlib.AbstractContextManager):
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         port = launch_gateway(port=port,
-                              classpath=Context.find_resource_path('net-0.8.0-all.jar'),
+                              classpath=Context.find_resource_path('net-0.8.1-all.jar'),
                               javaopts=["--add-modules", "java.se",
                                         "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
                                         "--add-opens", "java.base/java.lang=ALL-UNNAMED",

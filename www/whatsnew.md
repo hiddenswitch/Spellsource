@@ -5,7 +5,7 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-#### 0.8.0-2.0.14 (Thursday, December 13th)
+#### 0.8.1-2.0.14 (Thursday, December 13th)
 
 This release includes bug fixes reported by the community.
 
