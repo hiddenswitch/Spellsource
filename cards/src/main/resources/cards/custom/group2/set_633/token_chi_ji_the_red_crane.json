@@ -3,22 +3,32 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 8,
-  "baseHp": 6,
+  "baseAttack": 9,
+  "baseHp": 5,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. Whenever you target this minion with a spell, repeat it on your other minions.",
+  "description": "Deflect. Whenever you cast a spell, restore 1 Health to all friendly characters for each minion you control.",
   "trigger": {
     "eventTrigger": {
-      "class": "TargetAcquisitionTrigger",
-      "actionType": "SPELL",
-      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "class": "SpellCastedTrigger",
       "sourcePlayer": "SELF"
     },
     "spell": {
-      "class": "CastCardsSpell",
-      "target": "OTHER_FRIENDLY_MINIONS",
-      "secondaryTarget": "EVENT_SOURCE"
+      "class": "HealSpell",
+      "target": "FRIENDLY_CHARACTERS",
+	    "value": {
+	      "class": "EntityCounter",
+		    "target": "FRIENDLY_MINIONS",
+		    "filter": {
+		      "class": "OrFilter",
+		      "filters": [
+		        {
+			        "class": "AttributeFilter",
+			        "attribute": "PERMANENT"
+			      }
+		      ]
+		    }
+      }
     }
   },
   "attributes": {
