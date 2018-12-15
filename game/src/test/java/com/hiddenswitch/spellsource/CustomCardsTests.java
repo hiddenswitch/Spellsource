@@ -747,10 +747,10 @@ public class CustomCardsTests extends TestBase {
 	public void testSorrowstone() {
 		runGym((context, player, opponent) -> {
 			Minion target1 = playMinionCard(context, player, "minion_wisp");
-			Minion target2 = playMinionCard(context, player, "minion_wisp");
+			Minion target3 = playMinionCard(context, player, "minion_wisp");
 			playCard(context, player, "secret_sorrowstone");
 			context.endTurn();
-			Minion target3 = playMinionCard(context, opponent, "minion_wisp");
+			Minion target2 = playMinionCard(context, opponent, "minion_wisp");
 			destroy(context, target1);
 			assertEquals(player.getSecrets().size(), 1);
 			destroy(context, target2);
