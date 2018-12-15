@@ -18,7 +18,7 @@ This release includes bug fixes reported by the community.
 ###### Content Fixes:
 
  - Sorrowstone now works correctly.
- - Lord Cookie, Mutating Boa, Rhunok the Bear and Sea Stowaway are now Baron cards instead of Neutrals.
+ - Mutating Boa, Rhunok the Bear and Sea Stowaway are now Baron cards instead of Neutrals.
 
 ###### 0.8.0-2.0.13 (Thursday, December 13th)
 
