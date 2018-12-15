@@ -2,7 +2,7 @@
   "name": "Rhunok, the Bear",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "LEGENDARY",
