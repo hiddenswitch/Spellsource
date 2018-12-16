@@ -16,16 +16,15 @@
         },
         "spell1": {
           "class": "DamageSpell",
-		  "target":"ALL_MINIONS",
+          "target": "ALL_MINIONS",
           "value": 1
         },
         "spell2": {
           "class": "SummonSpell",
-	  "boardPositionRelative": "RIGHT",
           "card": "token_tauren_slime"
-}
-}
-]
+        }
+      }
+    ]
   },
   "collectible": false,
   "set": "BLIZZARD_ADVENTURE",
