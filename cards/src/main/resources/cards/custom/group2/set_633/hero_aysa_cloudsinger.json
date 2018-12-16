@@ -1,0 +1,15 @@
+{
+  "name": "Aysa Cloudsinger",
+  "heroPower": "hero_power_gift_of_the_ox",
+  "baseManaCost": 8,
+  "type": "HERO",
+  "heroClass": "JADE",
+  "rarity": "LEGENDARY",
+  "attributes": {
+    "HP": 10,
+    "MAX_HP": 10
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

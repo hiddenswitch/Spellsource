@@ -43,3 +43,4 @@ public final class ProphetWaRanSpell extends Spell {
 		}
 	}
 }
+

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.aura.SpecificCardFilterOverrideAura;
+import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -26,6 +27,12 @@ public class SpecificCardFilter extends EntityFilter {
 
 	public SpecificCardFilter(EntityFilterDesc desc) {
 		super(desc);
+	}
+
+	public static EntityFilterDesc create(String cardId) {
+		EntityFilterDesc desc = new EntityFilterDesc(SpecificCardFilter.class);
+		desc.put(EntityFilterArg.CARD, cardId);
+		return desc;
 	}
 
 	@Override

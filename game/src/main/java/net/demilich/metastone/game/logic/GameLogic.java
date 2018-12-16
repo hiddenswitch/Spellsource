@@ -3448,7 +3448,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Executes the deathrattle effect written on this {@link Actor}.
+	 * Executes the deathrattle effect written on this {@link Actor}, wherever it is.
 	 *
 	 * @param player           The player that owns the actor.
 	 * @param actor            The actor.
@@ -3461,32 +3461,50 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 
+		boolean isWeapon = actor instanceof Weapon;
 		// Don't trigger deathrattles for entities in the set aside zone... unless it's a weapon
 		if (previousLocation.getZone() == Zones.SET_ASIDE_ZONE
-				&& !(actor instanceof Weapon)) {
+				&& !isWeapon) {
 			return;
 		}
 
+		int playerId = player.getId();
+		List<SpellDesc> deathrattles = new ArrayList<>(actor.getDeathrattles());
+		EntityReference sourceReference = actor.getReference();
+		int sourceOwner = actor.getOwner();
+
+		resolveDeathrattles(playerId, sourceReference, deathrattles, sourceOwner, boardPosition);
+	}
+
+	/**
+	 * Casts a list of deathrattle spells given information about the entity that "hosts" those deathrattles
+	 *
+	 * @param playerId        The casting player
+	 * @param sourceReference A reference to the source
+	 * @param deathrattles    The actual deathrattles to cast
+	 * @param sourceOwner     The owner of the source
+	 * @param boardPosition   The former board position of the source
+	 */
+	@Suspendable
+	public void resolveDeathrattles(int playerId, EntityReference sourceReference, List<SpellDesc> deathrattles, int sourceOwner, int boardPosition) {
 		boolean doubleDeathrattles = false;
-		List<DoubleDeathrattlesAura> doubleDeathrattleAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleDeathrattlesAura.class);
+		List<DoubleDeathrattlesAura> doubleDeathrattleAuras = SpellUtils.getAuras(context, sourceOwner, DoubleDeathrattlesAura.class);
 		if (!doubleDeathrattleAuras.isEmpty()) {
 			for (DoubleDeathrattlesAura aura : doubleDeathrattleAuras) {
-				if (aura.getAffectedEntities().contains(actor.getId())) {
+				if (aura.getAffectedEntities().contains(sourceReference.getId())) {
 					doubleDeathrattles = true;
 				}
 			}
 		}
 
-		EntityReference sourceReference = actor.getReference();
 		// TODO: What happens if a deathrattle modifies another deathrattle?
-		// Make the list of deathrattles immutable
-		final List<SpellDesc> deathrattles = new ArrayList<>(actor.getDeathrattles());
 		for (SpellDesc deathrattleTemplate : deathrattles) {
 			SpellDesc deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
-			castSpell(player.getId(), deathrattle, sourceReference, EntityReference.NONE, false);
+
+			castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, false);
 			if (doubleDeathrattles) {
 				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)
-				castSpell(player.getId(), deathrattle, sourceReference, EntityReference.NONE, false);
+				castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, false);
 			}
 		}
 	}
@@ -3861,15 +3879,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				minion = summonTransformResolved(minion);
 			}
 
-			applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
-			refreshAttacksPerRound(minion);
-			processBattlefieldEnchantments(player, minion);
+			if (minion.isInPlay()) {
+				applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
+				refreshAttacksPerRound(minion);
+				processBattlefieldEnchantments(player, minion);
 
-			if (minion.getCardCostModifier() != null) {
-				addGameEventListener(player, minion.getCardCostModifier(), minion);
+				if (minion.getCardCostModifier() != null) {
+					addGameEventListener(player, minion.getCardCostModifier(), minion);
+				}
+
+				handleEnrage(minion);
 			}
-
-			handleEnrage(minion);
 
 			if (player.getMinions().contains(minion)
 					&& !minion.hasAttribute(Attribute.PERMANENT)) {

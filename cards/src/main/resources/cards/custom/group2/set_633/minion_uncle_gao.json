@@ -1,0 +1,194 @@
+{
+  "name": "Uncle Gao",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: If you played an Elemental last turn, fill your board with 1/2 Alementals and give them Rush, Poisonous, or Deflect randomly.",
+  "battlecry": {
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "PlayedLastTurnCondition",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+        }
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "LEFT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "LEFT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "LEFT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_tiny_alemental",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

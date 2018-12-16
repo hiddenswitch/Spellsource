@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.ReturnToHandEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -114,8 +115,12 @@ public class ReturnTargetToHandSpell extends Spell {
 			} else {
 				context.getLogic().receiveCard(owner.getId(), returnedCard);
 			}
-			if (cardSpell != null) {
+			if (cardSpell != null && returnedCard.getZone() == Zones.HAND) {
 				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);
+			}
+			// It must still be in the hand to be a returned to hand effect
+			if (returnedCard.getZone() == Zones.HAND) {
+				context.fireGameEvent(new ReturnToHandEvent(context, player.getId(), returnedCard, target));
 			}
 		}
 	}

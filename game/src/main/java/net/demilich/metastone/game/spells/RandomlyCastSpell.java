@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
- * Give a list of effects in {@link SpellArg#SPELLS}, randomly choose one to cast on each target.
+ * Givem a list of effects in {@link SpellArg#SPELLS}, randomly choose one to cast the {@code target}.
  * <p>
  * Implements Enhance-o Mechano.
  */
@@ -31,5 +31,4 @@ public class RandomlyCastSpell extends Spell {
 		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
 		SpellUtils.castChildSpell(context, player, context.getLogic().getRandom(Arrays.asList(spells)), source, target);
 	}
-
 }

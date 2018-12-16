@@ -1,0 +1,30 @@
+{
+  "name": "Ox School Instructor",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt. Battlecry: Recruit a Deflect Minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "DEFLECT",
+        "cardType": "MINION"
+      },
+      "cardLocation": "DECK",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

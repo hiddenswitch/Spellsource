@@ -24,6 +24,13 @@ public class SetAttributeSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(Attribute tag, Object value) {
+		Map<SpellArg, Object> arguments = new SpellDesc(SetAttributeSpell.class);
+		arguments.put(SpellArg.ATTRIBUTE, tag);
+		arguments.put(SpellArg.VALUE, value);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
