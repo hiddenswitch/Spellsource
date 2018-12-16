@@ -55,6 +55,71 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testAysaCloudsinger() {
+		GymFactory factory = getGymFactory((context, player, opponent) -> {
+			int heroHp = 15;
+			player.getHero().setHp(heroHp);
+			playCard(context, player, "minion_aysa_cloudsinger");
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_aysa_cloudsinger");
+			assertEquals(player.getMinions().size(), 1);
+			Minion chenToken = player.getMinions().get(0);
+			assertEquals(chenToken.getSourceCard().getCardId(), "token_chen_stormstout");
+			assertEquals(chenToken.getHp(), heroHp);
+			assertEquals(chenToken.getMaxHp(), 30);
+		});
+
+		// Test 1: Fatal damage, chen destroyed, player loses
+		factory.run((context, player, opponent) -> {
+			Minion chenToken = player.getMinions().get(0);
+			destroy(context, chenToken);
+			playCard(context, player, "spell_pyroblast", player.getHero());
+			assertTrue(context.updateAndGetGameOver());
+			assertEquals(context.getWinner(), opponent);
+		});
+
+		// Test 2: fatal damage, chen on board, player restores chen with health
+		factory.run((context, player, opponent) -> {
+			Minion chenToken = player.getMinions().get(0);
+			int hpValue = 17;
+			chenToken.setHp(hpValue);
+			playCard(context, player, "spell_pyroblast", player.getHero());
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_chen_stormstout");
+			assertEquals(player.getHero().getHp(), hpValue);
+			assertEquals(player.getMinions().size(), 0);
+		});
+
+		// Test 3: fatal damage, chen in hand, player restores chen with full health
+		factory.run((context, player, opponent) -> {
+			Minion chenToken = player.getMinions().get(0);
+			context.endTurn();
+			playCard(context, opponent, "spell_sap", chenToken);
+			context.endTurn();
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getMinions().size(), 0);
+			playCard(context, player, "spell_pyroblast", player.getHero());
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_chen_stormstout");
+			assertEquals(player.getHero().getHp(), 30);
+			assertEquals(player.getHand().size(), 0);
+		});
+		
+		// Test 4: fatal damage, chen in deck, player restores chen with full health.
+		factory.run((context, player, opponent) -> {
+			Minion chenToken = player.getMinions().get(0);
+			context.endTurn();
+			playCard(context, opponent, "spell_recycle", chenToken);
+			// Give the player something to draw
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			context.endTurn();
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getMinions().size(), 0);
+			playCard(context, player, "spell_pyroblast", player.getHero());
+			assertEquals(player.getHero().getSourceCard().getCardId(), "hero_chen_stormstout");
+			assertEquals(player.getHero().getHp(), 30);
+			assertEquals(player.getDeck().size(), 0);
+		});
+	}
+
+	@Test
 	public void testFissureLordXahdorahInteraction() {
 		runGym((context, player, opponent) -> {
 			Minion xahDorah = playMinionCard(context, player, "minion_lord_xah_dorah");

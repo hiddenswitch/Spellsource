@@ -91,6 +91,13 @@ import org.slf4j.LoggerFactory;
 public class ConditionalSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(ConditionalSpell.class);
 
+	public static SpellDesc create(Condition[] conditions, SpellDesc[] spells) {
+		SpellDesc desc = new SpellDesc(ConditionalSpell.class);
+		desc.put(SpellArg.CONDITIONS, conditions);
+		desc.put(SpellArg.SPELLS, spells);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

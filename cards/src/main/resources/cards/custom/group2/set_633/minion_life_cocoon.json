@@ -1,0 +1,27 @@
+{
+  "name": "Life Cocoon",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Taunt. Battlecry: Destroy a friendly minion. Deathrattle: Summon a copy of it.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "custom.JailMinionSpell"
+    }
+  },
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "TAUNT": true,
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

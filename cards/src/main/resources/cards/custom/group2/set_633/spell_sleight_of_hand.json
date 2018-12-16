@@ -1,0 +1,17 @@
+{
+  "name": "Sleight of Hand",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Return a friendly minion to your hand. Trigger its deathrattles.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "custom.SleightOfHandSpell"
+  },
+  "attributes": {
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

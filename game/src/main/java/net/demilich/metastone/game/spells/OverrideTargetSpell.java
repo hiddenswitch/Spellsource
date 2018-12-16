@@ -8,6 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
@@ -45,6 +46,10 @@ public class OverrideTargetSpell extends Spell {
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(OverrideTargetSpell.class);
 		return new SpellDesc(arguments);
+	}
+
+	public static SpellDesc create(EntityReference override) {
+		return new SpellDesc(OverrideTargetSpell.class, override, null, false);
 	}
 
 	@Override

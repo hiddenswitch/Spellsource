@@ -1,0 +1,46 @@
+{
+  "name": "Thundering Golden Serpent",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, gain \"Whenever you summon a Silver Hand Recruit, deal 2 damage to all enemies.\"",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "SELF",
+      "trigger": {
+        "eventTrigger": {
+          "class": "MinionSummonedTrigger",
+          "targetPlayer": "SELF",
+          "queueCondition": {
+            "class": "CardPropertyCondition",
+            "card": "token_silver_hand_recruit"
+          }
+        },
+        "spell": {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 2
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
