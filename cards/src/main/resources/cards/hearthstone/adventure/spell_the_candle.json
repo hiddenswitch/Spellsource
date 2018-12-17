@@ -1,0 +1,27 @@
+{
+	"name": "THE CANDLE",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Deal 4 damage to all enemy minions. Shuffle this into your deck.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "DamageSpell",
+				"target": "ENEMY_MINIONS",
+				"value": 4
+			},
+			{
+				"class": "ShuffleToDeckSpell",
+				"target": "NONE",
+				"card": "spell_the_candle"
+			}
+		]
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
