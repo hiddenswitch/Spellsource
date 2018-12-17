@@ -98,8 +98,9 @@ We'll now compare the simulation data to the actual data to get a sense for how 
 ### Getting Started With Simulations
 
  1. The `spellsource` Python module makes it easy to run simulations and compare results with real data. Install it with `pip3 install spellsource`. Then, try these various tools:
-    - `python3 -m spellsource.ext.datasources` downloads the current state of the meta from **HSReplay** and prints a TSV table of archetype winrates
-    - [`runsims.sh`](runsims.sh), which runs 10,000 simulations of every matchup of meta decks in the [current decklists directory](../net/src/main/resources/decklists/current).
+    - `spellsource hs-replay-matchups` downloads the current state of the meta from **HSReplay** and prints a TSV table of archetype winrates
+    - `spellsource simulate`, which allows you to run simulations from the command line and get results in a JSON format.
+    - [`runsims.sh`](runsims.sh), which runs 10,000 simulations of every matchup of meta decks in the [current decklists directory](../net/src/main/resources/decklists/current). This approach is considered deprecated.
     - [`simulation_example.ipynb`](../docs/simulation_example.ipynb), which is an example of programmatic simulation in Python.
     - [`faq.ipynb`](../docs/faq.ipynb), which contains an FAQ about AI and writing bots.
  2. Adapt these scripts to run simulations of different decks, including adding new decks to test.

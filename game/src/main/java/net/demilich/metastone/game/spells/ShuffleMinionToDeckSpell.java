@@ -31,5 +31,4 @@ public class ShuffleMinionToDeckSpell extends ShuffleToDeckSpell {
 
 		super.onCast(context, player, desc, source, target);
 	}
-
 }

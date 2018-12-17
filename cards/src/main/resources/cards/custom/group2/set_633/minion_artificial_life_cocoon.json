@@ -1,0 +1,31 @@
+{
+  "name": "Artificial Life Cocoon",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 8,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Magnetic. Taunt. Deflect. At the start of your next turn, deal 8 damage to itself.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "TRIGGER_HOST",
+      "value": 8
+    },
+    "maxFires": 1
+  },
+  "attributes": {
+    "DEFLECT": true,
+    "TAUNT": true,
+    "MAGNETIC": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

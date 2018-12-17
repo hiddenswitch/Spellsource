@@ -91,6 +91,17 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 		super(arguments, SpellArg.class);
 	}
 
+	public SpellDesc(Class<? extends Spell> spellClass, EntityReference target, EntityFilter filter, boolean randomTarget) {
+		super(spellClass, SpellArg.class);
+		put(SpellArg.TARGET, target);
+		if (filter != null) {
+			put(SpellArg.FILTER, filter);
+		}
+		if (randomTarget) {
+			put(SpellArg.RANDOM_TARGET, randomTarget);
+		}
+	}
+
 	@Override
 	protected Class<? extends Desc> getDescImplClass() {
 		return SpellDesc.class;

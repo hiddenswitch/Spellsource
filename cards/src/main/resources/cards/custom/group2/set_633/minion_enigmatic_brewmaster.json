@@ -1,0 +1,25 @@
+{
+  "name": "Enigmatic Brewmaster",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Deflect. Battlecry: Return adjacent minions to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+	  "target": "ADJACENT_MINIONS",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+	"DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

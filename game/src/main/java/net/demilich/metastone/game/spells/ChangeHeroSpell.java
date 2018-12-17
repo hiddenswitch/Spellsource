@@ -63,6 +63,22 @@ public class ChangeHeroSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	/**
+	 * Changes the specified player's hero with the specified card ID, resolving the battlecry if specified.
+	 *
+	 * @param player           the player
+	 * @param heroCardId       the hero card
+	 * @param resolveBattlecry {@code true} if the hero card should have its battlecry resolved
+	 * @return the spell
+	 */
+	public static SpellDesc create(TargetPlayer player, String heroCardId, boolean resolveBattlecry) {
+		Map<SpellArg, Object> arguments = new SpellDesc(ChangeHeroSpell.class);
+		arguments.put(SpellArg.TARGET_PLAYER, player);
+		arguments.put(SpellArg.CARD, heroCardId);
+		arguments.put(SpellArg.EXCLUSIVE, !resolveBattlecry);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

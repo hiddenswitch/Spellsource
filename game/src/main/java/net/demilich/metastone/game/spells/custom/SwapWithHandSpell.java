@@ -14,7 +14,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * <p>
  * Implements Alarm-O-Bot.
  */
-public class SwapWithHandSpell extends ReturnTargetToHandSpell {
+public final class SwapWithHandSpell extends ReturnTargetToHandSpell {
 
 	@Override
 	@Suspendable

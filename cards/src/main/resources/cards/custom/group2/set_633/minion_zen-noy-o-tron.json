@@ -1,0 +1,20 @@
+{
+  "name": "Zen-noy-o-Tron",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Taunt. Divine Shield. Deflect. Windfury.",
+  "attributes": {
+    "TAUNT": true,
+    "DIVINE_SHIELD": true,
+    "DEFLECT": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
