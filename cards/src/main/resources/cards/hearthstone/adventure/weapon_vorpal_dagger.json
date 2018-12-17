@@ -1,0 +1,17 @@
+{
+	"name": "Vorpal Dagger",
+	"baseManaCost": 2,
+	"type": "WEAPON",
+	"heroClass": "ANY",
+	"damage": 1,
+	"durability": 4,
+	"rarity": "FREE",
+	"description": "Poisonous. Mega-Windfury.",
+	"attributes": {
+		"POISONOUS": true,
+		"MEGA_WINDFURY": true
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
