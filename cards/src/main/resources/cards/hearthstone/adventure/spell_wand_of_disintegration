@@ -1,0 +1,25 @@
+{
+	"name": "Wand of Disintegration",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Silence and destroy all enemy minions.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "MetaSpell",
+		"spells": [
+			{
+				"class": "SilenceSpell",
+				"target": "ENEMY_MINIONS"
+			},
+			{
+				"class": "DestroySpell",
+				"target": "ENEMY_MINIONS"
+			}
+		]
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
