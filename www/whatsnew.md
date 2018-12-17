@@ -5,7 +5,7 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-#### 0.8.2-2.0.14 (Sunday, December 16th)
+#### 0.8.2-2.0.14 (Monday, December 17th)
 
 Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been added and tweaked. Test improvements have led to other minor content fixes.
 
