@@ -6,6 +6,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class IsDestroyedFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 2152444199265427112L;
+
 	public IsDestroyedFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

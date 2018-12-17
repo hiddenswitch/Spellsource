@@ -23,6 +23,7 @@ import org.slf4j.LoggerFactory;
  * @see FightSpell to cause an actor to attack a target generally.
  */
 public class MisdirectSpell extends Spell {
+	private static final long serialVersionUID = -3436955408575232576L;
 	private static Logger logger = LoggerFactory.getLogger(MisdirectSpell.class);
 
 	@Override

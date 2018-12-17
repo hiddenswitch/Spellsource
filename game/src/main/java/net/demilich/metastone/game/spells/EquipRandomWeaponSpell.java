@@ -12,6 +12,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 @Deprecated
 public class EquipRandomWeaponSpell extends EquipWeaponSpell {
 
+	private static final long serialVersionUID = 902050027691519428L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

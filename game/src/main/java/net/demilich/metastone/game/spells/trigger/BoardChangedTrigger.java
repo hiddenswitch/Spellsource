@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class BoardChangedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = 7337510203299158251L;
+
 	public BoardChangedTrigger() {
 		this(new EventTriggerDesc(BoardChangedTrigger.class));
 	}

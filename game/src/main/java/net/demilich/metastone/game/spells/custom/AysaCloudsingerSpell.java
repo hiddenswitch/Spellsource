@@ -46,6 +46,7 @@ import static java.util.Map.entry;
  */
 public final class AysaCloudsingerSpell extends Spell {
 
+	private static final long serialVersionUID = 3512676003608851740L;
 	private static Logger LOGGER = LoggerFactory.getLogger(AysaCloudsingerSpell.class);
 
 	@Override
@@ -114,10 +115,11 @@ public final class AysaCloudsingerSpell extends Spell {
 		switchingEnchantment.spell = MetaSpell.create(
 				// Prevents fatal damage
 				ModifyDamageSpell.create(0, AlgebraicOperation.SET),
-				// Then changes the hero
-				ChangeHeroSpell.create(TargetPlayer.SELF, originalHero.getCardId(), false),
-				// The remove spell is responsible for setting the HP in the event the token is on the battlefield
-				removeSpell);
+				CastAfterSequenceSpell.create(MetaSpell.create(
+						// Then changes the hero
+						ChangeHeroSpell.create(TargetPlayer.SELF, originalHero.getCardId(), false),
+						// The remove spell is responsible for setting the HP in the event the token is on the battlefield
+						removeSpell)));
 
 		switchingEnchantment.maxFires = 1;
 

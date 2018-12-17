@@ -36,6 +36,8 @@ import java.util.Map;
 @Deprecated
 public class ConditionalAttackBonusSpell extends Spell {
 
+	private static final long serialVersionUID = 3955125240847269468L;
+
 	public static SpellDesc create(EntityReference target, ValueProvider valueProvider) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ConditionalAttackBonusSpell.class);
 		arguments.put(SpellArg.VALUE, valueProvider);

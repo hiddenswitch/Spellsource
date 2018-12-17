@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 
 public final class WeaponEquippedEvent extends GameEvent implements HasCard {
+	private static final long serialVersionUID = 4826150256919315780L;
 	private final Weapon weapon;
 	private final Card source;
 

@@ -6,6 +6,8 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class WillEndSequenceTrigger extends EventTrigger {
+	private static final long serialVersionUID = -433968589362066912L;
+
 	public WillEndSequenceTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

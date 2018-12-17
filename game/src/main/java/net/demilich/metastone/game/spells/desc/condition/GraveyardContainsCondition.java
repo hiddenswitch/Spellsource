@@ -9,6 +9,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class GraveyardContainsCondition extends Condition {
 
+	private static final long serialVersionUID = -5180400170361395935L;
+
 	public GraveyardContainsCondition(ConditionDesc desc) {
 		super(desc);
 	}

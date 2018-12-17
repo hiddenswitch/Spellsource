@@ -45,6 +45,8 @@ import java.util.Map;
  */
 public final class CopyMinionSpell extends Spell {
 
+	private static final long serialVersionUID = -1680466861707801770L;
+
 	/**
 	 * Creates this spell. The {@code target} will be passed down by a parent invocation.
 	 *

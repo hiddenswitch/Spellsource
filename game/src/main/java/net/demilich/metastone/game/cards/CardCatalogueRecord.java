@@ -9,6 +9,7 @@ import java.io.Serializable;
  * A record that stores a card's ID, JSON representation and {@link CardDesc}.
  */
 public class CardCatalogueRecord implements Serializable {
+	private static final long serialVersionUID = 4740975310205862776L;
 	private String id;
 	private transient JsonObject cachedJson;
 	private CardDesc desc;

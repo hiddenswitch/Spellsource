@@ -10,6 +10,8 @@ import java.util.List;
 
 public class AttributeCounter extends ValueProvider {
 
+	private static final long serialVersionUID = -7815155960350704486L;
+
 	public AttributeCounter(ValueProviderDesc desc) {
 		super(desc);
 	}

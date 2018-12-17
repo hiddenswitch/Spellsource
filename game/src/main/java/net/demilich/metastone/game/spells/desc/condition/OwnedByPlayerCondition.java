@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 
 public class OwnedByPlayerCondition extends Condition {
 
+	private static final long serialVersionUID = 652451384063909494L;
+
 	public OwnedByPlayerCondition(ConditionDesc desc) {
 		super(desc);
 	}

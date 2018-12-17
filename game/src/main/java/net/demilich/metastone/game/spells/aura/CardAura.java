@@ -25,6 +25,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class CardAura extends Aura {
 
+	private static final long serialVersionUID = 2498163876596381613L;
+
 	public CardAura(AuraDesc desc) {
 		super(desc.getSecondaryTrigger() != null ? desc.getSecondaryTrigger().create() : new WillEndSequenceTrigger(),
 				SetCardSpell.create((String) desc.get(AuraArg.CARD), true),

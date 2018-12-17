@@ -8,6 +8,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class SupremacyTrigger extends AfterPhysicalAttackTrigger {
 
+	private static final long serialVersionUID = -1596424852801519637L;
+
 	public SupremacyTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

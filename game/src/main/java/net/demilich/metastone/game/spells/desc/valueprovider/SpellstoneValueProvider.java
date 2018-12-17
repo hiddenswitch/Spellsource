@@ -9,7 +9,9 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import java.util.List;
 
 public class SpellstoneValueProvider extends ValueProvider {
-    public SpellstoneValueProvider(ValueProviderDesc desc) {
+	private static final long serialVersionUID = -6311601559671792059L;
+
+	public SpellstoneValueProvider(ValueProviderDesc desc) {
         super(desc);
     }
 

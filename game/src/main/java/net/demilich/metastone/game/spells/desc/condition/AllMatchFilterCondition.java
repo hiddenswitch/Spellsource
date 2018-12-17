@@ -8,6 +8,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class AllMatchFilterCondition extends Condition {
 
+	private static final long serialVersionUID = 6257156576559053764L;
+
 	public AllMatchFilterCondition(ConditionDesc desc) {
 		super(desc);
 	}

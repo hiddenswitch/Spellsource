@@ -11,6 +11,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 public class Secret extends Enchantment {
+	private static final long serialVersionUID = 2444307692934656355L;
+
 	public Secret(EventTrigger trigger, SpellDesc spell, Card source) {
 		super(trigger, spell);
 		setSourceCard(source);

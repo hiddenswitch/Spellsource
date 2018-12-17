@@ -48,6 +48,8 @@ import java.util.Map;
  */
 public class AdjacentEffectSpell extends RelativeToTargetEffectSpell {
 
+	private static final long serialVersionUID = -4013004826895020709L;
+
 	public static SpellDesc create(EntityReference target, SpellDesc primarySpell, SpellDesc secondarySpell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(AdjacentEffectSpell.class);
 		if (primarySpell != null) {

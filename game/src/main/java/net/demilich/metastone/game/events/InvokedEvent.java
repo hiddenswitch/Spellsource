@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
 public class InvokedEvent extends GameEvent implements HasValue, HasCard {
+	private static final long serialVersionUID = 1085005515292187672L;
 	private final Card card;
 	private final int invokedMana;
 

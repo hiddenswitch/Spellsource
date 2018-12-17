@@ -26,6 +26,7 @@ import java.util.Map;
  */
 public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 
+	private static final long serialVersionUID = 2995436111073951627L;
 	private static Logger logger = LoggerFactory.getLogger(SummonFriendlyMinionsThatDiedSpell.class);
 
 	public static SpellDesc create() {

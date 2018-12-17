@@ -43,6 +43,8 @@ import java.util.Map;
  */
 public class OverrideTargetSpell extends Spell {
 
+	private static final long serialVersionUID = 2686604729169688507L;
+
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(OverrideTargetSpell.class);
 		return new SpellDesc(arguments);

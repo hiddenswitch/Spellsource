@@ -209,6 +209,7 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			defer(v -> {
 				try {
 					GameRecord gameRecord = new GameRecord(gameId.toString())
+							.setTrace(gameContext.getTrace().clone())
 							.setCreatedAt(new Date())
 							.setBotGame(botGame)
 							.setPlayerUserIds(userIds)

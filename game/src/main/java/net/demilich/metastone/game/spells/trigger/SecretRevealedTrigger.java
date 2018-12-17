@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class SecretRevealedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = 4985831295936484436L;
+
 	public SecretRevealedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

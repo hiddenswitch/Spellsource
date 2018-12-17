@@ -6,6 +6,8 @@ import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 
 public class ConditionDescDeserializer extends DescDeserializer<ConditionDesc, ConditionArg, Condition> {
 
+	private static final long serialVersionUID = -8523770098551156513L;
+
 	public ConditionDescDeserializer() {
 		super(ConditionDesc.class);
 	}

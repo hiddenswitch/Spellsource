@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class HasEnchantmentFilter extends EntityFilter {
+	private static final long serialVersionUID = 2608424482510762787L;
 	private static Logger logger = LoggerFactory.getLogger(HasEnchantmentFilter.class);
 
 	public HasEnchantmentFilter(EntityFilterDesc desc) {

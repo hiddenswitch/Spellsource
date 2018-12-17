@@ -15,6 +15,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class IsAdjacentCondition extends Condition {
 
+	private static final long serialVersionUID = 5823055701656786913L;
+
 	public IsAdjacentCondition(ConditionDesc desc) {
 		super(desc);
 	}

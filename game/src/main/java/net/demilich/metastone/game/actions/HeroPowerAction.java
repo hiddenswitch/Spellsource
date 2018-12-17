@@ -16,6 +16,7 @@ import java.io.Serializable;
  */
 public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
 
+	private static final long serialVersionUID = -5225394232903094127L;
 	private final String choiceCardId;
 
 	private HeroPowerAction() {

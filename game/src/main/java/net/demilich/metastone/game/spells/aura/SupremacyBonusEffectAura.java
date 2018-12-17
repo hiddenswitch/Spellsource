@@ -12,6 +12,8 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
  */
 public final class SupremacyBonusEffectAura extends Aura {
 
+	private static final long serialVersionUID = 3019915571367880087L;
+
 	public SupremacyBonusEffectAura(AuraDesc desc) {
 		super(desc);
 	}

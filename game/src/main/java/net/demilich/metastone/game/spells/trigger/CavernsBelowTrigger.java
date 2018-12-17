@@ -21,6 +21,8 @@ import static java.util.stream.Collectors.toMap;
 
 public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 
+	private static final long serialVersionUID = -6434060964902773009L;
+
 	public CavernsBelowTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.cards.Attribute;
 
 public abstract class AbstractCardTrigger extends EventTrigger {
+	private static final long serialVersionUID = 5508431482842969128L;
+
 	public AbstractCardTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

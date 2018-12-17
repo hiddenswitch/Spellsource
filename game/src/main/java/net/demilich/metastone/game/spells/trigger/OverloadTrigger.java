@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class OverloadTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -9169998706768584608L;
+
 	public OverloadTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

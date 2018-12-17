@@ -31,6 +31,7 @@ import java.util.Arrays;
  */
 public final class AddTriggerToCardSpell extends Spell {
 
+	private static final long serialVersionUID = -546158562799838889L;
 	private static Logger logger = LoggerFactory.getLogger(AddTriggerToCardSpell.class);
 
 	@Override

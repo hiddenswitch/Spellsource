@@ -10,6 +10,8 @@ import java.util.List;
 
 public class EntityCounter extends ValueProvider {
 
+	private static final long serialVersionUID = -4475854323019461282L;
+
 	public EntityCounter(ValueProviderDesc desc) {
 		super(desc);
 	}

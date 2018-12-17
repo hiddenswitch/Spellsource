@@ -52,6 +52,7 @@ import java.util.Map;
  */
 public class ReturnTargetToHandSpell extends Spell {
 
+	private static final long serialVersionUID = -2369789998322937661L;
 	private static Logger logger = LoggerFactory.getLogger(ReturnTargetToHandSpell.class);
 
 	public static SpellDesc create() {

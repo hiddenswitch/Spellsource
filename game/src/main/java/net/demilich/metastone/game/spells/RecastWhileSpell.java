@@ -16,6 +16,8 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * Stops casting if the {@link SpellArg#CONDITION} is not met.
  */
 public class RecastWhileSpell extends Spell {
+	private static final long serialVersionUID = 3943068823238343296L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

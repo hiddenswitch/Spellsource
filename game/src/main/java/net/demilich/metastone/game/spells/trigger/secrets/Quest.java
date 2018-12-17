@@ -48,6 +48,8 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
  */
 public class Quest extends Enchantment {
 
+	private static final long serialVersionUID = 3319075586169600761L;
+
 	public Quest(EventTrigger trigger, SpellDesc spell, Card source, int countUntilCast, boolean countByValue) {
 		super(trigger, spell);
 		this.setSourceCard(source);

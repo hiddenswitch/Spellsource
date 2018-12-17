@@ -9,6 +9,8 @@ import java.util.List;
 
 public class EntityEqualsFilter extends EntityFilter {
 
+	private static final long serialVersionUID = -5455486702564868024L;
+
 	public EntityEqualsFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

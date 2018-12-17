@@ -50,6 +50,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public class OverkillSpell extends DamageSpell {
 
+	private static final long serialVersionUID = -8869858576916490006L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

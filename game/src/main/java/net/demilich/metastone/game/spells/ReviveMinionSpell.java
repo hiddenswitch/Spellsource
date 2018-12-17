@@ -22,6 +22,8 @@ import java.util.Map;
  */
 public class ReviveMinionSpell extends Spell {
 
+	private static final long serialVersionUID = 4525896253927917946L;
+
 	public static SpellDesc create(EntityReference target) {
 		return create(target, 0);
 	}

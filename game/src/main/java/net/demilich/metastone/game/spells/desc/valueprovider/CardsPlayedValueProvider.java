@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class CardsPlayedValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = -3456065822931759622L;
+
 	public CardsPlayedValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

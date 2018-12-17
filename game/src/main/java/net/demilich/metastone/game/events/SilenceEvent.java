@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class SilenceEvent extends GameEvent {
 
+	private static final long serialVersionUID = 3433426548153484102L;
 	private final Actor target;
 
 	public SilenceEvent(GameContext context, int playerId, Actor target) {

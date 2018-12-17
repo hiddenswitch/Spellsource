@@ -30,6 +30,7 @@ import java.util.stream.Stream;
  */
 public final class AddActorEffectsToTargetActorSpell extends Spell {
 
+	private static final long serialVersionUID = -4068998184474601644L;
 	private static Logger logger = LoggerFactory.getLogger(AddActorEffectsToTargetActorSpell.class);
 
 	public static SpellDesc create(EntityReference sourceActor, EntityReference targetActor) {

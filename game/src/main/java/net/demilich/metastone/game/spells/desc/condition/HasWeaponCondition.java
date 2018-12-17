@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 
 public class HasWeaponCondition extends Condition {
 
+	private static final long serialVersionUID = -5199489404790742685L;
+
 	public HasWeaponCondition(ConditionDesc desc) {
 		super(desc);
 	}

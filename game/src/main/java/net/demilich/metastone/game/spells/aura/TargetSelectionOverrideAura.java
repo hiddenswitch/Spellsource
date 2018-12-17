@@ -15,6 +15,8 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  * 		modification logic.
  */
 public final class TargetSelectionOverrideAura extends Aura {
+	private static final long serialVersionUID = -1644576037595825002L;
+
 	public TargetSelectionOverrideAura(AuraDesc desc) {
 		super(desc);
 		this.triggers.add(new WillEndSequenceTrigger());

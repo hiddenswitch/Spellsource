@@ -13,6 +13,8 @@ import java.util.stream.Stream;
 
 public class MinionCountCondition extends Condition {
 
+	private static final long serialVersionUID = 121161930124020375L;
+
 	public MinionCountCondition(ConditionDesc desc) {
 		super(desc);
 	}

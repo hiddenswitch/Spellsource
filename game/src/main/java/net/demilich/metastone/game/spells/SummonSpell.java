@@ -147,6 +147,7 @@ import java.util.stream.Collectors;
  */
 public class SummonSpell extends Spell {
 
+	private static final long serialVersionUID = 3842375779051743425L;
 	private static Logger logger = LoggerFactory.getLogger(SummonSpell.class);
 
 	/**

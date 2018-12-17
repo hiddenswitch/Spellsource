@@ -916,11 +916,7 @@ public class SpellUtils {
 
 			// If the minion is removed from the board, stop casting spells.
 			if (source != null
-					&& castingTargetPlayer == TargetPlayer.OWNER
-					&& source.getEntityType() == EntityType.MINION
-					&& (source.getZone()
-					!= Zones.BATTLEFIELD
-					|| source.isDestroyed())) {
+					&& !source.isInPlay()) {
 				sourceDestroyed = true;
 				return this;
 			}

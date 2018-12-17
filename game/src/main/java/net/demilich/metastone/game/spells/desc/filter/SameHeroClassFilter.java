@@ -10,6 +10,8 @@ import java.util.List;
 
 public class SameHeroClassFilter extends EntityFilter {
 
+	private static final long serialVersionUID = -4648718274167747558L;
+
 	public SameHeroClassFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

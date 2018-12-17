@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public class DoubleAttackSpell extends Spell {
 
+	private static final long serialVersionUID = 6514952889954557233L;
+
 	public static SpellDesc create() {
 		return create(null);
 	}

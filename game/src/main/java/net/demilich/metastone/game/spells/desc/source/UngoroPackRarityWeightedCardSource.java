@@ -14,6 +14,8 @@ import java.util.stream.Collectors;
  */
 public final class UngoroPackRarityWeightedCardSource extends CatalogueSource {
 
+	private static final long serialVersionUID = 9202564452226907923L;
+
 	public UngoroPackRarityWeightedCardSource(CardSourceDesc desc) {
 		super(desc);
 	}

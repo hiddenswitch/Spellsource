@@ -257,6 +257,8 @@ import static java.util.stream.Collectors.toList;
  */
 public class DiscoverSpell extends Spell {
 
+	private static final long serialVersionUID = 2753439189356097520L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

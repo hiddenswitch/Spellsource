@@ -8,6 +8,8 @@ import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
 public class ComparisonCondition extends Condition {
 
+	private static final long serialVersionUID = -2711356049702446578L;
+
 	public ComparisonCondition(ConditionDesc desc) {
 		super(desc);
 	}

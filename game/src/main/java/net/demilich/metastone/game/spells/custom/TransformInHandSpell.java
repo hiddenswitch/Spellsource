@@ -19,6 +19,7 @@ import org.slf4j.LoggerFactory;
 
 public class TransformInHandSpell extends Spell {
 
+	private static final long serialVersionUID = -1173242023413657201L;
 	private static Logger logger = LoggerFactory.getLogger(TransformInHandSpell.class);
 
 	@Override

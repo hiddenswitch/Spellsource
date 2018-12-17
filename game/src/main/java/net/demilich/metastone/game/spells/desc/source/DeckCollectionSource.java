@@ -12,6 +12,8 @@ import java.io.Serializable;
 
 public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects, HasWeights {
 
+	private static final long serialVersionUID = -1474824651592172573L;
+
 	public DeckCollectionSource(CardSourceDesc desc) {
 		super(desc);
 	}

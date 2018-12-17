@@ -11,6 +11,8 @@ import java.util.Map;
 @JsonDeserialize(using = EntityFilterDescDeserializer.class)
 public class EntityFilterDesc extends Desc<EntityFilterArg, EntityFilter> {
 
+	private static final long serialVersionUID = -3350671372356177673L;
+
 	public EntityFilterDesc() {
 		super(EntityFilterArg.class);
 	}

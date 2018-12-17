@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import java.util.Map;
 
 public class PreGameStartTrigger extends EventTrigger {
+	private static final long serialVersionUID = 6215994937201026809L;
+
 	public static EventTriggerDesc create(TargetPlayer targetPlayer) {
 		Map<EventTriggerArg, Object> arguments = new EventTriggerDesc(PreGameStartTrigger.class);
 		arguments.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);

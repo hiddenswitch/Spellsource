@@ -82,6 +82,7 @@ import java.util.*;
  * @see CardAura that temporarily makes one card behave like another
  */
 public class Aura extends Enchantment implements HasDesc<AuraDesc> {
+	private static final long serialVersionUID = 5812593735430978862L;
 	private EntityReference targets;
 	protected SpellDesc applyAuraEffect;
 	protected SpellDesc removeAuraEffect;

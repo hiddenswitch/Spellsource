@@ -13,6 +13,8 @@ import java.util.List;
 
 public class AttributeCondition extends Condition {
 
+	private static final long serialVersionUID = 6409827738081029567L;
+
 	public AttributeCondition(ConditionDesc desc) {
 		super(desc);
 	}

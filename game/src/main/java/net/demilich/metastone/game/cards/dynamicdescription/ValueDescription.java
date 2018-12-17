@@ -9,6 +9,8 @@ import net.demilich.metastone.game.cards.Card;
  * DynamicDescriptionArg#VALUE} to a string.
  */
 public class ValueDescription extends DynamicDescription {
+	private static final long serialVersionUID = 6369654519816303840L;
+
 	public ValueDescription(DynamicDescriptionDesc desc) {
 		super(desc);
 	}

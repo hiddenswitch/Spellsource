@@ -25,6 +25,7 @@ import org.slf4j.LoggerFactory;
  */
 public class ResurrectFromEntityStorageSpell extends Spell {
 
+	private static final long serialVersionUID = -4264435699830210139L;
 	private static Logger logger = LoggerFactory.getLogger(ResurrectFromEntityStorageSpell.class);
 
 	@Override

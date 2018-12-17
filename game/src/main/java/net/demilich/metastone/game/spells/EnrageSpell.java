@@ -33,6 +33,8 @@ import java.util.Map;
  */
 public class EnrageSpell extends Spell {
 
+	private static final long serialVersionUID = -1757166273471015244L;
+
 	/**
 	 * Creates this spell to increase the attack by {@code attackBonus} when the minion takes damage
 	 *

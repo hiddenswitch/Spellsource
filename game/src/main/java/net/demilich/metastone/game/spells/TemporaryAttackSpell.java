@@ -19,6 +19,7 @@ import java.util.Map;
  */
 public class TemporaryAttackSpell extends Spell {
 
+	private static final long serialVersionUID = -251070175012051977L;
 	private static Logger logger = LoggerFactory.getLogger(TemporaryAttackSpell.class);
 
 	public static SpellDesc create(EntityReference target, int attackBonus) {

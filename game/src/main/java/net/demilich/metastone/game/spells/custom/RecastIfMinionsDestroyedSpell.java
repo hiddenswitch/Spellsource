@@ -11,6 +11,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 
 public final class RecastIfMinionsDestroyedSpell extends RecastWhileSpell {
+	private static final long serialVersionUID = -3579213724053743786L;
+
 	private int getDestroyedMinionsCount(GameContext context) {
 		return (int) context.getPlayers().stream()
 				.flatMap(p -> p.getMinions().stream())

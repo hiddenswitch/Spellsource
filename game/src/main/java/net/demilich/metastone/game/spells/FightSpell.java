@@ -44,6 +44,7 @@ import java.util.List;
  */
 public class FightSpell extends Spell {
 
+	private static final long serialVersionUID = 2133264044113375467L;
 	private static Logger logger = LoggerFactory.getLogger(FightSpell.class);
 
 	@Override

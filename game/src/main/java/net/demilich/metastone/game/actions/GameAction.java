@@ -27,6 +27,7 @@ import java.util.List;
  * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
  */
 public abstract class GameAction implements Cloneable, Serializable, Notification {
+	private static final long serialVersionUID = 5443178276239058814L;
 	protected Integer chooseOneOptionIndex = null;
 	private int id = -1;
 	private TargetSelection targetRequirement = TargetSelection.NONE;

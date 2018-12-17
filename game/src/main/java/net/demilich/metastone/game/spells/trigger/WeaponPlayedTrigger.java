@@ -6,6 +6,8 @@ import net.demilich.metastone.game.events.WeaponEquippedEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class WeaponPlayedTrigger extends WeaponEquippedTrigger {
+	private static final long serialVersionUID = -5074573694880732758L;
+
 	public WeaponPlayedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

@@ -53,6 +53,8 @@ import java.util.*;
  * @see CardDesc for the class that is the base of the serialized representation of cards.
  */
 public class Card extends Entity implements HasChooseOneActions, HasDeathrattleEnchantments {
+
+	private static final long serialVersionUID = 8461956631062222231L;
 	private static Logger logger = LoggerFactory.getLogger(Card.class);
 
 	protected static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(

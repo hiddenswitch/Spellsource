@@ -5,6 +5,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class CardShuffledTrigger extends AbstractCardTrigger {
 
+	private static final long serialVersionUID = 1567471972199999006L;
+
 	public CardShuffledTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

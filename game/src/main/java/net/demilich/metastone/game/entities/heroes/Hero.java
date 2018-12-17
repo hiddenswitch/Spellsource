@@ -12,6 +12,7 @@ import java.util.EnumMap;
 import java.util.Map;
 
 public final class Hero extends Actor {
+	private static final long serialVersionUID = 2882459041704890994L;
 	private HeroClass heroClass;
 	private EntityZone<Card> heroPowerZone = new EntityZone<>(getOwner(), Zones.HERO_POWER);
 	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), Zones.WEAPON);

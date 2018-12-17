@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class LoseDivineShieldTrigger extends EventTrigger {
+	private static final long serialVersionUID = -7657694354911413519L;
+
 	public LoseDivineShieldTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
 public class CardRoastedEvent extends GameEvent implements HasCard {
+	private static final long serialVersionUID = 8655207013683400518L;
 	private Card card;
 
 	public CardRoastedEvent(GameContext context, Card card) {

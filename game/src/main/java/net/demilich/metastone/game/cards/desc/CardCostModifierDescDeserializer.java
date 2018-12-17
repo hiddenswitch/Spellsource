@@ -6,6 +6,8 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc
 
 public class CardCostModifierDescDeserializer extends DescDeserializer<CardCostModifierDesc, CardCostModifierArg, CardCostModifier> {
 
+	private static final long serialVersionUID = -2545996000346435269L;
+
 	public CardCostModifierDescDeserializer() {
 		super(CardCostModifierDesc.class);
 	}

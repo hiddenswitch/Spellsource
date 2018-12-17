@@ -5,6 +5,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.cards.Attribute;
 
 public class AttributeAppliedEvent extends GameEvent {
+	private static final long serialVersionUID = -5586083755231739074L;
 	private final Entity target;
 	private final Entity source;
 	private final Attribute attribute;

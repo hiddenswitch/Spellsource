@@ -10,6 +10,7 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -152,6 +153,12 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		}
 
 		return request;
+	}
+
+	public static DeckCreateRequest fromCardIds(HeroClass heroClass, String... cardIds) {
+		return new DeckCreateRequest()
+				.withCardIds(Arrays.asList(cardIds))
+				.withHeroClass(heroClass);
 	}
 
 	public String getUserId() {

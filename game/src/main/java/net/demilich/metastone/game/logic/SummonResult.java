@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class SummonResult implements AsyncResult<Boolean>, Serializable {
 	public final static SummonResult SUMMONED = new SummonResult(true);
 	public final static SummonResult NOT_SUMMONED = new SummonResult(false);
+	private static final long serialVersionUID = -8503062787991611212L;
 	private boolean summoned;
 
 	public SummonResult(boolean summoned) {

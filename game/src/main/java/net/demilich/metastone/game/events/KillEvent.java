@@ -5,6 +5,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public final class KillEvent extends GameEvent implements HasVictim {
 
+	private static final long serialVersionUID = 5318711810637114374L;
 	private final Entity victim;
 
 	public KillEvent(GameContext context, Entity victim) {

@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class DamagedFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 7550596241765068737L;
+
 	public DamagedFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

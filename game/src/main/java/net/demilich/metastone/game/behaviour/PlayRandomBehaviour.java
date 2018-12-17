@@ -16,6 +16,7 @@ import java.util.*;
  */
 public class PlayRandomBehaviour extends IntelligentBehaviour {
 
+	private static final long serialVersionUID = 1488797457447658550L;
 	private Random random = new Random();
 
 	public PlayRandomBehaviour() {

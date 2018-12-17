@@ -5,6 +5,8 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 
 public class OverloadedManaCrystalsCondition extends Condition {
+	private static final long serialVersionUID = 5804400860108090260L;
+
 	public OverloadedManaCrystalsCondition(ConditionDesc desc) {
 		super(desc);
 	}

@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public class DescSerializer extends StdSerializer<Desc> {
 
+	private static final long serialVersionUID = -6740666907899558371L;
+
 	public DescSerializer() {
 		super(Desc.class);
 	}

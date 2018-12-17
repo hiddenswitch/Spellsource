@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -12,9 +13,14 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.TargetType;
 
 /**
- * A trigger that fires
+ * A trigger that fires whenever a minion dies.
+ * <p>
+ * A dead minion hosting such a trigger will never trigger for itself, because the {@link KillEvent} this trigger
+ * listens to fires when the dead minion is already in the graveyard.
  */
 public final class MinionDeathTrigger extends EventTrigger {
+
+	private static final long serialVersionUID = -4433466832508878666L;
 
 	public MinionDeathTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -39,6 +45,10 @@ public final class MinionDeathTrigger extends EventTrigger {
 	protected boolean fire(GameEvent event, Entity host) {
 		KillEvent killEvent = (KillEvent) event;
 		if (killEvent.getVictim().getEntityType() != EntityType.MINION) {
+			return false;
+		}
+
+		if (killEvent.getVictim().hasAttribute(Attribute.PERMANENT)) {
 			return false;
 		}
 

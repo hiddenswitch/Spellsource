@@ -20,6 +20,8 @@ import java.util.Map;
  */
 public final class UnweightedCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
+	private static final long serialVersionUID = -7022665807760019566L;
+
 	public UnweightedCatalogueSource(CardSourceDesc desc) {
 		super(desc);
 	}

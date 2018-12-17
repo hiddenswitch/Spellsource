@@ -11,6 +11,8 @@ import net.demilich.metastone.game.environment.Environment;
  */
 public final class DestroyedThisSequenceValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 4352744741977684104L;
+
 	public DestroyedThisSequenceValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

@@ -11,6 +11,8 @@ import static java.util.stream.Collectors.toCollection;
 
 public class GraveyardCardsSource extends CardSource {
 
+	private static final long serialVersionUID = 26094514880108637L;
+
 	public GraveyardCardsSource(CardSourceDesc desc) {
 		super(desc);
 	}

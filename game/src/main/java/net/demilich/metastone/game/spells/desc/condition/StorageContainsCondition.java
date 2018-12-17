@@ -8,6 +8,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 
 public class StorageContainsCondition extends Condition {
+	private static final long serialVersionUID = 3011356726341830367L;
+
 	public StorageContainsCondition(ConditionDesc desc) {
 		super(desc);
 	}

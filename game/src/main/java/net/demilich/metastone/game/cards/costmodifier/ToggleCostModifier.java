@@ -17,6 +17,7 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
  */
 public final class ToggleCostModifier extends CardCostModifier {
 
+	private static final long serialVersionUID = -854012472659514422L;
 	private EventTrigger toggleOnTrigger;
 	private EventTrigger toggleOffTrigger;
 	private boolean ready;

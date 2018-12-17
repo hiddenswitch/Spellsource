@@ -32,6 +32,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class OrCondition extends Condition {
 
+	private static final long serialVersionUID = -2676433681810863626L;
+
 	public OrCondition(ConditionDesc desc) {
 		super(desc);
 	}
@@ -45,6 +47,10 @@ public class OrCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		Condition[] conditions = (Condition[]) desc.get(ConditionArg.CONDITIONS);
+		if (conditions == null) {
+			return false;
+		}
+
 		for (Condition condition : conditions) {
 			if (condition.isFulfilled(context, player, source, target)) {
 				return true;

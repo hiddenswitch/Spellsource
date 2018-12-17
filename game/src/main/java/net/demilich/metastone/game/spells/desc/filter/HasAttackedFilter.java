@@ -8,6 +8,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class HasAttackedFilter extends EntityFilter {
 
+	private static final long serialVersionUID = -2922857185012926725L;
+
 	public HasAttackedFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

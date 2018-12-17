@@ -12,6 +12,8 @@ import java.util.Map;
  * @param <V>
  */
 public abstract class BaseMap<K extends Enum<K>, V> extends EnumMap<K, V> {
+	private static final long serialVersionUID = 987684099582019849L;
+
 	public BaseMap(Class<K> keyType) {
 		// To support an enum map base, enable the super below
 		super(keyType);

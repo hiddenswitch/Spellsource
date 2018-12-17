@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class HasHeroPowerCondition extends Condition {
 
+	private static final long serialVersionUID = -5259955878093128572L;
+
 	public HasHeroPowerCondition(ConditionDesc desc) {
 		super(desc);
 	}

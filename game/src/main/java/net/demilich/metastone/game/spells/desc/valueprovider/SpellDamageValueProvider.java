@@ -7,6 +7,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class SpellDamageValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 3782364348052673862L;
+
 	public SpellDamageValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

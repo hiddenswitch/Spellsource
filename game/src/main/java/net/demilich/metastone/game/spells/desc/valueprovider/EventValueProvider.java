@@ -6,6 +6,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class EventValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = -1463172110398981250L;
+
 	public EventValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

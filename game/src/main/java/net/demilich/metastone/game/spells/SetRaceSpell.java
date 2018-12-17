@@ -28,6 +28,7 @@ import java.util.Map;
  * </pre>
  */
 public class SetRaceSpell extends Spell {
+	private static final long serialVersionUID = -1134503319664076337L;
 	private static Logger logger = LoggerFactory.getLogger(SetRaceSpell.class);
 
 	public static SpellDesc create(Race race) {

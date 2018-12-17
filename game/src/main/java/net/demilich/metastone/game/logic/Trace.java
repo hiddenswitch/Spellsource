@@ -1,10 +1,19 @@
 package net.demilich.metastone.game.logic;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.common.GameState;
 import com.hiddenswitch.spellsource.util.Serialization;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import org.jetbrains.annotations.Nullable;
 
@@ -29,20 +38,31 @@ import java.util.function.Consumer;
  * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
-	private static final long serialVersionUID = 1L;
-	private GameState startState;
+	private static final long serialVersionUID = 2L;
 	private long seed;
 	private int catalogueVersion;
+	private HeroClass[] heroClasses;
+	private String[][] deckCardIds;
+	private String deckFormatName;
+	private CardSet[] deckFormatSets;
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
 	private transient List<String> log = new ArrayList<>();
 
-	public void setStartState(GameState gameState) {
-		this.startState = gameState;
+	public Trace() {
 	}
 
-	public GameState getStartState() {
-		return startState;
+	@JsonIgnore
+	public void setStartState(GameState gameState) {
+		Player[] players = new Player[]{gameState.player1, gameState.player2};
+		deckFormatSets = gameState.deckFormat.getCardSets().toArray(CardSet[]::new);
+		deckFormatName = gameState.deckFormat.getName();
+		heroClasses = new HeroClass[2];
+		deckCardIds = new String[2][];
+		for (int i = 0; i < 2; i++) {
+			heroClasses[i] = players[i].getHero().getHeroClass();
+			deckCardIds[i] = players[i].getDeck().stream().map(Card::getCardId).toArray(String[]::new);
+		}
 	}
 
 	public void setSeed(long seed) {
@@ -65,6 +85,7 @@ public class Trace implements Serializable, Cloneable {
 		return actions;
 	}
 
+	@JsonIgnore
 	public void addAction(int actionId, GameAction action, GameContext context) {
 		actions.add(actionId);
 		if (context == null) {
@@ -74,10 +95,12 @@ public class Trace implements Serializable, Cloneable {
 		}
 	}
 
+	@JsonIgnore
 	public GameContext replayContext() {
 		return replayContext(false, null);
 	}
 
+	@JsonIgnore
 	public GameContext replayContext(boolean skipLastAction) {
 		return replayContext(skipLastAction, null);
 	}
@@ -90,11 +113,17 @@ public class Trace implements Serializable, Cloneable {
 	 * @param beforeRequestActionHandler
 	 * @return
 	 */
+	@JsonIgnore
 	public GameContext replayContext(boolean skipLastAction, @Nullable Consumer<GameContext> beforeRequestActionHandler) {
 		AtomicInteger nextAction = new AtomicInteger();
 		int originalCatalogueVersion = CardCatalogue.getVersion();
 		CardCatalogue.setVersion(1);
-		GameContext stateRestored = GameContext.fromState(startState);
+		GameContext stateRestored = new GameContext(
+				new Player(DeckCreateRequest.fromCardIds(heroClasses[0], deckCardIds[0]).withFormat(deckFormatName).toGameDeck(), "Player 0"),
+				new Player(DeckCreateRequest.fromCardIds(heroClasses[1], deckCardIds[1]).withFormat(deckFormatName).toGameDeck(), "Player 1"),
+				new GameLogic(),
+				new DeckFormat().withName(deckFormatName).withCardSets(deckFormatSets)
+		);
 		List<Integer> behaviourActions = actions;
 		if (skipLastAction) {
 			behaviourActions = behaviourActions.subList(0, behaviourActions.size() - 1);
@@ -117,11 +146,11 @@ public class Trace implements Serializable, Cloneable {
 	}
 
 	public String dump() {
-		return Serialization.serializeBase64(this);
+		return Json.encodePrettily(this);
 	}
 
 	public static Trace load(String trace) {
-		return (Trace) Serialization.deserializeBase64(trace);
+		return Json.decodeValue(trace, Trace.class);
 	}
 
 	public void setMulligans(int[][] mulligans) {
@@ -132,9 +161,6 @@ public class Trace implements Serializable, Cloneable {
 	public Trace clone() {
 		try {
 			Trace clone = (Trace) super.clone();
-			if (startState != null) {
-				clone.startState = startState.clone();
-			}
 			if (mulligans != null) {
 				int[][] mulliganCopy = new int[mulligans.length][];
 				for (int i = 0; i < mulligans.length; i++) {
@@ -149,7 +175,53 @@ public class Trace implements Serializable, Cloneable {
 		}
 	}
 
+	@JsonIgnore
 	public List<String> getLog() {
 		return log;
+	}
+
+	public HeroClass[] getHeroClasses() {
+		return heroClasses;
+	}
+
+	public Trace setHeroClasses(HeroClass[] heroClasses) {
+		this.heroClasses = heroClasses;
+		return this;
+	}
+
+	public String[][] getDeckCardIds() {
+		return deckCardIds;
+	}
+
+	public Trace setDeckCardIds(String[][] deckCardIds) {
+		this.deckCardIds = deckCardIds;
+		return this;
+	}
+
+	public String getDeckFormatName() {
+		return deckFormatName;
+	}
+
+	public Trace setDeckFormatName(String deckFormatName) {
+		this.deckFormatName = deckFormatName;
+		return this;
+	}
+
+	public CardSet[] getDeckFormatSets() {
+		return deckFormatSets;
+	}
+
+	public Trace setDeckFormatSets(CardSet[] deckFormatSets) {
+		this.deckFormatSets = deckFormatSets;
+		return this;
+	}
+
+	public int[][] getMulligans() {
+		return mulligans;
+	}
+
+	public Trace setActions(List<Integer> actions) {
+		this.actions = actions;
+		return this;
 	}
 }

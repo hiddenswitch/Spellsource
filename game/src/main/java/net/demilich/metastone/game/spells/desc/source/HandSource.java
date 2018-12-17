@@ -9,6 +9,8 @@ import java.util.Map;
 
 public class HandSource extends CardSource {
 
+	private static final long serialVersionUID = -3099619069960657609L;
+
 	public HandSource(CardSourceDesc desc) {
 		super(desc);
 	}

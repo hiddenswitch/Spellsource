@@ -9,6 +9,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Fired after a card is played.
  */
 public class AfterCardPlayedEvent extends GameEvent implements HasCard {
+	private static final long serialVersionUID = -8760168603506352250L;
 	private Card card;
 
 	public AfterCardPlayedEvent(GameContext context, int playerId, EntityReference cardReference) {

@@ -72,6 +72,7 @@ import java.util.Map;
  * @param <V>
  */
 public abstract class DescDeserializer<T extends Desc<K, V>, K extends Enum<K>, V extends HasDesc<T>> extends StdDeserializer<T> {
+	private static final long serialVersionUID = -4516457397454734009L;
 	private LinkedHashMap<K, ParseValueType> interpreter = new LinkedHashMap<>();
 
 	protected DescDeserializer(Class<? extends T> vc) {

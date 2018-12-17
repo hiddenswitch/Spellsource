@@ -26,6 +26,8 @@ import java.util.Map;
  * Use {@link #getCards(GameContext, Entity)} to get a list of cards associated with a specific {@code source} entity.
  */
 public final class EnvironmentEntityList implements EnvironmentValue, Serializable {
+	private static final long serialVersionUID = 5671103267512842652L;
+
 	/**
 	 * @param context
 	 * @return

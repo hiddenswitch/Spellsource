@@ -6,6 +6,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class AndCondition extends Condition {
 
+	private static final long serialVersionUID = 4953573929283846798L;
+
 	public AndCondition(ConditionDesc desc) {
 		super(desc);
 	}

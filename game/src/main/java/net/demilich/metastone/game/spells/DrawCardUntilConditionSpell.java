@@ -29,6 +29,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class DrawCardUntilConditionSpell extends Spell {
+	private static final long serialVersionUID = 2985499604446132040L;
 	private static Logger logger = LoggerFactory.getLogger(DrawCardUntilConditionSpell.class);
 
 	@Override

@@ -8,6 +8,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class UncollectibleCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
+	private static final long serialVersionUID = -7349830877929707754L;
+
 	public UncollectibleCatalogueSource(CardSourceDesc desc) {
 		super(desc);
 	}

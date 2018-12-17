@@ -27,6 +27,8 @@ import java.util.List;
  */
 public final class CopyCardEnchantmentsSpell extends Spell {
 
+	private static final long serialVersionUID = -3108264541819827881L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

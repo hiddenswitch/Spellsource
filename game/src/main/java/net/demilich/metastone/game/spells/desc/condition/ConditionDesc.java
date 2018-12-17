@@ -11,6 +11,8 @@ import java.util.Map;
 @JsonDeserialize(using = ConditionDescDeserializer.class)
 public class ConditionDesc extends Desc<ConditionArg, Condition> {
 
+	private static final long serialVersionUID = -4203147544388575073L;
+
 	public ConditionDesc() {
 		super(ConditionArg.class);
 	}

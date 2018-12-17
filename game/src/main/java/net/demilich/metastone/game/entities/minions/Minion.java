@@ -8,6 +8,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public final class Minion extends Actor {
 
+	private static final long serialVersionUID = -8521639974584185403L;
+
 	public Minion(Card sourceCard) {
 		super(sourceCard);
 		Race race = sourceCard.hasAttribute(Attribute.RACE) ? (Race) sourceCard.getAttribute(Attribute.RACE) : Race.NONE;

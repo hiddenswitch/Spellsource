@@ -38,6 +38,7 @@ import java.io.Serializable;
  * 		GameState} (a {@link GameState} stores all the data/model that is needed to reconstruct a {@link GameContext}.
  */
 public final class EntityLocation implements Serializable {
+	private static final long serialVersionUID = 882493394434335328L;
 	/**
 	 * An unassigned location.
 	 */

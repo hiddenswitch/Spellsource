@@ -10,6 +10,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * An action that corresponds to playing a weapon card from the hand.
  */
 public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry {
+	private static final long serialVersionUID = 1021615252322246886L;
 	private BattlecryAction battlecry;
 
 	private PlayWeaponCardAction() {

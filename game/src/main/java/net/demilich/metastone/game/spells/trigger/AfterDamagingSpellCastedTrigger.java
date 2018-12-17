@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class AfterDamagingSpellCastedTrigger extends AfterSpellCastedTrigger {
 
+	private static final long serialVersionUID = 1717670256169762792L;
+
 	public AfterDamagingSpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

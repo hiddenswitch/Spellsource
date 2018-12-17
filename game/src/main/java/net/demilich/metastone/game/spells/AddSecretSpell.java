@@ -20,6 +20,7 @@ import java.util.Map;
  * If the secret is a card, use {@link CastCardsSpell}.
  */
 public class AddSecretSpell extends Spell {
+	private static final long serialVersionUID = -6050568896647837270L;
 	private static Logger logger = LoggerFactory.getLogger(AddSecretSpell.class);
 
 	public static SpellDesc create(Secret secret) {

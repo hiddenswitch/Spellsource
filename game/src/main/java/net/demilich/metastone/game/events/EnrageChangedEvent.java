@@ -5,6 +5,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class EnrageChangedEvent extends GameEvent {
 
+	private static final long serialVersionUID = 8840772747072039333L;
 	private final Entity target;
 
 	public EnrageChangedEvent(GameContext context, Entity target) {

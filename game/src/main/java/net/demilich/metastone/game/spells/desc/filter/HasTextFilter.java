@@ -6,6 +6,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class HasTextFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 3898265501148881881L;
+
 	public HasTextFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

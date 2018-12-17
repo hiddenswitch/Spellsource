@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 
 public class OwnedByPlayerFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 2656311284649075826L;
+
 	public OwnedByPlayerFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

@@ -13,6 +13,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
 
+	private static final long serialVersionUID = 1040692065372242047L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

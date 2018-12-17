@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class SpellCastedTrigger extends AbstractCardTrigger {
 
+	private static final long serialVersionUID = -8272322956060496736L;
+
 	public SpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);
 		this.getDesc().put(EventTriggerArg.CARD_TYPE, CardType.SPELL);

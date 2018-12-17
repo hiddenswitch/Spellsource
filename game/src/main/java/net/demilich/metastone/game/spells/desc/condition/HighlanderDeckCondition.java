@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class HighlanderDeckCondition extends Condition {
 
+	private static final long serialVersionUID = -10295782074838303L;
+
 	public HighlanderDeckCondition(ConditionDesc desc) {
 		super(desc);
 	}

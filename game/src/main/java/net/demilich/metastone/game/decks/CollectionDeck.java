@@ -9,6 +9,7 @@ import java.io.Serializable;
  */
 public final class CollectionDeck implements Serializable, Cloneable, Deck {
 
+	private static final long serialVersionUID = -2966752971975044125L;
 	private final String deckId;
 
 	public CollectionDeck(@NotNull String deckId) {

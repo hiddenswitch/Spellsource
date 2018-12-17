@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 public class DeckContainsCondition extends Condition {
 
+	private static final long serialVersionUID = -3897795367926658401L;
+
 	public DeckContainsCondition(ConditionDesc desc) {
 		super(desc);
 	}

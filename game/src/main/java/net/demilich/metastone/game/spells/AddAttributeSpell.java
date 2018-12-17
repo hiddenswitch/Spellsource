@@ -43,6 +43,7 @@ import java.util.Map;
  */
 public class AddAttributeSpell extends RevertableSpell {
 
+	private static final long serialVersionUID = 3397433932916602791L;
 	private static Logger logger = LoggerFactory.getLogger(AddAttributeSpell.class);
 
 	/**

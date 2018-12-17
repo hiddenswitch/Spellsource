@@ -7,6 +7,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class HeroPowerDamageValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = -4579996065097758130L;
+
 	public HeroPowerDamageValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

@@ -19,6 +19,8 @@ import java.util.Map;
  * Implements Impale.
  */
 public final class DamageOppositeMinionsSpell extends Spell {
+	private static final long serialVersionUID = 5484859234716083393L;
+
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(DamageAdjacentMinionsSpell.class);
 		return new SpellDesc(arguments);

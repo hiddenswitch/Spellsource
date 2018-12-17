@@ -18,6 +18,7 @@ import org.slf4j.LoggerFactory;
  */
 public class TriggerSecretSpell extends Spell {
 
+	private static final long serialVersionUID = 7437795153420236815L;
 	private static Logger logger = LoggerFactory.getLogger(TriggerSecretSpell.class);
 
 	@Override

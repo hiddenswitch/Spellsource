@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class AndFilter extends EntityFilter {
 
+	private static final long serialVersionUID = -8300466037168898017L;
+
 	public static AndFilter create() {
 		return new AndFilter(new EntityFilterDesc(AndFilter.class));
 	}

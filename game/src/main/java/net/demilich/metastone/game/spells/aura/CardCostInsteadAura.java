@@ -126,6 +126,8 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class CardCostInsteadAura extends Aura {
 
+	private static final long serialVersionUID = 1034258949334753819L;
+
 	public CardCostInsteadAura(AuraDesc desc) {
 		super(desc);
 		this.applyAuraEffect = NullSpell.create();

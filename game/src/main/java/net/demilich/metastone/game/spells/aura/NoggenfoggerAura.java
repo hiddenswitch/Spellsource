@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class NoggenfoggerAura extends Aura {
 
+	private static final long serialVersionUID = 5170273983944142383L;
+
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(new TargetAcquisitionTrigger(), null, NullSpell.create());
 		setDesc(desc);

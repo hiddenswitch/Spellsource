@@ -24,6 +24,8 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public final class RoastSpell extends RemoveCardSpell {
 
+	private static final long serialVersionUID = -848997767053235451L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

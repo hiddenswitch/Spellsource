@@ -12,6 +12,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Hero, boolean)}. Since it is played from the hand, battlecries are resolved.
  */
 public class PlayHeroCardAction extends PlayCardAction implements HasBattlecry {
+	private static final long serialVersionUID = 6087078279759236886L;
 	protected BattlecryAction battlecry;
 
 	public PlayHeroCardAction(EntityReference card) {

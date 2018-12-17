@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class HasEffectsFilter extends EntityFilter {
 
+	private static final long serialVersionUID = -3223701000322600092L;
+
 	public HasEffectsFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

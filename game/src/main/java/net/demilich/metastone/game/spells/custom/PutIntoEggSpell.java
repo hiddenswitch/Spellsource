@@ -18,6 +18,8 @@ import net.demilich.metastone.game.targeting.Zones;
  */
 public final class PutIntoEggSpell extends RevealCardSpell {
 
+	private static final long serialVersionUID = -2456546227941177936L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

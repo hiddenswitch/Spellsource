@@ -73,6 +73,7 @@ import java.util.Map;
  */
 public class BuffSpell extends Spell {
 
+	private static final long serialVersionUID = 511356236946623460L;
 	private static Logger logger = LoggerFactory.getLogger(BuffSpell.class);
 
 	public static SpellDesc create(EntityReference target, int value) {

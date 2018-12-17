@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 
 public final class SecretsContainsFilter extends ZoneContainsFilter {
 
+	private static final long serialVersionUID = 7120852704677447407L;
+
 	public SecretsContainsFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

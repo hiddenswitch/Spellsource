@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EventTargetMatchesReferenceCondition extends Condition {
-    public EventTargetMatchesReferenceCondition(ConditionDesc desc) {
+	private static final long serialVersionUID = 915981180961264727L;
+
+	public EventTargetMatchesReferenceCondition(ConditionDesc desc) {
         super(desc);
     }
 

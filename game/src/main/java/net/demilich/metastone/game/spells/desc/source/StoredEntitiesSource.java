@@ -27,6 +27,7 @@ import org.slf4j.LoggerFactory;
  */
 public class StoredEntitiesSource extends CardSource {
 
+	private static final long serialVersionUID = -5501246962436980970L;
 	private static Logger logger = LoggerFactory.getLogger(StoredEntitiesSource.class);
 
 	public StoredEntitiesSource(CardSourceDesc desc) {

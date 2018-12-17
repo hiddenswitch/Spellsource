@@ -8,6 +8,8 @@ import java.util.Map;
 
 public class AlgebraicValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = -371695960535667981L;
+
 	public static AlgebraicValueProvider create(Object value1, Object value2, AlgebraicOperation operation) {
 		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AlgebraicValueProvider.class);
 		if (value1 != null) {

@@ -17,6 +17,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public abstract class RevertableSpell extends Spell {
 
+	private static final long serialVersionUID = 923812135596564345L;
+
 	protected abstract SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target);
 
 	@Override

@@ -18,6 +18,8 @@ import java.util.List;
 
 public class ActivateTriggeredEffectSpell extends Spell {
 
+	private static final long serialVersionUID = -8533040224148404361L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

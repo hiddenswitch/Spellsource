@@ -20,6 +20,7 @@ import java.util.List;
  */
 public class DestroyAllExceptOneSpell extends DestroySpell {
 
+	private static final long serialVersionUID = 4256458671557332269L;
 	public static Logger logger = LoggerFactory.getLogger(DestroyAllExceptOneSpell.class);
 
 	@Override

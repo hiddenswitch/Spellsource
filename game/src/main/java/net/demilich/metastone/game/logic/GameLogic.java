@@ -67,6 +67,7 @@ import static java.util.stream.Collectors.toList;
  */
 public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public static final int END_OF_SEQUENCE_MAX_DEPTH = 14;
+	private static final long serialVersionUID = -8396086447346717917L;
 	protected static Logger logger = LoggerFactory.getLogger(GameLogic.class);
 	/**
 	 * The maximum number of {@link Minion} entities that can be on a {@link Zones#BATTLEFIELD}.
@@ -976,7 +977,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// This removes the hero power enchantments too
 		removeCard(previousHero.getHeroPower());
 		previousHero.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
-		player.setHero(hero);
+		hero.moveOrAddTo(context, Zones.HERO);
 		hero.modifyArmor(previousArmor);
 		final int armorChange = hero.getArmor() - previousArmor;
 		if (armorChange != 0) {

@@ -17,6 +17,7 @@ import java.util.List;
  */
 public class EndTurnAction extends GameAction {
 
+	private static final long serialVersionUID = 7653060210383263082L;
 	private int playerId;
 
 	public EndTurnAction(int playerId) {

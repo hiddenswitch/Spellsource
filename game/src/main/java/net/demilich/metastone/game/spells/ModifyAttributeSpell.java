@@ -19,6 +19,8 @@ import java.util.Map;
  * specified on the target.
  */
 public class ModifyAttributeSpell extends RevertableSpell {
+	private static final long serialVersionUID = 9168584452915820895L;
+
 	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);

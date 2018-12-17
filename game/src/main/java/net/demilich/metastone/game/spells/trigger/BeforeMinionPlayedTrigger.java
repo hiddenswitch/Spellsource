@@ -6,6 +6,8 @@ import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class BeforeMinionPlayedTrigger extends BeforeMinionSummonedTrigger {
+	private static final long serialVersionUID = -9020340587608563445L;
+
 	public BeforeMinionPlayedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

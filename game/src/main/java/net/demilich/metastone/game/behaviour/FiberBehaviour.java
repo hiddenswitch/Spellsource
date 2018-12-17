@@ -21,6 +21,7 @@ import java.util.List;
  * The underlying implementation relies on channels.
  */
 public class FiberBehaviour extends UtilityBehaviour {
+	private static final long serialVersionUID = 8044710047923953255L;
 	private QueueChannel<GameAction> requestActionResult = new QueueObjectChannel<>(new SingleConsumerLinkedObjectQueue<>(), Channels.OverflowPolicy.THROW, true, true);
 	private QueueChannel<List<Card>> mulliganResult = new QueueObjectChannel<>(new SingleConsumerLinkedObjectQueue<>(), Channels.OverflowPolicy.THROW, true, true);
 	private List<Card> mulliganCards = new ArrayList<>();

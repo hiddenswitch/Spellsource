@@ -10,6 +10,8 @@ import net.demilich.metastone.game.cards.Attribute;
 @Deprecated
 public class DeadMinionsThisTurn extends ValueProvider {
 
+	private static final long serialVersionUID = 3932412761497889433L;
+
 	public DeadMinionsThisTurn(ValueProviderDesc desc) {
 		super(desc);
 	}
