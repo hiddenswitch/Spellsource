@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Whenever a friendly minion takes damage, deal 1 damage to a random enemy.",
+  "description": "Whenever a friendly minion takes damage, deal 1 damage to a random enemy (up to 14).",
   "triggers": [
     {
       "eventTrigger": {
