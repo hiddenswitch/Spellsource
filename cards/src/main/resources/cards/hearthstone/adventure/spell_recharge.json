@@ -9,7 +9,7 @@
   "spell": {
     "class": "RefreshManaSpell"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "BLIZZARD_ADVENTURE",
   "fileFormatVersion": 1
 }
