@@ -21,6 +21,8 @@ import java.util.List;
  */
 public class ResurrectFromBothSpell extends Spell {
 
+	private static final long serialVersionUID = -982542671194765325L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

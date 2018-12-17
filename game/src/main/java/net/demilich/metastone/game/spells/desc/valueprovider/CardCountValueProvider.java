@@ -13,6 +13,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class CardCountValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 4610333040478416931L;
+
 	public CardCountValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

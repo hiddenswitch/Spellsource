@@ -12,6 +12,7 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public final class Weapon extends Actor {
 
+	private static final long serialVersionUID = 170429709694158103L;
 	private boolean active;
 	private SpellDesc onEquip;
 	private SpellDesc onUnequip;

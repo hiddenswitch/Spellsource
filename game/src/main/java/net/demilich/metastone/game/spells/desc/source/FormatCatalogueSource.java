@@ -9,6 +9,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class FormatCatalogueSource extends CardSource implements HasCardCreationSideEffects {
 
+	private static final long serialVersionUID = 9172516756717969859L;
+
 	public FormatCatalogueSource(CardSourceDesc desc) {
 		super(desc);
 	}

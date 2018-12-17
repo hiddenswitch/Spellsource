@@ -17,6 +17,8 @@ import java.util.List;
  */
 public class UpgradeHeroPowerSpell extends ChangeHeroPowerSpell {
 
+	private static final long serialVersionUID = -5631065046018680145L;
+
 	@Override
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {

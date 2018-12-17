@@ -69,6 +69,7 @@ import java.util.Map;
  */
 public class AddDeathrattleSpell extends Spell {
 
+	private static final long serialVersionUID = 7483406812305201616L;
 	private static Logger logger = LoggerFactory.getLogger(AddDeathrattleSpell.class);
 
 	/**

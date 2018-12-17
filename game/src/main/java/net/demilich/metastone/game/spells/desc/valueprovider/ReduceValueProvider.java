@@ -20,6 +20,7 @@ import java.util.Map;
  */
 public class ReduceValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 4258062052510351787L;
 	private static Logger logger = LoggerFactory.getLogger(ReduceValueProvider.class);
 
 	public ReduceValueProvider(ValueProviderDesc desc) {

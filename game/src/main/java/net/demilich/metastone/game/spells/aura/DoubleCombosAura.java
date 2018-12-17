@@ -6,7 +6,9 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
 public class DoubleCombosAura extends Aura {
 
-    public DoubleCombosAura(AuraDesc desc) {
+	private static final long serialVersionUID = 7936616385081221393L;
+
+	public DoubleCombosAura(AuraDesc desc) {
         super(desc);
         this.triggers.add(new WillEndSequenceTrigger());
         applyAuraEffect = NullSpell.create();

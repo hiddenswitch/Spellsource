@@ -10,6 +10,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class PlayerAttributeValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = -8729832975751525714L;
+
 	public PlayerAttributeValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

@@ -17,6 +17,8 @@ import java.util.Map;
  */
 public class MultiTargetSpell extends Spell {
 
+	private static final long serialVersionUID = -5446739265813296502L;
+
 	public static SpellDesc create(int targets) {
 		Map<SpellArg, Object> arguments = new SpellDesc(MultiTargetSpell.class);
 		arguments.put(SpellArg.VALUE, targets);

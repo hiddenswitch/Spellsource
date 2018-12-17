@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class LoseDeflectTrigger extends EventTrigger {
+	private static final long serialVersionUID = 4164207077869877017L;
+
 	public LoseDeflectTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

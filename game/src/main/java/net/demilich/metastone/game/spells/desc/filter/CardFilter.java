@@ -16,6 +16,8 @@ import java.util.List;
 
 public final class CardFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 2808684538827589497L;
+
 	public CardFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

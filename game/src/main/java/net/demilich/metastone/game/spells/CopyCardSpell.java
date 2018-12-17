@@ -36,6 +36,7 @@ import java.util.function.BiConsumer;
  */
 public class CopyCardSpell extends Spell {
 
+	private static final long serialVersionUID = -90518141141308639L;
 	private static Logger logger = LoggerFactory.getLogger(CopyCardSpell.class);
 
 	public static SpellDesc create(Card card) {

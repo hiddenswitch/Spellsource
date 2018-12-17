@@ -29,6 +29,8 @@ import java.util.Arrays;
  */
 public final class ShuffleWithCardCostModifierSpell extends CardCostModifierSpell {
 
+	private static final long serialVersionUID = 3568823925493592669L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

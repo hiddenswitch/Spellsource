@@ -24,6 +24,7 @@ import java.util.List;
 public final class CastOnEntitiesInStorageSpell extends Spell {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CastOnEntitiesInStorageSpell.class);
+	private static final long serialVersionUID = -8246620129492610476L;
 
 	@Override
 	@Suspendable

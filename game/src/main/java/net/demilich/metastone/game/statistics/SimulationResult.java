@@ -11,6 +11,7 @@ import java.io.Serializable;
  * @see #SimulationResult(GameContext) for the method to create a simulation result from a single game.
  */
 public class SimulationResult implements Cloneable, Serializable {
+	private static final long serialVersionUID = -4060954516017134121L;
 	private final GameStatistics player1Stats = new GameStatistics();
 	private final GameStatistics player2Stats = new GameStatistics();
 	private final long startTimestamp;

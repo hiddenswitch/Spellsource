@@ -31,6 +31,7 @@ import java.util.List;
  */
 public class DiscoverAction extends GameAction {
 
+	private static final long serialVersionUID = -8647736519968337505L;
 	private SpellDesc spell;
 	private Card card;
 

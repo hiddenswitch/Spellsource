@@ -35,6 +35,8 @@ import net.demilich.metastone.game.spells.GameValue;
  * @see net.demilich.metastone.game.spells.MetaSpell for a complete description on how to use this value provider.
  */
 public class GameValueProvider extends ValueProvider {
+	private static final long serialVersionUID = 5280402178801132371L;
+
 	public GameValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

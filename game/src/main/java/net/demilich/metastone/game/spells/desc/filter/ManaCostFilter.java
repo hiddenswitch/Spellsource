@@ -10,6 +10,8 @@ import java.util.Map;
 
 public class ManaCostFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 3107071217913251106L;
+
 	public static ManaCostFilter create(int manaCost, ComparisonOperation operation) {
 		Map<EntityFilterArg, Object> arguments = new EntityFilterDesc(ManaCostFilter.class);
 		arguments.put(EntityFilterArg.VALUE, manaCost);

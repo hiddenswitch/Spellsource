@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 
 public class StorageContainsFilter extends EntityFilter {
 
+	private static final long serialVersionUID = 4866110707658167389L;
+
 	public StorageContainsFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

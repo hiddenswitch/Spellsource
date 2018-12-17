@@ -31,6 +31,7 @@ import java.util.Map;
 public final class DiscoverDiscardSpell extends Spell {
 
 	public static final int ALL_CARDS = -1;
+	private static final long serialVersionUID = 7761023925302834014L;
 
 	public static SpellDesc create() {
 		return create(1);

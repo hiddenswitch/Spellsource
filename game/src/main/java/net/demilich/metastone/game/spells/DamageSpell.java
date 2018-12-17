@@ -97,6 +97,7 @@ import java.util.function.Predicate;
  * @see MissilesSpell to fire random missiles that calculate spell damage correctly.
  */
 public class DamageSpell extends Spell {
+	private static final long serialVersionUID = -2417324262263818848L;
 	private static Logger logger = LoggerFactory.getLogger(DamageSpell.class);
 
 	public static SpellDesc create(EntityReference target, int damage) {

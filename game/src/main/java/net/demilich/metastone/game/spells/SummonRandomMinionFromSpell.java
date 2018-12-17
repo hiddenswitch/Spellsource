@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 @Deprecated
 public class SummonRandomMinionFromSpell extends Spell {
 
+	private static final long serialVersionUID = -6365918609207426404L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

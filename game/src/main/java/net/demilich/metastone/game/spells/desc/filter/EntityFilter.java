@@ -16,6 +16,7 @@ import java.util.function.Predicate;
  * Filters {@link Entity} objects using its {@link #test(GameContext, Player, Entity, Entity)} implementation.
  */
 public abstract class EntityFilter implements Serializable, HasDesc<EntityFilterDesc> {
+	private static final long serialVersionUID = 2622900520492364594L;
 	private EntityFilterDesc desc;
 
 	@Override

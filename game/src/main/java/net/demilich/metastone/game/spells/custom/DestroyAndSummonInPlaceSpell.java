@@ -22,6 +22,8 @@ import static java.util.stream.Collectors.toMap;
  */
 public final class DestroyAndSummonInPlaceSpell extends SummonSpell {
 
+	private static final long serialVersionUID = -6135211297341497238L;
+
 	@Override
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {

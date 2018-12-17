@@ -18,6 +18,8 @@ import java.util.Map;
  */
 public class RandomlyCastSpell extends Spell {
 
+	private static final long serialVersionUID = 2861382473990547002L;
+
 	public static SpellDesc create(EntityReference target, SpellDesc... spells) {
 		Map<SpellArg, Object> arguments = new SpellDesc(RandomlyCastSpell.class);
 		arguments.put(SpellArg.SPELLS, spells);

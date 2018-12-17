@@ -9,6 +9,8 @@ import java.util.List;
 
 public class IsDeadCondition extends Condition {
 
+	private static final long serialVersionUID = -8552717175155591475L;
+
 	public IsDeadCondition(ConditionDesc desc) {
 		super(desc);
 	}

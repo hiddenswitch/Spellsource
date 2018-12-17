@@ -58,6 +58,7 @@ import java.util.Map;
  */
 public class CardCostModifierSpell extends Spell {
 
+	private static final long serialVersionUID = 4190470543205464557L;
 	private static Logger logger = LoggerFactory.getLogger(CardCostModifierSpell.class);
 
 	/**

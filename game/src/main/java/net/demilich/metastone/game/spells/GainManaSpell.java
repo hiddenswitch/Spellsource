@@ -27,6 +27,7 @@ import java.util.Map;
  */
 public class GainManaSpell extends Spell {
 
+	private static final long serialVersionUID = 2611587356191417133L;
 	private static Logger logger = LoggerFactory.getLogger(GainManaSpell.class);
 
 	/**

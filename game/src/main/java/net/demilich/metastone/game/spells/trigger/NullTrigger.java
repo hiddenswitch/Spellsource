@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class NullTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -6351160508914235798L;
+
 	public NullTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

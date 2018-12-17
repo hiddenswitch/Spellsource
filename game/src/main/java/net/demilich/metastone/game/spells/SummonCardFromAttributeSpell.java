@@ -27,6 +27,8 @@ import java.util.Map;
  * Implements Sourcing Specialist.
  */
 public class SummonCardFromAttributeSpell extends Spell {
+	private static final long serialVersionUID = 8918368074977462745L;
+
 	public static SpellDesc create(Attribute attributeContainingCardId, String defaultCardId, EntityReference target) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SummonCardFromAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, attributeContainingCardId);

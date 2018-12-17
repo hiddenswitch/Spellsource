@@ -11,6 +11,8 @@ import java.util.LinkedHashMap;
  */
 public class EnvironmentMap<K extends Serializable, E extends Serializable> extends LinkedHashMap<K, E> implements EnvironmentValue, Serializable {
 
+	private static final long serialVersionUID = -5110163256507335773L;
+
 	@Override
 	public EnvironmentValue getCopy() {
 		EnvironmentMap<K, E> copy = new EnvironmentMap<>();

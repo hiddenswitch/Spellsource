@@ -6,6 +6,8 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
 
 public class EntityFilterDescDeserializer extends DescDeserializer<EntityFilterDesc, EntityFilterArg, EntityFilter> {
 
+	private static final long serialVersionUID = -8939584616425582903L;
+
 	public EntityFilterDescDeserializer() {
 		super(EntityFilterDesc.class);
 	}

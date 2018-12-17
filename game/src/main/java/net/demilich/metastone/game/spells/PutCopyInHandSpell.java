@@ -26,6 +26,8 @@ import java.util.Map;
  */
 public class PutCopyInHandSpell extends Spell {
 
+	private static final long serialVersionUID = 4526492129699843338L;
+
 	public static SpellDesc create() {
 		return create(1);
 	}

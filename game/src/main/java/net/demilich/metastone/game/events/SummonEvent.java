@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class SummonEvent extends GameEvent implements HasCard {
 
+	private static final long serialVersionUID = 4286581269318974893L;
 	private final Actor minion;
 	private final Card source;
 

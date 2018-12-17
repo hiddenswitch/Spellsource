@@ -27,6 +27,7 @@ import static net.demilich.metastone.game.spells.SpellUtils.determineCastingPlay
 
 public class RepeatAllOtherBattlecriesSpell extends Spell {
 
+	private static final long serialVersionUID = 3931319928189471149L;
 	private static Logger logger = LoggerFactory.getLogger(RepeatAllOtherBattlecriesSpell.class);
 
 	@Override

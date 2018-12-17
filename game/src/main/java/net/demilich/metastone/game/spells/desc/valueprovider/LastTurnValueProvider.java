@@ -12,6 +12,8 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class LastTurnValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 2107310292941476779L;
+
 	public LastTurnValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

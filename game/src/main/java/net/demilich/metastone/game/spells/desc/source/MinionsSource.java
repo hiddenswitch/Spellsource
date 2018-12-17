@@ -11,6 +11,8 @@ import java.util.stream.Collectors;
 
 public final class MinionsSource extends CardSource implements HasCardCreationSideEffects {
 
+	private static final long serialVersionUID = -20746640218603898L;
+
 	public MinionsSource(CardSourceDesc desc) {
 		super(desc);
 	}

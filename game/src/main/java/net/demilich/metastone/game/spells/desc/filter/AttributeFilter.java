@@ -14,6 +14,8 @@ import java.util.List;
 
 public class AttributeFilter extends EntityFilter {
 
+	private static final long serialVersionUID = -1440224900131070373L;
+
 	public AttributeFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

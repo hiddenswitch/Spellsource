@@ -7,6 +7,8 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 
 public class CombinedSource extends CardSource {
+	private static final long serialVersionUID = 8946559553873199201L;
+
 	public CombinedSource(CardSourceDesc desc) {
 		super(desc);
 	}

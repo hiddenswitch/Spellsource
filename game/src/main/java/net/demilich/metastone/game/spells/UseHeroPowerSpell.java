@@ -13,6 +13,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class UseHeroPowerSpell extends Spell {
 
+	private static final long serialVersionUID = -5009064517464973846L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

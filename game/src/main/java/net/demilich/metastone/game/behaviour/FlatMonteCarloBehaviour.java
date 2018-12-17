@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
  * A behaviour which randomly samples the game tree seeking sequences of actions that terminate in wins.
  */
 public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
+	private static final long serialVersionUID = 4287651170838861856L;
+
 	private static class ScoredAction {
 		protected GameAction action;
 		protected double score;

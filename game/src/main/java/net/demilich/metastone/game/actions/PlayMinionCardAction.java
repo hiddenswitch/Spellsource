@@ -29,6 +29,7 @@ import java.util.Collection;
  */
 public final class PlayMinionCardAction extends PlayCardAction implements HasBattlecry {
 
+	private static final long serialVersionUID = -2214280767998804432L;
 	private BattlecryAction battlecry;
 
 	private PlayMinionCardAction() {

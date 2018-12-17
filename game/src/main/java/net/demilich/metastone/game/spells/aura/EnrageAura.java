@@ -43,6 +43,7 @@ import java.util.List;
 @Deprecated
 public final class EnrageAura extends Aura {
 
+	private static final long serialVersionUID = -876469984762550754L;
 	private boolean active;
 
 	public EnrageAura(AuraDesc desc) {

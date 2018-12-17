@@ -16,6 +16,8 @@ import java.io.Serializable;
  * The core function is {@link #isFulfilled(GameContext, Player, Entity, Entity)}.
  */
 public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
+
+	private static final long serialVersionUID = 7229995823131113403L;
 	private ConditionDesc desc;
 
 	public Condition(ConditionDesc desc) {

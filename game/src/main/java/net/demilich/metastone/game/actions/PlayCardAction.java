@@ -34,6 +34,7 @@ import java.util.List;
  */
 public abstract class PlayCardAction extends GameAction {
 
+	private static final long serialVersionUID = 2741261009665707168L;
 	public static Logger logger = LoggerFactory.getLogger(PlayCardAction.class);
 
 	protected PlayCardAction() {

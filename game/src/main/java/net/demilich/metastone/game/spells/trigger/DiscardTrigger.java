@@ -13,6 +13,8 @@ import java.util.List;
 
 public class DiscardTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = 6680612627450644174L;
+
 	public DiscardTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

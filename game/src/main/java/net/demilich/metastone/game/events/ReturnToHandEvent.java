@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.Entity;
  */
 public final class ReturnToHandEvent extends GameEvent implements HasCard {
 
+	private static final long serialVersionUID = -6731150026791817283L;
 	private final Card card;
 	private final Entity originalTarget;
 

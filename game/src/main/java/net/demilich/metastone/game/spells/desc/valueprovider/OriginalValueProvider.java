@@ -10,6 +10,8 @@ import net.demilich.metastone.game.entities.Entity;
  */
 public class OriginalValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 7016462157285705179L;
+
 	public static ValueProviderDesc create(Object originalValue) {
 		if (!(originalValue instanceof Integer || originalValue instanceof ValueProviderArg)) {
 			throw new UnsupportedOperationException("Cannot retrieve an original value of the wrong type.");

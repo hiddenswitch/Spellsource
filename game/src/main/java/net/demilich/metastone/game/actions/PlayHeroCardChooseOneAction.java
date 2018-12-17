@@ -9,6 +9,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class PlayHeroCardChooseOneAction extends PlayHeroCardAction {
 
+	private static final long serialVersionUID = 6383778751228632146L;
+
 	public PlayHeroCardChooseOneAction(Card heroCard, EntityReference entityReference) {
 		super(entityReference);
 	}

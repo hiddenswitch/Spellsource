@@ -128,6 +128,7 @@ import java.util.Map;
  */
 public class ReceiveCardSpell extends Spell {
 
+	private static final long serialVersionUID = 5804948219483721967L;
 	private static Logger logger = LoggerFactory.getLogger(ReceiveCardSpell.class);
 
 	@Override

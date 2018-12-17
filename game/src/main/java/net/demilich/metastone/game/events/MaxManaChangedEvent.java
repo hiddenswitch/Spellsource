@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
 public class MaxManaChangedEvent extends GameEvent implements HasValue {
+	private static final long serialVersionUID = 1824408223964580791L;
 	private final int change;
 
 	public MaxManaChangedEvent(GameContext context, int playerId, int change) {

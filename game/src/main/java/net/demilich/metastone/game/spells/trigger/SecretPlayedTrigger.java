@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
  */
 public class SecretPlayedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = 8041165572530670391L;
+
 	public SecretPlayedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

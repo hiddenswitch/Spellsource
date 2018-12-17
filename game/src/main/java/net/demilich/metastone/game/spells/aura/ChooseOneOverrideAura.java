@@ -32,6 +32,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * 		implementing this effect.
  */
 public class ChooseOneOverrideAura extends Aura {
+	private static final long serialVersionUID = -6372590131030416743L;
+
 	public ChooseOneOverrideAura(AuraDesc desc) {
 		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
 		setDesc(desc);

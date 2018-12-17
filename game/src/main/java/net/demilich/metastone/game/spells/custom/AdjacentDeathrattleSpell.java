@@ -19,6 +19,8 @@ import java.util.List;
  */
 public final class AdjacentDeathrattleSpell extends AdjacentEffectSpell {
 
+	private static final long serialVersionUID = -5254968939440176871L;
+
 	@Override
 	protected List<Actor> getActors(GameContext context, SpellDesc desc, Entity source, Entity target) {
 		if (desc.containsKey(SpellArg.BOARD_POSITION_ABSOLUTE)) {

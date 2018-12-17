@@ -49,6 +49,8 @@ import java.util.Map;
  */
 public class ForceDeathPhaseSpell extends Spell {
 
+	private static final long serialVersionUID = 5280001757454179970L;
+
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(ForceDeathPhaseSpell.class);
 		return new SpellDesc(arguments);

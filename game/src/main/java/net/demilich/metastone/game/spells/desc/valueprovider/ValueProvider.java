@@ -44,6 +44,7 @@ import java.io.Serializable;
  * Refer to the class hierarchy of this class for all the possible value providers.
  */
 public abstract class ValueProvider implements Serializable, HasDesc<ValueProviderDesc> {
+	private static final long serialVersionUID = 5978224139301123841L;
 	private ValueProviderDesc desc;
 
 	public ValueProvider(ValueProviderDesc desc) {

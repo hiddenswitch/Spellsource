@@ -5,6 +5,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 
 public final class ArmorChangedEvent extends GameEvent implements HasValue {
+	private static final long serialVersionUID = -6789956132726392926L;
 	private final Hero hero;
 	private final int armor;
 

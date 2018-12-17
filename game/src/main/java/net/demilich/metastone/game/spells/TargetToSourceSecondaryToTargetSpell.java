@@ -44,6 +44,8 @@ import java.util.List;
  * target into {@link FightSpell}'s {@code source}, which is interpreted as the fight spell's attacker.
  */
 public class TargetToSourceSecondaryToTargetSpell extends Spell {
+	private static final long serialVersionUID = 692113984816604107L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

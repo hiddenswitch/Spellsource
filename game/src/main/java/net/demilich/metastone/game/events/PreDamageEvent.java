@@ -5,6 +5,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public final class PreDamageEvent extends GameEvent implements HasValue, HasVictim {
 
+	private static final long serialVersionUID = 137555430104304982L;
 	private final Entity victim;
 	private final Entity source;
 	private final int amount;

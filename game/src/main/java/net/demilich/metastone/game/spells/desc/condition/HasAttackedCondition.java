@@ -11,6 +11,8 @@ import java.util.List;
 
 public class HasAttackedCondition extends Condition {
 
+	private static final long serialVersionUID = 5293354962195215457L;
+
 	public HasAttackedCondition(ConditionDesc desc) {
 		super(desc);
 	}

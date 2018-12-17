@@ -8,6 +8,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class AttributeExistsCondition extends Condition {
 
+	private static final long serialVersionUID = 447833659914923125L;
+
 	public AttributeExistsCondition(ConditionDesc desc) {
 		super(desc);
 	}

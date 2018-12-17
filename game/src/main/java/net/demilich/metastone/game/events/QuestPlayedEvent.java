@@ -6,6 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class QuestPlayedEvent extends GameEvent implements HasCard {
 
+	private static final long serialVersionUID = -7301384807981739071L;
 	private final Card questCard;
 
 	public QuestPlayedEvent(GameContext context, int playerId, Card questCard) {

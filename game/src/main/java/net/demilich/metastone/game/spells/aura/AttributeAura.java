@@ -30,6 +30,8 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public final class AttributeAura extends Aura {
 
+	private static final long serialVersionUID = 2509143016748174098L;
+
 	public AttributeAura(AuraDesc desc) {
 		super(desc.getSecondaryTrigger() != null ? desc.getSecondaryTrigger().create() : new WillEndSequenceTrigger(),
 				AddAttributeSpell.create(desc.getAttribute()),

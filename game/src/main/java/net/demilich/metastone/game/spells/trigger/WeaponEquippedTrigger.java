@@ -10,6 +10,8 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class WeaponEquippedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -1883892559733364836L;
+
 	public WeaponEquippedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

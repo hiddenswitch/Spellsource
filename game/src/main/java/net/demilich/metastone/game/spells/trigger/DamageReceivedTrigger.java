@@ -10,6 +10,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class DamageReceivedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = 5574705941064562631L;
+
 	public DamageReceivedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

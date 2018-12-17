@@ -44,6 +44,7 @@ import java.io.Serializable;
  * @see CardCostModifierArg for a list of arguments for card cost modification.
  */
 public class CardCostModifier extends CustomCloneable implements Trigger, Serializable, HasDesc<CardCostModifierDesc> {
+	private static final long serialVersionUID = 4799248736325231229L;
 	private static Logger logger = LoggerFactory.getLogger(CardCostModifier.class);
 	private boolean expired;
 	private int owner;

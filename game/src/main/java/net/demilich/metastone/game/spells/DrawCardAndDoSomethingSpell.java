@@ -6,5 +6,6 @@ package net.demilich.metastone.game.spells;
  */
 @Deprecated
 public class DrawCardAndDoSomethingSpell extends DrawCardSpell {
+	private static final long serialVersionUID = 2691794105011729165L;
 }
 

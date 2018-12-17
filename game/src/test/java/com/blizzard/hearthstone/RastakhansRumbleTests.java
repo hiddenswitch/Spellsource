@@ -13,6 +13,17 @@ import static org.testng.Assert.*;
 public class RastakhansRumbleTests extends TestBase {
 
 	@Test
+	public void testCorruptedBlood() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "spell_corrupted_blood");
+			putOnTopOfDeck(context, player, "spell_corrupted_blood");
+			context.endTurn();
+			context.endTurn();
+			assertEquals(player.getHero().getHp(), 30 - 3 - 3 - 1);
+		});
+	}
+
+	@Test
 	public void testSpiritOfTheShark() {
 		runGym((context, player, opponent) -> {
 			Minion spirit = playMinionCard(context, player, "minion_spirit_of_the_shark");

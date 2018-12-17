@@ -5,6 +5,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
 public class OverloadEvent extends GameEvent implements HasValue {
+	private static final long serialVersionUID = 8486856229123976896L;
 	private Card card;
 	private int manaCrystalsOverloaded;
 

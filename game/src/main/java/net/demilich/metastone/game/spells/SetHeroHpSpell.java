@@ -24,6 +24,7 @@ import java.util.Map;
 public class SetHeroHpSpell extends Spell {
 
 	private static final Logger logger = LoggerFactory.getLogger(SetHeroHpSpell.class);
+	private static final long serialVersionUID = -4051163814656424213L;
 
 	public static SpellDesc create(int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetHeroHpSpell.class);

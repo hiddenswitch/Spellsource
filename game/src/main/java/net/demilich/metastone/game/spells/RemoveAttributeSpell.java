@@ -18,6 +18,8 @@ import java.util.Map;
  * net.demilich.metastone.game.spells.trigger.EventTrigger}.
  */
 public class RemoveAttributeSpell extends RevertableSpell {
+	private static final long serialVersionUID = -4173648105929044405L;
+
 	public static SpellDesc create(Attribute tag) {
 		return create(null, tag);
 	}

@@ -26,6 +26,8 @@ import java.util.stream.Stream;
  */
 public final class HeroPowerToSpellSpell extends Spell {
 
+	private static final long serialVersionUID = -7661334525640016392L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

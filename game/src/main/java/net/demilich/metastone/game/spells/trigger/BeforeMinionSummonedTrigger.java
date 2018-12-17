@@ -5,6 +5,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class BeforeMinionSummonedTrigger extends AbstractSummonTrigger {
 
+	private static final long serialVersionUID = -4663900737779114064L;
+
 	public BeforeMinionSummonedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

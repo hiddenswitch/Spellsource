@@ -9,6 +9,8 @@ import java.util.Map;
 @JsonDeserialize(using = CardSourceDescDeserializer.class)
 public class CardSourceDesc extends Desc<CardSourceArg, CardSource> {
 
+	private static final long serialVersionUID = 8995378623220089925L;
+
 	public CardSourceDesc() {
 		super(CardSourceArg.class);
 	}

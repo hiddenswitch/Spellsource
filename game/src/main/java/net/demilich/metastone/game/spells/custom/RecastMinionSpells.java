@@ -18,6 +18,7 @@ import java.util.List;
 @Deprecated
 public class RecastMinionSpells extends Spell {
 
+	private static final long serialVersionUID = -1025422356136892098L;
 	private static Logger logger = LoggerFactory.getLogger(RecastMinionSpells.class);
 
 	@Override

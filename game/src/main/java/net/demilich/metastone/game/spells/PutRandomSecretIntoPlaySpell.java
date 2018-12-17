@@ -37,6 +37,8 @@ import net.demilich.metastone.game.targeting.Zones;
  */
 public class PutRandomSecretIntoPlaySpell extends Spell {
 
+	private static final long serialVersionUID = 8336230383135028185L;
+
 	private CardList findSecretCards(CardList cardList) {
 		CardList secretCards = new CardArrayList();
 		for (Card card : cardList) {

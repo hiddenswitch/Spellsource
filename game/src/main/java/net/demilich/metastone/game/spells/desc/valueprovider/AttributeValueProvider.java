@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Map;
 
 public class AttributeValueProvider extends ValueProvider {
+	private static final long serialVersionUID = -2697079415095086346L;
+
 	public static ValueProviderDesc create(Attribute attribute, EntityReference target) {
 		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AttributeValueProvider.class);
 		arguments.put(ValueProviderArg.ATTRIBUTE, attribute);

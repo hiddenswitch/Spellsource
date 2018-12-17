@@ -64,6 +64,8 @@ import static com.google.common.collect.Maps.immutableEntry;
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object> {
 
+	private static final long serialVersionUID = -1329968590998013966L;
+
 	public EnchantmentDesc() {
 	}
 

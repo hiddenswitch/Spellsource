@@ -14,6 +14,8 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
 public class SwapHpAndCostSpell extends Spell {
 
+	private static final long serialVersionUID = 3105664536436439802L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

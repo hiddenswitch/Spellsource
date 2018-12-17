@@ -58,6 +58,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class ModifyMaxManaSpell extends Spell {
 
+	private static final long serialVersionUID = -930582611770715619L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

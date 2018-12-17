@@ -14,6 +14,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  */
 public class PlayChooseOneCardAction extends PlayCardAction implements HasChoiceCard {
 
+	private static final long serialVersionUID = 7691363468750284161L;
 	protected SpellDesc spell;
 	protected final String chosenCard;
 

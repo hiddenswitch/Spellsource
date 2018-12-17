@@ -34,6 +34,8 @@ import java.util.Map;
  */
 public final class StealRandomSecretSpell extends Spell {
 
+	private static final long serialVersionUID = -2489109230736559486L;
+
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(StealRandomSecretSpell.class);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);

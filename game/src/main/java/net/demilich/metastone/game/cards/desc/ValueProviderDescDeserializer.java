@@ -6,6 +6,8 @@ import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 
 public class ValueProviderDescDeserializer extends DescDeserializer<ValueProviderDesc, ValueProviderArg, ValueProvider> {
 
+	private static final long serialVersionUID = 6636905834077726423L;
+
 	public ValueProviderDescDeserializer() {
 		super(ValueProviderDesc.class);
 	}

@@ -34,6 +34,8 @@ import java.io.Serializable;
  * </pre>
  */
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
+
+	private static final long serialVersionUID = -5386457779013010340L;
 	private int owner = -1;
 	private EventTriggerDesc desc;
 

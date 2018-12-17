@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.Entity;
  */
 public class JoustEvent extends GameEvent implements HasCard {
 
+	private static final long serialVersionUID = -2300434696430028388L;
 	private final boolean won;
 	private final Card ownCard;
 	private final Card opponentCard;

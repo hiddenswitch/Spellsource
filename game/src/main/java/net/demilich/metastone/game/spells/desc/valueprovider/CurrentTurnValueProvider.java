@@ -6,6 +6,8 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class CurrentTurnValueProvider extends ValueProvider {
 
+	private static final long serialVersionUID = -8994922899053721841L;
+
 	public CurrentTurnValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

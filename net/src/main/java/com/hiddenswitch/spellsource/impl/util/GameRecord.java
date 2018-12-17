@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.hiddenswitch.spellsource.client.models.Replay;
 import com.hiddenswitch.spellsource.impl.GameId;
+import net.demilich.metastone.game.logic.Trace;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -21,6 +22,7 @@ public class GameRecord extends MongoRecord implements Serializable {
 	public static final String PLAYER_USER_IDS = "playerUserIds";
 
 	private Replay replay;
+	private Trace trace;
 	private Date createdAt;
 	private List<String> playerUserIds;
 	private List<String> playerNames;
@@ -90,6 +92,15 @@ public class GameRecord extends MongoRecord implements Serializable {
 
 	public GameRecord setBotGame(boolean botGame) {
 		isBotGame = botGame;
+		return this;
+	}
+
+	public Trace getTrace() {
+		return trace;
+	}
+
+	public GameRecord setTrace(Trace trace) {
+		this.trace = trace;
 		return this;
 	}
 }

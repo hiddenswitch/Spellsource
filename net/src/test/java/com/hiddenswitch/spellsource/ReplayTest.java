@@ -27,7 +27,9 @@ public class ReplayTest extends SpellsourceTestBase {
 	public void testSmallerDocument(TestContext testContext) {
 		GameContext context = GameContext.fromTwoRandomDecks();
 		context.play();
-		GameRecord record = new GameRecord("local").setReplay(Games.replayFromGameContext(context));
+		GameRecord record = new GameRecord("local")
+				.setTrace(context.getTrace().clone())
+				.setReplay(Games.replayFromGameContext(context));
 		JsonObject json = JsonObject.mapFrom(record);
 		String encoded = json.encode();
 		testContext.assertTrue(encoded.length() < 16777216);

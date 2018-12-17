@@ -26,6 +26,7 @@ import org.slf4j.LoggerFactory;
  */
 public class SetDescriptionSpell extends Spell {
 
+	private static final long serialVersionUID = 4115152545788860198L;
 	private static Logger logger = LoggerFactory.getLogger(SetDescriptionSpell.class);
 
 	public static SpellDesc create(String description) {

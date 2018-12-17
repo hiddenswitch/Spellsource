@@ -13,6 +13,7 @@ import java.util.Map;
  */
 @Deprecated
 public class BuffWeaponSpell extends BuffSpell {
+	private static final long serialVersionUID = -451704290679497371L;
 	private static Logger logger = LoggerFactory.getLogger(BuffWeaponSpell.class);
 
 	public static SpellDesc create(int attackBonus, int durabilityBonus) {

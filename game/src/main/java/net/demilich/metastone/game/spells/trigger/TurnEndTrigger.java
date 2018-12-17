@@ -9,6 +9,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class TurnEndTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -397076440819725206L;
+
 	public static EventTriggerDesc create(TargetPlayer targetPlayer) {
 		EventTriggerDesc desc = new EventTriggerDesc(TurnEndTrigger.class);
 		desc.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);

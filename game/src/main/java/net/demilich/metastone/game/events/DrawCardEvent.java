@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public final class DrawCardEvent extends GameEvent implements HasCard {
 
+	private static final long serialVersionUID = 5582969144990830729L;
 	private final Card card;
 	private final CardType sourceType;
 	private final boolean drawn;

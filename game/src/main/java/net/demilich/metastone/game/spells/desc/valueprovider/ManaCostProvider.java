@@ -11,6 +11,8 @@ import java.util.Map;
 
 public class ManaCostProvider extends ValueProvider {
 
+	private static final long serialVersionUID = 5113007142063407323L;
+
 	public ManaCostProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

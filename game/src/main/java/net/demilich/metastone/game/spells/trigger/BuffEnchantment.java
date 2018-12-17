@@ -6,6 +6,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class BuffEnchantment extends Enchantment {
 
+	private static final long serialVersionUID = 3227549764630640488L;
+
 	public BuffEnchantment(int attack, int hp, String name, Trigger revertTrigger) {
 		setAttribute(Attribute.ATTACK_BONUS, attack);
 		setAttribute(Attribute.HP_BONUS, hp);

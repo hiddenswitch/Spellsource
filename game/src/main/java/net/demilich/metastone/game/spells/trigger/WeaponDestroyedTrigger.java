@@ -8,6 +8,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class WeaponDestroyedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -8088379205417836241L;
+
 	public WeaponDestroyedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

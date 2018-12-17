@@ -54,6 +54,8 @@ import java.util.Map;
  * @see GameContext#getSpellValueStack() for more about the spell value stack.
  */
 public class MetaSpell extends Spell {
+	private static final long serialVersionUID = -4394120331394906907L;
+
 	public static SpellDesc create(EntityReference target, boolean randomTarget, SpellDesc... spells) {
 		Map<SpellArg, Object> arguments = new SpellDesc(MetaSpell.class);
 		arguments.put(SpellArg.TARGET, target);

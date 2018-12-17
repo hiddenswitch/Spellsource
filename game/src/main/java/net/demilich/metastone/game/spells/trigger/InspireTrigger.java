@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class InspireTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = 7264305679756472837L;
+
 	public InspireTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

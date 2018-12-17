@@ -16,6 +16,8 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public final class SwapWithHandSpell extends ReturnTargetToHandSpell {
 
+	private static final long serialVersionUID = 5494994449347279125L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

@@ -5,4 +5,5 @@ package net.demilich.metastone.game.spells;
  */
 @Deprecated
 public class ReturnMinionToHandSpell extends ReturnTargetToHandSpell {
+	private static final long serialVersionUID = -3732151424110296569L;
 }

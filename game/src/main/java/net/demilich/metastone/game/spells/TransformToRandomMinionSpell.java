@@ -21,6 +21,8 @@ import java.util.Map;
  */
 public class TransformToRandomMinionSpell extends TransformMinionSpell {
 
+	private static final long serialVersionUID = 3028777063063884117L;
+
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(TransformToRandomMinionSpell.class);
 		return new SpellDesc(arguments);

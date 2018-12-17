@@ -16,6 +16,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public final class CardPropertyCondition extends Condition {
 
+	private static final long serialVersionUID = 6806828372347106492L;
+
 	public CardPropertyCondition(ConditionDesc desc) {
 		super(desc);
 	}

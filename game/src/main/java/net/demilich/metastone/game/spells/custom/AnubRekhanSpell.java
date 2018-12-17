@@ -22,6 +22,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public final class AnubRekhanSpell extends AddDeathrattleSpell {
 
+	private static final long serialVersionUID = 7428753381667624945L;
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

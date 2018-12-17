@@ -77,6 +77,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object> {
+	private static final long serialVersionUID = 8857490863700378727L;
 	public SpellDesc spell;
 	public TargetSelection targetSelection;
 	public ConditionDesc condition;

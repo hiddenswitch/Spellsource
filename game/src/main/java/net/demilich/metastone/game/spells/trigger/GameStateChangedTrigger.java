@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class GameStateChangedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -2662077513490942534L;
+
 	public GameStateChangedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

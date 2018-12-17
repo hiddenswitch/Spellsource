@@ -64,7 +64,7 @@ public class TraceTests {
 									})
 					);
 		}
-		return traces.get(traceName + ".txt");
+		return traces.get(traceName + ".json");
 	}
 
 	@Test
@@ -96,9 +96,20 @@ public class TraceTests {
 	}
 
 	@Test
-	@Ignore("out of date")
-	public void testShudderwockInteraction() {
-		Trace trace = getTrace("shudderwockinteraction");
+	public void testTrace1() {
+		Trace trace = getTrace("trace1");
+		GameContext context = trace.replayContext(false, null);
+	}
+
+	@Test
+	public void testTrace2() {
+		Trace trace = getTrace("trace2");
+		GameContext context = trace.replayContext(false, null);
+	}
+
+	@Test
+	public void testTrace3() {
+		Trace trace = getTrace("trace3");
 		GameContext context = trace.replayContext(false, null);
 	}
 

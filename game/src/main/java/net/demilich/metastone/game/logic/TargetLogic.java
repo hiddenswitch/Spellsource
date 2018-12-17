@@ -24,6 +24,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toCollection;
 
 public class TargetLogic implements Serializable {
+	private static final long serialVersionUID = 8862475946031334498L;
 	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
 
 	private static List<Entity> singleTargetAsList(Entity target) {

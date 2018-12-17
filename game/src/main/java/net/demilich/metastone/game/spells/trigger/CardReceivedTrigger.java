@@ -7,6 +7,8 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class CardReceivedTrigger extends EventTrigger {
 
+	private static final long serialVersionUID = -2544849798444249887L;
+
 	public CardReceivedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

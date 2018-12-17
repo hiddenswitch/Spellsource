@@ -42,6 +42,7 @@ import java.util.function.Predicate;
  * @see GameLogic#endOfSequence() for more about how minions, heroes and weapons are removed from play.
  */
 public class DestroySpell extends Spell {
+	private static final long serialVersionUID = -5263878076054970209L;
 	public static Logger logger = LoggerFactory.getLogger(DestroySpell.class);
 
 	public static SpellDesc create() {
