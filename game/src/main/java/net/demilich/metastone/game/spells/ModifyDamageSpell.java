@@ -69,6 +69,13 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class ModifyDamageSpell extends Spell {
 
+	public static SpellDesc create(int value, AlgebraicOperation operation) {
+		SpellDesc desc = new SpellDesc(ModifyDamageSpell.class);
+		desc.put(SpellArg.VALUE, value);
+		desc.put(SpellArg.OPERATION, operation);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

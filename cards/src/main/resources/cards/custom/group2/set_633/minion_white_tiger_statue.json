@@ -1,0 +1,27 @@
+{
+  "name": "White Tiger Statue",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Your Hero has +2 Attack during your turn.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "FRIENDLY_HERO",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    },
+    "attackBonus": 2,
+    "hpBonus": 0,
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

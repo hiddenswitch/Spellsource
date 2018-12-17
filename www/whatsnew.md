@@ -5,7 +5,21 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-#### 0.8.1-2.0.14 (Thursday, December 13th)
+#### 0.8.2-2.0.14 (Sunday, December 16th)
+
+Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been added and tweaked.
+
+###### Content Additions:
+
+ - Grandmaster Stormstout, Artificial Life Coccoon, Aysa Cloudsinger, Enigmatic Brewmaster, Life Cocoon, Monastery Scroll-Keeper, Ox School Instructor, Red Crane Statue, Student of the Crane, Thundering Crimson Seprent, Thundering Golden Serpent, Thundering Jade Serpent, Thundering Onyx Serpent, Sapphire Serpent, Uncle Gao, White Tiger Statue, Zen-noy-o-tron, and Sleight of Hand.  
+
+###### Content Fixes:
+
+ - Niuzao now has Deflect.
+ - Xuen and Yu'Lon have been changed.
+ - Lord Jaraxxus now correctly removes himself from the battlefield after being played.
+
+###### 0.8.1-2.0.14 (Friday, December 14th)
 
 This release includes bug fixes reported by the community.
 

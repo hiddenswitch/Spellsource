@@ -1,0 +1,21 @@
+{
+  "name": "Gift of the Ox",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Give all friendly characters +2 Health.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "attackBonus": 0,
+      "hpBonus": 2
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
