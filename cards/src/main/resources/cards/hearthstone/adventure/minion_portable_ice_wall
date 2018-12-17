@@ -1,0 +1,28 @@
+{
+	"name": "Portable Ice Wall",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"heroClass": "ANY",
+	"baseAttack": 3,
+	"baseHp": 15,
+	"rarity": "FREE",
+	"description": "Taunt. Can't Attack. Freeze any character damaged by this minion.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "DamageCausedTrigger",
+			"hostTargetType": "IGNORE_OTHER_SOURCES"
+		},
+		"spell": {
+			"class": "AddAttributeSpell",
+			"target": "EVENT_TARGET",
+			"attribute": "FROZEN"
+		}
+	},
+	"attributes": {
+		"CANNOT_ATTACK": true,
+		"TAUNT": true
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
