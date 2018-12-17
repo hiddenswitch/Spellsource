@@ -1,0 +1,18 @@
+{
+	"name": "Dr, Boom's Boombox",
+	"baseManaCost": 4,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Summon 7 Boom Bots.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "SummonSpell",
+		"value": 7,
+		"card": "token_boom_bot"
+	},
+	"attributes": {},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
