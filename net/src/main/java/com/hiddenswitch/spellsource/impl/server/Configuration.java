@@ -1,7 +1,9 @@
 package com.hiddenswitch.spellsource.impl.server;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.hiddenswitch.spellsource.Games;
 import com.hiddenswitch.spellsource.impl.UserId;
+import net.demilich.metastone.game.decks.CollectionDeck;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
@@ -13,9 +15,13 @@ public class Configuration implements Serializable, Cloneable {
 	private int playerId;
 	private String name;
 	private AttributeMap playerAttributes;
+	@JsonDeserialize(as = CollectionDeck.class)
 	private Deck deck;
 	private boolean isBot;
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
+
+	public Configuration() {
+	}
 
 	public UserId getUserId() {
 		return userId;

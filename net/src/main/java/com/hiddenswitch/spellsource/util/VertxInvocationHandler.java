@@ -7,6 +7,7 @@ import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.Sync;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
@@ -136,7 +137,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			message = result;
 			handler = new ReplyHandler(next);
 		} else if (serialization == RpcOptions.Serialization.JSON) {
-			message = Serialization.serialize(args[0]);
+			message = JsonObject.mapFrom(args[0]);
 			handler = new JsonReplyHandler(next, method.getReturnType());
 		} else {
 			throw new RuntimeException("Unspecified serialization option in invocation.");
