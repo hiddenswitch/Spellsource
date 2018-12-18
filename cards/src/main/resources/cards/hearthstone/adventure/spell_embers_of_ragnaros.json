@@ -6,7 +6,6 @@
 	"rarity": "FREE",
 	"description": "Shoot three fireballs at random enemies that deal *8* damage each.",
 	"targetSelection": "NONE",
-	"race": "ARCANE",
 	"spell": {
 		"class": "MissilesSpell",
 		"target": "ENEMY_CHARACTERS",
