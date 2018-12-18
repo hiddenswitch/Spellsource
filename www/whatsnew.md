@@ -16,7 +16,7 @@ Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been
 ###### Content Fixes:
 
  - Niuzao now has Deflect.
- - Xuen and Yu'Lon have been changed.
+ - Xuen, Chi-Ji and Yu'Lon have been changed.
  - Lord Jaraxxus now correctly removes himself from the battlefield after being played.
  - Corrupted Blood now shuffles copies of itself into your deck after the sequence ends. This prevents you from taking infinite damage when the last card in your deck is a Corrupted Blood, and an effect causes you to draw a card at the end of your turn.
  - Flesheating Ghoul and other death trigger minions no longer trigger from the removal of permanents.
