@@ -68,7 +68,7 @@ public class TraceTests {
 	}
 
 	@Test
-	public void testTraceValid() {
+	public void testTraceRecordedCorrectly() {
 		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
 			Player player1 = new Player(new RandomDeck(), "Player 1");
 			Player player2 = new Player(new RandomDeck(), "Player 2");
@@ -81,22 +81,9 @@ public class TraceTests {
 	}
 
 	@Test
-	@Ignore("out of date")
-	public void testFinleyShouldNotChangeHeroPowerToMinion() {
-		Trace noHeroPower = getTrace("noheropower");
-		GameContext context = noHeroPower.replayContext(false, null);
-	}
-
-
-	@Test
-	@Ignore("out of date")
-	public void testSuccessfulMagnetize() {
-		Trace trace = getTrace("magnetize1");
-		GameContext context = trace.replayContext(false, null);
-	}
-
-	@Test
 	public void testTrace1() {
+		// Aysa Cloudsinger modifying damage of a changed hero is no good. This passed once Aysa changed the hero after
+		// the sequence ends.
 		Trace trace = getTrace("trace1");
 		GameContext context = trace.replayContext(false, null);
 	}
@@ -109,19 +96,27 @@ public class TraceTests {
 
 	@Test
 	public void testTrace3() {
+		// Corrupted blood infinite loop
 		Trace trace = getTrace("trace3");
 		GameContext context = trace.replayContext(false, null);
 	}
 
 	@Test
-	@Ignore("out of date")
-	public void testShouldNotSummonEvilLaughter() {
-		Trace summoningEvilLaughter = getTrace("summoningevillaughter");
-		GameContext context = summoningEvilLaughter.replayContext(false, null);
+	public void testTrace4() {
+		// Elortha no Shandra infinite loop
+		Trace trace = getTrace("trace4");
+		GameContext context = trace.replayContext(false, null);
 	}
 
 	@Test
-	@Ignore("out of date")
+	public void testTrace5() {
+		// Fleeting Firebug infinite loop
+		Trace trace = getTrace("trace5");
+		GameContext context = trace.replayContext(false, null);
+	}
+
+	@Test
+	@Ignore("diagnostic only")
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {

@@ -20,7 +20,7 @@ import java.util.Map;
  * <p>
  * If a {@link SpellArg#SPELL} is specified, cast it on the newly revived minion as {@link EntityReference#OUTPUT}.
  */
-public class ReviveMinionSpell extends Spell {
+public final class ReviveMinionSpell extends Spell {
 
 	private static final long serialVersionUID = 4525896253927917946L;
 
