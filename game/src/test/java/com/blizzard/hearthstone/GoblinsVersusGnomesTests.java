@@ -86,10 +86,9 @@ public class GoblinsVersusGnomesTests extends TestBase {
 			assertTrue(sylvanas.isDestroyed());
 			assertTrue(illidan.isDestroyed());
 			assertEquals(player.getMinions().size(), 0);
-			assertEquals(opponent.getMinions().size(), 1);
-			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), "minion_deathwing");
+			assertEquals(opponent.getMinions().size(), 0, "Ambusher returns stolen Deathwing to hand");
 			assertEquals(player.getHand().size(), 0, "Player discards");
-			assertEquals(opponent.getHand().size(), 1, "Opponent does not discard");
+			assertEquals(opponent.getHand().size(), 2, "Opponent does not discard, holds Deathwing and the coin");
 		});
 	}
 
