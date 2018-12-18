@@ -899,6 +899,7 @@ definitions:
         - 'PRE_GAME_START'
         - 'QUEST_PLAYED'
         - 'QUEST_SUCCESSFUL'
+        - 'RETURNED_TO_HAND'
         - 'ROASTED'
         - 'REVEAL_CARD'
         - 'SECRET_PLAYED'

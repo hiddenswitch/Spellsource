@@ -211,7 +211,7 @@ public interface Matchmaking extends Verticle {
 							// Actually creating the game can happen without joining
 							// Create a bot game.
 							MatchmakingRequest user = thisMatchRequests.get(0);
-							SuspendableLock botLock = SuspendableLock.lock(Bots.TAKING_BOT_LOCK_NAME);
+							SuspendableLock botLock = SuspendableLock.noOpLock();
 
 							try {
 								// TODO: Move this lock into pollBotId

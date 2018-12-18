@@ -37,7 +37,7 @@ public class Clustered {
 		int vertxClusterPort = Integer.parseInt(System.getenv().getOrDefault("VERTX_CLUSTER_PORT", "5710"));
 
 		// Set significantly longer timeouts
-		long nanos = Duration.of(4, ChronoUnit.MINUTES).toNanos();
+		long nanos = Duration.of(10, ChronoUnit.SECONDS).toNanos();
 		HazelcastInstance instance = Hazelcast.newHazelcastInstance(Cluster.getDiscoverySPIConfig("us-west-2"));
 		ClusterManager clusterManager = new HazelcastClusterManager(instance);
 		String hostAddress = Gateway.getHostAddress();
@@ -50,9 +50,9 @@ public class Clustered {
 				.setWarningExceptionTime(nanos)
 				.setMaxEventLoopExecuteTime(nanos)
 				.setMaxWorkerExecuteTime(nanos)
-				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 40)
+				.setInternalBlockingPoolSize(Runtime.getRuntime().availableProcessors() * 400)
 				.setEventLoopPoolSize(Runtime.getRuntime().availableProcessors())
-				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 40), then -> {
+				.setWorkerPoolSize(Runtime.getRuntime().availableProcessors() * 400), then -> {
 
 			final Vertx vertx = then.result();
 

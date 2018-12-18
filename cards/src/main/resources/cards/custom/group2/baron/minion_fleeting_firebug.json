@@ -9,9 +9,12 @@
   "race": "BEAST",
   "description": "Deathrattle: Summon a Firebug for your opponent.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "card": "minion_fleeting_firebug",
-    "targetPlayer": "OPPONENT"
+    "class": "CastAfterSequenceSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_fleeting_firebug",
+      "targetPlayer": "OPPONENT"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true
