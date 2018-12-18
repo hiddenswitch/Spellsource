@@ -6,7 +6,7 @@ import com.hiddenswitch.spellsource.impl.UserId;
 import java.io.Serializable;
 
 /**
- * Created by bberman on 3/21/17.
+ * Indicates a request to concede a game session.
  */
 public class ConcedeGameSessionRequest implements Serializable {
 	private String gameId;
@@ -41,5 +41,20 @@ public class ConcedeGameSessionRequest implements Serializable {
 
 	public UserId getUserId() {
 		return userId;
+	}
+
+	public ConcedeGameSessionRequest setGameId(String gameId) {
+		this.gameId = gameId;
+		return this;
+	}
+
+	public ConcedeGameSessionRequest setPlayerId(int playerId) {
+		this.playerId = playerId;
+		return this;
+	}
+
+	public ConcedeGameSessionRequest setUserId(UserId userId) {
+		this.userId = userId;
+		return this;
 	}
 }

@@ -9,10 +9,12 @@ import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.Sync;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.nio.Buffer;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -110,7 +112,7 @@ public class Rpc {
 
 			final String address = name + "::" + method.getName();
 
-			SuspendableFunction<Object, Object> method1 = arg -> method.invoke(instance, arg);
+			SuspendableFunction<Object, Object> finalMethod = arg -> method.invoke(instance, arg);
 
 			// Get the context at the time of calling this function
 			RpcOptions.Serialization serialization = defaultSerialization();
@@ -119,15 +121,18 @@ public class Rpc {
 				serialization = rpcOptions.serialization();
 			}
 			SuspendableAction1 eventBusHandler;
+			MessageConsumer consumer;
 			if (serialization == RpcOptions.Serialization.JAVA) {
-				eventBusHandler = new BufferEventBusHandler<>(method1);
+				eventBusHandler = new BufferEventBusHandler<>(finalMethod);
+				consumer = eb.consumer(address, suspendableHandler(eventBusHandler));
 			} else if (serialization == RpcOptions.Serialization.JSON) {
-				eventBusHandler = new JsonEventBusHandler<>(method1, method.getParameterTypes()[0]);
+				eventBusHandler = new JsonEventBusHandler<>(finalMethod, method.getParameterTypes()[0]);
+				consumer = eb.<JsonObject>consumer(address, suspendableHandler(eventBusHandler));
 			} else {
 				throw new RuntimeException("Unexpected serialization option for this event bus handler.");
 			}
 
-			MessageConsumer consumer = eb.consumer(address, suspendableHandler(eventBusHandler));
+
 			// If the instance we are consuming supports deployment IDs, register a function prefixed with the
 			// deployment ID in order to support stateful message consumers.
 			if (instance instanceof AbstractVerticle) {
@@ -253,6 +258,6 @@ public class Rpc {
 	}
 
 	public static RpcOptions.Serialization defaultSerialization() {
-		return RpcOptions.Serialization.JAVA;
+		return RpcOptions.Serialization.JSON;
 	}
 }
