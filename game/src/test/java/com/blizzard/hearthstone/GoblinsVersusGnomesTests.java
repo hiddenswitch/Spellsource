@@ -11,6 +11,8 @@ import org.testng.Assert;
 import org.testng.annotations.Test;
 
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertTrue;
 
 public class GoblinsVersusGnomesTests extends TestBase {
 
@@ -33,6 +35,61 @@ public class GoblinsVersusGnomesTests extends TestBase {
 			destroy(context, malganis);
 			playCard(context, player, "spell_fireball", player.getHero());
 			assertEquals(player.getHero().getHp(), playerHp - 6);
+		});
+	}
+
+	@Test
+	public void testIllidanKnifeJugglerSheepDeathwingInteraction() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_the_coin");
+			receiveCard(context, opponent, "spell_the_coin");
+			Minion knifeJuggler = playMinionCard(context, player, "minion_knife_juggler");
+			Minion illidan = playMinionCard(context, player, "minion_illidan_stormrage");
+			// Knife Juggler dealt 1 dmg to opponent's hero
+			context.endTurn();
+			Minion sylvanas = playMinionCard(context, opponent, "minion_sylvanas_windrunner");
+			for (int i = 0; i < 4; i++) {
+				playMinionCard(context, opponent, "minion_explosive_sheep");
+			}
+			Minion explosiveSheep = playMinionCard(context, opponent, "minion_explosive_sheep");
+			context.endTurn();
+			overrideMissilesTrigger(context, knifeJuggler, explosiveSheep);
+			playCard(context, player, "minion_deathwing");
+			assertTrue(sylvanas.isDestroyed());
+			assertTrue(illidan.isDestroyed());
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(opponent.getMinions().size(), 1);
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), "minion_deathwing");
+			assertEquals(player.getHand().size(), 0, "Player discards");
+			assertEquals(opponent.getHand().size(), 1, "Opponent does not discard");
+		});
+	}
+
+	@Test
+	public void testIllidanKnifeJugglerAnubarAmbusherSheepDeathwingInteraction() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_the_coin");
+			receiveCard(context, opponent, "spell_the_coin");
+			Minion knifeJuggler = playMinionCard(context, player, "minion_knife_juggler");
+			Minion illidan = playMinionCard(context, player, "minion_illidan_stormrage");
+			// Knife Juggler dealt 1 dmg to opponent's hero
+			context.endTurn();
+			Minion sylvanas = playMinionCard(context, opponent, "minion_sylvanas_windrunner");
+			Minion ambusher = playMinionCard(context, opponent, "minion_anubar_ambusher");
+			for (int i = 0; i < 4; i++) {
+				playMinionCard(context, opponent, "minion_explosive_sheep");
+			}
+			Minion explosiveSheep = playMinionCard(context, opponent, "minion_explosive_sheep");
+			context.endTurn();
+			overrideMissilesTrigger(context, knifeJuggler, explosiveSheep);
+			playCard(context, player, "minion_deathwing");
+			assertTrue(sylvanas.isDestroyed());
+			assertTrue(illidan.isDestroyed());
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(opponent.getMinions().size(), 1);
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), "minion_deathwing");
+			assertEquals(player.getHand().size(), 0, "Player discards");
+			assertEquals(opponent.getHand().size(), 1, "Opponent does not discard");
 		});
 	}
 
