@@ -1,0 +1,19 @@
+{
+	"name": "Embers of Ragnaros",
+	"baseManaCost": 3,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Shoot three fireballs at random enemies that deal *8* damage each.",
+	"targetSelection": "NONE",
+	"race": "ARCANE",
+	"spell": {
+		"class": "MissilesSpell",
+		"target": "ENEMY_CHARACTERS",
+		"value": 8,
+		"howMany": 3
+	},
+	"collectible": false,
+	"set": "BLIZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
