@@ -25,6 +25,9 @@ import java.util.List;
  * After the attack occurs, casts the {@link SpellArg#SPELL} sub-spell with the {@code source} as the source of this
  * spell cast, the {@code target} as the defender, and the {@link EntityReference#OUTPUT} set to the attacker.
  * <p>
+ * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, this effect does not use up one of the attacker's attack
+ * counts.
+ * <p>
  * For example, consider the text from Birb's You from the Future, "Summon a copy of a friendly minion. Then, it attacks
  * the original":
  * <pre>
@@ -40,7 +43,6 @@ import java.util.List;
  * {@link SpellArg#SECONDARY_TARGET} specifier, the copied minion is the attacker. The {@code target} is implied to be
  * the selected target of the spell, i.e., the original minion.
  * <p>
- * {@link SpellArg#EXCLUSIVE to not use up the attacker's attack with this spell}
  */
 public class FightSpell extends Spell {
 
