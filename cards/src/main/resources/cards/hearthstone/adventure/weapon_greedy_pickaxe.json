@@ -1,0 +1,25 @@
+{
+	"name": "Greedy Pickaxe",
+	"baseManaCost": 2,
+	"type": "WEAPON",
+	"damage": 3,
+	"durability": 2,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "After your hero attacks, gain an empty Mana Crystal.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "AfterPhysicalAttackTrigger",
+			"sourceEntityType": "HERO",
+			"sourcePlayer": "SELF",
+			"targetPlayer": "BOTH"
+		},
+		"spell": {
+			"class": "ModifyMaxManaSpell",
+			"value": 1
+		}
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
