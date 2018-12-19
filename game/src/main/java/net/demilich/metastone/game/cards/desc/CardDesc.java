@@ -107,55 +107,63 @@ import static com.google.common.collect.Maps.immutableEntry;
 public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
 	public String id;
 	public String name;
-	public String description;
-	public Boolean legacy;
+	public String heroPower;
+	public int baseManaCost;
 	public CardType type;
 	public HeroClass heroClass;
 	public HeroClass[] heroClasses;
+	public int baseAttack;
+	public int baseHp;
+	public int damage;
+	public int durability;
 	public Rarity rarity;
-	public CardSet set;
-	public int baseManaCost;
-	public boolean collectible = true;
-	public AttributeMap attributes;
-	public int fileFormatVersion = 1;
-	public ValueProviderDesc manaCostModifier;
-	public EnchantmentDesc passiveTrigger;
-	public EnchantmentDesc[] passiveTriggers;
-	public EnchantmentDesc deckTrigger;
-	public EnchantmentDesc[] deckTriggers;
-	public EnchantmentDesc[] gameTriggers;
-	public String author;
-	public String flavor;
-	public String wiki;
+	public Race race;
+	public Race[] races;
+	public String description;
+
+	public TargetSelection targetSelection;
+
+
+	public EventTriggerDesc secret;
+	public EventTriggerDesc quest;
+	public int countUntilCast;
+	public boolean countByValue;
+
 	public BattlecryDesc battlecry;
 	public SpellDesc deathrattle;
 	public EnchantmentDesc trigger;
 	public EnchantmentDesc[] triggers;
 	public AuraDesc aura;
 	public AuraDesc[] auras;
-	public Race race;
 	public CardCostModifierDesc cardCostModifier;
-	public int baseAttack;
-	public int baseHp;
 	public BattlecryDesc[] chooseOneBattlecries;
 	public BattlecryDesc chooseBothBattlecry;
 	public String[] chooseOneCardIds;
 	public String chooseBothCardId;
-	public int damage;
-	public int durability;
 	public SpellDesc onEquip;
 	public SpellDesc onUnequip;
-	public String heroPower;
-	public TargetSelection targetSelection;
 	public SpellDesc spell;
 	public ConditionDesc condition;
 	public SpellDesc[] group;
-	public EventTriggerDesc secret;
-	public EventTriggerDesc quest;
-	public int countUntilCast;
-	public boolean countByValue;
-	public Race[] races;
+
+	public EnchantmentDesc passiveTrigger;
+	public EnchantmentDesc[] passiveTriggers;
+	public EnchantmentDesc deckTrigger;
+	public EnchantmentDesc[] deckTriggers;
+	public EnchantmentDesc[] gameTriggers;
+	public ValueProviderDesc manaCostModifier;
+
+	public AttributeMap attributes;
+
+
+	public String author;
+	public String flavor;
+	public String wiki;
+	public boolean collectible = true;
+	public CardSet set;
+	public int fileFormatVersion = 1;
 	public DynamicDescriptionDesc[] dynamicDescription;
+	public Boolean legacy;
 
 	public CardDesc() {
 		super();
