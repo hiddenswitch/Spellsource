@@ -29,7 +29,6 @@ import java.util.stream.Collectors;
  */
 public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
-	private static final long serialVersionUID = 6508418412142390256L;
 	private Card sourceCard;
 	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
 	private CardCostModifier cardCostModifier;

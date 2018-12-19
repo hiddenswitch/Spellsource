@@ -98,8 +98,6 @@ import java.util.Map;
  */
 public class SetHpSpell extends Spell {
 
-	private static final long serialVersionUID = -5608033800999840794L;
-
 	public static SpellDesc create(int hp) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetHpSpell.class);
 		arguments.put(SpellArg.VALUE, hp);

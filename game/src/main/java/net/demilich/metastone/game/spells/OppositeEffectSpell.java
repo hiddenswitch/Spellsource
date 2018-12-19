@@ -12,8 +12,6 @@ import java.util.List;
  */
 public final class OppositeEffectSpell extends RelativeToTargetEffectSpell {
 
-	private static final long serialVersionUID = 5290853475669672177L;
-
 	@Override
 	protected List<Actor> getActors(GameContext context, SpellDesc desc, Entity source, Entity target) {
 		return context.getOppositeMinions(target.getReference());

@@ -12,8 +12,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public final class ClearStorageSpell extends Spell {
 
-	private static final long serialVersionUID = 7212114250758959113L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

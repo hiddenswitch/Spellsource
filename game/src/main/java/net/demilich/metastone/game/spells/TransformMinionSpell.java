@@ -24,7 +24,6 @@ import java.util.Map;
  */
 public class TransformMinionSpell extends Spell {
 
-	private static final long serialVersionUID = -1813631462674281663L;
 	private static Logger logger = LoggerFactory.getLogger(TransformMinionSpell.class);
 
 	public static SpellDesc create(EntityReference target, Minion transformTarget, boolean randomTarget) {

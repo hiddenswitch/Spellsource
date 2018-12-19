@@ -12,7 +12,6 @@ import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
  */
 public final class OneTurnCostModifier extends CardCostModifier {
 
-	private static final long serialVersionUID = -4404411694986652419L;
 	private EventTrigger turnStartTrigger = new TurnStartTrigger();
 
 	public OneTurnCostModifier(CardCostModifierDesc desc) {

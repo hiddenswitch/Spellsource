@@ -14,7 +14,6 @@ import java.util.List;
  * Delegates the behaviour to a function passed in the constructor of this class.
  */
 public class RequestActionFunction extends UtilityBehaviour {
-	private static final long serialVersionUID = -3738521613415075526L;
 	private final T delegate;
 
 	/**

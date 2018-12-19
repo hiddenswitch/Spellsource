@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
  * Implements Echo of Malfurion.
  */
 public class GainStatsOfHighestCostMinionSpell extends BuffSpell {
-	private static final long serialVersionUID = -8381996171732381888L;
 	private static Logger logger = LoggerFactory.getLogger(GainStatsOfHighestCostMinionSpell.class);
 
 	@Override

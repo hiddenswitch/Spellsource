@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.Set;
 
 public final class FixedCardsDeckFormat extends DeckFormat {
-	private static final long serialVersionUID = 1239625530869032759L;
 	private final Set<String> cardIds;
 
 	public FixedCardsDeckFormat(String... cardIds) {

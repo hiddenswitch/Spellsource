@@ -6,8 +6,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class DeathrattleTrigger extends EventTrigger {
-	private static final long serialVersionUID = 1598740458142681185L;
-
 	public DeathrattleTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

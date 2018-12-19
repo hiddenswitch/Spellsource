@@ -19,8 +19,6 @@ import net.demilich.metastone.game.cards.Attribute;
  * Increments {@link Attribute#SUPREMACIES_THIS_GAME}.
  */
 public class SupremacySpell extends MetaSpell {
-	private static final long serialVersionUID = 3220297937505525507L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

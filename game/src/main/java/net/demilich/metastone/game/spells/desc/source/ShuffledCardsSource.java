@@ -11,8 +11,6 @@ import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
  * Returns all the cards that the specified {@link CardSourceArg#TARGET_PLAYER} has shuffled into their deck.
  */
 public class ShuffledCardsSource extends CardSource {
-	private static final long serialVersionUID = -1094249547073461212L;
-
 	public ShuffledCardsSource(CardSourceDesc desc) {
 		super(desc);
 	}

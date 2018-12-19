@@ -18,7 +18,6 @@ import java.util.Map;
  * Secrets removed in this way have their enchantments removed and are removed from play (not sent to the graveyard).
  */
 public class DestroySecretsSpell extends Spell {
-	private static final long serialVersionUID = -3319640839757065383L;
 	public static Logger logger = LoggerFactory.getLogger(DestroySecretsSpell.class);
 
 	public static SpellDesc create(TargetPlayer targetPlayer) {

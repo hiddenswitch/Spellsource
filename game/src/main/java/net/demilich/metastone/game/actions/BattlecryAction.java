@@ -24,7 +24,6 @@ public final class BattlecryAction extends GameAction {
 
 	public static final BattlecryAction NONE = new BattlecryAction(NullSpell.create());
 	private static final String BATTLECRY_NAME = "Battlecry";
-	private static final long serialVersionUID = -4786735244528210224L;
 	private final SpellDesc spell;
 	private Condition condition;
 

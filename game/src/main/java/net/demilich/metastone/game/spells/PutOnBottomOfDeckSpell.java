@@ -14,8 +14,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public final class PutOnBottomOfDeckSpell extends Spell {
 
-	private static final long serialVersionUID = 479946813036159860L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

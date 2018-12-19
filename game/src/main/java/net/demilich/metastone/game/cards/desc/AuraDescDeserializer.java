@@ -6,8 +6,6 @@ import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 
 public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Aura> {
 
-	private static final long serialVersionUID = 4879549240457792519L;
-
 	public AuraDescDeserializer() {
 		super(AuraDesc.class);
 	}

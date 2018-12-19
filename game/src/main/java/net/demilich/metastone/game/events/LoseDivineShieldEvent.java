@@ -4,7 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
 public final class LoseDivineShieldEvent extends GameEvent implements HasVictim {
-	private static final long serialVersionUID = 5439584401228970258L;
 	private final Entity eventTarget;
 
 	public LoseDivineShieldEvent(GameContext context, Entity loserOfShield, int targetPlayerId, int sourcePlayerId) {

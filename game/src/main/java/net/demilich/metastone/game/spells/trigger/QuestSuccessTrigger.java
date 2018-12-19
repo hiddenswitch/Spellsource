@@ -7,8 +7,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class QuestSuccessTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -1758941860952181115L;
-
 	public QuestSuccessTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

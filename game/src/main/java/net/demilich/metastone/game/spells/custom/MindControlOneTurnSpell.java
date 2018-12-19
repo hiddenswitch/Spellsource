@@ -19,8 +19,6 @@ import java.util.Map;
 
 public class MindControlOneTurnSpell extends MindControlSpell {
 
-	private static final long serialVersionUID = -6783206105248333918L;
-
 	public static SpellDesc create() {
 		return create(null);
 	}

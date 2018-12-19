@@ -29,7 +29,6 @@ import java.util.*;
  */
 public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 
-	private static final long serialVersionUID = 964881057496711363L;
 	private SpellDesc desc;
 
 	/**

@@ -8,8 +8,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class SilenceTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -4787724785893047843L;
-
 	public SilenceTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 
 public final class FatigueEvent extends GameEvent implements HasValue {
 
-	private static final long serialVersionUID = 3318341538588002207L;
 	private Hero target;
 	private int amount;
 

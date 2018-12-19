@@ -14,8 +14,6 @@ import java.util.Map;
 @JsonDeserialize(using = ValueProviderDescDeserializer.class)
 public class ValueProviderDesc extends Desc<ValueProviderArg, ValueProvider> {
 
-	private static final long serialVersionUID = -3325097633307417224L;
-
 	public ValueProviderDesc() {
 		super(ValueProviderArg.class);
 	}

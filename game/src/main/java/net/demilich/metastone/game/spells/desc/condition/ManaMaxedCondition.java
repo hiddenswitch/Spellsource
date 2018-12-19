@@ -7,8 +7,6 @@ import net.demilich.metastone.game.logic.GameLogic;
 
 public class ManaMaxedCondition extends Condition {
 
-	private static final long serialVersionUID = -3746978630459903319L;
-
 	public ManaMaxedCondition(ConditionDesc desc) {
 		super(desc);
 	}

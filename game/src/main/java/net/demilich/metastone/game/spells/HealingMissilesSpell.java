@@ -22,8 +22,6 @@ import java.util.List;
  */
 public class HealingMissilesSpell extends HealSpell {
 
-	private static final long serialVersionUID = 2892769378684362923L;
-
 	public static SpellDesc create(int healing) {
 		return create(null, healing);
 	}
@@ -51,8 +49,6 @@ public class HealingMissilesSpell extends HealSpell {
 				validTargets = SpellUtils.getValidRandomTargets(filteredTargets);
 			} else {
 				EntityFilter targetFilter = new EntityFilter(new EntityFilterDesc(new HashMap<>())) {
-					private static final long serialVersionUID = 1101895832803701941L;
-
 					@Override
 					protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 						return ((Actor) entity).isWounded();

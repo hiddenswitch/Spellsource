@@ -27,7 +27,6 @@ import java.util.Map;
  */
 public class SilenceSpell extends Spell {
 
-	private static final long serialVersionUID = 6280894129406953589L;
 	private static Logger logger = LoggerFactory.getLogger(SilenceSpell.class);
 
 	public static SpellDesc create() {

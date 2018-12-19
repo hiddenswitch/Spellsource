@@ -23,8 +23,6 @@ import java.util.List;
  */
 public final class CopyEnchantmentsSpell extends Spell {
 
-	private static final long serialVersionUID = 4915925255206313719L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity host, Entity target) {

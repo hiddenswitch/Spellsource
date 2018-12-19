@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
 @Deprecated
 public class CreateCardSpell extends Spell {
 
-	private static final long serialVersionUID = -132420663294615944L;
 	Logger logger = LoggerFactory.getLogger(CreateCardSpell.class);
 
 	@Suspendable

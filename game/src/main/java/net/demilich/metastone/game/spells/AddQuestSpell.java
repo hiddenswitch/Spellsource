@@ -41,7 +41,6 @@ import java.util.Map;
  */
 public class AddQuestSpell extends Spell {
 
-	private static final long serialVersionUID = -5670479963928719447L;
 	private static Logger logger = LoggerFactory.getLogger(AddQuestSpell.class);
 
 	/**

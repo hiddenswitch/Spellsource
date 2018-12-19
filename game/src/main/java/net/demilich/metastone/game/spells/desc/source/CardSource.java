@@ -22,7 +22,6 @@ import static java.util.stream.Collectors.toMap;
 
 public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc> {
 
-	private static final long serialVersionUID = 4174779752824928428L;
 	private CardSourceDesc desc;
 
 	public CardSource(CardSourceDesc desc) {

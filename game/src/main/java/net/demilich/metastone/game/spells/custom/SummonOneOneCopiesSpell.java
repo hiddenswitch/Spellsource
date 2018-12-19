@@ -17,8 +17,6 @@ import java.util.Map;
 @Deprecated
 public class SummonOneOneCopiesSpell extends Spell {
 
-	private static final long serialVersionUID = -8818100265426669064L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(SummonOneOneCopiesSpell.class);
 		return new SpellDesc(arguments);

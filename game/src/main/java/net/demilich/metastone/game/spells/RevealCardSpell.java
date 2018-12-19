@@ -33,7 +33,6 @@ import org.slf4j.LoggerFactory;
  */
 public class RevealCardSpell extends Spell {
 
-	private static final long serialVersionUID = 4053063215045526718L;
 	private static Logger logger = LoggerFactory.getLogger(RevealCardSpell.class);
 
 	@Override

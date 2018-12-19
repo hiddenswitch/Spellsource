@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
  * 		net.demilich.metastone.game.spells.desc.source.CardSource} that lets you access the entities stored by this spell.
  */
 public class StoreEntitySpell extends Spell {
-	private static final long serialVersionUID = -3446175942813428190L;
 	private static Logger logger = LoggerFactory.getLogger(StoreEntitySpell.class);
 
 	@Override

@@ -26,7 +26,6 @@ import java.util.Map;
  */
 public class ChangeHeroPowerSpell extends Spell {
 
-	private static final long serialVersionUID = -2363400393361126495L;
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroPowerSpell.class);
 
 	public static SpellDesc create(String card) {

@@ -4,8 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
 public class WillEndSequenceEvent extends GameEvent {
-	private static final long serialVersionUID = -3036987677623376548L;
-
 	public WillEndSequenceEvent(GameContext context) {
 		super(context, context.getActivePlayerId(), context.getActivePlayerId());
 	}

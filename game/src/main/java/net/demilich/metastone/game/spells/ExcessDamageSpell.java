@@ -19,8 +19,6 @@ import java.util.List;
  */
 public final class ExcessDamageSpell extends DamageSpell {
 
-	private static final long serialVersionUID = 6878053720439585385L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

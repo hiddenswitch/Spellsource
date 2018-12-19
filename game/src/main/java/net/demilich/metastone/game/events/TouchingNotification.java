@@ -8,7 +8,6 @@ import java.util.Collections;
 import java.util.List;
 
 public class TouchingNotification implements Notification {
-	private static final long serialVersionUID = -4586163151751893049L;
 	private EntityReference entityReference;
 	private boolean touched;
 	private int playerId;

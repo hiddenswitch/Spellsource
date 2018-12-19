@@ -5,5 +5,4 @@ package net.demilich.metastone.game.spells;
  */
 @Deprecated
 public class SummonOneOneCopySpell extends SummonSpell {
-	private static final long serialVersionUID = 8825287003765812934L;
 }

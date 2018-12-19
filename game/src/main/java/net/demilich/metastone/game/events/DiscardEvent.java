@@ -5,7 +5,6 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 
 public class DiscardEvent extends GameEvent implements HasCard {
-	private static final long serialVersionUID = -7725612719041827919L;
 	private final Card card;
 
 	public DiscardEvent(GameContext context, int playerId, Card card) {

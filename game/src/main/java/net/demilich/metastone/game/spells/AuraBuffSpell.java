@@ -21,7 +21,6 @@ import java.util.function.Predicate;
  */
 public final class AuraBuffSpell extends Spell {
 
-	private static final long serialVersionUID = -4387145471899028397L;
 	private static Logger logger = LoggerFactory.getLogger(AuraBuffSpell.class);
 
 	public static SpellDesc create(Object attackBonus) {

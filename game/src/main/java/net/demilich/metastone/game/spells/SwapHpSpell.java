@@ -18,8 +18,6 @@ import java.util.Map;
  */
 public class SwapHpSpell extends Spell {
 
-	private static final long serialVersionUID = -3095231146972164385L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(SwapHpSpell.class);
 		return new SpellDesc(arguments);

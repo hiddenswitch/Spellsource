@@ -11,8 +11,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public abstract class AbstractSummonTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = 7182271853097113973L;
-
 	public AbstractSummonTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

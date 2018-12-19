@@ -15,8 +15,6 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class PhysicalAttackAction extends GameAction {
 
-	private static final long serialVersionUID = -5367551000323772793L;
-
 	private PhysicalAttackAction() {
 		super();
 		setActionType(ActionType.PHYSICAL_ATTACK);

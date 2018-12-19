@@ -8,8 +8,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * The serializer that interprets JSON representations of a spell.
  */
 public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg, Spell> {
-	private static final long serialVersionUID = 5850329205594475245L;
-
 	protected SpellDescDeserializer(Class<? extends SpellDesc> vc) {
 		super(SpellDesc.class);
 	}

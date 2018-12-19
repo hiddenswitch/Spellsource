@@ -9,7 +9,6 @@ import java.util.List;
 
 public class TriggerFired implements Notification {
 
-	private static final long serialVersionUID = 6911658431608407503L;
 	private final Enchantment enchantment;
 	private final EntityReference eventTarget;
 

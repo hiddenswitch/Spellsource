@@ -37,7 +37,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class CastAfterSequenceSpell extends Spell {
 
-	private static final long serialVersionUID = 1586162606856892070L;
 	private static Logger LOGGER = LoggerFactory.getLogger(CastAfterSequenceSpell.class);
 
 	public static SpellDesc create(SpellDesc spell) {

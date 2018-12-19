@@ -24,7 +24,6 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class RefreshAttacksSpell extends Spell {
-	private static final long serialVersionUID = -4168077747799866700L;
 	private static Logger logger = LoggerFactory.getLogger(RefreshAttacksSpell.class);
 
 	@Override

@@ -6,8 +6,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class BattlecryTrigger extends EventTrigger {
-	private static final long serialVersionUID = 6430514874405024482L;
-
 	public BattlecryTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

@@ -17,7 +17,6 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 class TraceBehaviour extends UtilityBehaviour {
-	private static final long serialVersionUID = -1979529127688788696L;
 	private final int playerId;
 	private final int[][] mulligans;
 	private final AtomicInteger nextAction;

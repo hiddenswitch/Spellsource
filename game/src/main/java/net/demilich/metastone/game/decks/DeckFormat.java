@@ -12,7 +12,6 @@ import java.util.stream.Stream;
 import static net.demilich.metastone.game.cards.CardSet.*;
 
 public class DeckFormat implements Serializable, Cloneable {
-	private static final long serialVersionUID = 2239625530869032757L;
 	private String name = "";
 	private Set<CardSet> sets;
 

@@ -44,7 +44,6 @@ import net.demilich.metastone.game.logic.CustomCloneable;
  */
 public abstract class DynamicDescription extends CustomCloneable implements HasDesc<DynamicDescriptionDesc> {
 
-	private static final long serialVersionUID = -698255956813446491L;
 	private DynamicDescriptionDesc desc;
 
 	public DynamicDescription(DynamicDescriptionDesc desc) {

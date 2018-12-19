@@ -12,8 +12,6 @@ import java.util.Map;
 @JsonDeserialize(using = DynamicDescriptionDeserializer.class)
 public class DynamicDescriptionDesc extends Desc<DynamicDescriptionArg, DynamicDescription> {
 
-	private static final long serialVersionUID = 1066047095474109485L;
-
 	public DynamicDescriptionDesc() {
 		super(DynamicDescriptionArg.class);
 	}

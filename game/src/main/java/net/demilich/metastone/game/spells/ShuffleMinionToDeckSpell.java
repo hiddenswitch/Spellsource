@@ -22,8 +22,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class ShuffleMinionToDeckSpell extends ShuffleToDeckSpell {
 
-	private static final long serialVersionUID = 6797507244144929315L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

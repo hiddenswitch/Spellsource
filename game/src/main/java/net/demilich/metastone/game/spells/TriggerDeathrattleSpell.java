@@ -22,7 +22,6 @@ import java.util.Map;
  */
 public class TriggerDeathrattleSpell extends Spell {
 
-	private static final long serialVersionUID = 5195732894304633197L;
 	private static Logger logger = LoggerFactory.getLogger(TriggerDeathrattleSpell.class);
 
 	public static SpellDesc create(EntityReference target) {

@@ -10,8 +10,6 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  */
 public final class PhysicalAttackTargetOverrideAura extends Aura {
 
-	private static final long serialVersionUID = -5192104759409469741L;
-
 	public PhysicalAttackTargetOverrideAura(AuraDesc desc) {
 		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
 	}

@@ -8,8 +8,6 @@ import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 public abstract class ZoneContainsFilter extends EntityFilter {
-	private static final long serialVersionUID = 2575649516101257388L;
-
 	public ZoneContainsFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

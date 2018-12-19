@@ -46,8 +46,6 @@ import java.util.stream.Collectors;
  */
 public class ResurrectSpell extends Spell {
 
-	private static final long serialVersionUID = -2559209356327983314L;
-
 	@SuppressWarnings("unchecked")
 	@Override
 	@Suspendable

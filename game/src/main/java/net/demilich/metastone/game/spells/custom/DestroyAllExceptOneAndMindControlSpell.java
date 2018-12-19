@@ -21,7 +21,6 @@ import java.util.List;
  */
 public final class DestroyAllExceptOneAndMindControlSpell extends DestroySpell {
 
-	private static final long serialVersionUID = -5531768363677626596L;
 	public static Logger logger = LoggerFactory.getLogger(DestroyAllExceptOneSpell.class);
 
 	@Override

@@ -14,7 +14,6 @@ import org.slf4j.LoggerFactory;
 
 public class FatalDamageTrigger extends PreDamageTrigger {
 
-	private static final long serialVersionUID = 2270542678537266789L;
 	private static Logger logger = LoggerFactory.getLogger(FatalDamageTrigger.class);
 
 	public static EventTriggerDesc create(TargetPlayer damageSourceOwner, TargetPlayer damageVictimOwner, EntityType victimEntityType) {

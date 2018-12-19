@@ -5,7 +5,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class ModifyCurrentManaEvent extends GameEvent implements HasValue {
 
-	private static final long serialVersionUID = 1571551058525256083L;
 	private final int value;
 
 	public ModifyCurrentManaEvent(GameContext context, int targetPlayerId, int amount) {

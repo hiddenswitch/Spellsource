@@ -50,7 +50,6 @@ import java.util.Set;
  */
 public class FromDeckToHandSpell extends Spell {
 
-	private static final long serialVersionUID = -7539688325883534470L;
 	private static Logger logger = LoggerFactory.getLogger(FromDeckToHandSpell.class);
 
 	@Override

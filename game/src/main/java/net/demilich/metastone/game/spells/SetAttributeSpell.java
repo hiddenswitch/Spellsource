@@ -16,8 +16,6 @@ import java.util.Map;
  * Sets the {@code target}'s {@link SpellArg#ATTRIBUTE} to the specified {@link SpellArg#VALUE}.
  */
 public class SetAttributeSpell extends Spell {
-	private static final long serialVersionUID = -4472473031791548115L;
-
 	public static SpellDesc create(EntityReference target, Attribute tag, Object value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);

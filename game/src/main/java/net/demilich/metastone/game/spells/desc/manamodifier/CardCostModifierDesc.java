@@ -10,8 +10,6 @@ import java.util.Map;
 @JsonDeserialize(using = CardCostModifierDescDeserializer.class)
 public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCostModifier> {
 
-	private static final long serialVersionUID = -8740306319574751013L;
-
 	public CardCostModifierDesc() {
 		super(CardCostModifierArg.class);
 	}

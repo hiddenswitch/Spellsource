@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.weapons.Weapon;
 
 public class WeaponDestroyedEvent extends GameEvent {
 
-	private static final long serialVersionUID = -4246664575762212244L;
 	private final Weapon weapon;
 
 	public WeaponDestroyedEvent(GameContext context, Weapon weapon) {

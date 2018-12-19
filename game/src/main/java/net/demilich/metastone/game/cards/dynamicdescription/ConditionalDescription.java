@@ -10,8 +10,6 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * {@link DynamicDescriptionArg#DESCRIPTION2} when it is {@code false}.
  */
 public class ConditionalDescription extends DynamicDescription {
-	private static final long serialVersionUID = -1956050724453549718L;
-
 	public ConditionalDescription(DynamicDescriptionDesc desc) {
 		super(desc);
 	}

@@ -19,8 +19,6 @@ import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
  * Implements Solar Power.
  */
 public final class ReceiveCardNextTurnSpell extends AddEnchantmentSpell {
-	private static final long serialVersionUID = -8750786285183966415L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

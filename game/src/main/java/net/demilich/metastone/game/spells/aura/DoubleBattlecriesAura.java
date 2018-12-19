@@ -8,7 +8,6 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
 public class DoubleBattlecriesAura extends Aura {
 
-	private static final long serialVersionUID = -5320539865472276291L;
 	public SpellDesc extraEffect = null;
 
     public DoubleBattlecriesAura(AuraDesc desc) {

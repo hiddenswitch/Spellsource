@@ -7,8 +7,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class ArmorChangedTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -4367846181215304602L;
-
 	public ArmorChangedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

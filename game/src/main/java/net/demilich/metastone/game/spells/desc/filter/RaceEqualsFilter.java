@@ -7,8 +7,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 public final class RaceEqualsFilter extends EntityFilter {
 
-	private static final long serialVersionUID = 5613648268970486909L;
-
 	public RaceEqualsFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

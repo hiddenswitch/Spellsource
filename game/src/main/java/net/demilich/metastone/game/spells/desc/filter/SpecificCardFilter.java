@@ -25,8 +25,6 @@ import java.util.stream.Collectors;
  */
 public class SpecificCardFilter extends EntityFilter {
 
-	private static final long serialVersionUID = -3576411127059638716L;
-
 	public SpecificCardFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

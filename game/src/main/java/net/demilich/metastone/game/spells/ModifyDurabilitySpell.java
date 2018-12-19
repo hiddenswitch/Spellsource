@@ -15,8 +15,6 @@ import java.util.Map;
  */
 public class ModifyDurabilitySpell extends Spell {
 
-	private static final long serialVersionUID = -370524562554218523L;
-
 	public static SpellDesc create(EntityReference target, int durability) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ModifyDurabilitySpell.class);
 		arguments.put(SpellArg.VALUE, durability);

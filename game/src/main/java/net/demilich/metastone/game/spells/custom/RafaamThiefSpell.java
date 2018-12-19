@@ -18,8 +18,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public final class RafaamThiefSpell extends AddDeathrattleSpell {
 
-	private static final long serialVersionUID = 5232430588242636701L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

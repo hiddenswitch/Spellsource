@@ -29,8 +29,6 @@ import java.util.stream.Stream;
  */
 public final class FarseerNobundoSpell extends Spell {
 
-	private static final long serialVersionUID = -7283567571038353454L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity spellSource, Entity spellTarget) {

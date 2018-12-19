@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class PlayedLastTurnValueProvider extends ValueProvider {
 
-	private static final long serialVersionUID = 6205680753372122268L;
-
 	public PlayedLastTurnValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

@@ -7,8 +7,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class MaxManaChangedTrigger extends EventTrigger {
-	private static final long serialVersionUID = 5026463515842923157L;
-
 	public MaxManaChangedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

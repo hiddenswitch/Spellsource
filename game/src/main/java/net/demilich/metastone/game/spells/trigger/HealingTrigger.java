@@ -10,8 +10,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class HealingTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -280708331918647023L;
-
 	public HealingTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

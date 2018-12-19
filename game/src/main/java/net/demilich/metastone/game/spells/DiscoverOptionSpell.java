@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 @Deprecated
 public class DiscoverOptionSpell extends Spell {
 
-	private static final long serialVersionUID = 8363328698999909981L;
 	Logger logger = LoggerFactory.getLogger(DiscoverOptionSpell.class);
 
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {

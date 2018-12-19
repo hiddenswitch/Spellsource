@@ -5,5 +5,4 @@ package net.demilich.metastone.game.spells;
  */
 @Deprecated
 public class SummonRandomMinionFilteredSpell extends SummonSpell {
-	private static final long serialVersionUID = 4941382768823808927L;
 }

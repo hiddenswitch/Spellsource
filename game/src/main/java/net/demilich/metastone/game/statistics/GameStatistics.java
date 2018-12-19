@@ -18,7 +18,6 @@ import java.util.Map;
  * @see SimulationResult for
  */
 public class GameStatistics implements Cloneable, Serializable {
-	private static final long serialVersionUID = 8033496654511022621L;
 	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
 	private final Map<String, Map<Integer, Integer>> cardsPlayed = new HashMap<>();
 	private final Map<String, Integer> minionsSummoned = new HashMap<String, Integer>();

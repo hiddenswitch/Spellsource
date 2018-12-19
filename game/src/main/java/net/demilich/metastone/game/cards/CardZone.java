@@ -16,8 +16,6 @@ import java.util.stream.Stream;
  */
 public final class CardZone extends EntityZone<Card> implements CardList {
 
-	private static final long serialVersionUID = -5251692946944250685L;
-
 	public CardZone(int player, Zones zone) {
 		super(player, zone);
 	}

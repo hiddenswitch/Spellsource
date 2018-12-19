@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class HeroPowerUsedEvent extends GameEvent {
 
-	private static final long serialVersionUID = -3156480745244068012L;
 	private final Card heroPower;
 
 	public HeroPowerUsedEvent(GameContext context, int playerId, Card heroPower) {

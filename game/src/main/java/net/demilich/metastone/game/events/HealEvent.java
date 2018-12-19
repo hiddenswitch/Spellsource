@@ -5,7 +5,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public final class HealEvent extends GameEvent implements HasValue {
 
-	private static final long serialVersionUID = -1820195428563057219L;
 	private final Entity target;
 	private final int healing;
 

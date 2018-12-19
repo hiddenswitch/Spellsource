@@ -36,7 +36,6 @@ import java.util.Map;
  * {@link SpellArg#CARD} argument will be added to the sub-spell corresponding to each of the generated cards.
  */
 public class CopyDeathrattleSpell extends Spell {
-	private static final long serialVersionUID = -1007206287184396701L;
 	private static Logger logger = LoggerFactory.getLogger(CopyDeathrattleSpell.class);
 
 	public static SpellDesc create(EntityReference target) {

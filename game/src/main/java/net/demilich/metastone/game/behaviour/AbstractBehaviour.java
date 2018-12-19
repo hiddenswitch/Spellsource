@@ -14,8 +14,6 @@ import java.util.List;
  * A base class for behaviours that implement no action or a default action when its methods are called.
  */
 public abstract class AbstractBehaviour implements Behaviour, Serializable {
-	private static final long serialVersionUID = 660191653668676120L;
-
 	public Behaviour clone() {
 		try {
 			return (Behaviour) super.clone();

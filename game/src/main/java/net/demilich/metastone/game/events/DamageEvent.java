@@ -6,7 +6,6 @@ import net.demilich.metastone.game.targeting.DamageType;
 
 public final class DamageEvent extends GameEvent implements HasVictim, HasValue {
 
-	private static final long serialVersionUID = -4145236779696122571L;
 	private final Entity victim;
 	private final int damage;
 	private final DamageType damageType;

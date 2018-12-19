@@ -6,8 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class OrFilter extends EntityFilter {
 
-	private static final long serialVersionUID = 6453237291636788838L;
-
 	public OrFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

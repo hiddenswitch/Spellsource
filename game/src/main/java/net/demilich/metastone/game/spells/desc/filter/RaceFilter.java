@@ -7,8 +7,6 @@ import net.demilich.metastone.game.entities.minions.Race;
 
 public class RaceFilter extends EntityFilter {
 
-	private static final long serialVersionUID = 390874869729734871L;
-
 	public RaceFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

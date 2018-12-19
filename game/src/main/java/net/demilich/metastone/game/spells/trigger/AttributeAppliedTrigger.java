@@ -11,8 +11,6 @@ import net.demilich.metastone.game.cards.Attribute;
 
 public class AttributeAppliedTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = 9114119972252372327L;
-
 	public AttributeAppliedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

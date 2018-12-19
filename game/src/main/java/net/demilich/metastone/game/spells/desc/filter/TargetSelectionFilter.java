@@ -7,8 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 public class TargetSelectionFilter extends EntityFilter {
-	private static final long serialVersionUID = 2676268156745511634L;
-
 	public TargetSelectionFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

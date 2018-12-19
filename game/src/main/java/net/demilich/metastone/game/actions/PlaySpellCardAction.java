@@ -16,7 +16,6 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class PlaySpellCardAction extends PlayCardAction {
 
-	private static final long serialVersionUID = -3657230786516672881L;
 	private SpellDesc spell;
 
 	protected PlaySpellCardAction() {

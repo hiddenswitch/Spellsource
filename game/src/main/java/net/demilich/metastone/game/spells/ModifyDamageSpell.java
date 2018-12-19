@@ -69,8 +69,6 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class ModifyDamageSpell extends Spell {
 
-	private static final long serialVersionUID = 5377697977410465293L;
-
 	public static SpellDesc create(int value, AlgebraicOperation operation) {
 		SpellDesc desc = new SpellDesc(ModifyDamageSpell.class);
 		desc.put(SpellArg.VALUE, value);

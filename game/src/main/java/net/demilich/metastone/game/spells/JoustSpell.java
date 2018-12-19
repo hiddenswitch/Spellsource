@@ -20,8 +20,6 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
  */
 public class JoustSpell extends Spell {
 
-	private static final long serialVersionUID = -6972376325385390148L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

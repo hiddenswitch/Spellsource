@@ -17,8 +17,6 @@ import java.util.Map;
  */
 public class ComboSpell extends ConditionalEffectSpell {
 
-	private static final long serialVersionUID = 8826410608457863941L;
-
 	public static SpellDesc create(SpellDesc either, SpellDesc or, boolean exclusive) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ComboSpell.class);
 		arguments.put(SpellArg.SPELL1, either);

@@ -6,8 +6,6 @@ import net.demilich.metastone.game.entities.Actor;
 
 public final class BeforeSummonEvent extends SummonEvent {
 
-	private static final long serialVersionUID = -3493320809557631715L;
-
 	public BeforeSummonEvent(GameContext context, Actor minion, Card source) {
 		super(context, minion, source);
 	}

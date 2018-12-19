@@ -25,8 +25,6 @@ import java.util.Map;
  */
 public class MindControlSpell extends Spell {
 
-	private static final long serialVersionUID = -6818363391181125490L;
-
 	public static SpellDesc create(EntityReference target, TargetPlayer targetPlayer, boolean randomTarget) {
 		Map<SpellArg, Object> arguments = new SpellDesc(MindControlSpell.class);
 		arguments.put(SpellArg.TARGET, target);

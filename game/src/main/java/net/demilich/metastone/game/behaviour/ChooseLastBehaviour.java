@@ -14,8 +14,6 @@ import java.util.List;
  */
 public class ChooseLastBehaviour extends UtilityBehaviour {
 
-	private static final long serialVersionUID = 3058642607233828367L;
-
 	@Override
 	public String getName() {
 		return "Do Nothing";

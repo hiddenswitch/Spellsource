@@ -72,8 +72,6 @@ import static java.util.stream.Collectors.toList;
  */
 public class AllModuloValueEqualsZeroCondition extends Condition {
 
-	private static final long serialVersionUID = -3465651610198330369L;
-
 	public AllModuloValueEqualsZeroCondition(ConditionDesc desc) {
 		super(desc);
 	}

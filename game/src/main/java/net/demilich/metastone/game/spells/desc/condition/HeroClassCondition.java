@@ -8,8 +8,6 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 
 public class HeroClassCondition extends Condition {
 
-	private static final long serialVersionUID = -7697939814579607257L;
-
 	public HeroClassCondition(ConditionDesc desc) {
 		super(desc);
 	}

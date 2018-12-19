@@ -25,8 +25,6 @@ import java.util.Map;
  */
 public class CatalogueSource extends CardSource implements HasCardCreationSideEffects, HasWeights {
 
-	private static final long serialVersionUID = 5717419097752375939L;
-
 	public static CatalogueSource create() {
 		Map<CardSourceArg, Object> args = new CardSourceDesc(CatalogueSource.class);
 		return new CatalogueSource(new CardSourceDesc(args));

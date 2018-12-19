@@ -25,7 +25,6 @@ import java.util.stream.Stream;
  * Implements Fifi Fizzlewarp.
  */
 public class TextifySpell extends Spell {
-	private static final long serialVersionUID = -2616430709480428893L;
 	private static Logger logger = LoggerFactory.getLogger(TextifySpell.class);
 
 	@Override

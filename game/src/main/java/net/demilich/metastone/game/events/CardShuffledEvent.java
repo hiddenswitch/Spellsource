@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class CardShuffledEvent extends GameEvent implements HasCard {
 
-	private static final long serialVersionUID = -2512203431985573137L;
 	private final Card card;
 
 	public CardShuffledEvent(GameContext context, int targetPlayerId, int sourcePlayerId, Card card) {

@@ -12,8 +12,6 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
  * ValueProviderArg#CARD_SOURCE}.
  */
 public class IndexInSourceValueProvider extends ValueProvider {
-	private static final long serialVersionUID = -4320909327002603108L;
-
 	public IndexInSourceValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

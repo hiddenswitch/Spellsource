@@ -18,8 +18,6 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public final class DiedThisTurnValueProvider extends ValueProvider {
 
-	private static final long serialVersionUID = -8818137871947863978L;
-
 	public DiedThisTurnValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

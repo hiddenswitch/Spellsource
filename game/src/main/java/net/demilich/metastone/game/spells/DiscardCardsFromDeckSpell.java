@@ -26,8 +26,6 @@ import java.util.Map;
  */
 public class DiscardCardsFromDeckSpell extends Spell {
 
-	private static final long serialVersionUID = -5311860982780520406L;
-
 	public static SpellDesc create(int howMany) {
 		Map<SpellArg, Object> arguments = new SpellDesc(DiscardCardsFromDeckSpell.class);
 		arguments.put(SpellArg.VALUE, howMany);

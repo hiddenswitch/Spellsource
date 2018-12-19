@@ -14,8 +14,6 @@ import java.util.Comparator;
  */
 public final class SortDeckByManaCostSpell extends Spell {
 
-	private static final long serialVersionUID = -8987447611409438762L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

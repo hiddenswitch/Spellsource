@@ -9,8 +9,6 @@ import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
 public class GraveyardCountCondition extends Condition {
 
-	private static final long serialVersionUID = -951783119492724140L;
-
 	public GraveyardCountCondition(ConditionDesc desc) {
 		super(desc);
 	}

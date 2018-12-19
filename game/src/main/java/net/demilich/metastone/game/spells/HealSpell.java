@@ -38,8 +38,6 @@ import java.util.function.Predicate;
  */
 public class HealSpell extends Spell {
 
-	private static final long serialVersionUID = -6232440614210814690L;
-
 	public static SpellDesc create(EntityReference target, int healing) {
 		return create(target, healing, false);
 	}

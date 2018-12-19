@@ -24,7 +24,6 @@ import java.util.List;
  * </ul>
  */
 public abstract class RelativeToTargetEffectSpell extends Spell {
-	private static final long serialVersionUID = -4497291943838968402L;
 	private static Logger logger = LoggerFactory.getLogger(AdjacentEffectSpell.class);
 
 	@Override

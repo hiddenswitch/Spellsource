@@ -46,7 +46,6 @@ import static java.util.Map.entry;
  */
 public final class AysaCloudsingerSpell extends Spell {
 
-	private static final long serialVersionUID = 3512676003608851740L;
 	private static Logger LOGGER = LoggerFactory.getLogger(AysaCloudsingerSpell.class);
 
 	@Override

@@ -30,7 +30,6 @@ import java.util.List;
  */
 public class MissilesSpell extends DamageSpell {
 
-	private static final long serialVersionUID = -2799124935506297277L;
 	private static Logger logger = LoggerFactory.getLogger(MissilesSpell.class);
 
 	@Override

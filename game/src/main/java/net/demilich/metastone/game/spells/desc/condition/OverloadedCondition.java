@@ -6,8 +6,6 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
 
 public class OverloadedCondition extends Condition {
-	private static final long serialVersionUID = -1962302233702182719L;
-
 	public OverloadedCondition(ConditionDesc desc) {
 		super(desc);
 	}

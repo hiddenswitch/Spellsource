@@ -11,8 +11,6 @@ import java.util.List;
 
 public class HighestAttributeFilter extends EntityFilter {
 
-	private static final long serialVersionUID = 3885539324202252993L;
-
 	public HighestAttributeFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

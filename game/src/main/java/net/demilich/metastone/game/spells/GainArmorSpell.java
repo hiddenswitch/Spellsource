@@ -11,8 +11,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  * Gives the hero of the {@code target}'s owner {@link net.demilich.metastone.game.spells.desc.SpellArg#VALUE} armor.
  */
 public final class GainArmorSpell extends BuffSpell {
-	private static final long serialVersionUID = -9152121187671936441L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

@@ -21,8 +21,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public final class RemoveActorPeacefullySpell extends Spell {
 
-	private static final long serialVersionUID = -8034701801781447517L;
-
 	public static SpellDesc create(EntityReference target, EntityFilter filter, boolean randomTarget) {
 		return new SpellDesc(RemoveActorPeacefullySpell.class, target, filter, randomTarget);
 	}

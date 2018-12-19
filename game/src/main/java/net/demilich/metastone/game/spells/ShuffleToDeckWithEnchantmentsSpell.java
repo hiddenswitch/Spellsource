@@ -17,8 +17,6 @@ import java.util.List;
  */
 public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 
-	private static final long serialVersionUID = 1424546901750124474L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

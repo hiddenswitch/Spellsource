@@ -5,5 +5,4 @@ package net.demilich.metastone.game.spells;
  */
 @Deprecated
 public class DiscoverRandomCardSpell extends DiscoverSpell {
-	private static final long serialVersionUID = -858608778124322535L;
 }

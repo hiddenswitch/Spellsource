@@ -187,7 +187,6 @@ import static java.util.stream.Collectors.toList;
 public class GameContext implements Cloneable, Serializable, Inventory, EntityZoneTable {
 	public static final int PLAYER_1 = 0;
 	public static final int PLAYER_2 = 1;
-	private static final long serialVersionUID = -5992400445234360905L;
 	private static Logger LOGGER = LoggerFactory.getLogger(GameContext.class);
 	private Player[] players = new Player[2];
 	private Behaviour[] behaviours = new Behaviour[2];

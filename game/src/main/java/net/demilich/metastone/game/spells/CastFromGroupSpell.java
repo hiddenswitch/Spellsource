@@ -80,7 +80,6 @@ import java.util.*;
 @Deprecated
 public class CastFromGroupSpell extends Spell {
 
-	private static final long serialVersionUID = -5424850232000526821L;
 	private static Logger logger = LoggerFactory.getLogger(CastFromGroupSpell.class);
 
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {

@@ -32,8 +32,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  */
 public final class CastCardsSpell extends Spell {
 
-	private static final long serialVersionUID = 8804077369907401986L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

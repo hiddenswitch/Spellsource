@@ -22,8 +22,6 @@ import static java.util.stream.Collectors.toList;
  */
 public final class BaulPocuseSpell extends Spell {
 
-	private static final long serialVersionUID = 3808599423457065507L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

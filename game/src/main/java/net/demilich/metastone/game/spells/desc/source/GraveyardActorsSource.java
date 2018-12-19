@@ -18,8 +18,6 @@ import static java.util.stream.Collectors.toCollection;
 
 public class GraveyardActorsSource extends CardSource implements HasCardCreationSideEffects {
 
-	private static final long serialVersionUID = 8041698581153074954L;
-
 	public GraveyardActorsSource(CardSourceDesc desc) {
 		super(desc);
 	}
