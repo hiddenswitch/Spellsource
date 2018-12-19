@@ -1,0 +1,25 @@
+{
+	"name": "Bag of Stuffing",
+	"baseManaCost": 1,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Draw until your hand is full.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "DrawCardSpell",
+		"value": {
+			"class": "AlgebraicValueProvider",
+			"operation": "SUBTRACT",
+			"value1": 10,
+			"value2": {
+				"class": "PlayerAttributeValueProvider",
+				"playerAttribute": "HAND_COUNT",
+				"targetPlayer": "SELF"
+			}
+		}
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
