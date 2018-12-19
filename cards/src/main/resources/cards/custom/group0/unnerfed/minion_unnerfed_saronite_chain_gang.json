@@ -1,17 +1,17 @@
 {
-  "name": "Saronite Chain Gang",
+  "name": "Unnerfed Saronite Chain Gang",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Taunt. Battlecry: Summon another Saronite Chaingang.",
+  "description": "Taunt. Battlecry: Summon a copy of this minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "card": "minion_saronite_chain_gang",
+      "target": "SELF",
       "boardPositionRelative": "RIGHT"
     }
   },
@@ -20,6 +20,6 @@
     "TAUNT": true
   },
   "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

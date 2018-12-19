@@ -1,6 +1,6 @@
 {
-  "name": "Nourish",
-  "baseManaCost": 6,
+  "name": "Unnerfed Nourish",
+  "baseManaCost": 5,
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "RARE",
@@ -12,6 +12,6 @@
   ],
   "chooseBothCardId": "spell_nourish_3",
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }
