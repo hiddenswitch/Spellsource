@@ -5,9 +5,9 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-#### 0.8.3-2.0.14 (Monday, December 17th)
+#### 0.8.3-2.0.14 (Wednesday, December 19th)
 
-This release includes a hotfix to matchmaking to make it more reliable.
+This release fixes issues with starting games due to changes to tracing.
 
 ###### Context Fixes:
 
