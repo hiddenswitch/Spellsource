@@ -1,6 +1,6 @@
 {
-  "name": "Nourish",
-  "baseManaCost": 6,
+  "name": "Unnerfed Nourish",
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
@@ -21,6 +21,6 @@
     ]
   },
   "collectible": false,
-  "set": "CLASSIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }
