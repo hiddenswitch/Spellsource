@@ -1,0 +1,27 @@
+{
+	"name": "Boots of Haste",
+	"baseManaCost": 0,
+	"type": "SPELL",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Your minions cost (0) this turn.",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "CardCostModifierSpell",
+		"target": "FRIENDLY_PLAYER",
+		"cardCostModifier": {
+			"class": "CardCostModifier",
+			"value": 0,
+			"cardType": "MINION",
+			"expirationTrigger": {
+				"class": "TurnEndTrigger",
+				"targetPlayer": "SELF"
+			},
+			"operation": "SET",
+			"targetPlayer": "SELF"
+		}
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
