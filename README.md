@@ -72,7 +72,7 @@ You can also use the `spellsource` package programmatically. This requires **Pyt
  1. Install a Java JDK.
     - On Windows: Visit [this link](https://github.com/ojdkbuild/ojdkbuild) for the latest OpenJDK builds, which we test on. Choose a `java-11 ... msi` link, like [this one](https://github.com/ojdkbuild/ojdkbuild/releases/download/11.0.1-1/java-11-openjdk-11.0.1.13-1.ojdkbuild.windows.x86_64.msi).
     - On macOS: Install `brew`, then `brew cask install java`.
- 2. `pip3 install spellsource` to install the latest version of the package.
+ 2. `pip3 install spellsource` to install the latest version of the package. To build from Git, use `pip3 install -e .` to install the package from the root of this repository, and run `./gradlew net:shadowJar` to build the engine.
  3. Start a game and play it with the specified bots:
  
     ```python
