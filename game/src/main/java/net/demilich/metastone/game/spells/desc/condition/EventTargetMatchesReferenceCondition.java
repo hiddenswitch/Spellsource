@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class EventTargetMatchesReferenceCondition extends Condition {
-    public EventTargetMatchesReferenceCondition(ConditionDesc desc) {
+	public EventTargetMatchesReferenceCondition(ConditionDesc desc) {
         super(desc);
     }
 

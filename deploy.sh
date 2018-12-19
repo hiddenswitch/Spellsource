@@ -6,8 +6,8 @@ echo Building
 ./client.sh >/dev/null
 
 # Build the server
-./gradlew clean >/dev/null
-./gradlew net:shadowJar >/dev/null
+gradle clean >/dev/null
+gradle net:shadowJar >/dev/null
 
 cd www
 ./deploy.sh
@@ -17,7 +17,7 @@ cd ..
 zip artifact.zip \
     ./Dockerfile \
     ./Dockerrun.aws.json \
-    ./net/build/libs/net-0.8.1-all.jar \
+    ./net/build/libs/net-0.8.3-all.jar \
     ./server.sh >/dev/null
 
 eb use metastone-dev >/dev/null

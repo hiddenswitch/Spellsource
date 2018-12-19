@@ -35,10 +35,13 @@
           "class": "DrawCardSpell"
         },
         {
-          "class": "ShuffleToDeckSpell",
-          "targetPlayer": "SELF",
-          "card": "spell_corrupted_blood",
-          "howMany": 2
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "ShuffleToDeckSpell",
+            "targetPlayer": "SELF",
+            "card": "spell_corrupted_blood",
+            "howMany": 2
+          }
         }
       ]
     }

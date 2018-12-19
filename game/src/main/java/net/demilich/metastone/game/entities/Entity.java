@@ -42,6 +42,7 @@ import java.io.Serializable;
  * to their opponents.
  */
 public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
+
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.

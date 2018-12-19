@@ -9,7 +9,7 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import java.util.List;
 
 public class SpellstoneValueProvider extends ValueProvider {
-    public SpellstoneValueProvider(ValueProviderDesc desc) {
+	public SpellstoneValueProvider(ValueProviderDesc desc) {
         super(desc);
     }
 

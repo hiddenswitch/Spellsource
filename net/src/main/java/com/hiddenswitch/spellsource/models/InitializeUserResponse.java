@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * Created by bberman on 1/30/17.
+ * Indicates the result of initializing the specified user.
  */
 public final class InitializeUserResponse implements Serializable {
 	private CreateCollectionResponse createCollectionResponse;

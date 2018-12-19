@@ -24,7 +24,6 @@ import java.util.Map;
 public class SetHeroHpSpell extends Spell {
 
 	private static final Logger logger = LoggerFactory.getLogger(SetHeroHpSpell.class);
-
 	public static SpellDesc create(int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(SetHeroHpSpell.class);
 		arguments.put(SpellArg.VALUE, value);

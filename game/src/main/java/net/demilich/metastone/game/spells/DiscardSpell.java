@@ -66,7 +66,6 @@ import java.util.Map;
 public class DiscardSpell extends Spell {
 
 	public static final int ALL_CARDS = -1;
-
 	public static SpellDesc create() {
 		return create(1);
 	}

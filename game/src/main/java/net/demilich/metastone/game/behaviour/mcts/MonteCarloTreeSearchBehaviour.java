@@ -19,7 +19,6 @@ public class MonteCarloTreeSearchBehaviour extends IntelligentBehaviour {
 	private final static Logger logger = LoggerFactory.getLogger(MonteCarloTreeSearchBehaviour.class);
 
 	private static final int ITERATIONS = 500;
-
 	@Override
 	public String getName() {
 		return "MCTS";

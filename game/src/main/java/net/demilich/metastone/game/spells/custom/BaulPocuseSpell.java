@@ -6,10 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.spells.CopyCardSpell;
-import net.demilich.metastone.game.spells.ShuffleToDeckSpell;
-import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.cards.Attribute;
@@ -51,3 +48,4 @@ public final class BaulPocuseSpell extends Spell {
 		}
 	}
 }
+

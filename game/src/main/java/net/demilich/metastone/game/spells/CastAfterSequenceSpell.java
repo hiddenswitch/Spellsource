@@ -39,6 +39,12 @@ public final class CastAfterSequenceSpell extends Spell {
 
 	private static Logger LOGGER = LoggerFactory.getLogger(CastAfterSequenceSpell.class);
 
+	public static SpellDesc create(SpellDesc spell) {
+		SpellDesc desc = new SpellDesc(CastAfterSequenceSpell.class);
+		desc.put(SpellArg.SPELL, spell);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

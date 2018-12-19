@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 
 public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc> {
+
 	private CardSourceDesc desc;
 
 	public CardSource(CardSourceDesc desc) {

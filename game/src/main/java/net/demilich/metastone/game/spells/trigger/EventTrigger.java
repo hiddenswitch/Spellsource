@@ -34,6 +34,7 @@ import java.io.Serializable;
  * </pre>
  */
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
+
 	private int owner = -1;
 	private EventTriggerDesc desc;
 

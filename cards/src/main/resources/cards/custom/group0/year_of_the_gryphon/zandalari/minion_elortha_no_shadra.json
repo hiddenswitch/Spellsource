@@ -14,27 +14,24 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "CastCardsSpell",
+          "class": "ElorthaNoShandraSpell",
           "target": "FRIENDLY_DECK",
-          "card": "spell_ancestral_spirit",
           "filter": {
             "class": "CardFilter",
             "cardType": "MINION"
           }
         },
         {
-          "class": "CastCardsSpell",
+          "class": "ElorthaNoShandraSpell",
           "target": "FRIENDLY_HAND",
-          "card": "spell_ancestral_spirit",
           "filter": {
             "class": "CardFilter",
             "cardType": "MINION"
           }
         },
         {
-          "class": "CastCardsSpell",
+          "class": "ElorthaNoShandraSpell",
           "target": "FRIENDLY_MINIONS",
-          "card": "spell_ancestral_spirit",
           "filter": {
             "class": "CardFilter",
             "cardType": "MINION"

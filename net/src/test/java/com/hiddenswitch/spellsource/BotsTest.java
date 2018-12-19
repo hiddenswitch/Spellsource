@@ -27,9 +27,6 @@ import java.util.List;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static org.junit.Assert.*;
 
-/**
- * Created by bberman on 12/7/16.
- */
 public class BotsTest extends SpellsourceTestBase {
 
 	@Test
@@ -65,20 +62,6 @@ public class BotsTest extends SpellsourceTestBase {
 				context1.getLogic().performGameAction(context1.getActivePlayerId(), gameAction);
 			}
 			assertTrue(context1.getTurn() > startTurn);
-		});
-	}
-
-	@Test
-	public void testBroker(TestContext context) throws CardParseException {
-		sync(() -> {
-			final RpcClient<Bots> bots = Rpc.connect(Bots.class);
-			final MulliganRequest request = new MulliganRequest(
-					Arrays.asList(
-							CardCatalogue.getCardById("spell_fireball"),
-							CardCatalogue.getCardById("spell_arcane_missiles"),
-							CardCatalogue.getCardById("spell_assassinate")));
-			MulliganResponse r = Bots.mulligan(request);
-			assertEquals(2, r.discardedCards.size());
 		});
 	}
 

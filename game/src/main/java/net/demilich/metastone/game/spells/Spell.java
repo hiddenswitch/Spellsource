@@ -28,6 +28,7 @@ import java.util.*;
  * JSON for spell objects. Each string in the {@code "class"} values corresponds exactly to a subclass of this class.
  */
 public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
+
 	private SpellDesc desc;
 
 	/**

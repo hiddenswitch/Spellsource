@@ -105,6 +105,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
+
 	public String id;
 	public String name;
 	public String heroPower;
