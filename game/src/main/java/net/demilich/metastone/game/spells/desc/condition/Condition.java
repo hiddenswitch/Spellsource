@@ -16,6 +16,7 @@ import java.io.Serializable;
  * The core function is {@link #isFulfilled(GameContext, Player, Entity, Entity)}.
  */
 public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
+
 	private ConditionDesc desc;
 
 	public Condition(ConditionDesc desc) {

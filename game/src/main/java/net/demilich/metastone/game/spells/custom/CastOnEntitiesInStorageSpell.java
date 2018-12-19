@@ -24,7 +24,6 @@ import java.util.List;
 public final class CastOnEntitiesInStorageSpell extends Spell {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(CastOnEntitiesInStorageSpell.class);
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

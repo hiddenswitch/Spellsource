@@ -20,6 +20,7 @@ import java.util.Set;
  * retaining their enchantments by changing their {@link Attribute#CARD_ID} or {@link Attribute#AURA_CARD_ID}.
  */
 public final class CardAttributeMap extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
+
 	@JsonIgnore
 	private Card card;
 

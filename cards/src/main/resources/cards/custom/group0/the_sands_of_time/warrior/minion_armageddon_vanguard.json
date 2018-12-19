@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Whenever a friendly minion takes damage, deal 1 damage to a random enemy.",
+  "description": "Whenever a friendly minion takes damage, deal 1 damage to a random enemy (up to 14).",
   "triggers": [
     {
       "eventTrigger": {
@@ -15,7 +15,7 @@
       "spell": {
         "class": "SetAttributeSpell",
         "target": "SELF",
-        "value": 70,
+        "value": 14,
         "attribute": "RESERVED_INTEGER_1"
       }
     },
@@ -71,7 +71,7 @@
     }
   ],
   "attributes": {
-    "RESERVED_INTEGER_1": 70
+    "RESERVED_INTEGER_1": 14
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",

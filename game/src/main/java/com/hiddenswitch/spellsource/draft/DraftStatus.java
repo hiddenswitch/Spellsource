@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.draft;
 
 /**
- * Created by bberman on 12/14/16.
+ * Indicates different states of a draft.
  */
 public enum DraftStatus {
 	IN_PROGRESS,

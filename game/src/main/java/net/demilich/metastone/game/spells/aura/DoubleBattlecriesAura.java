@@ -8,15 +8,15 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
 public class DoubleBattlecriesAura extends Aura {
 
-    public SpellDesc extraEffect = null;
+	public SpellDesc extraEffect = null;
 
-    public DoubleBattlecriesAura(AuraDesc desc) {
-        super(desc);
-        this.triggers.add(new WillEndSequenceTrigger());
-        if (desc.containsKey(AuraArg.REMOVE_EFFECT)) {
-            extraEffect = (SpellDesc) desc.get(AuraArg.REMOVE_EFFECT);
-        }
-        applyAuraEffect = NullSpell.create();
-        removeAuraEffect = NullSpell.create();
-    }
+	public DoubleBattlecriesAura(AuraDesc desc) {
+		super(desc);
+		this.triggers.add(new WillEndSequenceTrigger());
+		if (desc.containsKey(AuraArg.REMOVE_EFFECT)) {
+			extraEffect = (SpellDesc) desc.get(AuraArg.REMOVE_EFFECT);
+		}
+		applyAuraEffect = NullSpell.create();
+		removeAuraEffect = NullSpell.create();
+	}
 }

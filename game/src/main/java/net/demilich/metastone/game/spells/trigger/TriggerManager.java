@@ -23,6 +23,7 @@ public class TriggerManager implements Cloneable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
 
 	private final List<Trigger> triggers = new ArrayList<Trigger>();
+	private int depth = 0;
 
 	public TriggerManager() {
 	}
@@ -36,7 +37,7 @@ public class TriggerManager implements Cloneable, Serializable {
 	public void addTrigger(Trigger trigger) {
 		triggers.add(trigger);
 		if (triggers.size() > 100) {
-			logger.warn("Warning, many triggers: " + triggers.size() + " adding one of type: " + trigger);
+			logger.warn("addTrigger {}: Warning, many triggers: {}", trigger, triggers.size());
 		}
 	}
 
@@ -66,6 +67,10 @@ public class TriggerManager implements Cloneable, Serializable {
 	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
+		depth++;
+		if (depth > 96) {
+			throw new IllegalStateException("infinite recursion");
+		}
 		if (event instanceof HasValue) {
 			event.getGameContext().getEventValueStack().push(((HasValue) event).getValue());
 		} else {
@@ -156,6 +161,7 @@ public class TriggerManager implements Cloneable, Serializable {
 		} catch (IndexOutOfBoundsException | NoSuchElementException ex) {
 			logger.error("fireGameEvent", ex);
 		}
+		depth--;
 	}
 
 	private List<Trigger> getListSnapshot(List<Trigger> triggerList) {

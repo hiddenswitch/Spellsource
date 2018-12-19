@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.entities.heroes;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;

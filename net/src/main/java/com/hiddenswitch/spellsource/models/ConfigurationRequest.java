@@ -14,15 +14,18 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 /**
- * Created by bberman on 4/3/17.
+ * Indicates a configuration for a new game.
  */
-public class ConfigurationRequest implements Serializable {
+public final class ConfigurationRequest implements Serializable {
 	private GameId gameId;
 	private List<Configuration> configurations = new ArrayList<>();
-	private Trigger triggers;
 	private long noActivityTimeout = Games.getDefaultNoActivityTimeout();
+
+	public ConfigurationRequest() {
+	}
 
 	public static ConfigurationRequest botMatch(GameId gameId, UserId userId, UserId botId, DeckId deckId, DeckId botDeckId) {
 		return new ConfigurationRequest()
@@ -85,15 +88,6 @@ public class ConfigurationRequest implements Serializable {
 		return ToStringBuilder.reflectionToString(this);
 	}
 
-	public Trigger getTriggers() {
-		return triggers;
-	}
-
-	public ConfigurationRequest setTriggers(Trigger triggers) {
-		this.triggers = triggers;
-		return this;
-	}
-
 	public long getNoActivityTimeout() {
 		return noActivityTimeout;
 	}
@@ -101,5 +95,20 @@ public class ConfigurationRequest implements Serializable {
 	public ConfigurationRequest setNoActivityTimeout(long noActivityTimeout) {
 		this.noActivityTimeout = noActivityTimeout;
 		return this;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ConfigurationRequest that = (ConfigurationRequest) o;
+		return noActivityTimeout == that.noActivityTimeout &&
+				Objects.equals(gameId, that.gameId) &&
+				Objects.equals(configurations, that.configurations);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(gameId, configurations, noActivityTimeout);
 	}
 }

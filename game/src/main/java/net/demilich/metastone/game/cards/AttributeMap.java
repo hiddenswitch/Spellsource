@@ -29,6 +29,7 @@ import java.util.Set;
  */
 //@JsonDeserialize(using = AttributeMapDeserializer.class)
 public class AttributeMap extends BaseMap<Attribute, Object> implements Serializable, Cloneable, HasEntrySet<Attribute, Object> {
+
 	public AttributeMap() {
 		super(Attribute.class);
 	}

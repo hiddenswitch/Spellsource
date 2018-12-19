@@ -3,16 +3,25 @@ package net.demilich.metastone.game.decks;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Indicates a deck from the player's online collection.
  */
 public final class CollectionDeck implements Serializable, Cloneable, Deck {
 
-	private final String deckId;
+	private String deckId;
+
+	public CollectionDeck() {
+	}
 
 	public CollectionDeck(@NotNull String deckId) {
 		this.deckId = deckId;
+	}
+
+	public CollectionDeck setDeckId(String deckId) {
+		this.deckId = deckId;
+		return this;
 	}
 
 	@Override
@@ -30,17 +39,15 @@ public final class CollectionDeck implements Serializable, Cloneable, Deck {
 	}
 
 	@Override
-	public boolean equals(Object obj) {
-		Deck rhs = (Deck) obj;
-		if (rhs == null) {
-			return false;
-		}
-
-		return this.getDeckId().equals(rhs.getDeckId());
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		CollectionDeck that = (CollectionDeck) o;
+		return Objects.equals(deckId, that.deckId);
 	}
 
 	@Override
 	public int hashCode() {
-		return deckId.hashCode();
+		return Objects.hash(deckId);
 	}
 }

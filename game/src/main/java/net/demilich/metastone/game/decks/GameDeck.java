@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  */
 public class GameDeck implements Serializable, Cloneable, Deck {
 	public static final GameDeck EMPTY;
-
 	protected String deckId;
 	protected CardList cards = new CardArrayList();
 

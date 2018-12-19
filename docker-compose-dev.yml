@@ -7,16 +7,8 @@ services:
       --debug \
       --api \
       --docker \
-      --entryPoints="Name:http Address::80 Redirect.EntryPoint:https" \
-      --entryPoints="Name:https Address::443 TLS" \
+      --entryPoints="Name:http Address::80" \
       --retry \
-      --acme \
-      --acme.tlschallenge \
-      --acme.email="benjamin.s.berman@gmail.com" \
-      --acme.storage="/data/acme.json" \
-      --acme.entrypoint="https" \
-      --acme.ondemand=true \
-      --docker.swarmmode \
       --docker.watch \
       --docker.exposedbydefault=true
     ports:
@@ -28,10 +20,8 @@ services:
     deploy:
       labels:
       - "traefik.frontend.rule=PathPrefixStrip:/admin/traefik/"
-      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.entryPoints=http"
       - "traefik.port=8080"
-      - "traefik.backend.loadbalancer.swarm=true"
-      - "traefik.frontend.auth.basic.users=DoctorPangloss:$$apr1$$HGvoycqo$$ZDgj8py9iGj747gYPmurC0"
   game:
     restart: always
     image: doctorpangloss/spellsource:latest
@@ -42,8 +32,7 @@ services:
     deploy:
       labels:
       - "traefik.frontend.rule=PathPrefixStrip:/api/v2/"
-      - "traefik.frontend.entryPoints=http,https"
-      - "traefik.backend.loadbalancer.swarm=true"
+      - "traefik.frontend.entryPoints=http"
       - "traefik.backend.loadbalancer.stickiness=true"
       - "traefik.backend.healthcheck.path=/"
       - "traefik.port=80"
@@ -54,6 +43,7 @@ services:
       retries: 3
   mongo:
     restart: always
+    # Latest version fully supported by Spellsource
     image: "mongo:3.6"
     volumes:
     - mongodata:/data/db
@@ -71,8 +61,7 @@ services:
     deploy:
       labels:
       - "traefik.frontend.rule=PathPrefix:/admin/mancenter/"
-      - "traefik.backend.loadbalancer.swarm=true"
-      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.frontend.entryPoints=http"
       - "traefik.port=8080"
 volumes:
   mongodata:

@@ -21,6 +21,7 @@ import java.util.*;
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable {
+
 	protected final Zones zone;
 	protected int player = -1;
 	protected List<E> internal = new ArrayList<>();

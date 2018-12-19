@@ -28,6 +28,7 @@ import java.util.Map;
 @JsonSerialize(using = DescSerializer.class)
 public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends BaseMap<T, Object> implements Serializable,
 		Cloneable, HasDesc<Desc<T, V>>, HasEntrySet<T, Object> {
+
 	protected Desc(Map<T, Object> arguments, Class<T> keyType) {
 		super(keyType);
 		if (arguments.isEmpty()) {

@@ -136,6 +136,8 @@ public class GameEvent implements Serializable {
     
     QUEST_SUCCESSFUL("QUEST_SUCCESSFUL"),
     
+    RETURNED_TO_HAND("RETURNED_TO_HAND"),
+    
     ROASTED("ROASTED"),
     
     REVEAL_CARD("REVEAL_CARD"),
