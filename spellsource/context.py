@@ -57,8 +57,9 @@ class Context(contextlib.AbstractContextManager):
         except FileNotFoundError:
             self.status = Context.STATUS_FAILED
             raise FileNotFoundError(
-                'Could not find the java executable. Is Java installed? On Windows, is java.exe somewhere in your '
-                'PATH?')
+                'Is Java installed? On Windows, is java.exe somewhere in your PATH? If this command was run from the '
+                'repository, did you run ./gradlew net:shadowJar (./gradlew.bat net:shadowJar on Windows)? These '
+                'commands build the Java library.')
         except Exception as ex:
             self.status = Context.STATUS_FAILED
             raise ex
