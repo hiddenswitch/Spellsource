@@ -1,0 +1,29 @@
+{
+	"name": "Party Portal",
+	"baseManaCost": 1,
+	"type": "MINION",
+	"baseAttack": 0,
+	"baseHp": 10,
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Whenever you cast a spell, summon a minion of the same Cost.",
+	"trigger": {
+		"eventTrigger": {
+			"class": "SpellCastedTrigger",
+			"sourcePlayer": "SELF"
+		},
+		"spell": {
+			"class": "SummonRandomMinionFilteredSpell",
+			"cardFilter": {
+				"class": "CardFilter",
+				"manaCost": {
+					"class": "PlayerAttributeValueProvider",
+					"playerAttribute": "LAST_MANA_COST"
+				}
+			}
+		}
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
