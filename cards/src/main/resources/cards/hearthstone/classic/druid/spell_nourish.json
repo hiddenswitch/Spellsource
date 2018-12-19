@@ -1,6 +1,6 @@
 {
   "name": "Nourish",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "CHOOSE_ONE",
   "heroClass": "BROWN",
   "rarity": "RARE",
