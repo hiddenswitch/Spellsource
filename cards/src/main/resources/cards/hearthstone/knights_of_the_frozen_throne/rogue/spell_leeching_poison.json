@@ -1,10 +1,10 @@
 {
   "name": "Leeching Poison",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Give your weapon Lifesteal.",
+  "description": "Give your weapon Lifesteal this turn.",
   "condition": {
     "class": "HasWeaponCondition",
     "targetPlayer": "SELF"
@@ -14,6 +14,10 @@
     "class": "AddAttributeSpell",
     "target": "FRIENDLY_WEAPON",
     "attribute": "LIFESTEAL"
+    "revertTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    }
   },
   "collectible": true,
   "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
