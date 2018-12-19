@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *https://api-4.hiddenswitch.com/api/v2*
+All URIs are relative to *https://api-3.hiddenswitch.com*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------

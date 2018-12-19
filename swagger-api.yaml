@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 4.0.0
+  version: 2.1.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -22,8 +22,7 @@ info:
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: api-4.hiddenswitch.com
-basePath: /api/v2
+host: api-3.hiddenswitch.com
 schemes:
 - https
 consumes:
