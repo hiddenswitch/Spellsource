@@ -6,8 +6,8 @@ echo Building
 ./client.sh >/dev/null
 
 # Build the server
-./gradlew clean >/dev/null
-./gradlew net:shadowJar >/dev/null
+gradle clean >/dev/null
+gradle net:shadowJar >/dev/null
 
 cd www
 ./deploy.sh
