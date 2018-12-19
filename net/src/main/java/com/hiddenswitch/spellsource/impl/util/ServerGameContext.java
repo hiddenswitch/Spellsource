@@ -503,8 +503,8 @@ public class ServerGameContext extends GameContext implements Server {
 					}
 					// The game is already ended whenever the fiber is interrupted, there's no other place that the external user
 					// is allowed to interrupt the fiber.
-				} catch (RuntimeException other) {
-					LOGGER.error("play {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), other);
+				} catch (Throwable anyOther) {
+					LOGGER.error("play {}: An error occurred and we're going to attempt ending the game normally.", getGameId(), anyOther);
 					try {
 						endGame();
 					} catch (Throwable endGameError) {
