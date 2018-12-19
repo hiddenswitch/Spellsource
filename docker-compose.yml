@@ -48,8 +48,7 @@ services:
       - "traefik.port=80"
   mongo:
     restart: always
-    # Latest version fully supported by Spellsource
-    image: "mongo:3.4.1"
+    image: "mongo:4.0.4"
     volumes:
     - mongodata:/data/db
     deploy:
