@@ -9,6 +9,7 @@ services:
       --docker \
       --entryPoints="Name:http Address::80" \
       --retry \
+      --docker.watch \
       --docker.exposedbydefault=true
     ports:
     - 80:80
@@ -35,10 +36,15 @@ services:
       - "traefik.backend.loadbalancer.stickiness=true"
       - "traefik.backend.healthcheck.path=/"
       - "traefik.port=80"
+    healthcheck:
+      test: curl --fail -s http://localhost:80/ || exit 1
+      interval: 8s
+      timeout: 4s
+      retries: 3
   mongo:
     restart: always
     # Latest version fully supported by Spellsource
-    image: "mongo:3.4.1"
+    image: "mongo:3.6"
     volumes:
     - mongodata:/data/db
     deploy:
