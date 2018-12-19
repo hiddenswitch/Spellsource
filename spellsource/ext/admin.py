@@ -15,7 +15,8 @@ class Admin(object):
     _DEFAULT_AWS_USER_POLICIES = (
         'arn:aws:iam::aws:policy/AWSElasticBeanstalkFullAccess',
         'arn:aws:iam::aws:policy/AmazonRekognitionFullAccess',
-        'arn:aws:iam::aws:policy/AmazonS3FullAccess'
+        'arn:aws:iam::aws:policy/AmazonS3FullAccess',
+        'arn:aws:iam::aws:policy/CloudWatchLogsFullAccess'
     )
 
     @staticmethod
@@ -82,12 +83,13 @@ class Admin(object):
          - AWSElasticBeanstalkFullAccess
          - AmazonRekognitionFullAccess
          - AmazonS3FullAccess
+         - CloudWatchLogsFullAccess
         :param username: The user's name to create. If it already exists this will fail early.
         :param profile_name: The profile name to use for the emitted credentials file. Defaults to 'default'.
         :return: A string with newlines representing the ~/.aws/credentials file for that user
         """
         aws = iam.Client()
-        if username in aws.list_users(path_prefix=username).users:
+        if username in aws.list_users(path_prefix='/' + username).users:
             raise ValueError(f'The username {username} already exists')
         aws.create_user(user_name=username)
         aws.add_user_to_group(group_name=Admin._SPELLSOURCE_CONTRIBUTOR_GROUP_NAME, user_name=username)

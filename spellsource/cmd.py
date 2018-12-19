@@ -21,9 +21,9 @@ def _cli():
 
 @_cli.command()
 @click.argument('username')
-@click.option('--profile_name', default='default', help='the profile name to use in the printed credentials file',
+@click.option('--profile-name', default='default', help='the profile name to use in the printed credentials file',
               show_default=True)
-def create_user(username, profile='default'):
+def create_user(username, profile_name='default'):
     """
     Creates an AWS user named USERNAME.
 
@@ -40,7 +40,7 @@ def create_user(username, profile='default'):
     Thus, to create the user doctorpangloss and save the credentials for later use, run the command:
 
     \b
-      spellsource create-user doctorpangloss --profile_name=spellsource >> ~/.aws/credentials
+      spellsource create-user doctorpangloss --profile-name=spellsource >> ~/.aws/credentials
 
     Then, to use this profile for an aws command:
 
@@ -50,7 +50,7 @@ def create_user(username, profile='default'):
     The following policies are added by default: AWSElasticBeanstalkFullAccess, AmazonRekognitionFullAccess and
     AmazonS3FullAccess.
     """
-    click.echo(Admin.create_user(username=username, profile_name=profile))
+    click.echo(Admin.create_user(username=username, profile_name=profile_name))
 
 
 @_cli.command()
