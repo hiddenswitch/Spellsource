@@ -16,8 +16,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public final class FightRandomAdjacentMinionSpell extends FightSpell {
 
-	private static final long serialVersionUID = -4237098997576032254L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

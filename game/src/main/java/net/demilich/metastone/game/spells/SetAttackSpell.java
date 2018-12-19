@@ -70,7 +70,6 @@ import java.util.Map;
  */
 public class SetAttackSpell extends Spell {
 
-	private static final long serialVersionUID = -1487837378719628332L;
 	private static Logger logger = LoggerFactory.getLogger(SetAttackSpell.class);
 
 	public static SpellDesc create(int value) {

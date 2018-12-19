@@ -83,8 +83,6 @@ import static java.util.stream.Collectors.toList;
 @JsonDeserialize(using = SpellDescDeserializer.class)
 public class SpellDesc extends Desc<SpellArg, Spell> {
 
-	private static final long serialVersionUID = 8185697663917823826L;
-
 	public SpellDesc() {
 		super(SpellArg.class);
 	}

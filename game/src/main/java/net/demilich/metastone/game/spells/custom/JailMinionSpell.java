@@ -17,8 +17,6 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public final class JailMinionSpell extends Spell {
 
-	private static final long serialVersionUID = -6915525982790968136L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

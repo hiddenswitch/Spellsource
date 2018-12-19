@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public final class CardRevealedEvent extends GameEvent implements HasCard {
 
-	private static final long serialVersionUID = -6000745204769223822L;
 	private final Card card;
 
 	public CardRevealedEvent(GameContext context, int playerId, Card card) {

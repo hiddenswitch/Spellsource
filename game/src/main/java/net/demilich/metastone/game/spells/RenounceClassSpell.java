@@ -14,8 +14,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 @Deprecated
 public class RenounceClassSpell extends Spell {
 
-	private static final long serialVersionUID = 7177056326346575669L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

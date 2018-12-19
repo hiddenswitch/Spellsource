@@ -4,7 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 
 public final class LoseDeflectEvent extends GameEvent implements HasVictim {
-	private static final long serialVersionUID = 682397019753088626L;
 	private final Entity eventTarget;
 
 	public LoseDeflectEvent(GameContext context, Entity loserOfShield, int targetPlayerId, int sourcePlayerId) {

@@ -20,8 +20,6 @@ import java.util.List;
  */
 public final class BuffLeftmostMinionInHandSpell extends BuffSpell {
 
-	private static final long serialVersionUID = -5020519366825625111L;
-
 	@Override
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {

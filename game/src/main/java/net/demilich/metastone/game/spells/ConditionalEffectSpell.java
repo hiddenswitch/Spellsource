@@ -38,7 +38,6 @@ import org.slf4j.LoggerFactory;
  * @see ConditionalSpell for a spell that executes its subspell only if its condition is met.
  */
 public class ConditionalEffectSpell extends Spell {
-	private static final long serialVersionUID = -824021881593620019L;
 	private static Logger logger = LoggerFactory.getLogger(ConditionalEffectSpell.class);
 
 	protected boolean isConditionFulfilled(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

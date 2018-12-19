@@ -12,7 +12,7 @@ import java.util.*;
 import static java.util.stream.Collectors.toList;
 
 /**
- * Created by bberman on 12/14/16.
+ * Progresses a draft.
  */
 public class DraftLogic {
 	private static final Logger logger = LoggerFactory.getLogger(DraftLogic.class);

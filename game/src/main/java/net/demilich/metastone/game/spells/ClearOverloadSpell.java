@@ -24,8 +24,6 @@ import java.util.Map;
  */
 public class ClearOverloadSpell extends Spell {
 
-	private static final long serialVersionUID = 7126554651911451471L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(ClearOverloadSpell.class);
 		return new SpellDesc(arguments);

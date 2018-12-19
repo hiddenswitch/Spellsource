@@ -22,7 +22,6 @@ import java.util.Map;
  */
 public final class BuffAsEnchantmentSpell extends BuffSpell {
 
-	private static final long serialVersionUID = 5269439643095111485L;
 	private static Logger logger = LoggerFactory.getLogger(BuffAsEnchantmentSpell.class);
 
 	public static SpellDesc create(EntityReference target, int value) {

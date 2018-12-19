@@ -9,8 +9,6 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 public class SecretSource extends CardSource implements HasCardCreationSideEffects {
 
-	private static final long serialVersionUID = 4499722668264597899L;
-
 	public SecretSource(CardSourceDesc desc) {
 		super(desc);
 	}

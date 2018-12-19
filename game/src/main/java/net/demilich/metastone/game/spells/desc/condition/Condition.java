@@ -17,7 +17,6 @@ import java.io.Serializable;
  */
 public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
 
-	private static final long serialVersionUID = 7229995823131113403L;
 	private ConditionDesc desc;
 
 	public Condition(ConditionDesc desc) {

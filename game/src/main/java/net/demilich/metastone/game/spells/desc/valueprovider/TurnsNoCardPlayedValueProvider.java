@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
  */
 public final class TurnsNoCardPlayedValueProvider extends ValueProvider {
 
-	private static final long serialVersionUID = 7924103729281642655L;
-
 	public TurnsNoCardPlayedValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

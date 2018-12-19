@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class TargetAcquisitionEvent extends GameEvent {
 
-	private static final long serialVersionUID = -4544144586682682981L;
 	private final Entity target;
 	private final Entity source;
 	private final ActionType actionType;

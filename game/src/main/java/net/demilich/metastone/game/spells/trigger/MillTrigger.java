@@ -5,8 +5,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public final class MillTrigger extends DiscardTrigger {
 
-	private static final long serialVersionUID = 2200997775576980770L;
-
 	public MillTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

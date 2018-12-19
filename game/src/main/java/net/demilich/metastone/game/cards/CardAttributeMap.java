@@ -21,7 +21,6 @@ import java.util.Set;
  */
 public final class CardAttributeMap extends AttributeMap implements Cloneable, JsonSerializable, Serializable {
 
-	private static final long serialVersionUID = -7078617079666624793L;
 	@JsonIgnore
 	private Card card;
 

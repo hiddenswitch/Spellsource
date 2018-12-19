@@ -12,8 +12,6 @@ import net.demilich.metastone.game.logic.GameLogic;
  */
 public class RandomCondition extends Condition {
 
-	private static final long serialVersionUID = 707057838829867886L;
-
 	public RandomCondition(ConditionDesc desc) {
 		super(desc);
 	}

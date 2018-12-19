@@ -13,8 +13,6 @@ import java.io.Serializable;
  */
 public class DeckSource extends CardSource implements Serializable {
 
-	private static final long serialVersionUID = -7502141471171947521L;
-
 	public DeckSource(CardSourceDesc desc) {
 		super(desc);
 	}

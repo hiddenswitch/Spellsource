@@ -7,8 +7,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class ReturnToHandTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = 7215090550933343657L;
-
 	public ReturnToHandTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

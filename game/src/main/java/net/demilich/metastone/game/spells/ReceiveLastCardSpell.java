@@ -14,8 +14,6 @@ import java.util.List;
  */
 public final class ReceiveLastCardSpell extends ReceiveCardSpell {
 
-	private static final long serialVersionUID = 7631856099508377230L;
-
 	@Override
 	protected Card getAndRemoveCard(GameContext context, List<Card> cards) {
 		if (cards.isEmpty()) {

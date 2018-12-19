@@ -8,8 +8,6 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 public class HoldsCardCondition extends Condition {
 
-	private static final long serialVersionUID = 7868441061782883097L;
-
 	public HoldsCardCondition(ConditionDesc desc) {
 		super(desc);
 	}

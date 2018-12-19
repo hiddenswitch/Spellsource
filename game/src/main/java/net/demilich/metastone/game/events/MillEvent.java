@@ -4,8 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 
 public final class MillEvent extends DiscardEvent {
-	private static final long serialVersionUID = 1914975810078079698L;
-
 	public MillEvent(GameContext context, int id, Card card) {
 		super(context, id, card);
 	}

@@ -6,8 +6,6 @@ import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 public class EventTriggerDescDeserializer extends DescDeserializer<EventTriggerDesc, EventTriggerArg, EventTrigger> {
 
-	private static final long serialVersionUID = 7004098097150995612L;
-
 	public EventTriggerDescDeserializer() {
 		super(EventTriggerDesc.class);
 	}

@@ -6,8 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class NullFilter extends EntityFilter {
 
-	private static final long serialVersionUID = 4199071903307707362L;
-
 	private NullFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

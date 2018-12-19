@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class SpellCastedEvent extends GameEvent implements HasCard {
 
-	private static final long serialVersionUID = 5600268099413753153L;
 	private final Card sourceCard;
 
 	public SpellCastedEvent(GameContext context, int playerId, Card sourceCard) {

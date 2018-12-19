@@ -12,8 +12,6 @@ import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 
 public class ManaCostModifierValueProvider extends ValueProvider {
-	private static final long serialVersionUID = 2552295337871631190L;
-
 	public ManaCostModifierValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

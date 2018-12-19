@@ -52,7 +52,6 @@ import java.util.Map;
  */
 public class EquipWeaponSpell extends Spell {
 
-	private static final long serialVersionUID = -6730662518858302204L;
 	private Logger logger = LoggerFactory.getLogger(EquipWeaponSpell.class);
 
 	public static SpellDesc create(String cardId) {

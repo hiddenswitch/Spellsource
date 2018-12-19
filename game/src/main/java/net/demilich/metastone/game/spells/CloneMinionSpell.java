@@ -23,8 +23,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 @Deprecated
 public class CloneMinionSpell extends Spell {
 
-	private static final long serialVersionUID = -4736373900364949913L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

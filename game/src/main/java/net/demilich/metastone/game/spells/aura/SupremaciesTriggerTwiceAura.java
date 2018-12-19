@@ -11,8 +11,6 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  */
 public final class SupremaciesTriggerTwiceAura extends Aura {
 
-	private static final long serialVersionUID = 4559340249024543445L;
-
 	public SupremaciesTriggerTwiceAura(AuraDesc desc) {
 		super(new WillEndSequenceTrigger(), NullSpell.create(), NullSpell.create(), desc.getTarget(), desc.getFilter(), desc.getCondition());
 	}

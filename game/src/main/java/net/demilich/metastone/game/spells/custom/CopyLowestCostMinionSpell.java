@@ -22,8 +22,6 @@ import static java.util.stream.Collectors.toList;
  * card.
  */
 public final class CopyLowestCostMinionSpell extends Spell {
-	private static final long serialVersionUID = 3105802601084921032L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

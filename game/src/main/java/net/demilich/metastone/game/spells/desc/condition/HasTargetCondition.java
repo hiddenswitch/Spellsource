@@ -10,8 +10,6 @@ import net.demilich.metastone.game.targeting.Zones;
 
 public class HasTargetCondition extends Condition {
 
-	private static final long serialVersionUID = 8572854016569154520L;
-
 	public HasTargetCondition(ConditionDesc desc) {
 		super(desc);
 	}

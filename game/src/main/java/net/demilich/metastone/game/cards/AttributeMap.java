@@ -30,8 +30,6 @@ import java.util.Set;
 //@JsonDeserialize(using = AttributeMapDeserializer.class)
 public class AttributeMap extends BaseMap<Attribute, Object> implements Serializable, Cloneable, HasEntrySet<Attribute, Object> {
 
-	private static final long serialVersionUID = 9163705894935440983L;
-
 	public AttributeMap() {
 		super(Attribute.class);
 	}

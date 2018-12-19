@@ -35,7 +35,6 @@ import java.util.Map;
  */
 public class CastRepeatedlySpell extends Spell {
 
-	private static final long serialVersionUID = -7169065991867895415L;
 	private static Logger logger = LoggerFactory.getLogger(CastRepeatedlySpell.class);
 
 	public static SpellDesc create(SpellDesc spell, int value) {

@@ -37,7 +37,6 @@ import java.util.Map;
  */
 public class PutMinionOnBoardFromDeckSpell extends Spell {
 
-	private static final long serialVersionUID = 6764351200397147569L;
 	private static Logger logger = LoggerFactory.getLogger(PutMinionOnBoardFromDeckSpell.class);
 
 	/**

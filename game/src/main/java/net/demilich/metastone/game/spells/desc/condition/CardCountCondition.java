@@ -9,8 +9,6 @@ import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
 public class CardCountCondition extends Condition {
 
-	private static final long serialVersionUID = 7641299979935702472L;
-
 	public CardCountCondition(ConditionDesc desc) {
 		super(desc);
 	}

@@ -9,8 +9,6 @@ import net.demilich.metastone.game.cards.Card;
  */
 public class StringDescription extends DynamicDescription {
 
-	private static final long serialVersionUID = -169968239787783226L;
-
 	public StringDescription(String s) {
 		super(new DynamicDescriptionDesc());
 		getDesc().put(DynamicDescriptionArg.STRING, s);

@@ -67,7 +67,6 @@ import static java.util.stream.Collectors.toList;
  */
 public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public static final int END_OF_SEQUENCE_MAX_DEPTH = 14;
-	private static final long serialVersionUID = -8396086447346717917L;
 	protected static Logger logger = LoggerFactory.getLogger(GameLogic.class);
 	/**
 	 * The maximum number of {@link Minion} entities that can be on a {@link Zones#BATTLEFIELD}.

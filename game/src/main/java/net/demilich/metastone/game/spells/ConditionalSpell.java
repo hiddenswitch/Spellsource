@@ -89,7 +89,6 @@ import org.slf4j.LoggerFactory;
  * 		condition is false.
  */
 public class ConditionalSpell extends Spell {
-	private static final long serialVersionUID = 6778978328278742689L;
 	private static Logger logger = LoggerFactory.getLogger(ConditionalSpell.class);
 
 	public static SpellDesc create(Condition[] conditions, SpellDesc[] spells) {

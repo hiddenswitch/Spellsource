@@ -24,8 +24,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public final class CastOnCardsInStorageSpell extends Spell {
 
-	private static final long serialVersionUID = 927068493798864282L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

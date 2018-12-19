@@ -6,8 +6,6 @@ import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class HeroPowerUsedTrigger extends EventTrigger {
-	private static final long serialVersionUID = -896842117946874301L;
-
 	public HeroPowerUsedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

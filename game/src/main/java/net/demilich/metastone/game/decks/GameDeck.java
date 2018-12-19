@@ -22,8 +22,6 @@ import java.util.stream.Collectors;
  */
 public class GameDeck implements Serializable, Cloneable, Deck {
 	public static final GameDeck EMPTY;
-	private static final long serialVersionUID = -5745145777614961300L;
-
 	protected String deckId;
 	protected CardList cards = new CardArrayList();
 

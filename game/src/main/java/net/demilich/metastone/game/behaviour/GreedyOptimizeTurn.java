@@ -15,7 +15,6 @@ import java.util.List;
 
 public class GreedyOptimizeTurn extends IntelligentBehaviour {
 
-	private static final long serialVersionUID = -111639888618191698L;
 	private final Logger logger = LoggerFactory.getLogger(GreedyOptimizeTurn.class);
 
 	private final Heuristic heuristic;

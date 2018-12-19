@@ -8,8 +8,6 @@ import net.demilich.metastone.game.cards.Attribute;
 public class ComboCondition extends Condition {
 
 	public static final ComboCondition INSTANCE = new ComboCondition(new ConditionDesc(ComboCondition.class));
-	private static final long serialVersionUID = 1343672859956870566L;
-
 	public ComboCondition(ConditionDesc desc) {
 		super(desc);
 	}

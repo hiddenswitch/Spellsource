@@ -6,8 +6,6 @@ package net.demilich.metastone.game.spells.desc.source;
 @Deprecated
 public class GraveyardSource extends GraveyardMinionsSource {
 
-	private static final long serialVersionUID = 8657089785857326619L;
-
 	public GraveyardSource(CardSourceDesc desc) {
 		super(desc);
 	}

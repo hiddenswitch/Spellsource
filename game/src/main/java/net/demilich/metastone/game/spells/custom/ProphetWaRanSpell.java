@@ -21,8 +21,6 @@ import java.util.List;
  */
 public final class ProphetWaRanSpell extends Spell {
 
-	private static final long serialVersionUID = -8287721809671484335L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

@@ -18,8 +18,6 @@ import java.util.List;
  */
 public final class CaptnCookieAura extends NoggenfoggerAura {
 
-	private static final long serialVersionUID = -4573949372353008326L;
-
 	public CaptnCookieAura(AuraDesc desc) {
 		super(desc);
 	}

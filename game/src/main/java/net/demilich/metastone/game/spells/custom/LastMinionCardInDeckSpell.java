@@ -36,7 +36,6 @@ import java.util.Optional;
  * Implements End of the Line.
  */
 public final class LastMinionCardInDeckSpell extends Spell {
-	private static final long serialVersionUID = -7683469750802578994L;
 	private static Logger logger = LoggerFactory.getLogger(LastMinionCardInDeckSpell.class);
 
 	@Override

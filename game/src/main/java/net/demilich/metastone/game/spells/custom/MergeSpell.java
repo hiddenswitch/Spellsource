@@ -18,8 +18,6 @@ import java.util.Map;
 
 public class MergeSpell extends Spell {
 
-	private static final long serialVersionUID = 872770609861227086L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(MergeSpell.class);
 		return new SpellDesc(arguments);

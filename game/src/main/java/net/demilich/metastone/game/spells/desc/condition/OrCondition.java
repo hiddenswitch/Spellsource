@@ -32,8 +32,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public class OrCondition extends Condition {
 
-	private static final long serialVersionUID = -2676433681810863626L;
-
 	public OrCondition(ConditionDesc desc) {
 		super(desc);
 	}

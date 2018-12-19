@@ -14,8 +14,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class AnyMatchFilterCondition extends Condition {
 
-	private static final long serialVersionUID = -4669833982168960406L;
-
 	public static Condition create(EntityReference target, EntityFilter filter) {
 		ConditionDesc desc = new ConditionDesc(AnyMatchFilterCondition.class);
 		desc.put(ConditionArg.TARGET, target);

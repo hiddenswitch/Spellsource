@@ -7,8 +7,6 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
 
 public class ConditionalValueProvider extends ValueProvider {
 
-	private static final long serialVersionUID = -7600242786007626988L;
-
 	public ConditionalValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

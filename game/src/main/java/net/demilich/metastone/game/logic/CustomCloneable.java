@@ -4,8 +4,6 @@ import java.io.Serializable;
 
 public class CustomCloneable implements Cloneable, Serializable {
 
-	private static final long serialVersionUID = -385083408761766369L;
-
 	@Override
 	public CustomCloneable clone() {
 		try {

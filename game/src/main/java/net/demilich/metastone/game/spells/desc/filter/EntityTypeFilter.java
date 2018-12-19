@@ -11,8 +11,6 @@ import net.demilich.metastone.game.entities.EntityType;
  */
 public final class EntityTypeFilter extends EntityFilter {
 
-	private static final long serialVersionUID = -1314400135196838178L;
-
 	public EntityTypeFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

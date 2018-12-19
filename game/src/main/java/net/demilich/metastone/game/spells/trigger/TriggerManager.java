@@ -20,7 +20,6 @@ import java.util.NoSuchElementException;
  * The trigger manager contains the code for managing triggers and actually processing events' effects in the game.
  */
 public class TriggerManager implements Cloneable, Serializable {
-	private static final long serialVersionUID = -1174060244466215836L;
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
 
 	private final List<Trigger> triggers = new ArrayList<Trigger>();

@@ -73,8 +73,6 @@ import java.util.List;
  */
 public class RecruitSpell extends Spell {
 
-	private static final long serialVersionUID = 2153278004317303468L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

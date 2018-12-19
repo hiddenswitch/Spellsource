@@ -11,8 +11,6 @@ import java.util.List;
 
 public class HasEntitiesOnBoardCondition extends Condition {
 
-	private static final long serialVersionUID = 5802068704694923884L;
-
 	public HasEntitiesOnBoardCondition(ConditionDesc desc) {
 		super(desc);
 	}

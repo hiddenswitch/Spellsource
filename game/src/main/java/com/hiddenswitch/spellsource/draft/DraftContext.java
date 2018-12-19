@@ -9,7 +9,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import java.util.function.Consumer;
 
 /**
- * Created by bberman on 12/14/16.
+ * Stores data and logic relating to drafting cards.
  */
 public class DraftContext implements Consumer<Handler<AsyncResult<DraftContext>>> {
 	private DraftLogic logic = new DraftLogic(this);

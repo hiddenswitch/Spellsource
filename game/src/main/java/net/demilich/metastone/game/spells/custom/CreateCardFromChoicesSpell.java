@@ -27,8 +27,6 @@ import java.util.Map;
  * Creates a card from a sequence of discovers.
  */
 public final class CreateCardFromChoicesSpell extends Spell {
-	private static final long serialVersionUID = -8699452373529039796L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(CreateCardFromChoicesSpell.class);
 		return new SpellDesc(arguments);

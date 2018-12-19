@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class StealCardSpell extends Spell {
-	private static final long serialVersionUID = 8108252944802236824L;
 	private static Logger logger = LoggerFactory.getLogger(StealCardSpell.class);
 
 	@Override

@@ -29,8 +29,6 @@ import java.util.Map;
 public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends BaseMap<T, Object> implements Serializable,
 		Cloneable, HasDesc<Desc<T, V>>, HasEntrySet<T, Object> {
 
-	private static final long serialVersionUID = -7548698708989973117L;
-
 	protected Desc(Map<T, Object> arguments, Class<T> keyType) {
 		super(keyType);
 		if (arguments.isEmpty()) {

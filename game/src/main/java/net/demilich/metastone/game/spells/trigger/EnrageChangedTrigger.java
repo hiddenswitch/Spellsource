@@ -7,8 +7,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class EnrageChangedTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -1495422576895225769L;
-
 	public EnrageChangedTrigger() {
 		this(new EventTriggerDesc(EnrageChangedTrigger.class));
 	}

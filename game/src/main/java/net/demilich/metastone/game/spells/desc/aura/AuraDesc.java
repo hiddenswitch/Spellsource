@@ -16,8 +16,6 @@ import java.util.Map;
 @JsonDeserialize(using = AuraDescDeserializer.class)
 public class AuraDesc extends Desc<AuraArg, Aura> {
 
-	private static final long serialVersionUID = -8561491911286500041L;
-
 	public AuraDesc() {
 		super(AuraArg.class);
 	}

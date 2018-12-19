@@ -34,7 +34,6 @@ import org.slf4j.LoggerFactory;
  */
 public final class SetCardSpell extends RevertableSpell {
 
-	private static final long serialVersionUID = -6070437061907213466L;
 	private static Logger logger = LoggerFactory.getLogger(SetCardSpell.class);
 
 	public static SpellDesc create(String cardId, boolean isAura) {

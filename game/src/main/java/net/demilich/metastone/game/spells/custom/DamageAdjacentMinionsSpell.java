@@ -20,8 +20,6 @@ import java.util.Map;
  */
 public final class DamageAdjacentMinionsSpell extends Spell {
 
-	private static final long serialVersionUID = -1605068107850285049L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(DamageAdjacentMinionsSpell.class);
 		return new SpellDesc(arguments);

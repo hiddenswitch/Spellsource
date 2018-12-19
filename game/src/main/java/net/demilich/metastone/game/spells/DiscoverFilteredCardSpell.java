@@ -21,8 +21,6 @@ import java.util.Map;
  */
 @Deprecated
 public class DiscoverFilteredCardSpell extends Spell {
-	private static final long serialVersionUID = -3022979233929606631L;
-
 	public static SpellDesc create(EntityReference target, SpellDesc spell) {
 		Map<SpellArg, Object> arguments = new SpellDesc(DiscoverFilteredCardSpell.class);
 		arguments.put(SpellArg.TARGET, target);

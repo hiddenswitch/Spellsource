@@ -61,7 +61,6 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
  */
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
-	private static final long serialVersionUID = 1092312455997919352L;
 	protected List<EventTrigger> triggers = new ArrayList<>();
 	protected SpellDesc spell;
 	protected EntityReference hostReference;

@@ -45,8 +45,6 @@ import java.util.Map;
  */
 public class DrawCardSpell extends Spell {
 
-	private static final long serialVersionUID = 88623214899727773L;
-
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(DrawCardSpell.class);
 		return new SpellDesc(arguments);

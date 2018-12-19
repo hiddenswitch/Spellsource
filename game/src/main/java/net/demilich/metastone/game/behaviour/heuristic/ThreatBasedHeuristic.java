@@ -21,7 +21,6 @@ import java.util.List;
  */
 public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
-	private static final long serialVersionUID = 5741638526649926399L;
 	private static List<String> hardRemoval;
 
 	static {

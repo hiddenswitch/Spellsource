@@ -8,8 +8,6 @@ import net.demilich.metastone.game.cards.desc.ParseValueType;
  */
 public class DynamicDescriptionDeserializer extends DescDeserializer<DynamicDescriptionDesc, DynamicDescriptionArg, DynamicDescription> {
 
-	private static final long serialVersionUID = -3991314078292024368L;
-
 	public DynamicDescriptionDeserializer() {
 		super(DynamicDescriptionDesc.class);
 	}

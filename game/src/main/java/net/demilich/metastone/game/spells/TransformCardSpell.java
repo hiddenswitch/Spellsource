@@ -20,7 +20,6 @@ import org.slf4j.LoggerFactory;
  */
 public class TransformCardSpell extends Spell {
 
-	private static final long serialVersionUID = -2808576263063356777L;
 	public static Logger logger = LoggerFactory.getLogger(TransformCardSpell.class);
 
 	@Override

@@ -33,8 +33,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class FumbleSpell extends Spell {
 
-	private static final long serialVersionUID = 171142728352570335L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

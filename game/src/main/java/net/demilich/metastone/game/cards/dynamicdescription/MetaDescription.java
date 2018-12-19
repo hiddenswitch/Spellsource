@@ -9,8 +9,6 @@ import net.demilich.metastone.game.cards.Card;
  * DynamicDescriptionArg#DESCRIPTIONS} array.
  */
 public class MetaDescription extends DynamicDescription {
-	private static final long serialVersionUID = 6823159090727650701L;
-
 	public MetaDescription(DynamicDescriptionDesc desc) {
 		super(desc);
 	}

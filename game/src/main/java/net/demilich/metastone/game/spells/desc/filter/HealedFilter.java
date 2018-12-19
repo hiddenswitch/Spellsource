@@ -6,8 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.cards.Attribute;
 
 public class HealedFilter extends EntityFilter {
-	private static final long serialVersionUID = -1491104917294203050L;
-
 	public HealedFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

@@ -13,8 +13,6 @@ import net.demilich.metastone.game.entities.Entity;
  */
 public final class TopThreeCardsOfDeckSource extends DeckSource {
 
-	private static final long serialVersionUID = 7214365982549808898L;
-
 	public TopThreeCardsOfDeckSource(CardSourceDesc desc) {
 		super(desc);
 	}

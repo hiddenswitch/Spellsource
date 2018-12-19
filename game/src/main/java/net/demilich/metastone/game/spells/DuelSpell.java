@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  */
 public final class DuelSpell extends FightSpell {
 
-	private static final long serialVersionUID = 2744537840966326709L;
 	private static Logger logger = LoggerFactory.getLogger(DuelSpell.class);
 
 	@Override

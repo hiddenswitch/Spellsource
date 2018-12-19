@@ -12,8 +12,6 @@ import net.demilich.metastone.game.cards.Attribute;
  */
 public class InvokeCondition extends Condition {
 
-	private static final long serialVersionUID = 7442204681521395567L;
-
 	public InvokeCondition(ConditionDesc desc) {
 		super(desc);
 	}

@@ -18,8 +18,6 @@ import java.util.stream.Collectors;
  */
 public final class CopyLastRoastedCardSpell extends CopyCardSpell {
 
-	private static final long serialVersionUID = -1672107241437074714L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

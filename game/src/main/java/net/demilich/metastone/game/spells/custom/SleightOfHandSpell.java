@@ -21,7 +21,6 @@ import java.util.List;
  */
 public final class SleightOfHandSpell extends ReturnTargetToHandSpell {
 
-	private static final long serialVersionUID = 7364122532196105181L;
 	private static Logger LOGGER = LoggerFactory.getLogger(SleightOfHandSpell.class);
 
 	@Override

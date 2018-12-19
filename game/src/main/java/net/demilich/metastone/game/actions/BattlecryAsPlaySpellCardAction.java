@@ -16,7 +16,6 @@ import net.demilich.metastone.game.targeting.TargetSelection;
  */
 public class BattlecryAsPlaySpellCardAction extends PlaySpellCardAction {
 
-	private static final long serialVersionUID = 7634084466766601461L;
 	private final EntityReference sourceMinion;
 
 	public BattlecryAsPlaySpellCardAction(EntityReference sourceMinion, SpellDesc battlecrySpell, Card card, TargetSelection targetSelection) {

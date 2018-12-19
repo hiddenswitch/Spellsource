@@ -26,7 +26,6 @@ import org.slf4j.LoggerFactory;
 @Deprecated
 public class CreateSummonSpell extends Spell {
 
-	private static final long serialVersionUID = 2228912755221985590L;
 	Logger logger = LoggerFactory.getLogger(CreateSummonSpell.class);
 
 	@Override

@@ -11,8 +11,6 @@ import java.util.Map;
  */
 @Deprecated
 public class BuffHeroSpell extends BuffSpell {
-	private static final long serialVersionUID = -5472767344656704340L;
-
 	public static SpellDesc create(int attackBonus, int armorBonus) {
 		return create(EntityReference.FRIENDLY_HERO, attackBonus, armorBonus);
 	}

@@ -10,8 +10,6 @@ import java.util.Map;
 
 public class PlayedLastTurnCondition extends Condition {
 
-	private static final long serialVersionUID = 1875448145054121569L;
-
 	public PlayedLastTurnCondition(ConditionDesc desc) {
 		super(desc);
 	}

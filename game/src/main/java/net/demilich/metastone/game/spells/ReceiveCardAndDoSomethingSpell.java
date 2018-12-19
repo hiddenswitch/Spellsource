@@ -7,5 +7,4 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
  */
 @Deprecated
 public class ReceiveCardAndDoSomethingSpell extends ReceiveCardSpell {
-	private static final long serialVersionUID = 4629269639434379575L;
 }

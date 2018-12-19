@@ -9,8 +9,6 @@ import java.util.Map;
 
 public class MinionSummonValueProvider extends ValueProvider {
 
-	private static final long serialVersionUID = -7276225834751474729L;
-
 	public MinionSummonValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

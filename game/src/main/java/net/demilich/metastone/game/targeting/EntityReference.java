@@ -478,8 +478,6 @@ public final class EntityReference implements Serializable {
 	 * References all entities that are "in play" for the enemy player i.e. cards in hand, deck, set aside + minions + hero
 	 */
 	public static final EntityReference ENEMY_CARDS = new EntityReference(-70);
-	private static final long serialVersionUID = 3626575587384766516L;
-
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;

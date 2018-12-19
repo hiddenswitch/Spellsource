@@ -13,8 +13,6 @@ import net.demilich.metastone.game.entities.minions.Race;
  */
 public class RaceCondition extends Condition {
 
-	private static final long serialVersionUID = -7599787433484503042L;
-
 	public RaceCondition(ConditionDesc desc) {
 		super(desc);
 	}

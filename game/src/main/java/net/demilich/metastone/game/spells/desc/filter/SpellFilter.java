@@ -12,8 +12,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SpellFilter extends EntityFilter {
-	private static final long serialVersionUID = -1563291333708327909L;
-
 	public SpellFilter(EntityFilterDesc desc) {
 		super(desc);
 	}

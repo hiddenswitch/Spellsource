@@ -17,8 +17,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class SwipeSpell extends Spell {
 
-	private static final long serialVersionUID = 3160889343154719469L;
-
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int primaryDamage = desc.getValue(SpellArg.VALUE, context, player, target, source, 2);

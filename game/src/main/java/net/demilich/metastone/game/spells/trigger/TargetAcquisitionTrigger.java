@@ -11,8 +11,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class TargetAcquisitionTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = 5918463931796104011L;
-
 	public TargetAcquisitionTrigger() {
 		this(new EventTriggerDesc(TargetAcquisitionTrigger.class));
 	}

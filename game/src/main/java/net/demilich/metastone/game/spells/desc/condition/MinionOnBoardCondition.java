@@ -8,8 +8,6 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
 public class MinionOnBoardCondition extends Condition {
 
-	private static final long serialVersionUID = -6038726619348278192L;
-
 	public MinionOnBoardCondition(ConditionDesc desc) {
 		super(desc);
 	}

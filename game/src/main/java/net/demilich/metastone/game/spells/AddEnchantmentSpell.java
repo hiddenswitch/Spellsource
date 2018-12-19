@@ -71,7 +71,6 @@ import java.util.Map;
  */
 public class AddEnchantmentSpell extends Spell {
 
-	private static final long serialVersionUID = -9090892952136017696L;
 	private static Logger logger = LoggerFactory.getLogger(AddEnchantmentSpell.class);
 
 	public static SpellDesc create(EntityReference target, EnchantmentDesc trigger) {

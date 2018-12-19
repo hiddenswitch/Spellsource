@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class EitherOrSpell extends Spell {
-	private static final long serialVersionUID = -517691760644442179L;
 	private static Logger logger = LoggerFactory.getLogger(EitherOrSpell.class);
 
 	@Override

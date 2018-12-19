@@ -28,7 +28,6 @@ import org.slf4j.LoggerFactory;
  * </pre>
  */
 public class SwapMinionSpell extends Spell {
-	private static final long serialVersionUID = 1088943187531771596L;
 	private static Logger logger = LoggerFactory.getLogger(SwapMinionSpell.class);
 
 	@Override

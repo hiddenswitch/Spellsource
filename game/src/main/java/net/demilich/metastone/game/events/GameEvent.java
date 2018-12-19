@@ -14,7 +14,6 @@ import java.util.List;
  * @see GameContext#fireGameEvent(GameEvent) for how game events are fired.
  */
 public abstract class GameEvent implements Notification {
-	private static final long serialVersionUID = -2342774442163230696L;
 	private transient final GameContext context;
 	private final int targetPlayerId;
 	private final int sourcePlayerId;

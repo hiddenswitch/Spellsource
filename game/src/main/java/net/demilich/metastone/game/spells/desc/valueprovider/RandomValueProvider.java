@@ -6,8 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class RandomValueProvider extends ValueProvider {
 
-	private static final long serialVersionUID = 4804424929764168250L;
-
 	public RandomValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}

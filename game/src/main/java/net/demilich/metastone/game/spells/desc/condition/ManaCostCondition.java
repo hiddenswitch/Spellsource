@@ -10,8 +10,6 @@ import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
 public class ManaCostCondition extends Condition {
 
-	private static final long serialVersionUID = -2899507991716657764L;
-
 	public ManaCostCondition(ConditionDesc desc) {
 		super(desc);
 	}

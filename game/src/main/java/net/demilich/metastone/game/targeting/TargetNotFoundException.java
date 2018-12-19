@@ -7,7 +7,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * subclass of {@link NullPointerException} to stay consistent with the spirit of the Java exception hierarchy.
  */
 public class TargetNotFoundException extends NullPointerException {
-	private static final long serialVersionUID = 7349377369511303193L;
 	private final EntityReference reference;
 
 	/**

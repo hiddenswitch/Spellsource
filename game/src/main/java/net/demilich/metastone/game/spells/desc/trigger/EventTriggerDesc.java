@@ -13,8 +13,6 @@ import java.util.Map;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
 public final class EventTriggerDesc extends Desc<EventTriggerArg, EventTrigger> {
 
-	private static final long serialVersionUID = -7411455631829389567L;
-
 	public EventTriggerDesc() {
 		super(EventTriggerArg.class);
 	}

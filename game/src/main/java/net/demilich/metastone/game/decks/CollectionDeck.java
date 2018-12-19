@@ -10,7 +10,6 @@ import java.util.Objects;
  */
 public final class CollectionDeck implements Serializable, Cloneable, Deck {
 
-	private static final long serialVersionUID = -2966752971975044125L;
 	private String deckId;
 
 	public CollectionDeck() {

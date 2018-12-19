@@ -10,8 +10,6 @@ import java.util.Map;
  */
 public class FeatureVector implements Cloneable, Serializable {
 
-	private static final long serialVersionUID = -6049634168423563185L;
-
 	public static FeatureVector getDefault() {
 		FeatureVector defaultVector = new FeatureVector();
 		defaultVector.set(WeightedFeature.RED_MODIFIER, -50);

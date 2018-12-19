@@ -45,8 +45,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
  */
 public final class AddDeathrattleSecondaryAsTargetSpell extends AddDeathrattleSpell {
 
-	private static final long serialVersionUID = 8674882093006221610L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

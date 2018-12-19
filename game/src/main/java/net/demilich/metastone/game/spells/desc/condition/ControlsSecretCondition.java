@@ -6,8 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class ControlsSecretCondition extends Condition {
 
-	private static final long serialVersionUID = 2661128840057558398L;
-
 	public ControlsSecretCondition(ConditionDesc desc) {
 		super(desc);
 	}

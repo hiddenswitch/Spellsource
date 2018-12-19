@@ -20,8 +20,6 @@ import net.demilich.metastone.game.targeting.TargetType;
  */
 public final class MinionDeathTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -4433466832508878666L;
-
 	public MinionDeathTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

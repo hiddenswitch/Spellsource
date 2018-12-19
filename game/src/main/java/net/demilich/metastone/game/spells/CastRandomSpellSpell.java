@@ -65,7 +65,6 @@ import java.util.Map;
  * 		weapons and heroes and uses the card as the source of the effects
  */
 public class CastRandomSpellSpell extends Spell {
-	private static final long serialVersionUID = 1459838259131663929L;
 	Logger logger = LoggerFactory.getLogger(CastRandomSpellSpell.class);
 
 	public static SpellDesc create(int value) {

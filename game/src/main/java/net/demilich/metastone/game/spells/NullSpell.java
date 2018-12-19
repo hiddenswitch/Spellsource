@@ -31,7 +31,6 @@ import java.util.Map;
  */
 public class NullSpell extends Spell {
 
-	private static final long serialVersionUID = 4058025580454161401L;
 	private static Logger logger = LoggerFactory.getLogger(NullSpell.class);
 
 	/**

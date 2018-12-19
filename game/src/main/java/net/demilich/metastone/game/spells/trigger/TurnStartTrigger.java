@@ -9,8 +9,6 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class TurnStartTrigger extends EventTrigger {
 
-	private static final long serialVersionUID = -3241021260450021846L;
-
 	public TurnStartTrigger() {
 		this(new EventTriggerDesc(TurnStartTrigger.class));
 	}

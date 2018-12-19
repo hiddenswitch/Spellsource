@@ -6,7 +6,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class AfterPhysicalAttackEvent extends GameEvent implements HasValue {
 
-	private static final long serialVersionUID = -5465908420368941113L;
 	private final Actor attacker;
 	private final Actor defender;
 	private final int damageDealt;

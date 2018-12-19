@@ -13,8 +13,6 @@ import java.util.Map;
 @Deprecated
 public class ReceiveRandomCardSpell extends ReceiveCardSpell {
 
-	private static final long serialVersionUID = -6536693818500288532L;
-
 	public static SpellDesc create(TargetPlayer targetPlayer, Card... cards) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ReceiveRandomCardSpell.class);
 		arguments.put(SpellArg.CARDS, cards);

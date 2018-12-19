@@ -35,7 +35,6 @@ import java.util.Map;
  * set to the new hero.
  */
 public class ChangeHeroSpell extends Spell {
-	private static final long serialVersionUID = -2128697374801258515L;
 	private static Logger logger = LoggerFactory.getLogger(ChangeHeroSpell.class);
 
 	/**

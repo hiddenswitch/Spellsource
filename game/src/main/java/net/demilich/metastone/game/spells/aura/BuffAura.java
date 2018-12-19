@@ -43,8 +43,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
  */
 public class BuffAura extends Aura {
 
-	private static final long serialVersionUID = 5737803319371636340L;
-
 	public BuffAura(AuraDesc desc) {
 		this(desc.get(AuraArg.ATTACK_BONUS), desc.get(AuraArg.HP_BONUS), desc.getTarget(), desc.getFilter());
 		if (desc.getSecondaryTrigger() != null) {

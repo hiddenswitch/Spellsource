@@ -11,8 +11,6 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 public class TriggerSecretRevealSpell extends Spell {
 
-	private static final long serialVersionUID = 7951323504558773995L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

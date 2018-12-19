@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 public class IdFactoryImpl extends CustomCloneable implements Serializable, IdFactory {
 
-	private static final long serialVersionUID = -8149516759877804355L;
 	private AtomicInteger nextId;
 
 	public IdFactoryImpl() {

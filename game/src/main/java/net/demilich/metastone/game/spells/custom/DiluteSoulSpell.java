@@ -31,8 +31,6 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class DiluteSoulSpell extends Spell {
 
-	private static final long serialVersionUID = 4998686990212303190L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

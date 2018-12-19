@@ -48,8 +48,6 @@ import java.util.List;
  * @see net.demilich.metastone.game.spells.custom.PlayCardsRandomlySpell for a more general spell to randomly play any card.
  */
 public class RandomCardTargetSpell extends Spell {
-	private static final long serialVersionUID = -1842005227684475515L;
-
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

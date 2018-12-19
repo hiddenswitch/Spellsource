@@ -32,7 +32,6 @@ import static java.util.stream.Collectors.toSet;
  */
 public final class GuessCardSpell extends Spell {
 
-	private static final long serialVersionUID = 6090206100204966852L;
 	private static Logger logger = LoggerFactory.getLogger(GuessCardSpell.class);
 
 	@Override

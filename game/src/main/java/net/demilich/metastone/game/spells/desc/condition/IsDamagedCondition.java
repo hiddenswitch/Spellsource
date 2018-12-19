@@ -7,8 +7,6 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class IsDamagedCondition extends Condition {
 
-	private static final long serialVersionUID = -252561698801956593L;
-
 	public IsDamagedCondition(ConditionDesc desc) {
 		super(desc);
 	}

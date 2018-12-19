@@ -74,7 +74,6 @@ import java.util.stream.Stream;
  * 		with the highest score.
  */
 public class GameStateValueBehaviour extends IntelligentBehaviour {
-	private static final long serialVersionUID = -2399671846841101614L;
 	private final Logger logger = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
 	protected Heuristic heuristic;
@@ -773,8 +772,6 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * holding onto references to state like cards and spells.
 	 */
 	static class IntermediateAction extends GameAction implements Serializable {
-
-		private static final long serialVersionUID = -4651146383275038254L;
 
 		public IntermediateAction(int index) {
 			this.setId(index);

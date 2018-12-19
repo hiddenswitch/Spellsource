@@ -22,7 +22,6 @@ import java.util.stream.Collectors;
  * the {@code target}.
  */
 public final class RemoveEnchantmentSpell extends Spell {
-	private static final long serialVersionUID = 8902394869381571913L;
 	private static Logger logger = LoggerFactory.getLogger(RemoveEnchantmentSpell.class);
 
 	@Override

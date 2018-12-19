@@ -6,8 +6,6 @@ import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 
 public class CardSourceDescDeserializer extends DescDeserializer<CardSourceDesc, CardSourceArg, CardSource> {
 
-	private static final long serialVersionUID = -8605640917502230942L;
-
 	public CardSourceDescDeserializer() {
 		super(CardSourceDesc.class);
 	}

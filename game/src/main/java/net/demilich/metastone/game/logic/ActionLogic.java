@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
  * 		instance into multiple game actions, one for each target.
  */
 public class ActionLogic implements Serializable {
-	private static final long serialVersionUID = 927593384926527599L;
 	private final TargetLogic targetLogic = new TargetLogic();
 
 	@Suspendable
