@@ -1,6 +1,6 @@
 {
-  "name": "Level Up!",
-  "baseManaCost": 6,
+  "name": "Unnerfed Level Up!",
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",
@@ -30,6 +30,6 @@
     ]
   },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }
