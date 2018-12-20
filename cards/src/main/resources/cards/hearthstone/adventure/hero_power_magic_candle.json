@@ -1,0 +1,34 @@
+{
+	"name": "Magic Candle",
+	"baseManaCost": 3,
+	"type": "HERO_POWER",
+	"heroClass": "ANY",
+	"rarity": "FREE",
+	"description": "Find a Treasure!",
+	"targetSelection": "NONE",
+	"spell": {
+		"class": "ReceiveCardSpell",
+		"cards": [
+			"weapon_archmage_staff",
+			"spell_bag_of_coins",
+			"spell_bag_of_stuffing",
+			"spell_boots_of_haste",
+			"spell_dr_booms_boombox",
+			"spell_embers_of_ragnaros",
+			"token_golden_kobold",
+			"weapon_greedy_pickaxe",
+			"spell_mask_of_mimicry",
+			"minion_party_portal",
+			"minion_portable_ice_wall",
+			"spell_scroll_of_confusion",
+			"spell_the_candle",
+			"weapon_vorpal_dagger",
+			"spell_wand_of_disintegration",
+			"spell_hilt_of_quel'delar"
+		],
+		"randomTarget": true
+	},
+	"collectible": false,
+	"set": "BLIZZARD_ADVENTURE",
+	"fileFormatVersion": 1
+}
