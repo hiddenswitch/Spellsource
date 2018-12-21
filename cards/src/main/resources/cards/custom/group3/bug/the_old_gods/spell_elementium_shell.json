@@ -1,10 +1,10 @@
 {
   "name": "Elementium Shell",
-  "baseManaCost": 2,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Give your Spiderlings +1/+1 (wherever they are) and draw a card.",
+  "description": "Give your Spiderlings +1/+1 (wherever they are) and draw two cards.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -34,7 +34,8 @@
         }
       },
       {
-        "class": "DrawCardSpell"
+        "class": "DrawCardSpell",
+        "value": 2
       }
     ]
   },
