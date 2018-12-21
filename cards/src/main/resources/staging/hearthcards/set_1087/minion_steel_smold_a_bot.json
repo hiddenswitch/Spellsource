@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "[b]Magnetic[/b]\r\n[b]Supremacy:[/b] Gain +2/+2.",
+  "description": "[b][b]Magnetic[/b][/b]\r\n[b]Supremacy:[/b] Gain +2/+2.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

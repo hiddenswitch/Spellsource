@@ -11,6 +11,10 @@ import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Returns the number of cards in the {@link ValueProviderArg#CARD_SOURCE} and {@link ValueProviderArg#CARD_FILTER} when
+ * specified, or {@link net.demilich.metastone.game.targeting.Zones#HAND} when not specified.
+ */
 public class CardCountValueProvider extends ValueProvider {
 
 	public CardCountValueProvider(ValueProviderDesc desc) {

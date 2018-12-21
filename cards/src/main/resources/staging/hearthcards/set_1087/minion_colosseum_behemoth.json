@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "Can only attack heroes and minions with [b]Taunt[/b].",
+  "description": "Can only attack heroes and minions with [b][b]Taunt[/b][/b].",
   "attributes": {
     "TAUNT": true
   },

@@ -108,6 +108,15 @@ def enrich_from_description(card_dict: Mapping,
         if 'description' in card_dict:
             description = card_dict['description']
 
+    # Remove Hearthcards tags and newlines from description
+    card_dict['description'] = description \
+        .replace('[b]', '') \
+        .replace('[/b]', '') \
+        .replace('[i]', '') \
+        .replace('[/i]', '') \
+        .replace('\r\n', ' ') \
+        .replace('\n', ' ')
+
     description = description.lower()
 
     if card_type is None:
@@ -185,11 +194,12 @@ def enrich_from_description(card_dict: Mapping,
         }
         spells += [copy.deepcopy(spell)]
     if 'draw' in description:
-        spell = {
-            'class': 'DrawCardSpell',
-            'value': 1
-        }
-        spells += [copy.deepcopy(spell)]
+        if 'whenever you draw' not in description:
+            spell = {
+                'class': 'DrawCardSpell',
+                'value': 1
+            }
+            spells += [copy.deepcopy(spell)]
     if 'shuffle' in description:
         spell = {
             'class': 'ShuffleToDeckSpell',
@@ -266,14 +276,7 @@ def enrich_from_description(card_dict: Mapping,
         condition = {
             'class': 'ComboCondition'
         }
-    if card_type is not None and card_attack is not None and card_health is not None:
-        if card_type == 'MINION':
-            card_dict['baseAttack'] = int(card_attack)
-            card_dict['baseHp'] = int(card_health)
-        elif card_type == 'WEAPON':
-            card_dict['damage'] = int(card_attack)
-            card_dict['durability'] = int(card_health)
-    elif card_type == 'SPELL':
+    if card_type == 'SPELL':
         if 'if' in description:
             spell['condition'] = condition
         if spell['class'] == 'DamageSpell' or spell['class'] == 'DestroySpell':
@@ -283,6 +286,13 @@ def enrich_from_description(card_dict: Mapping,
         else:
             card_dict['targetSelection'] = 'NONE'
         card_dict['spell'] = spell
+    elif card_type is not None and card_attack is not None and card_health is not None:
+        if card_type == 'MINION':
+            card_dict['baseAttack'] = int(card_attack)
+            card_dict['baseHp'] = int(card_health)
+        elif card_type == 'WEAPON':
+            card_dict['damage'] = int(card_attack)
+            card_dict['durability'] = int(card_health)
     if card_type == 'MINION' or card_type == 'WEAPON':
         if 'deathrattle' in description:
             card_dict['deathrattle'] = spell
@@ -314,14 +324,28 @@ def enrich_from_description(card_dict: Mapping,
             if 'if' in description:
                 card_dict['gameTriggers'][0]['eventTrigger']['spell']['condition'] = condition
         if 'whenever' in description \
+                or 'after' in description \
                 or 'at the end' in description \
                 or 'at the start' in description \
                 or 'after' in description \
                 or 'each turn' in description:
+            if 'you draw' in description:
+                trigger_class = 'CardDrawnTrigger'
+            elif 'you summon' in description:
+                trigger_class = 'AfterMinionSummonedTrigger' if 'after' in description else 'MinionSummonedTrigger'
+            elif 'you play a card' in description:
+                trigger_class = 'AfterCardPlayedTrigger' if 'after' in description else 'CardPlayedTrigger'
+            elif 'you play a minion' in description:
+                trigger_class = 'AfterMinionPlayedTrigger' if 'after' in description else 'MinionPlayedTrigger'
+            elif 'you cast' in description:
+                trigger_class = 'AfterSpellCastedTrigger' if 'after' in description else 'SpellCastedTrigger'
+            else:
+                trigger_class = 'TurnEndTrigger'
+
             card_dict['trigger'] = {
                 'eventTrigger': {
-                    'class': 'TurnEndTrigger',
-                    'targetPlayer': 'SELF'
+                    'class': trigger_class,
+                    'targetPlayer': 'SELF' if 'you' in description else 'OPPONENT'
                 },
                 'spell': spell
             }

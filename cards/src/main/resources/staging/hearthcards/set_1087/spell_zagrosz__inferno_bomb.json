@@ -1,0 +1,16 @@
+{
+  "name": "Zagrosz' Inferno Bomb",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "LEGENDARY",
+  "description": "Deal 10 damage\r\nto all enemies.\r\nCosts (2) more for each card in your deck.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

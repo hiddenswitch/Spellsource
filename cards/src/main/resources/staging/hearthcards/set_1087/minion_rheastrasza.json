@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "[b]Battlecry[/b] [b]and[/b] [b]Supremacy:[/b] Summon a 5/5 Dragon with [b]Charge[/b].",
+  "description": "[b]Battlecry[/b] [b]and[/b] [b]Supremacy:[/b] Summon a 5/5 Dragon with [b][b]Charge[/b][/b].",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

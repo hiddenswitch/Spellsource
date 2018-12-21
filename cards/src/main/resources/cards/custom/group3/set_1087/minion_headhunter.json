@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 5,
-  "baseHp": 8,
+  "baseHp": 9,
   "rarity": "EPIC",
   "description": "Supremacy: Add an Echo of the destroyed minion to your hand.",
   "trigger": {

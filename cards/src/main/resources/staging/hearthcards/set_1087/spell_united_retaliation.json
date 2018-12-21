@@ -1,0 +1,12 @@
+{
+  "name": "United Retaliation",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "This turn, after a friendly minion attacks, summon a random minion from your hand and give them [b][b]Rush[/b][/b].",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

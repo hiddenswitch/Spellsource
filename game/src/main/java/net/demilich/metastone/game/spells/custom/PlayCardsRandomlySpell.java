@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -41,13 +42,12 @@ import net.demilich.metastone.game.cards.Attribute;
  *   },
  * </pre>
  */
-public final class PlayCardsRandomlySpell extends Spell {
+public class PlayCardsRandomlySpell extends Spell {
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		// Retrieve all the cards
-		CardList cards = SpellUtils.getCards(context, player, target, source, desc, Integer.MAX_VALUE);
+		CardList cards = getCards(context, player, desc, source, target);
 		// Shuffle
 		cards.shuffle(context.getLogic().getRandom());
 
@@ -70,7 +70,8 @@ public final class PlayCardsRandomlySpell extends Spell {
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			*/
-			if (SpellUtils.playCardRandomly(context, player, card, source, true, false, false, false, false)) {
+			if (SpellUtils.playCardRandomly(context, player, card, source, true, false, source.getEntityType()
+					== EntityType.MINION, false, false)) {
 				context.getLogic().revealCard(player, card);
 			}
 			// context.getLogic().removeCard(card);
@@ -79,4 +80,10 @@ public final class PlayCardsRandomlySpell extends Spell {
 		player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 
 	}
+
+	protected CardList getCards(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		// Retrieve all the cards
+		return SpellUtils.getCards(context, player, target, source, desc, Integer.MAX_VALUE);
+	}
 }
+
