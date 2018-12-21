@@ -7,7 +7,7 @@ Thanks for playing Spellsource today! Release notes are below. Visit playspellso
 
 ### 0.8.4-2.0.14 (Thursday, December 20th)
 
-Thanks to great contributions from @Beatdoof and @Jdude, new Dragoon and Summoner cards have been added! @doombubbles has also authored some fixes and updates to balance changes in H.S. cards.
+Thanks to great contributions from @Beatdoof and @TheFlawlessWalrus, new Dragoon and Summoner cards have been added! @doombubbles has also authored some fixes and updates to balance changes in H.S. cards.
 
 Also a big shout out to @bdg for a very kind Christmas gift. Spellsource will always be free, and everyone's contributions -- playing, inviting players, testing, QA, writing cards, coding, card design and other debate -- is amazingly helpful.
 
