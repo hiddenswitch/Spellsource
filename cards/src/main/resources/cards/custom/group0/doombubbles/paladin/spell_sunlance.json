@@ -12,7 +12,7 @@
     "spell": {
       "class": "DrawCardSpell"
     },
-    "exlcusive": true
+    "exclusive": true
   },
   "collectible": true,
   "set": "CUSTOM",
