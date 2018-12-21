@@ -13,6 +13,10 @@ Also a big shout out to @bdg for a very kind Christmas gift. Spellsource will al
 
 And finally, a shout out to @doombubbles for quietly fixing bugs and adding features in the past, like our dynamic card text system.
 
+###### Known Issues:
+
+ - Poison Cloud, an Adventure hero power, can crash the game.
+
 ###### Content Additions:
 
  - New and changed cards for Dragoon (using their new names): Aspect Champion, Exotic Menace, Flamewarper, Frangiblesaur, Glacial Wyvern, Headhunter, Hornmender, Sapphiron (formerly Lady Deathwhisper), Mountain Whelp, Pyroblaster Zagrosz, Savage Ogreseer, Sarclet Magiserpent, Spirit of the Serpent, Tharon Ja the Serpent, Tol'Vir Vitalizer, Twilight Redbane, Draconic Insight, Exhilarate, Gobble (formerly Fissure), Garnet Spellstones, Manufacturing, Explosive Ride! (formerly Explosive Rune!), United Retaliation, Venom Breath, Hemocannon (formerly Anemic Cannon), Cleaver of Glory, Marrow Cleaver, The Dreadtalon and a few tokens.
