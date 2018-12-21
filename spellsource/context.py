@@ -57,8 +57,9 @@ class Context(contextlib.AbstractContextManager):
         except FileNotFoundError:
             self.status = Context.STATUS_FAILED
             raise FileNotFoundError(
-                'Could not find the java executable. Is Java installed? On Windows, is java.exe somewhere in your '
-                'PATH?')
+                'Is Java installed? On Windows, is java.exe somewhere in your PATH? If this command was run from the '
+                'repository, did you run ./gradlew net:shadowJar (./gradlew.bat net:shadowJar on Windows)? These '
+                'commands build the Java library.')
         except Exception as ex:
             self.status = Context.STATUS_FAILED
             raise ex
@@ -138,7 +139,7 @@ class Context(contextlib.AbstractContextManager):
         self.close()
 
     @staticmethod
-    def find_resource_path(filename='net-0.8.3-all.jar'):
+    def find_resource_path(filename='net-0.8.4-all.jar'):
         """
         Tries to find the path where the Spellsource jar is located.
         """
@@ -173,7 +174,7 @@ class Context(contextlib.AbstractContextManager):
         # launch Java side with dynamic port and get back the port on which the
         # server was bound to.
         port = launch_gateway(port=port,
-                              classpath=Context.find_resource_path('net-0.8.3-all.jar'),
+                              classpath=Context.find_resource_path('net-0.8.4-all.jar'),
                               javaopts=["--add-modules", "java.se",
                                         "--add-exports", "java.base/jdk.internal.ref=ALL-UNNAMED",
                                         "--add-opens", "java.base/java.lang=ALL-UNNAMED",

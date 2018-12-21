@@ -197,20 +197,22 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
 
-		/**
-		 * Diamond Spellstone will only resurrect a distinct minion, meaning if you have multiple versions of the same
-		 * minion die, you'll only get one copy of it back. For example, if you have multiple dead Saronite Chain Gangs,
-		 * it will only resurrect one of them. This also means that minions that summon separate token minions instead
-		 * of copies, such as Doppelgangster or Big-Time Racketeer will function as you expect with the spellstone,
-		 * being capable of summoning the base minion as well as its generated minions.
+		/*
+		  Diamond Spellstone will only resurrect a distinct minion, meaning if you have multiple versions of the same
+		  minion die, you'll only get one copy of it back. For example, if you have multiple dead Saronite Chain Gangs,
+		  it will only resurrect one of them. This also means that minions that summon separate token minions instead
+		  of copies, such as Doppelgangster or Big-Time Racketeer will function as you expect with the spellstone,
+		  being capable of summoning the base minion as well as its generated minions.
+
+		  Saronite no longer qualifies as a minion that copies itself. We'll use Doubling Imp instead.
 		 */
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "minion_saronite_chain_gang");
+			playCard(context, player, "minion_doubling_imp");
 			playCard(context, player, "spell_fireball", player.getMinions().get(1));
 			playCard(context, player, "spell_fireball", player.getMinions().get(0));
 			playCard(context, player, "spell_diamond_spellstone");
 			assertEquals(player.getMinions().size(), 1);
-			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_saronite_chain_gang");
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_doubling_imp");
 		});
 
 		runGym((context, player, opponent) -> {

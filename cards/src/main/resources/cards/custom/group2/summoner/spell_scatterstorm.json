@@ -1,0 +1,16 @@
+{
+  "name": "Scatterstorm",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "EPIC",
+  "description": "Replace all minions with random ones from their owners decks.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "custom.SwapMinionWithDeckSpell",
+    "target": "ALL_MINIONS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

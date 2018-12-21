@@ -3,7 +3,7 @@
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 4,
+  "baseAttack": 5,
   "baseHp": 6,
   "rarity": "EPIC",
   "description": "After a friendly minion attacks, fully heal it.",

@@ -1,0 +1,31 @@
+{
+  "name": "Horned Jouster",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Reveal a minion in each deck. If yours costs more, summon two 1/1 Beetles.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "JoustSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "value": 2,
+        "card": "token_beetle"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

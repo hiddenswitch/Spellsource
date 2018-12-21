@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "[b]Discover[/b] a Dragon.",
+  "description": "[b][b]Discover[/b][/b] a Dragon.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "[b]Taunt[/b]\r\n[b]Battlecry:[/b] Summon a\r\n4/4 Dragon for\r\nyour opponent.",
+  "description": "[b][b]Taunt[/b][/b]\r\n[b][b]Battlecry:[/b][/b] Summon a\r\n4/4 Dragon for\r\nyour opponent.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

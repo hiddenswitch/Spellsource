@@ -3,15 +3,19 @@
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "RUST",
-  "rarity": "RARE",
-  "description": "Choose a friendly Mech. Summon two copies of it.",
+  "rarity": "EPIC",
+  "description": "Summon a copy of a friendly minion. If it's a Mech, summon two copies instead.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "SummonSpell",
-    "value": 2,
-    "filter": {
-      "class": "RaceFilter",
-      "race": "MECH"
+    "value": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "RaceCondition",
+        "race": "MECH"
+      },
+      "ifFalse": 1,
+      "ifTrue": 2
     }
   },
   "attributes": {},

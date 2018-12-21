@@ -6,6 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
+  "race": "DRAGON",
   "description": "Battlecry: If your C'Thun has at least 10 Attack, give a character +5 Attack this turn.",
   "battlecry": {
     "condition": {

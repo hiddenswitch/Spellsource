@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] [b]Discover[/b] a Dragon that costs (4) \r\nor less.",
+  "description": "[b][b]Battlecry:[/b][/b] [b][b]Discover[/b][/b] a Dragon that costs (4) \r\nor less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

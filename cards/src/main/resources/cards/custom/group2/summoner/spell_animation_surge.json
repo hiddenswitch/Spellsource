@@ -1,0 +1,26 @@
+{
+  "name": "Animation Surge",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "COMMON",
+  "description": "Summon three 1/1 Golems. Invoke (5): Summon five instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "InvokeCondition"
+      },
+      "ifTrue": 5,
+      "ifFalse": 3
+    }
+  },
+  "attributes": {
+    "INVOKE": 5
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

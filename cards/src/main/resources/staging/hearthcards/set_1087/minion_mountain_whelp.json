@@ -3,10 +3,10 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 3,
-  "baseHp": 2,
+  "baseAttack": 2,
+  "baseHp": 3,
   "rarity": "COMMON",
-  "description": "[b]Charge[/b]",
+  "description": "[b][b]Charge[/b][/b]",
   "attributes": {
     "CHARGE": true
   },

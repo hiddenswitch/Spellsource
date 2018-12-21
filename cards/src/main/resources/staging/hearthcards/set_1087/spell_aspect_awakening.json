@@ -1,0 +1,12 @@
+{
+  "name": "Aspect Awakening",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "[b][b]Discover[/b][/b] and summon a Familiar Aspect.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,10 @@
+{
+  "seed" : -4752498039322179211,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "BLUE", "EGGPLANT" ],
+  "deckCardIds" : [ [ "minion_raid_leader", "minion_faceless_summoner", "minion_rhonin", "minion_master_jouster", "spell_unstable_portal", "minion_hogger", "minion_bronze_warden", "spell_forbidden_conjuring", "spell_research_project", "minion_vex_crow", "spell_set_ablaze", "minion_giggling_inventor", "spell_astral_rift", "minion_goldshire_footman", "spell_cinderstorm", "minion_kobold_chronomancer", "minion_defender_of_argus", "minion_tuskarr_fisherman", "minion_pyros", "spell_book_of_specters", "minion_silverback_matriarch", "minion_sunfury_protector", "minion_core_hound", "quest_open_the_waygate", "minion_dread_corsair", "minion_faceless_summoner", "minion_janalai_the_dragonhawk", "minion_soup_vendor", "spell_frostfire_bolt", "minion_raven_familiar" ], [ "minion_summoning_stone", "spell_take_down", "minion_psych-o-tron", "minion_acolyte_of_pain", "secret_reactive_potion", "minion_steelwing_rider", "minion_prince_tenris", "minion_annoy-o-tron", "minion_covetous_devotee", "spell_monologue", "minion_dreadscale_evoker", "minion_grand_artificer_pipi", "secret_watchful_gaze", "minion_dread_corsair", "minion_purifying_ooze", "spell_rockslide", "minion_charged_devilsaur", "secret_watchful_gaze", "minion_slippery_mook", "secret_hoard_keeper", "minion_undertaker", "minion_replicating_menace", "spell_blacksteel_shell", "minion_oracle_trili", "minion_desert_maiden", "minion_flame_bearer", "minion_primalfin_lookout", "minion_bog_creeper", "spell_sugary_celebration", "minion_hyldnir_frostrider" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "CUSTOM", "BLACKROCK_MOUNTAIN", "BATTLE_FOR_ASHENVALE", "REWARD", "KOBOLDS_AND_CATACOMBS", "BOOMSDAY_PROJECT", "SANDS_OF_TIME", "PROMO", "JOURNEY_TO_UNGORO", "NAXXRAMAS", "WITCHWOOD", "MEAN_STREETS_OF_GADGETZAN", "LEAGUE_OF_EXPLORERS", "BASIC", "ONE_NIGHT_IN_KARAZHAN", "GOBLINS_VS_GNOMES", "THE_OLD_GODS", "RASTAKHANS_RUMBLE", "KNIGHTS_OF_THE_FROZEN_THRONE", "HALL_OF_FAME", "CLASSIC", "THE_GRAND_TOURNAMENT" ],
+  "mulligans" : [ [ 27 ], [ 42, 54, 59 ] ],
+  "actions" : [ 0, 2, 0, 0, 5, 4, 0, 5, 1 ]
+}

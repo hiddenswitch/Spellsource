@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] Give a friendly minion [b]Rush[/b].",
+  "description": "[b][b]Battlecry:[/b][/b] Give a friendly minion [b][b]Rush[/b][/b].",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

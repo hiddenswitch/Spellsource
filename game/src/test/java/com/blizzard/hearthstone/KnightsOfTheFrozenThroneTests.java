@@ -298,13 +298,13 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 	@Test
 	public void testLeechingPoison() {
 		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion cho = playMinionCard(context, player, "minion_lorewalker_cho");
+			context.endTurn();
 			playCard(context, player, "spell_fireball", player.getHero());
 			int startHp = player.getHero().getHp();
 			playCard(context, player, "weapon_wicked_knife");
 			playCard(context, player, "spell_leeching_poison");
-			context.endTurn();
-			Minion cho = playMinionCard(context, player, "minion_lorewalker_cho");
-			context.endTurn();
 			attack(context, player, player.getHero(), cho);
 			assertEquals(player.getHero().getHp(), startHp + player.getHero().getWeapon().getAttack());
 		});

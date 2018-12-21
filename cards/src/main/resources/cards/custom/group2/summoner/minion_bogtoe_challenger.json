@@ -1,0 +1,26 @@
+{
+  "name": "Bogtoe Challenger",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Inspire: Transform a random friendly minion into a Bogtoe Challenger.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "TransformMinionSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "card": "minion_bogtoe_challenger",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -3,8 +3,8 @@
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 7,
-  "baseHp": 4,
+  "baseAttack": 5,
+  "baseHp": 3,
   "rarity": "LEGENDARY",
   "description": "[b][b]Deathrattle:[/b][/b] At the\r\nend of your next turn,\r\nresummon this.",
   "deathrattle": {
