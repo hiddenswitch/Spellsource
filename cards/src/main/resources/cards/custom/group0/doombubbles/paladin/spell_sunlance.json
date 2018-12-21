@@ -4,15 +4,15 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "Deal $4 damage. Any excess damage dealt is drawn as cards.",
+  "description": "Deal $4 damage. Overkill: Draw the excess damage as cards.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "ExcessDamageSpell",
+    "class": "OverkillSpell",
     "value": 4,
-    "secondaryTarget": "NONE",
     "spell": {
-      "class": "DrawCardSpell"
-    }
+      "class": "DrawCardSpell",
+    },
+    "exlcusive": true
   },
   "collectible": true,
   "set": "CUSTOM",

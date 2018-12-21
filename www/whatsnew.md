@@ -7,7 +7,7 @@ Thanks for playing Spellsource today! Release notes are below. Visit playspellso
 
 ### 0.8.4-2.0.14 (Thursday, December 20th)
 
-Thanks to great contributions from @Beatdoof and @Jdude, new Dragoon and Summoner cards have been added!
+Thanks to great contributions from @Beatdoof and @Jdude, new Dragoon and Summoner cards have been added! @doombubbles has also authored some fixes and updates to balance changes in H.S. cards.
 
 Also a big shout out to @bdg for a very kind Christmas gift. Spellsource will always be free, and everyone's contributions -- playing, inviting players, testing, QA, writing cards, coding, card design and other debate -- is amazingly helpful.
 
@@ -17,6 +17,13 @@ And finally, a shout out to @doombubbles for quietly fixing bugs and adding feat
 
  - New and changed cards for Dragoon (using their new names): Aspect Champion, Exotic Menace, Flamewarper, Frangiblesaur, Glacial Wyvern, Headhunter, Hornmender, Sapphiron (formerly Lady Deathwhisper), Mountain Whelp, Pyroblaster Zagrosz, Savage Ogreseer, Sarclet Magiserpent, Spirit of the Serpent, Tharon Ja the Serpent, Tol'Vir Vitalizer, Twilight Redbane, Draconic Insight, Exhilarate, Gobble (formerly Fissure), Garnet Spellstones, Manufacturing, Explosive Ride! (formerly Explosive Rune!), United Retaliation, Venom Breath, Hemocannon (formerly Anemic Cannon), Cleaver of Glory, Marrow Cleaver, The Dreadtalon and a few tokens.
  - New cards for Summoner: Berry Hoarder, Bogtoe Challenger, Buddybot, Champion Tangler, Clamouring Crusher, Crowdcodile, Horned Jouster, Oracle Trili, Proudjaw Lackey, Steelwing Rider, Isolate, Animation Surge, Blacksteel Shell, Scatterstorm, Sugary Celebration, Sweet Strategy and three tokens.
+ - Unnerfed versions of 12/18 balanced cards.
+
+###### Content Fixes:
+
+ - Nerfs to H.S. cards introduced on 12/18 have been implemented.
+ - Sunlance uses Overkill now.
+ - Captain Hooktusk no longer gives itself Rush.
 
 ###### 0.8.3-2.0.14 (Wednesday, December 19th)
 
