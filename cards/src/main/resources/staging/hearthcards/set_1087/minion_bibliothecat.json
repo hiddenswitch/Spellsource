@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] [b]Discover[/b] a Beast, Dragon or Murloc.",
+  "description": "[b][b]Battlecry:[/b][/b] [b][b]Discover[/b][/b] a Beast, Dragon or Murloc.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

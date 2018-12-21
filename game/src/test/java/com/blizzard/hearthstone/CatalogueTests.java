@@ -20,7 +20,7 @@ import java.util.List;
 public class CatalogueTests {
 
 	private static String getCurrentCards() {
-		String testedUrl = "https://api.hearthstonejson.com/v1/27845/enUS/cards.json";
+		String testedUrl = "https://api.hearthstonejson.com/v1/28329/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
 		if (overrideUrl != null && !overrideUrl.equals("")) {
 			testedUrl = overrideUrl;

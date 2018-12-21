@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 7,
-  "baseHp": 8,
+  "baseHp": 6,
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "Taunt",

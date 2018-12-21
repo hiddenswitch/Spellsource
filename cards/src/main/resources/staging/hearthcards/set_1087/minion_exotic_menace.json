@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] Summon a 5/5 Bounty Hunter with [b]Taunt[/b] for your opponent.",
+  "description": "[b][b]Battlecry:[/b][/b] Summon a 5/5 Bounty Hunter with [b][b]Taunt[/b][/b] for your opponent.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

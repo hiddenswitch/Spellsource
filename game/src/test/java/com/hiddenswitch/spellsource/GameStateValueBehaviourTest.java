@@ -329,7 +329,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// Should play wild growth
 			receiveCard(context, player, "spell_wild_growth");
 			receiveCard(context, player, "minion_pompous_thespian");
-			player.setMana(2);
+			player.setMana(3);
 			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 
 			while (context.takeActionInTurn()) {

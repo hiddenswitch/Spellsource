@@ -1,0 +1,12 @@
+{
+  "name": "Exhilarate",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Give a friendly minion +1 Attack for each\r\ncard in your hand.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
