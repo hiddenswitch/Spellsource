@@ -1,6 +1,6 @@
 {
-  "name": "Wild Growth",
-  "baseManaCost": 3,
+  "name": "Unnerfed Wild Growth",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "FREE",
@@ -22,6 +22,6 @@
     }
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

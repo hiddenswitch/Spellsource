@@ -27,8 +27,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "RUSH": true
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",
