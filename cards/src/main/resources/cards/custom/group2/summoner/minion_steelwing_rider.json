@@ -1,0 +1,28 @@
+{
+  "name": "Steelwing Rider",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Taunt, Windfury. Invoke (7): Summon a copy of this.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "attributes": {
+    "INVOKE": 7,
+    "WINDFURY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

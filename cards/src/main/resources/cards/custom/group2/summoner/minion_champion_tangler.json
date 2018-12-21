@@ -1,0 +1,28 @@
+{
+  "name": "Champion Tangler",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Destroy a minion that costs (5) or more.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 5,
+        "attribute": "BASE_MANA_COST",
+        "operation": "GREATER_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
