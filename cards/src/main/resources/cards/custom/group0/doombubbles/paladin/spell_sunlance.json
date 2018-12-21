@@ -10,7 +10,7 @@
     "class": "OverkillSpell",
     "value": 4,
     "spell": {
-      "class": "DrawCardSpell",
+      "class": "DrawCardSpell"
     },
     "exlcusive": true
   },
