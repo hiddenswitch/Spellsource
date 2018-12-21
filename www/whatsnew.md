@@ -24,6 +24,7 @@ And finally, a shout out to @doombubbles for quietly fixing bugs and adding feat
  - Nerfs to H.S. cards introduced on 12/18 have been implemented.
  - Sunlance uses Overkill now.
  - Captain Hooktusk no longer gives itself Rush.
+ - Big Ol' Beetle, Elementium Shell and Tweamwork have been adjusted. 
 
 ###### 0.8.3-2.0.14 (Wednesday, December 19th)
 
