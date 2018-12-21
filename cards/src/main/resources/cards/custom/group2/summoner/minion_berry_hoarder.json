@@ -1,0 +1,45 @@
+{
+  "name": "Berry Hoarder",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: Destroy all 0-Cost cards in your deck. Invoke (4): Draw them instead.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "InvokeCondition"
+      },
+      "spell1": {
+        "class": "FromDeckToHandSpell",
+        "value": 60,
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": 0
+        },
+        "exclusive": true
+      },
+      "spell2": {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "ManaCostFilter",
+          "value": 0,
+          "operation": "EQUAL"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "INVOKE": 4
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

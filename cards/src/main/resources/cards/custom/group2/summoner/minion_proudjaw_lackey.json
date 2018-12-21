@@ -1,0 +1,36 @@
+{
+  "name": "Proudjaw Lackey",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Battlecry: Give the next minion your opponent summons +2/+2.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "BeforeMinionSummonedTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "value": 2
+        },
+        "maxFires": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
