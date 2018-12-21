@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "[b]Battlecry:[/b] Give a friendly Dragon +2/+2.",
+  "description": "[b][b]Battlecry:[/b][/b] Give a friendly Dragon +2/+2.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

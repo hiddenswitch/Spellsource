@@ -23,6 +23,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
@@ -36,35 +37,34 @@ import java.util.stream.IntStream;
 import static java.util.stream.Collectors.toList;
 
 public class TraceTests {
-	private static Map<String, Trace> traces;
 	private static Logger LOGGER = LoggerFactory.getLogger(TraceTests.class);
+
+	@DataProvider(name = "Traces")
+	public static Object[][] getTraces() {
+		List<Trace> traces = new Reflections("traces", new ResourcesScanner())
+				.getResources(x -> true)
+				.stream()
+				.filter(Objects::nonNull)
+				.map(Resources::getResource)
+				.filter(Objects::nonNull)
+				.map(c -> {
+					try {
+						return Trace.load(Resources.toString(c, Charset.defaultCharset()));
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
+				}).collect(toList());
+
+		Object[][] data = new Object[traces.size()][1];
+		for (int i = 0; i < traces.size(); i++) {
+			data[i][0] = traces.get(i);
+		}
+		return data;
+	}
 
 	@BeforeClass
 	public static void before() {
 		CardCatalogue.loadCardsFromPackage();
-	}
-
-	private static Trace getTrace(String traceName) {
-		if (traces == null) {
-			traces = new Reflections("traces", new ResourcesScanner())
-					.getResources(x -> true)
-					.stream()
-					.filter(Objects::nonNull)
-					.map(Resources::getResource)
-					.filter(Objects::nonNull)
-					.collect(
-							Collectors.toMap(
-									c -> Paths.get(c.getPath()).getFileName().toString(),
-									c -> {
-										try {
-											return Trace.load(Resources.toString(c, Charset.defaultCharset()));
-										} catch (IOException e) {
-											return new Trace();
-										}
-									})
-					);
-		}
-		return traces.get(traceName + ".json");
 	}
 
 	@Test
@@ -80,38 +80,8 @@ public class TraceTests {
 		});
 	}
 
-	@Test
-	public void testTrace1() {
-		// Aysa Cloudsinger modifying damage of a changed hero is no good. This passed once Aysa changed the hero after
-		// the sequence ends.
-		Trace trace = getTrace("trace1");
-		GameContext context = trace.replayContext(false, null);
-	}
-
-	@Test
-	public void testTrace2() {
-		Trace trace = getTrace("trace2");
-		GameContext context = trace.replayContext(false, null);
-	}
-
-	@Test
-	public void testTrace3() {
-		// Corrupted blood infinite loop
-		Trace trace = getTrace("trace3");
-		GameContext context = trace.replayContext(false, null);
-	}
-
-	@Test
-	public void testTrace4() {
-		// Elortha no Shandra infinite loop
-		Trace trace = getTrace("trace4");
-		GameContext context = trace.replayContext(false, null);
-	}
-
-	@Test
-	public void testTrace5() {
-		// Fleeting Firebug infinite loop
-		Trace trace = getTrace("trace5");
+	@Test(dataProvider = "Traces")
+	public void testTraces(Trace trace) {
 		GameContext context = trace.replayContext(false, null);
 	}
 

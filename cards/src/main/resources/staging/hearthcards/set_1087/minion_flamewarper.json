@@ -1,0 +1,23 @@
+{
+  "name": "Flamewarper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "[b][b]Battlecry:[/b][/b] Double the\r\nfirst damage you deal\r\nthis turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

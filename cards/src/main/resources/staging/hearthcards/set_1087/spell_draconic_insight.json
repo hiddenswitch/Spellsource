@@ -1,0 +1,12 @@
+{
+  "name": "Draconic Insight",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "This turn, whenever\r\nyou play a card, draw\r\na spell from your deck.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -5,7 +5,19 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-#### 0.8.3-2.0.14 (Wednesday, December 19th)
+### 0.8.4-2.0.14 (Thursday, December 20th)
+
+Thanks to a great contribution from @Beatdoof, new Dragoon cards have been added!
+
+Also a big shout out to @bdg for a very kind Christmas gift. Spellsource will always be free, and everyone's contributions -- playing, inviting players, testing, QA, writing cards, coding, card design and other debate -- is amazingly helpful.
+
+And finally, a shout out to @doombubbles for quietly fixing bugs and adding features in the past, like our dynamic card text system.
+
+###### Content Additions:
+
+ - New and changed cards for Dragoon (using their new names): Aspect Champion, Exotic Menace, Flamewarper, Frangiblesaur, Glacial Wyvern, Headhunter, Hornmender, Sapphiron (formerly Lady Deathwhisper), Mountain Whelp, Pyroblaster Zagrosz, Savage Ogreseer, Sarclet Magiserpent, Spirit of the Serpent, Tharon Ja the Serpent, Tol'Vir Vitalizer, Twilight Redbane, Draconic Insight, Exhilarate, Gobble (formerly Fissure), Garnet Spellstones, Manufacturing, Explosive Ride! (formerly Explosive Rune!), United Retaliation, Venom Breath, Hemocannon (formerly Anemic Cannon), Cleaver of Glory, Marrow Cleaver, The Dreadtalon.  
+
+###### 0.8.3-2.0.14 (Wednesday, December 19th)
 
 This release fixes issues with starting games due to changes to tracing.
 
@@ -31,29 +43,3 @@ Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been
  - Flesheating Ghoul and other death trigger minions no longer trigger from the removal of permanents.
  - Shudderwock now correctly stops casting battlecries if it is removed from the board by dealing damage to itself until death.
  - Armageddon Vanguard will trigger off at most 14 minions.
-
-###### 0.8.1-2.0.14 (Friday, December 14th)
-
-This release includes bug fixes reported by the community.
-
-###### Client Fixes:
-
- - Choose Ones like Wrath no longer immediately cast on the minion that happened to be under the cursor when the selection was made.
- - Creating a deck a second time no longer requires reselecting a format and class. The deck name is also automatically populated with a useful default.
- - The Hero Power no longer has attack and health values.
- 
-###### Content Fixes:
-
- - Sorrowstone now works correctly.
- - Mutating Boa, Rhunok the Bear and Sea Stowaway are now Baron cards instead of Neutrals.
-
-###### 0.8.0-2.0.13 (Thursday, December 13th)
-
-This release includes bug fixes reported by the community.
-
-Random numbers are generated differently and the interface for game actions has changed, making this a backwards-incompatible change with some AIs.
-
-###### Usability Fixes:
-
- - The bot's overall reliability is improved.
- - The bot no longer has issues interacting with Shadow Visions.

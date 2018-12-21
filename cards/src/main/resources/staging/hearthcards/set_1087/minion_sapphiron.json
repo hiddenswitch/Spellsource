@@ -1,0 +1,25 @@
+{
+  "name": "Sapphiron",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "[b]Battlecry:[/b] Damage all enemy minions until they have 1 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "ENEMY_MINIONS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

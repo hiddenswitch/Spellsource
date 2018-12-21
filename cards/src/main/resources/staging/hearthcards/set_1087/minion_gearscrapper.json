@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "[b]Battlecry:[/b] If you control another Mech, attack an enemy minion.",
+  "description": "[b][b]Battlecry:[/b][/b] If you control another Mech, attack an enemy minion.",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition"

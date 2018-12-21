@@ -1,0 +1,26 @@
+{
+  "name": "Faceless Envoy",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Whenever you draw a card, gain +2 Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "TRIGGER_HOST",
+      "attackBonus": 2,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

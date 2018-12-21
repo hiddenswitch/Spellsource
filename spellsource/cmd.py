@@ -82,7 +82,7 @@ def hs_replay_matchups():
 @click.option('--directory', default='./cards/src/main/resources/staging/hearthcards',
               help='the path to save the stubs to', show_default=True)
 @click.option('--hero-class', default='ANY', help='the hero class to write onto the cards', show_default=True)
-def hearthcards_stubs(set_id, directory, hero_class):
+def hearthcards_stubs(set, directory, hero_class):
     """
     Creates stubs from the Hearthcards.
 
@@ -99,7 +99,7 @@ def hearthcards_stubs(set_id, directory, hero_class):
     You'll need to add your HERO_CLASS to HeroClass.java and modify that file to return the appropriate hero card for
     the class. The way to do that should be self-explanatory in the HeroClass.java file.
     """
-    write_set_stubs(set_id, dest_dir=directory, hero_class=hero_class)
+    write_set_stubs(set, dest_dir=directory, hero_class=hero_class)
 
 
 @_cli.command()

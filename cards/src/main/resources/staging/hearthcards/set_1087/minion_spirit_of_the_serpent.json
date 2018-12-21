@@ -1,0 +1,27 @@
+{
+  "name": "Spirit of the Serpent",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "[b]Stealth[/b] for 1 turn.\r\nAfter an enemy minion dies, draw a minion from your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "target": "FRIENDLY_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

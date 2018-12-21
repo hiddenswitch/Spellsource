@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "[b]Deathrattle:[/b] Destroy a random enemy minion.",
+  "description": "[b][b]Deathrattle:[/b][/b] Destroy a random enemy minion.",
   "deathrattle": {
     "class": "DestroySpell",
     "target": "ENEMY_MINIONS",

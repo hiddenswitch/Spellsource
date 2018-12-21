@@ -1,0 +1,14 @@
+{
+  "name": "Cleaver of Glory",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "RUST",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "[b]Supremacy:[/b] Draw a card.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
