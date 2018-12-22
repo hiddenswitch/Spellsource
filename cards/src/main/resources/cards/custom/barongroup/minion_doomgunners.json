@@ -1,0 +1,14 @@
+{
+  "name": "Doomgunners",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Attacks minions thrice.",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
