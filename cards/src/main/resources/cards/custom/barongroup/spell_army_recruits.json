@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Add a 2/2 Knight to your hand. At the start of your turn, repeat.",
+  "description": "Add a 2/2 Knight to your hand. At the start of your turns, repeat.",
     "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -29,9 +29,6 @@
         }
       }
     }
-  },
-  "attributes": {
-    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",
