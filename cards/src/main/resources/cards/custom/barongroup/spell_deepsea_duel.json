@@ -1,0 +1,35 @@
+{
+  "name": "Deepsea Duel",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Summon a 2-Cost minion. Reveal a minion in each deck. If yours costs more, summon two instead.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "JoustSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "spell1": {
+    "class": "SummonSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 2
+    },
+    "spell2": {
+    "class": "SummonSpell",
+    "value": 2,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
