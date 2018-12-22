@@ -1,0 +1,25 @@
+{
+  "name": "Alternate Timeline",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Discard your hand. Draw 5 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DiscardSpell",
+        "value": -1
+      },
+      {
+    "class": "DrawCardSpell",
+    "value": 5
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
