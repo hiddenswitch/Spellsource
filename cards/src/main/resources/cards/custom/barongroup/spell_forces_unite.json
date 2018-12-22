@@ -1,0 +1,23 @@
+
+{
+  "name": "Forces Unite!",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Give all minions in your hand +3/+3.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HAND",
+    "attackBonus": 3,
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "hpBonus": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
