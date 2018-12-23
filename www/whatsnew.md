@@ -5,7 +5,11 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-### 0.8.4-2.0.15 (Saturday, December 22nd)
+### 0.8.4-2.0.16 (Saturday, December 22nd)
+
+Choose ones now work on mobile devices.
+
+###### 0.8.4-2.0.15 (Saturday, December 22nd)
 
 A longstanding issue where mulligans appear to bug out the game has been solved. You are also less likely to run into older cards.
 
