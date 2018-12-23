@@ -5,7 +5,20 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-### 0.8.4-2.0.14 (Thursday, December 20th)
+### 0.8.4-2.0.16 (Saturday, December 22nd)
+
+Choose ones now work on mobile devices.
+
+###### 0.8.4-2.0.15 (Saturday, December 22nd)
+
+A longstanding issue where mulligans appear to bug out the game has been solved. You are also less likely to run into older cards.
+
+###### Usability Fixes:
+
+ - Mulligans no longer retain information from previous matches. This prevents an unrecoverable error during the mulligan phase on the server.
+ - The game finds leftover cards and removes them from play after you finish or concede your current game.
+
+###### 0.8.4-2.0.14 (Thursday, December 20th)
 
 Thanks to great contributions from @Beatdoof and @TheFlawlessWalrus, new Dragoon and Summoner cards have been added! @doombubbles has also authored some fixes and updates to balance changes in H.S. cards.
 
