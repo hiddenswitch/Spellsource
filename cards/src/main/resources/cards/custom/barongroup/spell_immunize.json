@@ -1,0 +1,17 @@
+{
+  "name": "Immunize",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Give a minion +1/+7.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 1,
+    "hpBonus": 7
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

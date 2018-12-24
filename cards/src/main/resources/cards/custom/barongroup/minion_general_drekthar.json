@@ -1,0 +1,28 @@
+{
+  "name": "General Drek'Thar",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "After you summon a minion for your opponent, take control of it.",
+  "trigger": {
+    "eventTrigger": {
+    "class": "MinionSummonedTrigger",
+    "fireCondition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    },
+    "targetPlayer": "OPPONENT"
+  },
+    },
+    "spell": {
+      "class": "MindControlSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

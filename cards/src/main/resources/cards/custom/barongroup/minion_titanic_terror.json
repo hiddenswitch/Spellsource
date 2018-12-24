@@ -1,0 +1,24 @@
+{
+  "name": "Titanic Terror",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "description": "Whenever you cast a spell, gain +4 Attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "target": "SELF",
+      "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
