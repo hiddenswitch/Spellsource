@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -87,6 +88,22 @@ public class CardCatalogue {
 		CardCatalogueRecord namedCard = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(recordsByName.get(name).get(0));
 		if (namedCard != null) {
 			return getCardById(namedCard.getId());
+		}
+		return null;
+	}
+
+	public static Card getCardByName(String name, HeroClass heroClass) {
+		List<CardCatalogueRecord> namedCards = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).collect(Collectors.toList());
+		if (!namedCards.isEmpty()) {
+			if (namedCards.size() > 1) {
+				for (CardCatalogueRecord namedCard : namedCards) {
+					Card card = getCardById(namedCard.getId());
+					if (card.hasHeroClass(heroClass)) {
+						return card;
+					}
+				}
+			}
+			return getCardById(namedCards.get(0).getId());
 		}
 		return null;
 	}

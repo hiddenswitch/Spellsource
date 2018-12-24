@@ -3309,13 +3309,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	@Suspendable
-	protected void resolveBattlecry(int playerId, Actor actor) {
+	protected BattlecryAction resolveBattlecry(int playerId, Actor actor) {
 		BattlecryAction battlecry = actor.getBattlecry();
 
 		Player player = context.getPlayer(playerId);
 		processTargetModifiers(battlecry);
 		if (!battlecry.canBeExecuted(context, player)) {
-			return;
+			return BattlecryAction.NONE;
 		}
 
 		battlecry.setSourceReference(actor.getReference());
@@ -3326,13 +3326,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			if (battlecryActions == null
 					|| battlecryActions.size() == 0) {
-				return;
+				return BattlecryAction.NONE;
 			}
 
 			BattlecryAction targetedBattlecry = (BattlecryAction) requestAction(player, battlecryActions);
 			performBattlecryAction(playerId, actor, player, targetedBattlecry);
+			return targetedBattlecry;
 		} else {
 			performBattlecryAction(playerId, actor, player, battlecry);
+			return battlecry;
 		}
 	}
 
@@ -3388,16 +3390,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		boolean willDouble = false;
-		List<SpellDesc> extraEffects = new ArrayList<>();
 		List<DoubleBattlecriesAura> doubleBattlecryAuras = SpellUtils.getAuras(context, actor.getOwner(), DoubleBattlecriesAura.class);
 		if (!doubleBattlecryAuras.isEmpty() && actor.hasAttribute(Attribute.BATTLECRY)) {
 			for (DoubleBattlecriesAura aura : doubleBattlecryAuras) {
 				aura.onGameEvent(new WillEndSequenceEvent(context));
 				if (aura.getAffectedEntities().contains(actor.getId())) {
 					willDouble = true;
-					if (aura.extraEffect != null) {
-						extraEffects.add(aura.extraEffect);
-					}
 				}
 			}
 		}
@@ -3426,9 +3424,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					|| getValidTargets(playerId, battlecryAction).stream().map(EntityReference::pointTo).anyMatch(er -> er.equals(target1));
 			if (!battlecryAction.canBeExecuted(context, player) || !targetable) {
 				return;
-			}
-			for (SpellDesc extraEffect : extraEffects) {
-				context.getLogic().castSpell(playerId, extraEffect, actor.getReference(), EntityReference.NONE, true);
 			}
 			performGameAction(playerId, battlecryAction);
 		} else {
@@ -3843,15 +3838,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			// After ever event, something may have transformed the minion, so make sure to get the correct entity.
 			if (!minion.hasAttribute(Attribute.PERMANENT)) {
-				context.fireGameEvent(new BeforeSummonEvent(context, minion, source));
+				context.fireGameEvent(new BeforeSummonEvent(context, minion, source, false, null));
 				minion = summonTransformResolved(minion);
 			}
 
 			context.fireGameEvent(new BoardChangedEvent(context));
 			minion = summonTransformResolved(minion);
-
+			BattlecryAction battlecryAction = null;
 			if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry() != BattlecryAction.NONE) {
-				resolveBattlecry(player.getId(), minion);
+				battlecryAction = resolveBattlecry(player.getId(), minion);
 				minion = summonTransformResolved(minion);
 				// A battlecry may have transformed the minion
 				endOfSequence();
@@ -3869,9 +3864,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (context.getEnvironment().get(Environment.TARGET_OVERRIDE) != null) {
 				Actor actor = (Actor) context.resolveTarget(player, source, (EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE)).get(0);
 				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-				summonEvent = new SummonEvent(context, actor, source);
+				summonEvent = new SummonEvent(context, actor, source, resolveBattlecry, battlecryAction);
 			} else {
-				summonEvent = new SummonEvent(context, minion, source);
+				summonEvent = new SummonEvent(context, minion, source, resolveBattlecry, battlecryAction);
 			}
 
 			if (summonEvent.getMinion() != null && !summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
@@ -3896,7 +3891,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				player.modifyAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 1);
 				player.modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
 				context.getOpponent(player).modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
-				context.fireGameEvent(new AfterSummonEvent(context, minion, source));
+				context.fireGameEvent(new AfterSummonEvent(context, minion, source, resolveBattlecry, battlecryAction));
 			}
 			context.fireGameEvent(new BoardChangedEvent(context));
 			return true;

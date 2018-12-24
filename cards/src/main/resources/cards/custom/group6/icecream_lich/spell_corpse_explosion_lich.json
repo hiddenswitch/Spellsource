@@ -1,0 +1,31 @@
+{
+  "name": "Corpse Explosion",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ICECREAM",
+  "rarity": "FREE",
+  "description": "Destroy a friendly minion. Deal $2 damage to all enemies.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

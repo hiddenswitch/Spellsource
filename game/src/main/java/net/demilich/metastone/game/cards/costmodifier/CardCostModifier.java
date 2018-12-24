@@ -14,6 +14,8 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
@@ -54,6 +56,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	 */
 	private EntityReference targetReference = EntityReference.FRIENDLY_HAND;
 	private EventTrigger expirationTrigger;
+	private Condition condition;
 	private CardCostModifierDesc desc;
 
 	public CardCostModifier(CardCostModifierDesc desc) {
@@ -64,6 +67,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		}
 		if (desc.containsKey(CardCostModifierArg.TARGET)) {
 			targetReference = (EntityReference) desc.get(CardCostModifierArg.TARGET);
+		}
+		if (desc.containsKey(CardCostModifierArg.CONDITION)) {
+			condition = (Condition) desc.get(CardCostModifierArg.CONDITION);
 		}
 	}
 
@@ -102,6 +108,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 		// If it's expired, don't continue evaluating
 		if (!applies) {
+			return false;
+		}
+		if (condition != null && !condition.isFulfilled(context, player, context.resolveSingleTarget(this.getHostReference()), card)) {
 			return false;
 		}
 

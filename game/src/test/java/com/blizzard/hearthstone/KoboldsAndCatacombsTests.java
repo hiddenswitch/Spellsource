@@ -1081,4 +1081,14 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			assertTrue((int) player.getAttributes().get(Attribute.MINIONS_SUMMONED_THIS_TURN) > 0);
 		});
 	}
+
+	@Test
+	public void testCallToArmsPintSized() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_pint-sized_summoner");
+			Card lumi = receiveCard(context, player, "minion_faithful_lumi");
+			playCard(context, player, "spell_call_to_arms");
+			assertEquals(costOf(context, player, lumi), 0);
+		});
+	}
 }

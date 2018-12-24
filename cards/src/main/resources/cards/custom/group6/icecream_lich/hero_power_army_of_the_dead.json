@@ -1,0 +1,22 @@
+{
+  "name": "Army of the Dead",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ICECREAM",
+  "rarity": "FREE",
+  "description": "Summon two 1/1 Ghouls with Charge that dies at the end of the turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_charging_lich_ghoul",
+        "token_charging_lich_ghoul"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

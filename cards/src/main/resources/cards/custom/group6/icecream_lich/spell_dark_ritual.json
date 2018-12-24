@@ -1,0 +1,24 @@
+{
+  "name": "Dark Ritual",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ICECREAM",
+  "rarity": "FREE",
+  "description": "Destroy a friendly minion. Draw 2 cards.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

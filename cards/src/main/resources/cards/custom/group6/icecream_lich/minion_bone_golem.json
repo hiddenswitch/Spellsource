@@ -1,0 +1,27 @@
+{
+  "name": "Bone Golem",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ICECREAM",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Sacrifice: Restore this minion to full Health.",
+   "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "SELF",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "MAX_HP"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

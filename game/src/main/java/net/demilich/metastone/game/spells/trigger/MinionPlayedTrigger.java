@@ -5,7 +5,7 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.SummonEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public final class MinionPlayedTrigger extends MinionSummonedTrigger {
+public class MinionPlayedTrigger extends MinionSummonedTrigger {
 	public MinionPlayedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}

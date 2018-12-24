@@ -5,7 +5,19 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-### 0.8.4-2.0.16 (Saturday, December 22nd)
+### 0.8.5-2.0.16 (Saturday, December 22nd)
+
+Thanks to a great contribution from @doombubbles and @Hooktusk'sHusbando, we have a new ICECREAM class! Expect some flavor updates.
+
+###### Content Additions
+
+ - The ICECREAM class, starting with 34 cards and tokens.
+ 
+###### Content Fixes
+
+ - Pint-Sized Summoner now interacts with Call to Arms correctly.
+
+###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
 Choose ones now work on mobile devices.
 

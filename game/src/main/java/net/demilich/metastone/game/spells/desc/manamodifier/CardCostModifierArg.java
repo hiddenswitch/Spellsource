@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
 public enum CardCostModifierArg {
@@ -86,5 +87,10 @@ public enum CardCostModifierArg {
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider#evaluateOperation(int, int,
 	 *    AlgebraicOperation) to see more on how operations are evaluated.
 	 */
-	OPERATION
+	OPERATION,
+
+	/**
+	 * A {@link Condition} for this card cost modifier to be active
+	 */
+	CONDITION
 }
