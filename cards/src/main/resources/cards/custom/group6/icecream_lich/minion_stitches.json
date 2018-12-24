@@ -1,0 +1,42 @@
+{
+  "name": "Stitches",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ICECREAM",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Destroy an enemy minion. Gain its Attack and Health.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "target": "ENEMY_MINION",
+            "attribute": "ATTACK"
+          },
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "target": "ENEMY_MINION",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "DestroySpell",
+          "target": "ENEMY_MINION"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

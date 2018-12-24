@@ -34,6 +34,7 @@ public enum HeroClass {
 	AMBER,
 	TOAST,
 	BRASS,
+	ICECREAM,
 	/**
 	 * The Hearthstone Death Knight card class.
 	 */
