@@ -123,7 +123,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				int count = Integer.parseInt(matcher.group("count"));
 				String cardId;
 				try {
-					cardId = CardCatalogue.getCardByName(cardName).getCardId();
+					cardId = CardCatalogue.getCardByName(cardName, request.getHeroClass()).getCardId();
 				} catch (NullPointerException ex) {
 					String message = String.format("Could not find a card named %s%s", cardName, request.getName() == null ? "" : " while reading deck list " + request.getName());
 					errors.add(new NullPointerException(message));

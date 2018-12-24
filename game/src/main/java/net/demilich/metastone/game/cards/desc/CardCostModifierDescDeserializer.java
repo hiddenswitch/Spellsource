@@ -29,6 +29,7 @@ public class CardCostModifierDescDeserializer extends DescDeserializer<CardCostM
 		ctx.add(CardCostModifierArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(CardCostModifierArg.OPERATION, ParseValueType.ALGEBRAIC_OPERATION);
 		ctx.add(CardCostModifierArg.FILTER, ParseValueType.ENTITY_FILTER);
+		ctx.add(CardCostModifierArg.CONDITION, ParseValueType.CONDITION);
 	}
 
 	@Override
