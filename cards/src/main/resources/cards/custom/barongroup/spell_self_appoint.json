@@ -1,0 +1,23 @@
+{
+  "name": "Self-Appoint",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "EPIC",
+  "description": "Transform a minion into a copy of a random minion in your deck.",
+  "targetSelection": "MINIONS",
+    "spell": {
+      "class": "TransformToRandomMinionSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+      "cardSource": {
+        "class": "DeckSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

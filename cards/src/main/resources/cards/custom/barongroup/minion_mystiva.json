@@ -1,0 +1,28 @@
+{
+  "name": "Mystiva",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you cast a spell, draw all copies of it from your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "secondaryTarget": "EVENT_TARGET"
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
