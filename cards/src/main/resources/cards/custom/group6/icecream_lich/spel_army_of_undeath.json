@@ -1,0 +1,20 @@
+{
+  "name": "Army of Undeath",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICECREAM",
+  "rarity": "FREE",
+  "description": "Summon three 1/1 Ghouls with Charge.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_lich_ghoul_charge",
+      "token_lich_ghoul_charge",
+      "token_lich_ghoul_charge"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
