@@ -1,0 +1,25 @@
+{
+  "name": "Howling Blast",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICECREAM",
+  "rarity": "EPIC",
+  "description": "Freeze a minion permanently.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FREEZES_PERMANENTLY"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

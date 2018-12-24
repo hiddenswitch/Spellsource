@@ -1,0 +1,34 @@
+{
+  "name": "Harvest Soul",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ICECREAM",
+  "rarity": "RARE",
+  "description": "Destroy a minion. Restore its Health to your hero.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "ignoreSpellDamage": true,
+        "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

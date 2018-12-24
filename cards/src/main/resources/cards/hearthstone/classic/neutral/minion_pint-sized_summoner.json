@@ -8,17 +8,47 @@
   "rarity": "RARE",
   "description": "The first minion you play each turn costs (1) less.",
   "cardCostModifier": {
-    "class": "ToggleCostModifier",
+    "class": "CardCostModifier",
     "value": -1,
     "cardType": "MINION",
     "targetPlayer": "SELF",
-    "toggleOffTrigger": {
-      "class": "CardPlayedTrigger",
-      "cardType": "MINION",
-      "targetPlayer": "SELF"
-    },
-    "toggleOnTrigger": {
-      "class": "TurnStartTrigger"
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
+        {
+          "class": "ComparisonCondition",
+          "value1": {
+            "class": "CardCountValueProvider",
+            "cardFilter": {
+              "class": "AndFilter",
+              "filters": [
+                {
+                  "class": "CardFilter",
+                  "cardType": "MINION"
+                },
+                {
+                  "class": "AttributeFilter",
+                  "value": {
+                    "class": "CurrentTurnValueProvider"
+                  },
+                  "attribute": "PLAYED_FROM_HAND_OR_DECK",
+                  "operation": "EQUAL"
+                }
+              ]
+            },
+            "cardSource": {
+              "class": "GraveyardCardsSource",
+              "targetPlayer": "SELF"
+            }
+          },
+          "operation": "EQUAL",
+          "value2": 0
+        }
+      ]
     }
   },
   "collectible": true,

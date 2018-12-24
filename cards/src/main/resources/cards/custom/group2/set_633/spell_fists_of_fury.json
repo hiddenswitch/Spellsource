@@ -1,10 +1,10 @@
 {
   "name": "Fists of Fury",
-  "baseManaCost": 4,
+  "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
-  "description": "Deal $10 damage randomly split among all enemy minions. This spell gets double bonus from Spell Damage.",
+  "description": "Deal $10 damage randomly split among all enemy minions.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",
@@ -13,7 +13,6 @@
     "howMany": 10
   },
   "attributes": {
-    "SPELL_DAMAGE_MULTIPLIER": 2
   },
   "collectible": true,
   "set": "CUSTOM",
