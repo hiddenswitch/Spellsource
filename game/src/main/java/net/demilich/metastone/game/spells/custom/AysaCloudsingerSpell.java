@@ -26,10 +26,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Map;
-
-import static java.util.Map.entry;
-
 /**
  * Changes your current hero to the first card in the {@link net.demilich.metastone.game.spells.desc.SpellArg#CARDS}
  * array.

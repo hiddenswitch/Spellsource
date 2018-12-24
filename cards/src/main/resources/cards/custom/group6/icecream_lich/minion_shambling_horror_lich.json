@@ -1,0 +1,16 @@
+{
+  "name": "Shambling Horror",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ICECREAM",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

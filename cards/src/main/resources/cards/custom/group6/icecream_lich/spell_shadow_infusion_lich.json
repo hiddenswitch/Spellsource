@@ -1,0 +1,20 @@
+{
+  "name": "Shadow Infusion",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "ICECREAM",
+  "rarity": "EPIC",
+  "description": "For each friendly minion, give your minions +1/+1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS"
+    },
+    "target": "FRIENDLY_MINIONS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
