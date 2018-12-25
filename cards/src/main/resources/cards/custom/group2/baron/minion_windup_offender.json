@@ -1,0 +1,33 @@
+{
+  "name": "Wind-up Offender",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Costs (1) less for each minion that attacked this turn.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ReduceValueProvider",
+    "operation": "ADD",
+    "target": "ALL_MINIONS",
+    "value1": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "ATTACKS_THIS_TURN"
+        },
+        "value2": 1,
+        "operation": "GREATER_OR_EQUAL"
+      },
+      "ifTrue": 1,
+      "ifFalse": 0
+    }
+  }
+}

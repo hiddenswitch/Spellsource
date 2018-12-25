@@ -1,0 +1,50 @@
+{
+  "name": "Catta the Merciless",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever a minion attacks another, they fight repeatedly until one dies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "EVENT_TARGET",
+            "invert": true
+          },
+          {
+            "class": "IsDeadCondition",
+            "target": "EVENT_SOURCE",
+            "invert": true
+          }
+        ]
+      },
+      "sourceEntityType": "MINION",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "FightSpell",
+          "target": "EVENT_TARGET",
+          "secondaryTarget": "EVENT_SOURCE"
+        },
+        {
+          "class": "ForceDeathPhaseSpell"
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

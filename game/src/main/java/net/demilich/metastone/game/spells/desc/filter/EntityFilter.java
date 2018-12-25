@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
@@ -45,6 +46,12 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 	 * <p>
 	 * {@link EntityFilterArg#TARGET_PLAYER} is interpreted as the point of view from which the {@link #test(GameContext,
 	 * Player, Entity, Entity)} call is evaluated.
+	 * <p>
+	 * If an {@link EntityFilterArg#AND_CONDITION} is specified, the filter's test <b>and</b> the condition must pass.
+	 * Works The condition uses the {@code player} passed into this function, not the {@link
+	 * EntityFilterArg#TARGET_PLAYER} that is potentially specified on this filter. for any filter. The condition uses the
+	 * {@code player} passed into this function, not the {@link EntityFilterArg#TARGET_PLAYER} that is potentially
+	 * specified on this filter.
 	 *
 	 * @param context
 	 * @param player
@@ -89,7 +96,14 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 				providingPlayer = player;
 				break;
 		}
-		return this.test(context, providingPlayer, entity, host) != invert;
+
+		boolean passesCondition = true;
+		if (getDesc().containsKey(EntityFilterArg.AND_CONDITION)) {
+			Condition condition = (Condition) getDesc().get(EntityFilterArg.AND_CONDITION);
+			passesCondition = condition.isFulfilled(context, player, host, entity);
+		}
+		return passesCondition
+				&& this.test(context, providingPlayer, entity, host) != invert;
 	}
 
 	/**

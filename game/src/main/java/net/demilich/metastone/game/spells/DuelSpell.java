@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * <p>
  * No minion attacks more than once, but some minions make be attacked more than once.
  */
-public final class DuelSpell extends FightSpell {
+public class DuelSpell extends FightSpell {
 
 	private static Logger logger = LoggerFactory.getLogger(DuelSpell.class);
 
@@ -27,8 +27,8 @@ public final class DuelSpell extends FightSpell {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		EntityFilter filter = desc.getEntityFilter();
-		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
-		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
+		List<Entity> validDefenders = getDefenders(context, player, source, targets, filter);
+		List<Entity> validAttackers = getAttackers(context, player, desc, source, filter);
 
 		for (Entity attacker : validAttackers) {
 			if (!(attacker instanceof Actor)) {
@@ -57,5 +57,13 @@ public final class DuelSpell extends FightSpell {
 			castForPlayer(context, player, fight, attacker, defender);
 			context.getSpellTargetStack().pop();
 		}
+	}
+
+	protected List<Entity> getAttackers(GameContext context, Player player, SpellDesc desc, Entity source, EntityFilter filter) {
+		return SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
+	}
+
+	protected List<Entity> getDefenders(GameContext context, Player player, Entity source, List<Entity> targets, EntityFilter filter) {
+		return SpellUtils.getValidTargets(context, player, targets, filter, source);
 	}
 }
