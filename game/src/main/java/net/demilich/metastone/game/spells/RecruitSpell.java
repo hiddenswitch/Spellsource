@@ -70,6 +70,9 @@ import java.util.List;
  *     "targetPlayer": "SELF"
  *   }
  * </pre>
+ * <p>
+ * To recruit a specific target from the hand, use {@link PutMinionOnBoardSpell}. If you need to only put the minion
+ * onto the board if it is in the deck, use {@link PutMinionOnBoardFromDeckSpell}.
  */
 public class RecruitSpell extends Spell {
 
@@ -129,7 +132,7 @@ public class RecruitSpell extends Spell {
 		}
 
 		Minion summon = card.summon();
-		boolean summonSuccess = context.getLogic().summon(player.getId(), summon, null, -1, false);
+		boolean summonSuccess = context.getLogic().summon(player.getId(), summon, source, -1, false);
 
 		// re-add the card here if we removed it before
 		if (originalZone == Zones.DECK) {

@@ -1,0 +1,30 @@
+{
+  "name": "Swarms of Time",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Draw a minion. If it's a Murloc, summon it.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "target": "OUTPUT",
+      "condition": {
+        "class": "RaceCondition",
+        "race": "MURLOC"
+      },
+      "spell": {
+        "class": "PutMinionOnBoardSpell"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

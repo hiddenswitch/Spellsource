@@ -5,16 +5,17 @@ import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import org.jetbrains.annotations.NotNull;
 
 public class SummonEvent extends GameEvent implements HasCard {
 
 	private final boolean resolvedBattlecry;
 	private final BattlecryAction battlecryAction;
 	private final Actor minion;
-	private final Card source;
+	private final Entity source;
 
-	public SummonEvent(GameContext context, Actor minion, Card source, boolean resolvedBattlecry, BattlecryAction battlecryAction) {
-		super(context, minion.getOwner(), source == null ? -1 : source.getOwner());
+	public SummonEvent(@NotNull GameContext context, @NotNull Actor minion, @NotNull Entity source, boolean resolvedBattlecry, BattlecryAction battlecryAction) {
+		super(context, minion.getOwner(), source.getOwner());
 		this.minion = minion;
 		this.source = source;
 		this.resolvedBattlecry = resolvedBattlecry;
@@ -22,11 +23,13 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
+	@NotNull
 	public Entity getEventTarget() {
 		return getMinion();
 	}
 
 	@Override
+	@NotNull
 	public Entity getEventSource() {
 		return getSource();
 	}
@@ -36,11 +39,13 @@ public class SummonEvent extends GameEvent implements HasCard {
 		return GameEventType.SUMMON;
 	}
 
+	@NotNull
 	public Actor getMinion() {
 		return minion;
 	}
 
-	public Card getSource() {
+	@NotNull
+	public Entity getSource() {
 		return source;
 	}
 
@@ -50,8 +55,9 @@ public class SummonEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
+	@NotNull
 	public Card getCard() {
-		return source;
+		return source.getSourceCard();
 	}
 
 	public boolean isResolvedBattlecry() {

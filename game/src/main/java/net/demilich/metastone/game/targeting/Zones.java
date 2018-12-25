@@ -26,8 +26,7 @@ import java.util.Set;
  * {@link #DECK}, opponent's {@link #SECRET} zone and their own {@link #DECK}. While neither player can browse through
  * the {@link #GRAVEYARD} the information inside of it is not considered secret.
  * <p>
- * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Card, int,
- * boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
+ * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Entity, int, boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
  * {@link Minion} is created by {@link Card#summon()} and placed into the {@link #BATTLEFIELD}.
  *
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.

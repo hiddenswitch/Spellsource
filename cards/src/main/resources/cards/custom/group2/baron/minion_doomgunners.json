@@ -1,0 +1,70 @@
+{
+  "name": "Doomgunners",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Attacks minions thrice.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "AfterPhysicalAttackTrigger",
+        "hostTargetType": "IGNORE_OTHER_SOURCES",
+        "targetEntityType": "MINION",
+        "fireCondition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "AttributeCondition",
+              "target": "TRIGGER_HOST",
+              "attribute": "RESERVED_BOOLEAN_1",
+              "invert": true,
+              "operation": "HAS"
+            },
+            {
+              "class": "IsDeadCondition",
+              "invert": true,
+              "target": "EVENT_SOURCE"
+            },
+            {
+              "class": "IsDeadCondition",
+              "invert": true,
+              "target": "EVENT_TARGET"
+            }
+          ]
+        }
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "TRIGGER_HOST",
+            "attribute": "RESERVED_BOOLEAN_1"
+          },
+          {
+            "class": "FightSpell",
+            "target": "EVENT_TARGET",
+            "secondaryTarget": "TRIGGER_HOST"
+          },
+          {
+            "class": "FightSpell",
+            "target": "EVENT_TARGET",
+            "secondaryTarget": "TRIGGER_HOST"
+          },
+          {
+            "class": "RemoveAttributeSpell",
+            "target": "TRIGGER_HOST",
+            "attribute": "RESERVED_BOOLEAN_1"
+          }
+        ]
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
