@@ -228,7 +228,7 @@ public class WitchwoodTests extends TestBase {
 			Minion remove = playMinionCard(context, player, "minion_zola_the_gorgon");
 			destroy(context, remove);
 			playMinionCard(context, player, "minion_shudderwock");
-			assertEquals(player.getHand().get(0).getCardId(), "minion_shudderwock", "Should copy Shudderwock");
+			assertEquals(player.getHand().size(), 0, "Should NOT copy Shudderwock");
 		});
 	}
 
@@ -271,6 +271,15 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(minion.getHp(), minion.getMaxHp() - 3);
 			playCard(context, player, "minion_shudderwock");
 			assertEquals(minion.getHp(), minion.getMaxHp() - 6);
+		});
+	}
+
+	@Test
+	public void testShudderwockConditionalBattlecriesInteraction() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_hooked_reaver");
+			Minion shudderwock = playMinionCard(context, player, "minion_shudderwock");
+			assertEquals(shudderwock.getAttack(), 6);
 		});
 	}
 
