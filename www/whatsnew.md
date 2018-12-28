@@ -27,6 +27,9 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Energetic Mentee: Reworked to increase token summoner potential in Basic/Classic.
  - Horned Jouster: Code changed to make the Beetles summon on either side.
  - Lackey Break: Just a name change due to being swapped with Savage Anger between sets.
+ - Tick and Tock is now a Dragon.
+ - Hive Guardian is now a Beast.
+ - Tenacious Beetle is now a Beast.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
