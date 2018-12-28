@@ -3,6 +3,33 @@ layout: page
 title: History
 permalink: /history/
 ---
+###### 0.8.3-2.0.14 (Wednesday, December 19th)
+
+This release fixes issues with starting games due to changes to tracing.
+
+###### Context Fixes:
+
+ - Fleeting Firebug no longer causes infinite loops when interacting with Defile.
+ - Elortha no Shandra no longer causes infinite loops in some situations.
+
+###### 0.8.2-2.0.14 (Monday, December 17th)
+
+Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been added and tweaked. Test improvements have led to other minor content fixes.
+
+###### Content Additions:
+
+ - Grandmaster Stormstout, Artificial Life Coccoon, Aysa Cloudsinger, Enigmatic Brewmaster, Life Cocoon, Monastery Scroll-Keeper, Ox School Instructor, Red Crane Statue, Student of the Crane, Thundering Crimson Seprent, Thundering Golden Serpent, Thundering Jade Serpent, Thundering Onyx Serpent, Sapphire Serpent, Uncle Gao, White Tiger Statue, Zen-noy-o-tron, and Sleight of Hand.  
+
+###### Content Fixes:
+
+ - Niuzao now has Deflect.
+ - Xuen, Chi-Ji and Yu'Lon have been changed.
+ - Lord Jaraxxus now correctly removes himself from the battlefield after being played.
+ - Corrupted Blood now shuffles copies of itself into your deck after the sequence ends. This prevents you from taking infinite damage when the last card in your deck is a Corrupted Blood, and an effect causes you to draw a card at the end of your turn.
+ - Flesheating Ghoul and other death trigger minions no longer trigger from the removal of permanents.
+ - Shudderwock now correctly stops casting battlecries if it is removed from the board by dealing damage to itself until death.
+ - Armageddon Vanguard will trigger off at most 14 minions.
+
 ###### 0.8.1-2.0.14 (Friday, December 14th)
 
 This release includes bug fixes reported by the community.
