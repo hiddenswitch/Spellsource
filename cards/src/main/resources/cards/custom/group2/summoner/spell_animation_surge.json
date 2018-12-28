@@ -15,7 +15,8 @@
       },
       "ifTrue": 5,
       "ifFalse": 3
-    }
+    },
+    "card": "token_rock_golem"
   },
   "attributes": {
     "INVOKE": 5
