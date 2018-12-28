@@ -7,25 +7,80 @@
   "description": "Summon a copy of each minion you summoned this turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "target": "ALL_MINIONS",
-    "filter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "SummonedByPlayerFilter",
-          "targetPlayer": "SELF"
-        },
-        {
-          "class": "AttributeFilter",
-          "attribute": "SUMMONED_ON_TURN",
-          "operation": "EQUAL",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          }
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "target": "ALL_MINIONS",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "SummonedByPlayerFilter",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "SUMMONED_ON_TURN",
+              "operation": "EQUAL",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              }
+            }
+          ]
         }
-      ]
-    }
+      },
+      {
+        "class": "SummonSpell",
+        "target": "FRIENDLY_GRAVEYARD",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "MINION"
+            },
+            {
+              "class": "SummonedByPlayerFilter",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "SUMMONED_ON_TURN",
+              "operation": "EQUAL",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              }
+            }
+          ]
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "target": "ENEMY_GRAVEYARD",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "MINION"
+            },
+            {
+              "class": "SummonedByPlayerFilter",
+              "targetPlayer": "SELF"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "SUMMONED_ON_TURN",
+              "operation": "EQUAL",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              }
+            }
+          ]
+        }
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

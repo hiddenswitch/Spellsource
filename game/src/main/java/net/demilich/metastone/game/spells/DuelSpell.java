@@ -27,9 +27,14 @@ public class DuelSpell extends FightSpell {
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
 		EntityFilter filter = desc.getEntityFilter();
-		List<Entity> validDefenders = getDefenders(context, player, source, targets, filter);
-		List<Entity> validAttackers = getAttackers(context, player, desc, source, filter);
+		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
+		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
 
+		duel(context, player, source, validAttackers, validDefenders);
+	}
+
+	@Suspendable
+	protected void duel(GameContext context, Player player, Entity source, List<Entity> validAttackers, List<Entity> validDefenders) {
 		for (Entity attacker : validAttackers) {
 			if (!(attacker instanceof Actor)) {
 				logger.error("onCast {} {}: Tried to duel attacker {} which is not an actor.", context.getGameId(), source, attacker);
@@ -59,11 +64,4 @@ public class DuelSpell extends FightSpell {
 		}
 	}
 
-	protected List<Entity> getAttackers(GameContext context, Player player, SpellDesc desc, Entity source, EntityFilter filter) {
-		return SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
-	}
-
-	protected List<Entity> getDefenders(GameContext context, Player player, Entity source, List<Entity> targets, EntityFilter filter) {
-		return SpellUtils.getValidTargets(context, player, targets, filter, source);
-	}
 }

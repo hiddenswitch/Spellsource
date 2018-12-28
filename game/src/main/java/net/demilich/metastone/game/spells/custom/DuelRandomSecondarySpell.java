@@ -1,11 +1,14 @@
 package net.demilich.metastone.game.spells.custom;
 
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.DuelSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Collections;
 import java.util.List;
@@ -19,12 +22,13 @@ import java.util.List;
 public final class DuelRandomSecondarySpell extends DuelSpell {
 
 	@Override
-	protected List<Entity> getDefenders(GameContext context, Player player, Entity source, List<Entity> targets, EntityFilter filter) {
-		return super.getDefenders(context, player, source, targets, null);
-	}
+	@Suspendable
+	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
+		List<Entity> validDefenders = targets;
+		List<Entity> validAttackers = context.resolveTarget(player, source, (EntityReference) desc.get(SpellArg.SECONDARY_TARGET));
+		validAttackers.removeAll(validDefenders);
+		validAttackers = Collections.singletonList(context.getLogic().getRandom(validAttackers));
 
-	@Override
-	protected List<Entity> getAttackers(GameContext context, Player player, SpellDesc desc, Entity source, EntityFilter filter) {
-		return Collections.singletonList(context.getLogic().getRandom(super.getAttackers(context, player, desc, source, null)));
+		duel(context, player, source, validAttackers, validDefenders);
 	}
 }

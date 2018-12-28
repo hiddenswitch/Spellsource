@@ -10,9 +10,7 @@
   "battlecry": {
     "spell": {
       "class": "SummonSpell",
-      "cards": [
-        "token_flakefuse_bomb"
-      ],
+      "card": "token_flakefuse_bomb",
       "targetPlayer": "OPPONENT"
     }
   },

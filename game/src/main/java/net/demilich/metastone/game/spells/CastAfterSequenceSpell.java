@@ -57,16 +57,18 @@ public final class CastAfterSequenceSpell extends Spell {
 		}
 
 		// Special casing spell target
-		if (spell.containsKey(SpellArg.TARGET)
-				&& spell.get(SpellArg.TARGET).equals(EntityReference.SPELL_TARGET)
-				&& target != null) {
-			spell = spell.addArg(SpellArg.TARGET, target.getReference());
-		} else if (spell.containsKey(SpellArg.TARGET) && spell.getTarget().isTargetGroup()) {
-			// If the subspell contains a group target that resolves to a single target, resolve it now.
-			try {
-				spell = spell.addArg(SpellArg.TARGET, context.resolveSingleTarget(player, source, spell.getTarget()).getReference());
-			} catch (ArrayStoreException notSingleTarget) {
-				LOGGER.warn("onCast {} {}: Passed a non-single-target target group {}, not resolving", context.getGameId(), source, spell.getTarget());
+		for (SpellArg targetAttribute : new SpellArg[]{SpellArg.TARGET, SpellArg.SECONDARY_TARGET}) {
+			if (spell.containsKey(targetAttribute)
+					&& spell.get(targetAttribute).equals(EntityReference.SPELL_TARGET)
+					&& target != null) {
+				spell = spell.addArg(targetAttribute, target.getReference());
+			} else if (spell.containsKey(targetAttribute) && spell.getTarget().isTargetGroup()) {
+				// If the subspell contains a group target that resolves to a single target, resolve it now.
+				try {
+					spell = spell.addArg(targetAttribute, context.resolveSingleTarget(player, source, spell.getTarget()).getReference());
+				} catch (ArrayStoreException notSingleTarget) {
+					LOGGER.warn("onCast {} {}: Passed a non-single-target target group {}, not resolving", context.getGameId(), source, spell.getTarget());
+				}
 			}
 		}
 
