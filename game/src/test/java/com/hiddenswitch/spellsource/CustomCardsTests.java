@@ -55,6 +55,31 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testCastleGiant() {
+		runGym((context, player, opponent) -> {
+			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost());
+			useHeroPower(context, player);
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 1);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_justicar_trueheart");
+			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost());
+			useHeroPower(context, player);
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_justicar_trueheart");
+			useHeroPower(context, player);
+			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+	}
+
+	@Test
 	public void testAysaCloudsinger() {
 		GymFactory factory = getGymFactory((context, player, opponent) -> {
 			int heroHp = 15;
