@@ -15,6 +15,7 @@
     "spell": {
       "class": "ShuffleToDeckSpell",
       "target": "ALL_OTHER_MINIONS",
+      "randomTarget": true,
       "spell": {
         "class": "BuffSpell",
         "target": "OUTPUT",

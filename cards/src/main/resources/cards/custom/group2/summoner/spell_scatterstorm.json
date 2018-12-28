@@ -4,10 +4,11 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "EPIC",
-  "description": "Replace all minions with random ones from their owners decks.",
+  "description": "Replace all minions with random ones from their owners' decks.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.SwapMinionWithDeckSpell",
+    "targetPlayer": "OWNER",
     "target": "ALL_MINIONS"
   },
   "collectible": true,
