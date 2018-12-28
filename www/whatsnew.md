@@ -33,6 +33,7 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - It is now possible to play Hangover on an empty board.
  - Curvehorn Guardian is now a Dragon.
  - Oracle Trili now randomly chooses a mininion to shuffle into your deck rather than all other minions.
+ - Sweet Strategy now correctly shuffles two copies of the highest cost card in your hand.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
