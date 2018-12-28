@@ -18,6 +18,7 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - The ICECREAM class, starting with 34 cards and tokens.
  - The new and changed Baron cards: Backstreet Blowup, Battlerattler, Catta the Merciless, Converse Reverser, Corrupted Reaver, Delivery Dealer, Doomgunners, Doomwalker, Freelancer, General Drekthar, Kitesail Ravager, Magister Umbric, Mrrghost of Past, Murloc Fixpicker, Mystiva, Night Knight, Scarlet Inquisitor, Seven Shot Gunner, Stonecold Sergeant, Titanic Terror, Toot Hoarder, Underworld Keeper, Windup Offender, Worgen Petkeeper, Zandalari Zapper, Alternate Timeline, Army Recruits, Avenging Forces, Deepsea Duel, Double Down, Forces Unite, Immunize, One on One, Self Appoint, Swarms of Time.
  - The new Summoner card Lackey Break.
+ - Unnerfed Gadgetzan Auctioneer.
  
 ###### Content Fixes
 
@@ -37,6 +38,7 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Scatterstorm now correctly swaps minions with their corresponding owner's deck minions.
  - Animation Surge now correctly summons minions.
  - Hagara the Stormbinder now correctly only activates if your deck only has class cards.
+ - Shudderwock no longer targets itself with targeted battlecries.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
