@@ -16,24 +16,24 @@
     "spell": {
       "class": "MetaSpell",
       "spells": [
-	      {
-		      "class": "SummonSpell",
-		      "card": "minion_jade_serpent_statue"
-		    },
-		    {
-		      "class": "BuffSpell",
-		      "target": "SELF",
-		      "value": {
-		        "class": "EntityCounter",
-			      "target": "OTHER_FRIENDLY_MINIONS",
-			      "filter": {
-			        "class": "CardFilter",
-			        "card": "minion_jade_serpent_statue"
-			      }
-		      }
-	    	}
-	    ]
-	  }
+        {
+          "class": "SummonSpell",
+          "card": "minion_jade_serpent_statue"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "value": {
+            "class": "EntityCounter",
+            "target": "FRIENDLY_MINIONS",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_jade_serpent_statue"
+            }
+          }
+        }
+      ]
+    }
   },
   "attributes": {
     "DEFLECT": true
