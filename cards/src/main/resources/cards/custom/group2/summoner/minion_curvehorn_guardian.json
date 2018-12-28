@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "race": "BEAST",
+  "race": "DRAGON",
   "description": "Battlecry: Summon a 3/3 copy of the next Beast you summon.",
   "battlecry": {
     "targetSelection": "NONE",

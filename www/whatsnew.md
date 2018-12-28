@@ -30,6 +30,8 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Tick and Tock is now a Dragon.
  - Hive Guardian is now a Beast.
  - Tenacious Beetle is now a Beast.
+ - It is now possible to play Hangover on an empty board.
+ - Curvehorn Guardian is now a Dragon.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
