@@ -10,7 +10,8 @@
     {
       "eventTrigger": {
         "class": "ReturnToHandTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "targetEntityType": "MINION"
       },
       "spell": {
         "class": "CardCostModifierSpell",
@@ -19,7 +20,7 @@
           "class": "CardCostModifier",
           "value": 0,
           "operation": "SET",
-          "targetPlayer": "SELF"
+          "target": "SELF"
         }
       }
     }
@@ -38,7 +39,7 @@
         "class": "CardCostModifier",
         "value": 0,
         "operation": "SET",
-        "targetPlayer": "SELF"
+        "target": "SELF"
       }
     }
   },
