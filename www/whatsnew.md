@@ -44,6 +44,7 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Hagara the Stormbinder now correctly only activates if your deck only has class cards.
  - Shudderwock no longer targets itself with targeted battlecries.
  - Xuen now correctly deals 4 damage to enemies other than the one it attacked.
+ - Yu Lon the Jade Serpent now correctly gains a +1/+1 buff for each Jade Serpent Statue controlled.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
