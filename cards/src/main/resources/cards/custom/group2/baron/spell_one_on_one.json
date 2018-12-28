@@ -36,7 +36,8 @@
       "filters": [
         {
           "class": "OwnedByPlayerFilter",
-          "targetPlayer": "OPPONENT",
+          "targetPlayer": "OWNER",
+          "invert": true,
           "andCondition": {
             "class": "ComparisonCondition",
             "value1": {
@@ -49,7 +50,7 @@
         },
         {
           "class": "OwnedByPlayerFilter",
-          "targetPlayer": "SELF",
+          "targetPlayer": "OWNER",
           "andCondition": {
             "class": "ComparisonCondition",
             "value1": {

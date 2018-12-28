@@ -11,7 +11,8 @@
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
       "fireCondition": {
-        "class": "IsDeadCondition"
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
       },
       "hostTargetType": "IGNORE_OTHER_SOURCES",
       "targetEntityType": "MINION"
