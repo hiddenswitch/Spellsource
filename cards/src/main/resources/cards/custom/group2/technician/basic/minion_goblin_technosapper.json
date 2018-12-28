@@ -1,6 +1,6 @@
 {
   "name": "Goblin Technosapper",
-  "baseManaCost": 1,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BRASS",
   "baseAttack": 2,
