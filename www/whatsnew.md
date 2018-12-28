@@ -36,6 +36,7 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Sweet Strategy now correctly shuffles two copies of the highest cost card in your hand.
  - Scatterstorm now correctly swaps minions with their corresponding owner's deck minions.
  - Animation Surge now correctly summons minions.
+ - Hagara the Stormbinder now correctly only activates if your deck only has class cards.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
