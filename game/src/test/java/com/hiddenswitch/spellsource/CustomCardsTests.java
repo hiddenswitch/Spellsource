@@ -55,6 +55,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSweetStrategy() {
+		runGym((context, player, opponent) -> {
+			Card shouldNotShuffle = receiveCard(context, player, "spell_the_coin");
+			Card shouldShuffle = receiveCard(context, player, "spell_fireball");
+			playCard(context, player, "spell_sweet_strategy");
+			assertEquals(player.getDeck().size(), 2);
+			assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals(shouldShuffle.getCardId())));
+		});
+	}
+
+	@Test
 	public void testCastleGiant() {
 		runGym((context, player, opponent) -> {
 			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
