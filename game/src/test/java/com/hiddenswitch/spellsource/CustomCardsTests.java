@@ -55,6 +55,25 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testScatterstorm() {
+		runGym((context, player, opponent) -> {
+			Minion friendly = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			Card newFriendly = shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			Card newEnemy = shuffleToDeck(context, opponent, "minion_river_crocolisk");
+			playCard(context, player, "spell_scatterstorm");
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getDeck().get(0).getCardId(), friendly.getSourceCard().getCardId());
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), newFriendly.getSourceCard().getCardId());
+			assertEquals(opponent.getDeck().size(), 1);
+			assertEquals(opponent.getDeck().get(0).getCardId(), enemy.getSourceCard().getCardId());
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), newEnemy.getSourceCard().getCardId());
+		});
+	}
+
+	@Test
 	public void testSweetStrategy() {
 		runGym((context, player, opponent) -> {
 			Card shouldNotShuffle = receiveCard(context, player, "spell_the_coin");

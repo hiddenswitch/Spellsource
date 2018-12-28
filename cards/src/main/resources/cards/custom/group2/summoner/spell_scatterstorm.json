@@ -8,6 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.SwapMinionWithDeckSpell",
+    "targetPlayer": "OWNER",
     "target": "ALL_MINIONS"
   },
   "collectible": true,
