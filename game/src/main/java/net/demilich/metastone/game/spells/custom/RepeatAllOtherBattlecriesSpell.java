@@ -62,6 +62,10 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				continue;
 			}
 
+			if (battlecryDesc.getCondition() != null && !battlecryDesc.getCondition().create().isFulfilled(context, player, source, target)) {
+				continue;
+			}
+
 			// Execute the battlecry on a random target
 			BattlecryAction action;
 			if (card.getAttributes().containsKey(Attribute.CHOICE)) {
@@ -85,6 +89,9 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				// Compute the battlecry's valid targets as though it was a spell, so that the battlecry can target Shudderwock
 				PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), battlecryDesc.spell, card, battlecryDesc.targetSelection);
 				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), spellCardAction);
+				if (targets != null && !targets.isEmpty() && targets.contains(source)) {
+					targets.remove(source); //They shouldn't actually be able to target Shudderwock
+				}
 				if (targets.isEmpty()) {
 					context.getLogic().revealCard(player, card);
 					context.getLogic().endOfSequence();
