@@ -4208,6 +4208,20 @@ public class CustomCardsTests extends TestBase {
 	public void testHagaraTheStormbinder() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
+			shuffleToDeck(context, player, "minion_neutral_test");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			assertEquals(context.getTriggersAssociatedWith(player.getReference()).size(), 0, "Should not have activated");
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
+			shuffleToDeck(context, player, "minion_silver_test");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			assertEquals(context.getTriggersAssociatedWith(player.getReference()).size(), 1, "Should have activated");
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
 			playCard(context, player, "minion_earth_elemental");
 			assertEquals(player.getAttributeValue(Attribute.OVERLOAD), 3);
