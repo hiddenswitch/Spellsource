@@ -13,6 +13,10 @@ Thanks to a great contribution from @Pircival, there are new Baron cards!
 
 Thanks to a great contribution from @The Invisible Man, there are updates to Summoner cards!
 
+###### Known Issues
+
+ - Cards like Roll and interactions with Kingsbane that put cards with buffed stats back into your hand do not correctly show the buffed stats.
+
 ###### Content Additions
 
  - The ICECREAM class, starting with 34 cards and tokens.
