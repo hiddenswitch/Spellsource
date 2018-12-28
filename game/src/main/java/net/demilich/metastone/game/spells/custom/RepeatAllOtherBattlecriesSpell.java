@@ -62,7 +62,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				continue;
 			}
 
-			if(battlecryDesc.getCondition() != null && !battlecryDesc.getCondition().create().isFulfilled(context, player, source, target)) {
+			if (battlecryDesc.getCondition() != null && !battlecryDesc.getCondition().create().isFulfilled(context, player, source, target)) {
 				continue;
 			}
 
