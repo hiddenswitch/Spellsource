@@ -12,9 +12,19 @@
     "spell": {
       "class": "JoustSpell",
       "spell": {
-        "class": "SummonSpell",
-        "value": 2,
-        "card": "token_beetle"
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "LEFT",
+            "card": "token_beetle"
+          },
+          {
+            "class": "SummonSpell",
+            "boardPositionRelative": "RIGHT",
+            "card": "token_beetle"
+          }
+        ]
       },
       "cardFilter": {
         "class": "CardFilter",

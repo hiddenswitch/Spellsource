@@ -101,7 +101,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHero().getHp(), 30);
 			assertEquals(player.getHand().size(), 0);
 		});
-		
+
 		// Test 4: fatal damage, chen in deck, player restores chen with full health.
 		factory.run((context, player, opponent) -> {
 			Minion chenToken = player.getMinions().get(0);
@@ -1679,14 +1679,21 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			player.setMana(2);
 			playMinionCard(context, player, "minion_energetic_mentee");
-			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_deathwhelp");
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_deathwhelp");
+			assertFalse(player.getMinions().get(0).hasAttribute(Attribute.CHARGE));
+			assertFalse(player.getMinions().get(2).hasAttribute(Attribute.CHARGE));
 		});
 
 		runGym((context, player, opponent) -> {
 			player.setMana(3);
 			playMinionCard(context, player, "minion_energetic_mentee");
-			assertEquals(player.getMinions().size(), 2);
-			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_deathwhelp");
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_deathwhelp");
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_deathwhelp");
+			assertTrue(player.getMinions().get(0).hasAttribute(Attribute.CHARGE));
+			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.CHARGE));
 		});
 	}
 

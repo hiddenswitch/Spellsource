@@ -6,20 +6,48 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Charge. Invoke (3): Summon a 1/1 Whelp with Charge.",
+  "description": "Summon two 1/1 Whelps. Invoke (3): Give them Charge.",
   "battlecry": {
-    "condition": {
-      "class": "InvokeCondition"
-    },
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonSpell",
-      "boardPositionRelative": "RIGHT",
-      "card": "token_deathwhelp"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_deathwhelp",
+          "spell": {
+            "class": "ConditionalSpell",
+            "condition": {
+              "class": "InvokeCondition"
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "CHARGE"
+            }
+          }
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_deathwhelp",
+          "spell": {
+            "class": "ConditionalSpell",
+            "condition": {
+              "class": "InvokeCondition"
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "CHARGE"
+            }
+          }
+        }
+      ]
     }
   },
   "attributes": {
-    "CHARGE": true,
     "INVOKE": 3
   },
   "collectible": true,
