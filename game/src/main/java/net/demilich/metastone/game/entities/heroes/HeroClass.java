@@ -99,6 +99,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_warchef_gordo");
 			case BRASS:
 				return CardCatalogue.getCardById("hero_brass");
+			case ICECREAM:
+				return CardCatalogue.getCardById("hero_kel_thuzad");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
