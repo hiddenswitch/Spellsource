@@ -7,6 +7,10 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
+/**
+ * Matches an entity if the entity is in the list of entities returned by resolving the {@link
+ * EntityFilterArg#SECONDARY_TARGET}.
+ */
 public class EntityEqualsFilter extends EntityFilter {
 
 	public EntityEqualsFilter(EntityFilterDesc desc) {
