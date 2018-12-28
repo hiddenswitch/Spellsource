@@ -19,7 +19,8 @@
       "target": "ENEMY_MINIONS",
       "filter": {
         "class": "EntityEqualsFilter",
-        "secondaryTarget": "EVENT_TARGET"
+        "secondaryTarget": "EVENT_TARGET",
+        "invert": true
       },
       "value": 4
     }
