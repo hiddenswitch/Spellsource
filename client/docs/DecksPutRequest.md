@@ -31,6 +31,7 @@ RUST | &quot;RUST&quot;
 EGGPLANT | &quot;EGGPLANT&quot;
 ICE | &quot;ICE&quot;
 OBSIDIAN | &quot;OBSIDIAN&quot;
+ICECREAM | &quot;ICECREAM&quot;
 AMBER | &quot;AMBER&quot;
 TOAST | &quot;TOAST&quot;
 
