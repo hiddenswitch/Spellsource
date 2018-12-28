@@ -43,6 +43,7 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Animation Surge now correctly summons minions.
  - Hagara the Stormbinder now correctly only activates if your deck only has class cards.
  - Shudderwock no longer targets itself with targeted battlecries.
+ - Xuen now correctly deals 4 damage to enemies other than the one it attacked.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 
