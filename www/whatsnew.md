@@ -5,17 +5,38 @@ permalink: /whats-new/
 ---
 Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
 
-### 0.8.5-2.0.16 (Saturday, December 22nd)
+### 0.8.5-2.0.16 (Friday, December 28th)
 
 Thanks to a great contribution from @doombubbles and @Hooktusk'sHusbando, we have a new ICECREAM class! Expect some flavor updates.
+
+Thanks to a great contribution from @Pircival, there are new Baron cards!
+
+Thanks to a great contribution from @The Invisible Man, there are updates to Summoner cards!
 
 ###### Content Additions
 
  - The ICECREAM class, starting with 34 cards and tokens.
+ - The new and changed Baron cards: Backstreet Blowup, Battlerattler, Catta the Merciless, Converse Reverser, Corrupted Reaver, Delivery Dealer, Doomgunners, Doomwalker, Freelancer, General Drekthar, Kitesail Ravager, Magister Umbric, Mrrghost of Past, Murloc Fixpicker, Mystiva, Night Knight, Scarlet Inquisitor, Seven Shot Gunner, Stonecold Sergeant, Titanic Terror, Toot Hoarder, Underworld Keeper, Windup Offender, Worgen Petkeeper, Zandalari Zapper, Alternate Timeline, Army Recruits, Avenging Forces, Deepsea Duel, Double Down, Forces Unite, Immunize, One on One, Self Appoint, Swarms of Time.
+ - The new Summoner card Lackey Break.
  
 ###### Content Fixes
 
  - Pint-Sized Summoner now interacts with Call to Arms correctly.
+ - Abandoned Hatchling: Reworked to reflect Baby Gryphon changes.
+ - Corrupt Forerunner: Invoke cost changed to 7.
+ - Energetic Mentee: Reworked to increase token summoner potential in Basic/Classic.
+ - Horned Jouster: Code changed to make the Beetles summon on either side.
+ - Lackey Break: Just a name change due to being swapped with Savage Anger between sets.
+ - Tick and Tock is now a Dragon.
+ - Hive Guardian is now a Beast.
+ - Tenacious Beetle is now a Beast.
+ - It is now possible to play Hangover on an empty board.
+ - Curvehorn Guardian is now a Dragon.
+ - Oracle Trili now randomly chooses a mininion to shuffle into your deck rather than all other minions.
+ - Sweet Strategy now correctly shuffles two copies of the highest cost card in your hand.
+ - Scatterstorm now correctly swaps minions with their corresponding owner's deck minions.
+ - Animation Surge now correctly summons minions.
+ - Hagara the Stormbinder now correctly only activates if your deck only has class cards.
 
 ###### 0.8.4-2.0.16 (Saturday, December 22nd)
 

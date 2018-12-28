@@ -7,19 +7,27 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Invoke (5): Deal 6 damage to a minion.",
+  "description": "Invoke (6): Destroy a minion and summon a 1/1 Hatchling.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"
     },
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "DamageSpell",
-      "value": 6
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "SummonSpell",
+          "card": "minion_abandoned_hatchling"
+        }
+      ]
     }
   },
   "attributes": {
-    "INVOKE": 5
+    "INVOKE": 6
   },
   "collectible": true,
   "set": "CUSTOM",

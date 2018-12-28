@@ -55,6 +55,61 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testScatterstorm() {
+		runGym((context, player, opponent) -> {
+			Minion friendly = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			Card newFriendly = shuffleToDeck(context, player, "minion_bloodfen_raptor");
+			Card newEnemy = shuffleToDeck(context, opponent, "minion_river_crocolisk");
+			playCard(context, player, "spell_scatterstorm");
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getDeck().get(0).getCardId(), friendly.getSourceCard().getCardId());
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), newFriendly.getSourceCard().getCardId());
+			assertEquals(opponent.getDeck().size(), 1);
+			assertEquals(opponent.getDeck().get(0).getCardId(), enemy.getSourceCard().getCardId());
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), newEnemy.getSourceCard().getCardId());
+		});
+	}
+
+	@Test
+	public void testSweetStrategy() {
+		runGym((context, player, opponent) -> {
+			Card shouldNotShuffle = receiveCard(context, player, "spell_the_coin");
+			Card shouldShuffle = receiveCard(context, player, "spell_fireball");
+			playCard(context, player, "spell_sweet_strategy");
+			assertEquals(player.getDeck().size(), 2);
+			assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals(shouldShuffle.getCardId())));
+		});
+	}
+
+	@Test
+	public void testCastleGiant() {
+		runGym((context, player, opponent) -> {
+			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost());
+			useHeroPower(context, player);
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 1);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_justicar_trueheart");
+			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost());
+			useHeroPower(context, player);
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_justicar_trueheart");
+			useHeroPower(context, player);
+			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
+			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
+		}, HeroClass.GOLD, HeroClass.GOLD);
+	}
+
+	@Test
 	public void testAysaCloudsinger() {
 		GymFactory factory = getGymFactory((context, player, opponent) -> {
 			int heroHp = 15;
@@ -101,7 +156,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getHero().getHp(), 30);
 			assertEquals(player.getHand().size(), 0);
 		});
-		
+
 		// Test 4: fatal damage, chen in deck, player restores chen with full health.
 		factory.run((context, player, opponent) -> {
 			Minion chenToken = player.getMinions().get(0);
@@ -1679,14 +1734,21 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			player.setMana(2);
 			playMinionCard(context, player, "minion_energetic_mentee");
-			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_deathwhelp");
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_deathwhelp");
+			assertFalse(player.getMinions().get(0).hasAttribute(Attribute.CHARGE));
+			assertFalse(player.getMinions().get(2).hasAttribute(Attribute.CHARGE));
 		});
 
 		runGym((context, player, opponent) -> {
 			player.setMana(3);
 			playMinionCard(context, player, "minion_energetic_mentee");
-			assertEquals(player.getMinions().size(), 2);
-			assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_deathwhelp");
+			assertEquals(player.getMinions().size(), 3);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "token_deathwhelp");
+			assertEquals(player.getMinions().get(2).getSourceCard().getCardId(), "token_deathwhelp");
+			assertTrue(player.getMinions().get(0).hasAttribute(Attribute.CHARGE));
+			assertTrue(player.getMinions().get(2).hasAttribute(Attribute.CHARGE));
 		});
 	}
 
@@ -4144,6 +4206,20 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testHagaraTheStormbinder() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
+			shuffleToDeck(context, player, "minion_neutral_test");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			assertEquals(context.getTriggersAssociatedWith(player.getReference()).size(), 0, "Should not have activated");
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
+			shuffleToDeck(context, player, "minion_silver_test");
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			assertEquals(context.getTriggersAssociatedWith(player.getReference()).size(), 1, "Should have activated");
+		});
+
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_hagara_the_stormbinder");
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));

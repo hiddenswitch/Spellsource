@@ -5,7 +5,7 @@
   "heroClass": "TOAST",
   "rarity": "FREE",
   "description": "Do nothing.",
-  "targetSelection": "MINIONS",
+  "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"
   },
