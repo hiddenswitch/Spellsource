@@ -55,6 +55,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testRoll() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_blessing_of_might", target);
+			playCard(context, player, "spell_roll", target);
+			Minion newTarget = playMinionCard(context, player, player.getHand().get(0));
+			assertEquals(newTarget.getAttack(), target.getBaseAttack() + 3);
+		});
+	}
+
+	@Test
 	public void testScatterstorm() {
 		runGym((context, player, opponent) -> {
 			Minion friendly = playMinionCard(context, player, "minion_neutral_test");
