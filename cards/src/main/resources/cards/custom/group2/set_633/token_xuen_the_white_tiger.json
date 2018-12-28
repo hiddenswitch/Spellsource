@@ -10,14 +10,18 @@
   "description": "Charge. Deflect. Whenever this attacks a minion, deal 4 Damage to all other enemy minions.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
+      "class": "PhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES",
       "targetEntityType": "MINION"
     },
     "spell": {
       "class": "DamageSpell",
-      "target": "OTHER_ENEMY_MINIONS",
-      "value": 1
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "EntityEqualsFilter",
+        "secondaryTarget": "EVENT_TARGET"
+      },
+      "value": 4
     }
   },
   "attributes": {
