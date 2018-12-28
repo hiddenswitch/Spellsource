@@ -105,7 +105,7 @@ public class CardCatalogue {
 			}
 			return getCardById(namedCards.get(0).getId());
 		}
-		return null;
+		return getCardById(recordsByName.get(name).get(0).getDesc().getId());
 	}
 
 	public static CardList getHeroes() {
