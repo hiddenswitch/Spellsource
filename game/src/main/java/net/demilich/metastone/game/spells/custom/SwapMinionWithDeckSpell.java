@@ -32,7 +32,7 @@ public class SwapMinionWithDeckSpell extends ShuffleMinionToDeckSpell {
 		super.onCast(context, player, desc, source, target);
 
 		// Summon the minion, which ALSO won't destroy itself...
-		context.getLogic().summon(player.getId(), randomCard.summon(), null, -1, false);
+		context.getLogic().summon(player.getId(), randomCard.summon(), source, -1, false);
 	}
 
 }

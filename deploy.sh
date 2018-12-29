@@ -18,7 +18,7 @@ rm artifact.zip || true
 zip artifact.zip \
     ./Dockerfile \
     ./Dockerrun.aws.json \
-    ./net/build/libs/net-0.8.6-all.jar \
+    ./net/build/libs/net-0.8.7-all.jar \
     ./server.sh >/dev/null
 
 eb use metastone-dev >/dev/null

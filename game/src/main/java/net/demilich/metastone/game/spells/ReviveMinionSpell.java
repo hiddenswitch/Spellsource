@@ -45,7 +45,7 @@ public final class ReviveMinionSpell extends Spell {
 		if (hpAdjustment != 0) {
 			minion.setHp(hpAdjustment);
 		}
-		context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
+		context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
 		if (desc.containsKey(SpellArg.SPELL)) {
 			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, minion);
 		}

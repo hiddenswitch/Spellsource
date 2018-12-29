@@ -52,7 +52,7 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 			Minion deadMinion = (Minion) deadEntity;
 			if (deadMinion.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {
 				Card card = deadMinion.getSourceCard();
-				context.getLogic().summon(player.getId(), card.summon(), null, -1, false);
+				context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
 			}
 		}
 	}

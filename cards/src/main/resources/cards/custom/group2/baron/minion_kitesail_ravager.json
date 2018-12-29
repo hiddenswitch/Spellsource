@@ -1,0 +1,43 @@
+{
+  "name": "Kitesail Ravager",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 10,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: Attack random minions until this dies.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "ALL_OTHER_MINIONS"
+      },
+      "value2": 0,
+      "operation": "GREATER"
+    },
+    "spell": {
+      "class": "RecastWhileSpell",
+      "condition": {
+        "class": "IsDeadCondition",
+        "target": "SELF",
+        "invert": true
+      },
+      "spell": {
+        "class": "FightSpell",
+        "target": "ALL_OTHER_MINIONS",
+        "randomTarget": true,
+        "secondaryTarget": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

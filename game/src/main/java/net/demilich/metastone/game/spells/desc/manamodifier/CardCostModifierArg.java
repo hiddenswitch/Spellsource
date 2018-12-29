@@ -36,6 +36,9 @@ public enum CardCostModifierArg {
 	MIN_VALUE,
 	/**
 	 * The value that will be interpreted by the given {@link #OPERATION} to determine the final cost effect.
+	 * <p>
+	 * By default, the card cost modifier's operation is {@link AlgebraicOperation#ADD}, so a <b>negative</b> value will
+	 * reduce the cost of the card when specified here without an operation.
 	 */
 	VALUE,
 	/**

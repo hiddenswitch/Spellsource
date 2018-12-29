@@ -3,7 +3,29 @@ layout: page
 title: History
 permalink: /history/
 ---
-###### 0.8.3-2.0.14 (Wednesday, December 19th, 2018)
+
+### 0.8.4-2.0.14 (Thursday, December 20th, 2018)
+
+Thanks to great contributions from @Beatdoof and @TheFlawlessWalrus, new Dragoon and Summoner cards have been added! @doombubbles has also authored some fixes and updates to balance changes in H.S. cards.
+
+Also a big shout out to @bdg for a very kind Christmas gift. Spellsource will always be free, and everyone's contributions -- playing, inviting players, testing, QA, writing cards, coding, card design and other debate -- is amazingly helpful.
+
+And finally, a shout out to @doombubbles for quietly fixing bugs and adding features in the past, like our dynamic card text system.
+
+###### Content Additions:
+
+ - New and changed cards for Dragoon (using their new names): Aspect Champion, Exotic Menace, Flamewarper, Frangiblesaur, Glacial Wyvern, Headhunter, Hornmender, Sapphiron (formerly Lady Deathwhisper), Mountain Whelp, Pyroblaster Zagrosz, Savage Ogreseer, Sarclet Magiserpent, Spirit of the Serpent, Tharon Ja the Serpent, Tol'Vir Vitalizer, Twilight Redbane, Draconic Insight, Exhilarate, Gobble (formerly Fissure), Garnet Spellstones, Manufacturing, Explosive Ride! (formerly Explosive Rune!), United Retaliation, Venom Breath, Hemocannon (formerly Anemic Cannon), Cleaver of Glory, Marrow Cleaver, The Dreadtalon and a few tokens.
+ - New cards for Summoner: Berry Hoarder, Bogtoe Challenger, Buddybot, Champion Tangler, Clamouring Crusher, Crowdcodile, Horned Jouster, Oracle Trili, Proudjaw Lackey, Steelwing Rider, Isolate, Animation Surge, Blacksteel Shell, Scatterstorm, Sugary Celebration, Sweet Strategy and three tokens.
+ - Unnerfed versions of 12/18 balanced cards.
+
+###### Content Fixes:
+
+ - Nerfs to H.S. cards introduced on 12/18 have been implemented.
+ - Sunlance uses Overkill now.
+ - Captain Hooktusk no longer gives itself Rush.
+ - Big Ol' Beetle, Elementium Shell and Tweamwork have been adjusted. 
+
+### 0.8.3-2.0.14 (Wednesday, December 19th, 2018)
 
 This release fixes issues with starting games due to changes to tracing.
 
@@ -12,7 +34,7 @@ This release fixes issues with starting games due to changes to tracing.
  - Fleeting Firebug no longer causes infinite loops when interacting with Defile.
  - Elortha no Shandra no longer causes infinite loops in some situations.
 
-###### 0.8.2-2.0.14 (Monday, December 17th, 2018)
+### 0.8.2-2.0.14 (Monday, December 17th, 2018)
 
 Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been added and tweaked. Test improvements have led to other minor content fixes.
 
@@ -30,7 +52,7 @@ Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been
  - Shudderwock now correctly stops casting battlecries if it is removed from the board by dealing damage to itself until death.
  - Armageddon Vanguard will trigger off at most 14 minions.
 
-###### 0.8.1-2.0.14 (Friday, December 14th, 2018)
+### 0.8.1-2.0.14 (Friday, December 14th, 2018)
 
 This release includes bug fixes reported by the community.
 
@@ -45,7 +67,7 @@ This release includes bug fixes reported by the community.
  - Sorrowstone now works correctly.
  - Mutating Boa, Rhunok the Bear and Sea Stowaway are now Baron cards instead of Neutrals.
 
-###### 0.8.0-2.0.13 (Thursday, December 13th, 2018)
+### 0.8.0-2.0.13 (Thursday, December 13th, 2018)
 
 This release includes bug fixes reported by the community.
 
@@ -56,7 +78,7 @@ Random numbers are generated differently and the interface for game actions has 
  - The bot's overall reliability is improved.
  - The bot no longer has issues interacting with Shadow Visions.
 
-###### 0.7.10-2.0.13 (Wednesday, December 12th, 2018)
+### 0.7.10-2.0.13 (Wednesday, December 12th, 2018)
 
 This release includes bug fixes reported by the community.
 
@@ -77,7 +99,7 @@ This release includes bug fixes reported by the community.
  - Soulwarden now copies discarded cards instead of moving them out of the graveyard.
  - Idiot Sandwich now works.
 
-###### 0.7.9-2.0.13 (Wednesday, December 12th, 2018)
+### 0.7.9-2.0.13 (Wednesday, December 12th, 2018)
 
 This release fixes a critical issue where the bot is capable of corrupting your game.
 
@@ -86,7 +108,7 @@ This release fixes a critical issue where the bot is capable of corrupting your 
  - Quest counters now increase when playing against the bot. A great deal of other subtle issues playing against the bot should also be resolved.
  - The client now handles resolution changes more elegantly.
 
-**0.7.8-2.0.12** (Monday, December 10th, 2018)
+### 0.7.8-2.0.12 (Monday, December 10th, 2018)
 
 This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
 
@@ -112,13 +134,13 @@ This release includes bug fixes reported by the community, new Classic cards and
  - Breath of Fire now ignores spell damage when damaging the Hero.
  - Untamed Beastmaster, Rumbletusk Shaker, Haunting Visions, Shriek, and Poisoned Dagger now have correct names.
 
-**0.7.7-2.0.12** (Saturday, December 8th, 2018)
+### 0.7.7-2.0.12 (Saturday, December 8th, 2018)
 
 This release has server improvements that should reduce the number of dropped games.
 
 Please report any issues you experience in the Discord, especially when playing against the bot.
 
-**0.7.6-2.0.12** (Wednesday, December 5th, 2018)
+### 0.7.6-2.0.12 (Wednesday, December 5th, 2018)
 
 This release has various bug fixes helpfully reported by the community. It also includes some overall improvements to common game effects.
 
@@ -139,7 +161,7 @@ This release has various bug fixes helpfully reported by the community. It also 
 
  - Wandering Monster now uses Misdirect's exact effect and its test is improved.
 
-**0.7.5-2.0.12** (Tuesday, December 4th, 2018)
+### 0.7.5-2.0.12 (Tuesday, December 4th, 2018)
 
 Thanks to a great contribution from @Pircival, we have new Baron cards!
 
@@ -156,7 +178,7 @@ The following cards have been added or changed: Bog Mutant; Deadeyed Ravager; Fa
  - Duelmaster Fizzle (and the similar, new effect written on Fend Off) now works.
  - Effects that take place after sequences are more reliable.
 
-**0.7.4-2.0.12** (Monday, December 3rd, 2018, 2018)
+### 0.7.4-2.0.12 (Monday, December 3rd, 2018, 2018)
 
 Important improvements to the server fix issues introduced in September.
 
@@ -177,7 +199,7 @@ Important improvements to the server fix issues introduced in September.
  - High Priestess Jeklik now keeps hand buffs (thanks @doombubbles)
  - Pearl Spellstone now has the right cost (thanks @doombubbles)
 
-**0.7.3-2.0.12** (#2 for Saturday, December 1st, 2018, 2018)
+### 0.7.3-2.0.12 (#2 for Saturday, December 1st, 2018, 2018)
 
 Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spellsource!
 
@@ -195,11 +217,11 @@ Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spel
  - A Second Heart is now a weapon.
  - Supreme Thief now reads, "Battlecry: Replace your deck with a copy of your opponent's."
 
-**0.7.2-2.0.12** (#1 for Saturday, December 1st, 2018)
+### 0.7.2-2.0.12 (#1 for Saturday, December 1st, 2018)
 
 Server improvements should lead to even more reliable connections.
 
-**0.7.1-2.0.12** (Friday November 30th, 2018)
+### 0.7.1-2.0.12 (Friday November 30th, 2018)
 
 Thanks again to a contribution from @doombubbles, the remaining Rastkhan's Rumble cards have been completed.
 
@@ -209,7 +231,7 @@ Immortal Prelate is still under development.
 
  - All Rastakhan's Rumble cards except Immortal Prelate have been added.
 
-**0.7.0-2.0.12** (Friday, November 30th, 2018)
+### 0.7.0-2.0.12 (Friday, November 30th, 2018)
 
 Server improvements should lead to greater reliability of connections.
 
@@ -224,7 +246,7 @@ In the next release, signing on in a new session will disconnect the previous se
  - Rotbutcher Gordo and about a dozen other custom cards are no longer appear incorrectly in the Wild filter in your Collection view.
  - Hopesteed is collectible.
 
-**0.6.6-2.0.11** (Wednesay, November 28th, 2018)
+### 0.6.6-2.0.11 (Wednesay, November 28th, 2018)
 
 Thanks to a great contribution from @doombubbles, new custom cards and a significant number of Rastakhan's Rumble cards have been added to the game.
 
@@ -241,7 +263,7 @@ Thanks to a great contribution from @doombubbles, new custom cards and a signifi
  - Thunderfury now is immune and does not reduce durability while you are overloaded.
  - Shudderwock now triggers Hagatha the Witch and other hero battlecries.
 
-**0.6.5-2.0.11** (Tuesday, November 27th, 2018)
+### 0.6.5-2.0.11 (Tuesday, November 27th, 2018)
 
 Thanks to a great contribution from @tehgdogg, replay functionality has been added for debugging and development purposes. Your games will be recorded and used to fix bugs when they occur. Currently, it is not possible to retrieve a replay from the client. Please reach out on Discord if you want a replay of a specific game.
 
@@ -257,7 +279,7 @@ Thanks to a great contribution from @tehgdogg, replay functionality has been add
 
 For an ongoing list of issues, see https://github.com/hiddenswitch/Spellsource-Server/issues
 
-**0.6.4-2.0.10** (Monday, November 26th, 2018)
+### 0.6.4-2.0.10 (Monday, November 26th, 2018)
 
 Overall server performance has been improved by better using computer resources.
 
@@ -271,7 +293,7 @@ Some connectivity issues ought to be improved. Please report "Networking" errors
  - Bright Eyed Scout and other card cost modification effects that occur on draw should no longer cause crashes.
  - Totemic Slam now interacts with Fandral Staghelm, for fun.
 
-**0.6.3-2.0.9** (Saturday, November 24th, 2018):
+### 0.6.3-2.0.9 (Saturday, November 24th, 2018):
 
 ###### Content Fixes:
 

@@ -13,7 +13,9 @@ public class AfterSpellCastedTrigger extends AbstractCardTrigger {
 
 	public AfterSpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);
-		desc.put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
+		EventTriggerDesc clone = desc.clone();
+		clone.put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
+		setDesc(clone);
 	}
 
 	@Override
