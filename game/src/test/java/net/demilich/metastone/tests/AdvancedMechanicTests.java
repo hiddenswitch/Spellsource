@@ -173,6 +173,19 @@ public class AdvancedMechanicTests extends TestBase {
 			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
 					&& c.getTargetReference().equals(opponentMinion.getReference())));
 		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion opponentMinion = playMinionCard(context, opponent, "minion_black_test");
+			context.endTurn();
+			Minion rushMinion = playMinionCard(context, player, "minion_test_rush");
+			rushMinion.setAttribute(Attribute.CHARGE);
+			assertTrue(rushMinion.canAttackThisTurn());
+			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponent.getHero().getReference())));
+			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponentMinion.getReference())));
+		});
 	}
 
 	@Test
