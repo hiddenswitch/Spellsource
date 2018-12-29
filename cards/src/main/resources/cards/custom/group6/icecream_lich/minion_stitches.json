@@ -17,18 +17,17 @@
           "target": "SELF",
           "attackBonus": {
             "class": "AttributeValueProvider",
-            "target": "ENEMY_MINION",
+            "target": "TARGET",
             "attribute": "ATTACK"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
-            "target": "ENEMY_MINION",
+            "target": "TARGET",
             "attribute": "HP"
           }
         },
         {
-          "class": "DestroySpell",
-          "target": "ENEMY_MINION"
+          "class": "DestroySpell"
         }
       ]
     }
