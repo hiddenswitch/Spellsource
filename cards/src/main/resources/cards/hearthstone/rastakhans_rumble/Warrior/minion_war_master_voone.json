@@ -2,9 +2,9 @@
   "name": "War Master Voone",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 4,
   "baseHp": 3,
-  "heroClass": "RED",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Copy all Dragons in your hand.",
   "battlecry": {

@@ -8,14 +8,14 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "OverkillSpell",
-    "value": 2,
     "target": "ALL_MINIONS",
+    "value": 2,
     "spell": {
       "class": "ReceiveCardSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "SPELL",
-        "heroClass": "BLUE"
+        "heroClass": "BLUE",
+        "cardType": "SPELL"
       }
     }
   },

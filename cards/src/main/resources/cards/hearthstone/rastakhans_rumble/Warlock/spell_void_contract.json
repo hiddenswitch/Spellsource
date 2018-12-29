@@ -11,9 +11,9 @@
     "spells": [
       {
         "class": "DiscardCardsFromDeckSpell",
-        "targetPlayer": "SELF",
         "value": {
           "class": "AlgebraicValueProvider",
+          "operation": "DIVIDE_ROUNDED",
           "value1": {
             "class": "CardCountValueProvider",
             "cardSource": {
@@ -21,15 +21,15 @@
               "targetPlayer": "SELF"
             }
           },
-          "operation": "DIVIDE_ROUNDED",
           "value2": 2
-        }
+        },
+        "targetPlayer": "SELF"
       },
       {
         "class": "DiscardCardsFromDeckSpell",
-        "targetPlayer": "OPPONENT",
         "value": {
           "class": "AlgebraicValueProvider",
+          "operation": "DIVIDE_ROUNDED",
           "value1": {
             "class": "CardCountValueProvider",
             "cardSource": {
@@ -37,11 +37,10 @@
               "targetPlayer": "SELF"
             }
           },
-          "operation": "DIVIDE_ROUNDED",
           "value2": 2
-        }
+        },
+        "targetPlayer": "OPPONENT"
       }
-
     ]
   },
   "collectible": true,

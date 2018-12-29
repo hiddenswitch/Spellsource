@@ -19,8 +19,8 @@
   },
   "attributes": {
     "INVOKE": 7,
-    "WINDFURY": true,
-    "TAUNT": true
+    "TAUNT": true,
+    "WINDFURY": true
   },
   "collectible": true,
   "set": "CUSTOM",

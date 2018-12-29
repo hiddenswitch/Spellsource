@@ -25,8 +25,8 @@
               "class": "DeckContainsCondition",
               "cardFilter": {
                 "class": "CardFilter",
-                "manaCost": 1,
-                "cardType": "MINION"
+                "cardType": "MINION",
+                "manaCost": 1
               },
               "invert": true
             },
@@ -34,8 +34,8 @@
               "class": "HoldsCardCondition",
               "cardFilter": {
                 "class": "CardFilter",
-                "manaCost": 1,
-                "cardType": "MINION"
+                "cardType": "MINION",
+                "manaCost": 1
               },
               "invert": true
             }

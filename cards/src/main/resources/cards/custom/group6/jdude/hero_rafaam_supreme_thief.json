@@ -17,11 +17,11 @@
         },
         {
           "class": "ShuffleToDeckSpell",
+          "value": 60,
           "cardSource": {
             "class": "DeckSource",
             "targetPlayer": "OPPONENT"
-          },
-          "value": 60
+          }
         }
       ]
     }

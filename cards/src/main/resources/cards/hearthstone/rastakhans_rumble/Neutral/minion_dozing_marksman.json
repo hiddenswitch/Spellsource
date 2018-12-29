@@ -2,9 +2,9 @@
   "name": "Dozing Marksman",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 0,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Has +4 Attack while damaged.",
   "trigger": {

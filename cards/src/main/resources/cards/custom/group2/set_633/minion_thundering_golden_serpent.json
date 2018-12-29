@@ -23,11 +23,11 @@
       "trigger": {
         "eventTrigger": {
           "class": "MinionSummonedTrigger",
-          "targetPlayer": "SELF",
           "queueCondition": {
             "class": "CardPropertyCondition",
             "card": "token_silver_hand_recruit"
-          }
+          },
+          "targetPlayer": "SELF"
         },
         "spell": {
           "class": "DamageSpell",

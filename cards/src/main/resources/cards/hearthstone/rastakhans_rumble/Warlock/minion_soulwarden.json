@@ -2,24 +2,24 @@
   "name": "Soulwarden",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "VIOLET",
   "baseAttack": 6,
   "baseHp": 6,
-  "heroClass": "VIOLET",
   "rarity": "EPIC",
-  "description": "Battlecry: Add 3 random cards you discarded this game to your hand.",
+  "description": "Battlecry:\u00a0Add 3 random cards you discarded this game to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CopyCardSpell",
       "value": 3,
-      "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "SELF"
-      },
       "cardFilter": {
         "class": "CardFilter",
         "attribute": "DISCARDED",
         "operation": "HAS"
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
       }
     }
   },

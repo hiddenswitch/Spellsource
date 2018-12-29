@@ -19,8 +19,8 @@
     "spell": {
       "class": "FightSpell",
       "target": "ENEMY_CHARACTERS",
-      "secondaryTarget": "TRIGGER_HOST",
-      "randomTarget": true
+      "randomTarget": true,
+      "secondaryTarget": "TRIGGER_HOST"
     }
   },
   "collectible": true,

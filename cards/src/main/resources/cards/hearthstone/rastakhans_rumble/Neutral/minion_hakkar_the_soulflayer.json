@@ -2,15 +2,15 @@
   "name": "Hakkar, the Soulflayer",
   "baseManaCost": 10,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 9,
   "baseHp": 6,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Deathrattle: Shuffle a Corrupted Blood into each player's deck.",
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
-    "targetPlayer": "BOTH",
-    "card": "spell_corrupted_blood"
+    "card": "spell_corrupted_blood",
+    "targetPlayer": "BOTH"
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -2,17 +2,17 @@
   "name": "Former Champ",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Battlecry: Summon a 5/5 Hotshot.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "card": "token_hotshot",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "token_hotshot"
     }
   },
   "attributes": {

@@ -11,13 +11,13 @@
     "spells": [
       {
         "class": "FightSpell",
-        "secondaryTarget": "TARGET",
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "secondaryTarget": "TARGET"
       },
       {
         "class": "FightSpell",
-        "secondaryTarget": "TARGET",
-        "target": "ENEMY_HERO"
+        "target": "ENEMY_HERO",
+        "secondaryTarget": "TARGET"
       }
     ]
   },

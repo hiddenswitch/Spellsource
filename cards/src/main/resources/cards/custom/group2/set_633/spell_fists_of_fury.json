@@ -12,8 +12,7 @@
     "value": 1,
     "howMany": 10
   },
-  "attributes": {
-  },
+  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

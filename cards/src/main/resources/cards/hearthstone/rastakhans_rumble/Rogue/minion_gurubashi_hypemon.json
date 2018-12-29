@@ -2,19 +2,15 @@
   "name": "Gurubashi Hypemon",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "BLACK",
   "baseAttack": 5,
   "baseHp": 7,
-  "heroClass": "BLACK",
   "rarity": "EPIC",
   "description": "Battlecry: Discover a 1/1 copy of a Battlecry minion. It costs (1)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscoverSpell",
-      "cardFilter": {
-        "class": "CardFilter",
-        "attribute": "BATTLECRY"
-      },
       "spell": {
         "class": "ReceiveCardSpell",
         "spell": {
@@ -42,6 +38,10 @@
             }
           ]
         }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "BATTLECRY"
       }
     }
   },

@@ -4,8 +4,8 @@
   "type": "HERO_POWER",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "targetSelection": "NONE",
   "description": "Add a 2/2 Pirate with Rush to your hand.",
+  "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
     "cards": [

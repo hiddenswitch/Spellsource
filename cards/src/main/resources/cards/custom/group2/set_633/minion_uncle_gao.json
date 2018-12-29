@@ -22,8 +22,6 @@
         "spells": [
           {
             "class": "SummonSpell",
-            "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental",
             "spell": {
               "class": "RandomlyCastSpell",
               "target": "OUTPUT",
@@ -41,12 +39,35 @@
                   "attribute": "DEFLECT"
                 }
               ]
-            }
+            },
+            "boardPositionRelative": "RIGHT",
+            "card": "token_tiny_alemental"
           },
           {
             "class": "SummonSpell",
+            "spell": {
+              "class": "RandomlyCastSpell",
+              "target": "OUTPUT",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "RUSH"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "POISONOUS"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "attribute": "DEFLECT"
+                }
+              ]
+            },
             "boardPositionRelative": "LEFT",
-            "card": "token_tiny_alemental",
+            "card": "token_tiny_alemental"
+          },
+          {
+            "class": "SummonSpell",
             "spell": {
               "class": "RandomlyCastSpell",
               "target": "OUTPUT",
@@ -64,12 +85,12 @@
                   "attribute": "DEFLECT"
                 }
               ]
-            }
-          },
-          {
-            "class": "SummonSpell",
+            },
             "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental",
+            "card": "token_tiny_alemental"
+          },
+          {
+            "class": "SummonSpell",
             "spell": {
               "class": "RandomlyCastSpell",
               "target": "OUTPUT",
@@ -87,12 +108,12 @@
                   "attribute": "DEFLECT"
                 }
               ]
-            }
-          },
-          {
-            "class": "SummonSpell",
+            },
             "boardPositionRelative": "LEFT",
-            "card": "token_tiny_alemental",
+            "card": "token_tiny_alemental"
+          },
+          {
+            "class": "SummonSpell",
             "spell": {
               "class": "RandomlyCastSpell",
               "target": "OUTPUT",
@@ -110,12 +131,12 @@
                   "attribute": "DEFLECT"
                 }
               ]
-            }
-          },
-          {
-            "class": "SummonSpell",
+            },
             "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental",
+            "card": "token_tiny_alemental"
+          },
+          {
+            "class": "SummonSpell",
             "spell": {
               "class": "RandomlyCastSpell",
               "target": "OUTPUT",
@@ -133,35 +154,12 @@
                   "attribute": "DEFLECT"
                 }
               ]
-            }
-          },
-          {
-            "class": "SummonSpell",
+            },
             "boardPositionRelative": "LEFT",
-            "card": "token_tiny_alemental",
-            "spell": {
-              "class": "RandomlyCastSpell",
-              "target": "OUTPUT",
-              "spells": [
-                {
-                  "class": "AddAttributeSpell",
-                  "attribute": "RUSH"
-                },
-                {
-                  "class": "AddAttributeSpell",
-                  "attribute": "POISONOUS"
-                },
-                {
-                  "class": "AddAttributeSpell",
-                  "attribute": "DEFLECT"
-                }
-              ]
-            }
+            "card": "token_tiny_alemental"
           },
           {
             "class": "SummonSpell",
-            "boardPositionRelative": "RIGHT",
-            "card": "token_tiny_alemental",
             "spell": {
               "class": "RandomlyCastSpell",
               "target": "OUTPUT",
@@ -179,7 +177,9 @@
                   "attribute": "DEFLECT"
                 }
               ]
-            }
+            },
+            "boardPositionRelative": "RIGHT",
+            "card": "token_tiny_alemental"
           }
         ]
       }

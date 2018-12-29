@@ -14,8 +14,8 @@
     "spell": {
       "class": "ModifyAttributeSpell",
       "target": "TRIGGER_HOST",
-      "attribute": "RESERVED_INTEGER_1",
-      "value": 1
+      "value": 1,
+      "attribute": "RESERVED_INTEGER_1"
     }
   },
   "collectible": false,

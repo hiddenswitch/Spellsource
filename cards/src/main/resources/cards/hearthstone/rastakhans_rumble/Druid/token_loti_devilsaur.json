@@ -9,11 +9,11 @@
   "race": "BEAST",
   "description": "Taunt, Rush, Poisonous, Stealth, Spell Damage +1",
   "attributes": {
-    "TAUNT": true,
-    "RUSH": true,
     "POISONOUS": true,
+    "RUSH": true,
+    "SPELL_DAMAGE": 1,
     "STEALTH": true,
-    "SPELL_DAMAGE": 1
+    "TAUNT": true
   },
   "collectible": false,
   "set": "RASTAKHANS_RUMBLE",

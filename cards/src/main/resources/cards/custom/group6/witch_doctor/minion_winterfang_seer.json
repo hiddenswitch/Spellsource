@@ -2,9 +2,9 @@
   "name": "Winterfang Seer",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ROSE",
   "baseAttack": 4,
   "baseHp": 3,
-  "heroClass": "ROSE",
   "rarity": "COMMON",
   "description": "Battlecry: Give a minion +3 Attack this turn.",
   "battlecry": {

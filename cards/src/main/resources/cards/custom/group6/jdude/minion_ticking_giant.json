@@ -13,8 +13,8 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "AttributeValueProvider",
-    "targetPlayer": "BOTH",
     "target": "FRIENDLY_HERO",
-    "attribute": "TOTAL_DAMAGE_RECEIVED"
+    "attribute": "TOTAL_DAMAGE_RECEIVED",
+    "targetPlayer": "BOTH"
   }
 }

@@ -2,17 +2,17 @@
   "name": "Booty Bay Bookie",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "description": "Battlecry: Give your opponent a Coin",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "OPPONENT",
-      "card": "spell_the_coin"
+      "card": "spell_the_coin",
+      "targetPlayer": "OPPONENT"
     }
   },
   "attributes": {

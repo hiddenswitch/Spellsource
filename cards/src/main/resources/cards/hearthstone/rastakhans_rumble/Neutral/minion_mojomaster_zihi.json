@@ -2,17 +2,17 @@
   "name": "Mojomaster Zihi",
   "baseManaCost": 6,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Set each player to 5 Mana Crystals.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "SetMaxManaSpell",
-      "targetPlayer": "BOTH",
-      "value": 5
+      "value": 5,
+      "targetPlayer": "BOTH"
     }
   },
   "attributes": {

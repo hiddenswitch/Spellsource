@@ -17,12 +17,12 @@
     "spell": {
       "class": "DamageSpell",
       "target": "ENEMY_MINIONS",
+      "value": 4,
       "filter": {
         "class": "EntityEqualsFilter",
-        "secondaryTarget": "EVENT_TARGET",
-        "invert": true
-      },
-      "value": 4
+        "invert": true,
+        "secondaryTarget": "EVENT_TARGET"
+      }
     }
   },
   "attributes": {

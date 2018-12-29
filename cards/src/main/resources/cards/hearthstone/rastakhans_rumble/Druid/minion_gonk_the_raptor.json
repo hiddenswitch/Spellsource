@@ -2,22 +2,22 @@
   "name": "Gonk, the Raptor",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 4,
   "baseHp": 9,
-  "heroClass": "BROWN",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "After your hero attacks and kills a minion, it may attack again.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourceEntityType": "HERO",
-      "sourcePlayer": "SELF",
-      "targetEntityType": "MINION",
       "fireCondition": {
         "class": "IsDeadCondition",
         "target": "EVENT_TARGET"
-      }
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
     },
     "spell": {
       "class": "ModifyAttributeSpell",

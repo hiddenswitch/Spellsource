@@ -15,8 +15,8 @@
       "race": "ELEMENTAL",
       "expirationTrigger": {
         "class": "CardPlayedTrigger",
-        "targetPlayer": "SELF",
-        "race": "ELEMENTAL"
+        "race": "ELEMENTAL",
+        "targetPlayer": "SELF"
       },
       "operation": "SUBTRACT"
     }

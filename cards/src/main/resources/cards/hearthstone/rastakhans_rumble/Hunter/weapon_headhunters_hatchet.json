@@ -2,9 +2,9 @@
   "name": "Headhunter's Hatchet",
   "baseManaCost": 2,
   "type": "WEAPON",
+  "heroClass": "GREEN",
   "damage": 2,
   "durability": 2,
-  "heroClass": "GREEN",
   "rarity": "COMMON",
   "description": "Battlecry: If you control a Beast, gain +1 Durability.",
   "battlecry": {

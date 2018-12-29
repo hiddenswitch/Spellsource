@@ -17,12 +17,12 @@
       },
       "spell": {
         "class": "RecruitSpell",
-        "cardLocation": "HAND",
         "spell": {
           "class": "AddAttributeSpell",
           "target": "OUTPUT",
           "attribute": "RUSH"
-        }
+        },
+        "cardLocation": "HAND"
       },
       "oneTurn": true
     }

@@ -11,8 +11,8 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "card": "minion_saronite_chain_gang",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_saronite_chain_gang"
     }
   },
   "attributes": {

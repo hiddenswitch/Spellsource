@@ -2,9 +2,9 @@
   "name": "Smolderthorn Lancer",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Battlecry: If you're holding a Dragon, destroy a damaged enemy minion.",
   "battlecry": {

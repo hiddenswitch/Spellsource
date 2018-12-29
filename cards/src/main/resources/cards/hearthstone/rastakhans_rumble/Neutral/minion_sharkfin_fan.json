@@ -2,9 +2,9 @@
   "name": "Sharkfin Fan",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "race": "PIRATE",
   "description": "After your hero attacks, summon a 1/1 Pirate.",
@@ -17,8 +17,8 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "card": "token_swabbie",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "token_swabbie"
     }
   },
   "collectible": true,

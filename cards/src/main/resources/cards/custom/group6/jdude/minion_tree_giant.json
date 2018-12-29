@@ -15,8 +15,8 @@
     "class": "CardsPlayedValueProvider",
     "filter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "attribute": "TAUNT"
+      "attribute": "TAUNT",
+      "cardType": "MINION"
     }
   }
 }

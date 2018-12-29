@@ -14,8 +14,6 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "boardPositionRelative": "RIGHT",
-          "card": "token_deathwhelp",
           "spell": {
             "class": "ConditionalSpell",
             "condition": {
@@ -26,12 +24,12 @@
               "target": "OUTPUT",
               "attribute": "CHARGE"
             }
-          }
+          },
+          "boardPositionRelative": "RIGHT",
+          "card": "token_deathwhelp"
         },
         {
           "class": "SummonSpell",
-          "boardPositionRelative": "LEFT",
-          "card": "token_deathwhelp",
           "spell": {
             "class": "ConditionalSpell",
             "condition": {
@@ -42,7 +40,9 @@
               "target": "OUTPUT",
               "attribute": "CHARGE"
             }
-          }
+          },
+          "boardPositionRelative": "LEFT",
+          "card": "token_deathwhelp"
         }
       ]
     }

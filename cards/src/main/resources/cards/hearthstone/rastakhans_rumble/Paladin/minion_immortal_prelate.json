@@ -2,9 +2,9 @@
   "name": "Immortal Prelate",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "GOLD",
   "baseAttack": 1,
   "baseHp": 3,
-  "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "(WIP) Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
   "deathrattle": {

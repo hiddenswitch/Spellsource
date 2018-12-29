@@ -2,12 +2,12 @@
   "name": "Gurubashi Chicken",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Overkill: Gain +5 attack.",
+  "description": "Overkill:\u00a0Gain +5 attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -2,9 +2,9 @@
   "name": "Farraki Battleaxe",
   "baseManaCost": 5,
   "type": "WEAPON",
+  "heroClass": "GOLD",
   "damage": 3,
   "durability": 3,
-  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Overkill: Give a minion in your hand +2/+2.",
   "trigger": {
@@ -19,13 +19,13 @@
       "spell": {
         "class": "BuffSpell",
         "target": "FRIENDLY_HAND",
-        "randomTarget": true,
         "attackBonus": 2,
-        "hpBonus": 2,
         "filter": {
           "class": "CardFilter",
           "cardType": "MINION"
-        }
+        },
+        "hpBonus": 2,
+        "randomTarget": true
       }
     }
   },

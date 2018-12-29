@@ -2,9 +2,9 @@
   "name": "Rumbletusk Shaker",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Deathrattle: Summon a 3/2 Rumbletusk Breaker.",
   "deathrattle": {

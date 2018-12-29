@@ -7,12 +7,12 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST",
-  "races": [
-    "DRAGON"
-  ],
   "description": "Also counts as a Dragon.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "races": [
+    "DRAGON"
+  ]
 }

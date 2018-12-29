@@ -2,9 +2,9 @@
   "name": "Spirit of the Dragonhawk",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "BLUE",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. Your Hero Power also targets adjacent minions.",
   "aura": {

@@ -8,14 +8,14 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
     "spell1": {
       "class": "DamageSpell",
       "value": 2
-    },
-    "condition": {
-      "class": "AttributeCondition",
-      "operation": "HAS",
-      "attribute": "FROZEN"
     },
     "spell2": {
       "class": "DrawCardSpell"

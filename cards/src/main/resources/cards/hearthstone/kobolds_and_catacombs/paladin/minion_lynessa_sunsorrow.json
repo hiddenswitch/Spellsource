@@ -12,15 +12,15 @@
     "spell": {
       "class": "custom.CastSpellSpell",
       "target": "SELF",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "CASTED_ON_FRIENDLY_MINION",
+        "cardType": "SPELL",
+        "operation": "HAS"
+      },
       "cardSource": {
         "class": "GraveyardCardsSource",
         "targetPlayer": "SELF"
-      },
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "SPELL",
-        "attribute": "CASTED_ON_FRIENDLY_MINION",
-        "operation": "HAS"
       }
     }
   },

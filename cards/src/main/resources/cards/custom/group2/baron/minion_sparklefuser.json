@@ -7,6 +7,9 @@
   "baseHp": 7,
   "rarity": "EPIC",
   "description": "Adjacent minions have Lifesteal and Poisonous.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "AttributeAura",
@@ -18,8 +21,5 @@
       "target": "ADJACENT_MINIONS",
       "attribute": "AURA_POISONOUS"
     }
-  ],
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

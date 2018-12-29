@@ -8,10 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "race": "BEAST"
-    },
     "spell": {
       "class": "BuffSpell",
       "target": "OUTPUT",
@@ -19,6 +15,10 @@
         "class": "AttributeValueProvider",
         "attribute": "HP"
       }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "BEAST"
     }
   },
   "collectible": true,

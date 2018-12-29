@@ -10,23 +10,23 @@
   "description": "Divine Shield, Rush, Lifesteal. Costs (1) less for each Mana you've spent on spells.",
   "attributes": {
     "DIVINE_SHIELD": true,
-    "RUSH": true,
-    "LIFESTEAL": true
+    "LIFESTEAL": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "CardCountValueProvider",
-    "targetPlayer": "SELF",
-    "cardSource": {
-      "class": "GraveyardCardsSource",
-      "targetPlayer": "SELF"
-    },
+    "attribute": "MANA_SPENT",
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "SPELL"
     },
-    "attribute": "MANA_SPENT"
+    "cardSource": {
+      "class": "GraveyardCardsSource",
+      "targetPlayer": "SELF"
+    },
+    "targetPlayer": "SELF"
   }
 }

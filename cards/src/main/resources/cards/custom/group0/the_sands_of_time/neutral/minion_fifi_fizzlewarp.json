@@ -100,8 +100,8 @@
                   {
                     "class": "AttributeFilter",
                     "attribute": "PERMANENT",
-                    "operation": "HAS",
-                    "invert": true
+                    "invert": true,
+                    "operation": "HAS"
                   }
                 ]
               },
@@ -146,8 +146,8 @@
                   {
                     "class": "AttributeFilter",
                     "attribute": "PERMANENT",
-                    "operation": "HAS",
-                    "invert": true
+                    "invert": true,
+                    "operation": "HAS"
                   }
                 ]
               },

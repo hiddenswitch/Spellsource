@@ -2,17 +2,14 @@
   "name": "Bwonsamdi",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "ROSE",
   "baseAttack": 5,
   "baseHp": 8,
-  "heroClass": "ROSE",
   "rarity": "LEGENDARY",
   "description": "Whenever your hero would take damage, deal it to the enemy hero instead.",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",
-      "sourcePlayer": "BOTH",
-      "targetPlayer": "SELF",
-      "targetEntityType": "HERO",
       "fireCondition": {
         "class": "AnyMatchFilterCondition",
         "target": "ENEMY_MINIONS",
@@ -21,7 +18,10 @@
           "card": "minion_bwonsamdi"
         },
         "invert": true
-      }
+      },
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",
@@ -35,8 +35,8 @@
         },
         {
           "class": "ModifyDamageSpell",
-          "operation": "SET",
-          "value": 0
+          "value": 0,
+          "operation": "SET"
         }
       ]
     }

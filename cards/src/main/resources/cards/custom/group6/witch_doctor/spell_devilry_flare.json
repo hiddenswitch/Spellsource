@@ -5,6 +5,12 @@
   "heroClass": "ROSE",
   "rarity": "COMMON",
   "description": "Deal $2 damage to an enemy minion and the enemy hero.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -19,12 +25,6 @@
         "value": 2
       }
     ]
-  },
-  "condition": {
-    "class": "MinionCountCondition",
-    "targetPlayer": "OPPONENT",
-    "operation": "GREATER",
-    "value": 0
   },
   "collectible": true,
   "set": "CUSTOM",

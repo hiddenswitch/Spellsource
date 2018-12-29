@@ -24,9 +24,9 @@
           {
             "class": "AttributeCondition",
             "target": "TRIGGER_HOST",
+            "value": 0,
             "attribute": "NUMBER_OF_ATTACKS",
-            "operation": "EQUAL",
-            "value": 0
+            "operation": "EQUAL"
           }
         ]
       },
@@ -34,9 +34,9 @@
         "class": "EitherOrSpell",
         "condition": {
           "class": "AttributeCondition",
-          "operation": "HAS",
+          "target": "TRIGGER_HOST",
           "attribute": "WINDFURY",
-          "target": "TRIGGER_HOST"
+          "operation": "HAS"
         },
         "spell1": {
           "class": "AddAttributeSpell",

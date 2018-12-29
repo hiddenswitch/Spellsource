@@ -2,12 +2,12 @@
   "name": "Oondasta",
   "baseManaCost": 9,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 7,
   "baseHp": 7,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Rush. Overkill: Summon a Beast from your hand.",
+  "description": "Rush. Overkill:\u00a0Summon a Beast from your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

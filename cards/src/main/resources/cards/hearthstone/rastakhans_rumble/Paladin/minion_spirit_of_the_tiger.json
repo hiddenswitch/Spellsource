@@ -2,25 +2,25 @@
   "name": "Spirit of the Tiger",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "GOLD",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "GOLD",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. Whenever you cast a spell, summon a Tiger with stats equal to its cost.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "sourcePlayer": "SELF",
       "queueCondition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER",
         "value1": {
           "class": "PlayerAttributeValueProvider",
           "playerAttribute": "LAST_MANA_COST",
           "targetPlayer": "SELF"
         },
-        "operation": "GREATER",
         "value2": 0
-      }
+      },
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "CreateSummonSpell",

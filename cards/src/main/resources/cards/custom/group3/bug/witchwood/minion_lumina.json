@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
-      "targetPlayer": "SELF",
-      "hostTargetType": "IGNORE_AS_SOURCE_CARD"
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "DiscoverSpell",

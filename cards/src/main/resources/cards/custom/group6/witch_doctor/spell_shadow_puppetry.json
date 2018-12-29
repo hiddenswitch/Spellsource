@@ -8,8 +8,8 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "FightSpell",
-    "secondaryTarget": "TARGET",
-    "target": "ENEMY_HERO"
+    "target": "ENEMY_HERO",
+    "secondaryTarget": "TARGET"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -2,9 +2,9 @@
   "name": "Pyromaniac",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "BLUE",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "BLUE",
   "rarity": "RARE",
   "description": "Whenever your Hero Power kills a minion, draw a card.",
   "aura": {

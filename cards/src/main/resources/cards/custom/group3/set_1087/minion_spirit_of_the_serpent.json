@@ -14,11 +14,11 @@
     },
     "spell": {
       "class": "FromDeckToHandSpell",
+      "value": 1,
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
-      },
-      "value": 1
+      }
     }
   },
   "attributes": {

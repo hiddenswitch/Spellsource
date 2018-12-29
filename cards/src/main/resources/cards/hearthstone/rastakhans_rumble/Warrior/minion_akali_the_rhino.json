@@ -2,9 +2,9 @@
   "name": "Akali, the Rhino",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "RED",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Rush, Overkill: Draw a Rush minion and give it +5/+5.",
@@ -18,16 +18,16 @@
       "class": "OverkillSpell",
       "spell": {
         "class": "FromDeckToHandSpell",
-        "cardFilter": {
-          "class": "CardFilter",
-          "cardType": "MINION",
-          "attribute": "RUSH"
-        },
         "spell": {
           "class": "BuffSpell",
           "target": "OUTPUT",
           "attackBonus": 5,
           "hpBonus": 5
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "RUSH",
+          "cardType": "MINION"
         }
       }
     }

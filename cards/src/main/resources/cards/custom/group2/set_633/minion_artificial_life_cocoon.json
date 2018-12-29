@@ -22,8 +22,8 @@
   },
   "attributes": {
     "DEFLECT": true,
-    "TAUNT": true,
-    "MAGNETIC": true
+    "MAGNETIC": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

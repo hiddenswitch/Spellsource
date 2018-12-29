@@ -2,9 +2,9 @@
   "name": "Griftah",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 4,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Discover two cards. Give one to your opponent at random.",
   "battlecry": {
@@ -14,10 +14,6 @@
       "spells": [
         {
           "class": "DiscoverSpell",
-          "cardFilter": {
-            "class": "CardFilter",
-            "heroClass": "ANY"
-          },
           "spell": {
             "class": "ReceiveCardSpell",
             "spell": {
@@ -25,14 +21,14 @@
               "target": "OUTPUT",
               "attribute": "RESERVED_BOOLEAN_4"
             }
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "ANY"
           }
         },
         {
           "class": "DiscoverSpell",
-          "cardFilter": {
-            "class": "CardFilter",
-            "heroClass": "ANY"
-          },
           "spell": {
             "class": "ReceiveCardSpell",
             "spell": {
@@ -40,6 +36,10 @@
               "target": "OUTPUT",
               "attribute": "RESERVED_BOOLEAN_4"
             }
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "ANY"
           }
         },
         {
@@ -52,8 +52,14 @@
               },
               {
                 "class": "ComparisonCondition",
+                "operation": "GREATER_OR_EQUAL",
                 "value1": {
                   "class": "CardCountValueProvider",
+                  "cardFilter": {
+                    "class": "CardFilter",
+                    "attribute": "RESERVED_BOOLEAN_4",
+                    "operation": "HAS"
+                  },
                   "cardSource": {
                     "class": "CombinedSource",
                     "cardSources": [
@@ -66,29 +72,23 @@
                         "targetPlayer": "OPPONENT"
                       }
                     ]
-                  },
-                  "cardFilter": {
-                    "class": "CardFilter",
-                    "attribute": "RESERVED_BOOLEAN_4",
-                    "operation": "HAS"
                   }
                 },
-                "operation": "GREATER_OR_EQUAL",
                 "value2": 2
               }
             ]
           },
           "spell": {
             "class": "StealCardSpell",
-            "targetPlayer": "OPPONENT",
             "target": "FRIENDLY_HAND",
             "cardLocation": "HAND",
-            "randomTarget": true,
             "filter": {
               "class": "CardFilter",
               "attribute": "RESERVED_BOOLEAN_4",
               "operation": "HAS"
-            }
+            },
+            "randomTarget": true,
+            "targetPlayer": "OPPONENT"
           }
         },
         {

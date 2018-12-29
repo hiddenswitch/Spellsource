@@ -2,20 +2,20 @@
   "name": "Mosh'Ogg Announcer",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Enemies attacking this have a 50% chance to attack someone else.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
       "actionType": "PHYSICAL_ATTACK",
-      "sourcePlayer": "OPPONENT",
       "hostTargetType": "IGNORE_OTHER_TARGETS",
       "queueCondition": {
         "class": "RandomCondition"
-      }
+      },
+      "sourcePlayer": "OPPONENT"
     },
     "spell": {
       "class": "FumbleSpell",

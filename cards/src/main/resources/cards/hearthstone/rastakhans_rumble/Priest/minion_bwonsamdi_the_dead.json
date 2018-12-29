@@ -2,16 +2,20 @@
   "name": "Bwonsamdi, the Dead",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "WHITE",
   "baseAttack": 7,
   "baseHp": 7,
-  "heroClass": "WHITE",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Draw 1-Cost minions from your deck until your hand is full.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "RecastWhileSpell",
-      "howMany": 10,
+      "condition": {
+        "class": "CardCountCondition",
+        "value": 10,
+        "operation": "LESS"
+      },
       "spell": {
         "class": "FromDeckToHandSpell",
         "cardFilter": {
@@ -29,11 +33,7 @@
           ]
         }
       },
-      "condition": {
-        "class": "CardCountCondition",
-        "operation": "LESS",
-        "value": 10
-      }
+      "howMany": 10
     }
   },
   "attributes": {

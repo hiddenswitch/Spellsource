@@ -2,9 +2,9 @@
   "name": "Daring Fire-Eater",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "BLUE",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "BLUE",
   "rarity": "COMMON",
   "description": "Battlecry: Your next Hero Power this turn deals 2 more damage.",
   "battlecry": {

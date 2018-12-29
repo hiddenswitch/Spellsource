@@ -4,10 +4,6 @@
   "heroClass": "ANY",
   "rarity": "FREE",
   "description": "The next battlecry played this turn is triggered twice.",
-  "aura": {
-    "class": "DoubleBattlecriesAura",
-    "target": "FRIENDLY_CARDS"
-  },
   "triggers": [
     {
       "eventTrigger": {
@@ -36,6 +32,10 @@
       }
     }
   ],
+  "aura": {
+    "class": "DoubleBattlecriesAura",
+    "target": "FRIENDLY_CARDS"
+  },
   "collectible": false,
   "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1

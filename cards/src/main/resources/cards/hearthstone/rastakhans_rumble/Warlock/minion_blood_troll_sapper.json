@@ -2,9 +2,9 @@
   "name": "Blood Troll Sapper",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "VIOLET",
   "baseAttack": 5,
   "baseHp": 8,
-  "heroClass": "VIOLET",
   "rarity": "COMMON",
   "description": "After a friendly minion dies, deal 2 damage to the enemy hero.",
   "trigger": {
@@ -14,8 +14,8 @@
     },
     "spell": {
       "class": "DamageSpell",
-      "value": 2,
-      "target": "ENEMY_HERO"
+      "target": "ENEMY_HERO",
+      "value": 2
     }
   },
   "collectible": true,

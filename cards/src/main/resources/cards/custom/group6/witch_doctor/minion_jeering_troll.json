@@ -2,9 +2,9 @@
   "name": "Jeering Troll",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ROSE",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "ROSE",
   "rarity": "COMMON",
   "description": "Taunt. Spell Damage +1",
   "attributes": {

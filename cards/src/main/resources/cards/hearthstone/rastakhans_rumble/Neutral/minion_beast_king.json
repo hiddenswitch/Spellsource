@@ -2,19 +2,19 @@
   "name": "Untamed Beastmaster",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Whenever you draw a Beast, give it +2/+2.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "RaceCondition",
         "race": "BEAST"
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",

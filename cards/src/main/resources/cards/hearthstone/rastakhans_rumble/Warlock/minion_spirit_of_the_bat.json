@@ -2,9 +2,9 @@
   "name": "Spirit of the Bat",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "VIOLET",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "VIOLET",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. After a friendly minion dies, give a minion in your hand +1/+1.",
   "trigger": {

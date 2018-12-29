@@ -2,9 +2,9 @@
   "name": "Old Jungle Masta",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ROSE",
   "baseAttack": 1,
   "baseHp": 6,
-  "heroClass": "ROSE",
   "rarity": "FREE",
   "description": "Spell Damage +1",
   "attributes": {

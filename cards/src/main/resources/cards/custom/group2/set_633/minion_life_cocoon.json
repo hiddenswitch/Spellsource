@@ -17,9 +17,9 @@
     "class": "NullSpell"
   },
   "attributes": {
-    "TAUNT": true,
     "BATTLECRY": true,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",
