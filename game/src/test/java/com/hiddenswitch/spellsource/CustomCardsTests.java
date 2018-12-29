@@ -1,5 +1,6 @@
 package com.hiddenswitch.spellsource;
 
+import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -9,6 +10,7 @@ import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -54,7 +56,6 @@ import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
 
-	@Test
 	public void testStitches() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
@@ -131,6 +132,254 @@ public class CustomCardsTests extends TestBase {
 			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 2);
 		}, HeroClass.GOLD, HeroClass.GOLD);
+	}
+
+	@Test
+	public void testOneOnOne() {
+		// Test 2 enemies, CAN choose enemy because there is another enemy to attack it.
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion enemy1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion enemy2 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			Card checkTargets = receiveCard(context, player, "spell_one_on_one");
+			player.setMana(3);
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> ga.getSourceReference().equals(checkTargets.getReference()) && ga.getTargetReference().equals(enemy1.getReference())));
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> ga.getSourceReference().equals(checkTargets.getReference()) && ga.getTargetReference().equals(enemy2.getReference())));
+		});
+
+		// Test 1 enemy, two friendlies, cannot choose enemy because there won't be another enemy to attack it
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			Minion friendly1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion friendly2 = playMinionCard(context, player, "minion_neutral_test");
+			Card checkTargets = receiveCard(context, player, "spell_one_on_one");
+			player.setMana(3);
+			assertFalse(context.getValidActions().stream().anyMatch(ga -> ga.getSourceReference().equals(checkTargets.getReference()) && ga.getTargetReference().equals(enemy.getReference())));
+		});
+
+		// Test 2 enemies, choose one, check that the other initiates the attack
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion enemy1 = playMinionCard(context, opponent, "minion_neutral_test");
+			// Choosing values for unambiguous differences
+			enemy1.setAttack(1);
+			enemy1.setHp(3);
+			Minion enemy2 = playMinionCard(context, opponent, "minion_neutral_test");
+			enemy2.setAttack(2);
+			enemy2.setHp(5);
+			context.endTurn();
+			Card checkTargets = receiveCard(context, player, "spell_one_on_one");
+			player.setMana(3);
+			playCard(context, player, checkTargets, enemy1);
+			assertEquals(enemy1.getHp(), 3 - 2);
+			assertEquals(enemy2.getHp(), 5 - 1);
+		});
+	}
+
+	@Test
+	public void testDoubleDown() {
+		// On your side: A marin, another marin, a treasure chest, a seven shot gunner, and another seven shot gunner. Note we destroyed the enemy treasure chest
+		runGym((context, player, opponent) -> {
+			Minion shouldNotHave = playMinionCard(context, player, "minion_neutral_test");
+			destroy(context, shouldNotHave);
+			context.endTurn();
+			context.endTurn();
+			playMinionCard(context, player, "minion_marin_the_fox");
+			Minion treasure = opponent.getMinions().get(0);
+			playMinionCard(context, player, "minion_seven_shot_gunner");
+			assertTrue(treasure.isDestroyed());
+			playCard(context, player, "spell_double_down");
+			assertEquals(player.getMinions().size(), 5);
+			Map<String, Integer> counts = new HashMap<>();
+			counts.put("minion_marin_the_fox", 2);
+			counts.put("token_treasure_chest", 1);
+			counts.put("minion_seven_shot_gunner", 2);
+			counts.put("minion_neutral_test", 0);
+			for (Map.Entry<String, Integer> count : counts.entrySet()) {
+				assertEquals(player.getMinions().stream().filter(e -> e.getSourceCard().getCardId().equals(count.getKey())).count(), (long) count.getValue());
+			}
+		});
+	}
+
+	@Test
+	public void testSevenShotGunner() {
+		// Test Marin the Fox interaction
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_marin_the_fox");
+			Minion treasure = opponent.getMinions().get(0);
+			playMinionCard(context, player, "minion_seven_shot_gunner");
+			assertTrue(treasure.isDestroyed());
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(Sets.newHashSet("token_golden_kobold",
+					"spell_tolins_goblet",
+					"spell_wondrous_wand",
+					"spell_zarogs_crown").contains(player.getHand().get(0).getCardId()));
+		});
+	}
+
+	@Test
+	public void testMurlocFixpicker() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_neutral_test");
+			playMinionCard(context, player, "minion_murloc_fixpicker");
+			context.getLogic().drawCard(player.getId(), player);
+			assertEquals(player.getHand().size(), 2);
+			assertEquals(player.getHand().get(0).getRace(), Race.MURLOC);
+			assertEquals(player.getHand().get(1).getRace(), Race.MURLOC);
+			assertEquals(player.getDeck().size(), 0);
+		});
+	}
+
+	@Test
+	public void testKitesailRavager() {
+		// Should pick off minions one by one
+		runGym((context, player, opponent) -> {
+			Card kitesailCard = receiveCard(context, player, "minion_kitesail_ravager");
+			int quantity = kitesailCard.getBaseHp() - 1;
+			List<Minion> targets = new ArrayList<>();
+			int friendlyCount = quantity / 2 + (quantity % 2);
+			for (int i = 0; i < friendlyCount; i++) {
+				targets.add(playMinionCard(context, player, "minion_wisp"));
+			}
+			int enemyCount = quantity / 2;
+			context.endTurn();
+			for (int i = 0; i < enemyCount; i++) {
+				targets.add(playMinionCard(context, opponent, "minion_wisp"));
+			}
+			context.endTurn();
+			Minion kitesail = playMinionCard(context, player, kitesailCard);
+			assertTrue(targets.stream().allMatch(Actor::isDestroyed));
+			assertEquals(kitesail.getHp(), 1);
+		});
+	}
+
+	@Test
+	public void testDoomgunners() {
+		// Attack 3 times, required 4 to kill
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_doomgunners");
+			context.endTurn();
+			Minion defender = playMinionCard(context, player, "minion_neutral_test");
+			defender.setAttack(0);
+			defender.setHp(attacker.getAttack() * 3 + 1);
+			context.endTurn();
+			attack(context, player, attacker, defender);
+			assertFalse(attacker.isDestroyed());
+			assertFalse(defender.isDestroyed());
+			assertEquals(defender.getHp(), 1, "Should still be alive, after 3 attacks");
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), 1 - 3);
+		});
+
+		// Just needs 2 attacks to finish
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_doomgunners");
+			context.endTurn();
+			Minion defender = playMinionCard(context, player, "minion_neutral_test");
+			defender.setAttack(0);
+			defender.setHp(attacker.getAttack() * 2);
+			context.endTurn();
+			attack(context, player, attacker, defender);
+			assertFalse(attacker.isDestroyed());
+			assertTrue(defender.isDestroyed());
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), 1 - 2);
+		});
+
+		// Defender kills attacker during the second attack, should not trigger a third attack. Third attack would kill the defender
+		runGym((context, player, opponent) -> {
+			Minion attacker = playMinionCard(context, player, "minion_doomgunners");
+			context.endTurn();
+			Minion defender = playMinionCard(context, player, "minion_neutral_test");
+			defender.setAttack(attacker.getHp() / 2);
+			defender.setHp(attacker.getAttack() * 2 + 1);
+			context.endTurn();
+			attack(context, player, attacker, defender);
+			assertTrue(attacker.isDestroyed());
+			assertFalse(defender.isDestroyed());
+			assertEquals(defender.getHp(), 1, "Should still be alive, after 2 attacks");
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), 1 - 2, "Attacker should have only get 2 attacks");
+		});
+	}
+
+	@Test
+	public void testCattaTheMerciless() {
+
+		runGym((context, player, opponent) -> {
+			Minion catta = playMinionCard(context, player, "minion_catta_the_merciless");
+
+			Minion attacker = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+
+			attack(context, player, attacker, defender);
+
+			assertTrue(attacker.isDestroyed());
+			assertTrue(defender.isDestroyed());
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), 0);
+		});
+
+		// Test interaction that requires 2 attacks for defender to die
+		runGym((context, player, opponent) -> {
+			Minion catta = playMinionCard(context, player, "minion_catta_the_merciless");
+
+			Minion attacker = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_neutral_test");
+			defender.setAttack(0);
+			attacker.setAttack(1);
+			context.endTurn();
+
+			int expectedAttacks = defender.getHp() / attacker.getAttack();
+			attack(context, player, attacker, defender);
+
+			assertFalse(attacker.isDestroyed());
+			assertTrue(defender.isDestroyed());
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), 1 - expectedAttacks);
+		});
+
+		// Test interaction with immune
+		runGym((context, player, opponent) -> {
+			Minion catta = playMinionCard(context, player, "minion_catta_the_merciless");
+
+			Minion attacker = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_neutral_test");
+			defender.setAttack(96);
+			defender.setHp(96);
+			attacker.setAttribute(Attribute.IMMUNE);
+			attacker.setAttack(1);
+			context.endTurn();
+
+			int expectedAttacks = defender.getHp() / attacker.getAttack();
+			attack(context, player, attacker, defender);
+
+			assertFalse(attacker.isDestroyed());
+			assertTrue(defender.isDestroyed());
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), 1 - expectedAttacks);
+		});
+
+		// Test infinite recursion mitigation
+		runGym((context, player, opponent) -> {
+			Minion catta = playMinionCard(context, player, "minion_catta_the_merciless");
+
+			Minion attacker = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion defender = playMinionCard(context, opponent, "minion_neutral_test");
+			defender.setAttack(0);
+			defender.setHp(97);
+			attacker.setAttack(1);
+			context.endTurn();
+
+			int expectedAttacks = defender.getHp() / attacker.getAttack();
+			attack(context, player, attacker, defender);
+
+			assertFalse(attacker.isDestroyed());
+			assertTrue(defender.isDestroyed());
+			assertEquals(attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS), -95, "Hit limit on attacks");
+		});
 	}
 
 	@Test

@@ -1,0 +1,29 @@
+{
+  "name": "Mrrghost of Past",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "Whenever a friendly Murloc attacks, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "RaceCondition",
+        "race": "MURLOC",
+        "target": "EVENT_SOURCE"
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

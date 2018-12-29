@@ -1,0 +1,43 @@
+{
+  "name": "Delivery Dealer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "At the end of your turn, summon a random 2-Cost minion for both players.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "targetPlayer": "OPPONENT",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": 2
+          }
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "MINION",
+            "manaCost": 2
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

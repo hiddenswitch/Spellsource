@@ -61,7 +61,7 @@ public class CreateSummonSpell extends Spell {
 		for (int i = 0; i < count; i++) {
 			Card card = newCard.clone();
 			Minion minion = card.summon();
-			if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false) && successfulSummonSpell != null) {
+			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
 				SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, minion, minion);
 			}
 			SpellUtils.castChildSpell(context, player, spell, source, target, minion);

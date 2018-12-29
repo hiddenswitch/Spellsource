@@ -63,7 +63,7 @@ import static java.util.stream.Collectors.toList;
  * <p>
  * Most effects are encoded in {@link Spell} classes, which subsequently call functions in this class. However, a few
  * key functions are called by {@link GameAction#execute(GameContext, int)} calls directly, like {@link #summon(int,
- * Minion, Card, int, boolean)} and {@link #fight(Player, Actor, Actor, PhysicalAttackAction)}.
+ * Minion, Entity, int, boolean)} and {@link #fight(Player, Actor, Actor, PhysicalAttackAction)}.
  */
 public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public static final int END_OF_SEQUENCE_MAX_DEPTH = 14;
@@ -1708,8 +1708,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				modifyDurability(hero.getWeapon(), -1);
 			}
 			context.getPlayer(hero.getOwner()).modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
+			context.getPlayer(hero.getOwner()).modifyAttribute(Attribute.ATTACKS_THIS_TURN, 1);
 		} else {
 			attacker.modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
+			attacker.modifyAttribute(Attribute.ATTACKS_THIS_TURN, 1);
 		}
 		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
 		if (attacker.isDestroyed() && !attackerWasDestroyed) {
@@ -3765,6 +3767,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		refreshAttacksPerRound(player.getHero());
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
+			minion.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
 			refreshAttacksPerRound(minion);
 			if (minion.hasAttribute(Attribute.STEALTH) && minion.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
 				int stealthForTurns = minion.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
@@ -3812,14 +3815,17 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                         opponent).
 	 * @param minion           The minion to summon. Typically the result of a {@link Card#summon()} call, but other cards
 	 *                         have effects that summon minions on e.g., battlecry with a {@link SummonSpell}.
-	 * @param source           The {@link Card} or {@link Entity} response for this minion.
+	 * @param source           The {@link Card} or {@link Entity} responsible for summoning this minion. If this is a
+	 *                         {@link EntityType#CARD} of {@link CardType#MINION} and the source has the attribute {@link
+	 *                         Attribute#PLAYED_FROM_HAND_OR_DECK}, this summoning is considered to have been a minion
+	 *                         "played" as opposed to merely summoned.
 	 * @param index            The location on the {@link Zones#BATTLEFIELD} to place this minion.
 	 * @param resolveBattlecry If {@code true}, the battlecry should be cast. Battlecries are only cast when a {@link
 	 *                         Minion} is summoned by a {@link Card} played from the {@link Zones#HAND}.
 	 * @return {@code true} if the summoning was successful.
 	 */
 	@Suspendable
-	public boolean summon(int playerId, Minion minion, Card source, int index, boolean resolveBattlecry) {
+	public boolean summon(int playerId, @NotNull Minion minion, @NotNull Entity source, int index, boolean resolveBattlecry) {
 		Player player = context.getPlayer(playerId);
 
 		if (!canSummonMoreMinions(player)) {
@@ -3827,6 +3833,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		minion.setId(generateId());
 		minion.setOwner(player.getId());
+		minion.setAttribute(Attribute.SUMMONED_ON_TURN, context.getTurn());
+		minion.setAttribute(Attribute.SUMMONED_BY_PLAYER, source.getOwner());
 		context.getSummonReferenceStack().push(minion.getReference());
 
 		try {
@@ -3869,7 +3877,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				summonEvent = new SummonEvent(context, minion, source, resolveBattlecry, battlecryAction);
 			}
 
-			if (summonEvent.getMinion() != null && !summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
+			if (!summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
 				context.fireGameEvent(summonEvent);
 				minion = summonTransformResolved(minion);
 			}
@@ -3898,10 +3906,35 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		} finally {
 			context.getSummonReferenceStack().pop();
 		}
-
 	}
 
 
+	/**
+	 * Combines two minions together using the rules of magnetization.
+	 * <p>
+	 * From Gamepedia: Magnetic is an ability exclusive to certain Mech minions which allows multiple minions to be merged
+	 * together. Playing a Magnetic minion to the left of an existing Mech will automatically cause the two minions' stats
+	 * and card text to be combined into a single minion.
+	 *
+	 * <ul>
+	 * <li>A Magnetic card cannot be played if the player's board is full, even to Magnetize onto another minion.[3]</li>
+	 * <li>If you use a Magnetic card to upgrade a mech, that upgrade is treated as an enchantment, not as a
+	 * transformation. So, for example, if the mech is silenced or returned to the hand, it loses all the effects it got
+	 * from the magnetizing.</li>
+	 * <li>In-hand enchantments given to Magnetic minions are considered part of the Magnetic effect when attached to
+	 * another Mech. For example, Kangor's Endless Army will resurrect a Mech with both the Magnetic buff and the in-hand
+	 * enchantment.</li>
+	 * <li>In-hand enchantments which give Deathrattle-effects (i.e. Val'anyr) are attached to the Target Mech-Unit all
+	 * the same. The Deathrattle-effect of the Unit which has been enhanced by a magnetic unit with an In-hand Deathrattle
+	 * enchantment does not show up in the tooltip of that unit. The Deathrattle-Symbol under the unit does show up
+	 * however and the Deathrattle-effect is excecuted upon destruction of the unit as expected.</li>
+	 * </ul>
+	 *
+	 * @param playerId
+	 * @param card
+	 * @param targetMinion
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	@Suspendable
 	public boolean magnetize(int playerId, Card card, Minion targetMinion) {

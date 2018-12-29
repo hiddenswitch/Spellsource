@@ -95,7 +95,7 @@ public class ResurrectSpell extends Spell {
 				}
 			} else summonedMinion = card.summon();
 
-			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, null, -1, false);
+			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)
 					&& summonedMinion.getZone() == Zones.BATTLEFIELD) {

@@ -4,7 +4,6 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
@@ -374,7 +373,7 @@ public enum Attribute {
 	 * Summoning sickness occurs however the minion entered the battlefield, whether through a play from the hand, a
 	 * Summon effect, a put into battlefield effect, or a transform effect.
 	 *
-	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the complete summoning rules.
+	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the complete summoning rules.
 	 * @see net.demilich.metastone.game.spells.PutMinionOnBoardFromDeckSpell for an unusual situation where minions enter
 	 * 		the battlefield.
 	 * @see GameLogic#transformMinion(Minion, Minion) for an unusual situation where minions enter the battlefield.
@@ -984,10 +983,18 @@ public enum Attribute {
 	DISABLE_FATIGUE,
 	/**
 	 * Indicates how many times the target {@link Actor} has been healed.
-	 *
+	 * <p>
 	 * When set on the {@link Player} entity, indicates how many friendly characters have been healed total.
 	 */
-	TIMES_HEALED;
+	TIMES_HEALED,
+	/**
+	 * Indicates which turn a minion was summoned.
+	 */
+	SUMMONED_ON_TURN,
+	/**
+	 * The player ID of the owner of the source entity that summoned this minion.
+	 */
+	SUMMONED_BY_PLAYER, ATTACKS_THIS_TURN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

@@ -3,7 +3,6 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.Notification;
@@ -51,8 +50,7 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	/**
 	 * The implementation of this method actually represents the game effects of this action.
 	 * <p>
-	 * For example, the {@link PlayMinionCardAction} eventually calls {@link net.demilich.metastone.game.logic.GameLogic#summon(int,
-	 * Minion, Card, int, boolean)}.
+	 * For example, the {@link PlayMinionCardAction} eventually calls {@link net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Entity, int, boolean)}.
 	 *
 	 * @param context  The game context
 	 * @param playerId The invoking player

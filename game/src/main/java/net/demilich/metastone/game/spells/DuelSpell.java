@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
  * <p>
  * No minion attacks more than once, but some minions make be attacked more than once.
  */
-public final class DuelSpell extends FightSpell {
+public class DuelSpell extends FightSpell {
 
 	private static Logger logger = LoggerFactory.getLogger(DuelSpell.class);
 
@@ -30,6 +30,11 @@ public final class DuelSpell extends FightSpell {
 		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
 		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
 
+		duel(context, player, source, validAttackers, validDefenders);
+	}
+
+	@Suspendable
+	protected void duel(GameContext context, Player player, Entity source, List<Entity> validAttackers, List<Entity> validDefenders) {
 		for (Entity attacker : validAttackers) {
 			if (!(attacker instanceof Actor)) {
 				logger.error("onCast {} {}: Tried to duel attacker {} which is not an actor.", context.getGameId(), source, attacker);
@@ -58,4 +63,5 @@ public final class DuelSpell extends FightSpell {
 			context.getSpellTargetStack().pop();
 		}
 	}
+
 }

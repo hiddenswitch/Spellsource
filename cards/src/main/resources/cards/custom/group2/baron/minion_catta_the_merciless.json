@@ -1,0 +1,104 @@
+{
+  "name": "Catta the Merciless",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever a minion attacks another, they fight repeatedly until one dies.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "AfterPhysicalAttackTrigger",
+        "fireCondition": {
+          "class": "AndCondition",
+          "conditions": [
+            {
+              "class": "IsDeadCondition",
+              "target": "EVENT_TARGET",
+              "invert": true
+            },
+            {
+              "class": "IsDeadCondition",
+              "target": "EVENT_SOURCE",
+              "invert": true
+            }
+          ]
+        },
+        "sourceEntityType": "MINION",
+        "targetEntityType": "MINION"
+      },
+      "spell": {
+        "class": "EitherOrSpell",
+        "spell1": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ModifyAttributeSpell",
+              "target": "SELF",
+              "attribute": "RESERVED_INTEGER_1",
+              "value": 1
+            },
+            {
+              "class": "FightSpell",
+              "target": "EVENT_TARGET",
+              "secondaryTarget": "EVENT_SOURCE"
+            }
+          ]
+        },
+        "spell2": {
+          "class": "EitherOrSpell",
+          "spell1": {
+            "class": "DestroySpell",
+            "target": "EVENT_TARGET"
+          },
+          "spell2": {
+            "class": "DestroySpell",
+            "target": "EVENT_SOURCE"
+          },
+          "condition": {
+            "class": "ComparisonCondition",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "attribute": "ATTACK",
+              "target": "EVENT_SOURCE"
+            },
+            "value2": {
+              "class": "AttributeValueProvider",
+              "attribute": "ATTACK",
+              "target": "EVENT_TARGET"
+            },
+            "operation": "GREATER"
+          }
+        },
+        "condition": {
+          "class": "ComparisonCondition",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "RESERVED_INTEGER_1",
+            "target": "SELF"
+          },
+          "value2": 95,
+          "operation": "LESS"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "WillEndSequenceTrigger"
+      },
+      "spell": {
+        "class": "SetAttributeSpell",
+        "attribute": "RESERVED_INTEGER_1",
+        "value": 0,
+        "target": "SELF"
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

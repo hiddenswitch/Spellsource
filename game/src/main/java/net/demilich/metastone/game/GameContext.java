@@ -128,8 +128,7 @@ import static java.util.stream.Collectors.toList;
  * Executing the card code is complicated, and follows the adage: Every sufficiently complex program has a poorly
  * implemented version of common Lisp. At a high level, players take turns generating {@link GameAction} objects, whose
  * {@link GameAction#execute(GameContext, int)} implementation does things like {@link GameLogic#castSpell(int,
- * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int,
- * Minion, Card, int, boolean)}. {@code "spell"} fields inside the {@link net.demilich.metastone.game.cards.desc.CardDesc}
+ * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int, Minion, Entity, int, boolean)}. {@code "spell"} fields inside the {@link net.demilich.metastone.game.cards.desc.CardDesc}
  * of the card currently being played get executed by looking at their {@link net.demilich.metastone.game.spells.desc.SpellArg#CLASS}
  * and creating an instance of the corresponding subclass of {@link net.demilich.metastone.game.spells.Spell}.
  * Subsequent "sub-spells" are called by {@link net.demilich.metastone.game.spells.SpellUtils#castChildSpell(GameContext,
@@ -147,8 +146,7 @@ import static java.util.stream.Collectors.toList;
  * we wanted the player to take of the possible choices from {@link GameContext#getValidActions()}.</li>
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
- * <li>{@link GameLogic#summon(int, Minion,
- * Card, int, boolean)}, which summons minions.</li>
+ * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
  * <li>{@link GameLogic#resolveBattlecry(int, Actor)},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
@@ -456,7 +454,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * checkpoints that need to be rendered to the client</li><li></ol>
 	 * <p>
 	 * Typically a {@link GameEvent} is instantiated inside a function in {@link GameLogic}, like {@link
-	 * net.demilich.metastone.game.events.SummonEvent} inside {@link GameLogic#summon(int, Minion, Card, int, boolean)},
+	 * net.demilich.metastone.game.events.SummonEvent} inside {@link GameLogic#summon(int, Minion, Entity, int, boolean)},
 	 * and then fired by the {@link GameLogic} using this function.
 	 *
 	 * @param gameEvent     The {@link GameEvent} to fire.
@@ -801,7 +799,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * Gets the minions whose summoning is currently being processed.
 	 * <p>
 	 * This stack can have multiple entries because battlecries or secrets can trigger summoning of other minions in the
-	 * middle of evaluating a {@link GameLogic#summon(int, Minion, Card, int, boolean)}.
+	 * middle of evaluating a {@link GameLogic#summon(int, Minion, Entity, int, boolean)}.
 	 *
 	 * @return A stack of summons.
 	 */

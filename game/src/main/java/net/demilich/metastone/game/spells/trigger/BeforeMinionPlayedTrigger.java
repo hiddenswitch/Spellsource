@@ -11,15 +11,7 @@ public final class BeforeMinionPlayedTrigger extends BeforeMinionSummonedTrigger
 	}
 
 	@Override
-	protected boolean fire(GameEvent event, Entity host) {
-		SummonEvent summonEvent = (SummonEvent) event;
-
-		// when source card is null, then this minion not played as a minion
-		// card
-		if (summonEvent.getSource() == null) {
-			return false;
-		}
-		return super.fire(summonEvent, host);
+	protected boolean onlyPlayedFromHandOrDeck() {
+		return true;
 	}
-
 }

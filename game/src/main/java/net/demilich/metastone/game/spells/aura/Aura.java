@@ -3,7 +3,6 @@ package net.demilich.metastone.game.spells.aura;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
@@ -11,7 +10,6 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.BoardChangedEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.WillEndSequenceEvent;
-import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -34,7 +32,7 @@ import java.util.*;
  * Because auras evaluate which entities they affect on board changes and sequence endings, they aren't affecting
  * entities the moment they "come into play" (are attached to a host that is {@link Entity#isInPlay()}). However, since
  * a {@link BoardChangedEvent} is fired right after a minion is put on the {@link Zones#BATTLEFIELD} during a {@link
- * net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Card, int, boolean)} call, in practice auras come
+ * net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Entity, int, boolean)} call, in practice auras come
  * into play immediately. Specifically, a minion with an aura written on it will not be affecting entities by the {@link
  * net.demilich.metastone.game.events.BeforeSummonEvent} event, but only by the first {@link BoardChangedEvent} (which
  * comes before any battlecries are resolved or before control is given back to the player).

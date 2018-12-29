@@ -59,7 +59,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	protected static final Set<Attribute> IGNORED_MINION_ATTRIBUTES = new HashSet<>(
 			Arrays.asList(Attribute.PASSIVE_TRIGGERS, Attribute.DECK_TRIGGERS, Attribute.BASE_ATTACK,
 					Attribute.BASE_HP, Attribute.SECRET, Attribute.CHOOSE_ONE, Attribute.BATTLECRY, Attribute.COMBO,
-					Attribute.TRANSFORM_REFERENCE, Attribute.ECHO, Attribute.AURA_ECHO));
+					Attribute.TRANSFORM_REFERENCE, Attribute.ECHO, Attribute.AURA_ECHO, Attribute.BEING_PLAYED, Attribute.HAND_INDEX));
 
 	protected static final Set<Attribute> HERO_ATTRIBUTES = new HashSet<>(
 			Arrays.asList(Attribute.HP, Attribute.MAX_HP, Attribute.BASE_HP, Attribute.ARMOR, Attribute.TAUNT));

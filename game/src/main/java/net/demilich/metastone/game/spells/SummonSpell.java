@@ -282,7 +282,7 @@ public class SummonSpell extends Spell {
 					}
 					final Minion minion = card.summon();
 
-					if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
+					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
 						cards.remove(card);
 					}
@@ -293,7 +293,7 @@ public class SummonSpell extends Spell {
 						card = count == 1 ? card : card.clone();
 						final Minion minion = card.summon();
 
-						if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
+						if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 							summonedMinions.add(minion);
 						}
 					}
@@ -322,7 +322,7 @@ public class SummonSpell extends Spell {
 					minion.clearEnchantments();
 				}
 
-				boolean summoned = context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
+				boolean summoned = context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
 				if (!summoned) {
 					// It's still possible that, even if a minion was successfully summoned, a subspell later destroys it
 					return;

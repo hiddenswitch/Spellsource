@@ -1,0 +1,28 @@
+{
+  "name": "Scarlet Inquisitor",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give all Knights in your hand +1/+1.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HAND",
+      "attackBonus": 1,
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_knight"
+      },
+      "hpBonus": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
