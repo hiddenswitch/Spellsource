@@ -16,8 +16,8 @@
     "class": "CardsPlayedValueProvider",
     "filter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "race": "ELEMENTAL"
+      "race": "ELEMENTAL",
+      "cardType": "MINION"
     }
   }
 }

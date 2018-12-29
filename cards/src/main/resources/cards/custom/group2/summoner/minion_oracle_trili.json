@@ -15,12 +15,12 @@
     "spell": {
       "class": "ShuffleToDeckSpell",
       "target": "ALL_OTHER_MINIONS",
-      "randomTarget": true,
       "spell": {
         "class": "BuffSpell",
         "target": "OUTPUT",
         "value": 4
-      }
+      },
+      "randomTarget": true
     }
   },
   "collectible": true,

@@ -2,9 +2,9 @@
   "name": "Saronite Taskmaster",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Deathrattle: Summon a 0/3 Free Agent with Taunt for your opponent.",
   "deathrattle": {

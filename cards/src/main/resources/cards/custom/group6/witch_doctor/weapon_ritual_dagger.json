@@ -2,18 +2,18 @@
   "name": "Ritual Dagger",
   "baseManaCost": 2,
   "type": "WEAPON",
+  "heroClass": "ROSE",
   "damage": 2,
   "durability": 2,
-  "heroClass": "ROSE",
   "rarity": "FREE",
   "description": "Whenever your hero attacks, restore 2 Health to it.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
       "actionType": "PHYSICAL_ATTACK",
+      "sourceEntityType": "HERO",
       "sourcePlayer": "SELF",
-      "targetPlayer": "BOTH",
-      "sourceEntityType": "HERO"
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "HealSpell",

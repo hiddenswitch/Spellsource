@@ -8,6 +8,10 @@
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    },
     "spells": [
       {
         "class": "BuffSpell",
@@ -15,16 +19,12 @@
       },
       {
         "class": "FightSpell",
-        "secondaryTarget": "TARGET",
         "target": "ENEMY_MINIONS",
+        "exclusive": true,
         "randomTarget": true,
-        "exclusive": true
+        "secondaryTarget": "TARGET"
       }
-    ],
-    "filter": {
-      "class": "RaceFilter",
-      "race": "BEAST"
-    }
+    ]
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",

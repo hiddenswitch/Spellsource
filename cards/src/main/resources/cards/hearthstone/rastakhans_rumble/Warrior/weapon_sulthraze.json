@@ -2,9 +2,9 @@
   "name": "Sul'thraze",
   "baseManaCost": 6,
   "type": "WEAPON",
+  "heroClass": "RED",
   "damage": 4,
   "durability": 4,
-  "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Overkill: You may attack again.",
   "trigger": {

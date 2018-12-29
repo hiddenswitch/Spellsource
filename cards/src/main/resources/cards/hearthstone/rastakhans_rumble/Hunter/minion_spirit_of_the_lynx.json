@@ -2,9 +2,9 @@
   "name": "Spirit of the Lynx",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "GREEN",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "GREEN",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. Whenever you summon a Beast, give it +1/+1",
   "trigger": {

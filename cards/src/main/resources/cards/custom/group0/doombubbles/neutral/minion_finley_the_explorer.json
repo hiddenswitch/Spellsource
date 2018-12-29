@@ -8,6 +8,19 @@
   "rarity": "LEGENDARY",
   "race": "MURLOC",
   "description": "Start of Game: Discover a new basic Hero Power. Battlecry: Upgrade It.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.UpgradeHeroPowerSpell",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "gameTriggers": [
     {
       "eventTrigger": {
@@ -43,18 +56,5 @@
         ]
       }
     }
-  ],
-  "battlecry": {
-    "targetSelection": "NONE",
-    "spell": {
-      "class": "custom.UpgradeHeroPowerSpell",
-      "targetPlayer": "SELF"
-    }
-  },
-  "attributes": {
-    "BATTLECRY": true
-  },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

@@ -2,9 +2,9 @@
   "name": "Hex Lord Malacrass",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "BLUE",
   "baseAttack": 5,
   "baseHp": 5,
-  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Add a copy of your opening hand to your hand (except this card).",
   "battlecry": {

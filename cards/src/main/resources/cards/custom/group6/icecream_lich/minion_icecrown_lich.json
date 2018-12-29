@@ -19,7 +19,7 @@
       "targetPlayer": "SELF"
     }
   },
-	"attributes": {
+  "attributes": {
     "TAUNT": true
   },
   "collectible": true,

@@ -8,6 +8,10 @@
   "rarity": "LEGENDARY",
   "race": "MECH",
   "description": "All healing is converted into Armor (for the target's Hero).",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "SpellOverrideAura",
@@ -29,9 +33,5 @@
         "class": "HealSpell"
       }
     }
-  ],
-  "attributes": {},
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+  ]
 }

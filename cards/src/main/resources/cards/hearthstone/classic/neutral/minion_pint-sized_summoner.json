@@ -10,8 +10,6 @@
   "cardCostModifier": {
     "class": "CardCostModifier",
     "value": -1,
-    "cardType": "MINION",
-    "targetPlayer": "SELF",
     "condition": {
       "class": "AndCondition",
       "conditions": [
@@ -21,6 +19,7 @@
         },
         {
           "class": "ComparisonCondition",
+          "operation": "EQUAL",
           "value1": {
             "class": "CardCountValueProvider",
             "cardFilter": {
@@ -45,11 +44,12 @@
               "targetPlayer": "SELF"
             }
           },
-          "operation": "EQUAL",
           "value2": 0
         }
       ]
-    }
+    },
+    "cardType": "MINION",
+    "targetPlayer": "SELF"
   },
   "collectible": true,
   "set": "CLASSIC",

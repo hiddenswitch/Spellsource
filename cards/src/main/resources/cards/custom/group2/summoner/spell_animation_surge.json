@@ -13,8 +13,8 @@
       "condition": {
         "class": "InvokeCondition"
       },
-      "ifTrue": 5,
-      "ifFalse": 3
+      "ifFalse": 3,
+      "ifTrue": 5
     },
     "card": "token_rock_golem"
   },

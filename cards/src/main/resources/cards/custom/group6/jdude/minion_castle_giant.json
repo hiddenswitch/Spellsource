@@ -13,10 +13,10 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "MinionSummonValueProvider",
-    "targetPlayer": "SELF",
     "filter": {
       "class": "SpecificCardFilter",
       "card": "token_silver_hand_recruit"
-    }
+    },
+    "targetPlayer": "SELF"
   }
 }

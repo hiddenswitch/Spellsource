@@ -14,7 +14,7 @@
         "class": "TurnEndTrigger",
         "targetPlayer": "SELF"
       },
-       "spell": {
+      "spell": {
         "class": "DamageSpell",
         "target": "ENEMY_CHARACTERS",
         "value": 1

@@ -26,8 +26,8 @@
       },
       {
         "class": "DamageSpell",
-        "value": 2,
-        "target": "ALL_MINIONS"
+        "target": "ALL_MINIONS",
+        "value": 2
       }
     ]
   },

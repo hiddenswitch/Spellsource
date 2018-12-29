@@ -9,11 +9,11 @@
   "description": "Deathrattle: Recruit a minion.",
   "deathrattle": {
     "class": "RecruitSpell",
-    "cardLocation": "DECK",
     "cardFilter": {
       "class": "CardFilter",
       "cardType": "MINION"
-    }
+    },
+    "cardLocation": "DECK"
   },
   "attributes": {
     "DEATHRATTLES": true

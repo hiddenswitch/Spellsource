@@ -13,8 +13,8 @@
     "target": "FRIENDLY_PLAYER",
     "applyEffect": {
       "class": "AddAttributeSpell",
-      "attribute": "FROZEN",
-      "target": "TARGET"
+      "target": "TARGET",
+      "attribute": "FROZEN"
     }
   },
   "collectible": true,

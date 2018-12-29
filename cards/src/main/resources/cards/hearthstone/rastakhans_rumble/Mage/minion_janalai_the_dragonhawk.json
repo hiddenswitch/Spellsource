@@ -2,9 +2,9 @@
   "name": "Jan'alai, the Dragonhawk",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "BLUE",
   "baseAttack": 4,
   "baseHp": 4,
-  "heroClass": "BLUE",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Battlecry: If your Hero Power dealt 8 damage this game, summon Ragnaros the Firelord.[]",
@@ -12,20 +12,20 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ConditionalSpell",
-      "spell": {
-        "class": "SummonSpell",
-        "card": "minion_ragnaros_the_firelord",
-        "boardPositionRelative": "RIGHT"
-      },
       "condition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "SELF",
-          "playerAttribute": "HERO_POWER_DAMAGE_DEALT"
+          "playerAttribute": "HERO_POWER_DAMAGE_DEALT",
+          "targetPlayer": "SELF"
         },
-        "operation": "GREATER_OR_EQUAL",
         "value2": 8
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "minion_ragnaros_the_firelord"
       }
     }
   },
@@ -40,12 +40,12 @@
       "class": "ConditionalDescription",
       "condition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "SELF",
-          "playerAttribute": "HERO_POWER_DAMAGE_DEALT"
+          "playerAttribute": "HERO_POWER_DAMAGE_DEALT",
+          "targetPlayer": "SELF"
         },
-        "operation": "GREATER_OR_EQUAL",
         "value2": 8
       },
       "description1": " (Ready!)",
@@ -57,12 +57,12 @@
             "class": "ValueDescription",
             "value": {
               "class": "AlgebraicValueProvider",
-              "value1": 8,
               "operation": "SUBTRACT",
+              "value1": 8,
               "value2": {
                 "class": "PlayerAttributeValueProvider",
-                "targetPlayer": "SELF",
-                "playerAttribute": "HERO_POWER_DAMAGE_DEALT"
+                "playerAttribute": "HERO_POWER_DAMAGE_DEALT",
+                "targetPlayer": "SELF"
               }
             }
           },

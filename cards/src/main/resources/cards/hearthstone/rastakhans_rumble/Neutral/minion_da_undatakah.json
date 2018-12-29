@@ -2,26 +2,26 @@
   "name": "Da Undatakah",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 8,
   "baseHp": 5,
-  "heroClass": "ANY",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Gain the Deathrattle effects of 3 friendly minions that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "CopyDeathrattleSpell",
-      "cardSource": {
-        "class": "GraveyardActorsSource",
-        "targetPlayer": "SELF"
+      "spell": {
+        "class": "RevealCardSpell"
       },
       "cardFilter": {
         "class": "CardFilter",
         "attribute": "DEATHRATTLES",
         "operation": "HAS"
       },
-      "spell": {
-        "class": "RevealCardSpell"
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "SELF"
       },
       "howMany": 3,
       "randomTarget": true

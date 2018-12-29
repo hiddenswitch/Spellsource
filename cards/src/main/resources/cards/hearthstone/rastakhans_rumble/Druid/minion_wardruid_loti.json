@@ -2,9 +2,9 @@
   "name": "Wardruid Loti",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 1,
   "baseHp": 2,
-  "heroClass": "BROWN",
   "rarity": "LEGENDARY",
   "description": "Choose One - Transform into One of Loti's four dinosaur forms.",
   "chooseOneBattlecries": [

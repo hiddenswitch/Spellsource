@@ -8,13 +8,13 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
-    },
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "MINION",
-      "race": "DEMON"
+      "race": "DEMON",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": true,

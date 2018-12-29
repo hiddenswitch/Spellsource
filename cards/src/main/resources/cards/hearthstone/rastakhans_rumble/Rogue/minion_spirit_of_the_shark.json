@@ -2,11 +2,18 @@
   "name": "Spirit of the Shark",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "BLACK",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "BLACK",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. Your minions' Battlecries and Combos trigger twice.",
+  "attributes": {
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1,
   "auras": [
     {
       "class": "DoubleBattlecriesAura",
@@ -16,12 +23,5 @@
       "class": "DoubleCombosAura",
       "target": "FRIENDLY_MINIONS"
     }
-  ],
-  "attributes": {
-    "STEALTH": true,
-    "STEALTH_FOR_TURNS": 1
-  },
-  "collectible": true,
-  "set": "RASTAKHANS_RUMBLE",
-  "fileFormatVersion": 1
+  ]
 }

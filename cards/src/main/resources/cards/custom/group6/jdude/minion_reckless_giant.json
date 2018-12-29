@@ -13,10 +13,10 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "CardsPlayedValueProvider",
-    "targetPlayer": "BOTH",
     "filter": {
       "class": "CardFilter",
       "cardType": "WEAPON"
-    }
+    },
+    "targetPlayer": "BOTH"
   }
 }

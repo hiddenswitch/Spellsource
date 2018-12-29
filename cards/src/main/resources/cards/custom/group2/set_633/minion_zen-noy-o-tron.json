@@ -9,9 +9,9 @@
   "race": "MECH",
   "description": "Taunt. Divine Shield. Deflect. Windfury.",
   "attributes": {
-    "TAUNT": true,
-    "DIVINE_SHIELD": true,
     "DEFLECT": true,
+    "DIVINE_SHIELD": true,
+    "TAUNT": true,
     "WINDFURY": true
   },
   "collectible": true,

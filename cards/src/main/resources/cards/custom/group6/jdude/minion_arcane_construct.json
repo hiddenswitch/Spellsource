@@ -22,8 +22,8 @@
   },
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "minion_mana_wyrm",
-    "value": 3
+    "value": 3,
+    "card": "minion_mana_wyrm"
   },
   "attributes": {
     "DEATHRATTLES": true

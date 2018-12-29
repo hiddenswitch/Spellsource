@@ -10,6 +10,9 @@
     "class": "DamageSpell",
     "value": 4
   },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "ConditionalValueProvider",
     "condition": {
@@ -21,8 +24,5 @@
     },
     "ifFalse": 0,
     "ifTrue": 3
-  },
-  "collectible": true,
-  "set": "RASTAKHANS_RUMBLE",
-  "fileFormatVersion": 1
+  }
 }

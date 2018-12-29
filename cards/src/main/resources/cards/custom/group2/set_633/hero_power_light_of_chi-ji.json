@@ -5,46 +5,46 @@
   "heroClass": "JADE",
   "rarity": "FREE",
   "description": "Passive Hero Power. Whenever a friendly minion returns to your hand, set its cost to 0.",
-  "targetSelection": "NONE",
   "passiveTriggers": [
     {
       "eventTrigger": {
         "class": "ReturnToHandTrigger",
-        "targetPlayer": "SELF",
-        "targetEntityType": "MINION"
+        "targetEntityType": "MINION",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "CardCostModifierSpell",
         "target": "EVENT_SOURCE",
         "cardCostModifier": {
           "class": "CardCostModifier",
+          "target": "SELF",
           "value": 0,
-          "operation": "SET",
-          "target": "SELF"
+          "operation": "SET"
         }
       }
     }
   ],
+  "condition": {
+    "class": "OrCondition"
+  },
+  "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_HAND",
-      "randomTarget": true,
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      },
       "filter": {
         "class": "CardFilter",
         "cardType": "MINION"
       },
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "value": 0,
-        "operation": "SET",
-        "target": "SELF"
-      }
+      "randomTarget": true
     }
-  },
-  "condition": {
-    "class": "OrCondition"
   },
   "collectible": false,
   "set": "CUSTOM",

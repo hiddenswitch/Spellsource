@@ -21,11 +21,11 @@
         {
           "class": "CastFromGroupSpell",
           "target": "FRIENDLY_HAND",
+          "group": "group_adapt",
           "filter": {
             "class": "SpecificCardFilter",
             "card": "token_knight"
-          },
-          "group": "group_adapt"
+          }
         }
       ]
     }

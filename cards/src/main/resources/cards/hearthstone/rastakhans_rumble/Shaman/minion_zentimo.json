@@ -2,9 +2,9 @@
   "name": "Zentimo",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "SILVER",
   "baseAttack": 1,
   "baseHp": 3,
-  "heroClass": "SILVER",
   "rarity": "LEGENDARY",
   "description": "Whenever you target a minion with a spell, it also targets adjacent ones.",
   "aura": {

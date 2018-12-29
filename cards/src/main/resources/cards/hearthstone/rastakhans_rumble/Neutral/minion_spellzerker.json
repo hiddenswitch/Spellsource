@@ -2,9 +2,9 @@
   "name": "Spellzerker",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "COMMON",
   "description": "Has Spell Damage +2 while damaged.",
   "aura": {
@@ -12,13 +12,13 @@
     "target": "SELF",
     "applyEffect": {
       "class": "ModifyAttributeSpell",
-      "attribute": "SPELL_DAMAGE",
-      "value": 2
+      "value": 2,
+      "attribute": "SPELL_DAMAGE"
     },
     "removeEffect": {
       "class": "ModifyAttributeSpell",
-      "attribute": "SPELL_DAMAGE",
-      "value": -2
+      "value": -2,
+      "attribute": "SPELL_DAMAGE"
     }
   },
   "attributes": {

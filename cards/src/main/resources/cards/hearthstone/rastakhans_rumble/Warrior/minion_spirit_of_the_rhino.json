@@ -2,9 +2,9 @@
   "name": "Spirit of the Rhino",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "RED",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "RED",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. You Rush minions are Immune the turn they're summoned.",
   "aura": {

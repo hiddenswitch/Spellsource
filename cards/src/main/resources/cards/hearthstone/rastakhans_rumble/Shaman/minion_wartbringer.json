@@ -2,19 +2,15 @@
   "name": "Wartbringer",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "SILVER",
   "baseAttack": 2,
   "baseHp": 1,
-  "heroClass": "SILVER",
   "rarity": "COMMON",
   "description": "Battlecry: If you played 2 spells this turn, deal 2 damage.",
   "battlecry": {
-    "targetSelection": "ANY",
-    "spell": {
-      "class": "DamageSpell",
-      "value": 2
-    },
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "CardCountValueProvider",
         "cardFilter": {
@@ -39,8 +35,12 @@
           "targetPlayer": "SELF"
         }
       },
-      "operation": "GREATER_OR_EQUAL",
       "value2": 2
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
     }
   },
   "attributes": {

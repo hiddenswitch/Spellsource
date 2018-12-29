@@ -11,13 +11,13 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReturnTargetToHandSpell",
-	  "target": "ADJACENT_MINIONS",
+      "target": "ADJACENT_MINIONS",
       "targetPlayer": "SELF"
     }
   },
   "attributes": {
     "BATTLECRY": true,
-	"DEFLECT": true
+    "DEFLECT": true
   },
   "collectible": true,
   "set": "CUSTOM",

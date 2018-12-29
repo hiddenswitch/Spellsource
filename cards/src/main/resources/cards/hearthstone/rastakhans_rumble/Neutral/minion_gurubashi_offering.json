@@ -2,9 +2,9 @@
   "name": "Gurubashi Offering",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 0,
   "baseHp": 2,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "At the start of your turn, destroy this and gain 8 Armor.",
   "trigger": {

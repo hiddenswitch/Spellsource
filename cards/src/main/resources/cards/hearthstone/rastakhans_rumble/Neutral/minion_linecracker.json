@@ -2,9 +2,9 @@
   "name": "Linecracker",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 10,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Overkill: Double this minion's Attack.",
   "trigger": {

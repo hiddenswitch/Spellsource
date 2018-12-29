@@ -17,8 +17,8 @@
       },
       {
         "class": "DuelSpell",
-        "secondaryTarget": "FRIENDLY_MINIONS",
-        "target": "ENEMY_MINIONS"
+        "target": "ENEMY_MINIONS",
+        "secondaryTarget": "FRIENDLY_MINIONS"
       }
     ]
   },

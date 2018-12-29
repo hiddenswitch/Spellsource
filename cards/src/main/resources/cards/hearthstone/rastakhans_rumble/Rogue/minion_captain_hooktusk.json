@@ -2,9 +2,9 @@
   "name": "Captain Hooktusk",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "BLACK",
   "baseAttack": 6,
   "baseHp": 3,
-  "heroClass": "BLACK",
   "rarity": "LEGENDARY",
   "race": "PIRATE",
   "description": "Battlecry: Summon 3 Pirates from your deck. Give them Rush.",
@@ -20,8 +20,8 @@
       },
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
-        "race": "PIRATE"
+        "race": "PIRATE",
+        "cardType": "MINION"
       },
       "cardLocation": "DECK"
     }

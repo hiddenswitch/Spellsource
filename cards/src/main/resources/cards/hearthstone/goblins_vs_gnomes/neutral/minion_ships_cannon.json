@@ -10,8 +10,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionSummonedTrigger",
-      "hostTargetType": "IGNORE_AS_TARGET",
       "race": "PIRATE",
+      "hostTargetType": "IGNORE_AS_TARGET",
       "targetPlayer": "SELF"
     },
     "spell": {

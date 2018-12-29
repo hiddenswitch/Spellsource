@@ -15,8 +15,8 @@
       },
       {
         "class": "DrawCardSpell",
-        "targetPlayer": "OWNER",
-        "value": 1
+        "value": 1,
+        "targetPlayer": "OWNER"
       }
     ]
   },

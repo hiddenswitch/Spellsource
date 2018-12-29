@@ -12,8 +12,8 @@
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
       "actionType": "SPELL",
-      "sourcePlayer": "SELF",
       "hostTargetType": "IGNORE_AS_TARGET",
+      "sourcePlayer": "SELF",
       "targetEntityType": "MINION",
       "targetPlayer": "SELF"
     },
@@ -23,8 +23,8 @@
         "class": "SummonSpell",
         "target": "EVENT_TARGET",
         "spell": {
-          "target": "OUTPUT",
           "class": "AddAttributeSpell",
+          "target": "OUTPUT",
           "attribute": "TAUNT"
         },
         "targetPlayer": "SELF"

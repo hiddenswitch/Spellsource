@@ -2,9 +2,9 @@
   "name": "Arena Patron",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ANY",
   "rarity": "RARE",
   "description": "Overkill: Summon another Arena Patron",
   "trigger": {
@@ -17,8 +17,8 @@
       "class": "OverkillSpell",
       "spell": {
         "class": "SummonSpell",
-        "card": "minion_arena_patron",
-        "boardPositionRelative": "RIGHT"
+        "boardPositionRelative": "RIGHT",
+        "card": "minion_arena_patron"
       }
     }
   },

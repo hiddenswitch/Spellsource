@@ -2,9 +2,9 @@
   "name": "Auchenai Phantasm",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "WHITE",
   "baseAttack": 3,
   "baseHp": 2,
-  "heroClass": "WHITE",
   "rarity": "EPIC",
   "description": "Battlecry: This turn, your healing effects deal damage instead.",
   "battlecry": {

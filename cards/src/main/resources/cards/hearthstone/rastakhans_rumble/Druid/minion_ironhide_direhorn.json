@@ -2,12 +2,12 @@
   "name": "Ironhide Direhorn",
   "baseManaCost": 7,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 7,
   "baseHp": 7,
-  "heroClass": "BROWN",
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Overkill: Summon a 5/5 Ironhide Runt.",
+  "description": "Overkill:\u00a0Summon a 5/5 Ironhide Runt.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

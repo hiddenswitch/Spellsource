@@ -2,9 +2,9 @@
   "name": "Spirit of the Bear",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "NAVY",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "NAVY",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. After a friendly minion attacks, add a random Baron spell to your hand.",
   "trigger": {

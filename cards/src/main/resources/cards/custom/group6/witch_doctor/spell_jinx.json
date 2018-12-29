@@ -14,17 +14,17 @@
       },
       {
         "class": "DrawCardSpell",
-        "targetPlayer": "OPPONENT",
         "spell": {
           "class": "CardCostModifierSpell",
           "target": "OUTPUT",
           "cardCostModifier": {
             "class": "CardCostModifier",
             "target": "SELF",
-            "operation": "ADD",
-            "value": 2
+            "value": 2,
+            "operation": "ADD"
           }
-        }
+        },
+        "targetPlayer": "OPPONENT"
       }
     ]
   },

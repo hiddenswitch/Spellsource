@@ -2,11 +2,11 @@
   "name": "Reckless Diretroll",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "VIOLET",
   "baseAttack": 2,
   "baseHp": 6,
-  "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Taunt. Battlecry: Discard your lowest cost card.",
+  "description": "Taunt. Battlecry:\u00a0Discard your lowest cost card.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

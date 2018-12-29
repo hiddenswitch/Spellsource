@@ -17,7 +17,7 @@
       "class": "BuffSpell",
       "target": "EVENT_TARGET",
       "attackBonus": 0,
-	  "hpBonus": 2
+      "hpBonus": 2
     }
   },
   "collectible": true,

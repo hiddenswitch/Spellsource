@@ -11,20 +11,6 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "ConditionalSpell",
-      "spells": [
-        {
-          "class": "DamageSpell",
-          "value": 1
-        },
-        {
-          "class": "DamageSpell",
-          "value": 2
-        },
-        {
-          "class": "DamageSpell",
-          "value": 3
-        }
-      ],
       "conditions": [
         {
           "class": "RaceCondition",
@@ -55,7 +41,21 @@
             "race": "DRAGON"
           }
         ]
-      }
+      },
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 1
+        },
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "DamageSpell",
+          "value": 3
+        }
+      ]
     }
   },
   "attributes": {

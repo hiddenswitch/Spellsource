@@ -2,17 +2,17 @@
   "name": "Bladesworn",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "ROSE",
   "baseAttack": 2,
   "baseHp": 4,
-  "heroClass": "ROSE",
   "rarity": "RARE",
   "description": "Whenever you target this minion with a spell, gain +1/+1.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
       "actionType": "SPELL",
-      "sourcePlayer": "SELF",
-      "hostTargetType": "IGNORE_OTHER_TARGETS"
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",

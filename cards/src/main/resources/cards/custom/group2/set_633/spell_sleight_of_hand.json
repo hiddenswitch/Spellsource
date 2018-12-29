@@ -9,8 +9,7 @@
   "spell": {
     "class": "custom.SleightOfHandSpell"
   },
-  "attributes": {
-  },
+  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

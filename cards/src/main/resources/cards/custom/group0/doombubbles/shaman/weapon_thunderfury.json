@@ -10,11 +10,6 @@
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",
-    "condition": {
-      "class": "OverloadedCondition",
-      "targetPlayer": "SELF"
-    },
-    "attribute": "AURA_IMMUNE",
     "triggers": [
       {
         "class": "OverloadTrigger",
@@ -24,7 +19,12 @@
         "class": "TurnStartTrigger",
         "targetPlayer": "BOTH"
       }
-    ]
+    ],
+    "condition": {
+      "class": "OverloadedCondition",
+      "targetPlayer": "SELF"
+    },
+    "attribute": "AURA_IMMUNE"
   },
   "collectible": true,
   "set": "CUSTOM",

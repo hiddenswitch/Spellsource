@@ -2,9 +2,9 @@
   "name": "Spirit of the Frog",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "SILVER",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "SILVER",
   "rarity": "RARE",
   "description": "Stealth for 1 Turn. Whenever you cast a spell, draw a spell from your deck that costs (1) more.",
   "trigger": {
@@ -19,9 +19,9 @@
         "cardType": "SPELL",
         "manaCost": {
           "class": "PlayerAttributeValueProvider",
-          "targetPlayer": "SELF",
+          "offset": 1,
           "playerAttribute": "LAST_MANA_COST",
-          "offset": 1
+          "targetPlayer": "SELF"
         }
       }
     }

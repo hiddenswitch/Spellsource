@@ -2,9 +2,9 @@
   "name": "Spirit of the Dead",
   "baseManaCost": 1,
   "type": "MINION",
+  "heroClass": "WHITE",
   "baseAttack": 0,
   "baseHp": 3,
-  "heroClass": "WHITE",
   "rarity": "RARE",
   "description": "Stealth for 1 turn. After a friendly minion dies, shuffle a 1-Cost copy of it into your deck.",
   "trigger": {
@@ -15,13 +15,13 @@
     "spell": {
       "class": "custom.ShuffleWithCardCostModifierSpell",
       "target": "EVENT_TARGET",
-      "targetPlayer": "SELF",
       "cardCostModifier": {
         "class": "CardCostModifier",
         "target": "SELF",
         "value": 1,
         "operation": "SET"
-      }
+      },
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

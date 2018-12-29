@@ -8,7 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "RecastWhileSpell",
-    "howMany": 10,
     "condition": {
       "class": "CardCountCondition",
       "value": 9,
@@ -17,7 +16,8 @@
     },
     "spell": {
       "class": "DiscoverSpell"
-    }
+    },
+    "howMany": 10
   },
   "collectible": true,
   "set": "CUSTOM",

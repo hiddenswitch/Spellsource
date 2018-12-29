@@ -1,9 +1,9 @@
 {
   "name": "Voodoo Chant",
+  "heroPower": "hero_power_call_of_the_loa",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "ROSE",
-  "heroPower": "hero_power_call_of_the_loa",
   "rarity": "FREE",
   "description": "Add a random Voodoo spell to your hand.",
   "targetSelection": "NONE",

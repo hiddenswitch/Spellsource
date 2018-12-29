@@ -12,22 +12,22 @@
       "class": "CastRandomSpellSpell",
       "value": {
         "class": "CardCountValueProvider",
-        "cardSource": {
-          "class": "GraveyardCardsSource",
-          "targetPlayer": "SELF"
-        },
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "SPELL"
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
         }
-      },
-      "cardSource": {
-        "class": "GraveyardCardsSource",
-        "targetPlayer": "SELF"
       },
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "SPELL"
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "SELF"
       }
     }
   },

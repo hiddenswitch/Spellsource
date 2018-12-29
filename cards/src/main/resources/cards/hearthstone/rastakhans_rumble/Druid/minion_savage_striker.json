@@ -2,9 +2,9 @@
   "name": "Savage Striker",
   "baseManaCost": 2,
   "type": "MINION",
+  "heroClass": "BROWN",
   "baseAttack": 2,
   "baseHp": 3,
-  "heroClass": "BROWN",
   "rarity": "COMMON",
   "description": "Battlecry: Deal damage to an enemy minion equal to your hero's Attack.",
   "battlecry": {

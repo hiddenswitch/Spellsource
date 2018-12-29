@@ -16,13 +16,13 @@
       },
       {
         "class": "FightSpell",
-        "secondaryTarget": "TARGET",
         "target": "ENEMY_MINIONS",
         "filter": {
           "class": "EntityEqualsFilter",
-          "secondaryTarget": "TARGET",
-          "invert": true
-        }
+          "invert": true,
+          "secondaryTarget": "TARGET"
+        },
+        "secondaryTarget": "TARGET"
       }
     ]
   },

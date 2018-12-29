@@ -2,17 +2,14 @@
   "name": "Snapjaw Shellfighter",
   "baseManaCost": 5,
   "type": "MINION",
+  "heroClass": "ANY",
   "baseAttack": 3,
   "baseHp": 8,
-  "heroClass": "ANY",
   "rarity": "EPIC",
   "description": "Whenever an adjacent minion takes damage, this minion takes it instead.",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",
-      "sourcePlayer": "BOTH",
-      "targetEntityType": "MINION",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "AndCondition",
         "conditions": [
@@ -27,7 +24,10 @@
             "target": "ADJACENT_MINIONS"
           }
         ]
-      }
+      },
+      "sourcePlayer": "BOTH",
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",

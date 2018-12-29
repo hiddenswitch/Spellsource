@@ -8,10 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "ShuffleToDeckSpell",
-    "howMany": 2,
-    "cardSource": {
-      "class": "HandSource"
-    },
     "cardFilter": {
       "class": "ManaCostFilter",
       "value": {
@@ -23,7 +19,11 @@
         }
       },
       "operation": "EQUAL"
-    }
+    },
+    "cardSource": {
+      "class": "HandSource"
+    },
+    "howMany": 2
   },
   "collectible": true,
   "set": "CUSTOM",

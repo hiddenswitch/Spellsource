@@ -2,9 +2,9 @@
   "name": "Hir'eek, the Bat",
   "baseManaCost": 8,
   "type": "MINION",
+  "heroClass": "VIOLET",
   "baseAttack": 1,
   "baseHp": 1,
-  "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
   "race": "BEAST",
   "description": "Battlecry: Fill your board with copies of this minions.",
@@ -13,8 +13,8 @@
     "spell": {
       "class": "SummonSpell",
       "target": "SELF",
-      "boardPositionRelative": "RIGHT",
-      "value": 6
+      "value": 6,
+      "boardPositionRelative": "RIGHT"
     }
   },
   "attributes": {

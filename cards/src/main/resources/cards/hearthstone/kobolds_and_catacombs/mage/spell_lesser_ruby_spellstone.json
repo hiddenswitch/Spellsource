@@ -53,14 +53,14 @@
       "class": "ConditionalDescription",
       "condition": {
         "class": "ComparisonCondition",
+        "operation": "EQUAL",
         "value1": {
           "class": "SpellstoneValueProvider"
         },
-        "operation": "EQUAL",
         "value2": 1
       },
       "description1": "",
-      "description2":"s"
+      "description2": "s"
     }
   ]
 }

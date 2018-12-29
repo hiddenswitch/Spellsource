@@ -2,9 +2,9 @@
   "name": "High Priest Thekal",
   "baseManaCost": 3,
   "type": "MINION",
+  "heroClass": "GOLD",
   "baseAttack": 3,
   "baseHp": 4,
-  "heroClass": "GOLD",
   "rarity": "LEGENDARY",
   "description": "Battlecry: Convert all but 1 of your Hero's Health into Armor.",
   "battlecry": {
