@@ -1,6 +1,6 @@
 {
   "name": "Harvest Soul",
-  "baseManaCost": 6,
+  "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "ICECREAM",
   "rarity": "RARE",

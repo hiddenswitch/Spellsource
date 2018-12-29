@@ -30,6 +30,13 @@ Thanks to a great contribution from @Logovaz, we have a new Witch Doctor class!
 
  - The Witch Doctor class, starting with 41 cards and tokens.
 
+###### Content Fixes:
+
+ - Shambling Horror is now 5/7, up from 5/6
+ - Howling Blast now costs (4), up from (3)
+ - Corpse Explosion and Dark Ritual now both cost (2), both up from (1)
+ - Harvest Soul now costs (7), up from (6)
+
 ###### 0.8.5-2.0.17 (Friday, December 28th, 2018)
 
 Thanks to a great contribution from @doombubbles and @Samswize, we have a new Lich class! Expect some flavor updates.
