@@ -55,6 +55,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testStitches() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			Minion stitches = playMinionCardWithBattlecry(context, player, "minion_stitches", target);
+			assertTrue(target.isDestroyed());
+			assertEquals(stitches.getAttack(), target.getBaseAttack() + stitches.getBaseAttack());
+			assertEquals(stitches.getMaxHp(), target.getBaseHp() + stitches.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testRoll() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_neutral_test");
