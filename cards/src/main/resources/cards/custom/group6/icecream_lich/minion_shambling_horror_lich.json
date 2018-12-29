@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ICECREAM",
   "baseAttack": 5,
-  "baseHp": 6,
+  "baseHp": 7,
   "rarity": "FREE",
   "description": "Taunt",
   "attributes": {

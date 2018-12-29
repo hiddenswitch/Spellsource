@@ -1,6 +1,6 @@
 {
   "name": "Dark Ritual",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "ICECREAM",
   "rarity": "FREE",
