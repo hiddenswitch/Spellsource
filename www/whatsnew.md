@@ -32,6 +32,8 @@ Thanks to a great contribution from @Logovaz, we have a new Witch Doctor class!
 
 ###### Content Fixes:
 
+ - Minions with Rush and Charge can now correctly target heroes.
+ - Stiches now correctly gains the attack and health of its target.
  - Shambling Horror is now 5/7, up from 5/6.
  - Howling Blast now costs (4), up from (3).
  - Corpse Explosion and Dark Ritual now both cost (2), both up from (1).
