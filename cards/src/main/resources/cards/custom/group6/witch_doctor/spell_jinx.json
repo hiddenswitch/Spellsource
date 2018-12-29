@@ -1,0 +1,34 @@
+{
+  "name": "Jinx",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Each player draws a card. Your opponent's card costs (2) more.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell"
+      },
+      {
+        "class": "DrawCardSpell",
+        "targetPlayer": "OPPONENT",
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "operation": "ADD",
+            "value": 2
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

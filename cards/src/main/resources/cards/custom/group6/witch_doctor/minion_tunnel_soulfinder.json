@@ -1,0 +1,27 @@
+{
+  "name": "Tunnel Soulfinder",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add a random Deathrattle minion to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "attribute": "DEATHRATTLES",
+        "operation": "HAS"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -3,7 +3,7 @@ layout: page
 title: History
 permalink: /history/
 ---
-###### 0.8.3-2.0.14 (Wednesday, December 19th)
+###### 0.8.3-2.0.14 (Wednesday, December 19th, 2018)
 
 This release fixes issues with starting games due to changes to tracing.
 
@@ -12,7 +12,7 @@ This release fixes issues with starting games due to changes to tracing.
  - Fleeting Firebug no longer causes infinite loops when interacting with Defile.
  - Elortha no Shandra no longer causes infinite loops in some situations.
 
-###### 0.8.2-2.0.14 (Monday, December 17th)
+###### 0.8.2-2.0.14 (Monday, December 17th, 2018)
 
 Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been added and tweaked. Test improvements have led to other minor content fixes.
 
@@ -30,7 +30,7 @@ Thanks to a great contribution from @<BK>LyokoBarbossa, new Monk cards have been
  - Shudderwock now correctly stops casting battlecries if it is removed from the board by dealing damage to itself until death.
  - Armageddon Vanguard will trigger off at most 14 minions.
 
-###### 0.8.1-2.0.14 (Friday, December 14th)
+###### 0.8.1-2.0.14 (Friday, December 14th, 2018)
 
 This release includes bug fixes reported by the community.
 
@@ -45,7 +45,7 @@ This release includes bug fixes reported by the community.
  - Sorrowstone now works correctly.
  - Mutating Boa, Rhunok the Bear and Sea Stowaway are now Baron cards instead of Neutrals.
 
-###### 0.8.0-2.0.13 (Thursday, December 13th)
+###### 0.8.0-2.0.13 (Thursday, December 13th, 2018)
 
 This release includes bug fixes reported by the community.
 
@@ -56,13 +56,12 @@ Random numbers are generated differently and the interface for game actions has 
  - The bot's overall reliability is improved.
  - The bot no longer has issues interacting with Shadow Visions.
 
-###### 0.7.10-2.0.13 (Wednesday, December 12th)
+###### 0.7.10-2.0.13 (Wednesday, December 12th, 2018)
 
 This release includes bug fixes reported by the community.
 
 ###### Known Issues:
 
- - Immortal Prelate does not include its enchantments when it is shuffled into the deck.
  - Choose One cards do not work correctly in the client.
 
 ###### Content Fixes:
@@ -78,7 +77,7 @@ This release includes bug fixes reported by the community.
  - Soulwarden now copies discarded cards instead of moving them out of the graveyard.
  - Idiot Sandwich now works.
 
-###### 0.7.9-2.0.13 (Wednesday, December 12th)
+###### 0.7.9-2.0.13 (Wednesday, December 12th, 2018)
 
 This release fixes a critical issue where the bot is capable of corrupting your game.
 
@@ -87,7 +86,7 @@ This release fixes a critical issue where the bot is capable of corrupting your 
  - Quest counters now increase when playing against the bot. A great deal of other subtle issues playing against the bot should also be resolved.
  - The client now handles resolution changes more elegantly.
 
-**0.7.8-2.0.12** (Monday, December 10th)
+**0.7.8-2.0.12** (Monday, December 10th, 2018)
 
 This release includes bug fixes reported by the community, new Classic cards and fixes to card names.
 
@@ -113,13 +112,13 @@ This release includes bug fixes reported by the community, new Classic cards and
  - Breath of Fire now ignores spell damage when damaging the Hero.
  - Untamed Beastmaster, Rumbletusk Shaker, Haunting Visions, Shriek, and Poisoned Dagger now have correct names.
 
-**0.7.7-2.0.12** (Saturday, December 8th)
+**0.7.7-2.0.12** (Saturday, December 8th, 2018)
 
 This release has server improvements that should reduce the number of dropped games.
 
 Please report any issues you experience in the Discord, especially when playing against the bot.
 
-**0.7.6-2.0.12** (Wednesday, December 5th)
+**0.7.6-2.0.12** (Wednesday, December 5th, 2018)
 
 This release has various bug fixes helpfully reported by the community. It also includes some overall improvements to common game effects.
 
@@ -140,7 +139,7 @@ This release has various bug fixes helpfully reported by the community. It also 
 
  - Wandering Monster now uses Misdirect's exact effect and its test is improved.
 
-**0.7.5-2.0.12** (Tuesday, December 4th)
+**0.7.5-2.0.12** (Tuesday, December 4th, 2018)
 
 Thanks to a great contribution from @Pircival, we have new Baron cards!
 
@@ -157,7 +156,7 @@ The following cards have been added or changed: Bog Mutant; Deadeyed Ravager; Fa
  - Duelmaster Fizzle (and the similar, new effect written on Fend Off) now works.
  - Effects that take place after sequences are more reliable.
 
-**0.7.4-2.0.12** (Monday, December 3rd, 2018)
+**0.7.4-2.0.12** (Monday, December 3rd, 2018, 2018)
 
 Important improvements to the server fix issues introduced in September.
 
@@ -178,7 +177,7 @@ Important improvements to the server fix issues introduced in September.
  - High Priestess Jeklik now keeps hand buffs (thanks @doombubbles)
  - Pearl Spellstone now has the right cost (thanks @doombubbles)
 
-**0.7.3-2.0.12** (#2 for Saturday, December 1st, 2018)
+**0.7.3-2.0.12** (#2 for Saturday, December 1st, 2018, 2018)
 
 Thanks to a contribution from @Jdude and @bdg, new cards have been added to Spellsource!
 

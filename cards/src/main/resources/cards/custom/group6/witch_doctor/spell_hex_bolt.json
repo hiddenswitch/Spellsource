@@ -1,0 +1,32 @@
+{
+  "name": "Hex Bolt",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Deal $1 damage to an enemy minion and the enemy hero.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 1
+      }
+    ]
+  },
+  "condition": {
+    "class": "MinionCountCondition",
+    "targetPlayer": "OPPONENT",
+    "operation": "GREATER",
+    "value": 0
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

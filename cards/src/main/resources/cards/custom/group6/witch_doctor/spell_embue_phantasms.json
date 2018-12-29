@@ -1,0 +1,25 @@
+{
+  "name": "Embue Phantasms",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Give a minion \"Deathrattle: Summon five 2/2 Spirits.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_voodoo_spirit",
+        "token_voodoo_spirit",
+        "token_voodoo_spirit",
+        "token_voodoo_spirit",
+        "token_voodoo_spirit"
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

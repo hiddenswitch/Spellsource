@@ -34,6 +34,7 @@ OBSIDIAN | &quot;OBSIDIAN&quot;
 ICECREAM | &quot;ICECREAM&quot;
 AMBER | &quot;AMBER&quot;
 TOAST | &quot;TOAST&quot;
+ROSE | &quot;ROSE&quot;
 
 
 <a name="FormatEnum"></a>

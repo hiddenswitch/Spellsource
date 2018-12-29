@@ -1,0 +1,17 @@
+{
+  "name": "Shadow Puppetry",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Choose a minion. Force it to attack the enemy hero.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "FightSpell",
+    "secondaryTarget": "TARGET",
+    "target": "ENEMY_HERO"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,32 @@
+{
+  "name": "Devilry Flare",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage to an enemy minion and the enemy hero.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 2
+      }
+    ]
+  },
+  "condition": {
+    "class": "MinionCountCondition",
+    "targetPlayer": "OPPONENT",
+    "operation": "GREATER",
+    "value": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

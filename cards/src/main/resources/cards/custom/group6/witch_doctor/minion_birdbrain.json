@@ -1,0 +1,37 @@
+{
+  "name": "Birdbrain",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "<b>Battlecry</b>: Give a friendly Mech +3 Attack or +3 Health (at random).",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "RandomlyCastSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "attackBonus": 3
+        },
+        {
+          "class": "BuffSpell",
+          "hpBonus": 3
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

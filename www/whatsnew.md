@@ -16,26 +16,37 @@ Join us on the Discord at https://discord.gg/HmbESh2 to join a Custom Cards tour
  - You're strongly encouraged to play Custom classes.
  - Basic and Classic only. You're encouraged to check out the Discord to sort out exactly which cards qualify.
 
-### 0.8.5-2.0.17 (Friday, December 28th)
+### 0.8.6-2.0.18 (Saturday, December 29th, 2018)
 
-Thanks to a great contribution from @doombubbles and @Hooktusk'sHusbando, we have a new ICECREAM class! Expect some flavor updates.
+Thanks to a great contribution from @Logovaz, we have a new Witch Doctor class!
+
+###### Known Issues:
+
+ - Cards like Roll and interactions with Kingsbane that put cards with buffed stats back into your hand do not correctly show the buffed stats. However, the buff itself is retained.
+ - Poison Cloud, an Adventure hero power, can crash the game.
+ - Immortal Prelate does not include its enchantments when it is shuffled into the deck.
+ 
+###### Content Additions:
+
+ - The Witch Doctor class, starting with 41 cards and tokens.
+
+###### 0.8.5-2.0.17 (Friday, December 28th, 2018)
+
+Thanks to a great contribution from @doombubbles and @Samswize, we have a new Lich class! Expect some flavor updates.
 
 Thanks to a great contribution from @Pircival, there are new Baron cards!
 
 Thanks to a great contribution from @The Invisible Man, there are updates to Summoner cards!
 
-###### Known Issues
 
- - Cards like Roll and interactions with Kingsbane that put cards with buffed stats back into your hand do not correctly show the buffed stats. However, the buff itself is retained.
+###### Content Additions:
 
-###### Content Additions
-
- - The ICECREAM class, starting with 34 cards and tokens.
+ - The Lich class, starting with 34 cards and tokens.
  - The new and changed Baron cards: Backstreet Blowup, Battlerattler, Catta the Merciless, Converse Reverser, Corrupted Reaver, Delivery Dealer, Doomgunners, Doomwalker, Freelancer, General Drekthar, Kitesail Ravager, Magister Umbric, Mrrghost of Past, Murloc Fixpicker, Mystiva, Night Knight, Scarlet Inquisitor, Seven Shot Gunner, Stonecold Sergeant, Titanic Terror, Toot Hoarder, Underworld Keeper, Windup Offender, Worgen Petkeeper, Zandalari Zapper, Alternate Timeline, Army Recruits, Avenging Forces, Deepsea Duel, Double Down, Forces Unite, Immunize, One on One, Self Appoint, Swarms of Time.
  - The new Summoner card Lackey Break.
  - Unnerfed Gadgetzan Auctioneer.
  
-###### Content Fixes
+###### Content Fixes:
 
  - Pint-Sized Summoner now interacts with Call to Arms correctly.
  - Abandoned Hatchling: Reworked to reflect Baby Gryphon changes.
@@ -59,11 +70,11 @@ Thanks to a great contribution from @The Invisible Man, there are updates to Sum
  - Light of Chi-Ji now only buffs the one card that is returned to zero cost.
  - Goblin Technosapper now costs 3.
 
-###### 0.8.4-2.0.16 (Saturday, December 22nd)
+###### 0.8.4-2.0.16 (Saturday, December 22nd, 2018)
 
 Choose ones now work on mobile devices.
 
-###### 0.8.4-2.0.15 (Saturday, December 22nd)
+###### 0.8.4-2.0.15 (Saturday, December 22nd, 2018)
 
 A longstanding issue where mulligans appear to bug out the game has been solved. You are also less likely to run into older cards.
 
@@ -72,17 +83,13 @@ A longstanding issue where mulligans appear to bug out the game has been solved.
  - Mulligans no longer retain information from previous matches. This prevents an unrecoverable error during the mulligan phase on the server.
  - The game finds leftover cards and removes them from play after you finish or concede your current game.
 
-###### 0.8.4-2.0.14 (Thursday, December 20th)
+###### 0.8.4-2.0.14 (Thursday, December 20th, 2018)
 
 Thanks to great contributions from @Beatdoof and @TheFlawlessWalrus, new Dragoon and Summoner cards have been added! @doombubbles has also authored some fixes and updates to balance changes in H.S. cards.
 
 Also a big shout out to @bdg for a very kind Christmas gift. Spellsource will always be free, and everyone's contributions -- playing, inviting players, testing, QA, writing cards, coding, card design and other debate -- is amazingly helpful.
 
 And finally, a shout out to @doombubbles for quietly fixing bugs and adding features in the past, like our dynamic card text system.
-
-###### Known Issues:
-
- - Poison Cloud, an Adventure hero power, can crash the game.
 
 ###### Content Additions:
 

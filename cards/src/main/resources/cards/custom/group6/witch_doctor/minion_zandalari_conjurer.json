@@ -1,0 +1,23 @@
+{
+  "name": "Zandalari Conjurer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Battlecry: Summon a 2/2 Spirit.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_voodoo_spirit",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -14,6 +14,7 @@ cd www
 cd ..
 
 # Package the two necessary files into the right places into a zip file
+rm artifact.zip || true
 zip artifact.zip \
     ./Dockerfile \
     ./Dockerrun.aws.json \

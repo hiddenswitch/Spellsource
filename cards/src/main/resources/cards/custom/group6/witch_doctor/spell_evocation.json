@@ -1,0 +1,26 @@
+{
+  "name": "Evocation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Draw 3 cards. Restore #6 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 3
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 6
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

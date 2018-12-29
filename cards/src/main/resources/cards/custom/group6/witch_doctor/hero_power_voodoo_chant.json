@@ -1,0 +1,23 @@
+{
+  "name": "Voodoo Chant",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ROSE",
+  "heroPower": "hero_power_call_of_the_loa",
+  "rarity": "FREE",
+  "description": "Add a random Voodoo spell to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "spell_divination",
+      "spell_frenzy",
+      "spell_hex_bolt",
+      "spell_spirit_bind"
+    ],
+    "randomTarget": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

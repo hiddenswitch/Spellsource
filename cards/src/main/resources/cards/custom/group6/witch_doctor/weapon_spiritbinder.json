@@ -1,0 +1,33 @@
+{
+  "name": "Spiritbinder",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "damage": 3,
+  "durability": 3,
+  "heroClass": "ROSE",
+  "rarity": "EPIC",
+  "description": "Battlecry: Your spells cost (2) less this turn.",
+  "battlecry": {
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "cardType": "SPELL",
+        "targetPlayer": "SELF",
+        "operation": "SUBTRACT",
+        "value": 2,
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

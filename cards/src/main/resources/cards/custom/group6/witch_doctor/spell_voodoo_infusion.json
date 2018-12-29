@@ -1,0 +1,27 @@
+{
+  "name": "Voodoo Infusion",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Double a minion's Attack and Health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DoubleAttackSpell"
+      },
+      {
+        "class": "BuffSpell",
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
