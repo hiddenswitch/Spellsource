@@ -1,0 +1,25 @@
+{
+  "name": "Cycle of Undeath",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Deal $1 damage to a minion. If that kills it, add a copy of it to your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition"
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 1
+    },
+    "spell2": {
+      "class": "CopyCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

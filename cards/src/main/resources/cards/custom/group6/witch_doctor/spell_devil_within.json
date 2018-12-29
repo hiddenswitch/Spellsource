@@ -1,0 +1,27 @@
+{
+  "name": "Devil Within",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Deal $1 damage to all enemy minions and $3 damage to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

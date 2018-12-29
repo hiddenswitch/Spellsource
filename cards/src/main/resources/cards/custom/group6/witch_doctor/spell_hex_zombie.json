@@ -1,0 +1,16 @@
+{
+  "name": "Hex: Zombie",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Transform a minion into a 2/3 Zombie Chow.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "minion_zombie_chow"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

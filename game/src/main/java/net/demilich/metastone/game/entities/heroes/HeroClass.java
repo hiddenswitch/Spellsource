@@ -1,9 +1,7 @@
 package net.demilich.metastone.game.entities.heroes;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.
@@ -26,6 +24,7 @@ public enum HeroClass {
 	VIOLET,
 	RED,
 	JADE,
+	ROSE,
 	LEATHER,
 	EGGPLANT,
 	RUST,
@@ -81,6 +80,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_garrosh");
 			case JADE:
 				return CardCatalogue.getCardById("hero_chen_stormstout");
+			case ROSE:
+				return CardCatalogue.getCardById("hero_witch_doctor");
 			case NAVY:
 				return CardCatalogue.getCardById("hero_baron_aldus");
 			case LEATHER:

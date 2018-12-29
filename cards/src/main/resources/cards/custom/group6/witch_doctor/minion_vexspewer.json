@@ -1,0 +1,47 @@
+{
+  "name": "Vexspewer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "<b>Deathrattle</b>: Add a Spare Part and a Voodoo spell to each player's hand.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "BOTH",
+        "cards": [
+          "spell_armor_plating",
+          "spell_emergency_coolant",
+          "spell_finicky_cloakfield",
+          "spell_reversing_switch",
+          "spell_rusty_horn",
+          "spell_time_rewinder",
+          "spell_whirling_blades"
+        ],
+        "randomTarget": true
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "BOTH",
+        "cards": [
+          "spell_divination",
+          "spell_frenzy",
+          "spell_hex_bolt",
+          "spell_spirit_bind"
+        ],
+        "randomTarget": true
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

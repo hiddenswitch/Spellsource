@@ -1,0 +1,16 @@
+{
+  "name": "Frenzy",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Give a minion +2 Attack.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": 2
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

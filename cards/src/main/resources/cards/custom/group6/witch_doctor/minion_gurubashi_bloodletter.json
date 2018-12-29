@@ -1,0 +1,31 @@
+{
+  "name": "Gurubashi Bloodletter",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "After this survives damage, transform it into a 5/5 Rage Behemoth.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      }
+    },
+    "spell": {
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "TransformMinionSpell",
+        "card": "token_rage_behemoth",
+        "target": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
