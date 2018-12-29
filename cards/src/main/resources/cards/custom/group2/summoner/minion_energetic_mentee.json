@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "EGGPLANT",
-  "baseAttack": 2,
+  "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
   "description": "Summon two 1/1 Whelps. Invoke (3): Give them Charge.",
