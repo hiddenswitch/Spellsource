@@ -14,7 +14,7 @@
       "operation": "HAS"
     },
     "spell1": {
-      "class": "MetaSpell"
+      "class": "MetaSpell",
       "spells": [
         {
           "class": "DrawCardSpell"
