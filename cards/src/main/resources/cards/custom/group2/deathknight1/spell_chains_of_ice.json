@@ -14,7 +14,19 @@
       "operation": "HAS"
     },
     "spell1": {
-      "class": "DrawCardSpell"
+      "class": "MetaSpell"
+      "spells": [
+        {
+          "class": "DrawCardSpell"
+        },
+        {
+          "class": "SilenceSpell"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "FROZEN"
+        }
+      ]
     },
     "spell2": {
       "class": "MetaSpell",
