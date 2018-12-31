@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "TargetToSourceSecondaryToTargetSpell",
-    "target": "ALL_MINIONS",
+    "target": "MINIONS",
     "spell": {
       "class": "FightSpell",
       "target": "OTHER_MINIONS",
