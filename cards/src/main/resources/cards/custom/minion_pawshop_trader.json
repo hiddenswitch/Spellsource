@@ -1,0 +1,45 @@
+{
+  "name": "Grimestreet Informant",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "heroClasses": [
+    "NAVY",
+    "RUST",
+    "ROSE"
+  ],
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a Baron, Dragoon, or Witch Doctor card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "heroClass": "NAVY"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "RUST"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "RUST"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
