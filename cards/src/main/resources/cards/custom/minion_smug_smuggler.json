@@ -1,0 +1,165 @@
+{
+  "name": "Smug Smuggler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "heroClasses": [
+    "NAVY",
+    "RUST",
+    "ROSE"
+  ],
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Choose a friendly minion. Draw a card with the same tribe.",
+ "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+   "spell": {
+      "class": "ConditionalSpell",
+      "conditions": [
+        {
+          "class": "RaceCondition",
+          "race": "MURLOC"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "BEAST"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DRAGON"
+        }
+                  {
+            "class": "RaceFilter",
+            "race": "PIRATE"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "MECH"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "DEMON"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "TOTEM"
+          }
+      ],
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+        {
+          "class": "RaceCondition",
+          "race": "MURLOC"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "BEAST"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DRAGON"
+        }
+                  {
+            "class": "RaceFilter",
+            "race": "PIRATE"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "MECH"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "DEMON"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "TOTEM"
+          }
+        ]
+      },
+      "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MURLOC",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "PIRATE",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MECH",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DEMON",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "TOTEM",
+          "cardType": "MINION"
+},
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
