@@ -21,7 +21,7 @@
     ]
   },
   "collectible": false,
-  "set": [
+  "sets": [
     "CUSTOM",
     "THE_GRAND_TOURNAMENT"
   ],
