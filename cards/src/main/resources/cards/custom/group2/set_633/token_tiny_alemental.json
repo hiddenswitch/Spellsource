@@ -9,6 +9,9 @@
   "race": "ELEMENTAL",
   "description": "",
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }
