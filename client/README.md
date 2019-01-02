@@ -28,7 +28,7 @@ Add this dependency to your project's POM:
 <dependency>
     <groupId>com.hiddenswitch</groupId>
     <artifactId>spellsource-client</artifactId>
-    <version>1.0.0</version>
+    <version>0.8.7</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:spellsource-client:1.0.0"
+compile "com.hiddenswitch:spellsource-client:0.8.7"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/spellsource-client-1.0.0.jar
+* target/spellsource-client-0.8.7.jar
 * target/lib/*.jar
 
 ## Getting Started

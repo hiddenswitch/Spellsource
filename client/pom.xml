@@ -5,7 +5,7 @@
     <artifactId>spellsource-client</artifactId>
     <packaging>jar</packaging>
     <name>spellsource-client</name>
-    <version>1.0.0</version>
+    <version>0.8.7</version>
     <url>https://github.com/swagger-api/swagger-codegen</url>
     <description>Swagger Java</description>
     <scm>

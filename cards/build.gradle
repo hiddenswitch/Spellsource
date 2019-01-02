@@ -1,3 +1,16 @@
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.hiddenswitch'
+            artifactId = 'cards'
+            version = project.version
+
+            from components.java
+        }
+    }
+}
+
+
 jar {
     manifest {
         attributes 'Implementation-Title': rootProject.name.capitalize() + ' Data Files',
