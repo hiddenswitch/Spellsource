@@ -1,0 +1,27 @@
+{
+  "name": "Fu Zan, Wanderer's Companion",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After your hero attacks, add an Exploding Keg to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+	  "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_exploding_keg"
+    }
+  },
+  "attributes": {
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

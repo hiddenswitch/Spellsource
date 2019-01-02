@@ -1,0 +1,22 @@
+{
+  "name": "Unnerfed Monastery Guard",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "description": "Taunt. Your other minions have +2 Health.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attackBonus": 0,
+    "hpBonus": 2
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

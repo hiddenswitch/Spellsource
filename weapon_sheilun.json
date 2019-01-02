@@ -1,0 +1,38 @@
+{
+  "name": "Sheilun, Staff of Mists",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 0,
+  "durability": 6,
+  "rarity": "LEGENDARY",
+  "description": "Whenever your hero takes damage while attacking, restore that much health instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PreDamageTrigger",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+	  "spells": [
+	    {
+	      "class": "HealSpell",
+		  "target": "SELF"
+		},
+		{
+		  "class": "ModifyDamageSpell",
+		  "value": 0,
+		  "operation": "SET"
+		}
+	  ]
+    }
+  },
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

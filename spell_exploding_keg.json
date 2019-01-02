@@ -1,0 +1,31 @@
+{
+  "name": "Exploding Keg",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Deal 1 damage to all enemy minions, then give your hero Taunt until your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+	  {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_HERO",
+        "attribute": "TAUNT",
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+		  "targetPlayer": "SELF"
+        }
+	  },
+	  {
+		"class": "DamageSpell",
+		"target": "ENEMY_MINIONS",
+		"value": 1
+	  },
+	]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

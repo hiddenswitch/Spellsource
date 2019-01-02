@@ -1,0 +1,29 @@
+{
+  "name": "Gao's Botched Formula",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "LEGENDARY",
+  "description": "Summon all minions from both players' hands.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecruitSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "SUBTRACT",
+      "value1": 7,
+      "value2": {
+        "class": "EntityCounter",
+        "target": "MINIONS"
+      }
+    "cardLocation": "HAND",
+    "targetPlayer": "BOTH"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+	"BOOMSDAY_PROJECT",
+  ],
+  "fileFormatVersion": 1
+}

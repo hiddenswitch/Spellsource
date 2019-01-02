@@ -1,0 +1,37 @@
+{
+  "name": "Torga's Trader",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Deal 5 damage to your minions, then give your hero +1 Attack for each one for this turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 5
+        },
+        {
+          "class": "TemporaryBuffSpell",
+          "target": "FRIENDLY_HERO",
+          "attackBonus": {
+		    "class": "EntityCounter",
+			"target": "FRIENDLY_MINIONS"
+		  }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

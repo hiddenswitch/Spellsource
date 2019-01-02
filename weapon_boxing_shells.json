@@ -1,0 +1,16 @@
+{
+  "name": "Boxing Shells",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 1,
+  "durability": 4,
+  "rarity": "COMMON",
+  "description": "Windfury.",
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

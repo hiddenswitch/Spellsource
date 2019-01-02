@@ -1,0 +1,53 @@
+{
+  "name": "Unnerfed Stance Change",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Give your minions +4 Attack, then swap their Attack and Health. Return this to your hand at the end of your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 4
+      },
+      {
+        "class": "SwapAttackAndHpSpell",
+        "target": "FRIENDLY_MINIONS"
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "trigger": {
+              "eventTrigger": {
+                "class": "TurnEndTrigger",
+                "targetPlayer": "SELF"
+              },
+              "spell": {
+                "class": "ReceiveCardSpell",
+                "card": "spell_stance_change"
+              },
+              "maxFires": 1
+            }
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

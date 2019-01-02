@@ -1,0 +1,28 @@
+{
+  "name": "Kinesthetic Sense",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Draw cards until you have as many in hand as there are minions on the field.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "SUBTRACT",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "MINIONS"
+      },
+      "value2": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

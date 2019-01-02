@@ -1,0 +1,21 @@
+{
+  "name": "Unnerfed Fists of Fury",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Deal $10 damage randomly split among all enemy minions. This spell gets double bonus from Spell Damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 1,
+    "howMany": 10
+  },
+  "attributes": {
+    "SPELL_DAMAGE_MULTIPLIER": 2
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
