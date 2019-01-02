@@ -109,11 +109,6 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
  4. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
  5. Download the Spellsource Client from within the launcher and start it.
  6. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
-
-### Using the Command Line Simulator
-
- 1. Build the `cluster` shadow JAR: `./gradlew cluster:shadowJar`.
- 2. Execute the simulator with `java -cp cluster/build/libs/cluster-0.7.6-all.jar com.hiddenswitch.cluster.applications.Simulate`. Read the help there.
  
 ### Automated Deckbuilding FAQ
  
