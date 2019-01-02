@@ -12,7 +12,9 @@
     "TAUNT": true,
     "UNTARGETABLE_BY_SPELLS": true
   },
-  "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }
