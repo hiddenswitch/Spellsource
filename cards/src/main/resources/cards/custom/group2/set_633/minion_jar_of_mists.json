@@ -24,6 +24,9 @@
     "TAUNT": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
   "fileFormatVersion": 1
 }
