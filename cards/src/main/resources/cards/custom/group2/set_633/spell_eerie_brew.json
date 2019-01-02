@@ -13,6 +13,9 @@
   },
   "attributes": {},
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
   "fileFormatVersion": 1
 }
