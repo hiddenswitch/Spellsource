@@ -34,6 +34,9 @@
     }
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }
