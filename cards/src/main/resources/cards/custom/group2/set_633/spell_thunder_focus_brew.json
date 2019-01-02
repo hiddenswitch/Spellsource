@@ -3,7 +3,7 @@
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "JADE",
-  "rarity": "COMMON",
+  "rarity": "RARE",
   "description": "Give a minion +3 Health and 'Cannot be targeted by spells or Hero Powers.'",
   "targetSelection": "MINIONS",
   "spell": {
@@ -20,6 +20,9 @@
     ]
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ],
   "fileFormatVersion": 1
 }
