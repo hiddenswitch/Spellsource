@@ -1,6 +1,6 @@
 {
   "name": "Mistlurker",
-  "baseManaCost": 4,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 6,
@@ -8,6 +8,9 @@
   "rarity": "FREE",
   "description": "",
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
   "fileFormatVersion": 1
 }
