@@ -8,8 +8,8 @@
   "rarity": "COMMON",
   "description": "Rush. Deflect.",
   "attributes": {
-    "RUSH": true
-	"DEFLECT": true
+    "RUSH": true,
+    "DEFLECT": true
   },
   "collectible": true,
   "set": "CUSTOM",
