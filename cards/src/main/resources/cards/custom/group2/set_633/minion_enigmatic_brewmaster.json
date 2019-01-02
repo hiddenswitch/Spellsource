@@ -5,7 +5,7 @@
   "heroClass": "JADE",
   "baseAttack": 6,
   "baseHp": 3,
-  "rarity": "COMMON",
+  "rarity": "RARE",
   "description": "Deflect. Battlecry: Return adjacent minions to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
@@ -20,6 +20,9 @@
     "DEFLECT": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ],
   "fileFormatVersion": 1
 }
