@@ -1,0 +1,165 @@
+{
+  "name": "Vanal Petkiper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "heroClasses": [
+    "NAVY",
+    "RUST",
+    "ROSE"
+  ],
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+ "battlecry": "Battlecry: Choose a minion. For the rest of your game, your minions have +1/+1 while you control that tribe."
+ {
+    "targetSelection": "MINIONS",
+    "spell": {
+   "spell": {
+      "class": "ConditionalSpell",
+      "conditions": [
+        {
+          "class": "RaceCondition",
+          "race": "MURLOC"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "BEAST"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DRAGON"
+        }
+                  {
+            "class": "RaceFilter",
+            "race": "PIRATE"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "MECH"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "DEMON"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "TOTEM"
+          }
+      ],
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+        {
+          "class": "RaceCondition",
+          "race": "MURLOC"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "BEAST"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DRAGON"
+        }
+                  {
+            "class": "RaceFilter",
+            "race": "PIRATE"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "MECH"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "DEMON"
+          }
+                    {
+            "class": "RaceFilter",
+            "race": "TOTEM"
+          }
+        ]
+      },
+      "spells": [
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MURLOC",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DRAGON",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "PIRATE",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MECH",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "DEMON",
+          "cardType": "MINION"
+},
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "TOTEM",
+          "cardType": "MINION"
+},
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
