@@ -30,6 +30,9 @@
     "DEFLECT": true
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }
