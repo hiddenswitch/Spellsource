@@ -189,6 +189,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ],
   "fileFormatVersion": 1
 }
