@@ -1,3 +1,15 @@
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.hiddenswitch'
+            artifactId = 'net'
+            version = project.version
+
+            from components.java
+        }
+    }
+}
+
 buildscript {
     repositories {
         mavenCentral()
