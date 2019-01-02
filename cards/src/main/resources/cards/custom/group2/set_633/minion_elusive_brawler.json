@@ -11,6 +11,9 @@
     "UNTARGETABLE_BY_SPELLS": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }
