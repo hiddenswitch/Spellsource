@@ -11,6 +11,9 @@
     "MAX_HP": 30
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }
