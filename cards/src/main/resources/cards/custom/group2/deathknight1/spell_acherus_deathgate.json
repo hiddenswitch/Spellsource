@@ -13,6 +13,7 @@
         "class": "DiscoverSpell",
         "spell": {
           "class": "FromDeckToHandSpell",
+          "target": "EVENT_SOURCE",
           "targetPlayer": "SELF"
         },
         "cardFilter": {
