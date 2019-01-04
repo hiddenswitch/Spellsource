@@ -3,13 +3,18 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-### Server Migrated
+### 0.8.8-2.0.19 (Friday, January 4th, 2019)
 
-The server has been moved to a new data center. Please report your experiences in the Discord!
+Happy New Years to all Spellsource players!
 
-##### Known Issues:
+The server has been migrated in this release.
 
- - Downloading the cards database for the first time may take longer than usual.
+###### Usability Improvements:
+
+ - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
+ - The server is now hosted locally in California instead of Oregon.
+ - Server deployments will result in less downtime. Downtime is reduced from around 10 minutes to less than 20 seconds.
+ - Patches can occur more frequently. In the previous infrastructure, patches could only be applied at most once per hour. Patches can now be applied as frequently as possible.
 
 ### 0.8.7-2.0.18 (Saturday, December 29th, 2018)
 

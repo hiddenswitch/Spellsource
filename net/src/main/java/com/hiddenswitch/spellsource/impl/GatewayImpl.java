@@ -76,7 +76,10 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.setHost("0.0.0.0")
 				.setPort(port)
 				.setMaxWebsocketFrameSize(65536)
-				.setMaxWebsocketMessageSize(100 * 65536));
+				.setMaxWebsocketMessageSize(100 * 65536)
+				.setPerFrameWebsocketCompressionSupported(true)
+				.setPerMessageWebsocketCompressionSupported(true)
+				.setCompressionSupported(true));
 		Router router = Router.router(vertx);
 
 		logger.info("start: Configuring router on instance {}", this.deploymentID());
@@ -145,14 +148,16 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(routingContext -> routingContext.response().end(Version.version()));
 
 		// All routes need logging of URLs. URLs never leak private information
-		router.route().handler(LoggerHandler.create(true, LoggerFormat.DEFAULT));
+		router.route().handler(LoggerHandler.create(false, LoggerFormat.DEFAULT));
 
 		// CORS
 		router.route().handler(CorsHandler.create(".*")
 				.allowedHeader("Content-Type")
 				.allowedHeader("X-Auth-Token")
 				.allowedHeader("If-None-Match")
+				.allowedHeader("Accept-Encoding")
 				.exposedHeader("Content-Type")
+				.exposedHeader("Content-Encoding")
 				.exposedHeader("ETag")
 				.exposedHeader("Cache-Control")
 				.exposedHeader("Last-Modified")
@@ -722,8 +727,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// We created the cache for the first time
 		// TODO: It's possible that there are multiple versions of Spellsource sharing a cluster, so version should be a hash
 		return WebResult.succeeded(new GetCardsResponse()
-				.cards(Cards.getCards())
-				.version(cardsVersion));
+				.cards(Cards.getCards()));
 	}
 
 	@Override

@@ -1481,6 +1481,7 @@ definitions:
         description: An integer corresponding to the entity's owner.
         type: 'integer'
         format: 'int32'
+        default: -1
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'

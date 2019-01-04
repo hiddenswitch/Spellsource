@@ -48,7 +48,7 @@ public class EntityState implements Serializable {
   private Integer boardPosition = null;
 
   @JsonProperty("owner")
-  private Integer owner = null;
+  private Integer owner = -1;
 
   @JsonProperty("heroClass")
   private String heroClass = null;
