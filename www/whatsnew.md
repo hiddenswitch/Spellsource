@@ -14,8 +14,9 @@ The server has been migrated in this release.
  - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
  - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
 
-###### Usability Improvements:
+###### Usability Fixes:
 
+ - Attacks no longer animate twice.
  - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
  - The server is now hosted locally in California instead of Oregon.
  - Server deployments will result in less downtime. Downtime is reduced from around 10 minutes to less than 20 seconds.
