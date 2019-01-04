@@ -286,13 +286,10 @@ if [[ "$deploy_launcher" = true ]] ; then
   echo "Launcher image built and uploaded. You must do the appropriate updates where necessary"
 fi
 
-if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true ]] ; then
+if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_python" = true ]] ; then
   echo "Building Spellsource JAR file"
   { # try
-    # Builds the swagger-api specified files
-    ./client.sh 2>&1 > /dev/null && \
     # Build the server
-    ${GRADLE_CMD} clean 2>&1 > /dev/null && \
     ${GRADLE_CMD} net:shadowJar 2>&1 > /dev/null
   } || { # catch
     echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
