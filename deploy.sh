@@ -2,7 +2,7 @@
 set -e
 OPTIND=1
 
-usage="$(basename "$0") [-hcedwpvD] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hcedwpvDA] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
@@ -18,6 +18,7 @@ where:
         the current version)
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
         binaries for your platform necessary for deployment
+    -A  visits the AWS console for Hidden Switch
 
 Invoking this script always rebuilds Spellsource-Server.
 
@@ -65,6 +66,9 @@ while getopts "hcedpwD" opt; do
      ;;
   D) install_dependencies=true
      echo "Installing dependencies"
+     ;;
+  A) open https://786922801148.signin.aws.amazon.com/console
+     exit
      ;;
   esac
 done
