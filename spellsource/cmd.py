@@ -182,7 +182,7 @@ def update_dbf():
 @_cli.command()
 @click.argument('decks', nargs=-1)
 @click.option('--number', default=1, show_default=True, type=click.INT, help='the number of games to simulate')
-@click.option('--behaviours', type=click.Tuple([str, str]), default=('PlayRandomBehaviour','PlayRandomBehaviour'),
+@click.option('--behaviours', type=click.Tuple([str, str]), default=('PlayRandomBehaviour', 'PlayRandomBehaviour'),
               show_default=True,
               help='the behaviours to use for this simulation, suggested choices are PlayRandomBehaviour and '
                    'GameStateValueBehaviour. If the behaviours differ, each matchup will be played with each '
@@ -318,7 +318,9 @@ def simulate(decks,
 @click.argument('remote-host', type=click.STRING)
 @click.option('--db-path', type=click.STRING, default='.mongo', show_default=True,
               help='the path to restore the database to, i.e. as an argument for --db-path')
-def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '.mongo'):
+@click.option('--tmp-dir', type=click.STRING, default=None, show_default=True,
+              help='the path to temporarily dump the database to')
+def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '.mongo', tmp_dir: str = None):
     """
     Replicates mongo databases.
 
@@ -329,7 +331,9 @@ def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '
     \b
       mongod --db-path DB_PATH
     """
-    Admin.replicate_mongo_db(abspath(path_to_pem_file), remote_host, abspath(db_path))
+    from tempfile import mkdtemp
+    tmp_dir = tmp_dir or mkdtemp()
+    Admin.replicate_mongo_db(abspath(path_to_pem_file), remote_host, abspath(db_path), tmp_dir=tmp_dir)
     click.echo(abspath(db_path))
 
 

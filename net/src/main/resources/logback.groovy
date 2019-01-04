@@ -15,7 +15,7 @@ import ch.qos.logback.classic.filter.ThresholdFilter
 import static ch.qos.logback.classic.Level.*
 
 def date = timestamp("yyyyMMdd")
-def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
+def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null || System.getenv("AWS_ACCESS_KEY_ID") != null
 Level defaultLevel = null;
 
 if (System.getenv().containsKey("SPELLSOURCE_LOGGING_LEVEL")) {

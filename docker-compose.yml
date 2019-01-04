@@ -34,10 +34,8 @@ services:
       labels:
       - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
       - "traefik.versionedhost.frontend.entryPoints=http,https"
-      - "traefik.versionedhost.backend.healthcheck.path=/api/v3/"
       - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefixStrip:/api/v3/"
       - "traefik.versionedurl.frontend.entryPoints=http,https"
-      - "traefik.versionedurl.backend.healthcheck.path=/"
       - "traefik.backend.loadbalancer.swarm=true"
       - "traefik.backend.loadbalancer.stickiness=true"
       - "traefik.port=80"

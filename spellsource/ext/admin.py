@@ -1,11 +1,10 @@
-import pymongo
-
-from autoboto.services import iam
-from tempfile import mkdtemp
 from os import makedirs
-from subprocess import Popen, call, DEVNULL
-from time import sleep
 from random import randint
+from subprocess import Popen, DEVNULL
+
+import pymongo
+from autoboto.services import iam
+from time import sleep
 
 from ..context import Context
 
@@ -44,16 +43,16 @@ class Admin(object):
             return_document=pymongo.ReturnDocument.AFTER)
 
     @staticmethod
-    def replicate_mongo_db(path_to_pem_file: str, remote_host: str, db_path: str):
+    def replicate_mongo_db(path_to_pem_file: str, remote_host: str, db_path: str, tmp_dir: str):
         """
         Retrieves the production databases from the specified remote host and restores them to a database stored at
         db_path.
         :param path_to_pem_file:
         :param remote_host:
         :param db_path:
+        :param tmp_dir:
         :return:
         """
-        temp_dump_dir = mkdtemp()
         makedirs(db_path, exist_ok=True)
         port = randint(28000, 60000)
         ssh = Popen(
@@ -61,7 +60,7 @@ class Admin(object):
             stderr=DEVNULL,
             stdout=DEVNULL)
         sleep(0.5)
-        mongodump = Popen(args=['mongodump', '-h', f'localhost:{port}', '-o', temp_dump_dir, '--oplog'],
+        mongodump = Popen(args=['mongodump', '-h', f'localhost:{port}', '-o', tmp_dir, '--oplog'],
                           stderr=DEVNULL, stdout=DEVNULL)
         mongodump.wait()
         ssh.terminate()
@@ -69,7 +68,7 @@ class Admin(object):
                        stderr=DEVNULL, stdout=DEVNULL)
         sleep(1.5)
         mongorestore = Popen(
-            args=['mongorestore', '--drop', '--oplogReplay', '--uri=mongodb://localhost:27017', temp_dump_dir],
+            args=['mongorestore', '--drop', '--oplogReplay', '--uri=mongodb://localhost:27017', tmp_dir],
             stderr=DEVNULL, stdout=DEVNULL)
         mongorestore.wait()
         mongod.terminate()
