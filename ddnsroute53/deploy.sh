@@ -19,4 +19,14 @@ done
 shift $((OPTIND-1))
 [ "${1:-}" = "--" ] && shift
 
+if [[ -z "${HOSTED_ZONE_ID+X}" ]] ; then
+  echo "Must specify HOSTED_ZONE_ID"
+  exit 1
+fi
+
+if [[ -z "${SHARED_SECRET+X}" ]] ; then
+  echo "Must specify SHARED_SECRET"
+  exit 1
+fi
+
 serverless deploy -v --hosted_zone_id "${HOSTED_ZONE_ID}" --shared_secret "${SHARED_SECRET}"
