@@ -15,7 +15,7 @@
         "target": "ENEMY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
-          "card": "minion_bwonsamdi"
+          "card": "minion_bwonsamdi_witchdoctor"
         },
         "invert": true
       },
