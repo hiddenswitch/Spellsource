@@ -366,7 +366,7 @@ if [[ "$deploy_python" = true ]] ; then
   pip3 install wheel twine >/dev/null
   python3 setup.py sdist bdist_wheel >/dev/null
   echo Deploying
-  twine upload dist/* >/dev/null
+  TWINE_USERNAME=${TWINE_USERNAME} TWINE_PASSWORD=${TWINE_PASSWORD} twine upload dist/*
   rm -rf dist/
 fi
 
