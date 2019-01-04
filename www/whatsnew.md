@@ -18,6 +18,7 @@ The server has been migrated in this release.
  - The hero power Rune Tap now costs (1).
  - Chains of Ice now draws a card correctly.
  - Dyn-o-Matic now correctly deals 5 damage to random targets.
+ - Bwonsamdi from Witch Doctor no longer causes an infinite recursion when each player controls one.
 
 ###### Usability Fixes:
 
