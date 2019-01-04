@@ -94,7 +94,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://api-3.hiddenswitch.com*
+All URIs are relative to *https://api.hiddenswitch.com/api/v3*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -120,6 +120,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getGameRecordIds**](docs/DefaultApi.md#getGameRecordIds) | **GET** /games | 
 *DefaultApi* | [**getInvite**](docs/DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 *DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
+*DefaultApi* | [**getVersion**](docs/DefaultApi.md#getVersion) | **GET** /version | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 

@@ -1,4 +1,6 @@
 # Elastic Beanstalk Files
-.elasticbeanstalk/*
-.git
-.gitignore
+*
+!net/build/libs/*
+!server.sh
+!Docker*
+!docker*

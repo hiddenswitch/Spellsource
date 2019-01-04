@@ -4,8 +4,6 @@ services:
     restart: always
     image: traefik:alpine
     command: |
-      --debug \
-      --api \
       --docker \
       --entryPoints="Name:http Address::80 Redirect.EntryPoint:https" \
       --entryPoints="Name:https Address::443 TLS" \
@@ -18,20 +16,13 @@ services:
       --acme.ondemand=true \
       --docker.swarmmode \
       --docker.watch \
-      --docker.exposedbydefault=true
+      --docker.exposedbydefault=false
     ports:
     - 80:80
     - 443:443
     volumes:
     - /var/run/docker.sock:/var/run/docker.sock
     - loadbalancerdata:/data
-    deploy:
-      labels:
-      - "traefik.frontend.rule=PathPrefixStrip:/admin/traefik/"
-      - "traefik.frontend.entryPoints=http,https"
-      - "traefik.port=8080"
-      - "traefik.backend.loadbalancer.swarm=true"
-      - "traefik.frontend.auth.basic.users=DoctorPangloss:$$apr1$$HGvoycqo$$ZDgj8py9iGj747gYPmurC0"
   game:
     restart: always
     image: doctorpangloss/spellsource:latest
@@ -41,12 +32,16 @@ services:
     - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
     deploy:
       labels:
-      - "traefik.frontend.rule=PathPrefixStrip:/api/v2/"
-      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
+      - "traefik.versionedhost.frontend.entryPoints=http,https"
+      - "traefik.versionedhost.backend.healthcheck.path=/api/v3/"
+      - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefixStrip:/api/v3/"
+      - "traefik.versionedurl.frontend.entryPoints=http,https"
+      - "traefik.versionedurl.backend.healthcheck.path=/"
       - "traefik.backend.loadbalancer.swarm=true"
       - "traefik.backend.loadbalancer.stickiness=true"
-      - "traefik.backend.healthcheck.path=/"
       - "traefik.port=80"
+      - "traefik.enable=true"
     healthcheck:
       test: curl --fail -s http://localhost:80/ || exit 1
       interval: 8s
@@ -70,10 +65,11 @@ services:
     - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
     deploy:
       labels:
-      - "traefik.frontend.rule=PathPrefix:/admin/mancenter/"
+      - "traefik.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/admin/mancenter/"
       - "traefik.backend.loadbalancer.swarm=true"
       - "traefik.frontend.entryPoints=http,https"
       - "traefik.port=8080"
+      - "traefik.enable=true"
 volumes:
   mongodata:
   mancenterdata:

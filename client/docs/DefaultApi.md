@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *https://api-3.hiddenswitch.com*
+All URIs are relative to *https://api.hiddenswitch.com/api/v3*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -26,6 +26,7 @@ Method | HTTP request | Description
 [**getGameRecordIds**](DefaultApi.md#getGameRecordIds) | **GET** /games | 
 [**getInvite**](DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 [**getInvites**](DefaultApi.md#getInvites) | **GET** /invites | 
+[**getVersion**](DefaultApi.md#getVersion) | **GET** /version | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingDelete**](DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
@@ -1204,6 +1205,47 @@ This endpoint does not need any parameter.
 ### Authorization
 
 [TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getVersion"></a>
+# **getVersion**
+> String getVersion()
+
+
+
+Retrieves the semver server version 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    String result = apiInstance.getVersion();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getVersion");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 
