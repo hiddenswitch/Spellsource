@@ -2,7 +2,7 @@
 set -e
 OPTIND=1
 
-usage="$(basename "$0") [-hcedwpvDA] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hcedwpvlDA] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
@@ -12,6 +12,7 @@ where:
     -e  deploy for Elastic Beanstalk
     -d  deploy for Docker (requires logged-in docker hub account, optionally
         PORTAINER_URL, PORTAINER_USERNAME, and PORTAINER_PASSWORD)
+    -l  builds and deploys the launcher
     -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
     -w  deploy playspellsource.com (requires spellsource on the command line)
     -v  bump the version (requires SPELLSOURCE_VERSION indicating
@@ -38,10 +39,11 @@ deploy_elastic_beanstalk=false
 deploy_docker=false
 deploy_www=false
 deploy_python=false
+deploy_launcher=false
 bump_version=false
 install_dependencies=false
 build_client=false
-while getopts "hcedpwD" opt; do
+while getopts "hcedplwD" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -54,6 +56,9 @@ while getopts "hcedpwD" opt; do
      ;;
   d) deploy_docker=true
      echo "Deploying for Docker"
+     ;;
+  l) deploy_launcher=true
+     echo "Deploying launcher"
      ;;
   p) deploy_python=true
      echo "Deploying for Python"
@@ -106,6 +111,11 @@ if [[ "$install_dependencies" = true ]] ; then
     if ! command -v docker --version > /dev/null ; then
       echo "Installing docker..."
       brew cask install docker
+    fi
+
+    if ! command -v meteor --version > /dev/null ; then
+      echo "Installing meteor..."
+      curl https://install.meteor.com/ | sh
     fi
 
     if [[ ! -f ${VIRTUALENV_PATH}/bin/activate ]] ; then
@@ -205,13 +215,36 @@ if [[ "$build_client" = true ]] ; then
 fi
 
 # Before building, retrieve the portainer password if it's not specified immediately
-if [[ "$deploy_docker" = true && -z ${PORTAINER_PASSWORD+x} ]] ; then
+if [[ "$deploy_docker" = true || "$deploy_launcher" = true && -z ${PORTAINER_PASSWORD+x} ]] ; then
   echo "docker deployment: Requesting PORTAINER_PASSWORD"
   stty -echo
   printf "Password: "
   read PORTAINER_PASSWORD
   stty echo
   printf "\n"
+fi
+
+if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
+  if [[ -z ${PORTAINER_URL+x} ]] ; then
+    PORTAINER_URL="http://hs-1.i.hiddenswitch.com:9000/"
+  fi
+
+  if [[ -z ${PORTAINER_USERNAME+x} ]] ; then
+    PORTAINER_USERNAME="doctorpangloss"
+  fi
+
+  # Authenticate with portainer
+  if [[ -z ${PORTAINER_BEARER_TOKEN+x} ]] ; then
+    { # try
+      PORTAINER_BEARER_TOKEN=$(curl -s --fail -H "Content-Type: application/json" -X POST \
+        -d "{\"Username\":\"${PORTAINER_USERNAME}\", \"Password\": \"${PORTAINER_PASSWORD}\"}" \
+        "${PORTAINER_URL}api/auth" | \
+      jq --raw-output '.jwt')
+    } || { # catch
+      echo "Invalid portainer URL, username or password"
+      exit 1
+    }
+  fi
 fi
 
 # Before building for python, check that we have the twine username and password
@@ -231,6 +264,27 @@ if [[ "$deploy_python" = true && -z ${TWINE_PASSWORD+x} ]] ; then
   printf "\n"
 fi
 
+if [[ "$deploy_launcher" = true ]] ; then
+  cd launcher
+
+  meteor npm install --save localforage
+  meteor build --server-only --architecture os.linux.x86_64 --directory ./
+
+  # Build image and upload to docker
+  { # try
+    echo "Building and uploading launcher Docker image"
+    docker build -t doctorpangloss/launcher . > /dev/null && \
+    docker tag spellsource doctorpangloss/launcher > /dev/null && \
+    docker push doctorpangloss/launcher:latest > /dev/null
+  } || { # catch
+    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
+    exit 1
+  }
+
+  cd ..
+
+  echo "Launcher image built and uploaded. You must do the appropriate updates where necessary"
+fi
 
 if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true ]] ; then
   echo "Building Spellsource JAR file"
@@ -264,29 +318,6 @@ if [[ "$deploy_www" = true ]] ; then
 fi
 
 if [[ "$deploy_docker" = true ]] ; then
-  if [[ -z ${PORTAINER_URL+x} ]] ; then
-    PORTAINER_URL="http://hs-1.i.hiddenswitch.com:9000/"
-  fi
-
-  if [[ -z ${PORTAINER_USERNAME+x} ]] ; then
-    PORTAINER_USERNAME="doctorpangloss"
-  fi
-
-  if [[ -z ${PORTAINER_IMAGE_NAME+x} ]] ; then
-    PORTAINER_IMAGE_NAME="doctorpangloss/spellsource:latest"
-  fi
-
-  # Authenticate with portainer
-  bearer_token=""
-  { # try
-    bearer_token=$(curl -s --fail -H "Content-Type: application/json" -X POST \
-      -d "{\"Username\":\"${PORTAINER_USERNAME}\", \"Password\": \"${PORTAINER_PASSWORD}\"}" \
-      "${PORTAINER_URL}api/auth" | \
-    jq --raw-output '.jwt')
-  } || { # catch
-    echo "Invalid portainer URL, username or password"
-    exit 1
-  }
 
   # Build image and upload to docker
   { # try
@@ -299,19 +330,21 @@ if [[ "$deploy_docker" = true ]] ; then
     exit 1
   }
 
+  portainer_image_name="doctorpangloss/spellsource:latest"
+
   # Update specific service for now instead of stack
   { # try
     # Figure out the service ID
     service_name=spellsource_game
-    service=$(curl -s -H "Authorization: Bearer ${bearer_token}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
+    service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
     service_id=$(echo $service | jq  -r .ID)
     service_specification=$(echo $service | jq .Spec)
     service_version=$(echo $service | jq .Version.Index)
-    service_update_command=$(echo $service_specification | jq ".TaskTemplate.ContainerSpec.Image |= \"${PORTAINER_IMAGE_NAME}\" " | jq ".TaskTemplate.ForceUpdate |= 1 ")
+    service_update_command=$(echo $service_specification | jq ".TaskTemplate.ContainerSpec.Image |= \"${portainer_image_name}\" " | jq ".TaskTemplate.ForceUpdate |= 1 ")
 
     # Update the container image
     curl --fail -H "Content-Type: application/json" \
-     -H "Authorization: Bearer ${bearer_token}" \
+     -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" \
      -X POST \
      -d "${service_update_command}" \
      "${PORTAINER_URL}api/endpoints/1/docker/services/${service_id}/update?version=${service_version}"
