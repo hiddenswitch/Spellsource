@@ -12,6 +12,7 @@ The server has been migrated in this release.
 ###### Content Fixes:
 
  - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
+ - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
 
 ###### Usability Improvements:
 
