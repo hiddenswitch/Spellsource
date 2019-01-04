@@ -116,7 +116,8 @@ if [[ "$install_dependencies" = true ]] ; then
 
     if ! command -v spellsource > /dev/null ; then
       echo "Installing spellsource from pypy."
-      echo "If you'd like to develop this package instead, uninstall with"
+      echo "If you'd like to develop this package instead, uninstall from your virtualenv with"
+      echo "  source ${VIRTUALENV_PATH}/bin/activate"
       echo "  pip3 uninstall spellsource"
       echo "and install the package locally in editable mode with a valid jar using:"
       echo "  ./gradlew net:shadowJar && pip3 install -e ."
@@ -137,7 +138,7 @@ if [[ "$bump_version" = true ]] ; then
   fi
 
   if ! command -v versionbump > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
-    echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}/"
+    echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
@@ -173,6 +174,7 @@ if [[ "$build_client" = true ]] ; then
     INPUT_DIR="clientcsharp"
     OUTPUT_DIR="../Spellsource-Client/Assets/Plugins/Client"
     ${GRADLE_CMD} swaggerClient
+    # Remove a lot of unnecessary files from the Unity project
     rm -rf ${OUTPUT_DIR}
     mv ${INPUT_DIR} ${OUTPUT_DIR}
     rm -rf ${INPUT_DIR}
@@ -242,7 +244,7 @@ fi
 
 if [[ "$deploy_www" = true ]] ; then
   if ! command -v spellsource && test -f ${VIRTUALENV_PATH}/bin/activate ; then
-    echo "Using virtualenv for spellsource package located at ${VIRTUALENV_PATH}/"
+    echo "Using virtualenv for spellsource package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
@@ -317,7 +319,7 @@ fi
 
 if [[ "$deploy_python" = true ]] ; then
   if ! command -v twine > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
-    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}/"
+    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
@@ -336,7 +338,7 @@ fi
 
 if [[ "$deploy_elastic_beanstalk" = true ]] ; then
     if ! command -v eb > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
-    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}/"
+    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
