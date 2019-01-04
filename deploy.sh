@@ -2,10 +2,13 @@
 set -e
 OPTIND=1
 
-usage="$(basename "$0") [-hedwpvD] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hcedwpvD] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
+    -c  build the client libraries in swagger. If a Spellsource-Client folder
+        is a sibling of the current working directory, the client there is
+        updated too
     -e  deploy for Elastic Beanstalk
     -d  deploy for Docker (requires logged-in docker hub account, optionally
         PORTAINER_URL, PORTAINER_USERNAME, and PORTAINER_PASSWORD)
@@ -25,9 +28,10 @@ Notes for successful deployment:
  - Requires eb on the path for Elastic Beanstalk deployment
  - Make sure to bump a version using ./versionbump.sh CURRENT.VERSION
 
-For example, to bump the version and deploy to docker, python and playspellsource.com:
+For example, to build the client library, bump the version and deploy to docker,
+python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.8 ./deploy.sh -pdwv
+  SPELLSOURCE_VERSION=0.8.8 ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -35,13 +39,17 @@ deploy_www=false
 deploy_python=false
 bump_version=false
 install_dependencies=false
-while getopts "hedpwD" opt; do
+build_client=false
+while getopts "hcedpwD" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
      ;;
   e) deploy_elastic_beanstalk=true
      echo "Deploying for Elastic Beanstalk"
+     ;;
+  c) build_client=true
+     echo "Building swagger client libraries"
      ;;
   d) deploy_docker=true
      echo "Deploying for Docker"
@@ -154,6 +162,40 @@ if test "$CI" = "true" || ! command -v gradle > /dev/null ; then
   export GRADLE_CMD="./gradlew"
 else
   export GRADLE_CMD=gradle
+fi
+
+if [[ "$build_client" = true ]] ; then
+  rm -rf "./client/"
+  ${GRADLE_CMD} swagger
+
+  if [[ -d "../Spellsource-Client" ]] ; then
+    mkdir -pv "clientcsharp"
+    INPUT_DIR="clientcsharp"
+    OUTPUT_DIR="../Spellsource-Client/Assets/Plugins/Client"
+    ${GRADLE_CMD} swaggerClient
+    rm -rf ${OUTPUT_DIR}
+    mv ${INPUT_DIR} ${OUTPUT_DIR}
+    rm -rf ${INPUT_DIR}
+    rm -rf ${OUTPUT_DIR}/src/
+    rm -rf ${OUTPUT_DIR}/docs/
+    rm -f ${OUTPUT_DIR}/build.bat
+    rm -f ${OUTPUT_DIR}/build.sh
+    rm -f ${OUTPUT_DIR}/git_push.sh
+    rm -f ${OUTPUT_DIR}/Spellsource.Client.sln
+    rm -f ${OUTPUT_DIR}/mono_nunit_test.sh
+    rm -f ${OUTPUT_DIR}/README.md
+    rm -rf ${OUTPUT_DIR}/Scripts/Spellsource.Client/Properties
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/packages.config
+    rm -rf ${OUTPUT_DIR}/Scripts/Spellsource.Client/Api
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ApiClient.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ApiException.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ApiResponse.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/Configuration.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/ExceptionFactory.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/GlobalConfiguration.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IApiAccessor.cs
+    rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IReadableConfiguration.cs
+  fi
 fi
 
 # Before building, retrieve the portainer password if it's not specified immediately
