@@ -8,10 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "FromDeckToHandSpell",
-    "cardFilter": {
-      "class": "CardFilter",
-      "cardType": "MINION"
-    },
     "spell": {
       "class": "ConditionalSpell",
       "target": "OUTPUT",
@@ -22,6 +18,10 @@
       "spell": {
         "class": "PutMinionOnBoardSpell"
       }
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
     }
   },
   "collectible": true,

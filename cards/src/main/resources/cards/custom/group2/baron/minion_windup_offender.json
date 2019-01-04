@@ -13,21 +13,21 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "ReduceValueProvider",
-    "operation": "ADD",
     "target": "ALL_MINIONS",
+    "operation": "ADD",
     "value1": {
       "class": "ConditionalValueProvider",
       "condition": {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "AttributeValueProvider",
           "attribute": "ATTACKS_THIS_TURN"
         },
-        "value2": 1,
-        "operation": "GREATER_OR_EQUAL"
+        "value2": 1
       },
-      "ifTrue": 1,
-      "ifFalse": 0
+      "ifFalse": 0,
+      "ifTrue": 1
     }
   }
 }

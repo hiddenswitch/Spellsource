@@ -5,6 +5,7 @@
   "heroClass": "NAVY",
   "baseAttack": 0,
   "baseHp": 3,
+  "rarity": "FREE",
   "race": "MECH",
   "description": "At the start of your turn, deal 1 damage to all friendly minions.",
   "trigger": {
