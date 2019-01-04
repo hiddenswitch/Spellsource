@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 2.1.0
+  version: 3.0.0
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -15,6 +15,9 @@ info:
 
     ClientToServerMessage and ServerToClientMessage are used for the realtime game state and actions two-way websocket
     interface for actually playing a game. Envelope is used for the realtime API services.
+
+    For the routes that correspond to the paths in this file, visit the Gateway.java file in the Spellsource-Server
+    GitHub repository located in this definition file.
   contact:
     name: Benjamin Berman
     email: ben@hiddenswitch.com
@@ -22,7 +25,8 @@ info:
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: api-3.hiddenswitch.com
+host: api.hiddenswitch.com
+basePath: /api/v3
 schemes:
 - https
 consumes:
@@ -2606,3 +2610,14 @@ paths:
         "403":
           description: |
             You are not permitted to view this game
+  /version:
+    get:
+      description: |
+        Retrieves the semver server version
+      operationId: getVersion
+      responses:
+        "200":
+          description: |
+            The semver version
+          schema:
+            type: 'string'

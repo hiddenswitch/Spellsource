@@ -1,0 +1,1 @@
+30 * * * * /usr/bin/curl -H "Authorization: ${AWS_ROUTE53_DDNS_AUTHORIZATION}" https://ucpefcea09.execute-api.us-east-1.amazonaws.com/dev/ddns/update?name=api.hiddenswitch.com 2>&1 > /dev/null

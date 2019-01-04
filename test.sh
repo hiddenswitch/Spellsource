@@ -8,7 +8,7 @@ mongo testdb --eval "printjson(db.dropDatabase())" > /dev/null
 echo "Running tests"
 
 # Configure the gradle command
-if [[ "$CI" = "true" ]] ; then
+if test "$CI" = "true" || ! command -v gradle > /dev/null ; then
   export GRADLE_CMD="./gradlew"
 else
   export GRADLE_CMD=gradle

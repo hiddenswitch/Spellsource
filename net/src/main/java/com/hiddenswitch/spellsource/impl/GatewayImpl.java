@@ -138,6 +138,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 					routingContext.response().end("OK");
 				});
 
+
+		// Version
+		router.route("/version")
+				.method(HttpMethod.GET)
+				.handler(routingContext -> routingContext.response().end(Version.version()));
+
 		// All routes need logging of URLs. URLs never leak private information
 		router.route().handler(LoggerHandler.create(true, LoggerFormat.DEFAULT));
 
