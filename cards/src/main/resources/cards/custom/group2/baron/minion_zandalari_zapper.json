@@ -9,10 +9,10 @@
   "description": "Your spells cost (2) less, but not less than (1).",
   "cardCostModifier": {
     "class": "CardCostModifier",
-    "operation": "SUBTRACT",
     "value": 2,
     "cardType": "SPELL",
-    "minValue": 1
+    "minValue": 1,
+    "operation": "SUBTRACT"
   },
   "collectible": true,
   "set": "CUSTOM",

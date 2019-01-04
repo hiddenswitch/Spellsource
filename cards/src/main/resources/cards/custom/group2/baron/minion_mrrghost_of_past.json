@@ -13,8 +13,8 @@
       "class": "PhysicalAttackTrigger",
       "fireCondition": {
         "class": "RaceCondition",
-        "race": "MURLOC",
-        "target": "EVENT_SOURCE"
+        "target": "EVENT_SOURCE",
+        "race": "MURLOC"
       },
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"

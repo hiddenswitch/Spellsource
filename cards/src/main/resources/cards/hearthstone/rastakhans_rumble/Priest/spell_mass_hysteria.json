@@ -6,7 +6,7 @@
   "rarity": "RARE",
   "description": "Force each minion to attack another random minion.",
   "targetSelection": "NONE",
-  "spell":  {
+  "spell": {
     "class": "MetaSpell",
     "spells": [
       {
