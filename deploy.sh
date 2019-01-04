@@ -2,14 +2,21 @@
 set -e
 OPTIND=1
 
-usage="$(basename "$0") [-hed] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hedwpvD] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
     -e  deploy for Elastic Beanstalk
-    -d  deploy for Docker (requires logged-in docker hub account, PORTAINER_URL,
-        PORTAINER_USERNAME, optionally PORTAINER_PASSWORD)
+    -d  deploy for Docker (requires logged-in docker hub account, optionally
+        PORTAINER_URL, PORTAINER_USERNAME, and PORTAINER_PASSWORD)
+    -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
     -w  deploy playspellsource.com (requires spellsource on the command line)
+    -v  bump the version (requires SPELLSOURCE_VERSION indicating
+        the current version)
+    -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
+        binaries for your platform necessary for deployment
+
+Invoking this script always rebuilds Spellsource-Server.
 
 Currently, the docker deployment only updates the spellsource_game image.
 
@@ -17,11 +24,18 @@ Notes for successful deployment:
  - Requires jq, curl and docker on the PATH for Docker deployment
  - Requires eb on the path for Elastic Beanstalk deployment
  - Make sure to bump a version using ./versionbump.sh CURRENT.VERSION
+
+For example, to bump the version and deploy to docker, python and playspellsource.com:
+
+  SPELLSOURCE_VERSION=0.8.8 ./deploy.sh -pdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
 deploy_www=false
-while getopts "hedw" opt; do
+deploy_python=false
+bump_version=false
+install_dependencies=false
+while getopts "hedpwD" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -32,13 +46,108 @@ while getopts "hedw" opt; do
   d) deploy_docker=true
      echo "Deploying for Docker"
      ;;
+  p) deploy_python=true
+     echo "Deploying for Python"
+     ;;
   w) deploy_www=true
      echo "Deploying playspellsource.com"
+     ;;
+  v) bump_version=true
+     echo "Bumping version"
+     ;;
+  D) install_dependencies=true
+     echo "Installing dependencies"
      ;;
   esac
 done
 shift $((OPTIND-1))
 [ "${1:-}" = "--" ] && shift
+
+# Configure virtualenv path
+if [[ -z ${VIRTUALENV_PATH+x} ]] ; then
+  VIRTUALENV_PATH="./.venv"
+fi
+
+if [[ "$install_dependencies" = true ]] ; then
+  if test "Darwin" = $(uname) ; then
+    # Install brew, java, jq, python3, docker, python packages
+    if ! command -v brew > /dev/null ; then
+      echo "Installing brew..."
+      /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)" > /dev/null
+    fi
+
+    if ! command -v java -version > /dev/null ; then
+      echo "Installing java..."
+      brew cask install java
+    fi
+
+    if ! command -v python3 --version > /dev/null ; then
+      echo "Installing python3..."
+      brew install python3 > /dev/null
+    fi
+
+    if ! command -v jq --version > /dev/null ; then
+      echo "Installing jq..."
+      brew install jq > /dev/null
+    fi
+
+    if ! command -v docker --version > /dev/null ; then
+      echo "Installing docker..."
+      brew cask install docker
+    fi
+
+    if [[ ! -f ${VIRTUALENV_PATH}/bin/activate ]] ; then
+      echo "Installing virtualenv at ${VIRTUALENV_PATH}"
+      pip3 install -U virtualenv > /dev/null
+      virtualenv -p python3 ${VIRTUALENV_PATH}
+    fi
+
+    source ${VIRTUALENV_PATH}/bin/activate
+
+    echo "Installing python dependencies"
+
+    if ! command -v spellsource > /dev/null ; then
+      echo "Installing spellsource from pypy."
+      echo "If you'd like to develop this package instead, uninstall with"
+      echo "  pip3 uninstall spellsource"
+      echo "and install the package locally in editable mode with a valid jar using:"
+      echo "  ./gradlew net:shadowJar && pip3 install -e ."
+      pip3 install spellsource > /dev/null
+    fi
+
+    pip3 install awscli awsebcli versionbump > /dev/null
+  else
+    echo "Cannot install dependencies on this platform yet"
+    exit 1
+  fi
+fi
+
+if [[ "$bump_version" = true ]] ; then
+  if [[ -z ${SPELLSOURCE_VERSION+x} ]] ; then
+    echo "Requires SPELLSOURCE_VERSION to be specified as the current version."
+    exit 1
+  fi
+
+  if ! command -v versionbump > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
+    echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}/"
+    source ${VIRTUALENV_PATH}/bin/activate
+  fi
+
+  if ! command -v versionbump > /dev/null ; then
+    echo "Failed to bump version: Missing versionbump binary. Install with pip3 install versionbump"
+    exit 1
+  fi
+
+  versionbump -c "${SPELLSOURCE_VERSION}" patch \
+    build.gradle \
+    setup.py \
+    deploy.sh \
+    server.sh \
+    Dockerfile \
+    spellsource/context.py \
+    cluster/runsims.sh \
+    net/src/main/java/com/hiddenswitch/spellsource/Version.java
+fi
 
 # Configure the gradle command
 if test "$CI" = "true" || ! command -v gradle > /dev/null ; then
@@ -51,11 +160,29 @@ fi
 if [[ "$deploy_docker" = true && -z ${PORTAINER_PASSWORD+x} ]] ; then
   echo "docker deployment: Requesting PORTAINER_PASSWORD"
   stty -echo
-  printf "Password:"
+  printf "Password: "
   read PORTAINER_PASSWORD
   stty echo
   printf "\n"
 fi
+
+# Before building for python, check that we have the twine username and password
+if [[ "$deploy_python" = true && -z ${TWINE_USERNAME+x} ]] ; then
+  echo "docker deployment: Requesting TWINE_USERNAME"
+  printf "Twine Username: "
+  read TWINE_USERNAME
+  printf "\n"
+fi
+
+if [[ "$deploy_python" = true && -z ${TWINE_PASSWORD+x} ]] ; then
+  echo "docker deployment: Requesting TWINE_PASSWORD"
+  stty -echo
+  printf "Password: "
+  read TWINE_PASSWORD
+  stty echo
+  printf "\n"
+fi
+
 
 if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true ]] ; then
   echo "Building Spellsource JAR file"
@@ -72,9 +199,9 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true ]] ; then
 fi
 
 if [[ "$deploy_www" = true ]] ; then
-  if ! command -v spellsource && test -f .venv/bin/activate ; then
-    echo "Using virtualenv for spellsource package located at .venv/"
-    source .venv/bin/activate
+  if ! command -v spellsource && test -f ${VIRTUALENV_PATH}/bin/activate ; then
+    echo "Using virtualenv for spellsource package located at ${VIRTUALENV_PATH}/"
+    source ${VIRTUALENV_PATH}/bin/activate
   fi
 
   if ! command -v spellsource ; then
@@ -146,9 +273,35 @@ if [[ "$deploy_docker" = true ]] ; then
   }
 fi
 
+if [[ "$deploy_python" = true ]] ; then
+  if ! command -v twine > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
+    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}/"
+    source ${VIRTUALENV_PATH}/bin/activate
+  fi
+
+  if ! command -v twine > /dev/null ; then
+    echo "Failed to deploy python: Missing twine binary. Install with pip3 install twine"
+    exit 1
+  fi
+  rm -rf dist/
+  mkdir -pv dist
+  pip3 install wheel twine >/dev/null
+  python3 setup.py sdist bdist_wheel >/dev/null
+  echo Deploying
+  twine upload dist/* >/dev/null
+  rm -rf dist/
+fi
+
 if [[ "$deploy_elastic_beanstalk" = true ]] ; then
-  echo "Checking AWS environment"
-  pip install awsebcli >/dev/null
+    if ! command -v eb > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
+    echo "Using virtualenv for twine package located at ${VIRTUALENV_PATH}/"
+    source ${VIRTUALENV_PATH}/bin/activate
+  fi
+
+  if ! command -v eb > /dev/null ; then
+    echo "Failed to deploy ELB python: Missing eb binary. Install with pip3 install awsebcli"
+    exit 1
+  fi
 
   # Package the two necessary files into the right places into a zip file
   rm artifact.zip || true
