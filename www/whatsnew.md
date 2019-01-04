@@ -9,6 +9,10 @@ Happy New Years to all Spellsource players!
 
 The server has been migrated in this release.
 
+###### Content Fixes:
+
+ - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
+
 ###### Usability Improvements:
 
  - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
