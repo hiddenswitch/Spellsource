@@ -47,6 +47,25 @@ services:
       interval: 8s
       timeout: 4s
       retries: 3
+  launcher:
+    restart: always
+    image: doctorpangloss/launcher:latest
+    environment:
+    - MONGO_URL=mongodb://mongo:27017/launcher
+    - ROOT_URL=https://launcher.hiddenswitch.com
+    deploy:
+      labels:
+      - "traefik.frontend.rule=Host:launcher.hiddenswitch.com"
+      - "traefik.frontend.entryPoints=http,https"
+      - "traefik.backend.loadbalancer.swarm=true"
+      - "traefik.backend.loadbalancer.stickiness=true"
+      - "traefik.port=3000"
+      - "traefik.enable=true"
+    healthcheck:
+      test: curl --fail -s http://localhost:3000/ || exit 1
+      interval: 8s
+      timeout: 4s
+      retries: 3
   mongo:
     restart: always
     image: "mongo:3.6"
@@ -55,6 +74,11 @@ services:
     deploy:
       labels:
       - "traefik.enable=false"
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/metastone --quiet
+      interval: 8s
+      timeout: 4s
+      retries: 3
   hazelcastmancenter:
     image: hazelcast/management-center
     volumes:
