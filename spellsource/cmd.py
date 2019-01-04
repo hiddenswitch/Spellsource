@@ -5,6 +5,7 @@ from os.path import join, abspath
 
 import click
 
+from .context import Context
 from .ext.updatedbf import write_dbf_json
 from .ext.populatedecklists import write_decklists
 from .ext.hearthcards import write_set_stubs
@@ -377,6 +378,22 @@ def markdown_to_textmesh(file: typing.TextIO, front_matter: bool = True):
         # skips front matter
         rendered = renderer.render(Document(input))
     click.echo(rendered)
+
+
+@_cli.command()
+@click.argument('file', type=click.File(mode='w'))
+def create_cards_db(file: typing.TextIO):
+    """
+    Saves a cards.json database for the client.
+
+    This should be located on a path that the server can return to.
+    """
+    with Context() as ctx:
+        cards = ctx.root_namespace().com.hiddenswitch.spellsource.client.models.GetCardsResponse()
+        cards.cards(ctx.root_namespace().com.hiddenswitch.spellsource.Cards.getCards())
+        cards.version("1")
+        json_cards = ctx.root_namespace().com.hiddenswitch.spellsource.util.Serialization.serialize(cards)
+    file.write(json_cards)
 
 
 def main():

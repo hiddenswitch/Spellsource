@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
+import com.hiddenswitch.spellsource.client.models.EntityState;
 import com.hiddenswitch.spellsource.models.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -104,7 +105,11 @@ public interface Cards {
 						&& cd.type != CardType.ENCHANTMENT)
 				.map(CardDesc::create)
 				.map(card -> Games.getEntity(workingContext, card, 0))
-				.map(entity -> new CardRecord().entity(entity))
+				.map(entity -> {
+					// Don't waste space storing locations on these
+					entity.getState().location(null);
+					return new CardRecord().entity(entity);
+				})
 				.collect(toList());
 	}
 }
