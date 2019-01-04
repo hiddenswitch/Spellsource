@@ -13,6 +13,11 @@ The server has been migrated in this release.
 
  - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
  - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
+ - Icy Talon has been renamed Abomination's Might.
+ - Dancing Rune Weapon now draws a card.
+ - The hero power Rune Tap now costs (1).
+ - Chains of Ice now draws a card correctly.
+ - Dyn-o-Matic now correctly deals 5 damage to random targets.
 
 ###### Usability Fixes:
 
