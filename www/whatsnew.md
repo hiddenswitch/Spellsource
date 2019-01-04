@@ -3,18 +3,13 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-Thanks for playing Spellsource today! Release notes are below. Visit playspellsource.com for more history.
+### Server Migrated
 
-### Tournament: Saturday, December 29th, 2018
+The server has been moved to a new data center. Please report your experiences in the Discord!
 
-Join us on the Discord at https://discord.gg/HmbESh2 to join a Custom Cards tournament! Prepare decks using the Custom classes and organize 1v1s against members of the community.
+##### Known Issues:
 
-##### Rules:
-
- - Players will build 4 decks and choose 1 to ban in 1v1 matchups.
- - 1 deck max per class.
- - You're strongly encouraged to play Custom classes.
- - Basic and Classic only. You're encouraged to check out the Discord to sort out exactly which cards qualify.
+ - Downloading the cards database for the first time may take longer than usual.
 
 ### 0.8.7-2.0.18 (Saturday, December 29th, 2018)
 
