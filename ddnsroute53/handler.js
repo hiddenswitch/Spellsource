@@ -1,7 +1,7 @@
 'use strict';
 
-var AWS = require("aws-sdk");
-var route53 = new AWS.Route53();
+const AWS = require("aws-sdk");
+const route53 = new AWS.Route53();
 
 module.exports.update = (event, context, cb) => {
     if (!event.headers.Authorization || event.headers.Authorization !== process.env.SHARED_SECRET) {
@@ -13,20 +13,28 @@ module.exports.update = (event, context, cb) => {
         return false;
     }
 
+    const names = event.queryStringParameters.name.split(',');
+    if (names.length === 0) {
+        cb(null, {statusCode: 400, body: 'Must specify at least one hostname to update'});
+        return false;
+    }
+
+    const changes = names.map((name) => {
+        return {
+            Action: 'UPSERT',
+            ResourceRecordSet: {
+                Name: name,
+                Type: 'A',
+                ResourceRecords: [{Value: event.requestContext.identity.sourceIp}],
+                TTL: 300
+            }
+        };
+    });
+
     route53.changeResourceRecordSets({
         HostedZoneId: process.env.HOSTED_ZONE_ID,
         ChangeBatch: {
-            Changes: [
-                {
-                    Action: 'UPSERT',
-                    ResourceRecordSet: {
-                        Name: event.queryStringParameters.name,
-                        Type: 'A',
-                        ResourceRecords: [{Value: event.requestContext.identity.sourceIp}],
-                        TTL: 300
-                    }
-                }
-            ],
+            Changes: changes,
             Comment: 'ddns update'
         }
     }, function (err, data) {
