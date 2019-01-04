@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Summon a copy of your weapon as a minion with Taunt.",
+  "description": "Summon a copy of your weapon as a minion with Taunt. Draw a card.",
   "condition": {
     "class": "HasWeaponCondition",
     "targetPlayer": "SELF"
@@ -81,6 +81,9 @@
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
             "attribute": "TAUNT"
+          },
+          {
+            "class": "DrawCardSpell"
           }
         ]
       },
@@ -110,6 +113,9 @@
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
             "attribute": "TAUNT"
+          },
+          {
+            "class": "DrawCardSpell"
           }
         ]
       },
@@ -139,6 +145,9 @@
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
             "attribute": "TAUNT"
+          },
+          {
+            "class": "DrawCardSpell"
           }
         ]
       },
@@ -168,6 +177,9 @@
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
             "attribute": "TAUNT"
+          },
+          {
+            "class": "DrawCardSpell"
           }
         ]
       },
@@ -197,6 +209,9 @@
             "class": "AddAttributeSpell",
             "target": "OUTPUT",
             "attribute": "TAUNT"
+          },
+          {
+            "class": "DrawCardSpell"
           }
         ]
       }
