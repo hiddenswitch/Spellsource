@@ -1,0 +1,28 @@
+{
+  "name": "Scarlet Thirst",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Whenever a character is healed this turn, draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+      "class": "HealingTrigger",
+	  "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DrawCardSpell",
+        "value: 1"
+      },
+      "oneTurn": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
