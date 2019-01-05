@@ -10,12 +10,15 @@
     "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "ANY"
+      "targetPlayer": "SELF"
     },
     "cardFilter": {
       "class": "CardFilter",
       "attribute": "ECHO",
       "operation": "HAS"
+    }
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "attributes": {
