@@ -19,7 +19,7 @@
             {"class": "SpecificCardFilter", "card": "token_xenodrone"}
           ]
       },
-     "attackBonus"= 1,
+     "attackBonus": 1,
      
      "spell": {
        "class": "SummonSpell",
