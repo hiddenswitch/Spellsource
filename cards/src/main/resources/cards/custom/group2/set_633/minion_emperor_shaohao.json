@@ -6,17 +6,20 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Deflect. Battlecry: Summon a random August Celestial.",
+  "description": "Deflect. Battlecry: Summon one of the four August Celestial.",
   "battlecry": {
     "spell": {
-      "class": "SummonSpell",
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "SummonSpell",
+      },
       "cards": [
         "token_xuen_the_white_tiger",
         "token_niuzao_the_black_ox",
         "token_chi_ji_the_red_crane",
         "token_yu_lon_the_jade_serpent"
       ],
-      "randomTarget": true
+      "howMany": 4
     }
   },
   "attributes": {
