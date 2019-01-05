@@ -1,0 +1,31 @@
+{
+  "name": "Souldrinker Axe",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "After your hero attacks and kills a minion, give them +4 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "EVENT_TARGET"
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "hpBonus": 4
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
