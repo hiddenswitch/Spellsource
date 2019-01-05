@@ -19,7 +19,7 @@
     },
     "cardSource": {
       "class": "UnweightedCatalogueSource"
-    },
+    }
   },
   "attributes": {
     "ECHO": true
