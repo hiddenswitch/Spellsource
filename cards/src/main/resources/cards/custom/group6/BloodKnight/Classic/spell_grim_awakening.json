@@ -9,18 +9,18 @@
   "spell": {
       "class": "MetaSpell",
       "spells": [
-		"spell": {
-			"class": "BuffSpell",
-			"target": "FRIENDLY_MINIONS",
-			"attackBonus": 1
+		{
+		"class": "BuffSpell",
+		"target": "FRIENDLY_MINIONS",
+		"attackBonus": 1
 		},
-		"spell": {
-			"class": "BuffSpell",
-			"target": "FRIENDLY_MINIONS",
-			"hpBonus": 2
+		{
+		"class": "BuffSpell",
+		"target": "FRIENDLY_MINIONS",
+		"hpBonus": 2
 		},
-		"spell": {
-			"class": "" (Insert Drain stuff here)
+		{
+		"class": "" (Insert Drain stuff here)
 		}
 	]
   }
