@@ -10,8 +10,8 @@
   "electron": {
     "autoPackage": true,
     "bundleClient": false,
-    "rootUrl": "http://launcher.hiddenswitch.com",
-    "version": "1.0.0",
+    "rootUrl": "https://launcher.hiddenswitch.com",
+    "version": "1.1.0",
     "downloadUrls": {
       "darwin": "https://s3.us-east-2.amazonaws.com/minionate/builds/launcher/osx/{{version}}/launcher.zip"
     },

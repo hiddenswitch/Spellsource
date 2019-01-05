@@ -7,14 +7,6 @@ var progress = require('request-progress');
 var unzip = require('unzipper');
 var _ = require('underscore');
 
-// var log = function(msg){
-//   fs.appendFile("C:\\Users\\Michael\\electron.log", msg + "\n", function(err){
-//     if (err){
-//       throw err;
-//     }
-//   })
-// };
-
 var log = function () {
 };
 

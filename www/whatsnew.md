@@ -3,6 +3,12 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.8-2.0.20 (Friday, January 4th, 2019)
+
+The Hidden Switch Launcher for Windows has been updated to 1.1.0 and should start on the latest updates to Windows 10 now.
+
+Additionally, the Collection view on Windows clients now correctly shows cards again.
+
 ### 0.8.8-2.0.19 (Friday, January 4th, 2019)
 
 Happy New Years to all Spellsource players!
