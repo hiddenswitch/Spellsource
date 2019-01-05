@@ -1,0 +1,23 @@
+{
+  "name": "Harness Suffering",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Give your hero +1 Attack this turn for each damaged character.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "attackBonus": {
+      "class": "EntityCounter",
+      "target": "ALL",
+      "filter": {
+        "class": "DamagedFilter"
+	}
+	}
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
