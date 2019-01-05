@@ -14,15 +14,15 @@
 		"target": "FRIENDLY_HERO",
         "hpBonus": 5
       },
-	"spell": {
-		"class": "AddAttributeSpell",
-		"target": "FRIENDLY_HERO",
-		"attribute": "TAUNT",
-		"revertTrigger": {
-			"class": "", (Insert new trigger that goes off once Health drops below 25 here)
-			"targetPlayer": "SELF"
-		}
-	},
+      {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "TAUNT",
+      "revertTrigger": {
+		"class": "", (Insert new trigger that goes off once Health drops below 25 here)
+		"targetPlayer": "SELF"
+      }
+      },
     ]
   },
   "collectible": true,
