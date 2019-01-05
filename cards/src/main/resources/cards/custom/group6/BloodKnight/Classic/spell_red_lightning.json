@@ -1,0 +1,17 @@
+{
+  "name": "Red Lightning",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Deal $7 damage to your opponent's central minion(s).",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "DamageSpell",
+      "target": "", (Can't seem to find a central minions target)
+      "value": 7
+  }
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
