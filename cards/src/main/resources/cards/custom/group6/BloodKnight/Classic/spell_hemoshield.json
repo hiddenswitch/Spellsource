@@ -1,0 +1,31 @@
+{
+  "name": "Hemoshield",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Give your hero +5 Health and Taunt. Once their Health drops below 25, they lose Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+		"target": "FRIENDLY_HERO",
+        "hpBonus": 5
+      },
+	"spell": {
+		"class": "AddAttributeSpell",
+		"target": "FRIENDLY_HERO",
+		"attribute": "TAUNT",
+		"revertTrigger": {
+			"class": "", (Insert new trigger that goes off once Health drops below 25 here)
+			"targetPlayer": "SELF"
+		}
+	},
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
