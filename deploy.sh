@@ -80,6 +80,23 @@ done
 shift $((OPTIND-1))
 [ "${1:-}" = "--" ] && shift
 
+function update_portainer() {
+  service_name=$1
+  portainer_image_name=$2
+  service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
+  service_id=$(echo $service | jq  -r .ID)
+  service_specification=$(echo $service | jq .Spec)
+  service_version=$(echo $service | jq .Version.Index)
+  service_update_command=$(echo $service_specification | jq ".TaskTemplate.ContainerSpec.Image |= \"${portainer_image_name}\" " | jq ".TaskTemplate.ForceUpdate |= 1 ")
+
+  # Update the container image
+  curl --fail -H "Content-Type: application/json" \
+   -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" \
+   -X POST \
+   -d "${service_update_command}" \
+   "${PORTAINER_URL}api/endpoints/1/docker/services/${service_id}/update?version=${service_version}"
+}
+
 # Configure virtualenv path
 if [[ -z ${VIRTUALENV_PATH+x} ]] ; then
   VIRTUALENV_PATH="./.venv"
@@ -274,6 +291,7 @@ if [[ "$deploy_launcher" = true ]] ; then
   { # try
     echo "Building and uploading launcher Docker image"
     docker build -t doctorpangloss/launcher . > /dev/null && \
+    rm -rf bundle && \
     docker tag spellsource doctorpangloss/launcher > /dev/null && \
     docker push doctorpangloss/launcher:latest > /dev/null
   } || { # catch
@@ -283,7 +301,15 @@ if [[ "$deploy_launcher" = true ]] ; then
 
   cd ..
 
-  echo "Launcher image built and uploaded. You must do the appropriate updates where necessary"
+  { # try
+    # Figure out the service ID
+    service_name=spellsource_launcher
+    portainer_image_name="doctorpangloss/launcher:latest"
+    update_portainer service_name portainer_image_name
+  } || { # catch
+    echo "Failed to update launcher service"
+    exit 1
+  }
 fi
 
 if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_python" = true ]] ; then
@@ -327,24 +353,13 @@ if [[ "$deploy_docker" = true ]] ; then
     exit 1
   }
 
-  portainer_image_name="doctorpangloss/spellsource:latest"
 
   # Update specific service for now instead of stack
   { # try
     # Figure out the service ID
     service_name=spellsource_game
-    service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
-    service_id=$(echo $service | jq  -r .ID)
-    service_specification=$(echo $service | jq .Spec)
-    service_version=$(echo $service | jq .Version.Index)
-    service_update_command=$(echo $service_specification | jq ".TaskTemplate.ContainerSpec.Image |= \"${portainer_image_name}\" " | jq ".TaskTemplate.ForceUpdate |= 1 ")
-
-    # Update the container image
-    curl --fail -H "Content-Type: application/json" \
-     -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" \
-     -X POST \
-     -d "${service_update_command}" \
-     "${PORTAINER_URL}api/endpoints/1/docker/services/${service_id}/update?version=${service_version}"
+    portainer_image_name="doctorpangloss/spellsource:latest"
+    update_portainer service_name portainer_image_name
   } || { # catch
     echo "Failed to update service"
     exit 1
