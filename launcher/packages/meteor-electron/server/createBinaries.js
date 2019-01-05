@@ -74,7 +74,7 @@ createBinaries = function() {
 
     /* Write out Electron application files */
     var appVersion = electronSettings.version;
-    var appName = electronSettings.name || "electron";
+    var appName = electronSettings.name || "Hidden Switch Launcher";
     var appDescription = electronSettings.description;
 
     var resolvedAppSrcDir;

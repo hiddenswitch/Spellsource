@@ -167,7 +167,7 @@ Visit the [Cluster README](cluster/README.md) for some theory on automated deckb
 
 **My download got interrupted in the launcher and it won't restart.**
 
-On Windows, delete the `%APPDATA%\Electron` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Electron`)*.
+On Windows, delete the `%APPDATA%\Hidden Switch Launcher` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Hidden Switch Launcher`)*.
 
 **I receive an error about Weaponized Piñata when I try to run tests while contributing cards on Windows.**
 
