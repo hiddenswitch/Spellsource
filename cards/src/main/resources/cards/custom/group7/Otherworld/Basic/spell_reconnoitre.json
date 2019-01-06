@@ -1,0 +1,38 @@
+{
+  "name": "Reconnoitre",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "FREE",
+  "description": "Summon two 0/2 Xenodrones, then give your Xenodrones +1 Attack.",
+  "targetSelection": "NONE",
+  "spell": {
+   "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "cards": [
+        "token_xenodrone",
+        "token_xenodrone"
+        ]
+      },
+      
+      {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+          "class": "OrFilter",
+          "filters": [
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone"}
+          ]
+         },
+       "attackBonus": 1
+       }
+      
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
