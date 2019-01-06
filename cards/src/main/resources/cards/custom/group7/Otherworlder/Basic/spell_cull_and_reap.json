@@ -10,16 +10,16 @@
     "class": "MetaSpell",
     "value": {
       "class": "EntityCounter",
-      "target": "ALL_MINIONS"
+      "target": "ALL_MINIONS",
       "filter": {
         "class": "AttributeFilter",
         "value": 0,
         "attribute": "ATTACK",
         "operation": "EQUAL"
-      }
-    },
+       }
+     },
     "spells": [
-    {
+      {
       "class": "DestroySpell",
       "target": "ALL_MINIONS",
       "filter": {
@@ -27,15 +27,15 @@
         "value": 0,
         "attribute": "ATTACK",
         "operation": "EQUAL"
-     }
-  },
-      {
+         }
+       },
+       {
         "class": "DrawCardSpell",
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
+          }
         }
-      }
     ]
   },
   "collectible": true,
