@@ -8,7 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
-    "spells": {
+    "spells": [
+      {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
       "filter": {
@@ -25,6 +26,7 @@
        "card": "token_xenodrone"
      }
     }
+   ]
   },
   "collectible": false,
   "set": "CUSTOM",
