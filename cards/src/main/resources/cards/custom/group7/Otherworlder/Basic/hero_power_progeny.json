@@ -9,7 +9,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
-    "spells": [
+    "spells": {
       "class": "BuffSpell",
       "target": "FRIENDLY_MINIONS",
       "filter": {
@@ -25,7 +25,7 @@
        "class": "SummonSpell",
        "card": "token_xenodrone"
      }
-   ]
+    }
   },
   "collectible": false,
   "set": "CUSTOM",
