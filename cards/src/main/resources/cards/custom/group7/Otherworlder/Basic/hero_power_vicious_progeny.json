@@ -8,6 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
+    "spell": {
+    "class": "MetaSpell",
     "spells": [
       {
       "class": "BuffSpell",
@@ -27,6 +29,7 @@
      }
     }
    ]
+  }
   },
   "collectible": false,
   "set": "CUSTOM",
