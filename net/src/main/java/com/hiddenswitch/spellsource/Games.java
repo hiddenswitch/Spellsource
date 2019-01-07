@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -28,6 +29,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
 import net.demilich.metastone.game.spells.DamageSpell;
@@ -499,14 +501,18 @@ public interface Games extends Verticle {
 
 		GameContext workingContext = event.getGameContext().clone();
 		// Handle the event types here.
-		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
+		if (event instanceof PhysicalAttackEvent) {
 			net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
 					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
 			Actor attacker = physicalAttackEvent.getAttacker();
 			Actor defender = physicalAttackEvent.getDefender();
 			int damageDealt = physicalAttackEvent.getDamageDealt();
 			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
-			clientEvent.physicalAttack(physicalAttack);
+			if (event.getEventType() == GameEventType.PHYSICAL_ATTACK) {
+				clientEvent.physicalAttack(physicalAttack);
+			} else if (event.getEventType() == GameEventType.AFTER_PHYSICAL_ATTACK) {
+				clientEvent.afterPhysicalAttack(physicalAttack);
+			}
 		} else if (event instanceof DiscardEvent) {
 			// Handles both discard and mill events
 			DiscardEvent discardEvent = (DiscardEvent) event;
@@ -518,13 +524,6 @@ public interface Games extends Verticle {
 			} else if (discardEvent.getEventType() == GameEventType.MILL) {
 				clientEvent.mill(cardEvent);
 			}
-		} else if (event instanceof AfterPhysicalAttackEvent) {
-			AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
-			Actor attacker = physicalAttackEvent.getAttacker();
-			Actor defender = physicalAttackEvent.getDefender();
-			int damageDealt = physicalAttackEvent.getDamageDealt();
-			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
-			clientEvent.afterPhysicalAttack(physicalAttack);
 		} else if (event instanceof DrawCardEvent) {
 			DrawCardEvent drawCardEvent = (DrawCardEvent) event;
 			Card card = drawCardEvent.getCard();

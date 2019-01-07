@@ -1,0 +1,25 @@
+service: ddns-route53-ddns-hiddenswitch
+provider:
+  name: aws
+  runtime: nodejs6.10
+  memorySize: 128
+  environment:
+    SHARED_SECRET: ${opt:shared_secret}
+    HOSTED_ZONE_ID: ${opt:hosted_zone_id}
+  iamRoleStatements:
+    - Effect: "Allow"
+      Action:
+        - route53:ChangeResourceRecordSets
+      Resource:
+        Fn::Join:
+          - ""
+          - - "arn:aws:route53:::hostedzone/"
+            - ${opt:hosted_zone_id}
+
+functions:
+  update:
+    handler: handler.update
+    events:
+      - http:
+          path: ddns/update
+          method: get

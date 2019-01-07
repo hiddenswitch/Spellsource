@@ -1,8 +1,9 @@
 apply plugin: 'idea'
 apply plugin: 'eclipse'
+apply plugin: 'maven-publish'
 
 group = 'com.hiddenswitch'
-version = '1.0.0'
+version = '0.8.7'
 
 buildscript {
     repositories {
@@ -16,6 +17,18 @@ buildscript {
 
 repositories {
     jcenter()
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.hiddenswitch'
+            artifactId = 'client'
+            version = version
+
+            from components.java
+        }
+    }
 }
 
 

@@ -9,16 +9,16 @@
   "race": "DRAGON",
   "description": "Battlecry: Attack random minions until this dies.",
   "battlecry": {
-    "targetSelection": "NONE",
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER",
       "value1": {
         "class": "EntityCounter",
         "target": "ALL_OTHER_MINIONS"
       },
-      "value2": 0,
-      "operation": "GREATER"
+      "value2": 0
     },
+    "targetSelection": "NONE",
     "spell": {
       "class": "RecastWhileSpell",
       "condition": {

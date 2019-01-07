@@ -5,6 +5,7 @@ from os.path import join, abspath
 
 import click
 
+from .context import Context
 from .ext.updatedbf import write_dbf_json
 from .ext.populatedecklists import write_decklists
 from .ext.hearthcards import write_set_stubs
@@ -182,7 +183,7 @@ def update_dbf():
 @_cli.command()
 @click.argument('decks', nargs=-1)
 @click.option('--number', default=1, show_default=True, type=click.INT, help='the number of games to simulate')
-@click.option('--behaviours', type=click.Tuple([str, str]), default=('PlayRandomBehaviour','PlayRandomBehaviour'),
+@click.option('--behaviours', type=click.Tuple([str, str]), default=('PlayRandomBehaviour', 'PlayRandomBehaviour'),
               show_default=True,
               help='the behaviours to use for this simulation, suggested choices are PlayRandomBehaviour and '
                    'GameStateValueBehaviour. If the behaviours differ, each matchup will be played with each '
@@ -318,7 +319,9 @@ def simulate(decks,
 @click.argument('remote-host', type=click.STRING)
 @click.option('--db-path', type=click.STRING, default='.mongo', show_default=True,
               help='the path to restore the database to, i.e. as an argument for --db-path')
-def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '.mongo'):
+@click.option('--tmp-dir', type=click.STRING, default=None, show_default=True,
+              help='the path to temporarily dump the database to')
+def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '.mongo', tmp_dir: str = None):
     """
     Replicates mongo databases.
 
@@ -329,7 +332,9 @@ def replicate_database(path_to_pem_file: str, remote_host: str, db_path: str = '
     \b
       mongod --db-path DB_PATH
     """
-    Admin.replicate_mongo_db(abspath(path_to_pem_file), remote_host, abspath(db_path))
+    from tempfile import mkdtemp
+    tmp_dir = tmp_dir or mkdtemp()
+    Admin.replicate_mongo_db(abspath(path_to_pem_file), remote_host, abspath(db_path), tmp_dir=tmp_dir)
     click.echo(abspath(db_path))
 
 
@@ -373,6 +378,22 @@ def markdown_to_textmesh(file: typing.TextIO, front_matter: bool = True):
         # skips front matter
         rendered = renderer.render(Document(input))
     click.echo(rendered)
+
+
+@_cli.command()
+@click.argument('file', type=click.File(mode='w'))
+def create_cards_db(file: typing.TextIO):
+    """
+    Saves a cards.json database for the client.
+
+    This should be located on a path that the server can return to.
+    """
+    with Context() as ctx:
+        cards = ctx.root_namespace().com.hiddenswitch.spellsource.client.models.GetCardsResponse()
+        cards.cards(ctx.root_namespace().com.hiddenswitch.spellsource.Cards.getCards())
+        cards.version("1")
+        json_cards = ctx.root_namespace().com.hiddenswitch.spellsource.util.Serialization.serialize(cards)
+    file.write(json_cards)
 
 
 def main():

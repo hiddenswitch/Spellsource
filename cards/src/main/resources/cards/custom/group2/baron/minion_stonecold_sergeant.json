@@ -10,11 +10,11 @@
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
-      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "CardPropertyCondition",
         "card": "token_knight"
-      }
+      },
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",

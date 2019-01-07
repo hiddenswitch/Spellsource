@@ -141,7 +141,9 @@ public class ClusteredGames extends SyncVerticle implements Games {
 	}
 
 	/**
-	 * Handles a game that ends by any means. Records metadata, like wins and losses.
+	 * Handles a game that ends by any means.
+	 * <p>
+	 * Records metadata, like wins and losses.
 	 *
 	 * @param gameId
 	 * @throws InterruptedException

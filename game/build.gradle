@@ -1,3 +1,15 @@
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.hiddenswitch'
+            artifactId = 'game'
+            version = project.version
+
+            from components.java
+        }
+    }
+}
+
 dependencies {
     compile project(':client')
     compile project(':vertx-sync')
