@@ -1,0 +1,27 @@
+{
+  "name": "Vampiric Savage",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Whenever your hero gains Health, this minion gains it as well.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "", (I don't know if this can be done or not. If it can't, let me know and I can redesign the card)
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "hpBonus": {
+        "class": "EventValueProvider"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
