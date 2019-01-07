@@ -1,0 +1,29 @@
+{
+  "name": "Trisword Swinger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Battlecry: Choose a minion. Attack it and adjacent minions.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+      "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "FightSpell",
+      "secondaryTarget": "SELF"
+    },
+    "spell2": {
+      "class": "FightSpell",
+      "secondaryTarget": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
