@@ -1,0 +1,19 @@
+{
+  "name": "Heartpiercer",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "Deathrattle: Drain the Health of all minions damaged by this.",
+  "deathrattle": {
+	(Sorry, I'm honestly not sure where to start with this one)
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Runic Sorceress",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Battlecry: Give a friendly character +3 Health.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_CHARACTERS",
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Grim Awakening",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Give your minions +1/+2, then Drain 1 Health from them.",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "MetaSpell",
+      "spells": [
+		{
+		"class": "BuffSpell",
+		"target": "FRIENDLY_MINIONS",
+		"attackBonus": 1
+		},
+		{
+		"class": "BuffSpell",
+		"target": "FRIENDLY_MINIONS",
+		"hpBonus": 2
+		},
+		{
+		"class": "" (Insert Drain stuff here)
+		}
+	]
+  }
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
