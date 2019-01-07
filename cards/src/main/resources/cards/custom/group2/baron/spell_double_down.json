@@ -21,11 +21,11 @@
             },
             {
               "class": "AttributeFilter",
-              "attribute": "SUMMONED_ON_TURN",
-              "operation": "EQUAL",
               "value": {
                 "class": "CurrentTurnValueProvider"
-              }
+              },
+              "attribute": "SUMMONED_ON_TURN",
+              "operation": "EQUAL"
             }
           ]
         }
@@ -46,11 +46,11 @@
             },
             {
               "class": "AttributeFilter",
-              "attribute": "SUMMONED_ON_TURN",
-              "operation": "EQUAL",
               "value": {
                 "class": "CurrentTurnValueProvider"
-              }
+              },
+              "attribute": "SUMMONED_ON_TURN",
+              "operation": "EQUAL"
             }
           ]
         }
@@ -71,11 +71,11 @@
             },
             {
               "class": "AttributeFilter",
-              "attribute": "SUMMONED_ON_TURN",
-              "operation": "EQUAL",
               "value": {
                 "class": "CurrentTurnValueProvider"
-              }
+              },
+              "attribute": "SUMMONED_ON_TURN",
+              "operation": "EQUAL"
             }
           ]
         }

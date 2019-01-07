@@ -5,30 +5,30 @@
   "heroClass": "NAVY",
   "rarity": "COMMON",
   "description": "Choose a minion. Force a random enemy minion to attack it.",
-  "targetSelection": "MINIONS",
   "condition": {
     "class": "AndCondition",
     "conditions": [
       {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "EntityCounter",
           "target": "ENEMY_MINIONS"
         },
-        "value2": 1,
-        "operation": "GREATER_OR_EQUAL"
+        "value2": 1
       },
       {
         "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
         "value1": {
           "class": "EntityCounter",
           "target": "ALL_MINIONS"
         },
-        "value2": 2,
-        "operation": "GREATER_OR_EQUAL"
+        "value2": 2
       }
     ]
   },
+  "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.DuelRandomSecondarySpell",
     "filter": {
@@ -36,30 +36,30 @@
       "filters": [
         {
           "class": "OwnedByPlayerFilter",
-          "targetPlayer": "OWNER",
-          "invert": true,
           "andCondition": {
             "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
             "value1": {
               "class": "EntityCounter",
               "target": "ENEMY_MINIONS"
             },
-            "value2": 2,
-            "operation": "GREATER_OR_EQUAL"
-          }
+            "value2": 2
+          },
+          "invert": true,
+          "targetPlayer": "OWNER"
         },
         {
           "class": "OwnedByPlayerFilter",
-          "targetPlayer": "OWNER",
           "andCondition": {
             "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
             "value1": {
               "class": "EntityCounter",
               "target": "ENEMY_MINIONS"
             },
-            "value2": 1,
-            "operation": "GREATER_OR_EQUAL"
-          }
+            "value2": 1
+          },
+          "targetPlayer": "OWNER"
         }
       ]
     },

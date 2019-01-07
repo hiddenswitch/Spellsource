@@ -28,7 +28,7 @@ Add this dependency to your project's POM:
 <dependency>
     <groupId>com.hiddenswitch</groupId>
     <artifactId>spellsource-client</artifactId>
-    <version>1.0.0</version>
+    <version>0.8.7</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:spellsource-client:1.0.0"
+compile "com.hiddenswitch:spellsource-client:0.8.7"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/spellsource-client-1.0.0.jar
+* target/spellsource-client-0.8.7.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -94,7 +94,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *https://api-3.hiddenswitch.com*
+All URIs are relative to *https://api.hiddenswitch.com/api/v3*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -120,6 +120,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getGameRecordIds**](docs/DefaultApi.md#getGameRecordIds) | **GET** /games | 
 *DefaultApi* | [**getInvite**](docs/DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 *DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
+*DefaultApi* | [**getVersion**](docs/DefaultApi.md#getVersion) | **GET** /version | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 

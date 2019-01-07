@@ -32,14 +32,24 @@
       },
       "spell": {
         "class": "EitherOrSpell",
+        "condition": {
+          "class": "ComparisonCondition",
+          "operation": "LESS",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1"
+          },
+          "value2": 95
+        },
         "spell1": {
           "class": "MetaSpell",
           "spells": [
             {
               "class": "ModifyAttributeSpell",
               "target": "SELF",
-              "attribute": "RESERVED_INTEGER_1",
-              "value": 1
+              "value": 1,
+              "attribute": "RESERVED_INTEGER_1"
             },
             {
               "class": "FightSpell",
@@ -50,6 +60,20 @@
         },
         "spell2": {
           "class": "EitherOrSpell",
+          "condition": {
+            "class": "ComparisonCondition",
+            "operation": "GREATER",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "target": "EVENT_SOURCE",
+              "attribute": "ATTACK"
+            },
+            "value2": {
+              "class": "AttributeValueProvider",
+              "target": "EVENT_TARGET",
+              "attribute": "ATTACK"
+            }
+          },
           "spell1": {
             "class": "DestroySpell",
             "target": "EVENT_TARGET"
@@ -57,31 +81,7 @@
           "spell2": {
             "class": "DestroySpell",
             "target": "EVENT_SOURCE"
-          },
-          "condition": {
-            "class": "ComparisonCondition",
-            "value1": {
-              "class": "AttributeValueProvider",
-              "attribute": "ATTACK",
-              "target": "EVENT_SOURCE"
-            },
-            "value2": {
-              "class": "AttributeValueProvider",
-              "attribute": "ATTACK",
-              "target": "EVENT_TARGET"
-            },
-            "operation": "GREATER"
           }
-        },
-        "condition": {
-          "class": "ComparisonCondition",
-          "value1": {
-            "class": "AttributeValueProvider",
-            "attribute": "RESERVED_INTEGER_1",
-            "target": "SELF"
-          },
-          "value2": 95,
-          "operation": "LESS"
         }
       }
     },
@@ -91,9 +91,9 @@
       },
       "spell": {
         "class": "SetAttributeSpell",
-        "attribute": "RESERVED_INTEGER_1",
+        "target": "SELF",
         "value": 0,
-        "target": "SELF"
+        "attribute": "RESERVED_INTEGER_1"
       }
     }
   ],

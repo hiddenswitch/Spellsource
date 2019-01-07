@@ -17,10 +17,10 @@
         "filters": [
           {
             "class": "AttributeFilter",
-            "attribute": "SUMMONED_ON_TURN",
             "value": {
               "class": "CurrentTurnValueProvider"
             },
+            "attribute": "SUMMONED_ON_TURN",
             "operation": "EQUAL"
           },
           {
@@ -38,4 +38,3 @@
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }
-

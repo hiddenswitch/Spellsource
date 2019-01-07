@@ -18,12 +18,12 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "targetPlayer": "OPPONENT",
           "cardFilter": {
             "class": "CardFilter",
             "cardType": "MINION",
             "manaCost": 2
-          }
+          },
+          "targetPlayer": "OPPONENT"
         },
         {
           "class": "SummonSpell",

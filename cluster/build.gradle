@@ -1,3 +1,15 @@
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = 'com.hiddenswitch'
+            artifactId = 'cluster'
+            version = project.version
+
+            from components.java
+        }
+    }
+}
+
 buildscript {
     repositories {
         mavenCentral()

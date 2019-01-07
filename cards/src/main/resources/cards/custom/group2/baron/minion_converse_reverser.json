@@ -10,9 +10,9 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE",
       "sourceEntityType": "MINION",
-      "sourcePlayer": "BOTH",
-      "hostTargetType": "IGNORE_AS_SOURCE"
+      "sourcePlayer": "BOTH"
     },
     "spell": {
       "class": "CopyCardSpell",

@@ -1,11 +1,13 @@
 #!/usr/bin/env bash
 
-if [[ -z "${SPELLSOURCE_APPLICATION}" ]]; then
+# This file executes the shadow / fat jar of the server on its docker image, using PORT=80 by default.
+
+if [[ -z "${SPELLSOURCE_APPLICATION+x}" ]]; then
   SPELLSOURCE_APPLICATION="Clustered"
 fi
 
-if [[ -z "${SPELLSOURCE_VERSION}" ]]; then
-  SPELLSOURCE_VERSION=0.8.7
+if [[ -z "${SPELLSOURCE_VERSION+x}" ]]; then
+  SPELLSOURCE_VERSION=0.8.8
 fi
 
 # Executes the fat jar of the network server using the Embedded application by default

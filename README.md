@@ -109,11 +109,6 @@ If you'd like to **contributed or edit cards**, **write new game mechanics** or 
  4. Download the Hidden Switch Launcher for [Mac OS X](http://go.hiddenswitch.com/mac) or [Windows](http://go.hiddenswitch.com/win).
  5. Download the Spellsource Client from within the launcher and start it.
  6. Your game client will automatically detect your local server and connect to it, as long as the server  is running before you start the client.
-
-### Using the Command Line Simulator
-
- 1. Build the `cluster` shadow JAR: `./gradlew cluster:shadowJar`.
- 2. Execute the simulator with `java -cp cluster/build/libs/cluster-0.7.6-all.jar com.hiddenswitch.cluster.applications.Simulate`. Read the help there.
  
 ### Automated Deckbuilding FAQ
  
@@ -172,7 +167,7 @@ Visit the [Cluster README](cluster/README.md) for some theory on automated deckb
 
 **My download got interrupted in the launcher and it won't restart.**
 
-On Windows, delete the `%APPDATA%\Electron` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Electron`)*.
+On Windows, delete the `%APPDATA%\Hidden Switch Launcher` directory. *(Copy and paste this into your Explorer address bar or `Ctrl+R` and type, `explorer %APPDATA%\Hidden Switch Launcher`)*.
 
 **I receive an error about Weaponized Piñata when I try to run tests while contributing cards on Windows.**
 

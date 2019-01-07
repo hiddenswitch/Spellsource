@@ -12,8 +12,6 @@
     {
       "eventTrigger": {
         "class": "AfterPhysicalAttackTrigger",
-        "hostTargetType": "IGNORE_OTHER_SOURCES",
-        "targetEntityType": "MINION",
         "fireCondition": {
           "class": "AndCondition",
           "conditions": [
@@ -26,16 +24,18 @@
             },
             {
               "class": "IsDeadCondition",
-              "invert": true,
-              "target": "EVENT_SOURCE"
+              "target": "EVENT_SOURCE",
+              "invert": true
             },
             {
               "class": "IsDeadCondition",
-              "invert": true,
-              "target": "EVENT_TARGET"
+              "target": "EVENT_TARGET",
+              "invert": true
             }
           ]
-        }
+        },
+        "hostTargetType": "IGNORE_OTHER_SOURCES",
+        "targetEntityType": "MINION"
       },
       "spell": {
         "class": "MetaSpell",

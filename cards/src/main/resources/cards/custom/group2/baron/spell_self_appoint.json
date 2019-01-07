@@ -8,6 +8,13 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalSpell",
+    "condition": {
+      "class": "DeckContainsCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    },
     "spell": {
       "class": "TransformToRandomMinionSpell",
       "cardFilter": {
@@ -17,13 +24,6 @@
       "cardSource": {
         "class": "DeckSource",
         "targetPlayer": "SELF"
-      }
-    },
-    "condition": {
-      "class": "DeckContainsCondition",
-      "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
       }
     }
   },
