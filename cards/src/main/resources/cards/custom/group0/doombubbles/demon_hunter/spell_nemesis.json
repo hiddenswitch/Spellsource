@@ -1,0 +1,31 @@
+{
+  "name": "Nemesis",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "FEL",
+  "rarity": "EPIC",
+  "description": "Set a minion's Health to 1. If it has a tribe, also affect all enemies of that tribe.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "spell1": {
+      "class": "SetHpSpell",
+      "value": 1
+    },
+    "condition": {
+      "class": "RaceCondition"
+    },
+    "spell2": {
+      "class": "SetHpSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "filter": {
+        "class": "RaceEqualsFilter",
+        "secondaryTarget": "TARGET"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

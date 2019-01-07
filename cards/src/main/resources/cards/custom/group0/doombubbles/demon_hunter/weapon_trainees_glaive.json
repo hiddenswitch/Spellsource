@@ -1,0 +1,13 @@
+{
+  "name": "Trainee's Glaive",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "FEL",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

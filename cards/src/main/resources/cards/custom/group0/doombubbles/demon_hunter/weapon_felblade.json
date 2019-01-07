@@ -1,0 +1,18 @@
+{
+  "name": "Felblade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "FEL",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Costs (1) less for each time your hero has attacked this turn.",
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "attribute": "ATTACKS_THIS_TURN",
+    "target": "FRIENDLY_PLAYER"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

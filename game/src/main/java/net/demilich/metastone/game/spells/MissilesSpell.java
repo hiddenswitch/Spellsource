@@ -42,7 +42,7 @@ public class MissilesSpell extends DamageSpell {
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
 		int damage = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 
-		if (damage == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
+		if ((damage == 1 || desc.getBool(SpellArg.EXCLUSIVE)) && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {

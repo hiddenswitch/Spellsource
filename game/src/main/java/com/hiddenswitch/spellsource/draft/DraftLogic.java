@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.draft;
 
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,7 +64,9 @@ public class DraftLogic {
 				HeroClass.RUST,
 				HeroClass.OBSIDIAN,
 				HeroClass.AMBER,
-				HeroClass.TOAST
+				HeroClass.TOAST,
+				HeroClass.ICECREAM,
+				HeroClass.FEL
 		);
 
 		Collections.shuffle(classes, getRandom());

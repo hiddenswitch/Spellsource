@@ -1180,7 +1180,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	}
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {
-		return desc.getDynamicDescription();
+		return getDesc().getDynamicDescription();
 	}
 
 	public String[] evaluateDescriptions(GameContext context, Player player) {

@@ -994,7 +994,12 @@ public enum Attribute {
 	/**
 	 * The player ID of the owner of the source entity that summoned this minion.
 	 */
-	SUMMONED_BY_PLAYER, ATTACKS_THIS_TURN;
+	SUMMONED_BY_PLAYER, ATTACKS_THIS_TURN,
+
+	/**
+	 * The number of turns a player has for Demonic Form
+	 */
+	DEMONIC_FORM;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

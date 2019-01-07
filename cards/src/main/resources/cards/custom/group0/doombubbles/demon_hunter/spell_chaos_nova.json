@@ -1,0 +1,38 @@
+{
+  "name": "Chaos Nova",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "FEL",
+  "rarity": "RARE",
+  "description": "Deal $2 damage to all enemies. If you're in Demonic Form, extend it 1 turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 2
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "DEMONIC_FORM",
+          "operation": "GREATER",
+          "value": 0
+        },
+        "spell": {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "DEMONIC_FORM",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

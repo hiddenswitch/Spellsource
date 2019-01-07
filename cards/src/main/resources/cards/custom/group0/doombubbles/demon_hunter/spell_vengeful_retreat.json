@@ -1,0 +1,20 @@
+{
+  "name": "Vengeful Retreat",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "FEL",
+  "rarity": "COMMON",
+  "description": "Return a friendly minion to your hand. Give it Rush.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "RUSH"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

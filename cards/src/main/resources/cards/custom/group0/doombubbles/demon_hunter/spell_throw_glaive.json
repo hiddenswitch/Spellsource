@@ -1,0 +1,26 @@
+{
+  "name": "Throw Glaive",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "FEL",
+  "rarity": "RARE",
+  "description": "Deal 2 damage to a minion. If you have a weapon, it deals it's damage instead.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "EitherOrSpell",
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "condition": {
+      "class": "HasWeaponCondition",
+      "targetPlayer": "SELF"
+    },
+    "spell1": {
+      "class": "WeaponDamageSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

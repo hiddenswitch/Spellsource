@@ -560,10 +560,23 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			assertEquals(tarCreeper1.getHp(), 1, "Deathrattle should not have triggered and should not have killed the first Tar Creeper.");
 			assertEquals(tarCreeper2.getHp(), 1, "The second Tar Creeper should have been damaged by the Doomerang");
 			Card card = player.getHand().get(player.getHand().getCount() - 1);
-			assertEquals(card.getSourceCard().getCardId(), "weapon_deaths_bite", "Doomerang should now be in the player's hand.");
+			assertEquals(card.getSourceCard().getCardId(), "weapon_deaths_bite", "Death's Bite should now be in the player's hand.");
 			assertEquals(player.getWeaponZone().size(), 0);
 			context.getLogic().performGameAction(player.getId(), card.play());
-			assertEquals(player.getHero().getWeapon().getDurability(), 2, "Doomerang should have 2 durability, not 1, since it was played fresh from the hand.");
+			assertEquals(player.getHero().getWeapon().getDurability(), 2, "Death's Bite should have 2 durability, not 1, since it was played fresh from the hand.");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_spectral_cutlass");
+
+			Minion tarCreeper1 = playMinionCard(context, player, CardCatalogue.getCardById("minion_tar_creeper"));
+			playCard(context, player, "spell_fireball", player.getHero());
+			playCard(context, player, "spell_envenom_weapon");
+
+			assertEquals(player.getHero().getHp(), 24);
+			playCard(context, player, "spell_doomerang", tarCreeper1);
+			assertEquals(player.getHero().getHp(), 26);
+			assertTrue(tarCreeper1.isDestroyed());
 		});
 	}
 
