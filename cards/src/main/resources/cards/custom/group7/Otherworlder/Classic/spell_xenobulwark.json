@@ -1,0 +1,36 @@
+{
+  "name": "Xenobulwark",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "COMMON",
+  "description": "Summon a 0/2 Xenodrone, then give your Xenodrones <b>Taunt</b>.",
+  "targetSelection": "NONE",
+  
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "class": "SummonSpell",
+      "card": "token_xenodrone"
+      },
+      
+      "spell": {
+       "class": "AddAttributeSpell",
+       "target": "FRIENDLY_MINIONS",
+       "filter": {
+          "class": "OrFilter",
+          "filters": [
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone"}
+          ]
+        },
+       "attribute": "TAUNT"
+       }
+     ]
+    },
+    
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
