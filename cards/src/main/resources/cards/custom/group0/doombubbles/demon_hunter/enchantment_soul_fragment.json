@@ -1,0 +1,11 @@
+{
+  "name": "Soul Fragment",
+  "type": "ENCHANTMENT",
+  "heroClass": "FEL",
+  "rarity": "FREE",
+  "description": "Dummy enchantment for giveing a Soul Fragment to your opponent on death",
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

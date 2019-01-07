@@ -1093,14 +1093,15 @@ public interface Games extends Verticle {
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 
-			if (card.getZone() == Zones.HAND) {
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
 				if (description.contains("[") && card.getDynamicDescription() != null) {
 					int i = 0;
 					String[] descriptions = card.evaluateDescriptions(workingContext, owningPlayer);
 					while (description.contains("[")) {
 						int start = description.indexOf("[");
 						int end = description.indexOf("]");
-						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1);
+						i++;
 					}
 				}
 			} else description = description.replace("[", "").replace("]", "");

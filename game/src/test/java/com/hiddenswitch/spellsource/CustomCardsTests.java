@@ -5430,5 +5430,315 @@ public class CustomCardsTests extends TestBase {
 
 		});
 	}
+
+	@Test
+    public void testZilchGodOfNothing() {
+	    runGym((context, player, opponent) -> {
+            shuffleToDeck(context, player, "minion_zilch_god_of_nothing");
+            shuffleToDeck(context, player, "minion_wax_elemental");
+            shuffleToDeck(context, player, "minion_public_defender");
+
+
+            shuffleToDeck(context, opponent, "minion_zilch_god_of_nothing");
+            shuffleToDeck(context, opponent, "minion_wisp");
+
+            context.fireGameEvent(new GameStartEvent(context, player.getId()));
+
+            for (Card card : player.getDeck()) {
+                assertEquals(card.getBonusAttack(), 1);
+                assertEquals(card.getBonusHp(), -1);
+            }
+
+            for (Card card : opponent.getDeck()) {
+                assertEquals(card.getBonusAttack(), 0);
+                assertEquals(card.getBonusHp(), 0);
+            }
+
+        });
+    }
+
+
+
+
+
+	//Demon Hunter tests
+
+	@Test
+	public void testThrowGlaive() {
+		runGym((context, player, opponent) -> {
+			Minion wisp1 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp2 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp3 = playMinionCard(context, opponent, "minion_wisp");
+
+			playCard(context, player, "weapon_warglaives_of_azzinoth");
+
+			playCard(context, player, "spell_leeching_poison");
+			playCard(context, player, "minion_high_priest_thekal"); //health to 1
+
+			playCard(context, player, "spell_throw_glaive", wisp2);
+
+			assertEquals(opponent.getMinions().size(), 0);
+			assertEquals(player.getHero().getHp(), 13);
+		});
+	}
+
+	@Test
+	public void testEyeBeam() {
+		runGym((context, player, opponent) -> {
+			Minion dino1 = playMinionCard(context, opponent, "minion_ultrasaur");
+			Minion dino2 = playMinionCard(context, opponent, "minion_ultrasaur");
+			Minion dino3 = playMinionCard(context, opponent, "minion_ultrasaur");
+
+			playCard(context, player, "spell_eye_beam", dino2);
+
+			assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion dino1 = playMinionCard(context, opponent, "minion_stegodon");
+			Minion dino2 = playMinionCard(context, opponent, "minion_ultrasaur");
+			Minion dino3 = playMinionCard(context, opponent, "minion_tyrantus");
+
+			playCard(context, player, "spell_eye_beam", dino2);
+			assertEquals(dino1.getHp(), 0);
+			assertEquals(dino2.getHp(), 8);
+			assertEquals(dino3.getHp(), 6);
+		});
+	}
+
+	@Test
+	public void testNemesis() {
+		runGym((context, player, opponent) -> {
+			Minion demon1 = playMinionCard(context, opponent, "minion_fearsome_doomguard");
+			Minion demon2 = playMinionCard(context, opponent, "minion_voidwalker");
+			Minion ogre = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			playCard(context, opponent, "minion_lord_jaraxxus");
+
+			playCard(context, player, "spell_nemesis", ogre);
+			assertEquals(ogre.getHp(), 1);
+			assertEquals(demon1.getHp(), 8);
+			assertEquals(demon2.getHp(), 3);
+			assertEquals(opponent.getHero().getHp(), 15);
+
+			playCard(context, player, "spell_nemesis", demon1);
+			assertEquals(demon1.getHp(), 1);
+			assertEquals(demon2.getHp(), 1);
+			assertEquals(opponent.getHero().getHp(), 1);
+		});
+
+	}
+
+	@Test
+	public void testFelblade() {
+		runGym((context, player, opponent) -> {
+			Card felblade = receiveCard(context, player, "weapon_felblade");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			playCard(context, player, "weapon_illidari_warglaives");
+			assertEquals(costOf(context, player, felblade), 3);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(costOf(context, player, felblade), 2);
+			useHeroPower(context, player, wisp.getReference());
+			assertTrue(wisp.isDestroyed());
+			assertEquals(costOf(context, player, felblade), 1);
+		}, HeroClass.FEL, HeroClass.FEL);
+	}
+
+	@Test
+	public void testVengefulRetreat() {
+		runGym((context, player, opponent) -> {
+			Minion badWisp = playMinionCard(context, opponent, "minion_wisp");
+			Minion goodWisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_vengeful_retreat", goodWisp);
+			playCard(context, player, player.getHand().get(0));
+			assertTrue(player.getMinions().get(0).canAttackThisTurn());
+
+		});
+	}
+
+	@Test
+	public void testMetamorphosis() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_wisp");
+			}
+
+			playCard(context, player, "spell_metamorphosis");
+
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+			Minion thek = playMinionCard(context, player, "minion_high_priest_thekal");
+			assertTrue(thek.hasAttribute(Attribute.LIFESTEAL));
+			assertEquals(player.getHand().size(), 1);
+
+			playCard(context, player, "weapon_warglaives_of_azzinoth");
+			assertTrue(player.getWeaponZone().get(0).hasAttribute(Attribute.LIFESTEAL));
+			assertEquals(player.getHand().size(), 2);
+
+			context.endTurn();
+			context.endTurn();
+
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+			playCard(context, player, "spell_chaos_nova");
+			assertEquals(player.getHero().getHp(), 3);
+
+			context.endTurn();
+			context.endTurn();
+
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+			context.endTurn();
+			context.endTurn();
+
+			assertNotEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_metamorphosis");
+
+			Card demonForm = player.getHeroPowerZone().get(0);
+
+
+
+			assertEquals(demonForm.getCardId(), "hero_power_demonic_form");
+			String[] strings = demonForm.evaluateDescriptions(context, player);
+
+			assertEquals(strings[0], "2");
+			assertEquals(strings[1], "s");
+
+			context.endTurn();
+			context.endTurn();
+
+
+			strings = demonForm.evaluateDescriptions(context, player);
+			assertEquals(strings[0], "1");
+			assertEquals(strings[1], "");
+		});
+
+	}
+
+	@Test
+	public void testDemonSpikes(){
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_demon_spikes");
+			assertEquals(player.getHero().getAttack(), 1);
+			context.endTurn();
+			assertEquals(player.getHero().getAttack(), 1);
+			context.endTurn();
+
+			assertEquals(player.getHero().getAttack(), 0);
+		});
+	}
+
+	@Test
+	public void testFelRush() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_wisp");
+			}
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			playCard(context, player, "weapon_illidari_warglaives");
+			playCard(context, player, "spell_fel_rush");
+			assertEquals(player.getHand().size(), 1);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHand().size(), 2);
+			useHeroPower(context, player, wisp.getReference());
+			assertEquals(player.getHand().size(), 3);
+		}, HeroClass.FEL, HeroClass.FEL);
+	}
+
+	@Test
+	public void testGlaivesOfTheFallen() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_glaives_of_the_fallen");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			attack(context, player, player.getHero(), wisp);
+			assertEquals(player.getHand().size(), 1);
+
+			Minion croc = playMinionCard(context, opponent, "minion_river_crocolisk");
+			attack(context, player, player.getHero(), croc);
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(croc.hasAttribute(Attribute.DEATHRATTLES));
+
+			playCard(context, player, "weapon_glaives_of_the_fallen");
+			attack(context, player, player.getHero(), croc);
+
+			assertEquals(player.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testChaosBlades() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_chaos_blades");
+			Minion adept = playMinionCard(context, player, "minion_illidari_adept");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(adept.getAttack(), 3);
+			assertTrue(wisp.isDestroyed());
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 4);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_chaos_blades");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 5);
+
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertTrue(wisp.isDestroyed());
+
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 3);
+		});
+	}
+
+	@Test
+	public void testIllidariEnforcer() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_fireball", opponent.getHero());
+			context.endTurn();
+			context.getTurn();
+			Minion enforcer = playMinionCard(context, opponent, "minion_illidari_enforcer");
+			assertTrue(enforcer.hasAttribute(Attribute.TAUNT));
+		});
+	}
+
+	@Test
+	public void testImmolationAura() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_immolation_aura");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			attack(context, opponent, wisp, player.getHero());
+			assertTrue(wisp.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testMomentum() {
+		runGym((context, player, opponent) -> {
+			Minion azzinoth = playMinionCard(context, player, "minion_azzinoth");
+			shuffleToDeck(context, player, "minion_wisp");
+			playCard(context, player, "spell_momentum");
+			context.getLogic().drawCard(player.getId(), null);
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getHand().size(), 1);
+			destroy(context, azzinoth);
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testFelBarrage() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_fel_barrage");
+			assertEquals(opponent.getHero().getHp(), 20);
+			playCard(context, player, "minion_bloodmage_thalnos");
+			playCard(context, player, "spell_fel_barrage");
+			assertEquals(opponent.getHero().getHp(), 8);
+		});
+	}
 }
 

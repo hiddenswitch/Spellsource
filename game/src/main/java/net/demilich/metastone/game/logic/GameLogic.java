@@ -1511,6 +1511,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Hero hero = player.getHero();
 		hero.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		hero.getAttributes().remove(Attribute.HERO_POWER_USAGES);
+		player.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
 		if (hero.getWeapon() != null) {
 			hero.getWeapon().getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
@@ -3757,6 +3758,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new MaxManaChangedEvent(context, player.getId(), 1));
 
 		player.getAttributes().remove(Attribute.OVERLOAD);
+		player.getHero().getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.TEMPORARY_ATTACK_BONUS);
 		}
@@ -3764,6 +3766,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		player.getHero().getHeroPower().setUsed(0);
 		player.getHero().activateWeapon(true);
+		player.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
 		refreshAttacksPerRound(player.getHero());
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);

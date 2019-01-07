@@ -35,6 +35,7 @@ ICECREAM | &quot;ICECREAM&quot;
 AMBER | &quot;AMBER&quot;
 TOAST | &quot;TOAST&quot;
 ROSE | &quot;ROSE&quot;
+FEL | &quot;FEL&quot;
 
 
 <a name="FormatEnum"></a>

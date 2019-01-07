@@ -1,0 +1,36 @@
+{
+  "name": "Immolation Aura",
+  "type": "ENCHANTMENT",
+  "heroClass": "FEL",
+  "rarity": "FREE",
+  "description": "Whenever your hero is attacked, deal 1 damage to all enemies.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_immolation_aura"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "PhysicalAttackTrigger",
+        "targetEntityType": "HERO",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

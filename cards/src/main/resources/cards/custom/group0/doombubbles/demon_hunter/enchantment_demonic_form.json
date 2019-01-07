@@ -1,0 +1,68 @@
+{
+  "name": "Demonic Form",
+  "type": "ENCHANTMENT",
+  "heroClass": "FEL",
+  "rarity": "FREE",
+  "description": "Your hero power is Demonic Form. Lasts a certain number of turns",
+  "aura": {
+    "class": "CardAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "card": "hero_power_demonic_form"
+  },
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "EVENT_TARGET",
+        "attribute": "LIFESTEAL"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "AfterCardPlayedTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "HeroPowerSpell",
+        "description": "Draw a card",
+        "spell": {
+          "class": "DrawCardSpell"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "ConditionalEffectSpell",
+        "spell1": {
+          "class": "ModifyAttributeSpell",
+          "attribute": "DEMONIC_FORM",
+          "target": "FRIENDLY_PLAYER",
+          "value": -1
+        },
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "DEMONIC_FORM",
+          "operation": "EQUAL",
+          "value": 0
+        },
+        "spell2": {
+          "class": "RemoveEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "card": "enchantment_demonic_form"
+        }
+      }
+    }
+  ],
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,16 @@
+{
+  "name": "Illidan Stormrage",
+  "heroPower": "hero_power_demons_bite",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "FEL",
+  "rarity": "FREE",
+  "description": "Hero Power: +1 Attack this turn. Attack a minion.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

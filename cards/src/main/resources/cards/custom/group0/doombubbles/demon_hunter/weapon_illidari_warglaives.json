@@ -1,0 +1,16 @@
+{
+  "name": "Illidari Warglaives",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "FEL",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Lifesteal",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

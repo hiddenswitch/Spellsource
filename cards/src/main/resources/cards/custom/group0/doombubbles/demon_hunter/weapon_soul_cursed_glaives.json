@@ -1,0 +1,16 @@
+{
+  "name": "Soul-Cursed Glaives",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "FEL",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "Poisonous",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

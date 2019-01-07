@@ -1,0 +1,50 @@
+{
+  "name": "Glaives of the Fallen",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "FEL",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Minions damaged by this give Soul Fragments on death.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "target": "EVENT_TARGET",
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddDeathrattleSpell",
+            "spell": {
+              "class": "ReceiveCardSpell",
+              "targetPlayer": "OPPONENT",
+              "card": "spell_soul_fragment"
+            }
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "card": "enchantment_soul_fragment"
+          }
+        ]
+      },
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "invert": true,
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_soul_fragment"
+        }
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

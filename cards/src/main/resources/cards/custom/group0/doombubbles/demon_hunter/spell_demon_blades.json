@@ -1,0 +1,16 @@
+{
+  "name": "Demon Blades",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "FEL",
+  "rarity": "RARE",
+  "description": "Your Hero Power becomes 'Passive. Your hero has +1 Attack during your turn.'",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ChangeHeroPowerSpell",
+    "card": "hero_power_demon_blades"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
