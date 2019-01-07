@@ -1,0 +1,42 @@
+{
+  "name": "Warp",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "COMMON",
+  "description": "<b>Wither (1).</b> Deal 1 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+   "class": "MetaSpell",
+      "spells": [
+       {
+        "trigger": {
+          "eventTrigger": {
+            "class": "DamageCausedTrigger",
+            "hostTargetType": "IGNORE_OTHER_SOURCES"
+          },
+          "condition":{
+            "class":
+            
+          },
+            "spell": {
+              "class": "BuffSpell",
+              "value": -1,
+              "revertTrigger": {
+                "class": "TurnStartTrigger",
+                "targetPlayer": "SELF"
+              }
+           }
+      },
+   
+      "spell": {
+        "class": "DamageSpell",
+        "value": 1
+     }
+    }
+   ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
