@@ -56,6 +56,20 @@ import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
 
+	@Test
+	public void testDeathsCaress() {
+		runGym((context, player, opponent) -> {
+			Minion spellDamage1 = playMinionCard(context, player, "minion_neutral_test");
+			spellDamage1.setAttribute(Attribute.SPELL_DAMAGE, 1);
+			Minion testTarget = playMinionCard(context, player, "minion_neutral_test");
+			testTarget.setHp(10);
+			playCard(context, player, "spell_deaths_caress", testTarget);
+			context.endTurn();
+			assertEquals(testTarget.getHp(), 6, "Should have been dealt 3 + 1 spell damage");
+		});
+	}
+
+	@Test
 	public void testStitches() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
