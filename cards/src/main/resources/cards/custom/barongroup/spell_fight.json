@@ -1,23 +1,23 @@
  "name": "Fight!",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Give a random friendly and random enemy minion +4 Attack.",
+  "description": "Give a random friendly and random enemy minion +3/+3.",
   "class": "MetaSpell",
     "spells": [
     {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
-    "attackBonus": 4,
-    "hpBonus": 0,
+    "attackBonus": 3,
+    "hpBonus": 3,
     "randomTarget": true
     }
     {
     "class": "BuffSpell",
     "target": "ENEMY_MINIONS",
-    "attackBonus": 4,
-    "hpBonus": 0,
+    "attackBonus": 3,
+    "hpBonus": 3,
     "randomTarget": true
     }
     ]
