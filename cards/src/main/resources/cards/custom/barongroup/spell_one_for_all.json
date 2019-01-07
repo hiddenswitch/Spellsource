@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "The next minion you play this turn has +3/+1.",
+  "description": "The next minion you play this turn has +2/+2.",
    "targetSelection": "NONE",
   "spell": {
     {
@@ -18,8 +18,8 @@
             "spell": {
               "class": "BuffSpell",
               "target": "EVENT_TARGET",
-              "attackBonus": 3,
-              "hpBonus": 1
+              "attackBonus": 2,
+              "hpBonus": 2
             },
             "maxFires": 1
                 "revertTrigger": {
