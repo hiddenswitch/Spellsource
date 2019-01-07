@@ -19,7 +19,8 @@ import java.util.function.Predicate;
 /**
  * Deals {@link SpellArg#VALUE} damage to the specified {@code target}.
  * <p>
- * When {@link SpellArg#IGNORE_SPELL_DAMAGE} is set to {@code true}, ignores {@link Attribute#SPELL_DAMAGE} bonuses.
+ * When {@link SpellArg#IGNORE_SPELL_DAMAGE} is set to {@code true}, ignores {@link Attribute#SPELL_DAMAGE} bonuses. By
+ * default, spell damage dealt anything other than a spell card cannot deal spell damage.
  * <p>
  * The amount of damage dealt can be modified by other, prior effects using {@link ModifyDamageSpell}. This is typically
  * done during the {@link net.demilich.metastone.game.spells.trigger.PreDamageTrigger}'s {@link

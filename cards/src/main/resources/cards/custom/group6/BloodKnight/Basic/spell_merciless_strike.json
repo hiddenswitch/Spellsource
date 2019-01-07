@@ -6,21 +6,29 @@
   "rarity": "FREE",
   "description": "Destroy your opponent's lowest Attack minion.",
   "targetSelection": "NONE",
-    "spell": {
-      "class": "DestroySpell",
-      "target": "ENEMY_MINIONS",
-      "filter": {
-        "class": "AttributeFilter",
-        "value": {
-          "class": "ReduceValueProvider",
-          "target": "ALL_MINIONS",
-          "attribute": "ATTACK",
-          "operation": "MINIMUM"
-        },
-        "attribute": "ATTACK"
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "value2": 0,
+    "operation": "GREATER"
+  },
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ENEMY_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "ENEMY_MINIONS",
+        "attribute": "ATTACK",
+        "operation": "MINIMUM"
       },
-      "randomTarget": true
-    }
+      "attribute": "ATTACK"
+    },
+    "randomTarget": true
   },
   "collectible": true,
   "set": "CUSTOM",
