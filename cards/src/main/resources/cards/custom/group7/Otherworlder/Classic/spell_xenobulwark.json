@@ -11,12 +11,12 @@
     "class": "MetaSpell",
     "spells": [
       
-      "spell": {
+      {
       "class": "SummonSpell",
       "card": "token_xenodrone_02"
       },
       
-      "spell": {
+      {
        "class": "AddAttributeSpell",
        "target": "FRIENDLY_MINIONS",
        "filter": {
