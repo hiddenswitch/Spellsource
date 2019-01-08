@@ -36,5 +36,9 @@ public enum TargetPlayer {
 	/**
 	 * The second player.
 	 */
-	PLAYER_2
+	PLAYER_2,
+	/**
+	 * Indicates either player. Used for filters and conditions.
+	 */
+	EITHER
 }

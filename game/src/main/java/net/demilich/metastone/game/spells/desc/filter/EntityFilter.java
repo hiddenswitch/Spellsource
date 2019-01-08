@@ -71,11 +71,17 @@ public abstract class EntityFilter implements Serializable, HasDesc<EntityFilter
 				providingPlayer = context.getActivePlayer();
 				break;
 			case BOTH:
-				boolean test = false;
+				boolean testBoth = true;
 				for (Player selectedPlayer : context.getPlayers()) {
-					test |= (this.test(context, selectedPlayer, entity, host) != invert);
+					testBoth &= (this.test(context, selectedPlayer, entity, host) != invert);
 				}
-				return test;
+				return testBoth;
+			case EITHER:
+				boolean testEither = false;
+				for (Player selectedPlayer : context.getPlayers()) {
+					testEither |= (this.test(context, selectedPlayer, entity, host) != invert);
+				}
+				return testEither;
 			case INACTIVE:
 				providingPlayer = context.getOpponent(context.getActivePlayer());
 				break;
