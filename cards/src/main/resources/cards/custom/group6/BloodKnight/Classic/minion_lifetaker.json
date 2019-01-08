@@ -1,0 +1,23 @@
+{
+  "name": "Lifetaker",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "Taunt. Battlecry: Drain 1 Health from all other minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "" (Insert Drain stuff here)
+    }
+  },
+  "attributes": {
+    "TAUNT": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

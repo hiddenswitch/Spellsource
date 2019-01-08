@@ -1,0 +1,28 @@
+{
+  "name": "Mindshaper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Battlecry: Summon two 2/1 Possessed Defenders with Taunt.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "LEFT",
+      "card": "token_possessed_defender"
+    }
+	"spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_possessed_defender"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
