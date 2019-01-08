@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "NEONGREEN",
   "rarity": "FREE",
-  "description": "Give your Xenodrones +1 Attack, then summon a 0/2 Xenodrone.",
+  "description": "Give your Xenodrones +1 Attack, then summon a 0/1 Xenodrone.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
@@ -19,14 +19,15 @@
           "class": "OrFilter",
           "filters": [
             {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone"}
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"}
           ]
       },
      "attackBonus": 1,
      
      "spell": {
        "class": "SummonSpell",
-       "card": "token_xenodrone"
+       "card": "token_xenodrone_01"
      }
     }
     ]
