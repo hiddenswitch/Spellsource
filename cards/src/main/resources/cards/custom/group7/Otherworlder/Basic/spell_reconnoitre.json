@@ -24,7 +24,7 @@
           "class": "OrFilter",
           "filters": [
             {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"}
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"},
             {"class": "SpecificCardFilter", "card": "token_xenodrone_02"}
           ]
          },
