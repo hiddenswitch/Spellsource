@@ -33,7 +33,7 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	public void testLesserPearlSpellstone() {
 		runGym((context, player, opponent) -> {
 			Card spellstone = receiveCard(context, player, "spell_lesser_pearl_spellstone");
-			opponent.getHero().setHp(29);
+			opponent.getHero().setHp(27);
 			playCard(context, player, "spell_healing_touch", opponent.getHero());
 			assertEquals(spellstone.transformResolved(context).getSourceCard().getCardId(), "spell_pearl_spellstone");
 		});

@@ -7,6 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.events.MaxHpIncreasedEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -122,6 +123,9 @@ public class BuffSpell extends Spell {
 				context.getLogic().modifyDurability((Weapon) target, hpBonus);
 			} else {
 				target.modifyHpBonus(hpBonus);
+				if (hpBonus > 0) {
+					context.fireGameEvent(new MaxHpIncreasedEvent(context, target, hpBonus, source.getOwner()));
+				}
 			}
 		}
 

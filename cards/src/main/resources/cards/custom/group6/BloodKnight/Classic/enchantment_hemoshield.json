@@ -1,0 +1,37 @@
+{
+  "name": "Hemoshield",
+  "type": "ENCHANTMENT",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "This actor gains taunt. Once its Health drops below 25, its loses Taunt.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "attribute": "AURA_TAUNT"
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "WillEndSequenceTrigger",
+      "fireCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP",
+          "target": "TRIGGER_HOST"
+        },
+        "value2": 25,
+        "operation": "LESS"
+      },
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "SELF",
+      "card": "enchantment_hemoshield"
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

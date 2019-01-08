@@ -6,12 +6,12 @@
   "baseAttack": 7,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Swap Health with the minion(s) opposite this one.",
+  "description": "Battlecry: Swap Health with the minion(s) opposite this one. (Splits its health for two)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "SwapHpSpell"
-	  "target": "OPPOSITE_MINIONS"
+      "class": "custom.BloodElfChampionSpell",
+      "target": "OPPOSITE_MINIONS"
     }
   },
   "attributes": {

@@ -25,8 +25,11 @@
         {
           "class": "AddDeathrattleSpell",
           "spell": {
-            "class": "SummonSpell",
-            "card": "minion_kiljaeden_deceiver"
+            "class": "CastAfterSequenceSpell",
+            "spell": {
+              "class": "SummonSpell",
+              "card": "minion_kiljaeden_deceiver"
+            }
           }
         }
       ]

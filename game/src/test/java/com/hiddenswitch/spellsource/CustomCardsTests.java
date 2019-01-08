@@ -56,6 +56,113 @@ import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
 
+	@Test
+	public void testBloodMoonRising() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_blood_moon_rising");
+			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
+			attack(context, player, wolfrider, opponent.getHero());
+			assertEquals(player.getHero().getMaxHp(), player.getHero().getBaseHp() + wolfrider.getAttack());
+		});
+	}
+
+	@Test
+	public void testVampiricSavage() {
+		runGym((context, player, opponent) -> {
+			Minion savage = playMinionCard(context, player, "minion_vampiric_savage");
+			playCard(context, player, "spell_hemoshield");
+			assertEquals(savage.getMaxHp(), savage.getBaseHp() + 5);
+		});
+	}
+
+	@Test
+	public void testSkullsplitterTroll() {
+		runGym((context, player, opponent) -> {
+			Minion troll = playMinionCard(context, player, "minion_skullsplitter_troll");
+			for (int i = 0; i < 2; i++) {
+				playMinionCard(context, player, "minion_neutral_test");
+			}
+			Minion lifetaker = playMinionCard(context, player, "minion_lifetaker");
+			assertEquals(lifetaker.getMaxHp(), lifetaker.getBaseHp() + 3);
+			assertEquals(troll.getAttack(), troll.getBaseAttack() + 1, "Draining only occurred once");
+		});
+	}
+
+	@Test
+	public void testLifetaker() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				playMinionCard(context, player, "minion_neutral_test");
+			}
+			Minion lifetaker = playMinionCard(context, player, "minion_lifetaker");
+			assertEquals(lifetaker.getMaxHp(), lifetaker.getBaseHp() + 3);
+		});
+	}
+
+	@Test
+	public void testBloodElfChampion() {
+		runGym((context, player, opponent) -> {
+			// No opposing minions, no swap
+			Minion elf = playMinionCard(context, player, "minion_blood_elf_champion");
+			assertEquals(elf.getHp(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// One opposing minion, swap
+			context.endTurn();
+			Minion swapped = playMinionCard(context, opponent, "minion_neutral_test");
+			swapped.setHp(10);
+			context.endTurn();
+			Minion elf = playMinionCard(context, player, "minion_blood_elf_champion");
+			assertEquals(elf.getHp(), 10);
+			assertEquals(swapped.getHp(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Two opposing minions, split
+			context.endTurn();
+			Minion swapped1 = playMinionCard(context, opponent, "minion_neutral_test");
+			swapped1.setHp(10);
+			Minion swapped2 = playMinionCard(context, opponent, "minion_neutral_test");
+			swapped2.setHp(10);
+			context.endTurn();
+			Minion elf = playMinionCard(context, player, "minion_blood_elf_champion");
+			assertEquals(elf.getHp(), 20);
+			assertEquals(swapped1.getHp(), 1);
+			assertEquals(swapped2.getHp(), 1);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Two opposing minions, handbuffed, split remainder to first minion
+			context.endTurn();
+			Minion swapped1 = playMinionCard(context, opponent, "minion_neutral_test");
+			swapped1.setHp(10);
+			Minion swapped2 = playMinionCard(context, opponent, "minion_neutral_test");
+			swapped2.setHp(10);
+			context.endTurn();
+			Card elfCard = receiveCard(context, player, "minion_blood_elf_champion");
+			elfCard.setAttribute(Attribute.HP_BONUS, 1);
+			Minion elf = playMinionCard(context, player, elfCard);
+			assertEquals(elf.getHp(), 20);
+			assertEquals(swapped1.getHp(), 2);
+			assertEquals(swapped2.getHp(), 1);
+		});
+	}
+
+	@Test
+	public void testDeathsCaress() {
+		runGym((context, player, opponent) -> {
+			Minion spellDamage1 = playMinionCard(context, player, "minion_neutral_test");
+			spellDamage1.setAttribute(Attribute.SPELL_DAMAGE, 1);
+			Minion testTarget = playMinionCard(context, player, "minion_neutral_test");
+			testTarget.setHp(10);
+			playCard(context, player, "spell_deaths_caress", testTarget);
+			context.endTurn();
+			assertEquals(testTarget.getHp(), 6, "Should have been dealt 3 + 1 spell damage");
+		});
+	}
+
+	@Test
 	public void testStitches() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

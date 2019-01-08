@@ -1,0 +1,37 @@
+{
+  "name": "",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Poisonous. Lifesteal. Also damages the minions next to whomever your hero attacks.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_HERO",
+          "attribute": "ATTACK"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "POISONOUS": true,
+    "LIFESTEAL": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

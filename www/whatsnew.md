@@ -3,6 +3,19 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.9-2.0.20 (Tuesday, January 8th, 2019)
+
+Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
+
+##### Content Additions:
+
+ - The Blood Knight class, starting with 38 cards and tokens.
+
+##### Content Fixes:
+
+ - Healing in excess of the health that can actually be restored no longer incorrectly triggers Pearl Spellstones, Soup Vendor, Blackguard, Virtuous Vapor, or Azjol Visionary.
+ - Cards that summon themselves on Deathrattle like Sacred Tombstone and Kil'jaeden, Deceiver no longer cause infinite loops.
+
 ### 0.8.8-2.0.20 (Friday, January 4th, 2019)
 
 The Hidden Switch Launcher for Windows has been updated to 1.1.0 and should start on the latest updates to Windows 10 now.

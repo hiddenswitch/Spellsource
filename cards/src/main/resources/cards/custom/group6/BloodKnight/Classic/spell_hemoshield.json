@@ -11,18 +11,14 @@
     "spells": [
       {
         "class": "BuffSpell",
-		"target": "FRIENDLY_HERO",
+        "target": "FRIENDLY_HERO",
         "hpBonus": 5
       },
       {
-      "class": "AddAttributeSpell",
-      "target": "FRIENDLY_HERO",
-      "attribute": "TAUNT",
-      "revertTrigger": {
-		"class": "", (Insert new trigger that goes off once Health drops below 25 here)
-		"targetPlayer": "SELF"
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_HERO",
+        "card": "enchantment_hemoshield"
       }
-      },
     ]
   },
   "collectible": true,
