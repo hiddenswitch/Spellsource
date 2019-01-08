@@ -9,7 +9,7 @@
   "description": "<b>Wither (5)</b>",
   
   "attributes": {
-    "Wither": 5,
+    "WITHER": 5,
   },
   
   "collectible": true,
