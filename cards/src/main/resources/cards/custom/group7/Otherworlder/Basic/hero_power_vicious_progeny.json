@@ -18,14 +18,15 @@
           "class": "OrFilter",
           "filters": [
             {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone"}
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"}
           ]
       },
      "attackBonus": 2,
      
      "spell": {
        "class": "SummonSpell",
-       "card": "token_xenodrone"
+       "card": "token_xenodrone_02"
      }
     }
    ]
