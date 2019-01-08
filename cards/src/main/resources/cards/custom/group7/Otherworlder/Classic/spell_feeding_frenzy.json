@@ -1,0 +1,37 @@
+{
+  "name": "Feeding Frenzy",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Destroy a friendly minion and distribute its stats among your other minions. Draw a card.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
+  
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+       "class": "MissilesSpell",
+       "target": "FRIENDLY_MINIONS",
+       "value": 1,
+       "howMany": ?????????????????????????????????????
+      },
+      {
+       "class": "DrawCardSpell",
+       "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
