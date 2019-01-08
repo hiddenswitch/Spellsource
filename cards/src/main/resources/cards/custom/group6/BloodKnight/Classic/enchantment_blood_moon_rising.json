@@ -1,0 +1,36 @@
+{
+  "name": "Blood Moon Rising",
+  "type": "ENCHANTMENT",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "All damage you deal this turn is Drained to your hero instead.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "custom.HealAndBuffExcessAsDrainSpell",
+        "target": "EVENT_TARGET",
+        "secondaryTarget": "FRIENDLY_HERO"
+      },
+      "persistentOwner": true
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "SELF",
+        "card": "enchantment_blood_moon_rising"
+      }
+    }
+  ],
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

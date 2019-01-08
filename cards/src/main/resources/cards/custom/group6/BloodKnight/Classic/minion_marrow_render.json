@@ -9,7 +9,9 @@
   "description": "Taunt. Battlecry: Drain 3 Health from your hero.",
   "battlecry": {
     "spell": {
-      "class": "" (Insert Drain stuff here)
+      "class": "DrainSpell",
+      "value": 3,
+      "target": "FRIENDLY_HERO"
     }
   },
   "attributes": {

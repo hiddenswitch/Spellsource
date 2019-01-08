@@ -1,5 +1,5 @@
 {
-  "name": "SKullsplitter Troll",
+  "name": "Skullsplitter Troll",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "BLOOD",
@@ -9,7 +9,7 @@
   "description": "Whenever Health is Drained, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
-      "class": "", (Insert Drain stuff here)
+      "class": "DrainTrigger"
     },
     "spell": {
       "class": "BuffSpell",

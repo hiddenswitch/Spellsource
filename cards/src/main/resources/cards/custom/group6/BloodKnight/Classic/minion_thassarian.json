@@ -10,7 +10,12 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "" (Insert Drain stuff here)
+      "class": "DrainSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP"
+      }
     }
   },
   "attributes": {

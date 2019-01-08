@@ -195,6 +195,8 @@ public class ParseUtils {
 				return EntityReference.ENEMY_CARDS;
 			case "current_summoning_minion":
 				return EntityReference.CURRENT_SUMMONING_MINION;
+			case "enemy_middle_minions":
+				return EntityReference.ENEMY_MIDDLE_MINIONS;
 			default:
 				return null;
 		}

@@ -4,10 +4,12 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "RARE",
-  "description": "All damage you deal this turn is Drained to your hero instead.",
+  "description": "All damage you deal this turn is also Drained to your hero.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "" (No idea here, sorry. For reference, this is meant to Drain Health to your hero instead of dealing the damage normally, so minions' lifesteal wouldn't proc and you'd become the recipient of other Drain effects. If that's not a thing you can do, let me know and I'll change the card)
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_blood_moon_rising"
   },
   "collectible": true,
   "set": "CUSTOM",

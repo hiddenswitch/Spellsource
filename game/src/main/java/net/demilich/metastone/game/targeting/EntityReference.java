@@ -471,13 +471,21 @@ public final class EntityReference implements Serializable {
 	 */
 	public static final EntityReference CURRENT_SUMMONING_MINION = new EntityReference(-68);
 	/**
-	 * References all entities that are "in play" for the friendly player i.e. cards in hand, deck, set aside + minions + hero
+	 * References all entities that are "in play" for the friendly player i.e. cards in hand, deck, set aside + minions +
+	 * hero.
 	 */
 	public static final EntityReference FRIENDLY_CARDS = new EntityReference(-69);
 	/**
-	 * References all entities that are "in play" for the enemy player i.e. cards in hand, deck, set aside + minions + hero
+	 * References all entities that are "in play" for the enemy player i.e. cards in hand, deck, set aside + minions +
+	 * hero.
 	 */
 	public static final EntityReference ENEMY_CARDS = new EntityReference(-70);
+	/**
+	 * References the minions that are in the middle of the enemy's battlefield. This will return two minions when the
+	 * number of minions on the opponent's battlefield is even.
+	 */
+	public static final EntityReference ENEMY_MIDDLE_MINIONS = new EntityReference(-71);
+
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
 			return null;

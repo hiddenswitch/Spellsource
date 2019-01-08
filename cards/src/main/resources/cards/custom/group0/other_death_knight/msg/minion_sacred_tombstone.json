@@ -8,8 +8,11 @@
   "rarity": "RARE",
   "description": "Deathrattle: Summon a Sacred Tombstone.",
   "deathrattle": {
-    "class": "SummonSpell",
-    "card": "minion_sacred_tombstone"
+    "class": "CastAfterSequenceSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_sacred_tombstone"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

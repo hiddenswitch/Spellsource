@@ -1,6 +1,5 @@
 {
   "name": "Crimson Tide",
-  "heroPower": "hero_power_crimon_tide",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BLOOD",

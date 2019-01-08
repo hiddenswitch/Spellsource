@@ -46,6 +46,24 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testSplashDamageAppliesPoisonousAndLifesteal() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_splash_damage_weapon");
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target3 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			player.getHero().setHp(27);
+			attack(context, player, player.getHero(), target2);
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			assertTrue(target3.isDestroyed());
+			assertEquals(player.getHero().getHp(), 30 - target2.getAttack());
+		});
+	}
+
+	@Test
 	public void testPermanentDoesntTriggerSummons() {
 		runGym((context, player, opponent) -> {
 			Minion minion = playMinionCard(context, player, "minion_test_permanents_dont_trigger_summons");

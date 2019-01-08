@@ -11,11 +11,11 @@
     "target": "FRIENDLY_HERO",
     "attackBonus": {
       "class": "EntityCounter",
-      "target": "ALL",
+      "target": "ALL_CHARACTERS",
       "filter": {
         "class": "DamagedFilter"
-	}
-	}
+      }
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

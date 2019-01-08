@@ -72,6 +72,12 @@ public final class CastAfterSequenceSpell extends Spell {
 			}
 		}
 
+		// Special casing a summon in a deathrattle context so that it has the appropriate board position
+		if (SummonSpell.class.isAssignableFrom(spell.getDescClass())
+				&& desc.containsKey(SpellArg.BOARD_POSITION_ABSOLUTE)) {
+			spell = spell.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, desc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE));
+		}
+
 		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
 		enchantmentDesc.spell = spell;
 		enchantmentDesc.maxFires = 1;

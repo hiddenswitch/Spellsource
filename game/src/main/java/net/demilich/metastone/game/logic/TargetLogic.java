@@ -10,6 +10,7 @@ import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -103,7 +104,7 @@ public class TargetLogic implements Serializable {
 		if (entity.isPresent()) {
 			return entity.get();
 		} else {
-		    throw new NullPointerException("Target not found exception: " + targetKey);
+			throw new NullPointerException("Target not found exception: " + targetKey);
 		}
 	}
 
@@ -454,6 +455,32 @@ public class TargetLogic implements Serializable {
 				return new ArrayList<>();
 			}
 			return singleTargetAsList(findEntity(context, context.getSummonReferenceStack().peekLast()));
+		} else if (targetKey.equals(EntityReference.ENEMY_MIDDLE_MINIONS)) {
+			Player opponent = context.getOpponent(player);
+			List<Entity> matching = new ArrayList<>();
+			/* Skip this many minions on both sides of the battlefield
+			Size - Skip
+			0 - 0
+			1 - 0
+			2 - 0
+			3 - 1
+			4 - 1
+			5 - 2
+			6 - 2
+			7 - 3
+
+			For example, for 5 minions, skip 2 on both sides:
+			skip skip return skip skip
+
+			 */
+			if (opponent.getMinions().size() == 0) {
+				return matching;
+			}
+			int skip = (opponent.getMinions().size() - 1) / 2;
+			for (int i = skip; i < opponent.getMinions().size() - skip; i++) {
+				matching.add(opponent.getMinions().get(i));
+			}
+			return matching;
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

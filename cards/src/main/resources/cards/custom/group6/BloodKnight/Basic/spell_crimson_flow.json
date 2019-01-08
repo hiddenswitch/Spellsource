@@ -4,10 +4,10 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "Take 2 damage. Restore 6 Health.",
-  "targetSelection": "ALL",
+  "description": "Take $2 damage. Restore #6 Health.",
+  "targetSelection": "ANY",
   "spell": {
-    "class": "HealSpell",
+    "class": "MetaSpell",
     "spells": [
       {
         "class": "DamageSpell",

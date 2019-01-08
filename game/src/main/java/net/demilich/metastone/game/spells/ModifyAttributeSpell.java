@@ -8,6 +8,8 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
@@ -19,6 +21,8 @@ import java.util.Map;
  * specified on the target.
  */
 public class ModifyAttributeSpell extends RevertableSpell {
+	private static Logger LOGGER = LoggerFactory.getLogger(ModifyAttributeSpell.class);
+
 	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
@@ -38,6 +42,12 @@ public class ModifyAttributeSpell extends RevertableSpell {
 		super.onCast(context, player, desc, source, target);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		if (attribute == Attribute.MAX_HP
+				|| attribute == Attribute.ATTACK
+				|| attribute == Attribute.ATTACK_BONUS
+				|| attribute == Attribute.HP_BONUS) {
+			LOGGER.warn("onCast {} {}: Modifying special attribute {} which should typically be modified other ways", context.getGameId(), source, attribute);
+		}
 		target.modifyAttribute(attribute, value);
 	}
 
