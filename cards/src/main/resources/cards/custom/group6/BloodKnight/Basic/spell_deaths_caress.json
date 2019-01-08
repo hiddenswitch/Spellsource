@@ -1,0 +1,26 @@
+{
+  "name": "Death's Caress",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Choose a minion. At the end of your turn, deal 3 damage to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "SELF",
+		"value": 3
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
