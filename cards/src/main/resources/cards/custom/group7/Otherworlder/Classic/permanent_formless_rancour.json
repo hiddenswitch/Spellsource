@@ -16,13 +16,14 @@
         "class": "DestroySpell",
         "target": "SELF"
       }
-    },
+
     "aura": {
     "class": "BuffAura",
     "target": "ADJACENT_MINIONS",
     "attackBonus": 1,
     "hpBonus": 0
-  }
+    }
+   }
   ],
   "attributes": {
     "PERMANENT": true
