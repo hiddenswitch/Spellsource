@@ -1,0 +1,37 @@
+{
+  "name": "Formless Celerity",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "description": "Permanent. At the end of your turn, both players draw a card. When a player has 9 cards in hand, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        //CONDITION
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+    },
+    {
+      "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+        "class": "DrawCardSpell",
+        "targetPlayer": "ANY"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
