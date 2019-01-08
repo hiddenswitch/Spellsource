@@ -12,11 +12,10 @@
     "trigger": {
       "eventTrigger": {
       "class": "HealingTrigger",
-	  "targetPlayer": "SELF"
+	  "targetPlayer": "BOTH"
       },
       "spell": {
-        "class": "DrawCardSpell",
-        "value: 1"
+        "class": "DrawCardSpell"
       },
       "oneTurn": true
     }

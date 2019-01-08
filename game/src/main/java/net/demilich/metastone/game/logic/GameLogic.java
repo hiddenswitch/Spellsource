@@ -1216,7 +1216,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			damage *= 2;
 		}
 
-		// Dealing zero base damage should never cause any effects
+		// Dealing zero base damage should never cause any effects because it doesn't count as a hit
 		if (damage == 0) {
 			return 0;
 		}
@@ -1231,7 +1231,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int damageDealt = 0;
 		switch (target.getEntityType()) {
 			case MINION:
-				damageDealt = damageMinion(player, damage, source, (Actor) target);
+				damageDealt = damageMinion(player, damage, source, target);
 				break;
 			case HERO:
 				damageDealt = damageHero((Hero) target, damage, source);
@@ -1240,6 +1240,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				break;
 		}
 
+		// Dealing zero damage at this point still counts as a hit.
 		target.setAttribute(Attribute.LAST_HIT, damageDealt);
 		target.getAttributes().put(Attribute.TOTAL_DAMAGE_RECEIVED, (int) target.getAttributes().getOrDefault(Attribute.TOTAL_DAMAGE_RECEIVED, 0) + damageDealt);
 
@@ -1295,7 +1296,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		minion.setHp(minion.getHp() - damage);
-		handleEnrage(minion);
+		handleHpChange(minion);
 		return damage;
 	}
 
@@ -2021,8 +2022,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return null;
 	}
 
+	/**
+	 * Handles changes in a entity's hitpoints.
+	 * <p>
+	 * Currently implements {@link Attribute#ENRAGED}.
+	 *
+	 * @param entity The entity whose hitpoints have changed.
+	 */
 	@Suspendable
-	private void handleEnrage(Actor entity) {
+	private void handleHpChange(Actor entity) {
 		if (!entity.hasAttribute(Attribute.ENRAGABLE)) {
 			return;
 		}
@@ -2162,25 +2170,19 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
-		if (applyHealingAmplification
-				&& source != null
-				&& source instanceof Card
-				&& (((Card) source).getCardType().isCardType(CardType.SPELL)
-				|| ((Card) source).getCardType().isCardType(CardType.HERO_POWER))) {
-		}
-		boolean success = false;
 		switch (target.getEntityType()) {
 			case MINION:
-				success = healMinion((Actor) target, healing);
+				healing = healMinion(target, healing);
 				break;
 			case HERO:
-				success = healHero((Hero) target, healing);
+				healing = healHero((Hero) target, healing);
 				break;
 			default:
 				break;
 		}
 
-		if (success) {
+		// Only record the amount that is actually healed
+		if (healing > 0) {
 			HealEvent healEvent = new HealEvent(context, player.getId(), target, healing);
 			// Implements Happy Ghoul
 			target.modifyAttribute(Attribute.HEALING_THIS_TURN, healing);
@@ -2193,22 +2195,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 	}
 
-	private boolean healHero(Hero hero, int healing) {
+	private int healHero(Hero hero, int healing) {
 		int newHp = Math.min(hero.getMaxHp(), hero.getHp() + healing);
 		int oldHp = hero.getHp();
 
 		hero.setHp(newHp);
-		return newHp != oldHp;
+		return newHp - oldHp;
 	}
 
 	@Suspendable
-	private boolean healMinion(Actor minion, int healing) {
+	private int healMinion(Actor minion, int healing) {
 		int newHp = Math.min(minion.getMaxHp(), minion.getHp() + healing);
 		int oldHp = minion.getHp();
 
 		minion.setHp(newHp);
-		handleEnrage(minion);
-		return newHp != oldHp;
+		handleHpChange(minion);
+		return newHp - oldHp;
 	}
 
 	/**
@@ -2557,9 +2559,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public void setHpAndMaxHp(Actor actor, int value) {
 		// If there is an active aura, we must account for it here
 		int auraHp = actor.getAttributeValue(Attribute.AURA_HP_BONUS);
-		actor.setMaxHp(value + auraHp);
-		actor.setHp(value + auraHp);
-		handleEnrage(actor);
+		int newMaxHp = value + auraHp;
+		int currentMaxHp = actor.getMaxHp();
+		actor.setMaxHp(newMaxHp);
+		actor.setHp(newMaxHp);
+		handleHpChange(actor);
+		if (newMaxHp > currentMaxHp) {
+			context.fireGameEvent(new MaxHpIncreasedEvent(context, actor, newMaxHp - currentMaxHp, -1));
+		}
 	}
 
 	/**
@@ -3810,6 +3817,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Minions summoned by a summon effect written on a card other than a {@link Card} are not played directly from the
 	 * hand, and therefore will not trigger Battlecries or Overload. However, they will work with triggered effects which
 	 * respond to the summoning of minions, like {@link MinionSummonedTrigger}.
+	 * <p>
+	 * A minion's {@link AfterMinionSummonedTrigger} and {@link AfterMinionPlayedTrigger} enchantments <b>will</b> fire
+	 * off this minion's summoning. Its {@link MinionSummonedTrigger}, {@link MinionPlayedTrigger}, {@link
+	 * BeforeMinionSummonedTrigger} and {@link BeforeMinionPlayedTrigger} enchantments will <b>not</b> trigger off this
+	 * minion's summonining.
 	 *
 	 * @param playerId         The player who will own the minion (not the initiator of the summon, which may be the
 	 *                         opponent).
@@ -3891,7 +3903,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					addGameEventListener(player, minion.getCardCostModifier(), minion);
 				}
 
-				handleEnrage(minion);
+				handleHpChange(minion);
 			}
 
 			if (player.getMinions().contains(minion)
@@ -4097,7 +4109,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					addGameEventListener(owner, newMinion.getCardCostModifier(), newMinion);
 				}
 
-				handleEnrage(newMinion);
+				handleHpChange(newMinion);
 			} else {
 				owner.getSetAsideZone().add(newMinion);
 				removeEnchantments(newMinion);

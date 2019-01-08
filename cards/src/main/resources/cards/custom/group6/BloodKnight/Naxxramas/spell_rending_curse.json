@@ -4,25 +4,11 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Give a minion 'Deathrattle: Deal $1 damage to all other minions, then give them this Deathrattle.'",
+  "description": "Give a minion 'Deathrattle: Deal 1 damage to all other minions, then give them this Deathrattle.'",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",
-    "spell": {
-      "class": "MetaSpell",
-	  "spells": [
-		{
-		"class": "DamageSpell",
-		"target": "ALL_OTHER_MINIONS",
-		"value": 1
-		}
-		{
-		"class": "AddDeathrattleSpell",
-		"target": "ALL_OTHER_MINIONS",
-		"spell": { (How does this work? Is there a way to separately define the deathrattle gained or something? If it just can't be done, let me know, I'll redo the card)
-		}
-		}
-	  ]
+    "card": "enchantment_rending_curse"
   },
   "collectible": true,
   "set": "CUSTOM",
