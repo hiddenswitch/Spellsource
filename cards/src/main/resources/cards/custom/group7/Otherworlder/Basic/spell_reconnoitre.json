@@ -12,8 +12,8 @@
       {
         "class": "SummonSpell",
         "cards": [
-        "token_xenodrone",
-        "token_xenodrone"
+        "token_xenodrone_02",
+        "token_xenodrone_02"
         ]
       },
       
@@ -24,7 +24,8 @@
           "class": "OrFilter",
           "filters": [
             {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone"}
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"}
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"}
           ]
          },
        "attackBonus": 1
