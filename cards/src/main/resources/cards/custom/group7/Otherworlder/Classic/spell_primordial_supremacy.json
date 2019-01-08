@@ -28,7 +28,7 @@
       
       {
         "class": "DrawCardSpell",
-        "targetPlayer": "SELF"
+        "value": 1
       }
     ]
   },
