@@ -1,0 +1,27 @@
+{
+  "name": "Grandmother Vratta",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 4,
+  "baseHp": 10,
+  "rarity": "LEGENDATY",
+  "description": "<b>Charge</b>. This has <b>Immune</b> as long as you control a Xenodrone.",
+  "targetSelection": "ANY",
+  "aura": {
+    "class": "AddAttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "XenodroneCondition", /////////////////////////////////
+      "targetPlayer": "SELF"
+    },
+    "attribute": "AURA_IMMUNE"
+  },
+  
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
