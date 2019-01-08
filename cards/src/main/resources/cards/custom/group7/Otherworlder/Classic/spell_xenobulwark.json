@@ -11,6 +11,7 @@
     "class": "MetaSpell",
     "spells": [
       {
+      {
       "class": "SummonSpell",
       "card": "token_xenodrone_02"
       },
@@ -29,7 +30,8 @@
        "attribute": "TAUNT"
        }
      ]
-    },
+    }
+   },
     
   "collectible": true,
   "set": "CUSTOM",
