@@ -4,12 +4,12 @@
   "type": "MINION",
   "heroClass": "NEONGREEN",
   "baseAttack": 1,
-  "baseHp": 4,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "<b>Wither (1)</b>",
   
   "attributes": {
-    "Wither": 1,
+    "WITHER": 1,
   },
   
   "collectible": true,
