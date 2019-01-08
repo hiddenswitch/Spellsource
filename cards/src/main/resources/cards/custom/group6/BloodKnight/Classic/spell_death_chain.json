@@ -11,18 +11,21 @@
     "trigger": {
       "eventTrigger": {
         "class": "DamageReceivedTrigger",
-		"hostTargetType": "IGNORE_OTHER_TARGETS"
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
       "spell": {
-            "class": "DamageSpell",
-            "target": "ADJACENT_MINIONS",
-			"value": {
-				"class": "AttributeValueProvider",
-				"target": "SELF",
-				"attribute": "LAST_HIT"
-			},
-		}	
-      "persistentOwner": true
+        "class": "SplashDamageSpell",
+        "target": "ADJACENT_MINIONS",
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "LAST_HIT"
+        }
+      }
     }
   },
   "collectible": true,

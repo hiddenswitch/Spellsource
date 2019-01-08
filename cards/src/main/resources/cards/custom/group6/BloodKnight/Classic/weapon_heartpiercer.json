@@ -7,8 +7,30 @@
   "durability": 2,
   "rarity": "EPIC",
   "description": "Deathrattle: Drain the Health of all minions damaged by this.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "card": "enchantment_heartpierced",
+      "target": "EVENT_TARGET"
+    }
+  },
   "deathrattle": {
-	(Sorry, I'm honestly not sure where to start with this one)
+    "class": "DrainSpell",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "HasEnchantmentFilter",
+      "card": "enchantment_heartpierced"
+    },
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    }
   },
   "attributes": {
     "DEATHRATTLES": true

@@ -7,7 +7,6 @@ import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -19,7 +18,8 @@ import java.util.function.Predicate;
 /**
  * Deals {@link SpellArg#VALUE} damage to the specified {@code target}.
  * <p>
- * When {@link SpellArg#IGNORE_SPELL_DAMAGE} is set to {@code true}, ignores {@link Attribute#SPELL_DAMAGE} bonuses.
+ * When {@link SpellArg#IGNORE_SPELL_DAMAGE} is set to {@code true}, ignores {@link Attribute#SPELL_DAMAGE} bonuses. By
+ * default, spell damage dealt anything other than a spell card cannot deal spell damage.
  * <p>
  * The amount of damage dealt can be modified by other, prior effects using {@link ModifyDamageSpell}. This is typically
  * done during the {@link net.demilich.metastone.game.spells.trigger.PreDamageTrigger}'s {@link
@@ -118,19 +118,8 @@ public class DamageSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(EntityReference target, ValueProvider damageModfier) {
-		Map<SpellArg, Object> arguments = new SpellDesc(DamageSpell.class);
-		arguments.put(SpellArg.VALUE, damageModfier);
-		arguments.put(SpellArg.TARGET, target);
-		return new SpellDesc(arguments);
-	}
-
 	public static SpellDesc create(int damage) {
 		return create(null, damage);
-	}
-
-	public static SpellDesc create(ValueProvider damageModfier) {
-		return create(null, damageModfier);
 	}
 
 	public static SpellDesc create() {
@@ -158,7 +147,10 @@ public class DamageSpell extends Spell {
 		int damage = 0;
 		// TODO Rewrite to more accurate way to grab Damage Stack damage.
 		if (!desc.containsKey(SpellArg.VALUE) && !context.getDamageStack().isEmpty()) {
-			damage = context.getDamageStack().peek();
+			Integer peek = context.getDamageStack().peek();
+			if (peek != null) {
+				damage = peek;
+			}
 		} else {
 			damage = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		}

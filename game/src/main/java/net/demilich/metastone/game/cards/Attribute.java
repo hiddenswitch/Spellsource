@@ -484,7 +484,7 @@ public enum Attribute {
 	HERO_POWERS_DISABLED,
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
-	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e .g.,
+	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e.g.,
 	 * a healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,

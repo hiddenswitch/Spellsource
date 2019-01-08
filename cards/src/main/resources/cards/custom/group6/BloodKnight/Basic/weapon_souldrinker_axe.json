@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "FREE",
-  "description": "After your hero attacks and kills a minion, give them +4 Health.",
+  "description": "After your hero attacks and kills a minion, give your hero +4 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -9,14 +9,19 @@
   "description": "Battlecry: Summon two 2/1 Possessed Defenders with Taunt.",
   "battlecry": {
     "spell": {
-      "class": "SummonSpell",
-      "boardPositionRelative": "LEFT",
-      "card": "token_possessed_defender"
-    }
-	"spell": {
-      "class": "SummonSpell",
-      "boardPositionRelative": "RIGHT",
-      "card": "token_possessed_defender"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_possessed_defender"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_possessed_defender"
+        }
+      ]
     }
   },
   "attributes": {
