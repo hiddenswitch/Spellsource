@@ -1,0 +1,31 @@
+{
+  "name": "Kang, Fist of First Dawn",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Whenever a friendly minion gains Health, they also gain that much Attack.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MaxHpIncreasedTrigger",
+      "targetEntityType": "FRIENDLY_MINION",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "attackBonus": {
+	    "class": "EventValueProvider",
+		"multiplier": 1
+	  }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+	"CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
