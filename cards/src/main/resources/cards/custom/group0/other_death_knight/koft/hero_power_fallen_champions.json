@@ -19,8 +19,7 @@
           "filters": [
             {
               "class": "OwnedByPlayerFilter",
-              "invert": true,
-              "targetPlayer": "SELF"
+              "targetPlayer": "OPPONENT"
             },
             {
               "class": "SpecificCardFilter",

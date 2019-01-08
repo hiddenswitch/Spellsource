@@ -45,8 +45,7 @@
             },
             "value2": 2
           },
-          "invert": true,
-          "targetPlayer": "OWNER"
+          "targetPlayer": "OPPONENT"
         },
         {
           "class": "OwnedByPlayerFilter",
@@ -59,7 +58,7 @@
             },
             "value2": 1
           },
-          "targetPlayer": "OWNER"
+          "targetPlayer": "SELF"
         }
       ]
     },
