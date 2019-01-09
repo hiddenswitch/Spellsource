@@ -33,7 +33,7 @@ Notes for successful deployment:
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.8 ./deploy.sh -cpdwv
+  SPELLSOURCE_VERSION=0.8.9 ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -43,7 +43,7 @@ deploy_launcher=false
 bump_version=false
 install_dependencies=false
 build_client=false
-while getopts "hcedplwD" opt; do
+while getopts "hcedplvwD" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -401,7 +401,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.8-all.jar \
+      ./net/build/libs/net-0.8.9-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

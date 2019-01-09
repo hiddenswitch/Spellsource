@@ -3,7 +3,7 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-### 0.8.9-2.0.20 (Tuesday, January 8th, 2019)
+### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
 
 Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
 

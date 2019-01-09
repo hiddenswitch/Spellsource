@@ -15,6 +15,6 @@ export SPELLSOURCE_LOGGING_LEVEL=ERROR
 # Execute the simulation
 # Gets a comma-separated list of deck file names.
 DECKS=$(ls | paste -s -d, -)
-java -cp ../../../../../../cluster/build/libs/cluster-0.8.8-all.jar com.hiddenswitch.cluster.applications.Simulate --decks "${DECKS}" --number 10000 --output ../temporary_results.tsv
+java -cp ../../../../../../cluster/build/libs/cluster-0.8.9-all.jar com.hiddenswitch.cluster.applications.Simulate --decks "${DECKS}" --number 10000 --output ../temporary_results.tsv
 cp ../temporary_results.tsv ../../../../../../cluster/simulations.tsv
 rm ../temporary_results.tsv
