@@ -1,0 +1,10 @@
+{
+  "seed" : -5234195555944411612,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "AMBER", "NEONGREEN" ],
+  "deckCardIds" : [ [ "minion_sunfury_protector", "minion_blue_beetle", "minion_ice_cream_peddler", "minion_sideshow_spelleater", "spell_swarm_shield", "minion_shieldbearer", "spell_encased_in_amber", "minion_vryghoul", "minion_ysera", "minion_knife_juggler", "minion_meetle", "minion_hands_on_historian", "minion_deathwhelp", "minion_morris", "minion_serv-ant", "minion_huge_toad", "minion_bog_creeper", "weapon_maexxnas_femur", "spell_ancient_catching", "minion_cloud_serpent_hatchling", "minion_backwater_wise", "minion_lightning_lure", "minion_lost_tallstrider", "minion_murloc_tidehunter", "minion_fallen_sun_cleric", "minion_dragonmaw_scorcher", "minion_trophy_huntress", "minion_ragnaros_the_firelord", "minion_silithid_wasp", "minion_eldritch_horror" ], [ "minion_hope_eater", "permanent_formless_celerity", "permanent_formless_rancour", "minion_gormok_the_impaler", "spell_xenobulwark", "spell_chaos_bolts", "spell_distort", "minion_illidan_stormrage", "spell_daunting_carapace", "spell_malignancy", "minion_hope_eater", "minion_nozdormu", "permanent_formless_immortal", "minion_grandmother_vratta", "minion_wargear", "spell_cannibalize", "spell_xenobulwark", "minion_dragonhawk_rider", "minion_kelthuzad", "spell_quasar_blast", "minion_cthun", "spell_warp", "minion_stormwatcher", "spell_malignancy", "spell_observer", "permanent_formless_rancour", "spell_cellular_overdrive", "spell_warp", "minion_kairozdormu", "minion_novice_time_traveler" ] ],
+  "deckFormatName" : "Custom",
+  "deckFormatSets" : [ "CLASSIC", "BATTLE_FOR_ASHENVALE", "JOURNEY_TO_UNGORO", "RASTAKHANS_RUMBLE", "GOBLINS_VS_GNOMES", "THE_GRAND_TOURNAMENT", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "ONE_NIGHT_IN_KARAZHAN", "PROMO", "SANDS_OF_TIME", "REWARD", "BOOMSDAY_PROJECT", "HALL_OF_FAME", "BASIC", "NAXXRAMAS", "THE_OLD_GODS", "BLACKROCK_MOUNTAIN", "WITCHWOOD", "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "KOBOLDS_AND_CATACOMBS" ],
+  "mulligans" : [ [ 18 ], [ 49, 44, 53 ] ],
+  "actions" : [ 2, 3, 2, 1, 3, 1, 3, 0, 6, 1, 3, 0, 0, 3, 2, 0, 0, 0, 1, 1, 4, 2, 0, 1 ]
+}

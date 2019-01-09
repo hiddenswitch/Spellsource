@@ -13,6 +13,7 @@ public enum EntityFilterArg {
 	HERO_CLASS,
 	HERO_CLASSES,
 	CARD,
+	CARDS,
 	FILTERS,
 	INVERT,
 	CARD_SET,

@@ -1,0 +1,48 @@
+{
+  "name": "Formless Immortal",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Permanent. At the end of your turn, give a random friendly minion +2 Health. When you have no minions, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "OTHER_FRIENDLY_MINIONS",
+        "hpBonus": 2,
+        "randomTarget": true
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger",
+        "fireCondition": {
+          "class": "ComparisonCondition",
+          "value1": {
+            "class": "EntityCounter",
+            "target": "FRIENDLY_MINIONS"
+          },
+          "value2": 0,
+          "operation": "EQUAL"
+        }
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
