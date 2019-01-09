@@ -1,0 +1,38 @@
+{
+  "name": "Vicious Progeny",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "NEONGREEN",
+  "rarity": "FREE",
+  "description": "Give your Xenodrones +2 Attack, then summon a 0/2 Xenodrone.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+          "class": "OrFilter",
+          "filters": [
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"}
+          ]
+      },
+     "attackBonus": 2,
+     
+     "spell": {
+       "class": "SummonSpell",
+       "card": "token_xenodrone_02"
+     }
+    }
+   ]
+  }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,38 @@
+{
+  "name": "Primordial Supremacy",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "EPIC",
+  "description": "Give your Titans, Xenodrones, and minions with <b>Wither</b> +1/+2. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 1,
+        "hpBonus": 2,
+        "filter": {
+          "class": "OrFilter",
+          "filters": [
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"},
+            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"},
+            {"class": "AttributeFilter", "attribute": "WITHER", "operation": "HAS"},
+            {"class": "RaceFilter", "race": "BEAST"}
+          ]
+        }
+      },
+      
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
