@@ -7,15 +7,22 @@ permalink: /whats-new/
 
 Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
 
+@Pircival contributed new Baron cards and fixes.
+
+@LyokoBarbossa also contributed fixes.
+
 ##### Content Additions:
 
  - The Blood Knight class, starting with 38 cards and tokens.
+ - The new Baron cards Pawshop Trader, Smug Smuggler, Trisword Swinger, Vanal Petkiper,
 
 ##### Content Fixes:
 
  - Healing in excess of the health that can actually be restored no longer incorrectly triggers Pearl Spellstones, Soup Vendor, Blackguard, Virtuous Vapor, or Azjol Visionary.
  - Cards that summon themselves on Deathrattle like Sacred Tombstone and Kil'jaeden, Deceiver no longer cause infinite loops.
  - Bronze Timekeeper now correctly triggers turn start and end enchantments that do something to their hosts.
+ - Baron's Fight! now gives a friendly and random enemy minion +3/+3 (was +4 Attack).
+ - Baron's One For All now gives the next minion you play this turn +2/+2 (was +3/+1).
 
 ### 0.8.8-2.0.20 (Friday, January 4th, 2019)
 
