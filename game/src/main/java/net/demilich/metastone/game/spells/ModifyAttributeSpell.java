@@ -6,6 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -24,6 +25,14 @@ public class ModifyAttributeSpell extends RevertableSpell {
 	private static Logger LOGGER = LoggerFactory.getLogger(ModifyAttributeSpell.class);
 
 	public static SpellDesc create(EntityReference target, Attribute tag, int value) {
+		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);
+		arguments.put(SpellArg.ATTRIBUTE, tag);
+		arguments.put(SpellArg.VALUE, value);
+		arguments.put(SpellArg.TARGET, target);
+		return new SpellDesc(arguments);
+	}
+
+	public static SpellDesc create(EntityReference target, Attribute tag, ValueProvider value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);
 		arguments.put(SpellArg.ATTRIBUTE, tag);
 		arguments.put(SpellArg.VALUE, value);

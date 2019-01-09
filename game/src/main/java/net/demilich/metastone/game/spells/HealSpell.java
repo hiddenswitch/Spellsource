@@ -63,6 +63,5 @@ public class HealSpell extends Spell {
 		int healing = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		context.getLogic().heal(player, (Actor) target, Math.max(0, healing), source);
 	}
-
 }
 

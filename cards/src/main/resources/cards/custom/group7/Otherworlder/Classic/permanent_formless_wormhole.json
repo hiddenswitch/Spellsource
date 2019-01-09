@@ -10,22 +10,30 @@
   "triggers": [
     {
       "eventTrigger": {
-        //CONDITION
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_xenodrone_02"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger",
+        "fireCondition": {
+          "class": "MinionCountCondition",
+          "targetPlayer": "SELF",
+          "value": {
+            "class": "MaxBoardSizeValueProvider"
+          },
+          "operation": "EQUAL"
+        }
       },
       "spell": {
         "class": "DestroySpell",
         "target": "SELF"
-      },
-    },
-    {
-      "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "SummonSpell",
-      "card": "token_xenodrone_02"
-     }
+      }
     }
   ],
   "attributes": {

@@ -7,19 +7,16 @@
   "description": "Deal $10 damage to an enemy minion, then deal its excess damage randomly split among all enemies.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DamageSpell",
-        "value": 10
-      },
-      {
-       "class": "MissilesSpell",
-       "target": "ENEMY_CHARACTERS",
-       "value": 1,
-       "howMany": ?????????????????????????????????????
+    "class": "ExcessDamageSpell",
+    "value": 10,
+    "spell": {
+      "class": "ValueToHowManySpell",
+      "spell": {
+        "class": "MissilesSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
       }
-    ]
+    }
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -10,7 +10,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Evaluates to {@code true} if the {@code target} or single entity resolved by {@link ConditionArg#TARGET} has the
  * specified {@link ConditionArg#RACE}.
  */
-public class RaceCondition extends Condition {
+public final class RaceCondition extends Condition {
 
 	public RaceCondition(ConditionDesc desc) {
 		super(desc);
@@ -24,5 +24,4 @@ public class RaceCondition extends Condition {
 		}
 		return target.getSourceCard().hasRace(race);
 	}
-
 }

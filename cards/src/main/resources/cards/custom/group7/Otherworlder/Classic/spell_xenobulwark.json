@@ -6,32 +6,28 @@
   "rarity": "COMMON",
   "description": "Summon a 0/2 Xenodrone, then give your Xenodrones <b>Taunt</b>.",
   "targetSelection": "NONE",
-  
   "spell": {
     "class": "MetaSpell",
     "spells": [
-      
       {
-      "class": "SummonSpell",
-      "card": "token_xenodrone_02"
+        "class": "SummonSpell",
+        "card": "token_xenodrone_02"
       },
-      
       {
-       "class": "AddAttributeSpell",
-       "target": "FRIENDLY_MINIONS",
-       "filter": {
-          "class": "OrFilter",
-          "filters": [
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"}
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "cards": [
+            "token_xenodrone_07",
+            "token_xenodrone_02",
+            "token_xenodrone_01"
           ]
         },
-       "attribute": "TAUNT"
-       }
-     ]
-   },
-    
+        "attribute": "TAUNT"
+      }
+    ]
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

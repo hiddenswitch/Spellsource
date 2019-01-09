@@ -12,16 +12,29 @@
       {
         "class": "BuffSpell",
         "attackBonus": -1,
-        "hpBonus": 4,
+        "hpBonus": 4
       },
       {
         "class": "AddAttributeSpell",
         "attribute": "TAUNT"
       },
       {
-        "class": "AddAttributeSpell",
+        "class": "ModifyAttributeSpell",
         "attribute": "WITHER",
-        "WITHER": 1
+        "value": 1
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger":  {
+          "eventTrigger": {
+            "class": "DamageCausedTrigger",
+            "hostTargetType": "IGNORE_OTHER_SOURCES"
+          },
+          "spell": {
+            "class": "WitherSpell",
+            "target": "EVENT_TARGET"
+          }
+        }
       }
     ]
   },

@@ -484,8 +484,8 @@ public enum Attribute {
 	HERO_POWERS_DISABLED,
 	/**
 	 * Records the amount of damage last sustained by an {@link Actor}. Typically used by an {@link
-	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e.g.,
-	 * a healing spell may heal the owning player by the amount of damage last dealt to an entity).
+	 * net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider} to feed a value into a spell (e.g., a
+	 * healing spell may heal the owning player by the amount of damage last dealt to an entity).
 	 */
 	LAST_HIT,
 	/**
@@ -994,7 +994,19 @@ public enum Attribute {
 	/**
 	 * The player ID of the owner of the source entity that summoned this minion.
 	 */
-	SUMMONED_BY_PLAYER, ATTACKS_THIS_TURN;
+	SUMMONED_BY_PLAYER,
+	/**
+	 * Indicates the number of attacks this {@link Actor} has made this turn.
+	 */
+	ATTACKS_THIS_TURN,
+	/**
+	 * Indicates this actor has a wither effect active on it. Does not actually implement the wither.
+	 */
+	WITHER,
+	/**
+	 * Indicates this actor has been withered.
+	 */
+	WITHERED;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

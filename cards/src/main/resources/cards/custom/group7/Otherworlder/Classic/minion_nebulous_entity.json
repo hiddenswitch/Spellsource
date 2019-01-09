@@ -4,19 +4,18 @@
   "type": "MINION",
   "heroClass": "NEONGREEN",
   "baseAttack": 3,
-  "baseHP": 6,
+  "baseHp": 6,
   "rarity": "RARE",
   "description": "Battlecry: Give an enemy minion -2/-2 until the start of your next turn.",
-
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
-     "class": "BuffSpell",
-     "value": -2,
-     "revertTrigger": {
-       "class": "TurnStartTrigger",
-       "targetPlayer": "SELF"
-     }
+      "class": "BuffSpell",
+      "value": -2,
+      "revertTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      }
     }
   },
   "attributes": {

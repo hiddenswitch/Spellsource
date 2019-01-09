@@ -12,6 +12,7 @@
     "class": "BuffAura",
     "target": "ENEMY_MINIONS",
     "attackBonus": -1,
+    "hpBonus": 0
   },
   "collectible": true,
   "set": "CUSTOM",
