@@ -7,6 +7,8 @@ permalink: /whats-new/
 
 Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
 
+And also, we get a great contribution from @AnterogradeNil: Introducing the Otherworlder class!
+
 @Pircival contributed new Baron cards and fixes.
 
 @Logovaz contributed new Witch Doctor cards.
@@ -16,6 +18,7 @@ Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight c
 ##### Content Additions:
 
  - The Blood Knight class, starting with 38 cards and tokens.
+ - The Otherworlder class, starting with 34 cards and tokens.
  - The new Baron cards Pawshop Trader, Smug Smuggler, Trisword Swinger, and Vanal Petkiper.
  - The new Witch Doctor cards Aberration, Chant Leader, Fading Berserker, Raptor Rider Raider, Tainted Raven, Temple Watcher, Tiki Tokens, Wolpertinger, Zalmah, Awakening Ritual, Bottled Spirit, False Promise, Ghostly Essence, Haunted Happenings, Paranoia, Rotten Curse, Shadow Puppetry, Spirit Bind, Spiritball, Bloodshed Reaver, and Spirit Wand.
 
