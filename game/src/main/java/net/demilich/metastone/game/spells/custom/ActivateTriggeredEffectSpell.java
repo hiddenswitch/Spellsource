@@ -29,7 +29,8 @@ public class ActivateTriggeredEffectSpell extends Spell {
 					Enchantment enchantment = (Enchantment) trigger;
 					if (enchantment.getTriggers().stream().anyMatch(eT ->
 							eT.getClass().equals(triggerClass))) {
-
+						// Correctly set the trigger stacks
+						context.getTriggerHostStack().push(target.getReference());
 						if (context.getLogic().hasAttribute(player, Attribute.DOUBLE_END_TURN_TRIGGERS) &&
 								triggerClass.equals(TurnEndTrigger.class)) {
 							context.getLogic().castSpell(target.getOwner(), enchantment.getSpell(),
@@ -38,6 +39,7 @@ public class ActivateTriggeredEffectSpell extends Spell {
 
 						context.getLogic().castSpell(target.getOwner(), enchantment.getSpell(),
 								target.getReference(), EntityReference.NONE, true);
+						context.getTriggerHostStack().pop();
 					}
 				}
 			}
