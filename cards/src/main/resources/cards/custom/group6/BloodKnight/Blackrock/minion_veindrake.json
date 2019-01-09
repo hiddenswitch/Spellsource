@@ -1,0 +1,53 @@
+{
+  "name": "Veindrake",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Battlecry: Drain 4 Health from your hero, then 4 more randomly split among all enemies.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+        "class": "DrainSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 4
+        }
+        {
+        "class": "DrainSpell",
+        "target": "ENEMY_CHARACTERS",
+        "randomTarget": true,
+        "value": 1
+        }
+        {
+        "class": "DrainSpell",
+        "target": "ENEMY_CHARACTERS",
+        "randomTarget": true,
+        "value": 1
+        }
+        {
+        "class": "DrainSpell",
+        "target": "ENEMY_CHARACTERS",
+        "randomTarget": true,
+        "value": 1
+        }
+        {
+        "class": "DrainSpell",
+        "target": "ENEMY_CHARACTERS",
+        "randomTarget": true,
+        "value": 1
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
