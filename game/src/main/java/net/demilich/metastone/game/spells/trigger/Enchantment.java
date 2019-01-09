@@ -74,6 +74,8 @@ public class Enchantment extends Entity implements Trigger {
 	protected Integer countUntilCast;
 	protected boolean countByValue;
 	protected boolean usesSpellTrigger = true;
+	protected Integer maxFiresPerSequence;
+	protected int firesThisSequence;
 
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
@@ -182,14 +184,22 @@ public class Enchantment extends Entity implements Trigger {
 			return false;
 		}
 		if (countByValue && event instanceof HasValue) {
-			fires += ((HasValue) event).getValue();
+			int value = ((HasValue) event).getValue();
+			fires += value;
+			firesThisSequence += value;
 		} else {
 			fires++;
+			firesThisSequence++;
 		}
 
 		boolean spellCasts = true;
 
 		// Prevents infinite looping
+		if (maxFiresPerSequence != null && firesThisSequence > maxFiresPerSequence) {
+			spellCasts = false;
+		}
+
+		// Max fires can expire the enchantment, while max fires per sequence does not.
 		if (maxFires != null
 				&& fires > maxFires) {
 			spellCasts = false;
@@ -384,5 +394,20 @@ public class Enchantment extends Entity implements Trigger {
 	 */
 	public List<EventTrigger> getTriggers() {
 		return Collections.unmodifiableList(triggers);
+	}
+
+	public void setMaxFiresPerSequence(Integer maxFiresPerSequence) {
+		this.maxFiresPerSequence = maxFiresPerSequence;
+	}
+
+	public Integer getMaxFiresPerSequence() {
+		return maxFiresPerSequence;
+	}
+
+	/**
+	 * Signals to the enchantment that the currently processing sequence is over.
+	 */
+	public void endOfSequence() {
+		firesThisSequence = 0;
 	}
 }

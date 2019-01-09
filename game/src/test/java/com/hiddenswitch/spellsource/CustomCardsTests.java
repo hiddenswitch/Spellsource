@@ -334,8 +334,8 @@ public class CustomCardsTests extends TestBase {
 			playMinionCard(context, player, "minion_murloc_fixpicker");
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(player.getHand().size(), 2);
-			assertEquals(player.getHand().get(0).getRace(), Race.MURLOC);
-			assertEquals(player.getHand().get(1).getRace(), Race.MURLOC);
+			assertTrue(player.getHand().get(0).getRace().hasRace(Race.MURLOC));
+			assertTrue(player.getHand().get(1).getRace().hasRace(Race.MURLOC));
 			assertEquals(player.getDeck().size(), 0);
 		});
 	}

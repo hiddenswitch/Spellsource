@@ -25,7 +25,8 @@
           "target": "SELF",
           "attribute": "LAST_HIT"
         }
-      }
+      },
+      "maxFiresPerSequence": 16
     }
   },
   "collectible": true,

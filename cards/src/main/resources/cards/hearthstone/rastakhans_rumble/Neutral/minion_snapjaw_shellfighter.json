@@ -14,9 +14,8 @@
         "class": "AndCondition",
         "conditions": [
           {
-            "class": "CardPropertyCondition",
-            "target": "EVENT_TARGET",
-            "card": "minion_snapjaw_shellfighter",
+            "class": "IsDeadCondition",
+            "target": "SELF",
             "invert": true
           },
           {
@@ -33,7 +32,7 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "DamageSpell",
+          "class": "SplashDamageSpell",
           "target": "TRIGGER_HOST"
         },
         {
@@ -42,7 +41,8 @@
           "operation": "SET"
         }
       ]
-    }
+    },
+    "maxFiresPerSequence": 16
   },
   "collectible": true,
   "set": "RASTAKHANS_RUMBLE",

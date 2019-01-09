@@ -88,6 +88,8 @@ public class GameEvent implements Serializable {
     
     DISCARD("DISCARD"),
     
+    DRAIN("DRAIN"),
+    
     DRAW_CARD("DRAW_CARD"),
     
     ENRAGE_CHANGED("ENRAGE_CHANGED"),
@@ -115,6 +117,8 @@ public class GameEvent implements Serializable {
     LOSE_DEFLECT("LOSE_DEFLECT"),
     
     MILL("MILL"),
+    
+    MAX_HP_INCREASED("MAX_HP_INCREASED"),
     
     MAX_MANA("MAX_MANA"),
     

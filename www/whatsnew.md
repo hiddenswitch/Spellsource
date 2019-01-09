@@ -15,6 +15,7 @@ Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight c
 
  - Healing in excess of the health that can actually be restored no longer incorrectly triggers Pearl Spellstones, Soup Vendor, Blackguard, Virtuous Vapor, or Azjol Visionary.
  - Cards that summon themselves on Deathrattle like Sacred Tombstone and Kil'jaeden, Deceiver no longer cause infinite loops.
+ - Bronze Timekeeper now correctly triggers turn start and end enchantments that do something to their hosts.
 
 ### 0.8.8-2.0.20 (Friday, January 4th, 2019)
 

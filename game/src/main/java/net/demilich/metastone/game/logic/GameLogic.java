@@ -1063,6 +1063,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				context.fireGameEvent(new BoardChangedEvent(context));
 			}
 			context.getEnvironment().put(Environment.DESTROYED_THIS_SEQUENCE_COUNT, 0);
+			// Reset all enchantment sequence counters
+			context.getTriggerManager().getTriggers().stream()
+					.filter(Enchantment.class::isInstance)
+					.map(Enchantment.class::cast)
+					.forEach(Enchantment::endOfSequence);
 			return;
 		}
 
