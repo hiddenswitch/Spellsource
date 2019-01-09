@@ -1,6 +1,6 @@
 {
   "name": "Shadow Puppetry",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",

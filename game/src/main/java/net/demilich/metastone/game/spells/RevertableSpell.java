@@ -34,5 +34,4 @@ public abstract class RevertableSpell extends Spell {
 			context.getLogic().addGameEventListener(player, removeTrigger, target);
 		}
 	}
-
 }

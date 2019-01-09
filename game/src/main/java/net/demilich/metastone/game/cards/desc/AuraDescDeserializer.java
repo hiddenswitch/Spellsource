@@ -35,6 +35,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.PAY_EFFECT, ParseValueType.SPELL);
 		ctx.add(AuraArg.TARGET_SELECTION, ParseValueType.TARGET_SELECTION);
 		ctx.add(AuraArg.CHOOSE_ONE_OVERRIDE, ParseValueType.CHOOSE_ONE_OVERRIDE);
+		ctx.add(AuraArg.VALUE, ParseValueType.INTEGER);
 	}
 
 	@Override

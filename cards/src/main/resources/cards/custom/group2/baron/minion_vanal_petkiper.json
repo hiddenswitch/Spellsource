@@ -11,6 +11,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
+  "race": "ALL",
   "description": "Battlecry: Choose a tribal minion. For the rest of your game, your minions have +1/+1 while you control that tribe.",
   "battlecry": {
     "targetSelection": "MINIONS",
@@ -30,23 +31,23 @@
           "race": "DRAGON"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "PIRATE"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "ELEMENTAL"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "MECH"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "DEMON"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "TOTEM"
         }
       ],
@@ -54,15 +55,15 @@
         "class": "OrFilter",
         "filters": [
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "MURLOC"
           },
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "BEAST"
           },
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "DRAGON"
           },
           {
@@ -97,8 +98,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "MURLOC",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "MURLOC"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -112,8 +116,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "BEAST",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "BEAST"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -127,8 +134,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "DRAGON",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "DRAGON"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -142,8 +152,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "PIRATE",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "PIRATE"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -157,8 +170,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "ELEMENTAL",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "ELEMENTAL"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -172,8 +188,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "MECH",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "MECH"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -187,8 +206,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "DEMON",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "DEMON"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }
@@ -202,8 +224,11 @@
             "attackBonus": 1,
             "hpBonus": 1,
             "condition": {
-              "class": "RaceCondition",
-              "race": "TOTEM",
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "TOTEM"
+              },
               "target": "FRIENDLY_MINIONS"
             }
           }

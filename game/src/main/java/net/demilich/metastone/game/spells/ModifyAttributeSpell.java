@@ -31,6 +31,13 @@ public class ModifyAttributeSpell extends RevertableSpell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(Attribute attribute, int value) {
+		Map<SpellArg, Object> arguments = new SpellDesc(ModifyAttributeSpell.class);
+		arguments.put(SpellArg.ATTRIBUTE, attribute);
+		arguments.put(SpellArg.VALUE, value);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
 		return ModifyAttributeSpell.create(target, (Attribute) desc.get(SpellArg.ATTRIBUTE), -desc.getValue(SpellArg.VALUE, context, player, context.resolveSingleTarget(target), source, 0));
@@ -42,13 +49,6 @@ public class ModifyAttributeSpell extends RevertableSpell {
 		super.onCast(context, player, desc, source, target);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		int value = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
-		if (attribute == Attribute.MAX_HP
-				|| attribute == Attribute.ATTACK
-				|| attribute == Attribute.ATTACK_BONUS
-				|| attribute == Attribute.HP_BONUS) {
-			LOGGER.warn("onCast {} {}: Modifying special attribute {} which should typically be modified other ways", context.getGameId(), source, attribute);
-		}
 		target.modifyAttribute(attribute, value);
 	}
-
 }

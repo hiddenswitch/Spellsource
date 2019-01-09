@@ -57,6 +57,31 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTaintedRaven() {
+		runGym((context, player, opponent) -> {
+			Minion taintedRaven = playMinionCard(context, player, "minion_tainted_raven");
+			for (int i = 0; i < 5; i++) {
+				receiveCard(context, opponent, "spell_the_coin");
+			}
+			context.getLogic().endOfSequence();
+			int hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - 6, "No spell damage yet");
+			receiveCard(context, opponent, "spell_the_coin");
+			context.getLogic().endOfSequence();
+			hp = opponent.getHero().getHp();
+			playCard(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - 6 - 2, "+2 spell damage");
+			context.getLogic().discardCard(opponent, opponent.getHand().get(0));
+			context.getLogic().discardCard(opponent, opponent.getHand().get(0));
+			hp = opponent.getHero().getHp();
+			context.getLogic().endOfSequence();
+			playCard(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), hp - 6, "No spell damage");
+		});
+	}
+
+	@Test
 	public void testBloodMoonRising() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_blood_moon_rising");

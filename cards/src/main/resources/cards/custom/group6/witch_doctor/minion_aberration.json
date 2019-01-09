@@ -1,0 +1,27 @@
+{
+  "name": "Aberration",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "After you target this with a spell, add an Aberration to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "sourcePlayer": "SELF",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "minion_aberration"
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

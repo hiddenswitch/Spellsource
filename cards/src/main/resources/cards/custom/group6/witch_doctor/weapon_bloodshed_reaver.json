@@ -1,0 +1,17 @@
+{
+  "name": "Bloodshed Reaver",
+  "baseManaCost": 6,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "COMMON",
+  "description": "Costs (1) less for each minion that died this turn.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "DiedThisTurnValueProvider",
+    "targetPlayer": "BOTH"
+  }
+}
