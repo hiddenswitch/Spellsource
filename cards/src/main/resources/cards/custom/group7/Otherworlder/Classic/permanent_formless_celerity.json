@@ -10,21 +10,39 @@
   "triggers": [
     {
       "eventTrigger": {
-        //CONDITION
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
       },
       "spell": {
-        "class": "DestroySpell",
-        "target": "SELF"
+        "class": "DrawCardSpell",
+        "targetPlayer": "BOTH"
       }
     },
     {
       "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-        "class": "DrawCardSpell",
-        "targetPlayer": "ANY"
+        "class": "GameStateChangedTrigger",
+        "targetPlayer": "BOTH",
+        "fireCondition": {
+          "class": "OrCondition",
+          "conditions": [
+            {
+              "class": "CardCountCondition",
+              "targetPlayer": "SELF",
+              "value": 9,
+              "operation": "GREATER_OR_EQUAL"
+            },
+            {
+              "class": "CardCountCondition",
+              "targetPlayer": "OPPONENT",
+              "value": 9,
+              "operation": "GREATER_OR_EQUAL"
+            }
+          ]
+        }
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
       }
     }
   ],

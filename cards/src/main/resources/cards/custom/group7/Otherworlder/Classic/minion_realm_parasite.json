@@ -6,12 +6,20 @@
   "baseAttack": 1,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "<b>Wither (1)</b>",
-  
-  "attributes": {
-    "WITHER": 1,
+  "description": "<b>Wither (1).</b>",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "WitherSpell",
+      "target": "EVENT_TARGET"
+    }
   },
-  
+  "attributes": {
+    "WITHER": 1
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

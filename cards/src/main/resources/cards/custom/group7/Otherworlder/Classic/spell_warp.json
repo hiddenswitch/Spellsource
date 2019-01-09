@@ -7,34 +7,19 @@
   "description": "<b>Wither (1).</b> Deal $1 damage.",
   "targetSelection": "ANY",
   "spell": {
-   "class": "MetaSpell",
-      "spells": [
-       {
-        "trigger": {
-          "eventTrigger": {
-            "class": "DamageCausedTrigger",
-            "hostTargetType": "IGNORE_OTHER_SOURCES"
-          },
-          "condition":{
-            "class":
-            
-          },
-            "spell": {
-              "class": "BuffSpell",
-              "value": -1,
-              "revertTrigger": {
-                "class": "TurnStartTrigger",
-                "targetPlayer": "SELF"
-              }
-           }
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "WitherSpell"
       },
-   
-      "spell": {
+      {
         "class": "DamageSpell",
         "value": 1
-     }
-    }
-   ]
+      }
+    ]
+  },
+  "attributes": {
+    "WITHER": 1
   },
   "collectible": true,
   "set": "CUSTOM",

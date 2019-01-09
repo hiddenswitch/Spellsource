@@ -15,17 +15,33 @@
         "attackBonus": 1,
         "hpBonus": 2,
         "filter": {
-          "class": "OrFilter",
+          "class": "AndFilter",
           "filters": [
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"},
-            {"class": "AttributeFilter", "attribute": "WITHER", "operation": "HAS"},
-            {"class": "RaceFilter", "race": "BEAST"}
+            {
+              "class": "AttributeFilter",
+              "attribute": "WITHER",
+              "operation": "HAS"
+            },
+            {
+              "class": "OrFilter",
+              "filters": [
+                {
+                  "class": "SpecificCardFilter",
+                  "cards": [
+                    "token_xenodrone_07",
+                    "token_xenodrone_02",
+                    "token_xenodrone_01"
+                  ]
+                },
+                {
+                  "class": "RaceFilter",
+                  "race": "TITAN"
+                }
+              ]
+            }
           ]
         }
       },
-      
       {
         "class": "DrawCardSpell",
         "value": 1

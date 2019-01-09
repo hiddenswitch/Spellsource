@@ -7,23 +7,12 @@
   "description": "Give your minions +2/+2 this turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddEnchantmentSpell",
-    "trigger": {
-      "eventTrigger": {
-        "class": "TurnEndTrigger"
-      },
-      "spell": {
-        "class": "RemoveEnchantmentSpell",
-        "target": "FRIENDLY_MINIONS",
-        "card": "spell_cellular_overdrive"
-      },
-      "maxFires": 1
-    },
-    "aura": {
-      "class": "BuffAura",
-      "target": "FRIENDLY_MINIONS",
-      "attackBonus": 2,
-      "hpBonus": 2
+    "class": "BuffSpell",
+    "target": "ALL_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 2,
+    "revertTrigger": {
+      "class": "TurnEndTrigger"
     }
   },
   "collectible": true,

@@ -57,6 +57,43 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDegenerator() {
+		runGym((context, player, opponent) -> {
+			Minion degenerator = playMinionCard(context, player, "minion_degenerator");
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			int wither = degenerator.getAttributeValue(Attribute.WITHER);
+			int maxHp = degenerator.getAttack() + wither + 1;
+			context.getLogic().setHpAndMaxHp(target, maxHp);
+			assertEquals(target.getHp(), maxHp);
+			context.endTurn();
+			attack(context, player, degenerator, target);
+			assertEquals(target.getHp(), maxHp - wither - degenerator.getAttack());
+			assertEquals(target.getAttack(), Math.max(0, target.getBaseAttack() - wither));
+			context.endTurn();
+			assertEquals(target.getHp(), maxHp - wither - degenerator.getAttack());
+			assertEquals(target.getAttack(), Math.max(0, target.getBaseAttack() - wither));
+			context.endTurn();
+			assertEquals(target.getHp(), maxHp - degenerator.getAttack());
+			assertEquals(target.getAttack(), target.getBaseAttack());
+		});
+
+		// Check that wither kills minions
+		runGym((context, player, opponent) -> {
+			Minion degenerator = playMinionCard(context, player, "minion_degenerator");
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			int wither = degenerator.getAttributeValue(Attribute.WITHER);
+			int maxHp = degenerator.getAttack() + wither - 1;
+			context.getLogic().setHpAndMaxHp(target, maxHp);
+			assertEquals(target.getHp(), maxHp);
+			context.endTurn();
+			attack(context, player, degenerator, target);
+			assertTrue(target.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testTaintedRaven() {
 		runGym((context, player, opponent) -> {
 			Minion taintedRaven = playMinionCard(context, player, "minion_tainted_raven");

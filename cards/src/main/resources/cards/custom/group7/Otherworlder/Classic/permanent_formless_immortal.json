@@ -10,24 +10,33 @@
   "triggers": [
     {
       "eventTrigger": {
-        //CONDITION
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "BuffSpell",
+        "target": "OTHER_FRIENDLY_MINIONS",
+        "hpBonus": 2,
+        "randomTarget": true
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger",
+        "fireCondition": {
+          "class": "ComparisonCondition",
+          "value1": {
+            "class": "EntityCounter",
+            "target": "FRIENDLY_MINIONS"
+          },
+          "value2": 0,
+          "operation": "EQUAL"
+        }
       },
       "spell": {
         "class": "DestroySpell",
         "target": "SELF"
-      },
-    },
-    {
-      "eventTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "BuffSpell",
-      "target": "OTHER_FRIENDLY_MINIONS",
-      "hpBonus": 2,
-      "randomTarget": true
-     }
+      }
     }
   ],
   "attributes": {

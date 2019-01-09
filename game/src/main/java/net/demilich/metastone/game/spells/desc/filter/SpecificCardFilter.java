@@ -11,14 +11,16 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 /**
  * A card or actor will pass this filter if its {@link Entity#getSourceCard()} {@link Card#getCardId()} matches the
  * {@link EntityFilterArg#CARD} argument.
+ * <p>
+ * If a {@link EntityFilterArg#CARDS} argument is specified, passes the filter if the {@code target}'s source card
+ * matches any card in the list.
  * <p>
  * If a {@link EntityFilterArg#SECONDARY_TARGET} is specified, the card or actor will pass the filter if its card ID
  * matches the card ID of the secondary target.
@@ -42,12 +44,12 @@ public class SpecificCardFilter extends EntityFilter {
 		}
 
 		String cardId = entity.getSourceCard().getCardId();
-		String requiredCardId = getDesc().getString(EntityFilterArg.CARD);
+		Set<String> requiredCardIds = new HashSet<>(getDesc().getCardOrCards());
 		EntityReference comparedTo = (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET);
 		if (comparedTo != null && !comparedTo.equals(EntityReference.NONE)) {
 			Entity target = context.resolveSingleTarget(player, host, comparedTo);
 			if (target != null) {
-				requiredCardId = target.getSourceCard().getCardId();
+				requiredCardIds = Collections.singleton(target.getSourceCard().getCardId());
 			}
 		}
 
@@ -55,13 +57,13 @@ public class SpecificCardFilter extends EntityFilter {
 		if (!filterAuras.isEmpty()) {
 			for (Aura aura : filterAuras) {
 				String overrideCardId = aura.getDesc().getString(AuraArg.CARD);
-				if (aura.getAffectedEntities().contains(entity.getId()) && overrideCardId != null && overrideCardId.equalsIgnoreCase(requiredCardId)) {
+				if (aura.getAffectedEntities().contains(entity.getId()) && overrideCardId != null && requiredCardIds.contains(overrideCardId)) {
 					return true;
 				}
 			}
 		}
 
-		return cardId.equalsIgnoreCase(requiredCardId);
+		return requiredCardIds.contains(cardId);
 	}
 
 }

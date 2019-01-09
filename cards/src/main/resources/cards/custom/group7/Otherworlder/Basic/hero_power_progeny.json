@@ -10,27 +10,26 @@
   "spell": {
     "class": "HeroPowerSpell",
     "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-      "class": "BuffSpell",
-      "target": "FRIENDLY_MINIONS",
-      "filter": {
-          "class": "OrFilter",
-          "filters": [
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_07"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_02"},
-            {"class": "SpecificCardFilter", "card": "token_xenodrone_01"}
-          ]
-      },
-     "attackBonus": 1,
-     
-     "spell": {
-       "class": "SummonSpell",
-       "card": "token_xenodrone_01"
-     }
-    }
-    ]
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "SpecificCardFilter",
+            "cards": [
+              "token_xenodrone_07",
+              "token_xenodrone_02",
+              "token_xenodrone_01"
+            ]
+          },
+          "attackBonus": 1,
+          "spell": {
+            "class": "SummonSpell",
+            "card": "token_xenodrone_01"
+          }
+        }
+      ]
     }
   },
   "collectible": false,
