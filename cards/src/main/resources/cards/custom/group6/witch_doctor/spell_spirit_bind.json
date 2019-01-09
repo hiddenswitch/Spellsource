@@ -4,19 +4,19 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Restore #3 Health to a friendly minion and to your hero.",
+  "description": "Restore #2 Health to a friendly minion and to your hero.",
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "HealSpell",
-        "value": 3
+        "value": 2
       },
       {
         "class": "HealSpell",
         "target": "FRIENDLY_HERO",
-        "value": 3
+        "value": 2
       }
     ]
   },

@@ -74,4 +74,8 @@ public class AuraDesc extends Desc<AuraArg, Aura> {
 	public EventTriggerDesc getRevertTrigger() {
 		return ((EventTriggerDesc) getOrDefault(AuraArg.REVERT_TRIGGER, null));
 	}
+
+	public int getValue() {
+		return (int) get(AuraArg.VALUE);
+	}
 }

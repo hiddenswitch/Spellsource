@@ -1,6 +1,6 @@
 {
   "name": "Fight!",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",

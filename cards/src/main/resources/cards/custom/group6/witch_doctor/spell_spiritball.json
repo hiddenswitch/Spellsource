@@ -1,16 +1,17 @@
 {
-  "name": "Divination",
+  "name": "Spiritball",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "ROSE",
-  "rarity": "FREE",
-  "description": "Give a minion +2 Health.",
+  "rarity": "COMMON",
+  "description": "Give a minion +2/+1.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
-    "hpBonus": 2
+    "attackBonus": 2,
+    "hpBonus": 1
   },
-  "collectible": false,
+  "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

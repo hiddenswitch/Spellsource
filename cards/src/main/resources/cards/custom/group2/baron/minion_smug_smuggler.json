@@ -30,23 +30,23 @@
           "race": "DRAGON"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "PIRATE"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "ELEMENTAL"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "MECH"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "DEMON"
         },
         {
-          "class": "RaceFilter",
+          "class": "RaceCondition",
           "race": "TOTEM"
         }
       ],
@@ -54,15 +54,15 @@
         "class": "OrFilter",
         "filters": [
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "MURLOC"
           },
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "BEAST"
           },
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "DRAGON"
           },
           {
