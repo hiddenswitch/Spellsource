@@ -19,6 +19,12 @@ public class CardCountCondition extends Condition {
 				: TargetPlayer.SELF;
 		int cardCount = 0;
 		switch (targetPlayer) {
+			case EITHER:
+				ConditionDesc playerDesc = desc.clone();
+				playerDesc.put(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
+				ConditionDesc opponentDesc = desc.clone();
+				opponentDesc.put(ConditionArg.TARGET_PLAYER, TargetPlayer.OPPONENT);
+				return isFulfilled(context, player, playerDesc, source, target) || isFulfilled(context, player, opponentDesc, source, target);
 			case BOTH:
 				cardCount = player.getHand().getCount() + context.getOpponent(player).getHand().getCount();
 				break;

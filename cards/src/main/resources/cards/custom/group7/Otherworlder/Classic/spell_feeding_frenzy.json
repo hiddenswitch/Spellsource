@@ -1,0 +1,68 @@
+{
+  "name": "Feeding Frenzy",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Destroy a friendly minion. Give its stats randomly among your other minions. Draw a card.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "SELF"
+  },
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "MinionCountCondition",
+          "value": 0,
+          "operation": "GREATER",
+          "targetPlayer": "SELF"
+        },
+        "howMany": {
+          "class": "AttributeValueProvider",
+          "attribute": "ATTACK"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "attackBonus": 1,
+          "randomTarget": true,
+          "target": "FRIENDLY_MINIONS"
+        }
+      },
+      {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "MinionCountCondition",
+          "value": 0,
+          "operation": "GREATER",
+          "targetPlayer": "SELF"
+        },
+        "howMany": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "hpBonus": 1,
+          "randomTarget": true,
+          "target": "FRIENDLY_MINIONS"
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

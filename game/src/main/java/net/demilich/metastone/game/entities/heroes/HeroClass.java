@@ -35,6 +35,7 @@ public enum HeroClass {
 	BRASS,
 	ICECREAM,
 	BLOOD,
+	NEONGREEN,
 	/**
 	 * The Hearthstone Death Knight card class.
 	 */
@@ -105,6 +106,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_kel_thuzad");
 			case BLOOD:
 				return CardCatalogue.getCardById("hero_koltira");
+			case NEONGREEN:
+				return CardCatalogue.getCardById("hero_oth");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
