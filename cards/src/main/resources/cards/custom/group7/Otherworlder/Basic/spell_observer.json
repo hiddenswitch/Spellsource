@@ -1,0 +1,16 @@
+{
+  "name": "Observer",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "FREE",
+  "description": "Summon a 0/7 Xenodrone.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_xenodrone_07"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

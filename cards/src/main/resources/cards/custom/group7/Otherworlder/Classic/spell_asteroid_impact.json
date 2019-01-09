@@ -1,0 +1,27 @@
+{
+  "name": "Asteroid Impact",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Deal $10 damage to an enemy minion, then deal its excess damage randomly split among all enemies.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 10
+      },
+      {
+       "class": "MissilesSpell",
+       "target": "ENEMY_CHARACTERS",
+       "value": 1,
+       "howMany": ?????????????????????????????????????
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

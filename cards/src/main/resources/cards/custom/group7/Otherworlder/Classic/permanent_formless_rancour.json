@@ -1,0 +1,35 @@
+{
+  "name": "Formless Rancour",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Adjacent minions have +1 Attack. When an adjacent minion is also a permanent, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        //CONDITION
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+   }
+  ],
+  
+  "aura": {
+    "class": "BuffAura",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 0
+    },
+  
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
