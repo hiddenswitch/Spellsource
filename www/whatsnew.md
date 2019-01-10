@@ -3,6 +3,16 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.10-2.0.22 (Wednesday, January 9th, 2019)
+
+Thanks to a contribution from @Samswize, we have new Lich cards!
+
+Additionally, the client has been upgraded for better performance.
+
+##### Content Additions:
+
+ - The new Lich cards Lord Marrowgar, Scrap Scavenger, Blood Boil, Chains of Ice, Path Frost, and Ebonchill.
+
 ### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
 
 Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
