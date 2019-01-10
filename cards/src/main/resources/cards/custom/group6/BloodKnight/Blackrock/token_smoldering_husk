@@ -1,0 +1,28 @@
+{
+  "name": "Smoldering Husk",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "description": "At the end of your turn, destroy this minion and deal damage to all other friendly characters equal to its Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "HEALTH"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
