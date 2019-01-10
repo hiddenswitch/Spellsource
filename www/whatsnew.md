@@ -7,11 +7,19 @@ permalink: /whats-new/
 
 Thanks to a contribution from @Samswize, we have new Lich cards!
 
+Thanks to a contribution from @DeepKhaos (@Dipsy), we have new Blood Knight Cards!
+
 Additionally, the client has been upgraded for better performance.
 
 ##### Content Additions:
 
  - The new Lich cards Lord Marrowgar, Scrap Scavenger, Blood Boil, Chains of Ice, Path Frost, and Ebonchill.
+ - The new Blood Knight cards Scarlet Thirst, Veindrake, Smoldering Husk, Assimilator, Goblin Harpooner, The Blood Engine, Blood to Iron, Siphoning Strike, Sweet Sustenance, and Voltsaber.
+ 
+##### Content Fixes:
+
+ - Rendering Curse no longer gives minions marked for death its deathrattle.
+ - Blood Moon Rising and Scarlet Thirst in play with an empty deck no longer interact to cause an infinite loop due to fatigue.
 
 ### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
 

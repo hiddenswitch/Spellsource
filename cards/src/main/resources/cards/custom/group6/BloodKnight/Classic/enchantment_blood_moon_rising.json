@@ -7,7 +7,7 @@
   "triggers": [
     {
       "eventTrigger": {
-        "class": "DamageCausedTrigger",
+        "class": "NonFatigueDamageCausedTrigger",
         "sourcePlayer": "SELF"
       },
       "spell": {

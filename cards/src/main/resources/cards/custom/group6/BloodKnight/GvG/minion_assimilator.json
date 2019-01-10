@@ -14,10 +14,10 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-    "class": "DrainSpell",
-    "target": "ENEMY_CHARACTERS",
-    "randomTarget": true,
-    "value": 2
+      "class": "DrainSpell",
+      "target": "ENEMY_CHARACTERS",
+      "randomTarget": true,
+      "value": 2
     }
   },
   "collectible": true,

@@ -10,8 +10,8 @@
     "class": "FromDeckToHandSpell",
     "value": 1,
     "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "WEAPON"
+      "class": "CardFilter",
+      "cardType": "WEAPON"
     },
     "spell": {
       "class": "DrainSpell",
