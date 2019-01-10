@@ -1,0 +1,31 @@
+{
+  "name": "Voltsaber",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "BLOOD",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "After a friendly Mech attacks, deal 2 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "RaceCondition",
+        "target": "EVENT_SOURCE",
+        "race": "MECH"
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2,
+      "howMany": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

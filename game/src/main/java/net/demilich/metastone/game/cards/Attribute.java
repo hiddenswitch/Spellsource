@@ -1006,7 +1006,7 @@ public enum Attribute {
 	/**
 	 * Indicates this actor has been withered.
 	 */
-	WITHERED;
+	WITHERED, DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
