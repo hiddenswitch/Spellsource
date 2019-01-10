@@ -10,7 +10,6 @@ import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
-import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * Gets the {@link Attribute#LAST_HIT} last amount of damage dealt to the {@code target}, and restores health in that
@@ -25,6 +24,6 @@ public final class HealAndBuffExcessAsDrainSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int amount = AttributeValueProvider.create(Attribute.LAST_HIT, target.getReference()).create().getValue(context, player, target, source);
-		DrainSpell.healAndBuffExcess(context, player, source, amount, context.resolveSingleTarget(player, source, desc.getSecondaryTarget()));
+		DrainSpell.drain(context, player, source, amount, context.resolveSingleTarget(player, source, desc.getSecondaryTarget()));
 	}
 }

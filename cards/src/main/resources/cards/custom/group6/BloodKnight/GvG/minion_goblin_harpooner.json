@@ -11,8 +11,14 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "DuelSpell",
-      "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT",
-      
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "EntityEqualsFilter",
+        "secondaryTarget": "TARGET",
+        "invert": true
+      },
+      "randomTarget": true,
+      "secondaryTarget": "TARGET"
     }
   },
   "attributes": {

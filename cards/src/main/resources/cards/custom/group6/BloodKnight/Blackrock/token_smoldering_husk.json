@@ -13,13 +13,26 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "DamageSpell",
-      "target": "FRIENDLY_CHARACTERS",
-      value": {
+      "class": "MetaSpell",
+      "value": {
         "class": "AttributeValueProvider",
         "target": "SELF",
-        "attribute": "HEALTH"
-      }
+        "attribute": "HP"
+      },
+      "spells": [
+        {
+          "class": "DestroySpell",
+          "target": "SELF"
+        },
+        {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_CHARACTERS",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          }
+        }
+      ]
     }
   },
   "collectible": false,

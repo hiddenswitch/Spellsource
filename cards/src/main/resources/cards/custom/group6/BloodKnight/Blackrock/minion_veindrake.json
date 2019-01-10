@@ -13,33 +13,19 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "class": "DrainSpell",
-        "target": "FRIENDLY_HERO",
-        "value": 4
-        }
+          "class": "DrainSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 4
+        },
         {
-        "class": "DrainSpell",
-        "target": "ENEMY_CHARACTERS",
-        "randomTarget": true,
-        "value": 1
-        }
-        {
-        "class": "DrainSpell",
-        "target": "ENEMY_CHARACTERS",
-        "randomTarget": true,
-        "value": 1
-        }
-        {
-        "class": "DrainSpell",
-        "target": "ENEMY_CHARACTERS",
-        "randomTarget": true,
-        "value": 1
-        }
-        {
-        "class": "DrainSpell",
-        "target": "ENEMY_CHARACTERS",
-        "randomTarget": true,
-        "value": 1
+          "class": "RecastWhileSpell",
+          "howMany": 4,
+          "spell": {
+            "class": "DrainSpell",
+            "target": "ENEMY_CHARACTERS",
+            "randomTarget": true,
+            "value": 1
+          }
         }
       ]
     }

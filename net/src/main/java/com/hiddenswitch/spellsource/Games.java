@@ -65,8 +65,6 @@ import static java.util.stream.Collectors.toList;
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
-	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	String GAMES_PLAYERS_MAP = "Games::players";
 	String GAMES = "games";
 
@@ -1092,112 +1090,7 @@ public interface Games extends Verticle {
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 
-			if (card.getZone() == Zones.HAND) {
-				if (description.contains("[") && card.getDynamicDescription() != null) {
-					int i = 0;
-					String[] descriptions = card.evaluateDescriptions(workingContext, owningPlayer);
-					while (description.contains("[")) {
-						int start = description.indexOf("[");
-						int end = description.indexOf("]");
-						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
-					}
-				}
-			} else description = description.replace("[", "").replace("]", "");
-
-			// Handle spell damage
-			if (card.isSpell()) {
-				// Find the $ damages
-				Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the dollar sign in the beginning
-					int damage = Integer.parseInt(matcher.group(1));
-					int modifiedDamage;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						ValueProviderDesc desc = new ValueProviderDesc();
-						desc.put(ValueProviderArg.VALUE, damage);
-						desc.put(ValueProviderArg.CLASS, SpellDamageValueProvider.class);
-						ValueProvider provider = desc.create();
-						modifiedDamage = provider.getValue(workingContext, owningPlayer, owningPlayer.getHero(), card);
-					} else {
-						modifiedDamage = damage;
-					}
-					if (modifiedDamage != damage) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			} else if (card.isHeroPower()) { //Handles hero power damage
-				// Find the $ damages
-				Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the dollar sign in the beginning
-					int damage = Integer.parseInt(matcher.group(1));
-					int modifiedDamage;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						ValueProviderDesc desc = new ValueProviderDesc();
-						desc.put(ValueProviderArg.VALUE, damage);
-						desc.put(ValueProviderArg.CLASS, HeroPowerDamageValueProvider.class);
-						ValueProvider provider = desc.create();
-						modifiedDamage = provider.getValue(workingContext, owningPlayer, owningPlayer.getHero(), card);
-					} else {
-						modifiedDamage = damage;
-					}
-					if (modifiedDamage != damage) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			}
-			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
-				Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the # in the beginning
-					int healing = Integer.parseInt(matcher.group(1));
-					int modifiedHealing = healing;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						modifiedHealing = workingContext.getLogic().applyAmplify(owningPlayer, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-						if (card.isSpell()) {
-							modifiedHealing = workingContext.getLogic().applyAmplify(owningPlayer, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
-						}
-						if (card.isHeroPower()) {
-							modifiedHealing = workingContext.getLogic().applyAmplify(owningPlayer, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
-						}
-					}
-					if (modifiedHealing != healing) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedHealing));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedHealing));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			}
-
-
+			description = card.getDescription(workingContext, owningPlayer);
 		} else {
 			entityState.playable(false);
 			entityState.manaCost(card.getBaseManaCost());

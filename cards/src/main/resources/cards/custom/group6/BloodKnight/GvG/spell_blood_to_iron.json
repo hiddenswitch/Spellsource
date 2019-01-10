@@ -4,40 +4,51 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Summon a copy of all friendly Mechs. Your hero takes damage equal to their combined Health.",
+  "description": "Take $[] damage. Then, summon copies of all your Mechs. (Increases for each health your Mechs have)",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-    "value": {
-      "class": "AttributeValueProvider",
-      "target": "FRIENDLY_MINIONS",
-      "filter": {
-          "class": "RaceFilter",
-          "race": "MECH"
-      },
-      "attribute": "HP"
-   },
     "spells": [
       {
-      "class": "SummonSpell",
-      "target": "FRIENDLY_MINIONS",
-      "filter": {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "ReduceValueProvider",
+          "operation": "ADD",
+          "target": "FRIENDLY_MINIONS",
+          "filter": {
+            "class": "RaceFilter",
+            "race": "MECH"
+          },
+          "attribute": "HP"
+        }
+      },
+      {
+        "class": "SummonSpell",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
           "class": "RaceFilter",
           "race": "MECH"
-      } 
-      {
-      "class": "DamageSpell",
-      "target": "FRIENDLY_HERO",
-      "value": {
-          "class": "GameValueProvider",
-          "gameValue": "SPELL_VALUE"
-      },
-      "ignoreSpellDamage": true,
-      "targetPlayer": "SELF"
+        }
       }
     ]
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "ReduceValueProvider",
+        "operation": "ADD",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
+          "class": "RaceFilter",
+          "race": "MECH"
+        },
+        "attribute": "HP"
+      }
+    }
+  ]
 }

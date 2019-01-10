@@ -11,12 +11,12 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-        "attribute": "CANNOT_ATTACK"
+        "attribute": "CANNOT_ATTACK",
         "revertTrigger": {
           "class": "TurnStartTrigger",
           "targetPlayer": "SELF"
         }
-      }
+      },
       {
         "class": "DrawCardSpell"
       }
