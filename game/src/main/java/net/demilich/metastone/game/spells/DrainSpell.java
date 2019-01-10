@@ -41,6 +41,10 @@ public final class DrainSpell extends Spell {
 			targets = Collections.singletonList(context.getLogic().getRandom(targets));
 		}
 
+		if (desc.getEntityFilter() != null) {
+			targets = SpellUtils.getValidTargets(context, player, targets, desc.getEntityFilter(), source);
+		}
+
 		int damageDealt = 0;
 		for (Entity target : targets) {
 			SpellDesc damageSpell = DamageSpell.create(target.getReference(), desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
@@ -73,9 +77,9 @@ public final class DrainSpell extends Spell {
 		if (excess > 0) {
 			SpellDesc buffSpell = BuffSpell.create(healingTarget.getReference(), 0, excess);
 			SpellUtils.castChildSpell(context, player, buffSpell, source, healingTarget);
-			healingTarget.modifyAttribute(Attribute.DRAINED_THIS_TURN, excess);
-			healingTarget.modifyAttribute(Attribute.TOTAL_DRAINED, excess);
 		}
+		healingTarget.modifyAttribute(Attribute.DRAINED_THIS_TURN, amount);
+		healingTarget.modifyAttribute(Attribute.TOTAL_DRAINED, amount);
 	}
 
 	@Override
