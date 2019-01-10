@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "MECH",
-  "description": "Battlecry: Deal damage split among all enemies equal to the Health your hero Drained on your last turn.",
+  "description": "Battlecry: Deal damage randomly split among all enemies equal to the Health your hero Drained on your last turn.",
   "battlecry": {
     "spell": {
       "class": "MissilesSpell",
