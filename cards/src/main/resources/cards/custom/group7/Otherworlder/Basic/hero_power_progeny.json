@@ -23,11 +23,11 @@
               "token_xenodrone_01"
             ]
           },
-          "attackBonus": 1,
-          "spell": {
-            "class": "SummonSpell",
-            "card": "token_xenodrone_01"
-          }
+          "attackBonus": 1
+        },
+        {
+          "class": "SummonSpell",
+          "card": "token_xenodrone_01"
         }
       ]
     }
