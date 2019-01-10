@@ -4,12 +4,23 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "FREE",
-  "description": "Give a minion +3/-3.",
+  "description": "Give a minion +$3 Attack. Deal $3 damage to it. (Improved by Spell Damage)",
   "targetSelection": "MINIONS",
   "spell": {
-    "class": "BuffSpell",
-    "attackBonus": 3,
-    "hpBonus": -3
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": {
+          "class": "SpellDamageValueProvider",
+          "value": 3
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "value": 3
+      }
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",
