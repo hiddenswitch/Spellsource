@@ -15,7 +15,6 @@
       },
       {
         "class": "AddAttributeSpell",
-        "target": "SELF",
         "attribute": "IMMUNE",
         "revertTrigger": {
           "class": "TurnStartTrigger",
