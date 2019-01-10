@@ -1,0 +1,43 @@
+{
+  "name": "Blood to Iron",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Summon a copy of all friendly Mechs. Your hero takes damage equal to their combined Health.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+          "class": "RaceFilter",
+          "race": "MECH"
+      },
+      "attribute": "HP"
+   },
+    "spells": [
+      {
+      "class": "SummonSpell",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+          "class": "RaceFilter",
+          "race": "MECH"
+      } 
+      {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+      },
+      "ignoreSpellDamage": true,
+      "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,28 @@
+{
+  "name": "Sweet Sustenance",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Give a minion 'Can't attack' until the start of your next turn. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "CANNOT_ATTACK"
+        "revertTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        }
+      }
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
