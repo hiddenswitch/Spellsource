@@ -57,6 +57,48 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTheBloodEngine() {
+		runGym((context, player, opponent) -> {
+			// Drain 2 total
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			context.endTurn();
+			context.endTurn();
+			// Drain three this turn
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			playCard(context, player, "spell_test_drain", opponent.getHero());
+			int opponentHealth = opponent.getHero().getHp();
+			playMinionCard(context, player, "minion_the_blood_engine");
+			assertEquals(opponent.getHero().getHp(), opponentHealth - 2);
+		});
+	}
+
+	@Test
+	public void testBloodToIron() {
+		runGym((context, player, opponent) -> {
+			Minion mech = playMinionCard(context, player, "minion_mech_test");
+			Card bloodToIronCard = receiveCard(context, player, "spell_blood_to_iron");
+			assertTrue(bloodToIronCard.getDescription(context, player).contains("Take 2"));
+			int hp = player.getHero().getHp();
+			playCard(context, player, bloodToIronCard);
+			assertEquals(player.getHero().getHp(), hp - 2);
+			assertEquals(player.getMinions().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion mech = playMinionCard(context, player, "minion_mech_test");
+			mech.setAttribute(Attribute.SPELL_DAMAGE, 1);
+			Card bloodToIronCard = receiveCard(context, player, "spell_blood_to_iron");
+			assertTrue(bloodToIronCard.getDescription(context, player).contains("Take *3*"));
+			int hp = player.getHero().getHp();
+			playCard(context, player, bloodToIronCard);
+			assertEquals(player.getHero().getHp(), hp - 3);
+			assertEquals(player.getMinions().size(), 2);
+		});
+	}
+
+	@Test
 	public void testDegenerator() {
 		runGym((context, player, opponent) -> {
 			Minion degenerator = playMinionCard(context, player, "minion_degenerator");

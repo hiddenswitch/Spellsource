@@ -18,7 +18,11 @@
       {
         "class": "AddDeathrattleSpell",
         "card": "enchantment_rending_curse",
-        "target": "ALL_OTHER_MINIONS"
+        "target": "ALL_OTHER_MINIONS",
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        }
       }
     ]
   },

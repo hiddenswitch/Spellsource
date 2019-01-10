@@ -1,0 +1,30 @@
+{
+  "name": "Siphoning Strike",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Draw a weapon from your deck. Drain Health from a random enemy equal to its Attack.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    },
+    "spell": {
+      "class": "DrainSpell",
+      "target": "ENEMY_CHARACTERS",
+      "randomTarget": true,
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "OUTPUT",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

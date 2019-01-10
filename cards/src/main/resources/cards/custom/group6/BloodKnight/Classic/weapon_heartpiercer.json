@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "Deathrattle: Drain the Health of all minions damaged by this.",
+  "description": "Deathrattle: Your hero Drains the Health of all minions damaged by this weapon.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageCausedTrigger",

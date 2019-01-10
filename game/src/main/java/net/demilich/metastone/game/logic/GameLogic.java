@@ -1107,11 +1107,29 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param baseDamage The base amount of damage to deal.
 	 * @param source     The source of the damage.
 	 * @return The amount of damage ultimately dealt, considering all on board effects.
-	 * @see #damage(Player, Actor, int, Entity, boolean) for a complete description of the damage effect.
+	 * @see #damage(Player, Actor, int, Entity, boolean, DamageType) for a complete description of the damage effect.
 	 */
 	@Suspendable
 	public int damage(Player player, Actor target, int baseDamage, Entity source) {
 		return damage(player, target, baseDamage, source, false);
+	}
+
+	/**
+	 * Deals damage to a target.
+	 *
+	 * @param player            The originating player of the damage.
+	 * @param target            The target to damage.
+	 * @param baseDamage        The base amount of damage to deal.
+	 * @param source            The source of the damage.
+	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
+	 * @return The amount of damage ultimately dealt, considering all on board effects.
+	 * @see #damage(Player, Actor, int, Entity, boolean, DamageType) for a complete description of the damage effect.
+	 */
+	@Suspendable
+	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
+		// sanity check to prevent StackOverFlowError with Mistress of Pain +
+		// Auchenai Soulpriest
+		return damage(player, target, baseDamage, source, ignoreSpellDamage, DamageType.MAGICAL);
 	}
 
 	/**
@@ -1138,14 +1156,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param baseDamage        The base amount of damage to deal.
 	 * @param source            The source of the damage.
 	 * @param ignoreSpellDamage When {@code true}, spell damage bonuses are not added to the damage dealt.
+	 * @param damageType        The type of damage dealt ot the target.
 	 * @return The amount of damage that was actually dealt
 	 */
 	@Suspendable
-	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage) {
-		// sanity check to prevent StackOverFlowError with Mistress of Pain +
-		// Auchenai Soulpriest
+	public int damage(Player player, Actor target, int baseDamage, Entity source, boolean ignoreSpellDamage, DamageType damageType) {
 		int damageDealt = applyDamageToActor(target, baseDamage, player, source, ignoreSpellDamage);
-		resolveDamageEvent(player, target, source, damageDealt);
+		resolveDamageEvent(player, target, source, damageDealt, damageType);
 		if (source.getEntityType() == EntityType.CARD) {
 			Card card = (Card) source;
 			if (card.isHeroPower()) {
@@ -1153,11 +1170,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 		return damageDealt;
-	}
-
-	@Suspendable
-	protected void resolveDamageEvent(Player player, Actor target, Entity source, int damageDealt) {
-		resolveDamageEvent(player, target, source, damageDealt, DamageType.MAGICAL);
 	}
 
 	@Suspendable
@@ -1290,7 +1302,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				&& minion.getHp() <= damage) {
 			removeAttribute(minion, Attribute.DEFLECT);
 			context.fireGameEvent(new LoseDeflectEvent(context, minion, player.getId(), source.getId()));
-			damage(player, context.getPlayer(minion.getOwner()).getHero(), damage, source, true);
+			damage(player, (Actor) context.getPlayer(minion.getOwner()).getHero(), damage, source, true);
 			return 0;
 		}
 		if (minion.hasAttribute(Attribute.IMMUNE) || minion.hasAttribute(Attribute.AURA_IMMUNE)) {
@@ -1478,7 +1490,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			fatigue++;
 			player.setAttribute(Attribute.FATIGUE, fatigue);
 			if (!player.hasAttribute(Attribute.DISABLE_FATIGUE)) {
-				damage(player, hero, fatigue, hero);
+				damage(player, hero, fatigue, hero, true, DamageType.FATIGUE);
 				context.fireGameEvent(new FatigueEvent(context, player.getId(), fatigue));
 				player.getStatistics().fatigueDamage(fatigue);
 			}
@@ -2760,7 +2772,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		} else if (cardCostsHealth) {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, 0);
-			damage(player, player.getHero(), modifiedManaCost, card, true);
+			damage(player, (Actor) player.getHero(), modifiedManaCost, (Entity) card, true);
 		} else {
 			context.getEnvironment().put(Environment.LAST_MANA_COST, modifiedManaCost);
 			modifyCurrentMana(playerId, -modifiedManaCost, true);
@@ -2830,8 +2842,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player   The player whose gaining the secret.
 	 * @param secret   The secret being played.
 	 * @param fromHand When {@code true}, a {@link SecretPlayedEvent} is fired; otherwise, the event is not fired.
-	 * @see net.demilich.metastone.game.spells.AddSecretSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for
-	 * 		the place where secret entities are created. A {@link Card} uses this spell to actually create a {@link Secret}.
+	 * @see net.demilich.metastone.game.spells.AddSecretSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) the
+	 * 		place where secret entities are created. A {@link Card} uses this spell to actually create a {@link Secret}.
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
@@ -3731,14 +3743,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Starts a turn.
 	 * <p>
-	 * At the start of each of their turns, the player gains {@link Player#maxMana} (up to a maximum of {@link
+	 * At the start of each of their turns, the player gains {@link Player#getMaxMana()} (up to a maximum of {@link
 	 * #MAX_MANA}), and attempts to draw a card. The player is then free (but not forced) to take an action by playing
 	 * cards, using their Hero Power, and/or attacking with their minions or hero. Once all possible actions have been
 	 * taken, the "End Turn" button will light up.
 	 * <p>
 	 * All minions with {@link Attribute#SUMMONING_SICKNESS} will have that attribute cleared; {@link Attribute#OVERLOAD}
-	 * will cause the player's {@link Player#mana} to decline by {@link Player#getLockedMana()}; and temporary bonuses
-	 * like {@link Attribute#TEMPORARY_ATTACK_BONUS} will be lost.
+	 * will cause the player's {@link Player#getMana()} to decline by {@link Player#getLockedMana()}; and temporary
+	 * bonuses like {@link Attribute#TEMPORARY_ATTACK_BONUS} will be lost.
 	 *
 	 * @param playerId The player that is starting their turn.
 	 */
@@ -3776,10 +3788,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		player.getHero().getHeroPower().setUsed(0);
 		player.getHero().activateWeapon(true);
+		player.getHero().setAttribute(Attribute.DRAINED_LAST_TURN, player.getHero().getAttributeValue(Attribute.DRAINED_THIS_TURN));
+		player.getHero().getAttributes().remove(Attribute.DRAINED_THIS_TURN);
 		refreshAttacksPerRound(player.getHero());
 		for (Minion minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 			minion.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
+			minion.setAttribute(Attribute.DRAINED_LAST_TURN, minion.getAttributeValue(Attribute.DRAINED_THIS_TURN));
+			minion.getAttributes().remove(Attribute.DRAINED_THIS_TURN);
 			refreshAttacksPerRound(minion);
 			if (minion.hasAttribute(Attribute.STEALTH) && minion.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
 				int stealthForTurns = minion.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
@@ -4151,7 +4167,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		int modifiedManaCost = getModifiedManaCost(player, power);
 		boolean cardCostsHealth = doesCardCostHealth(player, power);
 		if (cardCostsHealth) {
-			damage(player, player.getHero(), modifiedManaCost, power, true);
+			damage(player, (Actor) player.getHero(), modifiedManaCost, (Entity) power, true);
 		} else {
 			modifyCurrentMana(playerId, -modifiedManaCost, true);
 			player.getStatistics().manaSpent(modifiedManaCost);
@@ -4202,7 +4218,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 	/**
 	 * Plays the specified quest. The quest goes into the {@link Zones#QUEST} zone and triggers using the enchantment's
-	 * {@link Enchantment#countUntilCast} functionality.
+	 * {@link Enchantment#getCountUntilCast()} functionality.
 	 *
 	 * @param player   The player that triggered the quest.
 	 * @param quest    The quest to put into play.

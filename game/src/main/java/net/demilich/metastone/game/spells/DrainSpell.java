@@ -58,21 +58,23 @@ public final class DrainSpell extends Spell {
 		int healingAmount = damageDealt / targetsOfHealing.size();
 		int healingAmountRemainder = damageDealt / targetsOfHealing.size() + damageDealt % targetsOfHealing.size();
 
-		healAndBuffExcess(context, player, source, healingAmountRemainder, targetsOfHealing.get(0));
+		drain(context, player, source, healingAmountRemainder, targetsOfHealing.get(0));
 		for (int i = 1; i < targetsOfHealing.size(); i++) {
-			healAndBuffExcess(context, player, source, healingAmount, targetsOfHealing.get(i));
+			drain(context, player, source, healingAmount, targetsOfHealing.get(i));
 		}
 		context.fireGameEvent(new DrainEvent(context, source, player.getId(), damageDealt));
 	}
 
 	@Suspendable
-	public static void healAndBuffExcess(GameContext context, Player player, Entity source, int amount, Entity healingTarget) {
+	public static void drain(GameContext context, Player player, Entity source, int amount, Entity healingTarget) {
 		SpellDesc healSpell = HealSpell.create(healingTarget.getReference(), amount);
 		SpellUtils.castChildSpell(context, player, healSpell, source, healingTarget);
 		int excess = amount - healingTarget.getAttributeValue(Attribute.LAST_HEAL);
 		if (excess > 0) {
 			SpellDesc buffSpell = BuffSpell.create(healingTarget.getReference(), 0, excess);
 			SpellUtils.castChildSpell(context, player, buffSpell, source, healingTarget);
+			healingTarget.modifyAttribute(Attribute.DRAINED_THIS_TURN, excess);
+			healingTarget.modifyAttribute(Attribute.TOTAL_DRAINED, excess);
 		}
 	}
 
