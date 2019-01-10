@@ -15,7 +15,7 @@
         "attackBonus": 1,
         "hpBonus": 2,
         "filter": {
-          "class": "AndFilter",
+          "class": "OrFilter",
           "filters": [
             {
               "class": "AttributeFilter",
@@ -23,21 +23,16 @@
               "operation": "HAS"
             },
             {
-              "class": "OrFilter",
-              "filters": [
-                {
-                  "class": "SpecificCardFilter",
-                  "cards": [
-                    "token_xenodrone_07",
-                    "token_xenodrone_02",
-                    "token_xenodrone_01"
-                  ]
-                },
-                {
-                  "class": "RaceFilter",
-                  "race": "TITAN"
-                }
+              "class": "SpecificCardFilter",
+              "cards": [
+                "token_xenodrone_07",
+                "token_xenodrone_02",
+                "token_xenodrone_01"
               ]
+            },
+            {
+              "class": "RaceFilter",
+              "race": "TITAN"
             }
           ]
         }
