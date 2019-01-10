@@ -28,12 +28,11 @@ Currently, the docker deployment only updates the spellsource_game image.
 Notes for successful deployment:
  - Requires jq, curl and docker on the PATH for Docker deployment
  - Requires eb on the path for Elastic Beanstalk deployment
- - Make sure to bump a version using ./versionbump.sh CURRENT.VERSION
 
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.9 ./deploy.sh -cpdwv
+  SPELLSOURCE_VERSION=0.8.10 ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -155,7 +154,7 @@ if [[ "$install_dependencies" = true ]] ; then
       pip3 install spellsource > /dev/null
     fi
 
-    pip3 install awscli awsebcli versionbump > /dev/null
+    pip3 install awscli awsebcli bump2version > /dev/null
   else
     echo "Cannot install dependencies on this platform yet"
     exit 1
@@ -168,17 +167,17 @@ if [[ "$bump_version" = true ]] ; then
     exit 1
   fi
 
-  if ! command -v versionbump > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
+  if ! command -v bump2version > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
     echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
-  if ! command -v versionbump > /dev/null ; then
+  if ! command -v bump2version > /dev/null ; then
     echo "Failed to bump version: Missing versionbump binary. Install with pip3 install versionbump"
     exit 1
   fi
 
-  versionbump -c "${SPELLSOURCE_VERSION}" patch \
+  bump2version --allow-dirty --current-version "${SPELLSOURCE_VERSION}" patch \
     build.gradle \
     setup.py \
     deploy.sh \
@@ -401,7 +400,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.9-all.jar \
+      ./net/build/libs/net-0.8.10-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null
