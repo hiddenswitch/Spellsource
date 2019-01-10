@@ -82,6 +82,7 @@ shift $((OPTIND-1))
 function update_portainer() {
   service_name=$1
   portainer_image_name=$2
+  sleep 4
   service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
   service_id=$(echo $service | jq  -r .ID)
   service_specification=$(echo $service | jq .Spec)
@@ -94,6 +95,8 @@ function update_portainer() {
    -X POST \
    -d "${service_update_command}" \
    "${PORTAINER_URL}api/endpoints/1/docker/services/${service_id}/update?version=${service_version}"
+
+   echo "Deployed image"
 }
 
 # Configure virtualenv path
@@ -231,13 +234,15 @@ if [[ "$build_client" = true ]] ; then
 fi
 
 # Before building, retrieve the portainer password if it's not specified immediately
-if [[ "$deploy_docker" = true || "$deploy_launcher" = true && -z ${PORTAINER_PASSWORD+x} ]] ; then
-  echo "docker deployment: Requesting PORTAINER_PASSWORD"
-  stty -echo
-  printf "Password: "
-  read PORTAINER_PASSWORD
-  stty echo
-  printf "\n"
+if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
+  if [[ -z ${PORTAINER_PASSWORD+x} ]] ; then
+    echo "docker deployment: Requesting PORTAINER_PASSWORD"
+    stty -echo
+    printf "Password: "
+    read PORTAINER_PASSWORD
+    stty echo
+    printf "\n"
+  fi
 fi
 
 if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
