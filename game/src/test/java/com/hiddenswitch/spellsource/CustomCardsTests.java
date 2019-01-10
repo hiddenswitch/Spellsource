@@ -57,6 +57,24 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testPrimordialSupremacy() {
+		runGym((context, player, opponent) -> {
+			Minion titan = playMinionCard(context, player, "minion_degenerator");
+			Minion xenodrone = playMinionCard(context, player, "token_xenodrone_01");
+			Minion buffed = playMinionCard(context, player, "minion_neutral_test");
+			buffed.setAttribute(Attribute.WITHER, 1);
+			Minion notBuffed = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_primordial_supremacy");
+			for (Minion shouldBeBuffed : new Minion[]{titan, xenodrone}) {
+				assertEquals(shouldBeBuffed.getAttack(), shouldBeBuffed.getBaseAttack() + 1);
+				assertEquals(shouldBeBuffed.getMaxHp(), shouldBeBuffed.getBaseHp() + 2);
+			}
+			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
+			assertEquals(notBuffed.getMaxHp(), notBuffed.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testHeartpiercer() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
@@ -342,6 +360,8 @@ public class CustomCardsTests extends TestBase {
 			Card castleGiant = receiveCard(context, player, "minion_castle_giant");
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost());
 			useHeroPower(context, player);
+			context = context.clone();
+			player = context.getPlayer1();
 			assertEquals(costOf(context, player, castleGiant), castleGiant.getBaseManaCost() - 1);
 		}, HeroClass.GOLD, HeroClass.GOLD);
 

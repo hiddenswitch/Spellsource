@@ -3,6 +3,17 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.11-2.0.22 (Thursday, January 10th, 2019)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Wither no longer affects Heroes.
+ - Primordial Supremacy now buffs Titans, Xenodrones OR Wither minions, rather than Titans and Xenodrones WITH Wither.
+ - Cards that rely on player statistics like number of minions summoned (Castle Giant, Thing From Below) now correctly show their costs to the client.
+ - Cards that receive HP hand buffs now correctly show their HP in the client. For example, casting Roll on a minion should now show the correct stats in the client.
+
 ### 0.8.10-2.0.22 (Wednesday, January 9th, 2019)
 
 Thanks to a contribution from @Samswize, we have new Lich cards!

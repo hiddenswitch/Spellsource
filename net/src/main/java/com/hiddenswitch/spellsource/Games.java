@@ -1134,12 +1134,12 @@ public interface Games extends Verticle {
 				entityState.armor(card.getArmor());
 				break;
 			case MINION:
-				entityState.attack(card.getAttack() + card.getBonusAttack());
+				entityState.attack(card.getAttack() + card.getBonusAttack() + card.getAttributeValue(Attribute.AURA_ATTACK_BONUS));
 				entityState.baseAttack(card.getBaseAttack());
 				entityState.baseManaCost(card.getBaseManaCost());
-				entityState.hp(card.getHp());
+				entityState.hp(card.getHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
 				entityState.baseHp(card.getBaseHp());
-				entityState.maxHp(card.getBaseHp() + card.getBonusHp());
+				entityState.maxHp(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
 				entityState.underAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
