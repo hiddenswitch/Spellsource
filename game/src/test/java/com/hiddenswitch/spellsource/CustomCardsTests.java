@@ -57,6 +57,22 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHeartpiercer() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion hit = playMinionCard(context, player, "minion_neutral_test");
+			hit.setHp(CardCatalogue.getCardById("weapon_heartpiercer").getDamage() + 2);
+			Minion notHit = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "weapon_heartpiercer");
+			player.getHero().getWeapon().setHp(1);
+			attack(context, player, player.getHero(), hit);
+			assertTrue(hit.isDestroyed());
+			assertEquals(player.getHero().getAttributeValue(Attribute.DRAINED_THIS_TURN), 2);
+		});
+	}
+
+	@Test
 	public void testTheBloodEngine() {
 		runGym((context, player, opponent) -> {
 			// Drain 2 total

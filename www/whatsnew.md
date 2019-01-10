@@ -20,6 +20,10 @@ Additionally, the client has been upgraded for better performance.
 
  - Rendering Curse no longer gives minions marked for death its deathrattle.
  - Blood Moon Rising and Scarlet Thirst in play with an empty deck no longer interact to cause an infinite loop due to fatigue.
+ - The Blood Knight hero powers now summon a Xenodrone after the buff.
+ - Rotten Curse no longer gives Immune to your hero.
+ - Overdrive now only affects friendly minions.
+ - Heartpiercer now only drains from minions it hit.
 
 ### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
 
