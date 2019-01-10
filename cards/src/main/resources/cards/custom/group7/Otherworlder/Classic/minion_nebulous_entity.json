@@ -6,6 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
+  "race": "ELEMENTAL",
   "description": "Battlecry: Give an enemy minion -2/-2 until the start of your next turn.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
