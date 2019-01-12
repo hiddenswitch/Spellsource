@@ -74,6 +74,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		GameStatistics clone = new GameStatistics();
 		clone.stats.putAll(stats);
 		clone.getCardsPlayed().putAll(getCardsPlayed());
+		for (Map.Entry<String, Map<Integer, Integer>> item : cardsPlayed.entrySet()) {
+			HashMap<Integer, Integer> value = new HashMap<>(item.getValue());
+			clone.getCardsPlayed().put(item.getKey(), value);
+		}
 		clone.getMinionsSummoned().putAll(getMinionsSummoned());
 		return clone;
 	}

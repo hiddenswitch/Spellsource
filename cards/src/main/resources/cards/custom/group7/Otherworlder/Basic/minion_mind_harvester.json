@@ -6,10 +6,11 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "End of Turn: If there is a minion with 0 Attack on the battlefield, draw a card.",
+  "description": "At the end of your turn, if there is a minion with 0 Attack on the battlefield, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
+      "targetPlayer": "SELF",
       "fireCondition": {
         "class": "AnyMatchFilterCondition",
         "target": "ALL_MINIONS",

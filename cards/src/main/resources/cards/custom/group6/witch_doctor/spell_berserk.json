@@ -16,7 +16,7 @@
       },
       {
         "class": "FightSpell",
-        "target": "ENEMY_MINIONS",
+        "target": "ALL_MINIONS",
         "filter": {
           "class": "EntityEqualsFilter",
           "invert": true,

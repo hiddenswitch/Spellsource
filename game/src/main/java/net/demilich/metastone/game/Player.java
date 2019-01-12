@@ -62,8 +62,7 @@ public class Player extends Entity implements Serializable {
 	private EntityZone<Secret> secretZone = new EntityZone<>(getId(), Zones.SECRET);
 	private EntityZone<Quest> quests = new EntityZone<>(getId(), Zones.QUEST);
 	private EntityZone<Player> playerZone = new EntityZone<>(getId(), Zones.PLAYER);
-
-	private final GameStatistics statistics = new GameStatistics();
+	private GameStatistics statistics = new GameStatistics();
 
 	/**
 	 * @see #getMana()
@@ -118,8 +117,7 @@ public class Player extends Entity implements Serializable {
 		this.mana = otherPlayer.mana;
 		this.maxMana = otherPlayer.maxMana;
 		this.lockedMana = otherPlayer.lockedMana;
-		this.getStatistics().merge(otherPlayer.getStatistics());
-
+		this.statistics = otherPlayer.getStatistics().clone();
 	}
 
 	/**
