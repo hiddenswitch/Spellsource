@@ -5,7 +5,7 @@
   "heroClass": "BLACK",
   "baseAttack": 5,
   "baseHp": 5,
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "description": "Deathrattle: Add two random class cards to your hand (from your opponent's class).",
   "deathrattle": {
     "class": "ReceiveCardSpell",
