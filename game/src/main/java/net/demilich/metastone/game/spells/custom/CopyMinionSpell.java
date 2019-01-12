@@ -60,16 +60,16 @@ public final class CopyMinionSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Minion clone = ((Minion) target).getCopy();
 		clone.clearEnchantments();
-
-		boolean hadTransformReference = context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null;
+		clone.setCardCostModifier(null);
 		context.getLogic().transformMinion((Minion) source, clone);
-		if (hadTransformReference) {
-			return;
-		}
 
-		for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
-			Trigger triggerClone = trigger.clone();
-			context.getLogic().addGameEventListener(player, triggerClone, clone);
+		boolean didTransform = context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE);
+
+		if (didTransform) {
+			for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
+				Trigger triggerClone = trigger.clone();
+				context.getLogic().addGameEventListener(player, triggerClone, clone);
+			}
 		}
 	}
 }
