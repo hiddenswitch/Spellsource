@@ -5,6 +5,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -20,6 +21,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * SpellArg#VALUE} is specified, use that instead. At the start of the casting {@code player}'s next turn, restores
  * (without triggering healing) the health of the minion.
  * <p>
+ * Wither does <b>not</b> affect {@link EntityType#HERO} entities.
+ * <p>
  * Wither stacks.
  * <p>
  * Gives the target the {@link Attribute#WITHERED} attribute for the amount it was withered.
@@ -29,6 +32,10 @@ public final class WitherSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		if (target.getEntityType() == EntityType.HERO) {
+			return;
+		}
+
 		int witherAmount = source.getAttributeValue(Attribute.WITHER);
 		if (desc.containsKey(SpellArg.VALUE)) {
 			witherAmount = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);

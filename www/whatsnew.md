@@ -3,6 +3,22 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.11-2.0.22 (Friday, January 11th, 2019)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Wither no longer affects Heroes.
+ - Primordial Supremacy now buffs Titans, Xenodrones OR Wither minions, rather than Titans and Xenodrones WITH Wither.
+ - Cards that rely on player statistics like number of minions summoned (Castle Giant, Thing From Below) now correctly show their costs to the client.
+ - Cards that receive HP hand buffs now correctly show their HP in the client. For example, casting Roll on a minion should now show the correct stats in the client.
+ - Distort now reads "Give a minion +3 Attack. Deal 3 damage to it. (Improved by Spell Damage)."
+ - Card cost modifiers are no longer duplicated twice when gained via a minion transform-copy effect. (Fixes interactions between Faceless Manipulator, Prince Taldaram and cards like Radiant Elemental).
+ - Otherworlder's Vicious Progeny upgraded hero power now correctly summons a 0/2 Xenodrone.
+ - Mind Harvester only draws cards at the end of its owner's turn.
+ - Berserk now causes the targeted minion to attack all others.
+
 ### 0.8.10-2.0.22 (Wednesday, January 9th, 2019)
 
 Thanks to a contribution from @Samswize, we have new Lich cards!

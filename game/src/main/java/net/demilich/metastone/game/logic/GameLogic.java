@@ -3916,15 +3916,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 
 			if (minion.isInPlay()) {
-				applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
-				refreshAttacksPerRound(minion);
-				processBattlefieldEnchantments(player, minion);
-
-				if (minion.getCardCostModifier() != null) {
-					addGameEventListener(player, minion.getCardCostModifier(), minion);
-				}
-
-				handleHpChange(minion);
+				newMinionOnBattlefield(minion, player);
 			}
 
 			if (player.getMinions().contains(minion)
@@ -3939,6 +3931,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		} finally {
 			context.getSummonReferenceStack().pop();
 		}
+	}
+
+	protected void newMinionOnBattlefield(@NotNull Minion minion, Player player) {
+		applyAttribute(minion, Attribute.SUMMONING_SICKNESS);
+		refreshAttacksPerRound(minion);
+		processBattlefieldEnchantments(player, minion);
+
+		if (minion.getCardCostModifier() != null) {
+			addGameEventListener(player, minion.getCardCostModifier(), minion);
+		}
+
+		handleHpChange(minion);
 	}
 
 
@@ -4121,16 +4125,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					owner.getMinions().add(index, newMinion);
 				}
 
-				applyAttribute(newMinion, Attribute.SUMMONING_SICKNESS);
-				refreshAttacksPerRound(newMinion);
-
-				processBattlefieldEnchantments(owner, newMinion);
-
-				if (newMinion.getCardCostModifier() != null) {
-					addGameEventListener(owner, newMinion.getCardCostModifier(), newMinion);
-				}
-
-				handleHpChange(newMinion);
+				newMinionOnBattlefield(newMinion, owner);
 			} else {
 				owner.getSetAsideZone().add(newMinion);
 				removeEnchantments(newMinion);
