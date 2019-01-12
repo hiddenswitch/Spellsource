@@ -17,6 +17,7 @@ Bug fixes.
  - Card cost modifiers are no longer duplicated twice when gained via a minion transform-copy effect. (Fixes interactions between Faceless Manipulator, Prince Taldaram and cards like Radiant Elemental).
  - Otherworlder's Vicious Progeny upgraded hero power now correctly summons a 0/2 Xenodrone.
  - Mind Harvester only draws cards at the end of its owner's turn.
+ - Berserk now causes the targeted minion to attack all others.
 
 ### 0.8.10-2.0.22 (Wednesday, January 9th, 2019)
 
