@@ -3,7 +3,7 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-### 0.8.11-2.0.22 (Thursday, January 10th, 2019)
+### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
 Bug fixes.
 
