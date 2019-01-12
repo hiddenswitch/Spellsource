@@ -1,0 +1,29 @@
+{
+  "name": "Lingering Spirit",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add a random Secret to each player's hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "SECRET"
+        "operation": "HAS"
+      },
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
