@@ -17,8 +17,9 @@
             "class": "BuffSpell",
             "attackBonus": -2,
             "revertTrigger": {
-            "class": "TurnStartTrigger",
-            "targetPlayer": "SELF"
+              "class": "TurnStartTrigger",
+              "targetPlayer": "SELF"
+            }
           },
           {
             "class": "DamageSpell",
