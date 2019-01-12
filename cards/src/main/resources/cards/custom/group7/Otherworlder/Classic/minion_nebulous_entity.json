@@ -4,19 +4,27 @@
   "type": "MINION",
   "heroClass": "NEONGREEN",
   "baseAttack": 3,
-  "baseHp": 6,
+  "baseHp": 5,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Give an enemy minion -2/-2 until the start of your next turn.",
+  "description": "Battlecry: Deal 2 damage to an enemy minion and give it -2 Attack until your next turn. ",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
-      "class": "BuffSpell",
-      "value": -2,
-      "revertTrigger": {
-        "class": "TurnStartTrigger",
-        "targetPlayer": "SELF"
-      }
+      "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "BuffSpell",
+            "attackBonus": -2,
+            "revertTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "DamageSpell",
+            "value": 2
+          }
+        ]
     }
   },
   "attributes": {
