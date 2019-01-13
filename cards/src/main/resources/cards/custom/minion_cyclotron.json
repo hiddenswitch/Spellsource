@@ -1,0 +1,26 @@
+{
+  "name": "Cyclotron",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "race": "MECH",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "Battlecry: Draw cards equal to your unspent Mana Crystals.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell"
+          "value": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MANA"
+        }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
