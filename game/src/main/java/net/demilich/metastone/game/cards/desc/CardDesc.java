@@ -105,7 +105,6 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
-
 	public String id;
 	public String name;
 	public String heroPower;
@@ -119,7 +118,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int durability;
 	public Rarity rarity;
 	public Race race;
-	public Race[] races;
 	public String description;
 	public TargetSelection targetSelection;
 	public EventTriggerDesc secret;
@@ -696,13 +694,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setRace(Race race) {
 		this.race = race;
-	}
-
-	/**
-	 * For cards that have multiple races but not all races
-	 */
-	public Race[] getRaces() {
-		return races;
 	}
 
 	/**

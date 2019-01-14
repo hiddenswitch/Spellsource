@@ -49,7 +49,7 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
-		if (race != null && !card.hasRace(race)) {
+		if (race != null && !card.getRace().hasRace(race)) {
 			return false;
 		}
 

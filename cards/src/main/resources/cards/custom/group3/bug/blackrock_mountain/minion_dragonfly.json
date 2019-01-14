@@ -6,13 +6,10 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "COMMON",
-  "race": "BEAST",
+  "race": "BEAST_DRAGON",
   "description": "Also counts as a Dragon.",
   "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1,
-  "races": [
-    "DRAGON"
-  ]
+  "fileFormatVersion": 1
 }
