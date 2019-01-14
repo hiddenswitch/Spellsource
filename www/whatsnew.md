@@ -10,6 +10,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Skulking Geist now only destroys cost 1 spells instead of cost 1 cards.
+ - Dueling effects like Mass Hysteria and Duelmaster Fizzle no longer consume attacks. This includes situations where an attack may trigger a secret that prevents the attack from finishing.
 
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
