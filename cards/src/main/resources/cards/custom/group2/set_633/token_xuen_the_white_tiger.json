@@ -7,24 +7,7 @@
   "baseHp": 3,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Charge. Deflect. Whenever this attacks a minion, deal 4 Damage to all other enemy minions.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "PhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
-    },
-    "spell": {
-      "class": "DamageSpell",
-      "target": "ENEMY_MINIONS",
-      "value": 4,
-      "filter": {
-        "class": "EntityEqualsFilter",
-        "invert": true,
-        "secondaryTarget": "EVENT_TARGET"
-      }
-    }
-  },
+  "description": "Charge. Deflect.",
   "attributes": {
     "CHARGE": true,
     "DEFLECT": true
