@@ -57,6 +57,20 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTaintedRavenSilenceInteraction() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 6; i++) {
+				receiveCard(context, opponent, "spell_the_coin");
+			}
+			Minion taintedRaven = playMinionCard(context, player, "minion_tainted_raven");
+			Card fireball = receiveCard(context, player, "spell_fireball");
+			assertEquals(context.getLogic().applySpellpower(player, fireball, 6), 8);
+			playCard(context, player, "spell_silence", taintedRaven);
+			assertEquals(context.getLogic().applySpellpower(player, fireball, 6), 6);
+		});
+	}
+
+	@Test
 	public void testPrimordialSupremacy() {
 		runGym((context, player, opponent) -> {
 			Minion titan = playMinionCard(context, player, "minion_degenerator");

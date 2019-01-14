@@ -201,6 +201,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		IMMUNE_TO_SILENCE.add(Attribute.AURA_POISONOUS);
 		IMMUNE_TO_SILENCE.add(Attribute.AURA_RUSH);
 		IMMUNE_TO_SILENCE.add(Attribute.AURA_STEALTH);
+		IMMUNE_TO_SILENCE.add(Attribute.AURA_SPELL_DAMAGE);
+		IMMUNE_TO_SILENCE.add(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
+		IMMUNE_TO_SILENCE.add(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
+		IMMUNE_TO_SILENCE.add(Attribute.AURA_WINDFURY);
 		IMMUNE_TO_SILENCE.add(Attribute.RACE);
 		IMMUNE_TO_SILENCE.add(Attribute.DESTROYED);
 		IMMUNE_TO_SILENCE.add(Attribute.NUMBER_OF_ATTACKS);
@@ -213,6 +217,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		IMMUNE_TO_SILENCE.add(Attribute.USER_ID);
 		IMMUNE_TO_SILENCE.add(Attribute.LAST_HIT);
 		IMMUNE_TO_SILENCE.add(Attribute.LAST_HEAL);
+		IMMUNE_TO_SILENCE.add(Attribute.NAME);
+		IMMUNE_TO_SILENCE.add(Attribute.DESCRIPTION);
+		IMMUNE_TO_SILENCE.add(Attribute.DRAINED_LAST_TURN);
 		IMMUNE_TO_SILENCE.add(Attribute.LAST_MINION_DESTROYED_CARD_ID);
 		IMMUNE_TO_SILENCE.add(Attribute.LAST_MINION_DESTROYED_INVENTORY_ID);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_BOOLEAN_1);
