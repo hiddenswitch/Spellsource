@@ -6,16 +6,25 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Battlecry: Give an enemy minion -2/-2 until the start of your next turn.",
+  "description": "Battlecry: Choose an enemy minion. Deal 2 damage to it and -2 Attack until the start of your next turn.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
-      "class": "BuffSpell",
-      "value": -2,
-      "revertTrigger": {
-        "class": "TurnStartTrigger",
-        "targetPlayer": "SELF"
-      }
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "BuffSpell",
+          "attackBonus": -2,
+          "revertTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          }
+        }
+      ]
     }
   },
   "attributes": {
