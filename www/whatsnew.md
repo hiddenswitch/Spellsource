@@ -17,6 +17,7 @@ Bug fixes.
  - Nebulous Entity now deals 2 damage instead of giving a -2 HP buff.
  - Grandmother Vratta now has 7 HP (was 10).
  - Distort's attack buff is no longer affected by spell damage.
+ - Spirit of the Dragonhawk now interacts with Ice Walker correctly.
 
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
