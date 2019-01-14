@@ -57,6 +57,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testVanalAmalgamInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion amalgam = playMinionCard(context, player, "minion_nightmare_amalgam");
+			Minion vanal = playMinionCardWithBattlecry(context, player, "minion_vanal_petkiper", amalgam);
+			assertEquals(vanal.getAttack(), vanal.getBaseAttack() + 1);
+			assertEquals(amalgam.getAttack(), amalgam.getBaseAttack() + 1);
+		});
+	}
+
+	@Test
 	public void testTaintedRavenSilenceInteraction() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 6; i++) {

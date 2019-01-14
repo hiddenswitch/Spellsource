@@ -12,6 +12,7 @@ Bug fixes.
  - Skulking Geist now only destroys cost 1 spells instead of cost 1 cards.
  - Dueling effects like Mass Hysteria and Duelmaster Fizzle no longer consume attacks. This includes situations where an attack may trigger a secret that prevents the attack from finishing.
  - Tainted Raven now interacts with silence correctly.
+ - Vanal Petkiper now creates 1 buff when targeting Nightmare Amalgam instead of 7. 
 
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
