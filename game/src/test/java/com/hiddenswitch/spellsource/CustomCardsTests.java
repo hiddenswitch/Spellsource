@@ -3454,7 +3454,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testFifiFizzlewarp() {
-		// Test that cards that have `-filtered battlecries work correctly after Fifi Fizzlewarp
+		// Test that cards that have race-filtered battlecries work correctly after Fifi Fizzlewarp
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
 
@@ -5445,7 +5445,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			playCard(context, player, "spell_slain_party");
 			for (Minion minion : player.getMinions()) {
-				assertTrue(minion.getSourceCard().hasRace(Race.MURLOC));
+				assertTrue(minion.getRace().hasRace(Race.MURLOC));
 			}
 		});
 	}
@@ -5497,7 +5497,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference()));
 			useHeroPower(context, player);
-			assertTrue(player.getMinions().get(0).getSourceCard().hasRace(Race.MURLOC));
+			assertTrue(player.getMinions().get(0).getRace().hasRace(Race.MURLOC));
 		});
 	}
 

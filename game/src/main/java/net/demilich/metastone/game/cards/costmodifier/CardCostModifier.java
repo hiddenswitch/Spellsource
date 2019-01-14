@@ -141,7 +141,7 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 
 		// If a target race is specified, does it match?
 		applies &= !(getRequiredRace() != null
-				&& !card.hasRace(getRequiredRace()));
+				&& !card.getRace().hasRace(getRequiredRace()));
 
 		// Is the enchantment owner / caster the same as the card owner?
 		switch (getTargetPlayer()) {

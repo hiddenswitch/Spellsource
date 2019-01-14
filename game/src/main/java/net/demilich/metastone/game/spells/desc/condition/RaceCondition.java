@@ -22,6 +22,6 @@ public final class RaceCondition extends Condition {
 		if (desc.containsKey(ConditionArg.TARGET)) {
 			target = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET));
 		}
-		return target.getSourceCard().hasRace(race);
+		return target.getRace().hasRace(race);
 	}
 }
