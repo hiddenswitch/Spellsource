@@ -5,15 +5,17 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
 
-public class RaceFilter extends EntityFilter {
+/**
+ * Matches entities whose {@link Entity#getRace()} is specifically {@link Race#ALL}.
+ */
+public final class AmalgamRaceFilter extends EntityFilter {
 
-	public RaceFilter(EntityFilterDesc desc) {
+	public AmalgamRaceFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
-		return entity.getRace().hasRace(race);
+		return entity != null && entity.getRace() == Race.ALL;
 	}
 }

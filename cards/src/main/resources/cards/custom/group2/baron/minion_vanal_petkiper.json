@@ -16,8 +16,11 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "ConditionalSpell",
+      "class": "FirstConditionalSpell",
       "conditions": [
+        {
+          "class": "AmalgamRaceCondition"
+        },
         {
           "class": "RaceCondition",
           "race": "MURLOC"
@@ -55,6 +58,9 @@
         "class": "OrFilter",
         "filters": [
           {
+            "class": "AmalgamRaceFilter"
+          },
+          {
             "class": "RaceFilter",
             "race": "MURLOC"
           },
@@ -89,6 +95,25 @@
         ]
       },
       "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "attackBonus": 1,
+            "hpBonus": 1,
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "NONE",
+                "invert": true
+              },
+              "target": "FRIENDLY_MINIONS"
+            }
+          }
+        },
         {
           "class": "AddEnchantmentSpell",
           "target": "FRIENDLY_PLAYER",

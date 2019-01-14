@@ -28,6 +28,10 @@ public enum Race {
 			return true;
 		}
 
+		if ((this == DRAGON || this == BEAST) && comparedTo == BEAST_DRAGON) {
+			return true;
+		}
+
 		return this == comparedTo;
 	}
 }
