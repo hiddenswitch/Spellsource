@@ -3,6 +3,14 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.12-2.0.22 (Monday, January 14th, 2019)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Skulking Geist now only destroys cost 1 spells instead of cost 1 cards.
+
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
 Bug fixes.
