@@ -14,6 +14,7 @@ Bug fixes.
  - Tainted Raven now interacts with silence correctly.
  - Vanal Petkiper now creates 1 buff when targeting Nightmare Amalgam instead of 7. 
  - Sideline Coach now buffs before the minion attacks.
+ - Nebulous Entity now deals 2 damage instead of giving a -2 HP buff.
 
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
