@@ -1,0 +1,20 @@
+### Witch Doctor: Beast Doctor
+# Class: ROSE
+# Format: Spellsource
+#
+# 2x (1) Angry Primate
+# 2x (1) Deep Borer
+# 2x (1) Marked for Sacrifice
+# 2x (1) Tiki Tokens
+# 2x (2) Ritual Dagger
+# 2x (3) Bladesworn
+# 2x (3) Corvid Call
+# 2x (3) Nightmare Warden
+# 2x (3) Shadow Puppetry
+# 2x (3) Smug Smuggler
+# 2x (4) Winterfang Seer
+# 2x (4) Wolpertinger
+# 2x (5) Jeering Troll
+# 2x (5) Spirit Power
+# 2x (6) Evocation
+#
