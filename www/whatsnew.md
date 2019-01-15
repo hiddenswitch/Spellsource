@@ -5,7 +5,11 @@ permalink: /whats-new/
 ---
 ### 0.8.12-2.0.22 (Monday, January 14th, 2019)
 
-Bug fixes.
+Introducing the Sea Witch class! This release also contains important bug fixes.
+
+##### Content Additions:
+
+ - The Sea Witch, with 34 Basic and Classic cards and tokens.
 
 ##### Content Fixes:
 
