@@ -10,6 +10,7 @@ Introducing the Sea Witch class! This release also contains important bug fixes.
 ##### Content Additions:
 
  - The Sea Witch, with 34 Basic and Classic cards and tokens.
+ - @Rumu's Verdant Dreams expansion.
  - The Paladin card Echo! Echo! Echo!.
 
 ##### Content Fixes:
@@ -27,6 +28,7 @@ Introducing the Sea Witch class! This release also contains important bug fixes.
  - Yu'lon is now a 8/6 and only summons two statues.
  - Xuen now only has Charge and Deflect.
  - Soothing Mists now heals 3 (was 5).
+ - Assimilator and Broodmother Narvina both in play no longer causes an infinite loop.
 
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
