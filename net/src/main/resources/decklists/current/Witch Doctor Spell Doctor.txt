@@ -1,0 +1,22 @@
+### Witch Doctor: Spell Doctor
+# Class: ROSE
+# Format: Spellsource
+#
+# 2x (1) Cycle of Undeath
+# 2x (1) Tiki Tokens
+# 2x (2) Devilry Flare
+# 1x (2) Ghostly Essence
+# 2x (2) Possessed Madness
+# 2x (2) Ritual Dagger
+# 2x (2) Tainted Raven
+# 2x (3) Hex: Zombie
+# 2x (3) Old Jungle Masta
+# 2x (4) Gracious Timekeeper
+# 2x (4) Highmountain Primalist
+# 2x (5) Jeering Troll
+# 2x (6) Chant Leader
+# 2x (6) Evocation
+# 1x (6) Spiritbinder
+# 1x (7) Awakening Ritual
+# 1x (9) Zalmah
+#
