@@ -1,0 +1,30 @@
+{
+  "name": "Echo! Echo! Echo!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "RARE",
+  "description": "<b>Echo</b> <b>Discover</b> an <b>Echo</b> card from any class.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "attribute": "ECHO",
+      "operation": "HAS"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    }
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
