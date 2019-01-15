@@ -16,7 +16,7 @@
     "spell": {
       "class": "SummonSpell",
       "card": "minion_jade_serpent_statue",
-      "howMany": 2
+      "value": 2
     }
   },
   "attributes": {
