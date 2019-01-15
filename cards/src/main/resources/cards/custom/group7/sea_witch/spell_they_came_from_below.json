@@ -1,0 +1,40 @@
+{
+  "name": "They Came from Below",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "EPIC",
+  "description": "Deal $2 damage to a minion. Reservoir (25+): $6 damage. Reservoir (30+): Destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "FirstConditionalSpell",
+    "conditions": [
+      {
+        "class": "ReservoirCondition",
+        "value": 30
+      },
+      {
+        "class": "ReservoirCondition",
+        "value": 25
+      }
+    ],
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 6
+      }
+    ],
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    },
+    "exclusive": true
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

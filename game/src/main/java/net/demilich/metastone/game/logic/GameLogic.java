@@ -3590,6 +3590,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
+
+			context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 			return true;
 		}
 		return false;
@@ -3660,8 +3662,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					originalOwner = player.getId();
 				}
 				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
+				context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 			}
-
 			EnvironmentEntityList.getList(context, Environment.SHUFFLED_CARDS_LIST).add(player, card);
 			return true;
 		}

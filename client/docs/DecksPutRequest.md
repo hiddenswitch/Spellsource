@@ -37,6 +37,7 @@ TOAST | &quot;TOAST&quot;
 ROSE | &quot;ROSE&quot;
 BLOOD | &quot;BLOOD&quot;
 NEONGREEN | &quot;NEONGREEN&quot;
+TEAL | &quot;TEAL&quot;
 
 
 <a name="FormatEnum"></a>

@@ -1,0 +1,27 @@
+{
+  "name": "Condensation",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "RARE",
+  "description": "Summon two 3/2 Sea Elementals. Reservoir (25+): Shuffle a third into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReservoirSpell",
+    "value": 25,
+    "spell1": {
+      "class": "SummonSpell",
+      "value": 2,
+      "card": "minion_sea_elemental"
+    },
+    "spell2": {
+      "class": "ShuffleToDeckSpell",
+      "value": 1,
+      "card": "minion_sea_elemental"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

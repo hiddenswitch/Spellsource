@@ -15,7 +15,7 @@ import java.util.Map;
  *
  * @see ConditionalEffectSpell for how to write this spell.
  */
-public class ComboSpell extends ConditionalEffectSpell {
+public final class ComboSpell extends ConditionalEffectSpell {
 
 	public static SpellDesc create(SpellDesc either, SpellDesc or, boolean exclusive) {
 		Map<SpellArg, Object> arguments = new SpellDesc(ComboSpell.class);
@@ -29,5 +29,4 @@ public class ComboSpell extends ConditionalEffectSpell {
 	protected boolean isConditionFulfilled(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		return player.hasAttribute(Attribute.COMBO);
 	}
-
 }

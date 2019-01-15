@@ -435,6 +435,7 @@ definitions:
           - 'ROSE'
           - 'BLOOD'
           - 'NEONGREEN'
+          - 'TEAL'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -880,6 +881,7 @@ definitions:
           - 'ARMOR_GAINED'
           - 'BEFORE_SUMMON'
           - 'BOARD_CHANGED'
+          - 'CARD_ADDED_TO_DECK'
           - 'CARD_SHUFFLED'
           - 'DAMAGE'
           - 'DISCARD'
