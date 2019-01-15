@@ -14,9 +14,12 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "SummonSpell",
-      "value": 2,
-      "card": "token_spiderling"
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "value": 2,
+        "card": "token_spiderling"
+      }
     }
   },
   "collectible": true,

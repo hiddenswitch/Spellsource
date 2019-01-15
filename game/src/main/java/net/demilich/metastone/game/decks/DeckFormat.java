@@ -97,6 +97,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							RASTAKHANS_RUMBLE,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
+							VERDANT_DREAMS,
 							HALL_OF_FAME,
 							CardSet.CUSTOM
 					))
@@ -126,6 +127,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							RASTAKHANS_RUMBLE,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
+							VERDANT_DREAMS,
 							HALL_OF_FAME,
 							ALTERNATIVE,
 							UNNERFED,
