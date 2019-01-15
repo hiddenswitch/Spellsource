@@ -1,0 +1,29 @@
+{
+  "name": "Fists of the Heavens",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 0,
+  "durability": 4,
+  "rarity": "LEGENDARY",
+  "description": "Windfury. After your hero attacks, deal 1 damage to all enemy minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+	  "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "DamageSpell",
+	  "target": "ENEMY_MINIONS",
+	  "value": 1
+    }
+  },
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

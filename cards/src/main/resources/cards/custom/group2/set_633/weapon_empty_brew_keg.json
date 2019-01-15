@@ -1,0 +1,31 @@
+{
+  "name": "Empty Brew Keg",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 0,
+  "durability": 4,
+  "rarity": "EPIC",
+  "description": "After your hero attacks, add a random Monk spell to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+	  "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cardFilter": {
+	    "class": "CardFilter",
+        "heroClass": "JADE",
+        "cardType": "SPELL",
+	  }
+    }
+  },
+  "attributes": {
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

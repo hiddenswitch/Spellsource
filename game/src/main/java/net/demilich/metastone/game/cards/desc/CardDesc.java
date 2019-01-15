@@ -322,6 +322,9 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
 	public CardSet getSet() {
+		if (set == null && sets != null && sets.length > 0) {
+			return sets[0];
+		}
 		return set;
 	}
 
@@ -495,8 +498,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
-	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link
-	 * GameLogic#startGameForPlayer(Player)} phase.
+	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link GameLogic#startGameForPlayer(Player)} phase.
 	 * <p>
 	 * Note that the {@link net.demilich.metastone.game.events.GameStartEvent} is raised twice, once for each player, so
 	 * your {@link EventTriggerDesc} should specify a {@link net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg#TARGET_PLAYER}.

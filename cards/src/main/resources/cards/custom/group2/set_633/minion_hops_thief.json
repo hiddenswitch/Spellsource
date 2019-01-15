@@ -1,0 +1,34 @@
+{
+  "name": "Hops Thief",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Rush. Battlecry: Summon a Hops Thief for each Elemental you played last turn.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_hops_thief",
+      "value": {
+        "class": "PlayedLastTurnValueProvider",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ],
+  "fileFormatVersion": 1
+}

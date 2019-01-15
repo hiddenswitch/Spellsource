@@ -1,0 +1,59 @@
+{
+  "name": "Chronicler Bah'Kini",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "heroClass": "JADE",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Draw a weapon of each rarity from your deck.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "COMMON",
+            "cardType": "WEAPON"
+          }
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "RARE",
+            "cardType": "WEAPON"
+          }
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "EPIC",
+            "cardType": "WEAPON"
+          }
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "rarity": "LEGENDARY",
+            "cardType": "WEAPON"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

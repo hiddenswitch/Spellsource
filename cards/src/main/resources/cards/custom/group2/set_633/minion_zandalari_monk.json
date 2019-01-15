@@ -1,0 +1,17 @@
+{
+  "name": "Zandalari Monk",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Rush. Deflect.",
+  "attributes": {
+    "RUSH": true,
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

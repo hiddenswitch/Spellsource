@@ -1,0 +1,40 @@
+{
+  "name": "Spirit of the Turtle",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Stealth for 1 turn. Your Deflect minions have Rush and cost (2) less.",
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -2,
+    "cardType": "MINION",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "DEFLECT",
+      "operation": "HAS"
+    }
+  },
+  "aura": {
+    "class": "AttributeAura",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "AURA_RUSH",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "DEFLECT",
+      "operation": "HAS"
+    }
+  },
+  "attributes": {
+    "STEALTH": true,
+    "STEALTH_FOR_TURNS": 1
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "RASTAKHANS_RUMBLE"
+  ],
+  "fileFormatVersion": 1
+}

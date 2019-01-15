@@ -1,0 +1,25 @@
+{
+  "name": "Leaky Distillery Chamber",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Deathrattle: Add three 1/2 Alementals to your hand.",
+  "deathrattle": {
+      "class": "ReceiveCardSpell",
+	  "value": 3,
+      "card": "token_tiny_alemental"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+	"BOOMSDAY_PROJECT"
+  ],
+  "fileFormatVersion": 1
+}

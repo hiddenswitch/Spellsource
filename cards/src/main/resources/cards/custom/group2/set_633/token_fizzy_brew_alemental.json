@@ -1,0 +1,20 @@
+{
+  "name": "Fizzy Brew Alemental",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Can't be targeted by Spells or Hero Powers.",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+	"BOOMSDAY_PROJECT"
+  ],
+  "fileFormatVersion": 1
+}

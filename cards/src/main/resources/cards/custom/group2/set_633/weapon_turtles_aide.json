@@ -1,0 +1,28 @@
+{
+  "name": "Turtle's Aide",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "JADE",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Draw two Deflect minions from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "DEFLECT",
+        "cardType": "MINION"
+      },
+	  "value": 2
+    }
+  },
+  "attributes": {
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
