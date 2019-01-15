@@ -79,7 +79,9 @@ public class DecksPutRequest implements Serializable {
     
     BLOOD("BLOOD"),
     
-    NEONGREEN("NEONGREEN");
+    NEONGREEN("NEONGREEN"),
+    
+    TEAL("TEAL");
 
     private String value;
 

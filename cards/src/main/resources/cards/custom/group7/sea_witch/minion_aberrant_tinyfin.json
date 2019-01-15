@@ -1,0 +1,27 @@
+{
+  "name": "Aberrant Tinyfin",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "MURLOC",
+  "description": "Deathrattle: Give your Murlocs +1/+1.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "filter": {
+      "class": "RaceFilter",
+      "race": "MURLOC"
+    },
+    "target": "FRIENDLY_CHARACTERS",
+    "attackBonus": 0,
+    "hpBonus": 0
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

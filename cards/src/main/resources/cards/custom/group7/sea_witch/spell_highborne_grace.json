@@ -1,0 +1,41 @@
+{
+  "name": "Highborne Grace",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "COMMON",
+  "description": "Restore #[] Health. (Reservoir (0-15): Restores #14 instead).",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "ReservoirCondition",
+        "value1": 0,
+        "value2": 15
+      },
+      "ifTrue": 14,
+      "ifFalse": 7
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "ConditionalValueProvider",
+        "condition": {
+          "class": "ReservoirCondition",
+          "value1": 0,
+          "value2": 15
+        },
+        "ifTrue": 14,
+        "ifFalse": 7
+      }
+    }
+  ]
+}
