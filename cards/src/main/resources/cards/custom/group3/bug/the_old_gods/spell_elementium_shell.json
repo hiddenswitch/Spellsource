@@ -1,22 +1,18 @@
 {
   "name": "Elementium Shell",
-  "baseManaCost": 6,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Give your Spiderlings +1/+1 (wherever they are) and draw two cards.",
+  "description": "Give your Spiderlings +1 this game.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "aura": {
-          "class": "BuffAura",
-          "target": "FRIENDLY_MINIONS",
-          "attackBonus": 1,
-          "filter": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "aura": {
+        "class": "BuffAura",
+        "target": "FRIENDLY_MINIONS",
+        "filter": {
             "class": "AndFilter",
             "filters": [
               {
@@ -30,14 +26,8 @@
               }
             ]
           },
-          "hpBonus": 1
-        }
-      },
-      {
-        "class": "DrawCardSpell",
-        "value": 2
-      }
-    ]
+        "hpBonus": 1
+    }
   },
   "attributes": {},
   "collectible": true,
