@@ -1,0 +1,26 @@
+{
+  "name": "Water Blast",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage. Reservoir (20+): Shuffle a copy of this spell into your deck.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ReservoirSpell",
+    "value": 20,
+    "spell1": {
+      "class": "DamageSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "ShuffleToDeckSpell",
+      "value": 1,
+      "card": "spell_water_blast"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

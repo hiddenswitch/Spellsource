@@ -1,0 +1,57 @@
+{
+  "name": "Steamvault Bruiser",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Reservoir (16+): Charge. Reservoir (0-15): Gain +4 Health and Taunt.",
+  "battlecry": {
+    "condition": {
+      "class": "ReservoirCondition",
+      "value": 0
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "conditions": [
+        {
+          "class": "ReservoirCondition",
+          "value1": 0,
+          "value2": 15
+        },
+        {
+          "class": "ReservoirCondition",
+          "value": 16
+        }
+      ],
+      "spells": [
+        {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "BuffSpell",
+              "target": "SELF",
+              "hpBonus": 4
+            },
+            {
+              "class": "AddAttributeSpell",
+              "attribute": "TAUNT",
+              "target": "SELF"
+            }
+          ]
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "CHARGE"
+        }
+      ]
+    }
+  },
+  "attributes": {
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

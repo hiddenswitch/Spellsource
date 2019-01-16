@@ -13,6 +13,23 @@ import static org.testng.Assert.*;
 public class RastakhansRumbleTests extends TestBase {
 
 	@Test
+	public void testIceWalkerSpiritOfTheDragonhawkInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_ice_walker");
+			playCard(context, player, "minion_spirit_of_the_dragonhawk");
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target3 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			useHeroPower(context, player, target2.getReference());
+			assertTrue(target1.hasAttribute(Attribute.FROZEN));
+			assertTrue(target2.hasAttribute(Attribute.FROZEN));
+			assertTrue(target3.hasAttribute(Attribute.FROZEN));
+		});
+	}
+
+	@Test
 	public void testHallazhealSoupVendorCorruptedBloodInteraction() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_hallazeal_the_ascended");
@@ -20,7 +37,7 @@ public class RastakhansRumbleTests extends TestBase {
 			putOnTopOfDeck(context, player, "spell_corrupted_blood");
 			context.endTurn();
 			context.endTurn();
-			playCard(context,player,"spell_far_sight");
+			playCard(context, player, "spell_far_sight");
 		});
 	}
 

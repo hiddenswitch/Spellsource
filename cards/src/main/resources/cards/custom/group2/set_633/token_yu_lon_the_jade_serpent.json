@@ -3,36 +3,20 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 10,
-  "baseHp": 4,
+  "baseAttack": 8,
+  "baseHp": 6,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. At the start of your turn, summon a Jade Serpent Statue, then gain +1/+1 for each one you control.",
+  "description": "Deflect. At the start of your turn, summon two Jade Serpent Statues.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
-          "class": "SummonSpell",
-          "card": "minion_jade_serpent_statue"
-        },
-        {
-          "class": "BuffSpell",
-          "target": "SELF",
-          "value": {
-            "class": "EntityCounter",
-            "target": "FRIENDLY_MINIONS",
-            "filter": {
-              "class": "SpecificCardFilter",
-              "card": "minion_jade_serpent_statue"
-            }
-          }
-        }
-      ]
+      "class": "SummonSpell",
+      "card": "minion_jade_serpent_statue",
+      "value": 2
     }
   },
   "attributes": {

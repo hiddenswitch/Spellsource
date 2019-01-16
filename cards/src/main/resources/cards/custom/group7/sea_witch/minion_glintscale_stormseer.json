@@ -1,0 +1,26 @@
+{
+  "name": "Glintscale Stormseer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "Battlecry: Draw an 'Ocean Depths' from your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_ocean_depths"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
