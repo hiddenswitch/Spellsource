@@ -2,7 +2,7 @@
   "name": "Demon Spikes",
   "baseManaCost": 3,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Gain 6 Armor and +1 Attack until the start of your next turn.",
   "targetSelection": "NONE",

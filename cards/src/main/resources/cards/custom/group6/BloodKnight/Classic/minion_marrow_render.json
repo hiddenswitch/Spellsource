@@ -1,0 +1,23 @@
+{
+  "name": "Marrow Render",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Drain 3 Health from your hero.",
+  "battlecry": {
+    "spell": {
+      "class": "DrainSpell",
+      "value": 3,
+      "target": "FRIENDLY_HERO"
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

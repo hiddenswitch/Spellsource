@@ -2,7 +2,7 @@
   "name": "Throw Glaive",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "RARE",
   "description": "Deal 2 damage to a minion. If you have a weapon, it deals it's damage instead.",
   "targetSelection": "MINIONS",

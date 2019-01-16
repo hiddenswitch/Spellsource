@@ -2,7 +2,7 @@
   "name": "Fel Rush",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Draw a card. Each time your hero attacks this turn, draw another.",
   "targetSelection": "NONE",

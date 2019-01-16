@@ -34,6 +34,4 @@ public class ManaCostProvider extends ValueProvider {
 
 		return context.getLogic().getModifiedManaCost(player, targetCard);
 	}
-
-
 }

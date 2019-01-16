@@ -31,6 +31,7 @@ public class EntityFilterDescDeserializer extends DescDeserializer<EntityFilterD
 		ctx.add(EntityFilterArg.RARITY, ParseValueType.RARITY);
 		ctx.add(EntityFilterArg.MANA_COST, ParseValueType.VALUE);
 		ctx.add(EntityFilterArg.CARD, ParseValueType.STRING);
+		ctx.add(EntityFilterArg.CARDS, ParseValueType.STRING_ARRAY);
 		ctx.add(EntityFilterArg.FILTERS, ParseValueType.ENTITY_FILTER_ARRAY);
 		ctx.add(EntityFilterArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(EntityFilterArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);

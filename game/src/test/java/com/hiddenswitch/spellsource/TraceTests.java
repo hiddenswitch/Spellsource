@@ -28,6 +28,7 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.IOException;
+import java.net.URL;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 import java.util.*;
@@ -47,6 +48,7 @@ public class TraceTests {
 				.filter(Objects::nonNull)
 				.map(Resources::getResource)
 				.filter(Objects::nonNull)
+				.sorted(Comparator.comparing(URL::getFile).reversed())
 				.map(c -> {
 					try {
 						return Trace.load(Resources.toString(c, Charset.defaultCharset()));

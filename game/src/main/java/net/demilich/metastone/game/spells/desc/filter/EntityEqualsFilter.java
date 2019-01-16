@@ -10,6 +10,23 @@ import java.util.List;
 /**
  * Matches an entity if the entity is in the list of entities returned by resolving the {@link
  * EntityFilterArg#SECONDARY_TARGET}.
+ * <p>
+ * For example, to implement the text, "Choose a minion. It attacks a random friendly minion."
+ * <pre>
+ *   "spell": {
+ *     "class": "DuelSpell",
+ *     "target": "FRIENDLY_MINIONS",
+ *     "filter": {
+ *       "class": "EntityEqualsFilter",
+ *       "secondaryTarget": "TARGET",
+ *       "invert": true
+ *     },
+ *     "randomTarget": true,
+ *     "secondaryTarget": "TARGET"
+ *   }
+ * </pre>
+ * Observe that the filter takes a {@link EntityFilterArg#SECONDARY_TARGET} of {@link EntityReference#TARGET}, i.e., the
+ * actual minion chosen. We want to choose a random target that does <b>not</b> include the minion chosen.
  */
 public class EntityEqualsFilter extends EntityFilter {
 

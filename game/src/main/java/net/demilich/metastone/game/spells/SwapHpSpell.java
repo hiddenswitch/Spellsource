@@ -40,3 +40,4 @@ public class SwapHpSpell extends Spell {
 	}
 
 }
+

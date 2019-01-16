@@ -1,0 +1,30 @@
+{
+  "name": "Goblin Harpooner",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Choose a minion. It attacks a random friendly minion.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DuelSpell",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "EntityEqualsFilter",
+        "secondaryTarget": "TARGET",
+        "invert": true
+      },
+      "randomTarget": true,
+      "secondaryTarget": "TARGET"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

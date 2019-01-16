@@ -2,7 +2,7 @@
   "name": "Demonic Form",
   "baseManaCost": 0,
   "type": "HERO_POWER",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Whenever you play a card, give it Lifesteal and draw another card. (Ends in [X] turn[s])",
   "condition": {

@@ -1,0 +1,35 @@
+{
+  "name": "Death Chain",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Choose a minion. All damage it takes is also taken by the minions adjacent to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "DamageReceivedTrigger",
+        "hostTargetType": "IGNORE_OTHER_TARGETS"
+      },
+      "spell": {
+        "class": "SplashDamageSpell",
+        "target": "ADJACENT_MINIONS",
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        },
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "LAST_HIT"
+        }
+      },
+      "maxFiresPerSequence": 16
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

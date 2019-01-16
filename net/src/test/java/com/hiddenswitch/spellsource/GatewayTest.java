@@ -284,8 +284,9 @@ public class GatewayTest extends SpellsourceTestBase {
 		final long count = CardCatalogue.getRecords().values().stream().filter(
 				cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getDesc().getSet()) && cd.getDesc().type != CardType.GROUP && cd.getDesc().type != CardType.HERO_POWER && cd.getDesc().type != CardType.ENCHANTMENT).count();
 		context.assertEquals((long) response1.getCards().size(), count);
+		String etag = defaultApi.getApiClient().getResponseHeaders().get("ETag").get(0);
 		try {
-			GetCardsResponse response2 = defaultApi.getCards(response1.getVersion());
+			GetCardsResponse response2 = defaultApi.getCards(etag);
 			context.fail();
 		} catch (ApiException ex) {
 			context.assertEquals(ex.getCode(), 304);
@@ -293,7 +294,8 @@ public class GatewayTest extends SpellsourceTestBase {
 
 		GetCardsResponse response3 = defaultApi.getCards("invalid token");
 		context.assertNotNull(response3);
-		context.assertEquals(response3.getVersion(), response1.getVersion());
+		String newETag = defaultApi.getApiClient().getResponseHeaders().get("ETag").get(0);
+		context.assertEquals(newETag, etag);
 	}
 
 	@Test

@@ -19,8 +19,11 @@
       }
     },
     "spell": {
-      "class": "ReviveMinionSpell",
-      "target": "SELF"
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "ReviveMinionSpell",
+        "target": "SELF"
+      }
     }
   },
   "attributes": {

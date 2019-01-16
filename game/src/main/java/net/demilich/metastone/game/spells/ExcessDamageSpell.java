@@ -16,6 +16,10 @@ import java.util.List;
  * Deals {@link SpellArg#VALUE} damage to the {@code target} and any excess to the {@link SpellArg#SECONDARY_TARGET}.
  * <p>
  * If {@link SpellArg#EXCLUSIVE} is {@code true}, only deals excess damage.
+ * <p>
+ * If a {@link SpellArg#SPELL} is provided, cast it with a {@link SpellArg#VALUE} equal to the excess damage dealt
+ * (ignoring spell damage). Leave {@link SpellArg#SECONDARY_TARGET} undefined unless the spell should be cast on every
+ * secondary target.
  */
 public final class ExcessDamageSpell extends DamageSpell {
 

@@ -2,7 +2,7 @@
   "name": "Master of the Glaive",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",

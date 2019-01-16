@@ -2,7 +2,7 @@
   "name": "Fel Barrage",
   "baseManaCost": 7,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "RARE",
   "description": "Shoot $5 missiles at random enemies that deal two damage each.",
   "targetSelection": "NONE",

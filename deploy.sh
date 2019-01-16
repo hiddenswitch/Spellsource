@@ -28,12 +28,11 @@ Currently, the docker deployment only updates the spellsource_game image.
 Notes for successful deployment:
  - Requires jq, curl and docker on the PATH for Docker deployment
  - Requires eb on the path for Elastic Beanstalk deployment
- - Make sure to bump a version using ./versionbump.sh CURRENT.VERSION
 
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.8 ./deploy.sh -cpdwv
+  SPELLSOURCE_VERSION=0.8.11 ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -43,7 +42,7 @@ deploy_launcher=false
 bump_version=false
 install_dependencies=false
 build_client=false
-while getopts "hcedplwD" opt; do
+while getopts "hcedplvwD" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -83,6 +82,7 @@ shift $((OPTIND-1))
 function update_portainer() {
   service_name=$1
   portainer_image_name=$2
+  sleep 4
   service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
   service_id=$(echo $service | jq  -r .ID)
   service_specification=$(echo $service | jq .Spec)
@@ -95,6 +95,8 @@ function update_portainer() {
    -X POST \
    -d "${service_update_command}" \
    "${PORTAINER_URL}api/endpoints/1/docker/services/${service_id}/update?version=${service_version}"
+
+   echo "Deployed image"
 }
 
 # Configure virtualenv path
@@ -155,7 +157,7 @@ if [[ "$install_dependencies" = true ]] ; then
       pip3 install spellsource > /dev/null
     fi
 
-    pip3 install awscli awsebcli versionbump > /dev/null
+    pip3 install awscli awsebcli bump2version > /dev/null
   else
     echo "Cannot install dependencies on this platform yet"
     exit 1
@@ -168,17 +170,17 @@ if [[ "$bump_version" = true ]] ; then
     exit 1
   fi
 
-  if ! command -v versionbump > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
+  if ! command -v bump2version > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
     echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
-  if ! command -v versionbump > /dev/null ; then
+  if ! command -v bump2version > /dev/null ; then
     echo "Failed to bump version: Missing versionbump binary. Install with pip3 install versionbump"
     exit 1
   fi
 
-  versionbump -c "${SPELLSOURCE_VERSION}" patch \
+  bump2version --allow-dirty --current-version "${SPELLSOURCE_VERSION}" patch \
     build.gradle \
     setup.py \
     deploy.sh \
@@ -232,13 +234,15 @@ if [[ "$build_client" = true ]] ; then
 fi
 
 # Before building, retrieve the portainer password if it's not specified immediately
-if [[ "$deploy_docker" = true || "$deploy_launcher" = true && -z ${PORTAINER_PASSWORD+x} ]] ; then
-  echo "docker deployment: Requesting PORTAINER_PASSWORD"
-  stty -echo
-  printf "Password: "
-  read PORTAINER_PASSWORD
-  stty echo
-  printf "\n"
+if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
+  if [[ -z ${PORTAINER_PASSWORD+x} ]] ; then
+    echo "docker deployment: Requesting PORTAINER_PASSWORD"
+    stty -echo
+    printf "Password: "
+    read PORTAINER_PASSWORD
+    stty echo
+    printf "\n"
+  fi
 fi
 
 if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
@@ -401,7 +405,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.8-all.jar \
+      ./net/build/libs/net-0.8.11-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

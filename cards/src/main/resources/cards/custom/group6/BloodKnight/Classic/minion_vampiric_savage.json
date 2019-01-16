@@ -1,0 +1,28 @@
+{
+  "name": "Vampiric Savage",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Whenever your hero gains Health, this minion gains it as well.",
+  "trigger":  {
+    "eventTrigger": {
+      "class": "MaxHpIncreasedTrigger",
+      "targetEntityType": "HERO",
+      "targetPlayer": "SELF",
+      "hostTargetType": "IGNORE_AS_TARGET"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": {
+        "class": "EventValueProvider"
+      },
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

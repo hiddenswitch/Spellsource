@@ -1,0 +1,27 @@
+{
+  "name": "Hemoshield",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "EPIC",
+  "description": "Give your hero +5 Health and Taunt. Once their Health drops below 25, they lose Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "hpBonus": 5
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_HERO",
+        "card": "enchantment_hemoshield"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

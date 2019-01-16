@@ -1,0 +1,44 @@
+{
+  "name": "Daunting Carapace",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "COMMON",
+  "description": "Give a minion -1/+4, <b>Taunt</b>, and <b>Wither (1)</b>.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": -1,
+        "hpBonus": 4
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "ModifyAttributeSpell",
+        "attribute": "WITHER",
+        "value": 1
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger":  {
+          "eventTrigger": {
+            "class": "DamageCausedTrigger",
+            "hostTargetType": "IGNORE_OTHER_SOURCES"
+          },
+          "spell": {
+            "class": "WitherSpell",
+            "target": "EVENT_TARGET"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

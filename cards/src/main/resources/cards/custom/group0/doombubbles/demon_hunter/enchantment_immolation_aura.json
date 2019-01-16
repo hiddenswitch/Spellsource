@@ -1,7 +1,7 @@
 {
   "name": "Immolation Aura",
   "type": "ENCHANTMENT",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Whenever your hero is attacked, deal 1 damage to all enemies.",
   "triggers": [

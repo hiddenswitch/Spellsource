@@ -5,6 +5,9 @@ import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.EntityFilterDescDeserializer;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY, getterVisibility = JsonAutoDetect.Visibility.NONE, setterVisibility = JsonAutoDetect.Visibility.NONE)
@@ -36,5 +39,22 @@ public class EntityFilterDesc extends Desc<EntityFilterArg, EntityFilter> {
 	@Override
 	public EntityFilterDesc clone() {
 		return (EntityFilterDesc) copyTo(new EntityFilterDesc(getDescClass()));
+	}
+
+	public List<String> getCardOrCards() {
+
+		if (getDesc().containsKey(EntityFilterArg.CARD) && ! getDesc().containsKey(EntityFilterArg.CARDS)) {
+			return Collections.singletonList((String)get(EntityFilterArg.CARD));
+		}
+		if (!getDesc().containsKey(EntityFilterArg.CARD) && getDesc().containsKey(EntityFilterArg.CARDS)) {
+			return Arrays.asList((String[])get(EntityFilterArg.CARDS));
+		}
+		if (getDesc().containsKey(EntityFilterArg.CARD) && getDesc().containsKey(EntityFilterArg.CARDS)) {
+			String[] cards = (String[])get(EntityFilterArg.CARDS);
+			String[] newCards = Arrays.copyOf(cards,cards.length+1);
+			newCards[cards.length] = (String)get(EntityFilterArg.CARD);
+			return Arrays.asList(newCards);
+		}
+		return Collections.emptyList();
 	}
 }

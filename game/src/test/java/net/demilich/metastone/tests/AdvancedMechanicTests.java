@@ -46,6 +46,81 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testCopyingEnchantments() {
+		runGym((context, player, opponent) -> {
+			// Should give us exactly two auras
+			Minion auraMinion = playMinionCard(context, player, "minion_test_aura");
+			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", auraMinion);
+			assertEquals(copy.getSourceCard().getCardId(), "minion_test_aura");
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(auraMinion.getAttack(), 4);
+			assertEquals(copy.getAttack(), 4);
+			assertEquals(context.getTriggerManager().getTriggers().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Should give us exactly two card cost modifiers
+			Minion radiant = playMinionCard(context, player, "minion_radiant_elemental");
+			Minion princeTaldaramTransformed = playMinionCardWithBattlecry(context, player, "minion_prince_taldaram", radiant);
+			assertEquals(princeTaldaramTransformed.getSourceCard().getCardId(), "minion_radiant_elemental");
+			Card costThreeSpell = receiveCard(context, player, "spell_blood_warriors");
+			assertEquals(costOf(context, player, costThreeSpell), costThreeSpell.getBaseManaCost() - 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Should correctly copy enchantments granted after the fact
+			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_blessing_of_wisdom", blessed);
+			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
+			context.endTurn();
+			context.endTurn();
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			attack(context, player, blessed, opponent.getHero());
+			assertEquals(player.getHand().size(), 1);
+			attack(context, player, copy, opponent.getHero());
+			assertEquals(player.getHand().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Copies with persistent owner should work
+			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, opponent, "spell_blessing_of_wisdom", blessed);
+			context.endTurn();
+			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
+			context.endTurn();
+			context.endTurn();
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, opponent, "spell_the_coin");
+			}
+			attack(context, player, blessed, opponent.getHero());
+			assertEquals(opponent.getHand().size(), 1);
+			attack(context, player, copy, opponent.getHero());
+			assertEquals(opponent.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testSplashDamageAppliesPoisonousAndLifesteal() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_splash_damage_weapon");
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target3 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			player.getHero().setHp(27);
+			attack(context, player, player.getHero(), target2);
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			assertTrue(target3.isDestroyed());
+			assertEquals(player.getHero().getHp(), 30 - target2.getAttack());
+		});
+	}
+
+	@Test
 	public void testPermanentDoesntTriggerSummons() {
 		runGym((context, player, opponent) -> {
 			Minion minion = playMinionCard(context, player, "minion_test_permanents_dont_trigger_summons");

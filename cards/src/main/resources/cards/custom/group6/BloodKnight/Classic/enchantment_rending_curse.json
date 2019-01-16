@@ -1,0 +1,32 @@
+{
+  "name": "Rending Curse",
+  "type": "ENCHANTMENT",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Deathrattle: Deal 1 damage to all other minions, then give them this Deathrattle.",
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_OTHER_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "card": "enchantment_rending_curse",
+        "target": "ALL_OTHER_MINIONS",
+        "filter": {
+          "class": "IsDestroyedFilter",
+          "invert": true
+        }
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

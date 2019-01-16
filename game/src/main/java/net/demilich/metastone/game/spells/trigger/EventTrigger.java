@@ -6,6 +6,7 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
@@ -81,13 +82,23 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		if (targetPlayer != null && !determineTargetPlayer(event, targetPlayer, host, event.getTargetPlayerId())) {
 			return false;
 		}
+
 		TargetPlayer sourcePlayer = getDesc().getSourcePlayer();
 		if (sourcePlayer != null && !determineTargetPlayer(event, sourcePlayer, host, event.getSourcePlayerId())) {
 			return false;
 		}
 
-
 		if (!hostConditionMet(event, host)) {
+			return false;
+		}
+
+		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
+		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()) {
+			return false;
+		}
+
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		if (event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType()) {
 			return false;
 		}
 

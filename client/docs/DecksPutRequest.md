@@ -35,8 +35,9 @@ ICECREAM | &quot;ICECREAM&quot;
 AMBER | &quot;AMBER&quot;
 TOAST | &quot;TOAST&quot;
 ROSE | &quot;ROSE&quot;
-FEL | &quot;FEL&quot;
-
+BLOOD | &quot;BLOOD&quot;
+NEONGREEN | &quot;NEONGREEN&quot;
+DARKGREEN | &quot;DARKGREEN&quot;
 
 <a name="FormatEnum"></a>
 ## Enum: FormatEnum

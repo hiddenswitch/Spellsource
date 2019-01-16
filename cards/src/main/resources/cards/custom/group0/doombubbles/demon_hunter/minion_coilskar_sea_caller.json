@@ -2,7 +2,7 @@
   "name": "Coilskar Sea-Caller",
   "baseManaCost": 5,
   "type": "MINION",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "COMMON",

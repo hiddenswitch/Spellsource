@@ -1,0 +1,30 @@
+{
+  "name": "Systemic Transfer",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Destroy a friendly minion. Gain Attack equal to its Health for this turn.",
+  "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "target": "TARGET",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "DestroySpell"
+        }
+      ]
+    }
+  ,
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

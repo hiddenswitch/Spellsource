@@ -105,6 +105,13 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 	 */
 	public Integer maxFires;
 	/**
+	 * The maximum number of times this trigger can fire per sequence. This counter is reset at the beginning of the
+	 * sequence. Does <b>not</b> expire the trigger when exceeded.
+	 * <p>
+	 * When {@code null} (the default), the trigger can fire an unlimited number of times per sequence.
+	 */
+	public Integer maxFiresPerSequence;
+	/**
 	 * The number of times an {@link Enchantment} fires until it actually casts its spell.
 	 * <p>
 	 * Implements Quests and many other counting behaviours in triggers.
@@ -130,7 +137,8 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 				immutableEntry(EnchantmentDescArg.PERSISTENT_OWNER, persistentOwner),
 				immutableEntry(EnchantmentDescArg.MAX_FIRES, maxFires),
 				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
-				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue)
+				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue),
+				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, maxFiresPerSequence)
 		);
 
 		return entries;
@@ -154,6 +162,7 @@ public final class EnchantmentDesc implements Serializable, Cloneable, HasEntryS
 		enchantment.setKeepAfterTransform(keepAfterTransform);
 		enchantment.setCountUntilCast(countUntilCast);
 		enchantment.setCountByValue(countByValue);
+		enchantment.setMaxFiresPerSequence(maxFiresPerSequence);
 		return enchantment;
 	}
 

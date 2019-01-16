@@ -7,8 +7,10 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.events.MaxHpIncreasedEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
@@ -71,9 +73,9 @@ import java.util.Map;
  *
  * @see AddAttributeSpell to "buff" attributes.
  */
-public class BuffSpell extends Spell {
+public class BuffSpell extends RevertableSpell {
 
-	private static Logger logger = LoggerFactory.getLogger(BuffSpell.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(BuffSpell.class);
 
 	public static SpellDesc create(EntityReference target, int value) {
 		Map<SpellArg, Object> arguments = new SpellDesc(BuffSpell.class);
@@ -91,9 +93,34 @@ public class BuffSpell extends Spell {
 	}
 
 	@Override
+	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
+		SpellDesc reverse = new SpellDesc(BuffSpell.class, target, null, false);
+		if (desc.get(SpellArg.VALUE) instanceof ValueProvider
+				|| desc.get(SpellArg.ATTACK_BONUS) instanceof ValueProvider
+				|| desc.get(SpellArg.HP_BONUS) instanceof ValueProvider
+				|| desc.get(SpellArg.ARMOR_BONUS) instanceof ValueProvider) {
+			throw new UnsupportedOperationException("Cannot create a revertTrigger on a BuffSpell that uses a ValueProvider in any of its value fields");
+		}
+		if (desc.containsKey(SpellArg.VALUE)) {
+			reverse.put(SpellArg.VALUE, -desc.getInt(SpellArg.VALUE, 0));
+		}
+		if (desc.containsKey(SpellArg.ATTACK_BONUS)) {
+			reverse.put(SpellArg.ATTACK_BONUS, -desc.getInt(SpellArg.ATTACK_BONUS, 0));
+		}
+		if (desc.containsKey(SpellArg.HP_BONUS)) {
+			reverse.put(SpellArg.HP_BONUS, -desc.getInt(SpellArg.HP_BONUS, 0));
+		}
+		if (desc.containsKey(SpellArg.ARMOR_BONUS)) {
+			reverse.put(SpellArg.ARMOR_BONUS, -desc.getInt(SpellArg.ARMOR_BONUS, 0));
+		}
+		return reverse;
+	}
+
+	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.ATTACK_BONUS, SpellArg.HP_BONUS, SpellArg.ARMOR_BONUS, SpellArg.VALUE);
+		super.onCast(context, player, desc, source, target);
+		checkArguments(LOGGER, context, source, desc, SpellArg.ATTACK_BONUS, SpellArg.HP_BONUS, SpellArg.ARMOR_BONUS, SpellArg.VALUE, SpellArg.REVERT_TRIGGER);
 		int attackBonus = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
 		int hpBonus = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
 		int armorBonus = desc.getValue(SpellArg.ARMOR_BONUS, context, player, target, source, 0);
@@ -106,8 +133,6 @@ public class BuffSpell extends Spell {
 				attackBonus = hpBonus = value;
 			}
 		}
-
-		logger.debug("onCast {} {}: {} gains ({})", context.getGameId(), source, target, attackBonus + "/" + (hpBonus + armorBonus));
 
 		if (attackBonus != 0) {
 			if (target instanceof Hero) {
@@ -122,6 +147,9 @@ public class BuffSpell extends Spell {
 				context.getLogic().modifyDurability((Weapon) target, hpBonus);
 			} else {
 				target.modifyHpBonus(hpBonus);
+				if (hpBonus > 0) {
+					context.fireGameEvent(new MaxHpIncreasedEvent(context, target, hpBonus, source.getOwner()));
+				}
 			}
 		}
 
@@ -130,9 +158,9 @@ public class BuffSpell extends Spell {
 				context.getLogic().gainArmor(context.getPlayer(target.getOwner()), armorBonus);
 			} else {
 				if (target == null) {
-					logger.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
+					LOGGER.warn("onCast {} {}: Applying armor and calling with a null target", context.getGameId(), source);
 				} else if (target.getOwner() != player.getId()) {
-					logger.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
+					LOGGER.warn("onCast {} {}: Applying armor and calling without a hero target, but a target {} whose owner" +
 							" differs from the player {}", context.getGameId(), source, target, player);
 				}
 				context.getLogic().gainArmor(player, armorBonus);

@@ -1,0 +1,29 @@
+{
+  "name": "Chant Leader",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever you cast a spell, reduce the Cost of this card by (1).",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "SELF",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
