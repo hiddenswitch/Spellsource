@@ -42,8 +42,7 @@
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        },
-        "ignoreSpellDamage": true
+        }
       }
     ]
   },
