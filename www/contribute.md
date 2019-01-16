@@ -13,6 +13,8 @@ Visit our [Discord](https://discord.gg/HmbESh2) to chat about these guidelines a
 
 Spellsource welcomes custom cards from the community. Almost all contributions are accepted, but they tend to be accepted at different speeds depending on a few characteristics of the contribution. The better the **engineering** and the better the **gameplay quality**, the more likely your cards will be available in the public servers sooner rather than later.
 
+The long term goal of accepting contributions from the community is to make an **innovative and original game**. This means new, fresh-feeling mechanics and original flavor. This document uses these guidelines to encourage the things experienced game designers do to find innovative and fresh gameplay.
+
 With regards to **engineering**, maintainers prioritize content based on its engineering quality in this order:
 
  1. Fully coded in JSON, passing tests, tests for specific cards and placed in a Pull Request.
