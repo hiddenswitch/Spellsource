@@ -22,7 +22,7 @@ public abstract class AbstractSummonTrigger extends EventTrigger {
 		SummonEvent summonEvent = (SummonEvent) event;
 
 		Race race = (Race) getDesc().get(EventTriggerArg.RACE);
-		if (race != null && !summonEvent.getMinion().getSourceCard().hasRace(race)) {
+		if (race != null && !summonEvent.getMinion().getRace().hasRace(race)) {
 			return false;
 		}
 

@@ -435,6 +435,7 @@ definitions:
           - 'ROSE'
           - 'BLOOD'
           - 'NEONGREEN'
+          - 'TEAL'
           - 'DARKGREEN'
       name:
         description: |

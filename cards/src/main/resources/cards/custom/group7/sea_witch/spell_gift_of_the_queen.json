@@ -1,0 +1,18 @@
+{
+  "name": "Gift of the Queen",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Restore #4 Health to all friendly characters.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "HealSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": 4
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

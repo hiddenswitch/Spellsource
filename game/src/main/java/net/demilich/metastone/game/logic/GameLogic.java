@@ -2721,7 +2721,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.hasAttribute(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		final boolean spellsCostHealthCondition = card.getCardType().isCardType(CardType.SPELL)
 				&& hasAttribute(player, Attribute.SPELLS_COST_HEALTH);
-		final boolean murlocsCostHealthCondition = card.hasRace(Race.MURLOC)
+		final boolean murlocsCostHealthCondition = card.getRace().hasRace(Race.MURLOC)
 				&& hasAttribute(player, Attribute.MURLOCS_COST_HEALTH);
 		final boolean minionsCostHealthCondition = card.getCardType().isCardType(CardType.MINION)
 				&& hasAttribute(player, Attribute.MINIONS_COST_HEALTH);
@@ -3591,6 +3591,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
+
+			context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 			return true;
 		}
 		return false;
@@ -3661,8 +3663,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 					originalOwner = player.getId();
 				}
 				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
+				context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 			}
-
 			EnvironmentEntityList.getList(context, Environment.SHUFFLED_CARDS_LIST).add(player, card);
 			return true;
 		}

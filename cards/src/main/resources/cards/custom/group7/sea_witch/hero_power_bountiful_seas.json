@@ -1,0 +1,28 @@
+{
+  "name": "Bountiful Seas",
+  "heroPower": "hero_power_krakens_call",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Restore #1 Health. Shuffle a copy of 'Ocean Depths' into your deck.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 1
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "card": "spell_ocean_depths"
+      }
+    ]
+
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

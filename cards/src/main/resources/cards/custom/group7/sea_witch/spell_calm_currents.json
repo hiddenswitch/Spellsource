@@ -1,0 +1,31 @@
+{
+  "name": "Calm Currents",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Shuffle 2 copies of the last friendly minion that died into your deck.",
+  "targetSelection": "NONE",
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_GRAVEYARD",
+      "filter": {
+        "class": "EntityTypeFilter",
+        "entityType": "MINION"
+      }
+    },
+    "value2": 0,
+    "operation": "GREATER"
+  },
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "target": "FRIENDLY_LAST_DIED_MINION",
+    "value": 2
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

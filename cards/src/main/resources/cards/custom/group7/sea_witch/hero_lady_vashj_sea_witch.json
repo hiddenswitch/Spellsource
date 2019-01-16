@@ -1,0 +1,16 @@
+{
+  "name": "Lady Vashj",
+  "heroPower": "hero_power_bountiful_seas",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Hero Power: Restore 1 Health. Shuffle a copy of 'Ocean Depths' into your deck.",
+  "attributes": {
+    "HP": 30,
+    "MAX_HP": 30
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
