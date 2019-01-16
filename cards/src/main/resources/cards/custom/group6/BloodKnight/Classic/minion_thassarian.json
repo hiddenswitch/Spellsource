@@ -1,0 +1,27 @@
+{
+  "name": "Thassarian",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Drain the Health of all other minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrainSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "HP"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

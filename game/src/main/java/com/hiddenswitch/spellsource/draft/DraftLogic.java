@@ -66,7 +66,7 @@ public class DraftLogic {
 				HeroClass.AMBER,
 				HeroClass.TOAST,
 				HeroClass.ICECREAM,
-				HeroClass.FEL
+				HeroClass.DARKGREEN
 		);
 
 		Collections.shuffle(classes, getRandom());

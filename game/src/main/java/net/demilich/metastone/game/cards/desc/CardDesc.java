@@ -121,15 +121,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public Race race;
 	public Race[] races;
 	public String description;
-
 	public TargetSelection targetSelection;
-
-
 	public EventTriggerDesc secret;
 	public EventTriggerDesc quest;
 	public int countUntilCast;
 	public boolean countByValue;
-
 	public BattlecryDesc battlecry;
 	public SpellDesc deathrattle;
 	public EnchantmentDesc trigger;
@@ -146,22 +142,19 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public SpellDesc spell;
 	public ConditionDesc condition;
 	public SpellDesc[] group;
-
 	public EnchantmentDesc passiveTrigger;
 	public EnchantmentDesc[] passiveTriggers;
 	public EnchantmentDesc deckTrigger;
 	public EnchantmentDesc[] deckTriggers;
 	public EnchantmentDesc[] gameTriggers;
 	public ValueProviderDesc manaCostModifier;
-
 	public AttributeMap attributes;
-
-
 	public String author;
 	public String flavor;
 	public String wiki;
 	public boolean collectible = true;
 	public CardSet set;
+	public CardSet[] sets;
 	public int fileFormatVersion = 1;
 	public DynamicDescriptionDesc[] dynamicDescription;
 	public Boolean legacy;

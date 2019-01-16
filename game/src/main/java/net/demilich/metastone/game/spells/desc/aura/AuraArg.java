@@ -5,6 +5,7 @@ public enum AuraArg {
 	FILTER,
 	TARGET,
 	ATTRIBUTE,
+	VALUE,
 	ATTACK_BONUS,
 	HP_BONUS,
 	APPLY_EFFECT,

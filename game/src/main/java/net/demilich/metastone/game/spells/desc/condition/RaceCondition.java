@@ -7,12 +7,10 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
- * This not a programmers nightmare poured into a class; rather a condition if the specified target is of a certain
- * race
- * <p>
- * ++doombubbles
+ * Evaluates to {@code true} if the {@code target} or single entity resolved by {@link ConditionArg#TARGET} has the
+ * specified {@link ConditionArg#RACE}.
  */
-public class RaceCondition extends Condition {
+public final class RaceCondition extends Condition {
 
 	public RaceCondition(ConditionDesc desc) {
 		super(desc);
@@ -29,5 +27,4 @@ public class RaceCondition extends Condition {
 		Race race = (Race) desc.get(ConditionArg.RACE);
 		return target.getSourceCard().hasRace(race);
 	}
-
 }

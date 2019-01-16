@@ -2,7 +2,7 @@
   "name": "Double Jump",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "COMMON",
   "description": "Next time you draw a card, draw again.",
   "targetSelection": "NONE",

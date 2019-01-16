@@ -1,0 +1,30 @@
+{
+  "name": "Raptor Rider Raider",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Reveal a minion in each deck. If yours costs more, summon a copy of this minion.",
+  "battlecry": {
+    "spell": {
+      "class": "JoustSpell",
+	  "spell": {
+        "class": "SummonSpell",
+        "target": "SELF",
+        "boardPositionRelative": "RIGHT"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

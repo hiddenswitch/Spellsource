@@ -33,6 +33,18 @@ public class BoomsdayProjectTests extends TestBase {
 			assertEquals(notBuffedTarget.getAttack(), notBuffedTarget.getBaseAttack());
 			assertEquals(notBuffedTarget.getMaxHp(), notBuffedTarget.getBaseHp());
 		});
+
+		runGym((context, player, opponent) -> {
+			Card card = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_soul_infusion");
+			assertEquals(card.getAttack() + card.getBonusAttack(), 4);
+			card = card.clone();
+			assertEquals(card.getAttack() + card.getBonusAttack(), 4);
+			context = context.clone();
+			player = context.getPlayer1();
+			card = player.getHand().get(0);
+			assertEquals(card.getAttack() + card.getBonusAttack(), 4);
+		});
 	}
 
 	@Test

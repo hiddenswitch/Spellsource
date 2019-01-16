@@ -543,7 +543,6 @@ public class SpellUtils {
 	 * @param host
 	 * @return
 	 */
-	@Deprecated
 	public static List<Entity> getValidTargets(GameContext context, Player player, List<Entity> allTargets, EntityFilter filter, Entity host) {
 		if (filter == null) {
 			return allTargets;

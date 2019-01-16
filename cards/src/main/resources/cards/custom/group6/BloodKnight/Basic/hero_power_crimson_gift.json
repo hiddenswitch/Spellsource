@@ -1,0 +1,20 @@
+{
+  "name": "Crimson Gift",
+  "heroPower": "hero_power_crimson_tide",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Give a character +1 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "hpBonus": 1
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

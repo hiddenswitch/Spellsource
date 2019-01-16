@@ -1,0 +1,43 @@
+{
+  "name": "Blood Plague",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Drain $2 Health from a minion. At the start of each turn, it Drains 2 Health from all other minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrainSpell",
+        "value": 2
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "IsDeadCondition",
+          "invert": true
+        },
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "trigger": {
+            "eventTrigger": {
+              "class": "TurnStartTrigger",
+              "targetPlayer": "BOTH"
+            },
+            "spell": {
+              "class": "DrainSpell",
+              "target": "ALL_OTHER_MINIONS",
+              "value": 2,
+              "secondaryTarget": "TRIGGER_HOST"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

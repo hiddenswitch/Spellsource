@@ -2,7 +2,7 @@
   "name": "Blur",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "RARE",
   "description": "Give your hero Stealth until your next turn.",
   "targetSelection": "NONE",

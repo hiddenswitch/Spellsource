@@ -1,0 +1,23 @@
+{
+  "name": "Blood Elf Champion",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 7,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: Swap Health with the minion(s) opposite this one. (Splits its health for two)",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.BloodElfChampionSpell",
+      "target": "OPPOSITE_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

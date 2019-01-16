@@ -1,17 +1,17 @@
 {
-  "name": "Crone's Attendant",
-  "baseManaCost": 3,
-  "type": "MINION",
-  "heroClass": "ROSE",
-  "baseAttack": 5,
-  "baseHp": 1,
-  "rarity": "COMMON",
-  "race": "MECH",
-  "description": "<b>Immune</b> while attacking.",
-  "attributes": {
-    "IMMUNE_WHILE_ATTACKING": true
-  },
-  "collectible": true,
-  "set": "CUSTOM",
-  "fileFormatVersion": 1
+	"name": "Crone's Attendant",
+	"baseManaCost": 3,
+	"type": "MINION",
+	"baseAttack": 5,
+	"baseHp": 1,
+	"heroClass": "ROSE",
+	"rarity": "COMMON",
+	"race": "BEAST",
+	"description": "<b>Immune</b> while attacking.",
+	"attributes": {
+		"IMMUNE_WHILE_ATTACKING": true 
+	},
+	"collectible": true,
+	"set": "CUSTOM",
+	"fileFormatVersion": 1
 }

@@ -2,7 +2,7 @@
   "name": "Illidari Adept",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",

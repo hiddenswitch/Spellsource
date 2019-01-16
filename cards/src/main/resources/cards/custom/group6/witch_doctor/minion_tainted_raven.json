@@ -1,0 +1,32 @@
+{
+  "name": "Tainted Raven",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Has Spell Damage +2 while your opponent has 6 or more cards in hand.",
+  "aura": {
+    "class": "AttributeValueAura",
+    "target": "SELF",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 6,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "OPPONENT"
+    },
+    "attribute": "AURA_SPELL_DAMAGE",
+    "value": 2,
+    "triggers": [
+      {
+        "class": "CardReceivedTrigger",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

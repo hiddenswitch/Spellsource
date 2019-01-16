@@ -1,0 +1,36 @@
+{
+  "name": "Merciless Strike",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Destroy your opponent's lowest Attack minion.",
+  "targetSelection": "NONE",
+  "condition": {
+    "class": "ComparisonCondition",
+    "value1": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "value2": 0,
+    "operation": "GREATER"
+  },
+  "spell": {
+    "class": "DestroySpell",
+    "target": "ENEMY_MINIONS",
+    "filter": {
+      "class": "AttributeFilter",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "ENEMY_MINIONS",
+        "attribute": "ATTACK",
+        "operation": "MINIMUM"
+      },
+      "attribute": "ATTACK"
+    },
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

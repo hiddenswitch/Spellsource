@@ -1,0 +1,17 @@
+{
+  "name": "Red Lightning",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Deal $7 damage to the one or two minions in the middle of the opponent's battlefield.",
+  "targetSelection": "NONE",
+  "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MIDDLE_MINIONS",
+      "value": 7
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

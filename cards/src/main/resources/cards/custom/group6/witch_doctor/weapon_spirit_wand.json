@@ -1,0 +1,26 @@
+{
+  "name": "Spirit Wand",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "damage": 2,
+  "durability": 4,
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Costs (2) less while you have Spell Damage.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "SpellDamageValueProvider"
+      },
+      "value2": 1
+    },
+    "ifFalse": 0,
+    "ifTrue": 2
+  }
+}

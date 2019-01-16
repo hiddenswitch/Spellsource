@@ -4,11 +4,13 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
@@ -18,6 +20,8 @@ import net.demilich.metastone.game.cards.AttributeMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An in-game entity.
@@ -42,7 +46,8 @@ import java.io.Serializable;
  * to their opponents.
  */
 public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
-
+	private static Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
+	private static Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.
@@ -537,4 +542,103 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	public boolean isRemovedPeacefully() {
 		return getZone() == Zones.GRAVEYARD && !hasAttribute(Attribute.DIED_ON_TURN);
 	}
+
+	/**
+	 * Gets an entity's description applying its {@link CardDesc#getDynamicDescription()} fields and parsing spell damage
+	 * and health restoration.
+	 *
+	 * @param context The context
+	 * @param player  The player whose POV this description should be evaluated
+	 * @return The dynamic description if this entity is a card, otherwise the {@link #getDescription()}.
+	 */
+	public String getDescription(GameContext context, Player player) {
+		if (getSourceCard() != null && getEntityType() == EntityType.CARD) {
+			// First parse dynamic descriptions
+			Card card = getSourceCard();
+			String description = card.getDescription();
+			if (card.getZone() == Zones.HAND) {
+				if (description.contains("[") && card.getDynamicDescription() != null) {
+					int i = 0;
+					String[] descriptions = card.evaluateDescriptions(context, player);
+					while (description.contains("[")) {
+						int start = description.indexOf("[");
+						int end = description.indexOf("]");
+						description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+					}
+				}
+			} else {
+				description = description.replace("[", "X").replace("]", "");
+			}
+
+			// Handle spell damage
+			if (card.isSpell() || card.isHeroPower()) {
+				// Find the $ damages
+				Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
+				StringBuffer newDescription = new StringBuffer();
+
+				boolean didChange = false;
+				while (matcher.find()) {
+					// Skip the dollar sign in the beginning
+					int damage = Integer.parseInt(matcher.group(1));
+					int modifiedDamage;
+					if (card.getId() != GameLogic.UNASSIGNED) {
+						ValueProviderDesc desc = new ValueProviderDesc();
+						desc.put(ValueProviderArg.VALUE, damage);
+						desc.put(ValueProviderArg.CLASS, card.isSpell() ? SpellDamageValueProvider.class : HeroPowerDamageValueProvider.class);
+						ValueProvider provider = desc.create();
+						modifiedDamage = provider.getValue(context, player, player.getHero(), card);
+					} else {
+						modifiedDamage = damage;
+					}
+					if (modifiedDamage != damage) {
+						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
+					} else {
+						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
+					}
+					didChange = true;
+				}
+				if (didChange) {
+					matcher.appendTail(newDescription);
+					description = newDescription.toString();
+				}
+			}
+
+			// Healing
+			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+				Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
+				StringBuffer newDescription = new StringBuffer();
+
+				boolean didChange = false;
+				while (matcher.find()) {
+					// Skip the # in the beginning
+					int healing = Integer.parseInt(matcher.group(1));
+					int modifiedHealing = healing;
+					if (card.getId() != GameLogic.UNASSIGNED) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+						if (card.isSpell()) {
+							modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
+						}
+						if (card.isHeroPower()) {
+							modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+						}
+					}
+					if (modifiedHealing != healing) {
+						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedHealing));
+					} else {
+						matcher.appendReplacement(newDescription, Integer.toString(modifiedHealing));
+					}
+					didChange = true;
+				}
+				if (didChange) {
+					matcher.appendTail(newDescription);
+					description = newDescription.toString();
+				}
+			}
+
+			return description;
+		} else {
+			return getDescription();
+		}
+	}
+
 }

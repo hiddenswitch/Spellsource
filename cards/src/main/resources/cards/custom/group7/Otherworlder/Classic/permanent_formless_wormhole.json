@@ -1,0 +1,45 @@
+{
+  "name": "Formless Wormhole",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Permanent. At the end of your turn, summon a 0/2 Xenodrone. When your board is full, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_xenodrone_02"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "BoardChangedTrigger",
+        "fireCondition": {
+          "class": "MinionCountCondition",
+          "targetPlayer": "SELF",
+          "value": {
+            "class": "MaxBoardSizeValueProvider"
+          },
+          "operation": "EQUAL"
+        }
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "SELF"
+      }
+    }
+  ],
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

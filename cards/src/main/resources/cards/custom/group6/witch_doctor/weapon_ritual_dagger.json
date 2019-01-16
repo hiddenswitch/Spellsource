@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Whenever your hero attacks, restore 2 Health to it.",
+  "description": "Whenever your hero attacks, add a random Voodoo spell to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",
@@ -16,9 +16,14 @@
       "targetPlayer": "BOTH"
     },
     "spell": {
-      "class": "HealSpell",
-      "target": "FRIENDLY_HERO",
-      "value": 2
+      "class": "ReceiveCardSpell",
+      "randomTarget": true,
+      "cards": [
+        "spell_divination",
+        "spell_frenzy",
+        "spell_hex_bolt",
+        "spell_spirit_bind"
+      ]
     }
   },
   "collectible": true,

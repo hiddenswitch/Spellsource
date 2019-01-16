@@ -2,7 +2,7 @@
   "name": "Momentum",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "EPIC",
   "description": "Each time you receive a card this turn, shuffle a copy into your deck.",
   "targetSelection": "NONE",

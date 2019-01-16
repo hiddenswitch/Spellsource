@@ -1,0 +1,40 @@
+{
+  "name": "The Blood Engine",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLOOD",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Battlecry: Deal [] damage randomly split among all enemies. (Increases for each health your hero Drained your last turn)",
+  "battlecry": {
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": {
+        "class": "AttributeValueProvider",
+        "attribute": "DRAINED_LAST_TURN",
+        "target": "FRIENDLY_HERO"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "attribute": "DRAINED_LAST_TURN",
+        "target": "FRIENDLY_HERO"
+      }
+    }
+  ]
+}
+  

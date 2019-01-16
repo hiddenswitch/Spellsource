@@ -1,0 +1,18 @@
+{
+  "name": "Chaos Bolts",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "FREE",
+  "description": "Deal $2 damage randomly split among all enemy minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 1,
+    "howMany": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -2,7 +2,7 @@
   "name": "Shear",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Deal $3 damage to an enemy. If it's a minion, add a Soul Fragment to your hand.",
   "targetSelection": "ENEMY_CHARACTERS",

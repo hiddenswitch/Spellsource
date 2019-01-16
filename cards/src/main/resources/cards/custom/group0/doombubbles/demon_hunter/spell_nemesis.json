@@ -2,7 +2,7 @@
   "name": "Nemesis",
   "baseManaCost": 2,
   "type": "SPELL",
-  "heroClass": "FEL",
+  "heroClass": "DARKGREEN",
   "rarity": "EPIC",
   "description": "Set a minion's Health to 1. If it has a tribe, also affect all enemies of that tribe.",
   "targetSelection": "MINIONS",

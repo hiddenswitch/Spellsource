@@ -4,11 +4,11 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "FREE",
-  "description": "Give a minion +3 Health.",
+  "description": "Give a minion +2 Health.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "BuffSpell",
-    "hpBonus": 3
+    "hpBonus": 2
   },
   "collectible": false,
   "set": "CUSTOM",
