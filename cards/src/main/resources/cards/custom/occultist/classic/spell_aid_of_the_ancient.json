@@ -1,0 +1,20 @@
+{
+  "name": "Aid of the Ancient",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Summon three 1/1 Tentacles with Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_tauntentacle",
+      "token_tauntentacle",
+      "token_tauntentacle"
+    ]
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
