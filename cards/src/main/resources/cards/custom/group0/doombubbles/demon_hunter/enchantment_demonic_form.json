@@ -24,7 +24,8 @@
     {
       "eventTrigger": {
         "class": "AfterCardPlayedTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "SELF",
+        "requiredAttribute": "LIFESTEAL"
       },
       "spell": {
         "class": "HeroPowerSpell",

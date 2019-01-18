@@ -13,7 +13,9 @@
       "value": 1
     },
     "condition": {
-      "class": "RaceCondition"
+      "class": "RaceCondition",
+      "race": "NONE",
+      "invert": true
     },
     "spell2": {
       "class": "SetHpSpell",
