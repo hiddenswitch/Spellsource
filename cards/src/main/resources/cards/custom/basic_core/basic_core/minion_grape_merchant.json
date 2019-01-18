@@ -1,0 +1,23 @@
+{{
+  "name": "Grape Merchant",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "Battlecry: Restore #3 Health.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
