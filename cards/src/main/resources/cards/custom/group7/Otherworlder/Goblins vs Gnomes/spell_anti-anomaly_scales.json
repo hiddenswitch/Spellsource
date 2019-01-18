@@ -1,0 +1,29 @@
+{
+  "name": "Anti-Anomaly Scales",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Give a minion +2/+2, <b>Taunt</b> and "Can't be targeted by Spells or Hero Powers".",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class":AddAttributeSpell",
+        "attribute": "UNTARGETABLE_BY_SPELLS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
