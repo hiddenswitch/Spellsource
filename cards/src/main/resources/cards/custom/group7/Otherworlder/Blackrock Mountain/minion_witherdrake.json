@@ -33,7 +33,7 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
     "WITHER": 1
   },
   "collectible": true,
