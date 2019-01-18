@@ -5834,6 +5834,7 @@ public class CustomCardsTests extends TestBase {
 			}
 
 			playCard(context, player, "spell_metamorphosis");
+			assertEquals(player.getHand().size(), 0);
 
 			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
 
