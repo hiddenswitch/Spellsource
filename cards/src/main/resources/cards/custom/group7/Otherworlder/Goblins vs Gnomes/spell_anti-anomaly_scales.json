@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "RARE",
-  "description": "Give a minion +2/+2, <b>Taunt</b> and "Can't be targeted by Spells or Hero Powers".",
+  "description": "Give a minion +2/+2, <b>Taunt</b> and \"Can't be targeted by Spells or Hero Powers\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
