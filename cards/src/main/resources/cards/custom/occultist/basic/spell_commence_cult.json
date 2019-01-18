@@ -1,0 +1,26 @@
+{
+  "name": "Commence Cult",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Restore 6 Health. Deal 1 damage to all friendly minions.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+			"class": "HealSpell",
+			"value": 6
+      },
+      {
+            "class": "DamageSpell",
+			"target": "FRIENDLY_MINIONS",
+			"value": 1          
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

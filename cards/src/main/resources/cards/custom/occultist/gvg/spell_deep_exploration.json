@@ -1,0 +1,35 @@
+{
+  "name": "Deep Exploration",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Shuffle a friendly minion into your deck. When you draw it, draw 3 cards.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+    "class": "ShuffleMinionToDeckSpell",
+    "targetPlayer": "OWNER"
+      },
+      {
+         "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+      "spell": {
+        "class": "DrawSpell",
+        "target": "SELF",
+        "value": 3
+      }
+      }
+	 }
+    ]
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
+}
