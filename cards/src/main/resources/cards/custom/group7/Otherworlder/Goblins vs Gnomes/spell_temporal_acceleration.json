@@ -1,0 +1,27 @@
+{
+  "name": "Temporal Acceleration",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Discard your 3 left-most cards. Draw 3 cards.",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+    {
+      "class": "DiscardSpell",
+      "cardFilter": {
+        THREE LEFT-MOST CARDS
+      }
+    },
+    {
+      "class": "DrawCardSpell",
+      "value": 3
+    }
+    ]
+  },
+  
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
