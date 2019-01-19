@@ -3,12 +3,20 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TEAL",
-  "rarity": "FREE",
+  "rarity": "RARE",
   "description": "Silence a minion. Then, Freeze it.",
-  "targetSelection": "NONE",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "AddAttributeSpell",
-    "attribute": "FROZEN"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SilenceSpell"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "FROZEN"
+      }
+    ]
   },
   "attributes": {},
   "collectible": true,
