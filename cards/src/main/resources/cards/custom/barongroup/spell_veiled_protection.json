@@ -1,0 +1,21 @@
+
+{
+  "name": "Veiled Protection",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Your minions are Immune this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attribute": "IMMUNE",
+    "revertTrigger": {
+      "class": "TurnEndTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
