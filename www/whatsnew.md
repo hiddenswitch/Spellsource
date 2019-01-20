@@ -3,9 +3,26 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
+
+Introducing more cards from Verdant Dreams (thanks @Rumu).
+
+Other bug fixes to Bug.
+
+##### Content Additions:
+
+ - Additional Verdant Dreams expansion cards.
+
+##### Content Fixes:
+
+ - Teamwork now costs 7 mana.
+ - Elementium Shell now costs 3 mana, does not draw, and only buffs health.
+ - Maexnna's Femur now costs 8 mana and has 2 durability.
+ - Swarm Shield now costs 2 mana and gives a multiplier of 3 armor.
+
 ### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 
-Bug fixes and Vertdan Dreams.
+Bug fixes and Verdant Dreams.
 
 ##### Content Additions:
 
