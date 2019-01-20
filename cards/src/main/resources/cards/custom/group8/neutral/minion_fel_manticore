@@ -1,0 +1,18 @@
+{
+  "name": "Fel Manticore",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 12,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Taunt, lifesteal.",
+  "attributes": {
+    "LIFESTEAL": true,
+    "TAUNT": true,
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
