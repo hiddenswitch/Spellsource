@@ -1,0 +1,29 @@
+{
+  "name": "0CCUL7-WR3CK3R",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Whenever this minion survives damage, deal 5 damage to all other minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_OTHER_MINIONS",
+      "value": 5
+    }
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
+}

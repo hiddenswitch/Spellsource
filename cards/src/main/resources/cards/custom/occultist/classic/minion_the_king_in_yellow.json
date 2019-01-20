@@ -1,0 +1,24 @@
+{
+  "name": "The King in Yellow",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, transform your other minions into 6/6 Aberrations.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+	"spell": {
+      "class": "TransformMinionSpell",
+	  "target": "FRIENDLY_MINIONS",
+      "card": "token_aberration"
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

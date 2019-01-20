@@ -1,0 +1,32 @@
+{
+  "name": "Underwater Horrors",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Shuffle a minion into it's owner's deck. At the end of their turn, they draw it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+    "class": "ShuffleMinionToDeckSpell",
+    "targetPlayer": "OWNER"
+      },
+      {
+         "class": "AddEnchantmentSpell",
+    "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+      "class": "FromDeckToHandSpell",
+      "target": "SELF"
+      }
+	 }
+    ]
+  },
+  "collectible": true,
+  "set": "GOBLINS_VS_GNOMES",
+  "fileFormatVersion": 1
+}

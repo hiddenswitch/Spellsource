@@ -1,0 +1,17 @@
+{
+  "name": "Dawn Drake",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "description": "<b>Spell Damage +1</b>",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
