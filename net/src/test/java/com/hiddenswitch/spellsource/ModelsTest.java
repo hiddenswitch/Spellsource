@@ -28,6 +28,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(BlockJUnit4ClassRunner.class)
 public class ModelsTest {
@@ -35,15 +36,19 @@ public class ModelsTest {
 	@Test
 	public void testChooseOnesDelivered() {
 		runGym((context, player, opponent) -> {
-			context.getLogic().receiveCard(0, CardCatalogue.getCardById("spell_wrath"));
+			context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_wrath"));
 			Card card = CardCatalogue.getCardById("minion_bloodfen_raptor");
-			context.getLogic().summon(1, card.summon(), card, 0, false);
-			assertEquals("The player has Wrath (first card is The Coin)", "spell_wrath", context.getPlayer1().getHand().get(0).getSourceCard().getCardId());
-			context.getPlayer1().setMana(10);
+			context.getLogic().summon(opponent.getId(), card.summon(), card, 0, false);
+			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_wrath")));
+			if (context.getActivePlayerId() != player.getId()) {
+				context.endTurn();
+				context.startTurn(player.getId());
+			}
+			player.setMana(10);
 			List<GameAction> validActions = context.getValidActions();
 			GameActions clientActions = Games.getClientActions(context, validActions, 0);
-			assertEquals(0, clientActions.getSpells().size());
 			assertEquals(1, clientActions.getChooseOnes().size());
+			assertEquals(2, clientActions.getChooseOnes().get(0).getEntities().size());
 		});
 	}
 
@@ -51,17 +56,20 @@ public class ModelsTest {
 	public void testChooseOneDeliveredNotPlayable() {
 		runGym((context, player, opponent) -> {
 			Card wrath = CardCatalogue.getCardById("spell_wrath");
-			context.getLogic().receiveCard(0, wrath);
-			assertEquals("The player has Wrath (first card is The Coin)", "spell_wrath", context.getPlayer1().getHand().get(0).getSourceCard().getCardId());
-			context.getPlayer1().setMana(10);
+			context.getLogic().receiveCard(player.getId(), wrath);
+			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_wrath")));
+			assertTrue("The player has Wrath", player.getHand().stream().anyMatch(c -> c.getCardId().equals("spell_wrath")));
+			if (context.getActivePlayerId() != player.getId()) {
+				context.endTurn();
+				context.startTurn(player.getId());
+			}
+			player.setMana(10);
 			List<GameAction> validActions = context.getValidActions();
 			GameActions clientActions = Games.getClientActions(context, validActions, 0);
-			assertEquals(2, validActions.size());
 			assertEquals(0, clientActions.getChooseOnes().size());
-			assertEquals(0, clientActions.getSpells().size());
-			Entity clientWrath2 = Games.getEntity(context, wrath, 0);
+			Entity clientWrath2 = Games.getEntity(context, wrath, player.getId());
 			Assert.assertFalse(clientWrath2.getState().isPlayable());
-			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
+			GameState state = Games.getGameState(context, player, opponent);
 			Entity clientWrath = state.getEntities().stream().filter(e -> e.getId() == wrath.getId()).findFirst().get();
 			Assert.assertFalse(clientWrath.getState().isPlayable());
 		});
