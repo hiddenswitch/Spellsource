@@ -47,7 +47,7 @@ RUN set -ex; \
 	update-alternatives --query java | grep -q 'Status: manual'
 
 ENV SPELLSOURCE_VERSION=0.8.12
-ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}-all.jar /data/net-${SPELLSOURCE_VERSION}-all.jar
+ADD ./net/build/libs/net-${SPELLSOURCE_VERSION}.jar /data/net-${SPELLSOURCE_VERSION}-all.jar
 
 RUN mkdir /etc/service/java
 COPY server.sh /etc/service/java/run
