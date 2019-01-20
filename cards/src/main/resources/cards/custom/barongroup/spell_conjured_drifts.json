@@ -1,0 +1,21 @@
+
+{
+  "name": "Conjured Drifts",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Summon three 1/2 Gales with Rush.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_gale",
+      "token_gale",
+      "token_gale"
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
