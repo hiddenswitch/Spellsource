@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "COMMON",
-  "race": "BEAST"
+  "race": "BEAST",
   "description": "Battlecry: If you control another Beast, gain Stealth.",
   "battlecry": {
     "condition": {

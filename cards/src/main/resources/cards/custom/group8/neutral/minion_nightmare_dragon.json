@@ -5,7 +5,7 @@
   "heroClass": "ANY",
   "baseAttack": 6,
   "baseHp": 5,
-  "rarity": "EPIC"
+  "rarity": "EPIC",
   "race": "DRAGON",
   "description": "Battlecry: Give a minion +3/+3. At the start of your next turn, destroy it.",
   "battlecry": {
@@ -35,10 +35,9 @@
     }
   },
   "attributes": {
-    "BATTLECRY": true,
-    "SPELLSOURCE_NAME": "Tanuki Blacksmith"
+    "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }

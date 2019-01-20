@@ -1,6 +1,6 @@
 {
   "name": "Fangs of Ashamane",
-  "baseManaCost":5,
+  "baseManaCost": 5,
   "type": "WEAPON",
   "heroClass": "BLACK",
   "damage": 4,
@@ -12,16 +12,16 @@
       "class": "AfterPhysicalAttackTrigger",
       "sourceEntityType": "HERO",
       "sourcePlayer": "SELF",
-      "targetPlayer": "BOTH"
-    },
-    "condition": {
-      "class": "MinionCountCondition",
-      "value": 0,
-      "operation": "EQUAL",
-      "targetPlayer": "ENEMY"
+      "targetPlayer": "BOTH",
+      "fireCondition": {
+        "class": "MinionCountCondition",
+        "value": 0,
+        "operation": "EQUAL",
+        "targetPlayer": "OPPONENT"
+      }
     },
     "spell": {
-     "class": "BuffSpell",
+      "class": "BuffSpell",
       "target": "FRIENDLY_WEAPON",
       "hpBonus": 1
     }

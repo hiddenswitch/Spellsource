@@ -1,23 +1,19 @@
 {
-  "name": "Lingering Spirit",
-  "baseManaCost": 2,
+  "name": "Dracomancer",
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 2,
-  "baseHp": 3,
+  "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Add a random Secret to each player's hand.",
+  "description": "Battlecry: Add a random Dragon to your hand.",
   "battlecry": {
-    "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "value": 1,
       "cardFilter": {
         "class": "CardFilter",
-        "attribute": "SECRET"
-        "operation": "HAS"
-      },
-      "targetPlayer": "BOTH"
+        "race": "DRAGON"
+      }
     }
   },
   "attributes": {

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Restore #4 Health to all other characters.",
+  "description": "Battlecry: Restore 4 Health to all other characters.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

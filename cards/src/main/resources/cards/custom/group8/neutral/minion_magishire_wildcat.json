@@ -6,9 +6,10 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "race": "BEAST"
+  "race": "BEAST",
   "description": "Battlecry: Enemy spells cost (1) more next turn.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "FRIENDLY_PLAYER",
