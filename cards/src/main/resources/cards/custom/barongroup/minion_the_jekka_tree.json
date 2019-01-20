@@ -1,0 +1,38 @@
+{
+  "name": "The Jekka Tree",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you play a 1-Cost card, add a random Emerald Secret to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "fireCondition": {
+        "class": "AttributeCondition",
+        "target": "EVENT_TARGET",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "operation": "EQUAL"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+    "class": "ReceiveCardSpell",
+    "cards": [
+      "secret_secret_of_winter",
+      "secret_secret_of_spring",
+      "secret_secret_of_summer",
+      "secret_secret_of_autumn",
+      "secret_secret_of_twilight"
+    ],
+    "randomTarget": true
+      }
+    }
+  },
+  "collectible": true,
+  "set": "NAVY",
+  "fileFormatVersion": 1
+}
