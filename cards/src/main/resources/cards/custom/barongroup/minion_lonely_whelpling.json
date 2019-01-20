@@ -1,0 +1,30 @@
+{
+  "name": "Lonely Whelpling",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: Your 1-Cost cards cost (0) this turn.",
+    "battlecry": {
+    "class": "OneTurnCostModifier",
+    "target": "FRIENDLY_HAND",
+    "value": 0,
+    "filter": {
+      "class": "CardFilter",
+      "value": 1,
+      "attribute": "BASE_MANA_COST",
+      "operation": "EQUAL"
+    },
+    "operation": "SET",
+    "targetPlayer": "SELF"
+    },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
