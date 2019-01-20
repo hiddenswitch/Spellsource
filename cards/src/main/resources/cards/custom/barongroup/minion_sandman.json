@@ -1,0 +1,31 @@
+{
+  "name": "Sandman",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+    "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Summon 1/2 Gales with Rush until you control 3 minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RecastWhileSpell",
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER",
+      "value1": 3,
+      "value2": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+      }
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_gale"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
