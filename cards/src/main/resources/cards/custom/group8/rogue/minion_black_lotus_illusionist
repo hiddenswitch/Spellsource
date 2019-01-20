@@ -1,0 +1,25 @@
+
+  "name": "Black Lotus Illusionist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Combo: Summon a copy of an enemy minion.",
+  "battlecry": {
+    "condition": {
+      "class": "ComboCondition"
+    },
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "CloneMinionSpell"
+    }
+  },
+  "attributes": {
+    "COMBO": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
