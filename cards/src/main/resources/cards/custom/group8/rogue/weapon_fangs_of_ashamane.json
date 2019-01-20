@@ -1,0 +1,32 @@
+{
+  "name": "Fangs of Ashamane",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "BLACK",
+  "damage": 4,
+  "durability": 2,
+  "rarity": "RARE",
+  "description": "After your hero attacks, if your opponent controls no minions, gain +1 durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH",
+      "fireCondition": {
+        "class": "MinionCountCondition",
+        "value": 0,
+        "operation": "EQUAL",
+        "targetPlayer": "OPPONENT"
+      }
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_WEAPON",
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
