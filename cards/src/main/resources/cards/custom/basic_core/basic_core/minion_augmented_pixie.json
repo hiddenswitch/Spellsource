@@ -1,0 +1,17 @@
+{
+  "name": "Augmented Pixie",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "FAE",
+  "description": "<b>Dodge</b>",
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

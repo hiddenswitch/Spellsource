@@ -1,0 +1,30 @@
+{
+  "name": "Life Sacrifice",
+  "heroPower": "hero_power_life_sacrifice",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Hero Power: Deal $1 damage. Restore 3 Health to your hero.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+	"spell": {
+	"class": "MetaSpell",
+     "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+		]
+	}
+  },
+  "collectible": false,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

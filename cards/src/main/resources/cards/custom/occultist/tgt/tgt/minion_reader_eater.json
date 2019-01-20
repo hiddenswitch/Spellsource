@@ -1,0 +1,25 @@
+ {
+ "name": "Reader Eater",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Whenever you shuffle a card into your deck, give this +1/+1 instead.",
+  "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "value": 1
+    },
+    "removeEffect": {
+      "class": "ShuffleToDeckSpell"
+    }
+  },
+  "collectible": true,
+  "set": "THE_GRAND_TOURNAMENT",
+  "fileFormatVersion": 1
+}

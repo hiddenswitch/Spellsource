@@ -1,0 +1,31 @@
+{
+  "name": "Call of the Deep",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Deal $5 damage to your hero. Summon five 1/1 Tentacles with Taunt.",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 5
+      },
+      {
+        "class": "SummonSpell",
+    "cards": [
+      "token_tauntentacle",
+      "token_tauntentacle",
+      "token_tauntentacle",
+      "token_tauntentacle",
+      "token_tauntentacle"
+    ]
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
