@@ -17,3 +17,4 @@ public final class ReservoirsAlwaysActiveAura extends Aura {
 		removeAuraEffect = NullSpell.create();
 	}
 }
+

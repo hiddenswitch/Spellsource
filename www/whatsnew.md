@@ -3,13 +3,12 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-### 0.8.12-2.0.22 (Monday, January 14th, 2019)
+### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 
-Introducing the Sea Witch class! This release also contains important bug fixes.
+Bug fixes and Vertdan Dreams.
 
 ##### Content Additions:
 
- - The Sea Witch, with 34 Basic and Classic cards and tokens.
  - @Rumu's Verdant Dreams expansion.
  - The Paladin card Echo! Echo! Echo!.
 
