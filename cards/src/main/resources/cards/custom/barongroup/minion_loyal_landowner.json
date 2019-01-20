@@ -1,0 +1,28 @@
+{
+  "name": "Loyal Landowner",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Whenever this attacks, summon a 1/1 Sapling that attacks the target instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "OverrideTargetSpell",
+      "target": "ATTACKER"
+    },
+    "card": "token_sapling"
+  },
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
