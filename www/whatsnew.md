@@ -19,6 +19,7 @@ Other bug fixes to Bug.
  - Elementium Shell now costs 3 mana, does not draw, and only buffs health.
  - Maexnna's Femur now costs 8 mana and has 2 durability.
  - Swarm Shield now costs 2 mana and gives a multiplier of 3 armor.
+ - Breath of Fire now reads, "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)," which means all its damage effects gain spell power.
 
 ### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 

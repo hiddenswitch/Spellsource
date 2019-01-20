@@ -1498,7 +1498,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			int opponentHp = opponent.getHero().getHp();
 			playCard(context, player, "spell_breath_of_fire");
-			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertEquals(opponent.getHero().getHp(), opponentHp - 2, "Now includes immune minions");
 			assertFalse(damaged.isDestroyed());
 			assertEquals(damaged.getHp(), damaged.getMaxHp() - 1);
 		});
@@ -1511,7 +1511,7 @@ public class CustomCardsTests extends TestBase {
 			player.setAttribute(Attribute.SPELL_DAMAGE, 1);
 			int opponentHp = opponent.getHero().getHp();
 			playCard(context, player, "spell_breath_of_fire");
-			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertEquals(opponent.getHero().getHp(), opponentHp - 3, "Now uses spell damage");
 			assertTrue(damaged.isDestroyed());
 		});
 	}
