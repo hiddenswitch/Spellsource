@@ -5,7 +5,7 @@
   "heroClass": "TEAL",
   "baseAttack": 1,
   "baseHp": 1,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "MURLOC",
   "description": "Deathrattle: Give your Murlocs +1/+1.",
   "deathrattle": {
@@ -14,9 +14,9 @@
       "class": "RaceFilter",
       "race": "MURLOC"
     },
-    "target": "FRIENDLY_CHARACTERS",
-    "attackBonus": 0,
-    "hpBonus": 0
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 1
   },
   "attributes": {
     "DEATHRATTLES": true
