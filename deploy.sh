@@ -137,6 +137,12 @@ if [[ "$install_dependencies" = true ]] ; then
       curl https://install.meteor.com/ | sh
     fi
 
+    if ! command -v mongod > /dev/null ; then
+      echo "Installing mongod version 3.6"
+      brew install mongodb@3.6
+      brew link --force mongodb@3.6
+    fi
+
     if [[ ! -f ${VIRTUALENV_PATH}/bin/activate ]] ; then
       echo "Installing virtualenv at ${VIRTUALENV_PATH}"
       pip3 install -U virtualenv > /dev/null
@@ -157,7 +163,7 @@ if [[ "$install_dependencies" = true ]] ; then
       pip3 install spellsource > /dev/null
     fi
 
-    pip3 install awscli awsebcli bump2version > /dev/null
+    pip3 install awscli awsebcli bump2version twine > /dev/null
   else
     echo "Cannot install dependencies on this platform yet"
     exit 1
@@ -171,12 +177,12 @@ if [[ "$bump_version" = true ]] ; then
   fi
 
   if ! command -v bump2version > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
-    echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}"
+    echo "Using virtualenv for bump2version package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
   if ! command -v bump2version > /dev/null ; then
-    echo "Failed to bump version: Missing versionbump binary. Install with pip3 install versionbump"
+    echo "Failed to bump version: Missing bump2version binary. Install with pip3 install bump2version"
     exit 1
   fi
 
