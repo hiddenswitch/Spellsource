@@ -13,13 +13,16 @@
     "cardFilter": {
       "class": "RaceFilter",
       "race": "BEAST"
-    }
-    "target": "OUTPUT",
-    "cardCostModifier": {
-      "class": "CardCostModifier",
-      "target": "SELF",
-      "value": 2,
-      "operation": "SUBTRACT"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
     }
   },
   "attributes": {

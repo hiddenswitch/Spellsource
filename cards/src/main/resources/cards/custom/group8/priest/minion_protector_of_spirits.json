@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Add a copy of a friendly minion to your hand and set it's Attack to 4",
+  "description": "Battlecry: Add a copy of a friendly minion to your hand. Set its Attack to 4",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
@@ -14,7 +14,7 @@
       "spell": {
         "class": "MetaSpell",
         "target": "OUTPUT",
-        "spell": [
+        "spells": [
           {
             "class": "SetAttackSpell",
             "value": 4,
