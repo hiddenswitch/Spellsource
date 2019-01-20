@@ -1,0 +1,17 @@
+{
+  "name": "Gale",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "<b>Rush</b>",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "CUSTP<",
+  "fileFormatVersion": 1
+}
