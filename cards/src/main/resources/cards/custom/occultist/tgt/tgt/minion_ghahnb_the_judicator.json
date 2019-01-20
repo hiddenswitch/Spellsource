@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "MetaSpell",
-      "spells": 
+      "spells": [
         {
     "class": "ShuffleToDeckSpell",
     "value": 15,
@@ -26,6 +26,7 @@
 		  "class": "DrawCardSpell",
 		  "value": 15
 		}
+	    ]
 	}
   },
   "collectible": true,
