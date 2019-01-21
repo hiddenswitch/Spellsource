@@ -1,0 +1,40 @@
+{
+  "name": "Eldritech",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Battlecry: Destroy a friendly Mech to summon another Eldritech.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
+      },
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "minion_eldritech"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ],
+  "fileFormatVersion": 1
+}

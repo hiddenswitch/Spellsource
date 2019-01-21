@@ -35,6 +35,7 @@ public enum CardSet {
 	SANDS_OF_TIME,
 	VERDANT_DREAMS,
 	TEST,
+	SPELLSOURCE_BASIC,
 	SPELLSOURCE;
 
 	public static CardSet latestHearthstoneExpansion() {

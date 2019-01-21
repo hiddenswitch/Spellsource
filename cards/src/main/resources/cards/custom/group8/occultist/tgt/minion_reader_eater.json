@@ -1,0 +1,36 @@
+{
+  "name": "Reader Eater",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Whenever you shuffle a card into your deck, remove the card and give this minion +1/+1.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardShuffledTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RemoveCardSpell",
+          "target": "EVENT_TARGET"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_GRAND_TOURNAMENT"
+  ],
+  "fileFormatVersion": 1
+}

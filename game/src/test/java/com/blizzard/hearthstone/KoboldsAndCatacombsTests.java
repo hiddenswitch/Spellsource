@@ -142,6 +142,18 @@ public class KoboldsAndCatacombsTests extends TestBase {
 	}
 
 	@Test
+	public void testScrollOfWonderDoesNotTriggerFlamewaker() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("spell_the_coin"));
+			playMinionCard(context, player, "minion_flamewaker");
+			shuffleToDeck(context, player, "spell_scroll_of_wonder");
+			context.getLogic().drawCard(player.getId(), player);
+			context.getLogic().endOfSequence();
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp(), "Should not have triggered Flamewaker");
+		});
+	}
+
+	@Test
 	@Ignore("does not consistently produce errors")
 	public void testThirtyScrollsOfWonder() {
 		runGym((context, player, opponent) -> {

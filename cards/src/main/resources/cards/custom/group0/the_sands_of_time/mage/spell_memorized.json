@@ -12,11 +12,11 @@
     "trigger": {
       "eventTrigger": {
         "class": "SpellCastedTrigger",
-        "targetPlayer": "SELF"
+        "sourcePlayer": "SELF"
       },
       "spell": {
         "class": "ShuffleToDeckSpell",
-        "target": "EVENT_TARGET"
+        "target": "EVENT_SOURCE"
       },
       "maxFires": 1
     }

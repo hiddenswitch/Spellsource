@@ -17,7 +17,8 @@
         "class": "TurnEndTrigger"
       },
       "secondRevertTrigger": {
-        "class": "SpellCastedTrigger"
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF"
       }
     }
   },

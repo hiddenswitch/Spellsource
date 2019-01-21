@@ -1,0 +1,25 @@
+{
+  "name": "Infectious Zombie",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Transform a random friendly minion into an Infectious Zombie.",
+  "deathrattle": {
+    "class": "TransformMinionSpell",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "card": "minion_infectious_zombie",
+    "randomTarget": true
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "NAXXRAMAS"
+  ],
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Force Cast Test",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: Plays the Coin randomly.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "PlayCardsRandomlySpell",
+      "card": "spell_the_coin"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

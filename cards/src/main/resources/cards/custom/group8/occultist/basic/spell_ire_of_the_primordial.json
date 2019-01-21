@@ -1,0 +1,30 @@
+{
+  "name": "Ire of the Primordial",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Deal $8 damage to two random enemy minions.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 1,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MultiTargetSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 2,
+    "spell": {
+      "class": "DamageSpell",
+      "value": 8
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

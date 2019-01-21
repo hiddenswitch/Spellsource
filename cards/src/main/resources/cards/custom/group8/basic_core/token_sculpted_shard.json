@@ -1,0 +1,16 @@
+{
+  "name": "Sculpted Shard",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "<b>Guard</b>",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
