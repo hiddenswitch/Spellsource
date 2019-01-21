@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
-  "description": "Deal $1 damage to all enemy minions, then 1 damage to the enemy hero for each one hit.",
+  "description": "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -17,14 +17,6 @@
           {
             "class": "AttributeFilter",
             "attribute": "PERMANENT"
-          },
-          {
-            "class": "AttributeFilter",
-            "attribute": "IMMUNE"
-          },
-          {
-            "class": "AttributeFilter",
-            "attribute": "AURA_IMMUNE"
           }
         ],
         "invert": true
@@ -42,12 +34,30 @@
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        },
-        "ignoreSpellDamage": true
+        }
       }
     ]
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "EntityCounter",
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "OrFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "attribute": "PERMANENT"
+            }
+          ],
+          "invert": true
+        }
+      }
+    }
+  ]
 }

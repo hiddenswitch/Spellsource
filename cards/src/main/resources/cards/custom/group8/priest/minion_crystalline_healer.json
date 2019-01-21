@@ -1,0 +1,24 @@
+{
+  "name": "Crystalline Healer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Restore 4 Health to all other characters.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "HealSpell",
+      "target": "ALL_OTHER_CHARACTERS",
+      "value": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
