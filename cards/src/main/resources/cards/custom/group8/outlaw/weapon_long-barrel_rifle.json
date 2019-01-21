@@ -1,0 +1,13 @@
+{
+  "name": "Long-Barrel Rifle",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "COPPER",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

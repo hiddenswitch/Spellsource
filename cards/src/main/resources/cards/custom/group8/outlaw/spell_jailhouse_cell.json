@@ -1,0 +1,30 @@
+{
+  "name": "Jailhouse Cell",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "RARE",
+  "description": "Destroy a minion. At the start of your next turn, resummon it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "custom.AddEnchantmentToSummonSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

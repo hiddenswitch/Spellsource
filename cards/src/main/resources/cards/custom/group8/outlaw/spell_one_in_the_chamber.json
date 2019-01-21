@@ -1,0 +1,23 @@
+{
+  "name": "One in the Chamber",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "description": "Destroy an enemy minion. Draw a card.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

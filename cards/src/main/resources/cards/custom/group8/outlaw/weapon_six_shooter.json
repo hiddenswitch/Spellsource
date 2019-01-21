@@ -1,0 +1,25 @@
+{
+  "name": "Six-shooter",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "RARE",
+  "description": "Quick Draw: Deal 3 damage to a random enemy minion. Lose 1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3,
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

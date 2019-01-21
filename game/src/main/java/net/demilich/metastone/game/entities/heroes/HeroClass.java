@@ -38,6 +38,7 @@ public enum HeroClass {
 	NEONGREEN,
 	DARKGREEN,
 	TEAL,
+	COPPER,
 	/**
 	 * The Hearthstone Death Knight card class.
 	 */
@@ -114,6 +115,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_jikr");
 			case TEAL:
 				return CardCatalogue.getCardById("hero_lady_vashj_sea_witch");
+			case COPPER:
+				return CardCatalogue.getCardById("hero_");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

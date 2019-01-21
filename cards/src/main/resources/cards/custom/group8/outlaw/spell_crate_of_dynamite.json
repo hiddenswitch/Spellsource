@@ -1,0 +1,35 @@
+{
+  "name": "Crate of Dynamite",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "COMMON",
+  "description": "Give a minion 'Quick Draw: Deal 1 damage to all enemy minions.' Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardDrawnTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DamageSpell",
+            "target": "ENEMY_MINIONS",
+            "value": 1
+          },
+          "persistentOwner": true
+        }
+      },
+      {
+        "class": "DrawCardSpell"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

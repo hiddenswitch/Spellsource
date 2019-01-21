@@ -1,0 +1,26 @@
+{
+  "name": "Shady Stranger",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Quick Draw: Your opponent draws a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
