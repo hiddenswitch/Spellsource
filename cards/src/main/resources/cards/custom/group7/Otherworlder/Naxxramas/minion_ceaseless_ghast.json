@@ -1,0 +1,26 @@
+{
+  "name": "Ceaseless Ghast",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 5,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "TITAN",
+  "description": "Deathrattle: If this has more than 1 Attack, resummon it and give it -1 Attack.",
+  "deathrattle": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    /////////i just copied dreadsteed's code help
+      "spell": {
+        "class": "SummonSpell",
+        "card": "minion_ceaseless_ghast"
+      }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
