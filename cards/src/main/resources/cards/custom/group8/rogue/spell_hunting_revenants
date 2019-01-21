@@ -1,0 +1,67 @@
+{
+  "name": "Hunting Revenants",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "BLACK",
+  "rarity": "EPIC",
+  "description": "Summon a 1/1 copy of a deathrattle minion in your hand and from in deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "target": "FRIENDLY_HAND",
+        "spell": {
+          "class": "MetaSpell",
+          "target": "OUTPUT",
+          "spells": [
+            {
+              "class": "SetAttackSpell",
+              "value": 1
+            },
+            {
+              "class": "SetHpSpell",
+              "value": 1
+            }
+          ]
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "DEATHRATTLES",
+          "cardType": "MINION",
+          "operation": "HAS"
+        },
+        "randomTarget": true
+      },
+      {
+        "class": "SummonSpell",
+        "target": "FRIENDLY_DECK",
+        "spell": {
+          "class": "MetaSpell",
+          "target": "OUTPUT",
+          "spells": [
+            {
+              "class": "SetAttackSpell",
+              "value": 1
+            },
+            {
+              "class": "SetHpSpell",
+              "value": 1
+            }
+          ]
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "attribute": "DEATHRATTLES",
+          "cardType": "MINION",
+          "operation": "HAS"
+        },
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
