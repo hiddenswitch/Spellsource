@@ -1,0 +1,27 @@
+{
+  "name": "Drowned Fishman",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "After you play a minion, destroy it.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

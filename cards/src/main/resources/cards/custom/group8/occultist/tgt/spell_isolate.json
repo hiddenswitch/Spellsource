@@ -1,0 +1,24 @@
+{
+  "name": "Isolate",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Destroy the minions next to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "NullSpell"
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_GRAND_TOURNAMENT"
+  ],
+  "fileFormatVersion": 1
+}

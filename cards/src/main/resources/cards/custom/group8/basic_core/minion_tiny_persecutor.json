@@ -1,0 +1,24 @@
+{
+  "name": "Tiny Persecutor",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "DEMON",
+  "description": "Battlecry: Deal 1 damage.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

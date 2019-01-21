@@ -1,0 +1,16 @@
+{
+  "name": "Floating Crystal",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "<b>Spell Damage +1</b>",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

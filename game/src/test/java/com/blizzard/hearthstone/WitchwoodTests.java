@@ -316,6 +316,18 @@ public class WitchwoodTests extends TestBase {
 	}
 
 	@Test
+	public void testTessGreymaneDoesntTriggerFlamewaker() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_any_black_test", opponent.getHero());
+			playMinionCard(context, player, "minion_flamewaker");
+			playMinionCard(context, player, "minion_tess_greymane");
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp(), "Should not have triggered Flamewaker");
+			playCard(context, player, "spell_any_black_test", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2, "Should have triggered Flamewaker");
+		}, HeroClass.BLUE, HeroClass.BLUE);
+	}
+
+	@Test
 	public void testGennGreymane() {
 		{
 			DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);

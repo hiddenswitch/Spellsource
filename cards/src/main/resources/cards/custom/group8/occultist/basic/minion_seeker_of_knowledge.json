@@ -1,0 +1,25 @@
+{
+  "name": "Seeker of Knowledge",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Battlecry: Draw two cards.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}
