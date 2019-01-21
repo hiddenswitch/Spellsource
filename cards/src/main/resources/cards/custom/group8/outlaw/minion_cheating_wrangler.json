@@ -1,0 +1,25 @@
+{
+  "name": "Cheating Wrangler",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "COPPER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Quick Draw: Deal 1 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

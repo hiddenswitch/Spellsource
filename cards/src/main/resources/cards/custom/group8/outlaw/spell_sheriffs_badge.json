@@ -1,0 +1,19 @@
+{
+  "name": "Sheriff's Badge",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "COPPER",
+  "rarity": "EPIC",
+  "description": "Choose a aminion. Destroy all other minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TargetToSourceSecondaryToTargetSpell",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ALL_OTHER_MINIONS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
