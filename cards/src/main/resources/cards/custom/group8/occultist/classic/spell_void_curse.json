@@ -1,0 +1,29 @@
+{
+  "name": "Void Curse",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Choose an enemy minion. When it attacks, destroy it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TargetAcquisitionTrigger",
+        "actionType": "PHYSICAL_ATTACK",
+        "hostTargetType": "IGNORE_OTHER_SOURCES"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "TRIGGER_HOST"
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

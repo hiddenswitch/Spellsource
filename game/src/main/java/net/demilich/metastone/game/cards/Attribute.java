@@ -330,7 +330,7 @@ public enum Attribute {
 	 * When a combo {@link Card} is played after another card, an effect is triggered.
 	 *
 	 * @see net.demilich.metastone.game.spells.ComboSpell for the actual implementation of combo effects.
-	 * @see GameLogic#playCard(int, EntityReference) for the control of the combo attribute.
+	 * @see GameLogic#playCard(int, EntityReference, EntityReference) for the control of the combo attribute.
 	 */
 	COMBO,
 	/**
@@ -462,7 +462,7 @@ public enum Attribute {
 	 * When a {@link Card} is played and countered (by e.g. Counterspell), it is marked with this attribute and its text
 	 * is not executed.
 	 *
-	 * @see GameLogic#playCard(int, EntityReference) for the complete card playing implementation.
+	 * @see GameLogic#playCard(int, EntityReference, EntityReference) for the complete card playing implementation.
 	 */
 	COUNTERED,
 	/**

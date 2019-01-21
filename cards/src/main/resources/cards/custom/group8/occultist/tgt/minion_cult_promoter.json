@@ -1,0 +1,27 @@
+{
+  "name": "Cult Promoter",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Whenever a minion dies, shuffle a copy of it into your deck.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "BOTH"
+    },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "targetPlayer": "SELF",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_GRAND_TOURNAMENT"
+  ],
+  "fileFormatVersion": 1
+}

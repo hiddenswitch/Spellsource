@@ -19,6 +19,17 @@ import static org.testng.Assert.*;
 public class BlackrockMountainTests extends TestBase {
 
 	@Test
+	public void testForceCastDoesntTriggerFlamewaker() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_flamewaker");
+			playCard(context, player, "minion_force_cast_test");
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp(), "Should not have triggered Flamewaker");
+			playCard(context, player, "spell_the_coin");
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2, "Should have triggered Flamewaker");
+		});
+	}
+
+	@Test
 	public void testEmperorThaurissen() {
 		runGym((context, player, opponent) -> {
 			Card deckCard = shuffleToDeck(context, player, "minion_bloodfen_raptor");
