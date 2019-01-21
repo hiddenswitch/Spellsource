@@ -1,0 +1,22 @@
+{
+  "name": "Rapid Fire",
+  "heroPower": "hero_power_rapider_fire",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "COPPER",
+  "rarity": "FREE",
+  "description": "Deal $2 damage randomly split among all enemies.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 2
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
