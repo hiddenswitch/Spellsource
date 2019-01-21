@@ -1,0 +1,34 @@
+{
+  "name": "Jabberwocky",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Deathrattle: Add a random Beast to your hand. It Costs (2) less.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "OUTPUT",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 2,
+        "operation": "SUBTRACT"
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Shadownest Arachne",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "Deathrattle: Summon three 0/2 Nerubian Eggs.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "minion_nerubian_egg",
+    "value": 3
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
