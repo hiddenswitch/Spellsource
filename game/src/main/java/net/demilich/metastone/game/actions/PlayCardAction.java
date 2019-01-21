@@ -30,7 +30,7 @@ import java.util.List;
  * target.
  *
  * @see net.demilich.metastone.game.spells.SpellUtils#playCardRandomly(GameContext, Player, Card, Entity, boolean,
- *    boolean, boolean, boolean, boolean) to see how a card's actions can be manipulated with a spell.
+ * boolean, boolean, boolean, boolean) to see how a card's actions can be manipulated with a spell.
  */
 public abstract class PlayCardAction extends GameAction {
 
@@ -71,13 +71,17 @@ public abstract class PlayCardAction extends GameAction {
 	public void execute(GameContext context, int playerId) {
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		card.setAttribute(Attribute.BEING_PLAYED);
-		context.getLogic().playCard(playerId, getSourceReference());
+		context.getLogic().playCard(playerId, getSourceReference(), getTargetReference());
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
 			// Fixes Glinda Crowskin, whose aura stopped being applied once the card was played and moved to the graveyard
 			boolean hasEcho = card.hasAttribute(Attribute.ECHO)
 					|| card.hasAttribute(Attribute.AURA_ECHO);
-			innerExecute(context, playerId);
+			// Silencing a card here prevents its effects from being executed since they are being executed elsewhere.
+			// Unlike countering, it does deal with echo correctly.
+			if (!card.hasAttribute(Attribute.SILENCED)) {
+				innerExecute(context, playerId);
+			}
 			if (hasEcho) {
 				Card copy = card.getCopy();
 				copy.setAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);

@@ -1,0 +1,16 @@
+{
+  "name": "Haunted Armor",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "description": "<b>Dodge</b>",
+  "attributes": {
+    "DIVINE_SHIELD": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

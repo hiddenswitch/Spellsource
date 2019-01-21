@@ -1,0 +1,28 @@
+{
+  "name": "Eldritch Scroll",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Deal $2 damage. Draw a card.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}

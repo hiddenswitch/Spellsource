@@ -1,0 +1,16 @@
+{
+  "name": "Tentacle",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": false,
+  "sets": [
+    "CUSTOM",
+    "THE_GRAND_TOURNAMENT"
+  ],
+  "fileFormatVersion": 1
+}

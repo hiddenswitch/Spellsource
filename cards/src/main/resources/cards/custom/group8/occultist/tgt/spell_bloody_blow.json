@@ -1,0 +1,30 @@
+{
+  "name": "Bloody Blow",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Take $4 damage. Deal $2 damage to all minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 4
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_GRAND_TOURNAMENT"
+  ],
+  "fileFormatVersion": 1
+}

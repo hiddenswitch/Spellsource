@@ -1,0 +1,35 @@
+{
+  "name": "Deep Madness",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Give an enemy minion +10/+10. Draw 10 cards.",
+  "targetSelection": "ENEMY_MINIONS",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 10,
+        "hpBonus": 10
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 10
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

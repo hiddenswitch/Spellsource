@@ -57,6 +57,81 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testReaderEaterGhahnbTheJudicatorInteraction() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 20; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "minion_ghahnb_the_judicator");
+			Minion buffed = playMinionCard(context, player, "minion_reader_eater");
+			useHeroPower(context, player, player.getHero().getReference());
+			assertEquals(buffed.getAttack(), buffed.getBaseAttack() + 15);
+			assertEquals(buffed.getMaxHp(), buffed.getBaseHp() + 15);
+			assertEquals(player.getDeck().size(), 20 - 15, "Drew 15 cards, never added 15");
+		});
+	}
+
+	@Test
+	public void testUnderwaterHorrors() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "spell_underwater_horrors", target);
+			putOnTopOfDeck(context, opponent, "spell_the_coin");
+			context.endTurn();
+			assertEquals(opponent.getHand().size(), 1);
+			assertEquals(opponent.getHand().get(0).getCardId(), "spell_the_coin");
+			context.endTurn();
+			assertEquals(opponent.getHand().size(), 2);
+			assertEquals(opponent.getHand().get(1).getCardId(), "minion_neutral_test");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_underwater_horrors", target);
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			context.endTurn();
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_neutral_test");
+		});
+	}
+
+	@Test
+	public void testForgottenScience() {
+		runGym((context, player, opponent) -> {
+			Minion intendedTarget = playMinionCard(context, player, "minion_neutral_test");
+			Minion target1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_forgotten_science");
+			playCard(context, player, "spell_fireball", intendedTarget);
+			assertFalse(intendedTarget.isDestroyed());
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			playCard(context, player, "spell_fireball", intendedTarget);
+			assertTrue(intendedTarget.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testKahlOfTheDeep() {
+		runGym((context, player, opponent) -> {
+			Minion kahl = playMinionCard(context, player, "minion_kahl_of_the_deep");
+			destroy(context, kahl);
+			assertEquals(opponent.getDeck().size(), 1);
+			for (int i = 0; i < 9; i++) {
+				// Inserts to the bottom of the deck
+				context.getLogic().insertIntoDeck(opponent, CardCatalogue.getCardById("spell_the_coin"), 0);
+			}
+			assertEquals(opponent.getDeck().size(), 10);
+			context.endTurn();
+			assertEquals(opponent.getHand().size(), 9, "Drew 8 cards + Kahl");
+			assertEquals(opponent.getDeck().size(), 1, "1 card left in the deck");
+			assertEquals(opponent.getHand().get(0).getCardId(), "minion_kahl_of_the_deep");
+		});
+	}
+
+	@Test
 	public void testVanalAmalgamInteraction() {
 		runGym((context, player, opponent) -> {
 			Minion amalgam = playMinionCard(context, player, "minion_nightmare_amalgam");

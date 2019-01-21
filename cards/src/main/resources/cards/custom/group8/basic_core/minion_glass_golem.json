@@ -1,0 +1,17 @@
+{
+  "name": "Glass Golem",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Dash",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
