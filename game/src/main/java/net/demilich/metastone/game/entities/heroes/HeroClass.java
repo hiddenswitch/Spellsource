@@ -116,7 +116,7 @@ public enum HeroClass {
 			case TEAL:
 				return CardCatalogue.getCardById("hero_lady_vashj_sea_witch");
 			case COPPER:
-				return CardCatalogue.getCardById("hero_");
+				return CardCatalogue.getCardById("hero_handsome_joe");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
