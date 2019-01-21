@@ -1,0 +1,62 @@
+{
+  "name": "Chanting Cultist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Battlecry: If your C'Thun has at least 10 Attack, draw 10 cards.",
+"battlecry": {
+    "condition": {
+      "class": "OrCondition",
+      "conditions": [
+        {
+          "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
+          "value1": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_MINIONS",
+            "attribute": "ATTACK",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_cthun"
+            }
+          },
+          "value2": 10
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
+          "value1": {
+            "class": "ReduceValueProvider",
+            "target": "FRIENDLY_HAND",
+            "attribute": "ATTACK",
+            "filter": {
+              "class": "SpecificCardFilter",
+              "card": "minion_cthun"
+            }
+          },
+          "value2": 10
+        },
+        {
+          "class": "ComparisonCondition",
+          "operation": "GREATER_OR_EQUAL",
+          "value1": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "CTHUN_ATTACK_BUFF"
+          },
+          "value2": 4
+        }
+      ]
+    },
+    "spell": {
+      "class": "DrawSpell",
+      "armorBonus": 10
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
+}
