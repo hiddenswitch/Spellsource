@@ -2,7 +2,7 @@
   "name": "Protector of Spirits",
   "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "BLACK",
+  "heroClass": "WHITE",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "EPIC",
