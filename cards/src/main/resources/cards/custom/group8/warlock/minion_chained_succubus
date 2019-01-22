@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Whenever this takes damage, restore that much health to your hero.",
+  "description": "Lifesteal. Whenever this takes damage, restore that much health to your hero.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -22,6 +22,9 @@
         "attribute": "LAST_HIT"
       }
     }
+  },
+  "attributes": {
+    "LIFESTEAL": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",
