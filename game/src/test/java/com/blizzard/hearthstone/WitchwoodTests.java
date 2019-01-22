@@ -28,6 +28,17 @@ import static org.testng.Assert.*;
 public class WitchwoodTests extends TestBase {
 
 	@Test
+	public void testTessGreymaneFlamewakerInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_mind_blast");
+			playCard(context, player, "minion_flamewaker");
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "minion_tess_greymane");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 5, "Only mindblast should have been played, Flamewaker should not have been triggered");
+		});
+	}
+
+	@Test
 	public void testTheGlassKnight() {
 		runGym((context, player, opponent) -> {
 			Minion glassKnight = playMinionCard(context, player, "minion_the_glass_knight");
