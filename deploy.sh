@@ -300,9 +300,9 @@ if [[ "$deploy_launcher" = true ]] ; then
   # Build image and upload to docker
   { # try
     echo "Building and uploading launcher Docker image"
-    docker build -t doctorpangloss/launcher . > /dev/null && \
+    docker build -t launcher . > /dev/null && \
     rm -rf bundle && \
-    docker tag spellsource doctorpangloss/launcher > /dev/null && \
+    docker tag launcher doctorpangloss/launcher > /dev/null && \
     docker push doctorpangloss/launcher:latest > /dev/null
   } || { # catch
     echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
