@@ -11,6 +11,8 @@ Thanks to a contribution from @Muhframos, introducing the Occultist class.
 
 And thanks to a contribution from @Rumu11, we have more Verdant Dreams cards.
 
+Use the **Spellsource** format to use the new basic set and only custom classes and cards.
+
 Additional bug fixes.
 
 ##### Content Additions:
