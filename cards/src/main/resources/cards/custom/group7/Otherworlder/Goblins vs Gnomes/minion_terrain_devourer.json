@@ -1,0 +1,32 @@
+{
+  "name": "Terrain Devourer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "When a player has at least 4 or more minions and summons another, destroy it.",
+  "trigger": {
+    "targetSelection": "NONE",
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "queueCondition": {
+        "class": "MinionCountCondition",
+        "value": 4,
+        "operation": "GREATER",
+        "targetPlayer": "ANY"
+      }
+    },
+    "targetPlayer": "ANY"
+    "spell": {
+      "class": "DestroySpell",
+     "target": "EVENT_TARGET"
+    }
+  },
+  
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
