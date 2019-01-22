@@ -1,19 +1,19 @@
 {
   "name": "Gobble",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "COMMON",
-  "description": "Destroy the lowest Attack minion on the battlefield.",
+  "description": "Destroy the lowest Attack enemy minion on the battlefield.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",
-    "target": "ALL_MINIONS",
+    "target": "ENEMY_MINIONS",
     "filter": {
       "class": "AttributeFilter",
       "value": {
         "class": "ReduceValueProvider",
-        "target": "ALL_MINIONS",
+        "target": "ENEMY_MINIONS",
         "operation": "MINIMUM",
         "value1": {
           "class": "AttributeValueProvider",
