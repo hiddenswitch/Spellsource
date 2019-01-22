@@ -90,7 +90,8 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), battlecryDesc.spell, card, battlecryDesc.targetSelection);
 				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), spellCardAction);
 				if (targets != null && !targets.isEmpty() && targets.contains(source)) {
-					targets.remove(source); //They shouldn't actually be able to target Shudderwock
+					// They shouldn't actually be able to target Shudderwock
+					targets.remove(source);
 				}
 				if (targets.isEmpty()) {
 					context.getLogic().revealCard(player, card);

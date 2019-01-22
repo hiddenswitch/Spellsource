@@ -4,24 +4,27 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Give an enemy minion +5/+5. Deal 5 damage to all other minions.",
+  "description": "Give an enemy minion +5/+5. Deal $5 damage to all other minions.",
   "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
         "class": "BuffSpell",
-    "attackBonus": 5,
-    "hpBonus": 10
+        "attackBonus": 5,
+        "hpBonus": 5
       },
       {
         "class": "DamageSpell",
-    "target": "ALL_MINIONS",
-    "value": 5
+        "target": "ALL_MINIONS",
+        "value": 5
       }
     ]
   },
   "collectible": true,
-  "set": "THE_OLD_GODS",
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
   "fileFormatVersion": 1
 }

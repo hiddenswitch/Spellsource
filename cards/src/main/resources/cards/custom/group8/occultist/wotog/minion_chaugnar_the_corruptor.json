@@ -12,18 +12,22 @@
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "trigger": {
-       "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES"
-    },
-    "spell": {
-      "class": "DestroySpell",
-      "target": "SELF"
-    }
-			}
+          "class": "custom.AddEnchantmentToMinionCardSpell",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          "trigger": {
+            "eventTrigger": {
+              "class": "AfterPhysicalAttackTrigger",
+              "hostTargetType": "IGNORE_OTHER_SOURCES"
+            },
+            "spell": {
+              "class": "DestroySpell",
+              "target": "SELF"
+            }
+          }
         },
         {
           "class": "BuffSpell",
@@ -42,6 +46,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "THE_OLD_GODS",
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
   "fileFormatVersion": 1
 }

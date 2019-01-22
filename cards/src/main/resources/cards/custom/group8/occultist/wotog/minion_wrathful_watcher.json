@@ -14,7 +14,8 @@
       "targetEntityType": "HERO",
       "targetPlayer": "SELF"
     },
-    "class": "MetaSpell",
+    "spell": {
+      "class": "MetaSpell",
       "spells": [
         {
           "class": "BuffSpell",
@@ -47,8 +48,13 @@
           "attribute": "CTHUN_HEALTH_BUFF"
         }
       ]
+    }
+
   },
   "collectible": true,
-  "set": "GOBLINS_VS_GNOMES",
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
   "fileFormatVersion": 1
 }
