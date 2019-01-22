@@ -3,6 +3,14 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.14-2.0.22 (Tuesday, January 22nd, 2019)
+
+Bug fixes.
+
+##### Content Additions:
+
+ - The Dragoon cards Runt Leader and Cult Reverend.
+
 ### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
 
 Thanks to a contribution from @Pircival, @Walrus, @Logovaz and @Muhframos, introducing a Spellsource Basic set.
