@@ -9,6 +9,10 @@ public class CardPlayedTrigger extends AbstractCardTrigger {
 		super(desc);
 	}
 
+	public static EventTriggerDesc create() {
+		return new EventTriggerDesc(CardPlayedTrigger.class);
+	}
+
 	@Override
 	public GameEventType interestedIn() {
 		return GameEventType.PLAY_CARD;

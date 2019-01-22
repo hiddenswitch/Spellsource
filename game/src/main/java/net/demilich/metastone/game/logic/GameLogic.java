@@ -320,36 +320,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Handles combo and mana cost modifier removal for the card played in the {@link PlayCardAction#execute(GameContext,
-	 * int)} method. Can probably be inlined.
-	 *
-	 * @param playerId        The player index
-	 * @param entityReference A reference to the card.
-	 */
-	@Suspendable
-	public void afterCardPlayed(int playerId, EntityReference entityReference) {
-		Player player = context.getPlayer(playerId);
-
-		player.modifyAttribute(Attribute.COMBO, 1);
-		Card card = (Card) context.tryFind(entityReference);
-		if (card == null) {
-			return;
-		}
-		if (card.hasAttribute(Attribute.INVOKED)) {
-			// Increment the number of invoked cards that were played
-			player.modifyAttribute(Attribute.INVOKED, 1);
-			context.fireGameEvent(new InvokedEvent(context, playerId, (Card) card, card.getAttributeValue(Attribute.INVOKED)));
-		}
-
-		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			card.getDeathrattleEnchantments().clear();
-		}
-
-		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, entityReference));
-		context.setLastCardPlayedBeforeCurrentSequence(playerId, card.getReference());
-	}
-
-	/**
 	 * Calculates how much to amplify an attribute by. This is typically either a spell damage or healing effect
 	 * multiplier.
 	 * <p>
@@ -657,7 +627,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		chosenCard.moveOrAddTo(context, Zones.REMOVED_FROM_PLAY);
 		endOfSequence();
-		handleAfterSpellCasted(playerId, targets, chosenCard);
+		handleAfterSpellCasted(playerId, targets, sourceCard);
 	}
 
 	/*
@@ -2722,6 +2692,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	/**
 	 * Plays a card.
 	 * <p>
+	 * Playing a card from the hand moves it to the graveyard before its effects are resolved. This means its enchantments
+	 * are removed.
+	 * <p>
 	 * {@link #playCard(int, EntityReference, EntityReference)} is always initiated by an action, like a {@link PlayCardAction}. It
 	 * represents playing a card from the hand. This method then deducts the appropriate amount of mana (or health,
 	 * depending on the card). Then, it will check if the {@link Card} was countered by Counter Spell (a {@link Secret}
@@ -2793,7 +2766,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 		}
 
-		removeCard(card);
+		// Move the played card to the set aside zone. After its effects are evaluated, it is moved to the graveyard.
+		card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
+		// Passive triggers are still active here, but it's not clear if it matters (a card may transform this way like a Spellstone)
 
 		if ((card.getCardType().isCardType(CardType.SPELL))) {
 			GameEvent spellCastedEvent = new SpellCastedEvent(context, playerId, card, target);
@@ -3518,9 +3493,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		// TODO: What happens if a deathrattle modifies another deathrattle?
+		int id = 0;
 		for (SpellDesc deathrattleTemplate : deathrattles) {
 			SpellDesc deathrattle = deathrattleTemplate.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, boardPosition);
-
+			deathrattle.put(SpellArg.DEATHRATTLE_ID, id);
+			id++;
 			castSpell(playerId, deathrattle, sourceReference, EntityReference.NONE, false);
 			if (doubleDeathrattles) {
 				// TODO: Likewise, with double deathrattles, make sure that we can still target whatever we're targeting in the spells (possibly metaspells!)

@@ -7,8 +7,12 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.AfterCardPlayedEvent;
+import net.demilich.metastone.game.events.InvokedEvent;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -69,6 +73,7 @@ public abstract class PlayCardAction extends GameAction {
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
+		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		card.setAttribute(Attribute.BEING_PLAYED);
 		context.getLogic().playCard(playerId, getSourceReference(), getTargetReference());
@@ -82,6 +87,8 @@ public abstract class PlayCardAction extends GameAction {
 			if (!card.hasAttribute(Attribute.SILENCED)) {
 				innerExecute(context, playerId);
 			}
+			// After playing the effects, make sure to use the right card in case it was transformed
+			card = (Card) card.transformResolved(context);
 			if (hasEcho) {
 				Card copy = card.getCopy();
 				copy.setAttribute(Attribute.REMOVES_SELF_AT_END_OF_TURN);
@@ -89,7 +96,23 @@ public abstract class PlayCardAction extends GameAction {
 			}
 		}
 		card.getAttributes().remove(Attribute.BEING_PLAYED);
-		context.getLogic().afterCardPlayed(playerId, getSourceReference());
+		player.modifyAttribute(Attribute.COMBO, 1);
+
+		if (card.hasAttribute(Attribute.INVOKED)) {
+			// Increment the number of invoked cards that were played
+			player.modifyAttribute(Attribute.INVOKED, 1);
+			context.fireGameEvent(new InvokedEvent(context, playerId, card, card.getAttributeValue(Attribute.INVOKED)));
+		}
+
+		if (!card.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			card.getDeathrattleEnchantments().clear();
+		}
+
+		context.fireGameEvent(new AfterCardPlayedEvent(context, playerId, card.getReference()));
+		context.setLastCardPlayedBeforeCurrentSequence(playerId, card.getReference());
+		if (card.getZone() != Zones.GRAVEYARD || card.getZone() != Zones.REMOVED_FROM_PLAY) {
+			context.getLogic().removeCard(card);
+		}
 	}
 
 	/**

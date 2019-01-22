@@ -57,6 +57,20 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testChaugnarTheCorruptor() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_chaugnar_the_corruptor");
+			context.endTurn();
+			context.endTurn();
+			Minion test = playMinionCard(context, player, player.getHand().get(0));
+			test.setAttribute(Attribute.CHARGE);
+			attack(context, player, test, opponent.getHero());
+			assertTrue(test.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testReaderEaterGhahnbTheJudicatorInteraction() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 20; i++) {
@@ -5764,16 +5778,6 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(beast.getHp(), beast.getMaxHp() - 2);
 			playMinionCardWithBattlecry(context, player, "minion_trophy_huntress", dragon);
 			assertEquals(dragon.getHp(), dragon.getMaxHp() - 3);
-		});
-	}
-
-	@Test
-	public void testEnchantments() {
-		runGym((context, player, opponent) -> {
-			Minion wisp = playMinionCard(context, player, "minion_wisp");
-			playCard(context, player, "spell_blessing_of_wisdom", wisp);
-			assertEquals(wisp.getEnchantmentsFromContext(context).size(), 1);
-
 		});
 	}
 }

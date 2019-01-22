@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
 import java.util.HashSet;
