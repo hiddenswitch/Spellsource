@@ -17,7 +17,7 @@ Additional bug fixes.
 
  - Additional Verdant Dreams expansion cards.
  - A Spellsource Basic set, with 55 neutral minions.
- - The new Occultist class, with 57 cards and tokens.
+ - The new Occultist class, with 67 cards and tokens.
  - The Basic Spellsource set.
 
 ##### Content Fixes:
@@ -28,6 +28,7 @@ Additional bug fixes.
  - Swarm Shield now costs 2 mana and gives a multiplier of 3 armor.
  - Breath of Fire now reads, "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)," which means all its damage effects gain spell power.
  - Wild Pyromancer, Flamewaker and other spell casted triggering effects no longer trigger off Scroll of Wonders, Tess Greymane or other force casts that reuse cards from the graveyard.
+ - Immortal Prelate is now available for play.
 
 ### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 
