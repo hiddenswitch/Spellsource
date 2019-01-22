@@ -1,15 +1,15 @@
 {
   "name": "Forbidden Knowledge",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "RARE",
-  "description": "Spend all your Mana. Draw cards equal to the mana spent.",
+  "description": "Spend all your Mana. Draw cards equal to the mana spent. (Draws [])",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "DrawSpell",
+        "class": "DrawCardSpell",
         "value": {
           "class": "PlayerAttributeValueProvider",
           "playerAttribute": "MANA"
@@ -29,6 +29,24 @@
     ]
   },
   "collectible": true,
-  "set": "THE_OLD_GODS",
-  "fileFormatVersion": 1
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AlgebraicValueProvider",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MANA",
+          "offset": -2
+        },
+        "value2": 0,
+        "operation": "MAXIMUM"
+      }
+    }
+  ]
 }

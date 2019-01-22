@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "description": "Battlecry: If your C'Thun has at least 10 Attack, draw 10 cards.",
-"battlecry": {
+  "battlecry": {
     "condition": {
       "class": "OrCondition",
       "conditions": [
@@ -52,11 +52,17 @@
       ]
     },
     "spell": {
-      "class": "DrawSpell",
-      "armorBonus": 10
+      "class": "DrawCardSpell",
+      "value": 10
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
-  "set": "THE_OLD_GODS",
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
   "fileFormatVersion": 1
 }

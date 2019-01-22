@@ -23,6 +23,9 @@
     }
   },
   "collectible": true,
-  "set": "THE_OLD_GODS",
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
   "fileFormatVersion": 1
 }

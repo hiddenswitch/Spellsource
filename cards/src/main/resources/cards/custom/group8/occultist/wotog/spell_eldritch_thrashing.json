@@ -5,7 +5,7 @@
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
   "description": "Give your Tentacles +2/+2.",
- "spell": {
+  "spell": {
     "class": "MetaSpell",
     "spells": [
       {
@@ -29,6 +29,9 @@
     ]
   },
   "collectible": true,
-  "set": "THE_OLD_GODS",
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
   "fileFormatVersion": 1
 }
