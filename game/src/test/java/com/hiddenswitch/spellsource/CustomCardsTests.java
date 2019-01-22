@@ -1926,8 +1926,8 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testFissure() {
 		runGym((context, player, opponent) -> {
-			Minion threeTwo = playMinionCard(context, player, "minion_bloodfen_raptor");
-			Minion oneOneBuffed = playMinionCard(context, player, "minion_snowflipper_penguin");
+			Minion threeTwo = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion oneOneBuffed = playMinionCard(context, opponent, "minion_snowflipper_penguin");
 			playCard(context, player, "spell_nightmare", oneOneBuffed);
 			playCard(context, player, "spell_fissure");
 			assertFalse(oneOneBuffed.isDestroyed());

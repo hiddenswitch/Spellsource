@@ -315,7 +315,7 @@ if [[ "$deploy_launcher" = true ]] ; then
     # Figure out the service ID
     service_name=spellsource_launcher
     portainer_image_name="doctorpangloss/launcher:latest"
-    update_portainer service_name portainer_image_name
+    update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update launcher service"
     exit 1
@@ -369,7 +369,7 @@ if [[ "$deploy_docker" = true ]] ; then
     # Figure out the service ID
     service_name=spellsource_game
     portainer_image_name="doctorpangloss/spellsource:latest"
-    update_portainer service_name portainer_image_name
+    update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update service"
     exit 1

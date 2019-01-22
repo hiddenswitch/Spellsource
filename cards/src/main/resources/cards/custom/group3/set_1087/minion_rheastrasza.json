@@ -1,6 +1,6 @@
 {
   "name": "Rheastrasza",
-  "baseManaCost": 9,
+  "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 8,

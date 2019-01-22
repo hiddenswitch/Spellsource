@@ -34,6 +34,10 @@ Additional bug fixes.
  - Magic Keg now correctly puts Chef spells into your hand.
  - The Sands of Time Rifts (permanents) now show the number of turns left until they are removed. Their rules are simplified.
  - Sherazin, Seed now shows the number of additional cards you need to play to revive it.
+ - Gobble is now 2 Mana and reads "Destroy the lowest Attack enemy minion on the battlefield."
+ - Rheastrasza is now 10 Mana.
+ - Blade of Eventide now reads "Deathrattle: If your deck has only even-Cost cards, destroy the lowest Attack enemy minion."
+ - Molten Whelp is now replaced with Vermillion Glider. 
 
 ### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 

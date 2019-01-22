@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Deathrattle: If your deck has only even-Cost cards, destroy the lowest Attack minion.",
+  "description": "Deathrattle: If your deck has only even-Cost cards, destroy the lowest Attack enemy minion.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {
@@ -20,12 +20,12 @@
     },
     "spell": {
       "class": "DestroySpell",
-      "target": "ALL_MINIONS",
+      "target": "ENEMY_MINIONS",
       "filter": {
         "class": "AttributeFilter",
         "value": {
           "class": "ReduceValueProvider",
-          "target": "ALL_MINIONS",
+          "target": "ENEMY_MINIONS",
           "attribute": "ATTACK",
           "operation": "MINIMUM"
         },
