@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Permanent. When you've played minions with a total of 40 stats, transform into Nordrassil.",
+  "description": "When you've played minions with a total of [40 more] stats, transform into Nordrassil.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterMinionPlayedTrigger",
@@ -68,5 +68,28 @@
   },
   "collectible": false,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AlgebraicValueProvider",
+            "value1": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "RESERVED_INTEGER_1",
+              "offset": 40,
+              "multiplier": -1
+            },
+            "value2": 0,
+            "operation": "MAXIMUM"
+          }
+        },
+        " more"
+      ]
+    }
+  ]
 }

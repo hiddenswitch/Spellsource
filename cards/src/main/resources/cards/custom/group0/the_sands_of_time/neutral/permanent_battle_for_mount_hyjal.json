@@ -6,18 +6,18 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Permanent. Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent. (After 3 of your turns, this dies)",
+  "description": "Your minions have +2/+2. Battlecry: Summon an 8/8 Demon for your opponent. Lasts [6 turns].",
   "trigger": {
-    "countUntilCast": 3,
+    "countUntilCast": 6,
     "eventTrigger": {
       "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "DestroySpell",
       "target": "SELF"
     },
-    "maxFires": 3
+    "maxFires": 6
   },
   "aura": {
     "class": "BuffAura",
@@ -39,5 +39,17 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 6
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }
