@@ -1,0 +1,21 @@
+### Knight Baron Showcase
+# Class: NAVY
+# Format: Spellsource
+#
+# 2x (1) Doom Sergeant
+# 2x (1) Mini Knight
+# 2x (1) Scarlet Inquisitor
+# 2x (1) Undead Intern
+# 2x (2) Siege the Castle
+# 2x (3) Mutating Boa
+# 2x (3) One on One
+# 2x (3) Soulclencher
+# 2x (3) Sparkgunner
+# 2x (4) Call for Backup
+# 2x (4) Stonecold Sergeant
+# 2x (5) Army Recruits
+# 2x (5) Naga Illusionist
+# 2x (5) Savage Worgen
+# 1x (7) Clash!
+# 1x (7) The Transmogrifter
+#
