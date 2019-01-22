@@ -6,9 +6,9 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "(WIP) Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
+  "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
   "deathrattle": {
-    "class": "ShuffleToDeckSpell",
+    "class": "ShuffleToDeckWithEnchantmentsSpell",
     "target": "SELF"
   },
   "attributes": {

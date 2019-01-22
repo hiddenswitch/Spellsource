@@ -1,0 +1,54 @@
+{
+  "name": "Chaugnar the Corruptor",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Give all minions in your deck +5/+5. They die after they attack.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "custom.AddEnchantmentToMinionCardSpell",
+          "target": "FRIENDLY_DECK",
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          "trigger": {
+            "eventTrigger": {
+              "class": "AfterPhysicalAttackTrigger",
+              "hostTargetType": "IGNORE_OTHER_SOURCES"
+            },
+            "spell": {
+              "class": "DestroySpell",
+              "target": "SELF"
+            }
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_DECK",
+          "attackBonus": 5,
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          "hpBonus": 5
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
+  "fileFormatVersion": 1
+}

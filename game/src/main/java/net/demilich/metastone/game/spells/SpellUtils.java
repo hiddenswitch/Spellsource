@@ -647,9 +647,31 @@ public class SpellUtils {
 		return map;
 	}
 
-	static void processKeptEnchantments(GameContext context, Entity target, Card card) {
+	static void processKeptEnchantments(Entity target, Card card) {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
+			Stream.of(Attribute.POISONOUS,
+					Attribute.DIVINE_SHIELD,
+					Attribute.STEALTH,
+					Attribute.TAUNT,
+					Attribute.CANNOT_ATTACK,
+					Attribute.ATTACK_EQUALS_HP,
+					Attribute.CANNOT_ATTACK_HEROES,
+					Attribute.CHARGE,
+					Attribute.DEFLECT,
+					Attribute.IMMUNE,
+					Attribute.ENRAGABLE,
+					Attribute.IMMUNE_WHILE_ATTACKING,
+					Attribute.FROZEN,
+					Attribute.KEEPS_ENCHANTMENTS,
+					Attribute.MAGNETIC,
+					Attribute.PERMANENT,
+					Attribute.RUSH,
+					Attribute.WITHER,
+					Attribute.INVOKE,
+					Attribute.LIFESTEAL,
+					Attribute.WINDFURY,
+					Attribute.ATTACK_BONUS,
+					Attribute.HP_BONUS)
 					.filter(target::hasAttribute).forEach(k -> card.getAttributes().put(k, target.getAttributes().get(k)));
 
 			if (target instanceof Minion) {

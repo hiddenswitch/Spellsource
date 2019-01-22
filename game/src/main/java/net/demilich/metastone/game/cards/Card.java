@@ -228,8 +228,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
-		clone.storedEnchantments = new ArrayList<>();
 		deathrattleEnchantments.forEach(de -> clone.deathrattleEnchantments.add(de.clone()));
+		clone.storedEnchantments = new ArrayList<>();
 		clone.storedEnchantments.addAll(storedEnchantments);
 		return clone;
 	}

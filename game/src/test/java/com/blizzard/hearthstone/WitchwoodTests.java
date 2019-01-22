@@ -207,8 +207,8 @@ public class WitchwoodTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			// Make sure there are minions for novice and shudderwock to transform into
 			context.setDeckFormat(new FixedCardsDeckFormat("minion_cost_4_test", "minion_cost_11_test"));
-			playCard(context, player, "hero_thrall_deathseer");
 			playMinionCard(context, player, "minion_novice_engineer");
+			playCard(context, player, "hero_thrall_deathseer");
 			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
 			context.getLogic().setRandom(new XORShiftRandom(0L) {
 				@Override
