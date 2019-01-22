@@ -1,0 +1,33 @@
+{
+  "name": "Solstice Warrior",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Deal 1 damage to adjacent minionsand give them +2 Attack.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "ADJACENT_MINIONS",
+          "attackBonus": 2
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ADJACENT_MINIONS",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
