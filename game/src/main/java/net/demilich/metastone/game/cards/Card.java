@@ -1146,21 +1146,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		return getCardType().isCardType(CardType.HERO_POWER);
 	}
 
-	public DynamicDescriptionDesc[] getDynamicDescription() {
-		return desc.getDynamicDescription();
-	}
-
-	public String[] evaluateDescriptions(GameContext context, Player player) {
-		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
-		String[] strings = new String[dynamicDescriptionDescs.length];
-
-		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
-			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
-		}
-		return strings;
-	}
-
-
 	@Override
 	public int compareTo(@NotNull Entity o) {
 		if (o instanceof Card) {

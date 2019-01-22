@@ -6,19 +6,19 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Permanent. Whenever a friendly minion is healed, summon a Lightwarden. (After 2 of your turns, this dies)",
+  "description": "Whenever a friendly minion is healed, summon a Lightwarden. Lasts [4 more] turns.",
   "triggers": [
     {
-      "countUntilCast": 2,
+      "countUntilCast": 4,
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "DestroySpell",
         "target": "SELF"
       },
-      "maxFires": 2
+      "maxFires": 4
     },
     {
       "eventTrigger": {
@@ -38,5 +38,17 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 4
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }

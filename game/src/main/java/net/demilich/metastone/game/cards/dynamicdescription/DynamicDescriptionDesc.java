@@ -1,8 +1,11 @@
 package net.demilich.metastone.game.cards.dynamicdescription;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.EventTriggerDescDeserializer;
+import net.demilich.metastone.game.entities.Entity;
 
 import java.util.Map;
 
@@ -32,6 +35,10 @@ public class DynamicDescriptionDesc extends Desc<DynamicDescriptionArg, DynamicD
 
 	@Override
 	public Desc<DynamicDescriptionArg, DynamicDescription> clone() {
-		return (DynamicDescriptionDesc) copyTo(new DynamicDescriptionDesc(getDescClass()));
+		return copyTo(new DynamicDescriptionDesc(getDescClass()));
+	}
+
+	public String getDynamicDescription(DynamicDescriptionArg arg, GameContext context, Player player, Entity entity) {
+		return ((DynamicDescription) get(arg)).resolveFinalString(context, player, entity);
 	}
 }

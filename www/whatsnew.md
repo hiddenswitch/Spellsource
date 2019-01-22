@@ -29,6 +29,9 @@ Additional bug fixes.
  - Breath of Fire now reads, "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)," which means all its damage effects gain spell power.
  - Wild Pyromancer, Flamewaker and other spell casted triggering effects no longer trigger off Scroll of Wonders, Tess Greymane or other force casts that reuse cards from the graveyard.
  - Immortal Prelate is now available for play.
+ - Magic Keg now correctly puts Chef spells into your hand.
+ - The Sands of Time Rifts (permanents) now show the number of turns left until they are removed. Their rules are simplified.
+ - Sherazin, Seed now shows the number of additional cards you need to play to revive it.
 
 ### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 

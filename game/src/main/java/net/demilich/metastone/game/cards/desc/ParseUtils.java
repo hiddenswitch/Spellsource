@@ -373,23 +373,25 @@ public class ParseUtils {
 			case CHOOSE_ONE_OVERRIDE:
 				return Enum.valueOf(ChooseOneOverride.class, jsonData.asText());
 			case DYNAMIC_DESCRIPTION:
-				if (jsonData.toString().startsWith("\"")) {
+				if (jsonData.isTextual()) {
 					DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
-					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.toString().replace("\"", ""));
-					return descriptionDesc;
+					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.asText());
+					return descriptionDesc.create();
 				}
-				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData);
+				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData).create();
 			case DYNAMIC_DESCRIPTION_ARRAY:
 				ArrayNode jsonArray = (ArrayNode) jsonData;
-				DynamicDescription[] array2 = new DynamicDescription[jsonArray.size()];
-				for (int i = 0; i < array2.length; i++) {
-					if (jsonArray.get(i).toString().startsWith("\"")) {
+				DynamicDescription[] dynamicDescriptions = new DynamicDescription[jsonArray.size()];
+				for (int i = 0; i < dynamicDescriptions.length; i++) {
+					if (jsonArray.get(i).isTextual()) {
 						DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
-						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).toString().replace("\"", ""));
-						array2[i] = descriptionDesc.create();
-					} else array2[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).asText());
+						dynamicDescriptions[i] = descriptionDesc.create();
+					} else {
+						dynamicDescriptions[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+					}
 				}
-				return array2;
+				return dynamicDescriptions;
 			default:
 				break;
 		}
