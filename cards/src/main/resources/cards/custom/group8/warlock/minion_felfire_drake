@@ -1,0 +1,59 @@
+{
+  "name": "Felfire Drake",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: Copy the Attack of the Demon in your hand with the highest Attack. Repeat for Health.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value" {
+            "filters": [
+              {
+                "class": "CardFilter",
+                "race": "DEMON"
+              }
+              },
+                "class": "HighestAttributeFilter",
+                "target": "FRIENDLY_HAND",
+                "attribute": "ATTACK"
+              } 
+            ]
+          },
+          "exclusive": true
+        },
+        {
+          "class": "SetHpSpell",
+          "value" {
+            "filters": [
+              {
+                "class": "CardFilter",
+                "race": "DEMON"
+              }
+              },
+                "class": "HighestAttributeFilter",
+                "target": "FRIENDLY_HAND",
+                "attribute": "HEALTH"
+              } 
+            ]
+          },  
+          "exclusive": true
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
