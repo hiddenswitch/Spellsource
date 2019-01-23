@@ -11,12 +11,14 @@ import io.vertx.core.Verticle;
 import io.vertx.core.VertxException;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
+import io.vertx.ext.web.impl.Utils;
 
 import java.io.IOException;
 import java.net.Inet4Address;
 import java.net.InterfaceAddress;
 import java.net.NetworkInterface;
 import java.net.SocketException;
+import java.text.DateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -114,6 +116,8 @@ import java.util.Comparator;
  * </pre></li></ol>
  */
 public interface Gateway extends Verticle {
+	DateFormat DATE_TIME_FORMATTER = Utils.createRFC1123DateTimeFormatter();
+
 	static Gateway create() {
 		return new GatewayImpl(Port.port());
 	}
