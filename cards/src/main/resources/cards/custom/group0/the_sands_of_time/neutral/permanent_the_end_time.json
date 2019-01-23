@@ -6,12 +6,12 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "At the end of the turn, summon a 2/2 Infinite Warden. Deathrattle: Destroy all enemies. (After 20 of your turns, this dies)",
+  "description": "At the end of your turn, summon a 2/2 Infinite Warden. Lasts [40 turns], then destroys all enemies.",
   "triggers": [
     {
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "EitherOrSpell",
@@ -33,7 +33,7 @@
           "attribute": "RESERVED_INTEGER_1"
         }
       },
-      "maxFires": 20
+      "maxFires": 40
     },
     {
       "eventTrigger": {
@@ -53,9 +53,21 @@
   "attributes": {
     "DEATHRATTLES": true,
     "PERMANENT": true,
-    "RESERVED_INTEGER_1": 20
+    "RESERVED_INTEGER_1": 40
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 40
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }

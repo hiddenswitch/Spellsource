@@ -2,7 +2,7 @@
   "name": "Metamorphosis",
   "baseManaCost": 9,
   "type": "SPELL",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Deal 3 damage to all minions. Gain 6 Armor. Enter Demonic form for 2 turns.",
   "targetSelection": "NONE",

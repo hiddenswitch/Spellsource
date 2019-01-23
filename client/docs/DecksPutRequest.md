@@ -40,6 +40,7 @@ NEONGREEN | &quot;NEONGREEN&quot;
 TEAL | &quot;TEAL&quot;
 DARKGREEN | &quot;DARKGREEN&quot;
 
+
 <a name="FormatEnum"></a>
 ## Enum: FormatEnum
 Name | Value

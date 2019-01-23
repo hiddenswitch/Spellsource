@@ -2,7 +2,7 @@
   "name": "Imprison",
   "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Give a minion \"Can't Attack.\" When it takes damage, Silence it.",
   "targetSelection": "MINIONS",

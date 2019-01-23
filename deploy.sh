@@ -32,7 +32,7 @@ Notes for successful deployment:
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.12 ./deploy.sh -cpdwv
+  SPELLSOURCE_VERSION=0.8.14 ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -300,9 +300,9 @@ if [[ "$deploy_launcher" = true ]] ; then
   # Build image and upload to docker
   { # try
     echo "Building and uploading launcher Docker image"
-    docker build -t doctorpangloss/launcher . > /dev/null && \
+    docker build -t launcher . > /dev/null && \
     rm -rf bundle && \
-    docker tag spellsource doctorpangloss/launcher > /dev/null && \
+    docker tag launcher doctorpangloss/launcher > /dev/null && \
     docker push doctorpangloss/launcher:latest > /dev/null
   } || { # catch
     echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
@@ -315,7 +315,7 @@ if [[ "$deploy_launcher" = true ]] ; then
     # Figure out the service ID
     service_name=spellsource_launcher
     portainer_image_name="doctorpangloss/launcher:latest"
-    update_portainer service_name portainer_image_name
+    update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update launcher service"
     exit 1
@@ -369,7 +369,7 @@ if [[ "$deploy_docker" = true ]] ; then
     # Figure out the service ID
     service_name=spellsource_game
     portainer_image_name="doctorpangloss/spellsource:latest"
-    update_portainer service_name portainer_image_name
+    update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update service"
     exit 1
@@ -411,7 +411,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.12-all.jar \
+      ./net/build/libs/net-0.8.14-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",
-  "description": "Deal 1 damage to a random enemy for each Silver Hand Recruit you've summoned this game.[]",
+  "description": "Deal $[0] damage to [random enemies]. (Increases each Silver Hand Recruit you summon this game)",
   "targetSelection": "ANY",
   "spell": {
     "class": "MissilesSpell",

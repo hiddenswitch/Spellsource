@@ -6,12 +6,12 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Remove the top 4 cards of your deck. In 4 turns, add them to your hand.",
+  "description": "Remove the top 4 cards of your deck. In [4 turns], add them to your hand.",
   "trigger": {
     "countUntilCast": 4,
     "eventTrigger": {
       "class": "TurnStartTrigger",
-      "targetPlayer": "SELF"
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "MetaSpell",
@@ -49,5 +49,17 @@
   },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 4
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }

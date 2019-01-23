@@ -12,6 +12,7 @@ import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
+import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.ext.mongo.UpdateOptions;
@@ -165,10 +166,7 @@ public interface Draft {
 								.mapToObj(i -> Games.getEntity(workingContext, HeroClass.getHeroCard(inState.getHeroClassChoices().get(i)), 0).id(i))
 								.collect(Collectors.toList()))
 				.losses(inState.getLosses())
-				.selectedCards(inState.getSelectedCards() == null ? null :
-						IntStream.range(0, inState.getSelectedCards().size())
-								.mapToObj(i -> Games.getEntity(workingContext, CardCatalogue.getCardById(inState.getSelectedCards().get(i)), 0).id(i))
-								.collect(Collectors.toList()))
+				.selectedCardIds(inState.getSelectedCards())
 				.status(DraftState.StatusEnum.valueOf(inState.getStatus().toString()))
 				.wins(inState.getWins());
 	}

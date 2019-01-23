@@ -1,0 +1,31 @@
+{
+  "name": "Mutating Monstrosity",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "After this minion survives damage, summon a copy of it.",
+   "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      },
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
+  "fileFormatVersion": 1
+}

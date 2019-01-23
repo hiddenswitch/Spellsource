@@ -2,7 +2,7 @@
   "name": "Feed the Demon",
   "baseManaCost": 8,
   "type": "SPELL",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "EPIC",
   "description": "Discard your Soul Fragments. Enter Demonic Form for that many turns.",
   "condition": {

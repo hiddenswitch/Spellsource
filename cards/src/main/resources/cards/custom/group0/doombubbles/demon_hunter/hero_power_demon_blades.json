@@ -2,7 +2,7 @@
   "name": "Demon Blades",
   "baseManaCost": 2,
   "type": "HERO_POWER",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Passive Hero Power. Your hero has +1 Attack during your turn.",
   "targetSelection": "NONE",

@@ -65,8 +65,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "DEATHRATTLES": true,
-    "SPELLSOURCE_NAME": "Emperor Colossus"
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "CUSTOM",

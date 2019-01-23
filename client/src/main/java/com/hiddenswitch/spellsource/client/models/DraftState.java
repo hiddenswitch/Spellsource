@@ -85,8 +85,8 @@ public class DraftState implements Serializable {
   @JsonProperty("status")
   private StatusEnum status = null;
 
-  @JsonProperty("selectedCards")
-  private List<Entity> selectedCards = null;
+  @JsonProperty("selectedCardIds")
+  private List<String> selectedCardIds = null;
 
   @JsonProperty("cardsRemaining")
   private Integer cardsRemaining = null;
@@ -191,30 +191,30 @@ public class DraftState implements Serializable {
     this.status = status;
   }
 
-  public DraftState selectedCards(List<Entity> selectedCards) {
-    this.selectedCards = selectedCards;
+  public DraftState selectedCardIds(List<String> selectedCardIds) {
+    this.selectedCardIds = selectedCardIds;
     return this;
   }
 
-  public DraftState addSelectedCardsItem(Entity selectedCardsItem) {
-    if (this.selectedCards == null) {
-      this.selectedCards = new ArrayList<>();
+  public DraftState addSelectedCardIdsItem(String selectedCardIdsItem) {
+    if (this.selectedCardIds == null) {
+      this.selectedCardIds = new ArrayList<>();
     }
-    this.selectedCards.add(selectedCardsItem);
+    this.selectedCardIds.add(selectedCardIdsItem);
     return this;
   }
 
    /**
-   * Get selectedCards
-   * @return selectedCards
+   * Get selectedCardIds
+   * @return selectedCardIds
   **/
   @ApiModelProperty(value = "")
-  public List<Entity> getSelectedCards() {
-    return selectedCards;
+  public List<String> getSelectedCardIds() {
+    return selectedCardIds;
   }
 
-  public void setSelectedCards(List<Entity> selectedCards) {
-    this.selectedCards = selectedCards;
+  public void setSelectedCardIds(List<String> selectedCardIds) {
+    this.selectedCardIds = selectedCardIds;
   }
 
   public DraftState cardsRemaining(Integer cardsRemaining) {
@@ -321,7 +321,7 @@ public class DraftState implements Serializable {
         Objects.equals(this.currentCardChoices, draftState.currentCardChoices) &&
         Objects.equals(this.heroClass, draftState.heroClass) &&
         Objects.equals(this.status, draftState.status) &&
-        Objects.equals(this.selectedCards, draftState.selectedCards) &&
+        Objects.equals(this.selectedCardIds, draftState.selectedCardIds) &&
         Objects.equals(this.cardsRemaining, draftState.cardsRemaining) &&
         Objects.equals(this.draftIndex, draftState.draftIndex) &&
         Objects.equals(this.wins, draftState.wins) &&
@@ -331,7 +331,7 @@ public class DraftState implements Serializable {
 
   @Override
   public int hashCode() {
-    return Objects.hash(heroClassChoices, currentCardChoices, heroClass, status, selectedCards, cardsRemaining, draftIndex, wins, losses, deckId);
+    return Objects.hash(heroClassChoices, currentCardChoices, heroClass, status, selectedCardIds, cardsRemaining, draftIndex, wins, losses, deckId);
   }
 
 
@@ -344,7 +344,7 @@ public class DraftState implements Serializable {
     sb.append("    currentCardChoices: ").append(toIndentedString(currentCardChoices)).append("\n");
     sb.append("    heroClass: ").append(toIndentedString(heroClass)).append("\n");
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
-    sb.append("    selectedCards: ").append(toIndentedString(selectedCards)).append("\n");
+    sb.append("    selectedCardIds: ").append(toIndentedString(selectedCardIds)).append("\n");
     sb.append("    cardsRemaining: ").append(toIndentedString(cardsRemaining)).append("\n");
     sb.append("    draftIndex: ").append(toIndentedString(draftIndex)).append("\n");
     sb.append("    wins: ").append(toIndentedString(wins)).append("\n");

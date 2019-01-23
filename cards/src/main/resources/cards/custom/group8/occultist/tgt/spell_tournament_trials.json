@@ -1,0 +1,27 @@
+{
+  "name": "Tournament Trial",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Choose a minion. Summon two 1/1 Tentacles to attack it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "SummonSpell",
+    "spell": {
+      "class": "FightSpell",
+      "target": "TARGET",
+      "secondaryTarget": "OUTPUT"
+    },
+    "cards": [
+      "token_tentacle",
+      "token_tentacle"
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_GRAND_TOURNAMENT"
+  ],
+  "fileFormatVersion": 1
+}

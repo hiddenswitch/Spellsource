@@ -1,0 +1,47 @@
+{
+  "name": "Forgotten Science",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "The next time you cast a spell on a minion, cast it on all other minions instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "SpellCastedTrigger",
+        "sourcePlayer": "SELF",
+        "targetEntityType": "MINION"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "AddAttributeSpell",
+            "target": "EVENT_SOURCE",
+            "attribute": "SILENCED"
+          },
+          {
+            "class": "CastCardsSpell",
+            "secondaryTarget": "EVENT_SOURCE",
+            "target": "ALL_MINIONS",
+            "filter": {
+              "class": "EntityEqualsFilter",
+              "secondaryTarget": "EVENT_TARGET",
+              "invert": true
+            }
+          }
+        ]
+      },
+      "maxFires": 1
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ],
+  "fileFormatVersion": 1
+}
