@@ -57,6 +57,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHeadlessHorseman() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_headless_horseman");
+			Minion headlessHorseman = player.getMinions().stream().filter(m -> m.getSourceCard().getCardId().equals("minion_headless_horseman")).findFirst().orElseThrow(AssertionError::new);
+			assertEquals(player.getMinions().size(), 7);
+			destroy(context, headlessHorseman);
+			assertTrue(player.getMinions().stream().noneMatch(m -> m.hasAttribute(Attribute.PERMANENT)));
+		});
+	}
+
+	@Test
 	public void testChaugnarTheCorruptor() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_neutral_test");
