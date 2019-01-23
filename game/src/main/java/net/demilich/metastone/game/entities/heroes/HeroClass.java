@@ -2,6 +2,12 @@ package net.demilich.metastone.game.entities.heroes;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.
@@ -119,8 +125,13 @@ public enum HeroClass {
 		}
 	}
 
+	@NotNull
+	public static List<HeroClass> getBaseClasses() {
+		return Arrays.stream(values()).filter(HeroClass::isBaseClass).collect(toList());
+	}
+
 	public boolean isBaseClass() {
-		HeroClass[] nonBaseClasses = {ANY, SELF, OPPONENT, INHERIT, SPIRIT};
+		HeroClass[] nonBaseClasses = {ANY, BRASS, SELF, OPPONENT, INHERIT, SPIRIT};
 		for (int i = 0; i < nonBaseClasses.length; i++) {
 			if (nonBaseClasses[i] == this) {
 				return false;
