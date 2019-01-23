@@ -3,7 +3,9 @@ package com.hiddenswitch.spellsource;
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.EntityState;
+import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.models.*;
+import io.vertx.core.Vertx;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
@@ -113,5 +115,16 @@ public interface Cards {
 							.entity(entity);
 				})
 				.collect(toList());
+	}
+
+	/**
+	 * Invalidates the card cache.
+	 */
+	@Suspendable
+	static void invalidateCardCache() {
+		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards::cards");
+		// Invalidate the cache here
+		cache.put("cards-version", Vertx.currentContext().deploymentID());
+		cache.put("cards-last-modified", Gateway.DATE_TIME_FORMATTER.format(new Date()));
 	}
 }

@@ -11,6 +11,7 @@ import com.hiddenswitch.spellsource.models.DraftActionRequest;
 import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.core.Future;
 import io.vertx.ext.unit.TestContext;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.Test;
 
@@ -28,7 +29,7 @@ public class DraftTest extends SpellsourceTestBase {
 
 			// Choose a hero
 			assertNotNull(response.getPublicDraftState().getHeroClassChoices());
-			assertEquals(3, response.getPublicDraftState().getHeroClassChoices().size());
+			assertEquals(HeroClass.getBaseClasses().size(), response.getPublicDraftState().getHeroClassChoices().size());
 
 			response = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(car.getUserId())
@@ -86,7 +87,7 @@ public class DraftTest extends SpellsourceTestBase {
 			context.assertNotNull(card, "The draft service should provide a full card definition.");
 			context.assertNotNull(card.getCardId(), "The draft service should at least provide a card ID.");
 			state = api.draftsChooseCard(new DraftsChooseCardRequest().cardIndex(1));
-			context.assertEquals(card.getCardId(), state.getSelectedCards().get(state.getSelectedCards().size() - 1).getCardId(), "The card didn't appear to be selected correctly");
+			context.assertEquals(card.getCardId(), state.getSelectedCardIds().get(state.getSelectedCardIds().size() - 1), "The card didn't appear to be selected correctly");
 		}
 
 		context.assertEquals(DraftState.StatusEnum.COMPLETE, state.getStatus(), "The status of the draft should be complete.");
