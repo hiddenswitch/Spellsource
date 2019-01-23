@@ -14,6 +14,8 @@ Bug fixes.
 ##### Content Fixes:
 
  - Wither now hits shields, like Divine Shield and Deflect. If Wither is blocked by the shield, the Wither effect does not occur and the shield is lost. When Wither hits a Deflect, the hero takes damage equal to the Wither amount instead.
+ - Night Knight and Underworld Keeper are now correctly Baron cards.
+ - Kahl of the Deep and Cult Promoter are not correctly Occultist cards.
 
 ### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
 
