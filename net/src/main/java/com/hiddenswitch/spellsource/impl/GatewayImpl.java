@@ -27,13 +27,11 @@ import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
-import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
@@ -56,7 +54,6 @@ import static java.util.stream.Collectors.toList;
  */
 public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
-	private static final DateFormat dateTimeFormatter = Utils.createRFC1123DateTimeFormatter();
 	private final int port;
 	private HttpServer server;
 	private Closeable queues;
@@ -355,6 +352,8 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(authHandler);
 		router.route("/invites")
 				.method(HttpMethod.POST);
+
+		Cards.invalidateCardCache();
 
 		server.requestHandler(router);
 		HttpServer listening = awaitResult(server::listen);
@@ -696,21 +695,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards::cards");
-		// Our objective is to create a cards version ONCE for the entire cluster
-		final String thisCardsVersionId = deploymentID();
-		final String thisDate = dateTimeFormatter.format(new Date());
-		String cardsVersion = (String) cache.putIfAbsent("cards-version", thisCardsVersionId);
-		String lastModified = (String) cache.putIfAbsent("cards-last-modified", thisDate);
-		if (cardsVersion == null) {
-			cardsVersion = thisCardsVersionId;
-		}
-		if (lastModified == null) {
-			lastModified = thisDate;
-		}
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards::cards");
+
+		String cardsVersion = cache.get("cards-version");
+		String lastModified = cache.get("cards-last-modified");
 
 		context.response().putHeader("ETag", cardsVersion);
-		final String userVersion = context.request().getHeader("If-None-Match");
+		String userVersion = context.request().getHeader("If-None-Match");
 		if (userVersion != null &&
 				userVersion.equals(cardsVersion)) {
 			return WebResult.succeeded(304, new GetCardsResponse().version(cardsVersion));
@@ -718,7 +709,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		context.response().putHeader("Cache-Control", "public, max-age=31536000");
 		context.response().putHeader("Last-Modified", lastModified);
-		context.response().putHeader("Date", thisDate);
+		context.response().putHeader("Date", DATE_TIME_FORMATTER.format(new Date()));
 
 		if (context.request().method() == HttpMethod.HEAD) {
 			return WebResult.succeeded(new GetCardsResponse().version(cardsVersion));
