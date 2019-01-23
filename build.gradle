@@ -7,7 +7,7 @@ subprojects {
     apply plugin: 'maven-publish'
 
     sourceCompatibility = 1.8
-    project.version = '0.8.13'
+    project.version = '0.8.14'
     
     repositories {
         mavenCentral()
