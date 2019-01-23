@@ -108,7 +108,9 @@ public interface Cards {
 				.map(entity -> {
 					// Don't waste space storing locations on these
 					entity.getState().location(null);
-					return new CardRecord().entity(entity);
+					return new CardRecord()
+							.id(entity.getCardId())
+							.entity(entity);
 				})
 				.collect(toList());
 	}

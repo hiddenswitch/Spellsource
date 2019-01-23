@@ -1,0 +1,46 @@
+{
+  "name": "Faceless Shifter",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "After you play a minion, copy its Attack and Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "target": "SELF",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "EVENT_TARGET",
+            "attribute": "ATTACK"
+          }
+        },
+        {
+          "class": "SetHpSpell",
+          "target": "SELF",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "EVENT_TARGET",
+            "attribute": "HP"
+          }
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
+  ],
+  "fileFormatVersion": 1
+}

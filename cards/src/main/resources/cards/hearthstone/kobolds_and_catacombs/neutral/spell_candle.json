@@ -40,10 +40,6 @@
               {
                 "class": "RemoveAttributeSpell",
                 "attribute": "PERMANENT"
-              },
-              {
-                "class": "SetDescriptionSpell",
-                "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens."
               }
             ]
           }
@@ -90,10 +86,6 @@
             {
               "class": "RemoveAttributeSpell",
               "attribute": "PERMANENT"
-            },
-            {
-              "class": "SetDescriptionSpell",
-              "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens."
             }
           ]
         }

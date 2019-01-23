@@ -1,7 +1,7 @@
 {
   "name": "Demonic Form",
   "type": "ENCHANTMENT",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Your hero power is Demonic Form. Lasts a certain number of turns",
   "aura": {

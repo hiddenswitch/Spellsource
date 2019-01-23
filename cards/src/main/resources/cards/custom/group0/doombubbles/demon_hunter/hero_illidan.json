@@ -3,7 +3,7 @@
   "heroPower": "hero_power_demons_bite",
   "baseManaCost": 0,
   "type": "HERO",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Hero Power: +1 Attack this turn. Attack a minion.",
   "attributes": {

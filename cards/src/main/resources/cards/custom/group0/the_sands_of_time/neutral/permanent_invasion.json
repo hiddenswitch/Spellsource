@@ -6,19 +6,19 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Permanent. At the end of your turn, summon two random 1-Cost minions. The next two cost (1) more. (After 4 of your turns, this dies)",
+  "description": "At the end of your turn, summon two random [1]-Cost minions, increasing each time. Lasts [8 turns].",
   "triggers": [
     {
-      "countUntilCast": 4,
+      "countUntilCast": 8,
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "DestroySpell",
         "target": "SELF"
       },
-      "maxFires": 4
+      "maxFires": 8
     },
     {
       "eventTrigger": {
@@ -70,5 +70,25 @@
   },
   "collectible": false,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1"
+      }
+    },
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 4
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }

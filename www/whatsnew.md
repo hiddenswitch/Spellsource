@@ -3,15 +3,46 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.14-2.0.23 (Tuesday, January 22nd, 2019)
+
+Bug fixes and draft improvements.
+
+##### Usability Fixes:
+
+ - Draft mode now allows you to retire at any time, choose any hero, and only serves community cards.
+
+##### Content Additions:
+
+ - The Dragoon cards Runt Leader and Cult Reverend.
+ 
+##### Content Fixes:
+
+ - Wither now hits shields, like Divine Shield and Deflect. If Wither is blocked by the shield, the Wither effect does not occur and the shield is lost. When Wither hits a Deflect, the hero takes damage equal to the Wither amount instead.
+ - Night Knight and Underworld Keeper are now correctly Baron cards.
+ - Kahl of the Deep and Cult Promoter are not correctly Occultist cards.
+ - Acherus Deathgate now correctly draws a card from your deck.
+ - Lich's Phylactery is now called Phylactery and costs 4.
+ - Poison Cloud no longer crashes the game.
+ - The Rafaam Staff Pieces have better names now.
+
 ### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
 
-Introducing more cards from Verdant Dreams (thanks @Rumu).
+Thanks to a contribution from @Pircival, @Walrus, @Logovaz and @Muhframos, introducing a Spellsource Basic set.
 
-Other bug fixes to Bug.
+Thanks to a contribution from @Muhframos, introducing the Occultist class.
+
+And thanks to a contribution from @Rumu11, we have more Verdant Dreams cards.
+
+Use the **Spellsource** format to use the new basic set and only custom classes and cards.
+
+Additional bug fixes.
 
 ##### Content Additions:
 
  - Additional Verdant Dreams expansion cards.
+ - A Spellsource Basic set, with 55 neutral minions.
+ - The new Occultist class, with 67 cards and tokens.
+ - The Basic Spellsource set.
 
 ##### Content Fixes:
 
@@ -20,6 +51,15 @@ Other bug fixes to Bug.
  - Maexnna's Femur now costs 8 mana and has 2 durability.
  - Swarm Shield now costs 2 mana and gives a multiplier of 3 armor.
  - Breath of Fire now reads, "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)," which means all its damage effects gain spell power.
+ - Wild Pyromancer, Flamewaker and other spell casted triggering effects no longer trigger off Scroll of Wonders, Tess Greymane or other force casts that reuse cards from the graveyard.
+ - Immortal Prelate is now available for play.
+ - Magic Keg now correctly puts Chef spells into your hand.
+ - The Sands of Time Rifts (permanents) now show the number of turns left until they are removed. Their rules are simplified.
+ - Sherazin, Seed now shows the number of additional cards you need to play to revive it.
+ - Gobble is now 2 Mana and reads "Destroy the lowest Attack enemy minion on the battlefield."
+ - Rheastrasza is now 10 Mana.
+ - Blade of Eventide now reads "Deathrattle: If your deck has only even-Cost cards, destroy the lowest Attack enemy minion."
+ - Molten Whelp is now replaced with Vermillion Glider. 
 
 ### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
 
@@ -116,34 +156,3 @@ And also, we get a great contribution from @AnterogradeNil: Introducing the Othe
  - Ritual Dagger now correctly adds a random Voodoo spell to your hand instead of the Truesilver effect.
  - Shadow Puppetry now costs (3).
  - Divination and Spirit Bind tokens from Hero Power now give +2 Health and Restore 2 Health respectively.
-
-### 0.8.8-2.0.20 (Friday, January 4th, 2019)
-
-The Hidden Switch Launcher for Windows has been updated to 1.1.0 and should start on the latest updates to Windows 10 now.
-
-Additionally, the Collection view on Windows clients now correctly shows cards again.
-
-### 0.8.8-2.0.19 (Friday, January 4th, 2019)
-
-Happy New Years to all Spellsource players!
-
-The server has been migrated in this release.
-
-###### Content Fixes:
-
- - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
- - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
- - Abomination's Might, previously mis-named Icy Talon, now has a new name.
- - Dancing Rune Weapon now draws a card.
- - The spell Rune Tap now costs (1).
- - Chains of Ice now draws a card correctly.
- - Dyn-o-Matic now correctly deals 5 damage to random targets.
- - Bwonsamdi from Witch Doctor no longer causes an infinite recursion when each player controls one.
-
-###### Usability Fixes:
-
- - Attacks no longer animate twice.
- - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
- - The server is now hosted locally in California instead of Oregon.
- - Server deployments will result in less downtime. Downtime is reduced from around 10 minutes to less than 20 seconds.
- - Patches can occur more frequently. In the previous infrastructure, patches could only be applied at most once per hour. Patches can now be applied as frequently as possible.

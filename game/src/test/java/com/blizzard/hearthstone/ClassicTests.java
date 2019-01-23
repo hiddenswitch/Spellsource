@@ -46,6 +46,17 @@ import static org.testng.Assert.assertTrue;
 public class ClassicTests extends TestBase {
 
 	@Test
+	public void testForceCastDoesntTriggerWildPyromancer() {
+		runGym((context, player, opponent) -> {
+			Minion pyromancer = playMinionCard(context, player, "minion_wild_pyromancer");
+			playCard(context, player, "minion_force_cast_test");
+			assertEquals(pyromancer.getHp(), pyromancer.getMaxHp(), "Should not have triggered Pyromancer");
+			playCard(context, player, "spell_the_coin");
+			assertEquals(pyromancer.getHp(), pyromancer.getMaxHp() - 1, "Should have triggered Pyromancer");
+		});
+	}
+
+	@Test
 	public void testGadgetzanAuctioneer() {
 		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");

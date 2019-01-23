@@ -228,8 +228,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
-		clone.storedEnchantments = new ArrayList<>();
 		deathrattleEnchantments.forEach(de -> clone.deathrattleEnchantments.add(de.clone()));
+		clone.storedEnchantments = new ArrayList<>();
 		clone.storedEnchantments.addAll(storedEnchantments);
 		return clone;
 	}
@@ -1145,21 +1145,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public boolean isHeroPower() {
 		return getCardType().isCardType(CardType.HERO_POWER);
 	}
-
-	public DynamicDescriptionDesc[] getDynamicDescription() {
-		return getDesc().getDynamicDescription();
-	}
-
-	public String[] evaluateDescriptions(GameContext context, Player player) {
-		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
-		String[] strings = new String[dynamicDescriptionDescs.length];
-
-		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
-			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
-		}
-		return strings;
-	}
-
 
 	@Override
 	public int compareTo(@NotNull Entity o) {

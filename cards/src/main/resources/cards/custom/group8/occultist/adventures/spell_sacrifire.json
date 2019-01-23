@@ -1,0 +1,33 @@
+{
+  "name": "Sacrifire",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Deal $8 damage to a random friendly and enemy minion.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 8,
+        "randomTarget": true
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 8,
+        "randomTarget": true
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BLACKROCK_MOUNTAIN"
+  ],
+  "fileFormatVersion": 1
+}

@@ -2,7 +2,7 @@
   "name": "Underworld Keeper",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",

@@ -1,0 +1,19 @@
+{
+  "name": "Profane Disfiguration",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Transform a minion into a 6/6 Aberration.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "card": "token_aberration"
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}

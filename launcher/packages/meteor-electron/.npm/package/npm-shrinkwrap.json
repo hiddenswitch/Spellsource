@@ -2179,11 +2179,6 @@
         }
       }
     },
-    "nslog": {
-      "version": "3.0.0",
-      "resolved": "https://registry.npmjs.org/nslog/-/nslog-3.0.0.tgz",
-      "integrity": "sha1-nvfjpGveHnVyRFQcyhP/K2dvexk="
-    },
     "nugget": {
       "version": "1.6.2",
       "resolved": "https://registry.npmjs.org/nugget/-/nugget-1.6.2.tgz",

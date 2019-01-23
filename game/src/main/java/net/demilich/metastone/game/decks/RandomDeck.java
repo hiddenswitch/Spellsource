@@ -9,11 +9,8 @@ import net.demilich.metastone.game.decks.validation.DeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.RandomUtils;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * A deck that was randomly created.
@@ -59,7 +56,7 @@ public final class RandomDeck extends GameDeck {
 	}
 
 	private static HeroClass getRandomHeroClass() {
-		List<HeroClass> baseHeroes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
+		List<HeroClass> baseHeroes = HeroClass.getBaseClasses();
 		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 	}
 

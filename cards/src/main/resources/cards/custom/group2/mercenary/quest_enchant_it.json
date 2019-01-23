@@ -14,7 +14,7 @@
       "invert": true,
       "operation": "HAS"
     },
-    "targetPlayer": "SELF"
+    "sourcePlayer": "SELF"
   },
   "countUntilCast": 1,
   "targetSelection": "NONE",

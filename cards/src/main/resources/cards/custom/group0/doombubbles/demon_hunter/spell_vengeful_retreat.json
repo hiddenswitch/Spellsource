@@ -2,7 +2,7 @@
   "name": "Vengeful Retreat",
   "baseManaCost": 0,
   "type": "SPELL",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "COMMON",
   "description": "Return a friendly minion to your hand. Give it Rush.",
   "targetSelection": "FRIENDLY_MINIONS",

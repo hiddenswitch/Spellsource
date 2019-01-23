@@ -6,43 +6,7 @@
   "baseAttack": 20,
   "baseHp": 20,
   "rarity": "LEGENDARY",
-  "description": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.",
-  "aura": {
-    "class": "Aura",
-    "target": "SELF",
-    "applyEffect": {
-      "class": "ConditionalEffectSpell",
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "PERMANENT",
-        "operation": "HAS"
-      },
-      "exclusive": true,
-      "spell1": {
-        "class": "SetDescriptionSpell"
-      },
-      "spell2": {
-        "class": "SetDescriptionSpell",
-        "description": "Permanent. When your opponent draws 3 Candles, this awakens!"
-      }
-    },
-    "removeEffect": {
-      "class": "ConditionalEffectSpell",
-      "condition": {
-        "class": "AttributeCondition",
-        "attribute": "PERMANENT",
-        "operation": "HAS"
-      },
-      "exclusive": true,
-      "spell1": {
-        "class": "SetDescriptionSpell",
-        "description": "Permanent. When your opponent draws 3 Candles, this awakens!"
-      },
-      "spell2": {
-        "class": "SetDescriptionSpell"
-      }
-    }
-  },
+  "description": "[Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens.]",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -59,5 +23,49 @@
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "AttributeCondition",
+            "attribute": "PERMANENT",
+            "target": "SELF",
+            "operation": "HAS"
+          },
+          {
+            "class": "AllMatchFilterCondition",
+            "target": "SELF",
+            "filter": {
+              "class": "EntityTypeFilter",
+              "entityType": "MINION"
+            }
+          }
+        ]
+      },
+      "description1": {
+        "class": "MetaDescription",
+        "descriptions": [
+          "When your opponent draws ",
+          {
+            "class": "PluralDescription",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "SELF",
+              "attribute": "RESERVED_INTEGER_1",
+              "multiplier": -1,
+              "offset": 3
+            },
+            "description1": " Candle",
+            "description2": " Candles"
+          },
+          ", this awakens!"
+        ]
+      },
+      "description2": "Starts dormant. Battlecry: Shuffle 3 Candles into the enemy deck. When drawn, this awakens."
+    }
+  ]
 }

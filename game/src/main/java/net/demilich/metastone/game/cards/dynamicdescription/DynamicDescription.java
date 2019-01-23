@@ -2,9 +2,9 @@ package net.demilich.metastone.game.cards.dynamicdescription;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
+import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 
 /**
@@ -50,7 +50,7 @@ public abstract class DynamicDescription extends CustomCloneable implements HasD
 		this.desc = desc;
 	}
 
-	public abstract String resolveFinalString(GameContext context, Player player, Card card);
+	public abstract String resolveFinalString(GameContext context, Player player, Entity entity);
 
 	@Override
 	public DynamicDescriptionDesc getDesc() {

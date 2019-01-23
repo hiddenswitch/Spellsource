@@ -2,7 +2,7 @@
   "name": "Soul Fragment",
   "baseManaCost": 1,
   "type": "SPELL",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Restore #4 Health.",
   "targetSelection": "ANY",

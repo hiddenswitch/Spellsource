@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 3.0.0
+  version: 3.0.1
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -1174,10 +1174,10 @@ definitions:
           - 'SELECT_HERO'
           - 'COMPLETE'
           - 'RETIRED'
-      selectedCards:
+      selectedCardIds:
         type: 'array'
         items:
-          $ref: '#/definitions/Entity'
+          type: 'string'
       cardsRemaining:
         description: |
           Gets the number of card choices remaining to make.

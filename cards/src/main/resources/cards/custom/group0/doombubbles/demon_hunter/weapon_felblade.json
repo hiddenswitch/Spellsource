@@ -2,7 +2,7 @@
   "name": "Felblade",
   "baseManaCost": 3,
   "type": "WEAPON",
-  "heroClass": "DARKGREEN",
+  "heroClass": "PURPLE",
   "damage": 3,
   "durability": 2,
   "rarity": "COMMON",

@@ -1,0 +1,23 @@
+{
+  "name": "Crystal Shatterer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Destroy your opponent's weapon.",
+  "battlecry": {
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_WEAPON"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
