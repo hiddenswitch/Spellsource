@@ -3,9 +3,9 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
-### 0.8.14-2.0.22 (Tuesday, January 22nd, 2019)
+### 0.8.14-2.0.23 (Tuesday, January 22nd, 2019)
 
-Bug fixes.
+Bug fixes and draft improvements.
 
 ##### Usability Fixes:
 
@@ -156,34 +156,3 @@ And also, we get a great contribution from @AnterogradeNil: Introducing the Othe
  - Ritual Dagger now correctly adds a random Voodoo spell to your hand instead of the Truesilver effect.
  - Shadow Puppetry now costs (3).
  - Divination and Spirit Bind tokens from Hero Power now give +2 Health and Restore 2 Health respectively.
-
-### 0.8.8-2.0.20 (Friday, January 4th, 2019)
-
-The Hidden Switch Launcher for Windows has been updated to 1.1.0 and should start on the latest updates to Windows 10 now.
-
-Additionally, the Collection view on Windows clients now correctly shows cards again.
-
-### 0.8.8-2.0.19 (Friday, January 4th, 2019)
-
-Happy New Years to all Spellsource players!
-
-The server has been migrated in this release.
-
-###### Content Fixes:
-
- - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
- - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
- - Abomination's Might, previously mis-named Icy Talon, now has a new name.
- - Dancing Rune Weapon now draws a card.
- - The spell Rune Tap now costs (1).
- - Chains of Ice now draws a card correctly.
- - Dyn-o-Matic now correctly deals 5 damage to random targets.
- - Bwonsamdi from Witch Doctor no longer causes an infinite recursion when each player controls one.
-
-###### Usability Fixes:
-
- - Attacks no longer animate twice.
- - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
- - The server is now hosted locally in California instead of Oregon.
- - Server deployments will result in less downtime. Downtime is reduced from around 10 minutes to less than 20 seconds.
- - Patches can occur more frequently. In the previous infrastructure, patches could only be applied at most once per hour. Patches can now be applied as frequently as possible.
