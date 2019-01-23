@@ -17,6 +17,7 @@ Bug fixes.
  - Night Knight and Underworld Keeper are now correctly Baron cards.
  - Kahl of the Deep and Cult Promoter are not correctly Occultist cards.
  - Acherus Deathgate now correctly draws a card from your deck.
+ - Lich's Phylactery is now called Phylactery and costs 4.
 
 ### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
 
