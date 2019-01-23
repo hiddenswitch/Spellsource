@@ -7,6 +7,10 @@ permalink: /whats-new/
 
 Bug fixes.
 
+##### Usability Fixes:
+
+ - Draft mode now allows you to retire at any time, choose any hero, and only serves community cards.
+
 ##### Content Additions:
 
  - The Dragoon cards Runt Leader and Cult Reverend.
