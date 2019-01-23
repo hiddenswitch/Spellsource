@@ -2,7 +2,7 @@
   "name": "Cult Promoter",
   "baseManaCost": 2,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "DARKGREEN",
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",

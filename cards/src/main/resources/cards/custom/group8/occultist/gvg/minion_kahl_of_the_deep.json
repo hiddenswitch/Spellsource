@@ -2,7 +2,7 @@
   "name": "Kahl of the Deep",
   "baseManaCost": 8,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "DARKGREEN",
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "LEGENDARY",
