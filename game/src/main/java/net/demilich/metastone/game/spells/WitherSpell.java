@@ -4,6 +4,7 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -20,6 +21,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * Reduces the health of the {@code target} by the {@code source} entity's {@link Attribute#WITHER} value. If {@link
  * SpellArg#VALUE} is specified, use that instead. At the start of the casting {@code player}'s next turn, restores
  * (without triggering healing) the health of the minion.
+ * <p>
+ * Wither is blocked by shield like {@link Attribute#DIVINE_SHIELD} and {@link Attribute#DEFLECT}.
  * <p>
  * Wither does <b>not</b> affect {@link EntityType#HERO} entities.
  * <p>
@@ -39,6 +42,11 @@ public final class WitherSpell extends Spell {
 		int witherAmount = source.getAttributeValue(Attribute.WITHER);
 		if (desc.containsKey(SpellArg.VALUE)) {
 			witherAmount = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+		}
+
+		// Try to hit shields. If they were hit, we're done. Otherwise, wither was not blocked.
+		if (context.getLogic().hitShields(player, witherAmount, source, (Actor) target)) {
+			return;
 		}
 
 		EventTriggerDesc revertTrigger = TurnStartTrigger.create(player.getId() == GameContext.PLAYER_1 ? TargetPlayer.PLAYER_1 : TargetPlayer.PLAYER_2);

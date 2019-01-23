@@ -46,6 +46,18 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testWitherShouldNotTriggerOnDivineShield() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_divine_shield_test");
+			playCard(context, player, "spell_wither_test", target);
+			assertEquals(target.getAttack(), target.getBaseAttack());
+			assertEquals(target.getHp(), target.getMaxHp());
+			assertEquals(target.getHp(), target.getBaseHp());
+			assertFalse(target.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+	}
+
+	@Test
 	public void testCopyingEnchantments() {
 		runGym((context, player, opponent) -> {
 			// Should give us exactly two auras

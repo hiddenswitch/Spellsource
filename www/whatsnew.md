@@ -10,6 +10,10 @@ Bug fixes.
 ##### Content Additions:
 
  - The Dragoon cards Runt Leader and Cult Reverend.
+ 
+##### Content Fixes:
+
+ - Wither now hits shields, like Divine Shield and Deflect. If Wither is blocked by the shield, the Wither effect does not occur and the shield is lost. When Wither hits a Deflect, the hero takes damage equal to the Wither amount instead.
 
 ### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
 

@@ -1259,18 +1259,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return damage;
 		}
 
-		if (minion.hasAttribute(Attribute.DIVINE_SHIELD)) {
-			removeAttribute(minion, Attribute.DIVINE_SHIELD);
-			context.fireGameEvent(new LoseDivineShieldEvent(context, minion, minion.getOwner(), source.getOwner()));
+		if (hitShields(player, damage, source, minion)) {
 			return 0;
 		}
-		if (minion.hasAttribute(Attribute.DEFLECT)
-				&& minion.getHp() <= damage) {
-			removeAttribute(minion, Attribute.DEFLECT);
-			context.fireGameEvent(new LoseDeflectEvent(context, minion, player.getId(), source.getId()));
-			damage(player, (Actor) context.getPlayer(minion.getOwner()).getHero(), damage, source, true);
-			return 0;
-		}
+
 		if (minion.hasAttribute(Attribute.IMMUNE) || minion.hasAttribute(Attribute.AURA_IMMUNE)) {
 			return 0;
 		}
@@ -1281,6 +1273,36 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		minion.setHp(minion.getHp() - damage);
 		handleHpChange(minion);
 		return damage;
+	}
+
+	/**
+	 * Processes a hit against possible shields on the {@code target} {@link Actor}.
+	 * <p>
+	 * {@link Attribute#DIVINE_SHIELD} and {@link Attribute#DEFLECT} are the two kinds of shields currently supported.
+	 * <p>
+	 * This will have side effects for {@link Attribute#DEFLECT}.
+	 *
+	 * @param player the caster of this effect
+	 * @param damage the damage that would be otherwise dealt
+	 * @param source the source of the damage
+	 * @param target the target
+	 * @return {@code true} if a shield was hit, otherwise {@code false}.
+	 */
+	@Suspendable
+	public boolean hitShields(Player player, int damage, Entity source, Actor target) {
+		if (target.hasAttribute(Attribute.DIVINE_SHIELD)) {
+			removeAttribute(target, Attribute.DIVINE_SHIELD);
+			context.fireGameEvent(new LoseDivineShieldEvent(context, target, target.getOwner(), source.getOwner()));
+			return true;
+		}
+		if (target.hasAttribute(Attribute.DEFLECT)
+				&& target.getHp() <= damage) {
+			removeAttribute(target, Attribute.DEFLECT);
+			context.fireGameEvent(new LoseDeflectEvent(context, target, player.getId(), source.getId()));
+			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true);
+			return true;
+		}
+		return false;
 	}
 
 	/**
