@@ -1,6 +1,6 @@
 {
   "name": "Peroth'arn",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "ROGUE",
   "baseAttack": 2,
