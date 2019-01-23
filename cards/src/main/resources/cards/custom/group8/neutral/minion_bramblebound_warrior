@@ -1,0 +1,27 @@
+{
+  "name": "Bramblebound Warrior",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Whenever your weapon is destroyed, give your hero Windfury this turn only.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "WeaponDestroyedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "WINDFURY",
+      "revertTrigger": {
+        "class": "TurnEndTrigger"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
