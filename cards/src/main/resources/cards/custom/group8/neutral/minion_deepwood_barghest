@@ -1,0 +1,48 @@
+{
+  "name": "Deepwood Barghest",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: If your deck has no Secrets, add two Emerald Secrets to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "FRIENDLY_DECK",
+          "cardFilter": {
+            "class": "CardFilter",
+            "attribute": "SECRET",
+            "operation": "HAS"
+          }
+        },
+        "value2": 0
+      },
+      {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
