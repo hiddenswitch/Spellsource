@@ -11,13 +11,13 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-	  "class": "MetaSpell",
-	  "spells": [
+      "class": "MetaSpell",
+      "spells": [
         "class": "FromDeckToHandSpell",
         "value": 2,
-	    "cardFilter": {
-          "class": "AndFilter",
-          "filters": [
+	  "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
             {
               "class": "CardFilter",
               "cardType": "MINION"
@@ -40,7 +40,7 @@
             }
           ]
         },
-	    "spell": {
+	"spell": {
           "class": "MetaSpell",
           "target": "OUTPUT",
           "spells": [
