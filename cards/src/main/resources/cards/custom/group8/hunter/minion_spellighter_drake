@@ -1,0 +1,34 @@
+{
+  "name": "Spellighter Drake",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Battlecry: Discover a 1-Cost spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "cardType": "SPELL",
+        "operation": "EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
