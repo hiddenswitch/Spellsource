@@ -1,0 +1,21 @@
+{
+  "name": "Venomflower Maiden",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Poisonous. Adjacent minions have Poisonous.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "ADJACENT_MINIONS",
+    "attribute": "POISONOUS"
+  },
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
