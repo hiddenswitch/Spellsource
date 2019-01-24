@@ -6,6 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
+  "race": "TOTEM",
   "description": "Taunt. Deathrattle: Set your 0 and 1-Attack minions Attack to 2.",
   "deathrattle": {
     "class": "SetAttackSpell",
