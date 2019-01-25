@@ -1,0 +1,40 @@
+{
+  "name": "Centaur Acumen",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Reduce the Cost of 1-Cost spells in your hand by (1).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SUBTRACT"
+      },
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "ManaCostFilter",
+          "value": 1,
+          "operation": "EQUAL"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
