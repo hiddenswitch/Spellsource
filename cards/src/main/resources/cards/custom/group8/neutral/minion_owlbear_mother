@@ -1,0 +1,32 @@
+{
+  "name": "Owlbear Mother",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "<b>Deathrattle:</b> Summon two 0/1 Owlbear Babies.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_owlbear_baby"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "LEFT",
+        "card": "token_owlbear_baby"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
