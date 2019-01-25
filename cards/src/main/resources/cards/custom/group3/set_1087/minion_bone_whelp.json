@@ -13,7 +13,7 @@
     "condition": {
       "class": "AnyMatchFilterCondition",
       "target": "OTHER_FRIENDLY_MINIONS",
-      "cardFilter": {
+      "filter": {
         "class": "RaceFilter",
         "race": "DRAGON"
       }

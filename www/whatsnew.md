@@ -3,6 +3,23 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.15-2.0.24 (Friday, January 25th, 2019)
+
+Important usability fixes for the WebGL build.
+
+##### Usability Fixes:
+
+ - Matchmaking now works correctly when the applications do not have focus, in all builds. This was a regression.
+ - Draft retire button now enabled at the right times.
+ - Copying and pasting deck lists are supported, in a primitive way, in the WebGL build.
+ - Battlecry power history entries have the correct text now.
+
+##### Content Fixes:
+
+ - Bone Whelp now correctly only returns itself to hand when there are other dragons under your control.
+ - Boss Harambo now correctly adds Bananas, instead of Coins, to your hand.
+ - Roasting cards now appears in the power history.
+
 ### 0.8.14-2.0.23 (Tuesday, January 22nd, 2019)
 
 Bug fixes and draft improvements.
@@ -124,35 +141,3 @@ Additionally, the client has been upgraded for better performance.
  - Rotten Curse no longer gives Immune to your hero.
  - Overdrive now only affects friendly minions.
  - Heartpiercer now only drains from minions it hit.
-
-### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
-
-Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
-
-And also, we get a great contribution from @AnterogradeNil: Introducing the Otherworlder class!
-
-@Pircival contributed new Baron cards and fixes.
-
-@Logovaz contributed new Witch Doctor cards.
-
-@LyokoBarbossa also contributed fixes.
-
-##### Content Additions:
-
- - The Blood Knight class, starting with 38 cards and tokens.
- - The Otherworlder class, starting with 34 cards and tokens.
- - The new Baron cards Pawshop Trader, Smug Smuggler, Trisword Swinger, and Vanal Petkiper.
- - The new Witch Doctor cards Aberration, Chant Leader, Fading Berserker, Raptor Rider Raider, Tainted Raven, Temple Watcher, Tiki Tokens, Wolpertinger, Zalmah, Awakening Ritual, Bottled Spirit, False Promise, Ghostly Essence, Haunted Happenings, Paranoia, Rotten Curse, Shadow Puppetry, Spirit Bind, Spiritball, Bloodshed Reaver, and Spirit Wand.
-
-##### Content Fixes:
-
- - Healing in excess of the health that can actually be restored no longer incorrectly triggers Pearl Spellstones, Soup Vendor, Blackguard, Virtuous Vapor, or Azjol Visionary.
- - Cards that summon themselves on Deathrattle like Sacred Tombstone and Kil'jaeden, Deceiver no longer cause infinite loops.
- - Meat Construct no longer causes infinite loops.
- - Bronze Timekeeper now correctly triggers turn start and end enchantments that do something to their hosts.
- - Fight! now gives a friendly and random enemy minion +3/+3 (was +4 Attack) and now costs 2 (was 1).
- - One For All now gives the next minion you play this turn +2/+2 (was +3/+1).
- - Crone's Attendant is now a Beast (Instead of a Mech)
- - Ritual Dagger now correctly adds a random Voodoo spell to your hand instead of the Truesilver effect.
- - Shadow Puppetry now costs (3).
- - Divination and Spirit Bind tokens from Hero Power now give +2 Health and Restore 2 Health respectively.

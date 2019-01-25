@@ -13,6 +13,11 @@ public class CardRoastedEvent extends GameEvent implements HasCard {
 	}
 
 	@Override
+	public boolean isPowerHistory() {
+		return true;
+	}
+
+	@Override
 	public Entity getEventTarget() {
 		return card;
 	}
@@ -25,5 +30,15 @@ public class CardRoastedEvent extends GameEvent implements HasCard {
 	@Override
 	public Card getCard() {
 		return card;
+	}
+
+	@Override
+	public boolean isClientInterested() {
+		return true;
+	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		return String.format("%s roasted %s", context.getPlayer(playerId).getName(), getCard().getName());
 	}
 }

@@ -5,6 +5,8 @@ permalink: /download/
 ---
 [![Play Now](https://img.shields.io/badge/All%20Browsers-Play%20Now-blue.png?logo=Google-Chrome&longCache=true&style=for-the-badge)](/game)
 
+To run the game locally on your computer, use the following links:
+
 [![Download for Windows](https://img.shields.io/badge/Windows-Download-blue.png?logo=windows&longCache=true&style=for-the-badge)](http://go.hiddenswitch.com/win)
 
 [![Download for iOS](https://img.shields.io/badge/iOS-Testflight-black.png?logo=apple&longCache=true&style=for-the-badge)](https://testflight.apple.com/join/pkMfO2qa)
