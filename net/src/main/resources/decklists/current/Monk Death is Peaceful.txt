@@ -1,0 +1,22 @@
+### Monk: Death is Peaceful
+# Class: JADE
+# Format: All
+#
+# 2x (0) Life Cocoon
+# 2x (0) Sleight of Hand
+# 2x (1) Fanatical Brewmaster
+# 2x (2) Black Ox Brew
+# 2x (2) Jade Serpent Statue
+# 2x (2) Monastery Scroll-Keeper
+# 2x (2) Soothing Mists
+# 2x (2) White Tiger Statue
+# 1x (3) Alemental
+# 2x (4) Stance Change
+# 2x (5) Chi Torpedo
+# 2x (6) Storm, Earth, and Fire
+# 2x (7) Fists of Fury
+# 2x (7) Massive Egg
+# 1x (8) Grandmaster Stormstout
+# 1x (8) Tsulong, the Dark Serpent
+# 1x (9) Uncle Gao
+#
