@@ -1,0 +1,25 @@
+{
+  "name": "Baby Griffin",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Battlecry: Add a 2/2 Griffin Mother with Taunt to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "token_griffin_mother",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
