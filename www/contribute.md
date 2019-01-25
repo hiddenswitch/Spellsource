@@ -3,11 +3,22 @@ layout: page
 title: Contribute
 permalink: /contribute/
 ---
-### How to Use This Document
+### Table of Contents
+
+ 1. [How to Use This Document](#1-how-to-use-this-document)
+ 2. [Contribution Guidelines](#2-contribution-guidelines)
+    1. [Priority of Accepting Contributions based on Engineering](#21-priority-of-accepting-contributions-based-on-engineering)
+    2. [Priority of Accepting Contributions based on Gameplay Quality](#22-priority-of-accepting-contributions-based-on-gameplay-quality)
+ 3. [Card Merging Process](#3-card-merging-process)
+    1. [Addressing Engineering Problems with Existing Cards](#31-addressing-engineering-problems-with-existing-cards)
+    2. [Addressing Other Problems with Cards](#32-addressing-other-problems-with-cards)
+ 4. [Programming Cards](#4-programming-cards)
+
+### 1. How to Use This Document
 
 If you're making a contribution to Spellsource, please skim this document for what you need to know. Use its categories and quote it to help yourself, the maintainers and others keep up to standards for contributions and ensure everything goes smoothly.
 
-### Contribution Guidelines
+### 2. Contribution Guidelines
 
 Visit our [Discord](https://discord.gg/HmbESh2) to chat about these guidelines and what cards you'd like to add.
 
@@ -16,6 +27,8 @@ Spellsource welcomes custom cards from the community. Almost all contributions a
 The long term goal of accepting contributions from the community is to make an **innovative and original game**. This means new, fresh-feeling mechanics and original flavor. This document uses these guidelines to encourage the things experienced game designers do to find innovative and fresh gameplay.
 
 With regards to **engineering**, maintainers prioritize content based on its engineering quality in this order:
+
+#### 2.1 Priority of Accepting Contributions based on Engineering
 
  1. Fully coded in JSON, passing tests, tests for specific cards and placed in a Pull Request.
  2. Fully coded in JSON, passing tests and placed in a Pull Request.
@@ -32,6 +45,8 @@ With regards to **engineering**, maintainers prioritize content based on its eng
 Observe that the way you may be used to sharing a card--as an image with carefully selected art--is actually the least helpful way for the Spellsource maintainers to integrate new content.
 
 With regards to **gameplay quality**, maintainers prioritize content based on its gameplay quality in this order:
+
+#### 2.2 Priority of Accepting Contributions based on Gameplay Quality
 
  1. Original hero classes (60+ cards) with some evidence of being judged positively by the community (e.g. Hearthpwn competitions, weekly /r/customhearthstone competitions).
  2. Original cards with some evidence of being judged positively by the community.
@@ -54,7 +69,7 @@ The way to read this chart is to think about how your content can meet the quali
 
 As a general policy, except in very rare instances, we say a hard no to joke cards.
 
-### Card Merging Process
+### 3. Card Merging Process
 
 The current maintainer, **@doctorpangloss**, merges the highest quality (engineering and gameplay) cards on a first-come, first-serve basis. Merging means taking work someone else did and reconciling it with work that happened simultaneously by others. In practice, card merging is done one-group-of-contributions-at-a-time, and a certain amount of quality assurance and automated testing is performed.
 
@@ -89,7 +104,7 @@ Concretely, the maintainers perform the following steps:
  
 In practice, deployment occurs as frequently as once a day and as infrequently as once a week. It depends on the work load and the number of players currently playing Spellsource. Doing a deployment ends all currently running games, so it can be disruptive to do it too frequently.
 
-### Addressing Engineering Problems with Existing Cards
+#### 3.1 Addressing Engineering Problems with Existing Cards
 
 To report issues, use the GitHub Issues functionality and follow the template there. The template emphasizes reproduction steps. In particular, a great issue contains the word **should** in its title, indicating what **should** be happening in the game but isn't.
 
@@ -97,7 +112,7 @@ Issues reported in the `#bugs` channel will still be addressed, but at a lower p
 
 You can also request changes to gameplay by making the change using a code editor of your choice, editing the card file and submitting a pull request.
 
-### Addressing Other Problems with Cards
+#### 3.2 Addressing Other Problems with Cards
 
 To address other problems with cards, consider if the problem falls into any of the categories below. Each of these categories has a process for addressing the card's issue:
 
@@ -120,7 +135,7 @@ Some considerations go into whether or not changes are accepted for these proble
  - **Positive interactions with the community**: If the change is otherwise brought on by a commitment to improve the community's experience, it will be viewed favorably. There is a tension between an enthusiastic player, who may have been authoring custom cards and making contributions for a long time, and the player who *isn't playing yet*, like anonymous Internet users. Generally, the maintainers want to support users who are not yet playing, because they cannot voice their concerns and they help keep the game alive. For example, while flavor text is *always subject to change*, having original flavor for the time being is preferred to something unoriginal, because it's important that new players feel like they are playing something fresh and new. Or, for example, treating others with respect is always viewed *favorably*, because being disrespectful to new players or contributors will discourage their first match or contribution.
  - **Issues that improve the accessibility of the game or promote it positively**: Violating a contribution guideline in a way that encourages others to play or meets a specific, clear demand from players, especially new players, will generally be accepted.
 
-### Programming Cards
+### 4. Programming Cards
 
 Get ready to program some cards! For things you don't understand in this section, **Google** and **Discord** are your best friends. Many steps are purposefully not detailed because they will be out of date by the time you use them.
 

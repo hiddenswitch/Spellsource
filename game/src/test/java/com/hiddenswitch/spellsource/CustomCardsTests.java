@@ -57,6 +57,25 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testOnyxPawn() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 15; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			Minion transformed = playMinionCard(context, player, "minion_onyx_pawn");
+			assertEquals(transformed.getSourceCard().getCardId(), "token_onyx_queen");
+		});
+
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			Minion transformed = playMinionCard(context, player, "minion_onyx_pawn");
+			assertEquals(transformed.getSourceCard().getCardId(), "token_onyx_queen");
+		});
+	}
+
+	@Test
 	public void testHeadlessHorseman() {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_headless_horseman");
