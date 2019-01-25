@@ -2,7 +2,7 @@
 Class: TOAST
 Format: Spellsource
 2x Pastry Cook
-2x Guerilla Chef
+2x Guerrilla Chef
 2x Unsatisfied Customer
 2x Limb Tentacle
 2x Lesser Opal Spellstone
