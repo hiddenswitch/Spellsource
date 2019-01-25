@@ -21,14 +21,14 @@
         "class": "MinionSummonedTrigger",
         "targetPlayer": "SELF"
       },
+	  "oneTurn": true
       "spell": {
         "class": "BuffSpell",
         "target": "SELF",
         "value": 3
       }
     }
-  },
-  "oneTurn": true
+  }
       }
     ]
   },
