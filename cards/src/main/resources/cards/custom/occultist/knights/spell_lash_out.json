@@ -1,0 +1,47 @@
+{
+  "name": "Lash Out",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Deal 1 damage to all enemies. Summon a 1/1 Tentacle with Taunt for each.",
+  "targetSelection": "NONE",
+ "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMIES",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "PERMANENT",
+            "invert": true
+          }
+        ]
+      }
+    },
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "SummonSpell",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        },
+        "card": "token_tauntentacle"
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
+  "fileFormatVersion": 1
+}

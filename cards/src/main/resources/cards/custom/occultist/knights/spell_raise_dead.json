@@ -1,0 +1,48 @@
+{
+  "name": "Raise Dead",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Summon three 3/3 Ghouls. Costs (3) if at least 3 minions died this turn",
+  "targetSelection": "NONE",
+ "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_raise_ghoul",
+      "token_raise_ghoul",
+      "token_raise_ghoul"
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "ALL_ENTITIES",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "DIED_ON_TURN",
+            "operation": "EQUAL",
+			"value": 3
+          }
+        ]
+      }
+    },
+    "ifFalse": 0,
+    "ifTrue": 4
+  }
+}
