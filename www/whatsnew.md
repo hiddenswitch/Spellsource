@@ -19,6 +19,7 @@ Important usability fixes for the WebGL build.
  - Bone Whelp now correctly only returns itself to hand when there are other dragons under your control.
  - Boss Harambo now correctly adds Bananas, instead of Coins, to your hand.
  - Roasting cards now appears in the power history.
+ - Playing Play Dead on Spawn of N'Zoth now correctly buffs it.
 
 ### 0.8.14-2.0.23 (Tuesday, January 22nd, 2019)
 
