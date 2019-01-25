@@ -1,0 +1,14 @@
+{
+  "name": "Owlbear Baby",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "",
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
