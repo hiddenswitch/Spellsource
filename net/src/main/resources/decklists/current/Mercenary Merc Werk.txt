@@ -1,0 +1,20 @@
+### Mercenary: Merc Werk
+# Class: LEATHER
+# Format: All
+#
+# 1x (1) Prince Tenris
+# 2x (2) Countershot
+# 2x (2) Demand
+# 2x (2) Echoing Ooze
+# 1x (2) Rakanishu
+# 2x (2) Reload
+# 2x (3) Handsized Flamethrower
+# 2x (3) Questing Adventurer
+# 2x (3) Supply
+# 2x (3) Westlands Mugger
+# 2x (4) Amber Drop
+# 2x (4) Timewalker Stormlord
+# 2x (5) Azure Drake
+# 2x (6) Dead or Alive
+# 2x (6) Gadgetzan Auctioneer
+# 2x (12) Arcane Giant
