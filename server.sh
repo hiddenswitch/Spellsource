@@ -7,7 +7,7 @@ if [[ -z "${SPELLSOURCE_APPLICATION+x}" ]]; then
 fi
 
 if [[ -z "${SPELLSOURCE_VERSION+x}" ]]; then
-  SPELLSOURCE_VERSION=0.8.15
+  SPELLSOURCE_VERSION=0.8.16
 fi
 
 # Executes the fat jar of the network server using the Embedded application by default

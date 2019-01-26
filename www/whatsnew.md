@@ -3,6 +3,10 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.16-2.0.24 (Friday, January 25th, 2019)
+
+The bot now has decks to play with (hot fix for quick play).
+
 ### 0.8.15-2.0.24 (Friday, January 25th, 2019)
 
 Important usability fixes for the WebGL build.
