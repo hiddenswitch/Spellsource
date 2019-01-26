@@ -13,6 +13,10 @@ Important usability fixes for the WebGL build.
  - Draft retire button now enabled at the right times.
  - Copying and pasting deck lists are supported, in a primitive way, in the WebGL build.
  - Battlecry power history entries have the correct text now.
+ - Hovering over cards in the card side panel while browsing your collection will correctly show the card.
+ - Bots now play a rotation of custom cards decks.
+ - In your Quick Play view, you can turn off standard decks by hitting the Stack of Books icon toggle.
+ - In the future, standard decks will be updated as more are added to the collection.
 
 ##### Content Fixes:
 

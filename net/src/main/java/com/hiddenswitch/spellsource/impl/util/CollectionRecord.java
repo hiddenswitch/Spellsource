@@ -18,6 +18,7 @@ public class CollectionRecord extends MongoRecord {
 	@JsonProperty
 	private DeckType deckType;
 	private List<String> friendUserIds;
+	private boolean isStandardDeck;
 	private int wins;
 	private int totalGames;
 
@@ -180,6 +181,15 @@ public class CollectionRecord extends MongoRecord {
 
 	public CollectionRecord setName(String name) {
 		this.name = name;
+		return this;
+	}
+
+	public boolean isStandardDeck() {
+		return isStandardDeck;
+	}
+
+	public CollectionRecord setStandardDeck(boolean standardDeck) {
+		isStandardDeck = standardDeck;
 		return this;
 	}
 }

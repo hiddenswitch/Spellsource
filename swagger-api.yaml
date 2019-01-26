@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 3.0.1
+  version: 3.0.2
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -582,29 +582,50 @@ definitions:
     description: |
       An empty response signifying your password was correctly changed
   InventoryCollection:
+    description: |
+      A collection of cards.
     type: 'object'
     properties:
       _id:
+        description: |
+          The identifier of this collection. Corresponds to a deckId when this is a deck collection.
         type: 'string'
       userId:
+        description: |
+          The owner of this collection.
         type: 'string'
       name:
+        description: |
+          The name of this collection. Corresponds to the deck name when this is a deck collection.
         type: 'string'
       heroClass:
+        description: |
+          The hero class when this is a deck collection.
         type: 'string'
       format:
+        description: |
+          The format when this is a deck collection.
         type: 'string'
       type:
+        description: |
+          The type of collection this object is. A user's personal collection is of type USER. A deck is of type DECK.
         type: 'string'
         enum:
           - 'USER'
           - 'ALLIANCE'
           - 'DECK'
       deckType:
+        description: |
+          Indicates whether this is a deck meant for draft or constructed play.
         type: 'string'
         enum:
           - 'DRAFT'
           - 'CONSTRUCTED'
+      isStandardDeck:
+        description: |
+          When true, indicates this is a standard deck provided by the server.
+        type: 'boolean'
+        default: false
       inventory:
         type: 'array'
         items:

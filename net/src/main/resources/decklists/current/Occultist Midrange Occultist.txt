@@ -1,0 +1,22 @@
+### Occultist: Midrange Occultist
+# Class: DARKGREEN
+# Format: Custom
+#
+# 1x (1) End of Madness
+# 2x (1) Little Helper
+# 2x (2) Aid of the Ancient
+# 2x (2) Bloody Blow
+# 2x (2) Echoing Ooze
+# 2x (3) Sunken Ritual
+# 2x (4) Eater of Sacrifices
+# 2x (4) Forgotten Science
+# 2x (4) Mutating Monstrosity
+# 2x (4) Void Curse
+# 2x (5) Rotten Applebaum
+# 1x (6) Justicar Trueheart
+# 2x (6) Wrath of the Occult
+# 2x (7) Abduct
+# 2x (8) 0CCUL7-WR3CK3R
+# 1x (8) Ghahnb the Judicator
+# 1x (8) Kahl of the Deep
+#

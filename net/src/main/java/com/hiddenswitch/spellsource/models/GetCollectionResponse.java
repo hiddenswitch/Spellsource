@@ -34,6 +34,7 @@ public final class GetCollectionResponse implements Serializable {
 	private DeckType deckType;
 	private String heroCardId;
 	private String format;
+	private boolean standard;
 
 	private GetCollectionResponse() {
 	}
@@ -214,6 +215,7 @@ public final class GetCollectionResponse implements Serializable {
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
+				.isStandardDeck(isStandard())
 				.inventory(records);
 
 		if (getHeroClass() != null) {
@@ -303,6 +305,15 @@ public final class GetCollectionResponse implements Serializable {
 
 	public GetCollectionResponse withFormat(String format) {
 		this.format = format;
+		return this;
+	}
+
+	public boolean isStandard() {
+		return standard;
+	}
+
+	public GetCollectionResponse setStandard(boolean standard) {
+		this.standard = standard;
 		return this;
 	}
 }

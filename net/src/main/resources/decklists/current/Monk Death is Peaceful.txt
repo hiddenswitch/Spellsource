@@ -1,6 +1,6 @@
 ### Monk: Death is Peaceful
 # Class: JADE
-# Format: All
+# Format: Spellsource
 #
 # 2x (0) Life Cocoon
 # 2x (0) Sleight of Hand

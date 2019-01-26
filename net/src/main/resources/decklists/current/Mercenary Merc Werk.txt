@@ -1,6 +1,6 @@
 ### Mercenary: Merc Werk
 # Class: LEATHER
-# Format: All
+# Format: Custom
 #
 # 1x (1) Prince Tenris
 # 2x (2) Countershot

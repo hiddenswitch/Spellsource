@@ -25,6 +25,7 @@ public final class CreateCollectionRequest implements Serializable {
 	private int copies = 1;
 	private String heroCardId;
 	private String format;
+	private boolean standard;
 
 	private CreateCollectionRequest() {
 	}
@@ -248,5 +249,14 @@ public final class CreateCollectionRequest implements Serializable {
 
 	public void setFormat(String format) {
 		this.format = format;
+	}
+
+	public boolean isStandard() {
+		return standard;
+	}
+
+	public CreateCollectionRequest setStandard(boolean standard) {
+		this.standard = standard;
+		return this;
 	}
 }
