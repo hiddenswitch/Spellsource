@@ -435,7 +435,12 @@ public class Spellsource {
 						.withUp(thisVertx -> {
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(27, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(28)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(28, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

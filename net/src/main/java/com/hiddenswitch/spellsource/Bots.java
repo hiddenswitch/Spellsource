@@ -201,9 +201,7 @@ public interface Bots {
 				Decks.deleteDeck(DeckDeleteRequest.create(deckId));
 			}
 			for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
-				if (req.getFormat().equals("Standard")) {
-					Decks.createDeck(req.withUserId(bot.getString("_id")));
-				}
+				Decks.createDeck(req.withUserId(bot.getString("_id")));
 			}
 		}
 	}
