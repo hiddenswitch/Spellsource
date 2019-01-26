@@ -99,6 +99,7 @@ public interface Inventory {
 				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
 				record1.setHeroCardId(request.getHeroCardId());
 				record1.setFormat(request.getFormat());
+				record1.setStandardDeck(request.isStandard());
 				final String deckId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record1));
 
 				if (request.getInventoryIds() != null
@@ -343,7 +344,8 @@ public interface Inventory {
 
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
-				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed())
+						.setStandard(record.isStandardDeck()));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -373,7 +375,8 @@ public interface Inventory {
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed())
+					.setStandard(deck.isStandardDeck());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(userId, inventoryRecords);
 		} /*  else {

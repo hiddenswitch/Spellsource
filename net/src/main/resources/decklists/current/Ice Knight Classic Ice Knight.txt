@@ -1,0 +1,27 @@
+### Ice Knight: Classic Ice Knight
+# Class: ICE
+# Format: Custom
+#
+# 1x (1) Abusive Sergeant
+# 2x (2) Chains of Ice
+# 2x (2) Dancing Rune Weapon
+# 1x (2) Frost Strike
+# 2x (2) Ghoul
+# 1x (2) Loot Hoarder
+# 2x (2) Novice Engineer
+# 1x (2) Rune Tap
+# 1x (3) Anti-Magic Zone
+# 1x (3) Bolsterous Geist
+# 1x (3) Bone Shield
+# 2x (3) Howling Blast
+# 1x (3) Icy Talon
+# 2x (3) Runeforged Blade
+# 1x (3) Shambling Horror
+# 2x (4) Bloodcaked Axe
+# 1x (4) Dark Transformation
+# 2x (5) Blood Boil
+# 1x (6) Flesh Giant
+# 1x (6) Rimefang
+# 1x (6) Runic Corruption
+# 1x (6) Sylvanas Windrunner
+#

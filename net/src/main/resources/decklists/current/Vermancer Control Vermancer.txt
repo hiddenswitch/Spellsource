@@ -1,0 +1,23 @@
+### Vermancer: Control Vermancer
+# Class: AMBER
+# Format: Spellsource
+#
+# 2x (1) Forest Whispers
+# 2x (1) Obvious Ambush
+# 2x (2) Elementium Shell
+# 2x (2) Spider Surveillance
+# 2x (2) Unearth
+# 2x (3) Swarm Shield
+# 2x (3) Web Wrap
+# 2x (4) Springer
+# 2x (4) Twilight Drake
+# 1x (5) Lumina, Light of the Forest
+# 1x (5) Queen Beetrice
+# 1x (6) Maexxna's Femur
+# 1x (6) Monarch Barata
+# 1x (6) Sp1der
+# 2x (7) Locust Swarm
+# 1x (7) Terala, Draconic Mistress
+# 2x (12) Mountain Giant
+# 2x (15) Gi-Ant
+#

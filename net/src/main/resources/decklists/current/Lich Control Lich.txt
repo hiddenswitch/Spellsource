@@ -1,0 +1,21 @@
+### Lich: Control Lich
+# Class: ICECREAM
+# Format: Custom
+#
+# 2x (1) Scrap Scavenger
+# 2x (2) Corpse Explosion
+# 2x (2) Death Coil
+# 2x (3) Army of Undeath
+# 2x (3) Death and Decay
+# 2x (3) Phylactery
+# 1x (3) Moroes
+# 2x (3) Plague Dog
+# 1x (4) Ebonchill
+# 2x (4) Howling Blast
+# 2x (4) Shadow Fissure
+# 1x (6) Lord Marrowgar
+# 2x (6) Shambling Horror
+# 2x (7) Harvest Soul
+# 2x (7) Path of Frost
+# 2x (8) Chains of Ice
+# 1x (9) Stitches

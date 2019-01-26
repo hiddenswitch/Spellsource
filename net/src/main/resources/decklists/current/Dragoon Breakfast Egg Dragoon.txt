@@ -1,0 +1,23 @@
+### Dragoon: Breakfast Egg Dragoon
+# Class: RUST
+# Format: Custom
+#
+# 2x (1) Dragon Egg
+# 2x (1) Runic Egg
+# 2x (2) Nerubian Egg
+# 2x (2) Ready to Shakedown
+# 2x (2) Spectral Fervor
+# 2x (3) Devilsaur Egg
+# 1x (3) Gobble
+# 1x (3) Sergeant Sally
+# 2x (3) Spawn of N'Zoth
+# 2x (3) Void Ripper
+# 2x (4) Massive Egg
+# 1x (4) Spiritsinger Umbra
+# 2x (5) Carnivorous Cube
+# 2x (5) Mechano-Egg
+# 1x (5) Neltharion
+# 1x (6) Mossy Horror
+# 2x (9) Devouring Devilsaur
+# 1x (10) N'Zoth, the Corruptor
+#

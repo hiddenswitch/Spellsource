@@ -1,0 +1,20 @@
+### Death Knight: Aggro Death Knight
+# Class: OBSIDIAN
+# Format: Custom
+#
+# 2x (0) Six Feet Under
+# 1x (1) Dragonling Pet
+# 2x (1) Fire Fly
+# 2x (1) Hardened Initiate
+# 1x (1) Hatches the Dragon
+# 2x (1) Spectral Warrior
+# 2x (1) Trapped Soul
+# 2x (2) Bone Whelp
+# 2x (2) Dire Wolf Alpha
+# 2x (2) Dull Knife
+# 2x (2) Marrow Amulet
+# 2x (2) Obliterate
+# 2x (2) Rotting Dead
+# 2x (3) Archerus Deathcharger
+# 2x (3) Dungeon Fodder
+# 2x (3) Runed Soulblade

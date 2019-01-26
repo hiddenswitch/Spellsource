@@ -430,7 +430,12 @@ public class Spellsource {
 							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
 							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
 						}))
-				.migrateTo(26, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(27)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.migrateTo(27, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -438,7 +443,7 @@ public class Spellsource {
 	/**
 	 * Gets the current deck lists specified in the decklists.current resources directory.
 	 *
-	 * @return A list of deck create requests without a {@link DeckCreateRequest#userId} specified.
+	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
@@ -455,7 +460,7 @@ public class Spellsource {
 				return null;
 			}).map((deckList) -> {
 				try {
-					return DeckCreateRequest.fromDeckList(deckList);
+					return DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

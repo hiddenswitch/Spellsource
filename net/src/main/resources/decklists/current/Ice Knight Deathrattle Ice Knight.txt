@@ -1,0 +1,23 @@
+### Ice Knight: Deathrattle Ice Knight
+# Class: ICE
+# Format: Custom
+#
+# 2x (1) Mecharoo
+# 2x (2) Haunted Creeper
+# 2x (2) Nerubian Egg
+# 2x (2) Tombstone
+# 2x (3) Eggnapper
+# 2x (3) Howling Blast
+# 2x (3) Microtech Controller
+# 1x (4) Spiritsinger Umbra
+# 2x (5) Blood Boil
+# 2x (5) Doppelgangster
+# 2x (5) Giggling Inventor
+# 2x (5) Unholy Frenzy
+# 1x (6) Rimefang
+# 1x (6) Winter is Coming!
+# 1x (7) Deathlord Mograine
+# 2x (8) Acherus Deathgate
+# 1x (8) Headless Horseman
+# 1x (10) Murozond
+#
