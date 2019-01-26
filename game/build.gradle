@@ -1,3 +1,7 @@
+import java.nio.file.FileVisitResult
+import java.nio.file.Files
+import java.nio.file.attribute.BasicFileAttributes
+
 publishing {
     publications {
         maven(MavenPublication) {
