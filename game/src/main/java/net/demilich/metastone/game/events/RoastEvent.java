@@ -3,14 +3,14 @@ package net.demilich.metastone.game.events;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 
-public final class MillEvent extends DiscardEvent {
-	public MillEvent(GameContext context, int id, Card card) {
-		super(context, id, card);
+public final class RoastEvent extends DiscardEvent {
+	public RoastEvent(GameContext context, int playerId, Card card) {
+		super(context, playerId, card);
 	}
 
 	@Override
 	public GameEventType getEventType() {
-		return GameEventType.MILL;
+		return GameEventType.ROASTED;
 	}
 
 	@Override
@@ -20,6 +20,6 @@ public final class MillEvent extends DiscardEvent {
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
-		return String.format("%s milled %s", context.getPlayer(playerId).getName(), getCard().getName());
+		return String.format("%s roasted %s", context.getPlayer(playerId).getName(), getCard().getName());
 	}
 }

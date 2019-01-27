@@ -3,6 +3,10 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### 0.8.17-2.0.25 (Saturday, January 26th, 2019)
+
+Milling is now roasting, coherent with the design of Chef.
+
 ### 0.8.16-2.0.24 (Friday, January 25th, 2019)
 
 The bot now has decks to play with (hot fix for quick play).
