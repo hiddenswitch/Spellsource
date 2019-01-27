@@ -54,7 +54,7 @@ import net.demilich.metastone.game.cards.Attribute;
  *   }
  * </pre>
  * Observe {@code "amountOfCurrency"} returns the number of cards in the deck, because that's the amount of cards
- * available to mill.
+ * available to roast.
  * <p>
  * To put this aura into "play" while the host card is ordinarily in the hand, use a passive trigger to put the aura
  * onto the player entity. For example, suppose we had a card "spell_cheap_damage", a cost 2 that reads: "Deal $6
