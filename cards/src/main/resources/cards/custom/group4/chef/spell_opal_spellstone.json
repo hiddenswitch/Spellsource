@@ -14,7 +14,7 @@
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_opal_spellstone"
+      "card": "spell_greater_opal_spellstone"
     },
     "keepAfterTransform": false
   },

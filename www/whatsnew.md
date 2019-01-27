@@ -7,6 +7,10 @@ permalink: /whats-new/
 
 Milling is now roasting, coherent with the design of Chef.
 
+##### Content Fixes:
+
+ - Opal Spellstone now correctly upgrades to Greater Opal Spellstone.
+
 ### 0.8.16-2.0.24 (Friday, January 25th, 2019)
 
 The bot now has decks to play with (hot fix for quick play).
