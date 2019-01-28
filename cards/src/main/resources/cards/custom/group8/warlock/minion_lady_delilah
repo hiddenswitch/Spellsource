@@ -22,14 +22,14 @@
             "attribute": "LIFESTEAL"
           },
           {
-            "class": "SpecificCardFilter",
-            "card": "minion_lady_delilah"
-            "invert": true
+            "class": "EntityEqualsFilter",
+            "invert": true,
+            "secondaryTarget": "SELF"
           }
         ]
       }
     },
-    "hpBonus": {
+    "hpBonus": 
       "class": "CardCountValueProvider",
       "cardFilter": {
         "class": "AndFilter",
@@ -40,9 +40,9 @@
             "attribute": "LIFESTEAL"
           },
           {
-            "class": "SpecificCardFilter",
-            "card": "minion_lady_delilah"
-            "invert": true
+            "class": "EntityEqualsFilter",
+            "invert": true,
+            "secondaryTarget": "SELF"
           }
         ]
       }
