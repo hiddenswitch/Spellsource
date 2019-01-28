@@ -1,0 +1,28 @@
+{
+  "name": "Tempest Elemental",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL,
+  "description": "Battlecry: Give a friendly Elemental \"Can't be targeted by spells or Hero Powers.\"",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "UNTARGETABLE_BY_SPELLS",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "ELEMENTAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
