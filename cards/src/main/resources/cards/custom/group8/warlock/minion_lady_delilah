@@ -1,0 +1,58 @@
+{
+  "name": "Lady Delilah",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "race": "DEMON",
+  "description": "Rush, Lifesteal. Has +1/+1 for each other Lifesteal card you've played this game.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "SELF",
+    "attackBonus": {
+      "class": "CardCountValueProvider",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "attribute": "LIFESTEAL"
+          },
+          {
+            "class": "SpecificCardFilter",
+            "card": "minion_lady_delilah"
+            "invert": true
+          }
+        ]
+      }
+    },
+    "hpBonus": {
+      "class": "CardCountValueProvider",
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "attribute": "LIFESTEAL"
+          },
+          {
+            "class": "SpecificCardFilter",
+            "card": "minion_lady_delilah"
+            "invert": true
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "RUSH": true,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
