@@ -6,7 +6,7 @@
   "rarity": "COMMON",
   "description": "Draw 2 Secrets from your deck. Shuffle 2 random Mage Secrets into your deck.",
   "targetSelection": "NONE",
-  spell": {
+  "spell": {
     "class": "MetaSpell",
     "spells": [
       {
