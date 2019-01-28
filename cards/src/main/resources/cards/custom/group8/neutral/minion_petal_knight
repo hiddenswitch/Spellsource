@@ -1,0 +1,37 @@
+{
+  "name": "Petal Knight",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Rush. After this attacks and kills a minion, Add an Emerald Secret to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
