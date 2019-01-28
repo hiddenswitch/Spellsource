@@ -1,0 +1,22 @@
+{
+  "name": "Clumsy Dryad",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Lifesteal. Deathrattle: Restore 2 Health to ALL characters.",
+  "deathrattle": "spell": {
+    "class": "HealSpell",
+    "target": "ALL_CHARACTERS",
+    "value": 2
+  },
+  "attributes": {
+    "LIFESTEAL": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
