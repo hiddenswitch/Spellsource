@@ -1,0 +1,29 @@
+{
+  "name": "An'she's Blessing",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "FREE",
+  "description": "Give a minion Divine Shield.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DIVINE_SHIELD"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "LIFESTEAL"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
