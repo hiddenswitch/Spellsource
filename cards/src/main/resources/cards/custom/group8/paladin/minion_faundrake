@@ -1,0 +1,38 @@
+{
+  "name": "Faundrake",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "GOLD",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "<b>Battlecry:</b> Draw a dragon from your deck. It Costs (2) less.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      },
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 2,
+          "operation": "SUBTRACT"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
