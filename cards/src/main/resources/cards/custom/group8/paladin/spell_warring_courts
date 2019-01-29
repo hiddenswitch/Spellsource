@@ -1,0 +1,46 @@
+{
+  "name": "Warring Courts",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "EPIC",
+  "description": "Give your minions with more Attack than Health Lifesteal. Give the rest Divine Shield.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "LIFESTEAL",
+        "filter": {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "AttributeValueProvider",
+            "attribute": "HP"
+          },
+          "attribute": "ATTACK",
+          "operation": "GREATER"
+        }
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "DIVINE_SHIELD",
+        "filter": {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "AttributeValueProvider",
+            "attribute": "HP"
+          },
+          "attribute": "ATTACK",
+          "operation": "GREATER",
+          "invert": true
+        }
+      }
+    ]  
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
