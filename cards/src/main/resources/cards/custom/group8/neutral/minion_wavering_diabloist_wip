@@ -23,7 +23,7 @@
       },
       "spell2": {
         "class": "HealSpell",
-        "target"; output
+        "target": "OUTPUT",
         "value": 2
       },
     }
