@@ -1,0 +1,45 @@
+{
+  "name": "Keeper's Pupil",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "<b>Battlecry:</b> Play a Secret from your deck. <b>Deathrattle:</b> Shuffle that secret into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell":  {
+      "class": "PutRandomSecretIntoPlaySpell",
+      "cardSource": {
+        "class": "DeckSource"
+      },
+      "spell":  {
+        "class": "AddDeathrattleSecondaryAsTargetSpell",
+        "target": "SELF",
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "ShuffleToDeckSpell"
+            },
+            {
+              "class": "RemoveCardSpell"
+            }
+          ]
+        },
+        "secondaryTarget": "OUTPUT"
+      }
+    }
+  },
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
