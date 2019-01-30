@@ -1,0 +1,37 @@
+{
+  "name": "Wavering Diabloist",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 9,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DEMON",
+  "description": "Taunt. Battlecry: Deal 2 damage to all other characters, then restore 2 Health to any surviors.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDeadCondition",
+        "invert": true
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "target": "ALL_OTHER_CHARACTERS",
+        "value": 2
+      },
+      "spell2": {
+        "class": "HealSpell",
+        "target"; output
+        "value": 2
+      },
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
