@@ -1,0 +1,19 @@
+{
+  "name": "Fellow Academite",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Adjacent minions have +1 Attack.",
+  "aura": {
+    "class": "BuffAura",
+    "target": "ADJACENT_MINIONS",
+    "attackBonus": 1,
+    "hpBonus": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
