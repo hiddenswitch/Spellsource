@@ -2,7 +2,7 @@
 set -e
 OPTIND=1
 
-usage="$(basename "$0") [-hcedwpvlDA] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
@@ -15,6 +15,7 @@ where:
     -l  builds and deploys the launcher
     -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
     -w  deploy playspellsource.com (requires spellsource on the command line)
+    -W  deploy wiki.hiddenswitch.com
     -v  bump the version (requires SPELLSOURCE_VERSION indicating
         the current version)
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
@@ -22,8 +23,6 @@ where:
     -A  visits the AWS console for Hidden Switch
 
 Invoking this script always rebuilds Spellsource-Server.
-
-Currently, the docker deployment only updates the spellsource_game image.
 
 Notes for successful deployment:
  - Requires jq, curl and docker on the PATH for Docker deployment
@@ -39,10 +38,11 @@ deploy_docker=false
 deploy_www=false
 deploy_python=false
 deploy_launcher=false
+deploy_wiki=false
 bump_version=false
 install_dependencies=false
 build_client=false
-while getopts "hcedplvwD" opt; do
+while getopts "hcedwpvlWDA" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -55,6 +55,9 @@ while getopts "hcedplvwD" opt; do
      ;;
   d) deploy_docker=true
      echo "Deploying for Docker"
+     ;;
+  W) deploy_wiki=true
+     echo "Deploying mediawiki"
      ;;
   l) deploy_launcher=true
      echo "Deploying launcher"
@@ -240,7 +243,8 @@ if [[ "$build_client" = true ]] ; then
 fi
 
 # Before building, retrieve the portainer password if it's not specified immediately
-if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
+
+if [[ "$deploy_docker" = true || "$deploy_launcher" = true || "$deploy_wiki" = true ]] ; then
   if [[ -z ${PORTAINER_PASSWORD+x} ]] ; then
     echo "docker deployment: Requesting PORTAINER_PASSWORD"
     stty -echo
@@ -249,9 +253,7 @@ if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
     stty echo
     printf "\n"
   fi
-fi
 
-if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
   if [[ -z ${PORTAINER_URL+x} ]] ; then
     PORTAINER_URL="http://hs-1.i.hiddenswitch.com:9000/"
   fi
@@ -318,6 +320,32 @@ if [[ "$deploy_launcher" = true ]] ; then
     update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update launcher service"
+    exit 1
+  }
+fi
+
+if [[ "$deploy_wiki" = true ]] ; then
+  cd mediawiki
+
+  # Build image and upload to docker
+  { # try
+    echo "Building and uploading wiki Docker image"
+    docker build -t  doctorpangloss/wiki . >/dev/null && \
+    docker push doctorpangloss/wiki:latest >/dev/null
+  } || { # catch
+    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
+    exit 1
+  }
+
+  cd ..
+
+  { # try
+    # Figure out the service ID
+    service_name=spellsource_mediawiki
+    portainer_image_name="doctorpangloss/wiki:latest"
+    update_portainer ${service_name} ${portainer_image_name}
+  } || { # catch
+    echo "Failed to update wiki service"
     exit 1
   }
 fi
