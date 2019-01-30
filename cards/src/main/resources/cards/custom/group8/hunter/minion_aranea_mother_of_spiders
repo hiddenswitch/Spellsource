@@ -71,7 +71,7 @@
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "CardCountValueProvider",
     "cardFilter": {
