@@ -154,6 +154,7 @@ wfLoadExtension('OATHAuth');
 wfLoadExtension('SpamBlacklist');
 wfLoadExtension('TemplateData');
 wfLoadExtension('VisualEditor');
+wfLoadExtension('UploadWizard');
 
 # Configuration for AWS extension
 $wgAWSRegion = getenv('MEDIAWIKI_AWS_REGION');
