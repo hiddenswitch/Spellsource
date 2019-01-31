@@ -5,13 +5,23 @@
   "type": "HERO",
   "heroClass": "BROWN",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Deal 3 damage to all minions.",
+  "description": "Battlecry: Resurrect a friendly Beast for every Choose One minion you've played.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "DamageSpell",
-      "target": "ALL_MINIONS",
-      "value": 3
+      "class": "ResurrectSpell",
+      "value": {
+        "class": "CardCountValueProvider",
+        "filter": {
+          "class": "CardFilter",
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "attribute": "BATTLECRY"
+        }
+      },
+      "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
     }
   },
   "attributes": {
