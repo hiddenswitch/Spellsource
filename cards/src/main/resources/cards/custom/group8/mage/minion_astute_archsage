@@ -1,0 +1,52 @@
+{
+  "name": "Astute Archsage",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a Divine Shield minion, a Secret, or a Hand of Protection.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "value": 2,
+            "operation": "SUBTRACT"
+          }
+        }
+      },
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "attribute": "SECRET",
+          "operation": "HAS"
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "BLUE",
+          "cardType": "MINION"
+        },
+        {
+          "class": "SpecificCardFilter",
+          "card": "spell_arcane_intellect"
+        },
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
