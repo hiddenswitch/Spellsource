@@ -1,0 +1,25 @@
+{
+  "name": "Ysera, the Dreamer WIP",
+  "heroPower": "hero_power_emerald_dreams",
+  "baseManaCost": 9,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Deal 3 damage to all minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "ARMOR": 12,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "EMERALD_DREAMS",
+  "fileFormatVersion": 1
+}
