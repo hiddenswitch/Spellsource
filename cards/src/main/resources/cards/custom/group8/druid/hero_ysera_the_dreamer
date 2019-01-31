@@ -1,5 +1,5 @@
 {
-  "name": "Ysera, the Dreamer WIP",
+  "name": "Ysera, the Dreamer",
   "heroPower": "hero_power_emerald_dreams",
   "baseManaCost": 9,
   "type": "HERO",
@@ -15,7 +15,8 @@
         "filter": {
           "class": "CardFilter",
           "attribute": "PLAYED_FROM_HAND_OR_DECK",
-          "attribute": "BATTLECRY"
+          "attribute": "CHOICE",
+          "cardType": "MINION"
         }
       },
       "filter": {
