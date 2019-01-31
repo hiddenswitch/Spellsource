@@ -11,21 +11,22 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ConditionalEffectSpell",
-      "condition": {
-        "class": "IsDeadCondition",
-        "invert": true
-      },
-      "spell1": {
-        "class": "DamageSpell",
-        "target": "ALL_OTHER_CHARACTERS",
-        "value": 2
-      },
-      "spell2": {
-        "class": "HealSpell",
-        "target": "OUTPUT",
-        "value": 2
-      },
+      "class": "MetaSpell",
+      "target": "ALL_OTHER_CHARACTERS",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "HealSpell",
+          "value": 2,
+          "filter": {
+            "class": "IsDestroyedFilter",
+            "invert": true
+          }
+        }
+      ]
     }
   },
   "attributes": {
