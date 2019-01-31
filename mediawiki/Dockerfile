@@ -40,6 +40,10 @@ RUN git clone --depth 1 -b $MEDIAWIKI_BRANCH \
       https://gerrit.wikimedia.org/r/p/mediawiki/skins/MinervaNeue \
       /var/www/html/skins/MinervaNeue
 
+RUN git clone --depth 1 -b $MEDIAWIKI_BRANCH \
+      https://gerrit.wikimedia.org/r/p/mediawiki/extensions/UploadWizard \
+      /var/www/html/extensions/UploadWizard
+
 ENV MEDIAWIKI_AWS_REGION=us-east-2
 ENV MEDIAWIKI_AWS_BUCKET_ID=minionate
 ENV MEDIAWIKI_PARSOID_URL=http://localhost:8000
