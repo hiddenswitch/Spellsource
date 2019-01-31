@@ -1,0 +1,50 @@
+{
+  "name": "Emerald Hippogryph",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Choose One - this turn, give a friendly character +3 Attack; or All other friendly characters +1 Attack.",
+  "chooseOneBattlecries": [
+    {
+      "description": "+3 Attack",
+      "targetSelection": "FRIENDLY_CHARACTERS",
+      "spell": {
+        "class": "TemporaryAttackSpell",
+        "value": 3
+      },
+    },
+    {
+      "description": "+1 Attack to all",
+      "targetSelection": "NONE",
+      "spell": {
+        "class": "TemporaryAttackSpell",
+        "target": "OTHER_FRIENDLY_CHARACTERS",
+        "value": 1
+      }
+    }
+  ],
+  "chooseBothBattlecry": {
+    "description": "+4 Attack and +1 to others",
+    "targetSelection": "FRIENDLY_CHARACTERS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "TemporaryAttackSpell",
+          "value": 3
+        },
+        {
+          "class": "TemporaryAttackSpell",
+          "target": "OTHER_FRIENDLY_CHARACTERS",
+          "value": 1
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
