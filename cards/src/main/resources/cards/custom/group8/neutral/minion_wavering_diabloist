@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "DEMON",
-  "description": "Taunt. Battlecry: Deal 2 damage to all other characters, then restore 2 Health to any surviors.",
+  "description": "Taunt. Battlecry: Deal 2 damage to all other characters, then restore 2 Health to any survivors.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
