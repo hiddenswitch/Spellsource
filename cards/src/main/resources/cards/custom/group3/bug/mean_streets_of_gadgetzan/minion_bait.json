@@ -6,14 +6,14 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Deathrattle: Summon four 1/1 Spiderlings.",
+  "description": "Deathrattle: Summon four 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
     "cards": [
-      "token_spiderling",
-      "token_spiderling",
-      "token_spiderling",
-      "token_spiderling"
+      "token_larva",
+      "token_larva",
+      "token_larva",
+      "token_larva"
     ]
   },
   "attributes": {
