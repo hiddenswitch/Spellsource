@@ -13,7 +13,7 @@
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
-      "card": "token_guardian",
+      "card": "token_hive_guardian",
       "filter": {
         "class": "SpecificCardFilter",
         "card": "token_larva"
