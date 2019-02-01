@@ -1,6 +1,6 @@
 {
-  "name": "Frostforged Spider",
-  "baseManaCost": 2,
+  "name": "Frost Bee",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,
