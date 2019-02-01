@@ -14,10 +14,6 @@
         "value": 1
       },
       {
-        "class": "SummonSpell",
-        "card": "token_spiderling"
-      },
-      {
         "class": "ReceiveCardSpell",
         "cards": [
           "token_larva",
