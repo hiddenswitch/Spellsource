@@ -1,0 +1,38 @@
+{
+  "name": "Anzu the Raven God",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever you cast a spell on a friendly minion, give it +3/+3 instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "targetPlayer": "SELF",
+      "targetEntityType": "MINION",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_SOURCE",
+          "attribute": "COUNTERED"
+        },
+        {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "attackBonus": 3,
+		  "hpBonus": 3
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

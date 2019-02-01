@@ -1,0 +1,56 @@
+{
+  "name": "Vessel of C'Thun",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "After you target this minion with a spell, give your C'Thun +2/+2 (wherever it is).",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
+      "sourcePlayer": "SELF",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": 2,
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": 2,
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

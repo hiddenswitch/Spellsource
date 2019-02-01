@@ -3,6 +3,24 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+
+### 0.8.18-2.0.25 (Thursday, January 31st, 2019)
+
+Thanks to a great contribution from @Logovaz, introducing new Witch Doctor cards!
+
+Also, please check out the new lore draft at http://wiki.hiddenswitch.com.
+
+##### Content Fixes
+
+ - Bladesworn is now a 3 mana 4/2 that gains +1 Health whenever you cast a spell on it.
+ - Ritual Dagger now reads, "Battlecry: Add a random Voodoo spell to your hand."
+ - Split Personality can now only target friendly minions.
+ - Fading Berserker has fixed text description.
+ 
+##### Content Additions
+
+ - New Witch Doctor cards!
+
 ### 0.8.17-2.0.25 (Saturday, January 26th, 2019)
 
 Milling is now roasting, coherent with the design of Chef.

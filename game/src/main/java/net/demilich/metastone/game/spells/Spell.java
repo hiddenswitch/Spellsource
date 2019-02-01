@@ -35,7 +35,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * Arguments common to all spells that should not be considered invalid.
 	 */
 	private static final Set<SpellArg> COMMON_ARGS = Sets.newEnumSet(
-			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE), SpellArg.class);
+			Arrays.asList(SpellArg.CLASS, SpellArg.FILTER, SpellArg.TARGET, SpellArg.NAME, SpellArg.DESCRIPTION, SpellArg.RANDOM_TARGET, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.BOARD_POSITION_RELATIVE, SpellArg.BOARD_POSITION_ABSOLUTE, SpellArg.DEATHRATTLE_ID), SpellArg.class);
 
 	/**
 	 * Casts a spell for the given arguments.
@@ -64,7 +64,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param source  The source entity of this spell cast
 	 * @param targets A list of targets
 	 * @see SpellUtils#getValidTargets(GameContext, Player, List, EntityFilter, Entity) for the logic which filters the
-	 * 		targets argument.
+	 * targets argument.
 	 */
 	@Suspendable
 	public void cast(GameContext context, Player player, SpellDesc desc, Entity source, List<Entity> targets) {
@@ -161,7 +161,7 @@ public abstract class Spell implements Serializable, HasDesc<SpellDesc> {
 	 * @param target  The particular target of this invocation of the spell. When a spell hits multiple targets, like an
 	 *                AoE damage effect, this method is called once for each target in the list of targets.
 	 * @see SummonSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for an example of a complex spell
-	 * 		implementation.
+	 * implementation.
 	 */
 	@Suspendable
 	protected abstract void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target);

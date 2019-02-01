@@ -485,6 +485,10 @@ public final class EntityReference implements Serializable {
 	 * number of minions on the opponent's battlefield is even.
 	 */
 	public static final EntityReference ENEMY_MIDDLE_MINIONS = new EntityReference(-71);
+	/**
+	 * References the last minion card played before this current sequence.
+	 */
+	public static final EntityReference FRIENDLY_LAST_MINION_PLAYED = new EntityReference(-72);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
