@@ -1,10 +1,10 @@
 {
-  "name": "Spiderbomb",
+  "name": "Bee Bomb",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Deal $3 damage. Summon a 1/1 Spiderling.",
+  "description": "Deal $3 damage. Add two 1/1 Larva to your hand.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -14,8 +14,11 @@
         "value": 3
       },
       {
-        "class": "SummonSpell",
-        "card": "token_spiderling"
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "token_larva",
+          "token_larva"
+        ]
       }
     ]
   },
