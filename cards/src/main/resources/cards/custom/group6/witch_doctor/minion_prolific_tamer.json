@@ -1,0 +1,40 @@
+{
+  "name": "Prolific Tamer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: If you have 5 or more Beasts in your deck, draw one.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "value1": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_DECK",
+        "filter": {
+          "class": "CardFilter",
+          "cardType": "MINION",
+          "race": "BEAST"
+        }
+      },
+      "value2": 5,
+      "operation": "GREATER_OR_EQUAL"
+    },
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "BEAST"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

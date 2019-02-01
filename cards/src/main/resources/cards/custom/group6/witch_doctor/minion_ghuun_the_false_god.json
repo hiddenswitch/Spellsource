@@ -1,0 +1,34 @@
+{
+  "name": "G'huun the False God",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon all minions from your hand of the same Cost as the last minion you played.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "value": 7,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+		"manaCost": {
+		  "class": "AttributeValueProvider",
+		  "attribute": "MANA_SPENT",
+          "target": "FRIENDLY_LAST_MINION_PLAYED"
+		}
+      },
+      "cardLocation": "HAND",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

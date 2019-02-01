@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Gain +3 Health until until your next turn.",
+  "description": "Battlecry: Gain +3 Health until your next turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

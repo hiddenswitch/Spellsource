@@ -1,0 +1,41 @@
+{
+  "name": "Ptero Max",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Your Beasts can attack again after they attack and kill a minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "AndCondition",
+        "conditions": [
+          {
+            "class": "IsDeadCondition",
+            "target": "EVENT_TARGET"
+          },
+          {
+            "class": "RaceCondition",
+            "target": "EVENT_SOURCE",
+            "race": "BEAST"
+          }
+        ]
+      },
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "EVENT_SOURCE",
+      "value": 1,
+      "attribute": "EXTRA_ATTACKS"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

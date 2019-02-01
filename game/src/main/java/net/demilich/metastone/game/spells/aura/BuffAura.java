@@ -48,6 +48,7 @@ public class BuffAura extends Aura {
 		if (desc.getSecondaryTrigger() != null) {
 			triggers.add(desc.getSecondaryTrigger().create());
 		}
+		includeExtraTriggers(desc);
 		setCondition(desc.getCondition());
 		setDesc(desc);
 	}

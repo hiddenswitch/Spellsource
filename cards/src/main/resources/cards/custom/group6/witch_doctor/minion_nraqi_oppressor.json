@@ -1,0 +1,27 @@
+{
+  "name": "N'raqi Oppressor",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Taunt. Costs (1) if you have 4 or more minions.",
+  "attributes": {
+	"TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "MinionCountCondition",
+      "value": 3,
+      "operation": "GREATER",
+      "targetPlayer": "SELF"
+    },
+    "ifFalse": 0,
+    "ifTrue": 3
+  }
+}

@@ -1,16 +1,17 @@
 {
-  "name": "Old Jungle Masta",
-  "baseManaCost": 3,
+  "name": "Scarab",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 1,
-  "baseHp": 5,
+  "baseHp": 1,
   "rarity": "FREE",
-  "description": "Spell Damage +1",
+  "race": "BEAST",
+  "description": "Taunt",
   "attributes": {
-    "SPELL_DAMAGE": 1
+    "TAUNT": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

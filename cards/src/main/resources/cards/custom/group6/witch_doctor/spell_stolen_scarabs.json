@@ -1,0 +1,37 @@
+{
+  "name": "Stolen Scarabs",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Discover a Beast. Summon three 1/1 Scarabs with Taunt.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+	"spells": [
+	  {
+        "class": "DiscoverSpell",
+        "spell": {
+          "class": "ReceiveCardSpell",
+          "targetPlayer": "SELF"
+        },
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST",
+          "cardType": "MINION"
+        }
+      },
+	  {
+	    "class": "SummonSpell",
+        "cards": [
+          "token_voodoo_scarab",
+          "token_voodoo_scarab",
+          "token_voodoo_scarab"
+        ]
+      }
+	]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

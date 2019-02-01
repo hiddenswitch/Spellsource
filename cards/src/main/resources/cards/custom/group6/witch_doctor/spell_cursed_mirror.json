@@ -1,0 +1,26 @@
+{
+  "name": "Cursed Mirror",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "EPIC",
+  "description": "Give a minion +10 Health. Swap its Health with your hero's health.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 0,
+        "hpBonus": 10
+      },
+      {
+        "class": "SwapHpSpell",
+        "secondaryTarget": "FRIENDLY_HERO"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

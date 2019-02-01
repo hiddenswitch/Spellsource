@@ -7,6 +7,7 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
@@ -201,7 +202,7 @@ public class TargetLogic implements Serializable {
 	 *                  refer to the right of this argument.
 	 * @param targetKey The {@link EntityReference} to interpet.
 	 * @return {@code null} if no target key is specified or an {@link EntityReference#NONE} was passed; otherwise, a
-	 * 		possibly empty list of entities.
+	 * possibly empty list of entities.
 	 * @see EntityReference for more about the meaning of the specified entitiy references that are groups of entities.
 	 */
 	@SuppressWarnings("deprecation")
@@ -481,6 +482,20 @@ public class TargetLogic implements Serializable {
 				matching.add(opponent.getMinions().get(i));
 			}
 			return matching;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_MINION_PLAYED)) {
+			// Nowadays cards are only moved into graveyard after they have been played. The currently played card is in the
+			// set-aside zone, so the most recently added card to the graveyard is guaranteed to be the one most recently
+			// played.
+			List<Entity> minionCardsPlayed = player.getGraveyard().stream()
+					.filter(e -> e.getEntityType() == EntityType.CARD
+							&& e.getSourceCard().getCardType() == CardType.MINION
+							&& e.hasAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK))
+					.collect(Collectors.toList());
+			if (minionCardsPlayed.isEmpty()) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(minionCardsPlayed.get(minionCardsPlayed.size() - 1));
+			}
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

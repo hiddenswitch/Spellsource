@@ -4,8 +4,8 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Choose a minion. It attacks your hero, then the enemy hero.",
-  "targetSelection": "MINIONS",
+  "description": "Choose a friendly minion. It attacks your hero, then the enemy hero.",
+  "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [

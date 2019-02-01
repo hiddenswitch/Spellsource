@@ -57,6 +57,112 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testCursedMirror() {
+		runGym((context, player, opponent) -> {
+			Minion test = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_cursed_mirror", test);
+			assertEquals(test.getHp(), 30);
+			assertEquals(player.getHero().getHp(), CardCatalogue.getCardById("minion_neutral_test").getBaseHp() + 10);
+		});
+	}
+
+	@Test
+	public void testGhuunTheFalseGod() {
+		runGym((context, player, opponent) -> {
+			// Cost 1
+			playMinionCard(context, player, "minion_wisp");
+			// Cost 2
+			Minion destroyed = playMinionCard(context, player, "minion_bloodfen_raptor");
+			// Cost 3
+			playMinionCard(context, player, "minion_mind_control_tech");
+			destroy(context, destroyed);
+			Card card1 = receiveCard(context, player, "minion_cost_three_test");
+			Card card2 = receiveCard(context, player, "minion_cost_three_test");
+			Card card3 = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_ghuun_the_false_god");
+			assertEquals(card1.getZone(), Zones.GRAVEYARD);
+			assertEquals(card2.getZone(), Zones.GRAVEYARD);
+			assertEquals(card3.getZone(), Zones.HAND);
+			assertEquals(player.getMinions().size(), 5);
+		});
+	}
+
+	@Test
+	public void testBloodseeker() {
+		GymFactory factory = getGymFactory((context, player, opponent) -> {
+			player.setAttribute(Attribute.DISABLE_FATIGUE);
+			opponent.setAttribute(Attribute.DISABLE_FATIGUE);
+		});
+		factory.run((context, player, opponent) -> {
+
+			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			playCard(context, player, "spell_razorpetal", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 1);
+			context.endTurn();
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+		});
+
+		factory.run((context, player, opponent) -> {
+			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			context.endTurn();
+			playMinionCard(context, opponent, "minion_kobold_librarian");
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 6);
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 12);
+			context.endTurn();
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+		});
+
+		factory.run((context, player, opponent) -> {
+			Minion bloodseeker1 = playMinionCard(context, player, "minion_bloodseeker");
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker1.getAttack(), bloodseeker1.getBaseAttack() + 6);
+			playCard(context, player, "minion_herald_volazj");
+			Minion bloodseeker2 = player.getMinions().get(2);
+			assertEquals(bloodseeker2.getSourceCard().getCardId(), "minion_bloodseeker");
+			assertNotEquals(bloodseeker1, bloodseeker2);
+			assertEquals(bloodseeker2.getAttack(), 7, "it's a 1/1 + 6");
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker1.getAttack(), bloodseeker1.getBaseAttack() + 12);
+			assertEquals(bloodseeker2.getAttack(), 1 + 12, "it's a 1/1 + 12");
+			Minion bloodseeker3 = playMinionCard(context, player, "minion_bloodseeker");
+			assertEquals(bloodseeker3.getAttack(), bloodseeker3.getBaseAttack() + 12);
+			Minion bloodseeker4 = playMinionCardWithBattlecry(context, player, "minion_faceless_manipulator", bloodseeker3);
+			assertEquals(bloodseeker4.getSourceCard().getCardId(), "minion_bloodseeker");
+			assertNotEquals(bloodseeker1, bloodseeker4);
+			assertNotEquals(bloodseeker2, bloodseeker4);
+			assertNotEquals(bloodseeker3, bloodseeker4);
+			assertEquals(bloodseeker4.getAttack(), bloodseeker4.getBaseAttack() + 12);
+			context.endTurn();
+			for (Minion bloodseeker : new Minion[]{bloodseeker1, bloodseeker3, bloodseeker4}) {
+				assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			}
+			assertEquals(bloodseeker2.getAttack(), 1);
+		});
+
+		factory.run((context, player, opponent) -> {
+			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 6);
+			Minion faceless = playMinionCardWithBattlecry(context, player, "minion_faceless_manipulator", bloodseeker);
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 6);
+			context.endTurn();
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			playCard(context, opponent, "spell_razorpetal", opponent.getHero());
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 6);
+			playCard(context, opponent, "spell_mind_control", faceless);
+			assertEquals(faceless.getOwner(), opponent.getId());
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 1, "+1 from razorpetal damage this turn");
+			context.endTurn();
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack());
+		});
+	}
+
+	@Test
 	public void testOnyxPawn() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 15; i++) {

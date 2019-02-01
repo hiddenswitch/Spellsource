@@ -1,0 +1,27 @@
+{
+  "name": "Avatar of Hakkar",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Your Hero Power costs Health instead of Mana this game.",
+  "battlecry": {
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "aura": {
+        "class": "AttributeAura",
+        "attribute": "AURA_COSTS_HEALTH_INSTEAD_OF_MANA",
+        "target": "FRIENDLY_HERO_POWER"
+      },
+      "target": "FRIENDLY_PLAYER"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

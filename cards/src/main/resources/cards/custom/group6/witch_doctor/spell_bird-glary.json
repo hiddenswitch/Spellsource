@@ -1,0 +1,42 @@
+{
+  "name": "Bird-glary",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage. If you have a Beast, Discover a spell.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "MinionOnBoardCondition",
+          "cardFilter": {
+            "class": "RaceFilter",
+            "race": "BEAST"
+          }
+        },
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "cardType": "SPELL"
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

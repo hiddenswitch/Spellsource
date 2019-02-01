@@ -1,0 +1,33 @@
+{
+  "name": "Dreadweaver",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 8,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Choose a minion. Draw a minion of the same Cost from your deck.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "FromDeckToHandSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "BASE_MANA_COST"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

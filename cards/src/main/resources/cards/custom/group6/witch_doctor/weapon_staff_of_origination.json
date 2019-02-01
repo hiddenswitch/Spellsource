@@ -1,0 +1,46 @@
+{
+  "name": "Staff of Origination",
+  "baseManaCost": 9,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 2,
+  "durability": 8,
+  "rarity": "EPIC",
+  "description": "Your spells cost this weapon's Durability instead of Mana.",
+  "aura": {
+    "class": "CardCostInsteadAura",
+    "target": "FRIENDLY_HAND",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    },
+    "amountOfCurrency": {
+      "class": "AttributeValueProvider",
+      "target": "FRIENDLY_WEAPON",
+      "attribute": "HP"
+    },
+    "canAffordCondition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_WEAPON",
+        "attribute": "HP"
+      },
+      "value2": {
+        "class": "ManaCostProvider"
+      }
+    },
+    "payEffect": {
+      "class": "ModifyDurabilitySpell",
+      "value": {
+        "class": "ManaCostProvider",
+        "multiplier": -1
+      },
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

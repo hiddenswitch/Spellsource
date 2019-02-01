@@ -6,15 +6,8 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Whenever your hero attacks, add a random Voodoo spell to your hand.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "TargetAcquisitionTrigger",
-      "actionType": "PHYSICAL_ATTACK",
-      "sourceEntityType": "HERO",
-      "sourcePlayer": "SELF",
-      "targetPlayer": "BOTH"
-    },
+  "description": "Battlecry: Add a random Voodoo spell to your hand.",
+  "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",
       "randomTarget": true,
@@ -25,6 +18,9 @@
         "spell_spirit_bind"
       ]
     }
+  },
+  "attributes": {
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "CUSTOM",

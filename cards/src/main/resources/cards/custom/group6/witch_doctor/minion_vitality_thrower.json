@@ -1,0 +1,33 @@
+{
+  "name": "Vitality Thrower",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Restore #5 Health to a minion. If it's still damaged, set its Attack to 10.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDamagedCondition"
+      },
+      "spell1": {
+        "class": "HealSpell",
+        "value": 5
+      },
+      "spell2": {
+        "class": "SetAttackSpell",
+        "value": 10
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
