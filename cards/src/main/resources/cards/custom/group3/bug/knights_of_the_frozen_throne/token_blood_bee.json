@@ -1,6 +1,6 @@
 {
-  "name": "Bloodforged Spider",
-  "baseManaCost": 2,
+  "name": "Blood Bee",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,
