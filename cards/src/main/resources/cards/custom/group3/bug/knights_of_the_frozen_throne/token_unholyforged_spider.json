@@ -1,6 +1,6 @@
 {
-  "name": "Unholyforged Spider",
-  "baseManaCost": 2,
+  "name": "Unholy Bee",
+  "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,
