@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "AMBER",
   "rarity": "FREE",
-  "description": "Discover a Runeforged Spider.",
+  "description": "Discover a Runeforged Bee.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",
@@ -14,9 +14,9 @@
         "class": "ReceiveCardSpell"
       },
       "cards": [
-        "token_bloodforged_spider",
-        "token_frostforged_spider",
-        "token_unholyforged_spider"
+        "token_blood_bee",
+        "token_frost_bee",
+        "token_unholy_bee"
       ]
     }
   },
