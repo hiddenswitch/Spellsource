@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replace all Spiderlings in your hand with Silithid Wasps.",
+  "description": "Battlecry: Replace all Larva in your hand with Silithid Wasps.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,7 +15,7 @@
       "card": "minion_silithid_wasp",
       "filter": {
         "class": "SpecificCardFilter",
-        "card": "token_spiderling"
+        "card": "token_larva"
       }
     }
   },
