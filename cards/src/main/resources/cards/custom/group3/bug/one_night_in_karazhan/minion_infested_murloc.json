@@ -6,10 +6,11 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Deathrattle: Summon a 1/1 Spiderling.",
+  "race": "MURLOC",
+  "description": "Deathrattle: Summon a 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "token_spiderling"
+    "card": "token_larva"
   },
   "attributes": {
     "DEATHRATTLES": true
