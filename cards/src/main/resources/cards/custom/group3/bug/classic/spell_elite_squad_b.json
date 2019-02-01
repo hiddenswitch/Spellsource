@@ -1,17 +1,17 @@
 {
-  "name": "Bee Squad",
+  "name": "Elite Squad B",
   "baseManaCost": 9,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Summon three 1/1 Bees with Charge and Poisonous.",
+  "description": "Summon three 1/1 Elites with Charge and Poisonous.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
     "cards": [
-      "token_bee",
-      "token_bee",
-      "token_bee"
+      "token_elite",
+      "token_elite",
+      "token_elite"
     ]
   },
   "collectible": true,
