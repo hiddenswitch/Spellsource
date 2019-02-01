@@ -7,14 +7,14 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Deathrattle: Add four 1/1 Spiderlings to your hand.",
+  "description": "Deathrattle: Add four 1/1 Larva to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [
-      "token_spiderling",
-      "token_spiderling",
-      "token_spiderling",
-      "token_spiderling"
+      "token_larva",
+      "token_larva",
+      "token_larva",
+      "token_larva"
     ]
   },
   "attributes": {
