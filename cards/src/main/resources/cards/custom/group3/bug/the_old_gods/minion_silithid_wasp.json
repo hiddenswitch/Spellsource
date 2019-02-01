@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Give your C'Thun +1/+1 (wherever it is).",
+  "description": "Battlecry: Give your C'Thun +2/+2 (wherever it is).",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
@@ -15,7 +15,7 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
-          "value": 1,
+          "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_cthun"
@@ -24,7 +24,7 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_HAND",
-          "value": 1,
+          "value": 2,
           "filter": {
             "class": "SpecificCardFilter",
             "card": "minion_cthun"
@@ -33,13 +33,13 @@
         {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",
-          "value": 1,
+          "value": 2,
           "attribute": "CTHUN_ATTACK_BUFF"
         },
         {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",
-          "value": 1,
+          "value": 2,
           "attribute": "CTHUN_HEALTH_BUFF"
         }
       ]
