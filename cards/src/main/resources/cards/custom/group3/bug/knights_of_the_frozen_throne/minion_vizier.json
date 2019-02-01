@@ -1,19 +1,19 @@
 {
-  "name": "Nerubian Vizier",
+  "name": "Vizier",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Your Spiderlings have Lifesteal.",
+  "description": "Your Larva have Lifesteal.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",
     "attribute": "AURA_LIFESTEAL",
     "filter": {
       "class": "SpecificCardFilter",
-      "card": "token_spiderling"
+      "card": "token_larva"
     }
   },
   "collectible": true,
