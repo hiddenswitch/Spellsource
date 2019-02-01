@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Choose a minion. Summon 1/1 Spiderlings equal to its Cost.",
+  "description": "Choose a minion. Summon 1/1 Larva equal to its Cost.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "SummonSpell",
@@ -12,7 +12,7 @@
       "class": "AttributeValueProvider",
       "attribute": "BASE_MANA_COST"
     },
-    "card": "token_spiderling"
+    "card": "token_larva"
   },
   "collectible": true,
   "set": "CUSTOM",
