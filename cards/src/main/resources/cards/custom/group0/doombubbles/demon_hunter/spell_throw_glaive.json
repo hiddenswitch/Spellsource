@@ -4,20 +4,20 @@
   "type": "SPELL",
   "heroClass": "PURPLE",
   "rarity": "RARE",
-  "description": "Deal 2 damage to a minion. If you have a weapon, it deals it's damage instead.",
+  "description": "Deal 2 damage to a minion. If you have a weapon, it deals its damage instead.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "EitherOrSpell",
-    "spell2": {
-      "class": "DamageSpell",
-      "value": 2
-    },
     "condition": {
       "class": "HasWeaponCondition",
       "targetPlayer": "SELF"
     },
     "spell1": {
       "class": "WeaponDamageSpell"
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
     }
   },
   "collectible": true,
