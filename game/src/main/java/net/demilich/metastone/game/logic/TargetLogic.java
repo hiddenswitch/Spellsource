@@ -202,7 +202,7 @@ public class TargetLogic implements Serializable {
 	 *                  refer to the right of this argument.
 	 * @param targetKey The {@link EntityReference} to interpet.
 	 * @return {@code null} if no target key is specified or an {@link EntityReference#NONE} was passed; otherwise, a
-	 * possibly empty list of entities.
+	 * 		possibly empty list of entities.
 	 * @see EntityReference for more about the meaning of the specified entitiy references that are groups of entities.
 	 */
 	@SuppressWarnings("deprecation")
@@ -496,6 +496,10 @@ public class TargetLogic implements Serializable {
 			} else {
 				return singleTargetAsList(minionCardsPlayed.get(minionCardsPlayed.size() - 1));
 			}
+		} else if (targetKey.equals(EntityReference.OTHER_FRIENDLY_CHARACTERS)) {
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
+			targets.remove(source);
+			return targets;
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

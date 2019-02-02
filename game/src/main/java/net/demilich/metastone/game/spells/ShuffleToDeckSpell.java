@@ -32,6 +32,12 @@ import java.util.Map;
  */
 public class ShuffleToDeckSpell extends Spell {
 
+	public static SpellDesc create(String card) {
+		SpellDesc desc = new SpellDesc(ShuffleToDeckSpell.class);
+		desc.put(SpellArg.CARD, card);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {

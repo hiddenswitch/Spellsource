@@ -199,8 +199,10 @@ public class ParseUtils {
 				return EntityReference.ENEMY_MIDDLE_MINIONS;
 			case "friendly_last_minion_played":
 				return EntityReference.FRIENDLY_LAST_MINION_PLAYED;
+			case "other_friendly_characters":
+				return EntityReference.OTHER_FRIENDLY_CHARACTERS;
 			default:
-				return null;
+				throw new NullPointerException(str);
 		}
 	}
 

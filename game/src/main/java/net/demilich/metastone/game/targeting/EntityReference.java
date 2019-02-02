@@ -489,6 +489,10 @@ public final class EntityReference implements Serializable {
 	 * References the last minion card played before this current sequence.
 	 */
 	public static final EntityReference FRIENDLY_LAST_MINION_PLAYED = new EntityReference(-72);
+	/**
+	 * References a combination of {@link #OTHER_FRIENDLY_MINIONS} and the {@link #FRIENDLY_HERO}.
+	 */
+	public static final EntityReference OTHER_FRIENDLY_CHARACTERS = new EntityReference(-73);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

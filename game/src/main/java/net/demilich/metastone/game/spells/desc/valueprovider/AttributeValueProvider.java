@@ -13,11 +13,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Reduces the sum of all values of attribute {@link ValueProviderArg#ATTRIBUTE} on target entities for {@link
+ * ValueProviderArg#TARGET}. Correctly accounts for {@link Attribute#ATTACK} and {@link Attribute#HP} when retrieved
+ * from a {@link Card} or an {@link Actor} to include buffs and bonuses.
+ */
 public class AttributeValueProvider extends ValueProvider {
 	public static ValueProviderDesc create(Attribute attribute, EntityReference target) {
 		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AttributeValueProvider.class);
 		arguments.put(ValueProviderArg.ATTRIBUTE, attribute);
 		arguments.put(ValueProviderArg.TARGET, target);
+		return new ValueProviderDesc(arguments);
+	}
+
+	public static ValueProviderDesc create(Attribute attribute) {
+		Map<ValueProviderArg, Object> arguments = ValueProviderDesc.build(AttributeValueProvider.class);
+		arguments.put(ValueProviderArg.ATTRIBUTE, attribute);
 		return new ValueProviderDesc(arguments);
 	}
 
@@ -42,38 +53,44 @@ public class AttributeValueProvider extends ValueProvider {
 		}
 		int value = 0;
 		for (Entity entity : entities) {
-			if (attribute == Attribute.INDEX) {
-				value = entity.getEntityLocation().getIndex();
-				continue;
-			} else if (attribute == Attribute.INDEX_FROM_END) {
-				value = entity.getEntityLocation().getIndex() - context.getPlayer(entity.getOwner()).getZone(entity.getZone()).size();
-				continue;
-			}
+			value += provideValueForAttribute(context, attribute, entity);
+		}
+		return value;
+	}
 
-			if (entity instanceof Card) {
-				Card card = (Card) entity;
-				if (attribute == Attribute.ATTACK && card.getCardType() == CardType.MINION) {
-					value += card.getDesc().baseAttack + card.getBonusAttack();
-				} else if (attribute == Attribute.HP && card.getCardType() == CardType.MINION) {
-					value += card.getDesc().baseHp + card.getBonusHp();
-				} else value += card.getAttributeValue(attribute);
-			} else {
-				if (entity instanceof Actor) {
-					Actor source = (Actor) entity;
-					if (attribute == Attribute.ATTACK) {
-						value += source.getAttack();
-					} else if (attribute == Attribute.MAX_HP) {
-						value += source.getMaxHp();
-					} else if (attribute == Attribute.HP) {
-						value += source.getHp();
-					} else if (attribute == Attribute.BASE_MANA_COST) {
-						value += source.getSourceCard().getBaseManaCost();
-					} else {
-						value += source.getAttributeValue(attribute);
-					}
+	public static int provideValueForAttribute(GameContext context, Attribute attribute, Entity entity) {
+		int value = 0;
+		if (attribute == Attribute.INDEX) {
+			value = entity.getEntityLocation().getIndex();
+			return value;
+		} else if (attribute == Attribute.INDEX_FROM_END) {
+			value = entity.getEntityLocation().getIndex() - context.getPlayer(entity.getOwner()).getZone(entity.getZone()).size();
+			return value;
+		}
+
+		if (entity instanceof Card) {
+			Card card = (Card) entity;
+			if (attribute == Attribute.ATTACK && card.getCardType() == CardType.MINION) {
+				value += card.getDesc().baseAttack + card.getBonusAttack();
+			} else if (attribute == Attribute.HP && card.getCardType() == CardType.MINION) {
+				value += card.getDesc().baseHp + card.getBonusHp();
+			} else value += card.getAttributeValue(attribute);
+		} else {
+			if (entity instanceof Actor) {
+				Actor source = (Actor) entity;
+				if (attribute == Attribute.ATTACK) {
+					value += source.getAttack();
+				} else if (attribute == Attribute.MAX_HP) {
+					value += source.getMaxHp();
+				} else if (attribute == Attribute.HP) {
+					value += source.getHp();
+				} else if (attribute == Attribute.BASE_MANA_COST) {
+					value += source.getSourceCard().getBaseManaCost();
 				} else {
-					value += entity.getAttributeValue(attribute);
+					value += source.getAttributeValue(attribute);
 				}
+			} else {
+				value += entity.getAttributeValue(attribute);
 			}
 		}
 		return value;
