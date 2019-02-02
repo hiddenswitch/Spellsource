@@ -1416,13 +1416,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			card.getAttributes().put(Attribute.DISCARDED, true);
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
 			if (!card.hasAttribute(Attribute.DISCARDED)) {
-				logger.debug("discardCard {}: Discard of {} has been canceled by a trigger.", context.getGameId(), card);
+				logger.debug("discardCard {}: Discard of {} has been cancelled by a trigger.", context.getGameId(), card);
 				return;
 			}
 			player.getStatistics().cardDiscarded();
 		} else if (card.getZone() == Zones.DECK) {
-			logger.debug("discardCard {}: {} mills {}", context.getGameId(), player.getName(), card);
-			context.fireGameEvent(new MillEvent(context, player.getId(), card));
+			logger.debug("discardCard {}: {} roasts {}", context.getGameId(), player.getName(), card);
+			card.getAttributes().put(Attribute.ROASTED, context.getTurn());
+			context.fireGameEvent(new RoastEvent(context, player.getId(), card));
+			if (!card.hasAttribute(Attribute.ROASTED)) {
+				logger.debug("discardCard {}: Roast of {} has been cancelled by a trigger", context.getGameId(), card);
+				return;
+			}
 		}
 
 		removeCard(card);

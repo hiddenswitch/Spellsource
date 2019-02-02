@@ -1,7 +1,6 @@
 version: '3'
 services:
   loadbalancer:
-    restart: always
     image: traefik:alpine
     command: |
       --docker \
@@ -18,60 +17,77 @@ services:
       --docker.watch \
       --docker.exposedbydefault=false
     ports:
-    - 80:80
-    - 443:443
+      - 80:80
+      - 443:443
     volumes:
-    - /var/run/docker.sock:/var/run/docker.sock
-    - loadbalancerdata:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+      - loadbalancerdata:/data
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 8s
   game:
-    restart: always
     image: doctorpangloss/spellsource:latest
     environment:
-    - MONGO_URL=mongodb://mongo:27017/metastone
-    - HAZELCAST_URLS=spellsource-server_game_1:5701
-    - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
+      - MONGO_URL=mongodb://mongo:27017/metastone
+      - HAZELCAST_URLS=spellsource-server_game_1:5701
+      - HAZELCAST_MANCENTER_URL=http://hazelcastmancenter:8080/admin/mancenter
+      - SPELLSOURCE_APPLICATION=${SPELLSOURCE_APPLICATION}
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_DOMAIN=${SMTP_DOMAIN}
     deploy:
+      restart_policy:
+        condition: on-failure
+        window: 30s
       labels:
-      - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
-      - "traefik.versionedhost.frontend.entryPoints=http,https"
-      - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefixStrip:/api/v3/"
-      - "traefik.versionedurl.frontend.entryPoints=http,https"
-      - "traefik.backend.loadbalancer.swarm=true"
-      - "traefik.backend.loadbalancer.stickiness=true"
-      - "traefik.port=80"
-      - "traefik.enable=true"
+        - "traefik.versionedhost.frontend.rule=Host:api-3.hiddenswitch.com"
+        - "traefik.versionedhost.frontend.entryPoints=http,https"
+        - "traefik.versionedurl.frontend.rule=Host:api.hiddenswitch.com;PathPrefixStrip:/api/v3/"
+        - "traefik.versionedurl.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.backend.loadbalancer.stickiness=true"
+        - "traefik.port=80"
+        - "traefik.enable=true"
     healthcheck:
       test: curl --fail -s http://localhost:80/ || exit 1
       interval: 8s
       timeout: 4s
       retries: 3
   launcher:
-    restart: always
     image: doctorpangloss/launcher:latest
     environment:
-    - MONGO_URL=mongodb://mongo:27017/launcher
-    - ROOT_URL=https://launcher.hiddenswitch.com
+      - MONGO_URL=mongodb://mongo:27017/launcher
+      - ROOT_URL=https://launcher.hiddenswitch.com
     deploy:
+      restart_policy:
+        condition: on-failure
+        window: 30s
       labels:
-      - "traefik.frontend.rule=Host:launcher.hiddenswitch.com"
-      - "traefik.frontend.entryPoints=http,https"
-      - "traefik.backend.loadbalancer.swarm=true"
-      - "traefik.backend.loadbalancer.stickiness=true"
-      - "traefik.port=3000"
-      - "traefik.enable=true"
+        - "traefik.frontend.rule=Host:launcher.hiddenswitch.com"
+        - "traefik.frontend.entryPoints=http,https"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.backend.loadbalancer.stickiness=true"
+        - "traefik.port=3000"
+        - "traefik.enable=true"
     healthcheck:
       test: curl --fail -s http://localhost:3000/ || exit 1
       interval: 8s
       timeout: 4s
       retries: 3
   mongo:
-    restart: always
     image: "mongo:3.6"
     volumes:
-    - mongodata:/data/db
+      - mongodata:/data/db
     deploy:
+      restart_policy:
+        condition: on-failure
+        window: 10s
       labels:
-      - "traefik.enable=false"
+        - "traefik.enable=false"
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/metastone --quiet
       interval: 8s
@@ -80,20 +96,77 @@ services:
   hazelcastmancenter:
     image: hazelcast/management-center
     volumes:
-    - mancenterdata:/data
+      - mancenterdata:/data
     environment:
-    - MC_CONTEXT=/admin/mancenter
-    - MANCENTER_DATA=/data
-    - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
+      - MC_CONTEXT=/admin/mancenter
+      - MANCENTER_DATA=/data
+      - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
     deploy:
       labels:
-      - "traefik.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/admin/mancenter/"
-      - "traefik.backend.loadbalancer.swarm=true"
-      - "traefik.frontend.entryPoints=http,https"
-      - "traefik.port=8080"
-      - "traefik.enable=true"
+        - "traefik.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/admin/mancenter/"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.frontend.entryPoints=http,https"
+        - "traefik.port=8080"
+        - "traefik.enable=true"
+  mediawiki:
+    image: "doctorpangloss/wiki:latest"
+    environment:
+      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
+      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_USERNAME=${SMTP_USERNAME}
+      - SMTP_PASSWORD=${SMTP_PASSWORD}
+      - SMTP_DOMAIN=${SMTP_DOMAIN}
+      - MEDIAWIKI_SITE_NAME=Spellsource
+      - MEDIAWIKI_URL=https://wiki.hiddenswitch.com
+      - MEDIAWIKI_LOGO_URL=/resources/assets/wiki.png
+      - MEDIAWIKI_AWS_REGION=us-east-2
+      - MEDIAWIKI_AWS_BUCKET_ID=minionate
+      - MEDIAWIKI_PARSOID_URL=http://parsoid:8000
+      - MEDIAWIKI_PARSOID_DOMAIN=mediawiki
+      - MEDIAWIKI_DB_TYPE=mysql
+      - MEDIAWIKI_DB_SERVER=mariadb
+      - MEDIAWIKI_DB_USER=spellsource
+      - MEDIAWIKI_DB_NAME=spellsource
+      - MEDIAWIKI_DB_PASSWORD=password
+      - MEDIAWIKI_DB_PREFIX=mediawiki
+      - MEDIAWIKI_SECURITY_KEY=${MEDIAWIKI_SECURITY_KEY}
+      - MEDIAWIKI_UPGRADE_KEY=${MEDIAWIKI_UPGRADE_KEY}
+    volumes:
+      - mediawikidata:/var/www/html/images
+    deploy:
+      labels:
+        - "traefik.frontend.rule=Host:wiki.hiddenswitch.com"
+        - "traefik.backend.loadbalancer.swarm=true"
+        - "traefik.frontend.entryPoints=http,https"
+        - "traefik.port=80"
+        - "traefik.enable=true"
+  parsoid:
+    image: "thenets/parsoid:0.10.0"
+    deploy:
+      labels:
+        - "traefik.enable=false"
+    environment:
+      - PARSOID_DOMAIN_mediawiki=http://mediawiki/api.php
+  mariadb:
+    image: mariadb:10.4.1
+    deploy:
+      restart_policy:
+        condition: on-failure
+        window: 15s
+      labels:
+        - "traefik.enable=false"
+    environment:
+      - MYSQL_DATABASE=spellsource
+      - MYSQL_PASSWORD=password
+      - MYSQL_USER=spellsource
+      - MYSQL_ROOT_PASSWORD=password
+      - MYSQL_ROOT_HOST=%
+    volumes:
+      - mariadbdata:/var/lib/mysql
 volumes:
   mongodata:
   mancenterdata:
-  portainerdata:
   loadbalancerdata:
+  mediawikidata:
+  mariadbdata:

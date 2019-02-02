@@ -74,7 +74,7 @@
           "spells": [
             {
               "class": "CardCostModifierSpell",
-              "target": "FRIEDNLY_PLAYER",
+              "target": "FRIENDLY_PLAYER",
               "cardCostModifier": {
                 "class": "CardCostModifier",
                 "target": "FRIENDLY_HERO_POWER",

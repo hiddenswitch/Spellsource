@@ -21,8 +21,11 @@
           "randomTarget": true
         },
         {
-          "class": "DrawCardSpell",
-          "value": 1
+          "class": "CastAfterSequenceSpell",
+          "spell": {
+            "class": "DrawCardSpell",
+            "value": 1
+          }
         }
       ]
     }

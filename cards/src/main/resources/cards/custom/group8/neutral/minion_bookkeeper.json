@@ -1,0 +1,33 @@
+{
+  "name": "Bookkeeper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Battlecry: Refresh a Mana Crystal for every spell in your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RefreshManaSpell",
+      "value": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        "cardSource": {
+          "class": "HandSource",
+          "targetPlayer": "SELF"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

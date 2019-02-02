@@ -1,0 +1,50 @@
+{
+  "name": "Ysera, the Dreamer",
+  "heroPower": "hero_power_emerald_dreams",
+  "baseManaCost": 9,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Resurrect a friendly Beast for every Choose One minion you've played.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ResurrectSpell",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_GRAVEYARD",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "CARD"
+            },
+            {
+              "class": "AttributeFilter",
+              "operation": "HAS",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK"
+            },
+            {
+              "class": "AttributeFilter",
+              "operation": "HAS",
+              "attribute": "CHOICE"
+            }
+          ]
+        }
+      },
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      }
+    }
+  },
+  "attributes": {
+    "ARMOR": 12,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

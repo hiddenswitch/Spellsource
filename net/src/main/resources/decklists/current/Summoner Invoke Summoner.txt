@@ -1,0 +1,21 @@
+### Summoner: Invoke Summoner
+# Class: EGGPLANT
+# Format: Spellsource
+#
+# 2x (0) Hoardling of Tolin
+# 2x (1) Falling Stones
+# 2x (1) Mistress of Mixtures
+# 2x (1) Slippery Mook
+# 2x (2) Energetic Mentee
+# 2x (2) Fleshy Aberration
+# 2x (2) Potion of Creation
+# 2x (2) Whispers of Ruin
+# 2x (3) Hoard Keeper
+# 2x (3) Reactive Potion
+# 2x (4) Femme Fatale
+# 2x (5) Earthquake
+# 2x (5) Monologue
+# 2x (6) Lesser Citrine Spellstone
+# 1x (7) Skugg the Unclean
+# 1x (8) Big Bad Mephilia
+#
