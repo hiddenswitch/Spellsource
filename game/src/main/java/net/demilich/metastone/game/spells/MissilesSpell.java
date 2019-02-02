@@ -27,6 +27,9 @@ import java.util.List;
  * <p>
  * When the amount of damage a missile deals is 1, the spell damage modifier is interpreted to increase the number of
  * missiles. In all other instances, spell damage increases the damage <b>per missile.</b>
+ * <p>
+ * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, applies spell damage to the number of missiles (the {@link
+ * SpellArg#HOW_MANY} value).
  */
 public class MissilesSpell extends DamageSpell {
 
