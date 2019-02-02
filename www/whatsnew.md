@@ -4,6 +4,18 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.20-2.0.26 (Friday, February 1st, 2019)
+
+Thanks to a great contribution from @doombubbles, introducing the Demon Hunter hero class!
+
+##### Content Fixes
+
+ - Doomerang now correctly deals lifesteal and poisonous damage.
+
+##### Content Additions
+
+ - The Demon Hunter prototype.
+
 ### 0.8.19-2.0.25 (Friday, February 1st, 2019)
 
 Thanks to a great contribution from @Rumu, introducing many new cards in the Verdant Dreams set!
