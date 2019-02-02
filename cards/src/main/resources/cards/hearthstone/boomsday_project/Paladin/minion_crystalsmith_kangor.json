@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Divine Shield, Lifesteal. Your healing is doubled",
+  "description": "Divine Shield, Lifesteal. Your Healing is doubled",
   "attributes": {
     "DIVINE_SHIELD": true,
     "HEAL_AMPLIFY_MULTIPLIER": 2,
