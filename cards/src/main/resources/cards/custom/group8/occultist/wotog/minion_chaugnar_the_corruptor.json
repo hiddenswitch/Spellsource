@@ -14,10 +14,6 @@
         {
           "class": "custom.AddEnchantmentToMinionCardSpell",
           "target": "FRIENDLY_DECK",
-          "filter": {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
           "trigger": {
             "eventTrigger": {
               "class": "AfterPhysicalAttackTrigger",
@@ -27,6 +23,10 @@
               "class": "DestroySpell",
               "target": "SELF"
             }
+          },
+          "filter": {
+            "class": "CardFilter",
+            "cardType": "MINION"
           }
         },
         {
@@ -46,9 +46,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "THE_OLD_GODS"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

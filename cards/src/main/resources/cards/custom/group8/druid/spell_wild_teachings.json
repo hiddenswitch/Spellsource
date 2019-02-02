@@ -14,9 +14,9 @@
     },
     "cardFilter": {
       "class": "CardFilter",
-      "cardType": "SPELL",
       "value": 2,
       "attribute": "BASE_MANA_COST",
+      "cardType": "SPELL",
       "operation": "LESS_OR_EQUAL"
     }
   },

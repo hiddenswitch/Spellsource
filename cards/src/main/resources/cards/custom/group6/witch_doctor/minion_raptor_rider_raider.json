@@ -10,7 +10,7 @@
   "battlecry": {
     "spell": {
       "class": "JoustSpell",
-	  "spell": {
+      "spell": {
         "class": "SummonSpell",
         "target": "SELF",
         "boardPositionRelative": "RIGHT"

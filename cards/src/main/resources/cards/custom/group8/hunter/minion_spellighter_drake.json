@@ -18,8 +18,8 @@
       },
       "cardFilter": {
         "class": "CardFilter",
-        "manaCost": 1,
-        "cardType": "SPELL"
+        "cardType": "SPELL",
+        "manaCost": 1
       }
     }
   },

@@ -13,31 +13,6 @@
     "spell": {
       "class": "FromDeckToHandSpell",
       "value": 2,
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "cardType": "MINION"
-          },
-          {
-            "class": "ManaCostFilter",
-            "value": {
-              "class": "ReduceValueProvider",
-              "target": "FRIENDLY_DECK",
-              "filter": {
-                "class": "CardFilter",
-                "cardType": "MINION"
-              },
-              "operation": "MINIMUM",
-              "value1": {
-                "class": "ManaCostProvider"
-              }
-            },
-            "operation": "EQUAL"
-          }
-        ]
-      },
       "spell": {
         "class": "MetaSpell",
         "target": "OUTPUT",
@@ -60,6 +35,31 @@
             "class": "SetHpSpell",
             "value": 1,
             "exclusive": true
+          }
+        ]
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "ManaCostFilter",
+            "value": {
+              "class": "ReduceValueProvider",
+              "target": "FRIENDLY_DECK",
+              "filter": {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              },
+              "operation": "MINIMUM",
+              "value1": {
+                "class": "ManaCostProvider"
+              }
+            },
+            "operation": "EQUAL"
           }
         ]
       }

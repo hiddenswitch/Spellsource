@@ -10,7 +10,6 @@
   "deathrattle": {
     "class": "ShuffleMinionToDeckSpell",
     "target": "SELF",
-    "targetPlayer": "OPPONENT",
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "OUTPUT",
@@ -21,19 +20,20 @@
         },
         "spell": {
           "class": "DrawCardSpell",
-          "targetPlayer": "SELF",
-          "value": 8
+          "value": 8,
+          "targetPlayer": "SELF"
         }
       }
-    }
+    },
+    "targetPlayer": "OPPONENT"
   },
   "attributes": {
     "DEATHRATTLES": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "GOBLINS_VS_GNOMES"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

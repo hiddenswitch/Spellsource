@@ -7,12 +7,12 @@
   "durability": 2,
   "rarity": "COMMON",
   "description": "Costs (1) less for each time your hero has attacked this turn.",
-  "manaCostModifier": {
-    "class": "AttributeValueProvider",
-    "attribute": "ATTACKS_THIS_TURN",
-    "target": "FRIENDLY_PLAYER"
-  },
   "collectible": true,
   "set": "CUSTOM",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "ATTACKS_THIS_TURN"
+  }
 }

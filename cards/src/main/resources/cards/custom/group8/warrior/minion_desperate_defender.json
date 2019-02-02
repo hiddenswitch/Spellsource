@@ -13,10 +13,11 @@
       "target": "FRIENDLY_HERO",
       "armorBonus": {
         "class": "ReduceValueProvider",
-        "operation": "ADD",
         "target": "FRIENDLY_MINIONS",
+        "operation": "ADD",
         "value1": {
           "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
           "value1": {
             "class": "AttributeValueProvider",
             "attribute": "MAX_HP"
@@ -24,8 +25,7 @@
           "value2": {
             "class": "AttributeValueProvider",
             "attribute": "HP"
-          },
-          "operation": "SUBTRACT"
+          }
         }
       }
     }
@@ -41,10 +41,11 @@
       "class": "ValueDescription",
       "value": {
         "class": "ReduceValueProvider",
-        "operation": "ADD",
         "target": "FRIENDLY_MINIONS",
+        "operation": "ADD",
         "value1": {
           "class": "AlgebraicValueProvider",
+          "operation": "SUBTRACT",
           "value1": {
             "class": "AttributeValueProvider",
             "attribute": "MAX_HP"
@@ -52,8 +53,7 @@
           "value2": {
             "class": "AttributeValueProvider",
             "attribute": "HP"
-          },
-          "operation": "SUBTRACT"
+          }
         }
       }
     }

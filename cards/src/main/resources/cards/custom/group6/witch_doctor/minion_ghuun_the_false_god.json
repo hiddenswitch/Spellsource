@@ -15,11 +15,11 @@
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION",
-		"manaCost": {
-		  "class": "AttributeValueProvider",
-		  "attribute": "MANA_SPENT",
-          "target": "FRIENDLY_LAST_MINION_PLAYED"
-		}
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_LAST_MINION_PLAYED",
+          "attribute": "MANA_SPENT"
+        }
       },
       "cardLocation": "HAND",
       "targetPlayer": "SELF"

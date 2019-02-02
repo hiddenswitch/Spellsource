@@ -19,15 +19,15 @@
         "condition": {
           "class": "AttributeCondition",
           "target": "FRIENDLY_PLAYER",
+          "value": 0,
           "attribute": "DEMONIC_FORM",
-          "operation": "GREATER",
-          "value": 0
+          "operation": "GREATER"
         },
         "spell": {
           "class": "ModifyAttributeSpell",
           "target": "FRIENDLY_PLAYER",
-          "attribute": "DEMONIC_FORM",
-          "value": 1
+          "value": 1,
+          "attribute": "DEMONIC_FORM"
         }
       }
     ]

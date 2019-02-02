@@ -23,11 +23,11 @@
         "class": "BoardChangedTrigger",
         "fireCondition": {
           "class": "MinionCountCondition",
-          "targetPlayer": "SELF",
           "value": {
             "class": "MaxBoardSizeValueProvider"
           },
-          "operation": "EQUAL"
+          "operation": "EQUAL",
+          "targetPlayer": "SELF"
         }
       },
       "spell": {

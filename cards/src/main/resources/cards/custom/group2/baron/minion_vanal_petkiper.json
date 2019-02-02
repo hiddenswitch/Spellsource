@@ -101,17 +101,17 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "NONE",
                 "invert": true
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -120,16 +120,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "MURLOC"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -138,16 +138,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "BEAST"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -156,16 +156,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "DRAGON"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -174,16 +174,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "PIRATE"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -192,16 +192,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "ELEMENTAL"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -210,16 +210,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "MECH"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -228,16 +228,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "DEMON"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         },
         {
@@ -246,16 +246,16 @@
           "aura": {
             "class": "BuffAura",
             "target": "FRIENDLY_MINIONS",
-            "attackBonus": 1,
-            "hpBonus": 1,
             "condition": {
               "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
               "filter": {
                 "class": "RaceFilter",
                 "race": "TOTEM"
-              },
-              "target": "FRIENDLY_MINIONS"
-            }
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
           }
         }
       ]

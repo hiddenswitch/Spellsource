@@ -12,13 +12,13 @@
     "spell": {
       "class": "custom.FelfireDrakeSpell",
       "target": "SELF",
-      "cardSource": {
-        "class": "HandSource"
-      },
       "cardFilter": {
         "class": "CardFilter",
-        "cardType": "MINION",
-        "race": "DEMON"
+        "race": "DEMON",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "HandSource"
       }
     }
   },

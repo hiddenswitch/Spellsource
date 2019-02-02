@@ -13,8 +13,8 @@
     "value": 2
   },
   "attributes": {
-    "LIFESTEAL": true,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "LIFESTEAL": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

@@ -9,8 +9,8 @@
   "description": "Deathrattle: Summon three 0/2 Nerubian Eggs.",
   "deathrattle": {
     "class": "SummonSpell",
-    "card": "minion_nerubian_egg",
-    "value": 3
+    "value": 3,
+    "card": "minion_nerubian_egg"
   },
   "attributes": {
     "DEATHRATTLES": true

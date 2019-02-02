@@ -10,12 +10,12 @@
   "battlecry": {
     "spell": {
       "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
       "aura": {
         "class": "AttributeAura",
-        "attribute": "AURA_COSTS_HEALTH_INSTEAD_OF_MANA",
-        "target": "FRIENDLY_HERO_POWER"
-      },
-      "target": "FRIENDLY_PLAYER"
+        "target": "FRIENDLY_HERO_POWER",
+        "attribute": "AURA_COSTS_HEALTH_INSTEAD_OF_MANA"
+      }
     }
   },
   "attributes": {

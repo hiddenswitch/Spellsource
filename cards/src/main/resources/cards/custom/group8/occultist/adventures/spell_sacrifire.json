@@ -25,9 +25,9 @@
   },
   "attributes": {},
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "BLACKROCK_MOUNTAIN"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

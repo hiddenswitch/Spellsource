@@ -9,8 +9,8 @@
   "spell": {
     "class": "ShuffleMinionToDeckSpell",
     "target": "ENEMY_MINIONS",
-	"targetPlayer": "OWNER",
-    "randomTarget": true
+    "randomTarget": true,
+    "targetPlayer": "OWNER"
   },
   "collectible": true,
   "set": "CUSTOM",

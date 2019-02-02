@@ -29,9 +29,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "THE_OLD_GODS"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

@@ -19,9 +19,9 @@
     "randomTarget": true
   },
   "attributes": {
-    "STEALTH": true,
+    "DEATHRATTLES": true,
     "POISONOUS": true,
-    "DEATHRATTLES": true
+    "STEALTH": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",

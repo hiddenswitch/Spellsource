@@ -11,21 +11,21 @@
     "targetSelection": "MINIONS",
     "spell": {
       "class": "RecruitSpell",
-	  "value": 1,
-      "cardLocation": "DECK",
-	  "filter": {
-        "class": "RaceFilter",
-        "race": "BEAST"
-      },
+      "value": 1,
       "cardFilter": {
         "class": "CardFilter",
-		"race": "BEAST",
+        "race": "BEAST",
         "cardType": "MINION",
         "manaCost": {
           "class": "AttributeValueProvider",
           "target": "TARGET",
           "attribute": "BASE_MANA_COST"
         }
+      },
+      "cardLocation": "DECK",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
       }
     }
   },

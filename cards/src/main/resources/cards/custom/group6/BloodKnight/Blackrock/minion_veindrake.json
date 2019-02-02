@@ -19,13 +19,13 @@
         },
         {
           "class": "RecastWhileSpell",
-          "howMany": 4,
           "spell": {
             "class": "DrainSpell",
             "target": "ENEMY_CHARACTERS",
-            "randomTarget": true,
-            "value": 1
-          }
+            "value": 1,
+            "randomTarget": true
+          },
+          "howMany": 4
         }
       ]
     }

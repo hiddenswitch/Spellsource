@@ -10,8 +10,8 @@
     "class": "MissilesSpell",
     "target": "ENEMY_CHARACTERS",
     "value": 2,
-    "howMany": 5,
-    "exclusive": true
+    "exclusive": true,
+    "howMany": 5
   },
   "collectible": true,
   "set": "CUSTOM",

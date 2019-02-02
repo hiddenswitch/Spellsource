@@ -10,14 +10,14 @@
   "description": "Deathrattle: Add a random Voodoo spell to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
-    "targetPlayer": "SELF",
-    "randomTarget": true,
     "cards": [
       "spell_divination",
       "spell_frenzy",
       "spell_hex_bolt",
       "spell_spirit_bind"
-    ]
+    ],
+    "randomTarget": true,
+    "targetPlayer": "SELF"
   },
   "attributes": {
     "DEATHRATTLES": true

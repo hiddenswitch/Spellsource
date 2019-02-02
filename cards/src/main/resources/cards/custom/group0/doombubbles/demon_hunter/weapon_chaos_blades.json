@@ -44,30 +44,30 @@
             "class": "EitherOrSpell",
             "condition": {
               "class": "ComparisonCondition",
+              "operation": "GREATER",
               "value1": {
                 "class": "EntityCounter",
                 "target": "ENEMY_CHARACTERS",
                 "filter": {
                   "class": "AttributeFilter",
                   "attribute": "RESERVED_BOOLEAN_5",
-                  "operation": "HAS",
-                  "invert": true
+                  "invert": true,
+                  "operation": "HAS"
                 }
               },
-              "operation": "GREATER",
               "value2": 0
             },
             "spell1": {
               "class": "FightSpell",
-              "secondaryTarget": "FRIENDLY_HERO",
               "target": "ENEMY_CHARACTERS",
-              "randomTarget": true,
               "filter": {
                 "class": "AttributeFilter",
                 "attribute": "RESERVED_BOOLEAN_5",
-                "operation": "HAS",
-                "invert": true
-              }
+                "invert": true,
+                "operation": "HAS"
+              },
+              "randomTarget": true,
+              "secondaryTarget": "FRIENDLY_HERO"
             },
             "spell2": {
               "class": "RemoveAttributeSpell",

@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "CastFromGroupSpell",
-		"value": 2,
+        "value": 2,
         "group": "group_adapt"
       },
       {

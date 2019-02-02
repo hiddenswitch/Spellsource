@@ -10,15 +10,15 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
-      "sourceEntityType": "HERO",
-      "sourcePlayer": "SELF",
-      "targetPlayer": "BOTH",
       "fireCondition": {
         "class": "MinionCountCondition",
         "value": 0,
         "operation": "EQUAL",
         "targetPlayer": "OPPONENT"
-      }
+      },
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetPlayer": "BOTH"
     },
     "spell": {
       "class": "BuffSpell",

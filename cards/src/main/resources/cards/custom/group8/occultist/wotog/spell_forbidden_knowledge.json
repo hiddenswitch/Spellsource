@@ -29,24 +29,24 @@
     ]
   },
   "collectible": true,
-  "sets": [
-    "CUSTOM",
-    "THE_OLD_GODS"
-  ],
   "fileFormatVersion": 1,
   "dynamicDescription": [
     {
       "class": "ValueDescription",
       "value": {
         "class": "AlgebraicValueProvider",
+        "operation": "MAXIMUM",
         "value1": {
           "class": "PlayerAttributeValueProvider",
-          "playerAttribute": "MANA",
-          "offset": -2
+          "offset": -2,
+          "playerAttribute": "MANA"
         },
-        "value2": 0,
-        "operation": "MAXIMUM"
+        "value2": 0
       }
     }
+  ],
+  "sets": [
+    "CUSTOM",
+    "THE_OLD_GODS"
   ]
 }

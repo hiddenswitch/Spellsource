@@ -22,13 +22,13 @@
             },
             {
               "class": "AttributeFilter",
-              "operation": "HAS",
-              "attribute": "PLAYED_FROM_HAND_OR_DECK"
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "HAS"
             },
             {
               "class": "AttributeFilter",
-              "operation": "HAS",
-              "attribute": "CHOICE"
+              "attribute": "CHOICE",
+              "operation": "HAS"
             }
           ]
         }

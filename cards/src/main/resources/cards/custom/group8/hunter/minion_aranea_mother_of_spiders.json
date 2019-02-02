@@ -43,30 +43,6 @@
   "collectible": true,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1,
-  "manaCostModifier": {
-    "class": "CardCountValueProvider",
-    "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "CardFilter",
-          "cardType": "SPELL"
-        },
-        {
-          "class": "AttributeFilter",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "PLAYED_FROM_HAND_OR_DECK",
-          "operation": "EQUAL"
-        }
-      ]
-    },
-    "cardSource": {
-      "class": "GraveyardCardsSource",
-      "targetPlayer": "SELF"
-    }
-  },
   "dynamicDescription": [
     {
       "class": "ValueDescription",
@@ -124,5 +100,29 @@
       "description1": " 1/1 Webspinner",
       "description2": " 1/1 Webspinners"
     }
-  ]
+  ],
+  "manaCostModifier": {
+    "class": "CardCountValueProvider",
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "CardFilter",
+          "cardType": "SPELL"
+        },
+        {
+          "class": "AttributeFilter",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+          "attribute": "PLAYED_FROM_HAND_OR_DECK",
+          "operation": "EQUAL"
+        }
+      ]
+    },
+    "cardSource": {
+      "class": "GraveyardCardsSource",
+      "targetPlayer": "SELF"
+    }
+  }
 }

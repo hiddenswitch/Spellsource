@@ -25,13 +25,13 @@
           },
           {
             "class": "CastCardsSpell",
-            "secondaryTarget": "EVENT_SOURCE",
             "target": "ALL_MINIONS",
             "filter": {
               "class": "EntityEqualsFilter",
-              "secondaryTarget": "EVENT_TARGET",
-              "invert": true
-            }
+              "invert": true,
+              "secondaryTarget": "EVENT_TARGET"
+            },
+            "secondaryTarget": "EVENT_SOURCE"
           }
         ]
       },
@@ -39,9 +39,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "GOBLINS_VS_GNOMES"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

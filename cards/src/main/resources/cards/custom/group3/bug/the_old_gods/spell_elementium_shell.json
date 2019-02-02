@@ -10,23 +10,23 @@
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "aura": {
-        "class": "BuffAura",
-        "target": "FRIENDLY_MINIONS",
-        "filter": {
-            "class": "AndFilter",
-            "filters": [
-              {
-                "class": "AttributeFilter",
-                "attribute": "SILENCED",
-                "invert": true
-              },
-              {
-                "class": "SpecificCardFilter",
-                "card": "token_spiderling"
-              }
-            ]
+      "class": "BuffAura",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "SILENCED",
+            "invert": true
           },
-        "hpBonus": 1
+          {
+            "class": "SpecificCardFilter",
+            "card": "token_spiderling"
+          }
+        ]
+      },
+      "hpBonus": 1
     }
   },
   "attributes": {},

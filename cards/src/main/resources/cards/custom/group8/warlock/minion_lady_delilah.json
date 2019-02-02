@@ -8,81 +8,81 @@
   "rarity": "LEGENDARY",
   "race": "DEMON",
   "description": "Rush. Lifesteal. Has +1/+1 for each other Lifesteal card you've played this game.",
-  "auras": [
-    {
-      "class": "StatefulAttributeValueAura",
-      "attribute": "AURA_ATTACK_BONUS",
-      "target": "SELF",
-      "value": {
-        "class": "EntityCounter",
-        "target": "FRIENDLY_GRAVEYARD",
-        "filter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "EntityTypeFilter",
-              "entityType": "CARD"
-            },
-            {
-              "class": "AttributeFilter",
-              "attribute": "LIFESTEAL",
-              "operation": "HAS"
-            },
-            {
-              "class": "AttributeFilter",
-              "attribute": "PLAYED_FROM_HAND_OR_DECK",
-              "operation": "HAS"
-            }
-          ]
-        }
-      },
-      "triggers": [
-        {
-          "class": "AfterCardPlayedTrigger",
-          "targetPlayer": "SELF"
-        }
-      ]
-    },
-    {
-      "class": "StatefulAttributeValueAura",
-      "attribute": "AURA_ATTACK_BONUS",
-      "target": "SELF",
-      "value": {
-        "class": "EntityCounter",
-        "target": "FRIENDLY_GRAVEYARD",
-        "filter": {
-          "class": "AndFilter",
-          "filters": [
-            {
-              "class": "EntityTypeFilter",
-              "entityType": "CARD"
-            },
-            {
-              "class": "AttributeFilter",
-              "attribute": "LIFESTEAL",
-              "operation": "HAS"
-            },
-            {
-              "class": "AttributeFilter",
-              "attribute": "PLAYED_FROM_HAND_OR_DECK",
-              "operation": "HAS"
-            }
-          ]
-        }
-      },
-      "triggers": [
-        {
-          "class": "AfterCardPlayedTrigger",
-          "targetPlayer": "SELF"
-        }
-      ]
-    }
-  ],
   "attributes": {
-    "RUSH": true,
-    "LIFESTEAL": true
+    "LIFESTEAL": true,
+    "RUSH": true
   },
   "collectible": true,
   "set": "VERDANT_DREAMS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "StatefulAttributeValueAura",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_GRAVEYARD",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "CARD"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "LIFESTEAL",
+              "operation": "HAS"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "HAS"
+            }
+          ]
+        }
+      },
+      "triggers": [
+        {
+          "class": "AfterCardPlayedTrigger",
+          "targetPlayer": "SELF"
+        }
+      ],
+      "attribute": "AURA_ATTACK_BONUS"
+    },
+    {
+      "class": "StatefulAttributeValueAura",
+      "target": "SELF",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_GRAVEYARD",
+        "filter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "EntityTypeFilter",
+              "entityType": "CARD"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "LIFESTEAL",
+              "operation": "HAS"
+            },
+            {
+              "class": "AttributeFilter",
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "HAS"
+            }
+          ]
+        }
+      },
+      "triggers": [
+        {
+          "class": "AfterCardPlayedTrigger",
+          "targetPlayer": "SELF"
+        }
+      ],
+      "attribute": "AURA_ATTACK_BONUS"
+    }
+  ]
 }

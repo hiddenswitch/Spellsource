@@ -9,12 +9,12 @@
   "description": "Stealth. Deathrattle: If you have 10 Mana Crystals, draw a card.",
   "deathrattle": {
     "class": "ConditionalSpell",
+    "condition": {
+      "class": "ManaMaxedCondition"
+    },
     "spell": {
       "class": "DrawCardSpell",
       "value": 1
-    },
-    "condition": {
-      "class": "ManaMaxedCondition"
     }
   },
   "attributes": {

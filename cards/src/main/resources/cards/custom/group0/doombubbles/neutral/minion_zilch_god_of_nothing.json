@@ -38,9 +38,9 @@
                   },
                   {
                     "class": "CardFilter",
+                    "value": 0,
                     "attribute": "ATTACK",
-                    "operation": "GREATER",
-                    "value": 0
+                    "operation": "GREATER"
                   }
                 ]
               },
@@ -63,9 +63,9 @@
                   },
                   {
                     "class": "CardFilter",
+                    "value": 0,
                     "attribute": "ATTACK",
-                    "operation": "GREATER",
-                    "value": 0
+                    "operation": "GREATER"
                   }
                 ]
               },

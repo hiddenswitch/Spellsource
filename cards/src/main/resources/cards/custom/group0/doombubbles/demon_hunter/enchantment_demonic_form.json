@@ -4,11 +4,6 @@
   "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Your hero power is Demonic Form. Lasts a certain number of turns",
-  "aura": {
-    "class": "CardAura",
-    "target": "FRIENDLY_HERO_POWER",
-    "card": "hero_power_demonic_form"
-  },
   "triggers": [
     {
       "eventTrigger": {
@@ -24,8 +19,8 @@
     {
       "eventTrigger": {
         "class": "AfterCardPlayedTrigger",
-        "targetPlayer": "SELF",
-        "requiredAttribute": "LIFESTEAL"
+        "requiredAttribute": "LIFESTEAL",
+        "targetPlayer": "SELF"
       },
       "spell": {
         "class": "HeroPowerSpell",
@@ -42,18 +37,18 @@
       },
       "spell": {
         "class": "ConditionalEffectSpell",
-        "spell1": {
-          "class": "ModifyAttributeSpell",
-          "attribute": "DEMONIC_FORM",
-          "target": "FRIENDLY_PLAYER",
-          "value": -1
-        },
         "condition": {
           "class": "AttributeCondition",
           "target": "FRIENDLY_PLAYER",
+          "value": 0,
           "attribute": "DEMONIC_FORM",
-          "operation": "EQUAL",
-          "value": 0
+          "operation": "EQUAL"
+        },
+        "spell1": {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": -1,
+          "attribute": "DEMONIC_FORM"
         },
         "spell2": {
           "class": "RemoveEnchantmentSpell",
@@ -63,6 +58,11 @@
       }
     }
   ],
+  "aura": {
+    "class": "CardAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "card": "hero_power_demonic_form"
+  },
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

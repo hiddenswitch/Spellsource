@@ -9,13 +9,12 @@
   "description": "Has +1 Attack for each damage your hero has taken this turn.",
   "aura": {
     "class": "StatefulAttributeValueAura",
-    "attribute": "AURA_ATTACK_BONUS",
+    "target": "SELF",
     "value": {
       "class": "AttributeValueProvider",
-      "attribute": "DAMAGE_THIS_TURN",
-      "target": "FRIENDLY_HERO"
+      "target": "FRIENDLY_HERO",
+      "attribute": "DAMAGE_THIS_TURN"
     },
-    "target": "SELF",
     "triggers": [
       {
         "class": "TurnStartTrigger",
@@ -26,7 +25,8 @@
         "targetEntityType": "HERO",
         "targetPlayer": "SELF"
       }
-    ]
+    ],
+    "attribute": "AURA_ATTACK_BONUS"
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -14,8 +14,8 @@
     },
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF",
-      "card": "spell_the_coin"
+      "card": "spell_the_coin",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,
