@@ -18,8 +18,8 @@
         },
         {
           "class": "BuffSpell",
-          "value": 1,
-          "target": "FRIENDLY_WEAPON"
+          "target": "FRIENDLY_WEAPON",
+          "value": 1
         }
       ]
     }

@@ -11,8 +11,8 @@
     "spells": [
       {
         "class": "DamageSpell",
-        "value": 3,
-        "target": "ALL_MINIONS"
+        "target": "ALL_MINIONS",
+        "value": 3
       },
       {
         "class": "BuffSpell",
@@ -22,24 +22,24 @@
       {
         "class": "ConditionalSpell",
         "target": "FRIENDLY_PLAYER",
-        "spell": {
-          "class": "AddEnchantmentSpell",
-          "card": "enchantment_demonic_form"
-        },
         "condition": {
           "class": "AnyMatchFilterCondition",
-          "invert": true,
           "filter": {
             "class": "HasEnchantmentFilter",
             "card": "enchantment_demonic_form"
-          }
+          },
+          "invert": true
+        },
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "card": "enchantment_demonic_form"
         }
       },
       {
         "class": "SetAttributeSpell",
         "target": "FRIENDLY_PLAYER",
-        "attribute": "DEMONIC_FORM",
-        "value": 2
+        "value": 2,
+        "attribute": "DEMONIC_FORM"
       }
     ]
   },

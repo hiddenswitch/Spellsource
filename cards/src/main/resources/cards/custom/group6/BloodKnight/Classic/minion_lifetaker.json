@@ -11,13 +11,13 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "DrainSpell",
-      "value": 1,
-      "target": "ALL_OTHER_MINIONS"
+      "target": "ALL_OTHER_MINIONS",
+      "value": 1
     }
   },
   "attributes": {
-    "TAUNT": true,
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CUSTOM",

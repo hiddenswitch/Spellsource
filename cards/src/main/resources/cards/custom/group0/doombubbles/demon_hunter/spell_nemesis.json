@@ -8,14 +8,14 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",
-    "spell1": {
-      "class": "SetHpSpell",
-      "value": 1
-    },
     "condition": {
       "class": "RaceCondition",
       "race": "NONE",
       "invert": true
+    },
+    "spell1": {
+      "class": "SetHpSpell",
+      "value": 1
     },
     "spell2": {
       "class": "SetHpSpell",

@@ -8,9 +8,6 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "cards": [
-      "token_devilsaur_voodoo"
-    ],
     "spell": {
       "class": "MetaSpell",
       "target": "OUTPUT",
@@ -30,7 +27,10 @@
           "secondaryTarget": "OUTPUT"
         }
       ]
-    }
+    },
+    "cards": [
+      "token_devilsaur_voodoo"
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

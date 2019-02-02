@@ -20,12 +20,12 @@
       },
       {
         "class": "ModifyAttributeSpell",
-        "attribute": "WITHER",
-        "value": 1
+        "value": 1,
+        "attribute": "WITHER"
       },
       {
         "class": "AddEnchantmentSpell",
-        "trigger":  {
+        "trigger": {
           "eventTrigger": {
             "class": "DamageCausedTrigger",
             "hostTargetType": "IGNORE_OTHER_SOURCES"

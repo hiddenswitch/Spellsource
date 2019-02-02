@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "description": "After this minion survives damage, summon a copy of it.",
-   "trigger": {
+  "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
       "fireCondition": {
@@ -23,9 +23,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "THE_OLD_GODS"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

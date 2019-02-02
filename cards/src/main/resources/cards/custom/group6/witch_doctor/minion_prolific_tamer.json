@@ -10,17 +10,17 @@
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
       "value1": {
         "class": "EntityCounter",
         "target": "FRIENDLY_DECK",
         "filter": {
           "class": "CardFilter",
-          "cardType": "MINION",
-          "race": "BEAST"
+          "race": "BEAST",
+          "cardType": "MINION"
         }
       },
-      "value2": 5,
-      "operation": "GREATER_OR_EQUAL"
+      "value2": 5
     },
     "spell": {
       "class": "FromDeckToHandSpell",

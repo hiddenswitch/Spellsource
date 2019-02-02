@@ -2,17 +2,17 @@
   "name": "Vilewing Broodmother",
   "baseManaCost": 4,
   "type": "MINION",
+  "heroClass": "ROSE",
   "baseAttack": 3,
   "baseHp": 3,
-  "heroClass": "ROSE",
   "rarity": "COMMON",
   "race": "BEAST",
   "description": "Poisonous. Battlecry: Summon a 1/1 Hatchling with Poisonous.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",
-      "card": "token_vilewing_hatchling",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "token_vilewing_hatchling"
     }
   },
   "attributes": {

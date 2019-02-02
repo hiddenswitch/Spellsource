@@ -77,15 +77,15 @@
           "class": "ValueDescription",
           "value": {
             "class": "AlgebraicValueProvider",
+            "operation": "MAXIMUM",
             "value1": {
               "class": "AttributeValueProvider",
               "target": "SELF",
               "attribute": "RESERVED_INTEGER_1",
-              "offset": 40,
-              "multiplier": -1
+              "multiplier": -1,
+              "offset": 40
             },
-            "value2": 0,
-            "operation": "MAXIMUM"
+            "value2": 0
           }
         },
         " more"

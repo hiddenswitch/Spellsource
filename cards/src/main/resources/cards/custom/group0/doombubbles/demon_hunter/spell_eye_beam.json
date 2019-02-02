@@ -14,7 +14,6 @@
     },
     "spell": {
       "class": "RecastWhileSpell",
-      "howMany": 80,
       "condition": {
         "class": "ComparisonCondition",
         "operation": "EQUAL",
@@ -28,8 +27,8 @@
           "filter": {
             "class": "AttributeFilter",
             "attribute": "DESTROYED",
-            "operation": "HAS",
-            "invert": true
+            "invert": true,
+            "operation": "HAS"
           }
         }
       },
@@ -43,7 +42,8 @@
           "class": "DamageSpell",
           "value": 1
         }
-      }
+      },
+      "howMany": 80
     }
   },
   "collectible": true,

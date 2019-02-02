@@ -16,20 +16,20 @@
     },
     "spell": {
       "class": "AddEnchantmentSpell",
-      "card": "enchantment_heartpierced",
-      "target": "EVENT_TARGET"
+      "target": "EVENT_TARGET",
+      "card": "enchantment_heartpierced"
     }
   },
   "deathrattle": {
     "class": "DrainSpell",
     "target": "ALL_MINIONS",
-    "filter": {
-      "class": "HasEnchantmentFilter",
-      "card": "enchantment_heartpierced"
-    },
     "value": {
       "class": "AttributeValueProvider",
       "attribute": "HP"
+    },
+    "filter": {
+      "class": "HasEnchantmentFilter",
+      "card": "enchantment_heartpierced"
     }
   },
   "attributes": {

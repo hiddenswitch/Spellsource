@@ -11,9 +11,9 @@
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
-      "targetPlayer": "SELF",
+      "sourcePlayer": "SELF",
       "targetEntityType": "MINION",
-      "sourcePlayer": "SELF"
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "MetaSpell",
@@ -27,7 +27,7 @@
           "class": "BuffSpell",
           "target": "EVENT_TARGET",
           "attackBonus": 3,
-		  "hpBonus": 3
+          "hpBonus": 3
         }
       ]
     }

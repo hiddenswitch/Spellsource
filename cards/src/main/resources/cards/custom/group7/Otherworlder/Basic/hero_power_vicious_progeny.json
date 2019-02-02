@@ -14,6 +14,7 @@
         {
           "class": "BuffSpell",
           "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
           "filter": {
             "class": "SpecificCardFilter",
             "cards": [
@@ -21,8 +22,7 @@
               "token_xenodrone_02",
               "token_xenodrone_01"
             ]
-          },
-          "attackBonus": 2
+          }
         },
         {
           "class": "SummonSpell",

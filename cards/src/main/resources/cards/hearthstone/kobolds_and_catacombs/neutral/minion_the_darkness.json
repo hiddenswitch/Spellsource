@@ -32,8 +32,8 @@
         "conditions": [
           {
             "class": "AttributeCondition",
-            "attribute": "PERMANENT",
             "target": "SELF",
+            "attribute": "PERMANENT",
             "operation": "HAS"
           },
           {

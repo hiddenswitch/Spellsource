@@ -10,13 +10,13 @@
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",
-      "randomTarget": true,
       "cards": [
         "spell_divination",
         "spell_frenzy",
         "spell_hex_bolt",
         "spell_spirit_bind"
-      ]
+      ],
+      "randomTarget": true
     }
   },
   "attributes": {

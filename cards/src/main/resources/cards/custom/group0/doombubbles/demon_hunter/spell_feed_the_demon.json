@@ -7,6 +7,7 @@
   "description": "Discard your Soul Fragments. Enter Demonic Form for that many turns.",
   "condition": {
     "class": "ComparisonCondition",
+    "operation": "GREATER",
     "value1": {
       "class": "CardCountValueProvider",
       "cardFilter": {
@@ -14,7 +15,6 @@
         "card": "spell_soul_fragment"
       }
     },
-    "operation": "GREATER",
     "value2": 0
   },
   "targetSelection": "NONE",
@@ -39,27 +39,27 @@
       {
         "class": "ConditionalSpell",
         "target": "FRIENDLY_PLAYER",
-        "spell": {
-          "class": "AddEnchantmentSpell",
-          "card": "enchantment_demonic_form"
-        },
         "condition": {
           "class": "AnyMatchFilterCondition",
-          "invert": true,
           "filter": {
             "class": "HasEnchantmentFilter",
             "card": "enchantment_demonic_form"
-          }
+          },
+          "invert": true
+        },
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "card": "enchantment_demonic_form"
         }
       },
       {
         "class": "SetAttributeSpell",
         "target": "FRIENDLY_PLAYER",
-        "attribute": "DEMONIC_FORM",
         "value": {
           "class": "GameValueProvider",
           "gameValue": "SPELL_VALUE"
-        }
+        },
+        "attribute": "DEMONIC_FORM"
       }
     ]
   },

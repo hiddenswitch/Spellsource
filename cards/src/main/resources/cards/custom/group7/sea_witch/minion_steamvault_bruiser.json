@@ -36,8 +36,8 @@
             },
             {
               "class": "AddAttributeSpell",
-              "attribute": "TAUNT",
-              "target": "SELF"
+              "target": "SELF",
+              "attribute": "TAUNT"
             }
           ]
         },
@@ -49,8 +49,7 @@
       ]
     }
   },
-  "attributes": {
-  },
+  "attributes": {},
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

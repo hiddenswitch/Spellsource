@@ -8,8 +8,8 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
-	"spells": [
-	  {
+    "spells": [
+      {
         "class": "DiscoverSpell",
         "spell": {
           "class": "ReceiveCardSpell",
@@ -21,15 +21,15 @@
           "cardType": "MINION"
         }
       },
-	  {
-	    "class": "SummonSpell",
+      {
+        "class": "SummonSpell",
         "cards": [
           "token_voodoo_scarab",
           "token_voodoo_scarab",
           "token_voodoo_scarab"
         ]
       }
-	]
+    ]
   },
   "collectible": true,
   "set": "CUSTOM",

@@ -5,7 +5,6 @@
   "heroClass": "PURPLE",
   "rarity": "FREE",
   "description": "Passive Hero Power. Your hero has +1 Attack during your turn.",
-  "targetSelection": "NONE",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_HERO",
@@ -19,9 +18,9 @@
         {
           "class": "AttributeCondition",
           "target": "FRIENDLY_PLAYER",
+          "value": 1,
           "attribute": "DEMONIC_FORM",
-          "operation": "LESS",
-          "value": 1
+          "operation": "LESS"
         }
       ]
     },

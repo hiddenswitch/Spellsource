@@ -9,9 +9,9 @@
   "description": "All friendly minions gain +1/+1",
   "aura": {
     "class": "BuffAura",
+    "target": "FRIENDLY_MINIONS",
     "attackBonus": 1,
-    "hpBonus": 1,
-    "target": "FRIENDLY_MINIONS"
+    "hpBonus": 1
   },
   "collectible": true,
   "set": "TEST",

@@ -17,8 +17,8 @@
       },
       {
         "class": "FightSpell",
-        "secondaryTarget": "FRIENDLY_HERO",
-        "target": "TARGET"
+        "target": "TARGET",
+        "secondaryTarget": "FRIENDLY_HERO"
       }
     ]
   },

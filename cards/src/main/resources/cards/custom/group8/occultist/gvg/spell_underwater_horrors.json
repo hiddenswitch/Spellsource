@@ -8,7 +8,6 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",
-    "targetPlayer": "OWNER",
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "OUTPUT",
@@ -23,12 +22,13 @@
         },
         "maxFires": 1
       }
-    }
+    },
+    "targetPlayer": "OWNER"
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "GOBLINS_VS_GNOMES"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

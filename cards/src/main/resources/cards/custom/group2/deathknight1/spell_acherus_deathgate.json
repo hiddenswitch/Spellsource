@@ -15,7 +15,6 @@
           "class": "FromDeckToHandSpell",
           "targetPlayer": "SELF"
         },
-        "exclusive": true,
         "cardFilter": {
           "class": "CardFilter",
           "cardType": "MINION",
@@ -24,7 +23,8 @@
         "cardSource": {
           "class": "DeckSource",
           "distinct": true
-        }
+        },
+        "exclusive": true
       },
       {
         "class": "SummonSpell",

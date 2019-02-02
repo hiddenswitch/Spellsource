@@ -9,7 +9,7 @@
   "description": "<b>Battlecry:</b> Play a Secret from your deck. <b>Deathrattle:</b> Shuffle that secret into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
-    "spell":  {
+    "spell": {
       "class": "custom.KeepersPupilSpell"
     }
   },

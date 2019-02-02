@@ -13,10 +13,6 @@
     "spell": {
       "class": "FromDeckToHandSpell",
       "value": 1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "race": "DRAGON"
-      },
       "spell": {
         "class": "CardCostModifierSpell",
         "target": "OUTPUT",
@@ -26,6 +22,10 @@
           "value": 2,
           "operation": "SUBTRACT"
         }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
       }
     }
   },

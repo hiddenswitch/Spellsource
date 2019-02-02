@@ -15,9 +15,9 @@
     "DEATHRATTLES": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CLASSIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

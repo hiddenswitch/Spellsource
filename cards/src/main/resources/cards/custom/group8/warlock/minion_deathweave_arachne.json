@@ -8,7 +8,7 @@
   "rarity": "COMMON",
   "race": "DEMON",
   "description": "Battlecry: Discard a random minion.",
-   "battlecry": {
+  "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "DiscardSpell",

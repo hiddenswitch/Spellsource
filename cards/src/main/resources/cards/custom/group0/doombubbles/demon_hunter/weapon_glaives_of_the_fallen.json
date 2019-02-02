@@ -17,6 +17,14 @@
     "spell": {
       "class": "ConditionalSpell",
       "target": "EVENT_TARGET",
+      "condition": {
+        "class": "AnyMatchFilterCondition",
+        "filter": {
+          "class": "HasEnchantmentFilter",
+          "card": "enchantment_soul_fragment"
+        },
+        "invert": true
+      },
       "spell": {
         "class": "MetaSpell",
         "spells": [
@@ -24,8 +32,8 @@
             "class": "AddDeathrattleSpell",
             "spell": {
               "class": "ReceiveCardSpell",
-              "targetPlayer": "OPPONENT",
-              "card": "spell_soul_fragment"
+              "card": "spell_soul_fragment",
+              "targetPlayer": "OPPONENT"
             }
           },
           {
@@ -33,14 +41,6 @@
             "card": "enchantment_soul_fragment"
           }
         ]
-      },
-      "condition": {
-        "class": "AnyMatchFilterCondition",
-        "invert": true,
-        "filter": {
-          "class": "HasEnchantmentFilter",
-          "card": "enchantment_soul_fragment"
-        }
       }
     }
   },

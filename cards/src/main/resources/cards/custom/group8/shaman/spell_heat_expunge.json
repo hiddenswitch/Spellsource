@@ -16,12 +16,12 @@
       {
         "class": "DamageSpell",
         "target": "ALL_MINIONS",
+        "value": 2,
         "filter": {
           "class": "EntityEqualsFilter",
-          "secondaryTarget": "TARGET",
-          "invert": true
-        },
-        "value": 2
+          "invert": true,
+          "secondaryTarget": "TARGET"
+        }
       }
     ]
   },

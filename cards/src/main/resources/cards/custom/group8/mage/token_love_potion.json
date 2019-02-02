@@ -10,7 +10,7 @@
     "targetPlayer": "OPPONENT"
   },
   "spell": {
-    "class": "MindControlSpell",    
+    "class": "MindControlSpell",
     "target": "EVENT_TARGET"
   },
   "collectible": false,

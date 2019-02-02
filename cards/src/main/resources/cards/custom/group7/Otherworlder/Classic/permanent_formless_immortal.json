@@ -25,12 +25,12 @@
         "class": "BoardChangedTrigger",
         "fireCondition": {
           "class": "ComparisonCondition",
+          "operation": "EQUAL",
           "value1": {
             "class": "EntityCounter",
             "target": "FRIENDLY_MINIONS"
           },
-          "value2": 0,
-          "operation": "EQUAL"
+          "value2": 0
         }
       },
       "spell": {

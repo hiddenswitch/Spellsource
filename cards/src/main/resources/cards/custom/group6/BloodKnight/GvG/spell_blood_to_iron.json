@@ -14,13 +14,13 @@
         "target": "FRIENDLY_HERO",
         "value": {
           "class": "ReduceValueProvider",
-          "operation": "ADD",
           "target": "FRIENDLY_MINIONS",
+          "attribute": "HP",
           "filter": {
             "class": "RaceFilter",
             "race": "MECH"
           },
-          "attribute": "HP"
+          "operation": "ADD"
         }
       },
       {
@@ -41,13 +41,13 @@
       "class": "ValueDescription",
       "value": {
         "class": "ReduceValueProvider",
-        "operation": "ADD",
         "target": "FRIENDLY_MINIONS",
+        "attribute": "HP",
         "filter": {
           "class": "RaceFilter",
           "race": "MECH"
         },
-        "attribute": "HP"
+        "operation": "ADD"
       }
     }
   ]

@@ -10,10 +10,6 @@
   "aura": {
     "class": "CardCostInsteadAura",
     "target": "FRIENDLY_HAND",
-    "filter": {
-      "class": "CardFilter",
-      "cardType": "SPELL"
-    },
     "amountOfCurrency": {
       "class": "AttributeValueProvider",
       "target": "FRIENDLY_WEAPON",
@@ -30,6 +26,10 @@
       "value2": {
         "class": "ManaCostProvider"
       }
+    },
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
     },
     "payEffect": {
       "class": "ModifyDurabilitySpell",

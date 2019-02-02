@@ -17,9 +17,9 @@
           "target": "FRIENDLY_HERO",
           "value": {
             "class": "AttributeValueProvider",
-            "operation": "DIVIDE_ROUNDED",
             "target": "FRIENDLY_HERO",
-            "attribute": "HP"
+            "attribute": "HP",
+            "operation": "DIVIDE_ROUNDED"
           }
         },
         {

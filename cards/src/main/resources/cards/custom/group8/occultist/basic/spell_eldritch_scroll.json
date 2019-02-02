@@ -20,9 +20,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "BASIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

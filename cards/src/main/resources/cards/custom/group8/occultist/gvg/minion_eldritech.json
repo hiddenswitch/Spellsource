@@ -32,9 +32,9 @@
     "BATTLECRY": true
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "GOBLINS_VS_GNOMES"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

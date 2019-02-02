@@ -28,8 +28,8 @@
     }
   },
   "attributes": {
-    "POISONOUS": true,
-    "LIFESTEAL": true
+    "LIFESTEAL": true,
+    "POISONOUS": true
   },
   "collectible": false,
   "set": "TEST",

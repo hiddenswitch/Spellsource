@@ -12,7 +12,7 @@
       "class": "DamageReceivedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
-     "spell": {
+    "spell": {
       "class": "BuffSpell",
       "target": "OTHER_FRIENDLY_MINIONS",
       "attackBonus": 1,
@@ -21,9 +21,9 @@
     }
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "GOBLINS_VS_GNOMES"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

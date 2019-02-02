@@ -10,11 +10,11 @@
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition",
-      "targetPlayer": "OPPONENT",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "SPELL"
-      }
+      },
+      "targetPlayer": "OPPONENT"
     },
     "spell": {
       "class": "MetaSpell",

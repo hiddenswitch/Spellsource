@@ -8,7 +8,6 @@
   "targetSelection": "FRIENDLY_MINIONS",
   "spell": {
     "class": "ShuffleMinionToDeckSpell",
-    "targetPlayer": "OWNER",
     "spell": {
       "class": "AddEnchantmentSpell",
       "target": "OUTPUT",
@@ -19,16 +18,17 @@
         },
         "spell": {
           "class": "DrawCardSpell",
-          "targetPlayer": "SELF",
-          "value": 3
+          "value": 3,
+          "targetPlayer": "SELF"
         }
       }
-    }
+    },
+    "targetPlayer": "OWNER"
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "GOBLINS_VS_GNOMES"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

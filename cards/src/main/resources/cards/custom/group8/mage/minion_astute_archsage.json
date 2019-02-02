@@ -13,7 +13,6 @@
       "class": "DiscoverFilteredCardSpell",
       "spell": {
         "class": "ReceiveCardSpell",
-        "targetPlayer": "SELF",
         "spell": {
           "class": "CardCostModifierSpell",
           "target": "OUTPUT",
@@ -23,7 +22,8 @@
             "value": 2,
             "operation": "SUBTRACT"
           }
-        }
+        },
+        "targetPlayer": "SELF"
       },
       "cardFilters": [
         {

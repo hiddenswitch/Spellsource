@@ -36,8 +36,8 @@
           "secret_secret_of_autumn",
           "secret_secret_of_twilight"
         ],
-        "randomTarget": true,
-        "exclusive": true
+        "exclusive": true,
+        "randomTarget": true
       }
     }
   },

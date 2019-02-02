@@ -5,13 +5,13 @@
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
   "description": "Give an enemy minion +10/+10. Draw 10 cards.",
-  "targetSelection": "ENEMY_MINIONS",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,
     "operation": "GREATER",
     "targetPlayer": "OPPONENT"
   },
+  "targetSelection": "ENEMY_MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
@@ -27,9 +27,9 @@
     ]
   },
   "collectible": true,
+  "fileFormatVersion": 1,
   "sets": [
     "CUSTOM",
     "CLASSIC"
-  ],
-  "fileFormatVersion": 1
+  ]
 }

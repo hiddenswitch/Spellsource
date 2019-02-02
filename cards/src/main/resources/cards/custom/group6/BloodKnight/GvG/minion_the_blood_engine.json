@@ -15,8 +15,8 @@
       "value": 1,
       "howMany": {
         "class": "AttributeValueProvider",
-        "attribute": "DRAINED_LAST_TURN",
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "attribute": "DRAINED_LAST_TURN"
       }
     }
   },
@@ -31,10 +31,9 @@
       "class": "ValueDescription",
       "value": {
         "class": "AttributeValueProvider",
-        "attribute": "DRAINED_LAST_TURN",
-        "target": "FRIENDLY_HERO"
+        "target": "FRIENDLY_HERO",
+        "attribute": "DRAINED_LAST_TURN"
       }
     }
   ]
 }
-  
