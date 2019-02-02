@@ -11,6 +11,7 @@ Thanks to a great contribution from @Rumu, introducing many new cards in the Ver
 ##### Content Fixes
 
  - Treeleach now correctly contains Lifesteal in its description.
+ - Devastate now works.
 
 ##### Content Additions
 
