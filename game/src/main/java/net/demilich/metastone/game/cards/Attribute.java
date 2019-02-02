@@ -999,6 +999,10 @@ public enum Attribute {
 	 * Indicates the number of attacks this {@link Actor} has made this turn.
 	 */
 	ATTACKS_THIS_TURN,
+    /**
+     * The number of turns a player has for Demonic Form
+     */
+    DEMONIC_FORM,
 	/**
 	 * Indicates this actor has a wither effect active on it. Does not actually implement the wither.
 	 */

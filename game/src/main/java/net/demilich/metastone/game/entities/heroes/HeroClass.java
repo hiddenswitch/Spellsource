@@ -7,6 +7,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
 
+import static java.util.stream.Collectors.reducing;
 import static java.util.stream.Collectors.toList;
 
 /**
@@ -43,8 +44,9 @@ public enum HeroClass {
 	BLOOD,
 	NEONGREEN,
 	DARKGREEN,
+	PURPLE,
 	TEAL,
-	/**
+    /**
 	 * The Hearthstone Death Knight card class.
 	 */
 	SPIRIT,
@@ -120,6 +122,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_jikr");
 			case TEAL:
 				return CardCatalogue.getCardById("hero_lady_vashj_sea_witch");
+			case PURPLE:
+				return CardCatalogue.getCardById("hero_illidan");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
