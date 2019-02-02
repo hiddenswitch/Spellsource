@@ -1,0 +1,22 @@
+{
+  "name": "Emerald Exhibit",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 0,
+  "baseHp": 12,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Your opponent draws 2 cards.",
+  "deathrattle": {
+    "class": "DrawCardSpell",
+    "value": 2,
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "TAUNT": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

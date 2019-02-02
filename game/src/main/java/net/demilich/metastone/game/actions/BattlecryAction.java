@@ -197,7 +197,7 @@ public final class BattlecryAction extends GameAction {
 		}
 		if (source != null && target == null
 				&& source.getName() != null) {
-			return String.format("%s's %s occurred.", BATTLECRY_NAME, source.getName());
+			return String.format("%s's %s occurred.", source.getName(), BATTLECRY_NAME);
 		} else {
 			return String.format("A %s occurred.", BATTLECRY_NAME);
 		}

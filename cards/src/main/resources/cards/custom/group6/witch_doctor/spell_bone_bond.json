@@ -1,0 +1,32 @@
+{
+  "name": "Bone Bond",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "EPIC",
+  "description": "Deal $2 damage to your hero. Draw a $2-Cost card. (Improved by Spell Damage)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 2
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": {
+            "class": "SpellDamageValueProvider",
+            "value": 2
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

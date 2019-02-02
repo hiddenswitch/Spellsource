@@ -11,21 +11,22 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "RandomlyCastSpell",
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "RandomCondition"
+      },
       "filter": {
         "class": "RaceFilter",
         "race": "MECH"
       },
-      "spells": [
-        {
-          "class": "BuffSpell",
-          "attackBonus": 3
-        },
-        {
-          "class": "BuffSpell",
-          "hpBonus": 3
-        }
-      ]
+      "spell1": {
+        "class": "BuffSpell",
+        "attackBonus": 3
+      },
+      "spell2": {
+        "class": "BuffSpell",
+        "hpBonus": 3
+      }
     }
   },
   "attributes": {

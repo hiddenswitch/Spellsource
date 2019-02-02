@@ -37,7 +37,7 @@ Name | Type | Description | Notes
 **summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
-**mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
+**roasted** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
 **fatigue** | [**GameEventFatigue**](GameEventFatigue.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
@@ -74,7 +74,6 @@ JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;
 LOSE_DEFLECT | &quot;LOSE_DEFLECT&quot;
-MILL | &quot;MILL&quot;
 MAX_HP_INCREASED | &quot;MAX_HP_INCREASED&quot;
 MAX_MANA | &quot;MAX_MANA&quot;
 MANA_MODIFIED | &quot;MANA_MODIFIED&quot;

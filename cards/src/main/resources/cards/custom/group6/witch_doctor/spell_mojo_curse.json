@@ -1,0 +1,36 @@
+{
+  "name": "Mojo Curse",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Enemy minions cost (2) more next turn. Draw a card.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "value": 2,
+          "cardType": "MINION",
+          "expirationTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "OPPONENT"
+          },
+          "operation": "ADD",
+          "targetPlayer": "OPPONENT"
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

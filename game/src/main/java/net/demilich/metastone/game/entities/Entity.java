@@ -120,14 +120,25 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the specified attribute as an {@link Integer} value or fails with an exception.
+	 * Gets the specified attribute as an {@link Integer} value or {@code 0} if the specified attribute is of the wrong
+	 * type or is not found.
 	 *
 	 * @param attribute The {@link Attribute} to look up.
 	 * @return The attribute's value or 0 if it isn't set.
-	 * @throws ClassCastException if the {@link Attribute} is not an {@link Integer}
 	 */
-	public int getAttributeValue(Attribute attribute) throws ClassCastException {
+	public int getAttributeValue(Attribute attribute) {
 		return (int) getAttributes().getOrDefault(attribute, 0);
+	}
+
+	/**
+	 * Gets the specified attribute as an {@link Integer} value, defaulting to the specified value if the value is not an
+	 * integer.
+	 *
+	 * @param attribute The {@link Attribute} to look up.
+	 * @return The attribute's value or 0 if it isn't set.
+	 */
+	public int getAttributeValue(Attribute attribute, int defaultValue) {
+		return (int) getAttributes().getOrDefault(attribute, defaultValue);
 	}
 
 	/**

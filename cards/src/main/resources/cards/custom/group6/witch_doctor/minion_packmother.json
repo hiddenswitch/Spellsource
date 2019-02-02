@@ -1,0 +1,38 @@
+{
+  "name": "Packmother",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: Choose a Beast. Recruit one of the same Cost from your deck.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "RecruitSpell",
+	  "value": 1,
+      "cardLocation": "DECK",
+	  "filter": {
+        "class": "RaceFilter",
+        "race": "BEAST"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+		"race": "BEAST",
+        "cardType": "MINION",
+        "manaCost": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "BASE_MANA_COST"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
