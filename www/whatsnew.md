@@ -8,6 +8,10 @@ permalink: /whats-new/
 
 Thanks to a great contribution from @Rumu, introducing many new cards in the Verdant Dreams set!
 
+##### Content Fixes
+
+ - Treeleach now correctly contains Lifesteal in its description.
+
 ##### Content Additions
 
  - New cards in the Verdant Dreams set.
