@@ -5967,36 +5967,29 @@ public class CustomCardsTests extends TestBase {
 	*/
 
 	@Test
-    public void testZilchGodOfNothing() {
-	    runGym((context, player, opponent) -> {
-            shuffleToDeck(context, player, "minion_zilch_god_of_nothing");
-            shuffleToDeck(context, player, "minion_wax_elemental");
-            shuffleToDeck(context, player, "minion_public_defender");
+	public void testZilchGodOfNothing() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_zilch_god_of_nothing");
+			shuffleToDeck(context, player, "minion_wax_elemental");
+			shuffleToDeck(context, player, "minion_public_defender");
 
 
-            shuffleToDeck(context, opponent, "minion_zilch_god_of_nothing");
-            shuffleToDeck(context, opponent, "minion_wisp");
+			shuffleToDeck(context, opponent, "minion_zilch_god_of_nothing");
+			shuffleToDeck(context, opponent, "minion_wisp");
 
-            context.fireGameEvent(new GameStartEvent(context, player.getId()));
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
 
-            for (Card card : player.getDeck()) {
-                assertEquals(card.getBonusAttack(), 1);
-                assertEquals(card.getBonusHp(), -1);
-            }
+			for (Card card : player.getDeck()) {
+				assertEquals(card.getBonusAttack(), 1);
+				assertEquals(card.getBonusHp(), -1);
+			}
 
-            for (Card card : opponent.getDeck()) {
-                assertEquals(card.getBonusAttack(), 0);
-                assertEquals(card.getBonusHp(), 0);
-            }
-
-        });
-    }
-
-
-
-
-
-	//Demon Hunter tests
+			for (Card card : opponent.getDeck()) {
+				assertEquals(card.getBonusAttack(), 0);
+				assertEquals(card.getBonusHp(), 0);
+			}
+		});
+	}
 
 	@Test
 	public void testThrowGlaive() {
@@ -6127,14 +6120,12 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 
 			assertNotEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
-
 		});
 
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_metamorphosis");
 
 			Card demonForm = player.getHeroPowerZone().get(0);
-
 
 
 			assertEquals(demonForm.getCardId(), "hero_power_demonic_form");
@@ -6151,11 +6142,10 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(strings[0], "1");
 			assertEquals(strings[1], "");
 		});
-
 	}
 
 	@Test
-	public void testDemonSpikes(){
+	public void testDemonSpikes() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_demon_spikes");
 			assertEquals(player.getHero().getAttack(), 1);
