@@ -82,8 +82,6 @@ public class GameEvent implements Serializable {
     
     BOARD_CHANGED("BOARD_CHANGED"),
     
-    CARD_ADDED_TO_DECK("CARD_ADDED_TO_DECK"),
-    
     CARD_SHUFFLED("CARD_SHUFFLED"),
     
     DAMAGE("DAMAGE"),
