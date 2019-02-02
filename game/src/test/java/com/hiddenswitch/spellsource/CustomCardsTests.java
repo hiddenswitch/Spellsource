@@ -57,6 +57,37 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSunslayer() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "weapon_sunslayer");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your hero attacks, draw 0 cards. (Increases for every spell you've cast this turn)");
+			assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "spell_the_coin");
+			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your hero attacks, draw 1 card. (Increases for every spell you've cast this turn)");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHand().size(), 1);
+		});
+	}
+
+	@Test
+	public void testArcaneSigil() {
+		runGym((context, player, opponent) -> {
+			// Shouldn't fire itself infinitely
+			playCard(context, player, "secret_arcane_sigil");
+			playCard(context, player, "secret_counterspell");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, opponent, "spell_mirror_image");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 2, "Should have triggered Arcane Sigil");
+			assertEquals(player.getSecrets().size(), 0);
+		});
+	}
+
+	@Test
 	public void testCursedMirror() {
 		runGym((context, player, opponent) -> {
 			Minion test = playMinionCard(context, player, "minion_neutral_test");

@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.19-2.0.25 (Friday, February 1st, 2019)
+
+Thanks to a great contribution from @Rumu, introducing many new cards in the Verdant Dreams set!
+
+##### Content Additions
+
+ - New cards in the Verdant Dreams set.
+
 ### 0.8.18-2.0.25 (Thursday, January 31st, 2019)
 
 Thanks to a great contribution from @Logovaz, introducing new Witch Doctor cards!

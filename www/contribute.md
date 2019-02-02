@@ -12,7 +12,8 @@ permalink: /contribute/
  3. [Card Merging Process](#3-card-merging-process)
     1. [Addressing Engineering Problems with Existing Cards](#31-addressing-engineering-problems-with-existing-cards)
     2. [Addressing Other Problems with Cards](#32-addressing-other-problems-with-cards)
- 4. [Programming Cards](#4-programming-cards)
+ 4. [Best Practices](#4-best-practices)
+ 5. [Programming Cards](#5-programming-cards)
 
 ### 1. How to Use This Document
 
@@ -135,7 +136,11 @@ Some considerations go into whether or not changes are accepted for these proble
  - **Positive interactions with the community**: If the change is otherwise brought on by a commitment to improve the community's experience, it will be viewed favorably. There is a tension between an enthusiastic player, who may have been authoring custom cards and making contributions for a long time, and the player who *isn't playing yet*, like anonymous Internet users. Generally, the maintainers want to support users who are not yet playing, because they cannot voice their concerns and they help keep the game alive. For example, while flavor text is *always subject to change*, having original flavor for the time being is preferred to something unoriginal, because it's important that new players feel like they are playing something fresh and new. Or, for example, treating others with respect is always viewed *favorably*, because being disrespectful to new players or contributors will discourage their first match or contribution.
  - **Issues that improve the accessibility of the game or promote it positively**: Violating a contribution guideline in a way that encourages others to play or meets a specific, clear demand from players, especially new players, will generally be accepted.
 
-### 4. Programming Cards
+### 4. Best Practices
+
+Best practices will be updated here as time goes on.
+
+### 5. Programming Cards
 
 Get ready to program some cards! For things you don't understand in this section, **Google** and **Discord** are your best friends. Many steps are purposefully not detailed because they will be out of date by the time you use them.
 
