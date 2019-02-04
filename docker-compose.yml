@@ -103,11 +103,7 @@ services:
       - JAVA_OPTS=-Dhazelcast.mc.rest.enabled=true
     deploy:
       labels:
-        - "traefik.frontend.rule=Host:api.hiddenswitch.com;PathPrefix:/admin/mancenter/"
-        - "traefik.backend.loadbalancer.swarm=true"
-        - "traefik.frontend.entryPoints=http,https"
-        - "traefik.port=8080"
-        - "traefik.enable=true"
+        - "traefik.enable=false"
   mediawiki:
     image: "doctorpangloss/wiki:latest"
     environment:
