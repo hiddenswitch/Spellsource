@@ -1,0 +1,37 @@
+{
+  "name": "Corpsebomb",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "VIOLET",
+  "rarity": "RARE",
+  "description": "Destroy a minion. Deal $3 damage to all minions on the other side of the battlefield.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell1": {
+          "class": "DamageSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 3
+        },
+        "spell2": {
+          "class": "DamageSpell",
+          "target": "ENEMY_MINIONS",
+          "value": 3
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
