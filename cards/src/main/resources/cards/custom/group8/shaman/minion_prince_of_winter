@@ -1,19 +1,21 @@
 {
-  "name": "Princess of Summer",
-  "baseManaCost": 7,
+  "name": "Prince of Winter",
+  "baseManaCost": 6,
   "type": "MINION",
-  "heroClass": "RED",
+  "heroClass": "SILVER",
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: put a damaged enemy minion into your hand.",
+  "description": "Battlecry: put a Frozen minion into your hand.",
   "battlecry": {
-    "targetSelection": "ENEMY_MINIONS",
+    "targetSelection": "MINIONS",
     "spell": {
       "class": "ReturnTargetToHandSpell",
       "targetPlayer": "SELF",
       "filter": {
-        "class": "DamagedFilter"
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "operation": "HAS"
       }
     },
     
