@@ -1,0 +1,27 @@
+{
+  "name": "Princess of Summer",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: put a damaged enemy minion into your hand.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "targetPlayer": "SELF",
+      "filter": {
+        "class": "DamagedFilter"
+      }
+    },
+    
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
