@@ -1,0 +1,44 @@
+{
+  "name": "Brothers in Blood",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Whenever you summon a copy of that minion, double it's stats.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "targetPlayer": "SELF",
+		"filter": {
+            "class": "SpecificCardFilter",
+            "secondaryTarget": "TARGET"
+          }
+      },
+       "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DoubleAttackSpell"
+      },
+      {
+        "class": "BuffSpell",
+        "hpBonus": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP"
+        }
+      },
+	  "target": "EVENT_TARGET",
+    ]
+  }
+    }
+  }
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
+  "fileFormatVersion": 1
+}

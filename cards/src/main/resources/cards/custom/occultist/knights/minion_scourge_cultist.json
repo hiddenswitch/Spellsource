@@ -1,0 +1,58 @@
+{
+  "name": "Scourge Cultist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: If a friendly minion died this turn, summon two 1/1 Tentacles with Taunt.",
+	"battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_GRAVEYARD",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "DIED_ON_TURN",
+            "operation": "EQUAL"
+          }
+        ]
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+	"class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_tauntentacle"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "LEFT",
+          "card": "token_tauntentacle"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
+  "fileFormatVersion": 1
+}
