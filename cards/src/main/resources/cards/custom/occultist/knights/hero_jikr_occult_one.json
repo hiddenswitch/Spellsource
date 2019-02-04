@@ -1,0 +1,24 @@
+{
+  "name": "Jikr, Occult One",
+  "heroPower": "hero_power_eldritch_strength",
+  "baseManaCost": 8,
+  "type": "HERO",
+  "heroClass": "DARKGREEN",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Shuffle a copy of your deck into your deck.",
+  "battlecry": {
+      "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "FRIENDLY_DECK"
+    }
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
+  "fileFormatVersion": 1
+}
