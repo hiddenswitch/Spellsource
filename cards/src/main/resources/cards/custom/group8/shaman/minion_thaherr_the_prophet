@@ -1,0 +1,34 @@
+{
+  "name": "Thaherr the Prophet",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "SILVER",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Whenever a friendly Totem dies, put a random Secret of the same Cost into the battlefield.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "race": "TOTEM",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "PutRandomSecretIntoPlaySpell",
+      "cardFilter": {
+        "class": "ManaCostFilter",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_MANA_COST"
+        }
+      },
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
