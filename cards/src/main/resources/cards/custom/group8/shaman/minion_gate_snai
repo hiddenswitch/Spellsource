@@ -1,0 +1,59 @@
+{
+  "name": "Gate Snail",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Discover a Secret (from any class). Replace its Cost with Overload",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "spell": {
+          "class": "MetaSpell",
+          "target": "OUTPUT",
+          "spells": [
+            {
+              "class": "AddAttributeSpell",
+              "attribute": "OVERLOAD",
+            },
+            {
+              "class": "ModifyAttributeSpell",
+              "attribute": "OVERLOAD",
+              "value": {
+                "class": "AttributeValueProvider",
+                "target": "OUTPUT",
+                "attribute": "BASE_MANA_COST"
+              }
+            },
+            {
+              "class": "CardCostModifier",
+              "value": 0,
+              "operation": "SET"
+            }
+          ]
+        },
+        "targetPlayer": "SELF"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "SECRET",
+        "operation": "HAS"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
