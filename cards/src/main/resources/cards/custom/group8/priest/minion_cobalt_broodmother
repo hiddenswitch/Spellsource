@@ -1,0 +1,45 @@
+{
+  "name": "Cobalt Broodmother",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 4,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Deathrattle: Add two Emerald Secrets to your hand. If you're holding a Dragon, play them instead.",
+  "deathrattle": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "spell1": {
+      "class": "PutRandomSecretIntoPlaySpell",
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
+    },
+    "spell2": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true,
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
