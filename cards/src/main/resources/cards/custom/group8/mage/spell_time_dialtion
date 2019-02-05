@@ -1,0 +1,73 @@
+{
+  "name": "Time Dialation WIP",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "EPIC",
+  "description": "Your next spell this turn costs (5) less, but is delayed by two turns (targets chosen randomly).",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "CardCostModifierSpell",
+        "target": "FRIENDLY_PLAYER",
+        "cardCostModifier": {
+          "class": "OneTurnCostModifier",
+          "value": 5,
+          "cardType": "SPELL",
+          "expirationTrigger": {
+            "class": "CardPlayedTrigger",
+            "cardType": "SPELL",
+            "targetPlayer": "SELF"
+          },
+          "operation": "SUBTRACT"
+        }
+      },
+      {
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "trigger": {
+            "eventTrigger": {
+              "class": "SpellCastedTrigger",
+              "sourcePlayer": "SELF",
+            },
+            "spell": {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "AddAttributeSpell",
+                  "target": "EVENT_SOURCE",
+                  "attribute": "SILENCED"
+                },
+                {
+                  "class": "AddEnchantmentSpell",
+                  "target": "FRIENDLY_PLAYER",
+                  "trigger": {
+                    "countUntilCast": 2,
+                    "eventTrigger": {
+                      "class": "TurnStartTrigger",
+                      "targetPlayer": "SELF"
+                    },
+                    "spell": {
+                      "class": "RandomCardTargetSpell",
+                      "target": "???",
+                      "randomTarget": true
+                    }
+                  },
+                  "maxFires": 2
+                  }
+                }
+              ]
+            },
+            "oneTurn": true
+          }
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
