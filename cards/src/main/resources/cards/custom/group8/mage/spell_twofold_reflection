@@ -1,0 +1,38 @@
+{
+  "name": "Twofold Reflection",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "RARE",
+  "description": "In two turns, Draw 2 cards. They Cost (2) less that turn only.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "countUntilCast": 2,
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DrawCardSpell",
+        "value": 2,
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "OneTurnCostModifier",
+            "target": "SELF",
+            "value": 2,
+            "operation": "SUBTRACT"
+          }
+        }
+      },
+      "maxFires": 2
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
