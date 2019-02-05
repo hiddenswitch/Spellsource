@@ -1,0 +1,31 @@
+
+{
+  "name": "Scurvy Assassin",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "Battlecry: Deal 1 damage for each friendly Pirate.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+        "class": "DamageSpell",
+      "value": {
+        "class": "EntityCounter",
+        "target": "FRIENDLY_MINIONS"
+       "filter": {
+      "class": "RaceFilter",
+      "race": "PIRATE"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
