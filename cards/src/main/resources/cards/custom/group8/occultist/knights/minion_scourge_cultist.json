@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "description": "Battlecry: If a friendly minion died this turn, summon two 1/1 Tentacles with Taunt.",
-	"battlecry": {
+  "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",
       "target": "FRIENDLY_GRAVEYARD",
@@ -31,7 +31,7 @@
     },
     "targetSelection": "NONE",
     "spell": {
-	"class": "MetaSpell",
+      "class": "MetaSpell",
       "spells": [
         {
           "class": "SummonSpell",

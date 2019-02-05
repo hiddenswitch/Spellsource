@@ -20,6 +20,19 @@ public final class CardPropertyCondition extends Condition {
 		super(desc);
 	}
 
+	public static Condition create(String cardId) {
+		ConditionDesc desc = new ConditionDesc(CardPropertyCondition.class);
+		desc.put(ConditionArg.CARD, cardId);
+		return desc.create();
+	}
+
+	public static Condition create(EntityReference target, String cardId) {
+		ConditionDesc desc = new ConditionDesc(CardPropertyCondition.class);
+		desc.put(ConditionArg.TARGET, target);
+		desc.put(ConditionArg.CARD, cardId);
+		return desc.create();
+	}
+
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		target = desc.containsKey(ConditionArg.TARGET) ? context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET)) : target;
