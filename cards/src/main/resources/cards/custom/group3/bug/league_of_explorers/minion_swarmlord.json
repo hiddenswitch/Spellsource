@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "Battlecry: Summon all Spiderlings from your hand.",
+  "description": "Battlecry: Summon all Larva from your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

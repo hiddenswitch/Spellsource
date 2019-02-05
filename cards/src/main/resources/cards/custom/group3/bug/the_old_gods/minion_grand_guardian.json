@@ -1,11 +1,12 @@
 {
-  "name": "Qiraji Guardian",
+  "name": "Grand Guardian",
   "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Has +1/+1 for each other Common minion on the battlefield.",
   "aura": {
     "class": "BuffAura",
