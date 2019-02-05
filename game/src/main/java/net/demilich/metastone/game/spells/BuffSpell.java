@@ -92,6 +92,18 @@ public class BuffSpell extends RevertableSpell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(EntityReference target, ValueProvider attackBonus, ValueProvider hpBonus) {
+		Map<SpellArg, Object> arguments = new SpellDesc(BuffSpell.class);
+		if (attackBonus != null) {
+			arguments.put(SpellArg.ATTACK_BONUS, attackBonus);
+		}
+		if (hpBonus != null) {
+			arguments.put(SpellArg.HP_BONUS, hpBonus);
+		}
+		arguments.put(SpellArg.TARGET, target);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	protected SpellDesc getReverseSpell(GameContext context, Player player, Entity source, SpellDesc desc, EntityReference target) {
 		SpellDesc reverse = new SpellDesc(BuffSpell.class, target, null, false);

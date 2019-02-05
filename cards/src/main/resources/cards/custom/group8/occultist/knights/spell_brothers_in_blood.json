@@ -1,0 +1,17 @@
+{
+  "name": "Brothers in Blood",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Whenever you summon a copy of that minion, double its stats.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "custom.BrothersInBloodSpell"
+  },
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
+  "fileFormatVersion": 1
+}

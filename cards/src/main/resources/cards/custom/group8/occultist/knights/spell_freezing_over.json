@@ -11,24 +11,22 @@
     "spells": [
       {
         "class": "AddAttributeSpell",
-    "attribute": "FROZEN"
+        "attribute": "FROZEN"
       },
       {
-         "spell": {
-    "class": "AddEnchantmentSpell",
-    "trigger": {
-      "eventTrigger": {
-        "class": "MinionSummonedTrigger",
-        "targetPlayer": "SELF"
-      },
-	  "oneTurn": true
-      "spell": {
-        "class": "BuffSpell",
-        "target": "SELF",
-        "value": 3
-      }
-    }
-  }
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "MinionSummonedTrigger",
+            "targetPlayer": "SELF"
+          },
+          "oneTurn": true,
+          "spell": {
+            "class": "BuffSpell",
+            "target": "SELF",
+            "value": 3
+          }
+        }
       }
     ]
   },

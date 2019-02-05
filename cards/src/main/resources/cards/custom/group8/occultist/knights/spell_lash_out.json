@@ -4,28 +4,18 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Deal 1 damage to all enemies. Summon a 1/1 Tentacle with Taunt for each.",
+  "description": "Deal $1 damage to all enemies. Summon a 1/1 Tentacle with Taunt for each.",
   "targetSelection": "NONE",
- "spell": {
+  "spell": {
     "class": "MetaSpell",
     "value": {
       "class": "EntityCounter",
-      "target": "ENEMIES",
-      "filter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "AttributeFilter",
-            "attribute": "PERMANENT",
-            "invert": true
-          }
-        ]
-      }
+      "target": "ENEMY_CHARACTERS"
     },
     "spells": [
       {
         "class": "DamageSpell",
-        "target": "ENEMY_MINIONS",
+        "target": "ENEMY_CHARACTERS",
         "value": 1
       },
       {

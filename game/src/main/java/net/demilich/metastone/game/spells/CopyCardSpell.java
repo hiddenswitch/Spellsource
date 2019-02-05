@@ -115,10 +115,10 @@ public class CopyCardSpell extends Spell {
 				.peek(c -> c.setHost(clone))
 				.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
 		if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
-			clone.setAttribute(Attribute.ATTACK_BONUS, inCard.getAttribute(Attribute.ATTACK_BONUS));
+			clone.modifyAttribute(Attribute.ATTACK_BONUS, (int) inCard.getAttribute(Attribute.ATTACK_BONUS));
 		}
 		if (inCard.hasAttribute(Attribute.HP_BONUS)) {
-			clone.setAttribute(Attribute.HP_BONUS, inCard.getAttribute(Attribute.HP_BONUS));
+			clone.modifyAttribute(Attribute.HP_BONUS, (int) inCard.getAttribute(Attribute.HP_BONUS));
 		}
 		if (inCard.hasAttribute(Attribute.DEATHRATTLES)) {
 			clone.setAttribute(Attribute.DEATHRATTLES, inCard.getAttribute(Attribute.DEATHRATTLES));

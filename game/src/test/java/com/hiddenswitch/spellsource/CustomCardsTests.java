@@ -57,6 +57,35 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBrothersInBlood() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_brothers_in_blood", target);
+			Minion buffed = playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(buffed.getAttack(), buffed.getBaseAttack() * 2);
+			assertEquals(buffed.getMaxHp(), buffed.getBaseHp() * 2);
+			Minion notBuffed = playMinionCard(context, player, "minion_black_test");
+			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
+			assertEquals(notBuffed.getMaxHp(), notBuffed.getBaseHp());
+		});
+	}
+
+	@Test
+	public void testUnearthedHorror() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_unearthed_horror");
+			for (int i = 1; i < 4; i++) {
+				playCard(context, player, "spell_underwater_horrors", target);
+				context.getLogic().drawCard(player.getId(), player);
+				assertEquals(player.getHand().get(0).getCardId(), "minion_unearthed_horror");
+				target = playMinionCard(context, player, player.getHand().get(0));
+				assertEquals(target.getAttack(), target.getBaseAttack() + i * 7);
+				assertEquals(target.getMaxHp(), target.getBaseHp() + i * 7);
+			}
+		});
+	}
+
+	@Test
 	public void testSunslayer() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 30; i++) {

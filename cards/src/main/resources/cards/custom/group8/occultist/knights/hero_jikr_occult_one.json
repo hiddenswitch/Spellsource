@@ -7,13 +7,16 @@
   "rarity": "LEGENDARY",
   "description": "Battlecry: Shuffle a copy of your deck into your deck.",
   "battlecry": {
-      "targetSelection": "NONE",
+    "targetSelection": "NONE",
     "spell": {
       "class": "ShuffleToDeckSpell",
       "target": "FRIENDLY_DECK"
     }
+  },
   "attributes": {
-    "BATTLECRY": true
+    "BATTLECRY": true,
+    "ARMOR": 5,
+    "MAX_HP": 30
   },
   "collectible": true,
   "sets": [
