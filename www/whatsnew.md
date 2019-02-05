@@ -12,12 +12,14 @@ Thanks to a great contribution from @Muhframos, additional Occultist cards have 
 
 ##### Content Fixes
 
+ - Witch Doctor is now known as Senzaku.
  - Doomerang now correctly deals lifesteal and poisonous damage.
 
 ##### Content Additions
 
  - The Demon Hunter prototype.
  - New Occultist cards.
+ - Senzaku the Puppeteer, a Witch Doctor hero card.
 
 ### 0.8.19-2.0.25 (Friday, February 1st, 2019)
 
