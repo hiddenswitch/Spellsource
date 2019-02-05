@@ -1,12 +1,12 @@
 {
-  "name": "Nerubian Vizier",
+  "name": "Vizier",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Your Spiderlings have Lifesteal.",
+  "description": "Your Bees have Lifesteal.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",

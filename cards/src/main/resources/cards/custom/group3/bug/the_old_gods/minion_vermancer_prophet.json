@@ -1,18 +1,18 @@
 {
-  "name": "Prophet Skeram",
+  "name": "Vermancer Prophet",
   "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 9,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replace all Spiderlings in your hand with Silithid Wasps.",
+  "description": "Battlecry: Replace all Larva in your hand with Servant Wasps.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
-      "card": "minion_silithid_wasp",
+      "card": "minion_servant_wasp",
       "filter": {
         "class": "SpecificCardFilter",
         "card": "token_spiderling"

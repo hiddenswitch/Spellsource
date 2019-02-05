@@ -18,9 +18,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * transforms the {@code target} back into its original card. This effect lives on as a deathrattle on {@link
  * SpellArg#SECONDARY_TARGET}.
  * <p>
- * Implements Anub'Rekhan.
+ * Implements Anobii, the Trapper.
  */
-public final class AnubRekhanSpell extends AddDeathrattleSpell {
+public final class AnobiiSpell extends AddDeathrattleSpell {
 
 	@Override
 	@Suspendable

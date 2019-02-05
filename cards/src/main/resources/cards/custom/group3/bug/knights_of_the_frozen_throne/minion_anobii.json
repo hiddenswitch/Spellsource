@@ -1,5 +1,5 @@
 {
-  "name": "Anub'Rekhan",
+  "name": "Anobii, the Trapper",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AMBER",
@@ -10,7 +10,7 @@
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
-      "class": "custom.AnubRekhanSpell",
+      "class": "custom.AnobiiSpell",
       "card": "permanent_cocoon",
       "secondaryTarget": "SELF"
     }

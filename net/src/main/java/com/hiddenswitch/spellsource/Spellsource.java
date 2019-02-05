@@ -445,7 +445,19 @@ public class Spellsource {
 						.withUp(thisVertx -> {
 							changeCardId("minon_treeleach", "minion_treeleach");
 						}))
-				.migrateTo(29, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(30)
+						.withUp(thisVertx -> {
+							changeCardId("minion_anub'rekhan", "minion_anobii");
+							changeCardId("minion_azjol_visionary", "minion_visionary");
+							changeCardId("minion_nerubian_vizier", "minion_vizier");
+							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
+							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
+							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
+							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
+							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+						}))
+				.migrateTo(30, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}

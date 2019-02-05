@@ -1,10 +1,10 @@
 {
-  "name": "Elementium Shell",
+  "name": "Reinforced Shell",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Give your Spiderlings +1 Health this game.",
+  "description": "Give your Larva +1 Health this game.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",

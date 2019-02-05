@@ -1559,14 +1559,14 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testAnubrekhan() {
+	public void testAnobii() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playMinionCardWithBattlecry(context, player, "minion_anub'rekhan", bloodfenRaptor);
-			Minion anubrekhan = player.getMinions().get(1);
+			playMinionCardWithBattlecry(context, player, "minion_anobii", bloodfenRaptor);
+			Minion anobii = player.getMinions().get(1);
 			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
 			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "permanent_cocoon");
-			destroy(context, anubrekhan);
+			destroy(context, anobii);
 			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
 			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
