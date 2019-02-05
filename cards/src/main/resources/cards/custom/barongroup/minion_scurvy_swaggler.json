@@ -3,11 +3,11 @@
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "NAVY",
+  "rarity": "RARE",
   "race": "PIRATE",
   "baseAttack": 3,
   "baseHp": 2,
-  "rarity": "RARE",
-  "description": "Battlecry: Deal 1 damage for each Common minion you control.",
+  "description": "Battlecry: Deal 1 damage for each Pirate you control.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {
