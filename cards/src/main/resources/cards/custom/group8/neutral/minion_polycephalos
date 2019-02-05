@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "BEAST"
-  "description": "Taunt. Battlecry: Gain +1/+1 for each enemy Deathrattle minion.",
+  "description": "Rush. Battlecry: Gain +1 Attack for each enemy minion.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",
@@ -25,3 +25,4 @@
   "collectible": true,
   "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
+}
