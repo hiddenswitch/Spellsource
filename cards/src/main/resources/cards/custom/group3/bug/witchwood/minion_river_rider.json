@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Rush. Has +2 Attack while you control a Beast.",
   "aura": {
     "class": "BuffAura",
