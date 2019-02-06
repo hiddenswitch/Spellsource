@@ -1,0 +1,25 @@
+{
+  "name": "Titanic Bombardier",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 6,
+  "baseHp": 10,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "When drawn this, deal 2 damage to all minions.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
