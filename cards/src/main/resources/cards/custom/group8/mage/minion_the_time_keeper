@@ -1,0 +1,47 @@
+{
+  "name": "The Time Keeper",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Copy your hand. In two turns, replace your hand with that copy.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "countUntilCast": 2,
+        "eventTrigger": {
+          "class": "TurnStartTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "MetaSpell",
+          "spells": [
+            {
+              "class": "RemoveCardSpell",
+              "target": "FRIENDLY_HAND"
+            },
+            {
+              "class": "custom.ReceiveCardsInStorageSpell"
+            }
+          ]
+        },
+        "maxFires": 2
+      },
+      "spell": {
+        "class": "custom.StoreEntitySpell",
+        "target": "FRIENDLY_HAND"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
