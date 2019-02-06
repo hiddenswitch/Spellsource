@@ -57,6 +57,19 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testLoyalLandowner() {
+		runGym((context, player, opponent) -> {
+			Minion loyal = playMinionCard(context, player, "minion_loyal_landowner");
+			context.endTurn();
+			context.endTurn();
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK));
+			attack(context, player, loyal, opponent.getHero());
+			assertEquals(player.getMinions().size(), 2);
+			assertFalse(context.getValidActions().stream().anyMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK));
+		});
+	}
+
+	@Test
 	public void testBrothersInBlood() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_neutral_test");
