@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Draw a Beast, Dragon, and Murloc from your deck.",
+  "description": "Draw a Beast, Dragon, and Fae from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -30,7 +30,7 @@
         "value": 1,
         "cardFilter": {
           "class": "CardFilter",
-          "race": "MURLOC"
+          "race": "FAE"
         }
       }
     ]
