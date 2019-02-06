@@ -10,16 +10,20 @@ Thanks to a great contribution from @doombubbles, introducing the Demon Hunter h
 
 Thanks to a great contribution from @Muhframos, additional Occultist cards have been added.
 
+Thanks to a great contribution from @Pircival, additional Baron cards in the Verdant Dreams expansion have been added.
+
 ##### Content Fixes
 
  - Witch Doctor is now known as Senzaku.
  - Doomerang now correctly deals lifesteal and poisonous damage.
+ - Attacking uses up an attack before text like "whenever this minion attacks" is put into play.
 
 ##### Content Additions
 
  - The Demon Hunter prototype.
  - New Occultist cards.
  - Senzaku the Puppeteer, a Witch Doctor hero card.
+ - New Baron cards in the Verdant Dreams expansion.
 
 ### 0.8.19-2.0.25 (Friday, February 1st, 2019)
 
