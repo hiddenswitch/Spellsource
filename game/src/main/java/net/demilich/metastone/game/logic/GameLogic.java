@@ -1660,7 +1660,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player       The player who is initiating the fight.
 	 * @param attacker     The attacking {@link Actor}
 	 * @param defender     The defending {@link Actor}
-	 * @param sourceAction
+	 * @param sourceAction The action corresponding to this fight, if one exists
 	 * @see <a href="http://hearthstone.gamepedia.com/Attack">Attack</a> for more on this method and its rules.
 	 * @see PhysicalAttackAction#execute(GameContext, int) for the main caller of this function.
 	 * @see net.demilich.metastone.game.spells.MisdirectSpell for an example of a spell that causes actors to fight each
@@ -1672,7 +1672,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 */
 	@Suspendable
 	public void fight(Player player, Actor attacker, Actor defender, PhysicalAttackAction sourceAction) {
-		context.getAttackerReferenceStack().push(attacker.getReference());
+		// Manages the attacked
+		context.getAttackerReferenceStack().addFirst(attacker.getReference());
 
 		Actor target = defender;
 		Entity targetOverride = targetAcquisition(player, attacker, sourceAction);
@@ -1685,23 +1686,48 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			defender = target;
 		}
 
-		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING) || attacker.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING)) {
-			applyAttribute(attacker, Attribute.IMMUNE);
-		}
-
-		removeAttribute(attacker, Attribute.STEALTH);
-
-		// Hearthstone checks for win/loss/draw.
-		if (context.updateAndGetGameOver()) {
+		// Attacker can change after the target acquisition, or the attack can be cancelled.
+		attacker = context.resolveSingleTarget(player, attacker, context.getAttackerReferenceStack().peekFirst());
+		if (attacker == null) {
+			// Attack was canceled before target was acquired
 			return;
 		}
 
+		Entity entityGrantedImmunity = null;
+		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING) || attacker.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING)) {
+			applyAttribute(attacker, Attribute.IMMUNE);
+			entityGrantedImmunity = attacker;
+		}
+
+		removeAttribute(attacker, Attribute.STEALTH);
+		// Attacker should lose an attack as soon as it loses stealth
+		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
+
+		// Hearthstone checks for win/loss/draw.
+		if (context.updateAndGetGameOver()) {
+			clearImmuneWhileAttacking(entityGrantedImmunity);
+			return;
+		}
+
+		// Damage is computed before the physical attack event, in case it is buffed. To buff before a physical attack, use
+		// a TargetAcquisitionTrigger.
 		int attackerDamage = attacker.getAttack();
 		int defenderDamage = defender.getAttack();
+		// Defender should not be changed in a physical attack event, so target overrides are ignored
 		context.fireGameEvent(new PhysicalAttackEvent(context, attacker, defender, attackerDamage));
+
+		// Attacker can change or attack can be cancelled after the PhysicalAttackEvent too
+		attacker = context.resolveSingleTarget(player, attacker, context.getAttackerReferenceStack().peekFirst());
+		if (attacker == null) {
+			// Attack was canceled
+			clearImmuneWhileAttacking(entityGrantedImmunity);
+			return;
+		}
+
 		// secret may have killed attacker ADDENDUM: or defender
 		if (attacker.isDestroyed() || defender.isDestroyed()) {
 			context.getAttackerReferenceStack().pop();
+			clearImmuneWhileAttacking(entityGrantedImmunity);
 			return;
 		}
 
@@ -1715,13 +1741,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		boolean defenderWasDestroyed = defender.isDestroyed();
 		int damageDealtToAttacker = applyDamageToActor(attacker, defenderDamage, player, defender, true);
 		int damageDealtToDefender = applyDamageToActor(defender, attackerDamage, player, attacker, true);
-		// Defender queues first
+		// Defender queues first. Damage events should not change the attacker
 		resolveDamageEvent(context.getPlayer(defender.getOwner()), defender, attacker, damageDealtToDefender, DamageType.PHYSICAL);
 		resolveDamageEvent(context.getPlayer(attacker.getOwner()), attacker, defender, damageDealtToAttacker, DamageType.PHYSICAL);
 
-		if (attacker.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING) || attacker.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING)) {
-			attacker.getAttributes().remove(Attribute.IMMUNE);
-		}
+		clearImmuneWhileAttacking(entityGrantedImmunity);
 
 		if (attacker.getEntityType() == EntityType.HERO) {
 			Hero hero = (Hero) attacker;
@@ -1735,7 +1759,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			attacker.modifyAttribute(Attribute.ATTACKS_THIS_GAME, 1);
 			attacker.modifyAttribute(Attribute.ATTACKS_THIS_TURN, 1);
 		}
-		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
 		if (attacker.isDestroyed() && !attackerWasDestroyed) {
 			incrementedDestroyedThisSequenceCount();
 		}
@@ -1744,6 +1767,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 		context.fireGameEvent(new AfterPhysicalAttackEvent(context, attacker, defender, damageDealtToDefender));
 		context.getAttackerReferenceStack().pop();
+	}
+
+	private void clearImmuneWhileAttacking(Entity entityGrantedImmunity) {
+		if (entityGrantedImmunity != null && (entityGrantedImmunity.hasAttribute(Attribute.IMMUNE_WHILE_ATTACKING)
+				|| entityGrantedImmunity.hasAttribute(Attribute.AURA_IMMUNE_WHILE_ATTACKING))) {
+			entityGrantedImmunity.getAttributes().remove(Attribute.IMMUNE);
+		}
 	}
 
 	/**
