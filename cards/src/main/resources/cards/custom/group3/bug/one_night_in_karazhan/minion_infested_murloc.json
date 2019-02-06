@@ -1,12 +1,12 @@
 {
-  "name": "Infested Murloc",
+  "name": "Infaested",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Deathrattle: Summon a 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
