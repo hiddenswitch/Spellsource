@@ -6,6 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
+  "race": "FAE",
   "description": "Battlecry: Discover a copy of a 1-Attack minion in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
