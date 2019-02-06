@@ -37,6 +37,10 @@
               "class": "MetaSpell",
               "spells": [
                 {
+                  "class": "custom.StoreEntitySpell",
+                  "target": "EVENT_TARGET"
+                },
+                {
                   "class": "AddAttributeSpell",
                   "target": "EVENT_SOURCE",
                   "attribute": "SILENCED"
@@ -52,7 +56,11 @@
                     },
                     "spell": {
                       "class": "RandomCardTargetSpell",
-                      "target": "???",
+                      "target": {
+                        "filter": {
+                          "class": "StorageContainsFilter",
+                        }
+                      },
                       "randomTarget": true
                     }
                   },
@@ -61,6 +69,7 @@
                 }
               ]
             },
+            "maxFires": 1,
             "oneTurn": true
           }
         }
