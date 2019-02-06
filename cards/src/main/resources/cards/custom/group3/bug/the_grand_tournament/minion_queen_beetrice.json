@@ -15,7 +15,7 @@
     "spell": {
       "class": "ReceiveCardSpell",
       "cards": [
-        "token_wasp_soldier"
+        "token_bee_soldier"
       ]
     }
   },
