@@ -1,0 +1,35 @@
+{
+  "name": "Frost Presence",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Your minions Freeze any characters they damage this turn.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_frost_presence"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "DamageCausedTrigger",
+        "sourceEntityType": "MINION",
+        "sourcePlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "EVENT_TARGET",
+        "attribute": "FROZEN"
+      }
+    }
+  ],
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

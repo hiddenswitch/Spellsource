@@ -1,0 +1,16 @@
+{
+  "name": "Shouting Soldier",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "FREE",
+  "description": "<b>Guard</b>",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,21 @@
+{
+  "name": "Mighty Knight",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 6,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Battlecry: Draw a card.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

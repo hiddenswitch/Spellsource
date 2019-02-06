@@ -1,0 +1,12 @@
+{
+  "name": "Gobbles",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "<i>Every dying beast makes this dreaded carrion bird stronger.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

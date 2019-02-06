@@ -1,0 +1,26 @@
+{
+  "name": "Runic Attunement",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "COMMON",
+  "description": "Add a Rune to your hand for each Frozen character.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ALL_CHARACTERS",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "FROZEN",
+        "operation": "HAS"
+      }
+    },
+    "card": "spell_rune"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -12,8 +12,9 @@
     "spell": {
       "class": "DamageSpell",
       "value": {
-        "class": "ManaCostProvider",
-        "target": "OUTPUT"
+        "class": "AttributeValueProvider",
+        "target": "OUTPUT",
+        "attribute": "BASE_MANA_COST"
       }
     }
   },

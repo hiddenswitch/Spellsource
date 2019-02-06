@@ -2,29 +2,27 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
-import com.hiddenswitch.spellsource.impl.*;
+import com.hiddenswitch.spellsource.impl.Trigger;
+import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
-import io.vertx.core.http.HttpServer;
-import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import io.vertx.ext.mongo.FindOptions;
-import io.vertx.ext.mongo.MongoClientUpdateResult;
-import io.vertx.ext.mongo.UpdateOptions;
+import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
-import io.vertx.ext.sync.SyncVerticle;
-import io.vertx.ext.web.Router;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
@@ -34,11 +32,14 @@ import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
 import java.util.*;
-import java.util.function.Function;
 
+import static com.hiddenswitch.spellsource.Draft.DRAFTS;
+import static com.hiddenswitch.spellsource.Inventory.COLLECTIONS;
 import static com.hiddenswitch.spellsource.Inventory.INVENTORY;
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.array;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 import static java.util.stream.Collectors.toSet;
@@ -46,18 +47,20 @@ import static java.util.stream.Collectors.toSet;
 /**
  * The Spellsource Server API. Access it with {@link Spellsource#spellsource()}.
  * <p>
- * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(LegacyPersistenceHandler)}.
+ * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(String,
+ * GameEventType, Attribute, SuspendableAction1)}.
  * <p>
  * It will provide more APIs for features in the future.
+ * <p>
+ * When adding new collections, this class stores the migrations where index creation is appropriate.
+ *
+ * @see com.hiddenswitch.spellsource.applications.LocalClustered for the entry point of the executable.
  */
 public class Spellsource {
 	private static Logger logger = LoggerFactory.getLogger(Spellsource.class);
 	private static Spellsource instance;
 	private List<DeckCreateRequest> cachedStandardDecks;
-	private Map<String, LegacyPersistenceHandler> legacyPersistenceHandlers = new HashMap<>();
 	private Map<String, PersistenceHandler> persistAttributeHandlers = new HashMap<>();
-	private HttpServer httpServer;
-	private Router router;
 	private Map<String, Trigger> gameTriggers = new HashMap<>();
 	private Map<String, Spell> spells = new HashMap<>();
 
@@ -91,63 +94,82 @@ public class Spellsource {
 				.add(new MigrationRequest()
 						.withVersion(1)
 						.withUp(thisVertx -> {
+							final List<String> collections = mongo().getCollections();
 							try {
-								mongo().createIndex(Inventory.COLLECTIONS, json("deckType", 1));
+								if (!collections.contains(Accounts.USERS)) {
+									mongo().createCollection(Accounts.USERS);
+								}
+
+								if (!collections.contains(INVENTORY)) {
+									mongo().createCollection(INVENTORY);
+								}
+
+								if (!collections.contains(COLLECTIONS)) {
+									mongo().createCollection(COLLECTIONS);
+								}
+
+								if (!collections.contains(DRAFTS)) {
+									mongo().createCollection(DRAFTS);
+								}
+							} finally {
+								logger.info("add MigrationRequest 1: Collections created added if possible");
+							}
+
+
+							try {
+								mongo().createIndex(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, 1));
+								mongo().createIndex(INVENTORY, json("userId", 1));
+								mongo().createIndex(INVENTORY, json("collectionIds", 1));
+								mongo().createIndex(INVENTORY, json("cardDesc.id", 1));
+							} finally {
+								logger.info("add MigrationRequest 1: Indices added if possible");
+							}
+
+
+						}))
+				.add(new MigrationRequest()
+						.withVersion(2)
+						.withUp(thisVertx -> {
+							try {
+								mongo().createIndex(COLLECTIONS, json("deckType", 1));
 							} catch (Throwable ignored) {
 							}
 
 							// All draft decks should have the draft flag set
-							MongoClientUpdateResult u1 = mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+							MongoClientUpdateResult u1 = mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("name", json("$regex", "Draft Deck")),
 									json("$set", json("deckType", DeckType.DRAFT.toString())),
 									new UpdateOptions().setMulti(true));
 
 							// All other decks should have the constructed flag
-							MongoClientUpdateResult u2 = mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+							MongoClientUpdateResult u2 = mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("deckType", json("$ne", DeckType.DRAFT.toString()),
 											"type", CollectionTypes.DECK.toString()),
 									json("$set", json("deckType", DeckType.CONSTRUCTED.toString())),
 									new UpdateOptions().setMulti(true));
 
 							// Update to the latest decklist
-							InventoryImpl inventory = new InventoryImpl();
-							CardsImpl cards = new CardsImpl();
-							DecksImpl decksImpl = new DecksImpl();
-							String deploymentId = awaitResult(h -> thisVertx.deployVerticle(decksImpl, h));
-							String deploymentId2 = awaitResult(h -> thisVertx.deployVerticle(inventory, h));
-							String deploymentId3 = awaitResult(h -> thisVertx.deployVerticle(cards, h));
-							decksImpl.updateAllDecks(new DeckListUpdateRequest()
+
+							Decks.updateAllDecks(new DeckListUpdateRequest()
 									.withDeckCreateRequests(Spellsource.spellsource().getStandardDecks()));
-							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
-							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
-							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
-						}))
-				.add(new MigrationRequest()
-						.withVersion(2)
-						.withUp(thisVertx -> {
-							InventoryImpl inventory = new InventoryImpl();
-							CardsImpl cards = new CardsImpl();
-							DecksImpl decksImpl = new DecksImpl();
-							String deploymentId = awaitResult(h -> thisVertx.deployVerticle(decksImpl, h));
-							String deploymentId2 = awaitResult(h -> thisVertx.deployVerticle(inventory, h));
-							String deploymentId3 = awaitResult(h -> thisVertx.deployVerticle(cards, h));
-							// Trash the druid deck
-							List<String> deckIds = mongo().findWithOptions(Inventory.COLLECTIONS,
-									json("name", json("$regex", "Ramp Combo Druid")),
-									new FindOptions().setFields(json("_id", true))).stream()
-									.map(o -> o.getString("_id")).collect(toList());
-							for (String deckId : deckIds) {
-								decksImpl.deleteDeck(DeckDeleteRequest.create(deckId));
-							}
-							Void ignored = awaitResult(h -> thisVertx.undeploy(deploymentId, h));
-							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId2, h));
-							ignored = awaitResult(h -> thisVertx.undeploy(deploymentId3, h));
 						}))
 				.add(new MigrationRequest()
 						.withVersion(3)
 						.withUp(thisVertx -> {
+							// Trash the druid deck
+							List<String> deckIds = mongo().findWithOptions(COLLECTIONS,
+									json("name", json("$regex", "Ramp Combo Druid")),
+									new FindOptions().setFields(json("_id", true))).stream()
+									.map(o -> o.getString("_id")).collect(toList());
+							for (String deckId : deckIds) {
+								Decks.deleteDeck(DeckDeleteRequest.create(deckId));
+							}
+						}))
+				.add(new MigrationRequest()
+						.withVersion(4)
+						.withUp(thisVertx -> {
 							// Repair user collections
-							Mongo.mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json("heroClass", json("$eq", null)),
+							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS, json("heroClass", json("$eq", null)),
 									json("$unset", json("deckType", 1), "$set", json("trashed", false)), new UpdateOptions().setMulti(true));
 
 							for (JsonObject record : Mongo.mongo().findWithOptions(Accounts.USERS, json(), new FindOptions().setFields(json("_id", 1)))) {
@@ -159,23 +181,23 @@ public class Spellsource {
 							Mongo.mongo().removeDocuments(INVENTORY, json("collectionIds", json("$size", 1)));
 						}))
 				.add(new MigrationRequest()
-						.withVersion(4)
+						.withVersion(5)
 						.withUp(thisVertx -> {
 							// Set all existing decks to standard.
-							Mongo.mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", false)),
 									json("$set", json("format", "Standard")),
 									new UpdateOptions().setMulti(true));
 						})
 						.withDown(thisVertx -> {
 							// Remove format field
-							Mongo.mongo().updateCollectionWithOptions(Inventory.COLLECTIONS,
+							Mongo.mongo().updateCollectionWithOptions(COLLECTIONS,
 									json("format", json("$exists", true)),
 									json("$unset", json("format", null)),
 									new UpdateOptions().setMulti(true));
 						}))
 				.add(new MigrationRequest()
-						.withVersion(5)
+						.withVersion(6)
 						.withUp(thisVertx -> {
 							// Shuffle around the location of user record data
 							List<JsonObject> users = Mongo.mongo().find(Accounts.USERS, json());
@@ -217,27 +239,225 @@ public class Spellsource {
 								);
 
 								String userId = jo.getString("_id");
-								logger.debug("add MigrationRequest 5: Migrating passwords and emails for userId {}", userId);
+								logger.debug("add MigrationRequest 6: Migrating passwords and emails for userId {}", userId);
 
 								Mongo.mongo().updateCollection(Accounts.USERS, json("_id", userId),
 										updateCommand);
 							}
 						}))
 				.add(new MigrationRequest()
-						.withVersion(6)
+						.withVersion(7)
 						.withUp(thisVertx -> {
 							CardCatalogue.loadCardsFromPackage();
 							MongoClientUpdateResult result1 = changeCardId("spell_temporary_anomaly", "spell_temporal_anomaly");
 							MongoClientUpdateResult result2 = changeCardId("minion_doomlord", "minion_dreadlord");
-							logger.info("add MigrationRequest 6: Fixed {} Temporal Anomaly cards, {} Dreadlord cards", result1.getDocModified(), result2.getDocModified());
+							logger.info("add MigrationRequest 7: Fixed {} Temporal Anomaly cards, {} Dreadlord cards", result1.getDocModified(), result2.getDocModified());
 						}))
 				.add(new MigrationRequest()
-						.withVersion(7)
+						.withVersion(8)
 						.withUp(thisVertx -> {
 							// Creates an index on the cardDesc.id property to help find cards in inventory management
 							mongo().createIndex(INVENTORY, json("cardDesc.id", 1));
 						}))
-				.migrateTo(7, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(9)
+						.withUp(thisVertx -> {
+							// Remove all fields except the cardDesc.id field
+							mongo().updateCollectionWithOptions(INVENTORY, json(), json(
+									"$unset", json(
+											"cardDesc.name", 1,
+											"cardDesc.description", 1,
+											"cardDesc.legacy", 1,
+											"cardDesc.type", 1,
+											"cardDesc.heroClass", 1,
+											"cardDesc.heroClasses", 1,
+											"cardDesc.rarity", 1,
+											"cardDesc.set", 1,
+											"cardDesc.baseManaCost", 1,
+											"cardDesc.collectible", 1,
+											"cardDesc.attributes", 1,
+											"cardDesc.fileFormatVersion", 1,
+											"cardDesc.manaCostModifier", 1,
+											"cardDesc.passiveTriggers", 1,
+											"cardDesc.deckTrigger", 1,
+											"cardDesc.gameTriggers", 1,
+											"cardDesc.battlecry", 1,
+											"cardDesc.deathrattle", 1,
+											"cardDesc.trigger", 1,
+											"cardDesc.triggers", 1,
+											"cardDesc.aura", 1,
+											"cardDesc.auras", 1,
+											"cardDesc.race", 1,
+											"cardDesc.cardCostModifier", 1,
+											"cardDesc.baseAttack", 1,
+											"cardDesc.baseHp", 1,
+											"cardDesc.damage", 1,
+											"cardDesc.durability", 1,
+											"cardDesc.onEquip", 1,
+											"cardDesc.onUnequip", 1,
+											"cardDesc.heroPower", 1,
+											"cardDesc.targetSelection", 1,
+											"cardDesc.spell", 1,
+											"cardDesc.condition", 1,
+											"cardDesc.group", 1,
+											"cardDesc.secret", 1,
+											"cardDesc.quest", 1,
+											"cardDesc.countUntilCast", 1,
+											"cardDesc.options", 1,
+											"cardDesc.bothOptions", 1
+									)
+							), new UpdateOptions().setMulti(true).setWriteOption(WriteOption.UNACKNOWLEDGED));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(10)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(11)
+						.withUp(thisVertx -> {
+							// Add an index for the friend IDs
+							mongo().createIndex(Accounts.USERS, json("friends.friendId", 1));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(12)
+						.withUp(thisVertx -> {
+							// Give all users a privacy token
+							for (JsonObject userRecord : mongo().find(Accounts.USERS, json())) {
+								mongo().updateCollection(Accounts.USERS, json("_id", userRecord.getString("_id")),
+										json("$set", json("privacyToken", RandomStringUtils.randomNumeric(4))));
+							}
+
+
+							// Add an index for invites
+							if (!mongo().getCollections().contains(Invites.INVITES)) {
+								mongo().createCollection(Invites.INVITES);
+							}
+
+							mongo().createIndex(Invites.INVITES, json("toUserId", 1));
+							// Create an index for the username
+							mongo().createIndex(Accounts.USERS, json("username", 1));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(13)
+						.withUp(thisVertx -> {
+							// Remove all bot accounts.
+							long botsRemoved = Accounts.removeAccounts(mongo().find(Accounts.USERS, json("bot", true)).stream().map(jo -> new UserId(jo.getString("_id"))).collect(toList()));
+							logger.info("add MigrationRequest 13: Removed {} bot accounts", botsRemoved);
+						}))
+				.add(new MigrationRequest()
+						.withVersion(14)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("minion_diabologist", "minion_frenzied_diabolist");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(15)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("token_pumpkin_peasant", "minion_pumpkin_peasant");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(16)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							removeCards("spell_forbidden_evolution", "minion_seadevil_totem", "minion_tactician",
+									"spell_last_stand", "spell_starsurge", "minion_dranghul");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(17)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							removeCards("minion_shadowglen_vagrant", "minion_lone_wolf", "spell_bag_of_tricks");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(18)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							removeCards("spell_lone_wolf");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(19)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("spell_eerie_fermentation", "quest_eerie_fermentation");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(20)
+						.withUp(thisVertx -> {
+							mongo().updateCollectionWithOptions(Inventory.COLLECTIONS, json(), json("$set", json(
+									"wins", 0, "totalGames", 0
+							)), new UpdateOptions().setMulti(true));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(21)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(22)
+						.withUp(thisVertx -> {
+							// Needs to include the fromUserId too
+							mongo().createIndex(Invites.INVITES, json("fromUserId", 1));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(23)
+						.withUp(thisVertx -> {
+							// Remove all cards that don't exist
+							CardCatalogue.loadCardsFromPackage();
+							JsonArray allCardIds = array(CardCatalogue.getRecords().keySet().toArray());
+							MongoClientDeleteResult removed = Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+									json("$nin", allCardIds)));
+							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
+						}))
+				.add(new MigrationRequest()
+						.withVersion(24)
+						.withUp(thisVertx -> {
+							mongo().createCollection(Games.GAMES);
+							mongo().createIndex(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, 1));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(25)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("spell_lesser_oynx_spellstone", "spell_lesser_onyx_spellstone");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(26)
+						.withUp(thisVertx -> {
+							// DoctorPangloss is the first and only admin user
+							mongo().updateCollectionWithOptions(Accounts.USERS, json(), json("$set", json(UserRecord.ROLES, array())), new UpdateOptions().setMulti(true));
+							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
+							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
+						}))
+				.add(new MigrationRequest()
+						.withVersion(27)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(28)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(29)
+						.withUp(thisVertx -> {
+							changeCardId("minon_treeleach", "minion_treeleach");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(30)
+						.withUp(thisVertx -> {
+							changeCardId("minion_anub'rekhan", "minion_anobii");
+							changeCardId("minion_azjol_visionary", "minion_visionary");
+							changeCardId("minion_nerubian_vizier", "minion_vizier");
+							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
+							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
+							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
+							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
+							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+						}))
+				.migrateTo(30, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -245,7 +465,7 @@ public class Spellsource {
 	/**
 	 * Gets the current deck lists specified in the decklists.current resources directory.
 	 *
-	 * @return A list of deck create requests without a {@link DeckCreateRequest#userId} specified.
+	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
@@ -262,7 +482,7 @@ public class Spellsource {
 				return null;
 			}).map((deckList) -> {
 				try {
-					return DeckCreateRequest.fromDeckList(deckList);
+					return DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
@@ -283,7 +503,7 @@ public class Spellsource {
 	 *     		Spellsource.Spellsource().persistAttribute(
 	 *              "total-damage-dealt-1",
 	 *              GameEventType.AFTER_PHYSICAL_ATTACK,
-	 *              Attribute.TOTAL_DAMAGE_DEALT,
+	 *              Attribute.LIFETIME_DAMAGE_DEALT,
 	 *              (PersistenceContext<AfterPhysicalAttackEvent> context) -> {
 	 *                  int attackerDamage = context.event().getDamageDealt();
 	 *                  context.update(context.event().getAttacker().getReference(), attackerDamage);
@@ -301,18 +521,11 @@ public class Spellsource {
 	 *                  where the value will be persisted in a database.
 	 * @param <T>       The type of the event that corresponds to the provided {@link GameEventType}.
 	 */
-	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, Handler<PersistenceContext<T>> handler) {
-		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(Sync.fiberHandler(handler), id, event, attribute));
-		return this;
-	}
-
-	/**
-	 * @param legacyHandler A handler for game events and logic requests. See {@link LegacyPersistenceHandler#create(String,
-	 *                      GameEventType, Function, Function)} for an easy way to create this handler.
-	 * @param <T>           The event type.
-	 */
-	public <T extends GameEvent> Spellsource persistAttribute(LegacyPersistenceHandler<T> legacyHandler) {
-		getLegacyPersistenceHandlers().put(legacyHandler.getId(), legacyHandler);
+	public <T extends GameEvent> Spellsource persistAttribute(String id, GameEventType event, Attribute attribute, SuspendableAction1<PersistenceContext<T>> handler) {
+		if (getPersistAttributeHandlers().containsKey(id)) {
+			return this;
+		}
+		getPersistAttributeHandlers().put(id, new PersistenceHandler<>(suspendableHandler(handler), id, event, attribute));
 		return this;
 	}
 
@@ -336,28 +549,24 @@ public class Spellsource {
 	 * @param vertx       A vertx instance.
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
+	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final List<SyncVerticle> verticles = Arrays.asList(services());
+		List<Future> futures = new ArrayList<>();
+		// Use up all the event loops
+		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
+			for (Verticle verticle : services()) {
+				final Future<String> future = Future.future();
+				vertx.deployVerticle(verticle, future);
+				futures.add(future);
+			}
 
-		CompositeFuture.all(verticles.stream().map(verticle -> {
-			final Future<String> future = Future.future();
-			vertx.deployVerticle(verticle, future);
-			return future;
-		}).collect(toList())).setHandler(deployments);
+		CompositeFuture.all(futures).setHandler(deployments);
 	}
 
-	protected SyncVerticle[] services() {
-		return new SyncVerticle[]{
-				new CardsImpl(),
-				new AccountsImpl(),
-				new ClusteredGamesImpl(),
-				new MatchmakingImpl(),
-				new BotsImpl(),
-				new LogicImpl(),
-				new DecksImpl(),
-				new InventoryImpl(),
-				new DraftImpl(),
-				new GatewayImpl()};
+	protected Verticle[] services() {
+		return new Verticle[]{
+				Games.create(),
+				Gateway.create()};
 	}
 
 	/**
@@ -381,50 +590,11 @@ public class Spellsource {
 		return new Persistence(this);
 	}
 
-	public Map<String, LegacyPersistenceHandler> getLegacyPersistenceHandlers() {
-		return legacyPersistenceHandlers;
-	}
-
 	public Map<String, PersistenceHandler> getPersistAttributeHandlers() {
 		return persistAttributeHandlers;
 	}
 
-	/**
-	 * Gets the shared http server for this vertx instance
-	 *
-	 * @param vertx The Vertx instance
-	 * @return The server
-	 */
-	public synchronized HttpServer httpServer(Vertx vertx) {
-		if (httpServer == null) {
-			httpServer = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(Port.port()));
-		}
-		return httpServer;
-	}
-
-	/**
-	 * Gets the shared router for this vertx instance
-	 *
-	 * @param vertx
-	 * @return
-	 */
-	public synchronized Router router(Vertx vertx) {
-		if (router == null) {
-			HttpServer server = httpServer(vertx);
-			router = Router.router(vertx);
-			server.requestHandler(router::accept);
-			try {
-				server.listen();
-			} catch (IllegalStateException ignored) {
-			}
-		}
-
-		return router;
-	}
-
 	public void close() {
-		httpServer = null;
-		router = null;
 		instance = null;
 	}
 
@@ -437,13 +607,21 @@ public class Spellsource {
 	}
 
 	@Suspendable
-	public static MongoClientUpdateResult changeCardId(String oldId, String newId) {
-		if (CardCatalogue.getCardById(newId) == null) {
+	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
+		try {
+			CardCatalogue.getCardById(newId);
+		} catch (Throwable any) {
 			logger.error("changeCardId: Cannot change {} to {} because the new ID does not exist", oldId, newId);
 			return new MongoClientUpdateResult();
 		}
 
 		return Mongo.mongo().updateCollectionWithOptions(INVENTORY,
 				json("cardDesc.id", oldId), json("$set", json("cardDesc.id", newId)), new UpdateOptions().setMulti(true));
+	}
+
+	@Suspendable
+	protected static MongoClientDeleteResult removeCards(String... ids) {
+		return Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+				json("$in", array(ids))));
 	}
 }

@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -10,9 +8,48 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.Map;
+
 /**
- * A class that defines a collection of spells that should be executed one after another. Includes information useful to
- * the subspells in the {@link SpellArg#VALUE} property.
+ * A class that defines a collection of spells that should be executed one after another in the {@link SpellArg#SPELLS}
+ * argument.
+ * <p>
+ * If a {@link SpellArg#VALUE} is provided, its value will be calculated before the sub spells are evaluated and that
+ * value will be stored as the result of a {@link net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider}
+ * set to provide the {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg#GAME_VALUE} of
+ * {@link GameValue#SPELL_VALUE}. This is useful for calculating a value before effects occur.
+ * <p>
+ * For <b>example</b>, to implement the text, "Destroy all minions. Draw a card for each," it's important to destroy the
+ * minions first and then draw cards, because a deathrattle may have shuffled cards into your deck. A naive
+ * implementation would draw the card first based on how many minions are on the board. But by using the {@code
+ * GameValueProvider}, we can do things in the right order:
+ * <pre>
+ *   {
+ *     "class": "MetaSpell",
+ *     "value": {
+ *       "class": "EntityCounter",
+ *       "target": "ALL_MINIONS",
+ *       "filter": {
+ *         "class": "AttributeFilter",
+ *         "attribute": "IMMUNE",
+ *         "invert": true
+ *       }
+ *     },
+ *     "spells": [
+ *       {
+ *         "class": "DestroySpell",
+ *         "target": "ALL_MINIONS"
+ *       },
+ *       {
+ *         "class": "DrawCardSpell",
+ *         "value": {
+ *           "class": "GameValueProvider",
+ *           "gameValue": "SPELL_VALUE"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * </pre>
  *
  * @see GameContext#getSpellValueStack() for more about the spell value stack.
  */
@@ -25,14 +62,60 @@ public class MetaSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
+	public static SpellDesc create(SpellDesc... spells) {
+		Map<SpellArg, Object> arguments = new SpellDesc(MetaSpell.class);
+		arguments.put(SpellArg.SPELLS, spells);
+		return new SpellDesc(arguments);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
-		for (SpellDesc spell : (SpellDesc[]) desc.get(SpellArg.SPELLS)) {
-			SpellUtils.castChildSpell(context, player, spell, source, target);
+		if (desc.containsKey(SpellArg.VALUE)) {
+			context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
 		}
-		context.getSpellValueStack().pollLast();
+		// Manually obtain sub spells for performance reasons, this is accessed very often
+		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
+		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
+		SpellDesc spell1 = (SpellDesc) desc.get(SpellArg.SPELL1);
+		SpellDesc spell2 = (SpellDesc) desc.get(SpellArg.SPELL2);
+		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
+		// Pass down the CARD arg if it's specified on this desc. This allows DiscoverSpells to correctly use MetaSpell.
+		if (desc.containsKey(SpellArg.CARD)) {
+			if (spell != null) {
+				spell = spell.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+			if (spells != null) {
+				for (int i = 0; i < spells.length; i++) {
+					spells[i] = spells[i].addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+				}
+			}
+			if (spell1 != null) {
+				spell1 = spell1.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+			if (spell2 != null) {
+				spell2 = spell2.addArg(SpellArg.CARD, desc.get(SpellArg.CARD));
+			}
+		}
+		for (int i = 0; i < howMany; i++) {
+			if (spell != null) {
+				SpellUtils.castChildSpell(context, player, spell, source, target);
+			}
+			if (spells != null && spells.length > 0) {
+				for (SpellDesc subSpell : spells) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target);
+				}
+			}
+			if (spell1 != null) {
+				SpellUtils.castChildSpell(context, player, spell1, source, target);
+			}
+			if (spell2 != null) {
+				SpellUtils.castChildSpell(context, player, spell2, source, target);
+			}
+		}
+		if (desc.containsKey(SpellArg.VALUE)) {
+			context.getSpellValueStack().pollLast();
+		}
 	}
 
 }

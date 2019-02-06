@@ -1,0 +1,27 @@
+{
+  "name": "Burping Whelp",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Whenever you Roast a card, deal 1 damage to a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

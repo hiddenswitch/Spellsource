@@ -1,0 +1,48 @@
+{
+  "name": "Truefire Rocket",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BRASS",
+  "rarity": "FREE",
+  "description": "Destroy a random undamaged minion. If it's friendly, draw a card.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "DamagedFilter",
+      "invert": true
+    }
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "target": "ALL_MINIONS",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "IsDeadCondition"
+        },
+        {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "SELF"
+        }
+      ]
+    },
+    "filter": {
+      "class": "DamagedFilter",
+      "invert": true
+    },
+    "randomTarget": true,
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -8,7 +8,7 @@
   "rarity": "COMMON",
   "description": "Divine Shield. Spell Damage +1",
   "attributes": {
-    "DIVINE_SHIELD": 1,
+    "DIVINE_SHIELD": true,
     "SPELL_DAMAGE": 1
   },
   "collectible": true,

@@ -1,0 +1,28 @@
+{
+  "name": "Lord Marrowgar",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ICECREAM",
+  "baseAttack": 1,
+  "baseHp": 12,
+  "rarity": "LEGENDARY",
+  "description": "Taunt. Sacrifice: Deal 1 damage to all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

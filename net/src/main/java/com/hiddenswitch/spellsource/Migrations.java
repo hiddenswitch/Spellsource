@@ -9,6 +9,7 @@ import com.hiddenswitch.spellsource.models.MigrationResponse;
 import com.hiddenswitch.spellsource.models.MigrationToResponse;
 import com.hiddenswitch.spellsource.util.Migrator;
 import com.hiddenswitch.spellsource.util.RpcOptions;
+import io.vertx.core.Verticle;
 import io.vertx.core.Vertx;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ import java.io.Serializable;
 /**
  * The migrations service performs database migrations on Mongo, using a mongo document as a lock.
  */
-public interface Migrations {
+public interface Migrations extends Verticle {
 	/**
 	 * Adds a given up and down function to a specific version.
 	 *

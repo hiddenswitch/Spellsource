@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Deal 2 damage. Add a 1/2 Elemental to your hand.",
+  "description": "Deal $2 damage. Add a 1/2 Elemental to your hand.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

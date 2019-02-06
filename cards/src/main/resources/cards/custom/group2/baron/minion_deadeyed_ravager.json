@@ -1,0 +1,29 @@
+{
+  "name": "Deadeyed Ravager",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "After this kills a minion, attack a random enemy.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "IsDeadCondition"
+      },
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "FightSpell",
+      "target": "ENEMY_CHARACTERS",
+      "randomTarget": true,
+      "secondaryTarget": "TRIGGER_HOST"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

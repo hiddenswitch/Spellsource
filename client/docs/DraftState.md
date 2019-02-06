@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **currentCardChoices** | [**List&lt;Entity&gt;**](Entity.md) | When not null, contains the cards that correspond to your choices for the next draft selection.  |  [optional]
 **heroClass** | [**Entity**](Entity.md) |  |  [optional]
 **status** | [**StatusEnum**](#StatusEnum) | Gets the status of the draft.  |  [optional]
-**selectedCards** | [**List&lt;Entity&gt;**](Entity.md) |  |  [optional]
+**selectedCardIds** | **List&lt;String&gt;** |  |  [optional]
 **cardsRemaining** | **Integer** | Gets the number of card choices remaining to make.  |  [optional]
 **draftIndex** | **Integer** | Gets the current draft index.  |  [optional]
 **wins** | **Integer** | The number of wins you have achieved with your current draft deck.  |  [optional]

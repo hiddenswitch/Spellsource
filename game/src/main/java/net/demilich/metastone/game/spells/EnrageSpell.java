@@ -1,23 +1,23 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.cards.Attribute;
+
+import java.util.Map;
 
 /**
  * Implements the attack bonus portion of a complete Enrage effect. The {@code target}'s attack is increased by  {@link
  * SpellArg#ATTACK_BONUS}. Optionally, an {@link SpellArg#ATTRIBUTE} is also applied when specified.
  * <p>
- * To implement "Enrage: +2 Attack", the {@link net.demilich.metastone.game.cards.MinionCard} needs to have a {@link
- * net.demilich.metastone.game.spells.desc.trigger.TriggerDesc} specified in its {@link
- * net.demilich.metastone.game.cards.desc.MinionCardDesc#trigger} field:
+ * To implement "Enrage: +2 Attack", the {@link net.demilich.metastone.game.cards.Card} needs to have a {@link
+ * EnchantmentDesc} specified in its {@link net.demilich.metastone.game.cards.desc.CardDesc#trigger} field:
  * <pre>
  *      "trigger": {
  *          "eventTrigger": {

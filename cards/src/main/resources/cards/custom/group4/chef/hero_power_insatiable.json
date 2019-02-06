@@ -1,0 +1,39 @@
+{
+  "name": "Insatiable",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Passive Hero Power: After you play a card, shuffle a copy of it into your deck.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "AfterCardPlayedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "HeroPowerSpell",
+      "spell": {
+        "class": "ShuffleToDeckSpell",
+        "target": "EVENT_SOURCE",
+        "value": 1
+      }
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "FRIENDLY_LAST_CARD_PLAYED",
+      "value": 1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

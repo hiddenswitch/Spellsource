@@ -1,0 +1,30 @@
+{
+  "name": "Winds of Northrend",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Gain 8 Armor, then Freeze your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
+          "armorBonus": 8
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "FRIENDLY_HERO",
+          "attribute": "FROZEN"
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

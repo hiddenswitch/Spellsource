@@ -1,0 +1,23 @@
+{
+  "name": "Backstreet Blowup",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "EPIC",
+  "description": "Battlecry: Summon a 0/3 Bomb for your opponent that damages enemy minions.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_flakefuse_bomb",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

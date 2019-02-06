@@ -1,0 +1,23 @@
+{
+  "name": "Serpentcrest Staff",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "TEAL",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Restore 2 Health.",
+  "battlecry": {
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "HealSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "description": "Choose One - +5 Attack; or +5 Health and Taunt.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "+5 Attack",
       "spell": {
@@ -35,7 +35,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "+5/+5 and Taunt",
     "spell": {
       "class": "MetaSpell",

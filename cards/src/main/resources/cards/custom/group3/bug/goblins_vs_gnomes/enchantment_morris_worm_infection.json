@@ -1,0 +1,29 @@
+{
+  "name": "Infection",
+  "type": "ENCHANTMENT",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "+2/+2 and \"<b>Deathrattle:</b> Give your Infection to another random friendly minion.\"",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 2
+      },
+      {
+        "class": "AddDeathrattleSpell",
+        "target": "FRIENDLY_MINIONS",
+        "card": "enchantment_morris_worm_infection",
+        "randomTarget": true
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

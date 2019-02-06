@@ -1,0 +1,15 @@
+{
+  "name": "Impale",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Choose a minion. It deals its damage to the minions opposite it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "custom.DamageOppositeMinionsSpell"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

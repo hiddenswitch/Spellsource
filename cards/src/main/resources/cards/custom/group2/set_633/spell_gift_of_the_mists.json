@@ -1,0 +1,21 @@
+{
+  "name": "Gift of the Mists",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "EPIC",
+  "description": "Give your minions \"Deathrattle: Restore #4 Health to your hero.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 4
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

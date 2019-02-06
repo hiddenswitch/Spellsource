@@ -1,0 +1,16 @@
+{
+  "name": "Duplimancy",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Choose a minion. Put 2 copies of it into your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "CopyCardSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

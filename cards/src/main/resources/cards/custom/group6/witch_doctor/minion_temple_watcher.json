@@ -1,0 +1,42 @@
+{
+  "name": "Temple Watcher",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Taunt. Battlecry: Change the cost of a random spell in your hand to (5).",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_HAND",
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      }
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 5,
+        "operation": "SET"
+      },
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "SPELL"
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

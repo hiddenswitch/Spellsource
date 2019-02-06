@@ -1,0 +1,14 @@
+{
+  "name": "Dry Baguette",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "TOAST",
+  "damage": 3,
+  "durability": 1,
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

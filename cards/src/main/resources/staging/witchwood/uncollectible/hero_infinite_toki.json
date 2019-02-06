@@ -1,0 +1,12 @@
+{
+  "name": "Infinite Toki",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "<i>One either dies a hero or mangles time enough to become a villain.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,23 @@
+{
+  "name": "Alternate Justicar Trueheart",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Replace your starting Hero Power with a better one (alternately).",
+  "battlecry": {
+    "spell": {
+      "class": "custom.UpgradeHeroPowerSpell",
+      "exclusive": true,
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "ALTERNATIVE",
+  "fileFormatVersion": 1
+}

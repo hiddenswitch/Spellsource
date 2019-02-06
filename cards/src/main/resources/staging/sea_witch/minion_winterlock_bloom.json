@@ -1,0 +1,23 @@
+{
+  "name": "Winterlock Bloom",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Battlecry: Freeze this minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "FROZEN"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

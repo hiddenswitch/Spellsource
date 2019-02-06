@@ -1,0 +1,49 @@
+{
+  "name": "Thundering Sapphire Serpent",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "BLUE",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, gains \"Whenever you cast a spell, Discover a spell.\"",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "SELF",
+      "trigger": {
+        "eventTrigger": {
+          "class": "AfterSpellCastedTrigger",
+          "sourcePlayer": "SELF"
+        },
+        "spell": {
+          "class": "DiscoverSpell",
+          "spell": {
+            "class": "ReceiveCardSpell",
+            "targetPlayer": "SELF"
+          },
+          "cardFilter": {
+            "class": "CardFilter",
+            "heroClass": "SELF",
+            "cardType": "SPELL"
+          }
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

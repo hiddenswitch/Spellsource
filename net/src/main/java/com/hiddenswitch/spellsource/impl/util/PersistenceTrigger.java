@@ -1,20 +1,18 @@
 package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.Expose;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Spellsource;
 import com.hiddenswitch.spellsource.Logic;
-import com.hiddenswitch.spellsource.models.EventLogicRequest;
+import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.util.RpcClient;
 import io.vertx.core.Handler;
 import io.vertx.core.VertxException;
 import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.AfterPhysicalAttackEvent;
-import net.demilich.metastone.game.events.BeforeSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.trigger.Trigger;
@@ -26,7 +24,8 @@ import java.io.Serializable;
  * A trigger that records persistent {@link Attribute} to a database. Think of it as analytics for {@link Entity}
  * objects where some analytics events have side effects on gameplay.
  * <p>
- * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute, Handler)}.
+ * To implement a new persistence effect, see {@link Spellsource#persistAttribute(String, GameEventType, Attribute,
+ * SuspendableAction1)}.
  * <p>
  * In games with persistence effects enabled, the {@link PersistenceTrigger} is added to a list of "other triggers" that
  * are just always running throughout a game. In Spellsource, this trigger is added by a {@link
@@ -48,14 +47,10 @@ public class PersistenceTrigger implements Trigger, Serializable {
 	/**
 	 * The {@link RpcClient} for the {@link Logic} service.
 	 */
-	@Expose(serialize = false, deserialize = false)
-	private transient final RpcClient<Logic> logic;
-	private final String gameId;
-	@Expose(serialize = false, deserialize = false)
 	private transient final GameContext context;
+	private final GameId gameId;
 
-	public PersistenceTrigger(RpcClient<Logic> logic, GameContext context, String gameId) {
-		this.logic = logic;
+	public PersistenceTrigger(GameContext context, GameId gameId) {
 		this.gameId = gameId;
 		this.context = context;
 	}
@@ -68,16 +63,15 @@ public class PersistenceTrigger implements Trigger, Serializable {
 		}
 
 		try {
-			Spellsource.spellsource().persistence().persistenceTrigger(logic, event);
+			Spellsource.spellsource().persistence().persistenceTrigger(event);
 		} catch (VertxException e) {
-			logger.error("Failed a persistence call and silently continuing. Details:\n" + context.toLongString());
+			logger.error("onGameEvent: Failed a persistence call and silently continuing. {}", e);
 		}
-
 	}
 
 	@Override
 	public Trigger clone() {
-		return new PersistenceTrigger(logic, context, gameId);
+		return new PersistenceTrigger(context, gameId);
 	}
 
 	@Override
@@ -141,40 +135,4 @@ public class PersistenceTrigger implements Trigger, Serializable {
 		return true;
 	}
 
-
-	@Suspendable
-	public static EventLogicRequest<BeforeSummonEvent> beforeSummon(BeforeSummonEvent event) {
-		String gameId = event.getGameContext().getGameId();
-		final String cardInstanceId = event.getMinion().getCardInventoryId();
-		if (cardInstanceId == null) {
-			// Can't process a non-alliance card.
-			return null;
-		}
-
-		final EventLogicRequest<BeforeSummonEvent> request = new EventLogicRequest<>();
-		request.setEvent(event);
-		request.setCardInventoryId(cardInstanceId);
-		request.setGameId(gameId);
-		request.setUserId(event.getMinion().getUserId());
-		return request;
-	}
-
-	@Suspendable
-	public static EventLogicRequest<AfterPhysicalAttackEvent> afterPhysicalAttack(AfterPhysicalAttackEvent event) {
-		String gameId = event.getGameContext().getGameId();
-		final String attackerInstanceId = event.getAttacker().getCardInventoryId();
-		final String defenderInstanceId = event.getDefender().getCardInventoryId();
-		if (attackerInstanceId == null || defenderInstanceId == null) {
-			// Can't process a non-alliance card.
-			return null;
-		}
-
-		final EventLogicRequest<AfterPhysicalAttackEvent> request1 = new EventLogicRequest<>();
-		request1.setEvent(event);
-		request1.setCardInventoryId(attackerInstanceId);
-		request1.setGameId(gameId);
-		request1.setUserId(event.getAttacker().getUserId());
-		return request1;
-
-	}
 }

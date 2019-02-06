@@ -1,0 +1,18 @@
+{
+  "name": "Chi Wave",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "COMMON",
+  "description": "Restore #8 Health randomly split among all friendly characters.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HealingMissilesSpell",
+    "target": "FRIENDLY_CHARACTERS",
+    "value": 1,
+    "howMany": 8
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

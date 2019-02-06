@@ -18,6 +18,7 @@
       "target": "SELF",
       "cardFilter": {
         "class": "CardFilter",
+        "cardType": "MINION",
         "manaCost": 6
       }
     }

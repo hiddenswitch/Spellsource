@@ -1,0 +1,48 @@
+{
+  "name": "Deranged Shifter",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Gain adjacent minions' stats and text.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "target": "ADJACENT_MINIONS",
+            "attribute": "ATTACK"
+          },
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "target": "ADJACENT_MINIONS",
+            "attribute": "HP"
+          }
+        },
+        {
+          "class": "custom.AddActorEffectsToTargetActorSpell",
+          "target": "SELF",
+          "secondaryTarget": "LEFT_ADJACENT_MINION"
+        },
+        {
+          "class": "custom.AddActorEffectsToTargetActorSpell",
+          "target": "SELF",
+          "secondaryTarget": "RIGHT_ADJACENT_MINION"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -12,7 +12,7 @@
     "hpBonus": 4
   },
   "attributes": {
-    "NAME": "Ankylo's Strength"
+    "SPELLSOURCE_NAME": "Ankylo's Strength"
   },
   "collectible": true,
   "set": "BASIC",

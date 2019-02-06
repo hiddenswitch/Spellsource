@@ -1,0 +1,16 @@
+{
+  "name": "Tiger Palm Strike",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Deal $2 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

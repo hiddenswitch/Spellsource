@@ -1,0 +1,66 @@
+{
+  "name": "Spinning Crane Kick",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Randomly either deal $1 damage to all enemies or restore #1 Health to all friendly characters. Recast this twice.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "RandomCondition"
+        },
+        "spell1": {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1
+        },
+        "spell2": {
+          "class": "HealSpell",
+          "target": "FRIENDLY_CHARACTERS",
+          "value": 1
+        }
+      },
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "RandomCondition"
+        },
+        "spell1": {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1
+        },
+        "spell2": {
+          "class": "HealSpell",
+          "target": "FRIENDLY_CHARACTERS",
+          "value": 1
+        }
+      },
+      {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "RandomCondition"
+        },
+        "spell1": {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1
+        },
+        "spell2": {
+          "class": "HealSpell",
+          "target": "FRIENDLY_CHARACTERS",
+          "value": 1
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

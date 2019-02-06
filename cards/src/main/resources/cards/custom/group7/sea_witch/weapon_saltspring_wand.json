@@ -1,0 +1,23 @@
+{
+  "name": "Saltspring Wand",
+  "baseManaCost": 0,
+  "type": "WEAPON",
+  "heroClass": "TEAL",
+  "damage": 1,
+  "durability": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Add an Ocean Depths to your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "card": "spell_ocean_depths"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -5,8 +5,7 @@ bin
 .gradle
 .idea
 .vertx
-.mongo
-.mongo-backup
+.mongo*
 test-output
 report.log
 /~$card_checklist.xlsx
@@ -28,4 +27,12 @@ cards/out
 !.elasticbeanstalk/*.global.yml
 
 .vagrant/
-cards/src/main/resources/cards/hearthstone/classic/rogue/spell_shadowstep.json
+.venv/
+
+*.egg-info
+__pycache__/
+dist/
+
+.ipynb_checkpoints/
+dump/
+

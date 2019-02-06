@@ -1,0 +1,25 @@
+{
+  "name": "Avenging Forces",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "RARE",
+  "description": "Summon five random 3-Cost minions.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": 5,
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION",
+      "manaCost": 3
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

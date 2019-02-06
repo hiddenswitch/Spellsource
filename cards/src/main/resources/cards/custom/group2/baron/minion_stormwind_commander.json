@@ -1,0 +1,22 @@
+{
+  "name": "Stormwind Commander",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Your Knights have Charge.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attribute": "AURA_CHARGE",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "token_knight"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,12 @@
+{
+  "name": "Niira the Trickster",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "<i>She plays with wee critters\u2026 until they\u2019re big critters.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

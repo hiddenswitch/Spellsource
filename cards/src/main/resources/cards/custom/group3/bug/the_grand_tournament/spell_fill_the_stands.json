@@ -1,0 +1,20 @@
+{
+  "name": "Fill the Stands!",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Add four random Common minions to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 4,
+    "cardFilter": {
+      "class": "CardFilter",
+      "rarity": "COMMON"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

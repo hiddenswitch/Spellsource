@@ -15,7 +15,7 @@
       "class": "EnrageSpell",
       "target": "SELF",
       "attackBonus": 1,
-      "attribute": "WINDFURY"
+      "attribute": "AURA_WINDFURY"
     }
   },
   "attributes": {

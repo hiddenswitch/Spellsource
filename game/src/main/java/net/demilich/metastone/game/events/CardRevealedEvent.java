@@ -32,3 +32,4 @@ public final class CardRevealedEvent extends GameEvent implements HasCard {
 		return true;
 	}
 }
+

@@ -1,0 +1,15 @@
+{
+  "name": "Murloc Holmes",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "MURLOC",
+  "description": "Whenever your opponent draws a card, add a copy to your hand.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

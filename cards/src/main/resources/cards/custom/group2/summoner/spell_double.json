@@ -1,0 +1,17 @@
+{
+  "name": "Double",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "FREE",
+  "description": "Copy a random card from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "CopyCardSpell",
+    "target": "FRIENDLY_DECK",
+    "randomTarget": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,26 @@
+{
+  "name": "Greater Opal Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Deal $2 damage. Add an Opal Spellstone to your hand.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "spell_opal_spellstone"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,7 +6,7 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -27,6 +27,12 @@ import org.slf4j.LoggerFactory;
 public class SetDescriptionSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(SetDescriptionSpell.class);
+
+	public static SpellDesc create(String description) {
+		SpellDesc spellDesc = new SpellDesc(SetDescriptionSpell.class);
+		spellDesc.put(SpellArg.DESCRIPTION, description);
+		return spellDesc;
+	}
 
 	@Override
 	@Suspendable

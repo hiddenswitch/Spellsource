@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,13 +10,13 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
-import java.util.Map;
 
-public class CardFilter extends EntityFilter {
+public final class CardFilter extends EntityFilter {
 
-	public CardFilter(FilterDesc desc) {
+	public CardFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
@@ -39,18 +38,22 @@ public class CardFilter extends EntityFilter {
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> entities = getTargetedEntities(context, player, host);
 
+		if (entity == null) {
+			return false;
+		}
+
 		Card card = entity.getSourceCard();
 
-		CardType cardType = (CardType) desc.get(FilterArg.CARD_TYPE);
+		CardType cardType = (CardType) getDesc().get(EntityFilterArg.CARD_TYPE);
 		if (cardType != null && !card.getCardType().isCardType(cardType)) {
 			return false;
 		}
-		Race race = (Race) desc.get(FilterArg.RACE);
-		if (race != null && race != card.getAttribute(Attribute.RACE)) {
+		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
+		if (race != null && !card.getRace().hasRace(race)) {
 			return false;
 		}
 
-		HeroClass[] heroClasses = (HeroClass[]) desc.get(FilterArg.HERO_CLASSES);
+		HeroClass[] heroClasses = (HeroClass[]) getDesc().get(EntityFilterArg.HERO_CLASSES);
 		if (heroClasses != null && heroClasses.length > 0) {
 			boolean test = false;
 			for (HeroClass heroClass : heroClasses) {
@@ -61,51 +64,51 @@ public class CardFilter extends EntityFilter {
 			}
 		}
 
-		HeroClass heroClass = (HeroClass) desc.get(FilterArg.HERO_CLASS);
+		HeroClass heroClass = (HeroClass) getDesc().get(EntityFilterArg.HERO_CLASS);
 		if (heroClass != null && heroClassTest(context, player, card, heroClass)) {
 			return false;
 		}
 
-		if (desc.containsKey(FilterArg.MANA_COST)) {
-			int manaCost = desc.getValue(FilterArg.MANA_COST, context, player, null, host, 0);
+		if (getDesc().containsKey(EntityFilterArg.MANA_COST)) {
+			int manaCost = getDesc().getValue(EntityFilterArg.MANA_COST, context, player, null, host, 0);
 			// TODO: Should we be looking at base mana cost or modified mana cost here?
 			if (manaCost != card.getBaseManaCost()) {
 				return false;
 			}
 		}
-		Rarity rarity = (Rarity) desc.get(FilterArg.RARITY);
+		Rarity rarity = (Rarity) getDesc().get(EntityFilterArg.RARITY);
 		if (rarity != null && !card.getRarity().isRarity(rarity)) {
 			return false;
 		}
 
-		if (desc.containsKey(FilterArg.ATTRIBUTE)) {
-			Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
-			Operation operation = null;
-			if (desc.containsKey(FilterArg.OPERATION)) {
-				operation = (Operation) desc.get(FilterArg.OPERATION);
+		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
+		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+			return false;
+		}
+
+		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
+			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
+			ComparisonOperation operation = null;
+			if (getDesc().containsKey(EntityFilterArg.OPERATION)) {
+				operation = (ComparisonOperation) getDesc().get(EntityFilterArg.OPERATION);
 			}
-			if (!desc.containsKey(FilterArg.OPERATION)
-					&& desc.containsKey(FilterArg.VALUE)) {
-				operation = Operation.EQUAL;
+			if (!getDesc().containsKey(EntityFilterArg.OPERATION)
+					&& getDesc().containsKey(EntityFilterArg.VALUE)) {
+				operation = ComparisonOperation.EQUAL;
 			}
-			if (operation == Operation.HAS || operation == null) {
+			if (operation == ComparisonOperation.HAS || operation == null) {
 				return card.hasAttribute(attribute);
 			}
 
 			int targetValue;
 			if (entities == null) {
-				targetValue = desc.getInt(FilterArg.VALUE);
+				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, null, 0);
 			} else {
-				targetValue = desc.getValue(FilterArg.VALUE, context, player, entities.get(0), null, 0);
+				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), null, 0);
 			}
 
 			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
-		}
-
-		CardSet cardSet = (CardSet) desc.get(FilterArg.CARD_SET);
-		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
-			return false;
 		}
 
 		return true;
@@ -121,13 +124,14 @@ public class CardFilter extends EntityFilter {
 	}
 
 	public static CardFilter create(CardType cardType, Race race) {
-		FilterDesc arguments = new FilterDesc(CardFilter.class);
+		EntityFilterDesc arguments = new EntityFilterDesc(CardFilter.class);
 		if (cardType != null) {
-			arguments.put(FilterArg.CARD_TYPE, cardType);
+			arguments.put(EntityFilterArg.CARD_TYPE, cardType);
 		}
 		if (race != null) {
-			arguments.put(FilterArg.RACE, race);
+			arguments.put(EntityFilterArg.RACE, race);
 		}
 		return new CardFilter(arguments);
 	}
 }
+

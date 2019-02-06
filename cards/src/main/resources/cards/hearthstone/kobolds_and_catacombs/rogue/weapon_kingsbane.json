@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Shuffle this into your deck. It keeps any enchantments.",
+  "description": "Always keeps enchantments. Deathrattle: Shuffle this into your deck.",
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
     "target": "SELF"

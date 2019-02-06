@@ -1,0 +1,32 @@
+{
+  "name": "Haute Cuisine",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "EPIC",
+  "description": "Draw the highest-Cost card from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "cardFilter": {
+      "class": "ManaCostFilter",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "FRIENDLY_DECK",
+        "operation": "MAXIMUM",
+        "value1": {
+          "class": "ManaCostProvider"
+        }
+      },
+      "operation": "EQUAL"
+    },
+    "cardSource": {
+      "class": "DeckSource"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

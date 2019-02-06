@@ -1,5 +1,5 @@
 {
-  "name": "Mass Conscription",
+  "name": "The Silver Hand",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "GOLD",
@@ -12,11 +12,14 @@
   },
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "cards": [
-      "token_silver_hand_recruit",
-      "token_silver_hand_recruit"
-    ]
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_silver_hand_recruit",
+        "token_silver_hand_recruit"
+      ]
+    }
   },
   "collectible": false,
   "set": "THE_GRAND_TOURNAMENT",

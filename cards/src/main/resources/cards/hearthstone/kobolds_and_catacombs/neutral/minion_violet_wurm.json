@@ -40,6 +40,11 @@
         "class": "SummonSpell",
         "boardPositionRelative": "LEFT",
         "card": "token_grub"
+      },
+      {
+        "class": "SummonSpell",
+        "boardPositionRelative": "RIGHT",
+        "card": "token_grub"
       }
     ]
   },

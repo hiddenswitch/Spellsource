@@ -1,0 +1,13 @@
+{
+  "name": "Lil Bro",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "race": "DRAGON",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

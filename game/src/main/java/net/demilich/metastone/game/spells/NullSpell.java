@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -12,11 +10,13 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
 /**
  * A spell that has no effects.
  * <p>
  * This is useful for situations where a spell <b>must</b> be specified, like in a {@link
- * net.demilich.metastone.game.cards.desc.SpellCardDesc#spell} property in its JSON, but when no effects are intended.
+ * net.demilich.metastone.game.cards.desc.CardDesc#spell} property in its JSON, but when no effects are intended.
  * <p>
  * For <b>example</b>, place the following as the {@code spell} property in the card JSON for a spell card that should
  * do nothing:

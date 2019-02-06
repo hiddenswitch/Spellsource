@@ -1,18 +1,18 @@
 package net.demilich.metastone.game.behaviour;
 
-import java.util.HashMap;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.cards.Attribute;
+
+import java.util.HashMap;
 
 public class TranspositionTable {
 
 	private static int hash(Entity entity) {
 		int hash = entity.getName().hashCode();
-		for (Attribute tag : entity.getAttributes().keySet()) {
+		for (Attribute tag : entity.getAttributes().unsafeKeySet()) {
 			Object value = entity.getAttributes().get(tag);
 			if (!(value instanceof Integer)) {
 				continue;

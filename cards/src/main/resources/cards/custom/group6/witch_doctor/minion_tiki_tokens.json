@@ -1,0 +1,31 @@
+{
+  "name": "Tiki Tokens",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover a Voodoo spell.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      },
+      "cards": [
+        "spell_divination",
+        "spell_frenzy",
+        "spell_hex_bolt",
+        "spell_spirit_bind"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

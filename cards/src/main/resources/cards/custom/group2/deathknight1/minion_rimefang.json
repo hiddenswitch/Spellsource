@@ -1,0 +1,29 @@
+{
+  "name": "Rimefang",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Taunt. Battlecry: Fill your hand with Runes.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "CopyCardSpell",
+        "target": "OUTPUT",
+        "value": 9
+      },
+      "card": "spell_rune"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

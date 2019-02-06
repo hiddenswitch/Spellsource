@@ -6,13 +6,13 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Taunt. Battlecry: Summon a copy of this minion.",
+  "description": "Taunt. Battlecry: Summon another Saronite Chaingang.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "SummonSpell",
-      "target": "SELF",
-      "boardPositionRelative": "RIGHT"
+      "boardPositionRelative": "RIGHT",
+      "card": "minion_saronite_chain_gang"
     }
   },
   "attributes": {

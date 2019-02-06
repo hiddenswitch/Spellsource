@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Deal 9 damage randomly split among all characters.",
+  "description": "Deal $9 damage randomly split among all characters.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

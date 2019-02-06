@@ -6,11 +6,11 @@
   "rarity": "EPIC",
   "description": "Choose One - Summon 7 Wisps; or Give your minions +2/+2.",
   "targetSelection": "NONE",
-  "options": [
+  "chooseOneCardIds": [
     "spell_wisps_of_the_old_gods_1",
     "spell_wisps_of_the_old_gods_2"
   ],
-  "bothOptions": "spell_wisps_of_the_old_gods_3",
+  "chooseBothCardId": "spell_wisps_of_the_old_gods_3",
   "collectible": true,
   "set": "THE_OLD_GODS",
   "fileFormatVersion": 1

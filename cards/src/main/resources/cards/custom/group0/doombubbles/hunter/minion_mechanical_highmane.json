@@ -1,0 +1,26 @@
+{
+  "name": "Mechanical Highmane",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Deathrattle: Summon four 1/1 Microbots.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_microbot",
+      "token_microbot",
+      "token_microbot",
+      "token_microbot"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

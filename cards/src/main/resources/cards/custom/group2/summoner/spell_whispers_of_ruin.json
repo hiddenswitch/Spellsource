@@ -1,0 +1,28 @@
+{
+  "name": "Whispers of Ruin",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "COMMON",
+  "description": "Discover a copy of a minion in your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "DeckSource",
+      "distinct": true,
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

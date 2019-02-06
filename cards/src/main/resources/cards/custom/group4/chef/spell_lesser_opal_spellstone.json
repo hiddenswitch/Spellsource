@@ -1,0 +1,30 @@
+{
+  "name": "Lesser Opal Spellstone",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Deal $2 damage. (Roast 2 cards to upgrade).",
+  "passiveTrigger": {
+    "countUntilCast": 2,
+    "eventTrigger": {
+      "class": "RoastTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_opal_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 2
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

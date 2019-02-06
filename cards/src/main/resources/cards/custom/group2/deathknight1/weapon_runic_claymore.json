@@ -1,0 +1,13 @@
+{
+  "name": "Runic Claymore",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "ICE",
+  "damage": 4,
+  "durability": 3,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

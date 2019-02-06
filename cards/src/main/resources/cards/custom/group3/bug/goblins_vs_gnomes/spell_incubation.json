@@ -1,0 +1,16 @@
+{
+  "name": "Incubation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Add 3 copies of a minion to your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "PutCopyInHandSpell",
+    "howMany": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

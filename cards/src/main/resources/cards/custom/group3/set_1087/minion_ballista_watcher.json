@@ -1,0 +1,31 @@
+{
+  "name": "Ballista Watcher",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Whenever you summon a minion, it deals its Attack to a random enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "EVENT_TARGET",
+        "attribute": "ATTACK"
+      },
+      "randomTarget": true
+    }
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

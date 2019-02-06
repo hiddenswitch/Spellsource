@@ -1,6 +1,9 @@
 package net.demilich.metastone.game.entities;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.*;
@@ -14,10 +17,11 @@ import java.util.*;
  * @param <E> The subclass of {@link Entity} that is stored. For example, {@link Zones#BATTLEFIELD} can only store
  *            {@link net.demilich.metastone.game.entities.minions.Minion} entities.
  * @see net.demilich.metastone.game.cards.CardList for an interface that adds additional features for lists of cards,
- * like the {@link Zones#HAND} and the {@link Zones#DECK}.
+ * 		like the {@link Zones#HAND} and the {@link Zones#DECK}.
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		List<E>, Iterable<E>, Cloneable, Serializable {
+
 	protected final Zones zone;
 	protected int player = -1;
 	protected List<E> internal = new ArrayList<>();
@@ -25,6 +29,15 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public EntityZone(int player, Zones zone) {
 		this.zone = zone;
 		this.player = player;
+	}
+
+	@NotNull
+	public static Comparator<Card> getManaCostComparator() {
+		return (card1, card2) -> {
+			Integer manaCost1 = card1.getBaseManaCost();
+			Integer manaCost2 = card2.getBaseManaCost();
+			return manaCost1.compareTo(manaCost2);
+		};
 	}
 
 	@SuppressWarnings("unchecked")
@@ -45,6 +58,15 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 	public E set(int index, E element) {
 		checkElement(element);
 		return setUnchecked(index, element);
+	}
+
+	@Override
+	public void sort(Comparator<? super E> c) {
+		Object[] a = this.toArray();
+		Arrays.sort(a, (Comparator) c);
+		for (int i = 0; i < a.length; i++) {
+			setUnchecked(i, (E) a[i]);
+		}
 	}
 
 	private void checkElement(E element) {
@@ -166,6 +188,31 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 
 	public static EntityZone empty(int player) {
 		return new EntityZone(player, Zones.NONE);
+	}
+
+	/**
+	 * Swaps two entities with each other. They must be of the same type.
+	 *
+	 * @param sourceEntity One of the two entities to swap in location.
+	 * @param targetEntity One of the two entities to swap in location.
+	 * @param context      An {@link EntityZoneTable}, typically a {@link GameContext}, to look up entities inside of.
+	 * @param <E>          The type of the entity to swap (must be the same).
+	 */
+	public static <E extends Entity> void swap(E sourceEntity, E targetEntity, EntityZoneTable context) {
+		EntityZone<E> sourceZone = context.getZone(sourceEntity.getEntityLocation().getPlayer(), sourceEntity.getEntityLocation().getZone());
+		EntityZone<E> targetZone = context.getZone(targetEntity.getEntityLocation().getPlayer(), targetEntity.getEntityLocation().getZone());
+		int sourceIndex = sourceEntity.getEntityLocation().getIndex();
+		int targetIndex = targetEntity.getEntityLocation().getIndex();
+		int sourceOwner = sourceEntity.getOwner();
+		int targetOwner = targetEntity.getOwner();
+		if (sourceEntity.getOwner() != targetOwner) {
+			sourceEntity.setOwner(targetOwner);
+		}
+		if (targetEntity.getOwner() != sourceOwner) {
+			targetEntity.setOwner(sourceOwner);
+		}
+		sourceZone.move(sourceIndex, targetZone, targetIndex);
+		targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
 	}
 }
 

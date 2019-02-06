@@ -1,0 +1,18 @@
+{
+  "name": "Field Supplier",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 0,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Your other minions are Immune while attacking.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "OTHER_FRIENDLY_MINIONS",
+    "attribute": "AURA_IMMUNE_WHILE_ATTACKING"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

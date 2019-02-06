@@ -7,6 +7,8 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Casts the {@link SpellArg#SPELL} if the {@link Condition} in {@link SpellArg#CONDITION} is met; or, when a {@link
@@ -16,6 +18,9 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * The {@link Condition} in {@link SpellArg#CONDITION} or {@link SpellArg#CONDITIONS} is evaluated against this spell
  * invocation's {@code target}. This means that, for example, an {@link net.demilich.metastone.game.spells.desc.condition.IsDeadCondition}
  * will be evaluated against the target of this spell.
+ * <p>
+ * If a {@link SpellArg#SPELL} is specified and {@link SpellArg#EXCLUSIVE} is {@code true}, that spell is cast if
+ * <b>none</b> of the other conditions are met.
  * <p>
  * For <b>example</b>, this spell implements, "If you're holding a Dragon, deal 3 damage to all minions":
  * <pre>
@@ -79,15 +84,24 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * </pre>
  *
  * @see ConditionalEffectSpell to add an additional effect to a spell, giving you a default behaviour when the condition
- * fails.
+ * 		fails.
  * @see EitherOrSpell to perform a binary effect: one spell if the condition is true, and a different spell if the
- * condition is false.
+ * 		condition is false.
  */
 public class ConditionalSpell extends Spell {
+	private static Logger logger = LoggerFactory.getLogger(ConditionalSpell.class);
+
+	public static SpellDesc create(Condition[] conditions, SpellDesc[] spells) {
+		SpellDesc desc = new SpellDesc(ConditionalSpell.class);
+		desc.put(SpellArg.CONDITIONS, conditions);
+		desc.put(SpellArg.SPELLS, spells);
+		return desc;
+	}
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.SPELLS, SpellArg.CONDITIONS, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
 		// case 1 - only one condition
 		Condition condition = (Condition) desc.get(SpellArg.CONDITION);
 		if (condition != null) {
@@ -101,11 +115,16 @@ public class ConditionalSpell extends Spell {
 		// case 2 - multiple conditions and multiple spells
 		Condition[] conditions = (Condition[]) desc.get(SpellArg.CONDITIONS);
 		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
+		boolean anyMet = false;
 		for (int i = 0; i < conditions.length; i++) {
 			if (conditions[i].isFulfilled(context, player, source, target)) {
+				anyMet = true;
 				SpellUtils.castChildSpell(context, player, spells[i], source, target);
 			}
 		}
+		if (!anyMet && desc.getBool(SpellArg.EXCLUSIVE) && desc.containsKey(SpellArg.SPELL)) {
+			SpellUtils.castChildSpell(context, player, (SpellDesc) desc.get(SpellArg.SPELL), source, target);
+		}
 	}
-
 }
+

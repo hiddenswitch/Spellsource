@@ -12,7 +12,7 @@ public class WeaponPlayedTrigger extends WeaponEquippedTrigger {
 
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
-		WeaponEquippedEvent weaponEvent = (WeaponEquippedEvent)event;
+		WeaponEquippedEvent weaponEvent = (WeaponEquippedEvent) event;
 
 		if (weaponEvent.getSource() == null) {
 			return false;

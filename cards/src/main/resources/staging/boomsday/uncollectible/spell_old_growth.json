@@ -1,0 +1,17 @@
+{
+  "name": "Old Growth",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "FREE",
+  "description": "Give your other minions +1/+1.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

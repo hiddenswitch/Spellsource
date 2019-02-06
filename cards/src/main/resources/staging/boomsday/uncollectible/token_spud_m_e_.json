@@ -1,0 +1,20 @@
+{
+  "name": "Spud M.E.",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "After this minion survives damage, switch sides.\n<b>Deathrattle:</b>\u00a0Destroy your hero.",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

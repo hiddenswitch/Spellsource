@@ -1,0 +1,12 @@
+{
+  "name": "Captain Shivers",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "BLACK",
+  "rarity": "FREE",
+  "description": "<i>Vowing vengeance, his cursed crew haunts Gilnean shores.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

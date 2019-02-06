@@ -1,12 +1,14 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 
-class JsonReplyHandler implements Handler<AsyncResult<Message<Object>>> {
+class JsonReplyHandler implements SuspendableAction1<AsyncResult<Message<Object>>> {
 	private final Handler<AsyncResult<Object>> next;
 	private final Class responseClass;
 
@@ -18,10 +20,10 @@ class JsonReplyHandler implements Handler<AsyncResult<Message<Object>>> {
 	@Override
 	@Suspendable
 	@SuppressWarnings("unchecked")
-	public void handle(AsyncResult<Message<Object>> reply) {
+	public void call(AsyncResult<Message<Object>> reply) {
 		if (reply.succeeded()) {
 			try {
-				Object body = Serialization.deserialize((String) reply.result().body(), responseClass);
+				Object body = ((JsonObject) (reply.result().body())).mapTo(responseClass);
 				next.handle(Future.succeededFuture(body));
 			} catch (RuntimeException dataException) {
 				next.handle(Future.failedFuture(dataException));

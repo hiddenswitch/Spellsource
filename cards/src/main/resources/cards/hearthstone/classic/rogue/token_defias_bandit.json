@@ -8,7 +8,7 @@
   "rarity": "FREE",
   "description": "",
   "attributes": {
-    "NAME": "Fox Cub"
+    "SPELLSOURCE_NAME": "Fox Cub"
   },
   "collectible": false,
   "set": "CLASSIC",

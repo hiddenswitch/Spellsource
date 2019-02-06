@@ -1,18 +1,20 @@
 package net.demilich.metastone.game.actions;
 
-import java.io.Serializable;
-import java.util.Collections;
-import java.util.List;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.Notification;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
+
+import java.io.Serializable;
+import java.util.Collections;
+import java.util.List;
 
 /**
  * An action a player can take in the game.
@@ -24,11 +26,13 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
  * @see net.demilich.metastone.game.logic.GameLogic#performGameAction(int, GameAction) for more about game actions.
  */
 public abstract class GameAction implements Cloneable, Serializable, Notification {
+
+	protected Integer chooseOneOptionIndex = null;
 	private int id = -1;
 	private TargetSelection targetRequirement = TargetSelection.NONE;
 	private ActionType actionType = ActionType.SYSTEM;
-	private EntityReference source;
-	private EntityReference targetKey;
+	private EntityReference sourceReference;
+	private EntityReference targetReference;
 
 	public boolean canBeExecutedOn(GameContext gameContext, Player player, Entity entity) {
 		return true;
@@ -37,15 +41,21 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	@Override
 	public GameAction clone() {
 		try {
-			final GameAction clone = (GameAction) super.clone();
-			clone.setId(getId());
-			return clone;
+			return (GameAction) super.clone();
 		} catch (CloneNotSupportedException e) {
-			e.printStackTrace();
+			throw new UnsupportedOperationException(e);
 		}
-		return null;
 	}
 
+	/**
+	 * The implementation of this method actually represents the game effects of this action.
+	 * <p>
+	 * For example, the {@link PlayMinionCardAction} eventually calls {@link net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Entity, int, boolean)}.
+	 *
+	 * @param context  The game context
+	 * @param playerId The invoking player
+	 * @see PlayCardAction#execute(GameContext, int) for an important implementation for playing cards.
+	 */
 	@Suspendable
 	public abstract void execute(GameContext context, int playerId);
 
@@ -54,11 +64,11 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 	}
 
 	public EntityReference getSourceReference() {
-		return source;
+		return sourceReference;
 	}
 
 	public EntityReference getTargetReference() {
-		return targetKey;
+		return targetReference;
 	}
 
 	public TargetSelection getTargetRequirement() {
@@ -69,16 +79,16 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		this.actionType = actionType;
 	}
 
-	public void setSource(EntityReference source) {
-		this.source = source;
+	public void setSourceReference(EntityReference sourceReference) {
+		this.sourceReference = sourceReference;
 	}
 
 	public void setTarget(Entity target) {
-		this.targetKey = EntityReference.pointTo(target);
+		this.targetReference = EntityReference.pointTo(target);
 	}
 
 	public void setTargetReference(EntityReference targetKey) {
-		this.targetKey = targetKey;
+		this.targetReference = targetKey;
 	}
 
 	public void setTargetRequirement(TargetSelection targetRequirement) {
@@ -87,27 +97,30 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 
 	@Override
 	public boolean equals(Object other) {
-		if (other instanceof GameAction) {
-			GameAction otherAction = (GameAction) other;
-			return (this.actionType == otherAction.actionType)
-					&& (this.targetRequirement == otherAction.targetRequirement)
-					&& (this.getSourceReference().equals(otherAction.getSourceReference()))
-					&& (this.getTargetReference().equals(otherAction.getTargetReference()))
-					&& (this.getId() == otherAction.getId());
-		} else {
+		if (!(other instanceof GameAction)) {
 			return false;
 		}
+
+		GameAction rhs = (GameAction) other;
+
+		return new EqualsBuilder()
+				.append(chooseOneOptionIndex, rhs.chooseOneOptionIndex)
+				.append(getTargetRequirement(), rhs.getTargetRequirement())
+				.append(getActionType(), rhs.getActionType())
+				.append(getSourceReference(), rhs.getSourceReference())
+				.append(getTargetReference(), rhs.getTargetReference())
+				.build();
 	}
 
 	@Override
 	public int hashCode() {
 		return new HashCodeBuilder()
-				.append(id)
-				.append(targetRequirement)
-				.append(actionType)
-				.append(source)
-				.append(targetKey)
-				.toHashCode();
+				.append(chooseOneOptionIndex)
+				.append(getTargetRequirement())
+				.append(getActionType())
+				.append(getSourceReference())
+				.append(getTargetReference())
+				.build();
 	}
 
 	public int getId() {
@@ -155,13 +168,21 @@ public abstract class GameAction implements Cloneable, Serializable, Notificatio
 		return true;
 	}
 
+	public Integer getChooseOneOptionIndex() {
+		return chooseOneOptionIndex;
+	}
+
+	public void setChooseOneOptionIndex(Integer chooseOneOptionIndex) {
+		this.chooseOneOptionIndex = chooseOneOptionIndex;
+	}
+
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("id", id)
 				.append("actionType", actionType)
-				.append("source", source)
-				.append("target", targetKey)
+				.append("sourceReference", sourceReference)
+				.append("targetReference", targetReference)
 				.toString();
 	}
 }

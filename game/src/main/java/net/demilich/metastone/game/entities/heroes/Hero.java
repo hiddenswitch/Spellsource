@@ -1,23 +1,22 @@
 package net.demilich.metastone.game.entities.heroes;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.EntityZone;
 import net.demilich.metastone.game.entities.weapons.Weapon;
-import net.demilich.metastone.game.heroes.powers.HeroPowerCard;
 import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.cards.Attribute;
 
-public class Hero extends Actor {
+import java.util.EnumMap;
+import java.util.Map;
+
+public final class Hero extends Actor {
 	private HeroClass heroClass;
-	private EntityZone<HeroPowerCard> heroPowerZone = new EntityZone<>(getOwner(), Zones.HERO_POWER);
+	private EntityZone<Card> heroPowerZone = new EntityZone<>(getOwner(), Zones.HERO_POWER);
 	private EntityZone<Weapon> weaponZone = new EntityZone<>(getOwner(), Zones.WEAPON);
 
-	public Hero(HeroCard heroCard, HeroPowerCard heroPower) {
+	public Hero(Card heroCard, Card heroPower) {
 		super(heroCard);
 		setName(heroCard.getName());
 		this.setHeroClass(heroCard.getHeroClass());
@@ -69,7 +68,7 @@ public class Hero extends Actor {
 		return heroClass;
 	}
 
-	public HeroPowerCard getHeroPower() {
+	public Card getHeroPower() {
 		if (heroPowerZone.size() > 0) {
 			return heroPowerZone.get(0);
 		} else {
@@ -87,9 +86,10 @@ public class Hero extends Actor {
 
 	/**
 	 * Changes the amount of armor the hero has.
+	 *
 	 * @param armor The requested change in armor.
-	 * @return The amount the armor changed. If damage is being dealt, then the armor will change
-	 * {@code -Infinity < armor <= 0} if it is possible.
+	 * @return The amount the armor changed. If damage is being dealt, then the armor will change {@code -Infinity < armor
+	 * 		<= 0} if it is possible.
 	 */
 	public int modifyArmor(final int armor) {
 		// armor cannot fall below zero
@@ -103,7 +103,7 @@ public class Hero extends Actor {
 		this.heroClass = heroClass;
 	}
 
-	public void setHeroPower(HeroPowerCard heroPower) {
+	public void setHeroPower(Card heroPower) {
 		if (heroPowerZone.size() > 0) {
 			heroPowerZone.remove(0);
 		}
@@ -137,7 +137,7 @@ public class Hero extends Actor {
 		}
 	}
 
-	public EntityZone<HeroPowerCard> getHeroPowerZone() {
+	public EntityZone<Card> getHeroPowerZone() {
 		return heroPowerZone;
 	}
 

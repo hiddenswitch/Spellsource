@@ -1,0 +1,27 @@
+{
+  "name": "Effuse",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "COMMON",
+  "description": "Restore #4 Health. If cast on a minion, also give it +2 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "CardPropertyCondition",
+      "cardType": "MINION"
+    },
+    "spell1": {
+      "class": "HealSpell",
+      "value": 4
+    },
+    "spell2": {
+      "class": "BuffSpell",
+      "hpBonus": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

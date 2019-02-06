@@ -2,6 +2,15 @@ package net.demilich.metastone.game.cards;
 
 import com.hiddenswitch.spellsource.client.models.EntityState;
 
+/**
+ * Possible rarities of different cards.
+ * <p>
+ * Decks typically can only have two or fewer of all rarities, and one or fewer of {@link #LEGENDARY} cards.
+ * <p>
+ * These rarities affect some effects, like {@link net.demilich.metastone.game.spells.desc.filter.CardFilter}, which can
+ * select cards of a specific rarity; the draft logic in the {@code net} module; and the gem that appears in the middle
+ * of the card.
+ */
 public enum Rarity {
 	FREE,
 	COMMON,

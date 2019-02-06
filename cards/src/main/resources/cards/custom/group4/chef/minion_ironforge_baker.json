@@ -1,0 +1,42 @@
+{
+  "name": "Ironforge Baker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: Shuffle the left-most card in your hand into your deck. Set its Cost to (0).",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "target": "LEFTMOST_FRIENDLY_CARD_HAND",
+      "spells": [
+        {
+          "class": "ShuffleToDeckSpell",
+          "value": 1,
+          "spell": {
+            "class": "CardCostModifierSpell",
+            "target": "OUTPUT",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 0,
+              "operation": "SET"
+            }
+          }
+        },
+        {
+          "class": "RemoveCardSpell"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

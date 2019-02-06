@@ -1,0 +1,25 @@
+{
+  "name": "Executioner Aldus",
+  "heroPower": "hero_power_accuse",
+  "baseManaCost": 4,
+  "type": "HERO",
+  "heroClass": "NAVY",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Summon a 1/2 Bounty Target for your opponent that draws you cards when it dies.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_bounty_target",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

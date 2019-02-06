@@ -1,0 +1,12 @@
+{
+  "name": "Gearblade",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

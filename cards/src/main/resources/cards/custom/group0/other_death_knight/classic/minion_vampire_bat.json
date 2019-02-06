@@ -1,0 +1,17 @@
+{
+  "name": "Vampire Bat",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Lifesteal",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

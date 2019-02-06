@@ -1,0 +1,26 @@
+{
+  "name": "Souldrinker Drake",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Lifesteal. Battlecry: Give the next card you play this turn Lifesteal.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "card": "enchantment_souldrinking"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

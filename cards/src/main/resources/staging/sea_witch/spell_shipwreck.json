@@ -1,0 +1,16 @@
+{
+  "name": "Shipwreck",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "FREE",
+  "description": "Hero Power Destroy a minion.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

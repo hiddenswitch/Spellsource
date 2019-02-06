@@ -6,21 +6,20 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
-import net.demilich.metastone.game.spells.trigger.EventTrigger;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
 public class Secret extends Enchantment {
 	public Secret(EventTrigger trigger, SpellDesc spell, Card source) {
 		super(trigger, spell);
 		setSourceCard(source);
 		setMaxFires(1);
-		setAttributes((AttributeMap) source.getAttributes().clone());
+		getAttributes().putAll(source.getAttributes());
 	}
 
-	public Secret(TriggerDesc desc, Card source) {
-		this(desc.eventTrigger.createInstance(), desc.spell, source);
+	public Secret(EnchantmentDesc desc, Card source) {
+		this(desc.eventTrigger.create(), desc.spell, source);
 		setCountUntilCast(desc.countUntilCast);
 		if (desc.maxFires == null) {
 			setMaxFires(1);
@@ -36,10 +35,10 @@ public class Secret extends Enchantment {
 	@Suspendable
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
 		boolean spellCasts = super.onFire(ownerId, spell, event);
-		if (spellCasts) {
+		if (isInPlay() && spellCasts) {
+			expire();
 			Player owner = event.getGameContext().getPlayer(ownerId);
 			event.getGameContext().getLogic().secretTriggered(owner, this);
-			expire();
 		}
 		return spellCasts;
 	}

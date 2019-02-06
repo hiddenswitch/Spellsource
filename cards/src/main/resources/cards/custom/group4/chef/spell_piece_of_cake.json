@@ -1,0 +1,26 @@
+{
+  "name": "Piece of Cake",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "Draw, then Roast 2 cards.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      {
+        "class": "RoastSpell",
+        "value": 2
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

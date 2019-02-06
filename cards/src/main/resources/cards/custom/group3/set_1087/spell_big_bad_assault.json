@@ -1,0 +1,17 @@
+{
+  "name": "Big Bad Assault",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "EPIC",
+  "description": "Choose an enemy minion. All your minions attack it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "FightSpell",
+    "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

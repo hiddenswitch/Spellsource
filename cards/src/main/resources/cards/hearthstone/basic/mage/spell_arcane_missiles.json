@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "FREE",
-  "description": "Deal 3 damage randomly split among all enemies.",
+  "description": "Deal $3 damage randomly split among all enemies.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MissilesSpell",

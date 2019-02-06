@@ -1,0 +1,18 @@
+{
+  "name": "Lava Soup",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "EPIC",
+  "description": "The next card you play this turn costs Roasted cards instead of mana.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "card": "enchantment_lava_soup_flavors"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

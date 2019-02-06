@@ -1,0 +1,72 @@
+{
+  "name": "Dark Order Knight",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Give your C'Thun +1/+1 for each Knight in your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "MetaSpell",
+      "value": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "SpecificCardFilter",
+          "card": "token_knight"
+        }
+      },
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_cthun"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HAND",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
+          "filter": {
+            "class": "SpecificCardFilter",
+            "card": "minion_cthun"
+          }
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
+          "attribute": "CTHUN_ATTACK_BUFF"
+        },
+        {
+          "class": "ModifyAttributeSpell",
+          "target": "FRIENDLY_PLAYER",
+          "value": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
+          "attribute": "CTHUN_HEALTH_BUFF"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

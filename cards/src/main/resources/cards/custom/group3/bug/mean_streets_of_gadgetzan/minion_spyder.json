@@ -1,0 +1,30 @@
+{
+  "name": "Spyder",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Deathrattle: Draw a card and add a Spyder to your opponent's hand.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DrawCardSpell"
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "card": "minion_spyder",
+        "targetPlayer": "OPPONENT"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

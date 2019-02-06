@@ -1,0 +1,46 @@
+{
+  "name": "Thundering Onyx Serpent",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, gain \"Whenever an enemy minion dies, restore 4 Health to a random friendly character.\"",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "SELF",
+      "trigger": {
+        "eventTrigger": {
+          "class": "MinionDeathTrigger",
+          "targetPlayer": "OPPONENT"
+        },
+        "spell": {
+          "class": "HealSpell",
+          "target": "FRIENDLY_CHARACTERS",
+          "value": 4,
+          "filter": {
+            "class": "DamagedFilter"
+          },
+          "randomTarget": true
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

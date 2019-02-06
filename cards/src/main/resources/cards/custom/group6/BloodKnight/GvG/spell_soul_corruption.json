@@ -1,0 +1,23 @@
+{
+  "name": "Soul Corruption",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Give a minion +3/+3, then destroy the minions adjacent to it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "BuffSpell",
+      "attackBonus": 3,
+      "hpBonus": 3
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

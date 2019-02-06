@@ -1,0 +1,44 @@
+{
+  "name": "Bonefetcher",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Gain the text of a random minion that was shuffled into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.AddActorEffectsToTargetActorSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "RevealCardSpell",
+        "target": "OUTPUT"
+      },
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "CardFilter",
+            "cardType": "MINION"
+          },
+          {
+            "class": "OwnedByPlayerFilter",
+            "targetPlayer": "SELF"
+          }
+        ]
+      },
+      "cardSource": {
+        "class": "ShuffledCardsSource",
+        "targetPlayer": "BOTH"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

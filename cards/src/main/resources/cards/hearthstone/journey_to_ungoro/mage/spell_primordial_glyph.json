@@ -23,19 +23,9 @@
       "targetPlayer": "SELF"
     },
     "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "CardFilter",
-          "heroClass": "SELF",
-          "cardType": "SPELL"
-        },
-        {
-          "class": "CardFilter",
-          "rarity": "LEGENDARY",
-          "invert": true
-        }
-      ]
+      "class": "CardFilter",
+      "heroClass": "SELF",
+      "cardType": "SPELL"
     }
   },
   "collectible": true,

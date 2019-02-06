@@ -1,0 +1,19 @@
+{
+  "name": "Southsea Giant",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "PIRATE",
+  "description": "Costs (1) less for each time your hero has attacked this game.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "ATTACKS_THIS_GAME"
+  }
+}

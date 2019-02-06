@@ -1,0 +1,17 @@
+{
+  "name": "Radioactive Ooze",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "BLACK",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "<b>Poisonous</b>\n<b>Rush</b>",
+  "attributes": {
+    "POISONOUS": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

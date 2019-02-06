@@ -1,0 +1,17 @@
+{
+  "name": "Invincible",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Immune. Can't gain enchantments.",
+  "attributes": {
+    "CANT_GAIN_ENCHANTMENTS": true,
+    "IMMUNE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

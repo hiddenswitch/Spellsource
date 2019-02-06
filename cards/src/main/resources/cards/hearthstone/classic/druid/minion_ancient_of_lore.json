@@ -6,8 +6,8 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Choose One - Draw a card; or Restore 5 Health.",
-  "options": [
+  "description": "Choose One - Draw a card; or Restore #5 Health.",
+  "chooseOneBattlecries": [
     {
       "description": "Draw a card",
       "spell": {
@@ -24,7 +24,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Draw a card and heal for 5",
     "targetSelection": "ANY",
     "spell": {

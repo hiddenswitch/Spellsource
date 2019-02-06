@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.impl.util;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.strands.SuspendableAction1;
+import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.util.Serialization;
 import com.hiddenswitch.spellsource.util.WebResult;
 import com.hiddenswitch.spellsource.util.Sync;
@@ -10,6 +11,10 @@ import io.vertx.ext.web.RoutingContext;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
+
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
+
 /**
  * Created by bberman on 2/17/17.
  */
@@ -17,18 +22,36 @@ public class HandlerFactory {
 	static Logger logger = LoggerFactory.getLogger(HandlerFactory.class);
 
 	private static Handler<RoutingContext> returnUnhandledExceptions(SuspendableAction1<RoutingContext> handler) {
-		return Sync.suspendableHandler((context) -> {
+		return suspendableHandler((context) -> {
+			Throwable t = null;
 			try {
 				handler.call(context);
+			} catch (NullPointerException notFound) {
+				t = notFound;
+				respond(context, WebResult.notFound("Not found (%s)", notFound.getMessage()));
+			} catch (SecurityException notAuthorized) {
+				t = notAuthorized;
+				respond(context, WebResult.forbidden("Forbidden (%s)", notAuthorized.getMessage()));
+			} catch (IllegalStateException illegalState) {
+				t = illegalState;
+				respond(context, WebResult.illegalState("Illegal state (%s)", illegalState.getMessage()));
+			} catch (IllegalArgumentException illegalArgument) {
+				t = illegalArgument;
+				respond(context, WebResult.invalidArgument("Illegal argument (%s)", illegalArgument.getMessage()));
 			} catch (Throwable unhandled) {
+				t = unhandled;
 				respond(context, WebResult.failed(500, unhandled));
+			} finally {
+				if (t != null) {
+					logger.error("handler error", t);
+				}
 			}
 		});
 	}
 
 	public static <T, R> Handler<RoutingContext> handler(Class<T> classT, AuthorizedRequestHandler<T, R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
 			WebResult<R> result = internalHandler.call(context, userId, request);
 			respond(context, result);
@@ -46,7 +69,7 @@ public class HandlerFactory {
 	public static <R> Handler<RoutingContext> handler(String paramName, AuthorizedParamHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
 			String request = context.pathParam(paramName);
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId, request);
 			respond(context, result);
 		});
@@ -56,7 +79,7 @@ public class HandlerFactory {
 		return returnUnhandledExceptions((context) -> {
 			String param = context.pathParam(paramName);
 			T request = Serialization.deserialize(context.getBodyAsString(), classT);
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId, param, request);
 			respond(context, result);
 		});
@@ -64,7 +87,7 @@ public class HandlerFactory {
 
 	public static <R> Handler<RoutingContext> handler(AuthorizedHandler<R> internalHandler) {
 		return returnUnhandledExceptions((context) -> {
-			String userId = context.user().principal().getString("_id");
+			String userId = Accounts.userId(context);
 			WebResult<R> result = internalHandler.call(context, userId);
 			respond(context, result);
 		});
@@ -79,6 +102,11 @@ public class HandlerFactory {
 
 	private static <R> void respond(RoutingContext context, WebResult<R> result) {
 		context.response().setStatusCode(result.responseCode());
+		if (context.response().closed()) {
+			context.fail(new IOException("Response was closed (client disconnected)"));
+			return;
+		}
+
 		if (result.succeeded()) {
 			if (result.result() == null) {
 				// Allow empty response bodies

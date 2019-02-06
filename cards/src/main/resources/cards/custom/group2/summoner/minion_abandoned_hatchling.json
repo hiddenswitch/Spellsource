@@ -1,0 +1,35 @@
+{
+  "name": "Abandoned Hatchling",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Invoke (6): Destroy a minion and summon a 1/1 Hatchling.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "SummonSpell",
+          "card": "minion_abandoned_hatchling"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "INVOKE": 6
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

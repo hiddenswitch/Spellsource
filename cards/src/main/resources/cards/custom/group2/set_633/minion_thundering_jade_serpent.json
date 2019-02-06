@@ -1,0 +1,42 @@
+{
+  "name": "Thundering Jade Serpent",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, gain \"Whenever you restore Health, give +2 Health to all friendly characters.\"",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "SELF",
+      "trigger": {
+        "eventTrigger": {
+          "class": "HealingTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_CHARACTERS",
+          "hpBonus": 2
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

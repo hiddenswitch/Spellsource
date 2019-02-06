@@ -1,0 +1,35 @@
+{
+  "name": "Monastery Scroll-Keeper",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: If you played an Elemental last turn, add two random Monk spells to your hand.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "PlayedLastTurnCondition",
+      "filter": {
+        "class": "CardFilter",
+        "race": "ELEMENTAL"
+      }
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "cardFilter": {
+        "class": "CardFilter",
+        "heroClass": "JADE",
+        "cardType": "SPELL"
+      }
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

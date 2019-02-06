@@ -4,12 +4,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.events.BeforeSummonEvent;
+import net.demilich.metastone.game.events.AfterSummonEvent;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.custom.EnvironmentEntityList;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Comparator;
 import java.util.Map;
@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toMap;
 
-public class CavernsBelowTrigger extends BeforeMinionPlayedTrigger {
+public final class CavernsBelowTrigger extends AfterMinionPlayedTrigger {
 
 	public CavernsBelowTrigger(EventTriggerDesc desc) {
 		super(desc);
@@ -32,7 +32,7 @@ public class CavernsBelowTrigger extends BeforeMinionPlayedTrigger {
 			return false;
 		}
 
-		BeforeSummonEvent summonEvent = (BeforeSummonEvent) event;
+		AfterSummonEvent summonEvent = (AfterSummonEvent) event;
 		GameContext context = event.getGameContext();
 		EnvironmentEntityList list = EnvironmentEntityList.getList(context);
 		list.add(host, summonEvent.getSource());

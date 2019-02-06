@@ -24,7 +24,7 @@
     }
   },
   "attributes": {
-    "NAME": "Ushi-Oni"
+    "SPELLSOURCE_NAME": "Ushi-Oni"
   },
   "collectible": true,
   "set": "THE_OLD_GODS",

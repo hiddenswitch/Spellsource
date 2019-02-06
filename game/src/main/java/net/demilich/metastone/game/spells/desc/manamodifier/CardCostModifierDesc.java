@@ -1,23 +1,25 @@
 package net.demilich.metastone.game.spells.desc.manamodifier;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.cards.desc.CardCostModifierDescDeserializer;
 import net.demilich.metastone.game.cards.desc.Desc;
-import net.demilich.metastone.game.logic.CustomCloneable;
 
 import java.util.Map;
 
+@JsonDeserialize(using = CardCostModifierDescDeserializer.class)
 public final class CardCostModifierDesc extends Desc<CardCostModifierArg, CardCostModifier> {
 
 	public CardCostModifierDesc() {
-		super();
+		super(CardCostModifierArg.class);
 	}
 
 	public CardCostModifierDesc(Class<? extends CardCostModifier> clazz) {
-		super(clazz);
+		super(clazz, CardCostModifierArg.class);
 	}
 
 	public CardCostModifierDesc(Map<CardCostModifierArg, Object> arguments) {
-		super(arguments);
+		super(arguments, CardCostModifierArg.class);
 	}
 
 	@Override

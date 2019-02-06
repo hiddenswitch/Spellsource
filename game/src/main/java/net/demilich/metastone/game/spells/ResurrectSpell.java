@@ -1,40 +1,68 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.AndFilter;
+import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
+import net.demilich.metastone.game.spells.desc.source.GraveyardActorsSource;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
+
+/**
+ * Resurrects minions from the caster's graveyard.
+ * <p>
+ * If {@link SpellArg#EXCLUSIVE} is set to true, only unique copies are resurrected.
+ * <p>
+ * If {@link SpellArg#ATTRIBUTE} is set to {@link Attribute#MAGNETS}, the minion is resummoned with its magnetized
+ * elements.
+ * <p>
+ * If the minion was successfully summoned, {@link SpellArg#SPELL} will be cast with {@link EntityReference#OUTPUT}
+ * <b>and</b> {@code target} as the summoned minion.
+ * <p>
+ * For <b>example</b>, to resurrect <b>2 different</b> friendly minions:
+ * <pre>
+ *   {
+ *     "class": "ResurrectSpell",
+ *     "value": 2,
+ *     "exclusive": true
+ *   }
+ * </pre>
+ */
 public class ResurrectSpell extends Spell {
+
+	@SuppressWarnings("unchecked")
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		List<Minion> deadMinions = new ArrayList<>();
 		EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-		List<Entity> graveyard = new ArrayList<Entity>();
-		graveyard.addAll(player.getGraveyard());
+		List<Entity> graveyard = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyard) {
-			if (deadEntity.getEntityType() == EntityType.MINION) {
+			if (deadEntity.getEntityType() == EntityType.MINION
+					// Check that this died on a turn to indicate whether or not it was removed peacefully
+					&& !deadEntity.isRemovedPeacefully()) {
 				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}
 			}
 		}
+
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		// Implements unusual Diamond Spellstone unique minions behaviour
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
@@ -48,9 +76,26 @@ public class ResurrectSpell extends Spell {
 				return;
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
-			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
-			final Minion summonedMinion = minionCard.summon();
-			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, null, -1, false);
+			Card card = resurrectedMinion.getSourceCard();
+			final Minion summonedMinion;
+			// allow functionality to resurrect cards with certain attributes they died with
+			Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
+			if (attribute != null && resurrectedMinion.hasAttribute(attribute)) {
+				if (attribute == Attribute.MAGNETS) { //special coding to remagnetize the mechs for Kangor's Endless Army
+					summonedMinion = card.summon();
+					context.getLogic().removeAttribute(summonedMinion, Attribute.MAGNETS);
+					String[] magnets = (String[]) resurrectedMinion.getAttribute(Attribute.MAGNETS);
+					for (String magnet : magnets) {
+						Card magnetCard = context.getCardById(magnet);
+						context.getLogic().magnetize(player.getId(), magnetCard, summonedMinion);
+					}
+				} else {
+					card.setAttribute(attribute, resurrectedMinion.getAttributeValue(attribute));
+					summonedMinion = card.summon();
+				}
+			} else summonedMinion = card.summon();
+
+			final boolean summoned = context.getLogic().summon(player.getId(), summonedMinion, source, -1, false);
 			if (summoned
 					&& desc.containsKey(SpellArg.SPELL)
 					&& summonedMinion.getZone() == Zones.BATTLEFIELD) {

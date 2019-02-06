@@ -1,0 +1,27 @@
+{
+  "name": "Samureetle",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 7,
+  "baseHp": 9,
+  "rarity": "RARE",
+  "description": "Taunt. Inspire: Gain 4 Armor.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "InspireTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 4
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,9 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -15,7 +11,28 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
-public class StealRandomSecretSpell extends Spell {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+/**
+ * Steals a random secret belonging to the opponent of {@link SpellArg#TARGET_PLAYER}.
+ * <p>
+ * To steal one of the opponent's secrets:
+ * <pre>
+ *   {
+ *     "class": "StealRandomSecretSpell"
+ *   }
+ * </pre>
+ * To give the opponent one of the casting player's secrets:
+ * <pre>
+ *   {
+ *     "class": "StealRandomSecretSpell",
+ *     "targetPlayer": "OPPONENT"
+ *   }
+ * </pre>
+ */
+public final class StealRandomSecretSpell extends Spell {
 
 	public static SpellDesc create() {
 		Map<SpellArg, Object> arguments = new SpellDesc(StealRandomSecretSpell.class);

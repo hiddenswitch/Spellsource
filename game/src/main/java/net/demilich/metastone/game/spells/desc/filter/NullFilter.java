@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class NullFilter extends EntityFilter {
 
-	private NullFilter(FilterDesc desc) {
+	private NullFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

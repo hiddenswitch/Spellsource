@@ -1,0 +1,32 @@
+{
+  "name": "Julienne Cut",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Destroy a minion. Summon two 1/1 copies of it to replace it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "custom.DestroyAndSummonInPlaceSpell",
+    "value": 2,
+    "spell": {
+      "class": "MetaSpell",
+      "target": "OUTPUT",
+      "spells": [
+        {
+          "class": "SetAttackSpell",
+          "value": 1
+        },
+        {
+          "class": "SetHpSpell",
+          "value": 1
+        }
+      ]
+    },
+    "targetPlayer": "OWNER"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

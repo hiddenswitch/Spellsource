@@ -1,10 +1,19 @@
 package com.hiddenswitch.spellsource.common;
 
 /**
- * Created by bberman on 12/5/16.
+ * Represents the kind of gameplay request a client can take.
  */
 public enum GameplayRequestType {
+	/**
+	 * No request specified.
+	 */
 	NONE,
+	/**
+	 * A mulligan request.
+	 */
 	MULLIGAN,
+	/**
+	 * A game action.
+	 */
 	ACTION
 }

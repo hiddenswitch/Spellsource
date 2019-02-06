@@ -1,0 +1,25 @@
+{
+  "name": "Runic Empowerment",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Add three Runes to your hand. Costs (1) less for each Rune you've cast this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 3,
+    "card": "spell_rune"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardsPlayedValueProvider",
+    "filter": {
+      "class": "SpecificCardFilter",
+      "card": "spell_rune"
+    }
+  }
+}

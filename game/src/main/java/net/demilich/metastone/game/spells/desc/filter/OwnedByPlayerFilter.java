@@ -7,30 +7,12 @@ import net.demilich.metastone.game.spells.TargetPlayer;
 
 public class OwnedByPlayerFilter extends EntityFilter {
 
-	public OwnedByPlayerFilter(FilterDesc desc) {
+	public OwnedByPlayerFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(FilterArg.TARGET_PLAYER);
-
-		switch (targetPlayer) {
-			case ACTIVE:
-				return context.getActivePlayerId() == player.getId();
-			case INACTIVE:
-				return context.getActivePlayerId() != player.getId();
-			case BOTH:
-				return true;
-			case OPPONENT:
-				return entity.getOwner() != player.getId();
-			case SELF:
-				return entity.getOwner() == player.getId();
-			default:
-				break;
-
-		}
-
-		return false;
+		return entity.getOwner() == player.getId();
 	}
 }

@@ -1,0 +1,16 @@
+{
+  "name": "Yoth'al the Devourer",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

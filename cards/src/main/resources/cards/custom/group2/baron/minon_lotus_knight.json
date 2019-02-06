@@ -1,0 +1,18 @@
+{
+  "name": "Lotus Knight",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "<b>Poisonous</b>, <b>Charge</b>",
+  "attributes": {
+    "CHARGE": true,
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

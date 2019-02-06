@@ -1,15 +1,22 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.*;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
-import java.lang.reflect.Type;
 
-public abstract class Condition implements Serializable {
+/**
+ * A condition is used for true or false comparisons in the {@link net.demilich.metastone.game.cards.desc.CardDesc} card
+ * JSON.
+ * <p>
+ * The core function is {@link #isFulfilled(GameContext, Player, Entity, Entity)}.
+ */
+public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
+
 	private ConditionDesc desc;
 
 	public Condition(ConditionDesc desc) {
@@ -25,16 +32,28 @@ public abstract class Condition implements Serializable {
 		return isFulfilled(context, player, desc, source, target) != invert;
 	}
 
-	public static class Serializer implements JsonSerializer<Condition>, JsonDeserializer<Condition> {
-		@Override
-		public Condition deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
-			ConditionDesc desc = context.deserialize(json.getAsJsonObject().getAsJsonObject("desc"), ConditionDesc.class);
-			return desc == null ? null : desc.createInstance();
-		}
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (ConditionDesc) desc;
+	}
 
-		@Override
-		public JsonElement serialize(Condition src, Type typeOfSrc, JsonSerializationContext context) {
-			return context.serialize(src.desc);
+	@Override
+	public ConditionDesc getDesc() {
+		return desc;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Condition)) {
+			return false;
 		}
+		Condition rhs = (Condition) obj;
+		return desc.equals(rhs.desc);
+	}
+
+	@Override
+	public int hashCode() {
+		return desc.hashCode();
 	}
 }
+

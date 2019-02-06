@@ -1,0 +1,17 @@
+{
+  "name": "Vanguard",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "SELF"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

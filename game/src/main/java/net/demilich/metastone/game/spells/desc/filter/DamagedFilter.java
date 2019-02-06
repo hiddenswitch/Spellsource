@@ -7,7 +7,7 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class DamagedFilter extends EntityFilter {
 
-	public DamagedFilter(FilterDesc desc) {
+	public DamagedFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 

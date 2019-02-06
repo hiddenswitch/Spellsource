@@ -1,20 +1,30 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
 /**
- * Created by bberman on 3/17/17.
+ * Reads a card ID from the specified attribute {@link SpellArg#ATTRIBUTE}. Summons the card with that ID.
+ * <p>
+ * For example, to summon the last minion a minion destroyed:
+ * <pre>
+ *      "spell": {
+ *          "class": "SummonCardFromAttributeSpell",
+ *          "target": "SELF",
+ *          "attribute": "LAST_MINION_DESTROYED_CARD_ID"
+ *      }
+ * </pre>
+ * <p>
+ * Implements Sourcing Specialist.
  */
 public class SummonCardFromAttributeSpell extends Spell {
 	public static SpellDesc create(Attribute attributeContainingCardId, String defaultCardId, EntityReference target) {
@@ -42,8 +52,8 @@ public class SummonCardFromAttributeSpell extends Spell {
 			return;
 		}
 		for (int i = 0; i < count; i++) {
-			MinionCard minionCard = count == 1 ? (MinionCard) card : (MinionCard) card.clone();
-			context.getLogic().summon(player.getId(), minionCard.summon(), null, boardPosition, false);
+			card = count == 1 ? card : card.clone();
+			context.getLogic().summon(player.getId(), card.summon(), source, boardPosition, false);
 		}
 	}
 }

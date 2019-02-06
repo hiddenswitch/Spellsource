@@ -3,13 +3,19 @@ package net.demilich.metastone.game.actions;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.heroes.powers.HeroPowerChooseOneCard;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 
 import java.io.Serializable;
 
+/**
+ * Indicates an action that is a hero power card.
+ * <p>
+ * It otherwise behaves like a normal spell card, except {@link net.demilich.metastone.game.logic.GameLogic#useHeroPower(int)}
+ * is also called.
+ */
 public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCard, Serializable {
+
 	private final String choiceCardId;
 
 	private HeroPowerAction() {
@@ -17,7 +23,7 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 		setActionType(ActionType.HERO_POWER);
 	}
 
-	public HeroPowerAction(SpellDesc spell, HeroPowerChooseOneCard card, TargetSelection targetRequirement, Card chosenCard) {
+	public HeroPowerAction(SpellDesc spell, Card card, TargetSelection targetRequirement, Card chosenCard) {
 		super(spell, card, targetRequirement);
 		this.choiceCardId = chosenCard.getCardId();
 		setActionType(ActionType.HERO_POWER);
@@ -30,16 +36,21 @@ public class HeroPowerAction extends PlaySpellCardAction implements HasChoiceCar
 	}
 
 	@Override
+	public HeroPowerAction clone() {
+		return (HeroPowerAction) super.clone();
+	}
+
+	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		play(context, playerId);
+		innerExecute(context, playerId);
 		context.getLogic().useHeroPower(playerId);
 	}
 
 	@Override
 	@Suspendable
-	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, getSpell(), EntityReference, getTargetReference(), getTargetRequirement(), false, this);
+	public void innerExecute(GameContext context, int playerId) {
+		context.getLogic().castSpell(playerId, getSpell(), getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}
 
 	@Override

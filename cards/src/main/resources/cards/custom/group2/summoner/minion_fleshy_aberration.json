@@ -1,0 +1,26 @@
+{
+  "name": "Fleshy Aberration",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Invoke (4): Deal 3 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
+  },
+  "attributes": {
+    "INVOKE": 4
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

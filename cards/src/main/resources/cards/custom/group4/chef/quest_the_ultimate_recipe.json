@@ -1,0 +1,22 @@
+{
+  "name": "The Ultimate Recipe",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Shuffle 7 cards into your deck. Reward: Titan Feast.",
+  "quest": {
+    "class": "CardShuffledTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 7,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_titan_feast"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

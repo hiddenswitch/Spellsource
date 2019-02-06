@@ -1,0 +1,16 @@
+{
+  "name": "Hive Mind",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Choose a minion. All friendly minions attack that minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "FightSpell",
+    "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

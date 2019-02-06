@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Restore 12 Health divided randomly among all friendly characters.",
+  "description": "Restore #12 Health divided randomly among all friendly characters.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealingMissilesSpell",

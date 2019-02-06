@@ -1,0 +1,26 @@
+{
+  "name": "Banana Tree",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 0,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": " Taunt. After this minion takes damage, add a Banana to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_bananas"
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

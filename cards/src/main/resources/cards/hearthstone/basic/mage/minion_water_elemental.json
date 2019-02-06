@@ -20,7 +20,7 @@
     }
   },
   "attributes": {
-    "NAME": "Lightning Automaton"
+    "SPELLSOURCE_NAME": "Lightning Automaton"
   },
   "collectible": true,
   "set": "BASIC",

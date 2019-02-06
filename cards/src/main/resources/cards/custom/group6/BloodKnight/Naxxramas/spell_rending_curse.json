@@ -1,0 +1,16 @@
+{
+  "name": "Rending Curse",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "COMMON",
+  "description": "Give a minion 'Deathrattle: Deal 1 damage to all other minions, then give them this Deathrattle.'",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "card": "enchantment_rending_curse"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

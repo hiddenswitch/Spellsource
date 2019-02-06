@@ -1,0 +1,27 @@
+{
+  "name": "Tombstone",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Add a random minion that died this game to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "MINION"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "targetPlayer": "BOTH"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

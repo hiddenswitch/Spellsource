@@ -7,12 +7,12 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "race": "DEMON",
-  "description": "Battlecry: Deal 5 damage to your hero.",
+  "description": "Battlecry: Deal 7 damage to your hero.",
   "battlecry": {
     "spell": {
       "class": "DamageSpell",
       "target": "FRIENDLY_HERO",
-      "value": 5
+      "value": 7
     }
   },
   "attributes": {

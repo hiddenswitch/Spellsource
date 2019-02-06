@@ -1,0 +1,12 @@
+{
+  "name": "Handgonne",
+  "baseManaCost": 1,
+  "type": "WEAPON",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

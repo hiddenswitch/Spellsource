@@ -1,6 +1,9 @@
 package com.hiddenswitch.spellsource.models;
 
+import com.hiddenswitch.spellsource.impl.server.Configuration;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -8,73 +11,14 @@ import java.util.List;
  * Created by bberman on 2/11/17.
  */
 public class StartGameRequest implements Serializable {
-	private List<Player> players;
-	private String gameId;
+	private List<Configuration> configurations = new ArrayList<>();
 
-	public List<Player> getPlayers() {
-		return players;
+	public List<Configuration> getConfigurations() {
+		return configurations;
 	}
 
-	public void setPlayers(List<Player> players) {
-		this.players = players;
-	}
-
-	public StartGameRequest withPlayers(StartGameRequest.Player... players) {
-		this.players = Arrays.asList(players);
+	public StartGameRequest setConfigurations(List<Configuration> configurations) {
+		this.configurations = configurations;
 		return this;
-	}
-
-	public String getGameId() {
-		return gameId;
-	}
-
-	public StartGameRequest withGameId(String gameId) {
-		this.gameId = gameId;
-		return this;
-	}
-
-	public static class Player implements Serializable {
-		private String userId;
-		private String deckId;
-		private int id = -1;
-
-		public String getUserId() {
-			return userId;
-		}
-
-		public void setUserId(String userId) {
-			this.userId = userId;
-		}
-
-		public String getDeckId() {
-			return deckId;
-		}
-
-		public void setDeckId(String deckId) {
-			this.deckId = deckId;
-		}
-
-		public int getId() {
-			return id;
-		}
-
-		public void setId(int id) {
-			this.id = id;
-		}
-
-		public Player withUserId(final String userId) {
-			this.userId = userId;
-			return this;
-		}
-
-		public Player withDeckId(final String deckId) {
-			this.deckId = deckId;
-			return this;
-		}
-
-		public Player withId(final int id) {
-			this.id = id;
-			return this;
-		}
 	}
 }

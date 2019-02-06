@@ -1,0 +1,35 @@
+{
+  "name": "Breeding Grounds",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "FREE",
+  "description": "Summon two copies of a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "SummonSpell",
+        "spell": {
+          "class": "RemoveAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "COPIED_FROM"
+        },
+        "boardPositionRelative": "LEFT"
+      },
+      {
+        "class": "SummonSpell",
+        "spell": {
+          "class": "RemoveAttributeSpell",
+          "target": "OUTPUT",
+          "attribute": "COPIED_FROM"
+        },
+        "boardPositionRelative": "RIGHT"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

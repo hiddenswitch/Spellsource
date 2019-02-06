@@ -1,0 +1,29 @@
+{
+  "name": "Mass Hatching",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Fill your hand with random Beasts.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "SUBTRACT",
+      "value1": 10,
+      "value2": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "HAND_COUNT",
+        "targetPlayer": "SELF"
+      }
+    },
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "BEAST"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

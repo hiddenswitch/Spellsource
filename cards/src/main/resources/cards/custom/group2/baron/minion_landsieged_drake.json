@@ -1,0 +1,27 @@
+{
+  "name": "Landsieged Drake",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Taunt. Battlecry: Summon four 2/2 Knights for your opponent.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 3,
+      "card": "token_knight",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

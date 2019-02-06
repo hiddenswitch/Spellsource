@@ -17,19 +17,9 @@
       "class": "ReceiveCardSpell",
       "value": 1,
       "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "CardFilter",
-            "heroClass": "WHITE",
-            "cardType": "SPELL"
-          },
-          {
-            "class": "CardFilter",
-            "rarity": "LEGENDARY",
-            "invert": true
-          }
-        ]
+        "class": "CardFilter",
+        "heroClass": "WHITE",
+        "cardType": "SPELL"
       }
     }
   },

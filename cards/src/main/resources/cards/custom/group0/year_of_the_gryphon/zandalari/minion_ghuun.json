@@ -1,0 +1,35 @@
+{
+  "name": "G'huun",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Lifesteal. Damaged minions have +8/+8 and can't attack heroes.",
+  "attributes": {
+    "LIFESTEAL": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "BuffAura",
+      "target": "ALL_MINIONS",
+      "attackBonus": 8,
+      "filter": {
+        "class": "DamagedFilter"
+      },
+      "hpBonus": 8
+    },
+    {
+      "class": "AttributeAura",
+      "target": "ALL_MINIONS",
+      "attribute": "AURA_CANNOT_ATTACK_HEROES",
+      "filter": {
+        "class": "DamagedFilter"
+      }
+    }
+  ]
+}

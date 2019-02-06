@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "description": "Choose One - Transform into a 1/2 with Poisonouus; or a 1/5 with Taunt.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "1/2 with Poisonous",
       "spell": {
@@ -25,7 +25,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "1/5 with Taunt and Poisonous",
     "spell": {
       "class": "TransformMinionSpell",

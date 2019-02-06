@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "description": "Choose One - Summon a 2/2 Slime; or Gain an empty Mana Crystal.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Summon 2/2 Slime",
       "spell": {
@@ -26,7 +26,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "Summon 2/2 Slime and Mana.",
     "spell": {
       "class": "MetaSpell",

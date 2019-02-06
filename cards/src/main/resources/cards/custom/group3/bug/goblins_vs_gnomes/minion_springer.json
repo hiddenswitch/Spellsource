@@ -1,0 +1,24 @@
+{
+  "name": "Springer",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Battlecry: Return a random enemy minion to your opponent's hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "ENEMY_MINIONS",
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

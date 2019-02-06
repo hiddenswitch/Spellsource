@@ -1,0 +1,56 @@
+{
+  "name": "Dragonling Pet",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Start of Game: If your deck has no tribal minions except Dragons, draw this card from your deck.",
+  "deckTrigger": {
+    "eventTrigger": {
+      "class": "GameStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "DeckContainsCondition",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "RaceFilter",
+              "race": "DRAGON",
+              "invert": true
+            },
+            {
+              "class": "RaceFilter",
+              "race": "NONE",
+              "invert": true
+            }
+          ]
+        },
+        "invert": true
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "FromDeckToHandSpell",
+            "target": "SELF"
+          }
+        ]
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

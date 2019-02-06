@@ -1,0 +1,32 @@
+{
+  "name": "Choronus Fangalmouth",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 6,
+  "baseHp": 9,
+  "rarity": "LEGENDARY",
+  "description": "Deathrattle: Freeze all minions. Any already frozen minions are destroyed instead.",
+  "deathrattle": {
+    "class": "EitherOrSpell",
+    "target": "ALL_MINIONS",
+    "condition": {
+      "class": "AttributeCondition",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "AddAttributeSpell",
+      "attribute": "FROZEN"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -16,6 +16,7 @@
     "spells": [
       {
         "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
         "armorBonus": {
           "class": "AlgebraicValueProvider",
           "operation": "NEGATE",
@@ -36,6 +37,6 @@
     ]
   },
   "collectible": true,
-  "set": "KOBOLDS AND_CATACOMBS",
+  "set": "KOBOLDS_AND_CATACOMBS",
   "fileFormatVersion": 1
 }

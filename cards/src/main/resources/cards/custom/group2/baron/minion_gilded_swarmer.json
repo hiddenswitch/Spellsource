@@ -1,0 +1,31 @@
+{
+  "name": "Gilded Swarmer",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Swap adjacent minions for ones in your deck.",
+  "battlecry": {
+    "condition": {
+      "class": "DeckContainsCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.SwapMinionWithDeckSpell",
+      "target": "ADJACENT_MINIONS"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

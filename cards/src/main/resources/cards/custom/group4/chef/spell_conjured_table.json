@@ -1,0 +1,20 @@
+{
+  "name": "Conjured Table",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Draw $2 cards. Affected by Spell Damage.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DrawCardSpell",
+    "value": {
+      "class": "SpellDamageValueProvider",
+      "value": 2
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

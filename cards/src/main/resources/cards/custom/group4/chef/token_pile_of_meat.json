@@ -1,0 +1,14 @@
+{
+  "name": "Pile of Meat",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 0,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

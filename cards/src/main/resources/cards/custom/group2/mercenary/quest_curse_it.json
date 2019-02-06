@@ -1,0 +1,21 @@
+{
+  "name": "Curse It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Discard a card. Reward: Immortalize It!",
+  "quest": {
+    "class": "DiscardTrigger",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_immortalize_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

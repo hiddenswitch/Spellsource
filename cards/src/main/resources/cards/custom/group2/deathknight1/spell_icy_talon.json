@@ -1,0 +1,27 @@
+{
+  "name": "Icy Talon",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Destroy a Frozen enemy minion and deal 2 damage to adjacent ones.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,35 @@
+{
+  "name": "Corvid Call",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Add a random Beast to your hand. Draw a Beast from your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "cardFilter": {
+          "class": "RaceFilter",
+          "race": "BEAST"
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      },
+      {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "BEAST"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

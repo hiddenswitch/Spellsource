@@ -1,0 +1,12 @@
+{
+  "name": "Baran the Blind",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "RED",
+  "rarity": "FREE",
+  "description": "<i>Poor vision doesn't matter with strength like his.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

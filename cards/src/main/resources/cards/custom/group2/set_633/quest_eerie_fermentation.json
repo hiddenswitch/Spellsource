@@ -1,0 +1,25 @@
+{
+  "name": "Eerie Fermentation",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Trigger 5 friendly minions' Deflect. Reward: Eerie Brew.",
+  "quest": {
+    "class": "LoseDeflectTrigger",
+    "fireCondition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "SELF"
+    },
+    "targetEntityType": "MINION"
+  },
+  "countUntilCast": 5,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "spell_eerie_brew"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

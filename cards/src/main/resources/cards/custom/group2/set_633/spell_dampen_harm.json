@@ -1,0 +1,70 @@
+{
+  "name": "Dampen Harm",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Your minions can only take 1 damage at a time until the start of your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "PreDamageTrigger",
+            "fireCondition": {
+              "class": "OwnedByPlayerCondition",
+              "targetPlayer": "SELF"
+            },
+            "targetEntityType": "MINION",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "ModifyDamageSpell",
+            "value": 1,
+            "operation": "SET"
+          },
+          "oneTurn": true
+        }
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "OPPONENT"
+          },
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "trigger": {
+              "eventTrigger": {
+                "class": "PreDamageTrigger",
+                "fireCondition": {
+                  "class": "OwnedByPlayerCondition",
+                  "targetPlayer": "SELF"
+                },
+                "targetEntityType": "MINION",
+                "targetPlayer": "SELF"
+              },
+              "spell": {
+                "class": "ModifyDamageSpell",
+                "value": 1,
+                "operation": "SET"
+              },
+              "oneTurn": true
+            }
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

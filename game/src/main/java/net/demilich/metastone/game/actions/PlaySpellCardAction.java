@@ -1,19 +1,22 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
-import com.google.gson.annotations.SerializedName;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * An action indicating a spell is being cast.
+ * <p>
+ * The spell effect is referenced in the {@link #getSpell()} field.
+ */
 public class PlaySpellCardAction extends PlayCardAction {
 
 	private SpellDesc spell;
-	@SerializedName("EntityReference2")
-	protected EntityReference EntityReference;
 
 	protected PlaySpellCardAction() {
 		super();
@@ -25,13 +28,20 @@ public class PlaySpellCardAction extends PlayCardAction {
 		setActionType(ActionType.SPELL);
 		setTargetRequirement(targetSelection);
 		this.setSpell(spell);
-		this.EntityReference = card.getReference();
+	}
+
+	@Override
+	public PlaySpellCardAction clone() {
+		return (PlaySpellCardAction) super.clone();
 	}
 
 	@Override
 	@Suspendable
-	public void play(GameContext context, int playerId) {
-		context.getLogic().castSpell(playerId, spell, EntityReference, getTargetReference(), getTargetRequirement(), false, this);
+	public void innerExecute(GameContext context, int playerId) {
+		if (context.getLogic().hasAttribute(context.getPlayer(playerId), Attribute.SPELLS_CAST_TWICE)) {
+			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
+		}
+		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 	}
 
 	public SpellDesc getSpell() {
@@ -42,10 +52,6 @@ public class PlaySpellCardAction extends PlayCardAction {
 		this.spell = spell;
 	}
 
-	public EntityReference getSourceCardEntityId() {
-		return EntityReference;
-	}
-
 	@Override
 	public String getDescription(GameContext context, int playerId) {
 		if (getTargetReference() == null
@@ -53,8 +59,9 @@ public class PlaySpellCardAction extends PlayCardAction {
 			return super.getDescription(context, playerId);
 		}
 
-		final Card source = (Card) context.resolveSingleTarget(getEntityReference());
+		final Card source = (Card) context.resolveSingleTarget(getSourceReference());
 		final Entity target = context.resolveSingleTarget(getTargetReference());
 		return String.format("%s played %s on %s", context.getActivePlayer().getName(), source.getName(), target.getName());
 	}
 }
+

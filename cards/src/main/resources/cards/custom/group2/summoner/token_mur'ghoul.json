@@ -1,0 +1,14 @@
+{
+  "name": "Mur'ghoul",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "MURLOC",
+  "description": "",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

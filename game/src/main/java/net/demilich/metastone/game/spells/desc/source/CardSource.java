@@ -1,37 +1,44 @@
 package net.demilich.metastone.game.spells.desc.source;
 
 import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.desc.Desc;
+import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.TargetPlayer;
 
 import java.io.Serializable;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toMap;
 
-public abstract class CardSource implements Serializable {
-	protected final CardSourceDesc desc;
+public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc> {
+
+	private CardSourceDesc desc;
 
 	public CardSource(CardSourceDesc desc) {
-		this.desc = desc;
+		this.setDesc(desc);
 	}
 
 	public Object getArg(CardSourceArg arg) {
-		return desc.get(arg);
+		return getDesc().get(arg);
 	}
 
 	public boolean hasArg(CardSourceArg arg) {
-		return desc.containsKey(arg);
+		return getDesc().containsKey(arg);
 	}
 
 	@Suspendable
 	public CardList getCards(GameContext context, Entity source, Player player) {
-		TargetPlayer targetPlayer = (TargetPlayer) desc.get(CardSourceArg.TARGET_PLAYER);
+		TargetPlayer targetPlayer = (TargetPlayer) getDesc().get(CardSourceArg.TARGET_PLAYER);
 		if (targetPlayer == null) {
 			targetPlayer = TargetPlayer.SELF;
 		}
@@ -53,6 +60,12 @@ public abstract class CardSource implements Serializable {
 				case OPPONENT:
 					providingPlayer = context.getOpponent(player);
 					break;
+				case PLAYER_1:
+					providingPlayer = context.getPlayer1();
+					break;
+				case PLAYER_2:
+					providingPlayer = context.getPlayer2();
+					break;
 				case OWNER:
 				case SELF:
 				default:
@@ -62,21 +75,47 @@ public abstract class CardSource implements Serializable {
 			cards = this.match(context, source, providingPlayer);
 		}
 
-		if (desc.getBool(CardSourceArg.DISTINCT)) {
+		if (getDesc().getBool(CardSourceArg.DISTINCT)) {
 			cards = new CardArrayList(cards
 					.stream()
 					.collect(toMap(Card::getCardId, Function.identity(), (p, q) -> p))
 					.values());
 		}
 
+		if (getDesc().getBool(CardSourceArg.INVERT)) {
+			cards = new CardArrayList(Lists.reverse(cards.toList()));
+		}
+
 		return cards;
 	}
 
+	/**
+	 * Overridden by card source implementations to return a list of cards that usually get filtered in an {@link
+	 * net.demilich.metastone.game.spells.desc.filter.EntityFilter}.
+	 * <p>
+	 * See the implementations for examples of how, e.g. the graveyard is turned into a {@link CardList} instance by
+	 * iterating through all the actors in the graveyard and retrieving their {@link Entity#getSourceCard()}.
+	 *
+	 * @param context The game context
+	 * @param source  The entity that is the origin of this matching operation
+	 * @param player  The casting player
+	 * @return A list of cards pre-filter.
+	 */
 	@Suspendable
 	protected abstract CardList match(GameContext context, Entity source, Player player);
 
 	public TargetPlayer getTargetPlayer() {
-		return (TargetPlayer) desc.getOrDefault(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+		return (TargetPlayer) getDesc().getOrDefault(CardSourceArg.TARGET_PLAYER, TargetPlayer.SELF);
+	}
+
+	@Override
+	public CardSourceDesc getDesc() {
+		return desc;
+	}
+
+	@Override
+	public void setDesc(Desc<?, ?> desc) {
+		this.desc = (CardSourceDesc) desc;
 	}
 }
 

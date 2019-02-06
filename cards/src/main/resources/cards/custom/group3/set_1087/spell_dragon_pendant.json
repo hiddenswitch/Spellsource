@@ -1,0 +1,44 @@
+{
+  "name": "Dragon Pendant",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Give a minion +4/+4 and 'Deal any excess damage to the enemy hero.'",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 4,
+        "hpBonus": 4
+      },
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "PhysicalAttackTrigger",
+            "hostTargetType": "IGNORE_OTHER_SOURCES",
+            "targetEntityType": "MINION"
+          },
+          "spell": {
+            "class": "ExcessDamageSpell",
+            "target": "EVENT_TARGET",
+            "value": {
+              "class": "AttributeValueProvider",
+              "target": "TRIGGER_HOST",
+              "attribute": "ATTACK"
+            },
+            "exclusive": true,
+            "secondaryTarget": "ENEMY_HERO"
+          }
+        }
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

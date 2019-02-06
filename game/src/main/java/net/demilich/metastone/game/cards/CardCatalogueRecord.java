@@ -1,45 +1,35 @@
 package net.demilich.metastone.game.cards;
 
-import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 
 import java.io.Serializable;
-import java.util.Map;
 
 /**
  * A record that stores a card's ID, JSON representation and {@link CardDesc}.
  */
 public class CardCatalogueRecord implements Serializable {
 	private String id;
-	private String json;
 	private transient JsonObject cachedJson;
 	private CardDesc desc;
 
-	public CardCatalogueRecord(String id, JsonObject json, CardDesc desc) {
+	public CardCatalogueRecord(String id, CardDesc desc) {
 		this.id = id;
-		this.json = json.encode();
 		this.desc = desc;
 	}
 
+	/**
+	 * An ID that corresponds to the file name, less the {@code .json} extension, in the {@link
+	 * CardCatalogue#CARDS_FOLDER} in the {@code cards/src/main/resources} directory.
+	 *
+	 * @return
+	 */
 	public String getId() {
 		return id;
 	}
 
 	public void setId(String id) {
 		this.id = id;
-	}
-
-	@SuppressWarnings("unchecked")
-	public JsonObject getJson() {
-		if (cachedJson == null) {
-			cachedJson = new JsonObject(Json.decodeValue(json, Map.class)).put("id", id);
-		}
-		return cachedJson;
-	}
-
-	public void setJson(String json) {
-		this.json = json;
 	}
 
 	public CardDesc getDesc() {

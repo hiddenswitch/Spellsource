@@ -1,0 +1,19 @@
+{
+  "name": "Mu'sha's Blessing",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "FREE",
+  "description": "Give a minion +1/+1 for each minion you control.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "FRIENDLY_MINIONS"
+    }
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

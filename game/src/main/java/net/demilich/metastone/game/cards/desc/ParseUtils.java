@@ -1,249 +1,57 @@
 package net.demilich.metastone.game.cards.desc;
 
+import com.fasterxml.jackson.databind.DeserializationContext;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.base.CaseFormat;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-
-import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
-import net.demilich.metastone.game.spells.trigger.secrets.Quest;
-import net.demilich.metastone.game.spells.trigger.secrets.Secret;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.spells.GameValue;
-import net.demilich.metastone.game.spells.PlayerAttribute;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.actions.ActionType;
-import net.demilich.metastone.game.cards.CardDescType;
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.dynamicdescription.*;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.entities.minions.RelativeToSource;
+import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
+import net.demilich.metastone.game.spells.GameValue;
+import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
+import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.spells.desc.filter.FilterDesc;
-import net.demilich.metastone.game.spells.desc.filter.Operation;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilterDesc;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
+import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDescSerializer;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
-import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.TargetType;
+import net.demilich.metastone.game.targeting.Zones;
+
+import java.io.IOException;
 
 public class ParseUtils {
-	private static SpellDescSerializer spellParser = new SpellDescSerializer();
-	private static ValueProviderDescSerializer valueProviderParser = new ValueProviderDescSerializer();
-	private static FilterDescSerializer filterParser = new FilterDescSerializer();
-	private static AuraDescSerializer auraParser = new AuraDescSerializer();
-	private static SourceDescSerializer sourceParser = new SourceDescSerializer();
-	private static ConditionDescSerializer conditionParser = new ConditionDescSerializer();
-	private static EventTriggerDescSerializer triggerParser = new EventTriggerDescSerializer();
-	private static CardCostModifierDescSerializer manaModifierParser = new CardCostModifierDescSerializer();
+	private static DescDeserializer<SpellDesc, ?, ?> spellParser = new SpellDescDeserializer();
+	private static DescDeserializer<ValueProviderDesc, ?, ?> valueProviderParser = new ValueProviderDescDeserializer();
+	private static DescDeserializer<EntityFilterDesc, ?, ?> filterParser = new EntityFilterDescDeserializer();
+	private static DescDeserializer<AuraDesc, ?, ?> auraParser = new AuraDescDeserializer();
+	private static DescDeserializer<CardSourceDesc, ?, ?> sourceParser = new CardSourceDescDeserializer();
+	private static DescDeserializer<ConditionDesc, ?, ?> conditionParser = new ConditionDescDeserializer();
+	private static DescDeserializer<EventTriggerDesc, ?, ?> eventTriggerParser = new EventTriggerDescDeserializer();
+	private static DescDeserializer<DynamicDescriptionDesc, ?, ?> dynamicDescriptionParser = new DynamicDescriptionDeserializer();
+	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
-	public static Object parse(String argName, JsonObject jsonData, ParseValueType valueType) {
-		JsonElement entry = jsonData.get(argName);
-		switch (valueType) {
-			case INTEGER:
-				return entry.getAsInt();
-			case INTEGER_ARRAY: {
-				JsonArray jsonArray = entry.getAsJsonArray();
-				int[] array = new int[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					array[i] = jsonArray.get(i).getAsInt();
-				}
-				return array;
-			}
-			case BOOLEAN:
-				return entry.getAsBoolean();
-			case STRING:
-				return entry.getAsString();
-			case STRING_ARRAY: {
-				JsonArray jsonArray = entry.getAsJsonArray();
-				String[] array = new String[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					array[i] = jsonArray.get(i).getAsString();
-				}
-				return array;
-			}
-			case TARGET_SELECTION:
-				return Enum.valueOf(TargetSelection.class, entry.getAsString());
-			case TARGET_REFERENCE:
-				return parseEntityReference(entry.getAsString());
-			case TARGET_PLAYER:
-				return Enum.valueOf(TargetPlayer.class, entry.getAsString());
-			case RACE:
-				return Enum.valueOf(Race.class, entry.getAsString());
-			case CARD_SET:
-				return Enum.valueOf(CardSet.class, entry.getAsString());
-			case SPELL:
-				return spellParser.deserialize(entry, SpellDesc.class, null);
-			case SPELL_ARRAY: {
-				JsonArray jsonArray = entry.getAsJsonArray();
-				SpellDesc[] array = new SpellDesc[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					JsonElement entry1 = jsonArray.get(i);
-					if (entry1.getAsJsonObject().has("desc")) {
-						entry1 = entry1.getAsJsonObject().get("desc");
-					}
-					array[i] = spellParser.deserialize(entry1, SpellDesc.class, null);
-				}
-				return array;
-			}
-			case ATTRIBUTE:
-				return Enum.valueOf(Attribute.class, entry.getAsString());
-			case PLAYER_ATTRIBUTE:
-				return Enum.valueOf(PlayerAttribute.class, entry.getAsString());
-			case RARITY:
-				return Enum.valueOf(Rarity.class, entry.getAsString());
-			case HERO_CLASS:
-				return Enum.valueOf(HeroClass.class, entry.getAsString());
-			case GAME_VALUE:
-				return Enum.valueOf(GameValue.class, entry.getAsString());
-			case HERO_CLASS_ARRAY: {
-				JsonArray jsonArray = entry.getAsJsonArray();
-				HeroClass[] array = new HeroClass[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).getAsString());
-				}
-				return array;
-			}
-			case BOARD_POSITION_RELATIVE:
-				return Enum.valueOf(RelativeToSource.class, entry.getAsString());
-			case CARD_LOCATION:
-				return Enum.valueOf(Zones.class, entry.getAsString());
-			case OPERATION:
-				return Enum.valueOf(Operation.class, entry.getAsString());
-			case CARD_TYPE:
-				return Enum.valueOf(CardType.class, entry.getAsString());
-			case ENTITY_TYPE:
-				return Enum.valueOf(EntityType.class, entry.getAsString());
-			case ACTION_TYPE:
-				return Enum.valueOf(ActionType.class, entry.getAsString());
-			case TARGET_TYPE:
-				return Enum.valueOf(TargetType.class, entry.getAsString());
-			case CARD_DESC_TYPE:
-				return Enum.valueOf(CardDescType.class, entry.getAsString());
-			case ALGEBRAIC_OPERATION:
-				return Enum.valueOf(AlgebraicOperation.class, entry.getAsString());
-			case VALUE:
-				// value is either an int or a ValueProvider
-				// if it is not an object, parse it as int, else fall-through to VALUE_PROVIDER case
-				if (!entry.isJsonObject()) {
-					return entry.getAsInt();
-				}
-			case VALUE_PROVIDER:
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				ValueProviderDesc valueProviderDesc = valueProviderParser.deserialize(entry, ValueProviderDesc.class, null);
-				return valueProviderDesc.createInstance();
-			case ENTITY_FILTER: {
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				FilterDesc filterDesc = filterParser.deserialize(entry, FilterDesc.class, null);
-				return filterDesc.createInstance();
-			}
-			case CARD_SOURCE: {
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				CardSourceDesc cardSourceDesc = sourceParser.deserialize(entry, CardSourceDesc.class, null);
-				return cardSourceDesc.createInstance();
-			}
-			case AURA: {
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				AuraDesc auraDesc = auraParser.deserialize(entry, AuraDesc.class, null);
-				return auraDesc.createInstance();
-			}
-			case ENTITY_FILTER_ARRAY: {
-				JsonArray jsonArray = entry.getAsJsonArray();
-				EntityFilter[] array = new EntityFilter[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					JsonElement entry1 = jsonArray.get(i);
-					if (entry1.getAsJsonObject().has("desc")) {
-						entry1 = entry1.getAsJsonObject().get("desc");
-					}
-					FilterDesc filterDesc = filterParser.deserialize(entry1, FilterDesc.class, null);
-					array[i] = filterDesc.createInstance();
-				}
-				return array;
-			}
-			case CONDITION: {
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				ConditionDesc conditionDesc = conditionParser.deserialize(entry, ConditionDesc.class, null);
-				return conditionDesc.createInstance();
-			}
-			case CONDITION_ARRAY: {
-				JsonArray jsonArray = entry.getAsJsonArray();
-				Condition[] array = new Condition[jsonArray.size()];
-				for (int i = 0; i < array.length; i++) {
-					JsonElement entry1 = jsonArray.get(i);
-					if (entry1.getAsJsonObject().has("desc")) {
-						entry1 = entry1.getAsJsonObject().get("desc");
-					}
-					ConditionDesc conditionDesc = conditionParser.deserialize(entry1, ConditionDesc.class, null);
-					array[i] = conditionDesc.createInstance();
-				}
-				return array;
-			}
-			case TRIGGER:
-				return deserializeTriggerDesc(entry);
-			case TRIGGERS:
-				JsonArray array = entry.getAsJsonArray();
-				TriggerDesc[] triggerDescs = new TriggerDesc[array.size()];
-				for (int i = 0; i < array.size(); i++) {
-					triggerDescs[i] = deserializeTriggerDesc(array.get(i));
-				}
-				return triggerDescs;
-			case EVENT_TRIGGER:
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				return triggerParser.deserialize(entry, EventTriggerDesc.class, null);
-			case QUEST:
-				TriggerDesc questTriggerDesc = deserializeTriggerDesc(entry);
-				return new Quest(questTriggerDesc, null);
-			case SECRET:
-				TriggerDesc secretTriggerDesc = deserializeTriggerDesc(entry);
-				return new Secret(secretTriggerDesc, null);
-			case CARD_COST_MODIFIER:
-				if (entry.getAsJsonObject().has("desc")) {
-					entry = entry.getAsJsonObject().get("desc");
-				}
-				return manaModifierParser.deserialize(entry, CardCostModifierDesc.class, null);
-			default:
-				break;
-		}
-		return null;
-	}
-
-	protected static TriggerDesc deserializeTriggerDesc(JsonElement entry) {
-		JsonObject triggerObject = entry.getAsJsonObject();
-		TriggerDesc triggerDesc = new TriggerDesc();
-		triggerDesc.eventTrigger = triggerParser.deserialize(triggerObject.get("eventTrigger"), EventTriggerDesc.class, null);
-		triggerDesc.spell = spellParser.deserialize(triggerObject.get("spell"), SpellDesc.class, null);
-		triggerDesc.oneTurn = triggerObject.has("oneTurn") && triggerObject.get("oneTurn").getAsBoolean();
-		triggerDesc.persistentOwner = triggerObject.has("persistentOwner") && triggerObject.get("persistentOwner").getAsBoolean();
-		triggerDesc.maxFires = triggerObject.has("maxFires") ? triggerObject.get("maxFires").getAsInt() : null;
-		triggerDesc.countUntilCast = triggerObject.has("countUntilCast") ? triggerObject.get("countUntilCast").getAsInt() : null;
-		triggerDesc.keepAfterTransform = triggerObject.has("keepAfterTransform") && triggerObject.get("keepAfterTransform").getAsBoolean();
-		return triggerDesc;
-	}
-
+	@SuppressWarnings("deprecation")
 	private static EntityReference parseEntityReference(String str) {
 		String lowerCaseName = str.toLowerCase();
 		try {
@@ -277,10 +85,18 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_LAST_CARD_PLAYED;
 			case "enemy_last_card_played":
 				return EntityReference.ENEMY_LAST_CARD_PLAYED;
+			case "last_card_played_before_current_sequence":
+				return EntityReference.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
+			case "friendly_last_card_played_before_current_sequence":
+				return EntityReference.FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
+			case "enemy_last_card_played_before_current_sequence":
+				return EntityReference.ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE;
 			case "trigger_host":
 				return EntityReference.TRIGGER_HOST;
 			case "adjacent_minions":
 				return EntityReference.ADJACENT_MINIONS;
+			case "adjacent_to_target":
+				return EntityReference.ADJACENT_TO_TARGET;
 			case "attacker_adjacent_minions":
 				return EntityReference.ATTACKER_ADJACENT_MINIONS;
 			case "friendly_set_aside":
@@ -291,6 +107,8 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_GRAVEYARD;
 			case "enemy_graveyard":
 				return EntityReference.ENEMY_GRAVEYARD;
+			case "friendly_last_died_minion":
+				return EntityReference.FRIENDLY_LAST_DIED_MINION;
 			case "all_entities":
 				return EntityReference.ALL_ENTITIES;
 			case "opposite_minions":
@@ -315,8 +133,6 @@ public class ParseUtils {
 				return EntityReference.TARGET;
 			case "spell_target":
 				return EntityReference.SPELL_TARGET;
-			case "pending_card":
-				return EntityReference.PENDING_CARD;
 			case "output":
 				return EntityReference.OUTPUT;
 			case "self":
@@ -345,6 +161,8 @@ public class ParseUtils {
 				return EntityReference.MINIONS_TO_RIGHT;
 			case "friendly_deck":
 				return EntityReference.FRIENDLY_DECK;
+			case "friendly_deck_from_top":
+				return EntityReference.FRIENDLY_DECK_FROM_TOP;
 			case "friendly_top_card":
 				return EntityReference.FRIENDLY_TOP_CARD;
 			case "enemy_deck":
@@ -361,8 +179,30 @@ public class ParseUtils {
 				return EntityReference.FRIENDLY_HERO_POWER;
 			case "enemy_hero_power":
 				return EntityReference.ENEMY_HERO_POWER;
+			case "enemy_minions_left_to_right":
+				return EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT;
+			case "friendly_minions_left_to_right":
+				return EntityReference.FRIENDLY_MINIONS_LEFT_TO_RIGHT;
+			case "physical_attack_targets":
+				return EntityReference.PHYSICAL_ATTACK_TARGETS;
+			case "left_adjacent_minion":
+				return EntityReference.LEFT_ADJACENT_MINION;
+			case "right_adjacent_minion":
+				return EntityReference.RIGHT_ADJACENT_MINION;
+			case "friendly_cards":
+				return EntityReference.FRIENDLY_CARDS;
+			case "enemy_cards":
+				return EntityReference.ENEMY_CARDS;
+			case "current_summoning_minion":
+				return EntityReference.CURRENT_SUMMONING_MINION;
+			case "enemy_middle_minions":
+				return EntityReference.ENEMY_MIDDLE_MINIONS;
+			case "friendly_last_minion_played":
+				return EntityReference.FRIENDLY_LAST_MINION_PLAYED;
+			case "other_friendly_characters":
+				return EntityReference.OTHER_FRIENDLY_CHARACTERS;
 			default:
-				return null;
+				throw new NullPointerException(str);
 		}
 	}
 
@@ -370,22 +210,203 @@ public class ParseUtils {
 		return CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, input);
 	}
 
-	public static boolean tryParseBool(String value) {
-		try {
-			Boolean.parseBoolean(value);
-			return true;
-		} catch (Exception e) {
-			return false;
-		}
+	public static String toUpperCase(String input) {
+		return CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, input);
 	}
 
-	public static boolean tryParseInt(String value) {
-		try {
-			Integer.parseInt(value);
-			return true;
-		} catch (Exception e) {
-			return false;
+	@SuppressWarnings("unchecked")
+	public static Object parse(JsonNode jsonData, ParseValueType valueType, DeserializationContext ctxt) {
+		switch (valueType) {
+			case INTEGER:
+				return jsonData.asInt();
+			case INTEGER_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				int[] array = new int[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = jsonArray.get(i).asInt();
+				}
+				return array;
+			}
+			case BOOLEAN:
+				return jsonData.asBoolean();
+			case STRING:
+				return jsonData.asText();
+			case STRING_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				String[] array = new String[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = jsonArray.get(i).asText();
+				}
+				return array;
+			}
+			case TARGET_SELECTION:
+				return Enum.valueOf(TargetSelection.class, jsonData.asText());
+			case TARGET_REFERENCE:
+				return parseEntityReference(jsonData.asText());
+			case TARGET_PLAYER:
+				return Enum.valueOf(TargetPlayer.class, jsonData.asText());
+			case RACE:
+				return Enum.valueOf(Race.class, jsonData.asText());
+			case CARD_SET:
+				return Enum.valueOf(CardSet.class, jsonData.asText());
+			case SPELL:
+				return spellParser.innerDeserialize(ctxt, jsonData);
+			case SPELL_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				SpellDesc[] array = new SpellDesc[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					JsonNode entry1 = jsonArray.get(i);
+					array[i] = spellParser.innerDeserialize(ctxt, entry1);
+				}
+				return array;
+			}
+			case ATTRIBUTE:
+				return Enum.valueOf(Attribute.class, jsonData.asText());
+			case PLAYER_ATTRIBUTE:
+				return Enum.valueOf(PlayerAttribute.class, jsonData.asText());
+			case RARITY:
+				return Enum.valueOf(Rarity.class, jsonData.asText());
+			case HERO_CLASS:
+				return Enum.valueOf(HeroClass.class, jsonData.asText());
+			case GAME_VALUE:
+				return Enum.valueOf(GameValue.class, jsonData.asText());
+			case HERO_CLASS_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				HeroClass[] array = new HeroClass[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = Enum.valueOf(HeroClass.class, jsonArray.get(i).asText());
+				}
+				return array;
+			}
+			case BOARD_POSITION_RELATIVE:
+				return Enum.valueOf(BoardPositionRelative.class, jsonData.asText());
+			case CARD_LOCATION:
+				return Enum.valueOf(Zones.class, jsonData.asText());
+			case OPERATION:
+				return Enum.valueOf(ComparisonOperation.class, jsonData.asText());
+			case CARD_TYPE:
+				return Enum.valueOf(CardType.class, jsonData.asText());
+			case ENTITY_TYPE:
+				return Enum.valueOf(EntityType.class, jsonData.asText());
+			case ACTION_TYPE:
+				return Enum.valueOf(ActionType.class, jsonData.asText());
+			case TARGET_TYPE:
+				return Enum.valueOf(TargetType.class, jsonData.asText());
+			case CARD_DESC_TYPE:
+				return Enum.valueOf(CardDescType.class, jsonData.asText());
+			case ALGEBRAIC_OPERATION:
+				return Enum.valueOf(AlgebraicOperation.class, jsonData.asText());
+			case VALUE:
+				// value is either an int or a ValueProvider
+				// if it is not an object, parse it as int, else fall-through to VALUE_PROVIDER case
+				if (!(jsonData instanceof ObjectNode)) {
+					return jsonData.asInt();
+				}
+			case VALUE_PROVIDER:
+				return valueProviderParser.innerDeserialize(ctxt, jsonData).create();
+			case ENTITY_FILTER: {
+				return filterParser.innerDeserialize(ctxt, jsonData).create();
+			}
+			case CARD_SOURCE: {
+				return sourceParser.innerDeserialize(ctxt, jsonData).create();
+			}
+			case CARD_SOURCE_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				CardSource[] array = new CardSource[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = sourceParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+				}
+				return array;
+			}
+			case AURA: {
+				return auraParser.innerDeserialize(ctxt, jsonData).create();
+			}
+			case ENTITY_FILTER_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				EntityFilter[] array = new EntityFilter[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = filterParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+				}
+				return array;
+			}
+			case CONDITION: {
+				return conditionParser.innerDeserialize(ctxt, jsonData).create();
+			}
+			case CONDITION_ARRAY: {
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				Condition[] array = new Condition[jsonArray.size()];
+				for (int i = 0; i < array.length; i++) {
+					array[i] = conditionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+				}
+				return array;
+			}
+			case BATTLECRY:
+				try {
+					return Json.mapper.readerFor(BattlecryDesc.class).readValue(jsonData);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
+			case TRIGGER:
+				return getTriggerDesc(jsonData);
+			case TRIGGERS:
+				ArrayNode array = (ArrayNode) jsonData;
+				EnchantmentDesc[] enchantmentDescs = new EnchantmentDesc[array.size()];
+				for (int i = 0; i < array.size(); i++) {
+					enchantmentDescs[i] = getTriggerDesc(array.get(i));
+				}
+				return enchantmentDescs;
+			case EVENT_TRIGGER:
+				// Does not expect a concrete instance!
+				return eventTriggerParser.innerDeserialize(ctxt, jsonData);
+			case EVENT_TRIGGER_ARRAY:
+				ArrayNode eventTriggerArray = (ArrayNode) jsonData;
+				EventTriggerDesc[] eventTriggerDescs = new EventTriggerDesc[eventTriggerArray.size()];
+				// Does not expect a concrete instance!
+				for (int i = 0; i < eventTriggerArray.size(); i++) {
+					eventTriggerDescs[i] = eventTriggerParser.innerDeserialize(ctxt, eventTriggerArray.get(i));
+				}
+				return eventTriggerDescs;
+			case QUEST:
+				EnchantmentDesc questEnchantmentDesc = getTriggerDesc(jsonData);
+				return new Quest(questEnchantmentDesc, null);
+			case SECRET:
+				EnchantmentDesc secretEnchantmentDesc = getTriggerDesc(jsonData);
+				return new Secret(secretEnchantmentDesc, null);
+			case CARD_COST_MODIFIER:
+				return manaModifierParser.innerDeserialize(ctxt, jsonData);
+			case CHOOSE_ONE_OVERRIDE:
+				return Enum.valueOf(ChooseOneOverride.class, jsonData.asText());
+			case DYNAMIC_DESCRIPTION:
+				if (jsonData.isTextual()) {
+					DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
+					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.asText());
+					return descriptionDesc.create();
+				}
+				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData).create();
+			case DYNAMIC_DESCRIPTION_ARRAY:
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				DynamicDescription[] dynamicDescriptions = new DynamicDescription[jsonArray.size()];
+				for (int i = 0; i < dynamicDescriptions.length; i++) {
+					if (jsonArray.get(i).isTextual()) {
+						DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
+						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).asText());
+						dynamicDescriptions[i] = descriptionDesc.create();
+					} else {
+						dynamicDescriptions[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+					}
+				}
+				return dynamicDescriptions;
+			default:
+				break;
 		}
+		return null;
 	}
 
+	private static EnchantmentDesc getTriggerDesc(JsonNode jsonData) {
+		try {
+			return Json.mapper.readerFor(EnchantmentDesc.class).readValue(jsonData);
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
 }

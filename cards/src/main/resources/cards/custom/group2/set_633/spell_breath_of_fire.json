@@ -1,0 +1,63 @@
+{
+  "name": "Breath of Fire",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "JADE",
+  "rarity": "RARE",
+  "description": "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "PERMANENT"
+          }
+        ],
+        "invert": true
+      }
+    },
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ValueDescription",
+      "value": {
+        "class": "EntityCounter",
+        "target": "ENEMY_MINIONS",
+        "filter": {
+          "class": "OrFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "attribute": "PERMANENT"
+            }
+          ],
+          "invert": true
+        }
+      }
+    }
+  ]
+}

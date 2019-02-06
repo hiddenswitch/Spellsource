@@ -1,23 +1,29 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import co.paralleluniverse.fibers.Suspendable;
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.events.GameEvent;
+import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
+import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.spells.aura.Aura;
-import net.demilich.metastone.game.targeting.EntityReference;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.NoSuchElementException;
 
+/**
+ * The trigger manager contains the code for managing triggers and actually processing events' effects in the game.
+ */
 public class TriggerManager implements Cloneable, Serializable {
 	public static Logger logger = LoggerFactory.getLogger(TriggerManager.class);
 
 	private final List<Trigger> triggers = new ArrayList<Trigger>();
+	private int depth = 0;
 
 	public TriggerManager() {
 	}
@@ -31,7 +37,7 @@ public class TriggerManager implements Cloneable, Serializable {
 	public void addTrigger(Trigger trigger) {
 		triggers.add(trigger);
 		if (triggers.size() > 100) {
-			logger.warn("Warning, many triggers: " + triggers.size() + " adding one of type: " + trigger);
+			logger.warn("addTrigger {}: Warning, many triggers: {}", trigger, triggers.size());
 		}
 	}
 
@@ -44,8 +50,27 @@ public class TriggerManager implements Cloneable, Serializable {
 		triggers.clear();
 	}
 
+	/**
+	 * The core implementation of firing game events.
+	 * <p>
+	 * This method processes an {@code event}, checking each trigger to see if it should respond to that particular
+	 * event.
+	 * <p>
+	 * This method also manages various environment stacks, like the {@link GameContext#getEventValueStack()} if the event
+	 * has a value (like a {@link net.demilich.metastone.game.events.DamageEvent} or the {@link
+	 * GameContext#getEventTargetStack()} that helps the {@link EntityReference#EVENT_TARGET} entity reference to work.
+	 * <p>
+	 * This method will also remove triggers that are expired.
+	 *
+	 * @param event
+	 * @param gameTriggers
+	 */
 	@Suspendable
 	public void fireGameEvent(GameEvent event, List<Trigger> gameTriggers) {
+		depth++;
+		if (depth > 96) {
+			throw new IllegalStateException("infinite recursion");
+		}
 		if (event instanceof HasValue) {
 			event.getGameContext().getEventValueStack().push(((HasValue) event).getValue());
 		} else {
@@ -104,6 +129,7 @@ public class TriggerManager implements Cloneable, Serializable {
 			if (hostReference == null) {
 				hostReference = EntityReference.NONE;
 			}
+
 			event.getGameContext().getTriggerHostStack().push(hostReference);
 
 			if (trigger.canFireCondition(event) && triggers.contains(trigger)) {
@@ -116,14 +142,26 @@ public class TriggerManager implements Cloneable, Serializable {
 			if (trigger.isExpired()) {
 				removeTriggers.add(trigger);
 			}
-			event.getGameContext().getTriggerHostStack().pop();
+
+			try {
+				event.getGameContext().getTriggerHostStack().pop();
+			} catch (NoSuchElementException | IndexOutOfBoundsException noSuchElement) {
+				// If the game is over, don't worry about the host stack not having an item.
+				logger.error("fireGameEvent loop", noSuchElement);
+				continue;
+			}
 		}
 
 		triggers.removeAll(removeTriggers);
 
-		event.getGameContext().getEventValueStack().pop();
-		event.getGameContext().getEventSourceStack().pop();
-		event.getGameContext().getEventTargetStack().pop();
+		try {
+			event.getGameContext().getEventValueStack().pop();
+			event.getGameContext().getEventSourceStack().pop();
+			event.getGameContext().getEventTargetStack().pop();
+		} catch (IndexOutOfBoundsException | NoSuchElementException ex) {
+			logger.error("fireGameEvent", ex);
+		}
+		depth--;
 	}
 
 	private List<Trigger> getListSnapshot(List<Trigger> triggerList) {
@@ -148,12 +186,16 @@ public class TriggerManager implements Cloneable, Serializable {
 		trigger.expire();
 	}
 
-	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras) {
+	public void removeTriggersAssociatedWith(EntityReference entityReference, boolean removeAuras, boolean keepSelfCardCostModifiers, GameContext context) {
 		for (Trigger trigger : getListSnapshot(triggers)) {
 			if (trigger.getHostReference().equals(entityReference)) {
 				if (!removeAuras && trigger instanceof Aura) {
 					continue;
 				}
+				if (keepSelfCardCostModifiers && trigger instanceof CardCostModifier && ((CardCostModifier) trigger).targetsSelf()) {
+					continue;
+				}
+				trigger.onRemove(context);
 				trigger.expire();
 				triggers.remove(trigger);
 			}
@@ -162,5 +204,14 @@ public class TriggerManager implements Cloneable, Serializable {
 
 	public List<Trigger> getTriggers() {
 		return triggers;
+	}
+
+	/**
+	 * Expires all triggers in the game, to prevent end-of-game triggering from causing the game to glitch out
+	 */
+	public void expireAll() {
+		for (Trigger trigger : triggers) {
+			trigger.expire();
+		}
 	}
 }

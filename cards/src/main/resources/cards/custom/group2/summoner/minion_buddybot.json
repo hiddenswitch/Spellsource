@@ -1,0 +1,38 @@
+{
+  "name": "Buddybot",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Battlecry: Give the next Mech you summon this turn +2/+2.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "FRIENDLY_PLAYER",
+      "trigger": {
+        "eventTrigger": {
+          "class": "BeforeMinionSummonedTrigger",
+          "race": "MECH",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "EVENT_TARGET",
+          "value": 2
+        },
+        "maxFires": 1,
+        "oneTurn": true
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

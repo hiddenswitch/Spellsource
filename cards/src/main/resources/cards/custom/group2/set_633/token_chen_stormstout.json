@@ -1,0 +1,16 @@
+{
+  "name": "Chen Stormstout",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 30,
+  "rarity": "FREE",
+  "description": "Can't be targeted by Spells or Hero Powers.",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

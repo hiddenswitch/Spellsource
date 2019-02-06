@@ -1,0 +1,20 @@
+{
+  "name": "Soul Repressor",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "<b>Deathrattle:</b> Put the lowest Cost Demon from your hand into the battlefield.",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

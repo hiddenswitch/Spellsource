@@ -1,0 +1,31 @@
+{
+  "name": "Frozen Deck",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Can't draw cards until after you've finished your next full turn",
+  "trigger": {
+    "countUntilCast": 3,
+    "eventTrigger": {
+      "class": "TurnEndTrigger"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_frozen_deck"
+    }
+  },
+  "aura": {
+    "class": "SpellOverrideAura",
+    "target": "FRIENDLY_PLAYER",
+    "applyEffect": {
+      "class": "NullSpell"
+    },
+    "removeEffect": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

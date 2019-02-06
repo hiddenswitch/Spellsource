@@ -1,0 +1,36 @@
+{
+  "name": "Onyx Cloud Serpent",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "WHITE",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, destroy a minion with 5 or more Attack.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 5,
+        "attribute": "ATTACK",
+        "operation": "GREATER_OR_EQUAL"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

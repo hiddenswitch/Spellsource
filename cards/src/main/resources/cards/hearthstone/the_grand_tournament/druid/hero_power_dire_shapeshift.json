@@ -1,5 +1,5 @@
 {
-  "name": "Nightmarish Hanger",
+  "name": "Dire Shapeshift",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "BROWN",
@@ -7,10 +7,13 @@
   "description": "Gain 2 Armor and +2 Attack this turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 2,
-    "attackBonus": 2
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_HERO",
+      "armorBonus": 2,
+      "attackBonus": 2
+    }
   },
   "collectible": false,
   "set": "THE_GRAND_TOURNAMENT",

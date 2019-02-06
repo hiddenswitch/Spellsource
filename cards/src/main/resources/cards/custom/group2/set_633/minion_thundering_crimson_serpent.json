@@ -1,0 +1,42 @@
+{
+  "name": "Thundering Crimson Serpent",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "RED",
+  "baseAttack": 7,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Battlecry: If you're holding a Dragon, gain \"Whenever a friendly character is damaged, gain 4 Armor.\"",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "DRAGON"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddEnchantmentSpell",
+      "target": "SELF",
+      "trigger": {
+        "eventTrigger": {
+          "class": "DamageReceivedTrigger",
+          "targetPlayer": "SELF"
+        },
+        "spell": {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
+          "armorBonus": 4
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

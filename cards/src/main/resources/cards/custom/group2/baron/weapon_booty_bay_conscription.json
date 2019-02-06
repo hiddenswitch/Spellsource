@@ -1,0 +1,25 @@
+{
+  "name": "Booty Bay Conscription",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "NAVY",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "EPIC",
+  "description": "After you summon a Pirate, give it +1 Health.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterMinionSummonedTrigger",
+      "race": "PIRATE",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "hpBonus": 1
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

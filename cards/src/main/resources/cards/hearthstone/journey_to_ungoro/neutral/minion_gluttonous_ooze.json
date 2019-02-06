@@ -13,6 +13,7 @@
       "spells": [
         {
           "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
           "armorBonus": {
             "class": "AttributeValueProvider",
             "target": "ENEMY_WEAPON",

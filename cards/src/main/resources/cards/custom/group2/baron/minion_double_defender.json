@@ -1,0 +1,21 @@
+{
+  "name": "Double Defender",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Taunt. Deathrattle: Summon a 0/2 Defender with Taunt.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_defender"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

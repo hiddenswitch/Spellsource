@@ -1,30 +1,31 @@
 package net.demilich.metastone.tests.util;
 
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 
-public class TestMinionCard extends MinionCard {
+public class TestMinionCard extends Card {
 
 	private static int id = 1;
 
-	private static MinionCardDesc getDesc(int attack, int hp, Attribute... attributes) {
-		MinionCardDesc desc = new MinionCardDesc();
-		desc.name = "Test monster " + ++id;
-		desc.rarity = Rarity.FREE;
-		desc.baseAttack = attack;
-		desc.baseHp = hp;
-		desc.type = CardType.MINION;
-		desc.heroClass = HeroClass.ANY;
-		desc.attributes = new AttributeMap();
+	private static CardDesc getDesc(int attack, int hp, Attribute... attributes) {
+		CardDesc desc = new CardDesc();
+		desc.setId("test_minion_card");
+		desc.setName("Test monster " + ++id);
+		desc.setRarity(Rarity.FREE);
+		desc.setBaseAttack(attack);
+		desc.setBaseHp(hp);
+		desc.setType(CardType.MINION);
+		desc.setHeroClass(HeroClass.ANY);
+		desc.setAttributes(new AttributeMap());
 		for (Attribute gameTag : attributes) {
-			desc.attributes.put(gameTag, true);
+			desc.getAttributes().put(gameTag, true);
 		}
 		return desc;
 	}
@@ -33,9 +34,25 @@ public class TestMinionCard extends MinionCard {
 
 	public TestMinionCard(int baseAttack, int baseHp, Attribute... tags) {
 		super(getDesc(baseAttack, baseHp, tags));
-		setCollectible(false);
 
-		this.minion = createMinion();
+		CardDesc desc = getDesc();
+		Minion minion1 = new Minion(this);
+		for (Attribute gameTag : getAttributes().keySet()) {
+			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
+				minion1.setAttribute(gameTag, getAttribute(gameTag));
+			}
+		}
+
+		applyText(minion1);
+
+		minion1.setBaseAttack(getBaseAttack());
+		minion1.setAttack(getAttack());
+		minion1.setHp(getHp());
+		minion1.setMaxHp(getHp());
+		minion1.setBaseHp(getBaseHp());
+		minion1.setHp(minion1.getMaxHp());
+
+		this.minion = minion1;
 		for (Attribute attribute : tags) {
 			minion.setAttribute(attribute);
 		}
@@ -43,8 +60,24 @@ public class TestMinionCard extends MinionCard {
 
 	public TestMinionCard(int baseAttack, int baseHp, int manaCost) {
 		super(getDesc(baseAttack, baseHp));
-		setCollectible(false);
-		this.minion = createMinion();
+		CardDesc desc = getDesc();
+		Minion minion1 = new Minion(this);
+		for (Attribute gameTag : getAttributes().keySet()) {
+			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
+				minion1.setAttribute(gameTag, getAttribute(gameTag));
+			}
+		}
+
+		applyText(minion1);
+
+		minion1.setBaseAttack(getBaseAttack());
+		minion1.setAttack(getAttack());
+		minion1.setHp(getHp());
+		minion1.setMaxHp(getHp());
+		minion1.setBaseHp(getBaseHp());
+		minion1.setHp(minion1.getMaxHp());
+
+		this.minion = minion1;
 	}
 
 	@Override

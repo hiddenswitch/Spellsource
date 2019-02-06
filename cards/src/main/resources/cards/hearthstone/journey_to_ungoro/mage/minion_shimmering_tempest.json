@@ -11,19 +11,9 @@
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "CardFilter",
-          "heroClass": "BLUE",
-          "cardType": "SPELL"
-        },
-        {
-          "class": "CardFilter",
-          "rarity": "LEGENDARY",
-          "invert": true
-        }
-      ]
+      "class": "CardFilter",
+      "heroClass": "BLUE",
+      "cardType": "SPELL"
     }
   },
   "attributes": {

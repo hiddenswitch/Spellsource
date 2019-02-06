@@ -11,13 +11,13 @@
     "trigger": {
       "eventTrigger": {
         "class": "TurnStartTrigger",
-        "maxFires": 1,
         "targetPlayer": "SELF"
       },
       "spell": {
         "class": "MindControlSpell",
         "target": "SELF"
-      }
+      },
+      "maxFires": 1
     }
   },
   "collectible": true,

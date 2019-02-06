@@ -1,0 +1,31 @@
+{
+  "name": "Blood Boil",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "COMMON",
+  "description": "Silence all Frozen minions. Restore #6 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 6
+      },
+      {
+        "class": "SilenceSpell",
+        "target": "ALL_MINIONS",
+        "filter": {
+          "class": "AttributeFilter",
+          "attribute": "FROZEN",
+          "operation": "HAS"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

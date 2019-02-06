@@ -1,0 +1,20 @@
+{
+  "name": "All For One",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Give a minion +1 Attack for every other friendly minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "attackBonus": {
+      "class": "EntityCounter",
+      "target": "OTHER_FRIENDLY_MINIONS"
+    },
+    "hpBonus": 0
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

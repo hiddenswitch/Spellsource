@@ -1,0 +1,27 @@
+{
+  "name": "Twilight Cookbook",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "Discover a card you Roasted this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell"
+    },
+    "cardFilter": {
+      "class": "AttributeFilter",
+      "attribute": "ROASTED"
+    },
+    "cardSource": {
+      "class": "GraveyardCardsSource",
+      "distinct": true
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

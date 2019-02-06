@@ -11,8 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Retrieves the cards stored in the {@code source} {@link Entity} or {@link CardSourceArg#SOURCE} {@link EntityReference}
- * by a {@link net.demilich.metastone.game.spells.custom.StoreEntitySpell}.
+ * Retrieves the cards stored in the {@code source} {@link Entity} or {@link CardSourceArg#SOURCE} {@link
+ * EntityReference} by a {@link net.demilich.metastone.game.spells.custom.StoreEntitySpell}.
  * <p>
  * Example:
  * <pre>
@@ -23,7 +23,7 @@ import org.slf4j.LoggerFactory;
  * </pre>
  *
  * @see net.demilich.metastone.game.spells.custom.StoreEntitySpell for more on storing entities with respect to a
- * specific {@code source} {@link Entity}.
+ * 		specific {@code source} {@link Entity}.
  */
 public class StoredEntitiesSource extends CardSource {
 
@@ -35,7 +35,7 @@ public class StoredEntitiesSource extends CardSource {
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		EntityReference sourceOverride = (EntityReference) desc.get(CardSourceArg.SOURCE);
+		EntityReference sourceOverride = (EntityReference) getDesc().get(CardSourceArg.SOURCE);
 		if (source == null
 				&& sourceOverride == null) {
 			logger.error("match {}: A SOURCE argument is required.", context.getGameId());

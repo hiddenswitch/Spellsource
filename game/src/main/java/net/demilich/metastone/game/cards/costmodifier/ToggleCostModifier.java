@@ -11,7 +11,11 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 
-public class ToggleCostModifier extends CardCostModifier {
+/**
+ * A card cost modifier that toggles on and off as {@link CardCostModifierArg#TOGGLE_ON_TRIGGER} and {@link
+ * CardCostModifierArg#TOGGLE_OFF_TRIGGER} triggers fire.
+ */
+public final class ToggleCostModifier extends CardCostModifier {
 
 	private EventTrigger toggleOnTrigger;
 	private EventTrigger toggleOffTrigger;
@@ -20,10 +24,10 @@ public class ToggleCostModifier extends CardCostModifier {
 	public ToggleCostModifier(CardCostModifierDesc desc) {
 		super(desc);
 		EventTriggerDesc triggerDesc = (EventTriggerDesc) desc.get(CardCostModifierArg.TOGGLE_ON_TRIGGER);
-		this.toggleOnTrigger = triggerDesc.createInstance();
+		this.toggleOnTrigger = triggerDesc.create();
 
 		triggerDesc = (EventTriggerDesc) desc.get(CardCostModifierArg.TOGGLE_OFF_TRIGGER);
-		this.toggleOffTrigger = triggerDesc.createInstance();
+		this.toggleOffTrigger = triggerDesc.create();
 	}
 
 	@Override

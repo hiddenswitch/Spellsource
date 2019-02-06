@@ -1,0 +1,36 @@
+{
+  "name": "Pastry Cook",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Battlecry: If you Roasted a card this turn, deal 2 damage.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "FRIENDLY_GRAVEYARD",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": {
+          "class": "CurrentTurnValueProvider"
+        },
+        "attribute": "ROASTED",
+        "operation": "EQUAL"
+      }
+    },
+    "targetSelection": "ANY",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

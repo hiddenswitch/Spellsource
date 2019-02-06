@@ -1,0 +1,36 @@
+{
+  "name": "Dual Chillblades",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "OBSIDIAN",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "RARE",
+  "description": "Windfury, Freeze any character damaged by this.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageCausedTrigger",
+      "sourceEntityType": "HERO",
+      "sourcePlayer": "SELF",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "EVENT_TARGET",
+      "attribute": "FROZEN"
+    }
+  },
+  "onEquip": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "WINDFURY"
+  },
+  "onUnequip": {
+    "class": "RemoveAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "attribute": "WINDFURY"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

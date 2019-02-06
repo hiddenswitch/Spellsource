@@ -1,0 +1,16 @@
+{
+  "name": "Smug Theorist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "<b>Spell Damage +1</b>",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

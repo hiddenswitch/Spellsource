@@ -6,13 +6,16 @@ import net.demilich.metastone.game.entities.Entity;
 
 public class OrFilter extends EntityFilter {
 
-	public OrFilter(FilterDesc desc) {
+	public OrFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		EntityFilter[] filters = (EntityFilter[]) desc.get(FilterArg.FILTERS);
+		EntityFilter[] filters = (EntityFilter[]) getDesc().get(EntityFilterArg.FILTERS);
+		if (filters == null) {
+			return false;
+		}
 		for (EntityFilter filter : filters) {
 			if (filter.matches(context, player, entity, host)) {
 				return true;

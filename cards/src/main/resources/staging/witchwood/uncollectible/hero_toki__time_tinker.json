@@ -1,0 +1,20 @@
+{
+  "name": "Toki, Time-Tinker",
+  "baseManaCost": 3,
+  "type": "HERO",
+  "heroClass": "BLUE",
+  "rarity": "LEGENDARY",
+  "description": "<b>Battlecry:</b> Deal 3 damage to all minions and choose a <b>Passive</b> Treasure.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "NullSpell"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

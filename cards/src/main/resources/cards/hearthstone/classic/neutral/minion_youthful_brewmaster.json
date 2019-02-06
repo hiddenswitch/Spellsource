@@ -10,7 +10,8 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "ReturnTargetToHandSpell"
+      "class": "ReturnTargetToHandSpell",
+      "targetPlayer": "SELF"
     }
   },
   "attributes": {

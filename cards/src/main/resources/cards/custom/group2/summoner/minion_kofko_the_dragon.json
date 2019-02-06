@@ -1,0 +1,24 @@
+{
+  "name": "Kofko the Dragon",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Whenever you summon a minion, give it +3/+3.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "BuffSpell",
+      "target": "EVENT_TARGET",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

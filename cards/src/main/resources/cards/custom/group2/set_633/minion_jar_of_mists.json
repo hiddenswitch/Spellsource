@@ -1,0 +1,29 @@
+{
+  "name": "Jar of Mists",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: If it's your opponent's turn, summon a 6/6 Mistlurker.",
+  "deathrattle": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "INACTIVE"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_mistlurker",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

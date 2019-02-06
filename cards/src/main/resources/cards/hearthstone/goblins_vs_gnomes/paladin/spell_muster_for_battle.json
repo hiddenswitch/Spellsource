@@ -24,7 +24,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Shiramba's Song"
+    "SPELLSOURCE_NAME": "Shiramba's Song"
   },
   "collectible": true,
   "set": "GOBLINS_VS_GNOMES",

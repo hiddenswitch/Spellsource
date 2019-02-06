@@ -14,7 +14,7 @@
   "attributes": {
     "DEATHRATTLES": true,
     "DIVINE_SHIELD": true,
-    "NAME": "Hanjian Wu",
+    "SPELLSOURCE_NAME": "Hanjian Wu",
     "TAUNT": true
   },
   "collectible": true,

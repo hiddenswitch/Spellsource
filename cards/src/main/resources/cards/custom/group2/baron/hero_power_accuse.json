@@ -1,0 +1,25 @@
+{
+  "name": "Accuse",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "NAVY",
+  "rarity": "FREE",
+  "description": "Choose a minion. Force a random friendly minion to attack it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "description": "Choose a minion. Force a random friendly minion to attack it.",
+    "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "target": "FRIENDLY_MINIONS",
+      "spell": {
+        "class": "FightSpell"
+      },
+      "randomTarget": true,
+      "secondaryTarget": "TARGET"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

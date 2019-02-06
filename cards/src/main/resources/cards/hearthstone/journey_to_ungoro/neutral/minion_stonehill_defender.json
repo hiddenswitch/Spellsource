@@ -25,7 +25,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Rabid Tanuki",
+    "SPELLSOURCE_NAME": "Rabid Tanuki",
     "TAUNT": true
   },
   "collectible": true,

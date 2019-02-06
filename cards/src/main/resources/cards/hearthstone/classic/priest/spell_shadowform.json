@@ -18,7 +18,7 @@
       "class": "ConditionalSpell",
       "condition": {
         "class": "HasHeroPowerCondition",
-        "cardId": "hero_power_mind_shatter",
+        "card": "hero_power_mind_shatter",
         "invert": true
       },
       "spell": {

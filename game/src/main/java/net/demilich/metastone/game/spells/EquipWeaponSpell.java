@@ -1,11 +1,12 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -13,8 +14,11 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Equips the specified weapon in {@link SpellArg#CARD} or chooses a random one based on the {@link
@@ -57,7 +61,7 @@ public class EquipWeaponSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(TargetPlayer targetPlayer, WeaponCard weaponCard) {
+	public static SpellDesc create(TargetPlayer targetPlayer, Card weaponCard) {
 		Map<SpellArg, Object> arguments = new SpellDesc(EquipWeaponSpell.class);
 		arguments.put(SpellArg.CARD, weaponCard);
 		arguments.put(SpellArg.TARGET, EntityReference.NONE);
@@ -79,13 +83,14 @@ public class EquipWeaponSpell extends Spell {
 		return new SpellDesc(arguments);
 	}
 
-	public static SpellDesc create(WeaponCard weaponCard) {
+	public static SpellDesc create(Card weaponCard) {
 		return create(TargetPlayer.SELF, weaponCard);
 	}
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.TARGET_PLAYER);
 		String cardId = (String) desc.get(SpellArg.CARD);
 		CardList results = new CardArrayList();
 		if (cardId != null) {
@@ -94,17 +99,17 @@ public class EquipWeaponSpell extends Spell {
 				logger.error("onCast {} {}: The CARD {} was not found.", context.getGameId(), source, cardId);
 				return;
 			}
-			if (!(cardById instanceof WeaponCard)) {
+			if (!(cardById.getCardType() == CardType.WEAPON)) {
 				logger.error("onCast {} {}: The CARD {} is not a weapon that can be equipped.", context.getGameId(), source, cardById);
 				return;
 			}
 
-			WeaponCard weaponCard = (WeaponCard) cardById;
+			Card weaponCard = cardById;
 
 			results.add(weaponCard);
 		} else if (desc.getEntityFilter() != null || desc.getCardSource() != null) {
 			results.addAll(desc.getFilteredCards(context, player, source));
-			if (results.stream().anyMatch(c -> !(c instanceof WeaponCard))) {
+			if (results.stream().anyMatch(c -> !(c.getCardType() == CardType.WEAPON))) {
 				logger.error("onCast {} {}: The CARD_FILTER {} and CARD_SOURCE {} produced cards that aren't weapon cards", context.getGameId(), source, desc.getCardFilter(), desc.getCardSource());
 				return;
 			}
@@ -113,18 +118,23 @@ public class EquipWeaponSpell extends Spell {
 			return;
 		}
 
-		Weapon weapon = ((WeaponCard) context.getLogic().getRandom(results)).getWeapon();
-		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
-		for (SpellDesc spellDesc : desc.subSpells(0)) {
-			if (weapon.isDestroyed()) {
-				logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
-				continue;
-			}
-
-			SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
+		if (results.isEmpty()) {
+			return;
 		}
 
+		Weapon weapon = context.getLogic().getRandom(results).createWeapon();
+		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
+		weapon = player.getHero().getWeapon();
+		if (weapon != null && weapon.getZone() == Zones.WEAPON) {
+			for (SpellDesc spellDesc : desc.subSpells(0)) {
+				if (weapon.isDestroyed()) {
+					logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
+					continue;
+				}
 
+				SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
+			}
+		}
 	}
 
 

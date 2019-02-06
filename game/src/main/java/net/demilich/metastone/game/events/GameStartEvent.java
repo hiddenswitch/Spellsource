@@ -9,7 +9,7 @@ public class GameStartEvent extends GameEvent {
 	public GameStartEvent(GameContext context, int playerId) {
 		super(context, playerId, -1);
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return null;

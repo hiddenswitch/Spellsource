@@ -1,0 +1,27 @@
+{
+  "name": "Cursing Disciple",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Battlecry: Give a minion \"Deathrattle: Summon a 5/1 Revenant.\"",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "AddDeathrattleSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_revenant"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "A Very Corrupted ThePixelDash"
+}

@@ -12,10 +12,7 @@ import java.io.DataInput;
 import java.io.DataInputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class CommunityDeckStringSerializer {
@@ -98,7 +95,7 @@ public class CommunityDeckStringSerializer {
 
 		return DeckCreateRequest.empty(userId, name, heroClass)
 				.withFormat(format)
-				.withCardIds(cardIds.stream().map(CommunityDeckStringSerializer::getRecord).map(Card::getCardId).collect(Collectors.toList()));
+				.withCardIds(cardIds.stream().map(CommunityDeckStringSerializer::getRecord).filter(Objects::nonNull).map(Card::getCardId).collect(Collectors.toList()));
 	}
 
 	private static int read(DataInput buffer) {

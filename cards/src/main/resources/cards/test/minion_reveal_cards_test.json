@@ -1,0 +1,24 @@
+{
+  "name": "",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardRevealedTrigger"
+    },
+    "spell": {
+      "class": "ModifyAttributeSpell",
+      "target": "TRIGGER_HOST",
+      "value": 1,
+      "attribute": "RESERVED_INTEGER_1"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

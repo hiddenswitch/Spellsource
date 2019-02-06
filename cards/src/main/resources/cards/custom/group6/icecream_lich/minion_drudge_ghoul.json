@@ -1,0 +1,20 @@
+{
+  "name": "Drudge Ghoul",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ICECREAM",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Return this minion to your hand.",
+  "deathrattle": {
+    "class": "ReturnTargetToHandSpell",
+    "target": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

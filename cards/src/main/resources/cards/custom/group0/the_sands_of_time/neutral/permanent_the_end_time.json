@@ -1,0 +1,73 @@
+{
+  "name": "The End Time",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "At the end of your turn, summon a 2/2 Infinite Warden. Lasts [40 turns], then destroys all enemies.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "EitherOrSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "SELF",
+          "value": 1,
+          "attribute": "RESERVED_INTEGER_1",
+          "operation": "LESS_OR_EQUAL"
+        },
+        "spell1": {
+          "class": "DestroySpell",
+          "target": "SELF"
+        },
+        "spell2": {
+          "class": "ModifyAttributeSpell",
+          "target": "SELF",
+          "value": -1,
+          "attribute": "RESERVED_INTEGER_1"
+        }
+      },
+      "maxFires": 40
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_infinite_warden"
+      }
+    }
+  ],
+  "deathrattle": {
+    "class": "DestroySpell",
+    "target": "ENEMY_CHARACTERS"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "PERMANENT": true,
+    "RESERVED_INTEGER_1": 40
+  },
+  "collectible": true,
+  "set": "SANDS_OF_TIME",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 40
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
+}

@@ -1,14 +1,5 @@
 package net.demilich.metastone.tests;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.demilich.metastone.tests.util.TestBase;
-import net.demilich.metastone.tests.util.TestMinionCard;
-import net.demilich.metastone.tests.util.TestSpellCard;
-import org.testng.Assert;
-import org.testng.annotations.Test;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -19,6 +10,14 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.tests.util.TestBase;
+import net.demilich.metastone.tests.util.TestMinionCard;
+import net.demilich.metastone.tests.util.TestSpellCard;
+import org.testng.Assert;
+import org.testng.annotations.Test;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TechnicalTests extends TestBase {
 

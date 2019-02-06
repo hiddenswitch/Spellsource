@@ -1,0 +1,20 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Spend all your mana.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "GainManaSpell",
+    "value": {
+      "class": "PlayerAttributeValueProvider",
+      "multiplier": -1,
+      "playerAttribute": "MANA"
+    }
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

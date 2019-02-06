@@ -1,0 +1,62 @@
+{
+  "name": "Omelette Chef",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Battlecry: Destroy a 0-Attack minion. If it's an enemy one, Silence it first.",
+  "battlecry": {
+    "condition": {
+      "class": "AnyMatchFilterCondition",
+      "target": "ALL_OTHER_MINIONS",
+      "filter": {
+        "class": "AttributeFilter",
+        "value": 0,
+        "attribute": "ATTACK",
+        "operation": "EQUAL"
+      }
+    },
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "OwnedByPlayerCondition",
+        "targetPlayer": "OPPONENT"
+      },
+      "spell1": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "SilenceSpell"
+          },
+          {
+            "class": "DestroySpell",
+            "filter": {
+              "class": "AttributeFilter",
+              "value": 0,
+              "attribute": "ATTACK",
+              "operation": "EQUAL"
+            }
+          }
+        ]
+      },
+      "spell2": {
+        "class": "DestroySpell",
+        "filter": {
+          "class": "AttributeFilter",
+          "value": 0,
+          "attribute": "ATTACK",
+          "operation": "EQUAL"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

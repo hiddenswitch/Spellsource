@@ -1,0 +1,12 @@
+{
+  "name": "Manhunter Ivan",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "<i>Watch your step, this traitor is an expert trapper.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
