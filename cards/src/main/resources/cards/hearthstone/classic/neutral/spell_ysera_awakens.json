@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Deal 5 damage to all characters except Ysera.",
+  "description": "Deal $5 damage to all characters except Ysera.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
@@ -12,7 +12,7 @@
     "value": 5,
     "filter": {
       "class": "SpecificCardFilter",
-      "cardId": "minion_ysera",
+      "card": "minion_ysera",
       "invert": true
     }
   },

@@ -6,7 +6,8 @@
   "rarity": "LEGENDARY",
   "description": "Quest: Play five minions with the same name. Reward: Crystal Core.",
   "quest": {
-    "class": "CavernsBelowTrigger"
+    "class": "CavernsBelowTrigger",
+    "targetPlayer": "SELF"
   },
   "countUntilCast": 5,
   "targetSelection": "NONE",

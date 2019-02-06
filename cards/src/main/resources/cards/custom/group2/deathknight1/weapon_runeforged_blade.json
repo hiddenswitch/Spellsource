@@ -1,0 +1,13 @@
+{
+  "name": "Runeforged Blade",
+  "baseManaCost": 3,
+  "type": "WEAPON",
+  "heroClass": "ICE",
+  "damage": 2,
+  "durability": 3,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

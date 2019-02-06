@@ -1,0 +1,27 @@
+{
+  "name": "Zarmull, the Silent Mercenary",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Destroy all Marked minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "HasEnchantmentFilter",
+        "card": "enchantment_marked"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

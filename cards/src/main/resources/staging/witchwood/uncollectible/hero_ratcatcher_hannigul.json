@@ -1,0 +1,12 @@
+{
+  "name": "Ratcatcher Hannigul",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "VIOLET",
+  "rarity": "FREE",
+  "description": "<i>Rats aren't always the most loyal pets.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

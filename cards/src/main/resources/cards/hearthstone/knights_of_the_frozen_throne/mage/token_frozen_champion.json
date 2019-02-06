@@ -12,6 +12,9 @@
     "cardFilter": {
       "class": "CardFilter",
       "rarity": "LEGENDARY"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
     }
   },
   "attributes": {

@@ -1,0 +1,25 @@
+{
+  "name": "Paranoia",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Choose a minion. After a minion is played, it attacks the minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "AfterMinionPlayedTrigger"
+      },
+      "spell": {
+        "class": "FightSpell",
+        "target": "TRIGGER_HOST",
+        "secondaryTarget": "EVENT_TARGET"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

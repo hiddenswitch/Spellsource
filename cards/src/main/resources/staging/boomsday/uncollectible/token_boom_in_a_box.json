@@ -1,0 +1,20 @@
+{
+  "name": "Boom-in-a-Box",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 10,
+  "rarity": "FREE",
+  "description": "<b>Stealth</b>\n<b>Deathrattle:</b>Deal 100 damage to the enemy hero.",
+  "deathrattle": {
+    "class": "NullSpell"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "STEALTH": true
+  },
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

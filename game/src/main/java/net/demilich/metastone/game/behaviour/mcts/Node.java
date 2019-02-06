@@ -1,15 +1,16 @@
 package net.demilich.metastone.game.behaviour.mcts;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.actions.GameAction;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
-import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
-
-class Node {
+/**
+ * A node in the Monte Carlo Tree Search tree.
+ */
+public class Node {
 
 	private GameContext state;
 	private List<GameAction> validTransitions;
@@ -101,7 +102,7 @@ class Node {
 		return state.updateAndGetGameOver();
 	}
 
-	public void process(ITreePolicy treePolicy) {
+	public void process(TreePolicy treePolicy) {
 		List<Node> visited = new LinkedList<Node>();
 		Node current = this;
 		visited.add(this);
@@ -129,9 +130,6 @@ class Node {
 		}
 
 		GameContext simulation = node.getState().clone();
-		for (Player player : simulation.getPlayers()) {
-			player.setBehaviour(new PlayRandomBehaviour());
-		}
 
 		simulation.takeActionInTurn();
 

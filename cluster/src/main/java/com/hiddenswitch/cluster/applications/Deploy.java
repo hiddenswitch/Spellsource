@@ -36,7 +36,7 @@ public class Deploy {
 		Logger logger = Common.getLogger(Deploy.class);
 
 		String appArgs = "";
-		String jar = "cluster/build/libs/cluster-1.3.0-all.jar";
+		String jar = "cluster/build/libs/cluster-0.7.6-all.jar";
 		String mainClass = LegacyDeckTester.class.getName();
 		String bucketName = "clustercode";
 		String jobId = RandomStringUtils.randomAlphanumeric(8);
@@ -73,13 +73,13 @@ public class Deploy {
 		} catch (ParseException e) {
 			System.err.println(e.getMessage());
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Deploy --help", options);
+			formatter.printHelp("java -cp cluster/build/libs/cluster-0.7.6-all.jar com.hiddenswitch.cluster.applications.Deploy --help", options);
 			return;
 		}
 
 		if (cmd.hasOption(HELP)) {
 			HelpFormatter formatter = new HelpFormatter();
-			formatter.printHelp("java -cp cluster/build/libs/cluster-1.3.0-all.jar com.hiddenswitch.cluster.applications.Deploy --help", options);
+			formatter.printHelp("java -cp cluster/build/libs/cluster-0.7.6-all.jar com.hiddenswitch.cluster.applications.Deploy --help", options);
 			return;
 		}
 

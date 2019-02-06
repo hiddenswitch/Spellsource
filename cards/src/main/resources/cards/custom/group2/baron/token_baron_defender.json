@@ -1,0 +1,16 @@
+{
+  "name": "Baron Defender",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

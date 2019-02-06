@@ -1,0 +1,17 @@
+{
+  "name": "Gilnean Royal Guard",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "<b>Divine Shield</b>, <b>Rush</b> Each turn this is in your hand, swap its Attack and Health.",
+  "attributes": {
+    "DIVINE_SHIELD": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

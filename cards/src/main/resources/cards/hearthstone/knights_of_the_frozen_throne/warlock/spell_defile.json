@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Deal 1 damage to all minions. If any die, cast this again.",
+  "description": "Deal $1 damage to all minions. If any die, cast this again.",
   "targetSelection": "NONE",
   "spell": {
     "class": "custom.RecastIfMinionsDestroyedSpell",

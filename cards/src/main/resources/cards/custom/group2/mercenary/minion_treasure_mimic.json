@@ -1,0 +1,28 @@
+{
+  "name": "Treasure Mimic",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Deathrattle: Equip a random weapon for enemy hero.",
+  "deathrattle": {
+    "class": "EquipWeaponSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "cardType": "WEAPON"
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

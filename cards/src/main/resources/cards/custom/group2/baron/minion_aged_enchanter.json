@@ -1,0 +1,26 @@
+{
+  "name": "Aged Enchanter",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Give your minions that attacked this turn +2/+2.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "HasAttackedFilter"
+      },
+      "hpBonus": 2
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

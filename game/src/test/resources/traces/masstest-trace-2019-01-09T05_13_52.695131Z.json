@@ -1,0 +1,10 @@
+{
+  "seed" : 988869105110714753,
+  "catalogueVersion" : 1,
+  "heroClasses" : [ "BLOOD", "NEONGREEN" ],
+  "deckCardIds" : [ [ "spell_grim_awakening", "minion_mimirons_head", "spell_crimson_flow", "spell_merciless_strike", "weapon_midnight_blade", "minion_runic_sorceress", "minion_blood_elf_champion", "spell_merciless_strike", "minion_toxicologist", "minion_hemet_jungle_hunter", "minion_lifetaker", "weapon_midnight_blade", "minion_mindshaper", "minion_mindshaper", "minion_blood_elf_champion", "minion_nozdormu", "spell_scarlet_thirst", "minion_nerubian_egg", "minion_dirty_rat", "minion_genn_greymane", "minion_grimscale_oracle", "minion_thassarian", "minion_coldlight_seer", "minion_skullsplitter_troll", "minion_marrow_render", "minion_lifetaker", "spell_systemic_transfer", "minion_keening_banshee", "spell_harness_suffering", "minion_bloodrider" ], [ "minion_blingtron_3000", "spell_chaos_bolts", "spell_warp", "spell_chaos_bolts", "minion_silithid_swarmer", "minion_emperor_thaurissan", "minion_hope_eater", "permanent_formless_rancour", "spell_quasar_blast", "minion_force-tank_max", "minion_knight_eternal", "minion_daring_reporter", "minion_igneous_elemental", "minion_arena_patron", "minion_carnivorous_cube", "minion_soup_vendor", "spell_malignancy", "minion_feugen", "minion_sunwalker", "minion_lone_champion", "minion_realm_parasite", "spell_malignancy", "minion_shieldbearer", "spell_primordial_supremacy", "spell_cull_and_reap", "minion_mind_harvester", "minion_cybernetic_rager", "minion_sunwalker", "permanent_formless_wormhole", "minion_mind_harvester" ] ],
+  "deckFormatName" : "Spellsource",
+  "deckFormatSets" : [ "CLASSIC", "JOURNEY_TO_UNGORO", "RASTAKHANS_RUMBLE", "GOBLINS_VS_GNOMES", "THE_GRAND_TOURNAMENT", "MEAN_STREETS_OF_GADGETZAN", "CUSTOM", "ONE_NIGHT_IN_KARAZHAN", "PROMO", "REWARD", "BOOMSDAY_PROJECT", "HALL_OF_FAME", "BASIC", "NAXXRAMAS", "THE_OLD_GODS", "BLACKROCK_MOUNTAIN", "WITCHWOOD", "KNIGHTS_OF_THE_FROZEN_THRONE", "LEAGUE_OF_EXPLORERS", "KOBOLDS_AND_CATACOMBS" ],
+  "mulligans" : [ [ 9 ], [ 50 ] ],
+  "actions" : [ 1, 0, 1, 2, 0, 0, 3, 2, 0, 4, 1, 0, 11, 6, 7, 0, 23, 11, 12, 4, 6, 0, 11, 10, 13, 3, 6, 3, 0, 1, 5, 0, 0, 18 ]
+}

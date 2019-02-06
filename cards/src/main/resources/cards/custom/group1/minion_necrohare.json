@@ -1,0 +1,22 @@
+{
+  "name": "Necrohare",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "VIOLET",
+  "baseAttack": 4,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "description": "Charge. Deathrattle: Return this minion to your hand.",
+  "deathrattle": {
+    "class": "ReturnTargetToHandSpell",
+    "target": "SELF"
+  },
+  "attributes": {
+    "CHARGE": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "author": "krowski_nall"
+}

@@ -5,6 +5,13 @@
   "heroClass": "RED",
   "rarity": "EPIC",
   "description": "Deal 3 damage to all damaged minions.",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "ALL_MINIONS",
+    "filter": {
+      "class": "DamagedFilter"
+    }
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

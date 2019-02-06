@@ -1,0 +1,28 @@
+{
+  "name": "Ritual Dagger",
+  "baseManaCost": 2,
+  "type": "WEAPON",
+  "heroClass": "ROSE",
+  "damage": 2,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Add a random Voodoo spell to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_divination",
+        "spell_frenzy",
+        "spell_hex_bolt",
+        "spell_spirit_bind"
+      ],
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

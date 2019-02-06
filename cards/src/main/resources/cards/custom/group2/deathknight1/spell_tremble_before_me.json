@@ -1,0 +1,19 @@
+{
+  "name": "Tremble Before Me!",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "COMMON",
+  "description": "Echo. Freeze a minion.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "attribute": "FROZEN"
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

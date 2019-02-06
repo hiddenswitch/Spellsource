@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 8,
   "rarity": "COMMON",
-  "description": "Inspire: Restore 2 Health to your Hero.",
+  "description": "Inspire: Restore #2 Health to your Hero.",
   "trigger": {
     "eventTrigger": {
       "class": "InspireTrigger",

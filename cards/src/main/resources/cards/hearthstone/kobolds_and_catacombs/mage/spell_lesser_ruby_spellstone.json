@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "RARE",
-  "description": "Add 1 random Mage spell to your hand. (Play 2 Elementals to upgrade.)",
+  "description": "Add 1 random Mage spell to your hand. (Play [2] Elemental[s] to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 2,
     "eventTrigger": {
@@ -28,22 +28,39 @@
   "spell": {
     "class": "ReceiveCardSpell",
     "cardFilter": {
-      "class": "AndFilter",
-      "filters": [
-        {
-          "class": "CardFilter",
-          "heroClass": "BLUE",
-          "cardType": "SPELL"
-        },
-        {
-          "class": "CardFilter",
-          "rarity": "LEGENDARY",
-          "invert": true
-        }
-      ]
+      "class": "CardFilter",
+      "heroClass": "BLUE",
+      "cardType": "SPELL"
     }
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "SpellstoneValueProvider"
+          }
+        },
+        " more"
+      ]
+    },
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "EQUAL",
+        "value1": {
+          "class": "SpellstoneValueProvider"
+        },
+        "value2": 1
+      },
+      "description1": "",
+      "description2": "s"
+    }
+  ]
 }

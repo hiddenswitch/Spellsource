@@ -3,7 +3,6 @@ package com.hiddenswitch.spellsource.impl.util;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 
@@ -14,7 +13,6 @@ public class MongoRecord implements Serializable {
 	public static final String ID = "_id";
 	@JsonInclude(JsonInclude.Include.NON_NULL)
 	@JsonProperty(value = ID)
-	@SerializedName(ID)
 	protected String _id;
 
 	@JsonIgnore

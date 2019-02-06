@@ -1,0 +1,30 @@
+{
+  "name": "Blood Boil",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "COMMON",
+  "description": "Deal $2 damage to all enemies. Restore #1 Health to your hero for each one hit.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "EntityCounter",
+          "target": "ENEMY_CHARACTERS"
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 2
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,32 +1,33 @@
-//
-// Built on Fri Mar 09 18:42:29 CET 2018 by logback-translator
-// For more information on configuration files in Groovy
-// please see http://logback.qos.ch/manual/groovy.html
-
-// For assistance related to this tool or configuration files
-// in general, please contact the logback user mailing list at
-//    http://qos.ch/mailman/listinfo/logback-user
-
-// For professional support please see
-//   http://www.qos.ch/shop/products/professionalSupport
-
+/**
+ * Logging settings for Spellsource.
+ *
+ * To set a specific minimum logging level for all game code, set the environment variable SPELLSOURCE_LOGGING_LEVEL.
+ * For example, to see all tracing while running a server:
+ *
+ * SPELLSOURCE_LOGGING_LEVEL=TRACE gradle net:local
+ */
 import ca.pjer.logback.AwsLogsAppender
+import ch.qos.logback.classic.Level
 import ch.qos.logback.classic.PatternLayout
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder
 import ch.qos.logback.classic.filter.ThresholdFilter
-import ch.qos.logback.core.ConsoleAppender
-import ch.qos.logback.classic.Level
 
-import static ch.qos.logback.classic.Level.DEBUG
-import static ch.qos.logback.classic.Level.ERROR
+import static ch.qos.logback.classic.Level.*
 
 def date = timestamp("yyyyMMdd")
-def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
+def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null || System.getenv("AWS_ACCESS_KEY_ID") != null
+Level defaultLevel = null;
+
+if (System.getenv().containsKey("SPELLSOURCE_LOGGING_LEVEL")) {
+    defaultLevel = Level.valueOf(System.getenv("SPELLSOURCE_LOGGING_LEVEL"))
+} else {
+    defaultLevel = WARN;
+}
 
 if (isAWS) {
     appender("ASYNC_AWS_LOGS", AwsLogsAppender) {
         filter(ThresholdFilter) {
-            level = INFO
+            level = TRACE
         }
 
         layout(PatternLayout) {
@@ -48,7 +49,7 @@ appender("STDOUT", ConsoleAppender) {
     }
 
     filter(ThresholdFilter) {
-        level = isAWS ? ERROR : DEBUG
+        level = isAWS ? defaultLevel : TRACE
     }
 }
 
@@ -56,3 +57,24 @@ root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 
 logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
+logger("org.reflections", ERROR)
+logger("co.paralleluniverse", ERROR)
+logger("net.demilich", WARN)
+logger("io.vertx", INFO)
+
+// Production group
+logger("com.hiddenswitch", INFO)
+logger("com.hiddenswitch.spellsource.util", ERROR)
+logger("com.hiddenswitch.spellsource.concurrent", ERROR)
+logger("com.hiddenswitch.spellsource.Connection", defaultLevel)
+logger("com.hiddenswitch.spellsource.Matchmaking", defaultLevel)
+logger("com.hiddenswitch.spellsource.Games", defaultLevel)
+logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", defaultLevel)
+logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
+logger("com.hiddenswitch.spellsource.Gateway", INFO)
+
+// Test group
+logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
+logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", TRACE)
+logger("com.neovisionaries.ws.client", WARN)
+logger("org.asynchttpclient", WARN)

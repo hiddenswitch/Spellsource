@@ -1,4 +1,4 @@
-# client
+# spellsource-client
 
 ## Requirements
 
@@ -26,9 +26,9 @@ Add this dependency to your project's POM:
 
 ```xml
 <dependency>
-    <groupId>io.swagger</groupId>
-    <artifactId>client</artifactId>
-    <version>1.0.0</version>
+    <groupId>com.hiddenswitch</groupId>
+    <artifactId>spellsource-client</artifactId>
+    <version>0.8.7</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "io.swagger:client:1.0.0"
+compile "com.hiddenswitch:spellsource-client:0.8.7"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/client-1.0.0.jar
+* target/spellsource-client-0.8.7.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -60,7 +60,7 @@ Please follow the [installation](#installation) instruction and execute the foll
 
 import com.hiddenswitch.spellsource.client.*;
 import com.hiddenswitch.spellsource.client.auth.*;
-import com.hiddenswitch.spellsource.client.model.*;
+import com.hiddenswitch.spellsource.client.models.*;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
 
 import java.io.File;
@@ -78,12 +78,13 @@ public class DefaultApiExample {
         //TokenSecurity.setApiKeyPrefix("Token");
 
         DefaultApi apiInstance = new DefaultApi();
-        ChangePasswordRequest request = new ChangePasswordRequest(); // ChangePasswordRequest | 
+        String inviteId = "inviteId_example"; // String | 
+        AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
         try {
-            ChangePasswordResponse result = apiInstance.changePassword(request);
+            AcceptInviteResponse result = apiInstance.acceptInvite(inviteId, request);
             System.out.println(result);
         } catch (ApiException e) {
-            System.err.println("Exception when calling DefaultApi#changePassword");
+            System.err.println("Exception when calling DefaultApi#acceptInvite");
             e.printStackTrace();
         }
     }
@@ -93,10 +94,11 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://metastone-dev.us-west-2.elasticbeanstalk.com*
+All URIs are relative to *https://api.hiddenswitch.com/api/v3*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
+*DefaultApi* | [**acceptInvite**](docs/DefaultApi.md#acceptInvite) | **POST** /invites/{inviteId} | 
 *DefaultApi* | [**changePassword**](docs/DefaultApi.md#changePassword) | **POST** /accounts-password | 
 *DefaultApi* | [**createAccount**](docs/DefaultApi.md#createAccount) | **PUT** /accounts | 
 *DefaultApi* | [**decksDelete**](docs/DefaultApi.md#decksDelete) | **DELETE** /decks/{deckId} | 
@@ -104,6 +106,7 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**decksGetAll**](docs/DefaultApi.md#decksGetAll) | **GET** /decks | 
 *DefaultApi* | [**decksPut**](docs/DefaultApi.md#decksPut) | **PUT** /decks | 
 *DefaultApi* | [**decksUpdate**](docs/DefaultApi.md#decksUpdate) | **POST** /decks/{deckId} | 
+*DefaultApi* | [**deleteInvite**](docs/DefaultApi.md#deleteInvite) | **DELETE** /invites/{inviteId} | 
 *DefaultApi* | [**draftsChooseCard**](docs/DefaultApi.md#draftsChooseCard) | **PUT** /drafts/cards | 
 *DefaultApi* | [**draftsChooseHero**](docs/DefaultApi.md#draftsChooseHero) | **PUT** /drafts/hero | 
 *DefaultApi* | [**draftsGet**](docs/DefaultApi.md#draftsGet) | **GET** /drafts | 
@@ -113,30 +116,34 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getCards**](docs/DefaultApi.md#getCards) | **GET** /cards | 
-*DefaultApi* | [**getFriendConversation**](docs/DefaultApi.md#getFriendConversation) | **GET** /friends/{friendId}/conversation | 
+*DefaultApi* | [**getGameRecord**](docs/DefaultApi.md#getGameRecord) | **GET** /games/{gameId} | 
+*DefaultApi* | [**getGameRecordIds**](docs/DefaultApi.md#getGameRecordIds) | **GET** /games | 
+*DefaultApi* | [**getInvite**](docs/DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
+*DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
+*DefaultApi* | [**getVersion**](docs/DefaultApi.md#getVersion) | **GET** /version | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
-*DefaultApi* | [**matchmakingConstructedDelete**](docs/DefaultApi.md#matchmakingConstructedDelete) | **DELETE** /matchmaking/{queueId} | 
-*DefaultApi* | [**matchmakingConstructedGet**](docs/DefaultApi.md#matchmakingConstructedGet) | **GET** /matchmaking/{queueId} | 
-*DefaultApi* | [**matchmakingConstructedQueueDelete**](docs/DefaultApi.md#matchmakingConstructedQueueDelete) | **DELETE** /matchmaking | 
-*DefaultApi* | [**matchmakingConstructedQueuePut**](docs/DefaultApi.md#matchmakingConstructedQueuePut) | **PUT** /matchmaking/{queueId} | 
+*DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
 *DefaultApi* | [**matchmakingGet**](docs/DefaultApi.md#matchmakingGet) | **GET** /matchmaking | 
-*DefaultApi* | [**sendFriendMessage**](docs/DefaultApi.md#sendFriendMessage) | **PUT** /friends/{friendId}/conversation | 
+*DefaultApi* | [**postInvite**](docs/DefaultApi.md#postInvite) | **POST** /invites | 
 
 
 ## Documentation for Models
 
+ - [AcceptInviteRequest](docs/AcceptInviteRequest.md)
+ - [AcceptInviteResponse](docs/AcceptInviteResponse.md)
  - [Account](docs/Account.md)
  - [CardEvent](docs/CardEvent.md)
  - [CardRecord](docs/CardRecord.md)
  - [ChangePasswordRequest](docs/ChangePasswordRequest.md)
  - [ChangePasswordResponse](docs/ChangePasswordResponse.md)
+ - [ChatMessage](docs/ChatMessage.md)
  - [ChooseOneOptions](docs/ChooseOneOptions.md)
  - [ClientToServerMessage](docs/ClientToServerMessage.md)
  - [ClientToServerMessageFirstMessage](docs/ClientToServerMessageFirstMessage.md)
- - [Conversation](docs/Conversation.md)
  - [CreateAccountRequest](docs/CreateAccountRequest.md)
  - [CreateAccountResponse](docs/CreateAccountResponse.md)
+ - [DamageTypeEnum](docs/DamageTypeEnum.md)
  - [DecksGetAllResponse](docs/DecksGetAllResponse.md)
  - [DecksGetResponse](docs/DecksGetResponse.md)
  - [DecksPutRequest](docs/DecksPutRequest.md)
@@ -144,16 +151,32 @@ Class | Method | HTTP request | Description
  - [DecksUpdateCommand](docs/DecksUpdateCommand.md)
  - [DecksUpdateCommandPushCardIds](docs/DecksUpdateCommandPushCardIds.md)
  - [DecksUpdateCommandPushInventoryIds](docs/DecksUpdateCommandPushInventoryIds.md)
+ - [DefaultMethodResponse](docs/DefaultMethodResponse.md)
  - [DraftState](docs/DraftState.md)
  - [DraftsChooseCardRequest](docs/DraftsChooseCardRequest.md)
  - [DraftsChooseHeroRequest](docs/DraftsChooseHeroRequest.md)
  - [DraftsPostRequest](docs/DraftsPostRequest.md)
  - [Emote](docs/Emote.md)
+ - [Enchantment](docs/Enchantment.md)
  - [Entity](docs/Entity.md)
  - [EntityChangeSet](docs/EntityChangeSet.md)
  - [EntityChangeSetInner](docs/EntityChangeSetInner.md)
  - [EntityLocation](docs/EntityLocation.md)
  - [EntityState](docs/EntityState.md)
+ - [Envelope](docs/Envelope.md)
+ - [EnvelopeAdded](docs/EnvelopeAdded.md)
+ - [EnvelopeChanged](docs/EnvelopeChanged.md)
+ - [EnvelopeGame](docs/EnvelopeGame.md)
+ - [EnvelopeMethod](docs/EnvelopeMethod.md)
+ - [EnvelopeMethodDequeue](docs/EnvelopeMethodDequeue.md)
+ - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
+ - [EnvelopeRemoved](docs/EnvelopeRemoved.md)
+ - [EnvelopeRequest](docs/EnvelopeRequest.md)
+ - [EnvelopeResponse](docs/EnvelopeResponse.md)
+ - [EnvelopeResult](docs/EnvelopeResult.md)
+ - [EnvelopeResultSendMessage](docs/EnvelopeResultSendMessage.md)
+ - [EnvelopeSub](docs/EnvelopeSub.md)
+ - [EnvelopeSubConversation](docs/EnvelopeSubConversation.md)
  - [Friend](docs/Friend.md)
  - [FriendPutRequest](docs/FriendPutRequest.md)
  - [FriendPutResponse](docs/FriendPutResponse.md)
@@ -165,6 +188,7 @@ Class | Method | HTTP request | Description
  - [GameEventArmorGained](docs/GameEventArmorGained.md)
  - [GameEventBeforeSummon](docs/GameEventBeforeSummon.md)
  - [GameEventDamage](docs/GameEventDamage.md)
+ - [GameEventFatigue](docs/GameEventFatigue.md)
  - [GameEventHeal](docs/GameEventHeal.md)
  - [GameEventHeroPowerUsed](docs/GameEventHeroPowerUsed.md)
  - [GameEventJoust](docs/GameEventJoust.md)
@@ -184,25 +208,30 @@ Class | Method | HTTP request | Description
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [GetCardsResponse](docs/GetCardsResponse.md)
- - [GetConversationResponse](docs/GetConversationResponse.md)
+ - [GetGameRecordIdsResponse](docs/GetGameRecordIdsResponse.md)
+ - [GetGameRecordResponse](docs/GetGameRecordResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
- - [JavaSerializationObject](docs/JavaSerializationObject.md)
+ - [Invite](docs/Invite.md)
+ - [InviteGetResponse](docs/InviteGetResponse.md)
+ - [InvitePostRequest](docs/InvitePostRequest.md)
+ - [InviteResponse](docs/InviteResponse.md)
  - [LoginRequest](docs/LoginRequest.md)
  - [LoginResponse](docs/LoginResponse.md)
+ - [Match](docs/Match.md)
  - [MatchCancelResponse](docs/MatchCancelResponse.md)
  - [MatchConcedeResponse](docs/MatchConcedeResponse.md)
- - [MatchmakingDeck](docs/MatchmakingDeck.md)
  - [MatchmakingQueueItem](docs/MatchmakingQueueItem.md)
  - [MatchmakingQueueItemRequires](docs/MatchmakingQueueItemRequires.md)
  - [MatchmakingQueuePutRequest](docs/MatchmakingQueuePutRequest.md)
  - [MatchmakingQueuePutResponse](docs/MatchmakingQueuePutResponse.md)
  - [MatchmakingQueuePutResponseUnityConnection](docs/MatchmakingQueuePutResponseUnityConnection.md)
  - [MatchmakingQueuesResponse](docs/MatchmakingQueuesResponse.md)
- - [Message](docs/Message.md)
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
- - [SendMessageRequest](docs/SendMessageRequest.md)
- - [SendMessageResponse](docs/SendMessageResponse.md)
+ - [PresenceEnum](docs/PresenceEnum.md)
+ - [Replay](docs/Replay.md)
+ - [ReplayDeltas](docs/ReplayDeltas.md)
+ - [ReplayGameStates](docs/ReplayGameStates.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
  - [SpellAction](docs/SpellAction.md)
  - [SpellsourceException](docs/SpellsourceException.md)
@@ -225,9 +254,9 @@ Authentication schemes defined for the API:
 
 ## Recommendation
 
-It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issue.
+It's recommended to create an instance of `ApiClient` per thread in a multithreaded environment to avoid any potential issues.
 
 ## Author
 
-benjamin.s.berman@gmail.com
+ben@hiddenswitch.com
 

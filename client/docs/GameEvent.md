@@ -37,8 +37,9 @@ Name | Type | Description | Notes
 **summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
-**mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
+**roasted** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
+**fatigue** | [**GameEventFatigue**](GameEventFatigue.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
 
 
@@ -48,33 +49,44 @@ Name | Value
 ---- | -----
 ALL | &quot;ALL&quot;
 AFTER_PHYSICAL_ATTACK | &quot;AFTER_PHYSICAL_ATTACK&quot;
+AFTER_PLAY_CARD | &quot;AFTER_PLAY_CARD&quot;
 AFTER_SPELL_CASTED | &quot;AFTER_SPELL_CASTED&quot;
 AFTER_SUMMON | &quot;AFTER_SUMMON&quot;
 ATTRIBUTE_APPLIED | &quot;ATTRIBUTE_APPLIED&quot;
 ARMOR_GAINED | &quot;ARMOR_GAINED&quot;
 BEFORE_SUMMON | &quot;BEFORE_SUMMON&quot;
 BOARD_CHANGED | &quot;BOARD_CHANGED&quot;
+CARD_ADDED_TO_DECK | &quot;CARD_ADDED_TO_DECK&quot;
+CARD_SHUFFLED | &quot;CARD_SHUFFLED&quot;
 DAMAGE | &quot;DAMAGE&quot;
 DISCARD | &quot;DISCARD&quot;
+DRAIN | &quot;DRAIN&quot;
 DRAW_CARD | &quot;DRAW_CARD&quot;
 ENRAGE_CHANGED | &quot;ENRAGE_CHANGED&quot;
 ENTITY_TOUCHED | &quot;ENTITY_TOUCHED&quot;
 ENTITY_UNTOUCHED | &quot;ENTITY_UNTOUCHED&quot;
+FATIGUE | &quot;FATIGUE&quot;
 GAME_START | &quot;GAME_START&quot;
 HEAL | &quot;HEAL&quot;
 HERO_POWER_USED | &quot;HERO_POWER_USED&quot;
+INVOKED | &quot;INVOKED&quot;
 JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;
-MILL | &quot;MILL&quot;
+LOSE_DEFLECT | &quot;LOSE_DEFLECT&quot;
+MAX_HP_INCREASED | &quot;MAX_HP_INCREASED&quot;
 MAX_MANA | &quot;MAX_MANA&quot;
+MANA_MODIFIED | &quot;MANA_MODIFIED&quot;
 OVERLOAD | &quot;OVERLOAD&quot;
 PERFORMED_GAME_ACTION | &quot;PERFORMED_GAME_ACTION&quot;
 PHYSICAL_ATTACK | &quot;PHYSICAL_ATTACK&quot;
 PLAY_CARD | &quot;PLAY_CARD&quot;
 PRE_DAMAGE | &quot;PRE_DAMAGE&quot;
+PRE_GAME_START | &quot;PRE_GAME_START&quot;
 QUEST_PLAYED | &quot;QUEST_PLAYED&quot;
 QUEST_SUCCESSFUL | &quot;QUEST_SUCCESSFUL&quot;
+RETURNED_TO_HAND | &quot;RETURNED_TO_HAND&quot;
+ROASTED | &quot;ROASTED&quot;
 REVEAL_CARD | &quot;REVEAL_CARD&quot;
 SECRET_PLAYED | &quot;SECRET_PLAYED&quot;
 SECRET_REVEALED | &quot;SECRET_REVEALED&quot;

@@ -4,50 +4,75 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardList;
-import net.demilich.metastone.game.cards.CardArrayList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.cards.AttributeMap;
 
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER} cards
+ * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
+ * <p>
+ * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
+ * <p>
+ * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
+ * <pre>
+ *   {
+ *     "class": "ShuffleToDeckSpell",
+ *     "card": "token_mur'ghoul",
+ *     "howMany": 3,
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
+ */
 public class ShuffleToDeckSpell extends Spell {
+
+	public static SpellDesc create(String card) {
+		SpellDesc desc = new SpellDesc(ShuffleToDeckSpell.class);
+		desc.put(SpellArg.CARD, card);
+		return desc;
+	}
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		Card card = null;
-		AttributeMap map = new AttributeMap();
+		int copies = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
+		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
+
 		if (target != null) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
-			map = SpellUtils.processKeptEnchantments(target, map);
-			card = target.getSourceCard().getCopy();
-		} else if (desc.containsKey(SpellArg.CARD_FILTER)) {
-			EntityFilter cardFilter = (EntityFilter) desc.get(SpellArg.CARD_FILTER);
-			CardList cards = CardCatalogue.query(context.getDeckFormat());
-			CardList result = new CardArrayList();
-			for (Card cardResult : cards) {
-				if (cardFilter.matches(context, player, cardResult, source)) {
-					result.addCard(cardResult);
+			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());
+			for (int i = 0; i < copies; i++) {
+				Card copy = CopyCardSpell.copyCard(context, player, target.getSourceCard(), (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+				copy.getAttributes().putAll(map);
+				if (copy.getZone() == Zones.DECK) {
+					SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
 				}
 			}
-			card = context.getLogic().getRandom(result);
-		} else {
-			String cardId = (String) desc.get(SpellArg.CARD);
-			card = context.getCardById(cardId);
+			return;
 		}
 
-		int howMany = desc.getValue(SpellArg.HOW_MANY, context, player, target, source, 1);
-		for (int i = 0; i < howMany; i++) {
-			if (card != null) {
-				final Card copy = card.getCopy();
-				copy.getAttributes().putAll(map);
-				context.getLogic().shuffleToDeck(player, copy);
-				SpellUtils.castChildSpell(context, player, subSpell, source, target, copy);
+		CardList cards = SpellUtils.getCards(context, player, target, source, desc,
+				desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
+
+		Map<Card, Boolean> didShuffle = new HashMap<>();
+		for (int i = 0; i < copies; i++) {
+			for (Card original : cards) {
+				Card copy = CopyCardSpell.copyCard(context, player, original, (playerId, card) -> context.getLogic().shuffleToDeck(player, card, quiet));
+				didShuffle.put(copy, copy.getZone() == Zones.DECK);
+			}
+		}
+
+		for (Card card : didShuffle.keySet()) {
+			if (didShuffle.get(card)) {
+				SpellUtils.castChildSpell(context, player, subSpell, source, target, card);
 			}
 		}
 	}

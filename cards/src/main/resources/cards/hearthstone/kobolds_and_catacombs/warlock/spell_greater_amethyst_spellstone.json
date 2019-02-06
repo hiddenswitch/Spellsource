@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Lifesteal. Deal 7 damage to a minion.",
+  "description": "Lifesteal. Deal $7 damage to a minion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "DamageSpell",

@@ -1,22 +1,28 @@
 package net.demilich.metastone.game.entities;
 
-import java.io.Serializable;
-
-import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.targeting.IdFactoryImpl;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
+import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
+import org.jetbrains.annotations.NotNull;
+
+import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An in-game entity.
@@ -41,6 +47,8 @@ import net.demilich.metastone.game.utils.AttributeMap;
  * to their opponents.
  */
 public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
+	private static Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
+	private static Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.
@@ -49,8 +57,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public static final int NO_OWNER = -1;
 
-	private String name;
-	private AttributeMap attributes = new AttributeMap();
+	protected String name;
+	protected AttributeMap attributes;
 	/**
 	 * @see #getId()
 	 */
@@ -66,6 +74,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 
 	protected Entity() {
 		super();
+		attributes = new AttributeMap();
 	}
 
 	/**
@@ -80,13 +89,17 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	@Override
 	public Entity clone() {
 		Entity clone = (Entity) super.clone();
+		// The attributes need to be cloned
+		if (attributes != null) {
+			clone.attributes = attributes.clone();
+		}
 		return clone;
 	}
 
 	/**
 	 * Gets the specified attribute.
 	 * <p>
-	 * Attributes are {@link Integer}, {@link String}, {@link String[]} or {@link Enum} types.
+	 * Attributes are {@link Integer}, {@link String}, {@link String} array or {@link Enum} types.
 	 *
 	 * @param attribute The attribute to look up.
 	 * @return The value of the attribute.
@@ -107,14 +120,25 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the specified attribute as an {@link Integer} value or fails with an exception.
+	 * Gets the specified attribute as an {@link Integer} value or {@code 0} if the specified attribute is of the wrong
+	 * type or is not found.
 	 *
 	 * @param attribute The {@link Attribute} to look up.
 	 * @return The attribute's value or 0 if it isn't set.
-	 * @throws ClassCastException if the {@link Attribute} is not an {@link Integer}
 	 */
-	public int getAttributeValue(Attribute attribute) throws ClassCastException {
-		return getAttributes().containsKey(attribute) ? (int) getAttributes().get(attribute) : 0;
+	public int getAttributeValue(Attribute attribute) {
+		return (int) getAttributes().getOrDefault(attribute, 0);
+	}
+
+	/**
+	 * Gets the specified attribute as an {@link Integer} value, defaulting to the specified value if the value is not an
+	 * integer.
+	 *
+	 * @param attribute The {@link Attribute} to look up.
+	 * @return The attribute's value or 0 if it isn't set.
+	 */
+	public int getAttributeValue(Attribute attribute, int defaultValue) {
+		return (int) getAttributes().getOrDefault(attribute, defaultValue);
 	}
 
 	/**
@@ -134,8 +158,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 *
 	 * @return The entity's ID, or {@link IdFactoryImpl#UNASSIGNED} if it is unassigned.
 	 * @see IdFactoryImpl for the class that generates IDs.
-	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the place where minion IDs are set.
-	 * @see GameLogic#assignCardIds(CardList, int) for the place where IDs are set for all the cards that start in the
+	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the place where minion IDs are set.
+	 * @see GameLogic#assignEntityIds(Iterable, int) for the place where IDs are set for all the cards that start in the
 	 * game.
 	 * @see EntityReference for a class used to store the notion of a "target."
 	 */
@@ -144,8 +168,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the name of the entity (typically the name of the card that created this entity). Or, overridden by the
-	 * {@link Attribute#NAME} attribute set in this entity's attributes.
+	 * Gets the name of the entity (typically the name of the card that created this entity). Or, overridden by the {@link
+	 * Attribute#NAME} attribute set in this entity's attributes.
 	 *
 	 * @return The name.
 	 */
@@ -178,8 +202,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Gets an {@link EntityReference} that points to this entity.
 	 *
 	 * @return An {@link EntityReference}.
-	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some
-	 * notion of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
+	 * @see EntityReference for a better understanding of how references can point to a specific entity or to some notion
+	 * of a group of entities (like {@link EntityReference#ENEMY_MINIONS}).
 	 */
 	public EntityReference getReference() {
 		return EntityReference.pointTo(this);
@@ -196,9 +220,15 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		if (value == null) {
 			return false;
 		}
+
+		if (value instanceof Boolean) {
+			return (boolean) value;
+		}
+
 		if (value instanceof Integer) {
 			return ((int) value) != 0;
 		}
+
 		return true;
 	}
 
@@ -206,7 +236,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Checks if the entity is destroyed. Overridden to take into account entities with hitpoints.
 	 *
 	 * @return {@code true} if it is destroyed.
-	 * @see {@link Actor#isDestroyed()} for a more complete implementation.
+	 * @see Actor#isDestroyed() for a more complete implementation.
 	 */
 	public boolean isDestroyed() {
 		return hasAttribute(Attribute.DESTROYED);
@@ -235,19 +265,19 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Sets an attribute. This will remove silencing when it is called. Since boolean values are not stored in
-	 * attributes, attributes that are "boolean" are just set to 1. Setting the value to 0 is not equivalent to not
-	 * having the attribute.
+	 * Sets an attribute. This will remove silencing when it is called. Since boolean values are not stored in attributes,
+	 * attributes that are "boolean" are just set to 1. Setting the value to 0 is not equivalent to not having the
+	 * attribute.
 	 *
 	 * @param attribute The attribute to set.
 	 */
 	public void setAttribute(Attribute attribute) {
 		clearSilence(attribute);
-		getAttributes().put(attribute, 1);
+		getAttributes().put(attribute, true);
 	}
 
 	private void clearSilence(Attribute attribute) {
-		if (!GameLogic.immuneToSilence.contains(attribute)) {
+		if (!GameLogic.IMMUNE_TO_SILENCE.contains(attribute)) {
 			getAttributes().remove(Attribute.SILENCED);
 		}
 	}
@@ -272,6 +302,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public void setAttribute(Attribute attribute, Object value) {
 		clearSilence(attribute);
+		if (value == null) {
+			return;
+		}
 		getAttributes().put(attribute, value);
 	}
 
@@ -288,18 +321,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Overwrites all the entity's attributes with the specified {@link AttributeMap}. Does not copy the attribute map,
-	 * so be careful with multiple entities references the same map.
-	 *
-	 * @param attributes The {@link AttributeMap}
-	 */
-	public void setAttributes(AttributeMap attributes) {
-		this.attributes = attributes;
-	}
-
-	/**
-	 * Entities with persistent effects need their events to be processed differently in order to record those
-	 * persistent values to a database.
+	 * Entities with persistent effects need their events to be processed differently in order to record those persistent
+	 * values to a database.
 	 *
 	 * @return {@code true} if the entity needs to have its persistent effects persisted.
 	 * @see Attribute#LAST_MINION_DESTROYED_CARD_ID for an example of a persistent attribute that needs to be stored
@@ -363,8 +386,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Should not be called.
 	 * <p>
-	 * Resets the entity's location by setting it to {@link EntityLocation#UNASSIGNED}. Typically only called by an
-	 * {@link EntityZone}.
+	 * Resets the entity's location by setting it to {@link EntityLocation#UNASSIGNED}. Typically only called by an {@link
+	 * EntityZone}.
 	 */
 	public void resetEntityLocations() {
 		entityLocation = EntityLocation.UNASSIGNED;
@@ -379,19 +402,32 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	@SuppressWarnings("unchecked")
 	public void moveOrAddTo(GameContext context, Zones destination) throws ArrayStoreException {
+		moveOrAddTo(context, destination, context.getPlayer(getOwner()).getZone(destination).size());
+	}
+
+	/**
+	 * Moves this entity to a new zone ({@link Zones}) belonging to the {@link Player} indexed by {@link #getOwner()}.
+	 *
+	 * @param context     The game context this entity is in.
+	 * @param destination The destination zone belonging to the player to move to.
+	 * @param index       The location in the zone to move or add to
+	 * @throws ArrayStoreException if the entity has no owner; or if the entity already exists in the destination.
+	 */
+	@SuppressWarnings("unchecked")
+	public void moveOrAddTo(GameContext context, Zones destination, int index) throws ArrayStoreException {
 		if (getOwner() == Entity.NO_OWNER) {
 			throw new ArrayStoreException("No owner for entity.");
 		}
 
 		final Player player = context.getPlayer(getOwner());
 		if (getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-			player.getZone(destination).add(this);
+			player.getZone(destination).add(index, this);
 		} else if (getEntityLocation().getZone() == destination) {
 			// Already in the destination.
 			throw new ArrayStoreException("Already in destination.");
 		} else {
 			final Zones currentZone = getEntityLocation().getZone();
-			player.getZone(currentZone).move(this, player.getZone(destination));
+			player.getZone(currentZone).move(getEntityLocation().getIndex(), player.getZone(destination), index);
 		}
 	}
 
@@ -410,8 +446,8 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * Limits the number of transformations to follow to 89.
 	 *
 	 * @param context A {@link GameContext} to perform lookups in.
-	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no
-	 * transformed entity is found.
+	 * @return This entity if no transform is found, otherwise follows the chain of resolved entities until no transformed
+	 * entity is found.
 	 */
 	public Entity transformResolved(GameContext context) {
 		return transformResolved(context, 89);
@@ -436,7 +472,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	/**
 	 * Gets the possibly modified description of the entity to render to the end user.
 	 *
-	 * @return The {@link #getSourceCard()}'s {@link Card#description} field, or the value specified in {@link
+	 * @return The {@link #getSourceCard()}'s {@link Card#getDescription()} field, or the value specified in {@link
 	 * Attribute#DESCRIPTION}.
 	 */
 	public String getDescription() {
@@ -463,8 +499,22 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 * @return The entity's defined game triggers
 	 * @see GameLogic#processGameTriggers(Player, Entity) for the place to activate these triggers.
 	 */
-	public TriggerDesc[] getGameTriggers() {
-		return (TriggerDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new TriggerDesc[0]);
+	public EnchantmentDesc[] getGameTriggers() {
+		return (EnchantmentDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new EnchantmentDesc[0]);
+	}
+
+	public DynamicDescriptionDesc[] getDynamicDescription() {
+		return getSourceCard() != null ? getSourceCard().getDesc().getDynamicDescription() : null;
+	}
+
+	public String[] evaluateDescriptions(GameContext context, Player player) {
+		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
+		String[] strings = new String[dynamicDescriptionDescs.length];
+
+		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
+			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
+		}
+		return strings;
 	}
 
 	@Override
@@ -474,4 +524,148 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 		return Integer.compare(this.getId(), o.getId());
 	}
+
+	@NotNull
+	public Race getRace() {
+		return (Race) getAttributes().getOrDefault(Attribute.RACE, Race.NONE);
+	}
+
+	/**
+	 * Indicates that the entity is in play by being in an in-play zone.
+	 *
+	 * @return {@code} true if the entity is visible to both players
+	 */
+	public boolean isInPlay() {
+		switch (getZone()) {
+			case QUEST:
+			case SECRET:
+			case HERO:
+			case HERO_POWER:
+			case BATTLEFIELD:
+			case WEAPON:
+			case PLAYER:
+				return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * The entity's index in its zone.
+	 *
+	 * @return {@link EntityLocation#UNASSIGNED} 's index if it isn't yet in a zone (typically {@code -1}), or the index
+	 * in the {@link #getZone()} this entity is in.
+	 */
+	public int getIndex() {
+		return getEntityLocation().getIndex();
+	}
+
+	/**
+	 * Is this entity removed peacefully?
+	 *
+	 * @return {@code true} if it's in the graveyard and didn't die violently, otherwise false.
+	 */
+	public boolean isRemovedPeacefully() {
+		return getZone() == Zones.GRAVEYARD && !hasAttribute(Attribute.DIED_ON_TURN);
+	}
+
+	/**
+	 * Gets an entity's description applying its {@link CardDesc#getDynamicDescription()} fields and parsing spell damage
+	 * and health restoration.
+	 *
+	 * @param context The context
+	 * @param player  The player whose POV this description should be evaluated
+	 * @return The dynamic description if this entity is a card, otherwise the {@link #getDescription()}.
+	 */
+	public String getDescription(GameContext context, Player player) {
+		String description = getDescription();
+		Card card = getSourceCard();
+
+		if (getDynamicDescription() != null
+				&& getDynamicDescription().length > 0
+				&& (isInPlay() || getZone() == Zones.HAND || getZone() == Zones.DECK)) {
+			// First parse dynamic descriptions
+			if (description.contains("[") && getDynamicDescription() != null) {
+				int i = 0;
+				String[] descriptions = evaluateDescriptions(context, player);
+				while (description.contains("[")) {
+					int start = description.indexOf("[");
+					int end = description.indexOf("]");
+					description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+				}
+			}
+		} else {
+			description = description.replace("[", "").replace("]", "");
+		}
+
+		// Handle spell damage
+		if (card.isSpell() || card.isHeroPower()) {
+			// Find the $ damages
+			Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
+			StringBuffer newDescription = new StringBuffer();
+
+			boolean matchedAtLeastOnce = false;
+			while (matcher.find()) {
+				// Skip the dollar sign in the beginning
+				int damage = Integer.parseInt(matcher.group(1));
+				int modifiedDamage;
+				if (card.getId() != GameLogic.UNASSIGNED) {
+					ValueProviderDesc desc = new ValueProviderDesc();
+					desc.put(ValueProviderArg.VALUE, damage);
+					desc.put(ValueProviderArg.CLASS, card.isSpell()
+							? SpellDamageValueProvider.class
+							: HeroPowerDamageValueProvider.class);
+					ValueProvider provider = desc.create();
+					modifiedDamage = provider.getValue(context, player, player.getHero(), card);
+				} else {
+					modifiedDamage = damage;
+				}
+				modifyDescription(matcher, newDescription, damage, modifiedDamage);
+				matchedAtLeastOnce = true;
+			}
+			if (matchedAtLeastOnce) {
+				matcher.appendTail(newDescription);
+				description = newDescription.toString();
+			}
+		}
+
+		// Healing
+		if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
+			StringBuffer newDescription = new StringBuffer();
+
+			boolean matchedAtLeastOnce = false;
+			while (matcher.find()) {
+				// Skip the # in the beginning
+				int healing = Integer.parseInt(matcher.group(1));
+				int modifiedHealing = healing;
+				if (card.getId() != GameLogic.UNASSIGNED) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+					if (card.isSpell()) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
+					}
+					if (card.isHeroPower()) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+					}
+				}
+				modifyDescription(matcher, newDescription, healing, modifiedHealing);
+				matchedAtLeastOnce = true;
+			}
+			if (matchedAtLeastOnce) {
+				matcher.appendTail(newDescription);
+				description = newDescription.toString();
+			}
+		}
+
+		return description;
+	}
+
+	private void modifyDescription(Matcher matcher, StringBuffer newDescription, int originalValue, int newValue) {
+		if (newValue != originalValue) {
+			matcher.appendReplacement(newDescription, String.format("*%d*", newValue));
+		} else {
+			matcher.appendReplacement(newDescription, Integer.toString(newValue));
+		}
+	}
+
 }

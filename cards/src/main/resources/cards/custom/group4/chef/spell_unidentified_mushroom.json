@@ -1,0 +1,94 @@
+{
+  "name": "Unidentified Mushroom",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and gains a bonus effect in your hand.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "cards": [
+        "spell_clarity_mushroom",
+        "spell_hallucinogenic_mushroom",
+        "spell_healing_mushroom",
+        "spell_toxic_mushroom"
+      ]
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "RandomlyCastSpell",
+    "spells": [
+      {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_clarity_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_clarity"
+          }
+        ]
+      },
+      {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_toxic_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_toxicity"
+          }
+        ]
+      },
+      {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_healing_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_healing"
+          }
+        ]
+      },
+      {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "RevealCardSpell",
+            "card": "spell_hallucinogenic_mushroom"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_mushroom_hallucinogenic"
+          }
+        ]
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

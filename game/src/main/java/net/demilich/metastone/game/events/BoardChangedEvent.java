@@ -8,7 +8,7 @@ public class BoardChangedEvent extends GameEvent {
 	public BoardChangedEvent(GameContext context) {
 		super(context, -1, -1);
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return null;

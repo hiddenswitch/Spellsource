@@ -9,7 +9,7 @@
   "spell": {
     "class": "DiscoverSpell",
     "cardSource": {
-      "class": "DeckSource"
+      "class": "TopThreeCardsOfDeckSource"
     },
     "exclusive": true,
     "spell1": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "FREE",
-  "description": "Deal 1 damage. Draw a card.",
+  "description": "Deal $1 damage. Draw a card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

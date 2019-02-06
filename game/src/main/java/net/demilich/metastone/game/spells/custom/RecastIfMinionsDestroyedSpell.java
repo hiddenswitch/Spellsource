@@ -10,7 +10,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 
-public class RecastIfMinionsDestroyedSpell extends RecastWhileSpell {
+public final class RecastIfMinionsDestroyedSpell extends RecastWhileSpell {
 	private int getDestroyedMinionsCount(GameContext context) {
 		return (int) context.getPlayers().stream()
 				.flatMap(p -> p.getMinions().stream())

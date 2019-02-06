@@ -1,0 +1,21 @@
+{
+  "name": "Cellular Overdrive",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "FREE",
+  "description": "Give your minions +2/+2 this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "attackBonus": 2,
+    "hpBonus": 2,
+    "revertTrigger": {
+      "class": "TurnEndTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

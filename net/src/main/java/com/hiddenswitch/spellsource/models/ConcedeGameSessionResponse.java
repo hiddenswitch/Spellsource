@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.models;
 import java.io.Serializable;
 
 /**
- * Created by bberman on 3/21/17.
+ * Indicates that the server tried to concede the game requested in a {@link ConcedeGameSessionRequest}.
  */
 public final class ConcedeGameSessionResponse implements Serializable {
 }

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "RARE",
-  "description": "Deal 5 damage to ALL characters.",
+  "description": "Deal $5 damage to ALL characters.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

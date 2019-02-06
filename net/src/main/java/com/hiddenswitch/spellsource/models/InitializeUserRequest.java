@@ -3,12 +3,12 @@ package com.hiddenswitch.spellsource.models;
 import java.io.Serializable;
 
 /**
- * Created by bberman on 1/30/17.
+ * Indicates a request to initialize the specified user.
  */
 public final class InitializeUserRequest implements Serializable {
 	private String userId;
 
-	private InitializeUserRequest() {
+	public InitializeUserRequest() {
 	}
 
 	private InitializeUserRequest(String userId) {

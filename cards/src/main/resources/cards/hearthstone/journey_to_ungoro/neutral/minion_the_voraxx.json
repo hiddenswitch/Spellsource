@@ -9,17 +9,16 @@
   "description": "After you target this minion with a spell, summon a 1/1 Plant and cast another copy on it.",
   "trigger": {
     "eventTrigger": {
-      "class": "TargetAcquisitionTrigger",
-      "actionType": "SPELL",
+      "class": "AfterSpellCastedTrigger",
       "hostTargetType": "IGNORE_OTHER_TARGETS",
       "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "SummonSpell",
       "spell": {
-        "class": "RecastSpell",
+        "class": "CastCardsSpell",
         "target": "OUTPUT",
-        "card": "PENDING_CARD"
+        "secondaryTarget": "EVENT_SOURCE"
       },
       "boardPositionRelative": "RIGHT",
       "card": "token_sapling"

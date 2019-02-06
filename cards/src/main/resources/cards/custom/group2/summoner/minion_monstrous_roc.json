@@ -1,0 +1,30 @@
+{
+  "name": "Monstrous Roc",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 6,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Invoke (8): Recruit a Monstrous Roc.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RecruitSpell",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "minion_monstrous_roc"
+      }
+    }
+  },
+  "attributes": {
+    "INVOKE": 8
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

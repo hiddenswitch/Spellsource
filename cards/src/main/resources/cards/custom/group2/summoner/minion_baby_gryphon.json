@@ -1,0 +1,28 @@
+{
+  "name": "Baby Gryphon",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Invoke (6): Summon a 6/6 Mother Gryphon.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_mother_gryphon"
+    }
+  },
+  "attributes": {
+    "INVOKE": 6
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

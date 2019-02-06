@@ -1,0 +1,20 @@
+{
+  "name": "Duplicate It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play two minions with the same name. Reward: Bestify It!",
+  "quest": {
+    "class": "CavernsBelowTrigger"
+  },
+  "countUntilCast": 2,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_bestify_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

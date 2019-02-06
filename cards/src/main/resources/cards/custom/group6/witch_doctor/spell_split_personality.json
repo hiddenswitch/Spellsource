@@ -1,0 +1,27 @@
+{
+  "name": "Split Personality",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Choose a friendly minion. It attacks your hero, then the enemy hero.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "FightSpell",
+        "target": "FRIENDLY_HERO",
+        "secondaryTarget": "TARGET"
+      },
+      {
+        "class": "FightSpell",
+        "target": "ENEMY_HERO",
+        "secondaryTarget": "TARGET"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

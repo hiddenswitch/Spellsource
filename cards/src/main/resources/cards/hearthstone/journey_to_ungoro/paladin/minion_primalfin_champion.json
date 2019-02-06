@@ -17,7 +17,7 @@
     },
     "spell": {
       "class": "custom.StoreEntitySpell",
-      "target": "PENDING_CARD"
+      "target": "EVENT_SOURCE"
     }
   },
   "deathrattle": {

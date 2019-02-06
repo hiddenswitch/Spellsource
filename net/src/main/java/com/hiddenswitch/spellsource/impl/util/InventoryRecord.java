@@ -3,19 +3,15 @@ package com.hiddenswitch.spellsource.impl.util;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.CaseFormat;
-import com.hiddenswitch.spellsource.util.QuickJson;
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardParser;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.cards.desc.ParseUtils;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +24,7 @@ public class InventoryRecord extends MongoRecord {
 	private static Logger logger = LoggerFactory.getLogger(InventoryRecord.class);
 
 	@JsonProperty
-	private Map<String, Object> cardDesc;
+	private CardDesc cardDesc;
 
 	/**
 	 * The userId of the player who originally opened the pack containing the card.
@@ -37,8 +33,8 @@ public class InventoryRecord extends MongoRecord {
 	private String userId;
 
 	/**
-	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also
-	 * a collection ID.
+	 * The ID of the alliance this card belongs to, or null if this card is not shared with an alliance. The ID is also a
+	 * collection ID.
 	 */
 	@JsonProperty
 	private String allianceId;
@@ -52,42 +48,22 @@ public class InventoryRecord extends MongoRecord {
 	@JsonProperty
 	private Map<String, Object> facts = new HashMap<>();
 
-	@JsonIgnore
-	private transient CardDesc cardDescCached;
-
-	protected InventoryRecord() {
-	}
-
-	public InventoryRecord(Card card) {
-		this(card.getDesc());
-	}
-
-	public InventoryRecord(JsonObject card) {
-		this.cardDesc = card.getMap();
+	public InventoryRecord() {
 	}
 
 	public InventoryRecord(String id, JsonObject card) {
 		super(id);
-		this.cardDesc = card.getMap();
+		this.cardDesc = card.mapTo(CardDesc.class);
 	}
 
-	public InventoryRecord(CardDesc cardDesc) {
-		this();
-		this.cardDesc = QuickJson.toJson(cardDesc).getMap();
+	public InventoryRecord(String id, CardDesc cardDesc) {
+		super(id);
+		this.cardDesc = cardDesc;
 	}
 
 	@JsonIgnore
-	@SuppressWarnings("unchecked")
 	public CardDesc getCardDesc() {
-		if (cardDescCached == null) {
-			try {
-				cardDescCached = CardParser.parseCard(new JsonObject(cardDesc)).getDesc();
-			} catch (IOException e) {
-				logger.error("getCardDesc: Record {} has an invalid cardDesc {} with exception {}", _id, cardDesc, e);
-				throw new RuntimeException();
-			}
-		}
-		return cardDescCached;
+		return cardDesc;
 	}
 
 	@JsonIgnore
@@ -153,11 +129,6 @@ public class InventoryRecord extends MongoRecord {
 	}
 
 	@JsonIgnore
-	public Map<String, Object> getCardDescMap() {
-		return cardDesc;
-	}
-
-	@JsonIgnore
 	public Map<String, Object> getFacts() {
 		return facts;
 	}
@@ -169,34 +140,42 @@ public class InventoryRecord extends MongoRecord {
 
 	@JsonIgnore
 	public String getCardId() {
-		return cardDesc != null && cardDesc.containsKey("id")
-				? (String) cardDesc.get("id")
+		return cardDesc != null && cardDesc.getId() != null
+				? cardDesc.getId()
 				: null;
 	}
 
+	@JsonIgnore
 	public Object getPersistentAttribute(Attribute attribute) {
 		return getFacts().getOrDefault(ParseUtils.toCamelCase(attribute.toString()), null);
 	}
 
 	@SuppressWarnings("unchecked")
+	@JsonIgnore
 	public <T> T getPersistentAttribute(Attribute attribute, T defaultValue) {
 		return (T) getFacts().getOrDefault(attribute.toKeyCase(), defaultValue);
 	}
 
+	@JsonIgnore
 	public void putPersistentAttribute(Attribute attribute, Object value) {
 		getFacts().put(CaseFormat.UPPER_UNDERSCORE.to(CaseFormat.LOWER_CAMEL, attribute.toString()), value);
 	}
 
+	@JsonIgnore
 	public AttributeMap getPersistentAttributes() {
-		return new AttributeMap(getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
-				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue)));
+		Map<Attribute, Object> collect = getFacts().entrySet().stream().collect(Collectors.toMap(kv -> Attribute.valueOf
+				(CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_UNDERSCORE, kv.getKey())), Map.Entry::getValue));
+		if (collect.isEmpty()) {
+			return new AttributeMap();
+		}
+		return new AttributeMap(collect);
 	}
 
 	@Override
 	public String toString() {
 		return new ToStringBuilder(this)
 				.append("id", getId())
-				.append("cardId", getCardId())
+				.append("card", getCardId())
 				.toString();
 	}
 }

@@ -4,11 +4,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 
 public enum CardCostModifierArg {
 	/**
-	 * The {@link Class<CardCostModifier>} of this description.
+	 * The {@link Class} of this description.
 	 */
 	CLASS,
 	/**
@@ -35,6 +36,9 @@ public enum CardCostModifierArg {
 	MIN_VALUE,
 	/**
 	 * The value that will be interpreted by the given {@link #OPERATION} to determine the final cost effect.
+	 * <p>
+	 * By default, the card cost modifier's operation is {@link AlgebraicOperation#ADD}, so a <b>negative</b> value will
+	 * reduce the cost of the card when specified here without an operation.
 	 */
 	VALUE,
 	/**
@@ -77,14 +81,19 @@ public enum CardCostModifierArg {
 	 * <p>
 	 * {@link Card#getBaseManaCost()} {@link AlgebraicOperation} {@link #VALUE}.
 	 * <p>
-	 * If there are multiple card cost modifiers applying on the given {@link Card}, then the game evaluates the
-	 * modifiers that came into play earliest, and uses their resulting values on the left-hand side.
+	 * If there are multiple card cost modifiers applying on the given {@link Card}, then the game evaluates the modifiers
+	 * that came into play earliest, and uses their resulting values on the left-hand side.
 	 * <p>
 	 * For <b>example</b>, to reduce the cost of the card by {@code 1}, this attribute should be set to {@link
 	 * AlgebraicOperation#SUBTRACT} and the {@link #VALUE} should be {@code 1}.
 	 *
 	 * @see net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicValueProvider#evaluateOperation(int, int,
-	 * AlgebraicOperation) to see more on how operations are evaluated.
+	 *    AlgebraicOperation) to see more on how operations are evaluated.
 	 */
-	OPERATION
+	OPERATION,
+
+	/**
+	 * A {@link Condition} for this card cost modifier to be active
+	 */
+	CONDITION
 }

@@ -4,10 +4,9 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
-import net.demilich.metastone.game.events.MaxManaChangedEvent;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class MaxManaChangedTrigger extends EventTrigger {
+public final class MaxManaChangedTrigger extends EventTrigger {
 	public MaxManaChangedTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
@@ -23,3 +22,5 @@ public class MaxManaChangedTrigger extends EventTrigger {
 		return GameEventType.MAX_MANA;
 	}
 }
+
+

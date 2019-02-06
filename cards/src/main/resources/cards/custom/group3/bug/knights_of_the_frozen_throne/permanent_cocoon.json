@@ -1,0 +1,16 @@
+{
+  "name": "Cocoon",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 0,
+  "baseHp": 1,
+  "rarity": "FREE",
+  "description": "(Transforms back when Anub'Rekhan dies)",
+  "attributes": {
+    "PERMANENT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

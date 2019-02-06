@@ -1,0 +1,22 @@
+{
+  "name": "Reinforce It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon 2 minions for your opponent. Reward: It.",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "sourcePlayer": "SELF",
+    "targetPlayer": "OPPONENT"
+  },
+  "countUntilCast": 2,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "token_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

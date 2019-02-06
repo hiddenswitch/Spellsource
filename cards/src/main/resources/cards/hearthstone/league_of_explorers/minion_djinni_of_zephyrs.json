@@ -22,9 +22,9 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "RecastSpell",
+      "class": "CastCardsSpell",
       "target": "SELF",
-      "card": "PENDING_CARD"
+      "secondaryTarget": "EVENT_SOURCE"
     }
   },
   "collectible": true,

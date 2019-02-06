@@ -21,7 +21,7 @@ public class GraveyardCardsSource extends CardSource {
 				.getGraveyard()
 				.stream()
 				.filter(e -> e instanceof Card)
-				.map(e -> (Card)e)
+				.map(e -> (Card) e)
 				.collect(toCollection(CardArrayList::new));
 	}
 }

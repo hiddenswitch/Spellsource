@@ -41,13 +41,18 @@
           "class": "SummonSpell",
           "boardPositionRelative": "LEFT",
           "card": "token_whelp"
+        },
+        {
+          "class": "SummonSpell",
+          "boardPositionRelative": "RIGHT",
+          "card": "token_whelp"
         }
       ]
     }
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Emperor Colossus"
+    "SPELLSOURCE_NAME": "Emperor Colossus"
   },
   "collectible": true,
   "set": "CLASSIC",

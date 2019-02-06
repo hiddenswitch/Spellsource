@@ -21,19 +21,13 @@
           }
         },
         {
-          "class": "ConditionalSpell",
-          "condition": {
-            "class": "HoldsCardCondition",
-            "cardFilter": {
-              "class": "SpecificCardFilter",
-              "cardId": "token_shadow_reflection"
-            },
-            "invert": true
-          },
+          "class": "ReceiveCardSpell",
           "spell": {
-            "class": "ReceiveCardSpell",
-            "card": "token_shadow_reflection"
-          }
+            "class": "AddAttributeSpell",
+            "target": "OUTPUT",
+            "attribute": "REMOVES_SELF_AT_END_OF_TURN"
+          },
+          "card": "token_shadow_reflection"
         }
       ]
     }

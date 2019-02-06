@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "Choose One - Gain 10 Armor; or Refresh your Mana.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "Gain 10 Armor",
       "spell": {
@@ -19,23 +19,11 @@
     {
       "description": "Refresh Mana",
       "spell": {
-        "class": "GainManaSpell",
-        "value": {
-          "class": "AlgebraicValueProvider",
-          "operation": "SUBTRACT",
-          "value1": {
-            "class": "PlayerAttributeValueProvider",
-            "playerAttribute": "MAX_MANA"
-          },
-          "value2": {
-            "class": "PlayerAttributeValueProvider",
-            "playerAttribute": "MANA"
-          }
-        }
+        "class": "RefreshManaSpell"
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "10 Armor and Refresh",
     "spell": {
       "class": "MetaSpell",
@@ -46,19 +34,7 @@
           "armorBonus": 10
         },
         {
-          "class": "GainManaSpell",
-          "value": {
-            "class": "AlgebraicValueProvider",
-            "operation": "SUBTRACT",
-            "value1": {
-              "class": "PlayerAttributeValueProvider",
-              "playerAttribute": "MAX_MANA"
-            },
-            "value2": {
-              "class": "PlayerAttributeValueProvider",
-              "playerAttribute": "MANA"
-            }
-          }
+          "class": "RefreshManaSpell"
         }
       ]
     }

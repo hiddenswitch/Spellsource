@@ -1,0 +1,20 @@
+{
+  "name": "Capt'n Cookie",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Spell Damage +3. Your spells now have random targets.",
+  "aura": {
+    "class": "CaptnCookieAura"
+  },
+  "attributes": {
+    "SPELL_DAMAGE": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

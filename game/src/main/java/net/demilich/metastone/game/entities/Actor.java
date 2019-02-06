@@ -1,19 +1,23 @@
 package net.demilich.metastone.game.entities;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.targeting.IdFactory;
+import net.demilich.metastone.game.cards.Attribute;
+import org.jetbrains.annotations.NonNls;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -23,7 +27,7 @@ import net.demilich.metastone.game.utils.AttributeMap;
  * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON}),
  * {@link net.demilich.metastone.game.events.BoardChangedEvent} will be raised.
  */
-public abstract class Actor extends Entity {
+public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
 	private Card sourceCard;
 	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
@@ -34,6 +38,7 @@ public abstract class Actor extends Entity {
 		this.sourceCard = sourceCard;
 	}
 
+	@Override
 	public void addDeathrattle(SpellDesc deathrattleSpell) {
 		if (!hasAttribute(Attribute.DEATHRATTLES)) {
 			setAttribute(Attribute.DEATHRATTLES, new ArrayList<SpellDesc>());
@@ -41,19 +46,22 @@ public abstract class Actor extends Entity {
 		getDeathrattles().add(deathrattleSpell);
 	}
 
+	@Override
 	public void addEnchantment(Enchantment enchantment) {
 		enchantments.add(enchantment);
 		enchantment.setHost(this);
 	}
 
 	public boolean canAttackThisTurn() {
-		if (hasAttribute(Attribute.CANNOT_ATTACK)) {
+		if (hasAttribute(Attribute.CANNOT_ATTACK)
+				|| hasAttribute(Attribute.AURA_CANNOT_ATTACK)) {
 			return false;
 		}
 		if (hasAttribute(Attribute.FROZEN)) {
 			return false;
 		}
-		if (hasAttribute(Attribute.SUMMONING_SICKNESS) && !hasAttribute(Attribute.CHARGE)) {
+		if (hasAttribute(Attribute.SUMMONING_SICKNESS) && !hasAttribute(Attribute.CHARGE) && !hasAttribute(Attribute.AURA_CHARGE)
+				&& !hasAttribute(Attribute.RUSH) && !hasAttribute(Attribute.AURA_RUSH)) {
 			return false;
 		}
 		if (hasAttribute(Attribute.PERMANENT)) {
@@ -62,6 +70,7 @@ public abstract class Actor extends Entity {
 		return getAttack() > 0 && ((getAttributeValue(Attribute.NUMBER_OF_ATTACKS) + getAttributeValue(Attribute.EXTRA_ATTACKS)) > 0 || hasAttribute(Attribute.UNLIMITED_ATTACKS));
 	}
 
+	@Override
 	public void clearEnchantments() {
 		this.enchantments = new ArrayList<>();
 	}
@@ -69,14 +78,13 @@ public abstract class Actor extends Entity {
 	@Override
 	public Actor clone() {
 		Actor clone = (Actor) super.clone();
-		clone.setAttributes(new AttributeMap(getAttributes()));
+		clone.attributes = this.attributes.clone();
 		clone.clearEnchantments();
 		for (Enchantment trigger : getEnchantments()) {
 			clone.enchantments.add(trigger.clone());
 		}
 		if (hasAttribute(Attribute.DEATHRATTLES)
-				|| (getDeathrattles() != null
-				&& getDeathrattles().size() > 0)) {
+				|| (getDeathrattles().size() > 0)) {
 			clone.getAttributes().remove(Attribute.DEATHRATTLES);
 			for (SpellDesc deathrattleSpell : getDeathrattles()) {
 				SpellDesc deathrattleClone = deathrattleSpell.clone();
@@ -92,21 +100,24 @@ public abstract class Actor extends Entity {
 		return clone;
 	}
 
-	protected boolean displayGameTag(Attribute tag) {
-		return tag == Attribute.CHARGE || tag == Attribute.ENRAGED || tag == Attribute.FROZEN || tag == Attribute.DIVINE_SHIELD
-				|| tag == Attribute.WINDFURY || tag == Attribute.SPELL_DAMAGE || tag == Attribute.STEALTH || tag == Attribute.TAUNT
-				|| tag == Attribute.CANNOT_ATTACK || tag == Attribute.UNTARGETABLE_BY_SPELLS || tag == Attribute.AURA_UNTARGETABLE_BY_SPELLS
-				|| tag == Attribute.MEGA_WINDFURY;
-	}
-
 	public int getArmor() {
 		return getAttributeValue(Attribute.ARMOR);
 	}
 
 	public int getAttack() {
-		int attack = getAttributeValue(Attribute.ATTACK) + getAttributeValue(Attribute.ATTACK_BONUS)
+		int bonuses = getAttributeValue(Attribute.ATTACK_BONUS)
 				+ getAttributeValue(Attribute.AURA_ATTACK_BONUS) + getAttributeValue(Attribute.TEMPORARY_ATTACK_BONUS)
 				+ getAttributeValue(Attribute.CONDITIONAL_ATTACK_BONUS);
+		if (hasAttribute(Attribute.ATTACK_BONUS_MULTIPLIER) && getAttributeValue(Attribute.ATTACK_BONUS_MULTIPLIER) != 0) {
+			bonuses *= getAttributeValue(Attribute.ATTACK_BONUS_MULTIPLIER);
+		}
+
+		int attack = getAttributeValue(Attribute.ATTACK) + bonuses;
+
+		if (hasAttribute(Attribute.ATTACK_MULTIPLIER) && getAttributeValue(Attribute.ATTACK_MULTIPLIER) != 0) {
+			attack *= getAttributeValue(Attribute.ATTACK_MULTIPLIER);
+		}
+
 		return Math.max(0, attack);
 	}
 
@@ -118,8 +129,13 @@ public abstract class Actor extends Entity {
 		return getAttributeValue(Attribute.BASE_HP);
 	}
 
-	public BattlecryAction getBattlecry() {
-		return (BattlecryAction) getAttribute(Attribute.BATTLECRY);
+	public @Nullable
+	BattlecryAction getBattlecry() {
+		BattlecryAction action = (BattlecryAction) getAttribute(Attribute.BATTLECRY);
+		if (action != null) {
+			action.setSourceReference(getReference());
+		}
+		return action;
 	}
 
 	public CardCostModifier getCardCostModifier() {
@@ -127,8 +143,14 @@ public abstract class Actor extends Entity {
 	}
 
 	@SuppressWarnings("unchecked")
+	@NonNls
 	public List<SpellDesc> getDeathrattles() {
-		return (List<SpellDesc>) getAttribute(Attribute.DEATHRATTLES);
+		Object attribute = getAttribute(Attribute.DEATHRATTLES);
+		if (attribute == null) {
+			return new ArrayList<>();
+		} else {
+			return (List<SpellDesc>) attribute;
+		}
 	}
 
 	/**
@@ -141,8 +163,8 @@ public abstract class Actor extends Entity {
 	}
 
 	/**
-	 * Returns the maximum amount of hitpoints this actor can have, considering all of its bonuses from effects and
-	 * {@link net.demilich.metastone.game.spells.aura.Aura}s.
+	 * Returns the maximum amount of hitpoints this actor can have, considering all of its bonuses from effects and {@link
+	 * net.demilich.metastone.game.spells.aura.Aura}s.
 	 *
 	 * @return The maximum hitpoints.
 	 */
@@ -151,19 +173,17 @@ public abstract class Actor extends Entity {
 				+ getAttributeValue(Attribute.AURA_HP_BONUS);
 	}
 
-	public Race getRace() {
-		return (Race) getAttribute(Attribute.RACE);
-	}
-
 	@Override
 	public Card getSourceCard() {
 		return sourceCard;
 	}
 
+	@Override
 	public List<Enchantment> getEnchantments() {
 		return new ArrayList<>(enchantments);
 	}
 
+	@Override
 	public boolean hasEnchantment() {
 		return enchantments.size() != 0;
 	}
@@ -171,19 +191,29 @@ public abstract class Actor extends Entity {
 	public int getMaxNumberOfAttacks() {
 		if (hasAttribute(Attribute.MEGA_WINDFURY)) {
 			return GameLogic.MEGA_WINDFURY_ATTACKS;
-		} else if (hasAttribute(Attribute.WINDFURY)) {
+		} else if (hasAttribute(Attribute.WINDFURY) || hasAttribute(Attribute.AURA_WINDFURY)) {
 			return GameLogic.WINDFURY_ATTACKS;
 		}
 		return 1;
 	}
 
 
+	/**
+	 * Indicates whether or not the actor is mortally wounded.
+	 * <p>
+	 * A mortally wounded actor hasn't necessarily been taken off the board and put into the {@link
+	 * net.demilich.metastone.game.targeting.Zones#GRAVEYARD} yet. This is useful for preventing effects from impacting
+	 * already dead minions before a {@link GameLogic#endOfSequence()} has been called.
+	 *
+	 * @return {@code true} if the minion's health is less than 1 or if the minion has the {@link Attribute#DESTROYED}
+	 * 		attribute.
+	 */
 	@Override
 	public boolean isDestroyed() {
 		if (hasAttribute(Attribute.PERMANENT)) {
 			return hasAttribute(Attribute.DESTROYED);
 		}
-		return getHp() < 1 || super.isDestroyed();
+		return (getHp() < 1 || super.isDestroyed());
 	}
 
 	public boolean isWounded() {
@@ -276,7 +306,7 @@ public abstract class Actor extends Entity {
 		result += getAttack() + "/" + getHp();
 		String prefix = " ";
 		for (Attribute tag : getAttributes().keySet()) {
-			if (displayGameTag(tag)) {
+			if (false) {
 				result += prefix + tag;
 				prefix = ", ";
 			}
@@ -300,17 +330,39 @@ public abstract class Actor extends Entity {
 	}
 
 	@Override
+	public List<SpellDesc> getDeathrattleEnchantments() {
+		return getDeathrattles();
+	}
+
+	@Override
 	public Actor getCopy() {
 		Actor clone = this.clone();
 		clone.setEntityLocation(EntityLocation.UNASSIGNED);
 		clone.setId(IdFactory.UNASSIGNED);
 		clone.setOwner(IdFactory.UNASSIGNED);
 		clone.getAttributes().put(Attribute.COPIED_FROM, this.getReference());
+		clone.getAttributes().remove(Attribute.TRANSFORM_REFERENCE);
 		// Clear aura buffs when copying an actor
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_UNTARGETABLE_BY_SPELLS);
 		clone.getAttributes().remove(Attribute.AURA_TAUNT);
+		clone.getAttributes().remove(Attribute.AURA_STEALTH);
+		clone.getAttributes().remove(Attribute.AURA_CANNOT_ATTACK);
+		clone.getAttributes().remove(Attribute.AURA_CANNOT_ATTACK_HEROES);
+		clone.getAttributes().remove(Attribute.AURA_CARD_ID);
+		clone.getAttributes().remove(Attribute.AURA_CHARGE);
+		clone.getAttributes().remove(Attribute.AURA_ECHO);
+		clone.getAttributes().remove(Attribute.AURA_IMMUNE);
+		clone.getAttributes().remove(Attribute.AURA_INVOKE);
+		clone.getAttributes().remove(Attribute.AURA_LIFESTEAL);
+		clone.getAttributes().remove(Attribute.AURA_POISONOUS);
+		clone.getAttributes().remove(Attribute.AURA_RUSH);
+		clone.getAttributes().remove(Attribute.AURA_WINDFURY);
+		clone.getAttributes().remove(Attribute.AURA_IMMUNE_WHILE_ATTACKING);
+		clone.getAttributes().remove(Attribute.AURA_TAKE_DOUBLE_DAMAGE);
+		clone.getAttributes().remove(Attribute.AURA_SPELL_DAMAGE);
+		clone.getAttributes().remove(Attribute.AURA_COSTS_HEALTH_INSTEAD_OF_MANA);
 		// TODO: When auras put attributes on minions that aren't attack or hp bonuses, they must be removed here
 		return clone;
 	}

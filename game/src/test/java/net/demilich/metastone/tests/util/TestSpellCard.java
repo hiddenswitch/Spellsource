@@ -1,33 +1,42 @@
 package net.demilich.metastone.tests.util;
 
+import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.actions.PlaySpellCardAction;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.SpellCard;
-import net.demilich.metastone.game.cards.desc.SpellCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
+import org.apache.commons.lang3.RandomStringUtils;
 
-public class TestSpellCard extends SpellCard {
+public class TestSpellCard extends Card {
 
-	private static SpellCardDesc toDesc() {
-		SpellCardDesc desc = new SpellCardDesc();
-		desc.name = "Unit Test Spell";
-		desc.rarity = Rarity.FREE;
-		desc.type = CardType.SPELL;
-		desc.heroClass = HeroClass.ANY;
-		desc.attributes = new AttributeMap();
+	private final SpellDesc spell;
+
+	private static CardDesc toDesc() {
+		CardDesc desc = new CardDesc();
+		desc.setId(RandomStringUtils.randomAlphanumeric(15));
+		desc.setName("Unit Test Spell");
+		desc.setRarity(Rarity.FREE);
+		desc.setType(CardType.SPELL);
+		desc.setHeroClass(HeroClass.ANY);
+		desc.setAttributes(new AttributeMap());
 		return desc;
 	}
 
 	public TestSpellCard(SpellDesc spell) {
 		super(toDesc());
-		setDescription("This spell can have various effects and should only be used in the context of unit net.demilich.metastone.tests.");
-		setCollectible(false);
-
-		setSpell(spell);
+		getAttributes().put(Attribute.DESCRIPTION, "This spell can have various effects and should only be used in the context of unit net.demilich.metastone.tests.");
+		this.spell = spell;
 		setTargetRequirement(TargetSelection.NONE);
 	}
 
+	@Override
+	public PlayCardAction play() {
+		return new PlaySpellCardAction(spell, this, TargetSelection.NONE);
+	}
 }

@@ -1,0 +1,31 @@
+{
+  "name": "Well Fed",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "Fully heal a minion and give it +2/+2.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "TARGET",
+          "attribute": "MAX_HP"
+        }
+      },
+      {
+        "class": "BuffSpell",
+        "attackBonus": 2,
+        "hpBonus": 2
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

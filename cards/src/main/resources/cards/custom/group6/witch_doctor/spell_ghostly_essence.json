@@ -1,0 +1,28 @@
+{
+  "name": "Ghostly Essence",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Restore #5 Health. If you have Spell Damage, restore #8 instead.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": {
+      "class": "ConditionalValueProvider",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "SpellDamageValueProvider"
+        },
+        "value2": 1
+      },
+      "ifFalse": 5,
+      "ifTrue": 8
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Deal 2 damage to all enemy minions",
+  "description": "Deal $2 damage to all enemy minions",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

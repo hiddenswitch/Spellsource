@@ -1,17 +1,18 @@
 package com.blizzard.hearthstone;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
+
+import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertNotEquals;
+import static org.testng.Assert.assertTrue;
 
 public class GoblinsVersusGnomesTests extends TestBase {
 
@@ -21,6 +22,73 @@ public class GoblinsVersusGnomesTests extends TestBase {
 			playCard(context, player, "minion_blingtron_3000");
 			Assert.assertEquals(player.getWeaponZone().size(), 1);
 			Assert.assertEquals(opponent.getWeaponZone().size(), 1);
+		});
+	}
+
+	@Test
+	public void testMalganis() {
+		runGym((context, player, opponent) -> {
+			Minion malganis = playMinionCard(context, player, "minion_malganis");
+			int playerHp = player.getHero().getHp();
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), playerHp);
+			destroy(context, malganis);
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), playerHp - 6);
+		});
+	}
+
+	@Test
+	public void testIllidanKnifeJugglerSheepDeathwingInteraction() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_the_coin");
+			receiveCard(context, opponent, "spell_the_coin");
+			Minion knifeJuggler = playMinionCard(context, player, "minion_knife_juggler");
+			Minion illidan = playMinionCard(context, player, "minion_illidan_stormrage");
+			// Knife Juggler dealt 1 dmg to opponent's hero
+			context.endTurn();
+			Minion sylvanas = playMinionCard(context, opponent, "minion_sylvanas_windrunner");
+			for (int i = 0; i < 4; i++) {
+				playMinionCard(context, opponent, "minion_explosive_sheep");
+			}
+			Minion explosiveSheep = playMinionCard(context, opponent, "minion_explosive_sheep");
+			context.endTurn();
+			overrideMissilesTrigger(context, knifeJuggler, explosiveSheep);
+			playCard(context, player, "minion_deathwing");
+			assertTrue(sylvanas.isDestroyed());
+			assertTrue(illidan.isDestroyed());
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(opponent.getMinions().size(), 1);
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), "minion_deathwing");
+			assertEquals(player.getHand().size(), 0, "Player discards");
+			assertEquals(opponent.getHand().size(), 1, "Opponent does not discard");
+		});
+	}
+
+	@Test
+	public void testIllidanKnifeJugglerAnubarAmbusherSheepDeathwingInteraction() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, player, "spell_the_coin");
+			receiveCard(context, opponent, "spell_the_coin");
+			Minion knifeJuggler = playMinionCard(context, player, "minion_knife_juggler");
+			Minion illidan = playMinionCard(context, player, "minion_illidan_stormrage");
+			// Knife Juggler dealt 1 dmg to opponent's hero
+			context.endTurn();
+			Minion sylvanas = playMinionCard(context, opponent, "minion_sylvanas_windrunner");
+			Minion ambusher = playMinionCard(context, opponent, "minion_anubar_ambusher");
+			for (int i = 0; i < 4; i++) {
+				playMinionCard(context, opponent, "minion_explosive_sheep");
+			}
+			Minion explosiveSheep = playMinionCard(context, opponent, "minion_explosive_sheep");
+			context.endTurn();
+			overrideMissilesTrigger(context, knifeJuggler, explosiveSheep);
+			playCard(context, player, "minion_deathwing");
+			assertTrue(sylvanas.isDestroyed());
+			assertTrue(illidan.isDestroyed());
+			assertEquals(player.getMinions().size(), 0);
+			assertEquals(opponent.getMinions().size(), 0, "Ambusher returns stolen Deathwing to hand");
+			assertEquals(player.getHand().size(), 0, "Player discards");
+			assertEquals(opponent.getHand().size(), 2, "Opponent does not discard, holds Deathwing and the coin");
 		});
 	}
 
@@ -98,31 +166,44 @@ public class GoblinsVersusGnomesTests extends TestBase {
 
 	@Test
 	public void testBetrayalOnBurlyRockjawTroggDeals5Damage() {
-		GameContext context = createContext(HeroClass.GOLD, HeroClass.BLACK);
-		Player paladin = context.getPlayer1();
+		runGym((context, player, opponent) -> {
+			Card adjacentCard1 = new TestMinionCard(1, 5, 0);
+			playMinionCard(context, player, adjacentCard1);
 
-		MinionCard adjacentMinionCard1 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentMinionCard1);
+			Card targetCard = CardCatalogue.getCardById("minion_burly_rockjaw_trogg");
+			Minion targetMinion = playMinionCard(context, player, targetCard);
 
-		MinionCard targetMinionCard = (MinionCard) CardCatalogue.getCardById("minion_burly_rockjaw_trogg");
-		Minion targetMinion = playMinionCard(context, paladin, targetMinionCard);
+			Card adjacentCard2 = new TestMinionCard(1, 5, 0);
+			playMinionCard(context, player, adjacentCard2);
 
-		MinionCard adjacentMinionCard2 = new TestMinionCard(1, 5, 0);
-		playMinionCard(context, paladin, adjacentMinionCard2);
+			context.getLogic().endTurn(player.getId());
 
-		context.getLogic().endTurn(paladin.getId());
+			Assert.assertEquals(player.getMinions().size(), 3);
+			Card betrayal = CardCatalogue.getCardById("spell_betrayal");
 
-		Assert.assertEquals(paladin.getMinions().size(), 3);
+			context.getLogic().receiveCard(opponent.getId(), betrayal);
+			GameAction action = betrayal.play();
+			action.setTarget(targetMinion);
+			context.getLogic().performGameAction(opponent.getId(), action);
 
-		Player rogue = context.getPlayer2();
+			Assert.assertEquals(player.getMinions().size(), 1);
+		}, HeroClass.GOLD, HeroClass.BLACK);
+	}
 
-		Card betrayal = CardCatalogue.getCardById("spell_betrayal");
-
-		context.getLogic().receiveCard(rogue.getId(), betrayal);
-		GameAction action = betrayal.play();
-		action.setTarget(targetMinion);
-		context.getLogic().performGameAction(rogue.getId(), action);
-
-		Assert.assertEquals(paladin.getMinions().size(), 1);
+	@Test
+	public void testSteamwheedleSniper() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_wisp");
+			player.setMana(10);
+			int actionsBefore = (int) context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(player.getHeroPowerZone().get(0).getReference()))
+					.count();
+			playCard(context, player, "minion_steamwheedle_sniper");
+			int actionsAfter = (int) context.getLogic().getValidActions(player.getId()).stream()
+					.filter(gameAction -> gameAction.getSourceReference().equals(player.getHeroPowerZone().get(0).getReference()))
+					.count();
+			assertEquals(actionsBefore, 1);
+			assertEquals(actionsAfter, 4);
+		}, HeroClass.GREEN, HeroClass.GREEN);
 	}
 }

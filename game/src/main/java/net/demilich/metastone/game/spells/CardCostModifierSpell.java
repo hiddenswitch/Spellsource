@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -15,6 +13,8 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * Creates a {@link CardCostModifier} specified by {@link SpellArg#CARD_COST_MODIFIER} that is hosted by the specified
@@ -105,12 +105,17 @@ public class CardCostModifierSpell extends Spell {
 
 		if (manaModifierDesc.containsKey(CardCostModifierArg.TARGET)
 				&& target != null
-				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))) {
+				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))
+				&& !manaModifierDesc.get(CardCostModifierArg.TARGET).equals(EntityReference.SELF)) {
 			logger.debug("onCast {} {}: The target of this spell, {}, and the mana cost modifier's target, {}, do not match.",
 					context.getGameId(), source, target, manaModifierDesc.get(CardCostModifierArg.TARGET));
 		}
 		// The target is the host of the mana cost modifier.
-		context.getLogic().addGameEventListener(player, manaModifierDesc.createInstance(), target == null ? player : target);
+		CardCostModifier cardCostModifier = manaModifierDesc.create();
+		if (source != null && source.getSourceCard() != null) {
+			cardCostModifier.setSourceCardId(source.getSourceCard().getCardId());
+		}
+		context.getLogic().addGameEventListener(player, cardCostModifier, target == null ? player : target);
 	}
 
 }

@@ -1,0 +1,30 @@
+{
+  "name": "Veteran of the Third War",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 6,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Gain Health equal to the Attack of your weapon.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "SELF",
+      "attackBonus": 0,
+      "hpBonus": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_WEAPON",
+        "attribute": "ATTACK"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

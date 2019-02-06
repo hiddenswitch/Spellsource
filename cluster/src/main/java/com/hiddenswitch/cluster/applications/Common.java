@@ -9,7 +9,6 @@ import com.hiddenswitch.cluster.functions.Simulator;
 import com.hiddenswitch.cluster.models.TestConfig;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import org.apache.commons.io.IOUtils;
 import org.apache.hadoop.conf.Configuration;
@@ -76,20 +75,20 @@ public class Common {
 		}
 	}
 
-	public static JavaPairRDD<TestConfig, SimulationResult> simulate(JavaPairRDD<TestConfig, GameConfig> configs) {
+	public static JavaPairRDD<TestConfig, SimulationResult> simulate(JavaPairRDD<TestConfig, Object> configs) {
 		final StorageLevel storageLevel = StorageLevel.apply(true, false, false, false, 1);
 		JavaPairRDD<TestConfig, SimulationResult> simulations = configs.repartition((int) configs.count() / 10 + 1).persist(storageLevel).mapValues(new Simulator()).persist(storageLevel);
 		return simulations.reduceByKey(new MergeSimulationResults());
 	}
 
-	public static JavaPairRDD<TestConfig, GameConfig> getConfigsForDecks(JavaSparkContext sc, List<String> decks, int gamesPerBatch, int batches) throws IOException, URISyntaxException, CardParseException {
+	public static JavaPairRDD<TestConfig, Object> getConfigsForDecks(JavaSparkContext sc, List<String> decks, int gamesPerBatch, int batches) throws IOException, URISyntaxException, CardParseException {
 		List<String[]> deckPairs = GameContext.getDeckCombinations(decks);
 
 
 		JavaRDD<String[]> pairs = sc.parallelize(deckPairs);
 
 		// Create game configs to simulate
-		return pairs.flatMapToPair(new DecksToGameConfigs(batches, gamesPerBatch));
+		return pairs.flatMapToPair(null);
 	}
 
 	public static List<String> getDefaultDecks() throws IOException {

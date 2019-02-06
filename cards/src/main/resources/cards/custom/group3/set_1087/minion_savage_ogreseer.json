@@ -1,0 +1,36 @@
+{
+  "name": "Savage Ogreseer",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "RUST",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "Whenever you draw a minion, summon it. Battlecry: Draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      }
+    },
+    "spell": {
+      "class": "PutMinionOnBoardSpell",
+      "target": "EVENT_TARGET"
+    }
+  },
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

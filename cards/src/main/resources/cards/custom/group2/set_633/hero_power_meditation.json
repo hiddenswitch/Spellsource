@@ -1,0 +1,27 @@
+{
+  "name": "Meditation",
+  "heroPower": "hero_power_zen_meditation",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Restore #1 Health. +1 Attack this turn.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 1
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "attackBonus": 1
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,7 +1,5 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -10,6 +8,11 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.Map;
+
+/**
+ * Modifies the durability of a weapon regardless of which weapon is equipped.
+ */
 public class ModifyDurabilitySpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, int durability) {
@@ -31,6 +34,8 @@ public class ModifyDurabilitySpell extends Spell {
 			return;
 		}
 		int durabilityChange = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
+
+
 		context.getLogic().modifyDurability(player.getHero().getWeapon(), durabilityChange);
 	}
 

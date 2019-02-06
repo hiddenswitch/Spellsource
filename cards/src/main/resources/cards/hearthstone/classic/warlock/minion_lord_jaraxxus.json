@@ -11,21 +11,30 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "ChangeHeroSpell",
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "EquipWeaponSpell",
-            "card": "weapon_blood_fury"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ChangeHeroSpell",
+          "spell": {
+            "class": "MetaSpell",
+            "spells": [
+              {
+                "class": "EquipWeaponSpell",
+                "card": "weapon_blood_fury"
+              },
+              {
+                "class": "OverrideTargetSpell",
+                "target": "OUTPUT"
+              }
+            ]
           },
-          {
-            "class": "OverrideTargetSpell",
-            "target": "OUTPUT"
-          }
-        ]
-      },
-      "card": "hero_jaraxxus"
+          "card": "hero_jaraxxus"
+        },
+        {
+          "class": "RemoveActorPeacefullySpell",
+          "target": "SELF"
+        }
+      ]
     }
   },
   "attributes": {

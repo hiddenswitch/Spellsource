@@ -1,0 +1,33 @@
+{
+  "name": "Fantastic Feast",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "RARE",
+  "description": "Fully heal your hero. Put 2 'Hangover' cards that do nothing on top of your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "target": "FRIENDLY_HERO",
+        "value": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP"
+        }
+      },
+      {
+        "class": "PutDeckTopSpell",
+        "cards": [
+          "spell_hangover",
+          "spell_hangover"
+        ]
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

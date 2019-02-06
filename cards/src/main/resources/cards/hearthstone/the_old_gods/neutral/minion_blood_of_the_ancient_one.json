@@ -12,7 +12,7 @@
       "class": "TurnEndTrigger",
       "fireCondition": {
         "class": "HasEntitiesOnBoardCondition",
-        "cardIds": [
+        "cards": [
           "minion_blood_of_the_ancient_one",
           "minion_blood_of_the_ancient_one"
         ]

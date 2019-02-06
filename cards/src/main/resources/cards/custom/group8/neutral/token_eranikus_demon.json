@@ -1,0 +1,25 @@
+{
+  "name": "Demons",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Shuffle 5 random Demons with +3/+3 into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "value": 5,
+    "spell": {
+      "class": "BuffSpell",
+      "target": "OUTPUT",
+      "value": 3
+    },
+    "cardFilter": {
+      "class": "RaceFilter",
+      "race": "DEMON"
+    }
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

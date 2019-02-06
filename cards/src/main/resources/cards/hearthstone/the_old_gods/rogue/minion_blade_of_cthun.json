@@ -25,7 +25,7 @@
           },
           "filter": {
             "class": "SpecificCardFilter",
-            "cardId": "minion_cthun"
+            "card": "minion_cthun"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
@@ -43,7 +43,7 @@
           },
           "filter": {
             "class": "SpecificCardFilter",
-            "cardId": "minion_cthun"
+            "card": "minion_cthun"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",

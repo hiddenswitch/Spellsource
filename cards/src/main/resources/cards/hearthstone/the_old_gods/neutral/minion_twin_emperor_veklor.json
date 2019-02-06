@@ -20,7 +20,7 @@
             "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
-              "cardId": "minion_cthun"
+              "card": "minion_cthun"
             }
           },
           "value2": 10
@@ -34,7 +34,7 @@
             "attribute": "ATTACK",
             "filter": {
               "class": "SpecificCardFilter",
-              "cardId": "minion_cthun"
+              "card": "minion_cthun"
             }
           },
           "value2": 10

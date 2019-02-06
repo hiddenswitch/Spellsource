@@ -1,0 +1,17 @@
+{
+  "name": "Rubble",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

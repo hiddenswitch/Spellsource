@@ -1,0 +1,37 @@
+{
+  "name": "Winter is Coming!",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "EPIC",
+  "description": "Destroy a Frozen minion and deal its Health as damage to all enemies.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "HP"
+    },
+    "filter": {
+      "class": "AttributeFilter",
+      "attribute": "FROZEN",
+      "operation": "HAS"
+    },
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": {
+          "class": "GameValueProvider",
+          "gameValue": "SPELL_VALUE"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

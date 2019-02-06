@@ -1,0 +1,43 @@
+{
+  "name": "Monster Manual",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "EGGPLANT",
+  "damage": 0,
+  "durability": 3,
+  "rarity": "LEGENDARY",
+  "description": "After you cast a spell, Discover a Beast, Dragon or Murloc.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterSpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DiscoverFilteredCardSpell",
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "targetPlayer": "SELF"
+      },
+      "cardFilters": [
+        {
+          "class": "CardFilter",
+          "race": "BEAST"
+        },
+        {
+          "class": "CardFilter",
+          "race": "DRAGON"
+        },
+        {
+          "class": "CardFilter",
+          "race": "MURLOC"
+        }
+      ],
+      "cardSource": {
+        "class": "CatalogueSource"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

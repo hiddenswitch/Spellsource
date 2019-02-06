@@ -1,0 +1,40 @@
+{
+  "name": "Runic Corruption",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "RARE",
+  "description": "Discard a Rune to give your minions +2/+2.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalSpell",
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_rune"
+      }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscardSpell",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "spell_rune"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attackBonus": 2,
+          "hpBonus": 2
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

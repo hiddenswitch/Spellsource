@@ -2,7 +2,7 @@ package net.demilich.metastone.game.services;
 
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 
 public interface Inventory {
 
@@ -14,7 +14,7 @@ public interface Inventory {
 	 * @return The deck, or {@code null} if no deck was found with the given name.
 	 */
 	@Suspendable
-	Deck getDeck(Player player, String name);
+	GameDeck getDeck(Player player, String name);
 }
 
 

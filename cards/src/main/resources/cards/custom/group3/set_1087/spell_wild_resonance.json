@@ -1,0 +1,34 @@
+{
+  "name": "Wild Resonance",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "RARE",
+  "description": "Echo. Give your hero and a random friendly minion +2 Attack this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attackBonus": 2,
+        "hpBonus": 0,
+        "randomTarget": true
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "attackBonus": 2,
+        "hpBonus": 0,
+        "randomTarget": true
+      }
+    ]
+  },
+  "attributes": {
+    "ECHO": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

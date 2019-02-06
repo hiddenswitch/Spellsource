@@ -1,18 +1,16 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
- * 
- * This not a programmers nightmare poured into a class; rather a condition if
- * the specified target is of a certain race
- *
+ * Evaluates to {@code true} if the {@code target} or single entity resolved by {@link ConditionArg#TARGET} has the
+ * specified {@link ConditionArg#RACE}.
  */
-public class RaceCondition extends Condition {
+public final class RaceCondition extends Condition {
 
 	public RaceCondition(ConditionDesc desc) {
 		super(desc);
@@ -21,7 +19,9 @@ public class RaceCondition extends Condition {
 	@Override
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		Race race = (Race) desc.get(ConditionArg.RACE);
-		return target.getAttribute(Attribute.RACE) == race;
+		if (desc.containsKey(ConditionArg.TARGET)) {
+			target = context.resolveSingleTarget(player, source, (EntityReference) desc.get(ConditionArg.TARGET));
+		}
+		return target.getRace().hasRace(race);
 	}
-
 }

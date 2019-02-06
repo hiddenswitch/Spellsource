@@ -1,0 +1,48 @@
+{
+  "name": "Lord Cookie",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "MURLOC",
+  "description": "Whenever you summon a Pirate, draw a Murloc. Whenever you summon a Murloc, draw a Pirate.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "race": "PIRATE",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "MURLOC",
+          "cardType": "MINION"
+        }
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "MinionSummonedTrigger",
+        "race": "MURLOC",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "FromDeckToHandSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "race": "PIRATE",
+          "cardType": "MINION"
+        }
+      }
+    }
+  ],
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

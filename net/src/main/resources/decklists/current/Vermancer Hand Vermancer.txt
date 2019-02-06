@@ -1,0 +1,21 @@
+### Vermancer: Hand Vermancer
+# Class: AMBER
+# Format: Custom
+#
+# 2x (1) Mistress of Mixtures
+# 2x (2) Doomsayer
+# 2x (2) Elementium Shell
+# 2x (2) Spiderbomb
+# 2x (3) Parasites
+# 2x (3) Web Wrap
+# 2x (4) Defender of Argus
+# 2x (4) Poison Dart
+# 2x (4) Twilight Drake
+# 2x (5) Antique Healbot
+# 1x (6) Emperor Thaurissan
+# 2x (6) Incubation
+# 2x (6) Into the Parlor
+# 1x (8) The Lich King
+# 2x (9) Bee Squad
+# 2x (12) Mountain Giant
+#

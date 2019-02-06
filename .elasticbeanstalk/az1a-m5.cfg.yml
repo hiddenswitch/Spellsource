@@ -29,6 +29,8 @@ OptionSettings:
   aws:autoscaling:updatepolicy:rollingupdate:
     RollingUpdateType: Health
     RollingUpdateEnabled: true
+  aws:elb:policies:
+    ConnectionSettingIdleTimeout: 4000
 EnvironmentTier:
   Type: Standard
   Name: WebServer

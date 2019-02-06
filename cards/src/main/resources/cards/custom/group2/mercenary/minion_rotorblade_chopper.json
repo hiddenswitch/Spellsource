@@ -1,0 +1,36 @@
+{
+  "name": "Rotorblade Chopper",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 9,
+  "baseHp": 1,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Rush. Also damages the minions next to whomever he attacks.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES",
+      "targetEntityType": "MINION"
+    },
+    "spell": {
+      "class": "AdjacentEffectSpell",
+      "target": "EVENT_TARGET",
+      "spell2": {
+        "class": "DamageSpell",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SELF",
+          "attribute": "ATTACK"
+        }
+      }
+    }
+  },
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

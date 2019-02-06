@@ -1,0 +1,14 @@
+{
+  "name": "Cannon",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Deal",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

@@ -1,56 +1,60 @@
 package net.demilich.metastone.game.statistics;
 
-import net.demilich.metastone.game.statistics.GameStatistics;
-import net.demilich.metastone.game.statistics.Statistic;
-import net.demilich.metastone.game.gameconfig.GameConfig;
+
+import net.demilich.metastone.game.GameContext;
 
 import java.io.Serializable;
 
+/**
+ * Summarizing the results of one or more games.
+ *
+ * @see #SimulationResult(GameContext) for the method to create a simulation result from a single game.
+ */
 public class SimulationResult implements Cloneable, Serializable {
 	private final GameStatistics player1Stats = new GameStatistics();
 	private final GameStatistics player2Stats = new GameStatistics();
 	private final long startTimestamp;
 	private long duration;
-	private final GameConfig config;
+	private int numberOfGames;
 
-	public SimulationResult(GameConfig config) {
-		this.config = config;
+	public SimulationResult(int numberOfGames) {
 		this.startTimestamp = System.currentTimeMillis();
+		this.numberOfGames = numberOfGames;
+	}
+
+	/**
+	 * Creates a simulation result from a single, completed ({@link GameContext#updateAndGetGameOver()} {@code == true})
+	 * game.
+	 *
+	 * @param context The context to analyze.
+	 */
+	public SimulationResult(GameContext context) {
+		this(1);
+		this.getPlayer1Stats().merge(context.getPlayer1().getStatistics());
+		this.getPlayer2Stats().merge(context.getPlayer2().getStatistics());
+		this.calculateMetaStatistics();
 	}
 
 	public SimulationResult merge(SimulationResult other) {
 		getPlayer1Stats().merge(other.getPlayer1Stats());
 		getPlayer2Stats().merge(other.getPlayer2Stats());
 		duration += other.getDuration();
-		config.setNumberOfGames(other.getConfig().getNumberOfGames() + getConfig().getNumberOfGames());
+		setNumberOfGames(other.getNumberOfGames() + numberOfGames);
 		return this;
 	}
 
 	public void calculateMetaStatistics() {
-		calculateMetaStatistics(player1Stats);
-		calculateMetaStatistics(player2Stats);
-	}
-
-	private void calculateMetaStatistics(GameStatistics statistics) {
-		double gamesPlayed = getNumberOfGames();
-		double winRate = statistics.getLong(Statistic.GAMES_WON) / gamesPlayed * 100;
-		String winRateString = String.format("%.2f", winRate) + "%";
-		statistics.set(Statistic.WIN_RATE, winRateString);
-
 		long endTimestamp = System.currentTimeMillis();
 		duration = endTimestamp - startTimestamp;
 	}
 
-	public GameConfig getConfig() {
-		return config;
-	}
 
 	public long getDuration() {
 		return this.duration;
 	}
 
 	public int getNumberOfGames() {
-		return getConfig().getNumberOfGames();
+		return numberOfGames;
 	}
 
 	public GameStatistics getPlayer1Stats() {
@@ -65,12 +69,16 @@ public class SimulationResult implements Cloneable, Serializable {
 	public String toString() {
 		StringBuilder builder = new StringBuilder();
 		builder.append("[SimulationResult]\n");
-		builder.append("config:\n");
-		builder.append(config.toString());
 		builder.append("\nplayer1Stats:\n");
 		builder.append(getPlayer1Stats().toString());
 		builder.append("\nplayer2Stats:\n");
 		builder.append(getPlayer2Stats().toString());
 		return builder.toString();
 	}
+
+	public void setNumberOfGames(int numberOfGames) {
+		this.numberOfGames = numberOfGames;
+	}
 }
+
+

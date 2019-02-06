@@ -2,6 +2,7 @@ package com.hiddenswitch.spellsource.draft;
 
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.decks.Deck;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.io.Serializable;
@@ -31,7 +32,7 @@ public class PublicDraftState implements Serializable {
 	}
 
 	public Deck createDeck() {
-		Deck deck = new Deck(this.getHeroClass());
+		GameDeck deck = new GameDeck(this.getHeroClass());
 		this.getSelectedCards().forEach(c -> deck.getCards().addCard(CardCatalogue.getCardById(c)));
 		return deck;
 	}

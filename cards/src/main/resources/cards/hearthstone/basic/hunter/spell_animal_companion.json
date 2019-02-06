@@ -16,7 +16,7 @@
     "randomTarget": true
   },
   "attributes": {
-    "NAME": "Aid of Shiramba"
+    "SPELLSOURCE_NAME": "Aid of Shiramba"
   },
   "collectible": true,
   "set": "BASIC",

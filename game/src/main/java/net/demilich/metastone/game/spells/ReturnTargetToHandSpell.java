@@ -1,24 +1,55 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.Map;
-
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.entities.Actor;
-import net.demilich.metastone.game.entities.EntityLocation;
-import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.AttributeMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.events.ReturnToHandEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Map;
+
+/**
+ * Returns the {@code target} to the player's hand as a card.
+ * <p>
+ * After this effect, the card cannot be discarded by random discard effects for the rest of the sequence.
+ * <p>
+ * Actors removed this way are removed peacefully, i.e. their deathrattles are not triggered.
+ * <p>
+ * If the player's hand is full, the target minion or actor is destroyed and the deathrattle <b>is</b> triggered.
+ * <p>
+ * If the target has {@link Attribute#KEEPS_ENCHANTMENTS}, a limited number of buffs are kept. This is used primarily to
+ * implement Kingsbane.
+ * <p>
+ * The {@link SpellArg#SPELL} subspell is cast with {@link EntityReference#OUTPUT} pointing to the returned card.
+ * <p>
+ * For <b>example</b>, to return a target to hand but make it cost (2) less:
+ * <pre>
+ *   {
+ *     "class": "ReturnTargetToHandSpell",
+ *     "spell": {
+ *       "class": "CardCostModifierSpell",
+ *       "target": "OUTPUT",
+ *       "cardCostModifier": {
+ *         "class": "CardCostModifier",
+ *         "target": "SELF",
+ *         "value": 2,
+ *         "operation": "SUBTRACT"
+ *       }
+ *     }
+ *   }
+ * </pre>
+ */
 public class ReturnTargetToHandSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(ReturnTargetToHandSpell.class);
@@ -39,12 +70,20 @@ public class ReturnTargetToHandSpell extends Spell {
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		if (target == null) {
-			logger.warn("onCast: Could not return null target.");
+			logger.warn("onCast {} {}: Could not return null target.", context.getGameId(), source);
+			return;
+		}
+
+		if (target.getZone() == Zones.HAND && !target.hasAttribute(Attribute.DISCARDED)) {
+			logger.error("onCast {} {}: The target {} is already in the hand and we're not interrupting a discard.", context.getGameId(), source, target);
 			return;
 		}
 
 		SpellDesc cardSpell = (SpellDesc) desc.get(SpellArg.SPELL);
 		Player owner = context.getPlayer(target.getOwner());
+		if (desc.containsKey(SpellArg.TARGET_PLAYER)) {
+			owner = player;
+		}
 		if (owner.getHand().getCount() >= GameLogic.MAX_HAND_CARDS
 				&& Actor.class.isAssignableFrom(target.getClass())) {
 			logger.debug("onCast: {} is destroyed because {}'s hand is full", target, owner.getName());
@@ -59,16 +98,29 @@ public class ReturnTargetToHandSpell extends Spell {
 				context.getLogic().removeActor((Actor) target, true);
 			}
 			// The source card may be in the graveyard.
-			Card returnedCard = target.getSourceCard();
-			if (returnedCard.getZone() != Zones.GRAVEYARD
-					|| returnedCard.getZone() != Zones.REMOVED_FROM_PLAY
-					|| !returnedCard.getEntityLocation().equals(EntityLocation.UNASSIGNED)) {
-				returnedCard = returnedCard.getCopy();
+			Card returnedCard;
+			if (target instanceof Card) {
+				returnedCard = (Card) target;
+			} else {
+				// Don't get a copy of the source card, get a copy of the BASE card.
+				returnedCard = context.getCardById(target.getSourceCard().getCardId());
 			}
+
+			// Transferred enchantments
 			returnedCard.getAttributes().putAll(map);
-			context.getLogic().receiveCard(target.getOwner(), returnedCard);
-			if (cardSpell != null) {
+			// Prevents cards from being discarded
+			if (returnedCard.getZone() == Zones.HAND
+					&& returnedCard.hasAttribute(Attribute.DISCARDED)) {
+				returnedCard.getAttributes().remove(Attribute.DISCARDED);
+			} else {
+				context.getLogic().receiveCard(owner.getId(), returnedCard);
+			}
+			if (cardSpell != null && returnedCard.getZone() == Zones.HAND) {
 				SpellUtils.castChildSpell(context, player, cardSpell, source, target, returnedCard);
+			}
+			// It must still be in the hand to be a returned to hand effect
+			if (returnedCard.getZone() == Zones.HAND) {
+				context.fireGameEvent(new ReturnToHandEvent(context, player.getId(), returnedCard, target));
 			}
 		}
 	}

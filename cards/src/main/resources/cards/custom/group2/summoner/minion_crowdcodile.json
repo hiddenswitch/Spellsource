@@ -1,0 +1,30 @@
+{
+  "name": "Crowdcodile",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Invoke (4): For each other minion you control, summon a 2/3 Crocolisk.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": {
+        "class": "EntityCounter",
+        "target": "OTHER_FRIENDLY_MINIONS"
+      },
+      "card": "token_river_crowdcolisk"
+    }
+  },
+  "attributes": {
+    "INVOKE": 4
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

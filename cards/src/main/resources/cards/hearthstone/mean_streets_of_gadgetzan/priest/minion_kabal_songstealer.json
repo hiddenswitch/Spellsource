@@ -15,7 +15,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Vahlok Librarian"
+    "SPELLSOURCE_NAME": "Vahlok Librarian"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

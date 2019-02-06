@@ -1,0 +1,30 @@
+{
+  "name": "Accompany It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Play a 1-Cost minion. Reward: Unite It!",
+  "quest": {
+    "class": "MinionPlayedTrigger",
+    "queueCondition": {
+      "class": "ComparisonCondition",
+      "operation": "EQUAL",
+      "value1": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "LAST_MANA_COST"
+      },
+      "value2": 1
+    },
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 1,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_unite_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

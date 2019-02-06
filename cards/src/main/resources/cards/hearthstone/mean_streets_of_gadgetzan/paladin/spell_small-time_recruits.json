@@ -16,7 +16,7 @@
     }
   },
   "attributes": {
-    "NAME": "Small-Time Recruits"
+    "SPELLSOURCE_NAME": "Small-Time Recruits"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

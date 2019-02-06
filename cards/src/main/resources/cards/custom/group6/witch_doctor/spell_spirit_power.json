@@ -1,0 +1,26 @@
+{
+  "name": "Spirit Power",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Give a minion +4/+4. Summon a 2/2 Spirit.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "attackBonus": 4,
+        "hpBonus": 4
+      },
+      {
+        "class": "SummonSpell",
+        "card": "token_voodoo_spirit"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

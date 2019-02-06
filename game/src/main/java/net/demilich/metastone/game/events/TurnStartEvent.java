@@ -9,7 +9,7 @@ public class TurnStartEvent extends GameEvent {
 	public TurnStartEvent(GameContext context, int playerId) {
 		super(context, playerId, -1);
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return null;

@@ -9,6 +9,12 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
 public class TurnEndTrigger extends EventTrigger {
 
+	public static EventTriggerDesc create(TargetPlayer targetPlayer) {
+		EventTriggerDesc desc = new EventTriggerDesc(TurnEndTrigger.class);
+		desc.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
+		return desc;
+	}
+
 	public TurnEndTrigger() {
 		this(new EventTriggerDesc(TurnEndTrigger.class));
 	}
@@ -19,7 +25,7 @@ public class TurnEndTrigger extends EventTrigger {
 
 	public TurnEndTrigger(TargetPlayer targetPlayer) {
 		this();
-		desc.put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
+		getDesc().put(EventTriggerArg.TARGET_PLAYER, targetPlayer);
 	}
 
 	@Override
@@ -31,5 +37,4 @@ public class TurnEndTrigger extends EventTrigger {
 	public GameEventType interestedIn() {
 		return GameEventType.TURN_END;
 	}
-
 }

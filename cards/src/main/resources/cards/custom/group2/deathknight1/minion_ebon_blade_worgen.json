@@ -1,0 +1,45 @@
+{
+  "name": "Ebon Blade Worgen",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Rush. Battlecry: Discard a Rune to gain +2/+2.",
+  "battlecry": {
+    "condition": {
+      "class": "HoldsCardCondition",
+      "cardFilter": {
+        "class": "SpecificCardFilter",
+        "card": "spell_rune"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DiscardSpell",
+          "cardFilter": {
+            "class": "SpecificCardFilter",
+            "card": "spell_rune"
+          }
+        },
+        {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": 2,
+          "hpBonus": 2
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

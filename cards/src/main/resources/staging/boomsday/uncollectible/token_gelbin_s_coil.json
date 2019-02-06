@@ -1,0 +1,15 @@
+{
+  "name": "Gelbin's Coil",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "After you play a spell, deal 1 damage to a random enemy minion.",
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

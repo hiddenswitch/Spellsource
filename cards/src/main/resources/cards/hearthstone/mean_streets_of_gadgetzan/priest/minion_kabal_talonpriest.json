@@ -16,7 +16,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Vahlok Vestal"
+    "SPELLSOURCE_NAME": "Vahlok Vestal"
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",

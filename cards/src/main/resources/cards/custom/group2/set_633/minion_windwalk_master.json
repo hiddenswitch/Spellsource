@@ -1,0 +1,17 @@
+{
+  "name": "Windwalk Master",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Windfury. Deflect.",
+  "attributes": {
+    "DEFLECT": true,
+    "WINDFURY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

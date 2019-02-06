@@ -19,8 +19,8 @@
           "class": "TurnEndTrigger",
           "targetPlayer": "OPPONENT"
         },
-        "targetPlayer": "OPPONENT",
-        "operation": "ADD"
+        "operation": "ADD",
+        "targetPlayer": "OPPONENT"
       }
     }
   },

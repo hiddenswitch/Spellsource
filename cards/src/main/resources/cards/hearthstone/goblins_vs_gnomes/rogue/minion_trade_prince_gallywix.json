@@ -12,7 +12,7 @@
       "class": "SpellCastedTrigger",
       "queueCondition": {
         "class": "CardPropertyCondition",
-        "cardId": "spell_gallywixs_coin",
+        "card": "spell_gallywixs_coin",
         "invert": true
       },
       "sourcePlayer": "OPPONENT"
@@ -22,7 +22,7 @@
       "spells": [
         {
           "class": "CopyCardSpell",
-          "target": "EVENT_TARGET",
+          "target": "EVENT_SOURCE",
           "targetPlayer": "SELF"
         },
         {

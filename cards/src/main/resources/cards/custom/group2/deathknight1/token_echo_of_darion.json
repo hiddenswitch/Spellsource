@@ -1,0 +1,34 @@
+{
+  "name": "Echo of Darion",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Discover an enemy minion that died this game. Summon two copies of it.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "value": 2
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "distinct": true,
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

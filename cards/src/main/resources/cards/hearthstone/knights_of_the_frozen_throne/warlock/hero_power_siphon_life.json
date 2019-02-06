@@ -4,11 +4,14 @@
   "type": "HERO_POWER",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Hero Power: Lifesteal. Deal 3 damage.",
+  "description": "Lifesteal. Deal $3 damage.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DamageSpell",
-    "value": 3
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 3
+    }
   },
   "attributes": {
     "LIFESTEAL": true

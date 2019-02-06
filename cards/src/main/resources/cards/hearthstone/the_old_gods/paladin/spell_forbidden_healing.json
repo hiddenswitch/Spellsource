@@ -28,7 +28,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Reclaiming the Flesh"
+    "SPELLSOURCE_NAME": "Reclaiming the Flesh"
   },
   "collectible": true,
   "set": "THE_OLD_GODS",

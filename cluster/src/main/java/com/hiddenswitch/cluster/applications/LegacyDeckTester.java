@@ -3,7 +3,6 @@ package com.hiddenswitch.cluster.applications;
 import com.hiddenswitch.cluster.functions.MergeSimulationResults;
 import com.hiddenswitch.cluster.models.TestConfig;
 import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.gameconfig.GameConfig;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import org.apache.commons.cli.*;
 import org.apache.log4j.Logger;
@@ -86,7 +85,7 @@ public class LegacyDeckTester {
 			decks = Common.getDefaultDecks();
 		}
 
-		JavaPairRDD<TestConfig, GameConfig> configs = Common.getConfigsForDecks(sc, decks, gamesPerBatch, batches);
+		JavaPairRDD<TestConfig, Object> configs = Common.getConfigsForDecks(sc, decks, gamesPerBatch, batches);
 
 		// Simulate
 		JavaPairRDD<TestConfig, SimulationResult> results = Common.simulate(configs);

@@ -1,0 +1,23 @@
+### Death Knight: Deathrattle Death Knight
+# Class: OBSIDIAN
+# Format: Custom
+#
+# 2x (1) Corpse Explosion
+# 2x (1) Leper Gnome
+# 2x (1) Vampire Bat
+# 1x (2) Bloodmage Thalnos
+# 2x (2) Loot Hoarder
+# 2x (2) Obliterate
+# 2x (3) Archerus Deathcharger
+# 2x (3) Dungeon Fodder
+# 2x (3) Harvest Golem
+# 2x (3) Icebound Fortitude
+# 2x (3) Plague Dog
+# 2x (4) Death Coil
+# 1x (4) Flesh Monstrosity
+# 1x (6) Cairne Bloodhoof
+# 2x (6) Death and Decay
+# 1x (6) Sylvanas Windrunner
+# 1x (8) Frostmourne
+# 1x (8) Teron Gorefiend
+#

@@ -1,0 +1,29 @@
+{
+  "name": "Hoardling of Tolin",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Invoke (3): Add two copies of a card from your deck to your hand.",
+  "battlecry": {
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "FRIENDLY_DECK",
+      "value": 2,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "INVOKE": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

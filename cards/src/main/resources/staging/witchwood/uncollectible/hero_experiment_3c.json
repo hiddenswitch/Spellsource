@@ -1,0 +1,12 @@
+{
+  "name": "Experiment 3C",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "SILVER",
+  "rarity": "FREE",
+  "description": "<i>It's a Murloc! It's a Dragon! It's... everything?</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

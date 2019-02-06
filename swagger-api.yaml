@@ -1,18 +1,34 @@
+# Spellsource auto-generated client for Unity and Java specification using swagger
+# Run ./client.sh after modifying this file
+# Examine build.gradle for more about how swagger-codegen is invoked for C# and Java
+# Note a typo in the java template in the exact version of swagger-codegen that is required causes the
+# client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 1.0.1
+  version: 3.0.3
   title: Hidden Switch Spellsource API
-  description: The Spellsource API for matchmaking, user accounts, collections management and more
+  description: |
+    The Spellsource API for matchmaking, user accounts, collections management and more.
+
+    To get started, create a user account and make sure to include the entirety of the returned login token as the
+    X-Auth-Token header. You can reuse this token, or login for a new one.
+
+    ClientToServerMessage and ServerToClientMessage are used for the realtime game state and actions two-way websocket
+    interface for actually playing a game. Envelope is used for the realtime API services.
+
+    For the routes that correspond to the paths in this file, visit the Gateway.java file in the Spellsource-Server
+    GitHub repository located in this definition file.
   contact:
     name: Benjamin Berman
-    email: benjamin.s.berman@gmail.com
-    url: http://hiddenswitch.com
+    email: ben@hiddenswitch.com
+    url: https://hiddenswitch.com
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: metastone-dev.us-west-2.elasticbeanstalk.com
+host: api.hiddenswitch.com
+basePath: /api/v3
 schemes:
-  - http
+  - https
 consumes:
   - application/json
 produces:
@@ -23,31 +39,262 @@ securityDefinitions:
     in: header
     name: X-Auth-Token
 definitions:
-  Message:
+  Envelope:
+    description: |
+      A container for data to and from the server. This envelope is the type of every message sent through the
+      /realtime websocket endpoint.
     type: 'object'
     properties:
-      authorId:
+      added:
+        description: |
+          Indicates one of the records should be added to the client's ephemeral collections.
+        type: 'object'
+        properties:
+          chatMessage:
+            $ref: '#/definitions/ChatMessage'
+          friend:
+            $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
+          match:
+            $ref: '#/definitions/Match'
+      changed:
+        description: |
+          Indicates that a record's fields have changed.
+        type: 'object'
+        properties:
+          friend:
+            $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
+      removed:
+        description: |
+          Indicates that a record has been removed from the client's ephemeral collections.
+        type: 'object'
+        properties:
+          inviteId:
+            description: |
+              The unique ID of the invitation that should be removed.
+            type: 'string'
+          matchId:
+            description: |
+              The unique ID of the match that should be removed.
+            type: 'string'
+          friendId:
+            description: |
+              The unique ID of the friend that should be removed,
+            type: 'string'
+      sub:
+        description: |
+          When populated by the client and sent to the server, subscribes to data of the specified kind.
+        type: 'object'
+        properties:
+          conversation:
+            description: |
+              Subscribe to messages in a specific conversation. Receives all past messages, followed by any new ones.
+            type: 'object'
+            properties:
+              conversationId:
+                type: 'string'
+      request:
+        description: |
+          When populated by the server and sent to the client, represents a request from the server for information in
+          the client.
+        type: 'object'
+        properties:
+          isAlive:
+            description: |
+              The server is inquiring if the client is still in matchmaking/is alive with a low timeout.
+            type: 'object'
+      response:
+        description: |
+          When populated by the client and sent to the server, indicates a response to a request from the server.
+        type: 'object'
+        properties:
+          isAlive:
+            $ref: '#/definitions/DefaultMethodResponse'
+      method:
+        description: |
+          When populated by the client and sent to the server, indicates a method should be called. The side effects of
+          methods may include new data updates and a response.
+        type: 'object'
+        properties:
+          methodId:
+            description: |
+              The client-specified ID that will be used to mark the reply (the result) of this method call.
+            type: 'string'
+          enqueue:
+            $ref: '#/definitions/MatchmakingQueuePutRequest'
+          dequeue:
+            description: |
+              Leave the specified queue
+            type: 'object'
+            properties:
+              queueId:
+                type: 'string'
+                description: |
+                  The queue to which the server should direct this request.
+          sendMessage:
+            description: |
+              Send a change message to the indicated conversationId.
+            type: 'object'
+            properties:
+              conversationId:
+                description: |
+                  A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+                  lexicographically.
+                type: 'string'
+              message:
+                description: |
+                  The contents of the message to send to the conversation.
+                type: 'string'
+      result:
+        description: |
+          When populated on the server and sent to the client, indicates that a method call had a specific result.
+        type: 'object'
+        properties:
+          methodId:
+            description: |
+              The ID of the method this is a result for.
+            type: 'string'
+          sendMessage:
+            description: |
+              The result of sending a message.
+            type: 'object'
+            properties:
+              messageId:
+                description: |
+                  The new message ID.
+                type: 'string'
+          enqueue:
+            $ref: '#/definitions/MatchmakingQueuePutResponse'
+          dequeue:
+            $ref: '#/definitions/DefaultMethodResponse'
+      game:
+        description: |
+          Stores a ClientToServerMessage or a ServerToClientMessage. Allows envelopes to carry game messages.
+        type: 'object'
+        properties:
+          serverToClient:
+            $ref: '#/definitions/ServerToClientMessage'
+          clientToServer:
+            $ref: '#/definitions/ClientToServerMessage'
+  Enchantment:
+    type: 'object'
+    description: |
+      An enchantment
+  ChatMessage:
+    description: |
+      A chat message.
+    type: 'object'
+    properties:
+      messageId:
+        description: |
+          The ID of the message.
         type: 'string'
-      authorDisplayName:
+      conversationId:
+        description: |
+          A conversation ID looks like userId1,userId2 where the first user ID is the one that comes first
+          lexicographically.
         type: 'string'
-      text:
+      senderName:
+        description: |
+          The text to render in the sender name field.
+        type: 'string'
+      senderUserId:
+        description: |
+          The user ID of the sender. Useful for looking up against the presence notifications.
         type: 'string'
       timestamp:
+        description: |
+          The timestamp of the message.
         type: 'integer'
         format: 'int64'
-  Conversation:
+      dateLabel:
+        description: |
+          The text that should be used to render when this message was sent.
+        type: 'string'
+      message:
+        description: |
+          The contents of this message.
+        type: 'string'
+  Invite:
+    description: |
+      An object that indicates the player has a pending invitation to a game.
     type: 'object'
     properties:
       _id:
+        description: |
+          The ID of the invite.
         type: 'string'
-      messages:
-        type: 'array'
-        items:
-          $ref: '#/definitions/Message'
+      fromUserId:
+        description: |
+          The user ID from whom the invite originates
+        type: 'string'
+      toUserId:
+        description: |
+          The user ID to whom the invite is addressed
+        type: 'string'
+      toName:
+        description: |
+          The name of the user to whom the invite is addressed
+        type: 'string'
+      fromName:
+        description: |
+          The user from whom the invite originates
+        type: 'string'
+      message:
+        description: |
+          The description of this invite. Typically includes the queue contents and possibly a note from the user.
+        type: 'string'
+      queueId:
+        description: |
+          When set, indicates this is an invitation to play a game. The queue ID to put into the matchmaking request to
+          fulfill this invite.
+        type: 'string'
+      friendId:
+        description: |
+          When set, indicates this is an invitation to become friends.
+        type: 'string'
+      expiresAt:
+        description: |
+          An expiration timestamp.
+        type: 'integer'
+        format: 'int64'
+      status:
+        description: |
+          Indicates the status of the invite.
+           * UNDELIVERED: The invitation was created and is awaiting delivery, either due to ordinary networking delay
+             or because the recipient is not yet online.
+           * PENDING: The invitation is delivered and awaiting a response.
+           * TIMEOUT: The recipient did not respond by the expiration time and the invitation expired.
+           * ACCEPTED: The recipient accepted the invitation. The sender should enter the queue if they haven't already
+             done so.
+           * REJECTED: The recipient rejected the invitation.
+           * CANCELLED: The sender cancelled the invitation.
+        type: 'string'
+        enum:
+          - 'UNDELIVERED'
+          - 'PENDING'
+          - 'TIMEOUT'
+          - 'ACCEPTED'
+          - 'REJECTED'
+          - 'CANCELLED'
+  PresenceEnum:
+    description: |
+      Indicates the current status of a friend.
+    type: 'string'
+    enum:
+      - 'UNKNOWN'
+      - 'OFFLINE'
+      - 'IN_GAME'
+      - 'ONLINE'
   Friend:
     type: 'object'
     properties:
-      friendid:
+      presence:
+        $ref: '#/definitions/PresenceEnum'
+      friendId:
         type: 'string'
       since:
         type: 'integer'
@@ -58,16 +305,27 @@ definitions:
     type: 'object'
     properties:
       _id:
+        description: The user ID
         type: 'string'
       name:
+        description: The username that is displayed to toher players
+        type: 'string'
+      privacyToken:
+        description: |
+          The token that is appended to the end of the user's name to allow friending without sharing an e-mail address.
         type: 'string'
       email:
+        description: The user's email address
         type: 'string'
       friends:
+        description: |
+          The user's friends at the moment of receiving this account document. This may be out of date as the latest
+          friends information will come from receiving friend documents.
         type: 'array'
         items:
           $ref: '#/definitions/Friend'
       decks:
+        description: A list of decks belonging to the player
         type: 'array'
         items:
           $ref: '#/definitions/InventoryCollection'
@@ -77,23 +335,6 @@ definitions:
           True if the client should attempt to connect to a match with its token.
       personalCollection:
         $ref: '#/definitions/InventoryCollection'
-  SendMessageRequest:
-    type: 'object'
-    required:
-      - text
-    properties:
-      text:
-        type: 'string'
-  SendMessageResponse:
-    type: 'object'
-    properties:
-      message:
-        $ref: '#/definitions/Message'
-  GetConversationResponse:
-    type: 'object'
-    properties:
-      conversation:
-        $ref: '#/definitions/Conversation'
   GetAccountsRequest:
     type: 'object'
     required:
@@ -170,16 +411,6 @@ definitions:
         description: |
           A valid hero class for creating the deck. The appropriate hero card will be chosen for this deck unless
           otherwise specified.
-
-           - BROWN: Druid class.
-           - GREEN: Hunter class.
-           - BLUE: Mage class.
-           - GOLD: Paladin class.
-           - WHITE: Priest class.
-           - BLACK: Rogue class.
-           - SILVER: Shaman class.
-           - VIOLET: Warlock class.
-           - RED: Warrior class.
         type: 'string'
         enum:
           - 'BROWN'
@@ -191,6 +422,22 @@ definitions:
           - 'SILVER'
           - 'VIOLET'
           - 'RED'
+          - 'JADE'
+          - 'NAVY'
+          - 'LEATHER'
+          - 'RUST'
+          - 'EGGPLANT'
+          - 'ICE'
+          - 'OBSIDIAN'
+          - 'ICECREAM'
+          - 'AMBER'
+          - 'TOAST'
+          - 'ROSE'
+          - 'BLOOD'
+          - 'NEONGREEN'
+          - 'TEAL'
+          - 'DARKGREEN'
+          - 'PURPLE'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -336,29 +583,50 @@ definitions:
     description: |
       An empty response signifying your password was correctly changed
   InventoryCollection:
+    description: |
+      A collection of cards.
     type: 'object'
     properties:
       _id:
+        description: |
+          The identifier of this collection. Corresponds to a deckId when this is a deck collection.
         type: 'string'
       userId:
+        description: |
+          The owner of this collection.
         type: 'string'
       name:
+        description: |
+          The name of this collection. Corresponds to the deck name when this is a deck collection.
         type: 'string'
       heroClass:
+        description: |
+          The hero class when this is a deck collection.
         type: 'string'
       format:
+        description: |
+          The format when this is a deck collection.
         type: 'string'
       type:
+        description: |
+          The type of collection this object is. A user's personal collection is of type USER. A deck is of type DECK.
         type: 'string'
         enum:
           - 'USER'
           - 'ALLIANCE'
           - 'DECK'
       deckType:
+        description: |
+          Indicates whether this is a deck meant for draft or constructed play.
         type: 'string'
         enum:
           - 'DRAFT'
           - 'CONSTRUCTED'
+      isStandardDeck:
+        description: |
+          When true, indicates this is a standard deck provided by the server.
+        type: 'boolean'
+        default: false
       inventory:
         type: 'array'
         items:
@@ -400,6 +668,7 @@ definitions:
       - 'EMOTE'
       - 'TOUCH'
       - 'CONCEDE'
+      - 'PINGPONG'
   Emote:
     description: |
       An emote that should play from the specified entity.
@@ -446,6 +715,8 @@ definitions:
           The ID of the player who has won. Null if no player has won.
   ServerToClientMessage:
     type: 'object'
+    required:
+      - messageType
     properties:
       id:
         type: 'string'
@@ -470,6 +741,11 @@ definitions:
         $ref: '#/definitions/Emote'
       gameOver:
         $ref: '#/definitions/GameOver'
+      isReplayMessage:
+        description: |
+          True iff this message is a part of a replay.
+        type: 'boolean'
+        default: False
       startingCards:
         description: |
           Used for a mulligan request. An array of entities representing the cards you may mulligan.
@@ -530,9 +806,9 @@ definitions:
   EntityLocation:
     type: 'object'
     required:
-     - zone
-     - index
-     - player
+      - zone
+      - index
+      - player
     properties:
       player:
         type: 'integer'
@@ -594,6 +870,11 @@ definitions:
           Forces this card event to be shown locally
       card:
         $ref: '#/definitions/Entity'
+  DamageTypeEnum:
+    type: 'string'
+    enum:
+      - 'PHYSICAL'
+      - 'MAGICAL'
   GameEvent:
     type: 'object'
     properties:
@@ -616,33 +897,44 @@ definitions:
         enum:
           - 'ALL'
           - 'AFTER_PHYSICAL_ATTACK'
+          - 'AFTER_PLAY_CARD'
           - 'AFTER_SPELL_CASTED'
           - 'AFTER_SUMMON'
           - 'ATTRIBUTE_APPLIED'
           - 'ARMOR_GAINED'
           - 'BEFORE_SUMMON'
           - 'BOARD_CHANGED'
+          - 'CARD_ADDED_TO_DECK'
+          - 'CARD_SHUFFLED'
           - 'DAMAGE'
           - 'DISCARD'
+          - 'DRAIN'
           - 'DRAW_CARD'
           - 'ENRAGE_CHANGED'
           - 'ENTITY_TOUCHED'
           - 'ENTITY_UNTOUCHED'
+          - 'FATIGUE'
           - 'GAME_START'
           - 'HEAL'
           - 'HERO_POWER_USED'
+          - 'INVOKED'
           - 'JOUST'
           - 'KILL'
           - 'LOSE_DIVINE_SHIELD'
-          - 'MILL'
+          - 'LOSE_DEFLECT'
+          - 'MAX_HP_INCREASED'
           - 'MAX_MANA'
+          - 'MANA_MODIFIED'
           - 'OVERLOAD'
           - 'PERFORMED_GAME_ACTION'
           - 'PHYSICAL_ATTACK'
           - 'PLAY_CARD'
           - 'PRE_DAMAGE'
+          - 'PRE_GAME_START'
           - 'QUEST_PLAYED'
           - 'QUEST_SUCCESSFUL'
+          - 'RETURNED_TO_HAND'
+          - 'ROASTED'
           - 'REVEAL_CARD'
           - 'SECRET_PLAYED'
           - 'SECRET_REVEALED'
@@ -744,6 +1036,8 @@ definitions:
             type: 'integer'
           source:
             $ref: '#/definitions/Entity'
+          damageType:
+            $ref: '#/definitions/DamageTypeEnum'
       weaponEquipped:
         type: 'object'
         properties:
@@ -805,13 +1099,20 @@ definitions:
             $ref: '#/definitions/Entity'
       discard:
         $ref: '#/definitions/CardEvent'
-      mill:
+      roasted:
         $ref: '#/definitions/CardEvent'
       kill:
         type: 'object'
         properties:
           victim:
             $ref: '#/definitions/Entity'
+      fatigue:
+        type: 'object'
+        properties:
+          playerId:
+            type: 'integer'
+          damage:
+            type: 'integer'
       triggerFired:
         type: 'object'
         properties:
@@ -823,33 +1124,23 @@ definitions:
             description: |
               The entity ID corresponding to the source of the trigger that got fired.
             type: 'integer'
-  JavaSerializationObject:
-    type: 'object'
-    required:
-      - 'javaSerialized'
-    properties:
-      javaSerialized:
-        type: 'string'
-  MatchmakingDeck:
-    type: 'object'
-    required:
-      - 'cards'
-    properties:
-      heroClass:
-        type: 'string'
-      cards:
-        type: 'array'
-        items:
-          type: 'string'
+          triggerSource:
+            $ref: '#/definitions/Entity'
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:
-      casual:
-        type: 'boolean'
+      queueId:
+        type: 'string'
+        description: |
+          Indicates which queue this request is for.
       deckId:
         type: 'string'
-      deck:
-        $ref: '#/definitions/MatchmakingDeck'
+        description: |
+          When set, specifies the deck for this queue. Some queues do not accept deck IDs.
+      botDeckId:
+        type: 'string'
+        description: |
+          When set, specifies that the bot should play the provided deck.
   MatchmakingQueuePutResponseUnityConnection:
     type: 'object'
     properties:
@@ -862,8 +1153,6 @@ definitions:
   MatchmakingQueuePutResponse:
     type: 'object'
     properties:
-      connection:
-        $ref: '#/definitions/JavaSerializationObject'
       unityConnection:
         $ref: '#/definitions/MatchmakingQueuePutResponseUnityConnection'
       retry:
@@ -907,10 +1196,10 @@ definitions:
           - 'SELECT_HERO'
           - 'COMPLETE'
           - 'RETIRED'
-      selectedCards:
+      selectedCardIds:
         type: 'array'
         items:
-          $ref: '#/definitions/Entity'
+          type: 'string'
       cardsRemaining:
         description: |
           Gets the number of card choices remaining to make.
@@ -933,9 +1222,17 @@ definitions:
         type: 'string'
   FriendPutRequest:
     type: 'object'
+    description: |
+      Adds two users to each other's friends list.
     properties:
+      usernameWithToken:
+        type: 'string'
+        description: |
+          The username with the privacy token, like "username#1234".
       friendId:
         type: 'string'
+        description: |
+          Not supported. Throws an error if this is specified on the client.
     required:
       - friendId
   FriendPutResponse:
@@ -1158,12 +1455,11 @@ definitions:
           $ref: '#/definitions/ChooseOneOptions'
   Entity:
     type: 'object'
-    required:
-      - 'id'
     properties:
       id:
         description: The entity's ID in the game.
         type: 'integer'
+        format: 'int32'
         default: -1
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
@@ -1204,133 +1500,198 @@ definitions:
       gold:
         description: Render this entity with a "gold" effect.
         type: 'boolean'
+        default: false
       boardPosition:
         description: The index of the entity in its zone.
         type: 'integer'
+        format: 'int32'
       owner:
         description: An integer corresponding to the entity's owner.
         type: 'integer'
+        format: 'int32'
+        default: -1
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
       baseHp:
         description: The base hitpoints of the entity.
         type: 'integer'
+        format: 'int32'
       hp:
         description: |
           The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
         type: 'integer'
+        format: 'int32'
       durability:
         description: The durability (number of uses) that the weapon still has.
         type: 'integer'
+        format: 'int32'
       maxHp:
         description: The maximum number of hitpoints this entity can have.
         type: 'integer'
+        format: 'int32'
       baseAttack:
         description: The entity's base attack value.
         type: 'integer'
+        format: 'int32'
       attack:
         description: |
           The entity's current attack value. Conventionally, this value should be rendered on the attack token.
         type: 'integer'
+        format: 'int32'
       baseManaCost:
         description: |
           The entity's base mana cost.
         type: 'integer'
+        format: 'int32'
       manaCost:
         description: |
           The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
         type: 'integer'
+        format: 'int32'
       armor:
         description: |
           The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
         type: 'integer'
+        format: 'int32'
       destroyed:
         description: |
           When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
           still in a zone other than the graveyard; render a death icon over the entity when it is so marked.
         type: 'boolean'
+        default: false
       summoningSickness:
         description: |
           When true, the entity cannot attack this turn because it has "summoning sickness," or a disability related
           to the first turn the entity came into play. Typically rendered with snooze icons.
         type: 'boolean'
+        default: false
       frozen:
         description: |
           When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
           it would normally be able to attack.
         type: 'boolean'
+        default: false
+      uncensored:
+        description: |
+          When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
+          shown to the opponent.
+        type: 'boolean'
+        default: false
+      deflect:
+        description: |
+          When true, the entity's first incoming hit will hit its owner rather than itself.
+        type: 'boolean'
+        default: false
       silenced:
         description: |
           Indicates that the entity was silenced.
         type: 'boolean'
+        default: false
       windfury:
         description: |
           Indicates the entity can attack twice a turn.
         type: 'boolean'
+        default: false
       permanent:
         description: |
           Indicates the entity is an on-battlefield permanent.
         type: 'boolean'
+        default: false
+      collectible:
+        description: |
+          Indicates the card is collectible - valid for putting into decks.
+        type: 'boolean'
+        default: false
       taunt:
         description: |
           Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's
           physical attack action targeting.
         type: 'boolean'
+        default: false
       spellDamage:
         description: |
           Indicates the amount of additional spell damage this entity gives its owning player.
         type: 'integer'
+        format: 'int32'
       charge:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+        default: false
+      rush:
+        description: |
+          When true, the entity can attack a minion the same turn it is summoned.
+        type: 'boolean'
+        default: false
+      lifesteal:
+        description: |
+          When true, the entity heals its owner when it deals damage.
+        type: 'boolean'
+        default: false
+      poisonous:
+        description: |
+          When true, the entity will destroy any target it damages.
+        type: 'boolean'
+        default: false
       enraged:
         description: |
           When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
         type: 'boolean'
+        default: false
       battlecry:
         description: |
           When true, this entity has an effect that gets triggered when it is played from the hand.
         type: 'boolean'
+        default: false
       deathrattles:
         description: |
           When true, this entity has an effect that gets triggered when it is destroyed.
         type: 'boolean'
+        default: false
       immune:
         description: |
           Indicates the entity does not take damage.
         type: 'boolean'
+        default: false
       divineShield:
         description: |
           When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage.
         type: 'boolean'
+        default: false
       stealth:
         description: |
           When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
         type: 'boolean'
+        default: false
       combo:
         description: |
           Indicates this minion has a combo effect.
         type: 'boolean'
+        default: false
       overload:
         description: |
           Indicates the amount of mana that would be locked if this card were played.
         type: 'integer'
+        format: 'int32'
       chooseOne:
         description: |
           Indicates this card has a choose-one effect.
         type: 'boolean'
+        default: false
       untargetableBySpells:
         description: |
           Indicates this entity cannot be targeted by spells.
         type: 'boolean'
+        default: false
       cannotAttack:
         description: When true, indicates this minion cannot attack, even though it normally can.
         type: 'boolean'
+        default: false
       underAura:
         description: When true, indicates this minion is benefiting from the aura of another effect.
         type: 'boolean'
+        default: false
       customRenderer:
         type: 'string'
       customData:
@@ -1338,18 +1699,27 @@ definitions:
       playable:
         description: When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
         type: 'boolean'
+        default: false
+      conditionMet:
+        description: When true, indicates that a condition written on the card is met and the player should be informed.
+        type: 'boolean'
+        default: false
       mana:
         description: The player's current mana.
         type: 'integer'
+        format: 'int32'
       maxMana:
         description: The player's maximum amount of mana.
         type: 'integer'
+        format: 'int32'
       lockedMana:
         description: The amount of mana that was locked due to overload.
         type: 'integer'
+        format: 'int32'
       hostsTrigger:
         description: When true, indicates this entity has an effect that triggers on game events.
         type: 'boolean'
+        default: false
       note:
         description: A renderable note attached to this entity.
         type: 'string'
@@ -1369,11 +1739,15 @@ definitions:
       fires:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'
+        format: 'int32'
+        default: 0
       countUntilCast:
         description: |
           The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
           triggered.
         type: 'integer'
+        format: 'int32'
+        default: 0
       cardSet:
         description: |
           The card expansion set this entity belongs to.
@@ -1395,6 +1769,7 @@ definitions:
           other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
           turn 0.
         type: 'boolean'
+        default: false
   DraftsChooseCardRequest:
     type: 'object'
     required:
@@ -1479,14 +1854,14 @@ definitions:
             description: |
               Indicates that the player must choose from the specified deck IDs in the player's account.
   GetCardsResponse:
-    type: object
+    type: 'object'
     description: |
       A cacheable copy of the entire card catalogue.
     properties:
       version:
         description: |
           A token used in the If-None-Match argument when checking for new card catalogue content.
-        type: string
+        type: 'string'
       cards:
         description: |
           The actual array of cards representing the complete Spellsource catalogue.
@@ -1494,16 +1869,176 @@ definitions:
         items:
           $ref: '#/definitions/CardRecord'
   SpellsourceException:
-    type: object
+    type: 'object'
     description: |
       A server-side exception with content renderable to the client.
     properties:
       message:
         description: |
           A user-renderable message explaining the source of the error.
-        type: string
+        type: 'string'
     required:
       - message
+  InvitePostRequest:
+    type: 'object'
+    description: |
+      Requests to send an invite to play a 1v1 match, to friend a player, or both.
+    properties:
+      friend:
+        description: |
+          When true, indicates that this request is a friend invitation.
+        default: false
+        type: 'boolean'
+      queueId:
+        description: |
+          The queue that the player would like to 1v1 inside of. These may differ from the competitive queues.
+        type: 'string'
+      deckId:
+        description: |
+          The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is
+          automatically enqueued.
+        type: 'string'
+      toUserId:
+        description: |
+          The user who should receive the invite
+        type: 'string'
+      toUserNameWithToken:
+        description: |
+          The username and privacy token (#1234 part) to send the request to
+        type: 'string'
+      message:
+        description: |
+          An optional message to add to the invite request
+        type: 'string'
+  InviteResponse:
+    type: 'object'
+    description: |
+      The invitation that was sent, or the updated invite
+    properties:
+      invite:
+        $ref: '#/definitions/Invite'
+  InviteGetResponse:
+    type: 'object'
+    description: |
+      The invites where this user is either the sender or recipient.
+    properties:
+      invites:
+        type: 'array'
+        items:
+          $ref: '#/definitions/Invite'
+  AcceptInviteRequest:
+    type: 'object'
+    description: |
+      Accepts an invite to a match or a friend invite.
+    properties:
+      awaitGameStart:
+        type: 'boolean'
+        description: |
+          When true, specifies that the method call should only return when the game is actually ready to join
+      match:
+        $ref: '#/definitions/MatchmakingQueuePutRequest'
+  AcceptInviteResponse:
+    type: 'object'
+    properties:
+      friend:
+        $ref: '#/definitions/FriendPutResponse'
+      match:
+        $ref: '#/definitions/MatchmakingQueuePutResponse'
+      invite:
+        $ref: '#/definitions/Invite'
+  DefaultMethodResponse:
+    type: 'object'
+    description: |
+      Indicates a default, successful response.
+  Match:
+    description: |
+      A document that describes an awaiting match.
+    type: 'object'
+    properties:
+      _id:
+        type: 'string'
+        description: |
+          The ID of the match.
+      createdAt:
+        type: 'integer'
+        format: 'int64'
+        description: |
+          A timestamp for when this game was created (approximate).
+  Replay:
+    description: |
+      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+      Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`.
+    type: 'object'
+    properties:
+      gameStates:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayGameStates'
+      deltas:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayDeltas'
+  ReplayDeltas:
+    description: |
+      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+    type: 'object'
+    properties:
+      backward:
+        description: |
+          Backward delta.
+        $ref: '#/definitions/EntityChangeSet'
+      forward:
+        description: |
+          Forward delta.
+        $ref: '#/definitions/EntityChangeSet'
+  ReplayGameStates:
+    description: |
+      A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
+    type: 'object'
+    properties:
+      first:
+        $ref: '#/definitions/GameState'
+      second:
+        $ref: '#/definitions/GameState'
+  GetGameRecordIdsResponse:
+    description: |
+      Retrieves an array of game IDs played by this player. Eventually will require paging.
+    type: 'object'
+    properties:
+      gameIds:
+        description: |
+          All the game IDs ever played by this player
+        type: 'array'
+        items:
+          type: 'string'
+  GetGameRecordResponse:
+    description: |
+      Information about a game.
+
+      Statistics about the game will be stored at a later point in time.
+    type: 'object'
+    properties:
+      replay:
+        $ref: '#/definitions/Replay'
+      isBotGame:
+        type: 'boolean'
+        description: |
+          True if this game was played against a bot (or was played entirely by bots)
+      completedAtLocalized:
+        type: 'string'
+        description: |
+          The date and time when this game was finished in the client's local time.
+      completedAt:
+        type: 'integer'
+        format: 'int64'
+        description: |
+          A timestamp for when this game was finished (approximate).
+      playerNames:
+        description: |
+          The names of the players in this game, without their privacy tokens
+        type: 'array'
+        items:
+          type: 'string'
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
@@ -1663,7 +2198,7 @@ paths:
               type: string
               format: date-time
               description: |
-                 The RFC1123 date when this request was made.
+                The RFC1123 date when this request was made.
   /decks:
     get:
       description: |
@@ -1787,7 +2322,7 @@ paths:
           $ref: '#/responses/InternalServerError'
     delete:
       description: Removes your client from the matchmaking queue, regardless of which queue it is in.
-      operationId: matchmakingConstructedQueueDelete
+      operationId: matchmakingDelete
       security:
         - TokenSecurity: []
       responses:
@@ -1798,119 +2333,37 @@ paths:
             $ref: '#/definitions/MatchCancelResponse'
         default:
           $ref: '#/responses/InternalServerError'
-  /matchmaking/{queueId}:
-    get:
-      description: |
-        Gets a renderable gamestate representing this player's current game in this queue.
-      operationId: matchmakingConstructedGet
-      parameters:
-        - name: queueId
-          in: path
-          required: true
-          description: The ID of the queue to enter.
-          type: 'string'
-      security:
-        - TokenSecurity: []
-      responses:
-        "404":
-          description: |
-            There is no game currently available.
-        "200":
-          description: |
-            The client has a game and its state was delivered.
-          schema:
-            $ref: '#/definitions/GameState'
-        default:
-          $ref: '#/responses/InternalServerError'
-    delete:
-      description: |
-        Concedes the player's current game in this queue, or cancels their place in it.
-      operationId: matchmakingConstructedDelete
-      parameters:
-        - name: queueId
-          in: path
-          required: true
-          description: The ID of the queue to enter.
-          type: 'string'
-      security:
-        - TokenSecurity: []
-      responses:
-        "200":
-          description: |
-            The client's game was successfully conceded.
-          schema:
-            $ref: '#/definitions/MatchConcedeResponse'
-        default:
-          $ref: '#/responses/InternalServerError'
-    put:
-      description: |
-        Enters your client into the specified matchmaking queue. Clients have to keep their matchmaking queue entry
-         alive by regularly retrying when they have not yet been matched. Retry within 5 seconds.
-      operationId: matchmakingConstructedQueuePut
-      security:
-        - TokenSecurity: []
-      parameters:
-        - name: queueId
-          in: path
-          required: true
-          description: The ID of the queue to enter.
-          type: 'string'
-        - name: request
-          in: body
-          description: |
-            The matchmaking queue entry. Contains the deck.
-          required: true
-          schema:
-            $ref: '#/definitions/MatchmakingQueuePutRequest'
-      responses:
-        "200":
-          description: |
-            The client has been matched with a client and is ready to connect. Use the "connection" field for connection
-            information (client specific).
-          schema:
-            $ref: '#/definitions/MatchmakingQueuePutResponse'
-        "202":
-          description: |
-            The client is waiting in the matchmaking queue and has been given a MatchmakingRequest object to retry with
-            in the "retry" field of the MatchmakingResponse. Retry with this request within 5 seconds.
-          schema:
-            $ref: '#/definitions/MatchmakingQueuePutResponse'
-        default:
-          $ref: '#/responses/InternalServerError'
   /friends:
     put:
       description: |
-        connect with a friend
+        Adds a specified user to your friend list.
       operationId: friendPut
       security:
         - TokenSecurity: []
       parameters:
         - name: request
           in: body
-          description: |
-            Friend put request
           required: true
           schema:
             $ref: '#/definitions/FriendPutRequest'
       responses:
         "200":
           description: |
-            Connection has been made
+            Users were friended.
           schema:
             $ref: '#/definitions/FriendPutResponse'
         "404":
           description: |
-            friendId does not belong to a user
+            An invalid username and token were provided.
         "409":
           description: |
-            already friends
+            Either you are already friends, or you attempted to set a friend ID directly.
         default:
           $ref: '#/responses/InternalServerError'
-
   /friends/{friendId}:
     delete:
       description: |
-        unfriend a user
+        Removes the friend relationship between two users.
       operationId: friendDelete
       security:
         - TokenSecurity: []
@@ -1929,6 +2382,9 @@ paths:
         "404":
           description: |
             Not a friend
+        "418":
+          description: |
+            Another action has put this friend relationship into an invalid state (e.g., a ban or a user account change).
         default:
           $ref: '#/responses/InternalServerError'
   /drafts:
@@ -2021,57 +2477,176 @@ paths:
             An invalid option was chosen, or it's not time to choose a card (usually your draft is finished).
         default:
           $ref: '#/responses/InternalServerError'
-
-  /friends/{friendId}/conversation:
+  /invites:
     get:
       description: |
-        get conversation with friend
-      operationId: getFriendConversation
+        Retrieve all invites where this user is either the sender or recipient.
+      operationId: getInvites
       security:
         - TokenSecurity: []
-      parameters:
-        - name: friendId
-          in: path
-          required: true
-          description: id of friend
-          type: 'string'
       responses:
         "200":
           description: |
-            Succefully fetched conversation
+            The invites where this user is either the sender or recipient.
           schema:
-            $ref: '#/definitions/GetConversationResponse'
-        "404":
-          description: |
-            Friend not found
+            $ref: '#/definitions/InviteGetResponse'
         default:
           $ref: '#/responses/InternalServerError'
-    put:
+    post:
       description: |
-        send message to friend
-      operationId: sendFriendMessage
+        Send an invite.
+      operationId: postInvite
       security:
         - TokenSecurity: []
       parameters:
-        - name: friendId
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/InvitePostRequest'
+      responses:
+        "200":
+          description: |
+            The invite that was sent.
+          schema:
+            $ref: '#/definitions/InviteResponse'
+        "403":
+          description: |
+            You did not have access to change this invite.
+        "404":
+          description: |
+            The specified user was not found. You can send invites to people other than your friends currently.
+        default:
+          $ref: '#/responses/InternalServerError'
+  /invites/{inviteId}:
+    post:
+      description: |
+        Accepts the invite. If this is an invite to friend the user, this method will perform the friending path for
+        you. If this is an invite to play a match and a matchmaking queue put is specified (with the deck ID), this
+        method will enter you into the special invite matchmaking queue.
+      operationId: acceptInvite
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: inviteId
           in: path
           required: true
-          description: id of friend
           type: 'string'
         - name: request
           in: body
-          description: Send message request
           required: true
           schema:
-            $ref: '#/definitions/SendMessageRequest'
+            $ref: '#/definitions/AcceptInviteRequest'
       responses:
         "200":
           description: |
-            Message sent
+            An updated invite and the result of accepting the invitation. This may include a (currently empty) object
+            specifying that you can now connect to a game, or a friend record.
           schema:
-            $ref: '#/definitions/SendMessageResponse'
+            $ref: '#/definitions/AcceptInviteResponse'
+        "403":
+          description: |
+            You did not have access to change this invite.
         "404":
           description: |
-            Friend not found
+            The invite was not found.
+        "418":
+          description: |
+            The invite is already in an expired state.
         default:
           $ref: '#/responses/InternalServerError'
+    get:
+      description: |
+        Retrieves information about a specific invite, as long as this user is either the sender or recipient.
+      operationId: getInvite
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: inviteId
+          in: path
+          required: true
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            The invite.
+          schema:
+            $ref: '#/definitions/InviteResponse'
+        "404":
+          description: |
+            The invite as not found.
+    delete:
+      description: |
+        When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite.
+      operationId: deleteInvite
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: inviteId
+          in: path
+          required: true
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            The changed invite.
+          schema:
+            $ref: '#/definitions/InviteResponse'
+        "403":
+          description: |
+            You did not have access to change this invite.
+        "404":
+          description: |
+            The invite was not found.
+        "418":
+          description: |
+            The invite is already in an expired state.
+  /games:
+    get:
+      description: |
+        Retrieves a list of game IDs corresponding to all the games this player played.
+      operationId: getGameRecordIds
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            A list of game IDs
+          schema:
+            $ref: '#/definitions/GetGameRecordIdsResponse'
+  /games/{gameId}:
+    get:
+      description: |
+        Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
+        against other players only receive this player's point of view.
+      operationId: getGameRecord
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            A game record.
+          schema:
+            $ref: '#/definitions/GetGameRecordResponse'
+        "404":
+          description: |
+            The game with the specified ID was not found
+        "403":
+          description: |
+            You are not permitted to view this game
+  /version:
+    get:
+      description: |
+        Retrieves the semver server version
+      operationId: getVersion
+      responses:
+        "200":
+          description: |
+            The semver version
+          schema:
+            type: 'string'

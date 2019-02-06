@@ -1,0 +1,20 @@
+{
+  "name": "Venom Breath",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Destroy a minion. Costs (1) less for each card in your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroySpell"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT"
+  }
+}

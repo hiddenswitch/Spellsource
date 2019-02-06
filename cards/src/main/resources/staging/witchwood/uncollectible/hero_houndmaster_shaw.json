@@ -1,0 +1,12 @@
+{
+  "name": "Houndmaster Shaw",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

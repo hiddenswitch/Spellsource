@@ -1,24 +1,24 @@
 package net.demilich.metastone.game.spells.desc.filter;
 
-import java.util.List;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+import java.util.List;
+
 public class HighestAttributeFilter extends EntityFilter {
 
-	public HighestAttributeFilter(FilterDesc desc) {
+	public HighestAttributeFilter(EntityFilterDesc desc) {
 		super(desc);
 	}
 
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
-		Attribute attribute = (Attribute) desc.get(FilterArg.ATTRIBUTE);
-		EntityReference targetReference = (EntityReference) desc.get(FilterArg.TARGET);
+		Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
+		EntityReference targetReference = (EntityReference) getDesc().get(EntityFilterArg.TARGET);
 		List<Entity> entities = context.resolveTarget(player, entity, targetReference);
 		int highest = getHighestInList(entities, attribute);
 		return getAttributeValue(entity, attribute) >= highest;
@@ -41,5 +41,4 @@ public class HighestAttributeFilter extends EntityFilter {
 		}
 		return highest;
 	}
-
 }

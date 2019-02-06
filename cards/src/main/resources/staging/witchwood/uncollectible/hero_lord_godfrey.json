@@ -1,0 +1,12 @@
+{
+  "name": "Lord Godfrey",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "GREEN",
+  "rarity": "FREE",
+  "description": "<i>The Lord of Shadowfang Keep has a bullet to pick with Crowley.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

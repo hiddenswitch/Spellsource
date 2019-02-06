@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "CopyCardSpell",
-      "target": "EVENT_TARGET",
+      "target": "EVENT_SOURCE",
       "targetPlayer": "INACTIVE"
     }
   },

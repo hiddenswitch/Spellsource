@@ -1,12 +1,8 @@
 package com.hiddenswitch.spellsource;
 
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.cards.desc.HeroPowerCardDesc;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
-import net.demilich.metastone.game.cards.desc.SpellCardDesc;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.spells.ConditionalSpell;
 import net.demilich.metastone.game.spells.SummonSpell;
@@ -14,7 +10,8 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerArg;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.spells.desc.trigger.TriggerDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.cards.Attribute;
 import org.apache.commons.lang3.ClassUtils;
 
 import java.io.IOException;
@@ -24,6 +21,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+/**
+ * Converts the card JSON into a table format used for various AI-based card generation algorithms.
+ */
 public class Generator {
 	static final String BATTLECRY = "BattlecryTrigger";
 	static final String DEATHRATTLE = "DeathrattleTrigger";
@@ -82,75 +82,75 @@ public class Generator {
 
 	private Record getBaseRecord(CardDesc cardDesc) {
 		Record record = new Record();
-		record.baseManaCost = cardDesc.baseManaCost;
-		record.heroClass = cardDesc.heroClass.toString();
-		record.rarity = cardDesc.rarity.ordinal();
+		record.baseManaCost = cardDesc.getBaseManaCost();
+		record.heroClass = cardDesc.getHeroClass().toString();
+		record.rarity = cardDesc.getRarity().ordinal();
 		return record;
 	}
 
-	private Stream<Record> toRecords(MinionCardDesc minionCardDesc, int rank, boolean terminal) {
+	private Stream<Record> toRecords(CardDesc cardDesc, int rank, boolean terminal) {
 		// Create a minion "spell"
-		Record record = getBaseRecord(minionCardDesc);
+		Record record = getBaseRecord(cardDesc);
 		record.rank = rank;
 		// Represent this as a summon spell
 		record.args.put(SpellArg.CLASS.toString(), SummonSpell.class.getSimpleName());
-		record.args.put(SpellArg.SUMMON_BASE_HP.toString(), minionCardDesc.baseHp);
-		record.args.put(SpellArg.SUMMON_BASE_ATTACK.toString(), minionCardDesc.baseAttack);
-		if (minionCardDesc.race != null) {
-			record.args.put(SpellArg.RACE.toString(), minionCardDesc.race.toString());
+		record.args.put(SpellArg.SUMMON_BASE_HP.toString(), cardDesc.getBaseHp());
+		record.args.put(SpellArg.SUMMON_BASE_ATTACK.toString(), cardDesc.getBaseAttack());
+		if (cardDesc.getRace() != null) {
+			record.args.put(SpellArg.RACE.toString(), cardDesc.getRace().toString());
 		}
-		if (minionCardDesc.attributes != null) {
+		if (cardDesc.getAttributes() != null) {
 			record.args.putAll(EnumSet.of(Attribute.WINDFURY, Attribute.TAUNT, Attribute.CHARGE, Attribute.DIVINE_SHIELD, Attribute.STEALTH)
-					.stream().collect(Collectors.toMap(k -> "SUMMON_" + k, k -> minionCardDesc.attributes.containsKey(k))));
+					.stream().collect(Collectors.toMap(k -> "SUMMON_" + k, k -> cardDesc.getAttributes().containsKey(k))));
 		}
 
 		// TODO: Put together the battlecry, deathrattle, aura and trigger stuff
-		List<TriggerDesc> triggerDescs = new ArrayList<>();
-		if (minionCardDesc.battlecry != null) {
-			TriggerDesc battlecryTrigger = new TriggerDesc();
+		List<EnchantmentDesc> enchantmentDescs = new ArrayList<>();
+		if (cardDesc.getBattlecry() != null) {
+			EnchantmentDesc battlecryTrigger = new EnchantmentDesc();
 			battlecryTrigger.oneTurn = true;
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, BATTLECRY);
 			battlecryTrigger.eventTrigger = new EventTriggerDesc(args);
 			// TODO: When reconstructing the card, create the appropriate actions.
-			if (minionCardDesc.battlecry.condition != null) {
+			if (cardDesc.getBattlecry().getCondition() != null) {
 				Map<SpellArg, Object> conditionalSpell = new SpellDesc(ConditionalSpell.class);
-				conditionalSpell.put(SpellArg.CONDITION, minionCardDesc.battlecry.condition.createInstance());
-				conditionalSpell.put(SpellArg.SPELL, minionCardDesc.battlecry.spell);
+				conditionalSpell.put(SpellArg.CONDITION, cardDesc.getBattlecry().getCondition().create());
+				conditionalSpell.put(SpellArg.SPELL, cardDesc.getBattlecry().getSpell());
 				battlecryTrigger.spell = new SpellDesc(conditionalSpell);
 			} else {
-				battlecryTrigger.spell = minionCardDesc.battlecry.spell;
+				battlecryTrigger.spell = cardDesc.getBattlecry().getSpell();
 			}
-			battlecryTrigger.spell.put(SpellArg.TARGET_SELECTION, minionCardDesc.battlecry.getTargetSelection());
-			triggerDescs.add(battlecryTrigger);
+			battlecryTrigger.spell.put(SpellArg.TARGET_SELECTION, cardDesc.getBattlecry().getTargetSelection());
+			enchantmentDescs.add(battlecryTrigger);
 		}
 
-		if (minionCardDesc.deathrattle != null) {
-			TriggerDesc deathrattleTrigger = new TriggerDesc();
+		if (cardDesc.getDeathrattle() != null) {
+			EnchantmentDesc deathrattleTrigger = new EnchantmentDesc();
 			deathrattleTrigger.oneTurn = true;
 			Map<EventTriggerArg, Object> args = new HashMap<>();
 			args.put(EventTriggerArg.CLASS, DEATHRATTLE);
-			deathrattleTrigger.spell = minionCardDesc.deathrattle;
-			triggerDescs.add(deathrattleTrigger);
+			deathrattleTrigger.spell = cardDesc.getDeathrattle();
+			enchantmentDescs.add(deathrattleTrigger);
 		}
 
-		if (minionCardDesc.trigger != null) {
-			triggerDescs.add(minionCardDesc.trigger);
+		if (cardDesc.getTrigger() != null) {
+			enchantmentDescs.add(cardDesc.getTrigger());
 		}
 
-		if (minionCardDesc.triggers != null) {
-			triggerDescs.addAll(Arrays.asList(minionCardDesc.triggers));
+		if (cardDesc.getTriggers() != null) {
+			enchantmentDescs.addAll(Arrays.asList(cardDesc.getTriggers()));
 		}
 
-		record.args.put("SUB_TRIGGER_COUNT", triggerDescs.size());
+		record.args.put("SUB_TRIGGER_COUNT", enchantmentDescs.size());
 		record.args.put("SUB_TRIGGER_RANK", rank + 1);
 
-		if (triggerDescs.size() == 0) {
-			record.args.put(SpellArg.SUMMON_TRIGGERS.toString(), triggerDescs);
+		if (enchantmentDescs.size() == 0) {
+			record.args.put(SpellArg.SUMMON_TRIGGERS.toString(), enchantmentDescs);
 		}
 
 		return Stream.concat(Stream.of(record),
-				triggerDescs.stream().flatMap(t -> toRecords(t, record, rank + 1, terminal)));
+				enchantmentDescs.stream().flatMap(t -> toRecords(t, record, rank + 1, terminal)));
 	}
 
 	private Stream<Record> toRecords(final SpellDesc spellDesc, final Record record, final int rank, final boolean terminal) {
@@ -195,7 +195,7 @@ public class Generator {
 
 
 		// Get all the subspells
-		SpellArg[] subSpellArgs = {SpellArg.SPELL, SpellArg.SPELL_1, SpellArg.SPELL_2};
+		SpellArg[] subSpellArgs = {SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2};
 		Stream<Record> subSpells = Stream.of(subSpellArgs)
 				.filter(spellDesc::containsKey)
 				.flatMap(arg -> toRecords((SpellDesc) spellDesc.get(arg), spellRecord, rank + 1, terminal));
@@ -232,7 +232,7 @@ public class Generator {
 							} else {
 								return null;
 							}
-						}).filter(o -> o != null);
+						}).filter(Objects::nonNull);
 
 				List<Record> subCards = subRecords.collect(Collectors.toList());
 				// Find the lowest rank card in these subrecords.
@@ -261,46 +261,8 @@ public class Generator {
 		}
 	}
 
-	private Stream<Record> toRecords(CardDesc cardDesc, int rank, boolean terminal) {
-		if (cardDesc instanceof MinionCardDesc) {
-			return toRecords((MinionCardDesc) cardDesc, rank, terminal);
-		}
-
-		if (!(cardDesc instanceof SpellCardDesc)) {
-			return Stream.empty();
-		}
-
-		Record record = getBaseRecord(cardDesc);
-
-		Stream<Record> subCards = Stream.empty();
-
-		// Try to get the first spell out
-		SpellCardDesc spellCardDesc = (SpellCardDesc) cardDesc;
-
-		List<SpellDesc> descs = new ArrayList<>();
-		if (spellCardDesc.spell != null) {
-			SpellDesc spell = spellCardDesc.spell;
-			if (spellCardDesc.targetSelection != null) {
-				spell.put(SpellArg.TARGET_SELECTION, spellCardDesc.targetSelection);
-			}
-			descs.add(spell);
-		}
-
-		// Get the sub cards (relevant for options)
-		if (spellCardDesc instanceof HeroPowerCardDesc) {
-			HeroPowerCardDesc heroPowerCardDesc = (HeroPowerCardDesc) spellCardDesc;
-
-			if (heroPowerCardDesc.options != null) {
-				// TODO: Actually process the sub cards
-				subCards = Arrays.stream(heroPowerCardDesc.options).map(CardCatalogue::getCardById).flatMap(card -> toRecords(card.getDesc(), rank + 1));
-			}
-		}
-
-		return descs.stream().flatMap(desc -> toRecords(desc, record, rank, terminal));
-	}
-
-	private Stream<Record> toRecords(TriggerDesc triggerDesc, Record record, int rank, boolean terminal) {
+	private Stream<Record> toRecords(EnchantmentDesc enchantmentDesc, Record record, int rank, boolean terminal) {
 		// TODO: For now, just emit the spells
-		return toRecords(triggerDesc.spell, record, rank, terminal);
+		return toRecords(enchantmentDesc.spell, record, rank, terminal);
 	}
 }

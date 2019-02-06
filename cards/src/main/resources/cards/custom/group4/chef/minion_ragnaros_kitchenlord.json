@@ -1,0 +1,49 @@
+{
+  "name": "Ragnaros, Kitchenlord",
+  "baseManaCost": 8,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "ELEMENTAL",
+  "description": "At the end of your turn, randomly draw or Roast cards until you have at least 8 in hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "CardCountCondition",
+        "value": 8,
+        "operation": "LESS"
+      },
+      "spell": {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "CardCountCondition",
+          "value": 8,
+          "operation": "LESS"
+        },
+        "spell": {
+          "class": "EitherOrSpell",
+          "condition": {
+            "class": "RandomCondition"
+          },
+          "spell1": {
+            "class": "DrawCardSpell"
+          },
+          "spell2": {
+            "class": "RoastSpell"
+          }
+        }
+      }
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

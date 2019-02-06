@@ -1,0 +1,31 @@
+{
+  "name": "Sweet Strategy",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "RARE",
+  "description": "Shuffle two copies of the highest Cost card in your hand into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ShuffleToDeckSpell",
+    "cardFilter": {
+      "class": "ManaCostFilter",
+      "value": {
+        "class": "ReduceValueProvider",
+        "target": "FRIENDLY_HAND",
+        "operation": "MAXIMUM",
+        "value1": {
+          "class": "ManaCostProvider"
+        }
+      },
+      "operation": "EQUAL"
+    },
+    "cardSource": {
+      "class": "HandSource"
+    },
+    "howMany": 2
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

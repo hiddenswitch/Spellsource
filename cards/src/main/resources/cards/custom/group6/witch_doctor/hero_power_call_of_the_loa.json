@@ -1,0 +1,37 @@
+{
+  "name": "Call of the Loa",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Add two random Voodoo spells to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_divination",
+          "spell_frenzy",
+          "spell_hex_bolt",
+          "spell_spirit_bind"
+        ],
+        "randomTarget": true
+      },
+      {
+        "class": "ReceiveCardSpell",
+        "cards": [
+          "spell_divination",
+          "spell_frenzy",
+          "spell_hex_bolt",
+          "spell_spirit_bind"
+        ],
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

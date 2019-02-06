@@ -1,0 +1,27 @@
+{
+  "name": "Anti-Magic Shell",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "OBSIDIAN",
+  "rarity": "FREE",
+  "description": "Give your minions +2/+2 and \"Can't be targeted by spells or Hero Powers.\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_MINIONS",
+        "value": 2
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "UNTARGETABLE_BY_SPELLS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

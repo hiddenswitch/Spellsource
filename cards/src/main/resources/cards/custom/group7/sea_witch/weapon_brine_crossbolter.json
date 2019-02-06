@@ -1,0 +1,25 @@
+{
+  "name": "Brine Crossbolter",
+  "baseManaCost": 7,
+  "type": "WEAPON",
+  "heroClass": "TEAL",
+  "damage": 5,
+  "durability": 2,
+  "rarity": "EPIC",
+  "description": "Reservoir (0-5): Double this weapon's Attack.",
+  "battlecry": {
+    "condition": {
+      "class": "ReservoirCondition",
+      "value1": 0,
+      "value2": 5
+    },
+    "spell": {
+      "class": "DoubleAttackSpell",
+      "target": "SELF"
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

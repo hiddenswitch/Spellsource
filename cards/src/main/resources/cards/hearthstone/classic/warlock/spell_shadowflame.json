@@ -32,7 +32,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Paucha's Kiss"
+    "SPELLSOURCE_NAME": "Paucha's Kiss"
   },
   "collectible": true,
   "set": "CLASSIC",

@@ -1,6 +1,6 @@
 {
   "name": "Spiteful Summoner",
-  "baseManaCost": 6,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 4,

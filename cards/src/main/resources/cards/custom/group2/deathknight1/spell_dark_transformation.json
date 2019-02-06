@@ -1,0 +1,32 @@
+{
+  "name": "Dark Transformation",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Give a minion +6/+6 this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "spell_dark_transformation"
+      },
+      "maxFires": 1
+    },
+    "aura": {
+      "class": "BuffAura",
+      "target": "TRIGGER_HOST",
+      "attackBonus": 6,
+      "hpBonus": 6
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

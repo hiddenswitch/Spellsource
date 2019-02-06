@@ -1,18 +1,17 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardZone;
 import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
@@ -39,7 +38,7 @@ public class OneNightInKarazhanTests extends TestBase {
 			shuffleToDeck(context, player, cardId);
 			playCard(context, player, "minion_barnes");
 			Minion raptor = player.getMinions().get(1);
-			playCardWithTarget(context, player, "spell_silence", raptor);
+			playCard(context, player, "spell_silence", raptor);
 			Assert.assertEquals(raptor.getAttack(), 3);
 			Assert.assertEquals(raptor.getHp(), 2);
 		});
@@ -56,14 +55,8 @@ public class OneNightInKarazhanTests extends TestBase {
 	}
 
 	@Test
-	@Ignore
-	public void testIvoryKnight() {
-		Assert.fail("Needs test.");
-	}
-
-	@Test
 	public void testPrinceMalchezaar() {
-		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false);
+		DebugContext context = createContext(HeroClass.WHITE, HeroClass.WHITE, false, DeckFormat.CUSTOM);
 		context.getPlayers().stream().map(Player::getDeck).forEach(CardZone::clear);
 		context.getPlayers().stream().map(Player::getDeck).forEach(deck -> {
 			Stream.generate(() -> "minion_bloodfen_raptor")
@@ -102,19 +95,11 @@ public class OneNightInKarazhanTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			clearHand(context, player);
 			clearZone(context, player.getDeck());
-			final Card acidicSwampOoze = CardCatalogue.getCardById("minion_acidic_swamp_ooze");
-			acidicSwampOoze.setOwner(player.getId());
-			acidicSwampOoze.setId(context.getLogic().generateId());
-			player.getDeck().addCard(acidicSwampOoze);
-			final Card minionNoviceEngineer = CardCatalogue.getCardById("minion_novice_engineer");
-			context.getLogic().receiveCard(player.getId(), minionNoviceEngineer);
-			final Card malchezaarsImpl = CardCatalogue.getCardById("minion_malchezaars_imp");
-			final Card soulfire = CardCatalogue.getCardById("spell_soulfire");
-			playCard(context, player, malchezaarsImpl);
-			context.getLogic().receiveCard(player.getId(), soulfire);
-			PlayCardAction action = soulfire.play();
-			action.setTarget(context.getPlayer2().getHero());
-			context.getLogic().performGameAction(player.getId(), action);
+			putOnTopOfDeck(context, player, "minion_acidic_swamp_ooze");
+			Card minionNoviceEngineer = receiveCard(context, player, "minion_novice_engineer");
+			playCard(context, player, "minion_malchezaars_imp");
+			Card soulfire = receiveCard(context, player, "spell_soulfire");
+			playCard(context, player, soulfire, opponent.getHero());
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_acidic_swamp_ooze", "The player should have Acidic Swamp Ooze in their hand after playing soulfire.");
 			Assert.assertEquals(minionNoviceEngineer.getZone(), Zones.GRAVEYARD, "Novice engineer should be in the graveyard.");
 		});

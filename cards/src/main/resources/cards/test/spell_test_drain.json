@@ -1,0 +1,16 @@
+{
+  "name": "Drain 1",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "FREE",
+  "description": "Drain 1.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DrainSpell",
+    "value": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

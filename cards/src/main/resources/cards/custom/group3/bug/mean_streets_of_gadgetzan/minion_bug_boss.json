@@ -1,0 +1,23 @@
+{
+  "name": "Bug Boss",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Choose a minion. All friendly minions attack it.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "FightSpell",
+      "secondaryTarget": "FRIENDLY_MINIONS_LEFT_TO_RIGHT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

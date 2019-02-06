@@ -1,0 +1,31 @@
+{
+  "name": "Catacomb Candlefin",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "MURLOC",
+  "description": "Battlecry: Add a copy of the last friendly Murloc that died to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "ReceiveLastCardSpell",
+      "value": 1,
+      "cardFilter": {
+        "class": "CardFilter",
+        "race": "MURLOC"
+      },
+      "cardSource": {
+        "class": "GraveyardActorsSource",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

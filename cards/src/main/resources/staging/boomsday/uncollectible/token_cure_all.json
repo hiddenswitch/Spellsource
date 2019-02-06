@@ -1,0 +1,15 @@
+{
+  "name": "Cure-All",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "MECH",
+  "description": "Whenever a minion is healed, deal 2 damage to the enemy hero.",
+  "attributes": {},
+  "collectible": false,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Potion of Creation",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "EGGPLANT",
+  "rarity": "EPIC",
+  "description": "Summon a random 3-Cost minion. Invoke (8): 8-Cost.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "InvokeCondition"
+    },
+    "spell1": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 8
+      }
+    },
+    "spell2": {
+      "class": "SummonSpell",
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "MINION",
+        "manaCost": 3
+      }
+    }
+  },
+  "attributes": {
+    "INVOKE": 8
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

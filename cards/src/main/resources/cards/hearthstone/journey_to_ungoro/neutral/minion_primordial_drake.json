@@ -18,7 +18,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Frenzied Panda",
+    "SPELLSOURCE_NAME": "Frenzied Panda",
     "TAUNT": true
   },
   "collectible": true,

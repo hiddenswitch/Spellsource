@@ -1,0 +1,18 @@
+{
+  "name": "Butcher",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "COMMON",
+  "description": "Destroy a minion. Summon a 0/5 Pile of Meat to replace it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "custom.DestroyAndSummonInPlaceSpell",
+    "card": "token_pile_of_meat",
+    "targetPlayer": "OWNER"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

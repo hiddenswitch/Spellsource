@@ -2,7 +2,6 @@ package net.demilich.metastone.game.events;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.QuestCard;
 import net.demilich.metastone.game.entities.Entity;
 
 public class QuestSuccessfulEvent extends GameEvent implements HasCard {
@@ -16,7 +15,7 @@ public class QuestSuccessfulEvent extends GameEvent implements HasCard {
 
 	@Override
 	public Entity getEventTarget() {
-		return getQuest();
+		return getCard();
 	}
 
 	@Override
@@ -24,12 +23,8 @@ public class QuestSuccessfulEvent extends GameEvent implements HasCard {
 		return GameEventType.SECRET_REVEALED;
 	}
 
-	public Card getQuest() {
-		return quest;
-	}
-
 	@Override
 	public Card getCard() {
-		return getQuest();
+		return quest;
 	}
 }

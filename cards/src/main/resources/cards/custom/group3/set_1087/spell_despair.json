@@ -1,0 +1,21 @@
+{
+  "name": "Despair",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "RUST",
+  "rarity": "COMMON",
+  "description": "Set a minion's Attack to 0 this turn.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "TemporaryAttackSpell",
+    "value": {
+      "class": "AttributeValueProvider",
+      "attribute": "ATTACK",
+      "multiplier": -1
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,6 +1,6 @@
 {
   "name": "Wild Growth",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "FREE",

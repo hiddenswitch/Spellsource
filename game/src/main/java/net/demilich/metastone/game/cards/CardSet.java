@@ -2,9 +2,6 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.decks.DeckFormat;
 
-import java.util.EnumSet;
-import java.util.Set;
-
 /**
  * An enumeration of card sets from various games.
  */
@@ -26,15 +23,23 @@ public enum CardSet {
 	JOURNEY_TO_UNGORO,
 	KNIGHTS_OF_THE_FROZEN_THRONE,
 	KOBOLDS_AND_CATACOMBS,
+	WITCHWOOD,
+	BOOMSDAY_PROJECT,
+	RASTAKHANS_RUMBLE,
+	BLIZZARD_ADVENTURE,
 	HALL_OF_FAME,
 	CUSTOM,
+	ALTERNATIVE,
+	UNNERFED,
 	BATTLE_FOR_ASHENVALE,
 	SANDS_OF_TIME,
+	VERDANT_DREAMS,
 	TEST,
+	SPELLSOURCE_BASIC,
 	SPELLSOURCE;
 
 	public static CardSet latestHearthstoneExpansion() {
-		return KOBOLDS_AND_CATACOMBS;
+		return RASTAKHANS_RUMBLE;
 	}
 
 	public boolean isHearthstoneSet() {

@@ -1,0 +1,34 @@
+{
+  "name": "Blood Presence",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "TRIGGER_HOST",
+        "card": "enchantment_unholy_presence"
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "MinionDeathTrigger",
+        "targetPlayer": "BOTH"
+      },
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_ghoul",
+        "targetPlayer": "SELF"
+      }
+    }
+  ],
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

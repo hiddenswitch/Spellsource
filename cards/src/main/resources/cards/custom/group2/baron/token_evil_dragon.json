@@ -1,0 +1,21 @@
+{
+  "name": "Evil Dragon",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Deathrattle: Your opponent draws 3 cards.",
+  "deathrattle": {
+    "class": "DrawCardSpell",
+    "value": 3,
+    "targetPlayer": "OPPONENT"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

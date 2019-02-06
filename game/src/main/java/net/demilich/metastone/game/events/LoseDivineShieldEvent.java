@@ -26,3 +26,4 @@ public final class LoseDivineShieldEvent extends GameEvent implements HasVictim 
 		return getEventTarget();
 	}
 }
+

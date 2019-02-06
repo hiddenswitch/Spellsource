@@ -17,7 +17,11 @@ import java.util.List;
 
 import static java.util.stream.Collectors.toList;
 
-public class CopyLowestCostMinionSpell extends Spell {
+/**
+ * Copies the lowest cost {@link Card} of type {@link CardType#MINION} in the player's hand. Chooses the leftmost such
+ * card.
+ */
+public final class CopyLowestCostMinionSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -25,7 +29,8 @@ public class CopyLowestCostMinionSpell extends Spell {
 		List<Card> cards = sourceCards.getCards(context, source, player)
 				.stream()
 				.filter(c -> c.getCardType() == CardType.MINION)
-				.sorted(Comparator.comparingInt(c1 -> context.getLogic().getModifiedManaCost(player, c1)))
+				.sorted(Comparator.comparingInt((Card c1) -> context.getLogic().getModifiedManaCost(player, c1))
+						.thenComparingInt((Card c2) -> c2.getEntityLocation().getIndex()))
 				.collect(toList());
 
 		if (cards.isEmpty()) {
@@ -41,3 +46,4 @@ public class CopyLowestCostMinionSpell extends Spell {
 		SpellUtils.castChildSpell(context, player, copyCard, source, card, card);
 	}
 }
+

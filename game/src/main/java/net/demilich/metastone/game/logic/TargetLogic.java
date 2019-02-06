@@ -1,38 +1,46 @@
 package net.demilich.metastone.game.logic;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
-import net.demilich.metastone.game.entities.heroes.Hero;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.cards.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serializable;
+import java.util.*;
+import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toCollection;
 
 public class TargetLogic implements Serializable {
 	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
 
 	private static List<Entity> singleTargetAsList(Entity target) {
+		if (target == null) {
+			return new ArrayList<>();
+		}
 		ArrayList<Entity> list = new ArrayList<>(1);
 		list.add(target);
 		return list;
 	}
 
-	private boolean containsTaunters(List<Minion> minions) {
+	private boolean containsTaunters(List<? extends Entity> minions) {
 		for (Entity entity : minions) {
-			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT)) && !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE)) {
+			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT))
+					&& !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE) && !entity.hasAttribute(Attribute.AURA_STEALTH)) {
 				return true;
 			}
 		}
@@ -66,7 +74,7 @@ public class TargetLogic implements Serializable {
 				continue;
 			}
 
-			if (entity.getOwner() != player.getId() && (entity.hasAttribute(Attribute.STEALTH) || entity.hasAttribute(Attribute.IMMUNE) || entity.hasAttribute(Attribute.AURA_IMMUNE))) {
+			if (entity.getOwner() != player.getId() && (entity.hasAttribute(Attribute.STEALTH) || entity.hasAttribute(Attribute.IMMUNE) || entity.hasAttribute(Attribute.AURA_IMMUNE) || entity.hasAttribute(Attribute.AURA_STEALTH))) {
 				continue;
 			}
 
@@ -93,9 +101,12 @@ public class TargetLogic implements Serializable {
 			return environmentResult;
 		}
 
-		return context.getEntities().filter(e -> e.getId() == targetId)
-				.findFirst()
-				.orElseThrow(() -> new NullPointerException("Target not found exception: " + targetKey));
+		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId).findFirst();
+		if (entity.isPresent()) {
+			return entity.get();
+		} else {
+			throw new NullPointerException("Target not found exception: " + targetKey);
+		}
 	}
 
 	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {
@@ -139,9 +150,9 @@ public class TargetLogic implements Serializable {
 		return getEntities(context, player, targetRequirement, true);
 	}
 
-	private List<Entity> getTaunters(List<Minion> entities) {
+	private List<Entity> getTaunters(List<? extends Entity> entities) {
 		List<Entity> taunters = new ArrayList<>();
-		for (Actor entity : entities) {
+		for (Entity entity : entities) {
 			if ((entity.hasAttribute(Attribute.TAUNT) || entity.hasAttribute(Attribute.AURA_TAUNT)) && !entity.hasAttribute(Attribute.STEALTH) && !entity.hasAttribute(Attribute.IMMUNE)) {
 				taunters.add(entity);
 			}
@@ -162,8 +173,10 @@ public class TargetLogic implements Serializable {
 		// attack only allow corresponding minions as targets
 		if (actionType == ActionType.PHYSICAL_ATTACK
 				&& (targetRequirement == TargetSelection.ENEMY_CHARACTERS || targetRequirement == TargetSelection.ENEMY_MINIONS)
-				&& containsTaunters(withoutPermanents(opponent.getMinions()))) {
-			return getTaunters(opponent.getMinions());
+				&& (containsTaunters(withoutPermanents(opponent.getMinions())) || containsTaunters(opponent.getHeroZone()))) {
+			List<Entity> entities = new ArrayList<>(opponent.getMinions());
+			entities.add(opponent.getHero());
+			return getTaunters(entities);
 		}
 		if (actionType == ActionType.SUMMON) {
 			// you can summon next to any friendly minion or provide no target
@@ -185,13 +198,14 @@ public class TargetLogic implements Serializable {
 	 * @param player    The player from whose point of view this resolution is being interpreted. For example, {@link
 	 *                  EntityReference#FRIENDLY_MINIONS} will interpret this argument as friendly.
 	 * @param source    The entity from whose point of view this resolution is being interpreted. For example, {@link
-	 *                  EntityReference#SELF} will return the source entity; {@link EntityReference#MINIONS_TO_RIGHT}
-	 *                  will refer to the right of this argument.
+	 *                  EntityReference#SELF} will return the source entity; {@link EntityReference#MINIONS_TO_RIGHT} will
+	 *                  refer to the right of this argument.
 	 * @param targetKey The {@link EntityReference} to interpet.
 	 * @return {@code null} if no target key is specified or an {@link EntityReference#NONE} was passed; otherwise, a
-	 * possibly empty list of entities.
+	 * 		possibly empty list of entities.
 	 * @see EntityReference for more about the meaning of the specified entitiy references that are groups of entities.
 	 */
+	@SuppressWarnings("deprecation")
 	public List<Entity> resolveTargetKey(GameContext context, Player player, Entity source, EntityReference targetKey) {
 		if (targetKey == null || targetKey.equals(EntityReference.NONE)) {
 			return null;
@@ -206,6 +220,14 @@ public class TargetLogic implements Serializable {
 			return this.getEntities(context, player, TargetSelection.ENEMY_HERO);
 		} else if (targetKey.equals(EntityReference.ENEMY_MINIONS)) {
 			return this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
+		} else if (targetKey.equals(EntityReference.ENEMY_MINIONS_LEFT_TO_RIGHT)) {
+			List<Entity> enemyMinions = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
+			enemyMinions.sort(Comparator.comparingInt(e -> e.getEntityLocation().getIndex()));
+			return enemyMinions;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_MINIONS_LEFT_TO_RIGHT)) {
+			List<Entity> friendlyMinions = this.getEntities(context, player, TargetSelection.FRIENDLY_MINIONS);
+			friendlyMinions.sort(Comparator.comparingInt(e -> e.getEntityLocation().getIndex()));
+			return friendlyMinions;
 		} else if (targetKey.equals(EntityReference.FRIENDLY_CHARACTERS)) {
 			return this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
 		} else if (targetKey.equals(EntityReference.FRIENDLY_HERO)) {
@@ -235,6 +257,12 @@ public class TargetLogic implements Serializable {
 			return targets;
 		} else if (targetKey.equals(EntityReference.ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(source.getReference()));
+		} else if (targetKey.equals(EntityReference.ADJACENT_TO_TARGET)) {
+			EntityReference targetKey1 = (EntityReference) context.getEnvironment().get(Environment.TARGET);
+			if (targetKey1 == null) {
+				return new ArrayList<>();
+			}
+			return new ArrayList<>(context.getAdjacentMinions(targetKey1));
 		} else if (targetKey.equals(EntityReference.ATTACKER_ADJACENT_MINIONS)) {
 			return new ArrayList<>(context.getAdjacentMinions(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()).getReference()));
 		} else if (targetKey.equals(EntityReference.OPPOSITE_MINIONS)) {
@@ -242,7 +270,7 @@ public class TargetLogic implements Serializable {
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_LEFT)) {
 			return new ArrayList<>(context.getLeftMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.MINIONS_TO_RIGHT)) {
-			return new ArrayList<>(context.getRightMinions(player, source.getReference()));
+			return new ArrayList<>(context.getRightMinions(source.getReference()));
 		} else if (targetKey.equals(EntityReference.LEFTMOST_ENEMY_MINION)) {
 			final List<Entity> minions = this.getEntities(context, player, TargetSelection.ENEMY_MINIONS);
 			if (minions.size() == 0) {
@@ -271,26 +299,28 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(source);
 		} else if (targetKey.equals(EntityReference.EVENT_TARGET)) {
 			EntityReference target = context.getEventTargetStack().peek();
-			if (target.equals(EntityReference.NONE)) {
+			if (target == null || target.equals(EntityReference.NONE)) {
 				return new ArrayList<>();
 			}
 			return singleTargetAsList(context.resolveSingleTarget(target));
 		} else if (targetKey.equals(EntityReference.EVENT_SOURCE)) {
 			EntityReference target = context.getEventSourceStack().peek();
-			if (target.equals(EntityReference.NONE)) {
+			if (target == null || target.equals(EntityReference.NONE)) {
 				return new ArrayList<>();
 			}
 			return singleTargetAsList(context.resolveSingleTarget(target));
 		} else if (targetKey.equals(EntityReference.TARGET)) {
-			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TARGET)));
+			EntityReference targetKey1 = (EntityReference) context.getEnvironment().get(Environment.TARGET);
+			if (targetKey1 == null) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(context.resolveSingleTarget(targetKey1));
 		} else if (targetKey.equals(EntityReference.SPELL_TARGET)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getSpellTargetStack().peek()));
 		} else if (targetKey.equals(EntityReference.KILLED_MINION)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.KILLED_MINION)));
 		} else if (targetKey.equals(EntityReference.ATTACKER)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getAttackerReferenceStack().peek()));
-		} else if (targetKey.equals(EntityReference.PENDING_CARD)) {
-			return singleTargetAsList((Entity) context.getPendingCard());
 		} else if (targetKey.equals(EntityReference.OUTPUT)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getOutputStack().peek()));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_WEAPON)) {
@@ -316,20 +346,24 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.getOpponent(player));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_DECK)) {
 			return new ArrayList<>(player.getDeck().toList());
+		} else if (targetKey.equals(EntityReference.FRIENDLY_DECK_FROM_TOP)) {
+			ArrayList<Entity> deck = new ArrayList<>(player.getDeck().toList());
+			Collections.reverse(deck);
+			return deck;
 		} else if (targetKey.equals(EntityReference.ENEMY_DECK)) {
 			return new ArrayList<>(context.getOpponent(player).getDeck().toList());
 		} else if (targetKey.equals(EntityReference.FRIENDLY_TOP_CARD)) {
 			if (player.getDeck().size() == 0) {
 				return new ArrayList<>();
 			} else {
-				return singleTargetAsList(player.getDeck().get(0));
+				return singleTargetAsList(player.getDeck().peek());
 			}
 		} else if (targetKey.equals(EntityReference.ENEMY_TOP_CARD)) {
 			Player opponent = context.getOpponent(player);
 			if (opponent.getDeck().size() == 0) {
 				return new ArrayList<>();
 			} else {
-				return singleTargetAsList(opponent.getDeck().get(0));
+				return singleTargetAsList(opponent.getDeck().peek());
 			}
 		} else if (targetKey.equals(EntityReference.BOTH_DECKS)) {
 			ArrayList<Entity> friendly = new ArrayList<>(player.getDeck().toList());
@@ -345,6 +379,12 @@ public class TargetLogic implements Serializable {
 			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed(player.getId())));
 		} else if (targetKey.equals(EntityReference.ENEMY_LAST_CARD_PLAYED)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayed(context.getOpponent(player).getId())));
+		} else if (targetKey.equals(EntityReference.LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayedBeforeCurrentSequence()));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayedBeforeCurrentSequence(player.getId())));
+		} else if (targetKey.equals(EntityReference.ENEMY_LAST_CARD_PLAYED_BEFORE_CURRENT_SEQUENCE)) {
+			return singleTargetAsList(context.resolveSingleTarget(context.getLastCardPlayedBeforeCurrentSequence(context.getOpponent(player).getId())));
 		} else if (targetKey.equals(EntityReference.TRANSFORM_REFERENCE)) {
 			return singleTargetAsList(context.resolveSingleTarget((EntityReference) context.getEnvironment().get(Environment.TRANSFORM_REFERENCE)));
 		} else if (targetKey.equals(EntityReference.FRIENDLY_SET_ASIDE)) {
@@ -363,6 +403,103 @@ public class TargetLogic implements Serializable {
 			return context.getEntities().collect(Collectors.toList());
 		} else if (targetKey.equals(EntityReference.TRIGGER_HOST)) {
 			return singleTargetAsList(context.resolveSingleTarget(context.getTriggerHostStack().peek()));
+		} else if (targetKey.equals(EntityReference.PHYSICAL_ATTACK_TARGETS)) {
+			return getValidTargets(context, player, new PhysicalAttackAction(source.getReference()));
+		} else if (targetKey.equals(EntityReference.LEFT_ADJACENT_MINION)) {
+			List<Actor> leftMinions = context.getLeftMinions(source.getReference());
+			if (leftMinions.isEmpty()) {
+				return new ArrayList<>();
+			} else return singleTargetAsList(leftMinions.get(leftMinions.size() - 1));
+		} else if (targetKey.equals(EntityReference.RIGHT_ADJACENT_MINION)) {
+			List<Actor> rightMinions = context.getRightMinions(source.getReference());
+			if (rightMinions.isEmpty()) {
+				return new ArrayList<>();
+			} else return singleTargetAsList(rightMinions.get(0));
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_DIED_MINION)) {
+			for (int i = player.getGraveyard().size() - 1; i >= 0; i--) {
+				if (player.getGraveyard().get(i).getEntityType() == EntityType.MINION) {
+					return singleTargetAsList(player.getGraveyard().get(i));
+				}
+			}
+			return new ArrayList<>();
+		} else if (targetKey.equals(EntityReference.FRIENDLY_CARDS)) {
+			List<Entity> friendlyCards = new ArrayList<>();
+			friendlyCards.addAll(player.getHand());
+			friendlyCards.addAll(player.getDeck());
+			friendlyCards.addAll(player.getMinions());
+			friendlyCards.addAll(player.getSetAsideZone());
+			friendlyCards.add(player.getHero());
+			friendlyCards.addAll(player
+					.getGraveyard()
+					.stream()
+					.filter(e -> e instanceof Card)
+					.map(e -> (Card) e)
+					.filter(c -> c.hasAttribute(Attribute.BEING_PLAYED))
+					.collect(toCollection(CardArrayList::new)));
+			return friendlyCards;
+		} else if (targetKey.equals(EntityReference.ENEMY_CARDS)) {
+			List<Entity> enemyCards = new ArrayList<>();
+			enemyCards.addAll(context.getOpponent(player).getHand());
+			enemyCards.addAll(context.getOpponent(player).getDeck());
+			enemyCards.addAll(context.getOpponent(player).getMinions());
+			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
+			enemyCards.add(context.getOpponent(player).getHero());
+			enemyCards.addAll(context.getOpponent(player).getGraveyard()
+					.stream()
+					.filter(e -> e instanceof Card)
+					.map(e -> (Card) e)
+					.filter(c -> c.hasAttribute(Attribute.BEING_PLAYED))
+					.collect(toCollection(CardArrayList::new)));
+			return enemyCards;
+		} else if (targetKey.equals(EntityReference.CURRENT_SUMMONING_MINION)) {
+			if (context.getSummonReferenceStack().isEmpty()) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(findEntity(context, context.getSummonReferenceStack().peekLast()));
+		} else if (targetKey.equals(EntityReference.ENEMY_MIDDLE_MINIONS)) {
+			Player opponent = context.getOpponent(player);
+			List<Entity> matching = new ArrayList<>();
+			/* Skip this many minions on both sides of the battlefield
+			Size - Skip
+			0 - 0
+			1 - 0
+			2 - 0
+			3 - 1
+			4 - 1
+			5 - 2
+			6 - 2
+			7 - 3
+
+			For example, for 5 minions, skip 2 on both sides:
+			skip skip return skip skip
+
+			 */
+			if (opponent.getMinions().size() == 0) {
+				return matching;
+			}
+			int skip = (opponent.getMinions().size() - 1) / 2;
+			for (int i = skip; i < opponent.getMinions().size() - skip; i++) {
+				matching.add(opponent.getMinions().get(i));
+			}
+			return matching;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_MINION_PLAYED)) {
+			// Nowadays cards are only moved into graveyard after they have been played. The currently played card is in the
+			// set-aside zone, so the most recently added card to the graveyard is guaranteed to be the one most recently
+			// played.
+			List<Entity> minionCardsPlayed = player.getGraveyard().stream()
+					.filter(e -> e.getEntityType() == EntityType.CARD
+							&& e.getSourceCard().getCardType() == CardType.MINION
+							&& e.hasAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK))
+					.collect(Collectors.toList());
+			if (minionCardsPlayed.isEmpty()) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(minionCardsPlayed.get(minionCardsPlayed.size() - 1));
+			}
+		} else if (targetKey.equals(EntityReference.OTHER_FRIENDLY_CHARACTERS)) {
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
+			targets.remove(source);
+			return targets;
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

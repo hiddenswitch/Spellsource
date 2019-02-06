@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "COMMON",
-  "description": "Deal 4 damage to a random enemy minion.",
+  "description": "Deal $4 damage to a random enemy minion.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 0,

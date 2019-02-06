@@ -1,58 +1,67 @@
 package net.demilich.metastone.game.spells;
 
 import co.paralleluniverse.fibers.Suspendable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.MinionCard;
 import net.demilich.metastone.game.cards.Rarity;
-import net.demilich.metastone.game.cards.desc.MinionCardDesc;
+import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.cards.Attribute;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+/**
+ * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
+ * 		{@link CreateCardFromChoicesSpell} for an example.
+ */
+@Deprecated
 public class CreateSummonSpell extends Spell {
-	
+
 	Logger logger = LoggerFactory.getLogger(CreateSummonSpell.class);
 
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		String description = "";
-		MinionCardDesc minionCardDesc = new MinionCardDesc();
-		minionCardDesc.id = context.getLogic().generateCardId();
-		minionCardDesc.name = desc.getString(SpellArg.NAME);
-		minionCardDesc.baseAttack = desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0);
-		minionCardDesc.baseHp = desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0);
-		minionCardDesc.heroClass = HeroClass.ANY;
-		minionCardDesc.type = CardType.MINION;
-		minionCardDesc.rarity = Rarity.FREE;
-		minionCardDesc.description = description;
+		CardDesc cardDesc = new CardDesc();
+		cardDesc.setId(context.getLogic().generateCardId());
+		cardDesc.setName(desc.getString(SpellArg.NAME));
+		if (desc.containsKey(SpellArg.RACE)) {
+			cardDesc.setRace((Race) desc.get(SpellArg.RACE));
+		}
+		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
+		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
+		cardDesc.setHeroClass(HeroClass.ANY);
+		cardDesc.setType(CardType.MINION);
+		cardDesc.setRarity(Rarity.FREE);
+		cardDesc.setDescription(description);
 		Attribute attribute = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		if (attribute != null) {
-			minionCardDesc.attributes.put(attribute, true);
+			cardDesc.getAttributes().put(attribute, true);
 		}
-		minionCardDesc.set = CardSet.BASIC;
-		minionCardDesc.collectible = false;
-		minionCardDesc.baseManaCost = desc.getValue(SpellArg.MANA, context, player, target, source, 0);
-		MinionCard newCard = (MinionCard) minionCardDesc.createInstance();
+		cardDesc.setSet(CardSet.BASIC);
+		cardDesc.setCollectible(false);
+		cardDesc.setBaseManaCost(desc.getValue(SpellArg.MANA, context, player, target, source, 0));
+		Card newCard = cardDesc.create();
 		context.addTempCard(newCard);
-		
+
 		int boardPosition = SpellUtils.getBoardPosition(context, player, desc, source);
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
-		SpellDesc successfulSummonSpell = (SpellDesc) desc.get(SpellArg.SPELL_1);
+		SpellDesc successfulSummonSpell = (SpellDesc) desc.get(SpellArg.SPELL1);
 		for (int i = 0; i < count; i++) {
-			MinionCard minionCard = (MinionCard) newCard.clone();
-			Minion minion = minionCard.summon();
-			if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false) && successfulSummonSpell != null) {
+			Card card = newCard.clone();
+			Minion minion = card.summon();
+			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
 				SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, minion, minion);
 			}
 			SpellUtils.castChildSpell(context, player, spell, source, target, minion);

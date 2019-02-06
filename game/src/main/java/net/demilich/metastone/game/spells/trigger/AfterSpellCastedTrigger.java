@@ -13,14 +13,16 @@ public class AfterSpellCastedTrigger extends AbstractCardTrigger {
 
 	public AfterSpellCastedTrigger(EventTriggerDesc desc) {
 		super(desc);
-		desc.put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
+		EventTriggerDesc clone = desc.clone();
+		clone.put(EventTriggerArg.CARD_TYPE, CardType.SPELL);
+		setDesc(clone);
 	}
 
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
 		AfterSpellCastedEvent spellCastedEvent = (AfterSpellCastedEvent) event;
 
-		EntityType targetEntityType = (EntityType) desc.get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
 		if (targetEntityType != null
 				&& (spellCastedEvent.getEventTarget() == null || targetEntityType != spellCastedEvent.getEventTarget().getEntityType())) {
 			return false;

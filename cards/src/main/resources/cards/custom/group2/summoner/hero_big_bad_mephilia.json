@@ -1,0 +1,25 @@
+{
+  "name": "Big Bad Mephilia",
+  "heroPower": "hero_power_big_bad_mephilia_conscript",
+  "baseManaCost": 8,
+  "type": "HERO",
+  "heroClass": "EGGPLANT",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Fill your board with 1/1 Mooks with Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "value": 7,
+      "card": "token_worthless_mook"
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

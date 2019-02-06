@@ -9,8 +9,8 @@
   "race": "BEAST",
   "description": "Taunt. Poisonous.",
   "attributes": {
-    "NAME": "Blowgunner",
     "POISONOUS": true,
+    "SPELLSOURCE_NAME": "Blowgunner",
     "TAUNT": true
   },
   "collectible": true,

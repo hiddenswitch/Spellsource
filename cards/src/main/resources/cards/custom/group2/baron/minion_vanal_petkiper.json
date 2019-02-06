@@ -1,0 +1,270 @@
+{
+  "name": "Vanal Petkiper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "heroClasses": [
+    "NAVY",
+    "RUST",
+    "ROSE"
+  ],
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "ALL",
+  "description": "Battlecry: Choose a tribal minion. For the rest of your game, your minions have +1/+1 while you control that tribe.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "FirstConditionalSpell",
+      "conditions": [
+        {
+          "class": "AmalgamRaceCondition"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "MURLOC"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "BEAST"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DRAGON"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "PIRATE"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "ELEMENTAL"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "MECH"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "DEMON"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "TOTEM"
+        }
+      ],
+      "filter": {
+        "class": "OrFilter",
+        "filters": [
+          {
+            "class": "AmalgamRaceFilter"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "MURLOC"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "BEAST"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "DRAGON"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "PIRATE"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "ELEMENTAL"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "MECH"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "DEMON"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "TOTEM"
+          }
+        ]
+      },
+      "spells": [
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "NONE",
+                "invert": true
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "MURLOC"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "BEAST"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "DRAGON"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "PIRATE"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "ELEMENTAL"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "MECH"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "DEMON"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        },
+        {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "TOTEM"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,56 @@
+{
+  "name": "Heartstopped",
+  "type": "ENCHANTMENT",
+  "heroClass": "OBSIDIAN",
+  "rarity": "FREE",
+  "description": "Your minions don't die from fatal damage until the start of your next turn.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "FatalDamageTrigger",
+        "sourcePlayer": "BOTH",
+        "targetEntityType": "MINION",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "target": "EVENT_TARGET",
+        "spells": [
+          {
+            "class": "ModifyDamageSpell",
+            "value": 0,
+            "operation": "SET"
+          },
+          {
+            "class": "AddEnchantmentSpell",
+            "trigger": {
+              "eventTrigger": {
+                "class": "TurnStartTrigger",
+                "targetPlayer": "SELF"
+              },
+              "spell": {
+                "class": "DestroySpell",
+                "target": "TRIGGER_HOST"
+              }
+            }
+          }
+        ]
+      }
+    },
+    {
+      "eventTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_heartstopped",
+        "howMany": 2
+      }
+    }
+  ],
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

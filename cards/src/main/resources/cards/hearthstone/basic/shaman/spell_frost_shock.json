@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "FREE",
-  "description": "Deal 1 damage to an enemy character and Freeze it.",
+  "description": "Deal $1 damage to an enemy character and Freeze it.",
   "targetSelection": "ENEMY_CHARACTERS",
   "spell": {
     "class": "MetaSpell",

@@ -7,20 +7,17 @@ import com.hiddenswitch.spellsource.client.models.CardRecord;
 import com.hiddenswitch.spellsource.client.models.InventoryCollection;
 import com.hiddenswitch.spellsource.impl.util.InventoryRecord;
 import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.HeroCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.CardDesc;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.decks.DeckWithId;
+import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
-import static java.util.stream.Collectors.toList;
 
 /**
  * Created by bberman on 1/22/17.
@@ -37,6 +34,7 @@ public final class GetCollectionResponse implements Serializable {
 	private DeckType deckType;
 	private String heroCardId;
 	private String format;
+	private boolean standard;
 
 	private GetCollectionResponse() {
 	}
@@ -68,18 +66,19 @@ public final class GetCollectionResponse implements Serializable {
 				.withName(name);
 	}
 
-	public Deck asDeck(String userId) {
-		Deck deck = new DeckWithId(getCollectionId());
+	public GameDeck asDeck(String userId) {
+		GameDeck deck = new GameDeck();
+		deck.setDeckId(getCollectionId());
 		deck.setHeroClass(getHeroClass());
 		deck.setName(getName());
 		String heroCardId = getHeroCardId();
 		if (heroCardId != null) {
-			deck.setHeroCard((HeroCard) CardCatalogue.getCardById(heroCardId));
+			deck.setHeroCard((Card) CardCatalogue.getCardById(heroCardId));
 		}
 
 		getInventoryRecords().stream().map(cardRecord -> Logic.getDescriptionFromRecord(cardRecord, userId, getCollectionId()))
 				.filter(Objects::nonNull)
-				.map(CardDesc::createInstance)
+				.map(CardDesc::create)
 				.forEach(deck.getCards()::addCard);
 
 		return deck;
@@ -191,28 +190,33 @@ public final class GetCollectionResponse implements Serializable {
 		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
 		GameContext emptyContext = GameContext.uninitialized(fakeHeroClass, fakeHeroClass);
 
+		List<InventoryRecord> inventoryRecords = getInventoryRecords();
+		List<CardRecord> records = new ArrayList<>();
+
+		for (InventoryRecord cr : inventoryRecords) {
+			final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId());
+
+			if (record == null) {
+				continue;
+			}
+			final Card instance = record.create();
+			records.add(new CardRecord()
+					.userId(cr.getUserId())
+					.collectionIds(cr.getCollectionIds())
+					.entity(Games.getEntity(emptyContext, instance, 0))
+					.id(cr.getId())
+					.allianceId(cr.getAllianceId())
+					.donorUserId(cr.getDonorUserId()));
+		}
+
 		InventoryCollection collection = new InventoryCollection()
 				.name(displayName)
 				.id(getCollectionId())
 				.type(InventoryCollection.TypeEnum.valueOf(getCollectionType().toString()))
 				.format(getFormat())
 				.deckType(getCollectionType() == CollectionTypes.DECK ? InventoryCollection.DeckTypeEnum.valueOf(getDeckType().toString()) : null)
-				// Massively increase the performance of inventory record creation by making parallel the inventory record creation here
-				.inventory(getInventoryRecords().parallelStream().map(cr -> {
-					final CardDesc record = Logic.getDescriptionFromRecord(cr, cr.getUserId(), getCollectionId());
-					if (record == null) {
-						return null;
-					}
-					final Card instance = record.createInstance();
-					return new CardRecord()
-							.userId(cr.getUserId())
-							.collectionIds(cr.getCollectionIds())
-							.entity(Games.getEntity(emptyContext, instance, 0))
-							.id(cr.getId())
-							.allianceId(cr.getAllianceId())
-							.donorUserId(cr.getDonorUserId());
-				}).filter(Objects::nonNull)
-						.collect(toList()));
+				.isStandardDeck(isStandard())
+				.inventory(records);
 
 		if (getHeroClass() != null) {
 			collection.heroClass(getHeroClass().toString());
@@ -301,6 +305,15 @@ public final class GetCollectionResponse implements Serializable {
 
 	public GetCollectionResponse withFormat(String format) {
 		this.format = format;
+		return this;
+	}
+
+	public boolean isStandard() {
+		return standard;
+	}
+
+	public GetCollectionResponse setStandard(boolean standard) {
+		this.standard = standard;
 		return this;
 	}
 }

@@ -1,7 +1,6 @@
 package net.demilich.metastone.game.actions;
 
 import co.paralleluniverse.fibers.Suspendable;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -9,19 +8,27 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
+import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Indicates an attack between {@link #getAttackerReference()} and {@link #getTargetReference()}.
+ */
 public class PhysicalAttackAction extends GameAction {
-	private EntityReference attackerReference;
 
 	private PhysicalAttackAction() {
+		super();
 		setActionType(ActionType.PHYSICAL_ATTACK);
 		setTargetRequirement(TargetSelection.ENEMY_CHARACTERS);
-		this.attackerReference = EntityReference.NONE;
+	}
+
+	@Override
+	public PhysicalAttackAction clone() {
+		return (PhysicalAttackAction) super.clone();
 	}
 
 	public PhysicalAttackAction(EntityReference attackerReference) {
 		this();
-		this.attackerReference = attackerReference;
+		this.setSourceReference(attackerReference);
 	}
 
 	@Override
@@ -32,10 +39,11 @@ public class PhysicalAttackAction extends GameAction {
 		if (entity.getEntityType() != EntityType.HERO) {
 			return true;
 		}
-		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);
-		if (attacker.hasAttribute(Attribute.CANNOT_ATTACK_HEROES) ||
-				(attacker.hasAttribute(Attribute.CANNOT_ATTACK_HERO_ON_SUMMON)
-						&& attacker.hasAttribute(Attribute.SUMMONING_SICKNESS))) {
+		Actor attacker = (Actor) context.resolveSingleTarget(getSourceReference());
+		if (attacker.hasAttribute(Attribute.CANNOT_ATTACK_HEROES) || attacker.hasAttribute(Attribute.AURA_CANNOT_ATTACK_HEROES) ||
+				((attacker.hasAttribute(Attribute.RUSH) || attacker.hasAttribute(Attribute.AURA_RUSH))
+						&& attacker.hasAttribute(Attribute.SUMMONING_SICKNESS)
+						&& !(attacker.hasAttribute(Attribute.CHARGE) || attacker.hasAttribute(Attribute.AURA_CHARGE)))) {
 			return false;
 		}
 		return true;
@@ -45,34 +53,19 @@ public class PhysicalAttackAction extends GameAction {
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
 		Actor defender = (Actor) context.resolveSingleTarget(getTargetReference());
-		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);
+		Actor attacker = (Actor) context.resolveSingleTarget(getSourceReference());
 
 		context.getLogic().fight(context.getPlayer(playerId), attacker, defender, this);
 	}
 
 	public EntityReference getAttackerReference() {
-		return attackerReference;
-	}
-
-	@Override
-	public EntityReference getSourceReference() {
-		return attackerReference;
-	}
-
-	@Override
-	public String toString() {
-		return String.format("%s Attacker: %s Defender: %s", getActionType(), attackerReference, getTargetReference());
-	}
-
-	@Override
-	public Entity getSource(GameContext context) {
-		return context.resolveSingleTarget(attackerReference);
+		return getSourceReference();
 	}
 
 	@Override
 	public String getDescription(GameContext context, int playerId) {
 		Actor defender = (Actor) context.resolveSingleTarget(getTargetReference());
-		Actor attacker = (Actor) context.resolveSingleTarget(attackerReference);
+		Actor attacker = (Actor) context.resolveSingleTarget(getSourceReference());
 		return String.format("%s attacked %s.", attacker.getName(), defender.getName());
 	}
 }

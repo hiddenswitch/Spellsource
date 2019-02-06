@@ -1,0 +1,22 @@
+{
+  "name": "Immortalize It!",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "LEGENDARY",
+  "description": "Quest: Summon two Deathrattle minions. Reward: It.",
+  "quest": {
+    "class": "MinionSummonedTrigger",
+    "requiredAttribute": "DEATHRATTLES",
+    "targetPlayer": "SELF"
+  },
+  "countUntilCast": 2,
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "card": "quest_reinforce_it"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

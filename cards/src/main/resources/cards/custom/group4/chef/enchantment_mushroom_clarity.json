@@ -1,0 +1,36 @@
+{
+  "name": "Mushroom Clarity",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "The next time you use your Hero Power, it deals 2 more damage and you can choose its target.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "HeroPowerUsedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "RemoveEnchantmentSpell",
+      "target": "TRIGGER_HOST",
+      "card": "enchantment_mushroom_clarity"
+    }
+  },
+  "attributes": {
+    "HERO_POWER_DAMAGE": 2
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "auras": [
+    {
+      "class": "TargetSelectionOverrideAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "targetSelection": "ANY",
+      "filter": {
+        "class": "TargetSelectionFilter",
+        "targetSelection": "NONE"
+      }
+    }
+  ]
+}

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLUE",
   "rarity": "EPIC",
-  "description": "Deal 10 damage.",
+  "description": "Deal $10 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

@@ -1,0 +1,20 @@
+{
+  "name": "Protect the Hive!",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "For each enemy minion, summon a 1/1 Wasp with Poisonous.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "value": {
+      "class": "EntityCounter",
+      "target": "ENEMY_MINIONS"
+    },
+    "card": "token_wasp"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -11,6 +11,37 @@ import java.util.stream.Stream;
 
 public class DeckParsingTest {
 	@Test
+	public void testDecklistParsingNumberNameCards() {
+		CardCatalogue.loadCardsFromPackage();
+		String deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\n1x Has Number Name 1\n1x 2 Has Number Name";
+		final DeckCreateRequest createRequest = DeckCreateRequest.fromDeckList(deckList1);
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
+	}
+
+	@Test
+	public void testDecklistTwoWordHero() {
+		CardCatalogue.loadCardsFromPackage();
+		String deckList1 = "Name: Test Name\nClass: WHITE\nFormat: All\nHero: Two Words\n1x Has Number Name 1\n1x 2 Has Number Name";
+		final DeckCreateRequest createRequest = DeckCreateRequest.fromDeckList(deckList1);
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_1"));
+		Assert.assertTrue(createRequest.getCardIds().contains("minion_has_number_name_2"));
+		Assert.assertEquals(createRequest.getHeroCardId(), "hero_two_word_name");
+	}
+
+	@Test
+	public void testBoomsdayDecklistParsing() {
+		CardCatalogue.loadCardsFromPackage();
+		Stream.of("AAECAZ8FBugBucECnOIC/eoC0PQCp4IDDIwBngHIBKcF8wX1Ba8Hm8sC48sC1uUCrfIC2P4CAA==",
+				"AAECAa0GDAnFBO0F0wqWxALTxQLJxwLHywKJzQLwzwKQ0wLD6gIJ+wGhBNHBAtXBAujQAqniAsvmAp/rAqH+AgA=",
+				"AAECAaoICJQDtAPtBcLOArrSAqfuAur6Apn7Agv5A4EE9QT+BbIG9QjHwQKNzgLD0gLz5wKf/QIA")
+				.forEach(deckList -> {
+					DeckCreateRequest deck = DeckCreateRequest.fromDeckList(deckList);
+					Assert.assertEquals(deck.getCardIds().size(), 30);
+				});
+	}
+
+	@Test
 	public void testDecklistParsing() {
 		CardCatalogue.loadCardsFromPackage();
 		String deckList1 = "### Tempo Rogue\n" +

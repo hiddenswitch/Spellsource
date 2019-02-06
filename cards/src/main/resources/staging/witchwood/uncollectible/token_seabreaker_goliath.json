@@ -1,0 +1,15 @@
+{
+  "name": "Seabreaker Goliath",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 15,
+  "baseHp": 15,
+  "rarity": "FREE",
+  "race": "PIRATE",
+  "description": "Costs (1) less for each time you've fired your Cannons.",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

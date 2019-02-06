@@ -1,0 +1,123 @@
+{
+  "name": "General Vezax",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "OBSIDIAN",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Taunt. Whenever this minion takes damage, switch between Windfury, Lifesteal, and Taunt.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ConditionalEffectSpell",
+          "condition": {
+            "class": "AttributeCondition",
+            "target": "SELF",
+            "value": 4,
+            "attribute": "RESERVED_INTEGER_2",
+            "operation": "EQUAL"
+          },
+          "spell1": {
+            "class": "ModifyAttributeSpell",
+            "target": "SELF",
+            "value": 1,
+            "attribute": "RESERVED_INTEGER_2"
+          },
+          "spell2": {
+            "class": "SetAttributeSpell",
+            "target": "SELF",
+            "value": 1,
+            "attribute": "RESERVED_INTEGER_2"
+          }
+        },
+        {
+          "class": "ConditionalSpell",
+          "conditions": [
+            {
+              "class": "AttributeCondition",
+              "target": "SELF",
+              "value": 2,
+              "attribute": "RESERVED_INTEGER_2",
+              "operation": "EQUAL"
+            },
+            {
+              "class": "AttributeCondition",
+              "target": "SELF",
+              "value": 3,
+              "attribute": "RESERVED_INTEGER_2",
+              "operation": "EQUAL"
+            },
+            {
+              "class": "AttributeCondition",
+              "target": "SELF",
+              "value": 1,
+              "attribute": "RESERVED_INTEGER_2",
+              "operation": "EQUAL"
+            }
+          ],
+          "spells": [
+            {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "RemoveAttributeSpell",
+                  "target": "SELF",
+                  "attribute": "TAUNT"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "target": "SELF",
+                  "attribute": "WINDFURY"
+                }
+              ]
+            },
+            {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "RemoveAttributeSpell",
+                  "target": "SELF",
+                  "attribute": "WINDFURY"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "target": "SELF",
+                  "attribute": "LIFESTEAL"
+                }
+              ]
+            },
+            {
+              "class": "MetaSpell",
+              "spells": [
+                {
+                  "class": "RemoveAttributeSpell",
+                  "target": "SELF",
+                  "attribute": "LIFESTEAL"
+                },
+                {
+                  "class": "AddAttributeSpell",
+                  "target": "SELF",
+                  "attribute": "TAUNT"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "RESERVED_INTEGER_2": 1,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

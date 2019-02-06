@@ -1,0 +1,20 @@
+{
+  "name": "Giant Barbecue",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "TOAST",
+  "rarity": "FREE",
+  "description": "Deal $5 damage to an enemy minion and minions adjacent to it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell": {
+      "class": "DamageSpell",
+      "value": 5
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

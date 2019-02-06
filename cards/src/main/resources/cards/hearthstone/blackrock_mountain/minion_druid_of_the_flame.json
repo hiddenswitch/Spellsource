@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "description": "Choose One - Transform into a 5/2 minion; or a 2/5 minion.",
-  "options": [
+  "chooseOneBattlecries": [
     {
       "description": "5/2",
       "spell": {
@@ -25,7 +25,7 @@
       }
     }
   ],
-  "bothOptions": {
+  "chooseBothBattlecry": {
     "description": "5/5",
     "spell": {
       "class": "TransformMinionSpell",

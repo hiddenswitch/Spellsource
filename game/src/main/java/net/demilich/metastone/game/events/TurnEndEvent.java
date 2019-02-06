@@ -8,7 +8,7 @@ public class TurnEndEvent extends GameEvent {
 	public TurnEndEvent(GameContext context, int playerId) {
 		super(context, playerId, -1);
 	}
-	
+
 	@Override
 	public Entity getEventTarget() {
 		return null;

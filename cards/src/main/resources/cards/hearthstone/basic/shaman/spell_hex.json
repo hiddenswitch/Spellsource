@@ -11,7 +11,7 @@
     "card": "token_frog"
   },
   "attributes": {
-    "NAME": "Transmute"
+    "SPELLSOURCE_NAME": "Transmute"
   },
   "collectible": true,
   "set": "BASIC",

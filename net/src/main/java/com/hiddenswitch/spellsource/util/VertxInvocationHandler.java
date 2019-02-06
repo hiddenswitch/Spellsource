@@ -1,15 +1,17 @@
 package com.hiddenswitch.spellsource.util;
 
 import co.paralleluniverse.fibers.Suspendable;
-import io.vertx.core.AsyncResult;
-import io.vertx.core.Future;
-import io.vertx.core.Handler;
-import io.vertx.core.VertxException;
+import co.paralleluniverse.strands.SuspendableAction1;
+import io.vertx.core.*;
 import io.vertx.core.buffer.Buffer;
 import io.vertx.core.eventbus.DeliveryOptions;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.Sync;
+import org.apache.commons.lang3.builder.ToStringBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -18,6 +20,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
+import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 import static io.vertx.ext.sync.Sync.awaitFiber;
 
 /**
@@ -26,9 +29,9 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  *
  * @param <T> The service to which this invocation handler makes calls.
  * @see InvocationHandler for more about proxies.
- * @see java.lang.reflect.Proxy#newProxyInstance(ClassLoader, Class[], InvocationHandler) for more about proxies.
  */
 class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
+	private static Logger LOGGER = LoggerFactory.getLogger(VertxInvocationHandler.class);
 	final String deploymentId;
 	final String name;
 	final EventBus eb;
@@ -43,6 +46,17 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 		this.sync = sync;
 		this.next = next;
 		this.timeout = RpcClient.DEFAULT_TIMEOUT;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("deploymentId", deploymentId)
+				.append("name", name)
+				.append("sync", sync)
+				.append("next", next != null ? next.toString() : null)
+				.append("timeout", timeout)
+				.toString();
 	}
 
 	@Override
@@ -83,9 +97,15 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 
 		if (sync) {
 			final RpcOptions.Serialization finalSerialization = serialization;
-			result = awaitFiber(done -> {
-				call(methodName, args, deliveryOptions, finalSerialization, done, method);
-			});
+			try {
+				result = awaitFiber(done -> {
+					call(methodName, args, deliveryOptions, finalSerialization, done, method);
+				});
+			} catch (VertxException any) {
+				LOGGER.error("vertxInvocationHandler invoke {}: DeploymentIds={}", this.toString(), Vertx.currentContext().owner().deploymentIDs());
+				throw any;
+			}
+
 		} else {
 			call(methodName, args, deliveryOptions, serialization, next, method);
 		}
@@ -102,7 +122,7 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			address = deploymentId + "::" + address;
 		}
 
-		Handler<AsyncResult<Message<Object>>> handler;
+		SuspendableAction1<AsyncResult<Message<Object>>> handler;
 
 		if (serialization == RpcOptions.Serialization.JAVA) {
 			final Buffer result = Buffer.buffer(512);
@@ -117,12 +137,12 @@ class VertxInvocationHandler<T> implements InvocationHandler, Serializable {
 			message = result;
 			handler = new ReplyHandler(next);
 		} else if (serialization == RpcOptions.Serialization.JSON) {
-			message = Serialization.serialize(args[0]);
+			message = JsonObject.mapFrom(args[0]);
 			handler = new JsonReplyHandler(next, method.getReturnType());
 		} else {
 			throw new RuntimeException("Unspecified serialization option in invocation.");
 		}
 
-		eb.send(address, message, deliveryOptions, Sync.fiberHandler(handler));
+		eb.send(address, message, deliveryOptions, suspendableHandler(handler));
 	}
 }

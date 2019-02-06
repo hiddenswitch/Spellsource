@@ -1,21 +1,24 @@
 package net.demilich.metastone.game.spells.desc.source;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import net.demilich.metastone.game.cards.desc.CardSourceDescDeserializer;
 import net.demilich.metastone.game.cards.desc.Desc;
 
 import java.util.Map;
 
+@JsonDeserialize(using = CardSourceDescDeserializer.class)
 public class CardSourceDesc extends Desc<CardSourceArg, CardSource> {
 
 	public CardSourceDesc() {
-		super();
+		super(CardSourceArg.class);
 	}
 
 	public CardSourceDesc(Class<? extends CardSource> cardSourceClass) {
-		super(cardSourceClass);
+		super(cardSourceClass, CardSourceArg.class);
 	}
 
 	public CardSourceDesc(Map<CardSourceArg, Object> arguments) {
-		super(arguments);
+		super(arguments, CardSourceArg.class);
 	}
 
 	@Override

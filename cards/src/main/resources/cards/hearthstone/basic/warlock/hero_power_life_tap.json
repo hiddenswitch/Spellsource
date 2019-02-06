@@ -1,13 +1,14 @@
 {
   "name": "Life Tap",
+  "heroPower": "hero_power_soul_tap",
   "baseManaCost": 2,
   "type": "HERO_POWER",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Take 2 damage and draw a card.",
+  "description": "Take $2 damage and draw a card.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "MetaSpell",
+    "class": "HeroPowerSpell",
     "spells": [
       {
         "class": "DamageSpell",

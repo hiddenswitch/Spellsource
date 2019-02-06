@@ -4,7 +4,7 @@
 ## Properties
 Name | Type | Description | Notes
 ------------ | ------------- | ------------- | -------------
-**id** | **Integer** | The entity&#39;s ID in the game. | 
+**id** | **Integer** | The entity&#39;s ID in the game. |  [optional]
 **cardId** | **String** | The entity&#39;s Card ID. When null, it typically should not be rendered. |  [optional]
 **entityType** | [**EntityTypeEnum**](#EntityTypeEnum) | Broad categories describing this entity and how it should be rendered.  |  [optional]
 **name** | **String** | The text that would go into the entity&#39;s name field.  |  [optional]

@@ -1,0 +1,24 @@
+{
+  "name": "Gilblin Plunderer",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Battlecry: Shuffle two 3/4 Gilblins into deck. your",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "value": 2,
+      "card": "token_gilblin_marauder"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

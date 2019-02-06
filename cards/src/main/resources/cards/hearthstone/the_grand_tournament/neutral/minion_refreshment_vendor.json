@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Restore 4 Health to each hero.",
+  "description": "Battlecry: Restore #4 Health to each hero.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

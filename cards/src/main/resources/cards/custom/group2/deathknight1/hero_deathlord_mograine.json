@@ -1,0 +1,35 @@
+{
+  "name": "Deathlord Mograine",
+  "heroPower": "hero_power_presence",
+  "baseManaCost": 7,
+  "type": "HERO",
+  "heroClass": "ICE",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Give your minions +2/+2 and Taunt.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "FRIENDLY_MINIONS",
+          "attribute": "TAUNT"
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

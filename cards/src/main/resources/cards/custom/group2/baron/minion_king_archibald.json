@@ -1,0 +1,26 @@
+{
+  "name": "King Archibald",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "description": "<b>Rush</b>. Battlecry: Transform your Hero Power into Eternal Strength.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ChangeHeroPowerSpell",
+      "cards": [
+        "hero_power_eternal_strength"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

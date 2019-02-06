@@ -19,7 +19,7 @@
     ]
   },
   "attributes": {
-    "NAME": "Vestal Blessing"
+    "SPELLSOURCE_NAME": "Vestal Blessing"
   },
   "collectible": true,
   "set": "BASIC",

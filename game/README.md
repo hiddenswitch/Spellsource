@@ -8,11 +8,11 @@ In Spellsource, the object model starts with the [GameContext](src/main/java/net
 
 Start by visiting the [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) class and reading its documentation.
 
-For AI opponent-related work, start with the [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/shared/threat/GameStateValueBehaviour.java) to see an implementation of a one-turn horizon artificial intelligence opponent.
+For AI opponent-related work, start with the [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java) to see an implementation of a one-turn horizon artificial intelligence opponent.
 
 ### What belongs in this module
 
- - **Engine interfaces and implementation**: [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) is the core object that executes a single match of Spellsource. The best AI is implemented by [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/shared/threat/GameStateValueBehaviour.java).
+ - **Engine interfaces and implementation**: [GameContext](src/main/java/net/demilich/metastone/game/GameContext.java) is the core object that executes a single match of Spellsource. The best AI is implemented by [GameStateValueBehaviour](src/main/java/net/demilich/metastone/game/behaviour/GameStateValueBehaviour.java).
 
  - **Clean room implementations**: Code must be written as a "clean room" implementation: the author had only seen a behaviour and never a reverse engineered piece of game code from another game.
 

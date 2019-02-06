@@ -1,0 +1,27 @@
+{
+  "name": "Venom Drench",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "EPIC",
+  "description": "Deal $3 damage to all minions and give them Poisonous.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "target": "ALL_MINIONS",
+        "value": 3
+      },
+      {
+        "class": "AddAttributeSpell",
+        "target": "ALL_MINIONS",
+        "attribute": "POISONOUS"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

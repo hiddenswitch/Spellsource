@@ -1,0 +1,20 @@
+{
+  "name": "Runeforging",
+  "heroPower": "hero_power_efficient_runeforging",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Add a Rune to your hand.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_rune"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

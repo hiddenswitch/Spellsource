@@ -1,0 +1,12 @@
+{
+  "name": "Inquisitor Hav'nixx",
+  "baseManaCost": 0,
+  "type": "HERO",
+  "heroClass": "WHITE",
+  "rarity": "FREE",
+  "description": "<i>A mind is a terrible thing to waste. It's far too delicious.</i>",
+  "attributes": {},
+  "collectible": false,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}

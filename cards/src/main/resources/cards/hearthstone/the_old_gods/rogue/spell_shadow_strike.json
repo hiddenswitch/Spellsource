@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Deal 5 damage to an undamaged character.",
+  "description": "Deal $5 damage to an undamaged character.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",

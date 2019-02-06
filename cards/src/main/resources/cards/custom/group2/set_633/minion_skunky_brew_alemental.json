@@ -1,0 +1,26 @@
+{
+  "name": "Skunky Brew Alemental",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Deflect. Battlecry: Summon two 1/2 Alementals.",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "token_tiny_alemental",
+        "token_tiny_alemental"
+      ]
+    }
+  },
+  "attributes": {
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

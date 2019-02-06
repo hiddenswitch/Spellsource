@@ -1,0 +1,16 @@
+{
+  "name": "Ghoul",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ICE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Charge",
+  "attributes": {
+    "CHARGE": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

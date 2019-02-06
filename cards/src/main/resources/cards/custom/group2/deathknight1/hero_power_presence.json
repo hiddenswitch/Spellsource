@@ -1,0 +1,33 @@
+{
+  "name": "Presence",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ICE",
+  "rarity": "FREE",
+  "description": "Passive Hero Power. At the start of your turn, activate a random Presence.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "ChangeHeroPowerSpell",
+      "cards": [
+        "hero_power_blood_presence",
+        "hero_power_frost_presence",
+        "hero_power_unholy_presence"
+      ]
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

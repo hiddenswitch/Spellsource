@@ -1,0 +1,23 @@
+{
+  "name": "Squeak Freak",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "EGGPLANT",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "RARE",
+  "description": "Deathrattle: Draw a 0-Cost card from your deck.",
+  "deathrattle": {
+    "class": "FromDeckToHandSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "manaCost": 0
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards;
 
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.Zones;
+import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
 import java.util.Iterator;
@@ -32,7 +33,16 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @param card The card
 	 * @return This instance.
 	 */
-	CardList addCard(Card card);
+	CardList addCard(@NotNull Card card);
+
+	default CardList addCard(String cardId) {
+		Card cardById = CardCatalogue.getCardById(cardId);
+		if (cardById == null) {
+			throw new NullPointerException(cardId);
+		}
+		addCard(cardById);
+		return this;
+	}
 
 	/**
 	 * Adds all the cards from the given list.
@@ -52,7 +62,7 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 
 	/**
 	 * Checks if the list has the specific reference to a card. Does not use the card's {@link
-	 * net.demilich.metastone.game.entities.Entity#id} or its {@link Card#cardId}, which may be more helpful.
+	 * net.demilich.metastone.game.entities.Entity#id} or its {@link Card#getCardId()}, which may be more helpful.
 	 *
 	 * @param card The card instance to check.
 	 * @return {@code true} if the specific instance is inside this list.
@@ -61,10 +71,10 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	boolean contains(Card card);
 
 	/**
-	 * Checks if there is a card in this list whose {@link Card#cardId} matches the specified instance of a card.
+	 * Checks if there is a card in this list whose {@link Card#getCardId()} matches the specified instance of a card.
 	 *
 	 * @param card The card instance to compare.
-	 * @return {@code true} if the there is a card with a matching {@link Card#cardId}.
+	 * @return {@code true} if the there is a card with a matching {@link Card#getCardId()}.
 	 */
 	default boolean containsCard(Card card) {
 		if (card == null) {
@@ -74,10 +84,10 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	}
 
 	/**
-	 * Checks if there is a card in this list whose {@link Card#cardId} matches the specified card ID.
+	 * Checks if there is a card in this list whose {@link Card#getCardId()} matches the specified card ID.
 	 *
 	 * @param cardId The card ID
-	 * @return {@code true} if the there is a card with a matching {@link Card#cardId}.
+	 * @return {@code true} if the there is a card with a matching {@link Card#getCardId()}.
 	 */
 	default boolean containsCard(String cardId) {
 		if (cardId == null) {
@@ -158,8 +168,8 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	void removeAll() throws Exception;
 
 	/**
-	 * Removes the first card. Implements {@link net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell}, used
-	 * by 3 Hearthstone cards.
+	 * Removes the first card. Implements {@link net.demilich.metastone.game.spells.PutRandomSecretIntoPlaySpell}, used by
+	 * 3 Hearthstone cards.
 	 *
 	 * @return The card that is now removed.
 	 */
@@ -180,16 +190,6 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	 * @param random A {@link Random} instance.
 	 */
 	CardList shuffle(Random random);
-
-	/**
-	 * Sorts the cards in this list by their {@link Card#getBaseManaCost()}. Typically not used in gameplay.
-	 */
-	void sortByManaCost();
-
-	/**
-	 * Sorts the cards by name.
-	 */
-	void sortByName();
 
 	/**
 	 * Gets a {@link List} that references the contents of this instance.
@@ -224,7 +224,7 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	}
 
 	/**
-	 * Gets the {@link Stream<Card>} API representation of this card list.
+	 * Gets the {@link Stream} API representation of this card list.
 	 *
 	 * @return The backing list's {@link List#stream()}.
 	 */

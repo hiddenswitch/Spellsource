@@ -1,0 +1,22 @@
+{
+  "name": "Unstable Artifact",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Taunt. Deathrattle: Deal 4 damage to all minions.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "ALL_MINIONS",
+    "value": 4
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

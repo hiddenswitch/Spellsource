@@ -1,0 +1,27 @@
+{
+  "name": "Fizzle's Dark Duplicator",
+  "baseManaCost": 10,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "LEGENDARY",
+  "description": "Summon a copy of each enemy minion and give it Rush.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "target": "ENEMY_MINIONS",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "OUTPUT",
+      "attribute": "RUSH",
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "RUSH",
+        "invert": true,
+        "operation": "HAS"
+      }
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

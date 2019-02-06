@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "WHITE",
   "rarity": "EPIC",
-  "description": "Deal 5 damage to all minions except Dragons.",
+  "description": "Deal $5 damage to all minions except Dragons.",
   "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",

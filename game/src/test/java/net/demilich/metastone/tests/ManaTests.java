@@ -1,16 +1,14 @@
 package net.demilich.metastone.tests;
 
+import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-
 public class ManaTests extends TestBase {
-	
+
 	@Test
 	public void testDarnassusAspirant() {
 		GameContext context = createContext(HeroClass.BROWN, HeroClass.RED);
@@ -29,7 +27,7 @@ public class ManaTests extends TestBase {
 		Assert.assertEquals(player.getMana(), 0);
 		Assert.assertEquals(player.getMaxMana(), 5);
 		context.getLogic().endTurn(playerId);
-		
+
 		// start turn - Doomsayer triggers and kills Darnassus Aspirant
 		context.getLogic().startTurn(playerId);
 		// player should loose a full mana crystal in this case

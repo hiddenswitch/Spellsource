@@ -1,0 +1,24 @@
+{
+  "name": "Kanight",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "GREEN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Deathrattle: Summon two 1/1 Spiders.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_spider",
+      "token_spider"
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE",
+  "fileFormatVersion": 1
+}

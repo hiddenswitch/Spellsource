@@ -5,7 +5,6 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
-import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.TargetAcquisitionEvent;
 import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
@@ -14,10 +13,17 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.List;
 
+/**
+ * Noggenfogger auras override the target acquisitions of both players whenever {@link #getValidTargets(GameContext,
+ * TargetAcquisitionEvent)} returns a non-empty list of entities.
+ * <p>
+ * This aura's {@code getValidTargets} method can be overridden to support other kinds of retargeting.
+ */
 public class NoggenfoggerAura extends Aura {
 
 	public NoggenfoggerAura(AuraDesc desc) {
 		super(new TargetAcquisitionTrigger(), null, NullSpell.create());
+		setDesc(desc);
 	}
 
 	@Override
@@ -30,14 +36,35 @@ public class NoggenfoggerAura extends Aura {
 		GameContext gc = originalEvent.getGameContext();
 		List<Entity> validTargets;
 
-		if (event.getAction().getActionType() == ActionType.PHYSICAL_ATTACK) {
-			// Noggenfogger ignores taunt and stealth but doesn't choose friendlies
-			Player sourcePlayer = gc.getPlayer(originalEvent.getSourcePlayerId());
-			validTargets = gc.resolveTarget(sourcePlayer, event.getAction().getSource(gc), EntityReference.ENEMY_CHARACTERS);
-		} else {
-			validTargets = gc.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
-		}
+		validTargets = getValidTargets(gc, event);
 
+		if (validTargets.size() == 0) {
+			// An earlier event removed all valid targets
+			return;
+		}
 		gc.setTargetOverride(gc.getLogic().getRandom(validTargets).getReference());
 	}
+
+
+	/**
+	 * Based on the specified target acquisition event, override the target to a random one from the list returned by this
+	 * method. If the targets are empty, no override occurs.
+	 *
+	 * @param context The context
+	 * @param event   The event
+	 * @return A {@link List} of entities to choose randomly from, or an empty list if there are no valid targets
+	 * 		/ an override should not occur.
+	 */
+	protected List<Entity> getValidTargets(GameContext context, TargetAcquisitionEvent event) {
+		List<Entity> validTargets;
+		if (event.getAction().getActionType() == ActionType.PHYSICAL_ATTACK) {
+			// Noggenfogger ignores taunt and stealth but doesn't choose friendlies
+			Player sourcePlayer = context.getPlayer(event.getSourcePlayerId());
+			validTargets = context.resolveTarget(sourcePlayer, event.getAction().getSource(context), EntityReference.ENEMY_CHARACTERS);
+		} else {
+			validTargets = context.getLogic().getValidTargets(event.getSourcePlayerId(), event.getAction());
+		}
+		return validTargets;
+	}
 }
+

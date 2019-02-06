@@ -1,0 +1,29 @@
+{
+  "name": "Kosumoth the Hungering",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "TOAST",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "Taunt. Battlecry: Roast 10 cards that aren't 10-Cost",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "RoastSpell",
+      "value": 10,
+      "cardFilter": {
+        "class": "CardFilter",
+        "invert": true,
+        "manaCost": 10
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -16,7 +16,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "Tanuki Blacksmith"
+    "SPELLSOURCE_NAME": "Tanuki Blacksmith"
   },
   "collectible": true,
   "set": "CLASSIC",

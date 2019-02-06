@@ -1,12 +1,9 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.MinionCard;
+import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -14,6 +11,14 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+/**
+ * Resurrects minions from both player's graveyards.
+ * <p>
+ * Does not resurrect unique minions.
+ */
 public class ResurrectFromBothSpell extends Spell {
 
 	@Override
@@ -25,7 +30,8 @@ public class ResurrectFromBothSpell extends Spell {
 		bothGraveyards.addAll(player.getGraveyard());
 		bothGraveyards.addAll(context.getOpponent(player).getGraveyard());
 		for (Entity deadEntity : bothGraveyards) {
-			if (deadEntity.getEntityType() == EntityType.MINION) {
+			if (deadEntity.getEntityType() == EntityType.MINION
+					&& !deadEntity.isRemovedPeacefully()) {
 				if (cardFilter == null || cardFilter.matches(context, player, deadEntity, source)) {
 					deadMinions.add((Minion) deadEntity);
 				}
@@ -37,8 +43,8 @@ public class ResurrectFromBothSpell extends Spell {
 				return;
 			}
 			Minion resurrectedMinion = context.getLogic().getRandom(deadMinions);
-			MinionCard minionCard = (MinionCard) resurrectedMinion.getSourceCard();
-			context.getLogic().summon(player.getId(), minionCard.summon(), null, -1, false);
+			Card card = resurrectedMinion.getSourceCard();
+			context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
 			deadMinions.remove(resurrectedMinion);
 		}
 	}

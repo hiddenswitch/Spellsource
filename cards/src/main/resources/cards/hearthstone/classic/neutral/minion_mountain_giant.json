@@ -6,6 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "EPIC",
+  "race": "ELEMENTAL",
   "description": "Costs (1) less for each other card in your hand.",
   "collectible": true,
   "set": "CLASSIC",

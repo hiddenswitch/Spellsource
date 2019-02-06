@@ -1,0 +1,54 @@
+{
+  "name": "Flurricane",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "RARE",
+  "description": "Deal $1 damage to all minions and Freeze them. Surge: All enemies instead.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "EitherOrSpell",
+    "condition": {
+      "class": "AttributeCondition",
+      "target": "SELF",
+      "value": {
+        "class": "CurrentTurnValueProvider"
+      },
+      "attribute": "RECEIVED_ON_TURN",
+      "operation": "EQUAL"
+    },
+    "spell1": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": 1
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "ENEMY_CHARACTERS",
+          "attribute": "FROZEN"
+        }
+      ]
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "target": "ALL_MINIONS",
+          "value": 1
+        },
+        {
+          "class": "AddAttributeSpell",
+          "target": "ALL_MINIONS",
+          "attribute": "FROZEN"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -26,7 +26,7 @@
   },
   "attributes": {
     "BATTLECRY": true,
-    "NAME": "The Flying Lotus"
+    "SPELLSOURCE_NAME": "The Flying Lotus"
   },
   "collectible": true,
   "set": "CLASSIC",

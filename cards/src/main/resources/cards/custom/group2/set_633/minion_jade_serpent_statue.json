@@ -1,0 +1,39 @@
+{
+  "name": "Jade Serpent Statue",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 0,
+  "baseHp": 4,
+  "rarity": "FREE",
+  "race": "ELEMENTAL",
+  "description": "At the end of your turn, restore #2 Health to a damaged friendly minion and your hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_MINIONS",
+          "value": 2,
+          "filter": {
+            "class": "DamagedFilter"
+          },
+          "randomTarget": true
+        },
+        {
+          "class": "HealSpell",
+          "target": "FRIENDLY_HERO",
+          "value": 2
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

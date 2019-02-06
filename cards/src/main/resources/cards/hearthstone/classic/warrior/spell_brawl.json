@@ -11,7 +11,7 @@
     "target": "ALL_MINIONS"
   },
   "attributes": {
-    "NAME": "Bender"
+    "SPELLSOURCE_NAME": "Bender"
   },
   "collectible": true,
   "set": "CLASSIC",

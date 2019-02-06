@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Taunt. Battlecry: Restore 3 Health.",
+  "description": "Taunt. Battlecry: Restore #3 Health.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

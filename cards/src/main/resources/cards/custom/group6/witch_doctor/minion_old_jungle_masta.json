@@ -1,0 +1,16 @@
+{
+  "name": "Old Jungle Masta",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "FREE",
+  "description": "Spell Damage +1",
+  "attributes": {
+    "SPELL_DAMAGE": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

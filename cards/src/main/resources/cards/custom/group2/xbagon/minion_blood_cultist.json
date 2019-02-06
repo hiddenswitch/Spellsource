@@ -1,0 +1,29 @@
+{
+  "name": "Blood Cultist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Battlecry: Discover a Deathrattle minion. Gain its Deathrattle effect.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "CopyDeathrattleSpell"
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "DEATHRATTLES",
+        "cardType": "MINION"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
