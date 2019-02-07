@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "race": "BEAST"
+  "race": "BEAST",
   "description": "Rush. Battlecry: Gain +1 Attack for each enemy minion.",
   "battlecry": {
     "spell": {
