@@ -12,8 +12,18 @@
       "class": "BuffSpell",
       "target": "FRIENDLY_HERO",
       "armorBonus": {
-        "class": "AttributeValueProvider",
-        "attribute": "MAX_HP"
+        "class": "AlgebraicValueProvider",
+        "operation": "SUBTRACT",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "attribute": "MAX_HP",
+          "target": "FRIENDLY_MINIONS",
+        },
+        "value2": {
+          "class": "AttributeValueProvider",
+          "attribute": "HP",
+          "target": "FRIENDLY_MINIONS",
+        }
       }
     }
   },
