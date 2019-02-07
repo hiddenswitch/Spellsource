@@ -15,7 +15,7 @@
       "target": "SELF",
       "AttackBonus": {
         "class": "EntityCounter",
-        "target": "ENEMY_MINIONS",
+        "target": "ENEMY_MINIONS"
       }
     }
   },
