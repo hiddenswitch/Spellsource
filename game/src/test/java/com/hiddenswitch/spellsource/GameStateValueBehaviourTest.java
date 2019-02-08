@@ -263,8 +263,9 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	public void testCorrectOrder() {
 		runGym((context, player, opponent) -> {
 			GameStateValueBehaviour checkDepth = new GameStateValueBehaviour();
-			checkDepth.setMaxDepth(5);
-			checkDepth.setTimeout(9000L);
+			checkDepth.setMaxDepth(6);
+			checkDepth.setTimeout(24000L);
+			checkDepth.setParallel(false);
 			putOnTopOfDeck(context, opponent, "minion_bloodfen_raptor");
 			opponent.getHero().setHp(4);
 			// Your hero power is, Equip a 1/1 Weapon (costs 2)
@@ -285,7 +286,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// southsea, then attack with hero
 			// Southsea MUST attack before weapon attacks
 			// Sun cleric MUST be played after southsea and should NOT buff a minion that gains a huge amount of hp
-			// This is a depth 5 puzzle.
+			// This is a depth 6 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
 			assertTrue(context.updateAndGetGameOver());
 		}, HeroClass.BLACK, HeroClass.BLACK);
