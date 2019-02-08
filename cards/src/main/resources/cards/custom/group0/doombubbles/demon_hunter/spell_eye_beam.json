@@ -8,40 +8,38 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
-    "value": {
-      "class": "EntityCounter",
-      "target": "ALL_MINIONS"
-    },
     "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_eye_beaming"
+      },
       {
         "class": "RecastWhileSpell",
         "condition": {
-          "class": "ComparisonCondition",
-          "operation": "EQUAL",
-          "value1": {
-            "class": "GameValueProvider",
-            "gameValue": "SPELL_VALUE"
-          },
-          "value2": {
-            "class": "EntityCounter",
-            "target": "ALL_MINIONS",
-            "filter": {
-              "class": "AttributeFilter",
-              "attribute": "DESTROYED",
-              "invert": true,
-              "operation": "HAS"
-            }
+          "class": "AnyMatchFilterCondition",
+          "target": "FRIENDLY_PLAYER",
+          "filter": {
+            "class": "HasEnchantmentFilter",
+            "card": "enchantment_eye_beaming"
           }
         },
         "spell": {
           "class": "AdjacentEffectSpell",
-          "spell1": {
-            "class": "DamageSpell",
-            "value": 1
-          },
-          "spell2": {
-            "class": "DamageSpell",
-            "value": 1
+          "spell": {
+            "class": "ConditionalEffectSpell",
+            "spell1": {
+              "class": "DamageSpell",
+              "value": 1
+            },
+            "condition": {
+              "class": "IsDeadCondition"
+            },
+            "spell2": {
+              "class": "RemoveEnchantmentSpell",
+              "target": "FRIENDLY_PLAYER",
+              "card": "enchantment_eye_beaming"
+            }
           }
         },
         "howMany": 80

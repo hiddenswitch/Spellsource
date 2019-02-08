@@ -1,0 +1,11 @@
+{
+  "name": "Eye Beaming",
+  "type": "ENCHANTMENT",
+  "heroClass": "PURPLE",
+  "rarity": "FREE",
+  "description": "Dummy enchantment for tracking when the player is still using Eye Beam",
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

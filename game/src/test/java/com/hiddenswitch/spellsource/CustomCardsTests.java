@@ -6074,6 +6074,12 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(dino2.getHp(), 8);
 			assertEquals(dino3.getHp(), 6);
 		});
+
+		runGym((context, player, opponent) -> {
+			Minion harvest = playMinionCard(context, opponent, "minion_harvest_golem");
+			playCard(context, player, "spell_eye_beam", harvest);
+			assertEquals(opponent.getMinions().size(), 1);
+		});
 	}
 
 	@Test
