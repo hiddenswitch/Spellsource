@@ -40,7 +40,7 @@ public class GreedyOptimizeTurn extends IntelligentBehaviour {
 
 		List<GameAction> validActions = simulation.getValidActions();
 
-		double score = Float.NEGATIVE_INFINITY;
+		double score = Double.NEGATIVE_INFINITY;
 		if (table.known(simulation)) {
 			return table.getScore(simulation);
 			// logger.info("GameState is known, has score of {}", score);

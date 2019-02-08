@@ -12,11 +12,22 @@ Thanks to a great contribution from @Muhframos, additional Occultist cards have 
 
 Thanks to a great contribution from @Pircival, additional Baron cards in the Verdant Dreams expansion have been added.
 
+##### Usability Fixes
+
+ - The bot will perform better overall. It should find lethal by using a combination of direct damage spells, physical attacks and weapons. It may miss lethal in situations that depend on removing an opponent's taunt minions, healing on physical attack or damage triggers (like minions with both taunt and lifesteal) that give the opponent's hero health, direct damage battlecries or other advanced effects.
+
 ##### Content Fixes
 
  - Witch Doctor is now known as Senzaku.
  - Doomerang now correctly deals lifesteal and poisonous damage.
  - Attacking uses up an attack before text like "whenever this minion attacks" is put into play.
+ - Felomelorn now correctly casts Flamestrikes.
+ - Ner'Zhul now has a working hero power.
+ - Atomedic Androne now correctly buffs the target owner's hero with armor.
+ - Parting Gift in Verdant Dreams can now correctly be added to decks.
+ - Deepwood Barghest now correctly adds two secrets to the hand. They will not necessarily be distinct.
+ - Ironforge Portal now correctly buffs the hero.
+ - Finley the Explorer, Sunlance, Mealcatcher, Dancing Rune Weapon, Desert Maiden, The Maelstormm and Captain Cookie have been temporarily removed from the game.
 
 ##### Content Additions
 

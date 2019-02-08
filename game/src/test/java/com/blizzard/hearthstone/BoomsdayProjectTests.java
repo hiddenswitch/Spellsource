@@ -7,13 +7,16 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
+import net.demilich.metastone.game.environment.EnvironmentDeque;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
+import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentLinkedDeque;
 
 import static org.testng.Assert.*;
 
@@ -118,6 +121,10 @@ public class BoomsdayProjectTests extends TestBase {
 
 	@Test
 	public void testTreantSynergyCards() {
+		EnvironmentDeque<Integer> deque = new EnvironmentDeque<>();
+		deque.addLast(5);
+		assertFalse(deque.isEmpty());
+
 		// Dendrologist, mulchmuncher, landscaping
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_dendrologist");

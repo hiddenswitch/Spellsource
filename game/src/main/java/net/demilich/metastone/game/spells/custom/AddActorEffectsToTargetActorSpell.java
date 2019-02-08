@@ -67,7 +67,7 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 		Actor targetActor = (Actor) target;
 		if (targetActor.hasAttribute(Attribute.BATTLECRY)
 				&& sourceCard.hasBattlecry()) {
-			logger.warn("onCast {} {}: The source card {} is going to overwrite the target {} battlecry.", context.getGameId(), source, sourceCard, targetActor);
+			logger.debug("onCast {} {}: The source card {} is going to overwrite the target {} battlecry.", context.getGameId(), source, sourceCard, targetActor);
 		}
 
 		Race originalRace = targetActor.getRace();
