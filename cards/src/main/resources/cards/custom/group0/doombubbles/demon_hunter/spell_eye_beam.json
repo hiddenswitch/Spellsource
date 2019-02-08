@@ -12,41 +12,43 @@
       "class": "EntityCounter",
       "target": "ALL_MINIONS"
     },
-    "spell": {
-      "class": "RecastWhileSpell",
-      "condition": {
-        "class": "ComparisonCondition",
-        "operation": "EQUAL",
-        "value1": {
-          "class": "GameValueProvider",
-          "gameValue": "SPELL_VALUE"
-        },
-        "value2": {
-          "class": "EntityCounter",
-          "target": "ALL_MINIONS",
-          "filter": {
-            "class": "AttributeFilter",
-            "attribute": "DESTROYED",
-            "invert": true,
-            "operation": "HAS"
+    "spells": [
+      {
+        "class": "RecastWhileSpell",
+        "condition": {
+          "class": "ComparisonCondition",
+          "operation": "EQUAL",
+          "value1": {
+            "class": "GameValueProvider",
+            "gameValue": "SPELL_VALUE"
+          },
+          "value2": {
+            "class": "EntityCounter",
+            "target": "ALL_MINIONS",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "DESTROYED",
+              "invert": true,
+              "operation": "HAS"
+            }
           }
-        }
-      },
-      "spell": {
-        "class": "AdjacentEffectSpell",
-        "spell1": {
-          "class": "DamageSpell",
-          "value": 1
         },
-        "spell2": {
-          "class": "DamageSpell",
-          "value": 1
-        }
-      },
-      "howMany": 80
-    }
+        "spell": {
+          "class": "AdjacentEffectSpell",
+          "spell1": {
+            "class": "DamageSpell",
+            "value": 1
+          },
+          "spell2": {
+            "class": "DamageSpell",
+            "value": 1
+          }
+        },
+        "howMany": 80
+      }
+    ]
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1
 }

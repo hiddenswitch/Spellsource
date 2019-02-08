@@ -455,6 +455,22 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	public boolean canPlayCard(int playerId, EntityReference entityReference) {
 		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(entityReference);
+		return canPlayCard(player, card);
+	}
+
+	/**
+	 * Determines whether the given player can play the given card. Useful for drawing green borders around cards to
+	 * signal to an end user that they can play a particular card. Takes into account whether or not a spell that requires
+	 * targets has possible targets in the game.
+	 *
+	 * @param player The player whose point of view should be considered for this method.
+	 * @param card   The card.
+	 * @return {@code true} if the card can be played.
+	 */
+	@Suspendable
+	public boolean canPlayCard(Player player, Card card) {
+		int playerId = player.getId();
+		EntityReference entityReference = card.getReference();
 		// A player cannot play a card the player does not own.
 		if (card.getOwner() != player.getId()
 				&& card.getOwner() != Entity.NO_OWNER) {

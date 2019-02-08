@@ -154,10 +154,10 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		Player player = context.getPlayer(playerId);
 		Player opponent = context.getOpponent(player);
 		if (player.getHero().isDestroyed()) {
-			return Float.NEGATIVE_INFINITY;
+			return Double.NEGATIVE_INFINITY;
 		}
 		if (opponent.getHero().isDestroyed()) {
-			return Float.POSITIVE_INFINITY;
+			return Double.POSITIVE_INFINITY;
 		}
 		double score = 0;
 

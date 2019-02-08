@@ -128,7 +128,8 @@ import static java.util.stream.Collectors.toList;
  * Executing the card code is complicated, and follows the adage: Every sufficiently complex program has a poorly
  * implemented version of common Lisp. At a high level, players take turns generating {@link GameAction} objects, whose
  * {@link GameAction#execute(GameContext, int)} implementation does things like {@link GameLogic#castSpell(int,
- * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int, Minion, Entity, int, boolean)}. {@code "spell"} fields inside the {@link net.demilich.metastone.game.cards.desc.CardDesc}
+ * SpellDesc, EntityReference, EntityReference, TargetSelection, boolean, GameAction)} or {@link GameLogic#summon(int,
+ * Minion, Entity, int, boolean)}. {@code "spell"} fields inside the {@link net.demilich.metastone.game.cards.desc.CardDesc}
  * of the card currently being played get executed by looking at their {@link net.demilich.metastone.game.spells.desc.SpellArg#CLASS}
  * and creating an instance of the corresponding subclass of {@link net.demilich.metastone.game.spells.Spell}.
  * Subsequent "sub-spells" are called by {@link net.demilich.metastone.game.spells.SpellUtils#castChildSpell(GameContext,
@@ -1529,7 +1530,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        completed. This can be used to implement progress on a different thread.
 	 */
 	public static SimulationResult simulate(List<GameDeck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
-		return simulate(deckPair, player1, player2, numberOfGamesInBatch, useJavaParallel, matchCounter, null);
+		return simulate(deckPair, player1, player2, numberOfGamesInBatch, useJavaParallel, false, matchCounter, null);
 	}
 
 	/**
@@ -1549,14 +1550,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        corresponds to an AI to use for this player.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
 	 *                        on this JVM instance.
+	 * @param includeMirrors
 	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
 	 * @param contextHandler  A handler that can modify the game context for customization after it was initialized with
 	 *                        the specified decks but before mulligans. For example, the {@link GameLogic#seed} can be
-	 *                        changed here.
 	 */
-	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
 		// Actually run the computation
-		List<GameDeck[]> combinations = getDeckCombinations(decks, false);
+		List<GameDeck[]> combinations = getDeckCombinations(decks, includeMirrors);
 		Stream<GameDeck[]> deckStream = IntStream.range(0, numberOfGamesInBatch).boxed().flatMap(i -> combinations.stream());
 		if (useJavaParallel) {
 			deckStream = deckStream.parallel();
@@ -1587,6 +1588,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 			return innerResult;
 		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
+	}
+
+	public static int simulationCount(int numberOfDecks, int numberOfGamesInBatch, boolean includeMirrors) {
+		return ((includeMirrors ? numberOfDecks : 0) + (numberOfDecks * (numberOfDecks - 1)) / 2) * numberOfGamesInBatch;
 	}
 
 	/**
