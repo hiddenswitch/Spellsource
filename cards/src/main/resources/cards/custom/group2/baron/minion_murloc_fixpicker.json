@@ -1,5 +1,5 @@
 {
-  "name": "Murloc Fixpicker",
+  "name": "Fairy Fixpicker",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "NAVY",
@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "MURLOC",
-  "description": "Whenever you draw a minion, transform it into two random Murlocs.",
+  "description": "Whenever you draw a minion, transform it into two random Fae.",
   "trigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",
@@ -25,7 +25,7 @@
           "target": "EVENT_TARGET",
           "cardFilter": {
             "class": "CardFilter",
-            "race": "MURLOC",
+            "race": "FAE",
             "cardType": "MINION"
           },
           "cardSource": {
@@ -36,7 +36,7 @@
           "class": "ReceiveCardSpell",
           "cardFilter": {
             "class": "CardFilter",
-            "race": "MURLOC",
+            "race": "FAE",
             "cardType": "MINION"
           },
           "cardSource": {
