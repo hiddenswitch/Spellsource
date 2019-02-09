@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Choose a minion. Whenever you summon a copy of that minion, double it's stats.",
+  "description": "Choose a minion. Whenever you play a copy of that minion, double it's stats.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
     "trigger": {
       "eventTrigger": {
-        "class": "MinionSummonedTrigger",
+        "class": "AfterMinionPlayedTrigger",
         "targetPlayer": "SELF",
 		"filter": {
             "class": "SpecificCardFilter",
