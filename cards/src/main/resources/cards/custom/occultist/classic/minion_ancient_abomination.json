@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 8,
   "rarity": "RARE",
-  "description": "Whenever this minion takes damage, summon a 1/1 Tentacle with Taunt.",
+  "description": "Guard. Whenever this minion takes damage, summon a 1/1 Tentacle with Taunt.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -17,6 +17,9 @@
       "boardPositionRelative": "RIGHT",
       "card": "token_tauntentacle"
     }
+  },
+  "attributes": {
+    "TAUNT": true
   },
   "collectible": true,
   "set": "CLASSIC",

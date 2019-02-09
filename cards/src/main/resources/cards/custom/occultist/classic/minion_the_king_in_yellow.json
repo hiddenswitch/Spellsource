@@ -1,6 +1,6 @@
 {
   "name": "The King in Yellow",
-  "baseManaCost": 8,
+  "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 6,

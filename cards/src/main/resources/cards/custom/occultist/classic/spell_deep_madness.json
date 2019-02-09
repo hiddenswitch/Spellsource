@@ -1,6 +1,6 @@
 {
   "name": "Deep Madness",
-  "baseManaCost": 6,
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
