@@ -1,0 +1,29 @@
+{
+  "name": "Avatar of Freya",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Your spells cost (3) less. Whenever you cast a spell, summon a 2/2 Treant with Rush.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SpellCastedTrigger",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "boardPositionRelative": "RIGHT",
+      "card": "token_treant_rush"
+    }
+  },
+  "cardCostModifier": {
+    "class": "CardCostModifier",
+    "value": -3,
+    "cardType": "SPELL"
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
