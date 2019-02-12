@@ -10,9 +10,10 @@
   "description": "Whenever you cast a spell on a friendly minion, give it +3/+3 instead.",
   "trigger": {
     "eventTrigger": {
-      "class": "SpellCastedTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "SPELL",
       "sourcePlayer": "SELF",
-      "targetEntityType": "MINION",
+      "targetEntityType": "FRIENDLY_MINION",
       "targetPlayer": "SELF"
     },
     "spell": {
