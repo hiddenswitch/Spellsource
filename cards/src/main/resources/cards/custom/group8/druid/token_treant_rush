@@ -1,0 +1,16 @@
+{
+  "name": "Treant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "BROWN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "FREE",
+  "description": "Rush",
+  "attributes": {
+    "RUSH": true
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
