@@ -1,0 +1,19 @@
+{
+  "name": "Dusty Town Defender",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 4,
+  "baseHp": 8,
+  "rarity": "FREE",
+  "description": "Taunt",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
+  "fileFormatVersion": 1
+}
