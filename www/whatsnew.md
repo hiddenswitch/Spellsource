@@ -22,6 +22,7 @@ Bug fixes.
  - Polycephalos now reads, "Rush. Battlecry: Gain +1 Attack for each enemy minion."
  - The flavor of many Baron cards has been adapted for Spellsource (thanks @Pircival)
  - Various balance changes to Occultist cards.
+ - The flavor of many Vermancer cards have been adapted for Spellsource (thanks @Phyley).
 
 ### 0.8.20-2.0.26 (Monday, February 4th, 2019)
 
