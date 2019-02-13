@@ -1,0 +1,18 @@
+{
+  "name": "Silvershot Pistol",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 3,
+  "durability": 2,
+  "rarity": "FREE",
+  "description": "Battlecry: Draw a card.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
