@@ -57,6 +57,24 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBlackOxBrew() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_black_ox_brew");
+			int hp = player.getHero().getHp();
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), hp - 1);
+			context.endTurn();
+			hp = player.getHero().getHp();
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), hp - 1);
+			context.endTurn();
+			hp = player.getHero().getHp();
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), hp - 6);
+		});
+	}
+
+	@Test
 	public void testAnzuTheRavenGod() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "minion_anzu_the_raven_god");
