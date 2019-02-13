@@ -77,7 +77,6 @@ public class TycheBehaviour extends IntelligentBehaviour {
 	private final static double EXPLORE_THRESHOLD = 0.75;
 	private final static int DEFAULT_NUM_EPISODES_MULTIPLIER = 100;
 	private final static int LEARNING_NUM_EPISODES_MULTIPLIER = 20;
-	private final static String MIDRANGE_JADE_SHAMAN = "AAEBAaoIBu0dkAeUvQLzwgLrzwKr5wIMgQT1BP4d+6oCoLYC5rsCh7wCz7wC0bwC68IC+9MC3+kCAA==";
 
 	public enum Algorithm {
 		GREEDY,
