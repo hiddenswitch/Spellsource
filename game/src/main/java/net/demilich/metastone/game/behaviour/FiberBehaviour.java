@@ -2,6 +2,7 @@ package net.demilich.metastone.game.behaviour;
 
 import co.paralleluniverse.fibers.SuspendExecution;
 import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.Condition;
 import co.paralleluniverse.strands.channels.Channels;
 import co.paralleluniverse.strands.channels.QueueChannel;
 import co.paralleluniverse.strands.channels.QueueObjectChannel;
@@ -21,11 +22,22 @@ import java.util.List;
  * The underlying implementation relies on channels.
  */
 public class FiberBehaviour extends UtilityBehaviour {
+	private Condition next;
+	private List<GameAction> validActions;
 	private QueueChannel<GameAction> requestActionResult = new QueueObjectChannel<>(new SingleConsumerLinkedObjectQueue<>(), Channels.OverflowPolicy.THROW, true, true);
 	private QueueChannel<List<Card>> mulliganResult = new QueueObjectChannel<>(new SingleConsumerLinkedObjectQueue<>(), Channels.OverflowPolicy.THROW, true, true);
 	private List<Card> mulliganCards = new ArrayList<>();
 	private transient GameContext context;
 	private transient int playerId;
+
+	public FiberBehaviour(Condition next) {
+		super();
+		this.next = next;
+	}
+
+	public FiberBehaviour() {
+		this(null);
+	}
 
 	@Override
 	public String getName() {
@@ -39,6 +51,9 @@ public class FiberBehaviour extends UtilityBehaviour {
 		this.playerId = player.getId();
 		this.mulliganCards = new ArrayList<>(cards);
 		try {
+			if (next != null) {
+				next.signalAll();
+			}
 			return mulliganResult.receive();
 		} catch (SuspendExecution | InterruptedException execution) {
 			throw new RuntimeException(execution);
@@ -52,7 +67,11 @@ public class FiberBehaviour extends UtilityBehaviour {
 	public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
 		this.context = context;
 		this.playerId = player.getId();
+		this.validActions = validActions;
 		try {
+			if (next != null) {
+				next.signalAll();
+			}
 			return requestActionResult.receive();
 		} catch (SuspendExecution | InterruptedException execution) {
 			throw new RuntimeException(execution);
@@ -60,7 +79,7 @@ public class FiberBehaviour extends UtilityBehaviour {
 	}
 
 	public List<GameAction> getValidActions() {
-		return context.getActivePlayerId() == playerId ? context.getValidActions() : Collections.emptyList();
+		return validActions == null ? Collections.emptyList() : validActions;
 	}
 
 	public List<Card> getMulliganCards() {
@@ -75,5 +94,14 @@ public class FiberBehaviour extends UtilityBehaviour {
 	@Suspendable
 	public void setMulligan(List<Card> cardsToDiscard) throws InterruptedException, SuspendExecution {
 		mulliganResult.send0(cardsToDiscard, true, false, 0);
+	}
+
+	public Condition getNext() {
+		return next;
+	}
+
+	public FiberBehaviour setNext(Condition next) {
+		this.next = next;
+		return this;
 	}
 }

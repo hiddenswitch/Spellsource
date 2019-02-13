@@ -61,7 +61,7 @@ public class AdventureTests extends TestBase {
 	public void testNefarian() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_nefarian");
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertTrue(player.getHand().get(player.getHand().size() - 1).hasHeroClass(opponent.getHero().getHeroClass()));
 		}, HeroClass.VIOLET, HeroClass.GOLD);
 	}

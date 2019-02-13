@@ -378,7 +378,7 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(player.getHand().size(), handSize[0] + 1);
 		Card cardInHand = player.getHand().get(player.getHand().size() - 1);
 		Assert.assertEquals(cardInHand.getCardId(), originalMinion[0].getSourceCard().getCardId());
-		context.getLogic().performGameAction(player.getId(), cardInHand.play());
+		context.performAction(player.getId(), cardInHand.play());
 		int buff = light.getSpell().subSpells().stream().filter(sd -> sd.getDescClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
 		// Find the minion that was created with the specified card, because minions like Dr. Boom put unexpected cards into play into the first position.
 		Minion targetMinion = player.getMinions().stream().filter(m -> m.getSourceCard().getCardId().equals(cardInHand.getCardId())).findFirst().orElseThrow(AssertionError::new);

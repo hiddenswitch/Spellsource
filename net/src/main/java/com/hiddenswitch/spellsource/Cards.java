@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
-import com.hiddenswitch.spellsource.client.models.EntityState;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.core.Vertx;
@@ -97,7 +96,7 @@ public interface Cards {
 	 * @return The cards
 	 */
 	static List<CardRecord> getCards() {
-		GameContext workingContext = GameContext.uninitialized();
+		GameContext workingContext = GameContext.withNeutralHeroClasses();
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)

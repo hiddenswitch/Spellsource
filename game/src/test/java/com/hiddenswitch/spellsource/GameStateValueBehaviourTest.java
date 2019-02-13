@@ -237,7 +237,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			for (int i = 0; i < 2; i++) {
 				GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
 				actions.add(chosen);
-				context.getLogic().performGameAction(player.getId(), chosen);
+				context.performAction(player.getId(), chosen);
 			}
 			Assert.assertEquals(actions.get(0).getSourceReference(), brann.getReference());
 			Assert.assertEquals(actions.get(1).getSourceReference(), spiteful.getReference());
@@ -346,9 +346,9 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			receiveCard(context, opponent, "spell_fireball");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			context.getLogic().performGameAction(opponent.getId(), action);
+			context.performAction(opponent.getId(), action);
 			action = behaviour.requestAction(context, opponent, context.getValidActions());
-			context.getLogic().performGameAction(opponent.getId(), action);
+			context.performAction(opponent.getId(), action);
 			Assert.assertFalse(opponent.getHand().contains(cursed));
 		});
 	}
@@ -388,31 +388,6 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
 		});
-
-		// Should destroy Doomsayer
-		/*
-		runGym((context, player, opponent) -> {
-			context.endTurn();
-			Minion doomsayer = playMinionCard(context, opponent, "minion_doomsayer");
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
-			context.endTurn();
-			opponent.getHero().setHp(8);
-			for (int i = 0; i < 7; i++) {
-				playMinionCard(context, player, "minion_stonetusk_boar");
-			}
-			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
-			behaviour.setMaxDepth(8);
-			behaviour.setParallel(false);
-			behaviour.setTimeout(75000L);
-			context.setBehaviour(player.getId(), behaviour);
-
-			while (context.takeActionInTurn()) {
-			}
-
-			assertTrue(doomsayer.isDestroyed());
-			assertEquals(player.getMinions().size(), 7);
-		});
-		*/
 	}
 
 	@Test

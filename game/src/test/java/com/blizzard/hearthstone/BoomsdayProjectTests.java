@@ -780,7 +780,7 @@ public class BoomsdayProjectTests extends TestBase {
 					.findFirst()
 					.orElseThrow(NullPointerException::new);
 
-			context.getLogic().performGameAction(player.getId(), choice);
+			context.performAction(player.getId(), choice);
 			assertTrue(subject.isDestroyed());
 			assertEquals(player.getHand().size(), 1);
 			assertEquals(player.getHand().get(0).getCardId(), "spell_starfall");
