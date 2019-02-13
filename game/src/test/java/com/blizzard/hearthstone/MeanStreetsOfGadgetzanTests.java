@@ -78,7 +78,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 				return battlecryActions.get(0);
 			});
 
-			context.getLogic().performGameAction(player.getId(), card.play());
+			context.performAction(player.getId(), card.play());
 			Assert.assertEquals(latch.getCount(), 0);
 		});
 	}
@@ -137,7 +137,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 			playCard(context, player, "minion_raza_the_chained");
 			player.setMaxMana(2);
 			player.setMana(2);
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(opponent.getHero().getReference()));
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(opponent.getHero().getReference()));
 			Assert.assertEquals(player.getMana(), 1);
 		});
 	}

@@ -96,7 +96,6 @@ public class ServerGameContext extends GameContext implements Server {
 	private final Scheduler scheduler;
 	private boolean isRunning = false;
 	private final AtomicInteger eventCounter = new AtomicInteger(0);
-	private transient Fiber<Void> fiber;
 	private Long timerStartTimeMillis;
 	private Long timerLengthMillis;
 	private boolean didExpire;
@@ -467,17 +466,6 @@ public class ServerGameContext extends GameContext implements Server {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * <p>
-	 * Starts playing in a {@link Fiber} (i.e., {@link #play(boolean)} is called with {@code true}).
-	 */
-	@Override
-	@Suspendable
-	public void play() {
-		play(false);
-	}
-
-	/**
 	 * Plays the game. {@link GameContext#play()} is eventually called.
 	 *
 	 * @param fork When {@code false}, blocks until the game is done. Otherwise, plays the game inside a {@link Fiber}
@@ -487,13 +475,13 @@ public class ServerGameContext extends GameContext implements Server {
 		isRunning = true;
 		if (fork) {
 			// We're going to build this fiber with a huge stack
-			if (fiber != null) {
+			if (getFiber() != null) {
 				throw new UnsupportedOperationException("Cannot play with a fork twice!");
 			}
-			fiber = new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), Sync.getContextScheduler(), 512, () -> {
+			setFiber(new Fiber<>(String.format("ServerGameContext::fiber[%s]", getGameId()), Sync.getContextScheduler(), 512, () -> {
 				try {
 					LOGGER.debug("play {}: Starting forked game", gameId);
-					super.play();
+					super.play(false);
 				} catch (VertxException interrupted) {
 					// Generally only an interrupt from endGame() is allowed to gracefully interrupt this daemon.
 					if (Strand.currentStrand().isInterrupted() || interrupted.getCause() instanceof InterruptedException) {
@@ -518,9 +506,9 @@ public class ServerGameContext extends GameContext implements Server {
 					dispose();
 				}
 				return null;
-			});
+			}));
 
-			fiber.start();
+			getFiber().start();
 			LOGGER.debug("play {}: Fiber started", gameId);
 		} else {
 			super.play();
@@ -781,9 +769,9 @@ public class ServerGameContext extends GameContext implements Server {
 			// interrupt the event loop. Can the event loop itself be in the middle of calling endGame? In that case, the lock
 			// prevents two endGames from being processed simultaneously, along with other important mutating events, like
 			// other callbacks that may be processing player modifications to the game.
-			if (fiber != null && !Strand.currentStrand().equals(fiber)) {
-				fiber.interrupt();
-				fiber = null;
+			if (getFiber() != null && !Strand.currentStrand().equals(getFiber())) {
+				getFiber().interrupt();
+				setFiber(null);
 			}
 		} finally {
 			releaseUsers();
@@ -1020,7 +1008,7 @@ public class ServerGameContext extends GameContext implements Server {
 
 	public boolean isRunning() {
 		if (isRunning) {
-			return !fiber.isInterrupted() && !fiber.isTerminated();
+			return !getFiber().isInterrupted() && !getFiber().isTerminated();
 		}
 		return false;
 	}

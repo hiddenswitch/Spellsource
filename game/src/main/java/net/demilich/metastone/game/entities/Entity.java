@@ -518,10 +518,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	@Override
-	public int compareTo(Entity o) {
-		if (o == null) {
-			return 1;
-		}
+	public int compareTo(@NotNull Entity o) {
 		return Integer.compare(this.getId(), o.getId());
 	}
 

@@ -94,7 +94,7 @@ public class TheGrandTournamentTests extends TestBase {
 			context.getLogic().receiveCard(priest.getId(), testSpellCard);
 			GameAction spellAction = testSpellCard.play();
 			spellAction.setTarget(eydisDarkbane);
-			context.getLogic().performGameAction(priest.getId(), spellAction);
+			context.performAction(priest.getId(), spellAction);
 
 			// priest casted a spell on Eydis - warrior should be wounded
 			Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);
@@ -103,7 +103,7 @@ public class TheGrandTournamentTests extends TestBase {
 			context.getLogic().receiveCard(warrior.getId(), testSpellCard);
 			spellAction = testSpellCard.play();
 			spellAction.setTarget(eydisDarkbane);
-			context.getLogic().performGameAction(warrior.getId(), spellAction);
+			context.performAction(warrior.getId(), spellAction);
 
 			// warrior casted a spell on Eydis - nothing should happen
 			Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);

@@ -41,7 +41,7 @@ public class CardInteractionTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), abusiveSergeant);
 			GameAction action = abusiveSergeant.play();
 			action.setTarget(gahzrilla);
-			context.getLogic().performGameAction(player.getId(), action);
+			context.performAction(player.getId(), action);
 			assertEquals(gahzrilla.getAttack(), 8);
 			assertEquals(gahzrilla.getHp(), 9);
 
@@ -52,7 +52,7 @@ public class CardInteractionTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), cruelTaskmasterCard);
 			action = cruelTaskmasterCard.play();
 			action.setTarget(gahzrilla);
-			context.getLogic().performGameAction(player.getId(), action);
+			context.performAction(player.getId(), action);
 			assertEquals(gahzrilla.getAttack(), 20);
 			assertEquals(gahzrilla.getHp(), 8);
 
@@ -63,7 +63,7 @@ public class CardInteractionTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), abusiveSergeant);
 			action = abusiveSergeant.play();
 			action.setTarget(gahzrilla);
-			context.getLogic().performGameAction(player.getId(), action);
+			context.performAction(player.getId(), action);
 			assertEquals(gahzrilla.getAttack(), 22);
 			assertEquals(gahzrilla.getHp(), 8);
 
@@ -108,7 +108,7 @@ public class CardInteractionTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), buffCard);
 			GameAction action = buffCard.play();
 			action.setTarget(minion);
-			context.getLogic().performGameAction(player.getId(), action);
+			context.performAction(player.getId(), action);
 
 			assertEquals(minion.getAttack(), 7);
 			assertEquals(minion.getHp(), 7);

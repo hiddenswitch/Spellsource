@@ -52,7 +52,7 @@ public class TestBase {
 		Card baseCard = receiveCard(context, player, baseCardId);
 		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
 		player.setMana(cost);
-		context.getLogic().performGameAction(player.getId(), context.getValidActions()
+		context.performAction(player.getId(), context.getValidActions()
 				.stream()
 				.filter(ga -> ga instanceof PlayChooseOneCardAction)
 				.map(ga -> (PlayChooseOneCardAction) ga)
@@ -415,7 +415,7 @@ public class TestBase {
 	protected static void attack(GameContext context, Player player, Entity attacker, Entity target) {
 		PhysicalAttackAction physicalAttackAction = new PhysicalAttackAction(attacker.getReference());
 		physicalAttackAction.setTarget(target);
-		context.getLogic().performGameAction(player.getId(), physicalAttackAction);
+		context.performAction(player.getId(), physicalAttackAction);
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
@@ -490,19 +490,19 @@ public class TestBase {
 		if (card.getTargetSelection() != TargetSelection.NONE && card.getTargetSelection() != null) {
 			throw new UnsupportedOperationException(String.format("This card %s requires a target.", card.getName()));
 		}
-		context.getLogic().performGameAction(player.getId(), card.play());
+		context.performAction(player.getId(), card.play());
 	}
 
 	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player) {
-		context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+		context.performAction(player.getId(), player.getHero().getHeroPower().play());
 	}
 
 	@Suspendable
 	protected static void useHeroPower(GameContext context, Player player, EntityReference target) {
 		PlayCardAction action = player.getHero().getHeroPower().play();
 		action.setTargetReference(target);
-		context.getLogic().performGameAction(player.getId(), action);
+		context.performAction(player.getId(), action);
 	}
 
 	protected static void playCard(GameContext context, Player player, String cardId, Entity target) {
@@ -518,7 +518,7 @@ public class TestBase {
 		}
 		GameAction action = card.play();
 		action.setTarget(target);
-		context.getLogic().performGameAction(player.getId(), action);
+		context.performAction(player.getId(), action);
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, String minionCardId) {
@@ -531,7 +531,7 @@ public class TestBase {
 		}
 
 		PlayCardAction play = card.isChooseOne() ? card.playOptions()[0] : card.play();
-		context.getLogic().performGameAction(player.getId(), play);
+		context.performAction(player.getId(), play);
 		return getSummonedMinion(player.getMinions());
 	}
 

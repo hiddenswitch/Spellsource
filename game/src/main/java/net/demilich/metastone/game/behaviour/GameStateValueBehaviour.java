@@ -251,27 +251,9 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @return A list of cards to discard.
 	 */
 	@Override
+	@Suspendable
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		List<Card> discardedCards = new ArrayList<Card>();
-		for (Card card : cards) {
-			if (card.getBaseManaCost() > 3) {
-				discardedCards.add(card);
-			}
-		}
-
-		/*
-		ListValuedMap<Integer, Card> cardsAtCost = new ArrayListValuedHashMap<>();
-		cards.forEach(card -> cardsAtCost.put(card.getBaseManaCost(), card));
-
-		List<Card> discardedCards = new ArrayList<Card>();
-		for (int i = 0; i <= cards.size(); i++) {
-			if (cardsAtCost.get(i).size() > 1) {
-				discardedCards.add(cardsAtCost.get(i).get(0));
-			}
-		}
-		*/
-
-		return discardedCards;
+		return super.mulligan(context, player, cards);
 	}
 
 	/**
@@ -753,7 +735,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 		// Perform action
 		try {
-			mutateContext.getLogic().performGameAction(playerId, action);
+			mutateContext.performAction(playerId, action);
 		} catch (UnsupportedOperationException cannotRollout) {
 			LOGGER.error("requestAction (unknown) {}: Action {} cannot be simulated!", playerId, action);
 			if (debug) {
@@ -816,7 +798,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			}));
 
 			try {
-				intermediateMutateContext.getLogic().performGameAction(playerId, action);
+				intermediateMutateContext.performAction(playerId, action);
 			} catch (Throwable simulationError) {
 				LOGGER.error("requestAction (unknown) {}: There was a simulation error for action {} when considering intermediates {}: {}", playerId, action, choices, simulationError);
 				continue;
@@ -1064,8 +1046,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	/**
 	 * This helper class stores a list of choices from an intermediate node expansion.
 	 */
-	static class IntermediateNode {
-		final int choices[];
+	public static class IntermediateNode {
+		public final int choices[];
 
 		IntermediateNode(int... choices) {
 			this.choices = choices;

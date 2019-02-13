@@ -12,13 +12,11 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
-import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.behaviour.ChooseLastBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.targeting.Zones;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -81,14 +79,14 @@ public class ModelsTest {
 		runGym((context, player, opponent) -> {
 			Card cavernsCard = CardCatalogue.getCardById("quest_the_caverns_below");
 			context.getLogic().receiveCard(0, cavernsCard);
-			context.getLogic().performGameAction(0, cavernsCard.play());
+			context.performAction(0, cavernsCard.play());
 			assertEquals("quest_the_caverns_below", player.getQuests().get(0).getSourceCard().getCardId());
 			Card bloodfen1 = CardCatalogue.getCardById("minion_bloodfen_raptor");
 			context.getLogic().receiveCard(0, bloodfen1);
-			context.getLogic().performGameAction(0, bloodfen1.play());
+			context.performAction(0, bloodfen1.play());
 			bloodfen1 = CardCatalogue.getCardById("minion_bloodfen_raptor");
 			context.getLogic().receiveCard(0, bloodfen1);
-			context.getLogic().performGameAction(0, bloodfen1.play());
+			context.performAction(0, bloodfen1.play());
 			assertEquals(2, player.getQuests().get(0).getFires());
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
 			Assert.assertTrue(state.getEntities().stream().anyMatch(e -> e.getEntityType() == Entity.EntityTypeEnum.QUEST && e.getState().getFires() == 2));
@@ -111,7 +109,7 @@ public class ModelsTest {
 			context.getLogic().shuffleToDeck(player, neutralMinion);
 			Card kelesethCard = CardCatalogue.getCardById("minion_prince_keleseth");
 			context.getLogic().receiveCard(0, kelesethCard);
-			context.getLogic().performGameAction(0, kelesethCard.play());
+			context.performAction(0, kelesethCard.play());
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(3, neutralMinion.getAttack() + neutralMinion.getBonusAttack());
 			context.getLogic().endOfSequence();
@@ -127,14 +125,14 @@ public class ModelsTest {
 			context.getLogic().shuffleToDeck(player, neutralMinion);
 			Card kelesethCard = CardCatalogue.getCardById("minion_prince_keleseth");
 			context.getLogic().receiveCard(0, kelesethCard);
-			context.getLogic().performGameAction(0, kelesethCard.play());
+			context.performAction(0, kelesethCard.play());
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(3, neutralMinion.getAttack() + neutralMinion.getBonusAttack());
 			context.getLogic().endOfSequence();
-			context.getLogic().performGameAction(player.getId(), neutralMinion.play());
+			context.performAction(player.getId(), neutralMinion.play());
 			PlayCardAction roll = context.getLogic().receiveCard(player.getId(), CardCatalogue.getCardById("spell_roll"), player, true).play();
 			roll.setTarget(player.getMinions().get(1));
-			context.getLogic().performGameAction(player.getId(), roll);
+			context.performAction(player.getId(), roll);
 			context = context.clone();
 			GameState state = Games.getGameState(context, context.getPlayer1(), context.getPlayer2());
 			Entity entity = state.getEntities().stream().filter(e -> e.getState().getLocation().getZone() == EntityLocation.ZoneEnum.HAND && "minion_cost_three_test".equals(e.getCardId())).findFirst().orElseThrow(AssertionError::new);
@@ -145,7 +143,7 @@ public class ModelsTest {
 
 	private void runGym(GymConsumer consume) {
 		CardCatalogue.loadCardsFromPackage();
-		GameContext context = GameContext.uninitialized(HeroClass.BLACK, HeroClass.BLACK);
+		GameContext context = GameContext.withHeroClasses(HeroClass.BLACK, HeroClass.BLACK);
 		context.setLogic(new GameLogic(101010L));
 		context.setBehaviour(0, new ChooseLastBehaviour());
 		context.setBehaviour(1, new ChooseLastBehaviour());

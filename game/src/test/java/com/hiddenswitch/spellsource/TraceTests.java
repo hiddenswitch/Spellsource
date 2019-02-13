@@ -74,7 +74,10 @@ public class TraceTests {
 		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
 			Player player1 = new Player(new RandomDeck(), "Player 1");
 			Player player2 = new Player(new RandomDeck(), "Player 2");
-			GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.CUSTOM);
+			GameContext context1 = new GameContext();
+			context1.setDeckFormat(DeckFormat.CUSTOM);
+			context1.setPlayer(0, player1);
+			context1.setPlayer(1, player2);
 			context1.play();
 			Trace trace = context1.getTrace();
 			GameContext context2 = trace.replayContext(false, null);
@@ -97,7 +100,10 @@ public class TraceTests {
 			HeroClass heroClass2 = classes.get(RandomUtils.nextInt(0, classes.size()));
 			Player player1 = new Player(new RandomDeck(heroClass1, DeckFormat.STANDARD));
 			Player player2 = new Player(new RandomDeck(heroClass2, DeckFormat.STANDARD));
-			GameContext context1 = new GameContext(player1, player2, new GameLogic(), DeckFormat.STANDARD);
+			GameContext context1 = new GameContext();
+			context1.setPlayer(0, player1);
+			context1.setPlayer(1, player2);
+			context1.setDeckFormat(DeckFormat.STANDARD);
 			context1.play();
 			Trace trace = context1.getTrace();
 			try {

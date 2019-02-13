@@ -9,7 +9,11 @@ import net.demilich.metastone.game.cards.Attribute;
 public class DebugContext extends GameContext {
 
 	public DebugContext(Player player1, Player player2, GameLogic logic, DeckFormat deckFormat) {
-		super(player1, player2, logic, deckFormat);
+		super();
+		setPlayer(0, player1);
+		setPlayer(1, player2);
+		setLogic(logic);
+		setDeckFormat(deckFormat);
 	}
 
 	@Override

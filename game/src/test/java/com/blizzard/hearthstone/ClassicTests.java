@@ -560,7 +560,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(rogue.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(rogue.getId(), action);
+			context.performAction(rogue.getId(), action);
 			assertEquals(targetMinion.getAttack(), 3);
 			assertEquals(targetMinion.getHp(), 1);
 
@@ -595,7 +595,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(rogue.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(rogue.getId(), action);
+			context.performAction(rogue.getId(), action);
 
 			assertEquals(player.getMinions().size(), 1);
 		}, HeroClass.GOLD, HeroClass.BLACK);
@@ -626,7 +626,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(rogue.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(rogue.getId(), action);
+			context.performAction(rogue.getId(), action);
 			assertEquals(targetMinion.getAttack(), 3);
 			assertEquals(targetMinion.getHp(), 1);
 
@@ -650,16 +650,16 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getMana(), 10);
 
 			// first summoning portal costs full 4 mana
-			context.getLogic().performGameAction(player.getId(), summoningPortal1.play());
+			context.performAction(player.getId(), summoningPortal1.play());
 			assertEquals(player.getMana(), 6);
 
 			// second summoning portal affected by first one, costs only 2 mana
-			context.getLogic().performGameAction(player.getId(), summoningPortal2.play());
+			context.performAction(player.getId(), summoningPortal2.play());
 			assertEquals(player.getMana(), 4);
 
 			// base cost of minion card is 4, reduced by both summoning portals, but
 			// not below 1
-			context.getLogic().performGameAction(player.getId(), testCard.play());
+			context.performAction(player.getId(), testCard.play());
 			assertEquals(player.getMana(), 3);
 		}, HeroClass.VIOLET, HeroClass.RED);
 	}
@@ -686,7 +686,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), damageSpell);
 			GameAction spellAction = damageSpell.play();
 			spellAction.setTarget(spitefulSmith);
-			context.getLogic().performGameAction(player.getId(), spellAction);
+			context.performAction(player.getId(), spellAction);
 
 			// Smith is damaged now, so weapon should be buffed
 			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 5);
@@ -715,11 +715,11 @@ public class ClassicTests extends TestBase {
 
 			Card faerieDragonCard = CardCatalogue.getCardById("minion_faerie_dragon");
 			context.getLogic().receiveCard(opponent.getId(), faerieDragonCard);
-			context.getLogic().performGameAction(opponent.getId(), faerieDragonCard.play());
+			context.performAction(opponent.getId(), faerieDragonCard.play());
 
 			Card devMonsterCard = new TestMinionCard(1, 1);
 			context.getLogic().receiveCard(player.getId(), devMonsterCard);
-			context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
+			context.performAction(player.getId(), devMonsterCard.play());
 
 			Entity attacker = getSingleMinion(player.getMinions());
 			Actor elusiveOne = getSingleMinion(opponent.getMinions());
@@ -739,7 +739,7 @@ public class ClassicTests extends TestBase {
 			Card arcaneExplosionCard = CardCatalogue.getCardById("spell_arcane_explosion");
 			context.getLogic().receiveCard(player.getId(), arcaneExplosionCard);
 			int faerieDragonHp = elusiveOne.getHp();
-			context.getLogic().performGameAction(player.getId(), arcaneExplosionCard.play());
+			context.performAction(player.getId(), arcaneExplosionCard.play());
 			// hp should been affected after playing area of effect spell
 			Assert.assertNotEquals(faerieDragonHp, elusiveOne.getHp());
 		}, HeroClass.BLUE, HeroClass.RED);
@@ -768,14 +768,14 @@ public class ClassicTests extends TestBase {
 			// first attack, Gurubashi Berserker should have increased attack
 			GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
 			attackAction.setTarget(defender);
-			context.getLogic().performGameAction(player.getId(), attackAction);
+			context.performAction(player.getId(), attackAction);
 
 			assertEquals(attacker.getHp(), attacker.getMaxHp() - BASE_ATTACK);
 			assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
 			assertEquals(defender.getAttack(), BASE_ATTACK + ATTACK_BONUS);
 
 			// second attack, Gurubashi Berserker should become even stronger
-			context.getLogic().performGameAction(player.getId(), attackAction);
+			context.performAction(player.getId(), attackAction);
 			assertEquals(attacker.getHp(), attacker.getMaxHp() - 2 * BASE_ATTACK - ATTACK_BONUS);
 			assertEquals(defender.getHp(), defender.getMaxHp() - 2 * attacker.getAttack());
 			assertEquals(defender.getAttack(), BASE_ATTACK + 2 * ATTACK_BONUS);
@@ -794,17 +794,17 @@ public class ClassicTests extends TestBase {
 
 			Card devMonsterCard = new TestMinionCard(1, 1);
 			context.getLogic().receiveCard(player.getId(), devMonsterCard);
-			context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
+			context.performAction(player.getId(), devMonsterCard.play());
 
 			Actor minion = getSingleMinion(player.getMinions());
 
-			context.getLogic().performGameAction(player.getId(), druid.getHeroPower().play());
+			context.performAction(player.getId(), druid.getHeroPower().play());
 			assertEquals(druid.getAttack(), 1);
 			assertEquals(minion.getAttack(), 1);
 
 			Card savageRoar = CardCatalogue.getCardById("spell_savage_roar");
 			context.getLogic().receiveCard(player.getId(), savageRoar);
-			context.getLogic().performGameAction(player.getId(), savageRoar.play());
+			context.performAction(player.getId(), savageRoar.play());
 			assertEquals(druid.getAttack(), 3);
 			assertEquals(minion.getAttack(), 3);
 

@@ -2149,7 +2149,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_heavy_duty_dragoon");
 			playMinionCard(context, player, "minion_heavy_duty_dragoon");
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(player.getHero().getReference()));
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(player.getHero().getReference()));
 			context.getLogic().endOfSequence();
 			assertEquals(player.getHero().getAttack(), 3);
 		}, HeroClass.RUST, HeroClass.RUST);
@@ -2696,7 +2696,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "weapon_shield_of_nature");
 			Weapon shield = player.getWeaponZone().get(0);
 			player.setMana(2);
-			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+			context.performAction(player.getId(), player.getHero().getHeroPower().play());
 			// It should have run out of durability and been put to the graveyard
 			assertEquals(shield.getZone(), Zones.GRAVEYARD);
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
@@ -3136,7 +3136,7 @@ public class CustomCardsTests extends TestBase {
 			putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Card card = receiveCard(context, player, "minion_fel_giant");
 			assertEquals(costOf(context, player, card), card.getBaseManaCost());
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(costOf(context, player, card), card.getBaseManaCost() - 2);
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
 	}
@@ -3171,7 +3171,7 @@ public class CustomCardsTests extends TestBase {
 			context.setLogic(spy);
 			doAnswer(invocation -> player.getHero()).when(spy).getRandom(anyList());
 			int hp = player.getHero().getHp();
-			context.getLogic().performGameAction(opponent.getId(), opponent.getHeroPowerZone().get(0).play());
+			context.performAction(opponent.getId(), opponent.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getHp(), hp - 8);
 			context.endTurn();
 
@@ -5038,7 +5038,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_commander_garrosh");
 			player.setMana(10);
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getArmor(), 13);
 			assertEquals(player.getMana(), 0);
 		});
@@ -5047,7 +5047,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "hero_commander_garrosh");
 			playCard(context, player, "minion_raza_the_chained");
 			player.setMana(10);
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getArmor(), 14);
 			assertEquals(player.getMana(), 0);
 		});
@@ -5343,7 +5343,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_fandral_staghelm");
 			player.setMana(2);
 			assertEquals(context.getLogic().getValidActions(player.getId()).stream().count(), 2);
-			context.getLogic().performGameAction(player.getId(), context.getLogic().getValidActions(player.getId())
+			context.performAction(player.getId(), context.getLogic().getValidActions(player.getId())
 					.stream().filter(gameAction -> gameAction.getActionType().equals(ActionType.HERO_POWER)).findFirst().get());
 			context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference());
 			assertEquals(player.getHero().getAttack(), 3);
