@@ -16,6 +16,7 @@ public class SimulationResult implements Cloneable, Serializable {
 	private final long startTimestamp;
 	private long duration;
 	private int numberOfGames;
+	private int exceptionCount;
 
 	public SimulationResult(int numberOfGames) {
 		this.startTimestamp = System.currentTimeMillis();
@@ -38,6 +39,7 @@ public class SimulationResult implements Cloneable, Serializable {
 	public SimulationResult merge(SimulationResult other) {
 		getPlayer1Stats().merge(other.getPlayer1Stats());
 		getPlayer2Stats().merge(other.getPlayer2Stats());
+		exceptionCount += other.getExceptionCount();
 		duration += other.getDuration();
 		setNumberOfGames(other.getNumberOfGames() + numberOfGames);
 		return this;
@@ -78,6 +80,15 @@ public class SimulationResult implements Cloneable, Serializable {
 
 	public void setNumberOfGames(int numberOfGames) {
 		this.numberOfGames = numberOfGames;
+	}
+
+	public int getExceptionCount() {
+		return exceptionCount;
+	}
+
+	public SimulationResult setExceptionCount(int exceptionCount) {
+		this.exceptionCount = exceptionCount;
+		return this;
 	}
 }
 

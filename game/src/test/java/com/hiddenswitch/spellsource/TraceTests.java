@@ -1,22 +1,17 @@
 package com.hiddenswitch.spellsource;
 
-import ch.qos.logback.classic.Level;
 import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Multiset;
 import com.google.common.io.Resources;
-import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
-import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.Trace;
-import org.apache.commons.lang3.RandomUtils;
 import org.reflections.Reflections;
 import org.reflections.scanners.ResourcesScanner;
 import org.slf4j.Logger;
@@ -30,9 +25,9 @@ import org.testng.annotations.Test;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.charset.Charset;
-import java.nio.file.Paths;
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Objects;
 import java.util.stream.IntStream;
 
 import static java.util.stream.Collectors.toList;
@@ -72,8 +67,8 @@ public class TraceTests {
 	@Test
 	public void testTraceRecordedCorrectly() {
 		IntStream.range(0, 100).parallel().unordered().forEach(ignored -> {
-			Player player1 = new Player(new RandomDeck(), "Player 1");
-			Player player2 = new Player(new RandomDeck(), "Player 2");
+			Player player1 = new Player(Deck.randomDeck(), "Player 1");
+			Player player2 = new Player(Deck.randomDeck(), "Player 2");
 			GameContext context1 = new GameContext();
 			context1.setDeckFormat(DeckFormat.CUSTOM);
 			context1.setPlayer(0, player1);
@@ -95,11 +90,8 @@ public class TraceTests {
 	public void testDiagnoseTraces() {
 		Multiset<String> cards = ConcurrentHashMultiset.create();
 		IntStream.range(0, 10000).parallel().forEach(i -> {
-			List<HeroClass> classes = Arrays.stream(HeroClass.values()).filter(HeroClass::isBaseClass).collect(toList());
-			HeroClass heroClass1 = classes.get(RandomUtils.nextInt(0, classes.size()));
-			HeroClass heroClass2 = classes.get(RandomUtils.nextInt(0, classes.size()));
-			Player player1 = new Player(new RandomDeck(heroClass1, DeckFormat.STANDARD));
-			Player player2 = new Player(new RandomDeck(heroClass2, DeckFormat.STANDARD));
+			Player player1 = new Player(Deck.randomDeck());
+			Player player2 = new Player(Deck.randomDeck());
 			GameContext context1 = new GameContext();
 			context1.setPlayer(0, player1);
 			context1.setPlayer(1, player2);

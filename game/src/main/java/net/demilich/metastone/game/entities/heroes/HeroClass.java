@@ -2,6 +2,7 @@ package net.demilich.metastone.game.entities.heroes;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import org.apache.commons.lang3.RandomUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -132,6 +133,11 @@ public enum HeroClass {
 	@NotNull
 	public static List<HeroClass> getBaseClasses() {
 		return Arrays.stream(values()).filter(HeroClass::isBaseClass).collect(toList());
+	}
+
+	public static HeroClass random() {
+		List<HeroClass> baseHeroes = getBaseClasses();
+		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 	}
 
 	public boolean isBaseClass() {

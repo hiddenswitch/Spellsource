@@ -3394,8 +3394,16 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		return newCard;
 	}
 
+	/**
+	 * Resolves an {@link Actor}'s battlecry, requesting an action from the player's {@link
+	 * net.demilich.metastone.game.behaviour.Behaviour} if necessary.
+	 *
+	 * @param playerId
+	 * @param actor
+	 * @return
+	 */
 	@Suspendable
-	protected BattlecryAction resolveBattlecry(int playerId, Actor actor) {
+	public BattlecryAction resolveBattlecry(int playerId, Actor actor) {
 		BattlecryAction battlecry = actor.getBattlecry();
 
 		Player player = context.getPlayer(playerId);

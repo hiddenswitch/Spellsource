@@ -7,6 +7,10 @@ import net.demilich.metastone.game.GameContext;
 import java.io.Serializable;
 import java.lang.reflect.Field;
 
+/**
+ * An extension of fiber that can schedules itself on a default scheduler and can change the game context objects on its
+ * stack.
+ */
 public class GameContextFiber extends Fiber<Void> implements Serializable {
 
 	private static FiberScheduler DEFAULT_SCHEDULER = new FiberExecutorScheduler("__GameContextFiber", command -> command.run());

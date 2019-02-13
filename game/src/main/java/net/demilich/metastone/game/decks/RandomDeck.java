@@ -7,15 +7,13 @@ import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.validation.DefaultDeckValidator;
 import net.demilich.metastone.game.decks.validation.DeckValidator;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import org.apache.commons.lang3.RandomUtils;
 
-import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * A deck that was randomly created.
  */
-public final class RandomDeck extends GameDeck {
+final class RandomDeck extends GameDeck {
 	private static final long serialVersionUID = 1L;
 
 	/**
@@ -24,7 +22,7 @@ public final class RandomDeck extends GameDeck {
 	 * @param heroClass  The hero class
 	 * @param deckFormat The format
 	 */
-	public RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
+	RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
 		super(heroClass);
 		populate(deckFormat);
 	}
@@ -35,16 +33,16 @@ public final class RandomDeck extends GameDeck {
 	 *
 	 * @param deckFormat
 	 */
-	public RandomDeck(DeckFormat deckFormat) {
-		this(getRandomHeroClass(), deckFormat);
+	RandomDeck(DeckFormat deckFormat) {
+		this(HeroClass.random(), deckFormat);
 	}
 
 	/**
 	 * Creates a random deck with a random hero class and a balance of 50% Class cards and Neutral cards in the {@link
 	 * DeckFormat#CUSTOM} format.
 	 */
-	public RandomDeck() {
-		this(getRandomHeroClass(), DeckFormat.CUSTOM);
+	RandomDeck() {
+		this(HeroClass.random(), DeckFormat.CUSTOM);
 	}
 
 	/**
@@ -53,11 +51,6 @@ public final class RandomDeck extends GameDeck {
 	 */
 	public RandomDeck(HeroClass heroClass) {
 		this(heroClass, DeckFormat.CUSTOM);
-	}
-
-	private static HeroClass getRandomHeroClass() {
-		List<HeroClass> baseHeroes = HeroClass.getBaseClasses();
-		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
 	}
 
 	private void populate(DeckFormat deckFormat) {

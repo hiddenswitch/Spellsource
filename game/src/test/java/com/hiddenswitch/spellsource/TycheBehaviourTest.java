@@ -1,15 +1,13 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
-import co.paralleluniverse.fibers.Suspendable;
-import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.TycheBehaviour;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
@@ -23,10 +21,8 @@ import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.io.Serializable;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import static org.testng.Assert.assertTrue;
 
@@ -37,7 +33,7 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	@Test
 	@Ignore
 	public void testTycheBehaviour() {
-		SuspendableGameContext context = new SuspendableGameContext(new RandomDeck(), new RandomDeck());
+		SuspendableGameContext context = new SuspendableGameContext(Deck.randomDeck(), Deck.randomDeck());
 		context.play();
 		context.setMulligan(context.getActivePlayerId(), Collections.emptyList());
 		context.setMulligan(context.getNonActivePlayerId(), Collections.emptyList());
@@ -56,8 +52,8 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	@Ignore
 	public void testTycheBehaviourHandlesOwnSuspendableGameContext() {
 		GameContext context = new GameContext();
-		context.setDeck(0, new RandomDeck());
-		context.setDeck(1, new RandomDeck());
+		context.setDeck(0, Deck.randomDeck());
+		context.setDeck(1, Deck.randomDeck());
 		context.setBehaviour(0, new GameStateValueBehaviour());
 		context.setBehaviour(0, new TycheBehaviour());
 		context.play();
@@ -65,18 +61,17 @@ public class TycheBehaviourTest extends TestBase implements Serializable {
 	}
 
 	@Test
-	@Ignore
 	public void testMidrangeShamanMirrorMatch() {
-		List<GameDeck> decks = Collections.singletonList(DeckCreateRequest.fromDeckList("AAEBAaoIBoEE7QWTCZQUqbQChbgCDL0B7gHvAf4F8AfRE7IUyhb6qgL7qgLgsAKgtgIA").toGameDeck());
+		List<GameDeck> decks = Collections.singletonList(TycheBehaviour.midrangeShaman().toGameDeck());
 		Logging.setLoggingLevel(Level.ERROR);
 		SimulationResult res = GameContext.simulate(decks, TycheBehaviour::new, () -> {
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
-			behaviour.setMaxDepth(7);
-			behaviour.setTimeout(15000);
-			behaviour.setLethalTimeout(75000);
-			behaviour.setParallel(true);
+			behaviour.setMaxDepth(4);
+			behaviour.setTimeout(8000);
+			behaviour.setLethalTimeout(15000);
+			behaviour.setParallel(false);
 			return behaviour;
-		}, 100, true, true);
+		}, 2, true, true);
 		Logging.setLoggingLevel(Level.INFO);
 		LOGGER.info("testMidrangeShaman: TycheBehaviour winrate was {}", res.getPlayer1Stats().get(Statistic.WIN_RATE));
 	}

@@ -423,8 +423,8 @@ public class TestBase {
 	}
 
 	protected static DebugContext createContext(HeroClass hero1, HeroClass hero2, boolean shouldInit, DeckFormat deckFormat) {
-		Player player1 = new Player(Deck.getRandomDeck(hero1, deckFormat), "Player 1");
-		Player player2 = new Player(Deck.getRandomDeck(hero2, deckFormat), "Player 2");
+		Player player1 = new Player(Deck.randomDeck(hero1, deckFormat), "Player 1");
+		Player player2 = new Player(Deck.randomDeck(hero2, deckFormat), "Player 2");
 
 		DebugContext context = new DebugContext(player1, player2, new GameLogic() {
 			@Override

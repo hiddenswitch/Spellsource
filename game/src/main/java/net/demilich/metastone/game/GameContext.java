@@ -13,9 +13,9 @@ import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityZone;
@@ -74,6 +74,19 @@ import static java.util.stream.Collectors.toList;
  * context.setBehaviour(GameContext.PLAYER_2, new PlayRandomBehaviour());
  * context.play();
  * // The game is over here.
+ * }
+ * </pre>
+ * <p>
+ * This will start a game between two opponents that try to play a little smarter, using the Spellsource agent {@link
+ * net.demilich.metastone.game.behaviour.GameStateValueBehaviour}. It will also use a pair of decks to do it.
+ * <pre>
+ * {@code
+ * GameContext context = new GameContext();
+ * for (int playerId : new int[] {GameContext.PLAYER_1, GameContext.PLAYER_2}) {
+ *   context.setBehaviour(playerId, new GameStateValueProvider());
+ *   context.setDeck(playerId, Deck.randomDeck(HeroClass.RED, DeckFormat.STANDARD));
+ * }
+ * context.play();
  * }
  * </pre>
  * <p>
@@ -149,7 +162,7 @@ import static java.util.stream.Collectors.toList;
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
  * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
- * <li>{@link GameLogic#resolveBattlecry(int, Actor)},
+ * <li>{@link GameLogic#resolveBattlecry(int, Actor)}},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
  * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all
@@ -211,6 +224,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 
 	/**
 	 * Creates a game context with two empty players and two {@link PlayRandomBehaviour} behaviours.
+	 * <p>
+	 * Hero cards are not given to the players. Thus, this is not enough typically to mutate and run a game. Use {@link
+	 * #GameContext(HeroClass...)} with hero classes of your choosing to create a game context with enough initial state
+	 * to actually start playing immediately.
 	 */
 	public GameContext() {
 		behaviours = new Behaviour[]{new PlayRandomBehaviour(), new PlayRandomBehaviour()};
@@ -223,14 +240,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	/**
 	 * Creates a game context from another context by copying it.
 	 *
-	 * @param fromContext
+	 * @param fromContext The other context to copy.
 	 */
 	public GameContext(GameContext fromContext) {
 		GameLogic logicClone = fromContext.getLogic().clone();
 		Player player1Clone = fromContext.getPlayer1().clone();
 		Player player2Clone = fromContext.getPlayer2().clone();
 		setLogic(logicClone);
-		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null :fromContext. behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
+		behaviours = new Behaviour[]{fromContext.behaviours[0] == null ? null : fromContext.behaviours[0].clone(), fromContext.behaviours[1] == null ? null : fromContext.behaviours[1].clone()};
 		setDeckFormat(fromContext.getDeckFormat());
 		setPlayer1(player1Clone);
 		setPlayer2(player2Clone);
@@ -258,58 +275,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	/**
-	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified).
+	 * Creates an uninitialized game context (i.e., no cards in the decks of the players or behaviours specified). A hero
+	 * card is retrieved and given to each player.
+	 * <p>
+	 * This is typically the absolute minimum needed to mutate and run a game.
 	 *
-	 * @param playerHero1 The first player's {@link HeroClass}
-	 * @param playerHero2 The second player's {@link HeroClass}
-	 * @return A game context.
+	 * @param heroClasses The player's hero classes.
 	 */
-	public static GameContext withHeroClasses(HeroClass playerHero1, HeroClass playerHero2) {
-		GameContext gameContext = new GameContext();
-		gameContext.getPlayer1().setHero(HeroClass.getHeroCard(playerHero1).createHero());
-		gameContext.getPlayer2().setHero(HeroClass.getHeroCard(playerHero2).createHero());
-		return gameContext;
-	}
-
-	/**
-	 * Returns an uninitialized game context supporting all formats. Entity IDs have not been assigned to the cards;
-	 * mulligans haven't completed; the hero classes are neutral.
-	 *
-	 * @return An uninitialized game context that is nonetheless valid for performing many operations.
-	 */
-	public static GameContext withNeutralHeroClasses() {
-		return withHeroClasses(HeroClass.ANY, HeroClass.ANY);
-	}
-
-	/**
-	 * Construct a game with the specified hero class and cards for both players.
-	 *
-	 * @param heroClass1
-	 * @param cardIds1
-	 * @param heroClass2
-	 * @param cardIds2
-	 */
-	public static GameContext withClassesAndCards(HeroClass heroClass1, List<String> cardIds1, HeroClass heroClass2, List<String> cardIds2) {
-		HeroClass[] heroClasses = new HeroClass[]{heroClass1, heroClass2};
-		List[] cardIds = new List[]{cardIds1, cardIds2};
-		List<GameDeck> decks = new ArrayList<>();
-		GameContext gc = new GameContext();
-		for (int i = 0; i < 2; i++) {
-			GameDeck deck = new GameDeck(heroClasses[i]);
-			for (Object s : cardIds[i]) {
-				Card c = CardCatalogue.getCardById(s.toString());
-				deck.getCards().add(c);
-			}
-			Player player = new Player(deck, "Player " + Integer.toString(i));
-			player.setId(i);
-			gc.setPlayer(i, player);
-			gc.behaviours[i] = new PlayRandomBehaviour();
-			decks.add(deck);
+	public GameContext(HeroClass... heroClasses) {
+		this();
+		for (int i = 0; i < heroClasses.length; i++) {
+			getPlayer(i).setHero(HeroClass.getHeroCard(heroClasses[i]).createHero());
 		}
-		DeckFormat deckFormat = DeckFormat.getSmallestSupersetFormat(decks);
-		gc.setLogic(new GameLogic());
-		gc.setDeckFormat(deckFormat);
-		return gc;
 	}
 
 	/**
@@ -1503,7 +1480,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * <p>
 	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
-	 * @param deckPair        A pair of decks to run a match with.
+	 * @param decks           Decks to run the match with. At least two are required.
 	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
 	 *                        <p>
@@ -1511,13 +1488,15 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
+	 *                        {@link #simulationCount(int, int, boolean)}.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
 	 *                        on this JVM instance.
 	 * @param matchCounter    When not {@code null}, the simulator will increment this counter each time a match is
 	 *                        completed. This can be used to implement progress on a different thread.
 	 */
-	public static SimulationResult simulate(List<GameDeck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, AtomicInteger matchCounter) {
-		return simulate(deckPair, player1, player2, numberOfGamesInBatch, useJavaParallel, false, matchCounter, null);
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, AtomicInteger matchCounter) {
+		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, false, matchCounter, null);
 	}
 
 	/**
@@ -1525,7 +1504,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * <p>
 	 * This call will be blocking regardless of using it in a parallel fashion.
 	 *
-	 * @param deckPair        A pair of decks to run a match with.
+	 * @param decks           Decks to run the match with. At least one is required if {@code includeMirrors} is {@code
+	 *                        true}, otherwise at least two.
 	 * @param player1         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
 	 *                        <p>
@@ -1533,12 +1513,14 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
+	 *                        {@link #simulationCount(int, int, boolean)}.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
 	 *                        on this JVM instance.
-	 * @param includeMirrors  When {@code true}, includes mirror matchups
+	 * @param includeMirrors  When {@code true}, includes mirror matchups for each deck.
 	 */
-	public static SimulationResult simulate(List<GameDeck> deckPair, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, boolean includeMirrors) {
-		return simulate(deckPair, player1, player2, numberOfGamesInBatch, useJavaParallel, includeMirrors, null, null);
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors) {
+		return simulate(decks, player1, player2, gamesPerMatchup, useJavaParallel, includeMirrors, null, null);
 	}
 
 	/**
@@ -1556,6 +1538,8 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        player's AI should be a game state value behaviour.
 	 * @param player2         A {@link Supplier} (function which returns a new instance) of a {@link Behaviour} that
 	 *                        corresponds to an AI to use for this player.
+	 * @param gamesPerMatchup The number of games per matchup to play. The number of matchups total can be calculated with
+	 *                        {@link #simulationCount(int, int, boolean)}.
 	 * @param useJavaParallel When {@code true}, uses the Java Streams Parallel interface to parallelize this computation
 	 *                        on this JVM instance.
 	 * @param includeMirrors  When {@code true}, includes mirror matchups
@@ -1564,10 +1548,10 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 *                        the specified decks but before mulligans. For example, the {@link GameLogic#getSeed()} can
 	 *                        be
 	 */
-	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int numberOfGamesInBatch, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
+	public static SimulationResult simulate(List<GameDeck> decks, Supplier<Behaviour> player1, Supplier<Behaviour> player2, int gamesPerMatchup, boolean useJavaParallel, boolean includeMirrors, AtomicInteger matchCounter, Consumer<GameContext> contextHandler) {
 		// Actually run the computation
 		List<GameDeck[]> combinations = getDeckCombinations(decks, includeMirrors);
-		Stream<GameDeck[]> deckStream = IntStream.range(0, numberOfGamesInBatch).boxed().flatMap(i -> combinations.stream());
+		Stream<GameDeck[]> deckStream = IntStream.range(0, gamesPerMatchup).boxed().flatMap(i -> combinations.stream());
 		if (useJavaParallel) {
 			deckStream = deckStream.parallel();
 		}
@@ -1583,40 +1567,53 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 			SimulationResult innerResult = new SimulationResult(1);
 
 			try {
+				if (matchCounter != null) {
+					matchCounter.incrementAndGet();
+				}
+
 				newGame.play();
 
 				innerResult.getPlayer1Stats().merge(newGame.getPlayer1().getStatistics());
 				innerResult.getPlayer2Stats().merge(newGame.getPlayer2().getStatistics());
 				innerResult.calculateMetaStatistics();
+			} catch (Throwable any) {
+				innerResult.setExceptionCount(innerResult.getExceptionCount() + 1);
+				return null;
 			} finally {
 				newGame.dispose();
 			}
 
-			if (matchCounter != null) {
-				matchCounter.incrementAndGet();
-			}
-
 			return innerResult;
-		}).reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
+		})
+				.filter(Objects::nonNull)
+				.reduce(SimulationResult::merge).orElseThrow(NullPointerException::new);
 	}
 
-	public static int simulationCount(int numberOfDecks, int numberOfGamesInBatch, boolean includeMirrors) {
-		return ((includeMirrors ? numberOfDecks : 0) + (numberOfDecks * (numberOfDecks - 1)) / 2) * numberOfGamesInBatch;
+	/**
+	 * Calculates the expected number of simulations that will be run given the parameters of the simulation function.
+	 *
+	 * @param numberOfDecks   The number of decks (i.e., {@code decks.size()})
+	 * @param gamesPerMatchup The number of games to play per unique deck pair.
+	 * @param includeMirrors  When true, include mirror matches.
+	 * @return
+	 */
+	public static int simulationCount(int numberOfDecks, int gamesPerMatchup, boolean includeMirrors) {
+		return ((includeMirrors ? numberOfDecks : 0) + (numberOfDecks * (numberOfDecks - 1)) / 2) * gamesPerMatchup;
 	}
 
 	/**
 	 * A generator of simulation results. Blocks until all simulations are complete.
 	 *
-	 * @param deckPair
-	 * @param behaviours
-	 * @param numberOfGamesInBatch
-	 * @param reduce               When {@code true}, merges matches that have the same behaviour and decks.
-	 * @param computed             The callback that will be fed a simulation result whenever it is computed.
+	 * @param deckPair        Two decks to test. Specify the same deck twice to perform a mirror match.
+	 * @param behaviours      The behaviours to use. When an empty list is specified, uses {@link PlayRandomBehaviour}.
+	 * @param gamesPerMatchup The number of games to play per matchup.
+	 * @param reduce          When {@code true}, merges matches that have the same behaviour and decks.
+	 * @param computed        The callback that will be fed a simulation result whenever it is computed.
 	 * @throws InterruptedException
 	 */
-	public static void simulate(List<GameDeck> deckPair, List<Supplier<Behaviour>> behaviours, int numberOfGamesInBatch, boolean reduce, Consumer<SimulationResult> computed) throws InterruptedException {
+	public static void simulate(List<GameDeck> deckPair, List<Supplier<Behaviour>> behaviours, int gamesPerMatchup, boolean reduce, Consumer<SimulationResult> computed) throws InterruptedException {
 		// Actually run the computation
-		Stream<Integer> stream = IntStream.range(0, numberOfGamesInBatch).boxed().parallel().unordered();
+		Stream<Integer> stream = IntStream.range(0, gamesPerMatchup).boxed().parallel().unordered();
 
 		Stream<SimulationResult> result = stream.map(i -> {
 			GameContext newGame;
@@ -1739,7 +1736,7 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	 * @see #play() to actually execute the game.
 	 */
 	public static GameContext fromTwoRandomDecks() {
-		return fromDecks(Arrays.asList(new RandomDeck(), new RandomDeck()));
+		return fromDecks(Arrays.asList(Deck.randomDeck(), Deck.randomDeck()));
 	}
 
 	/**
