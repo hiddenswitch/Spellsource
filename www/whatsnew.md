@@ -8,6 +8,10 @@ permalink: /whats-new/
 
 Bug fixes.
 
+##### Content Additions
+
+ - New cards in the Occultist class (thanks @Muhframos).
+
 ##### Content Fixes
 
  - Anzu no longer incorrectly cancels all spells, only spells with chosen minion targets.
@@ -16,6 +20,8 @@ Bug fixes.
  - Captain Cookie now works correctly.
  - Black Ox Brew now correctly lasts until the start of the player's next turn.
  - Polycephalos now reads, "Rush. Battlecry: Gain +1 Attack for each enemy minion."
+ - The flavor of many Baron cards has been adapted for Spellsource (thanks @Pircival)
+ - Various balance changes to Occultist cards.
 
 ### 0.8.20-2.0.26 (Monday, February 4th, 2019)
 

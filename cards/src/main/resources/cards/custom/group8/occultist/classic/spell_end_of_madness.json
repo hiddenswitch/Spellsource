@@ -1,6 +1,6 @@
 {
   "name": "End of Madness",
-  "baseManaCost": 1,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
