@@ -825,14 +825,14 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testMurlocFixpicker() {
+	public void testFairyFixpicker() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_neutral_test");
 			playMinionCard(context, player, "minion_murloc_fixpicker");
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(player.getHand().size(), 2);
-			assertTrue(player.getHand().get(0).getRace().hasRace(Race.MURLOC));
-			assertTrue(player.getHand().get(1).getRace().hasRace(Race.MURLOC));
+			assertTrue(player.getHand().get(0).getRace().hasRace(Race.FAE));
+			assertTrue(player.getHand().get(1).getRace().hasRace(Race.FAE));
 			assertEquals(player.getDeck().size(), 0);
 		});
 	}
