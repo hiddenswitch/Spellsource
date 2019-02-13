@@ -15,6 +15,7 @@ Bug fixes.
  - Eye Beam now correctly stops casting when a deathrattle summons a minion.
  - Captain Cookie now works correctly.
  - Black Ox Brew now correctly lasts until the start of the player's next turn.
+ - Polycephalos now reads, "Rush. Battlecry: Gain +1 Attack for each enemy minion."
 
 ### 0.8.20-2.0.26 (Monday, February 4th, 2019)
 
