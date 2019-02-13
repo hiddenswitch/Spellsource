@@ -4,6 +4,15 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
+
+Bug fixes.
+
+##### Content Fixes
+
+ - Anzu no longer incorrectly cancels all spells, only spells with chosen minion targets.
+ - Sea Witch's hero power now correctly shuffles Ocean Depths instead of the target into your deck.
+
 ### 0.8.20-2.0.26 (Monday, February 4th, 2019)
 
 Thanks to a great contribution from @doombubbles, introducing the Demon Hunter hero class!
