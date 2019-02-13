@@ -57,6 +57,14 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testSeaWitchShufflesCard() {
+		runGym((context, player, opponent) -> {
+			useHeroPower(context, player, player.getHero().getReference());
+			assertEquals(player.getDeck().get(0).getCardId(), "spell_ocean_depths");
+		}, HeroClass.TEAL, HeroClass.TEAL);
+	}
+
+	@Test
 	public void testLoyalLandowner() {
 		runGym((context, player, opponent) -> {
 			Minion loyal = playMinionCard(context, player, "minion_loyal_landowner");
