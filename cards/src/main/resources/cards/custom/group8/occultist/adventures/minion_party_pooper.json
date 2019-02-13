@@ -1,0 +1,28 @@
+{
+  "name": "Party Pooper",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Shuffle your other minions into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ShuffleMinionToDeckSpell",
+      "target": "OTHER_FRIENDLY_MINIONS",
+      "targetPlayer": "SELF"
+    }
+  },
+  "attributes": {
+    "TAUNT": true,
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "ONE_NIGHT_IN_KARAZHAN"
+  ],
+  "fileFormatVersion": 1
+}
