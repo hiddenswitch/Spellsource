@@ -1,0 +1,30 @@
+{
+  "name": "Bullet With Your Name",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "COMMON",
+  "description": "Give your minions \"Quickdraw: Deal 1 damage to the enemy hero.\".",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_MINIONS",
+    "trigger": {
+      "eventTrigger": {
+        "class": "CardDrawnTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": 1
+      }
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
