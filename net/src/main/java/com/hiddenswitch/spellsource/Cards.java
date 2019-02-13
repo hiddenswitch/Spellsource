@@ -12,6 +12,7 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.*;
 
@@ -96,7 +97,7 @@ public interface Cards {
 	 * @return The cards
 	 */
 	static List<CardRecord> getCards() {
-		GameContext workingContext = GameContext.withNeutralHeroClasses();
+		GameContext workingContext = new GameContext(HeroClass.ANY, HeroClass.ANY);
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)

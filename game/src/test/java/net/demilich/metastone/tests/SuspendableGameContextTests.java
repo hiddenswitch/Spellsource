@@ -1,16 +1,12 @@
 package net.demilich.metastone.tests;
 
-import co.paralleluniverse.fibers.Fiber;
 import net.demilich.metastone.game.behaviour.FiberBehaviour;
-import net.demilich.metastone.game.decks.RandomDeck;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.fibers.SuspendableGameContext;
 import net.demilich.metastone.tests.util.TestBase;
-import org.testng.Assert;
 import org.testng.annotations.Test;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.concurrent.ExecutionException;
 
@@ -51,8 +47,8 @@ public class SuspendableGameContextTests extends TestBase {
 
 		// Correct cloning just before mulligan
 		context1 = new SuspendableGameContext();
-		context1.setDeck(0, new RandomDeck(HeroClass.BLACK));
-		context1.setDeck(1, new RandomDeck(HeroClass.BROWN));
+		context1.setDeck(0, Deck.randomDeck());
+		context1.setDeck(1, Deck.randomDeck());
 		context1.play();
 		context2 = context1.clone();
 		assertNotNull(context2.getFiber());
@@ -64,8 +60,8 @@ public class SuspendableGameContextTests extends TestBase {
 
 		// Correctly clone start of game
 		context1 = new SuspendableGameContext();
-		context1.setDeck(0, new RandomDeck(HeroClass.BLACK));
-		context1.setDeck(1, new RandomDeck(HeroClass.BROWN));
+		context1.setDeck(0, Deck.randomDeck());
+		context1.setDeck(1, Deck.randomDeck());
 		context1.play();
 		context1.setMulligan(context1.getActivePlayerId(),
 				Collections.singletonList(context1.getMulliganChoices(context1.getActivePlayerId()).get(0)));
@@ -76,8 +72,8 @@ public class SuspendableGameContextTests extends TestBase {
 
 		// Correctly clone a full sequence of actions
 		context1 = new SuspendableGameContext();
-		context1.setDeck(0, new RandomDeck(HeroClass.BLACK));
-		context1.setDeck(1, new RandomDeck(HeroClass.BROWN));
+		context1.setDeck(0, Deck.randomDeck());
+		context1.setDeck(1, Deck.randomDeck());
 		context1.play();
 		context1.setMulligan(context1.getActivePlayerId(),
 				Collections.singletonList(context1.getMulliganChoices(context1.getActivePlayerId()).get(0)));

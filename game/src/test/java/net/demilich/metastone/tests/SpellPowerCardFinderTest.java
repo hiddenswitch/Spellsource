@@ -79,7 +79,7 @@ public class SpellPowerCardFinderTest extends TestBase {
 	}
 
 	private static GameContext createGameContext() {
-		GameContext context = GameContext.withHeroClasses(HeroClass.BLACK, HeroClass.BLACK);
+		GameContext context = new GameContext(HeroClass.BLACK, HeroClass.BLACK);
 		context.setLogic(new GameLogic(1010101L));
 		context.setBehaviour(0, new ChooseLastBehaviour());
 		context.setBehaviour(1, new ChooseLastBehaviour());

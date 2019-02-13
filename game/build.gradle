@@ -37,6 +37,7 @@ dependencies {
 test {
     // enable TestNG support (default is JUnit)
     useTestNG()
+    enableAssertions = false
     testLogging {
         events "standardError"
     }

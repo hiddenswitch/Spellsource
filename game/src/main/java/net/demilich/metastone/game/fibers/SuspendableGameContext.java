@@ -16,6 +16,13 @@ import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 
+/**
+ * A game context that uses only {@link FiberBehaviour} and suspends itself whenever an action or mulligan is
+ * requested.
+ * <p>
+ * Its {@link #clone()} implementation does not copy data. Instead, it replays the {@link Trace} located on the game
+ * context.
+ */
 public class SuspendableGameContext extends GameContext {
 
 	private Condition ready;
@@ -46,9 +53,7 @@ public class SuspendableGameContext extends GameContext {
 	 * Creates a suspendable game context using the trace in the {@code sourceContext}
 	 *
 	 * @param sourceContext
-	 * @return
-	 * @throws InterruptedException
-	 * @throws SuspendExecution
+	 * @return a context
 	 */
 	@Suspendable
 	public static SuspendableGameContext fromTrace(@NonNull GameContext sourceContext) {

@@ -79,8 +79,8 @@ public class TestBase {
 		for (CardSet set : CardSet.values()) {
 			deckFormat.addSet(set);
 		}
-		Player player1 = new Player(Deck.getRandomDeck(hero1, DeckFormat.WILD),"Player 1");
-		Player player2 = new Player(Deck.getRandomDeck(hero2, DeckFormat.WILD),"Player 2");
+		Player player1 = new Player(Deck.randomDeck(hero1, DeckFormat.WILD),"Player 1");
+		Player player2 = new Player(Deck.randomDeck(hero2, DeckFormat.WILD),"Player 2");
 		GameLogic logic = new GameLogic();
 		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
 		logic.setContext(context);

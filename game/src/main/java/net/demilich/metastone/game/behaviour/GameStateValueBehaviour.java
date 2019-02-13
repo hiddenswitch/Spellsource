@@ -37,6 +37,8 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -228,8 +230,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * while (!getStrictPlan().isEmpty()) {
 	 *   context.performGameAction(playerId, getStrictPlan().pollFirst());
 	 * }
-	 * </pre>
 	 * }
+	 * </pre>
 	 *
 	 * @return A path of actions (state transitions) towards the highest scoring game state.
 	 * @see #getIndexPlan() for an equivalent representation of the path that does not use {@link GameAction} objects.
@@ -874,10 +876,25 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return indexPlan;
 	}
 
+	/**
+	 * Just below the maximum amount of time in milliseconds the bot will spend <b>per call</b> to {@link
+	 * #requestAction(GameContext, Player, List)} to determine its sequence of actions. This time tends to be amortized
+	 * over {@link #getMaxDepth()}-length action sequences, because this behaviour caches the calculation of a complete
+	 * sequence.
+	 *
+	 * @return The time to spend per request, in milliseconds
+	 */
 	public long getTimeout() {
 		return timeout;
 	}
 
+	/**
+	 * Indicates whether or not nodes should be "disposed" (their game context references set to {@code null}.
+	 * <p>
+	 * On some JVMs, this may help the garbage collector find finished game states faster.
+	 *
+	 * @return
+	 */
 	public boolean isDisposeNodes() {
 		return disposeNodes;
 	}
@@ -887,6 +904,14 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return this;
 	}
 
+	/**
+	 * Indicates whether or not a garbage collection call via {@link System#gc()} should be made whenever a game context
+	 * is done being processed.
+	 * <p>
+	 * This will slow the bot down but may reduce overall heap usage.
+	 *
+	 * @return
+	 */
 	public boolean isForceGarbageCollection() {
 		return forceGarbageCollection;
 	}
@@ -901,6 +926,15 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return this;
 	}
 
+	/**
+	 * Indicates whether or not the bot should process / expand nodes in its game state tree expansion using multiple
+	 * threads.
+	 * <p>
+	 * When using {@link GameContext#simulate(List, Supplier, Supplier, int, boolean, AtomicInteger)}, typically this should be set to {@code
+	 * false} whenever {@code useJavaParallel} is {@code true}.
+	 *
+	 * @return
+	 */
 	public boolean isParallel() {
 		return parallel;
 	}

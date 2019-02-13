@@ -9,6 +9,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,13 @@ public class GameDeck implements Serializable, Cloneable, Deck {
 	public GameDeck(HeroClass heroClass, boolean arbitrary) {
 		this.heroClass = heroClass;
 		this.arbitrary = arbitrary;
+	}
+
+	public GameDeck(HeroClass heroClass1, List<String> cardIds1) {
+		this.heroClass = heroClass1;
+		for (String cardId : cardIds1) {
+			getCards().addCard(cardId);
+		}
 	}
 
 	public int containsHowMany(Card card) {
