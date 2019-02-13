@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "EPIC",
   "description": "Battlecry: Replace all Knights in your hand with Emerald Secrets.",
-  "deathrattle": {
+  "battlecry": {
     "class": "ReplaceCardsSpell",
     "target": "FRIENDLY_HAND",
     "cards": [
@@ -26,6 +26,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "set": "VERDANT_DREAMS",
   "fileFormatVersion": 1
 }
