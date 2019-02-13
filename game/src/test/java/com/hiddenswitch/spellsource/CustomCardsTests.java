@@ -57,6 +57,15 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testAnzuTheRavenGod() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_anzu_the_raven_god");
+			playCard(context, player, "spell_doom");
+			assertEquals(player.getMinions().size(), 0);
+		});
+	}
+
+	@Test
 	public void testSeaWitchShufflesCard() {
 		runGym((context, player, opponent) -> {
 			useHeroPower(context, player, player.getHero().getReference());
