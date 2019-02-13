@@ -1,0 +1,13 @@
+{
+  "name": "Long-Barral Rifle",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "FREE",
+  "description": "",
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
