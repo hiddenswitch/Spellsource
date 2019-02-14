@@ -19,11 +19,18 @@ import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.TurnState;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.spells.trigger.TurnEndTrigger;
+import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.checkerframework.checker.nullness.qual.NonNull;
@@ -37,7 +44,6 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedDeque;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Stream;
 
@@ -97,9 +103,9 @@ import static java.util.stream.Collectors.toList;
 public class GameStateValueBehaviour extends IntelligentBehaviour {
 	public static final int DEFAULT_TARGET_CONTEXT_STACK_SIZE = 7 * 6 - 1;
 	public static final int DEFAULT_MAXIMUM_DEPTH = 2;
-	public static final int DEFAULT_TIMEOUT = 400;
+	public static final int DEFAULT_TIMEOUT = 1400;
 	public static final int DEFAULT_LETHAL_TIMEOUT = 15000;
-	private final Logger LOGGER = LoggerFactory.getLogger(GameStateValueBehaviour.class);
+	private final static Logger LOGGER = LoggerFactory.getLogger(GameStateValueBehaviour.class);
 
 	protected Heuristic heuristic;
 	protected FeatureVector featureVector;
@@ -116,6 +122,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	protected boolean pruneContextStack = true;
 	protected boolean debug;
 	protected boolean expandDepthForLethal = true;
+	protected boolean triggerStartTurns = true;
 	protected long lethalTimeout = DEFAULT_LETHAL_TIMEOUT;
 	protected int targetContextStackSize = DEFAULT_TARGET_CONTEXT_STACK_SIZE;
 	protected long requestActionStartTime = Long.MAX_VALUE;
@@ -836,17 +843,45 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 	/**
 	 * Post-processes a game state for scoring.
+	 * <p>
+	 * Currently, this method triggers turn start effects on both sides of the battlefield.
 	 *
 	 * @param playerId
-	 * @param thisContext
+	 * @param context
 	 */
-	protected void postProcess(int playerId, GameContext thisContext) {
-		// If a Doomsayer is on the board (i.e., not destroyed), don't count friendly minions
-		if (thisContext.getPlayers().stream()
-				.flatMap(p -> p.getMinions().stream())
-				.anyMatch(c -> c.getSourceCard().getCardId().equals("minion_doomsayer"))) {
-			thisContext.getPlayer(playerId).getMinions().forEach(m -> thisContext.getLogic().markAsDestroyed(m));
-			thisContext.getLogic().endOfSequence();
+	protected void postProcess(int playerId, GameContext context) {
+		if (isTriggerStartTurns()
+				&& !context.updateAndGetGameOver()
+				&& context.getTurnState() == TurnState.TURN_ENDED) {
+			Player player = context.getPlayer(playerId);
+			Player opponent = context.getOpponent(player);
+
+			// Make sure that friendly start turns don't accidentally wind up killing the opponent
+			int opponentHp = opponent.getHero().getHp();
+			for (Trigger trigger : new ArrayList<>(context.getTriggerManager().getTriggers())) {
+				if (trigger instanceof Enchantment && !(trigger instanceof Aura)) {
+					Enchantment enchantment = (Enchantment) trigger;
+					if (enchantment.getTriggers().stream().anyMatch(e -> e.getClass().equals(TurnStartTrigger.class)
+							|| (e.getClass().equals(TurnEndTrigger.class) && e.getOwner() == opponent.getId()))) {
+						// Correctly set the trigger stacks
+						context.getTriggerHostStack().push(trigger.getHostReference());
+						context.getLogic().castSpell(trigger.getOwner(), enchantment.getSpell(),
+								trigger.getHostReference(), EntityReference.NONE, true);
+						context.getTriggerHostStack().pop();
+					}
+				}
+			}
+
+			// If a turn start trigger killed the opponent, it probably should not have had, and should not count as a
+			// game-ending effect.
+			if (opponent.getHero().getHp() <= 0) {
+				opponent.getHero().setHp(opponentHp);
+			}
+
+			if (opponent.getHero().isDestroyed()) {
+				opponent.getHero().getAttributes().remove(Attribute.DESTROYED);
+			}
+			context.getLogic().endOfSequence();
 		}
 	}
 
@@ -930,8 +965,8 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * Indicates whether or not the bot should process / expand nodes in its game state tree expansion using multiple
 	 * threads.
 	 * <p>
-	 * When using {@link GameContext#simulate(List, Supplier, Supplier, int, boolean, AtomicInteger)}, typically this should be set to {@code
-	 * false} whenever {@code useJavaParallel} is {@code true}.
+	 * When using {@link GameContext#simulate(List, Supplier, Supplier, int, boolean, AtomicInteger)}, typically this
+	 * should be set to {@code false} whenever {@code useJavaParallel} is {@code true}.
 	 *
 	 * @return
 	 */
@@ -944,6 +979,14 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		return this;
 	}
 
+	/**
+	 * Throws an exception if an invalid plan is encountered.
+	 * <p>
+	 * When errors occur during replaying existing plans, there might be a game reproducibility issue where the same exact
+	 * seed and sequence of actions did not produce the same exact results; or, there is an issue cloning game states.
+	 *
+	 * @return
+	 */
 	public boolean isThrowOnInvalidPlan() {
 		return throwOnInvalidPlan;
 	}
@@ -1012,6 +1055,11 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 		}
 	}
 
+	/**
+	 * Gets the minimum observed free memory recorded during the execution of this instance.
+	 *
+	 * @return
+	 */
 	public long getMinFreeMemory() {
 		return minFreeMemory;
 	}
@@ -1043,6 +1091,20 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 
 	public GameStateValueBehaviour setExpandDepthForLethal(boolean expandDepthForLethal) {
 		this.expandDepthForLethal = expandDepthForLethal;
+		return this;
+	}
+
+	/**
+	 * Indicates if start turn effects should be evaluated at the end of the bot's turn.
+	 *
+	 * @return
+	 */
+	public boolean isTriggerStartTurns() {
+		return triggerStartTurns;
+	}
+
+	public GameStateValueBehaviour setTriggerStartTurns(boolean triggerStartTurns) {
+		this.triggerStartTurns = triggerStartTurns;
 		return this;
 	}
 
@@ -1155,7 +1217,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 	 * @param target
 	 * @return
 	 */
-	protected boolean observesLethal(GameContext context, int playerId, Actor target) {
+	public static boolean observesLethal(GameContext context, int playerId, Actor target) {
 		try {
 			Player player = context.getPlayer(playerId);
 			// If the opponent has a taunt minion, always return false.
@@ -1260,11 +1322,7 @@ public class GameStateValueBehaviour extends IntelligentBehaviour {
 			return damage >= target.getHp();
 		} catch (RuntimeException runtimeException) {
 			LOGGER.error("observeLethal:\n", runtimeException);
-			if (isDebug()) {
-				throw runtimeException;
-			}
 			return false;
 		}
-
 	}
 }

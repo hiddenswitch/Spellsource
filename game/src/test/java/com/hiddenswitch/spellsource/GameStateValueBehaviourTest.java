@@ -344,7 +344,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, player, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
-			Assert.assertEquals(((PlayCardAction) action).getSourceReference(), powerTrip.getReference());
+			Assert.assertEquals(action.getSourceReference(), powerTrip.getReference());
 		});
 	}
 
@@ -382,6 +382,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			context.endTurn();
 			receiveCard(context, opponent, "minion_snowflipper_penguin");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.END_TURN);
 		});
@@ -393,6 +394,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 				playMinionCard(context, opponent, "minion_wolfrider");
 			}
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
@@ -406,6 +408,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());

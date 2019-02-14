@@ -15,7 +15,21 @@ import java.util.concurrent.CountDownLatch;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.testng.Assert.*;
+
 public class MeanStreetsOfGadgetzanTests extends TestBase {
+
+	@Test
+	public void testMistressOfMixtures() {
+		runGym((context, player, opponent) -> {
+			Minion mistress = playMinionCard(context, player, "minion_mistress_of_mixtures");
+			player.getHero().setHp(10);
+			opponent.getHero().setHp(10);
+			destroy(context, mistress);
+			assertEquals(player.getHero().getHp(), 14);
+			assertEquals(opponent.getHero().getHp(), 14);
+		});
+	}
 
 	@Test
 	public void testMayorNoggenfogger() {
