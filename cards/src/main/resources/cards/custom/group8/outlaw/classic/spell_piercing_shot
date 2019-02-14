@@ -1,0 +1,40 @@
+{
+  "name": "Piercing Shot",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "EPIC
+  "description": "Destroy a random enemy minion, then deal its Cost as damage to the enemy hero.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "DestroySpell",
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_HERO",
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "SPELL_TARGET",
+          "attribute": "BASE_MANA_COST",
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
