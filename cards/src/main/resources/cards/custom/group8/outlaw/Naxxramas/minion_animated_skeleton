@@ -1,0 +1,29 @@
+{
+  "name": "Animated Skeleton",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Draw a card for each friendly Deathrattle minion.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": {
+        "class": "AttributeCounter",
+        "target": "FRIENDLY_MINIONS",
+        "attribute": "DEATHRATTLES"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "NAXXRAMAS"
+  ],
+  "fileFormatVersion": 1
+}
