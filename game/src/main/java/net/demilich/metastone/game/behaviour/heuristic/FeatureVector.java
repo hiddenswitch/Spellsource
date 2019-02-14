@@ -35,6 +35,8 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.QUEST_REWARD_VALUE, 9);
 		defaultVector.set(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE, 6.5);
 		defaultVector.set(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE, -16);
+		defaultVector.set(WeightedFeature.OWN_ROASTED_VALUE, -15);
+		defaultVector.set(WeightedFeature.OPPONENT_ROASTED_VALUE, 31);
 		return defaultVector;
 	}
 
@@ -63,6 +65,8 @@ public class FeatureVector implements Cloneable, Serializable {
 		defaultVector.set(WeightedFeature.QUEST_REWARD_VALUE, 55.7);
 		defaultVector.set(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE, 15.5);
 		defaultVector.set(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE, -31);
+		defaultVector.set(WeightedFeature.OWN_ROASTED_VALUE, -15);
+		defaultVector.set(WeightedFeature.OPPONENT_ROASTED_VALUE, 31);
 		return defaultVector;
 	}
 

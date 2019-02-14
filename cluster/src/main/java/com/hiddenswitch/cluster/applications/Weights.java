@@ -17,9 +17,9 @@ import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.behaviour.heuristic.FeatureVector;
 import net.demilich.metastone.game.behaviour.heuristic.WeightedFeature;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
-import net.demilich.metastone.game.decks.RandomDeck;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
@@ -70,7 +70,7 @@ public class Weights {
 				"AAECAR8CuwWG0wIO4eMCi+UCoIUD3gSXCI7DAo0BtQOoAqSIA9sJyfgC3dIC7/ECAA==\n" +
 				"#\n" +
 				"# To use this deck, copy it to your clipboard and create a new deck in Hearthstone").toGameDeck());
-		gameDecks.add(new RandomDeck(DeckFormat.SPELLSOURCE));
+		gameDecks.add(Deck.randomDeck(DeckFormat.SPELLSOURCE));
 		return gameDecks;
 	}
 
@@ -100,6 +100,7 @@ public class Weights {
 			case QUEST_REWARD_VALUE:
 			case OWN_CARD_COUNT:
 			case OWN_HP_FACTOR:
+			case OPPONENT_ROASTED_VALUE:
 				return 1;
 			case OPPONENT_HP_FACTOR:
 			case OPPONENT_CARD_COUNT:
@@ -107,6 +108,7 @@ public class Weights {
 			case RED_MODIFIER:
 			case CURSED_FACTOR:
 			case YELLOW_MODIFIER:
+			case OWN_ROASTED_VALUE:
 				return -1;
 			default:
 				throw new UnsupportedOperationException();

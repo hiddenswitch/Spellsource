@@ -22,7 +22,6 @@ import java.util.Map;
  *     "targetPlayer": "SELF"
  *   }
  * </pre>
- * TODO: Fel Reaver currently incorrectly removes random cards from the deck instead of the top cards.
  */
 public class DiscardCardsFromDeckSpell extends Spell {
 
@@ -38,16 +37,12 @@ public class DiscardCardsFromDeckSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		int howMany = desc.getValue(SpellArg.VALUE, context, player, target, source, 0);
 		for (int i = 0; i < howMany; i++) {
-			// Question: If I have no cards left and my Fel Reaver discards 3,
-			// do I draw 3 Fatigues or do I only Fatigue more when I draw a
-			// card?
-			// Answer: Fel Reaver won't trigger fatigue
-			// Source: Blue post
 			if (player.getDeck().isEmpty()) {
 				return;
 			}
-			Card card = context.getLogic().getRandom(player.getDeck());
-			context.getLogic().removeCard(card);
+
+			Card card = player.getDeck().peek();
+			context.getLogic().discardCard(player, card);
 		}
 	}
 
