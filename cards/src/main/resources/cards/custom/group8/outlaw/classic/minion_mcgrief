@@ -1,0 +1,28 @@
+{
+  "name": "McGrief",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Quickdraw: Deal 3 damage to the enemy hero.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_HERO",
+      "value": 3
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
