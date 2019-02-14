@@ -215,6 +215,10 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		score += questCount * weights.get(WeightedFeature.QUEST_COUNTER_VALUE);
 		score += questRewards * weights.get(WeightedFeature.QUEST_REWARD_VALUE);
 
+		// Count roasted cards to make sure the bot punishes Fel Reaper
+		score += player.getGraveyard().stream().filter(c -> c.hasAttribute(Attribute.ROASTED)).count() * weights.get(WeightedFeature.OWN_ROASTED_VALUE);
+		score += opponent.getGraveyard().stream().filter(c -> c.hasAttribute(Attribute.ROASTED)).count() * weights.get(WeightedFeature.OPPONENT_ROASTED_VALUE);
+
 		score += player.getMaxMana() * weights.get(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE);
 		score += opponent.getMaxMana() * weights.get(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE);
 
