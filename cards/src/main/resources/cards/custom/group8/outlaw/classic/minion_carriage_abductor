@@ -1,0 +1,30 @@
+{
+  "name": "Carriage Abductor",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 2,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "description": "Taunt. Quickdraw: Deal 2 damage to the left-most enemy minion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "LEFTMOST_ENEMY_MINION",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
