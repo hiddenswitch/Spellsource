@@ -1,0 +1,26 @@
+{
+  "name": "Saloon Barkeep",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Taunt. Battlecry: Draw a card.",
+  "battlecry": {
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
