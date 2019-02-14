@@ -1,0 +1,43 @@
+{
+  "name": "Jailhouse Cell",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "RARE",
+  "description": "Destroy an enemy minions. At the start of your next turn, resummon it.",
+  "targetSelection": "ENEMY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "custom.StoreEntitySpell",
+      },
+      {
+        "class": "DestroySpell",
+      },
+      {
+        "spell": {
+          "class": "AddEnchantmentSpell",
+          "target": "ENEMY_PLAYER",
+          "trigger": {
+            "countUntilCast": 1,
+            "eventTrigger": {
+              "class": "TurnStartTrigger",
+              "targetPlayer": "OPPONENT"
+            },
+            "spell": {
+              "class": "custom.ResurrectFromEntityStorageSpell"
+            }
+          },
+          "maxFires": 1
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
