@@ -1,0 +1,27 @@
+{
+  "name": "Silver Scattershot",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 3,
+  "durability": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Deal 1 damage to all enemy minions.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
