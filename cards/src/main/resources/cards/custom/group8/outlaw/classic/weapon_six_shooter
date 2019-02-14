@@ -1,0 +1,41 @@
+{
+  "name": "Six Shooter",
+  "baseManaCost": 5,
+  "type": "WEAPON",
+  "heroClass": "LEATHER",
+  "damage": 1,
+  "durability": 6,
+  "rarity": "RARE",
+  "description": "Quickdraw: Deal 3 damage to a random enemy minion and this loses 1 Durability.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "fireCondition": {
+        "class": "HasWeaponCondition"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "MissilesSpell",
+          "target": "ENEMY_MINIONS",
+          "value": 3,
+          "howMany": 1
+        },
+        {
+          "class": "ModifyDurabilitySpell",
+          "value": -1,
+          "targetPlayer": "SELF"
+        }
+      ]
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
