@@ -1,0 +1,18 @@
+{
+  "name": "Sheriff's Badge",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "EPIC",
+  "description": "Choose a minion. Destroy all other minions.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "DestroyAllExceptOneSpell",
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
