@@ -1,0 +1,29 @@
+{
+  "name": "Dustbowl Vigilante",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "LEATHER",
+  "baseAttack": 3,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "description": "Quickdraw: Deal 3 damage randomly split among all enemies.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MissilesSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1,
+      "howMany": 3
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
