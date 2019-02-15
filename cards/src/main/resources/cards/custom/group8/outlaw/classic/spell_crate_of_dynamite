@@ -1,0 +1,38 @@
+{
+  "name": "Crate of Dynamite",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "LEATHER",
+  "rarity": "RARE",
+  "description": "Give a minion \"Quickdraw: Deal 1 damage to all enemy minions.\" Draw a card.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "CardDrawnTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "DamageSpell",
+            "target": "ENEMY_MINIONS",
+            "value": 1
+          }
+        }
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
