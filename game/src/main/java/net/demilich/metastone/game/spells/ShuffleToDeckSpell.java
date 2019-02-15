@@ -15,8 +15,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER} cards
- * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
+ * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER}
+ * cards into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
  * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
  * <p>
@@ -45,7 +45,11 @@ public class ShuffleToDeckSpell extends Spell {
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
 		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
 
-		if (target != null) {
+		if (target != null
+				&& !desc.containsKey(SpellArg.CARD)
+				&& !desc.containsKey(SpellArg.CARDS)
+				&& !desc.containsKey(SpellArg.CARD_SOURCE)
+				&& !desc.containsKey(SpellArg.CARD_FILTER)) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());

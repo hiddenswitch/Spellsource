@@ -31,7 +31,7 @@ public class TechnicalTests extends TestBase {
 
 		TestMinionCard victimCard = new TestMinionCard(1, 10);
 		context.getLogic().receiveCard(warrior.getId(), victimCard);
-		context.getLogic().performGameAction(warrior.getId(), victimCard.play());
+		context.performAction(warrior.getId(), victimCard.play());
 
 		Card corruption1 = CardCatalogue.getCardById("spell_corruption");
 		Card corruption2 = CardCatalogue.getCardById("spell_corruption");
@@ -44,8 +44,8 @@ public class TechnicalTests extends TestBase {
 		GameAction playCorruption2 = corruption2.play();
 		playCorruption2.setTarget(victim);
 
-		context.getLogic().performGameAction(warlock.getId(), playCorruption1);
-		context.getLogic().performGameAction(warlock.getId(), playCorruption2);
+		context.performAction(warlock.getId(), playCorruption1);
+		context.performAction(warlock.getId(), playCorruption2);
 
 		context.getLogic().endTurn(GameContext.PLAYER_1);
 		context.getLogic().startTurn(GameContext.PLAYER_2);

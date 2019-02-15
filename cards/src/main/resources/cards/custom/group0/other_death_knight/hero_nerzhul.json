@@ -1,6 +1,6 @@
 {
   "name": "Ner'zhul",
-  "heroPower": "hero_power_raisey_dead",
+  "heroPower": "hero_power_raise_dead",
   "baseManaCost": 0,
   "type": "HERO",
   "heroClass": "OBSIDIAN",

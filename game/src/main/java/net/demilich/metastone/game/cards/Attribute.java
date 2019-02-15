@@ -245,7 +245,6 @@ public enum Attribute {
 	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
 	 *
 	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that implements Enrage.
-	 * @see GameLogic#handleEnrage(Actor) for the logic that controls this attribute.
 	 */
 	ENRAGED,
 	/**
@@ -259,8 +258,7 @@ public enum Attribute {
 	 * <p>
 	 * This implements Brann Bronzebeard's text.
 	 *
-	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
-	 * 		battlecries.
+	 * @deprecated since the introduction of {@link net.demilich.metastone.game.spells.aura.DoubleBattlecriesAura}.
 	 */
 	@Deprecated
 	DOUBLE_BATTLECRIES,

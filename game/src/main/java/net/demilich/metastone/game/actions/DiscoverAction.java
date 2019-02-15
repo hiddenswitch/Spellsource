@@ -90,8 +90,7 @@ public class DiscoverAction extends GameAction {
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		// Discover actions should never be executed, we only use them nowadays to store a card
-		throw new UnsupportedOperationException("Discover actions should never be executed.");
+		// Resume the appropriate fiber
 	}
 
 	/**

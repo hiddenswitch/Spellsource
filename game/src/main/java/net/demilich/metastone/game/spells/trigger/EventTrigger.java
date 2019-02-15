@@ -93,12 +93,14 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		}
 
 		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
-		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()) {
+		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()
+				|| (event.getSource() == null && sourceEntityType != null)) {
 			return false;
 		}
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if (event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType()) {
+		if ((event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType())
+				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}
 

@@ -12,7 +12,6 @@ import com.hiddenswitch.spellsource.impl.util.DraftRecord;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.MatchmakingQueueConfiguration;
-import com.hiddenswitch.spellsource.util.Sync;
 import io.vertx.core.Closeable;
 import io.vertx.core.Future;
 import io.vertx.ext.mongo.UpdateOptions;
@@ -151,7 +150,8 @@ public interface Draft {
 	 */
 	@Suspendable
 	static DraftState toDraftState(PublicDraftState inState) {
-		GameContext workingContext = GameContext.uninitialized(inState.getHeroClass() == null ? HeroClass.RED : inState.getHeroClass(), HeroClass.RED);
+		HeroClass playerHero1 = inState.getHeroClass() == null ? HeroClass.RED : inState.getHeroClass();
+		GameContext workingContext = new GameContext(playerHero1, HeroClass.RED);
 		return new DraftState()
 				.cardsRemaining(inState.getCardsRemaining())
 				.currentCardChoices(inState.getCurrentCardChoices() == null ? null :

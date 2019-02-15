@@ -4,22 +4,57 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
+
+Bug fixes.
+
+##### Content Additions
+
+ - New cards in the Occultist class (thanks @Muhframos).
+
+##### Content Fixes
+
+ - Anzu no longer incorrectly cancels all spells, only spells with chosen minion targets.
+ - Sea Witch's hero power now correctly shuffles Ocean Depths instead of the target into your deck.
+ - Eye Beam now correctly stops casting when a deathrattle summons a minion.
+ - Captain Cookie now works correctly.
+ - Black Ox Brew now correctly lasts until the start of the player's next turn.
+ - Polycephalos now reads, "Rush. Battlecry: Gain +1 Attack for each enemy minion."
+ - The flavor of many Baron cards has been adapted for Spellsource (thanks @Pircival)
+ - Various balance changes to Occultist cards.
+ - The flavor of many Vermancer cards have been adapted for Spellsource (thanks @Phyley).
+
 ### 0.8.20-2.0.26 (Monday, February 4th, 2019)
 
 Thanks to a great contribution from @doombubbles, introducing the Demon Hunter hero class!
 
 Thanks to a great contribution from @Muhframos, additional Occultist cards have been added.
 
+Thanks to a great contribution from @Pircival, additional Baron cards in the Verdant Dreams expansion have been added.
+
+##### Usability Fixes
+
+ - The bot will perform better overall. It should find lethal by using a combination of direct damage spells, physical attacks and weapons. It may miss lethal in situations that depend on removing an opponent's taunt minions, healing on physical attack or damage triggers (like minions with both taunt and lifesteal) that give the opponent's hero health, direct damage battlecries or other advanced effects.
+
 ##### Content Fixes
 
  - Witch Doctor is now known as Senzaku.
  - Doomerang now correctly deals lifesteal and poisonous damage.
+ - Attacking uses up an attack before text like "whenever this minion attacks" is put into play.
+ - Felomelorn now correctly casts Flamestrikes.
+ - Ner'Zhul now has a working hero power.
+ - Atomedic Androne now correctly buffs the target owner's hero with armor.
+ - Parting Gift in Verdant Dreams can now correctly be added to decks.
+ - Deepwood Barghest now correctly adds two secrets to the hand. They will not necessarily be distinct.
+ - Ironforge Portal now correctly buffs the hero.
+ - Finley the Explorer, Sunlance, Mealcatcher, Dancing Rune Weapon, Desert Maiden, The Maelstormm and Captain Cookie have been temporarily removed from the game.
 
 ##### Content Additions
 
  - The Demon Hunter prototype.
  - New Occultist cards.
  - Senzaku the Puppeteer, a Witch Doctor hero card.
+ - New Baron cards in the Verdant Dreams expansion.
 
 ### 0.8.19-2.0.25 (Friday, February 1st, 2019)
 

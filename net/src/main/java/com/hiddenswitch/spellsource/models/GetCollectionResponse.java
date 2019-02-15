@@ -188,7 +188,7 @@ public final class GetCollectionResponse implements Serializable {
 		}
 
 		final HeroClass fakeHeroClass = getHeroClass() == null ? HeroClass.RED : getHeroClass();
-		GameContext emptyContext = GameContext.uninitialized(fakeHeroClass, fakeHeroClass);
+		GameContext emptyContext = new GameContext(fakeHeroClass, fakeHeroClass);
 
 		List<InventoryRecord> inventoryRecords = getInventoryRecords();
 		List<CardRecord> records = new ArrayList<>();
