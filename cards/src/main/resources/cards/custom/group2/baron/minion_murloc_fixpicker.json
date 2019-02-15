@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "EPIC",
-  "race": "MURLOC",
+  "race": "FAE",
   "description": "Whenever you draw a minion, transform it into two random Fae.",
   "trigger": {
     "eventTrigger": {
