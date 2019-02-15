@@ -376,7 +376,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		GameAction playWrath = wrathChooseOne.playOptions()[0];
 		playWrath.setTarget(getSingleMinion(opponent.getMinions()));
-		context.getLogic().performGameAction(player.getId(), playWrath);
+		context.performAction(player.getId(), playWrath);
 
 		validActions = context.getLogic().getValidActions(player.getId());
 		// This time it should just be the 'End Turn'
@@ -395,7 +395,7 @@ public class AdvancedMechanicTests extends TestBase {
 		int cardsInOpponentsDeck = opponent.getDeck().getCount();
 		Card thoughtsteal = CardCatalogue.getCardById("spell_test_copy_cards");
 		context.getLogic().receiveCard(player.getId(), thoughtsteal);
-		context.getLogic().performGameAction(player.getId(), thoughtsteal.play());
+		context.performAction(player.getId(), thoughtsteal.play());
 		assertEquals(opponent.getDeck().getCount(), cardsInOpponentsDeck);
 		assertEquals(player.getHand().getCount(), cardsInHand + 2);
 	}
@@ -410,11 +410,11 @@ public class AdvancedMechanicTests extends TestBase {
 
 		Card card1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
 		context.getLogic().receiveCard(mage.getId(), card1);
-		context.getLogic().performGameAction(mage.getId(), card1.play());
+		context.performAction(mage.getId(), card1.play());
 
 		Card card2 = new TestMinionCard(5, 5);
 		context.getLogic().receiveCard(warrior.getId(), card2);
-		context.getLogic().performGameAction(warrior.getId(), card2.play());
+		context.performAction(warrior.getId(), card2.play());
 
 		Actor attacker = getSingleMinion(mage.getMinions());
 		Actor defender = getSingleMinion(warrior.getMinions());
@@ -422,12 +422,12 @@ public class AdvancedMechanicTests extends TestBase {
 		GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
 		attackAction.setTarget(defender);
 
-		context.getLogic().performGameAction(mage.getId(), attackAction);
+		context.performAction(mage.getId(), attackAction);
 		assertEquals(attacker.getHp(), attacker.getMaxHp());
 		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
 		assertEquals(attacker.isDestroyed(), false);
 
-		context.getLogic().performGameAction(mage.getId(), attackAction);
+		context.performAction(mage.getId(), attackAction);
 		assertEquals(attacker.getHp(), attacker.getMaxHp() - defender.getAttack());
 		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack() * 2);
 		assertEquals(attacker.isDestroyed(), true);
@@ -482,7 +482,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Card overloadCard = new TestMinionCard(1, 1);
 			overloadCard.setAttribute(Attribute.OVERLOAD, 2);
 			context.getLogic().receiveCard(player.getId(), overloadCard);
-			context.getLogic().performGameAction(player.getId(), overloadCard.play());
+			context.performAction(player.getId(), overloadCard.play());
 			context.endTurn();
 			context.endTurn();
 			assertEquals(player.getMana(), 1);
@@ -514,7 +514,7 @@ public class AdvancedMechanicTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), card);
 		GameAction playSpellCard = card.play();
 		playSpellCard.setTarget(minion);
-		context.getLogic().performGameAction(player.getId(), playSpellCard);
+		context.performAction(player.getId(), playSpellCard);
 		assertEquals(minion.getHp(), modifiedHp);
 		assertEquals(minion.getMaxHp(), modifiedHp);
 
@@ -525,7 +525,7 @@ public class AdvancedMechanicTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), card);
 		playSpellCard = card.play();
 		playSpellCard.setTarget(minion);
-		context.getLogic().performGameAction(player.getId(), playSpellCard);
+		context.performAction(player.getId(), playSpellCard);
 		assertEquals(minion.getHp(), baseHp);
 	}
 
@@ -578,22 +578,22 @@ public class AdvancedMechanicTests extends TestBase {
 			int expectedDamage = 5;
 			context.getLogic().receiveCard(player.getId(), damageSpell);
 
-			context.getLogic().performGameAction(player.getId(), damageSpell.play());
+			context.performAction(player.getId(), damageSpell.play());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - expectedDamage);
 
 			Card spellPowerCard = CardCatalogue.getCardById("minion_test_spellpower");
 			context.getLogic().receiveCard(player.getId(), spellPowerCard);
-			context.getLogic().performGameAction(player.getId(), spellPowerCard.play());
+			context.performAction(player.getId(), spellPowerCard.play());
 			damageSpell = damageSpell.getCopy();
 			context.getLogic().receiveCard(player.getId(), damageSpell);
-			context.getLogic().performGameAction(player.getId(), damageSpell.play());
+			context.performAction(player.getId(), damageSpell.play());
 			int spellPower = getSingleMinion(player.getMinions()).getAttributeValue(Attribute.SPELL_DAMAGE);
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2 * expectedDamage - spellPower);
 
 			int opponentHp = opponent.getHero().getHp();
 			GameAction useHeroPower = player.getHero().getHeroPower().play();
 			useHeroPower.setTarget(opponent.getHero());
-			context.getLogic().performGameAction(player.getId(), useHeroPower);
+			context.performAction(player.getId(), useHeroPower);
 
 			// hero power should not be affected by SPELL_DAMAGE, and thus deal 1 damage
 			assertEquals(opponent.getHero().getHp(), opponentHp - 1);

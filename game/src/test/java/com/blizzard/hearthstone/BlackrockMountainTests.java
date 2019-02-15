@@ -78,7 +78,7 @@ public class BlackrockMountainTests extends TestBase {
 			PhysicalAttackAction attack = new PhysicalAttackAction(grimPatron.getReference());
 			attack.setTargetReference(impGangBoss.getReference());
 			overrideMissilesTrigger(context, knifeJuggler, grimPatron);
-			context.getLogic().performGameAction(player.getId(), attack);
+			context.performAction(player.getId(), attack);
 			assertEquals(player.getMinions().size(), 0);
 		});
 	}

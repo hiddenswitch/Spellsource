@@ -6,8 +6,8 @@
   "baseAttack": 5,
   "baseHp": 3,
   "rarity": "RARE",
-  "race": "MURLOC",
-  "description": "Battlecry: If you control another Murloc, draw a Murloc from your deck.",
+  "race": "FAE",
+  "description": "Battlecry: If you control another Fae, draw a Fae from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -16,7 +16,7 @@
         "class": "MinionOnBoardCondition",
         "cardFilter": {
           "class": "RaceFilter",
-          "race": "MURLOC"
+          "race": "FAE"
         }
       },
       "spell": {
@@ -24,7 +24,7 @@
         "value": 1,
         "cardFilter": {
           "class": "CardFilter",
-          "race": "MURLOC"
+          "race": "FAE"
         }
       }
     }

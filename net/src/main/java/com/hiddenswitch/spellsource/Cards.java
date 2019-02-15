@@ -2,7 +2,6 @@ package com.hiddenswitch.spellsource;
 
 import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.CardRecord;
-import com.hiddenswitch.spellsource.client.models.EntityState;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.models.*;
 import io.vertx.core.Vertx;
@@ -13,6 +12,7 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.entities.heroes.HeroClass;
 
 import java.util.*;
 
@@ -97,7 +97,7 @@ public interface Cards {
 	 * @return The cards
 	 */
 	static List<CardRecord> getCards() {
-		GameContext workingContext = GameContext.uninitialized();
+		GameContext workingContext = new GameContext(HeroClass.ANY, HeroClass.ANY);
 		return CardCatalogue.getRecords().values()
 				.stream()
 				.map(CardCatalogueRecord::getDesc)

@@ -67,7 +67,7 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 
 		Card card = (Card) target;
 		if (!player.getDeck().contains(card)) {
-			logger.warn("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, card, player);
+			logger.debug("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, card, player);
 			return;
 		}
 

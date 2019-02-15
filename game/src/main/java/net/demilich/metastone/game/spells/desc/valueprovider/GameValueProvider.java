@@ -5,6 +5,10 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.GameValue;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Objects;
 
 /**
  * Used to retrieve a variable calculated in a {@link net.demilich.metastone.game.spells.MetaSpell}.
@@ -35,6 +39,9 @@ import net.demilich.metastone.game.spells.GameValue;
  * @see net.demilich.metastone.game.spells.MetaSpell for a complete description on how to use this value provider.
  */
 public class GameValueProvider extends ValueProvider {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(GameValueProvider.class);
+
 	public GameValueProvider(ValueProviderDesc desc) {
 		super(desc);
 	}
@@ -47,7 +54,11 @@ public class GameValueProvider extends ValueProvider {
 				return (int) context.getEnvironment().get(Environment.LAST_MANA_COST);
 			case SPELL_VALUE:
 				// Query the top of the stack since that's almost always what's intended.
-				return context.getSpellValueStack().peekFirst();
+				if (context.getSpellValueStack().isEmpty()) {
+					LOGGER.error("provideValue {} {}: The stack is empty!", context.getGameId(), host);
+					return 0;
+				}
+				return context.getSpellValueStack().peekLast();
 			default:
 				break;
 		}

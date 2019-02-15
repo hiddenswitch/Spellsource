@@ -8,19 +8,22 @@
   "rarity": "EPIC",
   "description": "Battlecry: Replace all Knights in your hand with Emerald Secrets.",
   "battlecry": {
-    "class": "ReplaceCardsSpell",
-    "target": "FRIENDLY_HAND",
-    "cards": [
-      "secret_secret_of_winter",
-      "secret_secret_of_spring",
-      "secret_secret_of_summer",
-      "secret_secret_of_autumn",
-      "secret_secret_of_twilight"
-    ],
-    "filter": {
-      "class": "SpecificCardFilter",
-      "card": "token_knight"
-    }
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_knight"
+      }
+    },
+    "targetSelection": "NONE"
   },
   "attributes": {
     "BATTLECRY": true

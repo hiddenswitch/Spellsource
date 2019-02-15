@@ -157,9 +157,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @return A list of enchantments (auras, triggers, etc.)
 	 */
 	public List<Enchantment> createEnchantments() {
+		/*
 		if (getCardType() != CardType.ENCHANTMENT) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an enchantment", this, getCardType());
 		}
+		*/
 
 		List<Enchantment> enchantments = new ArrayList<>(4);
 		if (getDesc().getTrigger() != null) {
@@ -402,6 +404,7 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return A {@link Race}
 	 */
+	@NotNull
 	@Override
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());

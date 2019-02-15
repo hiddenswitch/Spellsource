@@ -53,7 +53,7 @@ public class BasicTests extends TestBase {
 			testBattlecry.setTarget(warrior.getHero());
 			devMonster.getMinion().setBattlecry(testBattlecry);
 			context.getLogic().receiveCard(mage.getId(), devMonster);
-			context.getLogic().performGameAction(mage.getId(), devMonster.play());
+			context.performAction(mage.getId(), devMonster.play());
 
 			Assert.assertEquals(warrior.getHero().getHp(), warrior.getHero().getMaxHp() - 3);
 		}, HeroClass.BLUE, HeroClass.RED);
@@ -73,7 +73,7 @@ public class BasicTests extends TestBase {
 			Actor devMonster = getSingleMinion(mage.getMinions());
 			GameAction minionAttackAction = new PhysicalAttackAction(devMonster.getReference());
 			minionAttackAction.setTarget(druid.getHero());
-			context.getLogic().performGameAction(mage.getId(), minionAttackAction);
+			context.performAction(mage.getId(), minionAttackAction);
 			// monster attacked; it should not be damaged by the hero
 			Assert.assertEquals(druid.getHero().getHp(), druid.getHero().getMaxHp() - damage);
 			Assert.assertEquals(devMonster.getHp(), devMonster.getMaxHp());
@@ -82,7 +82,7 @@ public class BasicTests extends TestBase {
 			context.getLogic().castSpell(druid.getId(), heroBuffSpell, druid.getHero().getReference(), null, false);
 			GameAction heroAttackAction = new PhysicalAttackAction(druid.getHero().getReference());
 			heroAttackAction.setTarget(devMonster);
-			context.getLogic().performGameAction(mage.getId(), heroAttackAction);
+			context.performAction(mage.getId(), heroAttackAction);
 			// hero attacked; both entities should be damaged
 			Assert.assertEquals(druid.getHero().getHp(), druid.getHero().getMaxHp() - 2 * damage);
 			Assert.assertEquals(devMonster.getHp(), devMonster.getMaxHp() - damage);
@@ -94,11 +94,11 @@ public class BasicTests extends TestBase {
 		runGym((context, mage, warrior) -> {
 			Card card1 = new TestMinionCard(5, 5);
 			context.getLogic().receiveCard(mage.getId(), card1);
-			context.getLogic().performGameAction(mage.getId(), card1.play());
+			context.performAction(mage.getId(), card1.play());
 
 			Card card2 = new TestMinionCard(1, 1);
 			context.getLogic().receiveCard(warrior.getId(), card2);
-			context.getLogic().performGameAction(warrior.getId(), card2.play());
+			context.performAction(warrior.getId(), card2.play());
 
 			Assert.assertEquals(mage.getMinions().size(), 1);
 			Assert.assertEquals(warrior.getMinions().size(), 1);
@@ -108,7 +108,7 @@ public class BasicTests extends TestBase {
 
 			GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
 			attackAction.setTarget(defender);
-			context.getLogic().performGameAction(mage.getId(), attackAction);
+			context.performAction(mage.getId(), attackAction);
 
 			Assert.assertEquals(attacker.getHp(), attacker.getMaxHp() - defender.getAttack());
 			Assert.assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
@@ -125,7 +125,7 @@ public class BasicTests extends TestBase {
 			Card devMonster = new TestMinionCard(1, 1);
 			context.getLogic().receiveCard(mage.getId(), devMonster);
 			Assert.assertEquals(mage.getHand().getCount(), 1);
-			context.getLogic().performGameAction(mage.getId(), devMonster.play());
+			context.performAction(mage.getId(), devMonster.play());
 			Assert.assertEquals(mage.getHand().isEmpty(), true);
 			Actor minion = getSingleMinion(mage.getMinions());
 			Assert.assertEquals(minion.getName(), devMonster.getName());
@@ -137,7 +137,7 @@ public class BasicTests extends TestBase {
 			context.getLogic().receiveCard(mage.getId(), devMonster2);
 			GameAction summonAction = devMonster2.play();
 			summonAction.setTarget(minion);
-			context.getLogic().performGameAction(mage.getId(), summonAction);
+			context.performAction(mage.getId(), summonAction);
 
 			Assert.assertEquals(mage.getMinions().size(), 2);
 			Actor left = mage.getMinions().get(0);

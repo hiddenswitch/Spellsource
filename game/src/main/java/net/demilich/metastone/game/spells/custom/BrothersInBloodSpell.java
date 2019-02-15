@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.AttributeValueProvider;
+import net.demilich.metastone.game.spells.trigger.MinionPlayedTrigger;
 import net.demilich.metastone.game.spells.trigger.MinionSummonedTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 
@@ -35,7 +36,7 @@ public final class BrothersInBloodSpell extends Spell {
 		}
 		String cardId = target.getSourceCard().getCardId();
 		EnchantmentDesc enchantment = new EnchantmentDesc();
-		enchantment.eventTrigger = MinionSummonedTrigger.create(TargetPlayer.SELF, cardId);
+		enchantment.eventTrigger = MinionPlayedTrigger.create(TargetPlayer.SELF, cardId);
 		enchantment.spell = MetaSpell.create(DoubleAttackSpell.create(EntityReference.EVENT_TARGET), BuffSpell.create(EntityReference.EVENT_TARGET, null, AttributeValueProvider.create(Attribute.HP).create()));
 		SpellUtils.castChildSpell(context, player, AddEnchantmentSpell.create(enchantment), source, host);
 	}
