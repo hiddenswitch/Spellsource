@@ -1,0 +1,65 @@
+{
+  "name": "Ursoc the Mighty",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Whenever a friendly Secret is played or revealed, deal it's Cost as damage to all enemies instead.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "SecretPlayedTrigger",
+      "sourcePlayer": "SELF",
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_SOURCE",
+          "attribute": "SILENCED"
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "EVENT_SOURCE",
+            "attribute": "BASE_MANA_COST"
+          }
+        }
+      ]
+    }
+  },
+  "trigger": {
+    "eventTrigger": {
+      "class": "SecretRevealedTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "target": "EVENT_SOURCE",
+          "attribute": "SILENCED"
+        },
+        {
+          "class": "DamageSpell",
+          "target": "ENEMY_CHARACTERS",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "EVENT_SOURCE",
+            "attribute": "BASE_MANA_COST"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
