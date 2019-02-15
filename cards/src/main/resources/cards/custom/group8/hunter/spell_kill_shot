@@ -1,0 +1,48 @@
+{
+  "name": "Kill Shot",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "COMMON",
+  "description": "Deal $1 damage to all minions. Draw a card for each minion killed.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "MinionDeathTrigger",
+            "targetPlayer": "OPPONENT"
+          },
+          "spell": {
+            "class": "CastAfterSequenceSpell",
+            "spell": {
+              "class": "DrawCardSpell",
+              "value": 1
+            }
+          }
+        }
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_MINIONS",
+        "value": 1
+      },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "RemoveEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "spell_kill_shot"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
