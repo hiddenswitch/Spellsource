@@ -2,6 +2,7 @@ package net.demilich.metastone.game.behaviour.heuristic;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -21,24 +22,24 @@ import java.util.List;
  */
 public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
-	private static List<String> hardRemoval;
+	private static List<String> HARD_REMOVALS;
 
 	static {
-		hardRemoval = new ArrayList<String>();
-		hardRemoval.add("spell_polymorph");
-		hardRemoval.add("spell_execute");
-		hardRemoval.add("spell_crush");
-		hardRemoval.add("spell_assassinate");
-		hardRemoval.add("spell_siphon_soul");
-		hardRemoval.add("spell_shadow_word_death");
-		hardRemoval.add("spell_naturalize");
-		hardRemoval.add("spell_hex");
-		hardRemoval.add("spell_humility");
-		hardRemoval.add("spell_equality");
-		hardRemoval.add("spell_deadly_shot");
-		hardRemoval.add("spell_sap");
-		hardRemoval.add("minion_doomsayer");
-		hardRemoval.add("minion_big_game_hunter");
+		HARD_REMOVALS = new ArrayList<String>();
+		HARD_REMOVALS.add("spell_polymorph");
+		HARD_REMOVALS.add("spell_execute");
+		HARD_REMOVALS.add("spell_crush");
+		HARD_REMOVALS.add("spell_assassinate");
+		HARD_REMOVALS.add("spell_siphon_soul");
+		HARD_REMOVALS.add("spell_shadow_word_death");
+		HARD_REMOVALS.add("spell_naturalize");
+		HARD_REMOVALS.add("spell_hex");
+		HARD_REMOVALS.add("spell_humility");
+		HARD_REMOVALS.add("spell_equality");
+		HARD_REMOVALS.add("spell_deadly_shot");
+		HARD_REMOVALS.add("spell_sap");
+		HARD_REMOVALS.add("minion_doomsayer");
+		HARD_REMOVALS.add("minion_big_game_hunter");
 	}
 
 	private static ThreatLevel calcuateThreatLevel(GameContext context, int playerId) {
@@ -51,7 +52,8 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 		damageOnBoard += getHeroDamage(opponent.getHero());
 
 		int remainingHp = player.getHero().getEffectiveHp() - damageOnBoard;
-		if (remainingHp < 1) {
+		boolean observesLethal = GameStateValueBehaviour.observesLethal(context, opponent.getId(), player.getHero());
+		if (remainingHp < 1 || observesLethal) {
 			return ThreatLevel.RED;
 		} else if (remainingHp < 15) {
 			return ThreatLevel.YELLOW;
@@ -92,7 +94,7 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 			destroySpell |= DestroySpell.class.isAssignableFrom(spell.getDescClass())
 					|| spell.subSpells().stream().anyMatch(sd -> DestroySpell.class.isAssignableFrom(sd.getDescClass()));
 		}
-		return hardRemoval.contains(card.getCardId())
+		return HARD_REMOVALS.contains(card.getCardId())
 				|| isPoisonous
 				|| destroySpell;
 	}
@@ -214,6 +216,10 @@ public class ThreatBasedHeuristic implements Heuristic, Serializable {
 
 		score += questCount * weights.get(WeightedFeature.QUEST_COUNTER_VALUE);
 		score += questRewards * weights.get(WeightedFeature.QUEST_REWARD_VALUE);
+
+		// Count roasted cards to make sure the bot punishes Fel Reaper
+		score += player.getGraveyard().stream().filter(c -> c.hasAttribute(Attribute.ROASTED)).count() * weights.get(WeightedFeature.OWN_ROASTED_VALUE);
+		score += opponent.getGraveyard().stream().filter(c -> c.hasAttribute(Attribute.ROASTED)).count() * weights.get(WeightedFeature.OPPONENT_ROASTED_VALUE);
 
 		score += player.getMaxMana() * weights.get(WeightedFeature.EMPTY_MANA_CRYSTAL_VALUE);
 		score += opponent.getMaxMana() * weights.get(WeightedFeature.OPPOSING_EMPTY_MANA_CRYSTAL_VALUE);

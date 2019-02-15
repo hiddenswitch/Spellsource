@@ -32,6 +32,28 @@ import static org.testng.Assert.assertTrue;
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test
+	public void testAIMakesOpponentMillCards() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion felReaver = playMinionCard(context, opponent, "minion_fel_reaver");
+			context.endTurn();
+			for (int i = 0; i < 60; i++) {
+				shuffleToDeck(context, opponent, "spell_the_coin");
+			}
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "spell_a_f_kupcake");
+			}
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			context.setBehaviour(player.getId(), behaviour);
+
+			while (context.takeActionInTurn()) {
+			}
+
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
 	public void testAIFindsPhysicalAttackLethal() {
 		runGym((context, player, opponent) -> {
 			for (int i = 0; i < 7; i++) {
@@ -43,7 +65,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			highValueTarget.setAttribute(Attribute.SPELL_DAMAGE, 1000);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setExpandDepthForLethal(true);
-			behaviour.setParallel(false);
+			behaviour.setParallel(true);
 			behaviour.setPruneContextStack(true);
 			context.setBehaviour(player.getId(), behaviour);
 
@@ -322,7 +344,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, player, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
-			Assert.assertEquals(((PlayCardAction) action).getSourceReference(), powerTrip.getReference());
+			Assert.assertEquals(action.getSourceReference(), powerTrip.getReference());
 		});
 	}
 
@@ -360,6 +382,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			context.endTurn();
 			receiveCard(context, opponent, "minion_snowflipper_penguin");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.END_TURN);
 		});
@@ -371,6 +394,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 				playMinionCard(context, opponent, "minion_wolfrider");
 			}
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
@@ -384,6 +408,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
