@@ -6,10 +6,11 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Whenever a minion takes damage, gain +1 Health.",
+  "description": "Whenever another minion takes damage, gain +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_AS_TARGET",
       "targetEntityType": "MINION",
       "targetPlayer": "BOTH"
     },
