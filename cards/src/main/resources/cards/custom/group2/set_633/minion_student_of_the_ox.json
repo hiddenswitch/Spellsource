@@ -1,12 +1,12 @@
 {
   "name": "Student of the Ox",
-  "baseManaCost": 4,
+  "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 1,
-  "baseHp": 3,
+  "baseHp": 1,
   "rarity": "RARE",
-  "description": "Whenever a minion takes damage, gain +1 Health.",
+  "description": "Whenever another minion takes damage, gain +1 Health.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
