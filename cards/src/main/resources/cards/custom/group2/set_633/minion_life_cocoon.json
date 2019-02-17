@@ -1,6 +1,6 @@
 {
   "name": "Life Cocoon",
-  "baseManaCost": 0,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 0,
