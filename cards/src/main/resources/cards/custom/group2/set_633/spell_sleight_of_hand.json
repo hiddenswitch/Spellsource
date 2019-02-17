@@ -1,6 +1,6 @@
 {
   "name": "Sleight of Hand",
-  "baseManaCost": 0,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "RARE",
