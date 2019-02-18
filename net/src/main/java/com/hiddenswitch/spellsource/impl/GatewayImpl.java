@@ -666,7 +666,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<InviteResponse> deleteInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
-		return WebResult.succeeded(Invites.deleteInvite(new InviteId(inviteId), (UserRecord) context.user()));
+		return WebResult.succeeded(Invites.deleteInvite(new InviteId(inviteId), new UserId(userId)));
 	}
 
 	@Override
@@ -787,7 +787,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
-				.inMatch(Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
+				.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))
 				.name(displayName + "#" + record.getPrivacyToken())
 				.privacyToken(record.getPrivacyToken());
 	}
