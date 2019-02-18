@@ -6,7 +6,9 @@ permalink: /whats-new/
 
 ### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
 
-Bug fixes.
+You can now invite friends to play in one versus one challenges.
+
+Also includes bug fixes.
 
 ##### Content Additions
 

@@ -46,7 +46,6 @@ public interface Invites {
 
 	/**
 	 * Sends clients undelivered invites and marks them as pending.
-	 *
 	 */
 	static void handleConnections() {
 		Connection.connected((connection, fut) -> {
@@ -210,6 +209,7 @@ public interface Invites {
 			Invite invite = new Invite()
 					.id(inviteId.toString())
 					.fromName(user.getUsername())
+					.toName(toUser.getUsername())
 					.fromUserId(user.getId())
 					.toUserId(toUser.getId())
 					.message(request.getMessage())
@@ -221,7 +221,7 @@ public interface Invites {
 				invite.setFriendId(user.getId());
 			}
 
-			if (request.getQueueId() != null) {
+			if (request.getQueueId() != null || request.getDeckId() != null) {
 				// Assert that the player isn't currently in a match.
 
 				UserId userId = new UserId(user.getId());
@@ -238,7 +238,8 @@ public interface Invites {
 				request.setQueueId(RandomStringUtils.randomAlphanumeric(10));
 				// Right now, anyone can wait in any queue, but this is probably the most convenient.
 				// TODO: Destroy the user's missing queues
-				String customQueueId = user.getUsername() + "-" + inviteId + "-" + request.getQueueId();
+				String queueIdRequested = request.getQueueId() == null ? "" : "-" + request.getQueueId();
+				String customQueueId = user.getUsername() + "-" + inviteId + queueIdRequested;
 				invite.queueId(customQueueId);
 
 				// The matchmaker will close itself automatically if no one joins after 4s or the

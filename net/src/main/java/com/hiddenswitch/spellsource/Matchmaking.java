@@ -242,35 +242,39 @@ public interface Matchmaking extends Verticle {
 						}
 
 						// Create a game for every pair
-						if (thisMatchRequests.size() % 2 != 0) {
-							throw new AssertionError("thisMatchRequests.size()");
-						}
-
-						LOGGER.trace("startMatchmaker {}: Creating game", queueId);
-						for (int i = 0; i < thisMatchRequests.size(); i += 2) {
-							MatchmakingRequest user1 = thisMatchRequests.get(i);
-							MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
-
-							// This is a standard two player competitive match
-							ConfigurationRequest request =
-									ConfigurationRequest.versusMatch(gameId,
-											new UserId(user1.getUserId()),
-											new DeckId(user1.getDeckId()),
-											new UserId(user2.getUserId()),
-											new DeckId(user2.getDeckId()));
-							Games.createGame(request);
-
-							LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
-
-							for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
-								@SuppressWarnings("unchecked")
-								WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
-								connection.write(gameReadyMessage());
+						try {
+							if (thisMatchRequests.size() % 2 != 0) {
+								throw new AssertionError("thisMatchRequests.size()");
 							}
 
-							userToQueue.remove(new UserId(user1.getUserId()));
-							userToQueue.remove(new UserId(user2.getUserId()));
+							LOGGER.trace("startMatchmaker {}: Creating game", queueId);
+							for (int i = 0; i < thisMatchRequests.size(); i += 2) {
+								MatchmakingRequest user1 = thisMatchRequests.get(i);
+								MatchmakingRequest user2 = thisMatchRequests.get(i + 1);
+
+								// This is a standard two player competitive match
+								ConfigurationRequest request =
+										ConfigurationRequest.versusMatch(gameId,
+												new UserId(user1.getUserId()),
+												new DeckId(user1.getDeckId()),
+												new UserId(user2.getUserId()),
+												new DeckId(user2.getDeckId()));
+								Games.createGame(request);
+
+								LOGGER.trace("startMatchmaker {}: Created game for {} and {}", queueId, user1.getUserId(), user2.getUserId());
+
+								for (WriteStream innerConnection : new WriteStream[]{Connection.writeStream(user1.getUserId()), Connection.writeStream(user2.getUserId())}) {
+									@SuppressWarnings("unchecked")
+									WriteStream<Envelope> connection = (WriteStream<Envelope>) innerConnection;
+									connection.write(gameReadyMessage());
+								}
+							}
+						} finally {
+							for (MatchmakingRequest request : thisMatchRequests) {
+								userToQueue.remove(new UserId(request.getUserId()));
+							}
 						}
+
 					});
 				} while (/*Queues that run once are typically private games*/!queueConfiguration.isOnce());
 			} catch (VertxException | InterruptedException ex) {
