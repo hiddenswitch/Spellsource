@@ -3,10 +3,10 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "NAVY",
-  "baseAttack": 9,
-  "baseHp": 9,
+  "baseAttack": 6,
+  "baseHp": 14,
   "rarity": "LEGENDARY",
-  "description": "Taunt. Whenever a minion attacks, gain +2/+2.",
+  "description": "Taunt. Whenever a minion attacks, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
