@@ -104,7 +104,16 @@ public class ClusteredGames extends SyncVerticle implements Games {
 				}
 
 				// Deal with ending the game
-				context.handleEndGame(this::onGameOver);
+				context.handleEndGame(session -> {
+					Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
+					final GameId gameOverId = new GameId(session.getGameId());
+					// The players should not accidentally wind back up in games
+					try {
+						removeGameAndRecordReplay(gameOverId);
+					} catch (InterruptedException | SuspendExecution e) {
+						throw new RuntimeException(e);
+					}
+				});
 
 				CreateGameSessionResponse response = CreateGameSessionResponse.session(deploymentID(), context);
 				connections.replace(request.getGameId(), response);
@@ -125,18 +134,6 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			Games.LOGGER.debug("createGameSession: Repeat createGameSessionRequest suspected because actually deploymentId " + connection.deploymentId + " is responsible for deploying this match.");
 			// Otherwise, return its state, whatever it is
 			return connection;
-		}
-	}
-
-	@Suspendable
-	private void onGameOver(ServerGameContext session) {
-		Games.LOGGER.debug("onGameOver: Handling on game over for session " + session.getGameId());
-		final GameId gameOverId = new GameId(session.getGameId());
-		// The players should not accidentally wind back up in games
-		try {
-			removeGameAndRecordReplay(gameOverId);
-		} catch (InterruptedException | SuspendExecution e) {
-			throw new RuntimeException(e);
 		}
 	}
 
@@ -202,10 +199,15 @@ public class ClusteredGames extends SyncVerticle implements Games {
 			gameContext.loseBothPlayers();
 		}
 
+		// Set the player's presence to no longer be in a game
+		List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
+		for (String userId : userIds) {
+			Presence.updatePresence(userId);
+		}
+
 		try {
 			// Let's kick this off to be nonblocking of ending the game here, since things are sensitive to this timing
 			boolean botGame = gameContext.getPlayerConfigurations().stream().anyMatch(Configuration::isBot);
-			List<String> userIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getUserId).map(UserId::toString).collect(toList());
 			List<String> deckIds = gameContext.getPlayerConfigurations().stream().map(Configuration::getDeck).map(Deck::getDeckId).collect(toList());
 			List<String> playerNames = gameContext.getPlayerConfigurations().stream().map(Configuration::getName).collect(toList());
 			defer(v -> {

@@ -40,24 +40,6 @@ public interface Matchmaking extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Matchmaking.class);
 
 	/**
-	 * Gets information about the current match the user is in. This is used for reconnecting.
-	 *
-	 * @param request The user's ID.
-	 * @return The current match information. This may be a queue entry, the match, or nothing (but not null) if the user
-	 * 		is not in a match.
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
-	 */
-	static CurrentMatchResponse getCurrentMatch(CurrentMatchRequest request) throws SuspendExecution, InterruptedException {
-		GameId gameId = Games.getUsersInGames().get(new UserId(request.getUserId()));
-		if (gameId != null) {
-			return CurrentMatchResponse.response(gameId.toString());
-		} else {
-			return CurrentMatchResponse.response(null);
-		}
-	}
-
-	/**
 	 * Enqueues the user with the specified request.
 	 *
 	 * @param request The matchmaking request
@@ -87,6 +69,7 @@ public interface Matchmaking extends Verticle {
 		}
 		LOGGER.trace("enqueue {}: Successfully enqueued", request.getUserId());
 
+		Presence.updatePresence(new UserId(request.getUserId()), PresenceEnum.IN_GAME);
 		return true;
 	}
 
@@ -110,6 +93,7 @@ public interface Matchmaking extends Verticle {
 			queue.offer(new MatchmakingQueueEntry()
 					.setCommand(MatchmakingQueueEntry.Command.CANCEL)
 					.setUserId(userId.toString()), false);
+			Presence.updatePresence(userId.toString());
 			LOGGER.trace("dequeue {}: Successfully dequeued", userId);
 		} else {
 			LOGGER.trace("dequeue {}: User was not enqueued", userId);
