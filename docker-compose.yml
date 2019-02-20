@@ -2,6 +2,8 @@ version: '3'
 services:
   loadbalancer:
     image: traefik:alpine
+    networks:
+      - web
     command: |
       --docker \
       --entryPoints="Name:http Address::80 Redirect.EntryPoint:https" \
@@ -14,6 +16,7 @@ services:
       --acme.entrypoint="https" \
       --acme.ondemand=true \
       --docker.swarmmode \
+      --docker.network=web \
       --docker.watch \
       --docker.exposedbydefault=false
     ports:
@@ -41,6 +44,9 @@ services:
       - SMTP_USERNAME=${SMTP_USERNAME}
       - SMTP_PASSWORD=${SMTP_PASSWORD}
       - SMTP_DOMAIN=${SMTP_DOMAIN}
+    networks:
+      - web
+      - backend
     deploy:
       restart_policy:
         condition: on-failure
@@ -63,6 +69,9 @@ services:
       retries: 3
   launcher:
     image: doctorpangloss/launcher:latest
+    networks:
+      - web
+      - backend
     environment:
       - MONGO_URL=mongodb://mongo:27017/launcher
       - ROOT_URL=https://launcher.hiddenswitch.com
@@ -86,6 +95,8 @@ services:
       retries: 3
   mongo:
     image: "mongo:3.6"
+    networks:
+      - backend
     volumes:
       - mongodata:/data/db
     deploy:
@@ -103,6 +114,8 @@ services:
       retries: 3
   hazelcastmancenter:
     image: hazelcast/management-center
+    networks:
+      - backend
     volumes:
       - mancenterdata:/data
     environment:
@@ -116,6 +129,9 @@ services:
         constraints: [node.platform.arch == x86_64]
   mediawiki:
     image: "doctorpangloss/wiki:latest"
+    networks:
+      - web
+      - backend
     environment:
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
       - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
@@ -151,6 +167,8 @@ services:
         constraints: [node.platform.arch == x86_64]
   parsoid:
     image: "thenets/parsoid:0.10.0"
+    networks:
+      - backend
     deploy:
       labels:
         - "traefik.enable=false"
@@ -160,6 +178,8 @@ services:
       - PARSOID_DOMAIN_mediawiki=http://mediawiki/api.php
   mariadb:
     image: mariadb:10.4.1
+    networks:
+      - backend
     deploy:
       restart_policy:
         condition: on-failure
@@ -182,3 +202,8 @@ volumes:
   loadbalancerdata:
   mediawikidata:
   mariadbdata:
+networks:
+  web:
+    external: true
+  backend:
+    external: true
