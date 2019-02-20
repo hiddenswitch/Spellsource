@@ -26,6 +26,8 @@ services:
       restart_policy:
         condition: on-failure
         window: 8s
+      placement:
+        constraints: [node.platform.arch == x86_64]
   game:
     image: doctorpangloss/spellsource:latest
     environment:
@@ -52,6 +54,8 @@ services:
         - "traefik.backend.loadbalancer.stickiness=true"
         - "traefik.port=80"
         - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     healthcheck:
       test: curl --fail -s http://localhost:80/ || exit 1
       interval: 8s
@@ -73,6 +77,8 @@ services:
         - "traefik.backend.loadbalancer.stickiness=true"
         - "traefik.port=3000"
         - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     healthcheck:
       test: curl --fail -s http://localhost:3000/ || exit 1
       interval: 8s
@@ -88,6 +94,8 @@ services:
         window: 10s
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     healthcheck:
       test: echo 'db.runCommand("ping").ok' | mongo localhost:27017/metastone --quiet
       interval: 8s
@@ -104,6 +112,8 @@ services:
     deploy:
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
   mediawiki:
     image: "doctorpangloss/wiki:latest"
     environment:
@@ -137,11 +147,15 @@ services:
         - "traefik.frontend.entryPoints=http,https"
         - "traefik.port=80"
         - "traefik.enable=true"
+      placement:
+        constraints: [node.platform.arch == x86_64]
   parsoid:
     image: "thenets/parsoid:0.10.0"
     deploy:
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     environment:
       - PARSOID_DOMAIN_mediawiki=http://mediawiki/api.php
   mariadb:
@@ -152,6 +166,8 @@ services:
         window: 15s
       labels:
         - "traefik.enable=false"
+      placement:
+        constraints: [node.platform.arch == x86_64]
     environment:
       - MYSQL_DATABASE=spellsource
       - MYSQL_PASSWORD=password
