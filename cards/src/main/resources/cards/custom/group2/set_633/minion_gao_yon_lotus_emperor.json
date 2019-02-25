@@ -1,0 +1,32 @@
+{
+  "name": "Gao-Yon, Lotus Emperor",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "JADE",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Deflect. Battlecry: Summon one of the Pillar Spirits.",
+  "battlecry": {
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "SummonSpell"
+      },
+      "cards": [
+        "token_xin_tiger_of_strength",
+        "token_nao_zu_ox_of_courage",
+        "token_ki_yu_crane_of_hope",
+        "token_xan_serpent_of_wisdom"
+      ],
+      "howMany": 4
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEFLECT": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
