@@ -1,20 +1,20 @@
 {
-  "name": "Aysa Cloudsinger",
+  "name": "Chiyo Sho",
   "baseManaCost": 8,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 4,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Swap your hero with Aysa Cloudsinger. When she dies, return your hero.",
+  "description": "Battlecry: Swap your hero with Chiyo Sho. When she dies, return your hero.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "custom.AysaCloudsingerSpell",
       "cards": [
-        "hero_aysa_cloudsinger",
-        "token_chen_stormstout",
-        "hero_chen_stormstout"
+        "hero_chiyo_sho",
+        "token_guan_hun",
+        "hero_guan_hun"
       ]
     }
   },
