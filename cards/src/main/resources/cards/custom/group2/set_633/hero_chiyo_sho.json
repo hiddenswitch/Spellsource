@@ -1,10 +1,11 @@
 {
-  "name": "Aysa Cloudsinger",
+  "name": "Chiyo Sho",
   "heroPower": "hero_power_gift_of_the_ox",
   "baseManaCost": 8,
   "type": "HERO",
   "heroClass": "JADE",
   "rarity": "LEGENDARY",
+  "description": "Hero Power: Give all friendly characters +2 Health.",
   "attributes": {
     "HP": 10,
     "MAX_HP": 10
