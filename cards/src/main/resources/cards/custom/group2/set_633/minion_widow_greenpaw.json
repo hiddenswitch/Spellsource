@@ -1,6 +1,6 @@
 {
   "name": "Widow Greenpaw",
-  "baseManaCost": 7,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 7,
