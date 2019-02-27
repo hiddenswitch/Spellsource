@@ -1,26 +1,5 @@
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'com.hiddenswitch'
-            artifactId = 'cards'
-            version = project.version
-
-            from components.java
-        }
-    }
-}
-
-
-jar {
-    manifest {
-        attributes 'Implementation-Title': rootProject.name.capitalize() + ' Data Files',
-                'Implementation-Version': project.version,
-                'Description': 'Cards, Decks and DeckFormat data files.'
-    }
-}
-
 dependencies {
-    testCompile group: 'org.testng', name: 'testng', version: '6.+'
+    testCompile group: 'org.testng', name: 'testng', version: '6.14.3'
 }
 
 test {

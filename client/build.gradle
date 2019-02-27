@@ -3,14 +3,14 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 group = 'com.hiddenswitch'
-version = '0.8.7'
+version = '0.8.20'
 
 buildscript {
     repositories {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.3.+'
+        classpath 'com.android.tools.build:gradle:2.3.0'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
     }
 }

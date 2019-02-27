@@ -197,6 +197,8 @@ if [[ "$bump_version" = true ]] ; then
     Dockerfile \
     spellsource/context.py \
     cluster/runsims.sh \
+    client/build.gradle \
+    swagger-templates/java/build.gradle.mustache \
     net/src/main/java/com/hiddenswitch/spellsource/Version.java
 fi
 
