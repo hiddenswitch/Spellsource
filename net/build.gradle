@@ -1,22 +1,10 @@
-publishing {
-    publications {
-        maven(MavenPublication) {
-            groupId = 'com.hiddenswitch'
-            artifactId = 'net'
-            version = project.version
-
-            from components.java
-        }
-    }
-}
-
 buildscript {
     repositories {
         mavenCentral()
         maven { url 'https://plugins.gradle.org/m2/' }
     }
     dependencies {
-        classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.4'
+        classpath 'com.github.jengelman.gradle.plugins:shadow:4.0.2'
     }
 }
 
@@ -35,8 +23,7 @@ def debugSystemProperties = ["spellsource.port"                        : "8080",
                              "games.defaultNoActivityTimeout"          : "999999000",
                              "vertx.logger-delegate-factory-class-name": "io.vertx.core.logging.SLF4JLogDelegateFactory"]
 
-apply plugin: 'application'
-mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
+def mainClassName = 'com.hiddenswitch.spellsource.applications.Clustered'
 apply plugin: 'com.github.johnrengelman.shadow'
 
 configurations.all {
@@ -49,8 +36,21 @@ configurations.all {
     }
 }
 
+jar {
+    manifest {
+        attributes 'Main-Class': mainClassName
+    }
+}
+
 shadowJar {
+    mergeServiceFiles()
+    archiveClassifier.set(null)
+    configurations = [project.configurations.compile]
     zip64 true
+}
+
+artifacts {
+    archives shadowJar
 }
 
 repositories {
@@ -96,7 +96,7 @@ dependencies {
     compile project(':client')
     compile project(':vertx-sync')
 
-    testCompile group: 'junit', name: 'junit', version: '4.+'
+    testCompile group: 'junit', name: 'junit', version: '4.12'
     testCompile group: 'org.unitils', name: 'unitils-core', version: '3.4.3'
     testCompile group: 'io.vertx', name: 'vertx-unit', version: '3.6.0'
     testCompile group: 'io.github.robwin', name: 'assertj-swagger', version: '0.5.0'
