@@ -1,0 +1,24 @@
+{
+  "name": "Tampering Horologist",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Battlecry: Destroy a random enemy Secret.",
+  "battlecry": {
+    "spell": {
+      "class": "DestroySecretsSpell",
+      "targetPlayer": "OPPONENT",
+      "howMany": 1,
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
