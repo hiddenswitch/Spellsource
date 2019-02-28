@@ -19,9 +19,14 @@
     },
     "spell1": {
       "class": "PutRandomSecretIntoPlaySpell",
-      "cardSource": {
-        "class": "CatalogueSource"
-      }
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "howMany": 2
     },
     "spell2": {
       "class": "ReceiveCardSpell",
