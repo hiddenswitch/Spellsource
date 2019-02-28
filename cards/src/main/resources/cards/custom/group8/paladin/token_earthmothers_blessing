@@ -1,0 +1,64 @@
+{
+  "name": "Earthmother's Blessing",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "FREE",
+  "description": "Give a minion \"Deathrattle: Resummon this minion. It keeps any Enchantments.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "EitherOrSpell",
+      "condition": {
+        "class": "AttributeCondition",
+        "target": "SELF",
+        "attribute": "KEEPS_ENCHANTMENTS",
+        "operation": "HAS"
+      }
+    },
+    "spell1": {
+      "class": "ReviveMinionSpell",
+      "target": "SELF",
+      "spell": {
+        "class": "RemoveEnchantmentSpell",
+        "target": "OUTPUT",
+        "card": "token_earthmothers_blessing"
+      }
+    },
+    "spell2": {
+      "class": "MetaSpell",
+      "target": "SELF",
+      "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "KEEPS_ENCHANTMENTS"
+        },
+        {
+          "class": "ReviveMinionSpell",
+          "spell": {
+            "class": "MetaSpell",
+            "target": "OUTPUT",
+            "spells": [
+              {
+                "class": "RemoveAttributeSpell",
+                "attribute": "KEEPS_ENCHANTMENTS"
+              },
+              {
+                "class": "RemoveEnchantmentSpell",
+                "card": "token_earthmothers_blessing"
+              }
+            ]
+          }
+        },
+        {
+          "class": "RemoveAttributeSpell",
+          "attribute": "KEEPS_ENCHANTMENTS"
+        }
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
