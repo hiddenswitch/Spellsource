@@ -1,6 +1,6 @@
 {
   "name": "Fists of Fury",
-  "baseManaCost": 7,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
