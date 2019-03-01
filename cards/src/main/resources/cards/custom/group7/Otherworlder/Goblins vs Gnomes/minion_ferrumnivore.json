@@ -1,0 +1,31 @@
+{
+  "name": "Ferrumnivore",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 5,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Battlecry: Destroy a friendly Mech to deal its combined stats as damage randomly split among all enemies.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DestroySpell"
+      },
+      {
+      //DEAL ITS COMBINED STATS AS DAMAGE RANDOMLY SPLIT AMONG ALL ENEMIES
+      }
+    ]
+    }
+  },
+  
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
