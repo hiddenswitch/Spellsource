@@ -3,7 +3,7 @@
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "NEONGREEN",
-  "rarity": "RARE",
+  "rarity": "COMMON",
   "description": "Give a minion +1/+1, <b>Wither (1)</b>, and \"At the end of your turn, deal 3 damage randomly split among all characters\".",
   "targetSelection": "MINIONS",
   "spell": {
