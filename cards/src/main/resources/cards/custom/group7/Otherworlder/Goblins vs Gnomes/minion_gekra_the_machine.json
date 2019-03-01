@@ -1,0 +1,52 @@
+{
+  "name": "Gekra, the Machine",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "NEONGREEN",
+  "baseAttack": 5,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "race": "MECH",
+  "description": "Deathrattle: Permanently give this minion <b>Taunt</b>, <b>Divine Shield</b>, <b>Stealth</b>, or <b>Windfury</b> at random and shuffle it into your deck.",
+  "deathrattle": {
+    "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "RandomlyCastSpell",
+        "target": "SELF",
+        "spells": [
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "TAUNT"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "DIVINE_SHIELD"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "STEALTH"
+        },
+        {
+          "class": "AddAttributeSpell",
+          "attribute": "WINDFURY"
+        }
+        //I DON'T KNOW HOW TO MAKE THE BUFFS PERMANENT
+        //NOTES: IT CANNOT GAIN THE SAME BUFF TWICE AND IT WOULD JUST STOP BUFFING ITSELF IF IT HAS ALL THE KEYWORDS (THOUGH IT'LL STILL SHUFFLE ITSELF BACK INTO YOUR DECK)
+      ]
+      },
+      {
+        "class": "ShuffleToDeckSpell",
+        "target": "SELF"
+      }
+    ]
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
