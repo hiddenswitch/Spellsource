@@ -183,14 +183,6 @@ public abstract class Actor extends Entity implements HasEnchantments, HasDeathr
 		return new ArrayList<>(enchantments);
 	}
 
-	public List<Enchantment> getEnchantmentsFromContext(GameContext context) {
-		return context.getTriggersAssociatedWith(this.getReference()).stream()
-				.filter(trigger -> trigger instanceof Enchantment)
-				.map(trigger -> (Enchantment) trigger)
-				.filter(enchantment -> !enchantment.isExpired())
-				.collect(Collectors.toList());
-	}
-
 	@Override
 	public boolean hasEnchantment() {
 		return enchantments.size() != 0;

@@ -63,7 +63,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Minion target = playMinionCard(context, opponent, "minion_boulderfist_ogre");
 			Minion right = playMinionCard(context, opponent, "minion_boulderfist_ogre");
 			context.endTurn();
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			attack(context, player, player.getHero(), target);
 			Stream.of(left, target, right).forEach(minion -> {
 				assertEquals(minion.getHp(), minion.getBaseHp() - CardCatalogue.getCardById("weapon_shadowmourne").getBaseDamage() - 1);
@@ -322,7 +322,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Assert.assertTrue(tarCreeper.hasAttribute(Attribute.LIFESTEAL));
 			Assert.assertFalse(bloodfen.hasAttribute(Attribute.LIFESTEAL));
 			bloodfen.setHp(1);
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(bloodfen.getReference()));
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(bloodfen.getReference()));
 			Assert.assertTrue(bloodfen.isDestroyed());
 			final Minion waterElemental = player.getMinions().get(1);
 			assertEquals(waterElemental.getSourceCard().getCardId(), "minion_water_elemental");
@@ -420,7 +420,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 			playCard(context, player, "hero_deathstalker_rexxar");
 			isBuildingBeast.set(true);
-			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+			context.performAction(player.getId(), player.getHero().getHeroPower().play());
 			isBuildingBeast.set(false);
 			Card cardInHand = player.getHand().get(0);
 			assertEquals(cardInHand.getBaseHp(), cards.stream().collect(summarizingInt(Card::getBaseHp)).getSum());
@@ -554,16 +554,29 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 			Minion tarCreeper1 = playMinionCard(context, player, CardCatalogue.getCardById("minion_tar_creeper"));
 			Minion tarCreeper2 = playMinionCard(context, player, CardCatalogue.getCardById("minion_tar_creeper"));
 			context.endTurn();
-			context.getLogic().performGameAction(player.getId(), new PhysicalAttackAction(player.getHero().getReference()).withTargetReference(tarCreeper1.getReference()));
+			context.performAction(player.getId(), new PhysicalAttackAction(player.getHero().getReference()).withTargetReference(tarCreeper1.getReference()));
 			assertEquals(tarCreeper1.getHp(), 1);
 			playCard(context, player, CardCatalogue.getCardById("spell_doomerang"), tarCreeper2);
 			assertEquals(tarCreeper1.getHp(), 1, "Deathrattle should not have triggered and should not have killed the first Tar Creeper.");
 			assertEquals(tarCreeper2.getHp(), 1, "The second Tar Creeper should have been damaged by the Doomerang");
 			Card card = player.getHand().get(player.getHand().getCount() - 1);
-			assertEquals(card.getSourceCard().getCardId(), "weapon_deaths_bite", "Doomerang should now be in the player's hand.");
+			assertEquals(card.getSourceCard().getCardId(), "weapon_deaths_bite", "Death's Bite should now be in the player's hand.");
 			assertEquals(player.getWeaponZone().size(), 0);
-			context.getLogic().performGameAction(player.getId(), card.play());
-			assertEquals(player.getHero().getWeapon().getDurability(), 2, "Doomerang should have 2 durability, not 1, since it was played fresh from the hand.");
+			context.performAction(player.getId(), card.play());
+			assertEquals(player.getHero().getWeapon().getDurability(), 2, "Death's Bite should have 2 durability, not 1, since it was played fresh from the hand.");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_spectral_cutlass");
+
+			Minion tarCreeper1 = playMinionCard(context, player, CardCatalogue.getCardById("minion_tar_creeper"));
+			playCard(context, player, "spell_fireball", player.getHero());
+			playCard(context, player, "spell_envenom_weapon");
+
+			assertEquals(player.getHero().getHp(), 24);
+			playCard(context, player, "spell_doomerang", tarCreeper1);
+			assertEquals(player.getHero().getHp(), 26);
+			assertTrue(tarCreeper1.isDestroyed());
 		});
 	}
 
@@ -753,8 +766,8 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 
 			PhysicalAttackAction leeroyAttack = new PhysicalAttackAction(leeroyJenkins.getReference());
 			leeroyAttack.setTarget(waterElemental);
-			context.getLogic().performGameAction(player.getId(), leeroyAttack);
-			context.getLogic().performGameAction(player.getId(), heroAttack);
+			context.performAction(player.getId(), leeroyAttack);
+			context.performAction(player.getId(), heroAttack);
 
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
@@ -833,7 +846,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 				}
 
 				play.setTarget(target);
-				context.getLogic().performGameAction(player.getId(), play);
+				context.performAction(player.getId(), play);
 				if (target == null) {
 					Assert.assertFalse(expected);
 				} else {
@@ -844,7 +857,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 				context.getLogic().destroy(icyVeins);
 				play = player.getHero().getHeroPower().play();
 				play.setTarget(target);
-				context.getLogic().performGameAction(player.getId(), play);
+				context.performAction(player.getId(), play);
 				if (target == null) {
 					Assert.assertFalse(expected);
 				} else {
@@ -883,7 +896,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 					.filter(ga -> ga.getChoiceCardId().equals(heroPowerCardId))
 					.findFirst().orElseThrow(AssertionError::new);
 
-			context.getLogic().performGameAction(player.getId(), action);
+			context.performAction(player.getId(), action);
 
 			return context;
 		};
@@ -918,7 +931,7 @@ public class KnightsOfTheFrozenThroneTests extends TestBase {
 						player.setMana(9);
 
 						PlayCardAction action = actionGetter.apply(malfurion);
-						context1.getLogic().performGameAction(player.getId(), action);
+						context1.performAction(player.getId(), action);
 						assertEquals(player.getHero().getArmor(), 5);
 
 						// Assert that the player has both choose one hero powers present

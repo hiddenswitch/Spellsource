@@ -3,6 +3,7 @@ package net.demilich.metastone.game.spells;
 import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -18,6 +19,8 @@ import java.util.stream.Collectors;
  * Makes each actor in {@link SpellArg#SECONDARY_TARGET} attack another random actor in {@link SpellArg#TARGET}.
  * <p>
  * No minion attacks more than once, but some minions make be attacked more than once.
+ * <p>
+ * Dueling does not consume attacks.
  */
 public class DuelSpell extends FightSpell {
 
@@ -56,10 +59,12 @@ public class DuelSpell extends FightSpell {
 			}
 
 			context.getSpellTargetStack().push(defender.getReference());
+			int attacksBefore = attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
 			SpellDesc fight = new SpellDesc(FightSpell.class);
 			fight.put(SpellArg.TARGET, defender.getReference());
 			fight.put(SpellArg.SECONDARY_TARGET, attacker.getReference());
 			castForPlayer(context, player, fight, attacker, defender);
+			attacker.setAttribute(Attribute.NUMBER_OF_ATTACKS, attacksBefore);
 			context.getSpellTargetStack().pop();
 		}
 	}

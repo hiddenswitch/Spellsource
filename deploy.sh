@@ -2,7 +2,7 @@
 set -e
 OPTIND=1
 
-usage="$(basename "$0") [-hcedwpvlDA] -- build and deploy the Spellsource Server
+usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
 where:
     -h  show this help text
@@ -15,6 +15,7 @@ where:
     -l  builds and deploys the launcher
     -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
     -w  deploy playspellsource.com (requires spellsource on the command line)
+    -W  deploy wiki.hiddenswitch.com
     -v  bump the version (requires SPELLSOURCE_VERSION indicating
         the current version)
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
@@ -23,8 +24,6 @@ where:
 
 Invoking this script always rebuilds Spellsource-Server.
 
-Currently, the docker deployment only updates the spellsource_game image.
-
 Notes for successful deployment:
  - Requires jq, curl and docker on the PATH for Docker deployment
  - Requires eb on the path for Elastic Beanstalk deployment
@@ -32,17 +31,18 @@ Notes for successful deployment:
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.11 ./deploy.sh -cpdwv
+  SPELLSOURCE_VERSION=0.8.20 ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
 deploy_www=false
 deploy_python=false
 deploy_launcher=false
+deploy_wiki=false
 bump_version=false
 install_dependencies=false
 build_client=false
-while getopts "hcedplvwD" opt; do
+while getopts "hcedwpvlWDA" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -55,6 +55,9 @@ while getopts "hcedplvwD" opt; do
      ;;
   d) deploy_docker=true
      echo "Deploying for Docker"
+     ;;
+  W) deploy_wiki=true
+     echo "Deploying mediawiki"
      ;;
   l) deploy_launcher=true
      echo "Deploying launcher"
@@ -137,6 +140,12 @@ if [[ "$install_dependencies" = true ]] ; then
       curl https://install.meteor.com/ | sh
     fi
 
+    if ! command -v mongod > /dev/null ; then
+      echo "Installing mongod version 3.6"
+      brew install mongodb@3.6
+      brew link --force mongodb@3.6
+    fi
+
     if [[ ! -f ${VIRTUALENV_PATH}/bin/activate ]] ; then
       echo "Installing virtualenv at ${VIRTUALENV_PATH}"
       pip3 install -U virtualenv > /dev/null
@@ -157,7 +166,7 @@ if [[ "$install_dependencies" = true ]] ; then
       pip3 install spellsource > /dev/null
     fi
 
-    pip3 install awscli awsebcli bump2version > /dev/null
+    pip3 install awscli awsebcli bump2version twine > /dev/null
   else
     echo "Cannot install dependencies on this platform yet"
     exit 1
@@ -171,12 +180,12 @@ if [[ "$bump_version" = true ]] ; then
   fi
 
   if ! command -v bump2version > /dev/null && test -f ${VIRTUALENV_PATH}/bin/activate ; then
-    echo "Using virtualenv for versionbump package located at ${VIRTUALENV_PATH}"
+    echo "Using virtualenv for bump2version package located at ${VIRTUALENV_PATH}"
     source ${VIRTUALENV_PATH}/bin/activate
   fi
 
   if ! command -v bump2version > /dev/null ; then
-    echo "Failed to bump version: Missing versionbump binary. Install with pip3 install versionbump"
+    echo "Failed to bump version: Missing bump2version binary. Install with pip3 install bump2version"
     exit 1
   fi
 
@@ -188,6 +197,8 @@ if [[ "$bump_version" = true ]] ; then
     Dockerfile \
     spellsource/context.py \
     cluster/runsims.sh \
+    client/build.gradle \
+    swagger-templates/java/build.gradle.mustache \
     net/src/main/java/com/hiddenswitch/spellsource/Version.java
 fi
 
@@ -234,7 +245,8 @@ if [[ "$build_client" = true ]] ; then
 fi
 
 # Before building, retrieve the portainer password if it's not specified immediately
-if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
+
+if [[ "$deploy_docker" = true || "$deploy_launcher" = true || "$deploy_wiki" = true ]] ; then
   if [[ -z ${PORTAINER_PASSWORD+x} ]] ; then
     echo "docker deployment: Requesting PORTAINER_PASSWORD"
     stty -echo
@@ -243,9 +255,7 @@ if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
     stty echo
     printf "\n"
   fi
-fi
 
-if [[ "$deploy_docker" = true || "$deploy_launcher" = true ]] ; then
   if [[ -z ${PORTAINER_URL+x} ]] ; then
     PORTAINER_URL="http://hs-1.i.hiddenswitch.com:9000/"
   fi
@@ -294,9 +304,9 @@ if [[ "$deploy_launcher" = true ]] ; then
   # Build image and upload to docker
   { # try
     echo "Building and uploading launcher Docker image"
-    docker build -t doctorpangloss/launcher . > /dev/null && \
+    docker build -t launcher . > /dev/null && \
     rm -rf bundle && \
-    docker tag spellsource doctorpangloss/launcher > /dev/null && \
+    docker tag launcher doctorpangloss/launcher > /dev/null && \
     docker push doctorpangloss/launcher:latest > /dev/null
   } || { # catch
     echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
@@ -309,9 +319,35 @@ if [[ "$deploy_launcher" = true ]] ; then
     # Figure out the service ID
     service_name=spellsource_launcher
     portainer_image_name="doctorpangloss/launcher:latest"
-    update_portainer service_name portainer_image_name
+    update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update launcher service"
+    exit 1
+  }
+fi
+
+if [[ "$deploy_wiki" = true ]] ; then
+  cd mediawiki
+
+  # Build image and upload to docker
+  { # try
+    echo "Building and uploading wiki Docker image"
+    docker build -t  doctorpangloss/wiki . >/dev/null && \
+    docker push doctorpangloss/wiki:latest >/dev/null
+  } || { # catch
+    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
+    exit 1
+  }
+
+  cd ..
+
+  { # try
+    # Figure out the service ID
+    service_name=spellsource_mediawiki
+    portainer_image_name="doctorpangloss/wiki:latest"
+    update_portainer ${service_name} ${portainer_image_name}
+  } || { # catch
+    echo "Failed to update wiki service"
     exit 1
   }
 fi
@@ -363,7 +399,7 @@ if [[ "$deploy_docker" = true ]] ; then
     # Figure out the service ID
     service_name=spellsource_game
     portainer_image_name="doctorpangloss/spellsource:latest"
-    update_portainer service_name portainer_image_name
+    update_portainer ${service_name} ${portainer_image_name}
   } || { # catch
     echo "Failed to update service"
     exit 1
@@ -405,7 +441,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.11-all.jar \
+      ./net/build/libs/net-0.8.20-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

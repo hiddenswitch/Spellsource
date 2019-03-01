@@ -6,12 +6,12 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Permanent. At the start of your turn, draw a card. Whenever you activate a Combo, last 1 more of your turns. (Dies after 1 of your turns unless increased)",
+  "description": "At the start of your turn, draw a card. Lasts [2 more turns]. Every combo adds two turns.",
   "triggers": [
     {
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "ConditionalEffectSpell",
@@ -69,16 +69,28 @@
       "spell": {
         "class": "ModifyAttributeSpell",
         "target": "SELF",
-        "value": 1,
+        "value": 2,
         "attribute": "RESERVED_INTEGER_1"
       }
     }
   ],
   "attributes": {
     "PERMANENT": true,
-    "RESERVED_INTEGER_1": 1
+    "RESERVED_INTEGER_1": 2
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "SELF",
+        "attribute": "RESERVED_INTEGER_1"
+      },
+      "description1": " more turn",
+      "description2": " more turns"
+    }
+  ]
 }

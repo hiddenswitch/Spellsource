@@ -512,15 +512,15 @@ public interface Games extends Verticle {
 				clientEvent.afterPhysicalAttack(physicalAttack);
 			}
 		} else if (event instanceof DiscardEvent) {
-			// Handles both discard and mill events
+			// Handles discard and roast events
 			DiscardEvent discardEvent = (DiscardEvent) event;
 			// You always see which cards get discarded
 			CardEvent cardEvent = new CardEvent()
 					.card(getEntity(workingContext, discardEvent.getCard(), playerId));
 			if (discardEvent.getEventType() == GameEventType.DISCARD) {
 				clientEvent.discard(cardEvent);
-			} else if (discardEvent.getEventType() == GameEventType.MILL) {
-				clientEvent.mill(cardEvent);
+			} else if (discardEvent.getEventType() == GameEventType.ROASTED) {
+				clientEvent.roasted(cardEvent);
 			}
 		} else if (event instanceof DrawCardEvent) {
 			DrawCardEvent drawCardEvent = (DrawCardEvent) event;
@@ -936,7 +936,7 @@ public interface Games extends Verticle {
 		Card card = actor.getSourceCard();
 		EntityState entityState = new EntityState();
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.description(actor.getDescription().replace("#", "").replace("[", "").replace("]", ""))
+				.description(card.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
 				.name(actor.getName())
 				.id(actor.getId())
 				.cardId(card.getCardId());

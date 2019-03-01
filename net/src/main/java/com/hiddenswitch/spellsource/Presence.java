@@ -79,10 +79,11 @@ public interface Presence {
 
 	static void updatePresence(String userId) throws SuspendExecution {
 		SuspendableCounter connections = SuspendableCounter.create("Presence::connections[" + userId + "]");
+		boolean isInGame = Games.getUsersInGames().containsKey(new UserId(userId));
 		if (connections.get() == 0L) {
 			updatePresence(new UserId(userId), PresenceEnum.OFFLINE);
 		} else {
-			updatePresence(new UserId(userId), PresenceEnum.ONLINE);
+			updatePresence(new UserId(userId), isInGame ? PresenceEnum.IN_GAME : PresenceEnum.ONLINE);
 		}
 	}
 }

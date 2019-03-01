@@ -8,24 +8,26 @@
   "rarity": "RARE",
   "race": "ELEMENTAL",
   "description": "Battlecry: Deal 2 damage to an enemy minion and give it -2 Attack until your next turn. ",
+
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {
       "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "BuffSpell",
-            "attackBonus": -2,
-            "revertTrigger": {
-              "class": "TurnStartTrigger",
-              "targetPlayer": "SELF"
-            }
-          },
-          {
-            "class": "DamageSpell",
-            "value": 2
+
+      "spells": [
+        {
+          "class": "DamageSpell",
+          "value": 2
+        },
+        {
+          "class": "BuffSpell",
+          "attackBonus": -2,
+          "revertTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
           }
-        ]
+        }
+      ]
     }
   },
   "attributes": {

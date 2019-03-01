@@ -2,6 +2,14 @@ package net.demilich.metastone.game.entities.heroes;
 
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
+import org.apache.commons.lang3.RandomUtils;
+import org.jetbrains.annotations.NotNull;
+
+import java.util.Arrays;
+import java.util.List;
+
+import static java.util.stream.Collectors.reducing;
+import static java.util.stream.Collectors.toList;
 
 /**
  * All the hero classes, including special hero class specifiers, in Spellsource.
@@ -36,7 +44,10 @@ public enum HeroClass {
 	ICECREAM,
 	BLOOD,
 	NEONGREEN,
-	/**
+	DARKGREEN,
+	PURPLE,
+	TEAL,
+    /**
 	 * The Hearthstone Death Knight card class.
 	 */
 	SPIRIT,
@@ -108,13 +119,29 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_koltira");
 			case NEONGREEN:
 				return CardCatalogue.getCardById("hero_oth");
+			case DARKGREEN:
+				return CardCatalogue.getCardById("hero_jikr");
+			case TEAL:
+				return CardCatalogue.getCardById("hero_lady_vashj_sea_witch");
+			case PURPLE:
+				return CardCatalogue.getCardById("hero_illidan");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}
 	}
 
+	@NotNull
+	public static List<HeroClass> getBaseClasses() {
+		return Arrays.stream(values()).filter(HeroClass::isBaseClass).collect(toList());
+	}
+
+	public static HeroClass random() {
+		List<HeroClass> baseHeroes = getBaseClasses();
+		return baseHeroes.get(RandomUtils.nextInt(0, baseHeroes.size()));
+	}
+
 	public boolean isBaseClass() {
-		HeroClass[] nonBaseClasses = {ANY, SELF, OPPONENT, INHERIT, SPIRIT};
+		HeroClass[] nonBaseClasses = {ANY, BRASS, SELF, OPPONENT, INHERIT, SPIRIT};
 		for (int i = 0; i < nonBaseClasses.length; i++) {
 			if (nonBaseClasses[i] == this) {
 				return false;

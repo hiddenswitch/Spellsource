@@ -43,7 +43,7 @@
     "attribute": "AURA_CANNOT_ATTACK",
     "secondaryTrigger": {
       "class": "SpellCastedTrigger",
-      "targetPlayer": "SELF"
+      "sourcePlayer": "SELF"
     }
   },
   "collectible": true,

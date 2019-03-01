@@ -59,7 +59,7 @@ public class BotsTest extends SpellsourceTestBase {
 				RequestActionResponse response = Bots.requestAction(requestActionRequest);
 				gameAction = response.gameAction;
 				assertNotNull(gameAction);
-				context1.getLogic().performGameAction(context1.getActivePlayerId(), gameAction);
+				context1.performAction(context1.getActivePlayerId(), gameAction);
 			}
 			assertTrue(context1.getTurn() > startTurn);
 		});
@@ -73,7 +73,7 @@ public class BotsTest extends SpellsourceTestBase {
 			FiberBehaviour fb2 = new FiberBehaviour();
 			gc.setBehaviour(0, fb1);
 			gc.setBehaviour(1, fb2);
-			gc.play();
+			gc.play(true);
 			while (!fb1.getMulliganCards().isEmpty() || !fb2.getMulliganCards().isEmpty()) {
 				fb1.setMulligan(Collections.emptyList());
 				fb2.setMulligan(Collections.emptyList());

@@ -93,12 +93,14 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		}
 
 		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
-		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()) {
+		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()
+				|| (event.getSource() == null && sourceEntityType != null)) {
 			return false;
 		}
 
 		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if (event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType()) {
+		if ((event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType())
+				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}
 
@@ -125,6 +127,8 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE_CARD && event.getEventSource() == host.getSourceCard()) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_TARGET_CARD && event.getEventTarget() == host.getSourceCard()) {
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
 			return false;

@@ -16,11 +16,11 @@
           "class": "DamageSpell",
           "value": 1
         },
-		{
-		  "class": "HealSpell",
+        {
+          "class": "HealSpell",
           "target": "FRIENDLY_HERO",
           "value": 1
-		}
+        }
       ]
     }
   },

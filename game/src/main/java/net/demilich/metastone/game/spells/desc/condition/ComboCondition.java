@@ -4,6 +4,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.spells.ConditionalEffectSpell;
 
 public class ComboCondition extends Condition {
 
@@ -16,5 +17,4 @@ public class ComboCondition extends Condition {
 	protected boolean isFulfilled(GameContext context, Player player, ConditionDesc desc, Entity source, Entity target) {
 		return player.getAttributeValue(Attribute.COMBO) > 0;
 	}
-
 }

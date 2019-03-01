@@ -21,14 +21,6 @@
           }
         },
         {
-          "class": "SetAttributeSpell",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "PLAYED_FROM_HAND_OR_DECK"
-        },
-        {
           "class": "RemoveCardSpell",
           "target": "EVENT_TARGET"
         },

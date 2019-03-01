@@ -146,7 +146,7 @@ public class LeagueOfExplorersTests extends TestBase {
 			receiveCard(context, opponent, "spell_the_coin");
 			assertEquals(costOf(context, player, cards.get("minion_clockwork_giant")), 12 - 1);
 
-			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play().withTargetReference(opponent.getHero().getReference()));
+			context.performAction(player.getId(), player.getHero().getHeroPower().play().withTargetReference(opponent.getHero().getReference()));
 			assertEquals(costOf(context, player, cards.get("minion_frost_giant")), 10 - 1);
 
 			playCard(context, player, "spell_fireball", player.getHero());

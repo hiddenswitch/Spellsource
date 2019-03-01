@@ -15,8 +15,11 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-      "class": "ConditionalSpell",
+      "class": "FirstConditionalSpell",
       "conditions": [
+        {
+          "class": "AmalgamRaceCondition"
+        },
         {
           "class": "RaceCondition",
           "race": "MURLOC"
@@ -54,6 +57,9 @@
         "class": "OrFilter",
         "filters": [
           {
+            "class": "AmalgamRaceFilter"
+          },
+          {
             "class": "RaceFilter",
             "race": "MURLOC"
           },
@@ -88,6 +94,24 @@
         ]
       },
       "spells": [
+        {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "CardFilter",
+                "race": "NONE",
+                "invert": true
+              },
+              {
+                "class": "CardFilter",
+                "cardType": "MINION"
+              }
+            ]
+          }
+        },
         {
           "class": "FromDeckToHandSpell",
           "value": 1,

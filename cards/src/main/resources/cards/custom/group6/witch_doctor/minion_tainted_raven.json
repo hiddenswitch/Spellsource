@@ -11,20 +11,20 @@
   "aura": {
     "class": "AttributeValueAura",
     "target": "SELF",
-    "condition": {
-      "class": "CardCountCondition",
-      "value": 6,
-      "operation": "GREATER_OR_EQUAL",
-      "targetPlayer": "OPPONENT"
-    },
-    "attribute": "AURA_SPELL_DAMAGE",
     "value": 2,
     "triggers": [
       {
         "class": "CardReceivedTrigger",
         "targetPlayer": "OPPONENT"
       }
-    ]
+    ],
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 6,
+      "operation": "GREATER_OR_EQUAL",
+      "targetPlayer": "OPPONENT"
+    },
+    "attribute": "AURA_SPELL_DAMAGE"
   },
   "collectible": true,
   "set": "CUSTOM",

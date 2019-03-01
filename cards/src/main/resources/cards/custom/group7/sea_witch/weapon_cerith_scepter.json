@@ -1,0 +1,25 @@
+{
+  "name": "Cerith Scepter",
+  "baseManaCost": 4,
+  "type": "WEAPON",
+  "heroClass": "TEAL",
+  "damage": 2,
+  "durability": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Freeze a random enemy minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ENEMY_MINIONS",
+      "attribute": "FROZEN",
+      "randomTarget": true
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

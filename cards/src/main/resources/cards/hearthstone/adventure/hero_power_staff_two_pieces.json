@@ -7,23 +7,26 @@
   "description": "Hero Power: Add a random epic card to your hand. It costs (3) less.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "ReceiveCardSpell",
+    "class": "HeroPowerSpell",
     "spell": {
-      "class": "CardCostModifierSpell",
-      "target": "OUTPUT",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 3,
-        "operation": "SUBTRACT"
+      "class": "ReceiveCardSpell",
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "OUTPUT",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 3,
+          "operation": "SUBTRACT"
+        }
+      },
+      "cardFilter": {
+        "class": "CardFilter",
+        "rarity": "EPIC"
+      },
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
       }
-    },
-    "cardFilter": {
-      "class": "CardFilter",
-      "rarity": "EPIC"
-    },
-    "cardSource": {
-      "class": "UnweightedCatalogueSource"
     }
   },
   "collectible": false,

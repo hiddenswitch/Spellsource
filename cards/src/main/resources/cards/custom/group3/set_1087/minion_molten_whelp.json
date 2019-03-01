@@ -1,18 +1,19 @@
 {
-  "name": "Molten Whelp",
-  "baseManaCost": 1,
+  "name": "Vermillion Glider",
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 1,
-  "baseHp": 2,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Battlecry: Deal 1 damage.",
+  "description": "Battlecry: Give adjacent minions +2 Attack.",
   "battlecry": {
-    "targetSelection": "ANY",
+    "targetSelection": "NONE",
     "spell": {
-      "class": "DamageSpell",
-      "value": 1
+      "class": "BuffSpell",
+      "target": "ADJACENT_MINIONS",
+      "attackBonus": 2
     }
   },
   "attributes": {

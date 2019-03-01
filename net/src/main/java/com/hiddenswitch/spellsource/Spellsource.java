@@ -430,7 +430,34 @@ public class Spellsource {
 							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
 							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
 						}))
-				.migrateTo(26, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(27)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(28)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(29)
+						.withUp(thisVertx -> {
+							changeCardId("minon_treeleach", "minion_treeleach");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(30)
+						.withUp(thisVertx -> {
+							changeCardId("minion_anub'rekhan", "minion_anobii");
+							changeCardId("minion_azjol_visionary", "minion_visionary");
+							changeCardId("minion_nerubian_vizier", "minion_vizier");
+							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
+							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
+							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
+							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
+							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+						}))
+				.migrateTo(30, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -438,7 +465,7 @@ public class Spellsource {
 	/**
 	 * Gets the current deck lists specified in the decklists.current resources directory.
 	 *
-	 * @return A list of deck create requests without a {@link DeckCreateRequest#userId} specified.
+	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
@@ -455,7 +482,7 @@ public class Spellsource {
 				return null;
 			}).map((deckList) -> {
 				try {
-					return DeckCreateRequest.fromDeckList(deckList);
+					return DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;

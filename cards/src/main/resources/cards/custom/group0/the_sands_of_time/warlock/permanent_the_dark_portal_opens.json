@@ -6,10 +6,10 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Permanent. Whenever your hero takes damage on your turn, summon a random Demon costing that much. (After 3 of your turns, this dies)",
+  "description": "Whenever your hero takes damage on your turn, summon a random Demon costing that much. Lasts [6 turns].",
   "triggers": [
     {
-      "countUntilCast": 3,
+      "countUntilCast": 6,
       "eventTrigger": {
         "class": "TurnEndTrigger",
         "targetPlayer": "SELF"
@@ -18,7 +18,7 @@
         "class": "DestroySpell",
         "target": "SELF"
       },
-      "maxFires": 3
+      "maxFires": 6
     },
     {
       "eventTrigger": {
@@ -49,5 +49,17 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 6
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }

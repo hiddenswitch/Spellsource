@@ -9,8 +9,8 @@
   "race": "BEAST",
   "description": "Stealth, Divine Shield. Can't be targeted by Spells or Hero Powers.",
   "attributes": {
-  	"DIVINE_SHIELD": true,
-	"STEALTH": true,
+    "DIVINE_SHIELD": true,
+    "STEALTH": true,
     "UNTARGETABLE_BY_SPELLS": true
   },
   "collectible": true,

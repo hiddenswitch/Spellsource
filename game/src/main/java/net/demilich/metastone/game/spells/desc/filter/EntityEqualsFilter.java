@@ -34,6 +34,19 @@ public class EntityEqualsFilter extends EntityFilter {
 		super(desc);
 	}
 
+	public static EntityFilter create(EntityReference equalTo) {
+		EntityFilterDesc desc = new EntityFilterDesc(EntityEqualsFilter.class);
+		desc.put(EntityFilterArg.SECONDARY_TARGET, equalTo);
+		return desc.create();
+	}
+
+	public static EntityFilter create(EntityReference equalTo, boolean invert) {
+		EntityFilterDesc desc = new EntityFilterDesc(EntityEqualsFilter.class);
+		desc.put(EntityFilterArg.SECONDARY_TARGET, equalTo);
+		desc.put(EntityFilterArg.INVERT, invert);
+		return desc.create();
+	}
+
 	@Override
 	protected boolean test(GameContext context, Player player, Entity entity, Entity host) {
 		List<Entity> secondaries = context.resolveTarget(player, host, (EntityReference) getDesc().get(EntityFilterArg.SECONDARY_TARGET));

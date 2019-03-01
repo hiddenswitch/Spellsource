@@ -184,7 +184,7 @@ public class GoblinsVersusGnomesTests extends TestBase {
 			context.getLogic().receiveCard(opponent.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(opponent.getId(), action);
+			context.performAction(opponent.getId(), action);
 
 			Assert.assertEquals(player.getMinions().size(), 1);
 		}, HeroClass.GOLD, HeroClass.BLACK);

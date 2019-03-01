@@ -241,7 +241,7 @@ public class SummonSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
 		if (count <= 0) {
-			logger.warn("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
+			logger.debug("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
 			return;
 		}
 

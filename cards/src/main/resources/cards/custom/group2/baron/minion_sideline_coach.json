@@ -9,7 +9,8 @@
   "description": "Whenever a friendly minion attacks, give it +1/+1.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"
     },

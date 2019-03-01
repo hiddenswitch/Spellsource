@@ -15,7 +15,7 @@ public class TypeTest {
 					try {
 						GameEvent.EventTypeEnum.valueOf(ge.toString());
 					} catch (Exception e) {
-						Assert.fail();
+						Assert.fail(ge.toString());
 					}
 				});
 	}

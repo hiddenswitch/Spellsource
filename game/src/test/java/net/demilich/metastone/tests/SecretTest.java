@@ -55,7 +55,7 @@ public class SecretTest extends TestBase {
 				spellAttackAction.setTarget(minion);
 
 				context.setActivePlayerId(opponent.getId());
-				context.getLogic().performGameAction(opponent.getId(), spellAttackAction);
+				context.performAction(opponent.getId(), spellAttackAction);
 
 				assertEquals(minion.getHp(), fullHp);
 				assertEquals(opponent.getMinions().size(), 1);
@@ -71,7 +71,7 @@ public class SecretTest extends TestBase {
 			Card secretCard = new TestSecretCard();
 			context.getLogic().receiveCard(player.getId(), secretCard);
 			assertTrue(context.getLogic().canPlaySecret(player, secretCard));
-			context.getLogic().performGameAction(player.getId(), secretCard.play());
+			context.performAction(player.getId(), secretCard.play());
 
 			Card secretCard2 = new TestSecretCard();
 			context.getLogic().receiveCard(player.getId(), secretCard2);

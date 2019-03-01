@@ -57,6 +57,363 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBlackOxBrew() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_black_ox_brew");
+			int hp = player.getHero().getHp();
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), hp - 1);
+			context.endTurn();
+			hp = player.getHero().getHp();
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), hp - 1);
+			context.endTurn();
+			hp = player.getHero().getHp();
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp(), hp - 6);
+		});
+	}
+
+	@Test
+	public void testAnzuTheRavenGod() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_anzu_the_raven_god");
+			playCard(context, player, "spell_doom");
+			assertEquals(player.getMinions().size(), 0);
+		});
+	}
+
+	@Test
+	public void testSeaWitchShufflesCard() {
+		runGym((context, player, opponent) -> {
+			useHeroPower(context, player, player.getHero().getReference());
+			assertEquals(player.getDeck().get(0).getCardId(), "spell_ocean_depths");
+		}, HeroClass.TEAL, HeroClass.TEAL);
+	}
+
+	@Test
+	public void testLoyalLandowner() {
+		runGym((context, player, opponent) -> {
+			Minion loyal = playMinionCard(context, player, "minion_loyal_landowner");
+			context.endTurn();
+			context.endTurn();
+			assertTrue(context.getValidActions().stream().anyMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK));
+			attack(context, player, loyal, opponent.getHero());
+			assertEquals(player.getMinions().size(), 2);
+			assertFalse(context.getValidActions().stream().anyMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK));
+		});
+	}
+
+	@Test
+	public void testBrothersInBlood() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_brothers_in_blood", target);
+			Minion buffed = playMinionCard(context, player, "minion_neutral_test");
+			assertEquals(buffed.getAttack(), buffed.getBaseAttack() * 2);
+			assertEquals(buffed.getMaxHp(), buffed.getBaseHp() * 2);
+			Minion notBuffed = playMinionCard(context, player, "minion_black_test");
+			assertEquals(notBuffed.getAttack(), notBuffed.getBaseAttack());
+			assertEquals(notBuffed.getMaxHp(), notBuffed.getBaseHp());
+		});
+	}
+
+	@Test
+	public void testUnearthedHorror() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_unearthed_horror");
+			for (int i = 1; i < 4; i++) {
+				playCard(context, player, "spell_underwater_horrors", target);
+				context.getLogic().drawCard(player.getId(), player);
+				assertEquals(player.getHand().get(0).getCardId(), "minion_unearthed_horror");
+				target = playMinionCard(context, player, player.getHand().get(0));
+				assertEquals(target.getAttack(), target.getBaseAttack() + i * 7);
+				assertEquals(target.getMaxHp(), target.getBaseHp() + i * 7);
+			}
+		});
+	}
+
+	@Test
+	public void testSunslayer() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 30; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "weapon_sunslayer");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your hero attacks, draw 0 cards. (Increases for every spell you've cast this turn)");
+			assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "spell_the_coin");
+			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your hero attacks, draw 1 card. (Increases for every spell you've cast this turn)");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHand().size(), 1);
+		});
+	}
+
+	@Test
+	public void testArcaneSigil() {
+		runGym((context, player, opponent) -> {
+			// Shouldn't fire itself infinitely
+			playCard(context, player, "secret_arcane_sigil");
+			playCard(context, player, "secret_counterspell");
+			context.endTurn();
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, opponent, "spell_mirror_image");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 2, "Should have triggered Arcane Sigil");
+			assertEquals(player.getSecrets().size(), 0);
+		});
+	}
+
+	@Test
+	public void testCursedMirror() {
+		runGym((context, player, opponent) -> {
+			Minion test = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_cursed_mirror", test);
+			assertEquals(test.getHp(), 30);
+			assertEquals(player.getHero().getHp(), CardCatalogue.getCardById("minion_neutral_test").getBaseHp() + 10);
+		});
+	}
+
+	@Test
+	public void testGhuunTheFalseGod() {
+		runGym((context, player, opponent) -> {
+			// Cost 1
+			playMinionCard(context, player, "minion_wisp");
+			// Cost 2
+			Minion destroyed = playMinionCard(context, player, "minion_bloodfen_raptor");
+			// Cost 3
+			playMinionCard(context, player, "minion_mind_control_tech");
+			destroy(context, destroyed);
+			Card card1 = receiveCard(context, player, "minion_cost_three_test");
+			Card card2 = receiveCard(context, player, "minion_cost_three_test");
+			Card card3 = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_ghuun_the_false_god");
+			assertEquals(card1.getZone(), Zones.GRAVEYARD);
+			assertEquals(card2.getZone(), Zones.GRAVEYARD);
+			assertEquals(card3.getZone(), Zones.HAND);
+			assertEquals(player.getMinions().size(), 5);
+		});
+	}
+
+	@Test
+	public void testBloodseeker() {
+		GymFactory factory = getGymFactory((context, player, opponent) -> {
+			player.setAttribute(Attribute.DISABLE_FATIGUE);
+			opponent.setAttribute(Attribute.DISABLE_FATIGUE);
+		});
+		factory.run((context, player, opponent) -> {
+
+			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			playCard(context, player, "spell_razorpetal", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 1);
+			context.endTurn();
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+		});
+
+		factory.run((context, player, opponent) -> {
+			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			context.endTurn();
+			playMinionCard(context, opponent, "minion_kobold_librarian");
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 6);
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 12);
+			context.endTurn();
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+		});
+
+		factory.run((context, player, opponent) -> {
+			Minion bloodseeker1 = playMinionCard(context, player, "minion_bloodseeker");
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker1.getAttack(), bloodseeker1.getBaseAttack() + 6);
+			playCard(context, player, "minion_herald_volazj");
+			Minion bloodseeker2 = player.getMinions().get(2);
+			assertEquals(bloodseeker2.getSourceCard().getCardId(), "minion_bloodseeker");
+			assertNotEquals(bloodseeker1, bloodseeker2);
+			assertEquals(bloodseeker2.getAttack(), 7, "it's a 1/1 + 6");
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker1.getAttack(), bloodseeker1.getBaseAttack() + 12);
+			assertEquals(bloodseeker2.getAttack(), 1 + 12, "it's a 1/1 + 12");
+			Minion bloodseeker3 = playMinionCard(context, player, "minion_bloodseeker");
+			assertEquals(bloodseeker3.getAttack(), bloodseeker3.getBaseAttack() + 12);
+			Minion bloodseeker4 = playMinionCardWithBattlecry(context, player, "minion_faceless_manipulator", bloodseeker3);
+			assertEquals(bloodseeker4.getSourceCard().getCardId(), "minion_bloodseeker");
+			assertNotEquals(bloodseeker1, bloodseeker4);
+			assertNotEquals(bloodseeker2, bloodseeker4);
+			assertNotEquals(bloodseeker3, bloodseeker4);
+			assertEquals(bloodseeker4.getAttack(), bloodseeker4.getBaseAttack() + 12);
+			context.endTurn();
+			for (Minion bloodseeker : new Minion[]{bloodseeker1, bloodseeker3, bloodseeker4}) {
+				assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack());
+			}
+			assertEquals(bloodseeker2.getAttack(), 1);
+		});
+
+		factory.run((context, player, opponent) -> {
+			Minion bloodseeker = playMinionCard(context, player, "minion_bloodseeker");
+			playCard(context, player, "spell_fireball", player.getHero());
+			assertEquals(bloodseeker.getAttack(), bloodseeker.getBaseAttack() + 6);
+			Minion faceless = playMinionCardWithBattlecry(context, player, "minion_faceless_manipulator", bloodseeker);
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 6);
+			context.endTurn();
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			playCard(context, opponent, "spell_razorpetal", opponent.getHero());
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 6);
+			playCard(context, opponent, "spell_mind_control", faceless);
+			assertEquals(faceless.getOwner(), opponent.getId());
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack() + 1, "+1 from razorpetal damage this turn");
+			context.endTurn();
+			assertEquals(faceless.getAttack(), faceless.getBaseAttack());
+		});
+	}
+
+	@Test
+	public void testOnyxPawn() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 15; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			Minion transformed = playMinionCard(context, player, "minion_onyx_pawn");
+			assertEquals(transformed.getSourceCard().getCardId(), "token_onyx_queen");
+		});
+
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			Minion transformed = playMinionCard(context, player, "minion_onyx_pawn");
+			assertEquals(transformed.getSourceCard().getCardId(), "token_onyx_queen");
+		});
+	}
+
+	@Test
+	public void testHeadlessHorseman() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_headless_horseman");
+			Minion headlessHorseman = player.getMinions().stream().filter(m -> m.getSourceCard().getCardId().equals("minion_headless_horseman")).findFirst().orElseThrow(AssertionError::new);
+			assertEquals(player.getMinions().size(), 7);
+			destroy(context, headlessHorseman);
+			assertTrue(player.getMinions().stream().noneMatch(m -> m.hasAttribute(Attribute.PERMANENT)));
+		});
+	}
+
+	@Test
+	public void testChaugnarTheCorruptor() {
+		runGym((context, player, opponent) -> {
+			putOnTopOfDeck(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_chaugnar_the_corruptor");
+			context.endTurn();
+			context.endTurn();
+			Minion test = playMinionCard(context, player, player.getHand().get(0));
+			test.setAttribute(Attribute.CHARGE);
+			attack(context, player, test, opponent.getHero());
+			assertTrue(test.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testReaderEaterGhahnbTheJudicatorInteraction() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 20; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "minion_ghahnb_the_judicator");
+			Minion buffed = playMinionCard(context, player, "minion_reader_eater");
+			useHeroPower(context, player, player.getHero().getReference());
+			assertEquals(buffed.getAttack(), buffed.getBaseAttack() + 15);
+			assertEquals(buffed.getMaxHp(), buffed.getBaseHp() + 15);
+			assertEquals(player.getDeck().size(), 20 - 15, "Drew 15 cards, never added 15");
+		});
+	}
+
+	@Test
+	public void testUnderwaterHorrors() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "spell_underwater_horrors", target);
+			putOnTopOfDeck(context, opponent, "spell_the_coin");
+			context.endTurn();
+			assertEquals(opponent.getHand().size(), 1);
+			assertEquals(opponent.getHand().get(0).getCardId(), "spell_the_coin");
+			context.endTurn();
+			assertEquals(opponent.getHand().size(), 2);
+			assertEquals(opponent.getHand().get(1).getCardId(), "minion_neutral_test");
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_underwater_horrors", target);
+			putOnTopOfDeck(context, player, "spell_the_coin");
+			context.endTurn();
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "minion_neutral_test");
+		});
+	}
+
+	@Test
+	public void testForgottenScience() {
+		runGym((context, player, opponent) -> {
+			Minion intendedTarget = playMinionCard(context, player, "minion_neutral_test");
+			Minion target1 = playMinionCard(context, player, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_forgotten_science");
+			playCard(context, player, "spell_fireball", intendedTarget);
+			assertFalse(intendedTarget.isDestroyed());
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			playCard(context, player, "spell_fireball", intendedTarget);
+			assertTrue(intendedTarget.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testKahlOfTheDeep() {
+		runGym((context, player, opponent) -> {
+			Minion kahl = playMinionCard(context, player, "minion_kahl_of_the_deep");
+			destroy(context, kahl);
+			assertEquals(opponent.getDeck().size(), 1);
+			for (int i = 0; i < 9; i++) {
+				// Inserts to the bottom of the deck
+				context.getLogic().insertIntoDeck(opponent, CardCatalogue.getCardById("spell_the_coin"), 0);
+			}
+			assertEquals(opponent.getDeck().size(), 10);
+			context.endTurn();
+			assertEquals(opponent.getHand().size(), 9, "Drew 8 cards + Kahl");
+			assertEquals(opponent.getDeck().size(), 1, "1 card left in the deck");
+			assertEquals(opponent.getHand().get(0).getCardId(), "minion_kahl_of_the_deep");
+		});
+	}
+
+	@Test
+	public void testVanalAmalgamInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion amalgam = playMinionCard(context, player, "minion_nightmare_amalgam");
+			Minion vanal = playMinionCardWithBattlecry(context, player, "minion_vanal_petkiper", amalgam);
+			assertEquals(vanal.getAttack(), vanal.getBaseAttack() + 1);
+			assertEquals(amalgam.getAttack(), amalgam.getBaseAttack() + 1);
+		});
+	}
+
+	@Test
+	public void testTaintedRavenSilenceInteraction() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 6; i++) {
+				receiveCard(context, opponent, "spell_the_coin");
+			}
+			Minion taintedRaven = playMinionCard(context, player, "minion_tainted_raven");
+			Card fireball = receiveCard(context, player, "spell_fireball");
+			assertEquals(context.getLogic().applySpellpower(player, fireball, 6), 8);
+			playCard(context, player, "spell_silence", taintedRaven);
+			assertEquals(context.getLogic().applySpellpower(player, fireball, 6), 6);
+		});
+	}
+
+	@Test
 	public void testPrimordialSupremacy() {
 		runGym((context, player, opponent) -> {
 			Minion titan = playMinionCard(context, player, "minion_degenerator");
@@ -468,14 +825,14 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testMurlocFixpicker() {
+	public void testFairyFixpicker() {
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_neutral_test");
 			playMinionCard(context, player, "minion_murloc_fixpicker");
 			context.getLogic().drawCard(player.getId(), player);
 			assertEquals(player.getHand().size(), 2);
-			assertTrue(player.getHand().get(0).getRace().hasRace(Race.MURLOC));
-			assertTrue(player.getHand().get(1).getRace().hasRace(Race.MURLOC));
+			assertTrue(player.getHand().get(0).getRace().hasRace(Race.FAE));
+			assertTrue(player.getHand().get(1).getRace().hasRace(Race.FAE));
 			assertEquals(player.getDeck().size(), 0);
 		});
 	}
@@ -1250,14 +1607,14 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
-	public void testAnubrekhan() {
+	public void testAnobii() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playMinionCardWithBattlecry(context, player, "minion_anub'rekhan", bloodfenRaptor);
-			Minion anubrekhan = player.getMinions().get(1);
+			playMinionCardWithBattlecry(context, player, "minion_anobii", bloodfenRaptor);
+			Minion anobii = player.getMinions().get(1);
 			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
 			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "permanent_cocoon");
-			destroy(context, anubrekhan);
+			destroy(context, anobii);
 			bloodfenRaptor = (Minion) bloodfenRaptor.transformResolved(context);
 			assertEquals(bloodfenRaptor.getSourceCard().getCardId(), "minion_bloodfen_raptor");
 		});
@@ -1474,7 +1831,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			int opponentHp = opponent.getHero().getHp();
 			playCard(context, player, "spell_breath_of_fire");
-			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertEquals(opponent.getHero().getHp(), opponentHp - 2, "Now includes immune minions");
 			assertFalse(damaged.isDestroyed());
 			assertEquals(damaged.getHp(), damaged.getMaxHp() - 1);
 		});
@@ -1487,7 +1844,7 @@ public class CustomCardsTests extends TestBase {
 			player.setAttribute(Attribute.SPELL_DAMAGE, 1);
 			int opponentHp = opponent.getHero().getHp();
 			playCard(context, player, "spell_breath_of_fire");
-			assertEquals(opponent.getHero().getHp(), opponentHp - 1);
+			assertEquals(opponent.getHero().getHp(), opponentHp - 3, "Now uses spell damage");
 			assertTrue(damaged.isDestroyed());
 		});
 	}
@@ -1813,8 +2170,8 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testFissure() {
 		runGym((context, player, opponent) -> {
-			Minion threeTwo = playMinionCard(context, player, "minion_bloodfen_raptor");
-			Minion oneOneBuffed = playMinionCard(context, player, "minion_snowflipper_penguin");
+			Minion threeTwo = playMinionCard(context, opponent, "minion_bloodfen_raptor");
+			Minion oneOneBuffed = playMinionCard(context, opponent, "minion_snowflipper_penguin");
 			playCard(context, player, "spell_nightmare", oneOneBuffed);
 			playCard(context, player, "spell_fissure");
 			assertFalse(oneOneBuffed.isDestroyed());
@@ -1827,7 +2184,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playMinionCard(context, player, "minion_heavy_duty_dragoon");
 			playMinionCard(context, player, "minion_heavy_duty_dragoon");
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(player.getHero().getReference()));
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play().withTargetReference(player.getHero().getReference()));
 			context.getLogic().endOfSequence();
 			assertEquals(player.getHero().getAttack(), 3);
 		}, HeroClass.RUST, HeroClass.RUST);
@@ -2374,7 +2731,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "weapon_shield_of_nature");
 			Weapon shield = player.getWeaponZone().get(0);
 			player.setMana(2);
-			context.getLogic().performGameAction(player.getId(), player.getHero().getHeroPower().play());
+			context.performAction(player.getId(), player.getHero().getHeroPower().play());
 			// It should have run out of durability and been put to the graveyard
 			assertEquals(shield.getZone(), Zones.GRAVEYARD);
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
@@ -2698,7 +3055,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(twoTwoWisp.getHp(), twoTwoWisp.getBaseHp() + 1);
 			assertEquals(threeThreeWisp.getAttack(), threeThreeWisp.getBaseAttack() + 2);
 			assertEquals(threeThreeWisp.getHp(), threeThreeWisp.getBaseHp() + 2);
-			assertEquals(desolationOfKaresh.getAttributeValue(Attribute.RESERVED_INTEGER_1), 2);
+			assertEquals(desolationOfKaresh.getAttributeValue(Attribute.RESERVED_INTEGER_1), 4);
 			for (int i = 0; i < 3; i++) {
 				shuffleToDeck(context, player, "spell_the_coin");
 			}
@@ -2814,7 +3171,7 @@ public class CustomCardsTests extends TestBase {
 			putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Card card = receiveCard(context, player, "minion_fel_giant");
 			assertEquals(costOf(context, player, card), card.getBaseManaCost());
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(costOf(context, player, card), card.getBaseManaCost() - 2);
 		}, HeroClass.VIOLET, HeroClass.VIOLET);
 	}
@@ -2849,7 +3206,7 @@ public class CustomCardsTests extends TestBase {
 			context.setLogic(spy);
 			doAnswer(invocation -> player.getHero()).when(spy).getRandom(anyList());
 			int hp = player.getHero().getHp();
-			context.getLogic().performGameAction(opponent.getId(), opponent.getHeroPowerZone().get(0).play());
+			context.performAction(opponent.getId(), opponent.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getHp(), hp - 8);
 			context.endTurn();
 
@@ -2865,8 +3222,8 @@ public class CustomCardsTests extends TestBase {
 			Minion target = playMinionCard(context, player, "minion_kargath_bladefist");
 			playCard(context, player, "spell_you_from_the_future", target);
 			Minion target2 = player.getMinions().get(1);
-			Assert.assertTrue(target.isWounded());
-			Assert.assertTrue(target2.isWounded());
+			assertTrue(target.isWounded());
+			assertTrue(target2.isWounded());
 			context.endTurn();
 			assertEquals(target.getAttack(), target.getBaseAttack() + 4);
 			assertEquals(target2.getAttack(), target2.getBaseAttack() + 4);
@@ -2894,8 +3251,8 @@ public class CustomCardsTests extends TestBase {
 			Card card1 = receiveCard(context, player, "minion_bloodfen_raptor");
 			Card card2 = receiveCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_doomguard");
-			Assert.assertTrue(card1.hasAttribute(Attribute.DISCARDED));
-			Assert.assertTrue(card2.hasAttribute(Attribute.DISCARDED));
+			assertTrue(card1.hasAttribute(Attribute.DISCARDED));
+			assertTrue(card2.hasAttribute(Attribute.DISCARDED));
 			CountDownLatch latch = new CountDownLatch(1);
 			overrideDiscover(context, player, discoverActions -> {
 				latch.countDown();
@@ -2968,7 +3325,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, startedInHand);
 			clerics++;
 			damaged.setHp(damaged.getHp() - 1);
-			Assert.assertTrue(damaged.isWounded());
+			assertTrue(damaged.isWounded());
 			for (int i = 0; i < 30; i++) {
 				shuffleToDeck(context, player, "minion_bloodfen_raptor");
 			}
@@ -3001,9 +3358,9 @@ public class CustomCardsTests extends TestBase {
 			Minion onBoardBefore = playMinionCard(context, player, "token_searing_totem");
 			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
 			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
-			Assert.assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
 			playCard(context, player, "spell_silence", copyCard);
-			Assert.assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
 		});
 
 		runGym((context, player, opponent) -> {
@@ -3011,7 +3368,7 @@ public class CustomCardsTests extends TestBase {
 			Minion copyCard = playMinionCard(context, player, "minion_argent_Squire");
 			playCard(context, player, "spell_silence", copyCard);
 			playMinionCardWithBattlecry(context, player, "minion_farseer_nobundo", copyCard);
-			Assert.assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertTrue(onBoardBefore.hasAttribute(Attribute.DIVINE_SHIELD));
 		});
 
 		// Test does not copy non-text attributes (buffs or whatever)
@@ -3028,18 +3385,18 @@ public class CustomCardsTests extends TestBase {
 	public void testTheEndTime() {
 		runGym((context, player, opponent) -> {
 			Minion endTime = playMinionCard(context, player, "permanent_the_end_time");
-			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 20);
+			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 40);
 			context.endTurn();
-			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 19);
+			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 39);
 			context.endTurn();
-			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 19);
+			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 38);
 			context.endTurn();
-			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 17);
+			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 35, "The infinite wardens in play reduce this by 2 each.");
 		});
 
 		runGym((context, player, opponent) -> {
 			Minion endTime = playMinionCard(context, player, "permanent_the_end_time");
-			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 20);
+			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 40);
 			endTime.setAttribute(Attribute.RESERVED_INTEGER_1, 1);
 			context.endTurn();
 			assertEquals(context.getStatus(), GameStatus.WON);
@@ -3053,10 +3410,10 @@ public class CustomCardsTests extends TestBase {
 			Minion spaceMoorine = playMinionCard(context, player, "minion_space_moorine");
 			Assert.assertFalse(spaceMoorine.hasAttribute(Attribute.AURA_TAUNT));
 			playCard(context, player, "spell_iron_hide");
-			Assert.assertTrue(spaceMoorine.hasAttribute(Attribute.AURA_TAUNT));
+			assertTrue(spaceMoorine.hasAttribute(Attribute.AURA_TAUNT));
 			context.endTurn();
 			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
-			Assert.assertTrue(context.getValidActions().stream().filter(va -> va.getActionType() == ActionType.PHYSICAL_ATTACK)
+			assertTrue(context.getValidActions().stream().filter(va -> va.getActionType() == ActionType.PHYSICAL_ATTACK)
 					.allMatch(t -> t.getTargetReference().equals(spaceMoorine.getReference())));
 		});
 	}
@@ -3093,8 +3450,8 @@ public class CustomCardsTests extends TestBase {
 			while (!armageddon1.isDestroyed()) {
 				playCard(context, opponent, "spell_razorpetal", armageddon1);
 			}
-			Assert.assertTrue(armageddon1.isDestroyed());
-			Assert.assertTrue(armageddon2.isDestroyed());
+			assertTrue(armageddon1.isDestroyed());
+			assertTrue(armageddon2.isDestroyed());
 		});
 
 		runGym((context, player, opponent) -> {
@@ -3190,33 +3547,38 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testDesolationOfKaresh() {
-		// No combos played, should die
+		// No combos played, should die player's next turn
 		runGym((context, player, opponent) -> {
 			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
 			context.endTurn();
-			Assert.assertTrue(desolation.isDestroyed());
+			assertFalse(desolation.isDestroyed());
+			context.endTurn();
+			assertTrue(desolation.isDestroyed());
 		});
 
-		// Activated combo card played, should die in 2 turns
+		// Activated combo card played, should die in 4 turns
 		runGym((context, player, opponent) -> {
 			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
 			playCard(context, player, "minion_defias_ringleader");
 			context.endTurn();
+			context.endTurn();
+			context.endTurn();
 			Assert.assertFalse(desolation.isDestroyed());
 			context.endTurn();
-			context.endTurn();
-			Assert.assertTrue(desolation.isDestroyed());
+			assertTrue(desolation.isDestroyed());
 		});
 
-		// Not combo card played, should die next turn
+		// Not combo card played, should die player's next turn
 		runGym((context, player, opponent) -> {
 			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
 			playCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			Assert.assertTrue(desolation.isDestroyed());
+			assertFalse(desolation.isDestroyed());
+			context.endTurn();
+			assertTrue(desolation.isDestroyed());
 		});
 
-		// Activated combo card played, then not activated combo card played. Should die in 2 turns.
+		// Activated combo card played, then not activated combo card played. Should die in 4 turns.
 		runGym((context, player, opponent) -> {
 			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
 			playCard(context, player, "minion_defias_ringleader");
@@ -3225,10 +3587,11 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			playCard(context, player, "minion_defias_ringleader");
 			context.endTurn();
-			Assert.assertTrue(desolation.isDestroyed());
+			context.endTurn();
+			assertTrue(desolation.isDestroyed());
 		});
 
-		// Activated combo card played, then not activated combo card played, then activated combo card played. Should die in 3 turns.
+		// Activated combo card played, then not activated combo card played, then activated combo card played. Should die in 6 turns.
 		runGym((context, player, opponent) -> {
 			Minion desolation = playMinionCard(context, player, "permanent_desolation_of_karesh");
 			playCard(context, player, "minion_defias_ringleader");
@@ -3241,7 +3604,8 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertFalse(desolation.isDestroyed());
 			context.endTurn();
 			context.endTurn();
-			Assert.assertTrue(desolation.isDestroyed());
+			context.endTurn();
+			assertTrue(desolation.isDestroyed());
 		});
 	}
 
@@ -3268,9 +3632,9 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion source = playMinionCard(context, opponent, "minion_wolfrider");
 			attack(context, opponent, source, target);
-			Assert.assertTrue(source.isDestroyed());
+			assertTrue(source.isDestroyed());
 			Assert.assertFalse(target.isDestroyed());
-			Assert.assertTrue(player.getGraveyard().stream().anyMatch(c -> c.getEntityType() == EntityType.MINION
+			assertTrue(player.getGraveyard().stream().anyMatch(c -> c.getEntityType() == EntityType.MINION
 					&& c.getSourceCard().getCardId().equals("minion_wolfrider")));
 		});
 	}
@@ -3353,7 +3717,7 @@ public class CustomCardsTests extends TestBase {
 				context.endTurn();
 				context.endTurn();
 			}
-			Assert.assertTrue(bigGameHunt.isDestroyed());
+			assertTrue(bigGameHunt.isDestroyed());
 			// Should be a total of -1
 			assertEquals(bigGameHunt.getAttributeValue(Attribute.RESERVED_INTEGER_1), -1);
 			Minion kingBangalash1 = player.getMinions().get(0);
@@ -3379,7 +3743,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(player.getWeaponZone().get(0).getDurability(),
 					CardCatalogue.getCardById("weapon_eaglehorn_bow").getBaseDurability() - 1,
 					"Eaglehorn Bow loses durability because the secret triggered before it was in play.");
-			Assert.assertTrue(wolfrider.isDestroyed());
+			assertTrue(wolfrider.isDestroyed());
 		});
 	}
 
@@ -3440,7 +3804,7 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testFifiFizzlewarp() {
-		// Test that cards that have `-filtered battlecries work correctly after Fifi Fizzlewarp
+		// Test that cards that have race-filtered battlecries work correctly after Fifi Fizzlewarp
 		runGym((context, player, opponent) -> {
 			putOnTopOfDeck(context, player, "minion_boulderfist_ogre");
 
@@ -3525,7 +3889,7 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(drawnCard, shouldBeDrawn.transformResolved(context));
 			shouldBeDrawn = (Card) shouldBeDrawn.transformResolved(context);
 			Minion argentSquire = playMinionCard(context, player, shouldBeDrawn);
-			Assert.assertTrue(argentSquire.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertTrue(argentSquire.hasAttribute(Attribute.DIVINE_SHIELD));
 		});
 
 		// Test specifically Tirion's deathrattle
@@ -3542,7 +3906,7 @@ public class CustomCardsTests extends TestBase {
 			Minion tirion = playMinionCard(context, player, shouldBeDrawn);
 			playCard(context, player, "spell_fireball", tirion);
 			playCard(context, player, "spell_fireball", tirion);
-			Assert.assertTrue(tirion.isDestroyed());
+			assertTrue(tirion.isDestroyed());
 			assertEquals(player.getHero().getWeapon().getSourceCard().getCardId(), "weapon_ashbringer");
 		});
 
@@ -3612,8 +3976,8 @@ public class CustomCardsTests extends TestBase {
 
 			playCard(context, player, "minion_chromie");
 
-			Assert.assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_bloodfen_raptor")));
-			Assert.assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals("spell_mirror_image")));
+			assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_bloodfen_raptor")));
+			assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals("spell_mirror_image")));
 			assertEquals(player.getHand().size(), 6);
 			assertEquals(player.getDeck().size(), 6);
 		});
@@ -3632,8 +3996,8 @@ public class CustomCardsTests extends TestBase {
 
 			playCard(context, player, "minion_chromie");
 
-			Assert.assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_bloodfen_raptor")));
-			Assert.assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals("spell_mirror_image")));
+			assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_bloodfen_raptor")));
+			assertTrue(player.getDeck().stream().allMatch(c -> c.getCardId().equals("spell_mirror_image")));
 			assertEquals(player.getHand().size(), 10);
 			assertEquals(player.getDeck().size(), 6);
 		});
@@ -3714,7 +4078,7 @@ public class CustomCardsTests extends TestBase {
 			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
 			context.endTurn();
 			playCard(context, player, "spell_vampiric_touch", wolfrider);
-			Assert.assertTrue(wolfrider.isDestroyed());
+			assertTrue(wolfrider.isDestroyed());
 			assertEquals(player.getMinions().get(0).getAttack(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_wolfrider");
 		});
@@ -3803,7 +4167,7 @@ public class CustomCardsTests extends TestBase {
 				});
 				playCard(context, player, "minion_criminologist");
 				Card card = player.getHand().get(0);
-				Assert.assertTrue(card.isSecret());
+				assertTrue(card.isSecret());
 				HeroClass secretClass = card.getHeroClass();
 				switch (heroClass) {
 					case MAGE:
@@ -3837,7 +4201,7 @@ public class CustomCardsTests extends TestBase {
 			Minion bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "spell_razorpetal", bloodfen);
-			Assert.assertTrue(bloodfen.isDestroyed());
+			assertTrue(bloodfen.isDestroyed());
 		});
 	}
 
@@ -3850,16 +4214,16 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion friendly = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_frost_bomb", target);
-			Assert.assertTrue(target.hasAttribute(Attribute.FROZEN));
+			assertTrue(target.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
 			context.endTurn();
-			Assert.assertTrue(target.hasAttribute(Attribute.FROZEN));
+			assertTrue(target.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
 			context.endTurn();
 			Assert.assertFalse(target.hasAttribute(Attribute.FROZEN));
-			Assert.assertTrue(other.hasAttribute(Attribute.FROZEN));
+			assertTrue(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
 		});
 
@@ -3870,12 +4234,12 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion friendly = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_frost_bomb", target);
-			Assert.assertTrue(target.hasAttribute(Attribute.FROZEN));
+			assertTrue(target.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
 			context.endTurn();
 			playCard(context, opponent, "spell_fireball", target);
-			Assert.assertTrue(target.isDestroyed());
+			assertTrue(target.isDestroyed());
 			Assert.assertFalse(other.hasAttribute(Attribute.FROZEN));
 			Assert.assertFalse(friendly.hasAttribute(Attribute.FROZEN));
 			context.endTurn();
@@ -3898,7 +4262,7 @@ public class CustomCardsTests extends TestBase {
 			Minion newJade = player.getMinions().get(1);
 			assertEquals(newJade.getHp(), 1, "The second jade should have 1 HP left.");
 			assertEquals(newJade.getAttributeValue(Attribute.LAST_HIT), 1, "The second jade should have taken 1 damage");
-			Assert.assertTrue(hound.isDestroyed());
+			assertTrue(hound.isDestroyed());
 			Assert.assertFalse(originalJade.isDestroyed());
 		});
 	}
@@ -4030,8 +4394,8 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertFalse(villager.isDestroyed());
 			assertEquals(bloodfen.getHp(), bloodfen.getBaseHp(), "Metamagic should not have triggered its own effect.");
 			playCard(context, player, "spell_arcane_explosion");
-			Assert.assertTrue(villager.isDestroyed());
-			Assert.assertTrue(bloodfen.isDestroyed(), "Two damage should have been dealt in this sequence.");
+			assertTrue(villager.isDestroyed());
+			assertTrue(bloodfen.isDestroyed(), "Two damage should have been dealt in this sequence.");
 			assertEquals(opponent.getMinions().size(), 1, "There should just be a shadowbeast, because the additional spell effect does not happen in its own sequence.");
 			context.endTurn();
 			bloodfen = playMinionCard(context, opponent, "minion_bloodfen_raptor");
@@ -4068,8 +4432,8 @@ public class CustomCardsTests extends TestBase {
 			Minion minion2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "spell_arcane_explosion");
-			Assert.assertTrue(minion1.hasAttribute(Attribute.FROZEN));
-			Assert.assertTrue(minion2.hasAttribute(Attribute.FROZEN));
+			assertTrue(minion1.hasAttribute(Attribute.FROZEN));
+			assertTrue(minion2.hasAttribute(Attribute.FROZEN));
 			assertEquals(minion1.getHp(), minion1.getBaseHp() - 1);
 			assertEquals(minion2.getHp(), minion1.getBaseHp() - 1);
 		});
@@ -4116,7 +4480,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "minion_nexus_king_salhadaar");
 			assertEquals(player.getMinions().size(), 1);
-			Assert.assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 1));
+			assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 1));
 		});
 	}
 
@@ -4154,7 +4518,7 @@ public class CustomCardsTests extends TestBase {
 			Minion flipper = playMinionCard(context, opponent, "minion_snowflipper_penguin");
 			context.endTurn();
 			attack(context, player, player.getHero(), flipper);
-			Assert.assertTrue(player.getHand().containsCard("spell_inner_rage"));
+			assertTrue(player.getHand().containsCard("spell_inner_rage"));
 		});
 
 		runGym((context, player, opponent) -> {
@@ -4177,7 +4541,7 @@ public class CustomCardsTests extends TestBase {
 			Minion boulderfist2 = playMinionCard(context, opponent, "minion_boulderfist_ogre");
 			context.endTurn();
 			playCard(context, player, "spell_pulse_bomb", bloodfen);
-			Assert.assertTrue(bloodfen.isDestroyed());
+			assertTrue(bloodfen.isDestroyed());
 			// Up to 18 damage rule
 			assertEquals(boulderfist1.getHp(), boulderfist1.getBaseHp() - 10 + bloodfen.getBaseHp());
 			assertEquals(boulderfist2.getHp(), boulderfist2.getBaseHp() - 10 + bloodfen.getBaseHp());
@@ -4250,7 +4614,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_deja_vu");
 			assertEquals(player.getMinions().size(), 2);
-			Assert.assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 1));
+			assertTrue(player.getHand().stream().allMatch(c -> costOf(context, player, c) == 1));
 			playCard(context, player, player.getHand().get(1));
 			playCard(context, player, player.getHand().get(0));
 			for (int i = 2; i < 4; i++) {
@@ -4357,7 +4721,7 @@ public class CustomCardsTests extends TestBase {
 				context.endTurn();
 				context.endTurn();
 			}
-			Assert.assertTrue(context.getLogic().getMatchResult(player, opponent) != GameStatus.RUNNING);
+			assertTrue(context.getLogic().getMatchResult(player, opponent) != GameStatus.RUNNING);
 		});
 
 		// Our opponent gives us 10 mana somehow, we die
@@ -4375,7 +4739,7 @@ public class CustomCardsTests extends TestBase {
 				assertEquals(player.getMaxMana(), 3 + i + 1);
 			}
 			assertEquals(player.getMaxMana(), 10);
-			Assert.assertTrue(context.getLogic().getMatchResult(player, opponent) != GameStatus.RUNNING);
+			assertTrue(context.getLogic().getMatchResult(player, opponent) != GameStatus.RUNNING);
 		});
 
 		// Check that minions have +1/+1
@@ -4607,9 +4971,9 @@ public class CustomCardsTests extends TestBase {
 			int opponentHp = opponent.getHero().getHp();
 			// Damages minions by 1
 			playCard(context, opponent, "spell_arcane_explosion");
-			Assert.assertTrue(minion.isDestroyed());
+			assertTrue(minion.isDestroyed());
 			assertEquals(opponent.getHero().getHp(), opponentHp, "Opponent's HP should not have changed.");
-			Assert.assertTrue(wyrmrest.hasAttribute(Attribute.STEALTH));
+			assertTrue(wyrmrest.hasAttribute(Attribute.STEALTH));
 		});
 
 		// Enemy Dragon survives damage, no damage is dealt to the opponent's hero
@@ -4625,7 +4989,7 @@ public class CustomCardsTests extends TestBase {
 			Assert.assertFalse(minion.isDestroyed());
 			assertEquals(minion.getHp(), minion.getBaseHp() - 1);
 			assertEquals(opponent.getHero().getHp(), opponentHp, "Opponent's HP should not have changed.");
-			Assert.assertTrue(wyrmrest.hasAttribute(Attribute.STEALTH));
+			assertTrue(wyrmrest.hasAttribute(Attribute.STEALTH));
 		});
 	}
 
@@ -4709,7 +5073,7 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "hero_commander_garrosh");
 			player.setMana(10);
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getArmor(), 13);
 			assertEquals(player.getMana(), 0);
 		});
@@ -4718,7 +5082,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "hero_commander_garrosh");
 			playCard(context, player, "minion_raza_the_chained");
 			player.setMana(10);
-			context.getLogic().performGameAction(player.getId(), player.getHeroPowerZone().get(0).play());
+			context.performAction(player.getId(), player.getHeroPowerZone().get(0).play());
 			assertEquals(player.getHero().getArmor(), 14);
 			assertEquals(player.getMana(), 0);
 		});
@@ -5014,7 +5378,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "minion_fandral_staghelm");
 			player.setMana(2);
 			assertEquals(context.getLogic().getValidActions(player.getId()).stream().count(), 2);
-			context.getLogic().performGameAction(player.getId(), context.getLogic().getValidActions(player.getId())
+			context.performAction(player.getId(), context.getLogic().getValidActions(player.getId())
 					.stream().filter(gameAction -> gameAction.getActionType().equals(ActionType.HERO_POWER)).findFirst().get());
 			context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference());
 			assertEquals(player.getHero().getAttack(), 3);
@@ -5318,7 +5682,6 @@ public class CustomCardsTests extends TestBase {
 			for (int i = 0; i < 4; i++) {
 				assertEquals(player.getHand().size(), 0);
 				context.endTurn();
-				context.endTurn();
 			}
 			assertEquals(player.getHand().size(), 4);
 			context.endTurn();
@@ -5431,7 +5794,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			playCard(context, player, "spell_slain_party");
 			for (Minion minion : player.getMinions()) {
-				assertTrue(minion.getSourceCard().hasRace(Race.MURLOC));
+				assertTrue(minion.getRace().hasRace(Race.MURLOC));
 			}
 		});
 	}
@@ -5483,7 +5846,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_twisting_nether");
 			assertTrue(context.getLogic().canPlayCard(player.getId(), player.getHeroPowerZone().get(0).getReference()));
 			useHeroPower(context, player);
-			assertTrue(player.getMinions().get(0).getSourceCard().hasRace(Race.MURLOC));
+			assertTrue(player.getMinions().get(0).getRace().hasRace(Race.MURLOC));
 		});
 	}
 
@@ -5570,7 +5933,7 @@ public class CustomCardsTests extends TestBase {
 		});
 
 		context.init();
-		Assert.assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
+		assertTrue(context.getEntities().anyMatch(c -> c.getSourceCard().getCardId().equals("spell_the_coin")));
 		playCard(context, context.getPlayer1(), "hero_shadowreaper_anduin");
 		// Both player's hero powers should cost one
 		assertEquals(context.getEntities().filter(c -> c.getEntityType() == EntityType.CARD)
@@ -5668,6 +6031,7 @@ public class CustomCardsTests extends TestBase {
 		});
 	}
 
+	/*
 	@Test
 	public void testEnchantments() {
 		runGym((context, player, opponent) -> {
@@ -5675,6 +6039,314 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_blessing_of_wisdom", wisp);
 			assertEquals(wisp.getEnchantmentsFromContext(context).size(), 1);
 
+		});
+	}
+	*/
+
+	@Test
+	public void testZilchGodOfNothing() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_zilch_god_of_nothing");
+			shuffleToDeck(context, player, "minion_wax_elemental");
+			shuffleToDeck(context, player, "minion_public_defender");
+
+
+			shuffleToDeck(context, opponent, "minion_zilch_god_of_nothing");
+			shuffleToDeck(context, opponent, "minion_wisp");
+
+			context.fireGameEvent(new GameStartEvent(context, player.getId()));
+
+			for (Card card : player.getDeck()) {
+				assertEquals(card.getBonusAttack(), 1);
+				assertEquals(card.getBonusHp(), -1);
+			}
+
+			for (Card card : opponent.getDeck()) {
+				assertEquals(card.getBonusAttack(), 0);
+				assertEquals(card.getBonusHp(), 0);
+			}
+		});
+	}
+
+	@Test
+	public void testThrowGlaive() {
+		runGym((context, player, opponent) -> {
+			Minion wisp1 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp2 = playMinionCard(context, opponent, "minion_wisp");
+			Minion wisp3 = playMinionCard(context, opponent, "minion_wisp");
+
+			playCard(context, player, "weapon_warglaives_of_azzinoth");
+
+			playCard(context, player, "spell_leeching_poison");
+			playCard(context, player, "minion_high_priest_thekal"); //health to 1
+
+			playCard(context, player, "spell_throw_glaive", wisp2);
+
+			assertEquals(opponent.getMinions().size(), 0);
+			assertEquals(player.getHero().getHp(), 13);
+		});
+	}
+
+	@Test
+	public void testEyeBeam() {
+		runGym((context, player, opponent) -> {
+			Minion dino1 = playMinionCard(context, opponent, "minion_ultrasaur");
+			Minion dino2 = playMinionCard(context, opponent, "minion_ultrasaur");
+			Minion dino3 = playMinionCard(context, opponent, "minion_ultrasaur");
+
+			playCard(context, player, "spell_eye_beam", dino2);
+
+			assertEquals(opponent.getMinions().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion dino1 = playMinionCard(context, opponent, "minion_stegodon");
+			Minion dino2 = playMinionCard(context, opponent, "minion_ultrasaur");
+			Minion dino3 = playMinionCard(context, opponent, "minion_tyrantus");
+
+			playCard(context, player, "spell_eye_beam", dino2);
+			assertEquals(dino1.getHp(), 0);
+			assertEquals(dino2.getHp(), 8);
+			assertEquals(dino3.getHp(), 6);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion harvest = playMinionCard(context, opponent, "minion_harvest_golem");
+			playCard(context, player, "spell_eye_beam", harvest);
+			assertEquals(opponent.getMinions().size(), 1);
+		});
+	}
+
+	@Test
+	public void testNemesis() {
+		runGym((context, player, opponent) -> {
+			Minion demon1 = playMinionCard(context, opponent, "minion_fearsome_doomguard");
+			Minion demon2 = playMinionCard(context, opponent, "minion_voidwalker");
+			Minion ogre = playMinionCard(context, opponent, "minion_boulderfist_ogre");
+			playCard(context, opponent, "minion_lord_jaraxxus");
+
+			playCard(context, player, "spell_nemesis", ogre);
+			assertEquals(ogre.getHp(), 1);
+			assertEquals(demon1.getHp(), 8);
+			assertEquals(demon2.getHp(), 3);
+			assertEquals(opponent.getHero().getHp(), 15);
+
+			playCard(context, player, "spell_nemesis", demon1);
+			assertEquals(demon1.getHp(), 1);
+			assertEquals(demon2.getHp(), 1);
+			assertEquals(opponent.getHero().getHp(), 1);
+		});
+
+	}
+
+	@Test
+	public void testFelblade() {
+		runGym((context, player, opponent) -> {
+			Card felblade = receiveCard(context, player, "weapon_felblade");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			playCard(context, player, "weapon_illidari_warglaives");
+			assertEquals(costOf(context, player, felblade), 3);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(costOf(context, player, felblade), 2);
+			useHeroPower(context, player, wisp.getReference());
+			assertTrue(wisp.isDestroyed());
+			assertEquals(costOf(context, player, felblade), 1);
+		}, HeroClass.PURPLE, HeroClass.PURPLE);
+	}
+
+	@Test
+	public void testVengefulRetreat() {
+		runGym((context, player, opponent) -> {
+			Minion badWisp = playMinionCard(context, opponent, "minion_wisp");
+			Minion goodWisp = playMinionCard(context, player, "minion_wisp");
+			playCard(context, player, "spell_vengeful_retreat", goodWisp);
+			playCard(context, player, player.getHand().get(0));
+			assertTrue(player.getMinions().get(0).canAttackThisTurn());
+
+		});
+	}
+
+	@Test
+	public void testMetamorphosis() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_wisp");
+			}
+
+			playCard(context, player, "spell_metamorphosis");
+			assertEquals(player.getHand().size(), 0);
+
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+			Minion thek = playMinionCard(context, player, "minion_high_priest_thekal");
+			assertTrue(thek.hasAttribute(Attribute.LIFESTEAL));
+			assertEquals(player.getHand().size(), 1);
+
+			playCard(context, player, "weapon_warglaives_of_azzinoth");
+			assertTrue(player.getWeaponZone().get(0).hasAttribute(Attribute.LIFESTEAL));
+			assertEquals(player.getHand().size(), 2);
+
+			context.endTurn();
+			context.endTurn();
+
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+			playCard(context, player, "spell_chaos_nova");
+			assertEquals(player.getHero().getHp(), 3);
+
+			context.endTurn();
+			context.endTurn();
+
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+
+			context.endTurn();
+			context.endTurn();
+
+			assertNotEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_demonic_form");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_metamorphosis");
+
+			Card demonForm = player.getHeroPowerZone().get(0);
+
+
+			assertEquals(demonForm.getCardId(), "hero_power_demonic_form");
+			String[] strings = demonForm.evaluateDescriptions(context, player);
+
+			assertEquals(strings[0], "2");
+			assertEquals(strings[1], "s");
+
+			context.endTurn();
+			context.endTurn();
+
+
+			strings = demonForm.evaluateDescriptions(context, player);
+			assertEquals(strings[0], "1");
+			assertEquals(strings[1], "");
+		});
+	}
+
+	@Test
+	public void testDemonSpikes() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_demon_spikes");
+			assertEquals(player.getHero().getAttack(), 1);
+			context.endTurn();
+			assertEquals(player.getHero().getAttack(), 1);
+			context.endTurn();
+
+			assertEquals(player.getHero().getAttack(), 0);
+		});
+	}
+
+	@Test
+	public void testFelRush() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_wisp");
+			}
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			playCard(context, player, "weapon_illidari_warglaives");
+			playCard(context, player, "spell_fel_rush");
+			assertEquals(player.getHand().size(), 1);
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getHand().size(), 2);
+			useHeroPower(context, player, wisp.getReference());
+			assertEquals(player.getHand().size(), 3);
+		}, HeroClass.PURPLE, HeroClass.PURPLE);
+	}
+
+	@Test
+	public void testGlaivesOfTheFallen() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_glaives_of_the_fallen");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			attack(context, player, player.getHero(), wisp);
+			assertEquals(player.getHand().size(), 1);
+
+			Minion croc = playMinionCard(context, opponent, "minion_river_crocolisk");
+			attack(context, player, player.getHero(), croc);
+			assertEquals(player.getHand().size(), 1);
+			assertTrue(croc.hasAttribute(Attribute.DEATHRATTLES));
+
+			playCard(context, player, "weapon_glaives_of_the_fallen");
+			attack(context, player, player.getHero(), croc);
+
+			assertEquals(player.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testChaosBlades() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_chaos_blades");
+			Minion adept = playMinionCard(context, player, "minion_illidari_adept");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(adept.getAttack(), 3);
+			assertTrue(wisp.isDestroyed());
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 4);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_chaos_blades");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 5);
+
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertTrue(wisp.isDestroyed());
+
+			assertEquals(player.getWeaponZone().get(0).getDurability(), 3);
+		});
+	}
+
+	@Test
+	public void testIllidariEnforcer() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_fireball", opponent.getHero());
+			context.endTurn();
+			context.getTurn();
+			Minion enforcer = playMinionCard(context, opponent, "minion_illidari_enforcer");
+			assertTrue(enforcer.hasAttribute(Attribute.TAUNT));
+		});
+	}
+
+	@Test
+	public void testImmolationAura() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_immolation_aura");
+			Minion wisp = playMinionCard(context, opponent, "minion_wisp");
+			context.endTurn();
+			attack(context, opponent, wisp, player.getHero());
+			assertTrue(wisp.isDestroyed());
+		});
+	}
+
+	@Test
+	public void testMomentum() {
+		runGym((context, player, opponent) -> {
+			Minion azzinoth = playMinionCard(context, player, "minion_azzinoth");
+			shuffleToDeck(context, player, "minion_wisp");
+			playCard(context, player, "spell_momentum");
+			context.getLogic().drawCard(player.getId(), null);
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getHand().size(), 1);
+			destroy(context, azzinoth);
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testFelBarrage() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_fel_barrage");
+			assertEquals(opponent.getHero().getHp(), 20);
+			playCard(context, player, "minion_bloodmage_thalnos");
+			playCard(context, player, "spell_fel_barrage");
+			assertEquals(opponent.getHero().getHp(), 8);
 		});
 	}
 }

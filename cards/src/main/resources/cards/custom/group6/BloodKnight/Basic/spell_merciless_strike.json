@@ -5,16 +5,16 @@
   "heroClass": "BLOOD",
   "rarity": "FREE",
   "description": "Destroy your opponent's lowest Attack minion.",
-  "targetSelection": "NONE",
   "condition": {
     "class": "ComparisonCondition",
+    "operation": "GREATER",
     "value1": {
       "class": "EntityCounter",
       "target": "ENEMY_MINIONS"
     },
-    "value2": 0,
-    "operation": "GREATER"
+    "value2": 0
   },
+  "targetSelection": "NONE",
   "spell": {
     "class": "DestroySpell",
     "target": "ENEMY_MINIONS",

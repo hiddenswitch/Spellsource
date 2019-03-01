@@ -65,7 +65,7 @@ public class FightSpell extends Spell {
 
 		// Only attack sources that aren't destroyed
 		if (!target.isInPlay() || target.isDestroyed()) {
-			logger.warn("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
+			logger.debug("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
 			return;
 		}
 
@@ -81,12 +81,12 @@ public class FightSpell extends Spell {
 			}
 
 			if (!resolvedSource.isInPlay() || resolvedSource.isDestroyed()) {
-				logger.warn("onCast {} {}: Source {} is no longer in play or is destroyed and will not initiate a fight.", context.getGameId(), source, resolvedSource);
+				logger.debug("onCast {} {}: Source {} is no longer in play or is destroyed and will not initiate a fight.", context.getGameId(), source, resolvedSource);
 				continue;
 			}
 
 			if (resolvedSource.equals(target)) {
-				logger.warn("onCast {} {}: Source {} is trying to attack itself, which is not allowed. Skipping.", context.getGameId(), source, resolvedSource);
+				logger.debug("onCast {} {}: Source {} is trying to attack itself, which is not allowed. Skipping.", context.getGameId(), source, resolvedSource);
 				continue;
 			}
 

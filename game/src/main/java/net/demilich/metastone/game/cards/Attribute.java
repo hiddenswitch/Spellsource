@@ -245,7 +245,6 @@ public enum Attribute {
 	 * gained by an {@link net.demilich.metastone.game.spells.EnrageSpell}.
 	 *
 	 * @see net.demilich.metastone.game.spells.EnrageSpell for the spell that implements Enrage.
-	 * @see GameLogic#handleEnrage(Actor) for the logic that controls this attribute.
 	 */
 	ENRAGED,
 	/**
@@ -259,8 +258,7 @@ public enum Attribute {
 	 * <p>
 	 * This implements Brann Bronzebeard's text.
 	 *
-	 * @see GameLogic#performBattlecryAction(int, Actor, Player, BattlecryAction) for the complete rules on double
-	 * 		battlecries.
+	 * @deprecated since the introduction of {@link net.demilich.metastone.game.spells.aura.DoubleBattlecriesAura}.
 	 */
 	@Deprecated
 	DOUBLE_BATTLECRIES,
@@ -330,7 +328,7 @@ public enum Attribute {
 	 * When a combo {@link Card} is played after another card, an effect is triggered.
 	 *
 	 * @see net.demilich.metastone.game.spells.ComboSpell for the actual implementation of combo effects.
-	 * @see GameLogic#playCard(int, EntityReference) for the control of the combo attribute.
+	 * @see GameLogic#playCard(int, EntityReference, EntityReference) for the control of the combo attribute.
 	 */
 	COMBO,
 	/**
@@ -462,7 +460,7 @@ public enum Attribute {
 	 * When a {@link Card} is played and countered (by e.g. Counterspell), it is marked with this attribute and its text
 	 * is not executed.
 	 *
-	 * @see GameLogic#playCard(int, EntityReference) for the complete card playing implementation.
+	 * @see GameLogic#playCard(int, EntityReference, EntityReference) for the complete card playing implementation.
 	 */
 	COUNTERED,
 	/**
@@ -999,6 +997,10 @@ public enum Attribute {
 	 * Indicates the number of attacks this {@link Actor} has made this turn.
 	 */
 	ATTACKS_THIS_TURN,
+	/**
+	 * The number of turns a player has for Demonic Form
+	 */
+	DEMONIC_FORM,
 	/**
 	 * Indicates this actor has a wither effect active on it. Does not actually implement the wither.
 	 */
