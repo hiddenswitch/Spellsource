@@ -4,11 +4,11 @@
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "COMMON",
-  "description": "Echo. Restore #5 Health.",
+  "description": "Echo. Restore #3 Health.",
   "targetSelection": "ANY",
   "spell": {
     "class": "HealSpell",
-    "value": 5
+    "value": 3
   },
   "attributes": {
     "ECHO": true

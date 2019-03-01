@@ -9,7 +9,7 @@
   "description": "Deathrattle: Give your minions +1/+1.",
   "deathrattle": {
     "class": "BuffSpell",
-    "target": "OTHER_FRIENDLY_MINIONS",
+    "target": "FRIENDLY_MINIONS",
     "attackBonus": 1,
     "hpBonus": 1
   },

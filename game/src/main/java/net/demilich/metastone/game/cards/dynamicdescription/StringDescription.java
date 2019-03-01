@@ -2,7 +2,7 @@ package net.demilich.metastone.game.cards.dynamicdescription;
 
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.entities.Entity;
 
 /**
  * Represents a simple string description.
@@ -19,7 +19,7 @@ public class StringDescription extends DynamicDescription {
 	}
 
 	@Override
-	public String resolveFinalString(GameContext context, Player player, Card card) {
+	public String resolveFinalString(GameContext context, Player player, Entity entity) {
 		return getDesc().getString(DynamicDescriptionArg.STRING);
 	}
 }

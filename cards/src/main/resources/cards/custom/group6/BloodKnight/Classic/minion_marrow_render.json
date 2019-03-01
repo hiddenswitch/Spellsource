@@ -10,8 +10,8 @@
   "battlecry": {
     "spell": {
       "class": "DrainSpell",
-      "value": 3,
-      "target": "FRIENDLY_HERO"
+      "target": "FRIENDLY_HERO",
+      "value": 3
     }
   },
   "attributes": {

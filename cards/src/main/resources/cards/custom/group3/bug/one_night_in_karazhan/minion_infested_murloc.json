@@ -1,12 +1,13 @@
 {
-  "name": "Infested Murloc",
+  "name": "Infaested",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Deathrattle: Summon a 1/1 Spiderling.",
+  "race": "FAE",
+  "description": "Deathrattle: Summon a 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_spiderling"

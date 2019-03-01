@@ -1,20 +1,20 @@
 {
-  "name": "Mrrghost of Past",
+  "name": "Little Lieutenant",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "race": "MURLOC",
-  "description": "Whenever a friendly Murloc attacks, draw a card.",
+  "race": "FAE",
+  "description": "Whenever a friendly Fae attacks, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",
       "fireCondition": {
         "class": "RaceCondition",
         "target": "EVENT_SOURCE",
-        "race": "MURLOC"
+        "race": "FAE"
       },
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"

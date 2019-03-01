@@ -1,0 +1,18 @@
+{
+  "name": "Coilfang Battlemaiden",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Your Reservoir effects are always active.",
+  "aura": {
+    "class": "ReservoirsAlwaysActiveAura",
+    "target": "FRIENDLY_CARDS"
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

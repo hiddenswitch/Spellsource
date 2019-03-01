@@ -6,19 +6,19 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Permanent. Players gain Points by killing minions. Deathrattle: Summon a 7/7 Beast giving +1/+1 for your points and -1/-1 for enemy's. (After 4 of your turns, this dies)",
+  "description": "Deathrattle: Summon a [7/7] Beast. Lasts [8 turns]. (Increase by killing minions, decreases if opponent does)",
   "triggers": [
     {
-      "countUntilCast": 4,
+      "countUntilCast": 8,
       "eventTrigger": {
         "class": "TurnEndTrigger",
-        "targetPlayer": "SELF"
+        "targetPlayer": "BOTH"
       },
       "spell": {
         "class": "DestroySpell",
         "target": "SELF"
       },
-      "maxFires": 4
+      "maxFires": 8
     },
     {
       "eventTrigger": {
@@ -64,5 +64,42 @@
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        "",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1",
+            "offset": 7
+          }
+        },
+        "/",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "SELF",
+            "attribute": "RESERVED_INTEGER_1",
+            "offset": 7
+          }
+        }
+      ]
+    },
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "FiresLeftValueProvider",
+        "target": "SELF",
+        "value": 8
+      },
+      "description1": " turn",
+      "description2": " turns"
+    }
+  ]
 }

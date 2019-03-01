@@ -157,9 +157,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 * @return A list of enchantments (auras, triggers, etc.)
 	 */
 	public List<Enchantment> createEnchantments() {
+		/*
 		if (getCardType() != CardType.ENCHANTMENT) {
 			logger.warn("createEnchantments {}: Trying to interpret a {} as an enchantment", this, getCardType());
 		}
+		*/
 
 		List<Enchantment> enchantments = new ArrayList<>(4);
 		if (getDesc().getTrigger() != null) {
@@ -171,7 +173,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 				enchantments.add(trigger.create());
 			}
 		}
-
 
 		if (getDesc().getDeathrattle() != null) {
 			logger.warn("createEnchantments {}: Currently creating a deathrattle using a MinionDeathTrigger is not supported", getCardId());
@@ -229,8 +230,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 		clone.getAttributes().setCard(clone);
 		clone.setDesc(this.getDesc());
 		clone.deathrattleEnchantments = new ArrayList<>();
-		clone.storedEnchantments = new ArrayList<>();
 		deathrattleEnchantments.forEach(de -> clone.deathrattleEnchantments.add(de.clone()));
+		clone.storedEnchantments = new ArrayList<>();
 		clone.storedEnchantments.addAll(storedEnchantments);
 		return clone;
 	}
@@ -296,15 +297,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 */
 	public HeroClass[] getHeroClasses() {
 		return getDesc().getHeroClasses();
-	}
-
-	/**
-	 * For minions with multiple tribes. This field stores those multiple races when they are defined.
-	 *
-	 * @return The different races
-	 */
-	public Race[] getRaces() {
-		return getDesc().getRaces();
 	}
 
 	/**
@@ -412,32 +404,10 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	 *
 	 * @return A {@link Race}
 	 */
+	@NotNull
 	@Override
 	public Race getRace() {
 		return (Race) getAttributes().getOrDefault(Attribute.RACE, getDesc().getRace() == null ? Race.NONE : getDesc().getRace());
-	}
-
-	/**
-	 * Checks if the race specified is in its list of races when this minion has multiple races.
-	 *
-	 * @param race The {@link Race} to search.
-	 * @return <code>True</code> if this card has the specified class.
-	 */
-	public boolean hasRace(Race race) {
-		if (getRaces() != null) {
-			for (Race r : getRaces()) {
-				if (race == r) {
-					return true;
-				}
-			}
-		}
-		if (race == getRace()) {
-			return true;
-		}
-		if (race == Race.ALL || getRace() == Race.ALL) {
-			return true;
-		}
-		return false;
 	}
 
 	/**
@@ -1178,21 +1148,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 	public boolean isHeroPower() {
 		return getCardType().isCardType(CardType.HERO_POWER);
 	}
-
-	public DynamicDescriptionDesc[] getDynamicDescription() {
-		return desc.getDynamicDescription();
-	}
-
-	public String[] evaluateDescriptions(GameContext context, Player player) {
-		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
-		String[] strings = new String[dynamicDescriptionDescs.length];
-
-		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
-			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
-		}
-		return strings;
-	}
-
 
 	@Override
 	public int compareTo(@NotNull Entity o) {

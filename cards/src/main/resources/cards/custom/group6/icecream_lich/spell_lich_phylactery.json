@@ -1,6 +1,6 @@
 {
-  "name": "Lich's Phylactery",
-  "baseManaCost": 3,
+  "name": "Phylactery",
+  "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "ICECREAM",
   "rarity": "FREE",

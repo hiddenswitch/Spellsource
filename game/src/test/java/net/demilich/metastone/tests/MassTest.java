@@ -3,6 +3,7 @@ package net.demilich.metastone.tests;
 import ch.qos.logback.classic.Level;
 import ch.qos.logback.classic.Logger;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
@@ -35,12 +36,11 @@ public class MassTest extends TestBase {
 			context.play();
 		} catch (RuntimeException any) {
 			try {
-				Files.writeString(Path.of("masstest-trace-" + Instant.now().toString() + ".json"), context.getTrace().dump());
+				Files.writeString(Path.of("masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump());
 			} catch (IOException e) {
 				return;
 			}
 			throw any;
 		}
-
 	}
 }

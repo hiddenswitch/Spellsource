@@ -37,7 +37,7 @@ Name | Type | Description | Notes
 **summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
-**mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
+**roasted** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
 **fatigue** | [**GameEventFatigue**](GameEventFatigue.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
@@ -56,6 +56,7 @@ ATTRIBUTE_APPLIED | &quot;ATTRIBUTE_APPLIED&quot;
 ARMOR_GAINED | &quot;ARMOR_GAINED&quot;
 BEFORE_SUMMON | &quot;BEFORE_SUMMON&quot;
 BOARD_CHANGED | &quot;BOARD_CHANGED&quot;
+CARD_ADDED_TO_DECK | &quot;CARD_ADDED_TO_DECK&quot;
 CARD_SHUFFLED | &quot;CARD_SHUFFLED&quot;
 DAMAGE | &quot;DAMAGE&quot;
 DISCARD | &quot;DISCARD&quot;
@@ -73,7 +74,6 @@ JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;
 LOSE_DEFLECT | &quot;LOSE_DEFLECT&quot;
-MILL | &quot;MILL&quot;
 MAX_HP_INCREASED | &quot;MAX_HP_INCREASED&quot;
 MAX_MANA | &quot;MAX_MANA&quot;
 MANA_MODIFIED | &quot;MANA_MODIFIED&quot;

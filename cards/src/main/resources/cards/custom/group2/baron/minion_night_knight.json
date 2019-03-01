@@ -2,7 +2,7 @@
   "name": "Night Knight",
   "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "NAVY",
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "EPIC",

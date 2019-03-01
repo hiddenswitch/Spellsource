@@ -32,7 +32,7 @@
         },
         {
           "class": "DestroySpell",
-          "target": "MINIONS"
+          "target": "ALL_MINIONS"
         }
       ]
     }

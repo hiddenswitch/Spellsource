@@ -6,11 +6,11 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "FREE",
-  "description": "Battlecry: Choose an It cannot attack enemy. this minion.",
+  "description": "Battlecry: Choose an enemy minion. This minion cannot attack it.",
   "battlecry": {
-    "targetSelection": "NONE",
+    "targetSelection": "ENEMY_MINIONS",
     "spell": {
-      "class": "BuffSpell",
+      "class": "AddEnchantmentSpell",
       "target": "ENEMY_MINIONS",
       "attackBonus": 0,
       "hpBonus": 0

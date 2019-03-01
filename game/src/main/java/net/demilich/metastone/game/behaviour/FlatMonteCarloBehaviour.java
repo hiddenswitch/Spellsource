@@ -97,7 +97,7 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 	@Suspendable
 	private double simulate(GameContext context, int playerId, GameAction action, long startMillis) {
 		GameContext simulation = context.clone();
-		simulation.getLogic().performGameAction(simulation.getActivePlayerId(), action);
+		simulation.performAction(simulation.getActivePlayerId(), action);
 		if (simulation.updateAndGetGameOver()) {
 			// Action leads to lethal
 			return simulation.getWinningPlayerId() == playerId ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;

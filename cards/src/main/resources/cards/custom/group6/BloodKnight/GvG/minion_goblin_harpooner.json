@@ -14,8 +14,8 @@
       "target": "FRIENDLY_MINIONS",
       "filter": {
         "class": "EntityEqualsFilter",
-        "secondaryTarget": "TARGET",
-        "invert": true
+        "invert": true,
+        "secondaryTarget": "TARGET"
       },
       "randomTarget": true,
       "secondaryTarget": "TARGET"

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
@@ -105,7 +106,6 @@ import static com.google.common.collect.Maps.immutableEntry;
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
 public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
-
 	public String id;
 	public String name;
 	public String heroPower;
@@ -119,7 +119,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public int durability;
 	public Rarity rarity;
 	public Race race;
-	public Race[] races;
 	public String description;
 	public TargetSelection targetSelection;
 	public EventTriggerDesc secret;
@@ -153,6 +152,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	public String flavor;
 	public String wiki;
 	public boolean collectible = true;
+	@JsonProperty
 	public CardSet set;
 	public CardSet[] sets;
 	public int fileFormatVersion = 1;
@@ -323,7 +323,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * Eventually, a set will be immutable and represent a particular release or expansion, while a {@link
 	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
+	@JsonIgnore
 	public CardSet getSet() {
+		if (sets != null && sets.length > 0) {
+			return sets[0];
+		}
 		return set;
 	}
 
@@ -696,13 +700,6 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	public void setRace(Race race) {
 		this.race = race;
-	}
-
-	/**
-	 * For cards that have multiple races but not all races
-	 */
-	public Race[] getRaces() {
-		return races;
 	}
 
 	/**

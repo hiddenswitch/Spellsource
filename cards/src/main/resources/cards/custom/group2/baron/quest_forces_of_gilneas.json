@@ -1,10 +1,10 @@
 {
-  "name": "Forces of Gilneas",
+  "name": "Aldus's Brawl",
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "LEGENDARY",
-  "description": "Quest: Summon 5 minions for your opponent. Reward: King Archibald.",
+  "description": "Quest: Summon 5 minions for your opponent. Reward: The Lynchpin.",
   "quest": {
     "class": "MinionSummonedTrigger",
     "fireCondition": {

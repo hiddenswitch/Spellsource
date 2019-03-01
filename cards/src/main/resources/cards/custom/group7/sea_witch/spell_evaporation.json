@@ -1,0 +1,27 @@
+{
+  "name": "Evaporation",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "TEAL",
+  "rarity": "COMMON",
+  "description": "Deal $3 damage to all enemy minions. Reservoir (20+): Restore #8 Health to your hero.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ReservoirSpell",
+    "value": 20,
+    "spell1": {
+      "class": "DamageSpell",
+      "target": "ENEMY_MINIONS",
+      "value": 1
+    },
+    "spell2": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 8
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

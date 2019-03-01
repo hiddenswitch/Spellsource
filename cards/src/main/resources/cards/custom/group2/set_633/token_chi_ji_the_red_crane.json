@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. Whenever you cast a spell, restore 1 Health to all friendly characters for each minion you control.",
+  "description": "Deflect. Whenever you cast a spell, restore 3 Health to all friendly characters.",
   "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
@@ -16,10 +16,7 @@
     "spell": {
       "class": "HealSpell",
       "target": "FRIENDLY_CHARACTERS",
-      "value": {
-        "class": "EntityCounter",
-        "target": "FRIENDLY_MINIONS"
-      }
+      "value": 3
     }
   },
   "attributes": {

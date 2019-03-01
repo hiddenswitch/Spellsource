@@ -1,0 +1,27 @@
+{
+  "name": "Horrible Hallucination",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "RARE",
+  "description": "Summon a copy of a random enemy minion.",
+  "condition": {
+    "class": "MinionCountCondition",
+    "value": 0,
+    "operation": "GREATER",
+    "targetPlayer": "OPPONENT"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "target": "ENEMY_MINIONS",
+    "randomTarget": true,
+    "targetPlayer": "SELF"
+  },
+  "collectible": true,
+  "fileFormatVersion": 1,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ]
+}

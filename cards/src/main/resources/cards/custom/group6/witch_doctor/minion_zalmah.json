@@ -19,14 +19,14 @@
       },
       {
         "class": "ModifyAttributeSpell",
-        "attribute": "SPELL_DAMAGE",
-        "value": 2
+        "value": 2,
+        "attribute": "SPELL_DAMAGE"
       }
     ]
   },
   "attributes": {
-    "SPELL_DAMAGE": 2,
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "SPELL_DAMAGE": 2
   },
   "collectible": true,
   "set": "CUSTOM",

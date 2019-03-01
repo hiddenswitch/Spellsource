@@ -3,6 +3,209 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+
+### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
+
+You can now invite friends to play in one versus one challenges.
+
+Also includes bug fixes.
+
+##### Content Additions
+
+ - New cards in the Occultist class (thanks @Muhframos).
+
+##### Content Fixes
+
+ - Anzu no longer incorrectly cancels all spells, only spells with chosen minion targets.
+ - Sea Witch's hero power now correctly shuffles Ocean Depths instead of the target into your deck.
+ - Eye Beam now correctly stops casting when a deathrattle summons a minion.
+ - Captain Cookie now works correctly.
+ - Black Ox Brew now correctly lasts until the start of the player's next turn.
+ - Polycephalos now reads, "Rush. Battlecry: Gain +1 Attack for each enemy minion."
+ - The flavor of many Baron cards has been adapted for Spellsource (thanks @Pircival)
+ - Various balance changes to Occultist cards.
+ - The flavor of many Vermancer cards have been adapted for Spellsource (thanks @Phyley).
+
+### 0.8.20-2.0.26 (Monday, February 4th, 2019)
+
+Thanks to a great contribution from @doombubbles, introducing the Demon Hunter hero class!
+
+Thanks to a great contribution from @Muhframos, additional Occultist cards have been added.
+
+Thanks to a great contribution from @Pircival, additional Baron cards in the Verdant Dreams expansion have been added.
+
+##### Usability Fixes
+
+ - The bot will perform better overall. It should find lethal by using a combination of direct damage spells, physical attacks and weapons. It may miss lethal in situations that depend on removing an opponent's taunt minions, healing on physical attack or damage triggers (like minions with both taunt and lifesteal) that give the opponent's hero health, direct damage battlecries or other advanced effects.
+
+##### Content Fixes
+
+ - Witch Doctor is now known as Senzaku.
+ - Doomerang now correctly deals lifesteal and poisonous damage.
+ - Attacking uses up an attack before text like "whenever this minion attacks" is put into play.
+ - Felomelorn now correctly casts Flamestrikes.
+ - Ner'Zhul now has a working hero power.
+ - Atomedic Androne now correctly buffs the target owner's hero with armor.
+ - Parting Gift in Verdant Dreams can now correctly be added to decks.
+ - Deepwood Barghest now correctly adds two secrets to the hand. They will not necessarily be distinct.
+ - Ironforge Portal now correctly buffs the hero.
+ - Finley the Explorer, Sunlance, Mealcatcher, Dancing Rune Weapon, Desert Maiden, The Maelstormm and Captain Cookie have been temporarily removed from the game.
+
+##### Content Additions
+
+ - The Demon Hunter prototype.
+ - New Occultist cards.
+ - Senzaku the Puppeteer, a Witch Doctor hero card.
+ - New Baron cards in the Verdant Dreams expansion.
+
+### 0.8.19-2.0.25 (Friday, February 1st, 2019)
+
+Thanks to a great contribution from @Rumu, introducing many new cards in the Verdant Dreams set!
+
+##### Content Fixes
+
+ - Treeleach now correctly contains Lifesteal in its description.
+ - Devastate now works.
+
+##### Content Additions
+
+ - New cards in the Verdant Dreams set.
+
+### 0.8.18-2.0.25 (Thursday, January 31st, 2019)
+
+Thanks to a great contribution from @Logovaz, introducing new Witch Doctor cards!
+
+Also, please check out the new lore draft at http://wiki.hiddenswitch.com.
+
+##### Content Fixes
+
+ - Bladesworn is now a 3 mana 4/2 that gains +1 Health whenever you cast a spell on it.
+ - Ritual Dagger now reads, "Battlecry: Add a random Voodoo spell to your hand."
+ - Split Personality can now only target friendly minions.
+ - Fading Berserker has fixed text description.
+ 
+##### Content Additions
+
+ - New Witch Doctor cards!
+
+### 0.8.17-2.0.25 (Saturday, January 26th, 2019)
+
+Milling is now roasting, coherent with the design of Chef.
+
+##### Content Fixes:
+
+ - Opal Spellstone now correctly upgrades to Greater Opal Spellstone.
+
+### 0.8.16-2.0.24 (Friday, January 25th, 2019)
+
+The bot now has decks to play with (hot fix for quick play).
+
+### 0.8.15-2.0.24 (Friday, January 25th, 2019)
+
+Important usability fixes for the WebGL build.
+
+##### Usability Fixes:
+
+ - Matchmaking now works correctly when the applications do not have focus, in all builds. This was a regression.
+ - Draft retire button now enabled at the right times.
+ - Copying and pasting deck lists are supported, in a primitive way, in the WebGL build.
+ - Battlecry power history entries have the correct text now.
+ - Hovering over cards in the card side panel while browsing your collection will correctly show the card.
+ - Bots now play a rotation of custom cards decks.
+ - In your Quick Play view, you can turn off standard decks by hitting the Stack of Books icon toggle.
+ - In the future, standard decks will be updated as more are added to the collection.
+
+##### Content Fixes:
+
+ - Bone Whelp now correctly only returns itself to hand when there are other dragons under your control.
+ - Boss Harambo now correctly adds Bananas, instead of Coins, to your hand.
+ - Roasting cards now appears in the power history.
+ - Playing Play Dead on Spawn of N'Zoth now correctly buffs it.
+
+### 0.8.14-2.0.23 (Tuesday, January 22nd, 2019)
+
+Bug fixes and draft improvements.
+
+##### Usability Fixes:
+
+ - Draft mode now allows you to retire at any time, choose any hero, and only serves community cards.
+
+##### Content Additions:
+
+ - The Dragoon cards Runt Leader and Cult Reverend.
+ 
+##### Content Fixes:
+
+ - Wither now hits shields, like Divine Shield and Deflect. If Wither is blocked by the shield, the Wither effect does not occur and the shield is lost. When Wither hits a Deflect, the hero takes damage equal to the Wither amount instead.
+ - Night Knight and Underworld Keeper are now correctly Baron cards.
+ - Kahl of the Deep and Cult Promoter are not correctly Occultist cards.
+ - Acherus Deathgate now correctly draws a card from your deck.
+ - Lich's Phylactery is now called Phylactery and costs 4.
+ - Poison Cloud no longer crashes the game.
+ - The Rafaam Staff Pieces have better names now.
+
+### 0.8.13-2.0.22 (Sunday, January 20th, 2019)
+
+Thanks to a contribution from @Pircival, @Walrus, @Logovaz and @Muhframos, introducing a Spellsource Basic set.
+
+Thanks to a contribution from @Muhframos, introducing the Occultist class.
+
+And thanks to a contribution from @Rumu11, we have more Verdant Dreams cards.
+
+Use the **Spellsource** format to use the new basic set and only custom classes and cards.
+
+Additional bug fixes.
+
+##### Content Additions:
+
+ - Additional Verdant Dreams expansion cards.
+ - A Spellsource Basic set, with 55 neutral minions.
+ - The new Occultist class, with 67 cards and tokens.
+ - The Basic Spellsource set.
+
+##### Content Fixes:
+
+ - Teamwork now costs 7 mana.
+ - Elementium Shell now costs 3 mana, does not draw, and only buffs health.
+ - Maexnna's Femur now costs 8 mana and has 2 durability.
+ - Swarm Shield now costs 2 mana and gives a multiplier of 3 armor.
+ - Breath of Fire now reads, "Deal $1 damage to all enemy minions. Then deal $[] damage to the enemy hero. (Increases for each enemy minion)," which means all its damage effects gain spell power.
+ - Wild Pyromancer, Flamewaker and other spell casted triggering effects no longer trigger off Scroll of Wonders, Tess Greymane or other force casts that reuse cards from the graveyard.
+ - Immortal Prelate is now available for play.
+ - Magic Keg now correctly puts Chef spells into your hand.
+ - The Sands of Time Rifts (permanents) now show the number of turns left until they are removed. Their rules are simplified.
+ - Sherazin, Seed now shows the number of additional cards you need to play to revive it.
+ - Gobble is now 2 Mana and reads "Destroy the lowest Attack enemy minion on the battlefield."
+ - Rheastrasza is now 10 Mana.
+ - Blade of Eventide now reads "Deathrattle: If your deck has only even-Cost cards, destroy the lowest Attack enemy minion."
+ - Molten Whelp is now replaced with Vermillion Glider. 
+
+### 0.8.12-2.0.22 (Saturday, January 19th, 2019)
+
+Bug fixes and Verdant Dreams.
+
+##### Content Additions:
+
+ - @Rumu's Verdant Dreams expansion.
+ - The Paladin card Echo! Echo! Echo!.
+
+##### Content Fixes:
+
+ - Skulking Geist now only destroys cost 1 spells instead of cost 1 cards.
+ - Dueling effects like Mass Hysteria and Duelmaster Fizzle no longer consume attacks. This includes situations where an attack may trigger a secret that prevents the attack from finishing.
+ - Tainted Raven now interacts with silence correctly.
+ - Vanal Petkiper now creates 1 buff when targeting Nightmare Amalgam instead of 7. 
+ - Sideline Coach now buffs before the minion attacks.
+ - Nebulous Entity now deals 2 damage instead of giving a -2 HP buff.
+ - Grandmother Vratta now has 7 HP (was 10).
+ - Distort's attack buff is no longer affected by spell damage.
+ - Spirit of the Dragonhawk now interacts with Ice Walker correctly.
+ - Chi-Ji now restores a flat 3 Health when triggered.
+ - Yu'lon is now a 8/6 and only summons two statues.
+ - Xuen now only has Charge and Deflect.
+ - Soothing Mists now heals 3 (was 5).
+ - Assimilator and Broodmother Narvina both in play no longer causes an infinite loop.
+
 ### 0.8.11-2.0.22 (Friday, January 11th, 2019)
 
 Bug fixes.
@@ -40,66 +243,3 @@ Additionally, the client has been upgraded for better performance.
  - Rotten Curse no longer gives Immune to your hero.
  - Overdrive now only affects friendly minions.
  - Heartpiercer now only drains from minions it hit.
-
-### 0.8.9-2.0.21 (Tuesday, January 8th, 2019)
-
-Thanks to a contribution from @DeepKhaos (Dipsy), introducing the Blood Knight class!
-
-And also, we get a great contribution from @AnterogradeNil: Introducing the Otherworlder class!
-
-@Pircival contributed new Baron cards and fixes.
-
-@Logovaz contributed new Witch Doctor cards.
-
-@LyokoBarbossa also contributed fixes.
-
-##### Content Additions:
-
- - The Blood Knight class, starting with 38 cards and tokens.
- - The Otherworlder class, starting with 34 cards and tokens.
- - The new Baron cards Pawshop Trader, Smug Smuggler, Trisword Swinger, and Vanal Petkiper.
- - The new Witch Doctor cards Aberration, Chant Leader, Fading Berserker, Raptor Rider Raider, Tainted Raven, Temple Watcher, Tiki Tokens, Wolpertinger, Zalmah, Awakening Ritual, Bottled Spirit, False Promise, Ghostly Essence, Haunted Happenings, Paranoia, Rotten Curse, Shadow Puppetry, Spirit Bind, Spiritball, Bloodshed Reaver, and Spirit Wand.
-
-##### Content Fixes:
-
- - Healing in excess of the health that can actually be restored no longer incorrectly triggers Pearl Spellstones, Soup Vendor, Blackguard, Virtuous Vapor, or Azjol Visionary.
- - Cards that summon themselves on Deathrattle like Sacred Tombstone and Kil'jaeden, Deceiver no longer cause infinite loops.
- - Meat Construct no longer causes infinite loops.
- - Bronze Timekeeper now correctly triggers turn start and end enchantments that do something to their hosts.
- - Fight! now gives a friendly and random enemy minion +3/+3 (was +4 Attack) and now costs 2 (was 1).
- - One For All now gives the next minion you play this turn +2/+2 (was +3/+1).
- - Crone's Attendant is now a Beast (Instead of a Mech)
- - Ritual Dagger now correctly adds a random Voodoo spell to your hand instead of the Truesilver effect.
- - Shadow Puppetry now costs (3).
- - Divination and Spirit Bind tokens from Hero Power now give +2 Health and Restore 2 Health respectively.
-
-### 0.8.8-2.0.20 (Friday, January 4th, 2019)
-
-The Hidden Switch Launcher for Windows has been updated to 1.1.0 and should start on the latest updates to Windows 10 now.
-
-Additionally, the Collection view on Windows clients now correctly shows cards again.
-
-### 0.8.8-2.0.19 (Friday, January 4th, 2019)
-
-Happy New Years to all Spellsource players!
-
-The server has been migrated in this release.
-
-###### Content Fixes:
-
- - Mass Hysteria now correctly causes minions to duel each other (like Duelmaster Fizzle).
- - Sugary Celebration is no longer collectible since it is a copy of Lackey Break.
- - Abomination's Might, previously mis-named Icy Talon, now has a new name.
- - Dancing Rune Weapon now draws a card.
- - The spell Rune Tap now costs (1).
- - Chains of Ice now draws a card correctly.
- - Dyn-o-Matic now correctly deals 5 damage to random targets.
- - Bwonsamdi from Witch Doctor no longer causes an infinite recursion when each player controls one.
-
-###### Usability Fixes:
-
- - Attacks no longer animate twice.
- - All server communications are now compressed. This reduces your bandwidth usage by almost 10x in the typical case.
- - The server is now hosted locally in California instead of Oregon.
- - Server deployments will result in less downtime. Downtime is reduced from around 10 minutes to less than 20 seconds.
- - Patches can occur more frequently. In the previous infrastructure, patches could only be applied at most once per hour. Patches can now be applied as frequently as possible.

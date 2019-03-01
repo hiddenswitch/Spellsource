@@ -138,7 +138,7 @@ public class ReceiveCardSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
 		if (count == 0) {
-			logger.warn("onCast {} {}: Suspicious call that was receive a VALUE computed to be 0, which is not the default. The VALUE arg is {}", context.getGameId(), source, desc.get(SpellArg.VALUE));
+			logger.debug("onCast {} {}: Suspicious call that was receive a VALUE computed to be 0, which is not the default. The VALUE arg is {}", context.getGameId(), source, desc.get(SpellArg.VALUE));
 		}
 
 		// If a card is being received from a filter, we're creating new cards

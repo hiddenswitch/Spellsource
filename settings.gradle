@@ -1,4 +1,4 @@
-rootProject.name = 'metastone'
+rootProject.name = 'spellsource'
 include 'game'
 include 'cards'
 include 'net'

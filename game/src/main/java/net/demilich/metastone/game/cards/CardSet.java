@@ -33,7 +33,9 @@ public enum CardSet {
 	UNNERFED,
 	BATTLE_FOR_ASHENVALE,
 	SANDS_OF_TIME,
+	VERDANT_DREAMS,
 	TEST,
+	SPELLSOURCE_BASIC,
 	SPELLSOURCE;
 
 	public static CardSet latestHearthstoneExpansion() {

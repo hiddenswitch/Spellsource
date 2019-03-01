@@ -185,21 +185,35 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			}
 		}
 
-		boolean alwaysApply = getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+		boolean alwaysApply = alwaysApply();
 
 		for (Entity target : relevantTargets) {
 			if (affects(context, owner, target, resolvedTargets) && (!affectedEntities.contains(target.getId()) || alwaysApply)) {
 				affectedEntities.add(target.getId());
-				context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
+				applyAuraEffect(context, target);
 				// target is not affected anymore, remove effect
 			} else if (!affects(context, owner, target, resolvedTargets) && affectedEntities.contains(target.getId())) {
 				affectedEntities.remove(target.getId());
 				if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 					continue;
 				}
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+				removeAuraEffect(context, target);
 			}
 		}
+	}
+
+	protected boolean alwaysApply() {
+		return getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+	}
+
+	@Suspendable
+	protected void removeAuraEffect(GameContext context, Entity target) {
+		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+	}
+
+	@Suspendable
+	protected void applyAuraEffect(GameContext context, Entity target) {
+		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
 	}
 
 	@Override
@@ -209,7 +223,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			EntityReference targetKey = new EntityReference(targetId);
 			Entity target = context.tryFind(targetKey);
 			if (target != null) {
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+				removeAuraEffect(context, target);
 			}
 		}
 		affectedEntities.clear();
