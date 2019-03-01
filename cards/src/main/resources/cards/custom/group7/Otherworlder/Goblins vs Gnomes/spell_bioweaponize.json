@@ -1,0 +1,29 @@
+{
+  "name": "Bioweaponize",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "RARE",
+  "description": "Give a minion +1/+1, <b>Wither (1)</b>, and \"At the end of your turn, deal 3 damage randomly split among all characters\".",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "value": 1
+      },
+      {
+        "class": "ModifyAttributeSpell",
+        "attribute": "WITHER",
+        "value": 1
+      },
+      {
+        //AT THE END OF TURN, DEAL 3 DAMAGE RANDOMLY SPLIT AMONG ALL CHARACTERS
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
