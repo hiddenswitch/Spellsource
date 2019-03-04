@@ -1,8 +1,8 @@
 {
-  "name": "Arch-Thief Rafaam",
-  "baseManaCost": 9,
+  "name": "Sunwalker Dezco",
+  "baseManaCost": 7,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "GOLD",
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
