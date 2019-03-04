@@ -1,0 +1,32 @@
+{
+  "name": "Arch-Thief Rafaam",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "Taunt, Divine Shield. Battlecry: Discover a Holy Blessing.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscoverSpell",
+      "spell": {
+        "class": "ReceiveCardSpell"
+      },
+      "cards": [
+        "token_anshes_blessing",
+        "token_earthmothers_blessing",
+        "token_mushas_blessing"
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DIVINE_SHIELD": true,
+    "TAUNT": true    
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}
