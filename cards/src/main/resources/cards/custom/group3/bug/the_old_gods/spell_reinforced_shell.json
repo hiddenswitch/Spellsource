@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Give your Larva +1 Health this game.",
+  "description": "Give your Beasts +1 Health this game.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
@@ -21,8 +21,9 @@
             "invert": true
           },
           {
-            "class": "SpecificCardFilter",
-            "card": "token_spiderling"
+            "class": "CardFilter",
+            "race": "BEAST",
+            "cardType": "MINION"
           }
         ]
       },
