@@ -2205,6 +2205,15 @@ public class CustomCardsTests extends TestBase {
 	}
 
 	@Test
+	public void testHeavyDutyDragoonChenStormstoutInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_heavy_duty_dragoon");
+			useHeroPower(context, player, target.getReference());
+			assertEquals(player.getHero().getAttack(), 2);
+		}, HeroClass.JADE, HeroClass.JADE);
+	}
+
+	@Test
 	public void testLadyDeathwhisper() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

@@ -8,33 +8,18 @@
   "rarity": "RARE",
   "race": "DRAGON",
   "description": "Your Hero Power gives 1 more Attack.",
-  "aura": {
-    "class": "HeroPowerBonusAura",
-    "target": "FRIENDLY_PLAYER",
-    "applyEffect": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "AndCondition",
-        "conditions": [
-          {
-            "class": "HasTargetCondition"
-          },
-          {
-            "class": "AllMatchFilterCondition",
-            "target": "TARGET",
-            "filter": {
-              "class": "EntityEqualsFilter",
-              "secondaryTarget": "ALL_CHARACTERS"
-            }
-          }
-        ]
-      },
-      "spell": {
-        "class": "TemporaryAttackSpell",
-        "value": 1
-      }
+  "auras": [
+    {
+      "class": "ModifyBuffSpellAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "attackBonus": 1
+    },
+    {
+      "class": "ModifyTemporaryAttackSpellAura",
+      "target": "FRIENDLY_HERO_POWER",
+      "value": 1
     }
-  },
+  ],
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

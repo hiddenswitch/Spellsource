@@ -34,6 +34,7 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -343,7 +344,7 @@ public class SpellUtils {
 	 * @param spell   The spell description to retrieve the cards from.
 	 * @return A new array of {@link Card} entities.
 	 * @see #castChildSpell(GameContext, Player, SpellDesc, Entity, Entity, Entity) for a description of what an {@code
-	 * "OUTPUT_CARD"} value corresponds to.
+	 * 		"OUTPUT_CARD"} value corresponds to.
 	 */
 	public static Card[] getCards(GameContext context, SpellDesc spell) {
 		String[] cardIds;
@@ -402,7 +403,7 @@ public class SpellUtils {
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
-	 * DiscoverCardSpell}.
+	 * 		DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, Entity source, SpellDesc desc, CardList cards) {
@@ -478,7 +479,7 @@ public class SpellUtils {
 	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
-	 * To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
+	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.
 	 */
 	@Suspendable
 	public static DiscoverAction getSpellDiscover(GameContext context, Player player, SpellDesc desc, List<SpellDesc> spells, Entity source) {
@@ -744,7 +745,7 @@ public class SpellUtils {
 	 * @param desc    The {@link SpellDesc} typically of the calling spell.
 	 * @return A list of cards.
 	 * @see #getCards(GameContext, Player, Entity, Entity, SpellDesc, int) for a complete description of the rules of how
-	 * cards are generated or retrieved in this method.
+	 * 		cards are generated or retrieved in this method.
 	 */
 	public static CardList getCards(GameContext context, Player player, Entity target, Entity source, SpellDesc desc) {
 		return getCards(context, player, target, source, desc, desc.getValue(SpellArg.VALUE, context, player, target, source, 1));
@@ -854,6 +855,23 @@ public class SpellUtils {
 	}
 
 	/**
+	 * Get the auras that are affecting the specified target of the given class.
+	 *
+	 * @param context
+	 * @param auraClass
+	 * @param target
+	 * @param <T>
+	 * @return
+	 */
+	public static <T extends Aura> List<T> getAuras(GameContext context, Class<T> auraClass, Entity target) {
+		return context.getTriggerManager().getTriggers().stream()
+				.filter(auraClass::isInstance)
+				.map(auraClass::cast)
+				.filter(aura -> aura.getAffectedEntities().contains(target.getId()))
+				.collect(Collectors.toList());
+	}
+
+	/**
 	 * Retrieves an array of spells corresponding to the {@link net.demilich.metastone.game.spells.desc.aura.AuraArg#APPLY_EFFECT}
 	 * field on an aura whose condition is null or fulfilled for the given {@code source} and {@code target}.
 	 *
@@ -887,7 +905,7 @@ public class SpellUtils {
 	 *                            TargetPlayer#OPPONENT} is chosen here, then the opponent of the owner of the {@code
 	 *                            source} will be used.
 	 * @return An object containing information related to who is the casting player and whether or not the source has
-	 * been destroyed.
+	 * 		been destroyed.
 	 */
 	public static DetermineCastingPlayer determineCastingPlayer(GameContext context, Player player, Entity source, TargetPlayer castingTargetPlayer) {
 		return new DetermineCastingPlayer(context, player, source, castingTargetPlayer).invoke();

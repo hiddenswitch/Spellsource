@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes
 
  - Flesh Monstronsity now correctly adds its own stats and the added text appears in its description.
+ - Heavy Duty Dragoon now only gives 1 more attack if the hero power normally gives attack, and it now correctly interacts with Meditation.
 
 ### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
 
