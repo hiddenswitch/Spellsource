@@ -504,6 +504,9 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	public DynamicDescriptionDesc[] getDynamicDescription() {
+		if (getAttributes().containsKey(Attribute.DYNAMIC_DESCRIPTION)) {
+			return (DynamicDescriptionDesc[]) getAttribute(Attribute.DYNAMIC_DESCRIPTION);
+		}
 		return getSourceCard() != null ? getSourceCard().getDesc().getDynamicDescription() : null;
 	}
 

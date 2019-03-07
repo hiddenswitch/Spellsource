@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.22-2.0.26 (Thursday, March 7th, 2019)
+
+Bug fixes.
+
+##### Content Fixes
+
+ - Flesh Monstronsity now correctly adds its own stats and the added text appears in its description.
+
 ### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
 
 You can now invite friends to play in one versus one challenges.
