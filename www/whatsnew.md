@@ -4,9 +4,13 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.22-2.0.26 (Thursday, March 7th, 2019)
+### 0.8.22-2.0.27 (Thursday, March 7th, 2019)
 
 Bug fixes.
+
+##### Usability Fixes
+
+ - Dragon's Fury (and other card revealing effects) now correctly show secrets being revealed, as long as they're not being played.
 
 ##### Content Fixes
 
