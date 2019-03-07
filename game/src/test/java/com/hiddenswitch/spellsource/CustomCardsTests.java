@@ -57,6 +57,20 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFleshMonstrosity() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_divine_shield_test");
+			target.setAttack(10);
+			target.setHp(15);
+			Minion fleshMonstrosity = playMinionCardWithBattlecry(context, player, "minion_flesh_monstrosity", target);
+			assertEquals(fleshMonstrosity.getAttack(), fleshMonstrosity.getBaseAttack() + target.getAttack());
+			assertEquals(fleshMonstrosity.getMaxHp(), fleshMonstrosity.getBaseHp() + target.getHp());
+			assertTrue(fleshMonstrosity.hasAttribute(Attribute.DIVINE_SHIELD));
+			assertTrue(fleshMonstrosity.getDescription().contains("Divine Shield"));
+		});
+	}
+
+	@Test
 	public void testBlackOxBrew() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_black_ox_brew");

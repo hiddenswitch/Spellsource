@@ -17,19 +17,24 @@
           "target": "SELF",
           "attackBonus": {
             "class": "AttributeValueProvider",
-            "target": "SPELL_TARGET",
+            "target": "TARGET",
             "attribute": "ATTACK"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
-            "target": "SPELL_TARGET",
+            "target": "TARGET",
             "attribute": "HP"
           }
         },
         {
           "class": "custom.AddActorEffectsToTargetActorSpell",
           "target": "SELF",
-          "secondaryTarget": "SPELL_TARGET"
+          "secondaryTarget": "TARGET"
+        },
+        {
+          "class": "AddDescriptionSpell",
+          "target": "SELF",
+          "secondaryTarget": "TARGET"
         },
         {
           "class": "DestroySpell"
