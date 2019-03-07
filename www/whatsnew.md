@@ -12,6 +12,7 @@ Bug fixes.
 
  - Flesh Monstronsity now correctly adds its own stats and the added text appears in its description.
  - Heavy Duty Dragoon now only gives 1 more attack if the hero power normally gives attack, and it now correctly interacts with Meditation.
+ - Lady Delilah now correctly gains +1/+1 for each lifesteal card played. However, its aura does not update in hand (will be addressed at a later date).
 
 ### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
 

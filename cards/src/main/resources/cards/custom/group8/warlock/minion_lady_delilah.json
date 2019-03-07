@@ -2,7 +2,7 @@
   "name": "Lady Delilah",
   "baseManaCost": 9,
   "type": "MINION",
-  "heroClass": "ANY",
+  "heroClass": "VIOLET",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
@@ -82,7 +82,7 @@
           "targetPlayer": "SELF"
         }
       ],
-      "attribute": "AURA_ATTACK_BONUS"
+      "attribute": "AURA_HP_BONUS"
     }
   ]
 }
