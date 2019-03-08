@@ -24,6 +24,7 @@ Bug fixes.
  - Roll now correctly keeps more enchantments when it returns the target to hand.
  - Fantastic Feast now correctly puts two Hangovers on the top of your deck.
  - Boss Harambo now correctly puts the remaining bananas on the bottom of your deck instead of just one.
+ - Acolyte of Peroth'arn has a fixed spelling error.
 
 ### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
 
