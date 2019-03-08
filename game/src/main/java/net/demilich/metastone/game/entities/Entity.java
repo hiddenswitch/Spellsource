@@ -592,6 +592,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 					int start = description.indexOf("[");
 					int end = description.indexOf("]");
 					description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+					i++;
 				}
 			}
 		} else {

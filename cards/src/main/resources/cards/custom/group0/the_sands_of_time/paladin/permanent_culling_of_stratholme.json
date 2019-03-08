@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Whenever a minion dies, the current turn player draws a card. Lasts [6 more] turns.",
+  "description": "Whenever a minion dies, the active player draws a card. Lasts [6 more] turns.",
   "triggers": [
     {
       "countUntilCast": 6,
