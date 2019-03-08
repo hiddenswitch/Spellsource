@@ -12,6 +12,10 @@ Bug fixes.
 
  - Dragon's Fury (and other card revealing effects) now correctly show secrets being revealed, as long as they're not being played.
 
+##### Balance Changes
+
+ - Articus Dragon Giant no longer has Taunt, is now 8/8 and is Legendary.
+
 ##### Content Fixes
 
  - Flesh Monstronsity now correctly adds its own stats and the added text appears in its description.
