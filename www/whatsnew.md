@@ -11,6 +11,7 @@ Bug fixes.
 ##### Usability Fixes
 
  - Dragon's Fury (and other card revealing effects) now correctly show secrets being revealed, as long as they're not being played.
+ - The side panel showing the list of cards in the Drafting view now correctly shows you the card when you hover over a row.
 
 ##### Balance Changes
 
