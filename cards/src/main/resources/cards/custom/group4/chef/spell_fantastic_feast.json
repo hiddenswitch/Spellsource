@@ -19,10 +19,8 @@
       },
       {
         "class": "PutDeckTopSpell",
-        "cards": [
-          "spell_hangover",
-          "spell_hangover"
-        ]
+        "card": "spell_hangover",
+        "howMany": 2
       }
     ]
   },
