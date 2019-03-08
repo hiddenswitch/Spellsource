@@ -57,6 +57,22 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testBossHarambo() {
+		runGym((context, player, opponent) -> {
+			int BANANAS_EXPECTED_IN_HAND = 7;
+			int BANANAS_EXPECTED_IN_DECK = 10 - BANANAS_EXPECTED_IN_HAND;
+			for (int i = 0; i < 10 - BANANAS_EXPECTED_IN_HAND; i++) {
+				receiveCard(context, player, "spell_the_coin");
+			}
+			playCard(context, player, "minion_boss_harambo");
+			assertEquals(player.getHand().filtered(c -> c.getCardId().equals("spell_bananas")).size(), BANANAS_EXPECTED_IN_HAND);
+			assertEquals(player.getDeck().size(), BANANAS_EXPECTED_IN_DECK);
+			assertEquals(Stream.concat(player.getHand().stream(),
+					player.getDeck().stream()).filter(c -> c.getCardId().equals("spell_bananas")).count(), 10);
+		});
+	}
+
+	@Test
 	public void testFantasticFeast() {
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(1);
