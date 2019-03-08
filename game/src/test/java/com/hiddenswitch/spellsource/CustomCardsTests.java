@@ -57,6 +57,39 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testTheMaelstrom() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "permanent_the_maelstrom");
+			int playerHp = player.getHero().getHp();
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "spell_fireball", opponent.getHero());
+			assertEquals(player.getHero().getHp() + opponent.getHero().getHp(), playerHp + opponentHp - 12);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "permanent_the_maelstrom");
+			context.endTurn();
+			int playerHp = player.getHero().getHp();
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, opponent, "spell_fireball", player.getHero());
+			assertEquals(player.getHero().getHp() + opponent.getHero().getHp(), playerHp + opponentHp - 12);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "permanent_the_maelstrom");
+			playCard(context, player, "spell_mirror_image");
+			assertEquals(player.getMinions().size(), 5, "Maelstrom + 4 Mirror Image tokens");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "permanent_the_maelstrom");
+			context.endTurn();
+			playCard(context, opponent, "spell_mirror_image");
+			assertEquals(opponent.getMinions().size(), 4, "4 Mirror Image tokens");
+		});
+	}
+
+	@Test
 	public void testPastryCook() {
 		// Check condition isn't met when nothing is roasted
 		runGym((context, player, opponent) -> {
