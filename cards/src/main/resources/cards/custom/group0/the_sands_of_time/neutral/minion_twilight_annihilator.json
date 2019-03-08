@@ -13,7 +13,7 @@
     "spell": {
       "class": "DamageSpell",
       "target": "LEFTMOST_ENEMY_MINION",
-      "value": 3
+      "value": 8
     }
   },
   "attributes": {
