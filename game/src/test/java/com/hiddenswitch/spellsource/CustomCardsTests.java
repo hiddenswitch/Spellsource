@@ -57,6 +57,46 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testPastryCook() {
+		// Check condition isn't met when nothing is roasted
+		runGym((context, player, opponent) -> {
+			Card pastryCook = receiveCard(context, player, "minion_pastry_cook");
+			Card shouldNotBeRoasted = shuffleToDeck(context, player, "spell_the_coin");
+			player.setMana(pastryCook.getBaseManaCost());
+			assertFalse(context.getLogic().conditionMet(player.getId(), pastryCook));
+		});
+
+		// Roasted using a spell
+		runGym((context, player, opponent) -> {
+			// Make sure the number stuck into the ROASTED attribute as the current turn isn't idiosyncratically zero
+			context.endTurn();
+			context.endTurn();
+			Card pastryCook = receiveCard(context, player, "minion_pastry_cook");
+			Card shouldBeRoasted = shuffleToDeck(context, player, "spell_the_coin");
+			playCard(context, player, "minion_food_critic");
+			assertEquals(shouldBeRoasted.getAttributeValue(Attribute.ROASTED), context.getTurn());
+			player.setMana(pastryCook.getBaseManaCost());
+			assertTrue(context.getLogic().conditionMet(player.getId(), pastryCook));
+		});
+
+		// Roasted by having a full hand
+		runGym((context, player, opponent) -> {
+			// Make sure the number stuck into the ROASTED attribute as the current turn isn't idiosyncratically zero
+			context.endTurn();
+			context.endTurn();
+			Card pastryCook = receiveCard(context, player, "minion_pastry_cook");
+			for (int i = 0; i < 9; i++) {
+				receiveCard(context, player, "spell_the_coin");
+			}
+			Card shouldBeRoasted = shuffleToDeck(context, player, "spell_the_coin");
+			playCard(context, player, "spell_arcane_intellect");
+			assertEquals(shouldBeRoasted.getAttributeValue(Attribute.ROASTED), context.getTurn());
+			player.setMana(pastryCook.getBaseManaCost());
+			assertTrue(context.getLogic().conditionMet(player.getId(), pastryCook));
+		});
+	}
+
+	@Test
 	public void testBossHarambo() {
 		runGym((context, player, opponent) -> {
 			int BANANAS_EXPECTED_IN_HAND = 7;
