@@ -15,7 +15,7 @@
       "spells": [
         {
           "class": "PutOnBottomOfDeckSpell",
-          "value": {
+          "howMany": {
             "class": "PlayerAttributeValueProvider",
             "playerAttribute": "HAND_COUNT",
             "targetPlayer": "SELF"
