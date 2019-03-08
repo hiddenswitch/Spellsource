@@ -57,6 +57,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testFantasticFeast() {
+		runGym((context, player, opponent) -> {
+			player.getHero().setHp(1);
+			playCard(context, player, "spell_fantastic_feast");
+			assertEquals(player.getDeck().size(), 2);
+			assertEquals(player.getHero().getHp(), player.getHero().getMaxHp());
+		});
+	}
+
+	@Test
 	public void testFleshMonstrosity() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_divine_shield_test");
