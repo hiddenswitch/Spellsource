@@ -1,6 +1,6 @@
 {
   "name": "Rallying Cry",
-  "baseManaCost": 4,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "RED",
   "rarity": "RARE",
