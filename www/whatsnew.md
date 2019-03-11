@@ -4,6 +4,10 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.22-2.0.28 (Monday, March 11th, 2019)
+
+The font in the client has been improved significantly for better visibility. Feedback is encouraged and highly appreciated!
+
 ### 0.8.22-2.0.27 (Thursday, March 7th, 2019)
 
 Bug fixes.
