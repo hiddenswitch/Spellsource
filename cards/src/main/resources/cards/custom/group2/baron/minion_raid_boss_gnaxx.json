@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 6,
-  "baseHp": 14,
+  "baseHp": 12,
   "rarity": "LEGENDARY",
   "description": "Taunt. Whenever a minion attacks, gain +2 Attack.",
   "trigger": {
