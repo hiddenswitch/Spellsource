@@ -53,6 +53,10 @@
           "class": "RaceCondition",
           "race": "TOTEM"
         }
+        {
+          "class": "RaceCondition",
+          "race": "FAE"
+        }
       ],
       "filter": {
         "class": "OrFilter",
@@ -91,6 +95,10 @@
           {
             "class": "RaceFilter",
             "race": "TOTEM"
+          }
+          {
+          "class": "RaceCondition",
+          "race": "FAE"
           }
         ]
       },
@@ -258,6 +266,23 @@
             "hpBonus": 1
           }
         }
+                {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+            "class": "BuffAura",
+            "target": "FRIENDLY_MINIONS",
+            "condition": {
+              "class": "AnyMatchFilterCondition",
+              "target": "FRIENDLY_MINIONS",
+              "filter": {
+                "class": "RaceFilter",
+                "race": "FAE"
+              }
+            },
+            "attackBonus": 1,
+            "hpBonus": 1
+          }
       ]
     }
   },
