@@ -1,0 +1,34 @@
+{
+  "name": "Harvest Golem",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Aftermath: Deal 3 damage to a random enemy minion and your champion.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "value": 3,
+    "howMany": 1
+      },
+      {
+        "class": "DamageSpell",
+        "target": "FRIENDLY_HERO",
+        "value": 3
+      }
+    ]
+  },
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
