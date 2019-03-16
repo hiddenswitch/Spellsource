@@ -25,4 +25,42 @@ public class RiseOfShadowsTests extends TestBase {
 			assertEquals(player.getHand().size(), 0);
 		});
 	}
+
+	@Test
+	public void testHagathasScheme() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				receiveCard(context, player, "spell_hagathas_scheme");
+			}
+			Minion gargoyle = playMinionCard(context, opponent, "minion_stoneskin_gargoyle");
+			for (int i = 1; i <= 4; i++) {
+				Card card = player.getHand().get(0);
+				assertTrue(card.getDescription(context, player).contains("Deal " + i + " damage"));
+				playCard(context, player, card);
+				assertEquals(gargoyle.getHp(), 4 - i);
+				context.endTurn();
+				context.endTurn();
+			}
+		});
+	}
+
+	@Test
+	public void testTogwagglesScheme() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				receiveCard(context, player, "spell_togwaggles_scheme");
+			}
+			Minion wisp = playMinionCard(context, player, "minion_wisp");
+			for (int i = 1; i <= 4; i++) {
+				Card card = player.getHand().get(0);
+				assertTrue(card.getDescription(context, player).contains("Shuffle " + i));
+				int deckCount = player.getDeck().getCount();
+				playCard(context, player, card, wisp);
+				assertEquals(player.getDeck().size(), deckCount + i);
+				context.endTurn();
+				context.endTurn();
+			}
+		});
+
+	}
 }
