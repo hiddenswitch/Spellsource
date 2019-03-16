@@ -1,0 +1,26 @@
+
+  
+{
+  "name": "Harbinger of Hope",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Aftermath: Draw a minion from your deck.",
+  "deathrattle": {
+    "class": "FromDeckToHandSpell",
+    "value": 1,
+    "cardFilter": {
+      "cardType": "MINION"
+    },
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+}
