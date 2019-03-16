@@ -1,0 +1,31 @@
+{
+  "name": "Mutamite Terror",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Discard your rightmost card.",
+  "battlecry": {   
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscardSpell",
+      "cardFilter": {
+          "target": "FRIENDLY_HAND",
+          "class": "PlayerAttributeValueProvider",
+          "offset": -1,
+          "playerAttribute": "HAND_COUNT",
+          "targetPlayer": "SELF"
+        },
+        "attribute": "HAND_INDEX",
+        "operation": "EQUAL"
+      },
+      "targetPlayer": "SELF"
+    },
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
