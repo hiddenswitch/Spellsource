@@ -1,0 +1,16 @@
+{
+  "name": "Draining Slime",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "description": "Guard",
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": false,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
