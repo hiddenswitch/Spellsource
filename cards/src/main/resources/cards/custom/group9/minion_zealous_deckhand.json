@@ -1,0 +1,24 @@
+{
+  "name": "Zealous Deckhand",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "PIRATE",
+  "description": "Opener: Your opponent equips a 3/2 Blade.",
+  "battlecry": {
+    "spell": {
+      "class": "EquipWeaponSpell",
+      "card": "weapon_bloody_blade"
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
