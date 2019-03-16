@@ -1,0 +1,22 @@
+{
+  "name": "Antique Collector",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "EPIC",
+  "description": "Aftermath: Discard the leftmost card in your hand.",
+  "deathrattle": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DiscardSpell",
+      "target": "LEFTMOST_FRIENDLY_CARD_HAND",
+  },
+  "attributes": {
+    "DEATHRATTLE": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
