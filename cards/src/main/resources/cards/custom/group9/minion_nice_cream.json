@@ -1,0 +1,26 @@
+
+  
+{
+  "name": "Nice Cream",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Restore 3 Health to all characters.",
+  "battlecry": {
+    "targetSelection": "NONE",
+  "spell": {
+    "class": "HealSpell",
+    "target": "ALL_CHARACTERS",
+    "value": 3
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
