@@ -4,7 +4,7 @@
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 3,
-  "baseHp": 5,
+  "baseHp": 3,
   "rarity": "RARE",
   "description": "Guard. Aftermath: Summon a 3/3 Slime with Guard.",
   "deathrattle": {
