@@ -1017,6 +1017,10 @@ public enum Attribute {
 	 * Counter for each time a "XXXXX's Scheme" card has upgraded
 	 */
 	SCHEME,
+	/**
+	 * Indicates a minion is part of the "___ Lackey" subset of cards for the Year of the Dragon
+	 */
+	LACKEY,
 	DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN, DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
