@@ -77,4 +77,41 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testForbiddenWords() {
+		runGym((context, player, opponent) -> {
+			Card words = receiveCard(context, player, "spell_forbidden_words");
+			player.setMana(3);
+			Minion theAntiPriest = playMinionCard(context, opponent, "minion_twilight_drake");
+			assertFalse(words.canBeCastOn(context, player, theAntiPriest));
+			player.setMana(4);
+			assertTrue(words.canBeCastOn(context, player, theAntiPriest));
+		});
+	}
+
+	@Test
+	public void testKalecgos() {
+		runGym((context, player, opponent) -> {
+			Card pyro = receiveCard(context, player, "spell_pyroblast");
+			assertFalse(context.getLogic().canPlayCard(player, pyro));
+			playMinionCard(context, player, "minion_kalecgos");
+			assertEquals(player.getHand().size(), 2);
+			assertTrue(context.getLogic().canPlayCard(player, pyro));
+		});
+	}
+
+	@Test
+	public void testSpellwardJeweler() {
+		runGym((context, player, opponent) -> {
+			Card pyro = receiveCard(context, opponent, "spell_pyroblast");
+			assertTrue(context.getLogic().getValidTargets(opponent.getId(), pyro.play()).contains(player.getHero()));
+			playCard(context, player, "minion_spellward_jeweler");
+			assertTrue(player.getHero().hasAttribute(Attribute.UNTARGETABLE_BY_SPELLS));
+			assertFalse(context.getLogic().getValidTargets(opponent.getId(), pyro.play()).contains(player.getHero()));
+			context.endTurn();
+			context.endTurn();
+			assertTrue(context.getLogic().getValidTargets(opponent.getId(), pyro.play()).contains(player.getHero()));
+		});
+	}
 }
