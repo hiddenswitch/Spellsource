@@ -1,0 +1,17 @@
+{
+  "name": "Beefy Vegetarian",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Guard. Can't attack.",
+  "attributes": {
+    "CANNOT_ATTACK": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
