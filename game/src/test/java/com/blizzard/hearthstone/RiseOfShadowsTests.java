@@ -63,4 +63,18 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 
 	}
+
+	@Test
+	public void testEvilMiscreant() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_evil_miscreant");
+			assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "minion_evil_miscreant");
+			assertEquals(player.getHand().size(), 2);
+			for (int i = 0; i < 1; i++) {
+				assertTrue(player.getHand().get(i).hasAttribute(Attribute.LACKEY));
+			}
+		});
+
+	}
 }
