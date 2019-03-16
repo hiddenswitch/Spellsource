@@ -1,0 +1,29 @@
+{
+  "name": "Barside Slinker",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Whenever you play a card with Opener, gain Hidden.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardPlayedTrigger",
+      "queueCondition": {
+        "class": "AttributeCondition",
+        "attribute": "BATTLECRY",
+        "operation": "HAS"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "STEALTH"
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
