@@ -14,8 +14,9 @@
       "target": "OTHER_FRIENDLY_MINIONS",
       "card": "token_ancient",
       "filter": {
-        "class": "SpecificCardFilter",
-        "card": "treant"
+        "class": "AttributeFilter",
+        "attribute": "TREANT",
+        "operation": "HAS"
       }
     }
   },

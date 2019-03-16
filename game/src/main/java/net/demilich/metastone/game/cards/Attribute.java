@@ -1021,6 +1021,10 @@ public enum Attribute {
 	 * Indicates a minion is part of the "___ Lackey" subset of cards for the Year of the Dragon
 	 */
 	LACKEY,
+	/**
+	 * Indicates a minion is an official Treant, considered for Treant-related synergies
+	 */
+	TREANT,
 	DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN, DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
