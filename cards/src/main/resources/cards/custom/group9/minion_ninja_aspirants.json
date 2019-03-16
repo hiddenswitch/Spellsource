@@ -1,0 +1,25 @@
+{
+  "name": "Doubling Imp",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Hidden. Battlecry: Summon a copy of this minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "BOOMSDAY_PROJECT",
+  "fileFormatVersion": 1
+}
