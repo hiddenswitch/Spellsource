@@ -1,0 +1,21 @@
+{
+  "name": "Draining Ooze",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Guard. Aftermath: Summon a 3/3 Slime with Guard.",
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_draining_slime"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
