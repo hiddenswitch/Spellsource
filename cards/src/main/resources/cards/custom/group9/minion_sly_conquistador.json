@@ -1,0 +1,31 @@
+
+  
+{
+  "name": "Sly Conquistador",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Dodge. Your minions with Dodge have +2 Attack.",
+  "battlecry": {
+    "spell": {
+      "class": "BuffAura",
+      "target": "FRIENDLY_MINIONS",
+      "attackBonus": 2,
+      "filter": {
+        "class": "AttributeFilter",
+        "attribute": "DIVINE_SHIELD",
+        "operation": "HAS"
+      },
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
