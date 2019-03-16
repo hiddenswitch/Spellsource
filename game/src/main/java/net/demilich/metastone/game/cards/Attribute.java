@@ -1013,6 +1013,10 @@ public enum Attribute {
 	 * Indicates the spell will give the player one more copy of itself on cast (but not again)
 	 */
 	TWINSPELL,
+	/**
+	 * Counter for each time a "XXXXX's Scheme" card has upgraded
+	 */
+	SCHEME,
 	DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN, DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
