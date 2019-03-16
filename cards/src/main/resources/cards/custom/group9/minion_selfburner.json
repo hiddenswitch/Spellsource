@@ -1,0 +1,25 @@
+{
+  "name": "Baron Geddon",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "At the end of your turn, deal 1 damage to ALL minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 1
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
