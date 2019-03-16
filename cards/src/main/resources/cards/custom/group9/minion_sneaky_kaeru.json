@@ -1,0 +1,26 @@
+{
+  "name": "Sneaky Kaeru",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Whenever this minion's Health is 1, return this to your hand.",
+   "condition": {
+        "class": "AttributeCondition",
+        "target": "SELF",
+        "value": 3,
+        "attribute": "HP",
+        "operation": "EQUAL"
+    },
+    "spell": {
+      "class": "ReturnTargetToHandSpell",
+      "target": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
