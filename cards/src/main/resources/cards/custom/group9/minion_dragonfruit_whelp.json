@@ -1,0 +1,25 @@
+{
+  "name": "Dragonfruit Whelp",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 5,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Whenever this takes damage, restore 3 Health to your champion.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "DamageReceivedTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "HealSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 3
+    }
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
