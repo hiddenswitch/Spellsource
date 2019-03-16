@@ -1,0 +1,27 @@
+{
+  "name": "Polychrome Hydra",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "race": "BEAST",
+  "description": "Opener: Deal 2 damage to three random enemies.",
+  "battlecry": {
+    "spell": {
+      "class": "MultiTargetSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 3,
+      "spell": {
+        "class": "DamageSpell",
+        "value": 2
+      }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}
