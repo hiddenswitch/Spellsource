@@ -1,0 +1,21 @@
+{
+  "name": "Fiery Warchief",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "<b>Aftermath:</b> Give your minions +2 Health.",
+  "deathrattle": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_MINIONS",
+    "hpBonus": 2
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "WITCHWOOD",
+  "fileFormatVersion": 1
+}
