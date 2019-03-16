@@ -8,7 +8,8 @@
   "rarity": "FREE",
   "description": "Charge",
   "attributes": {
-    "CHARGE": true
+    "CHARGE": true,
+    "TREANT": true
   },
   "collectible": false,
   "set": "UNNERFED",
