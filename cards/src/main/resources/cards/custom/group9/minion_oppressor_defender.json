@@ -1,0 +1,31 @@
+{
+  "name": "Oppressor Defender",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Battlecry: Give a minion and adjacent minions Dodge.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+    "class": "AddAttributeSpell",
+    "attribute": "DIVINE_SHIELD"
+    },
+    "spell2": {
+    "class": "AddAttributeSpell",
+    "attribute": "DIVINE_SHIELD"
+    }
+  },
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
