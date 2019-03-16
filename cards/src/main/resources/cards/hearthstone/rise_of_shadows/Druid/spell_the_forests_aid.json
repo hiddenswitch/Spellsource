@@ -1,0 +1,25 @@
+{
+  "name": "The Forest's Aid",
+  "baseManaCost": 8,
+  "type": "SPELL",
+  "heroClass": "BROWN",
+  "rarity": "RARE",
+  "description": "Twinspell. Summon five 2/2 Treants.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "cards": [
+      "token_treant",
+      "token_treant",
+      "token_treant",
+      "token_treant",
+      "token_treant"
+    ]
+  },
+  "attributes": {
+    "TWINSPELL": true
+  },
+  "collectible": true,
+  "set": "RISE_OF_SHADOWS",
+  "fileFormatVersion": 1
+}

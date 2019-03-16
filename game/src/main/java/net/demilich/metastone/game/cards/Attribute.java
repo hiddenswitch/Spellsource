@@ -1008,7 +1008,12 @@ public enum Attribute {
 	/**
 	 * Indicates this actor has been withered.
 	 */
-	WITHERED, DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN, DYNAMIC_DESCRIPTION;
+	WITHERED,
+	/**
+	 * Indicates the spell will give the player one more copy of itself on cast (but not again)
+	 */
+	TWINSPELL,
+	DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN, DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
