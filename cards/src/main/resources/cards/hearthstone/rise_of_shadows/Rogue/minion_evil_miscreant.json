@@ -14,8 +14,7 @@
       "value": 2,
       "cardFilter": {
         "class": "CardFilter",
-        "attribute": "LACKEY",
-        "operation": "HAS"
+        "attribute": "LACKEY"
       },
       "cardSource": {
         "class": "UncollectibleCatalogueSource"
