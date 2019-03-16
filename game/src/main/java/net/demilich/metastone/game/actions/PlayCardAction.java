@@ -77,6 +77,19 @@ public abstract class PlayCardAction extends GameAction {
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		card.setAttribute(Attribute.BEING_PLAYED);
 		context.getLogic().playCard(playerId, getSourceReference(), getTargetReference());
+
+		if (card.hasAttribute(Attribute.TWINSPELL)) {
+			Card copy = card.getCopy();
+			CardDesc copyDesc = copy.getDesc().clone();
+			if (copyDesc != null) {
+				copyDesc.attributes.remove(Attribute.TWINSPELL);
+				copyDesc.setDescription(card.getDescription().replace("Twinspell. ", ""));
+			}
+			copy.setDesc(copyDesc);
+			context.getLogic().receiveCard(playerId, copy);
+		}
+
+
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
 			// Fixes Glinda Crowskin, whose aura stopped being applied once the card was played and moved to the graveyard
