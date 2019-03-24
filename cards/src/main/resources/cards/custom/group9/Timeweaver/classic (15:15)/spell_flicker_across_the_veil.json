@@ -1,0 +1,36 @@
+
+{
+  "name": "Flicker Across the Veil",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "Destroy a minion. At the end of your opponent's turn, resummon it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+       "class": "DestroySpell"
+      },
+      {
+       "class": "AddEnchantmentSpell",
+       "target": "FRIENDLY_PLAYER",
+       "trigger": {
+         "eventTrigger": {
+           "class": "TurnEndTrigger",
+           "targetPlayer": "ENEMY"
+           },
+         "spell": {
+           "class": "SummonSpell",
+           "targetPlayer": "OWNER"
+           },
+         "maxFires": 1
+        }  
+     }
+   ]
+ }, 
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

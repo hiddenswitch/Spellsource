@@ -1,0 +1,24 @@
+{
+  "name": "HONGRIEST!",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Reshuffle 3 cards. Add 3 Adaptation spells to your hand.",
+  "spell": {
+      "class": "ChooseAndReshuffleSpell",
+      "value": 3
+     }
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_adaptation",
+        "spell_adaptation",
+        "spell_adaptation"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

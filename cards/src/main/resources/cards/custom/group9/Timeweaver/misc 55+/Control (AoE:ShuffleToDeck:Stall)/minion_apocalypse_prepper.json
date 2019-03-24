@@ -1,0 +1,36 @@
+{
+  "name": "Apocalypse Prepper",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "description": "Battlecry: Add five 1-mana Discover spells from any class to to the bottom of your deck.",
+  "battlecry": {
+    "class": "PutOnBottomOfDeckSpell",
+    "value": 5
+    "cardFilter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+        "class": "DiscoverSpell",
+        "operation": "HAS"
+        },
+        {
+        "class": "CardFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "cardType": "SPELL",
+        "operation": "EQUAL"
+        },
+      ]
+    }
+  "cardSource": {
+    "class": "UnweightedCatalogueSource"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

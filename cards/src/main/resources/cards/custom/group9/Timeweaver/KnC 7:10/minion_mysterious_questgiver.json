@@ -1,0 +1,31 @@
+{
+  "name": "Mysterious Questgiver",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Battlecry: Discover three 1-Cost Timeweaver minions.",
+"battlecry": {
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      },
+    },
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": 1,
+        "attribute": "BASE_MANA_COST",
+        "heroClass": "TIME",
+        "cardType": "MINION",
+        "operation": "EQUAL"
+      }
+    "howMany": 3
+    },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

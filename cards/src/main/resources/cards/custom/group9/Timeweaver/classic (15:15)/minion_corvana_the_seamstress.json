@@ -1,0 +1,44 @@
+{
+  "name": "Corvana the Seamstress",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Reshuffle 3 cards, then draw 6 cards. Your Surge cards cost (1) this turn.",
+  "battlecry": {
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "ChooseAndReshuffleSpell",
+        "value": 3
+      },
+      {
+      "class": "DrawCardSpell",
+      "value": 6
+      },
+      {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "value": 1,
+        "attribute": "SURGE",
+        "expirationTrigger": {
+          "class": "TurnEndTrigger",
+          "targetPlayer": "SELF"
+        },
+        "operation": "SET",
+      },
+    },
+  },
+  "attributes": {
+    "BATTLECRY": true,
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

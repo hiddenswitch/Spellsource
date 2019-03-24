@@ -1,0 +1,49 @@
+{
+  "name": "Mystic Weaver",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Battlecry: Reshuffle a card and gain Spell Damage +1. Surge: Spell Damage +2.",
+  "battlecry": {
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+    {
+      "class": "EitherOrSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "SELF",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+        "attribute": "RECEIVED_ON_TURN",
+        "operation": "EQUAL"
+        },
+        "spell1": {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "SPELL_DAMAGE"
+          "value": 1
+        },
+        "spell2": {
+          "class": "AddAttributeSpell",
+          "target": "SELF",
+          "attribute": "SPELL_DAMAGE"
+          "value": 2
+        },
+      },
+      {
+      "class": "ChooseAndReshuffleSpell",
+      },
+  "attributes": {
+    "BATTLECRY": true,
+    "SURGE": true
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}

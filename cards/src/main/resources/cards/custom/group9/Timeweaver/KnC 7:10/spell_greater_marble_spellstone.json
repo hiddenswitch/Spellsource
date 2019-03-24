@@ -1,0 +1,31 @@
+{
+  "name": "Greater Marble Spellstone",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "RARE",
+  "description": "Deal $1 damage to all enemies thrice."
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "metaSpell",
+    "spells": [
+      {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1
+      },
+      {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1
+      },
+      {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 1
+      },
+  },
+  "collectible": false,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

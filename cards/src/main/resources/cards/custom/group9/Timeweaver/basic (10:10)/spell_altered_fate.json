@@ -1,0 +1,15 @@
+{
+  "name": "Altered Fate",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Resummon all friendly minions that died this turn.",
+  "targetSelection": "NONE",
+    "spell": {
+      "class": "custom.SummonFriendlyMinionsThatDiedSpell"
+    }  
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

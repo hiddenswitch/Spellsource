@@ -1,0 +1,43 @@
+{
+  "name": "Temporal Rift",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "RARE",
+  "description": "Fill both boards with 0/1 Riftwalls with Taunt that die at the start of your turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+      "class": "SummonSpell",
+      "cards": [
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall"
+        ]
+      "targetPlayer": "OPPONENT"
+      },
+      {
+      "class": "SummonSpell",
+      "cards": [
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall",
+        "token_riftwall"
+        ]
+      "targetPlayer": "SELF"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

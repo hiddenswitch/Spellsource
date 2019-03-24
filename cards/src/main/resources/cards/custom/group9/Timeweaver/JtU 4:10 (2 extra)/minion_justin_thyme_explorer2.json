@@ -1,0 +1,55 @@
+{
+  "name": "Justin Thyme, Explorer2",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 10,
+  "baseHp": 10,
+  "rarity": "LEGENDARY",
+  "description": "Surge: If you played an Elemental last turn, are holding a Dragon, and have an empty deck, destroy the enemy hero.",
+  "battlecry": {
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+       {
+        "class": "PlayedLastTurnCondition",
+        "filter": {
+          "class": "CardFilter",
+          "race": "ELEMENTAL"
+          }
+        },
+        {
+          "class": "HoldsCardCondition",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "DRAGON"
+          }
+        },
+        {
+          "class": "AttributeCondition",
+          "target": "SELF",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+          "attribute": "RECEIVED_ON_TURN",
+          "operation": "EQUAL"
+        },
+        {
+          "class": "DeckContainsCondition",
+          "invert": true,
+          "targetPlayer": "SELF"
+        }
+      ]
+    },
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_HERO"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

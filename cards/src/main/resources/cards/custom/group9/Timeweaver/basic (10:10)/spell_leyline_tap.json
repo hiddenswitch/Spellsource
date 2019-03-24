@@ -1,0 +1,40 @@
+{
+  "name": "Leyline Tap",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Gain Spell Damage +1 until the end of your next turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddAttributeSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 1,
+    "attribute": "SPELL_DAMAGE"
+           },
+  "spell": {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnStartTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "AddEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "trigger": {
+              "revertTrigger": {
+                "class": "TurnEndTrigger",
+                "targetPlayer": "SELF"
+                       }
+              "maxFires": 1
+            }
+          },
+          "maxFires": 1
+        }
+      },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

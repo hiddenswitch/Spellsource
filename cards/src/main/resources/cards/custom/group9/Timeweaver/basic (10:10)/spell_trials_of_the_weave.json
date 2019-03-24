@@ -1,0 +1,28 @@
+{
+  "name": "Trials of the Weave",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Deal $4 damage to all enemies. Restore 2 health to enemies that live.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDeadCondition",
+      "invert": true
+    },
+    "spell1": {
+      "class": "DamageSpell",
+      "target": "ENEMY_CHARACTERS",
+      "value": 2
+    },
+    "spell2": {
+      "class": "HealSpell",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

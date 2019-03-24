@@ -1,0 +1,22 @@
+{
+  "name": "Fate's Tapestry",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Reshuffle 2 cards. Draw 2 cards.",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "ChooseAndReshuffleSpell",
+      "value": 2
+     }
+    "spell": {
+      "class": "DrawCardSpell",
+      "value": 2
+     }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

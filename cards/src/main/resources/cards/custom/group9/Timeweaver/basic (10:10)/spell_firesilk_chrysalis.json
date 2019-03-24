@@ -1,0 +1,22 @@
+{
+  "name": "Firesilk Chrysalis",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Deal $1 Damage. Gain 3 Armor.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 1
+  },
+  "spell": {
+    "class": "BuffSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": 3
+    "collectible": true,
+   },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

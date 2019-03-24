@@ -1,0 +1,35 @@
+{
+  "name": "Lesser Marble Spellstone",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "RARE",
+  "description": "Deal $1 damage to all enemies once. (End your turn with mana to upgrade.)",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "EndTurnTrigger",
+      "fireCondition": {
+        "class": "PlayerAttributeValueProvider",
+        "playerAttribute": "MANA"
+        "value": 0,
+        "operation": "GREATER"
+      },
+    },
+    "spell": {
+      "class": "custom.TransformInHandSpell",
+      "target": "SELF",
+      "card": "spell_marble_spellstone"
+    },
+    "keepAfterTransform": false
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DamageSpell",
+    "target": "ENEMY_CHARACTERS",
+    "value": 1
+    },
+  },
+  "collectible": true,
+  "set": "KOBOLDS_AND_CATACOMBS",
+  "fileFormatVersion": 1
+}

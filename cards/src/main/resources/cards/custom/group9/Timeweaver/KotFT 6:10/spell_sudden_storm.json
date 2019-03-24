@@ -1,0 +1,14 @@
+{
+  "name": "Sudden Storm",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "Add two copies of 1-Cost cards you've drawn this turn to your hand.",
+  "spell": {
+    "class": "AddCardToHandSpell",
+//?????
+  "collectible": true,
+  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "fileFormatVersion": 1
+}

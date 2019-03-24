@@ -1,0 +1,43 @@
+{
+  "name": "Banish",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Deal $3 damage, Reshuffle a card, draw a card. Surge: Deal $2 more damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "target": "SELF",
+          "value": {
+            "class": "CurrentTurnValueProvider"
+          },
+        "attribute": "RECEIVED_ON_TURN",
+        "operation": "EQUAL"
+        },
+    "spell1": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ChooseAndReshuffleSpell",
+        },
+        {
+          "class": "DrawCardsSpell",
+        },
+        {
+          "class": "DamageSpell",
+          "value": 3
+        }
+      ]
+    },
+    "spell2": {
+          "class": "DamageSpell",
+          "value": 2
+        }
+  },
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}
