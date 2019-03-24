@@ -2,7 +2,7 @@
   "name": "Swift Stinger",
   "baseManaCost": 1,
   "type": "MINION",
-  "heroClass": "OBSIDIAN",
+  "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
