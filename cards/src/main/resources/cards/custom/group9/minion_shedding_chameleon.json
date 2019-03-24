@@ -1,13 +1,14 @@
 
   
 {
-  "name": "Harbinger of Hope",
+  "name": "Shedding Chameleon",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "ANY",
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
+  "race": "BEAST",
   "description": "Aftermath: Draw a minion from your deck.",
   "deathrattle": {
     "class": "FromDeckToHandSpell",
