@@ -1,6 +1,6 @@
 {
-  "name": "Cold Blood",
-  "baseManaCost": 2,
+  "name": "Unnerfed Cold Blood",
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
@@ -19,6 +19,6 @@
     }
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

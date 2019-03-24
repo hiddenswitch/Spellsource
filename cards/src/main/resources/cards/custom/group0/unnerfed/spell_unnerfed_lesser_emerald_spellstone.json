@@ -1,6 +1,6 @@
 {
-  "name": "Lesser Emerald Spellstone",
-  "baseManaCost": 6,
+  "name": "Unnerfed Lesser Emerald Spellstone",
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
@@ -15,7 +15,7 @@
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_emerald_spellstone"
+      "card": "spell_unnerfed_emerald_spellstone"
     },
     "countByValue": false,
     "keepAfterTransform": false
@@ -27,6 +27,6 @@
     "card": "token_wolf"
   },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

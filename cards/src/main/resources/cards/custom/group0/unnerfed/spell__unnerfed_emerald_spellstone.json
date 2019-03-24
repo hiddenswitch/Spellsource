@@ -1,10 +1,10 @@
 {
-  "name": "Lesser Emerald Spellstone",
-  "baseManaCost": 6,
+  "name": "Unnerfed Emerald Spellstone",
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "Summon two 3/3 Wolves. (Play a Secret to upgrade.)",
+  "description": "Summon three 3/3 Wolves. (Play a Secret to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 1,
     "eventTrigger": {
@@ -15,7 +15,7 @@
     "spell": {
       "class": "custom.TransformInHandSpell",
       "target": "SELF",
-      "card": "spell_emerald_spellstone"
+      "card": "spell_unnefed_greater_emerald_spellstone"
     },
     "countByValue": false,
     "keepAfterTransform": false
@@ -23,10 +23,10 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
-    "value": 2,
+    "value": 3,
     "card": "token_wolf"
   },
-  "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "collectible": false,
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

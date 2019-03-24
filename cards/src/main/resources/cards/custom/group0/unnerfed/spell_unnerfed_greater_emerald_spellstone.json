@@ -1,6 +1,6 @@
 {
-  "name": "Greater Emerald Spellstone",
-  "baseManaCost": 6,
+  "name": "Unnerfed Greater Emerald Spellstone",
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
@@ -12,6 +12,6 @@
     "card": "token_wolf"
   },
   "collectible": false,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }
