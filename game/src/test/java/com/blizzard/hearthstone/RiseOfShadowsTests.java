@@ -165,4 +165,73 @@ public class RiseOfShadowsTests extends TestBase {
 
 		});
 	}
+
+	@Test
+	public void testOblivitron() {
+		runGym((context, player, opponent) -> {
+			Minion tron = playMinionCard(context, player, "minion_oblivitron");
+			receiveCard(context, player, "minion_goblin_bomb");
+			destroy(context, tron);
+			assertEquals(opponent.getHero().getHp(), 28);
+		});
+	}
+
+	@Test
+	public void testLazulsScheme() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 4; i++) {
+				receiveCard(context, player, "spell_lazuls_scheme");
+			}
+			Minion dino = playMinionCard(context, opponent, "minion_ultrasaur");
+			for (int i = 1; i <= 4; i++) {
+				Card card = player.getHand().get(0);
+				assertTrue(card.getDescription(context, player).contains("by " + i));
+				assertEquals(dino.getAttack(), 7);
+				playCard(context, player, card, dino);
+				assertEquals(dino.getAttack(), 7 - i);
+				context.endTurn();
+				assertEquals(dino.getAttack(), 7 - i);
+				context.endTurn();
+			}
+		});
+	}
+
+	@Test
+	public void testRafaamsScheme() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 7; i++) {
+				receiveCard(context, player, "spell_rafaams_scheme");
+			}
+			for (int i = 1; i <= 7; i++) {
+				Card card = player.getHand().get(0);
+				assertTrue(card.getDescription(context, player).contains("Summon " + i));
+				playCard(context, player, card);
+				assertEquals(player.getMinions().size(), i);
+				context.endTurn();
+				playCard(context, opponent, "spell_twisting_nether");
+				context.endTurn();
+			}
+		});
+	}
+
+	@Test
+	public void testMadameLazul() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, opponent, "minion_wisp");
+			receiveCard(context, opponent, "minion_ultrasaur");
+			receiveCard(context, opponent, "spell_pyroblast");
+
+			overrideDiscover(context, player, discoverActions -> {
+				assertTrue(discoverActions.stream().anyMatch(discoverAction -> discoverAction.getCard().getCardId().equals("minion_wisp")));
+				assertTrue(discoverActions.stream().anyMatch(discoverAction -> discoverAction.getCard().getCardId().equals("minion_ultrasaur")));
+				assertTrue(discoverActions.stream().anyMatch(discoverAction -> discoverAction.getCard().getCardId().equals("spell_pyroblast")));
+				return discoverActions.stream().filter(discoverAction -> discoverAction.getCard().getCardId().equals("spell_pyroblast")).findFirst().get();
+			});
+			playCard(context, player, "minion_madame_lazul");
+
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_pyroblast");
+		});
+	}
+
 }
