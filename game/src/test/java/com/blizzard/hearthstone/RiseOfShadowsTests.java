@@ -1,12 +1,23 @@
 package com.blizzard.hearthstone;
 
+import net.demilich.metastone.game.actions.DiscoverAction;
+import net.demilich.metastone.game.actions.GameAction;
+import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.tests.util.TestBase;
+import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static java.util.stream.Collectors.summarizingInt;
 import static org.testng.Assert.*;
 
 public class RiseOfShadowsTests extends TestBase {
@@ -112,6 +123,46 @@ public class RiseOfShadowsTests extends TestBase {
 			context.endTurn();
 			context.endTurn();
 			assertTrue(context.getLogic().getValidTargets(opponent.getId(), pyro.play()).contains(player.getHero()));
+		});
+	}
+
+	@Test
+	public void testSwampqueenHagatha() {
+		runGym((context, player, opponent) -> {
+			Behaviour spiedBehavior = Mockito.spy(context.getBehaviours().get(player.getId()));
+			context.setBehaviour(player.getId(), spiedBehavior);
+			List<Card> cards = new ArrayList<>();
+			AtomicBoolean isTeachingHorror = new AtomicBoolean(false);
+			final Answer<GameAction> answer = invocation -> {
+
+				if (isTeachingHorror.get()) {
+					final List<GameAction> gameActions = (List<GameAction>) invocation.getArguments()[2];
+					final DiscoverAction discoverAction = (DiscoverAction) gameActions.get(0);
+					cards.add(discoverAction.getCard());
+					return discoverAction;
+				}
+				return (GameAction) invocation.callRealMethod();
+			};
+
+			Mockito.doAnswer(answer)
+					.when(spiedBehavior)
+					.requestAction(Mockito.any(), Mockito.any(), Mockito.anyList());
+
+			isTeachingHorror.set(true);
+			playCard(context, player, "minion_swampqueen_hagatha");
+			isTeachingHorror.set(false);
+			Card cardInHand = player.getHand().get(0);
+			assertEquals(cardInHand.getBaseHp(), 5);
+			assertEquals(cardInHand.getBaseAttack(), 5);
+			assertEquals(cardInHand.getBaseManaCost(), 5);
+			for (Card card : cards) {
+				assertTrue(cardInHand.getDescription().contains(card.getName()));
+				if (card.getTargetSelection() != TargetSelection.NONE) {
+					assertTrue(cardInHand.getDesc().getBattlecry().getTargetSelection() == card.getTargetSelection());
+				}
+			}
+
+
 		});
 	}
 }
