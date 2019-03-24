@@ -1,0 +1,51 @@
+{
+  "name": "Hex Lord Malacrass",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Set your health and deck to the state they were when the game started.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "FRIENDLY_DECK",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "STARTED_IN_DECK",
+            "operation": "HAS"
+          },
+          {
+            "class": "OwnedByPlayerFilter",
+            "targetPlayer": "SELF"
+          },
+          {
+            "class": "SpecificCardFilter",
+            "card": "quest_the_impossible_harvest",
+            "invert": true
+          },
+          {
+            "class": "EntityTypeFilter",
+            "entityType": "CARD"
+          }
+        ]
+      }
+    }
+    "spell": {
+      "class": "SetHeroHpSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 30
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,37 @@
+{
+  "name": "Pacify",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "Change all but one of a minion's attack into health. Draw a card.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "value": {
+      "class": "AlgebraicValueProvider",
+      "operation": "SUBTRACT",
+      "value1": {
+        "class": "AttributeValueProvider",
+        "attribute": "ATTACK"
+      },
+      "value2": 1
+    },
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "hpBonus": "SPELL_VALUE"
+      },
+      {
+        "class": "SetAttackSpell",
+        "value": 1
+      }
+      {
+        "class": "DrawCardSpell",
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

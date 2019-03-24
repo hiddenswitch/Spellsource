@@ -1,0 +1,23 @@
+{
+  "name": "Hungrier",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Reshuffle 2 cards. Add 2 Adaptation spells to your hand.",
+  "spell": {
+      "class": "ChooseAndReshuffleSpell",
+      "value": 2
+     }
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_adaptation",
+        "spell_adaptation"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

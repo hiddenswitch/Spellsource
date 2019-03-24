@@ -1,0 +1,25 @@
+{
+  "name": "Bullet Time",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "Common",
+  "description": "Your spells cost (1) less this turn.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_HERO",
+    "cardCostModifier": {
+      "class": "CardCostModifier",
+      "value": -1,
+      "cardType": "SPELL"
+    },
+    "revertTrigger": {
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF"
+    },
+  }
+  "collectible": true,
+  "set": "BASIC",
+  "fileFormatVersion": 1
+}

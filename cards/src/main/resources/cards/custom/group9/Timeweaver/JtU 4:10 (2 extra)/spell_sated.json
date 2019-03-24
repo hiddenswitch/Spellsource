@@ -1,0 +1,13 @@
+{
+  "name": "Sated",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Do nothing",
+  "spell": {
+    "class": "NullSpell",
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

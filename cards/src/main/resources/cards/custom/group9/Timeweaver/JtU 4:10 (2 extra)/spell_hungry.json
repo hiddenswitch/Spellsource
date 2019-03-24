@@ -1,0 +1,22 @@
+{
+  "name": "Hungry",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "FREE",
+  "description": "Reshuffle a card. Add an Adaptation spell to your hand.",
+  "spell": {
+      "class": "ChooseAndReshuffleSpell",
+      "value": 1
+     }
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "cards": [
+        "spell_adaptation"
+      ]
+    }
+  },
+  "collectible": false,
+  "set": "JOURNEY_TO_UNGORO",
+  "fileFormatVersion": 1
+}

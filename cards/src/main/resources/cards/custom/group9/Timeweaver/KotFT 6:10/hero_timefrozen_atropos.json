@@ -1,0 +1,50 @@
+{
+  "name": "Timefrozen Atropos",
+  "heroPower": "hero_power_freezetime_flurry",
+  "baseManaCost": 9,
+  "type": "HERO",
+  "heroClass": "TIME",
+  "rarity": "LEGENDARY",
+  "description": "Battlecry: Your cards cost (1) less this game. Shuffle 1-Cost cards you’ve played into your deck.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+          "class": "AddEnchantmentSpell",
+          "target": "FRIENDLY_PLAYER",
+          "aura": {
+             "class": "CardCostModifier",
+             "value": -1,
+             "targetPlayer": "SELF"
+           }
+        },
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "value": 90
+      "cardSource": {
+           "class": "GraveyardCardsSource"
+          }
+      "cardFilter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "operation": "HAS"
+          },
+          {
+            "value": 1,
+            "attribute": "BASE_MANA_COST",
+            "operation": "EQUAL"
+          },
+        ]
+      },
+    },
+  "attributes": {
+    "ARMOR": 5,
+    "BATTLECRY": true,
+    "MAX_HP": 30
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
