@@ -1,6 +1,6 @@
 {
-  "name": "Hunter's Mark",
-  "baseManaCost": 2,
+  "name": "Other Unnerfed Hunter's Mark",
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "FREE",
@@ -11,6 +11,6 @@
     "value": 1
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

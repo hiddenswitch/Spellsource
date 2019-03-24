@@ -1,6 +1,6 @@
 {
-  "name": "Equality",
-  "baseManaCost": 4,
+  "name": "Unnerfed Equality",
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
@@ -12,6 +12,6 @@
     "value": 1
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }

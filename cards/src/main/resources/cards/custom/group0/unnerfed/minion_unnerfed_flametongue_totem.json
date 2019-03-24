@@ -1,6 +1,6 @@
 {
-  "name": "Flametongue Totem",
-  "baseManaCost": 3,
+  "name": "Unnerfed Flametongue Totem",
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 0,
@@ -15,6 +15,6 @@
     "hpBonus": 0
   },
   "collectible": true,
-  "set": "BASIC",
+  "set": "UNNERFED",
   "fileFormatVersion": 1
 }
