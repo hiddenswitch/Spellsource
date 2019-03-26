@@ -1,0 +1,16 @@
+{
+  "name": "Unleash the Beast",
+  "baseManaCost": 6,
+  "type": "SPELL",
+  "heroClass": "GREEN",
+  "rarity": "RARE",
+  "description": "Summon a 5/5 Wyvern with Rush.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_wyvern"
+  },
+  "collectible": true,
+  "set": "RISE_OF_SHADOWS",
+  "fileFormatVersion": 1
+}

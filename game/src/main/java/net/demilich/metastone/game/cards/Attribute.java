@@ -1010,10 +1010,6 @@ public enum Attribute {
 	 */
 	WITHERED,
 	/**
-	 * Indicates the spell will give the player one more copy of itself on cast (but not again)
-	 */
-	TWINSPELL,
-	/**
 	 * Counter for each time a "XXXXX's Scheme" card has upgraded
 	 */
 	SCHEME,
