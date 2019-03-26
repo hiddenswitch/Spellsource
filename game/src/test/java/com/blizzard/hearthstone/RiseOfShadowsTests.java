@@ -30,9 +30,7 @@ public class RiseOfShadowsTests extends TestBase {
 			assertEquals(player.getHand().size(), 1);
 			aid = player.getHand().get(0);
 			assertFalse(aid.getDescription().contains("Twinspell"));
-			assertFalse(aid.hasAttribute(Attribute.TWINSPELL));
 			playCard(context, player, aid);
-
 			assertEquals(player.getHand().size(), 0);
 		});
 	}
