@@ -234,4 +234,71 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testBombCards() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_clockwork_goblin");
+			assertEquals(opponent.getDeck().size(), 1);
+			playCard(context, player, "weapon_wrenchcalibur");
+			attack(context, player, player.getHero(), opponent.getHero());
+			assertEquals(opponent.getDeck().size(), 2);
+			playCard(context, player, "minion_iron_juggernaut");
+			assertEquals(opponent.getDeck().size(), 3);
+			playCard(context, player, "spell_twisting_nether");
+			playMinionCard(context, player, "minion_blastmaster_boom");
+			assertEquals(player.getMinions().size(), 5);
+		});
+	}
+
+	@Test
+	public void testHeistbaronTogwaggle() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_heistbaron_togwaggle");
+			assertEquals(player.getHand().size(), 0);
+			playCard(context, player, "token_kobold_lackey", opponent.getHero());
+			overrideDiscover(context, player, discoverActions -> {
+				assertTrue(discoverActions.stream().anyMatch(dA -> dA.getCard().getCardId().equals("spell_tolins_goblet")));
+				assertTrue(discoverActions.stream().anyMatch(dA -> dA.getCard().getCardId().equals("spell_zarogs_crown")));
+				assertTrue(discoverActions.stream().anyMatch(dA -> dA.getCard().getCardId().equals("spell_wondrous_wand")));
+				assertTrue(discoverActions.stream().anyMatch(dA -> dA.getCard().getCardId().equals("token_golden_kobold")));
+				return discoverActions.get(0);
+			});
+
+			playCard(context, player, "minion_heistbaron_togwaggle");
+			assertEquals(player.getHand().size(), 1);
+		});
+	}
+
+	@Test
+	public void testKhadgar() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_khadgar");
+			playCard(context, player, "minion_saronite_chain_gang");
+			assertEquals(player.getMinions().size(), 4);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_khadgar");
+			playCard(context, player, "spell_mirror_image");
+			assertEquals(player.getMinions().size(), 5);
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_khadgar");
+			playCard(context, player, "spell_kara_kazham");
+			assertEquals(player.getMinions().size(), 7);
+		});
+	}
+
+	@Test
+	public void testHenchClanBurglar() {
+		runGym((context, player, opponent) -> {
+			overrideDiscover(context, player, discoverActions -> {
+				discoverActions.stream().forEach(discoverAction -> assertFalse(discoverAction.getCard().hasHeroClass(player.getHero().getHeroClass())));
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_hench_clan_burglar");
+		});
+
+	}
 }
