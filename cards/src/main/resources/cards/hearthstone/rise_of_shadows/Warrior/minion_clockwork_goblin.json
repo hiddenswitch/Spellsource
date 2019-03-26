@@ -1,11 +1,12 @@
 {
-  "name": "Seaforium Bomber",
-  "baseManaCost": 5,
+  "name": "Clockwork Goblin",
+  "baseManaCost": 3,
   "type": "MINION",
-  "heroClass": "ANY",
-  "baseAttack": 5,
-  "baseHp": 5,
-  "rarity": "EPIC",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "heroClass": "RED",
+  "rarity": "RARE",
+  "race": "MECH",
   "description": "Battlecry: Shuffle a Bomb into your opponent's deck. When drawn, it explodes for 5 damage.",
   "battlecry": {
     "targetSelection": "NONE",
@@ -19,6 +20,6 @@
     "BATTLECRY": true
   },
   "collectible": true,
-  "set": "BOOMSDAY_PROJECT",
+  "set": "RISE_OF_SHADOWS",
   "fileFormatVersion": 1
 }

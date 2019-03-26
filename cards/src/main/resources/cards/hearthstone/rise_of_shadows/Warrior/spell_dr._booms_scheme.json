@@ -1,15 +1,15 @@
 {
-  "name": "Rafaam's Scheme",
-  "baseManaCost": 3,
+  "name": "Dr. Boom's Scheme",
+  "baseManaCost": 4,
   "type": "SPELL",
-  "heroClass": "VIOLET",
+  "heroClass": "RED",
   "rarity": "COMMON",
-  "description": "Summon [1] 1/1 [Imp]. (Upgrades each turn!)",
+  "description": "Gain [1] Armor. (Upgrades each turn!)",
   "targetSelection": "NONE",
   "spell": {
-    "class": "SummonSpell",
-    "card": "token_imp",
-    "value": {
+    "class": "BuffHeroSpell",
+    "target": "FRIENDLY_HERO",
+    "armorBonus": {
       "class": "AttributeValueProvider",
       "target": "SELF",
       "attribute": "SCHEME",
@@ -40,17 +40,6 @@
         "attribute": "SCHEME",
         "offset": 1
       }
-    },
-    {
-      "class": "PluralDescription",
-      "value": {
-        "class": "AttributeValueProvider",
-        "target": "SELF",
-        "attribute": "SCHEME",
-        "offset": 1
-      },
-      "description1": "Imp",
-      "description2": "Imps"
     }
   ]
 }

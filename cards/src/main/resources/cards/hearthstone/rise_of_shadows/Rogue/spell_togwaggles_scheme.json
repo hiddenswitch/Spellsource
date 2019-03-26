@@ -17,7 +17,7 @@
   },
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "TurnStartTrigger",
+      "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
