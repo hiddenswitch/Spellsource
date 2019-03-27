@@ -23,11 +23,16 @@
             "class": "CardFilter",
             "heroClass": "SELF",
             "invert": true
+          },
+          {
+            "class": "CardFilter",
+            "heroClass": "ANY",
+            "invert": true
           }
         ]
       },
       "cardSource": {
-        "class": "CatalogueSource"
+        "class": "UnweightedCatalogueSource"
       },
       "spell": {
         "class": "ReceiveCardSpell",

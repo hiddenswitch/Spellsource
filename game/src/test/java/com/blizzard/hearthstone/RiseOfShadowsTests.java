@@ -292,11 +292,27 @@ public class RiseOfShadowsTests extends TestBase {
 	public void testHenchClanBurglar() {
 		runGym((context, player, opponent) -> {
 			overrideDiscover(context, player, discoverActions -> {
-				discoverActions.stream().forEach(discoverAction -> assertFalse(discoverAction.getCard().hasHeroClass(player.getHero().getHeroClass())));
+				discoverActions.stream().forEach(discoverAction -> {
+					assertFalse(discoverAction.getCard().getHeroClass() == HeroClass.SELF);
+					assertFalse(discoverAction.getCard().getHeroClass() == HeroClass.ANY);
+				});
 				return discoverActions.get(0);
 			});
 			playCard(context, player, "minion_hench_clan_burglar");
+			assertEquals(player.getHand().size(), 1);
 		});
 
 	}
+
+	@Test
+	public void testKeeperStalladris() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_keeper_stalladris");
+			playChooseOneCard(context, player, "spell_power_of_the_wild", "spell_power_of_the_wild_2");
+			assertEquals(player.getHand().get(0).getCardId(), "spell_power_of_the_wild_1");
+			assertEquals(player.getHand().get(1).getCardId(), "spell_power_of_the_wild_2");
+		});
+	}
+
+
 }
