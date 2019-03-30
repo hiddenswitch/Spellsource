@@ -7,6 +7,8 @@ import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
@@ -326,6 +328,53 @@ public class RiseOfShadowsTests extends TestBase {
 			assertEquals(player.getMinions().size(), 3);
 		});
 
+	}
+
+	@Test
+	public void testMuckmorpher(){
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_malygos");
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_muckmorpher");
+			}
+
+			playCard(context, player, "minion_muckmorpher");
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_malygos");
+			assertEquals(player.getMinions().get(0).getHp(), 4);
+
+
+		});
+	}
+
+	@Test
+	public void testCommanderRhyssa() {
+		runGym((context, player, opponent) -> {
+			assertFalse(SpellUtils.hasAura(context, player.getId(), SecretsTriggerTwiceAura.class));
+			Minion rhyssa = playMinionCard(context, player, "minion_commander_rhyssa");
+			assertTrue(SpellUtils.hasAura(context, player.getId(), SecretsTriggerTwiceAura.class));
+
+
+			playCard(context, player, "secret_competitive_spirit");
+			playCard(context, player, "secret_noble_sacrifice");
+			context.endTurn();
+			playCard(context, opponent, "spell_claw");
+			attack(context, opponent, opponent.getHero(), rhyssa);
+			assertEquals(player.getMinions().size(), 2);
+			context.endTurn();
+			assertEquals(rhyssa.getHp(), rhyssa.getBaseHp() + 2);
+
+
+		});
+	}
+
+	@Test
+	public void testManaCyclone() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_elemental_evocation");
+			playCard(context, player, "spell_pyroblast", opponent.getHero());
+			playCard(context, player, "minion_mana_cyclone");
+			assertEquals(player.getHand().size(), 2);
+		});
 	}
 
 
