@@ -314,5 +314,19 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testCrystalStag() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_crystal_stag");
+			assertEquals(player.getMinions().size(), 1);
+			playCard(context, player, "spell_fireball", player.getHero());
+			playChooseOneCard(context, player, "spell_crystal_power", "spell_crystal_power_2", player.getHero());
+
+			playMinionCard(context, player, "minion_crystal_stag");
+			assertEquals(player.getMinions().size(), 3);
+		});
+
+	}
+
 
 }
