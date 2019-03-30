@@ -377,5 +377,26 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testUnseenSaboteur() {
+		runGym((context, player, opponent) -> {
+			receiveCard(context, opponent, "spell_fiendish_circle");
+			playCard(context, player, "minion_unseen_saboteur");
+			assertEquals(opponent.getHand().size(), 0);
+			assertEquals(opponent.getMinions().size(), 4);
+		});
+	}
+
+	@Test
+	public void testDuel() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_violet_wurm");
+			shuffleToDeck(context, opponent, "minion_violet_wurm");
+			playCard(context, player, "spell_duel");
+			assertEquals(player.getMinions().size(), 7);
+			assertEquals(opponent.getMinions().size(), 7);
+		});
+	}
+
 
 }
