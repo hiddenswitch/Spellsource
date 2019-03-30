@@ -11,6 +11,8 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.events.HasValue;
 import net.demilich.metastone.game.spells.AddEnchantmentSpell;
+import net.demilich.metastone.game.spells.SpellUtils;
+import net.demilich.metastone.game.spells.aura.SecretsTriggerTwiceAura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
@@ -212,6 +214,9 @@ public class Enchantment extends Entity implements Trigger {
 		if (spellCasts) {
 			if (this instanceof Quest) {
 				expire();
+			}
+			if (this instanceof Secret && SpellUtils.hasAura(event.getGameContext(), ownerId, SecretsTriggerTwiceAura.class)) {
+				event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 			}
 			event.getGameContext().getLogic().castSpell(ownerId, spell, hostReference, EntityReference.NONE, true);
 		}
