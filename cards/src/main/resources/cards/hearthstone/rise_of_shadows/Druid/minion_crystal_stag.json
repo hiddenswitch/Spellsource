@@ -26,7 +26,8 @@
     }
   },
   "attributes": {
-    "RUSH": true
+    "RUSH": true,
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "RISE_OF_SHADOWS",

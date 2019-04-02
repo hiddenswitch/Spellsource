@@ -398,5 +398,92 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testLucentBark() {
+		runGym((context, player, opponent) -> {
+			Minion lucentbark = playMinionCard(context, player, "minion_lucentbark");
+			playCard(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_assassinate", lucentbark);
+
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "permanent_spirit_of_lucentbark");
+
+			Minion minion = player.getMinions().get(0);
+
+			playCard(context, player, "spell_regenerate", player.getHero());
+			//System.out.println(minion.getDescription(context, player));
+			//assertTrue(minion.getDescription(context, player).contains("2 more"));
+			playCard(context, player, "minion_voodoo_doctor", player.getHero());
+
+
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_lucentbark");
+		});
+	}
+
+	@Test
+	public void testTakNozwhisker() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_tak_nozwhisker");
+			playCard(context, player, "minion_elise_trailblazer");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getDeck().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_ungoro_pack");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_tak_nozwhisker");
+			playCard(context, player, "spell_academic_espionage");
+			assertEquals(player.getHand().size(), 10);
+			assertEquals(player.getDeck().size(), 10);
+
+			for (Card card : player.getHand()) {
+				assertEquals(costOf(context, player, card), 1);
+			}
+		});
+	}
+
+	@Test
+	public void testCrytalsongPortal() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_crystalsong_portal");
+			assertEquals(player.getHand().size(), 3);
+			playCard(context, player, "spell_crystalsong_portal");
+			assertEquals(player.getHand().size(), 4);
+		});
+	}
+
+	@Test
+	public void testNineLives() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_savannah_highmane");
+			playCard(context, player, "spell_twisting_nether");
+			playCard(context, player, "spell_twisting_nether");
+
+			playCard(context, player, "spell_nine_lives");
+			assertEquals(player.getMinions().size(), 2);
+		});
+	}
+
+	@Test
+	public void testArchmageVargoth() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_archmage_vargoth");
+			playCard(context, player, "spell_muster_for_battle");
+			assertEquals(player.getMinions().size(), 4);
+			context.endTurn();
+			assertEquals(player.getMinions().size(), 7);
+		});
+	}
+
+	@Test
+	public void testVendetta() {
+		runGym((context, player, opponent) -> {
+			Card vendetta = receiveCard(context, player, "spell_vendetta");
+			assertEquals(costOf(context, player, vendetta), 4);
+			receiveCard(context, player, "spell_pyroblast");
+			assertEquals(costOf(context, player, vendetta), 0);
+		}, HeroClass.BLACK, HeroClass.BLACK);
+	}
+
 
 }
