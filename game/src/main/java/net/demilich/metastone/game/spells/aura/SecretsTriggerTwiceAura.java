@@ -6,6 +6,9 @@ import net.demilich.metastone.game.spells.NullSpell;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
 
+/**
+ * When this aura is active, spells from {@link net.demilich.metastone.game.spells.trigger.secrets.Secret}s will be performed twice
+ */
 public class SecretsTriggerTwiceAura extends Aura {
 
 
