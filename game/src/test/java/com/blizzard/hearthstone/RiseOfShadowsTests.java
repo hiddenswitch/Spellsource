@@ -485,5 +485,26 @@ public class RiseOfShadowsTests extends TestBase {
 		}, HeroClass.BLACK, HeroClass.BLACK);
 	}
 
+	@Test
+	public void testConjurersCalling() {
+		runGym((context, player, opponent) -> {
+			Minion dino = playMinionCard(context, player, "minion_ultrasaur");
+			playCard(context, player, "spell_conjurers_calling", dino);
+			assertEquals(player.getMinions().size(), 2);
+			for (int i = 0; i < 2; i++) {
+				assertEquals(player.getMinions().get(i).getSourceCard().getBaseManaCost(), 10);
+			}
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion dino = playMinionCard(context, opponent, "minion_ultrasaur");
+			playCard(context, player, "spell_conjurers_calling", dino);
+			assertEquals(opponent.getMinions().size(), 2);
+			for (int i = 0; i < 2; i++) {
+				assertEquals(opponent.getMinions().get(i).getSourceCard().getBaseManaCost(), 10);
+			}
+		});
+	}
+
 
 }

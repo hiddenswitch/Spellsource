@@ -10,7 +10,7 @@
     "class": "SummonSpell",
     "card": "token_wyvern"
   },
-  "collectible": true,
+  "collectible": false,
   "set": "RISE_OF_SHADOWS",
   "fileFormatVersion": 1
 }
