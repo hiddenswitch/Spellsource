@@ -1,0 +1,71 @@
+{
+  "name": "Mrs. Merria",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "LEGENDARY",
+  "description": "Opener: If you played five cards this turn, take control of an enemy minion.[]",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "COMBO"
+        },
+        "value2": 5
+      },
+      "spell": {
+        "class": "MindControlSpell"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "ConditionalDescription",
+      "condition": {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "FRIENDLY_PLAYER",
+          "attribute": "COMBO"
+        },
+        "value2": 5
+      },
+      "description1": " (Ready!)",
+      "description2": {
+        "class": "MetaDescription",
+        "descriptions": [
+          " (",
+          {
+            "class": "ValueDescription",
+            "value": {
+              "class": "AlgebraicValueProvider",
+              "operation": "SUBTRACT",
+              "value1": 5,
+              "value2": {
+                "class": "AttributeValueProvider",
+                "target": "FRIENDLY_PLAYER",
+                "attribute": "COMBO"
+              }
+            }
+          },
+          " left!)"
+        ]
+      }
+    }
+  ]
+}
