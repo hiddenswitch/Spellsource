@@ -1,0 +1,24 @@
+{
+  "name": "Stallius the Horned",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 20,
+  "rarity": "LEGENDARY",
+  "race": "BEAST",
+  "description": "Battlecry: Swap Health with another minion.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SwapHpSpell",
+      "target": "FRIENDLY_HERO"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CORE",
+  "fileFormatVersion": 1
+}
