@@ -506,5 +506,44 @@ public class RiseOfShadowsTests extends TestBase {
 		});
 	}
 
+	@Test
+	public void testSweepingStrikes() {
+		runGym((context, player, opponent) -> {
+			Minion gangster = playMinionCard(context, opponent, "minion_doppelgangster");
+			assertEquals(opponent.getMinions().size(), 3);
+			Minion overkiller = playMinionCard(context, player, "minion_half_time_scavenger");
+			playCard(context, player, "spell_sweeping_strikes", overkiller);
+			attack(context, player, overkiller, gangster);
+			//assertEquals(player.getHero().getArmor(), 9);
+		});
+	}
+
+	@Test
+	public void testDarkestHour() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "minion_ultrasaur");
+			}
+
+			for (int i = 0; i < 5; i++) {
+				playCard(context, player, "minion_wisp");
+			}
+
+			playCard(context, player, "spell_darkest_hour");
+
+			assertEquals(player.getMinions().size(), 5);
+		});
+	}
+
+	@Test
+	public void testWhirlwindTempest() {
+		runGym((context, player, opponent) -> {
+			Minion harpy = playMinionCard(context, player, "minion_windfury_harpy");
+			assertEquals(harpy.getMaxNumberOfAttacks(), 2);
+			Minion tempest = playMinionCard(context, player, "minion_whirlwind_tempest");
+			assertEquals(harpy.getMaxNumberOfAttacks(), 4);
+		});
+	}
+
 
 }
