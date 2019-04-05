@@ -10,9 +10,8 @@
   "description": "Rush, Overkill: Draw a Rush minion and give it +5/+5.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
       "class": "OverkillSpell",

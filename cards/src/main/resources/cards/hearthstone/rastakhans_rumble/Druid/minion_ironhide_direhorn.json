@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Overkill:\u00a0Summon a 5/5 Ironhide Runt.",
+  "description": "\u00a0Summon a 5/5 Ironhide Runt.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

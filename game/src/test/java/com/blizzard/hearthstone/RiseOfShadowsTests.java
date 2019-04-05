@@ -509,12 +509,18 @@ public class RiseOfShadowsTests extends TestBase {
 	@Test
 	public void testSweepingStrikes() {
 		runGym((context, player, opponent) -> {
-			Minion gangster = playMinionCard(context, opponent, "minion_doppelgangster");
+			Minion left = playMinionCard(context, opponent, "minion_wisp");
+			Minion middle = playMinionCard(context, opponent, "minion_wisp");
+			Minion right = playMinionCard(context, opponent, "minion_wisp");
 			assertEquals(opponent.getMinions().size(), 3);
 			Minion overkiller = playMinionCard(context, player, "minion_half_time_scavenger");
 			playCard(context, player, "spell_sweeping_strikes", overkiller);
-			attack(context, player, overkiller, gangster);
-			//assertEquals(player.getHero().getArmor(), 9);
+			attack(context, player, overkiller, middle);
+			assertTrue(left.isDestroyed());
+			assertTrue(middle.isDestroyed());
+			assertTrue(right.isDestroyed());
+			assertEquals(opponent.getMinions().size(), 0);
+			assertEquals(player.getHero().getArmor(), 9);
 		});
 	}
 
