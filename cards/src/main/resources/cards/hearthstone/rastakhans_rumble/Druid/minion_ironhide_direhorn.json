@@ -7,12 +7,11 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "\u00a0Summon a 5/5 Ironhide Runt.",
+  "description": "Overkill:\u00a0Summon a 5/5 Ironhide Runt.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
+      "class": "DamageCausedTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
     },
     "spell": {
       "class": "OverkillSpell",
