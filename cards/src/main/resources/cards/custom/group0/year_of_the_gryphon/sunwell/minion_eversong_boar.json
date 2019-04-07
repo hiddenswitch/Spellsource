@@ -10,13 +10,7 @@
   "description": "Rush. Surge: Gain +2 Attack.",
   "battlecry": {
     "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "attribute": "RECEIVED_ON_TURN",
-      "operation": "EQUAL"
+     "class": "SurgeCondition"
     },
     "targetSelection": "NONE",
     "spell": {
@@ -26,7 +20,8 @@
     }
   },
   "attributes": {
-    "RUSH": true
+    "RUSH": true,
+    "SURGE": true
   },
   "collectible": true,
   "set": "CUSTOM",

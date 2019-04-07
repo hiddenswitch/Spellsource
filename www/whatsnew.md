@@ -4,6 +4,17 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.23-2.0.29 (Thursday, April 4th, 2019)
+
+Introducing the Timeweaver class!
+
+##### Content Additions
+
+ - Many sets of the Timeweaver class.
+ - Abera, Swarm Evolver has been added to the Vermancer class: Battlecry: Adapt your Larva. (Wherever they are)"
+
+##### Content Fixes
+
 ### 0.8.22-2.0.28 (Monday, March 11th, 2019)
 
 The font in the client has been improved significantly for better visibility. Feedback is encouraged and highly appreciated!

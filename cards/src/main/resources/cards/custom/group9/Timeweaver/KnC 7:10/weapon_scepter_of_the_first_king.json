@@ -4,28 +4,42 @@
   "type": "WEAPON",
   "heroClass": "TIME",
   "damage": 0,
-  "durability": 1,
+  "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "When you play a card, add a 0-Mana spell to your hand. Breaks at the start of your turn.",
-  "passiveTrigger": {
-    "eventTrigger": {
-      "class": "AfterCardPlayedTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "value": 1,
-      "cardFilter": {
-        "class": "CardFilter",
-        "manaCost": 0
-        "cardType": "SPELL"
+  "description": "Whenever you play a card, add a 0-Cost spell to your hand. At the end of your turn, destroy this.",
+  "triggers": [
+    {
+      "eventTrigger": {
+        "class": "CardPlayedTrigger",
+        "targetPlayer": "SELF"
       },
-      "cardSource": {
-        "class": "UnweightedCatalogueSource"
-      },
+      "spell": {
+        "class": "ReceiveCardSpell",
+        "value": 1,
+        "cardFilter": {
+          "class": "CardFilter",
+          "manaCost": 0,
+          "cardType": "SPELL"
+        },
+        "cardSource": {
+          "class": "UnweightedCatalogueSource"
+        }
+      }
     },
-  },
+    {
+      "eventTrigger": {
+        "class": "TurnEndTrigger"
+      },
+      "spell": {
+        "class": "DestroySpell",
+        "target": "FRIENDLY_WEAPON"
+      }
+    }
+  ],
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

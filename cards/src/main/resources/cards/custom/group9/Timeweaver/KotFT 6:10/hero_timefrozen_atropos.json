@@ -9,42 +9,52 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-          "class": "AddEnchantmentSpell",
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "CardCostModifierSpell",
           "target": "FRIENDLY_PLAYER",
-          "aura": {
-             "class": "CardCostModifier",
-             "value": -1,
-             "targetPlayer": "SELF"
-           }
-        },
-    "spell": {
-      "class": "ShuffleToDeckSpell",
-      "value": 90
-      "cardSource": {
-           "class": "GraveyardCardsSource"
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "operation": "SUBTRACT",
+            "value": 1
           }
-      "cardFilter": {
-        "class": "AndFilter",
-        "filters": [
-          {
-            "class": "AttributeFilter",
-            "attribute": "PLAYED_FROM_HAND_OR_DECK",
-            "operation": "HAS"
+        },
+        {
+          "class": "ShuffleToDeckSpell",
+          "value": 90,
+          "cardSource": {
+            "class": "GraveyardCardsSource"
           },
-          {
-            "value": 1,
-            "attribute": "BASE_MANA_COST",
-            "operation": "EQUAL"
-          },
-        ]
-      },
-    },
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "AttributeFilter",
+                "attribute": "PLAYED_FROM_HAND_OR_DECK",
+                "operation": "HAS"
+              },
+              {
+                "class": "AttributeFilter",
+                "value": 1,
+                "attribute": "BASE_MANA_COST",
+                "operation": "EQUAL"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
   "attributes": {
     "ARMOR": 5,
     "BATTLECRY": true,
     "MAX_HP": 30
   },
   "collectible": true,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
   "fileFormatVersion": 1
 }

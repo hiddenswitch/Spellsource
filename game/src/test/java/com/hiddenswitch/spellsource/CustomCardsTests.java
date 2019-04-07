@@ -34,6 +34,7 @@ import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
+import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.jetbrains.annotations.NotNull;
 import org.mockito.Mockito;
@@ -55,6 +56,30 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class CustomCardsTests extends TestBase {
+
+	@Test
+	public void testAberaSwarmEvolver() {
+		runGym((context, player, opponent) -> {
+			AtomicReference<String> name = new AtomicReference<>();
+			AtomicInteger counter = new AtomicInteger(0);
+			overrideDiscover(context, player, discoverActions -> {
+				name.set(discoverActions.get(0).getCard().getName());
+				counter.incrementAndGet();
+				return discoverActions.get(0);
+			});
+			Minion larva = playMinionCard(context, player, "token_spiderling");
+			playMinionCard(context, player, "token_abera_swarm_evolver");
+
+			assertAdapted(name.get(), larva);
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(counter.get(),1);
+			playCard(context, player, "spell_spider_swarm");
+			assertEquals(counter.get(),1);
+			assertEquals(player.getMinions().size(), 4);
+			assertAdapted(name.get(), player.getMinions().get(2));
+			assertAdapted(name.get(), player.getMinions().get(3));
+		});
+	}
 
 	@Test
 	public void testTheMaelstrom() {

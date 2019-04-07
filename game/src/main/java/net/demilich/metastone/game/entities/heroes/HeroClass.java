@@ -127,7 +127,7 @@ public enum HeroClass {
 			case PURPLE:
 				return CardCatalogue.getCardById("hero_illidan");
 			case TIME:
-				return CardCatalogue.getCardById("hero_Atropos");
+				return CardCatalogue.getCardById("hero_atropos");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

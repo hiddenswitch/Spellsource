@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "EPIC",
-  "description": "Add the 4 Bard Brothers to your hand. Noise complaints will be ignored.",
+  "description": "Add the 4 Bard Brothers to your hand. (Noise complaints will be ignored.)",
   "targetSelection": "NONE",
   "spell": {
     "class": "ReceiveCardSpell",
@@ -12,10 +12,13 @@
       "token_trumpet_tony",
       "token_guitar_gordon",
       "token_cello_charlie",
-      "token_keyboard_kyle",
+      "token_keyboard_kyle"
     ]
-  }
+  },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

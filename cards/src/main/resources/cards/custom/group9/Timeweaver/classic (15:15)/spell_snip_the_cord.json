@@ -4,27 +4,21 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "FREE",
-  "description": "Deal $3 damage, Reshuffle a card, draw a card. Surge: Deal $2 more damage.",
+  "description": "Deal $3 damage. Reshuffle 1, draw 1. Surge: Deal $2 more damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "ConditionalEffectSpell",
-        "condition": {
-          "class": "AttributeCondition",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-        "attribute": "RECEIVED_ON_TURN",
-        "operation": "EQUAL"
-        },
+    "condition": {
+      "class": "SurgeCondition"
+    },
     "spell1": {
       "class": "MetaSpell",
       "spells": [
         {
-          "class": "ChooseAndReshuffleSpell",
+          "class": "ChooseAndReshuffleSpell"
         },
         {
-          "class": "DrawCardsSpell",
+          "class": "DrawCardSpell"
         },
         {
           "class": "DamageSpell",
@@ -33,11 +27,14 @@
       ]
     },
     "spell2": {
-          "class": "DamageSpell",
-          "value": 2
-        }
+      "class": "DamageSpell",
+      "value": 2
+    }
   },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }

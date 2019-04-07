@@ -8,30 +8,42 @@
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
-    "value": {
-      "class": "AlgebraicValueProvider",
-      "operation": "SUBTRACT",
-      "value1": {
-        "class": "AttributeValueProvider",
-        "attribute": "ATTACK"
-      },
-      "value2": 1
-    },
     "spells": [
       {
         "class": "BuffSpell",
-        "hpBonus": "SPELL_VALUE"
+        "hpBonus": {
+          "class": "AlgebraicValueProvider",
+          "operation": "MAXIMUM",
+          "value2": 0,
+          "value1": {
+            "class": "AttributeValueProvider",
+            "attribute": "ATTACK",
+            "offset": -1
+          }
+        }
       },
       {
-        "class": "SetAttackSpell",
-        "value": 1
-      }
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "AttributeCondition",
+          "value": 0,
+          "operation": "GREATER",
+          "attribute": "ATTACK"
+        },
+        "spell": {
+          "class": "SetAttackSpell",
+          "value": 1
+        }
+      },
       {
-        "class": "DrawCardSpell",
+        "class": "DrawCardSpell"
       }
     ]
   },
   "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ],
   "fileFormatVersion": 1
 }

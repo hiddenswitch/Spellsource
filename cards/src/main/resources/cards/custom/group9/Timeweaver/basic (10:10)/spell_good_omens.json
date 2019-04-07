@@ -8,7 +8,7 @@
   "targetSelection": "NONE",
   "spell": {
     "class": "DrawCardSpell",
-    "value": 2
+    "value": 2,
     "spell": {
       "class": "CardCostModifierSpell",
       "target": "OUTPUT",
@@ -17,11 +17,11 @@
         "target": "SELF",
         "value": 1,
         "operation": "SUBTRACT"
-        }
-      },
-      "targetPlayer": "SELF"
+      }
     },
+    "targetPlayer": "SELF"
+  },
   "collectible": true,
-  "set": "BASIC",
+  "sets": ["CUSTOM","BASIC"],
   "fileFormatVersion": 1
 }

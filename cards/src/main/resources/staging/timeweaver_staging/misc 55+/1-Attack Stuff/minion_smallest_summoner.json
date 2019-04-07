@@ -1,37 +1,35 @@
 {
-  "name": "Smallest Sorcerer",
+  "name": "Smallest Summoner",
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "TIME",
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Surge: Discover a 1-Cost spell.",
+  "description": "Surge: Discover a 1-Cost Timeweaver minion.",
 "battlecry": {
-   "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "attribute": "RECEIVED_ON_TURN",
-      "operation": "EQUAL"
-    },
+  "condition": {
+    "class": "SurgeCondition"
+  },
   "targetSelection": "NONE",
   "spell": {
     "class": "DiscoverSpell",
     "spell": {
       "class": "ReceiveCardSpell",
       },
-      "targetPlayer": "SELF"
+    },
       "cardFilter": {
         "class": "CardFilter",
         "value": 1,
         "attribute": "BASE_MANA_COST",
-        "cardType": "SPELL",
+        "heroClass": "TIME",
+        "cardType": "MINION",
         "operation": "EQUAL"
       }
     },
+  "attributes": {
+    "SURGE": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1

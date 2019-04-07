@@ -11,6 +11,9 @@
     "STEALTH": true
   },
   "collectible": false,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

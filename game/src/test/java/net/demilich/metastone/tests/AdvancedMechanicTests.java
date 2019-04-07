@@ -46,6 +46,11 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
+	public void testSilencingMinionWithSelfTargetingBuffAuraResultsInCorrectStats() {
+
+	}
+
+	@Test
 	public void testWitherShouldNotTriggerOnDivineShield() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_divine_shield_test");

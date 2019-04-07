@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
  *   }
  * </pre>
  */
-public class DrawCardUntilConditionSpell extends Spell {
+public final class DrawCardUntilConditionSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(DrawCardUntilConditionSpell.class);
 
 	@Override

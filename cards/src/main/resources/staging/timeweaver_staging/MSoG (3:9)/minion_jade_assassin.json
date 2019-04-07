@@ -17,7 +17,7 @@
         "cards": [
           "spell_sated",
           "spell_hungry",
-          "spell_hungier",
+          "spell_hungrier",
           "spell_hongriest"
         ],
         "howMany": 4

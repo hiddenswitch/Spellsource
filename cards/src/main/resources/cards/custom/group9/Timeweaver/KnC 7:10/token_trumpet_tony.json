@@ -6,11 +6,14 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "LIFESTEAL",
+  "description": "Lifesteal",
   "attributes": {
     "LIFESTEAL": true
   },
   "collectible": false,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

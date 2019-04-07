@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Whenever you discard a card, instead shuffle it into your deck.",
+  "description": "Whenever you discard a card, shuffle a copy into your deck.",
   "trigger": {
     "eventTrigger": {
       "class": "DiscardTrigger",
@@ -14,11 +14,14 @@
     },
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "card": "EVENT_TRIGGER",
+      "target": "EVENT_TARGET",
       "value": 1
     }
   },
   "collectible": true,
-  "set": "OGOBLINS_VS_GNOMES",
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ],
   "fileFormatVersion": 1
 }

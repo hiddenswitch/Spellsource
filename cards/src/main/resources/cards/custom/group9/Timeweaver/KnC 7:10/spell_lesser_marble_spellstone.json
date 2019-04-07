@@ -4,16 +4,20 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "RARE",
-  "description": "Deal $1 damage to all enemies once. (End your turn with mana to upgrade.)",
+  "description": "Deal $1 damage to all enemies. (End your turn with unspent mana to upgrade)",
   "passiveTrigger": {
     "eventTrigger": {
-      "class": "EndTurnTrigger",
-      "fireCondition": {
-        "class": "PlayerAttributeValueProvider",
-        "playerAttribute": "MANA"
-        "value": 0,
+      "class": "TurnEndTrigger",
+      "targetPlayer": "SELF",
+      "queueCondition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "PlayerAttributeValueProvider",
+          "playerAttribute": "MANA"
+        },
+        "value2": 0,
         "operation": "GREATER"
-      },
+      }
     },
     "spell": {
       "class": "custom.TransformInHandSpell",
@@ -27,9 +31,11 @@
     "class": "DamageSpell",
     "target": "ENEMY_CHARACTERS",
     "value": 1
-    },
   },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

@@ -9,22 +9,19 @@
   "spell": {
     "class": "EitherOrSpell",
     "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "attribute": "RECEIVED_ON_TURN",
-      "operation": "EQUAL"
+      "class": "SurgeCondition"
     },
     "spell1": {
       "class": "DrawCardSpell",
-      "value": 2,
+      "value": 2
     },
     "spell2": {
       "class": "DrawCardSpell",
       "value": 3,
     }
+  },
+  "attributes": {
+    "SURGE": true
   },
   "collectible": true,
   "set": "CUSTOM",

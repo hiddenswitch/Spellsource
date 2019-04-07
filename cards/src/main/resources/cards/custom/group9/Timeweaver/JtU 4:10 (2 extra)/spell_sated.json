@@ -6,8 +6,12 @@
   "rarity": "FREE",
   "description": "Do nothing",
   "spell": {
-    "class": "NullSpell",
+    "class": "NullSpell"
+  },
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ],
   "fileFormatVersion": 1
 }

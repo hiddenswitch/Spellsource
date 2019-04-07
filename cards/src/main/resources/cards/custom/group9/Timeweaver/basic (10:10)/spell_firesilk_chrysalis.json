@@ -7,16 +7,20 @@
   "description": "Deal $1 Damage. Gain 3 Armor.",
   "targetSelection": "ANY",
   "spell": {
-    "class": "DamageSpell",
-    "value": 1
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 1
+      },
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 3
+      }
+    ]
   },
-  "spell": {
-    "class": "BuffSpell",
-    "target": "FRIENDLY_HERO",
-    "armorBonus": 3
-    "collectible": true,
-   },
   "collectible": true,
-  "set": "BASIC",
+  "sets": ["CUSTOM","BASIC"],
   "fileFormatVersion": 1
 }

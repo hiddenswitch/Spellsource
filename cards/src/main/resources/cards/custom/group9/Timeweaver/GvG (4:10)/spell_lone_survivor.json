@@ -6,16 +6,19 @@
   "rarity": "EPIC",
   "description": "Choose a minion. Destroy minions adjacent to it.",
   "targetSelection": "MINIONS",
-   "spell": {
-      "class": "AdjacentEffectSpell",
-      "spell1": {
-        "class": "NullSpell"
-        },
-        "spell2": {
-        "class": "DestroySpell",
-        }
-      },
+  "spell": {
+    "class": "AdjacentEffectSpell",
+    "spell1": {
+      "class": "NullSpell"
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ],
   "fileFormatVersion": 1
 }

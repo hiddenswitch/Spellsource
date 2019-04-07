@@ -10,15 +10,20 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "CopyCardSpell"
-        "target": "ALL_MINIONS"
+        "class": "CopyCardSpell",
+        "target": "ALL_MINIONS",
         "targetPlayer": "OWNER"
       },
+      {
         "class": "DestroySpell",
         "target": "ALL_MINIONS"
-      },
+      }
     ]
-  },  "collectible": true,
-  "set": "BASIC",
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }

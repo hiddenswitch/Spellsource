@@ -46,7 +46,7 @@ public class SpellUtils {
 	private static Logger logger = LoggerFactory.getLogger(SpellUtils.class);
 
 	/**
-	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on a
+	 * Sets up the source and target references for casting a child spell, typically an "effect" of a spell defined on a
 	 * card.
 	 *
 	 * @param context The game context.
@@ -670,9 +670,12 @@ public class SpellUtils {
 					Attribute.WITHER,
 					Attribute.INVOKE,
 					Attribute.LIFESTEAL,
-					Attribute.WINDFURY,
+					Attribute.WINDFURY
+					/* These two attributes are included in the CopyCardSpell effects since they're numeric
 					Attribute.ATTACK_BONUS,
-					Attribute.HP_BONUS)
+					Attribute.HP_BONUS
+					*/
+			)
 					.filter(target::hasAttribute).forEach(k -> card.getAttributes().put(k, target.getAttributes().get(k)));
 
 			if (target instanceof Minion) {

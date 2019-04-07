@@ -3,23 +3,23 @@
   "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "TIME",
-  "rarity": "Common",
+  "rarity": "COMMON",
   "description": "Your spells cost (1) less this turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_HERO",
+    "class": "CardCostModifierSpell",
+    "target": "FRIENDLY_PLAYER",
     "cardCostModifier": {
-      "class": "CardCostModifier",
-      "value": -1,
+      "class": "OneTurnCostModifier",
+      "value": 1,
+      "operation": "SUBTRACT",
       "cardType": "SPELL"
-    },
-    "revertTrigger": {
-      "class": "TurnEndTrigger",
-      "targetPlayer": "SELF"
-    },
-  }
+    }
+  },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }
