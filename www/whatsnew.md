@@ -4,6 +4,8 @@ title: What's New
 permalink: /whats-new/
 ---
 
+Raid Boss Gnaxx now reads, "Taunt. Whenever a minion attacks, gain +2 Attack."
+
 ### 0.8.22-2.0.28 (Monday, March 11th, 2019)
 
 The font in the client has been improved significantly for better visibility. Feedback is encouraged and highly appreciated!
