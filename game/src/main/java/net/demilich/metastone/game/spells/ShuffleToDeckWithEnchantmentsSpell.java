@@ -44,8 +44,9 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 				.filter(e -> !e.isExpired())
 				.collect(toList());
 
+		Card sourceCard = target.getSourceCard();
 		List<EnchantmentDesc> copies = enchantments.stream()
-				.filter(e -> e.getSourceCard().getId() != target.getSourceCard().getId())
+				.filter(e -> e.getSourceCard().getId() != sourceCard.getId())
 				.map(enchantment -> {
 					EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
 					enchantmentDesc.eventTrigger = enchantment.getTriggers().get(0).getDesc().clone();
@@ -66,8 +67,11 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 			context.getLogic().removeActor(actor, true);
 		}
 
+		// Remove the attack and HP bonuses from the source card, if they exist
+		sourceCard.getAttributes().remove(Attribute.ATTACK_BONUS);
+		sourceCard.getAttributes().remove(Attribute.HP_BONUS);
 		// Shuffles a copy of Immortal Prelate back into the deck
-		Card card = CopyCardSpell.copyCard(context, player, target.getSourceCard(), (playerId, copiedCard) -> {
+		Card card = CopyCardSpell.copyCard(context, player, sourceCard, (playerId, copiedCard) -> {
 			moveCopyToDestination(context, player, target, copiedCard);
 		});
 
