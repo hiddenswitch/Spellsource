@@ -51,6 +51,10 @@
         {
           "class": "RaceCondition",
           "race": "TOTEM"
+        },
+        {
+          "class": "RaceCondition",
+          "race": "FAE"
         }
       ],
       "filter": {
@@ -90,6 +94,10 @@
           {
             "class": "RaceFilter",
             "race": "TOTEM"
+          },
+          {
+            "class": "RaceFilter",
+            "race": "FAE"
           }
         ]
       },
@@ -181,6 +189,14 @@
           "cardFilter": {
             "class": "CardFilter",
             "race": "TOTEM",
+            "cardType": "MINION"
+          },
+          {
+          "class": "FromDeckToHandSpell",
+          "value": 1,
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "FAE",
             "cardType": "MINION"
           }
         }
