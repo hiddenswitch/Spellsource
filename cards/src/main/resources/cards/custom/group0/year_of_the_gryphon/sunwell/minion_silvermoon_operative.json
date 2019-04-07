@@ -9,13 +9,7 @@
   "description": "Your copies of this minion keep their enchantments. Surge: Gain +2/+2 and Stealth.",
   "battlecry": {
     "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "attribute": "RECEIVED_ON_TURN",
-      "operation": "EQUAL"
+      "class": "SurgeCondition"
     },
     "targetSelection": "NONE",
     "spell": {
@@ -36,9 +30,10 @@
     }
   },
   "attributes": {
-    "KEEPS_ENCHANTMENTS": true
+    "KEEPS_ENCHANTMENTS": true,
+    "SURGE": true
   },
-  "collectible": true,
+  "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
   "wiki": "Surge indicates a bonus gained when the card is played the same turn it is received in the hand."

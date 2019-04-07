@@ -17,6 +17,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.targeting.Zones;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -127,6 +128,7 @@ public class ModelsTest {
 			context.getLogic().receiveCard(0, kelesethCard);
 			context.performAction(0, kelesethCard.play());
 			context.getLogic().drawCard(player.getId(), player);
+			assertEquals(neutralMinion.getZone(), Zones.HAND);
 			assertEquals(3, neutralMinion.getAttack() + neutralMinion.getBonusAttack());
 			context.getLogic().endOfSequence();
 			context.performAction(player.getId(), neutralMinion.play());

@@ -7,25 +7,29 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "description": "Battlecry: Discover three 1-Cost Timeweaver minions.",
-"battlecry": {
-  "targetSelection": "NONE",
-  "spell": {
-    "class": "DiscoverSpell",
+  "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
-      "class": "ReceiveCardSpell",
-      },
-    },
+      "class": "DiscoverSpell",
       "cardFilter": {
         "class": "CardFilter",
-        "value": 1,
-        "attribute": "BASE_MANA_COST",
+        "manaCost": 1,
         "heroClass": "TIME",
-        "cardType": "MINION",
-        "operation": "EQUAL"
+        "cardType": "MINION"
+      },
+      "howMany": 3,
+      "spell": {
+        "class": "ReceiveCardSpell"
       }
-    "howMany": 3
-    },
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

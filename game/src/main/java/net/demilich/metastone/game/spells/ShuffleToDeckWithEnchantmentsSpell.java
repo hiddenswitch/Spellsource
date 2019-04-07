@@ -41,7 +41,7 @@ public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 		List<Enchantment> enchantments = context.getTriggersAssociatedWith(actor.getReference()).stream()
 				.filter(Enchantment.class::isInstance)
 				.map(Enchantment.class::cast)
-				.filter(Predicate.not(Enchantment::isExpired))
+				.filter(e -> !e.isExpired())
 				.collect(toList());
 
 		List<EnchantmentDesc> copies = enchantments.stream()

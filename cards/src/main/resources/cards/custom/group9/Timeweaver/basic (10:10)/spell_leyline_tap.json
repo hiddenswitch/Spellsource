@@ -7,34 +7,15 @@
   "description": "Gain Spell Damage +1 until the end of your next turn.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddAttributeSpell",
+    "class": "ModifyAttributeSpell",
     "target": "FRIENDLY_HERO",
     "value": 1,
-    "attribute": "SPELL_DAMAGE"
-           },
-  "spell": {
-        "class": "AddEnchantmentSpell",
-        "target": "FRIENDLY_PLAYER",
-        "trigger": {
-          "eventTrigger": {
-            "class": "TurnStartTrigger",
-            "targetPlayer": "SELF"
-          },
-          "spell": {
-            "class": "AddEnchantmentSpell",
-            "target": "FRIENDLY_PLAYER",
-            "trigger": {
-              "revertTrigger": {
-                "class": "TurnEndTrigger",
-                "targetPlayer": "SELF"
-                       }
-              "maxFires": 1
-            }
-          },
-          "maxFires": 1
-        }
-      },
+    "attribute": "SPELL_DAMAGE",
+    "revertTrigger": {
+      "class": "TurnEndTrigger"
+    }
+  },
   "collectible": true,
-  "set": "BASIC",
+  "sets": ["CUSTOM","BASIC"],
   "fileFormatVersion": 1
 }

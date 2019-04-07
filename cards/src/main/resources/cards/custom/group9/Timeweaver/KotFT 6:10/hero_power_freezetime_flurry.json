@@ -13,11 +13,14 @@
       "condition": {
         "class": "ManaCostCondition",
         "value": 1,
-        "operation": "GREATER_OR_EQUAL"        
+        "operation": "GREATER_OR_EQUAL"
       }
-    }  
+    }
   },
   "collectible": false,
-  "set": "CUSTOM",
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
   "fileFormatVersion": 1
 }

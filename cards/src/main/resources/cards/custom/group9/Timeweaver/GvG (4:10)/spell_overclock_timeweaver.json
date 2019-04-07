@@ -29,6 +29,9 @@
     ]
   },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ],
   "fileFormatVersion": 1
 }

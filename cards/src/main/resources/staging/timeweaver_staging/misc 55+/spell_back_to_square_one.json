@@ -4,14 +4,14 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "RARE",
-  "description": "Shuffle a minion and its copies into your opponent's deck, wherever they are. They Cost (1) more.",
+  "description": "Shuffle a minion and its copies into your opponent's deck, wherever they are. They cost (1) more.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
     "spells": [
       {
       "class": "ShuffleMinionToDeckSpell",
-      "targetPlayer": "OPPONENT"
+      "targetPlayer": "OPPONENT",
       "spell": {
         "class": "CardCostModifierSpell",
         "target": "OUTPUT",

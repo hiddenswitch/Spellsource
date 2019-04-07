@@ -8,15 +8,9 @@
   "rarity": "COMMON",
   "description": "Surge: Transform into a copy of a minion that costs (3) or less.",
 "battlecry": {
-   "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "attribute": "RECEIVED_ON_TURN",
-      "operation": "EQUAL"
-    },
+  "condition": {
+    "class": "SurgeCondition"
+  },
   "targetSelection": "MINIONS",
   "spell": {
     "class": "custom.CopyMinionSpell"
@@ -26,6 +20,9 @@
       "operation": "LESS_OR_EQUAL"
       }
     }
+  },
+  "attributes": {
+    "SURGE": true
   },
   "collectible": true,
   "set": "THE_OLD_GODS",

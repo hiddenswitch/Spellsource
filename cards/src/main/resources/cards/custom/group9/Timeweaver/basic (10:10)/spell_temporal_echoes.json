@@ -16,19 +16,23 @@
       "class": "MetaSpell",
       "spells": [
         {
-        "class": "FromDeckToHandSpell"
+          "class": "FromDeckToHandSpell"
         },
         {
-        "class": "PutDeckTopSpell",
-        "value": 2
+          "class": "PutDeckTopSpell",
+          "value": 1,
+          "howMany": 2
         }
-        ]
-      },
+      ]
+    },
     "spell2": {
       "class": "RemoveCardSpell"
     }
   },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }

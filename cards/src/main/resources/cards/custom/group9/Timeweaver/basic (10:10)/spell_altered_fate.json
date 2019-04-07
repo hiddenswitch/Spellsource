@@ -6,10 +6,13 @@
   "rarity": "FREE",
   "description": "Resummon all friendly minions that died this turn.",
   "targetSelection": "NONE",
-    "spell": {
-      "class": "custom.SummonFriendlyMinionsThatDiedSpell"
-    }  
+  "spell": {
+    "class": "custom.SummonFriendlyMinionsThatDiedSpell"
+  },
   "collectible": true,
-  "set": "BASIC",
+  "sets": [
+    "CUSTOM",
+    "BASIC"
+  ],
   "fileFormatVersion": 1
 }

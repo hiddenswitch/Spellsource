@@ -375,6 +375,7 @@ public class DiscoverSpell extends Spell {
 		}
 
 		List<GameAction> discoverActions = new ArrayList<>();
+		Card[] cardsInDiscover = new Card[choices.size()];
 		for (int i = 0; i < choices.size(); i++) {
 			Card originalCard = choices.get(i);
 			Card copy = originalCard.getCopy();
@@ -409,22 +410,22 @@ public class DiscoverSpell extends Spell {
 			discover.setId(i);
 			discover.setSourceReference(source != null ? source.getReference() : null);
 			discoverActions.add(discover);
-			choices.set(i, copy);
+			cardsInDiscover[i] = copy;
 		}
 
 		Attribute attribute = desc.getAttribute();
 		if (attribute != null) {
-			for (Card choice : choices) {
+			for (Card choice : cardsInDiscover) {
 				choice.setAttribute(attribute);
 			}
 		}
 
 		// Execute the discovery (the target is the both the output and the discovery)
-		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, choices, discoverActions);
+		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, Arrays.asList(cardsInDiscover), discoverActions);
 		SpellUtils.castChildSpell(context, player, chosenAction.getSpell(), source, target);
 		// Remove the attribute that was set on all the cards
 		if (attribute != null) {
-			for (Card choice : choices) {
+			for (Card choice : cardsInDiscover) {
 				choice.getAttributes().remove(attribute);
 			}
 		}

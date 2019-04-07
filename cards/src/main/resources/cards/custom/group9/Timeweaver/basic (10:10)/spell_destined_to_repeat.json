@@ -10,17 +10,17 @@
     "class": "MetaSpell",
     "spells": [
       {
-        "class": "CopyCardSpell"
-        "targetPlayer": "OWNER"
-      },
-      {
-      "class": "CardCostModifierSpell",
-      "target": "OUTPUT",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 2,
-        "operation": "SUBTRACT"
+        "class": "CopyCardSpell",
+        "targetPlayer": "OWNER",
+        "spell": {
+          "class": "CardCostModifierSpell",
+          "target": "OUTPUT",
+          "cardCostModifier": {
+            "class": "CardCostModifier",
+            "target": "SELF",
+            "value": 2,
+            "operation": "SUBTRACT"
+          }
         }
       },
       {
@@ -29,6 +29,6 @@
     ]
   },
   "collectible": true,
-  "set": "BASIC",
+  "sets": ["CUSTOM","BASIC"],
   "fileFormatVersion": 1
 }

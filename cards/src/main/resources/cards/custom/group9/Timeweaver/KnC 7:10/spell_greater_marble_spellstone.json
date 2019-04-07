@@ -4,28 +4,38 @@
   "type": "SPELL",
   "heroClass": "TIME",
   "rarity": "RARE",
-  "description": "Deal $1 damage to all enemies thrice."
+  "description": "Deal $1 damage to all enemies. Repeat twice.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "metaSpell",
+    "class": "MetaSpell",
     "spells": [
       {
-      "class": "DamageSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
       },
       {
-      "class": "DamageSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1
+        "class": "ForceDeathPhaseSpell"
       },
       {
-      "class": "DamageSpell",
-      "target": "ENEMY_CHARACTERS",
-      "value": 1
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
       },
+      {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
+        "class": "DamageSpell",
+        "target": "ENEMY_CHARACTERS",
+        "value": 1
+      }
+    ]
   },
   "collectible": false,
-  "set": "KOBOLDS_AND_CATACOMBS",
+  "sets": [
+    "CUSTOM",
+    "KOBOLDS_AND_CATACOMBS"
+  ],
   "fileFormatVersion": 1
 }

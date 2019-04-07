@@ -10,8 +10,7 @@
     "class": "MetaSpell",
     "spells": [
       {
-      "class": "RefreshHeroPowerSpell",
-      "targetPlayer": "SELF"
+        "class": "RefreshHeroPowerSpell"
       },
       {
         "class": "AddQuestSpell",
@@ -33,7 +32,7 @@
           },
           "spell": {
             "class": "ReceiveCardSpell",
-            "card": "spell_peace_in_nothing."
+            "card": "spell_peace_in_nothing"
           },
           "maxFires": 1
         }
@@ -44,6 +43,9 @@
     "QUEST": true
   },
   "collectible": true,
-  "set": "JOURNEY_TO_UNGORO",
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ],
   "fileFormatVersion": 1
 }

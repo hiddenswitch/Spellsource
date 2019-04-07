@@ -15,13 +15,23 @@
       "value1": {
         "class": "CardCountValueProvider",
         "cardFilter": {
-            "class": "AttributeFilter",
-            "value": {
-              "class": "CurrentTurnValueProvider"
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
             },
-            "attribute": "PLAYED_FROM_HAND_OR_DECK",
-            "operation": "EQUAL"
-          },
+            {
+              "class": "AttributeFilter",
+              "attribute": "BEING_PLAYED",
+              "invert": true
+            }
+          ]
+        },
         "cardSource": {
           "class": "GraveyardCardsSource",
           "targetPlayer": "SELF"
@@ -31,14 +41,24 @@
     },
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "value": 60
+      "value": 60,
       "cardFilter": {
-        "class": "AttributeFilter",
-        "value": {
-          "class": "CurrentTurnValueProvider"
-        },
-        "attribute": "PLAYED_FROM_HAND_OR_DECK",
-        "operation": "EQUAL"
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "PLAYED_FROM_HAND_OR_DECK",
+            "operation": "EQUAL"
+          },
+          {
+            "class": "AttributeFilter",
+            "attribute": "BEING_PLAYED",
+            "invert": true
+          }
+        ]
       },
       "cardSource": {
         "class": "GraveyardCardsSource",
@@ -46,7 +66,13 @@
       }
     }
   },
+  "attributes": {
+    "BATTLECRY": true
+  },
   "collectible": true,
-  "set": "KNIGHTS_OF_THE_FROZEN_THRONE",
+  "sets": [
+    "CUSTOM",
+    "KNIGHTS_OF_THE_FROZEN_THRONE"
+  ],
   "fileFormatVersion": 1
 }

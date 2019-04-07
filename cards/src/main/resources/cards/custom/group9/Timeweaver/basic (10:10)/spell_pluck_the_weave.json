@@ -6,20 +6,21 @@
   "rarity": "FREE",
   "description": "Deal $2 damage, then deal $1 damage to all enemies.",
   "targetSelection": "ANY",
-   "spell": {
-      "class": "MetaSpell",
-      "spells": [
-        {
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
         "class": "DamageSpell",
         "value": 2
-        },
-        {
+      },
+      {
         "class": "DamageSpell",
         "target": "ENEMY_CHARACTERS",
         "value": 1
-        }
-      ]
+      }
+    ]
+  },
   "collectible": true,
-  "set": "BASIC",
+  "sets": ["CUSTOM","BASIC"],
   "fileFormatVersion": 1
 }

@@ -7,11 +7,13 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "description": "Taunt",
-  },
   "attributes": {
     "TAUNT": true
   },
   "collectible": false,
-  "set": "WITCHWOOD",
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
   "fileFormatVersion": 1
 }

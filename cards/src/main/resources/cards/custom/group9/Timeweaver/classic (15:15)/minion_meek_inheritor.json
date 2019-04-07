@@ -6,41 +6,41 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Reshuffle 4 cards, then draw 5 cards. Surge: Only Reshuffle 3 cards.",
+  "description": "Battlecry: Reshuffle 4 (Surge: 3) cards, then draw 5.",
   "battlecry": {
-  "targetSelection": "NONE",
-  "spell": {
-    "class": "MetaSpell",
-    "spells": [
-    {
-      "class": "EitherOrSpell",
-        "condition": {
-          "class": "AttributeCondition",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "EitherOrSpell",
+          "condition": {
+            "class": "SurgeCondition"
           },
-        "attribute": "RECEIVED_ON_TURN",
-        "operation": "EQUAL"
+          "spell1": {
+            "class": "ChooseAndReshuffleSpell",
+            "value": 3
+          },
+          "spell2": {
+            "class": "ChooseAndReshuffleSpell",
+            "value": 4
+          }
         },
-        "spell1": {
-          "class": "ChooseAndReshuffleSpell",
-          "value": 4
-        },
-        "spell2": {
-          "class": "ChooseAndReshuffleSpell",
-          "value": 3
-        },
-      },
-      {
-      "class": "DrawCardSpell",
-      "value": 5
-      },
+        {
+          "class": "DrawCardSpell",
+          "value": 5
+        }
+      ]
+    }
+  },
   "attributes": {
     "BATTLECRY": true,
     "SURGE": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }

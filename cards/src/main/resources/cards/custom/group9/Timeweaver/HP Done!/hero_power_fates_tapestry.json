@@ -7,14 +7,16 @@
   "description": "Reshuffle 2 cards. Draw 2 cards.",
   "spell": {
     "class": "HeroPowerSpell",
-    "spell": {
-      "class": "ChooseAndReshuffleSpell",
-      "value": 2
-     }
-    "spell": {
-      "class": "DrawCardSpell",
-      "value": 2
-     }
+    "spells": [
+      {
+        "class": "ChooseAndReshuffleSpell",
+        "value": 1
+      },
+      {
+        "class": "DrawCardSpell",
+        "value": 1
+      }
+    ]
   },
   "collectible": false,
   "set": "CUSTOM",

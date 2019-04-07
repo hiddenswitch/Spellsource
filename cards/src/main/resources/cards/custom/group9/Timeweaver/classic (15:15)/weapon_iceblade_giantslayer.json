@@ -6,38 +6,39 @@
   "damage": 8,
   "durability": 1,
   "rarity": "FREE",
-  "description": "Battlecry: Freeze your hero, Reshuffle a card. Surge: Don't.",
+  "description": "Battlecry: Freeze your hero, Reshuffle 1. Surge: Don't.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "EitherOrSpell",
-        "condition": {
-          "class": "AttributeCondition",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-        "attribute": "RECEIVED_ON_TURN",
-        "operation": "EQUAL"
-        },
-      "spell1": {
+      "condition": {
+        "class": "SurgeCondition"
+      },
+      "spell2": {
         "class": "MetaSpell",
         "spells": [
           {
-           "class": "AddAttributeSpell",
-           "target": "FRIENDLY_HERO"
-           "attribute": "FROZEN",
+            "class": "AddAttributeSpell",
+            "target": "FRIENDLY_HERO",
+            "attribute": "FROZEN"
           },
           {
-           "class": "ChooseAndReshuffleSpell"
-          },
+            "class": "ChooseAndReshuffleSpell"
+          }
         ]
       },
-      "spell2": {
-        "class": "NullSpell",
+      "spell1": {
+        "class": "NullSpell"
       }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "sets": [
+    "CUSTOM",
+    "CLASSIC"
+  ],
   "fileFormatVersion": 1
 }

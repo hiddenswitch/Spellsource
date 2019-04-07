@@ -10,7 +10,6 @@
   "trigger": {
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
-      "hostTargetType": "IGNORE_AS_TARGET",
       "targetPlayer": "SELF"
     },
     "spell": {
@@ -18,9 +17,12 @@
       "target": "ENEMY_CHARACTERS",
       "value": 1,
       "howMany": 2
-    },
+    }
   },
   "collectible": true,
-  "set": "GOBLINS_VS_GNOMES",
+  "sets": [
+    "CUSTOM",
+    "GOBLINS_VS_GNOMES"
+  ],
   "fileFormatVersion": 1
 }
