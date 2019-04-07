@@ -52,7 +52,7 @@
         {
           "class": "RaceCondition",
           "race": "TOTEM"
-        }
+        },
         {
           "class": "RaceCondition",
           "race": "FAE"
@@ -97,8 +97,8 @@
             "race": "TOTEM"
           },
           {
-          "class": "RaceCondition",
-          "race": "FAE"
+            "class": "RaceCondition",
+            "race": "FAE"
           }
         ]
       },
