@@ -11,11 +11,17 @@
     "eventTrigger": {
       "class": "AfterCardPlayedTrigger",
       "requiredAttribute": "SECRET",
-      "sourcePlayer": "SELF"
+      "sourcePlayer": "SELF",
+      "fireCondition": {
+        "class": "MinionCountCondition",
+        "value": 7,
+        "operation": "LESS",
+        "targetPlayer": "SELF"
+      }
     },
     "spell": {
-      "class": "RecruitSpell",
-      "target": "SELF"
+      "class": "PutMinionOnBoardFromDeckSpell",
+      "target": "TRIGGER_HOST"
     }
   },
   "collectible": true,

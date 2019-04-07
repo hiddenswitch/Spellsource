@@ -3,7 +3,7 @@
   "baseManaCost": 5,
   "type": "MINION",
   "baseAttack": 3,
-  "baseHp": 3,
+  "baseHp": 5,
   "heroClass": "GOLD",
   "rarity": "EPIC",
   "description": "Battlecry: Give all Dragons in your hand +3/+3",
