@@ -4,6 +4,9 @@ title: What's New
 permalink: /whats-new/
 ---
 
+Issue: Lightcaller does not work correctly
+It can discover secrets from any class, instead of the controller class. It should probably get a total rewriting of its code because it's a mess. Astute Archmage shares the text and is probably broken as well.
+
 ### 0.8.22-2.0.28 (Monday, March 11th, 2019)
 
 The font in the client has been improved significantly for better visibility. Feedback is encouraged and highly appreciated!
