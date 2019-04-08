@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.23-2.0.29 (Sunday, April 7th, 2019)
+### 0.8.21-2.0.29 (Sunday, April 7th, 2019)
 
 Introducing new Spellsource core cards. Thank you @Pircival and others for the fantastic contribution.
 
@@ -51,11 +51,11 @@ Now clarifying the following additional keywords:
  - Raid Boss Gnaxx now reads, "Guard. Whenever a minion attacks, gain +2 Attack."
  - Lightcaller and Astute Archmage now discover spells from their controllers' class, or Paladin secrets when not specified.
 
-### 0.8.22-2.0.28 (Monday, March 11th, 2019)
+### 0.8.20-2.0.28 (Monday, March 11th, 2019)
 
 The font in the client has been improved significantly for better visibility. Feedback is encouraged and highly appreciated!
 
-### 0.8.22-2.0.27 (Thursday, March 7th, 2019)
+### 0.8.20-2.0.27 (Thursday, March 7th, 2019)
 
 Bug fixes.
 
@@ -81,7 +81,7 @@ Bug fixes.
  - Acolyte of Peroth'arn has a fixed spelling error.
  - Twilight Annihilator now correctly deals 8 damage.
 
-### 0.8.21-2.0.26 (Wednesday, February 13th, 2019)
+### 0.8.20-2.0.26 (Wednesday, February 13th, 2019)
 
 You can now invite friends to play in one versus one challenges.
 
