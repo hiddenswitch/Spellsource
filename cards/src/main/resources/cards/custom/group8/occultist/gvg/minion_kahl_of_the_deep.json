@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 8 cards\"",
+  "description": "Aftermath: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 8 cards\"",
   "deathrattle": {
     "class": "ShuffleMinionToDeckSpell",
     "target": "SELF",

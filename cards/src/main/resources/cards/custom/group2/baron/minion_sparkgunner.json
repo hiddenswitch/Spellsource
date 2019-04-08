@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "description": "Battlecry: Summon a 1/1 Spark with Rush for every Knight in your hand.",
+  "description": "Opener: Summon a 1/1 Spark with Dash for every Knight in your hand.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

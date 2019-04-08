@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Choose One - Deal 3 damage; or Gain +3 Attack and Stealth.",
+  "description": "Choose One - Deal 3 damage; or Gain +3 Attack and Hidden.",
   "chooseOneBattlecries": [
     {
       "description": "Deal 3 damage",
@@ -17,7 +17,7 @@
       }
     },
     {
-      "description": "Gain +3 Attack and Stealth",
+      "description": "Gain +3 Attack and Hidden",
       "targetSelection": "NONE",
       "spell": {
         "class": "MetaSpell",
@@ -37,7 +37,7 @@
     }
   ],
   "chooseBothBattlecry": {
-    "description": "Deal 3 damage and Gain +3 Attack and Stealth",
+    "description": "Deal 3 damage and Gain +3 Attack and Hidden",
     "targetSelection": "ANY",
     "spell": {
       "class": "MetaSpell",

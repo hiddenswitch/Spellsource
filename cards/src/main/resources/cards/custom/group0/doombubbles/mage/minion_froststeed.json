@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Battlecry: Freeze all enemy minions. Deathrattle: Destroy all frozen minions.",
+  "description": "Opener: Freeze all enemy minions. Aftermath: Destroy all frozen minions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

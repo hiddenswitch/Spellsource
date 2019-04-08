@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "EPIC",
-  "description": "Summon two 1/1 copies of Deathrattle minions - one from your hand, and one from your deck.",
+  "description": "Summon two 1/1 copies of Aftermath minions - one from your hand, and one from your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "NEONGREEN",
   "rarity": "FREE",
-  "description": "Hero Power: Give your Xenodrones +1 Attack, then summon a 0/2 Xenodrone.",
+  "description": "Skill: Give your Xenodrones +1 Attack, then summon a 0/2 Xenodrone.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

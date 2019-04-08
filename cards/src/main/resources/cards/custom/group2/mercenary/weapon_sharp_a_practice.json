@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 5,
   "rarity": "RARE",
-  "description": "Battlecry: Double the numbers of your Hero Power. Inspire: Lose 1 Durability",
+  "description": "Opener: Double the numbers of your Skill. Inspire: Lose 1 Durability",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

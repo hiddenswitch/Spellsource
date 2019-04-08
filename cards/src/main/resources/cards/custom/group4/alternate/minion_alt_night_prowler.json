@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "<b>Battlecry:</b> If this is the only minion in the battlefield, gain +3/+3.",
+  "description": "<b>Opener:</b> If this is the only minion in the battlefield, gain +3/+3.",
   "battlecry": {
     "condition": {
       "class": "MinionCountCondition",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "PIRATE",
-  "description": "Battlecry: Deal 1 damage for each friendly Pirate.",
+  "description": "Opener: Deal 1 damage for each friendly Pirate.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

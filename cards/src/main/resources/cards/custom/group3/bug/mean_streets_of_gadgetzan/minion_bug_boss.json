@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Choose a minion. All friendly minions attack it.",
+  "description": "Opener: Choose a minion. All friendly minions attack it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

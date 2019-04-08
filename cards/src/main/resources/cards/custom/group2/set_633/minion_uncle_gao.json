@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If you played an Elemental last turn, fill your board with 1/2 Alementals and give them Rush, Poisonous, or Deflect randomly.",
+  "description": "Opener: If you played an Elemental last turn, fill your board with 1/2 Alementals and give them Dash, Toxic, or Deflect randomly.",
   "battlecry": {
     "spell": {
       "class": "ConditionalSpell",

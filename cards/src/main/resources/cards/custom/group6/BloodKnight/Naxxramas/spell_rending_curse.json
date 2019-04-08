@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "COMMON",
-  "description": "Give a minion 'Deathrattle: Deal 1 damage to all other minions, then give them this Deathrattle.'",
+  "description": "Give a minion 'Aftermath: Deal 1 damage to all other minions, then give them this Aftermath.'",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

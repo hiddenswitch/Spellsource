@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Charge. Reservoir (20+): Can't attack heroes.",
+  "description": "Charge. Reservoir (20+): Can't attack championes.",
   "battlecry": {
     "condition": {
       "class": "ReservoirCondition",

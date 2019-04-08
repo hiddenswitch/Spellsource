@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Whenever your hero is healed, gain that much Health.",
+  "description": "Whenever your champion is healed, gain that much Health.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",

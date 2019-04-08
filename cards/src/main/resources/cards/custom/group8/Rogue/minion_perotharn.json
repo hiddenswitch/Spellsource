@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "<b>Battlecry:</b> Draw the two lowest Cost minions from your deck. They are 1/1 and Cost (1)",
+  "description": "<b>Opener:</b> Draw the two lowest Cost minions from your deck. They are 1/1 and Cost (1)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

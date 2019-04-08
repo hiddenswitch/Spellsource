@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Charge. Deal any excess damage to the enemy hero.",
+  "description": "Charge. Deal any excess damage to the enemy champion.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

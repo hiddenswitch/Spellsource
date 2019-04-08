@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Stealth, Divine Shield. Can't be targeted by Spells or Hero Powers.",
+  "description": "Hidden, Dodge. Can't be targeted by Spells or Skills.",
   "attributes": {
     "DIVINE_SHIELD": true,
     "STEALTH": true,

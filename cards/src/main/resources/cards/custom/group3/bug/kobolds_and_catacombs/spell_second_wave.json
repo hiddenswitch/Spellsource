@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Give your minions \"Deathrattle: Recruit a minion.\"",
+  "description": "Give your minions \"Aftermath: Recruit a minion.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",

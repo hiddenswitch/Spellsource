@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "PURPLE",
   "rarity": "COMMON",
-  "description": "Deal 1 damage to all enemies. Each time your hero is attacked next turn, repeat.",
+  "description": "Deal 1 damage to all enemies. Each time your champion is attacked next turn, repeat.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
