@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 6,
   "rarity": "FREE",
-  "description": "After your hero attacks, put a random Secret into the battlefield.",
+  "description": "After your champion attacks, put a random Secret into the battlefield.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

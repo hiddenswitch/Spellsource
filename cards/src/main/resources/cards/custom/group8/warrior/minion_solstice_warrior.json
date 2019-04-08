@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Deal 1 damage to adjacent minions and give them +2 Attack.",
+  "description": "Opener: Deal 1 damage to adjacent minions and give them +2 Attack.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

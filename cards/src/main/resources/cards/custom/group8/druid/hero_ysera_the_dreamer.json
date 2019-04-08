@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "BROWN",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Resurrect a friendly Beast for every Choose One minion you've played.",
+  "description": "Opener: Resurrect a friendly Beast for every Choose One minion you've played.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

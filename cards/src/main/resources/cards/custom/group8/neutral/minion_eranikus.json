@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Battlecry: Shuffle five random Dragons, Beasts or Demons into your deck. Give them +3/+3.",
+  "description": "Opener: Shuffle five random Dragons, Beasts or Demons into your deck. Give them +3/+3.",
   "battlecry": {
     "spell": {
       "class": "DiscoverSpell",

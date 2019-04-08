@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "Battlecry: Deal 1 damage.",
+  "description": "Opener: Deal 1 damage.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

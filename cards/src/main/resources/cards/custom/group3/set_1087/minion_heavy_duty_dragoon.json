@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Your Hero Power gives 1 more Attack.",
+  "description": "Your Skill gives 1 more Attack.",
   "auras": [
     {
       "class": "ModifyBuffSpellAura",

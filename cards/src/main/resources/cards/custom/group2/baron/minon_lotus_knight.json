@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "<b>Poisonous</b>, <b>Charge</b>",
+  "description": "<b>Toxic</b>, <b>Charge</b>",
   "attributes": {
     "CHARGE": true,
     "POISONOUS": true

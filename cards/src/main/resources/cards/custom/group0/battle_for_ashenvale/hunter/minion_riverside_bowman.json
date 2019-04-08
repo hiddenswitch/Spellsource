@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Your Hero Power can target minions this turn.",
+  "description": "Opener: Your Skill can target minions this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

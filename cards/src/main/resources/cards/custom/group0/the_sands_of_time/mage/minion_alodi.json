@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "After you cast a spell, gain Spell Damage +1.",
+  "description": "After you cast a spell, gain Spellpower +1.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterSpellCastedTrigger",

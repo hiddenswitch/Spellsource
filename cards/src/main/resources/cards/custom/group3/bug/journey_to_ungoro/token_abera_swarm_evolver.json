@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Battlecry: Adapt your Spiderlings (wherever they are).",
+  "description": "Opener: Adapt your Spiderlings (wherever they are).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

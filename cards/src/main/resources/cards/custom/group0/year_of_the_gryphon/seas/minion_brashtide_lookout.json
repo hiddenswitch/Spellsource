@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "PIRATE",
-  "description": "Battlecry: If you control another Pirate, Discover a Rush minion.",
+  "description": "Opener: If you control another Pirate, Discover a Dash minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

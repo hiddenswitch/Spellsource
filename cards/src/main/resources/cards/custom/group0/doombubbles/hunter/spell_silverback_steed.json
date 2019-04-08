@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "Give a minion +1/+4 and Taunt. When it dies, summon a Silverback Patriarch.",
+  "description": "Give a minion +1/+4 and Guard. When it dies, summon a Silverback Patriarch.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

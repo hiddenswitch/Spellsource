@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Rush. Lifesteal. Has +1/+1 for each other Lifesteal card you've played this game.",
+  "description": "Dash. Lifesteal. Has +1/+1 for each other Lifesteal card you've played this game.",
   "attributes": {
     "LIFESTEAL": true,
     "RUSH": true

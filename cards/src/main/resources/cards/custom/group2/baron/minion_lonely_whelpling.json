@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: Your 1-Cost cards cost (0) this turn.",
+  "description": "Opener: Your 1-Cost cards cost (0) this turn.",
   "battlecry": {
     "spell": {
       "class": "CardCostModifierSpell",

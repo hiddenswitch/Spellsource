@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Battlecry: Give your C'Thun +1/+1 for each Knight in your hand.",
+  "description": "Opener: Give your C'Thun +1/+1 for each Knight in your hand.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

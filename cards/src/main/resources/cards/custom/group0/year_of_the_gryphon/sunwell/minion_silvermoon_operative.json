@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Your copies of this minion keep their enchantments. Surge: Gain +2/+2 and Stealth.",
+  "description": "Your copies of this minion keep their enchantments. Surge: Gain +2/+2 and Hidden.",
   "battlecry": {
     "condition": {
       "class": "AttributeCondition",

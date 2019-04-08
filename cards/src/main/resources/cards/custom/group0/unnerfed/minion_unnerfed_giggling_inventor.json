@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Battlecry: Summon two 1/2 Mechs with Taunt and Divine Shield",
+  "description": "Opener: Summon two 1/2 Mechs with Guard and Dodge",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

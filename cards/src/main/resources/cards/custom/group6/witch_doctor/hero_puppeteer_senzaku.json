@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "ROSE",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: After an enemy minion dies this game, summon it.",
+  "description": "Opener: After an enemy minion dies this game, summon it.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

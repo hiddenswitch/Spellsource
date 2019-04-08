@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Choose One - Charge; or +3 Health and Taunt.",
+  "description": "Choose One - Charge; or +3 Health and Guard.",
   "chooseOneBattlecries": [
     {
       "description": "Charge",
@@ -17,7 +17,7 @@
       }
     },
     {
-      "description": "+3 Health and Taunt",
+      "description": "+3 Health and Guard",
       "spell": {
         "class": "TransformMinionSpell",
         "target": "SELF",
@@ -26,7 +26,7 @@
     }
   ],
   "chooseBothBattlecry": {
-    "description": "Charge, +3 Health, and Taunt",
+    "description": "Charge, +3 Health, and Guard",
     "spell": {
       "class": "TransformMinionSpell",
       "target": "SELF",

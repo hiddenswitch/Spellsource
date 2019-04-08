@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Taunt. Whenever a minion attacks, gain +2/+2.",
+  "description": "Guard. Whenever a minion attacks, gain +2/+2.",
   "trigger": {
     "eventTrigger": {
       "class": "PhysicalAttackTrigger",

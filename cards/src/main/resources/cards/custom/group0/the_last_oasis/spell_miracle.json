@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "EPIC",
-  "description": "Fully heal your Hero.",
+  "description": "Fully heal your Champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

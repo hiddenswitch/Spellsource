@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Reveal a spell from your deck. Summon a random minion with the same Cost.",
+  "description": "Opener: Reveal a spell from your deck. Summon a random minion with the same Cost.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "LEGENDARY",
-  "description": "Quest: Use your Hero Power twice. Reward: Seek the Signal.",
+  "description": "Quest: Use your Skill twice. Reward: Seek the Signal.",
   "quest": {
     "class": "InspireTrigger",
     "targetPlayer": "SELF"

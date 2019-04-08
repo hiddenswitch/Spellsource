@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Poisonous. Battlecry: Summon a 1/1 Hatchling with Poisonous.",
+  "description": "Toxic. Opener: Summon a 1/1 Hatchling with Toxic.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

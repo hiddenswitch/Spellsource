@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Discover a Secret. Your opponent can see your options.",
+  "description": "Opener: Discover a Secret. Your opponent can see your options.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

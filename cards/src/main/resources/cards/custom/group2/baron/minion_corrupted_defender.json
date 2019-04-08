@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Give all enemy minions Taunt.",
+  "description": "Opener: Give all enemy minions Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

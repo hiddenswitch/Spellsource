@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Deathrattle: Deal 2 damage to the enemy hero.",
+  "description": "Aftermath: Deal 2 damage to the enemy champion.",
   "deathrattle": {
     "class": "DamageSpell",
     "target": "ENEMY_HERO",
