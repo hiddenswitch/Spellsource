@@ -30,13 +30,7 @@
           "target": "EVENT_TARGET",
           "battlecry": {
             "condition": {
-              "class": "AttributeCondition",
-              "target": "SELF",
-              "value": {
-                "class": "CurrentTurnValueProvider"
-              },
-              "attribute": "RECEIVED_ON_TURN",
-              "operation": "EQUAL"
+              "class": "SurgeCondition"
             },
             "targetSelection": "NONE",
             "spell": {

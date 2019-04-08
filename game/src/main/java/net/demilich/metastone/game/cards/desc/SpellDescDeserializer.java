@@ -72,6 +72,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.TRIGGERS, ParseValueType.TRIGGERS);
 		ctx.add(SpellArg.VALUE, ParseValueType.VALUE);
 		ctx.add(SpellArg.BATTLECRY, ParseValueType.BATTLECRY);
+		ctx.add(SpellArg.ZONES, ParseValueType.ZONES);
 	}
 
 	@Override

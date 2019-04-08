@@ -8,6 +8,8 @@ permalink: /whats-new/
 
 Introducing new Spellsource core cards. Thank you @Pircival and others for the fantastic contribution.
 
+Introducing the Timeweaver class! Big thanks to @Richochet_Beret for the awesome contribution. This brings the total number of classes to 27, so please get feedback in via the Discord.
+
 The following keywords have been consistently applied to Spellsource cards:
 
  - Champion: Your player character. When this dies, you lose the game.
@@ -41,6 +43,8 @@ Now clarifying the following additional keywords:
 ##### Content Additions:
 
  - 62 Spellsource Basic Commons.
+ - Many sets of the Timeweaver class.
+ - Abera, Swarm Evolver has been added to the Vermancer class: Battlecry: Adapt your Larva. (Wherever they are)"
 
 ##### Content Fixes
 

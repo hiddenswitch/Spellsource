@@ -38,6 +38,10 @@ public class ShuffleToDeckSpell extends Spell {
 		return desc;
 	}
 
+	public static SpellDesc create() {
+		return new SpellDesc(ShuffleToDeckSpell.class);
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
