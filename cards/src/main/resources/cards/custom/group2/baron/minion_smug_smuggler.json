@@ -190,8 +190,9 @@
             "class": "CardFilter",
             "race": "TOTEM",
             "cardType": "MINION"
-          },
-          {
+          }
+        },
+        {
           "class": "FromDeckToHandSpell",
           "value": 1,
           "cardFilter": {
