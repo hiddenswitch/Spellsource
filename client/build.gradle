@@ -3,7 +3,7 @@ apply plugin: 'eclipse'
 apply plugin: 'maven-publish'
 
 group = 'com.hiddenswitch'
-version = '0.8.7'
+version = '0.8.21'
 
 buildscript {
     repositories {
