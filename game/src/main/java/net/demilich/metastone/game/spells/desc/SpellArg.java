@@ -171,7 +171,6 @@ public enum SpellArg {
 	/**
 	 * Multiple card filters that are used by effects like {@link DiscoverFilteredCardSpell}. Considered obsolete.
 	 */
-	@Deprecated
 	CARD_FILTERS,
 	/**
 	 * A value from {@link Zones} that represents a place to or from a card will be affected.
@@ -190,6 +189,7 @@ public enum SpellArg {
 	 * @see CardSource for more about card sources.
 	 */
 	CARD_SOURCE,
+	CARD_SOURCES,
 	/**
 	 * Used by the {@link CreateCardSpell} to determine what kind of card to make. Considered obsolete.
 	 */

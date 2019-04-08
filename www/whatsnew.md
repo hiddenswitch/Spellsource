@@ -4,8 +4,11 @@ title: What's New
 permalink: /whats-new/
 ---
 
-Issue: Lightcaller does not work correctly
-It can discover secrets from any class, instead of the controller class. It should probably get a total rewriting of its code because it's a mess. Astute Archmage shares the text and is probably broken as well.
+### 0.8.22-2.0.29 (Sunday, April 7th, 2019)
+
+##### Content Fixes
+
+ - Lightcaller and Astute Archmage now discover spells from their controllers' class, or Paladin secrets when not specified.
 
 ### 0.8.22-2.0.28 (Monday, March 11th, 2019)
 

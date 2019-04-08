@@ -16,6 +16,13 @@ import java.util.function.Predicate;
 
 import static java.util.stream.Collectors.toCollection;
 
+/**
+ * Returns the source cards of the actors in the graveyard, including the minions, weapons and heroes. The {@link
+ * Attribute#DIED_ON_TURN} attribute is copied to the card, even though it ordinarily does not belong on cards.
+ * <p>
+ * Does <b>not include</b> cards that were removed peacefully according to {@link Entity#isRemovedPeacefully()}, even
+ * though those actors are in the graveyard too.
+ */
 public class GraveyardActorsSource extends CardSource implements HasCardCreationSideEffects {
 
 	public GraveyardActorsSource(CardSourceDesc desc) {
