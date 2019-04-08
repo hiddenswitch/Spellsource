@@ -97,7 +97,7 @@
             "race": "TOTEM"
           },
           {
-            "class": "RaceCondition",
+            "class": "RaceFilter",
             "race": "FAE"
           }
         ]
