@@ -1,0 +1,27 @@
+{
+  "name": "Lesser Chronostasis",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "At the end of your turn, Freeze ALL characters.",
+ "spell": {
+    "class": "AddEnchantmentSpell",
+    "target": "FRIENDLY_PLAYER",
+    "trigger": {
+      "eventTrigger": {
+        "class": "TurnEndTrigger",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "AddAttributeSpell",
+        "target": "ALL_CHARACTERS",
+        "attribute": "FROZEN"
+      },
+      "maxFires": 1
+    }
+  },
+  "collectible": true,
+  "set": "THE_OLD_GODS",
+  "fileFormatVersion": 1
+}

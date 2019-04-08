@@ -189,5 +189,12 @@ public enum ParseValueType {
 	 * The array version of {@link #EVENT_TRIGGER}.
 	 */
 	EVENT_TRIGGER_ARRAY,
+	/**
+	 * An array of {@link net.demilich.metastone.game.targeting.Zones} enum values.
+	 */
+	ZONES,
+	/**
+	 * An array of {@link net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc} objects.
+	 */
 	DYNAMIC_DESCRIPTION_ARRAY
 }

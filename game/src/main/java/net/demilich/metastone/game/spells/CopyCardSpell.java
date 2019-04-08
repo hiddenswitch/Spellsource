@@ -94,6 +94,10 @@ public class CopyCardSpell extends Spell {
 			Card random = context.getLogic().getRandom(sourceCollection);
 			peek(random, context, player);
 			Card output = copyCard(context, player, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
+			// Only cast the subspells if they actually made it into the player's hand
+			if (output == null || output.getZone() != Zones.HAND) {
+				continue;
+			}
 			for (SpellDesc subSpell : subSpells) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
 			}

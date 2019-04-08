@@ -396,6 +396,13 @@ public class ParseUtils {
 					}
 				}
 				return dynamicDescriptions;
+			case ZONES:
+				ArrayNode zoneArray = (ArrayNode) jsonData;
+				Zones[] zones = new Zones[zoneArray.size()];
+				for (int i = 0; i < zoneArray.size(); i++) {
+					zones[i] = Enum.valueOf(Zones.class, jsonData.get(i).asText());
+				}
+				return zones;
 			default:
 				break;
 		}
