@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Deathrattle: Summon four 1/1 Larva.",
+  "description": "Aftermath: Summon four 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
     "cards": [

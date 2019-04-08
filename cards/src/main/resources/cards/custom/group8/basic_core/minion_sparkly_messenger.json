@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "FAE",
-  "description": "Battlecry: Add a 1/1 Fae to your hand.",
+  "description": "Opener: Add a 1/1 Fae to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

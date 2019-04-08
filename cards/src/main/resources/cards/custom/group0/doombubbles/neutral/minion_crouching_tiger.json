@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Give a Dragon Stealth until your next turn.",
+  "description": "Opener: Give a Dragon Hidden until your next turn.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

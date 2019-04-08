@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Battlecry: Destroy a friendly Mech to summon another Eldritech.",
+  "description": "Opener: Destroy a friendly Mech to summon another Eldritech.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

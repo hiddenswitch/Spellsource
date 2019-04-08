@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Deal damage equal to the combined Cost of Elementals you played last turn.",
+  "description": "Opener: Deal damage equal to the combined Cost of Elementals you played last turn.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

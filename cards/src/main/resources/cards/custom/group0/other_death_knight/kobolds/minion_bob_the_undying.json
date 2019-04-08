@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Replace the top card of your deck with Bob the Undying.",
+  "description": "Aftermath: Replace the top card of your deck with Bob the Undying.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

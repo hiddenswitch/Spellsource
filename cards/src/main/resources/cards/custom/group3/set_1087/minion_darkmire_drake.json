@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Rush Costs (1) less for each Dragon you control.",
+  "description": "Dash Costs (1) less for each Dragon you control.",
   "attributes": {
     "RUSH": true
   },

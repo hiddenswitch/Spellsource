@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Deathrattle: Add a 'Power Overwhelming' to your hand.",
+  "description": "Aftermath: Add a 'Power Overwhelming' to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "card": "spell_power_overwhelming",

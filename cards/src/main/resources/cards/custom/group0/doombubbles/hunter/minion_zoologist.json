@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: If you control another Beast, put a Secret from your deck into the battlefield.",
+  "description": "Opener: If you control another Beast, put a Secret from your deck into the battlefield.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

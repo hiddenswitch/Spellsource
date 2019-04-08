@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "FREE",
-  "description": "Passive: Your starting Hero Power is 'Deal 2 damage and take 2 damage.'",
+  "description": "Passive: Your starting Skill is 'Deal 2 damage and take 2 damage.'",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"

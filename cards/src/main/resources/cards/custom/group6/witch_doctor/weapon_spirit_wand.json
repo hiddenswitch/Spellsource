@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 4,
   "rarity": "COMMON",
-  "description": "Costs (2) less while you have Spell Damage.",
+  "description": "Costs (2) less while you have Spellpower.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

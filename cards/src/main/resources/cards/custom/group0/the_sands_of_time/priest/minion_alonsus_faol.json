@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Add the three Priest artifacts to your hand.",
+  "description": "Aftermath: Add the three Priest artifacts to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cards": [

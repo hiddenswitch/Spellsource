@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "RARE",
-  "description": "After your hero attacks, if your opponent controls no minions, gain +1 durability.",
+  "description": "After your champion attacks, if your opponent controls no minions, gain +1 durability.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

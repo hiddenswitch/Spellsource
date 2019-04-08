@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Return this minion to your hand.",
+  "description": "Aftermath: Return this minion to your hand.",
   "deathrattle": {
     "class": "ReturnTargetToHandSpell",
     "target": "SELF"

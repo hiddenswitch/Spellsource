@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Rush. Deathrattle: Deal 3 damage to your hero.",
+  "description": "Dash. Aftermath: Deal 3 damage to your champion.",
   "deathrattle": {
     "class": "DamageSpell",
     "target": "FRIENDLY_HERO",

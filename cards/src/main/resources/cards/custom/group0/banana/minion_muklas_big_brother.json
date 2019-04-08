@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Battlecry: Discard ALL Bananas and gain +2/+2 for each.",
+  "description": "Opener: Discard ALL Bananas and gain +2/+2 for each.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

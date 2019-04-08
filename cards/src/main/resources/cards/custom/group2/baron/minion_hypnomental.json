@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry and Deathrattle: Summon a 0/2 Defender with Taunt.",
+  "description": "Opener and Aftermath: Summon a 0/2 Defender with Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "EPIC",
-  "description": "Your Hero Power becomes 'Summon a 1/1 Crater Hatchling with Charge.'",
+  "description": "Your Skill becomes 'Summon a 1/1 Crater Hatchling with Charge.'",
   "targetSelection": "NONE",
   "spell": {
     "class": "ChangeHeroPowerSpell",

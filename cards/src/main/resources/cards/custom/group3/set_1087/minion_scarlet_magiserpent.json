@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Gain +1/+1 for each card in your hand.",
+  "description": "Opener: Gain +1/+1 for each card in your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

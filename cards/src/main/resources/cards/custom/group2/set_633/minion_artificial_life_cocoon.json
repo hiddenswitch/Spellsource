@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Magnetic. Taunt. Deflect. At the start of your next turn, deal 8 damage to itself.",
+  "description": "Magnetic. Guard. Deflect. At the start of your next turn, deal 8 damage to itself.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

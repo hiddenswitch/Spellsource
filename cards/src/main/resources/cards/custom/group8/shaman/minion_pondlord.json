@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Taunt. Deathrattle: Summon three 0/1 Frogs with Taunt.",
+  "description": "Guard. Aftermath: Summon three 0/1 Frogs with Guard.",
   "deathrattle": {
     "class": "SummonSpell",
     "cards": [

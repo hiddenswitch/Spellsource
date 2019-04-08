@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Battlecry: Draw 2 cards that didn't start in your deck.",
+  "description": "Opener: Draw 2 cards that didn't start in your deck.",
   "battlecry": {
     "spell": {
       "class": "FromDeckToHandSpell",

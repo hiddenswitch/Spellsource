@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Mark a minion.",
+  "description": "Opener: Mark a minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

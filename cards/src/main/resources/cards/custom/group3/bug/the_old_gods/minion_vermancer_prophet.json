@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replace all Larva in your hand with Servant Wasps.",
+  "description": "Opener: Replace all Larva in your hand with Servant Wasps.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

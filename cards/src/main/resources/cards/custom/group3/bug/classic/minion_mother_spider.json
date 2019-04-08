@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Deathrattle: Shuffle two Mother Spiders into your deck.",
+  "description": "Aftermath: Shuffle two Mother Spiders into your deck.",
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
     "card": "minion_mother_spider",

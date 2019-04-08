@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Taunt. Deathrattle: Transform your Tentacles into Temple Guardians.",
+  "description": "Guard. Aftermath: Transform your Tentacles into Temple Guardians.",
   "deathrattle": {
     "class": "TransformMinionSpell",
     "target": "FRIENDLY_MINIONS",

@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Deathrattle: Gain 8 Armor.",
+  "description": "Aftermath: Gain 8 Armor.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HERO",

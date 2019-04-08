@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "Battlecry: Your hero is Immune this turn. Costs (1) less if you have a Beast.",
+  "description": "Opener: Your champion is Immune this turn. Costs (1) less if you have a Beast.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
