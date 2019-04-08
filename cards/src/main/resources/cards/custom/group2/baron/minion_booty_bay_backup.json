@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "PIRATE",
-  "description": "Battlecry: Give your other Pirates +1/+1.",
+  "description": "Opener: Give your other Pirates +1/+1.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

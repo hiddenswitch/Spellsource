@@ -4,7 +4,47 @@ title: What's New
 permalink: /whats-new/
 ---
 
-Raid Boss Gnaxx now reads, "Taunt. Whenever a minion attacks, gain +2 Attack."
+### 0.8.23-2.0.29 (Sunday, April 7th, 2019)
+
+Introducing new Spellsource core cards. Thank you @Pircival and others for the fantastic contribution.
+
+The following keywords have been consistently applied to Spellsource cards:
+
+ - Champion: Your player character. When this dies, you lose the game.
+ - Skill: A spell your Champion can play every turn.
+ - Opener: Occurs whenever the card is played from the hand.
+ - Aftermath: Occurs whenever a minion dies (horribly) on the battlefield.
+ - Hidden: This minion cannot be targeted by enemies until it deals damage.
+ - Dodge: The first time this minion takes damage, it takes zero instead.
+ - Dash: This can attack enemy minions even if it is exhausted.
+ - Charge: This can attack enemies even if it is exhausted.
+ - Spellpower (X): Your Spells deal this much more damage.
+ - Toxic: This kills minions it damages.
+ - Guard: This must be destroyed before minions can attack its champion.
+ 
+Now clarifying the following additional keywords:
+
+ - Armor: Instead of losing health, lose this instead.
+ - Deflect: The first time this minion takes damage, deal it to its Champion instead.
+ - Wither (X): This reduces its target's health by this amount, and restores the health at the start of the caster's turn.
+ - Enchantment: Occurs as long as the target this is attached to is in play.
+ - Exhausted: During the turn it comes into play or changes sides, this minion is exhausted and cannot attack this turn. It loses exhaustion at the start of next turn.
+ - Elusive: Cannot be targeted by spells or skills.
+ - Drain (X): Deals this much damage to the target, then heals the source by this amount. Any excess is given as extra health instead.
+ - Roast: Remove a card from the top of your deck.
+ - Reservoir (X): Occurs when your deck is larger than this amount.
+ - Sacrifice: Occurs whenever a friendly minion dies.
+ - Silence: The text on this card and any enchantments added later are no longer in play.
+ - Supremacy: Occurs whenever this minion attacks and kills another.
+ - Surge: Occurs when a card is played from the hand on the same turn it was added to the hand.
+
+##### Content Additions:
+
+ - 62 Spellsource Basic Commons.
+
+##### Content Fixes
+
+ - Raid Boss Gnaxx now reads, "Guard. Whenever a minion attacks, gain +2 Attack."
 
 ### 0.8.22-2.0.28 (Monday, March 11th, 2019)
 

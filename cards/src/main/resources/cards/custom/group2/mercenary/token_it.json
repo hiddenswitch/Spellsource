@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Win the game.",
+  "description": "Opener: Win the game.",
   "battlecry": {
     "spell": {
       "class": "DestroySpell",

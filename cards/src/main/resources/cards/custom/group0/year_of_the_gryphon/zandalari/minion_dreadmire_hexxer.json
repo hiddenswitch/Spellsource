@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Add three 0/3 Toads with Taunt to your hand.",
+  "description": "Opener: Add three 0/3 Toads with Guard to your hand.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

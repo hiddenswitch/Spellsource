@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Deathrattle: Replace all Death Knight cards in your hand with Paladin ones.",
+  "description": "Aftermath: Replace all Death Knight cards in your hand with Paladin ones.",
   "deathrattle": {
     "class": "ReplaceCardsSpell",
     "target": "FRIENDLY_HAND",

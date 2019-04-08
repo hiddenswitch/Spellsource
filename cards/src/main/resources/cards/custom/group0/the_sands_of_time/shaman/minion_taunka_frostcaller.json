@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Choose a minion. Freeze the minions adjacent to it.",
+  "description": "Opener: Choose a minion. Freeze the minions adjacent to it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

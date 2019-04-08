@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "Give a minion +2/+2. If it's your only minion, give it Divine Shield.",
+  "description": "Give a minion +2/+2. If it's your only minion, give it Dodge.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

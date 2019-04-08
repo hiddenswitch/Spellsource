@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "<b>Deathrattle</b>: Add a Spare Part and a Voodoo spell to each player's hand.",
+  "description": "<b>Aftermath</b>: Add a Spare Part and a Voodoo spell to each player's hand.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

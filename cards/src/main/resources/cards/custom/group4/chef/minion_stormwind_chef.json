@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Taunt. Battlecry: Roast 5 cards.",
+  "description": "Guard. Opener: Roast 5 cards.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

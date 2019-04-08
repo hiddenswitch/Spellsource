@@ -5,7 +5,7 @@
   "type": "HERO_POWER",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Summon a 0/1 Pebble with Taunt.",
+  "description": "Summon a 0/1 Pebble with Guard.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 7,

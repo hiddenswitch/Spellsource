@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: The next spell you cast costs (1) less.",
+  "description": "Opener: The next spell you cast costs (1) less.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

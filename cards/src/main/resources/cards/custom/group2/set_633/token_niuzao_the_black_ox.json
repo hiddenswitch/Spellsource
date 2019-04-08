@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Taunt. Deflect. At the end of your turn, give your other minions +2 Health and Deflect.",
+  "description": "Guard. Deflect. At the end of your turn, give your other minions +2 Health and Deflect.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

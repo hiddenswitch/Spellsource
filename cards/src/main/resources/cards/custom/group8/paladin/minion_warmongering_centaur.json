@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Deal 1 damage for each Secret in your hand.",
+  "description": "Opener: Deal 1 damage for each Secret in your hand.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

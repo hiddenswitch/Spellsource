@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Your hero Immune this turn.",
+  "description": "Opener: Your champion Immune this turn.",
   "battlecry": {
     "spell": {
       "class": "AddAttributeSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Reservoir (16+): Charge. Reservoir (0-15): Gain +4 Health and Taunt.",
+  "description": "Reservoir (16+): Charge. Reservoir (0-15): Gain +4 Health and Guard.",
   "battlecry": {
     "condition": {
       "class": "ReservoirCondition",

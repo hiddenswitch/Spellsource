@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Taunt. Deathrattle: Summon a 0/2 Defender with Taunt.",
+  "description": "Guard. Aftermath: Summon a 0/2 Defender with Guard.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_baron_defender"

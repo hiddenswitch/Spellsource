@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Gain +2 Health for each other friendly minion.",
+  "description": "Opener: Gain +2 Health for each other friendly minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

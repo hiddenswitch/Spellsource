@@ -254,10 +254,10 @@ public class CustomCardsTests extends TestBase {
 			}
 			playCard(context, player, "weapon_sunslayer");
 			attack(context, player, player.getHero(), opponent.getHero());
-			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your hero attacks, draw 0 cards. (Increases for every spell you've cast this turn)");
+			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your champion attacks, draw 0 cards. (Increases for every spell you've cast this turn)");
 			assertEquals(player.getHand().size(), 0);
 			playCard(context, player, "spell_the_coin");
-			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your hero attacks, draw 1 card. (Increases for every spell you've cast this turn)");
+			assertEquals(player.getWeaponZone().get(0).getDescription(context, player), "After your champion attacks, draw 1 card. (Increases for every spell you've cast this turn)");
 			attack(context, player, player.getHero(), opponent.getHero());
 			assertEquals(player.getHand().size(), 1);
 		});

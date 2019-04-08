@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Battlecry and Supremacy: Summon a 5/5 Dragon with Charge.",
+  "description": "Opener and Supremacy: Summon a 5/5 Dragon with Charge.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

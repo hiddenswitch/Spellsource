@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 9,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Fill your board with dormant 4/4 Squashlings. Deathrattle: Awaken your Squashlings.",
+  "description": "Opener: Fill your board with dormant 4/4 Squashlings. Aftermath: Awaken your Squashlings.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Draw a Divine Shield minion from your deck.",
+  "description": "Opener: Draw a Dodge minion from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

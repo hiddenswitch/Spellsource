@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Gain 2 Mana Crystals this turn only.",
+  "description": "Opener: Gain 2 Mana Crystals this turn only.",
   "battlecry": {
     "spell": {
       "class": "GainManaSpell",

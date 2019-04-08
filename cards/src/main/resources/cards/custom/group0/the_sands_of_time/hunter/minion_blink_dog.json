@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Deathrattle: Give a random friendly Beast \"Deathrattle: Summon a Blink Dog\"",
+  "description": "Aftermath: Give a random friendly Beast \"Aftermath: Summon a Blink Dog\"",
   "deathrattle": {
     "class": "AddDeathrattleSpell",
     "target": "FRIENDLY_MINIONS",
