@@ -49,6 +49,7 @@ Now clarifying the following additional keywords:
 ##### Content Fixes
 
  - Raid Boss Gnaxx now reads, "Guard. Whenever a minion attacks, gain +2 Attack."
+ - Lightcaller and Astute Archmage now discover spells from their controllers' class, or Paladin secrets when not specified.
 
 ### 0.8.22-2.0.28 (Monday, March 11th, 2019)
 
