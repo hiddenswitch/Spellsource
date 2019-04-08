@@ -6,9 +6,9 @@ permalink: /whats-new/
 
 ### 0.8.21-2.0.29 (Sunday, April 7th, 2019)
 
-Introducing new Spellsource core cards. Thank you @Pircival and others for the fantastic contribution.
+Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg and others for the fantastic contribution.
 
-Introducing the Timeweaver class! Big thanks to @Richochet_Beret for the awesome contribution. This brings the total number of classes to 27, so please get feedback in via the Discord.
+Introducing the Timeweaver class! Big thanks to @Ricochet_Beret for the awesome contribution. This brings the total number of classes to 27, so please get feedback in via the Discord.
 
 The following keywords have been consistently applied to Spellsource cards:
 
