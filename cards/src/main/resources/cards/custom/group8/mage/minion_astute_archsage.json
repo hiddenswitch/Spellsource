@@ -25,10 +25,22 @@
         },
         "targetPlayer": "SELF"
       },
+      "cardSources": [
+        {
+          "class": "SecretSource"
+        },
+        {
+          "class": "CatalogueSource"
+        },
+        {
+          "class": "CatalogueSource"
+        }
+      ],
       "cardFilters": [
         {
           "class": "CardFilter",
           "attribute": "SECRET",
+          "heroClass": "SELF",
           "operation": "HAS"
         },
         {
