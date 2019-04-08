@@ -4,9 +4,9 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.23-2.0.29 (Thursday, April 4th, 2019)
+### 0.8.23-2.0.29 (Sunday, April 7th, 2019)
 
-Introducing the Timeweaver class!
+Introducing the Timeweaver class! Big thanks to @Richochet_Beret for the awesome contribution. This brings the total number of classes to 27, so please get feedback in via the Discord.
 
 ##### Content Additions
 
