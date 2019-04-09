@@ -13,7 +13,10 @@
     "card": "minion_temple_guardian",
 	"filter": {
           "class": "SpecificCardFilter",
-          "card": "token_tentacle"
+          "cards": [
+	  "token_tauntentacle",
+	  "token_tentacle"
+                   ]
         }
   },
   "attributes": {
