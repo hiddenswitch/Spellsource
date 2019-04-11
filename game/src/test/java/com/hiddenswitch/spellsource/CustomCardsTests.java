@@ -693,9 +693,9 @@ public class CustomCardsTests extends TestBase {
 	public void testBloodMoonRising() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_blood_moon_rising");
-			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
-			attack(context, player, wolfrider, opponent.getHero());
-			assertEquals(player.getHero().getMaxHp(), player.getHero().getBaseHp() + wolfrider.getAttack());
+			Minion charger = playMinionCard(context, player, "minion_charge_test");
+			attack(context, player, charger, opponent.getHero());
+			assertEquals(player.getHero().getMaxHp(), player.getHero().getBaseHp() + charger.getAttack());
 		});
 	}
 
@@ -2276,7 +2276,7 @@ public class CustomCardsTests extends TestBase {
 			Minion target1 = playMinionCard(context, opponent, "minion_wisp");
 			Minion target2 = playMinionCard(context, opponent, "minion_wisp");
 			context.endTurn();
-			Minion attacker = playMinionCard(context, player, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, player, "minion_charge_test");
 			Minion defender = playMinionCard(context, player, "minion_wisp");
 			Minion doubleDefender = playMinionCard(context, player, "minion_boulderfist_ogre");
 			playCard(context, player, "spell_heartstop_aura");
@@ -2284,7 +2284,7 @@ public class CustomCardsTests extends TestBase {
 			assertFalse(attacker.isDestroyed());
 			assertTrue(target1.isDestroyed());
 			context.endTurn();
-			Minion opponentAttacker = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion opponentAttacker = playMinionCard(context, opponent, "minion_charge_test");
 			attack(context, opponent, opponentAttacker, defender);
 			assertTrue(opponentAttacker.isDestroyed());
 			assertFalse(defender.isDestroyed());
@@ -2295,7 +2295,7 @@ public class CustomCardsTests extends TestBase {
 			assertTrue(attacker.isDestroyed());
 			assertTrue(defender.isDestroyed());
 			assertFalse(doubleDefender.isDestroyed(), "Boulderfist Ogre should not have taken enough damage to be killed.");
-			attacker = playMinionCard(context, player, "minion_wolfrider");
+			attacker = playMinionCard(context, player, "minion_charge_test");
 			attack(context, player, attacker, target2);
 			assertTrue(attacker.isDestroyed(), "Hearstopped enchantment should have expired.");
 		});
@@ -2398,22 +2398,22 @@ public class CustomCardsTests extends TestBase {
 	public void testBloodPresence() {
 		runGym((context, player, opponent) -> {
 			player.getHero().setHp(27);
-			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
+			Minion charger = playMinionCard(context, player, "minion_charge_test");
 			SpellDesc spell = new SpellDesc(ChangeHeroPowerSpell.class);
 			spell.put(SpellArg.CARD, "hero_power_blood_presence");
 			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
 			// Make sure aura actually gets recalculated
 			context.getLogic().endOfSequence();
 			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_blood_presence");
-			attack(context, player, wolfrider, opponent.getHero());
+			attack(context, player, charger, opponent.getHero());
 			assertEquals(player.getHero().getHp(), 30);
 			spell.put(SpellArg.CARD, "hero_power_fireblast");
 			context.getLogic().castSpell(player.getId(), spell, player.getReference(), null, false);
 			// Make sure aura actually gets recalculated
 			context.getLogic().endOfSequence();
-			assertFalse(wolfrider.hasAttribute(Attribute.AURA_LIFESTEAL));
+			assertFalse(charger.hasAttribute(Attribute.AURA_LIFESTEAL));
 			player.getHero().setHp(27);
-			attack(context, player, wolfrider, opponent.getHero());
+			attack(context, player, charger, opponent.getHero());
 			assertEquals(player.getHero().getHp(), 27);
 		});
 	}
@@ -2544,15 +2544,15 @@ public class CustomCardsTests extends TestBase {
 			receiveCard(context, player, "minion_eldritch_horror");
 			playCard(context, player, "secret_panicked_summoning");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
-			attack(context, opponent, wolfrider, player.getHero());
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
+			attack(context, opponent, charger, player.getHero());
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
 			context.endTurn();
 			playCard(context, player, "secret_panicked_summoning");
 			context.endTurn();
-			attack(context, opponent, wolfrider, player.getHero());
+			attack(context, opponent, charger, player.getHero());
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(player.getMinions().size(), 1);
 			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_bloodfen_raptor");
@@ -2690,7 +2690,7 @@ public class CustomCardsTests extends TestBase {
 			context.endTurn();
 			Minion target = playMinionCard(context, opponent, "minion_target_dummy");
 			context.endTurn();
-			Minion attacker = playMinionCard(context, player, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, player, "minion_charge_test");
 			playCard(context, player, "spell_path_of_frost", attacker);
 			int opponentHp = opponent.getHero().getHp();
 			attack(context, player, attacker, target);
@@ -3032,7 +3032,7 @@ public class CustomCardsTests extends TestBase {
 	public void testTouchOfKarma() {
 		// Target friendly
 		runGym((context, player, opponent) -> {
-			Minion attacker = playMinionCard(context, player, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, player, "minion_charge_test");
 			playCard(context, player, "spell_touch_of_karma", attacker);
 			int hp = opponent.getHero().getHp();
 			attack(context, player, attacker, opponent.getHero());
@@ -3042,7 +3042,7 @@ public class CustomCardsTests extends TestBase {
 		// Target opponent
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, opponent, "minion_charge_test");
 			context.endTurn();
 			playCard(context, player, "spell_touch_of_karma", attacker);
 			context.endTurn();
@@ -3173,7 +3173,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_fireball", target);
 			assertEquals(target.getHp(), target.getBaseHp() - 2);
 			context.endTurn();
-			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, opponent, "minion_charge_test");
 			attack(context, opponent, attacker, target);
 			assertEquals(target.getHp(), target.getBaseHp() - 3);
 		});
@@ -3559,7 +3559,7 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "spell_iron_hide");
 			assertTrue(spaceMoorine.hasAttribute(Attribute.AURA_TAUNT));
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
 			assertTrue(context.getValidActions().stream().filter(va -> va.getActionType() == ActionType.PHYSICAL_ATTACK)
 					.allMatch(t -> t.getTargetReference().equals(spaceMoorine.getReference())));
 		});
@@ -3760,7 +3760,7 @@ public class CustomCardsTests extends TestBase {
 	public void testShadowOfThePast() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			playCard(context, opponent, "minion_wolfrider");
+			playCard(context, opponent, "minion_charge_test");
 			playCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
 			Minion shadow = playMinionCard(context, player, "minion_shadow_of_the_past");
@@ -3777,12 +3777,12 @@ public class CustomCardsTests extends TestBase {
 			playCard(context, player, "secret_own_worst_enemy");
 			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			Minion source = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion source = playMinionCard(context, opponent, "minion_charge_test");
 			attack(context, opponent, source, target);
 			assertTrue(source.isDestroyed());
 			Assert.assertFalse(target.isDestroyed());
 			assertTrue(player.getGraveyard().stream().anyMatch(c -> c.getEntityType() == EntityType.MINION
-					&& c.getSourceCard().getCardId().equals("minion_wolfrider")));
+					&& c.getSourceCard().getCardId().equals("minion_charge_test")));
 		});
 	}
 
@@ -3884,13 +3884,13 @@ public class CustomCardsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_lie_in_wait");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
-			attack(context, opponent, wolfrider, player.getHero());
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
+			attack(context, opponent, charger, player.getHero());
 
 			assertEquals(player.getWeaponZone().get(0).getDurability(),
 					CardCatalogue.getCardById("weapon_eaglehorn_bow").getBaseDurability() - 1,
 					"Eaglehorn Bow loses durability because the secret triggered before it was in play.");
-			assertTrue(wolfrider.isDestroyed());
+			assertTrue(charger.isDestroyed());
 		});
 	}
 
@@ -4222,12 +4222,12 @@ public class CustomCardsTests extends TestBase {
 	public void testVampiricTouch() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
 			context.endTurn();
-			playCard(context, player, "spell_vampiric_touch", wolfrider);
-			assertTrue(wolfrider.isDestroyed());
+			playCard(context, player, "spell_vampiric_touch", charger);
+			assertTrue(charger.isDestroyed());
 			assertEquals(player.getMinions().get(0).getAttack(), 1);
-			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_wolfrider");
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_charge_test");
 		});
 
 		runGym((context, player, opponent) -> {

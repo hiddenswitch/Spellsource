@@ -1032,8 +1032,8 @@ public class KoboldsAndCatacombsTests extends TestBase {
 			playCard(context, player, "spell_shield_block");
 			receiveCard(context, player, "spell_lesser_jasper_spellstone");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
-			attack(context, opponent, wolfrider, player.getHero());
+			Minion charger = playMinionCard(context, player, "minion_charge_test");
+			attack(context, opponent, charger, player.getHero());
 			assertEquals(player.getHand().get(0).getCardId(), "spell_lesser_jasper_spellstone");
 		});
 	}

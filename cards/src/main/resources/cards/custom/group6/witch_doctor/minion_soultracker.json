@@ -1,0 +1,24 @@
+{
+  "name": "Soultracker",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "description": "Dash. Opener: Give an enemy minion Guard.",
+  "battlecry": {
+    "targetSelection": "ENEMY_MINIONS",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

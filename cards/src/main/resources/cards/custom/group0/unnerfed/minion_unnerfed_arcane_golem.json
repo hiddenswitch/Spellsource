@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Charge. Opener: Give your opponent a Mana Crystal.",
+  "description": "Blitz. Opener: Give your opponent a Mana Crystal.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Surge: If you played an Elemental last turn and are holding a Dragon, gain +4/+3 and Charge.",
+  "description": "Surge: If you played an Elemental last turn and are holding a Dragon, gain +4/+3 and Blitz.",
   "battlecry": {
     "condition": {
       "class": "AndCondition",

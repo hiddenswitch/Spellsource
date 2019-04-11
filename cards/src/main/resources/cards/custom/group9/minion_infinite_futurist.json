@@ -11,7 +11,10 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ReceiveCardSpell",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "cardSource": {
+        "class": "UnweightedCatalogueSource"
+      }
     }
   },
   "attributes": {

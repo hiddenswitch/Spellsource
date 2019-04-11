@@ -1,0 +1,31 @@
+{
+  "name": "Aquatic Fantasy",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Restore #14 Health. Shuffle two random cards from your hand into your deck.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "HealSpell",
+        "value": 14
+      },
+      {
+        "class": "ShuffleOriginalToDeckSpell",
+        "target": "FRIENDLY_HAND",
+        "randomTarget": true
+      },
+      {
+        "class": "ShuffleOriginalToDeckSpell",
+        "target": "FRIENDLY_HAND",
+        "randomTarget": true
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

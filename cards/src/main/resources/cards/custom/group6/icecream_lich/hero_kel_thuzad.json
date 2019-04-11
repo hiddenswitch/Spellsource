@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "ICECREAM",
   "rarity": "FREE",
-  "description": "Skill: Summon a 1/1 Ghoul with Charge that dies at the end of your turn.",
+  "description": "Skill: Summon a 1/1 Ghoul with Blitz that dies at the end of your turn.",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

@@ -1,38 +1,40 @@
 {
   "name": "Puppeteer Senzaku",
-  "heroPower": "hero_power_no_strings_on_me",
+  "heroPower": "hero_power_tainted_blood",
   "baseManaCost": 8,
   "type": "HERO",
   "heroClass": "ROSE",
   "rarity": "LEGENDARY",
-  "description": "Opener: After an enemy minion dies this game, summon it.",
+  "description": "Opener: Add a 1-Cost 1/1 copy of each minion to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "AddEnchantmentSpell",
-      "target": "FRIENDLY_PLAYER",
-      "trigger": {
-        "eventTrigger": {
-          "class": "MinionDeathTrigger",
-          "targetPlayer": "OPPONENT"
-        },
-        "spell": {
-          "class": "ResurrectFromBothSpell",
-          "targetPlayer": "SELF",
-          "cardFilter": {
-            "class": "AndFilter",
-            "filters": [
-              {
-                "class": "OwnedByPlayerFilter",
-                "targetPlayer": "OPPONENT"
-              },
-              {
-                "class": "SpecificCardFilter",
-                "secondaryTarget": "EVENT_TARGET"
-              }
-            ]
+      "class": "CopyCardSpell",
+      "target": "ALL_MINIONS",
+      "spell": {
+        "class": "MetaSpell",
+        "target": "OUTPUT",
+        "spells": [
+          {
+            "class": "CardCostModifierSpell",
+            "cardCostModifier": {
+              "class": "CardCostModifier",
+              "target": "SELF",
+              "value": 1,
+              "operation": "SET"
+            }
+          },
+          {
+            "class": "SetAttackSpell",
+            "value": 1,
+            "exclusive": true
+          },
+          {
+            "class": "SetHpSpell",
+            "value": 1,
+            "exclusive": true
           }
-        }
+        ]
       }
     }
   },

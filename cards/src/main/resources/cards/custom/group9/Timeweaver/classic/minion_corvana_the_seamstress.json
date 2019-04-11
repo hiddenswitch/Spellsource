@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Reshuffle 3 cards, then draw 6. Surge cards cost (1) this turn.",
+  "description": "Opener: Reshuffle 3 cards, then draw 6. Surge cards cost (1) this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

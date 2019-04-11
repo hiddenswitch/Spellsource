@@ -176,7 +176,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
 			context.endTurn();
-			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, opponent, "minion_charge_test");
 			int hp = player.getHero().getHp();
 			attack(context, opponent, attacker, deflect);
 			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
@@ -188,7 +188,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
 			context.endTurn();
-			Minion defender = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion defender = playMinionCard(context, opponent, "minion_charge_test");
 			context.endTurn();
 
 			int hp = player.getHero().getHp();
