@@ -1,10 +1,10 @@
 {
-  "name": "Avatar of Hakkar",
+  "name": "Blood Shaman Irako",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ROSE",
-  "baseAttack": 4,
-  "baseHp": 2,
+  "baseAttack": 3,
+  "baseHp": 3,
   "rarity": "LEGENDARY",
   "description": "Opener: Your Skill costs Health instead of Mana this game.",
   "battlecry": {
