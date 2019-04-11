@@ -14,12 +14,12 @@
       "spells": [
         {
           "class": "SummonSpell",
-          "boardPositionRelative": "RIGHT",
+          "boardPositionRelative": "LEFT",
           "card": "token_amalgam"
         },
         {
           "class": "SummonSpell",
-          "boardPositionRelative": "LEFT",
+          "boardPositionRelative": "RIGHT",
           "card": "token_amalgam"
         }
       ]

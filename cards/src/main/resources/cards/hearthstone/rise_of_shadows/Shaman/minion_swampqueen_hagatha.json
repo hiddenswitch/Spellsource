@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "custom.CreateAndTeachSpell",
-      "name": "Horror",
+      "name": "Drustvar Horror",
       "attackBonus": 5,
       "hpBonus": 5,
       "mana": 5,
