@@ -1,5 +1,5 @@
 {
-  "name": "Bwonsamdi",
+  "name": "Barbasu the Vigilant",
   "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "ROSE",
@@ -15,7 +15,7 @@
         "target": "ENEMY_MINIONS",
         "filter": {
           "class": "SpecificCardFilter",
-          "card": "minion_bwonsamdi_witchdoctor"
+          "card": "minion_barbasu_the_vigilant"
         },
         "invert": true
       },
