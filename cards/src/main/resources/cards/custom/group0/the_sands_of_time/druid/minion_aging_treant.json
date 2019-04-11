@@ -23,8 +23,7 @@
     }
   },
   "attributes": {
-    "TAUNT": true,
-    "TREANT": true
+    "TAUNT": true
   },
   "collectible": true,
   "set": "SANDS_OF_TIME",
