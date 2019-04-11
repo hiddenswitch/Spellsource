@@ -1,12 +1,12 @@
 {
-  "name": "Zalmah",
+  "name": "Ulji the Eternal",
   "baseManaCost": 9,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Spellpower +2. Aftermath: Give a random friendly minion +6/+6 and Spellpower +2.",
+  "description": "Spellpower +3. Aftermath: Give a random friendly minion +6/+6 and Spellpower +3.",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",
@@ -19,14 +19,14 @@
       },
       {
         "class": "ModifyAttributeSpell",
-        "value": 2,
+        "value": 3,
         "attribute": "SPELL_DAMAGE"
       }
     ]
   },
   "attributes": {
     "DEATHRATTLES": true,
-    "SPELL_DAMAGE": 2
+    "SPELL_DAMAGE": 3
   },
   "collectible": true,
   "set": "CUSTOM",
