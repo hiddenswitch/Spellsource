@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Shuffle a copy of each card you played this turn into your deck.",
+  "description": "Opener: Shuffle a copy of each card you played this turn into your deck.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.logic;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -2866,7 +2864,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
+			if (spellsCastTwice(player, card, card, target)) {
 				context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 			}
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
@@ -2887,7 +2885,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
+			if (spellsCastTwice(player, card, card, target)) {
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 			}
@@ -2895,6 +2893,30 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Implements Snowfury Giant
 			player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 		}
+	}
+
+	/**
+	 * Determines if spells should be casting twice. Allows auras to control double spell casting.
+	 *
+	 * @param player
+	 * @param card
+	 * @param source
+	 * @param target
+	 * @return
+	 */
+	protected boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
+		boolean playerHasAttribute = context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE);
+		boolean playerHasSilentDreamer = false;
+		if (target != null && source != null) {
+			for (TheliaSilentdreamerAura aura : SpellUtils.getAuras(context, TheliaSilentdreamerAura.class, target)) {
+				if (aura.getSpellCondition().isFulfilled(context, player, source, card)) {
+					playerHasSilentDreamer = true;
+					break;
+				}
+			}
+		}
+
+		return playerHasAttribute || playerHasSilentDreamer;
 	}
 
 	/**

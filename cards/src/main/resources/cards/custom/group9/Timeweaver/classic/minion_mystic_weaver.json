@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Reshuffle a card and gain Spell Damage +1 (Surge: +2)",
+  "description": "Opener: Reshuffle a card and gain Spell Damage +1 (Surge: +2)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

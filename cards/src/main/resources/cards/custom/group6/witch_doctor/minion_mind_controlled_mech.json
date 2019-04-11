@@ -1,0 +1,19 @@
+{
+  "name": "Mind Controlled Mech",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 2,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "MECH",
+  "description": "Can't attack. Your Hero Power is 'Mental Command'.",
+  "aura": {
+    "class": "CardAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "card": "hero_power_mental_command"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

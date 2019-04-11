@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Aftermath: Summon a 6/4 Dragon with Charge.",
+  "description": "Aftermath: Summon a 6/4 Dragon with Blitz.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_flytrap_drake"

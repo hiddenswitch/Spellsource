@@ -1,0 +1,31 @@
+{
+  "name": "Blood Transfuser",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Aftermath: Give a random friendly minion Guard and Lifesteal.",
+  "deathrattle": {
+    "class": "MetaSpell",
+    "target": "FRIENDLY_MINIONS",
+    "randomTarget": true,
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+		"attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "LIFESTEAL"
+      }
+    ]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

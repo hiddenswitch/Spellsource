@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Hidden, Dodge. Can't be targeted by Spells or Skills.",
+  "description": "Hidden, Dodge. Elusive.",
   "attributes": {
     "DIVINE_SHIELD": true,
     "STEALTH": true,

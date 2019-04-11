@@ -27,7 +27,8 @@
       },
       "cardSources": [
         {
-          "class": "SecretSource"
+          "class": "SecretSource",
+          "heroClass": "BLUE"
         },
         {
           "class": "CatalogueSource"
@@ -40,7 +41,6 @@
         {
           "class": "CardFilter",
           "attribute": "SECRET",
-          "heroClass": "SELF",
           "operation": "HAS"
         },
         {

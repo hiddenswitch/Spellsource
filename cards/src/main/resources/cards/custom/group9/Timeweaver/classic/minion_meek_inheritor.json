@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "FREE",
-  "description": "Battlecry: Reshuffle 4 (Surge: 3) cards, then draw 5.",
+  "description": "Opener: Reshuffle 4 (Surge: 3) cards, then draw 5.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

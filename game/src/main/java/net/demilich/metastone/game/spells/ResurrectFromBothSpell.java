@@ -16,6 +16,8 @@ import java.util.List;
 
 /**
  * Resurrects minions from both player's graveyards.
+ *
+ * If a {@link SpellArg#CARD_FILTER} is specified, only resurrect minions that satisfy the filter.
  * <p>
  * Does not resurrect unique minions.
  */

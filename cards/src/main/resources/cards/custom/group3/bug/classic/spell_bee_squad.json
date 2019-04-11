@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Summon three 1/1 Elites with Charge and Toxic.",
+  "description": "Summon three 1/1 Elites with Blitz and Toxic.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

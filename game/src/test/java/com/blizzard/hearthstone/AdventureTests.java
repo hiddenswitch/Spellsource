@@ -37,7 +37,7 @@ public class AdventureTests extends TestBase {
 			assertTrue(opponent.getHero().hasAttribute(Attribute.TAUNT));
 			Minion notTargetable = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, player, "minion_wolfrider");
+			Minion charger = playMinionCard(context, player, "minion_charge_test");
 			assertTrue(context.getValidActions().stream().noneMatch(ga -> ga.getActionType() == ActionType.PHYSICAL_ATTACK
 					&& ga.getTargetReference().equals(notTargetable.getReference())));
 		});

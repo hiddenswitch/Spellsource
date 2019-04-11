@@ -4,11 +4,9 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.21-2.0.29 (Sunday, April 7th, 2019)
+### 0.8.22-2.0.29 (Wednesday, April 10th, 2019)
 
-Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg and others for the fantastic contribution.
-
-Introducing the Timeweaver class! Big thanks to @Ricochet_Beret for the awesome contribution. This brings the total number of classes to 27, so please get feedback in via the Discord.
+Thanks to a contribution from @Logovaz, there are new cards for Senzaku!
 
 The following keywords have been consistently applied to Spellsource cards:
 
@@ -19,7 +17,7 @@ The following keywords have been consistently applied to Spellsource cards:
  - Hidden: This minion cannot be targeted by enemies until it deals damage.
  - Dodge: The first time this minion takes damage, it takes zero instead.
  - Dash: This can attack enemy minions even if it is exhausted.
- - Charge: This can attack enemies even if it is exhausted.
+ - Blitz: This can attack enemies even if it is exhausted.
  - Spellpower (X): Your Spells deal this much more damage.
  - Toxic: This kills minions it damages.
  - Guard: This must be destroyed before minions can attack its champion.
@@ -39,6 +37,28 @@ Now clarifying the following additional keywords:
  - Silence: The text on this card and any enchantments added later are no longer in play.
  - Supremacy: Occurs whenever this minion attacks and kills another.
  - Surge: Occurs when a card is played from the hand on the same turn it was added to the hand.
+
+##### Content Additions:
+
+ - Added Witch Doctor cards for Verdant Dreams (10 Cards)
+ - Added 28 new cards and 2 tokens.
+
+##### Content Fixes:
+
+ - Puppeteer Senzaku now reads: "Opener: Add a 1-Cost 1/1 copy of each minion to your hand." Its Skill is now "Passive Skill. During your turn, take control of any enemy minion dies."
+ - Hex Zombie now costs 4 mana.
+ - Shadow Puppetry now costs 4 and reads "Choose an enemy minion. Force it to attack adjacent minions."
+ - Wolpertinger now says "Hidden, Dodge, Elusive."
+ - Timeweaver cards now have the proper keywords.
+ - Blitz is now being used as a keyword correctly.
+ - Astute Archsage now works correctly when played by a non-Mage minion.
+ - Ner'Zhul now has the correct hero power.
+
+### 0.8.21-2.0.29 (Sunday, April 7th, 2019)
+
+Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg and others for the fantastic contribution.
+
+Introducing the Timeweaver class! Big thanks to @Ricochet_Beret for the awesome contribution. This brings the total number of classes to 27, so please get feedback in via the Discord.
 
 ##### Content Additions:
 
