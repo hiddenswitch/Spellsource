@@ -1,7 +1,6 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.PlayCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardZone;
@@ -13,7 +12,6 @@ import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.stream.Stream;
@@ -40,7 +38,7 @@ public class OneNightInKarazhanTests extends TestBase {
 			shuffleToDeck(context, player, cardId);
 			playCard(context, player, "minion_barnes");
 			Minion raptor = player.getMinions().get(1);
-			playCardWithTarget(context, player, "spell_silence", raptor);
+			playCard(context, player, "spell_silence", raptor);
 			Assert.assertEquals(raptor.getAttack(), 3);
 			Assert.assertEquals(raptor.getHp(), 2);
 		});
@@ -101,7 +99,7 @@ public class OneNightInKarazhanTests extends TestBase {
 			Card minionNoviceEngineer = receiveCard(context, player, "minion_novice_engineer");
 			playCard(context, player, "minion_malchezaars_imp");
 			Card soulfire = receiveCard(context, player, "spell_soulfire");
-			playCardWithTarget(context, player, soulfire, opponent.getHero());
+			playCard(context, player, soulfire, opponent.getHero());
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "minion_acidic_swamp_ooze", "The player should have Acidic Swamp Ooze in their hand after playing soulfire.");
 			Assert.assertEquals(minionNoviceEngineer.getZone(), Zones.GRAVEYARD, "Novice engineer should be in the graveyard.");
 		});

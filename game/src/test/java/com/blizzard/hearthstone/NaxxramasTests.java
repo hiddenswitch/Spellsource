@@ -1,8 +1,5 @@
 package com.blizzard.hearthstone;
 
-import net.demilich.metastone.game.GameContext;
-import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -152,7 +149,7 @@ public class NaxxramasTests extends TestBase {
 			playMinionCard(context, opponent, "minion_zombie_chow");
 			playMinionCard(context, opponent, "minion_zombie_chow");
 			playMinionCard(context, opponent, "minion_auchenai_soulpriest");
-			playCardWithTarget(context, player, "spell_pyroblast", player.getHero());
+			playCard(context, player, "spell_pyroblast", player.getHero());
 			Assert.assertEquals(player.getHero().getHp(), GameLogic.MAX_HERO_HP - 10);
 			Card poisonSeeds = CardCatalogue.getCardById("spell_poison_seeds");
 			playCard(context, player, poisonSeeds);

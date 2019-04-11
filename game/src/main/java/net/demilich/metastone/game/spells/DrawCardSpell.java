@@ -1,12 +1,13 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,6 +21,25 @@ import java.util.Map;
  * <p>
  * The method used to draw cards from the deck will trigger fatigue damage if the deck is empty. If an effect puts a
  * card into the deck on the (n-1)th sub spell just before attempting the n-th draw, this spell will draw it correctly.
+ * <p>
+ * For <b>example,</b> to draw a card and set its cost to 1:
+ * <pre>
+ *   {
+ *     "class": "DrawCardSpell",
+ *     "spell": {
+ *       "class": "CardCostModifierSpell",
+ *       "target": "OUTPUT",
+ *       "cardCostModifier": {
+ *         "class": "CardCostModifier",
+ *         "target": "SELF",
+ *         "operation": "SET",
+ *         "value": 1
+ *       }
+ *     }
+ *   }
+ * </pre>
+ * Observe that the target of the {@code "CardCostModifierSpell"} subspell is {@link
+ * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}, which is the card that you actually drew.
  *
  * @see FromDeckToHandSpell to draw a specific card from the deck.
  */
@@ -40,7 +60,7 @@ public class DrawCardSpell extends Spell {
 		for (int i = 0; i < cardCount; i++) {
 			Card card = context.getLogic().drawCard(player.getId(), source);
 
-			if (card == null) {
+			if (card == null || card.getZone() != Zones.HAND) {
 				continue;
 			}
 

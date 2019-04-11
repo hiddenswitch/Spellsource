@@ -27,14 +27,6 @@ public class TargetAcquisitionTrigger extends EventTrigger {
 		if (actionType != null && targetAcquisitionEvent.getActionType() != actionType) {
 			return false;
 		}
-		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
-		if (sourceEntityType != null && sourceEntityType != targetAcquisitionEvent.getSource().getEntityType()) {
-			return false;
-		}
-		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if (targetEntityType != null && targetEntityType != targetAcquisitionEvent.getTarget().getEntityType()) {
-			return false;
-		}
 
 		return true;
 	}

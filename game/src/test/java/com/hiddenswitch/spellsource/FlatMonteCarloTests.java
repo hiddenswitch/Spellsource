@@ -88,7 +88,7 @@ public class FlatMonteCarloTests extends TestBase {
 			List<GameAction> validActions = context.getValidActions();
 			GameAction playCardAction = behaviour.requestAction(context, player, validActions);
 			Assert.assertEquals(playCardAction.getActionType(), ActionType.SPELL);
-			Assert.assertEquals(((PlayCardAction) playCardAction).getEntityReference(), winTheGame.getReference());
+			Assert.assertEquals(((PlayCardAction) playCardAction).getSourceReference(), winTheGame.getReference());
 		});
 	}
 }

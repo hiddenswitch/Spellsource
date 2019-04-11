@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Give a friendly minion Stealth.",
+  "description": "Opener: Give a friendly minion Hidden.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -1,14 +1,14 @@
 package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg;
-import net.demilich.metastone.game.utils.BaseMap;
+import net.demilich.metastone.game.cards.BaseMap;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
@@ -23,9 +23,12 @@ import java.util.Map;
  *
  * @param <T> The enum representing the parameters/arguments/fields in the abstract base class.
  * @param <V> The abstract base class of the concrete type.
+ * @see DescDeserializer for a walk through on how deserialization of card JSON works on subclasses of this one.
  */
 @JsonSerialize(using = DescSerializer.class)
-public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends BaseMap<T, Object> implements Serializable, Cloneable, HasDesc<Desc<T, V>> {
+public abstract class Desc<T extends Enum<T>, V extends HasDesc<?>> extends BaseMap<T, Object> implements Serializable,
+		Cloneable, HasDesc<Desc<T, V>>, HasEntrySet<T, Object> {
+
 	protected Desc(Map<T, Object> arguments, Class<T> keyType) {
 		super(keyType);
 		if (arguments.isEmpty()) {

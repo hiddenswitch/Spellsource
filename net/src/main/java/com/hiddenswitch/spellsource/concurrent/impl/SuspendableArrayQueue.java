@@ -1,16 +1,18 @@
 package com.hiddenswitch.spellsource.concurrent.impl;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.hiddenswitch.spellsource.concurrent.SuspendableCondition;
 import com.hiddenswitch.spellsource.concurrent.SuspendableLock;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.concurrent.SuspendableQueue;
+import io.vertx.core.AsyncResult;
+import io.vertx.core.Handler;
 import io.vertx.core.VertxException;
 import io.vertx.core.json.Json;
 import io.vertx.core.json.JsonObject;
-import io.vertx.core.shareddata.Lock;
+import io.vertx.core.shareddata.AsyncMap;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
@@ -231,16 +233,27 @@ public class SuspendableArrayQueue<V> implements SuspendableQueue<V> {
 
 	@NotNull
 	@Suspendable
-	private SuspendableMap<String, SuspendableArrayQueueHeader> getArrayQueues() {
+	public static SuspendableMap<String, SuspendableArrayQueueHeader> getArrayQueues() {
 		return SuspendableMap.getOrCreate("SuspendableArrayQueue::arrayQueues");
+	}
+
+	@NotNull
+	@Suspendable
+	private static void getArrayQueues(Handler<AsyncResult<AsyncMap<String, SuspendableArrayQueueHeader>>> handler) {
+		SuspendableMap.getOrCreate("SuspendableArrayQueue::arrayQueues", handler);
 	}
 
 	@Override
 	@Suspendable
 	public void destroy() {
-		getArrayQueues().remove(name);
-		notFull().signalAll();
-		notEmpty().signalAll();
+		getArrayQueues(v1 -> {
+			if (v1.succeeded()) {
+				v1.result().remove(name, v2 -> {
+					notFull().signalAll();
+					notEmpty().signalAll();
+				});
+			}
+		});
 	}
 
 	static class SuspendableArrayQueueHeader implements Serializable /*, ClusterSerializable*/ {

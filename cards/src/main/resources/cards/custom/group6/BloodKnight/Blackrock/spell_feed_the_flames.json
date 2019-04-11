@@ -1,0 +1,17 @@
+{
+  "name": "Feed the Flames",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "BLOOD",
+  "rarity": "RARE",
+  "description": "Transform the left-most enemy minion into a Smoldering Husk.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "TransformMinionSpell",
+    "target": "LEFTMOST_ENEMY_MINION",
+    "card": "token_smoldering_husk"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

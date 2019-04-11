@@ -1,6 +1,11 @@
+# Spellsource auto-generated client for Unity and Java specification using swagger
+# Run ./client.sh after modifying this file
+# Examine build.gradle for more about how swagger-codegen is invoked for C# and Java
+# Note a typo in the java template in the exact version of swagger-codegen that is required causes the
+# client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 2.0.0
+  version: 3.0.3
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -10,6 +15,9 @@ info:
 
     ClientToServerMessage and ServerToClientMessage are used for the realtime game state and actions two-way websocket
     interface for actually playing a game. Envelope is used for the realtime API services.
+
+    For the routes that correspond to the paths in this file, visit the Gateway.java file in the Spellsource-Server
+    GitHub repository located in this definition file.
   contact:
     name: Benjamin Berman
     email: ben@hiddenswitch.com
@@ -17,13 +25,14 @@ info:
   license:
     name: MIT
     url: http://github.com/gruntjs/grunt/blob/master/LICENSE-MIT
-host: api-3.hiddenswitch.com
+host: api.hiddenswitch.com
+basePath: /api/v3
 schemes:
-- https
+  - https
 consumes:
-- application/json
+  - application/json
 produces:
-- application/json
+  - application/json
 securityDefinitions:
   TokenSecurity:
     type: apiKey
@@ -51,11 +60,13 @@ definitions:
             $ref: '#/definitions/Match'
       changed:
         description: |
-          Indicates that a record's fields have changed. In this model, the new document is a full replacement.
+          Indicates that a record's fields have changed.
         type: 'object'
         properties:
           friend:
             $ref: '#/definitions/Friend'
+          invite:
+            $ref: '#/definitions/Invite'
       removed:
         description: |
           Indicates that a record has been removed from the client's ephemeral collections.
@@ -68,6 +79,10 @@ definitions:
           matchId:
             description: |
               The unique ID of the match that should be removed.
+            type: 'string'
+          friendId:
+            description: |
+              The unique ID of the friend that should be removed,
             type: 'string'
       sub:
         description: |
@@ -259,21 +274,21 @@ definitions:
            * CANCELLED: The sender cancelled the invitation.
         type: 'string'
         enum:
-        - 'UNDELIVERED'
-        - 'PENDING'
-        - 'TIMEOUT'
-        - 'ACCEPTED'
-        - 'REJECTED'
-        - 'CANCELLED'
+          - 'UNDELIVERED'
+          - 'PENDING'
+          - 'TIMEOUT'
+          - 'ACCEPTED'
+          - 'REJECTED'
+          - 'CANCELLED'
   PresenceEnum:
     description: |
       Indicates the current status of a friend.
     type: 'string'
     enum:
-    - 'UNKNOWN'
-    - 'OFFLINE'
-    - 'IN_GAME'
-    - 'ONLINE'
+      - 'UNKNOWN'
+      - 'OFFLINE'
+      - 'IN_GAME'
+      - 'ONLINE'
   Friend:
     type: 'object'
     properties:
@@ -290,16 +305,27 @@ definitions:
     type: 'object'
     properties:
       _id:
+        description: The user ID
         type: 'string'
       name:
+        description: The username that is displayed to toher players
+        type: 'string'
+      privacyToken:
+        description: |
+          The token that is appended to the end of the user's name to allow friending without sharing an e-mail address.
         type: 'string'
       email:
+        description: The user's email address
         type: 'string'
       friends:
+        description: |
+          The user's friends at the moment of receiving this account document. This may be out of date as the latest
+          friends information will come from receiving friend documents.
         type: 'array'
         items:
           $ref: '#/definitions/Friend'
       decks:
+        description: A list of decks belonging to the player
         type: 'array'
         items:
           $ref: '#/definitions/InventoryCollection'
@@ -312,7 +338,7 @@ definitions:
   GetAccountsRequest:
     type: 'object'
     required:
-    - userIds
+      - userIds
     properties:
       userIds:
         description: |
@@ -330,9 +356,9 @@ definitions:
   CreateAccountRequest:
     type: 'object'
     required:
-    - name
-    - email
-    - password
+      - name
+      - email
+      - password
     properties:
       name:
         description: |
@@ -360,8 +386,8 @@ definitions:
   LoginRequest:
     type: 'object'
     required:
-    - email
-    - password
+      - email
+      - password
     properties:
       email:
         type: 'string'
@@ -387,24 +413,32 @@ definitions:
           otherwise specified.
         type: 'string'
         enum:
-        - 'BROWN'
-        - 'GREEN'
-        - 'BLUE'
-        - 'GOLD'
-        - 'WHITE'
-        - 'BLACK'
-        - 'SILVER'
-        - 'VIOLET'
-        - 'RED'
-        - 'JADE'
-        - 'NAVY'
-        - 'LEATHER'
-        - 'RUST'
-        - 'EGGPLANT'
-        - 'ICE'
-        - 'OBSIDIAN'
-        - 'AMBER'
-        - 'TOAST'
+          - 'BROWN'
+          - 'GREEN'
+          - 'BLUE'
+          - 'GOLD'
+          - 'WHITE'
+          - 'BLACK'
+          - 'SILVER'
+          - 'VIOLET'
+          - 'RED'
+          - 'JADE'
+          - 'NAVY'
+          - 'LEATHER'
+          - 'RUST'
+          - 'EGGPLANT'
+          - 'ICE'
+          - 'OBSIDIAN'
+          - 'ICECREAM'
+          - 'AMBER'
+          - 'TOAST'
+          - 'ROSE'
+          - 'BLOOD'
+          - 'NEONGREEN'
+          - 'TEAL'
+          - 'DARKGREEN'
+          - 'PURPLE'
+          - 'TIME'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to
@@ -429,11 +463,11 @@ definitions:
           matchmakingGet, the queues will specify which current decks can be chosen.
         type: 'string'
         enum:
-        - 'Standard'
-        - 'Wild'
-        - 'Custom'
-        - 'Spellsource'
-        - 'All'
+          - 'Standard'
+          - 'Wild'
+          - 'Custom'
+          - 'Spellsource'
+          - 'All'
       deckList:
         type: 'string'
         description: |
@@ -482,7 +516,7 @@ definitions:
           same as the deck's hero class marks the deck as invalid.
         type: 'object'
         required:
-        - $each
+          - $each
         properties:
           $each:
             description: |
@@ -498,7 +532,7 @@ definitions:
           same as the deck's hero class.
         type: 'object'
         required:
-        - $each
+          - $each
         properties:
           $each:
             description: |
@@ -539,7 +573,7 @@ definitions:
   ChangePasswordRequest:
     type: 'object'
     required:
-    - password
+      - password
     properties:
       password:
         type: 'string'
@@ -550,29 +584,50 @@ definitions:
     description: |
       An empty response signifying your password was correctly changed
   InventoryCollection:
+    description: |
+      A collection of cards.
     type: 'object'
     properties:
       _id:
+        description: |
+          The identifier of this collection. Corresponds to a deckId when this is a deck collection.
         type: 'string'
       userId:
+        description: |
+          The owner of this collection.
         type: 'string'
       name:
+        description: |
+          The name of this collection. Corresponds to the deck name when this is a deck collection.
         type: 'string'
       heroClass:
+        description: |
+          The hero class when this is a deck collection.
         type: 'string'
       format:
+        description: |
+          The format when this is a deck collection.
         type: 'string'
       type:
+        description: |
+          The type of collection this object is. A user's personal collection is of type USER. A deck is of type DECK.
         type: 'string'
         enum:
-        - 'USER'
-        - 'ALLIANCE'
-        - 'DECK'
+          - 'USER'
+          - 'ALLIANCE'
+          - 'DECK'
       deckType:
+        description: |
+          Indicates whether this is a deck meant for draft or constructed play.
         type: 'string'
         enum:
-        - 'DRAFT'
-        - 'CONSTRUCTED'
+          - 'DRAFT'
+          - 'CONSTRUCTED'
+      isStandardDeck:
+        description: |
+          When true, indicates this is a standard deck provided by the server.
+        type: 'boolean'
+        default: false
       inventory:
         type: 'array'
         items:
@@ -599,22 +654,22 @@ definitions:
   MessageType:
     type: 'string'
     enum:
-    - 'REGISTER_PLAYER'
-    - 'UPDATE_ACTION'
-    - 'ON_GAME_EVENT'
-    - 'ON_GAME_END'
-    - 'SET_PLAYERS'
-    - 'ON_ACTIVE_PLAYER'
-    - 'ON_UPDATE'
-    - 'ON_TURN_END'
-    - 'ON_REQUEST_ACTION'
-    - 'FIRST_MESSAGE'
-    - 'ON_MULLIGAN'
-    - 'UPDATE_MULLIGAN'
-    - 'EMOTE'
-    - 'TOUCH'
-    - 'CONCEDE'
-    - 'PINGPONG'
+      - 'REGISTER_PLAYER'
+      - 'UPDATE_ACTION'
+      - 'ON_GAME_EVENT'
+      - 'ON_GAME_END'
+      - 'SET_PLAYERS'
+      - 'ON_ACTIVE_PLAYER'
+      - 'ON_UPDATE'
+      - 'ON_TURN_END'
+      - 'ON_REQUEST_ACTION'
+      - 'FIRST_MESSAGE'
+      - 'ON_MULLIGAN'
+      - 'UPDATE_MULLIGAN'
+      - 'EMOTE'
+      - 'TOUCH'
+      - 'CONCEDE'
+      - 'PINGPONG'
   Emote:
     description: |
       An emote that should play from the specified entity.
@@ -625,12 +680,12 @@ definitions:
       message:
         type: 'string'
         enum:
-        - 'HELLO'
-        - 'AMAZING'
-        - 'WHOOPS'
-        - 'GOOD_GAME'
-        - 'FACE_MY_WRATH'
-        - 'WELL_PLAYED'
+          - 'HELLO'
+          - 'AMAZING'
+          - 'WHOOPS'
+          - 'GOOD_GAME'
+          - 'FACE_MY_WRATH'
+          - 'WELL_PLAYED'
   Timers:
     description: |
       Information about timers. This helps the client render the countdown clock.
@@ -662,7 +717,7 @@ definitions:
   ServerToClientMessage:
     type: 'object'
     required:
-    - messageType
+      - messageType
     properties:
       id:
         type: 'string'
@@ -687,6 +742,11 @@ definitions:
         $ref: '#/definitions/Emote'
       gameOver:
         $ref: '#/definitions/GameOver'
+      isReplayMessage:
+        description: |
+          True iff this message is a part of a replay.
+        type: 'boolean'
+        default: False
       startingCards:
         description: |
           Used for a mulligan request. An array of entities representing the cards you may mulligan.
@@ -747,36 +807,36 @@ definitions:
   EntityLocation:
     type: 'object'
     required:
-    - zone
-    - index
-    - player
+      - zone
+      - index
+      - player
     properties:
       player:
         type: 'integer'
         enum:
-        - -1
-        - 0
-        - 1
+          - -1
+          - 0
+          - 1
       index:
         type: 'integer'
       zone:
         type: 'string'
         enum:
-        - 'NONE'
-        - 'HAND'
-        - 'DECK'
-        - 'GRAVEYARD'
-        - 'BATTLEFIELD'
-        - 'SECRET'
-        - 'QUEST'
-        - 'HERO_POWER'
-        - 'HERO'
-        - 'WEAPON'
-        - 'SET_ASIDE_ZONE'
-        - 'HIDDEN'
-        - 'DISCOVER'
-        - 'REMOVED_FROM_PLAY'
-        - 'PLAYER'
+          - 'NONE'
+          - 'HAND'
+          - 'DECK'
+          - 'GRAVEYARD'
+          - 'BATTLEFIELD'
+          - 'SECRET'
+          - 'QUEST'
+          - 'HERO_POWER'
+          - 'HERO'
+          - 'WEAPON'
+          - 'SET_ASIDE_ZONE'
+          - 'HIDDEN'
+          - 'DISCOVER'
+          - 'REMOVED_FROM_PLAY'
+          - 'PLAYER'
   EntityChangeSet:
     description: |
       An abbreviated description of changes since the last change set this client received.
@@ -791,9 +851,9 @@ definitions:
             populated in this changeset.
           type: 'string'
           enum:
-          - 'A'
-          - 'C'
-          - 'R'
+            - 'A'
+            - 'C'
+            - 'R'
         id:
           description: |
             The ID of the entity in this change set.
@@ -814,8 +874,8 @@ definitions:
   DamageTypeEnum:
     type: 'string'
     enum:
-    - 'PHYSICAL'
-    - 'MAGICAL'
+      - 'PHYSICAL'
+      - 'MAGICAL'
   GameEvent:
     type: 'object'
     properties:
@@ -836,56 +896,59 @@ definitions:
         description: |
           The game event type corresponding to this game event.
         enum:
-        - 'ALL'
-        - 'AFTER_PHYSICAL_ATTACK'
-        - 'AFTER_PLAY_CARD'
-        - 'AFTER_SPELL_CASTED'
-        - 'AFTER_SUMMON'
-        - 'ATTRIBUTE_APPLIED'
-        - 'ARMOR_GAINED'
-        - 'BEFORE_SUMMON'
-        - 'BOARD_CHANGED'
-        - 'CARD_SHUFFLED'
-        - 'DAMAGE'
-        - 'DISCARD'
-        - 'DRAW_CARD'
-        - 'ENRAGE_CHANGED'
-        - 'ENTITY_TOUCHED'
-        - 'ENTITY_UNTOUCHED'
-        - 'FATIGUE'
-        - 'GAME_START'
-        - 'HEAL'
-        - 'HERO_POWER_USED'
-        - 'INVOKED'
-        - 'JOUST'
-        - 'KILL'
-        - 'LOSE_DIVINE_SHIELD'
-        - 'LOSE_DEFLECT'
-        - 'MILL'
-        - 'MAX_MANA'
-        - 'MANA_MODIFIED'
-        - 'OVERLOAD'
-        - 'PERFORMED_GAME_ACTION'
-        - 'PHYSICAL_ATTACK'
-        - 'PLAY_CARD'
-        - 'PRE_DAMAGE'
-        - 'PRE_GAME_START'
-        - 'QUEST_PLAYED'
-        - 'QUEST_SUCCESSFUL'
-        - 'ROASTED'
-        - 'REVEAL_CARD'
-        - 'SECRET_PLAYED'
-        - 'SECRET_REVEALED'
-        - 'SPELL_CASTED'
-        - 'SUMMON'
-        - 'TARGET_ACQUISITION'
-        - 'TRIGGER_FIRED'
-        - 'TURN_END'
-        - 'TURN_START'
-        - 'SILENCE'
-        - 'WEAPON_DESTROYED'
-        - 'WEAPON_EQUIPPED'
-        - 'WILL_END_SEQUENCE'
+          - 'ALL'
+          - 'AFTER_PHYSICAL_ATTACK'
+          - 'AFTER_PLAY_CARD'
+          - 'AFTER_SPELL_CASTED'
+          - 'AFTER_SUMMON'
+          - 'ATTRIBUTE_APPLIED'
+          - 'ARMOR_GAINED'
+          - 'BEFORE_SUMMON'
+          - 'BOARD_CHANGED'
+          - 'CARD_ADDED_TO_DECK'
+          - 'CARD_SHUFFLED'
+          - 'DAMAGE'
+          - 'DISCARD'
+          - 'DRAIN'
+          - 'DRAW_CARD'
+          - 'ENRAGE_CHANGED'
+          - 'ENTITY_TOUCHED'
+          - 'ENTITY_UNTOUCHED'
+          - 'FATIGUE'
+          - 'GAME_START'
+          - 'HEAL'
+          - 'HERO_POWER_USED'
+          - 'INVOKED'
+          - 'JOUST'
+          - 'KILL'
+          - 'LOSE_DIVINE_SHIELD'
+          - 'LOSE_DEFLECT'
+          - 'MAX_HP_INCREASED'
+          - 'MAX_MANA'
+          - 'MANA_MODIFIED'
+          - 'OVERLOAD'
+          - 'PERFORMED_GAME_ACTION'
+          - 'PHYSICAL_ATTACK'
+          - 'PLAY_CARD'
+          - 'PRE_DAMAGE'
+          - 'PRE_GAME_START'
+          - 'QUEST_PLAYED'
+          - 'QUEST_SUCCESSFUL'
+          - 'RETURNED_TO_HAND'
+          - 'ROASTED'
+          - 'REVEAL_CARD'
+          - 'SECRET_PLAYED'
+          - 'SECRET_REVEALED'
+          - 'SPELL_CASTED'
+          - 'SUMMON'
+          - 'TARGET_ACQUISITION'
+          - 'TRIGGER_FIRED'
+          - 'TURN_END'
+          - 'TURN_START'
+          - 'SILENCE'
+          - 'WEAPON_DESTROYED'
+          - 'WEAPON_EQUIPPED'
+          - 'WILL_END_SEQUENCE'
       afterPhysicalAttack:
         $ref: '#/definitions/PhysicalAttackEvent'
       drawCard:
@@ -1037,7 +1100,7 @@ definitions:
             $ref: '#/definitions/Entity'
       discard:
         $ref: '#/definitions/CardEvent'
-      mill:
+      roasted:
         $ref: '#/definitions/CardEvent'
       kill:
         type: 'object'
@@ -1062,6 +1125,8 @@ definitions:
             description: |
               The entity ID corresponding to the source of the trigger that got fired.
             type: 'integer'
+          triggerSource:
+            $ref: '#/definitions/Entity'
   MatchmakingQueuePutRequest:
     type: 'object'
     properties:
@@ -1128,14 +1193,14 @@ definitions:
           Gets the status of the draft.
         type: 'string'
         enum:
-        - 'IN_PROGRESS'
-        - 'SELECT_HERO'
-        - 'COMPLETE'
-        - 'RETIRED'
-      selectedCards:
+          - 'IN_PROGRESS'
+          - 'SELECT_HERO'
+          - 'COMPLETE'
+          - 'RETIRED'
+      selectedCardIds:
         type: 'array'
         items:
-          $ref: '#/definitions/Entity'
+          type: 'string'
       cardsRemaining:
         description: |
           Gets the number of card choices remaining to make.
@@ -1170,7 +1235,7 @@ definitions:
         description: |
           Not supported. Throws an error if this is specified on the client.
     required:
-    - friendId
+      - friendId
   FriendPutResponse:
     type: 'object'
     properties:
@@ -1391,12 +1456,11 @@ definitions:
           $ref: '#/definitions/ChooseOneOptions'
   Entity:
     type: 'object'
-    required:
-    - 'id'
     properties:
       id:
         description: The entity's ID in the game.
         type: 'integer'
+        format: 'int32'
         default: -1
       cardId:
         description: The entity's Card ID. When null, it typically should not be rendered.
@@ -1437,158 +1501,198 @@ definitions:
       gold:
         description: Render this entity with a "gold" effect.
         type: 'boolean'
+        default: false
       boardPosition:
         description: The index of the entity in its zone.
         type: 'integer'
+        format: 'int32'
       owner:
         description: An integer corresponding to the entity's owner.
         type: 'integer'
+        format: 'int32'
+        default: -1
       heroClass:
         description: The string enum value that corresponds to this entity's hero class.
         type: 'string'
       baseHp:
         description: The base hitpoints of the entity.
         type: 'integer'
+        format: 'int32'
       hp:
         description: |
           The current hitpoints of the entity. Conventionally, this value should be rendered on the hitpoints token.
         type: 'integer'
+        format: 'int32'
       durability:
         description: The durability (number of uses) that the weapon still has.
         type: 'integer'
+        format: 'int32'
       maxHp:
         description: The maximum number of hitpoints this entity can have.
         type: 'integer'
+        format: 'int32'
       baseAttack:
         description: The entity's base attack value.
         type: 'integer'
+        format: 'int32'
       attack:
         description: |
           The entity's current attack value. Conventionally, this value should be rendered on the attack token.
         type: 'integer'
+        format: 'int32'
       baseManaCost:
         description: |
           The entity's base mana cost.
         type: 'integer'
+        format: 'int32'
       manaCost:
         description: |
           The entity's current mana cost. Conventionally, this value should be rendered on the mana token.
         type: 'integer'
+        format: 'int32'
       armor:
         description: |
           The entity's armor. Conventionally, this value should be rendered on a hero entity's armor token.
         type: 'integer'
+        format: 'int32'
       destroyed:
         description: |
           When true, indicates that this entity is destroyed. During event evaluation, an entity can be destroyed but
           still in a zone other than the graveyard; render a death icon over the entity when it is so marked.
         type: 'boolean'
+        default: false
       summoningSickness:
         description: |
           When true, the entity cannot attack this turn because it has "summoning sickness," or a disability related
           to the first turn the entity came into play. Typically rendered with snooze icons.
         type: 'boolean'
+        default: false
       frozen:
         description: |
           When true, the entity cannot attack because a spell casted on it prevents it so, until the next turn when
           it would normally be able to attack.
         type: 'boolean'
+        default: false
       uncensored:
         description: |
           When true, indicates that this entity that is ordinarily censored to this user is not. It can be "flipped" and
           shown to the opponent.
         type: 'boolean'
+        default: false
       deflect:
         description: |
           When true, the entity's first incoming hit will hit its owner rather than itself.
         type: 'boolean'
+        default: false
       silenced:
         description: |
           Indicates that the entity was silenced.
         type: 'boolean'
+        default: false
       windfury:
         description: |
           Indicates the entity can attack twice a turn.
         type: 'boolean'
+        default: false
       permanent:
         description: |
           Indicates the entity is an on-battlefield permanent.
         type: 'boolean'
+        default: false
       collectible:
         description: |
           Indicates the card is collectible - valid for putting into decks.
         type: 'boolean'
+        default: false
       taunt:
         description: |
           Indicates the entity and other taunt entities must be targeted by enemy actors first during an opponent's
           physical attack action targeting.
         type: 'boolean'
+        default: false
       spellDamage:
         description: |
           Indicates the amount of additional spell damage this entity gives its owning player.
         type: 'integer'
+        format: 'int32'
       charge:
         description: |
           When true, the entity can attack the same turn it is summoned.
         type: 'boolean'
+        default: false
       rush:
         description: |
           When true, the entity can attack a minion the same turn it is summoned.
         type: 'boolean'
+        default: false
       lifesteal:
         description: |
           When true, the entity heals its owner when it deals damage.
         type: 'boolean'
+        default: false
       poisonous:
         description: |
           When true, the entity will destroy any target it damages.
         type: 'boolean'
+        default: false
       enraged:
         description: |
           When true, this entity is under the influence of "enrage," or a bonus when it takes damage the first time.
         type: 'boolean'
+        default: false
       battlecry:
         description: |
           When true, this entity has an effect that gets triggered when it is played from the hand.
         type: 'boolean'
+        default: false
       deathrattles:
         description: |
           When true, this entity has an effect that gets triggered when it is destroyed.
         type: 'boolean'
+        default: false
       immune:
         description: |
           Indicates the entity does not take damage.
         type: 'boolean'
+        default: false
       divineShield:
         description: |
           When true, the entity will take no loss in hitpoints the first time it would ordinarily take damage.
         type: 'boolean'
+        default: false
       stealth:
         description: |
           When true, the minion cannot be targeted by the opponent until the entity attacks for the first time.
         type: 'boolean'
+        default: false
       combo:
         description: |
           Indicates this minion has a combo effect.
         type: 'boolean'
+        default: false
       overload:
         description: |
           Indicates the amount of mana that would be locked if this card were played.
         type: 'integer'
+        format: 'int32'
       chooseOne:
         description: |
           Indicates this card has a choose-one effect.
         type: 'boolean'
+        default: false
       untargetableBySpells:
         description: |
           Indicates this entity cannot be targeted by spells.
         type: 'boolean'
+        default: false
       cannotAttack:
         description: When true, indicates this minion cannot attack, even though it normally can.
         type: 'boolean'
+        default: false
       underAura:
         description: When true, indicates this minion is benefiting from the aura of another effect.
         type: 'boolean'
+        default: false
       customRenderer:
         type: 'string'
       customData:
@@ -1596,21 +1700,27 @@ definitions:
       playable:
         description: When true, indicates the card can be played, or the hero / minion can initiate a physical attack.
         type: 'boolean'
+        default: false
       conditionMet:
         description: When true, indicates that a condition written on the card is met and the player should be informed.
         type: 'boolean'
+        default: false
       mana:
         description: The player's current mana.
         type: 'integer'
+        format: 'int32'
       maxMana:
         description: The player's maximum amount of mana.
         type: 'integer'
+        format: 'int32'
       lockedMana:
         description: The amount of mana that was locked due to overload.
         type: 'integer'
+        format: 'int32'
       hostsTrigger:
         description: When true, indicates this entity has an effect that triggers on game events.
         type: 'boolean'
+        default: false
       note:
         description: A renderable note attached to this entity.
         type: 'string'
@@ -1618,23 +1728,27 @@ definitions:
         description: When not null, indicates this card entity has a specified type.
         type: 'string'
         enum:
-        - 'HERO'
-        - 'MINION'
-        - 'SPELL'
-        - 'WEAPON'
-        - 'HERO_POWER'
-        - 'CHOOSE_ONE'
+          - 'HERO'
+          - 'MINION'
+          - 'SPELL'
+          - 'WEAPON'
+          - 'HERO_POWER'
+          - 'CHOOSE_ONE'
       tribe:
         description: When not null, indicates the card's tribe/race. Typically only minions have this field set.
         type: 'string'
       fires:
         description: The number of times this enchantment (secret, quest or trigger on card) has fired.
         type: 'integer'
+        format: 'int32'
+        default: 0
       countUntilCast:
         description: |
           The number of times this enchantment (secret, quest or trigger on card) must fire before its spell effect is
           triggered.
         type: 'integer'
+        format: 'int32'
+        default: 0
       cardSet:
         description: |
           The card expansion set this entity belongs to.
@@ -1644,29 +1758,30 @@ definitions:
           The rarity of the card
         type: 'string'
         enum:
-        - 'FREE'
-        - 'COMMON'
-        - 'RARE'
-        - 'EPIC'
-        - 'LEGENDARY'
-        - 'ALLIANCE'
+          - 'FREE'
+          - 'COMMON'
+          - 'RARE'
+          - 'EPIC'
+          - 'LEGENDARY'
+          - 'ALLIANCE'
       gameStarted:
         description: |
           For player entities, indicates whether or not the player has finished the mulligan phase and is awaiting the
           other player to finish mulligan or, if both players have this field as true, indicates the game has begun on
           turn 0.
         type: 'boolean'
+        default: false
   DraftsChooseCardRequest:
     type: 'object'
     required:
-    - cardIndex
+      - cardIndex
     properties:
       cardIndex:
         type: 'integer'
   DraftsChooseHeroRequest:
     type: 'object'
     required:
-    - heroIndex
+      - heroIndex
     properties:
       heroIndex:
         type: 'integer'
@@ -1764,7 +1879,7 @@ definitions:
           A user-renderable message explaining the source of the error.
         type: 'string'
     required:
-    - message
+      - message
   InvitePostRequest:
     type: 'object'
     description: |
@@ -1773,10 +1888,16 @@ definitions:
       friend:
         description: |
           When true, indicates that this request is a friend invitation.
+        default: false
         type: 'boolean'
       queueId:
         description: |
           The queue that the player would like to 1v1 inside of. These may differ from the competitive queues.
+        type: 'string'
+      deckId:
+        description: |
+          The deck the user is creating this invite with. Used for 1v1 queues. If this is specified, the user is
+          automatically enqueued.
         type: 'string'
       toUserId:
         description: |
@@ -1811,6 +1932,10 @@ definitions:
     description: |
       Accepts an invite to a match or a friend invite.
     properties:
+      awaitGameStart:
+        type: 'boolean'
+        description: |
+          When true, specifies that the method call should only return when the game is actually ready to join
       match:
         $ref: '#/definitions/MatchmakingQueuePutRequest'
   AcceptInviteResponse:
@@ -1840,7 +1965,81 @@ definitions:
         format: 'int64'
         description: |
           A timestamp for when this game was created (approximate).
-      # TODO: Add the names of the players, additional information like that
+  Replay:
+    description: |
+      Description of a (possibly partially complete) match. Useful for viewing said match in retrospect.
+      Note: If there are `n` elements in `gameStates` then there should be `n-1` elements in `deltas`.
+    type: 'object'
+    properties:
+      gameStates:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayGameStates'
+      deltas:
+        type: 'array'
+        items:
+          $ref: '#/definitions/ReplayDeltas'
+  ReplayDeltas:
+    description: |
+      The forward and backword deltas (change sets) required (along with player `GameState`s) to transition the client battlefield.
+    type: 'object'
+    properties:
+      backward:
+        description: |
+          Backward delta.
+        $ref: '#/definitions/EntityChangeSet'
+      forward:
+        description: |
+          Forward delta.
+        $ref: '#/definitions/EntityChangeSet'
+  ReplayGameStates:
+    description: |
+      A pair of game states. Used to capture a game from each player's point of view (useful for example in replays).
+    type: 'object'
+    properties:
+      first:
+        $ref: '#/definitions/GameState'
+      second:
+        $ref: '#/definitions/GameState'
+  GetGameRecordIdsResponse:
+    description: |
+      Retrieves an array of game IDs played by this player. Eventually will require paging.
+    type: 'object'
+    properties:
+      gameIds:
+        description: |
+          All the game IDs ever played by this player
+        type: 'array'
+        items:
+          type: 'string'
+  GetGameRecordResponse:
+    description: |
+      Information about a game.
+
+      Statistics about the game will be stored at a later point in time.
+    type: 'object'
+    properties:
+      replay:
+        $ref: '#/definitions/Replay'
+      isBotGame:
+        type: 'boolean'
+        description: |
+          True if this game was played against a bot (or was played entirely by bots)
+      completedAtLocalized:
+        type: 'string'
+        description: |
+          The date and time when this game was finished in the client's local time.
+      completedAt:
+        type: 'integer'
+        format: 'int64'
+        description: |
+          A timestamp for when this game was finished (approximate).
+      playerNames:
+        description: |
+          The names of the players in this game, without their privacy tokens
+        type: 'array'
+        items:
+          type: 'string'
 responses:
   InternalServerError:
     description: The request raised an exception on the server and produced a user-renderable message.
@@ -1862,12 +2061,12 @@ paths:
         Get a specific account. Contains more information if the userId matches the requesting user.
       operationId: getAccount
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: targetUserId
-        in: path
-        required: true
-        type: 'string'
+        - name: targetUserId
+          in: path
+          required: true
+          type: 'string'
       responses:
         "200":
           description: |
@@ -1882,13 +2081,13 @@ paths:
         Get a list of accounts including user profile information.
       operationId: getAccounts
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/GetAccountsRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/GetAccountsRequest'
       responses:
         "200":
           description: |
@@ -1902,11 +2101,11 @@ paths:
         Create an account with Spellsource.
       operationId: createAccount
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/CreateAccountRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/CreateAccountRequest'
       responses:
         "200":
           description: |
@@ -1920,11 +2119,11 @@ paths:
         Login with a username and password, receiving an authentication token to use for future sessions.
       operationId: login
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/LoginRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/LoginRequest'
       responses:
         "200":
           description: |
@@ -1939,13 +2138,13 @@ paths:
         Changes your password. Does not log you out after the password is changed.
       operationId: changePassword
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/ChangePasswordRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/ChangePasswordRequest'
       responses:
         "200":
           description: |
@@ -1960,12 +2159,12 @@ paths:
         Gets a complete catalogue of all the cards available in Spellsource as a list of CardRecords
       operationId: getCards
       parameters:
-      - name: If-None-Match
-        in: header
-        description: |
-          The value returned in the ETag header from the server when this was last called, or empty if this is the
-          first call to this resource.
-        type: string
+        - name: If-None-Match
+          in: header
+          description: |
+            The value returned in the ETag header from the server when this was last called, or empty if this is the
+            first call to this resource.
+          type: string
       responses:
         "304":
           description: |
@@ -2007,7 +2206,7 @@ paths:
         Gets all the user's decks.
       operationId: decksGetAll
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2021,15 +2220,15 @@ paths:
         Creates a new deck with optionally specified inventory IDs, a name and a hero class.
       operationId: decksPut
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        description: |
-          The deck creation request.
-        required: true
-        schema:
-          $ref: '#/definitions/DecksPutRequest'
+        - name: request
+          in: body
+          description: |
+            The deck creation request.
+          required: true
+          schema:
+            $ref: '#/definitions/DecksPutRequest'
       responses:
         "200":
           description: |
@@ -2044,13 +2243,13 @@ paths:
         Gets a deck. Only viewable for the owner of the deck or players in the alliance.
       operationId: decksGet
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: deckId
-        in: path
-        required: true
-        description: The Deck ID to get.
-        type: 'string'
+        - name: deckId
+          in: path
+          required: true
+          description: The Deck ID to get.
+          type: 'string'
       responses:
         "200":
           description: |
@@ -2064,20 +2263,20 @@ paths:
         Updates the deck by adding or removing cards, changing the hero class, or renaming the deck.
       operationId: decksUpdate
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: deckId
-        in: path
-        description: The Deck ID to update.
-        required: true
-        type: 'string'
-      - name: updateCommand
-        in: body
-        description: |
-          An update command modifying specified properties of the deck.
-        required: true
-        schema:
-          $ref: '#/definitions/DecksUpdateCommand'
+        - name: deckId
+          in: path
+          description: The Deck ID to update.
+          required: true
+          type: 'string'
+        - name: updateCommand
+          in: body
+          description: |
+            An update command modifying specified properties of the deck.
+          required: true
+          schema:
+            $ref: '#/definitions/DecksUpdateCommand'
       responses:
         "200":
           description: |
@@ -2091,13 +2290,13 @@ paths:
         Deletes the specified deck by ID.
       operationId: decksDelete
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: deckId
-        in: path
-        description: The Deck ID to delete.
-        required: true
-        type: 'string'
+        - name: deckId
+          in: path
+          description: The Deck ID to delete.
+          required: true
+          type: 'string'
       responses:
         "200":
           description: |
@@ -2110,7 +2309,7 @@ paths:
         Gets a list of queues available for matchmaking.
       operationId: matchmakingGet
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       responses:
         "404":
           description: |
@@ -2126,7 +2325,7 @@ paths:
       description: Removes your client from the matchmaking queue, regardless of which queue it is in.
       operationId: matchmakingDelete
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2141,13 +2340,13 @@ paths:
         Adds a specified user to your friend list.
       operationId: friendPut
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/FriendPutRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/FriendPutRequest'
       responses:
         "200":
           description: |
@@ -2162,20 +2361,19 @@ paths:
             Either you are already friends, or you attempted to set a friend ID directly.
         default:
           $ref: '#/responses/InternalServerError'
-
   /friends/{friendId}:
     delete:
       description: |
         Removes the friend relationship between two users.
       operationId: friendDelete
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: friendId
-        in: path
-        required: true
-        description: id of friend to unfriend.
-        type: 'string'
+        - name: friendId
+          in: path
+          required: true
+          description: id of friend to unfriend.
+          type: 'string'
       responses:
         "200":
           description: |
@@ -2196,7 +2394,7 @@ paths:
         Gets your latest state of the draft.
       operationId: draftsGet
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2213,13 +2411,13 @@ paths:
         Starts a draft, or make a change to your draft, like retiring early.
       operationId: draftsPost
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/DraftsPostRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DraftsPostRequest'
       responses:
         "200":
           description: |
@@ -2238,13 +2436,13 @@ paths:
         Choose a hero from your hero selection.
       operationId: draftsChooseHero
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/DraftsChooseHeroRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DraftsChooseHeroRequest'
       responses:
         "200":
           description: |
@@ -2262,13 +2460,13 @@ paths:
         Make a selection for the given draft index.
       operationId: draftsChooseCard
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/DraftsChooseCardRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/DraftsChooseCardRequest'
       responses:
         "200":
           description: |
@@ -2286,7 +2484,7 @@ paths:
         Retrieve all invites where this user is either the sender or recipient.
       operationId: getInvites
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       responses:
         "200":
           description: |
@@ -2294,19 +2492,19 @@ paths:
           schema:
             $ref: '#/definitions/InviteGetResponse'
         default:
-          $ref: '#/definitions/InternalServerError'
+          $ref: '#/responses/InternalServerError'
     post:
       description: |
         Send an invite.
       operationId: postInvite
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/InvitePostRequest'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/InvitePostRequest'
       responses:
         "200":
           description: |
@@ -2329,13 +2527,17 @@ paths:
         method will enter you into the special invite matchmaking queue.
       operationId: acceptInvite
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
-      - name: request
-        in: body
-        required: true
-        schema:
-          $ref: '#/definitions/AcceptInviteRequest'
+        - name: inviteId
+          in: path
+          required: true
+          type: 'string'
+        - name: request
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/AcceptInviteRequest'
       responses:
         "200":
           description: |
@@ -2359,7 +2561,12 @@ paths:
         Retrieves information about a specific invite, as long as this user is either the sender or recipient.
       operationId: getInvite
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
+      parameters:
+        - name: inviteId
+          in: path
+          required: true
+          type: 'string'
       responses:
         "200":
           description: |
@@ -2374,8 +2581,12 @@ paths:
         When this user is the sender, cancels the invite. When this user is the recipient, rejects the specified invite.
       operationId: deleteInvite
       security:
-      - TokenSecurity: []
+        - TokenSecurity: []
       parameters:
+        - name: inviteId
+          in: path
+          required: true
+          type: 'string'
       responses:
         "200":
           description: |
@@ -2391,3 +2602,52 @@ paths:
         "418":
           description: |
             The invite is already in an expired state.
+  /games:
+    get:
+      description: |
+        Retrieves a list of game IDs corresponding to all the games this player played.
+      operationId: getGameRecordIds
+      security:
+        - TokenSecurity: []
+      responses:
+        "200":
+          description: |
+            A list of game IDs
+          schema:
+            $ref: '#/definitions/GetGameRecordIdsResponse'
+  /games/{gameId}:
+    get:
+      description: |
+        Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games
+        against other players only receive this player's point of view.
+      operationId: getGameRecord
+      security:
+        - TokenSecurity: []
+      parameters:
+        - name: gameId
+          in: path
+          required: true
+          type: 'string'
+      responses:
+        "200":
+          description: |
+            A game record.
+          schema:
+            $ref: '#/definitions/GetGameRecordResponse'
+        "404":
+          description: |
+            The game with the specified ID was not found
+        "403":
+          description: |
+            You are not permitted to view this game
+  /version:
+    get:
+      description: |
+        Retrieves the semver server version
+      operationId: getVersion
+      responses:
+        "200":
+          description: |
+            The semver version
+          schema:
+            type: 'string'

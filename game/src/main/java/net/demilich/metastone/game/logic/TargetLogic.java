@@ -5,22 +5,25 @@ import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.CardArrayList;
+import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
+
+import static java.util.stream.Collectors.toCollection;
 
 public class TargetLogic implements Serializable {
 	private static Logger logger = LoggerFactory.getLogger(TargetLogic.class);
@@ -98,9 +101,12 @@ public class TargetLogic implements Serializable {
 			return environmentResult;
 		}
 
-		return context.getEntities().filter(e -> e.getId() == targetId)
-				.findFirst()
-				.orElseThrow(() -> new NullPointerException("Target not found exception: " + targetKey));
+		Optional<Entity> entity = context.getEntities().filter(e -> e.getId() == targetId).findFirst();
+		if (entity.isPresent()) {
+			return entity.get();
+		} else {
+			throw new NullPointerException("Target not found exception: " + targetKey);
+		}
 	}
 
 	private Entity findInEnvironment(GameContext context, EntityReference targetKey) {
@@ -416,6 +422,84 @@ public class TargetLogic implements Serializable {
 				}
 			}
 			return new ArrayList<>();
+		} else if (targetKey.equals(EntityReference.FRIENDLY_CARDS)) {
+			List<Entity> friendlyCards = new ArrayList<>();
+			friendlyCards.addAll(player.getHand());
+			friendlyCards.addAll(player.getDeck());
+			friendlyCards.addAll(player.getMinions());
+			friendlyCards.addAll(player.getSetAsideZone());
+			friendlyCards.add(player.getHero());
+			friendlyCards.addAll(player
+					.getGraveyard()
+					.stream()
+					.filter(e -> e instanceof Card)
+					.map(e -> (Card) e)
+					.filter(c -> c.hasAttribute(Attribute.BEING_PLAYED))
+					.collect(toCollection(CardArrayList::new)));
+			return friendlyCards;
+		} else if (targetKey.equals(EntityReference.ENEMY_CARDS)) {
+			List<Entity> enemyCards = new ArrayList<>();
+			enemyCards.addAll(context.getOpponent(player).getHand());
+			enemyCards.addAll(context.getOpponent(player).getDeck());
+			enemyCards.addAll(context.getOpponent(player).getMinions());
+			enemyCards.addAll(context.getOpponent(player).getSetAsideZone());
+			enemyCards.add(context.getOpponent(player).getHero());
+			enemyCards.addAll(context.getOpponent(player).getGraveyard()
+					.stream()
+					.filter(e -> e instanceof Card)
+					.map(e -> (Card) e)
+					.filter(c -> c.hasAttribute(Attribute.BEING_PLAYED))
+					.collect(toCollection(CardArrayList::new)));
+			return enemyCards;
+		} else if (targetKey.equals(EntityReference.CURRENT_SUMMONING_MINION)) {
+			if (context.getSummonReferenceStack().isEmpty()) {
+				return new ArrayList<>();
+			}
+			return singleTargetAsList(findEntity(context, context.getSummonReferenceStack().peekLast()));
+		} else if (targetKey.equals(EntityReference.ENEMY_MIDDLE_MINIONS)) {
+			Player opponent = context.getOpponent(player);
+			List<Entity> matching = new ArrayList<>();
+			/* Skip this many minions on both sides of the battlefield
+			Size - Skip
+			0 - 0
+			1 - 0
+			2 - 0
+			3 - 1
+			4 - 1
+			5 - 2
+			6 - 2
+			7 - 3
+
+			For example, for 5 minions, skip 2 on both sides:
+			skip skip return skip skip
+
+			 */
+			if (opponent.getMinions().size() == 0) {
+				return matching;
+			}
+			int skip = (opponent.getMinions().size() - 1) / 2;
+			for (int i = skip; i < opponent.getMinions().size() - skip; i++) {
+				matching.add(opponent.getMinions().get(i));
+			}
+			return matching;
+		} else if (targetKey.equals(EntityReference.FRIENDLY_LAST_MINION_PLAYED)) {
+			// Nowadays cards are only moved into graveyard after they have been played. The currently played card is in the
+			// set-aside zone, so the most recently added card to the graveyard is guaranteed to be the one most recently
+			// played.
+			List<Entity> minionCardsPlayed = player.getGraveyard().stream()
+					.filter(e -> e.getEntityType() == EntityType.CARD
+							&& e.getSourceCard().getCardType() == CardType.MINION
+							&& e.hasAttribute(Attribute.PLAYED_FROM_HAND_OR_DECK))
+					.collect(Collectors.toList());
+			if (minionCardsPlayed.isEmpty()) {
+				return new ArrayList<>();
+			} else {
+				return singleTargetAsList(minionCardsPlayed.get(minionCardsPlayed.size() - 1));
+			}
+		} else if (targetKey.equals(EntityReference.OTHER_FRIENDLY_CHARACTERS)) {
+			List<Entity> targets = this.getEntities(context, player, TargetSelection.FRIENDLY_CHARACTERS);
+			targets.remove(source);
+			return targets;
 		}
 		return singleTargetAsList(findEntity(context, targetKey));
 	}

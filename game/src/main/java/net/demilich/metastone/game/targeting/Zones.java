@@ -26,8 +26,7 @@ import java.util.Set;
  * {@link #DECK}, opponent's {@link #SECRET} zone and their own {@link #DECK}. While neither player can browse through
  * the {@link #GRAVEYARD} the information inside of it is not considered secret.
  * <p>
- * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Card, int,
- * boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
+ * Many effects interact with zones in special ways. For example, a {@link GameLogic#summon(int, Minion, Entity, int, boolean)} performs the consequences of playing a {@link Card}; the card is moved to the {@link #GRAVEYARD} and a new
  * {@link Minion} is created by {@link Card#summon()} and placed into the {@link #BATTLEFIELD}.
  *
  * @see Entity#moveOrAddTo(GameContext, Zones) for the method that generally moves entities from one zone to another.
@@ -52,7 +51,7 @@ public enum Zones {
 	 */
 	DECK,
 	/**
-	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference)} goes;
+	 * The graveyard is where a {@link Card} has been played with {@link GameLogic#playCard(int, EntityReference, EntityReference)} goes;
 	 * and where an {@link Actor} that has been destroyed with {@link GameLogic#destroy(Actor...)} goes. A {@link
 	 * net.demilich.metastone.game.spells.trigger.secrets.Secret} and other entities subclassing {@link Enchantment} go to
 	 * {@link #REMOVED_FROM_PLAY}.
@@ -80,8 +79,8 @@ public enum Zones {
 	 */
 	QUEST,
 	/**
-	 * The hero power zone stores the {@link net.demilich.metastone.game.heroes.powers.HeroPowerCard} for a corresponding
-	 * {@link net.demilich.metastone.game.entities.heroes.Hero}. Only one such card can be in the zone at a time.
+	 * The hero power zone stores the hero power for a corresponding {@link net.demilich.metastone.game.entities.heroes.Hero}.
+	 * Only one such card can be in the zone at a time.
 	 *
 	 * @see Hero#getHeroPowerZone() for more about the hero power zone.
 	 */
@@ -105,8 +104,8 @@ public enum Zones {
 	 * <p>
 	 * The opposing player can see the count, but not the contents, of cards the player is choosing between.
 	 *
-	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for more
-	 * 		about how discover is implemented.
+	 * @see net.demilich.metastone.game.spells.SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList)
+	 * 		for more about how discover is implemented.
 	 * @see net.demilich.metastone.game.actions.DiscoverAction for more about a discover action.
 	 */
 	DISCOVER,

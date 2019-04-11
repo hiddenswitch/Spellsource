@@ -1,0 +1,28 @@
+{
+  "name": "Vermancer Prophet",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "AMBER",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Opener: Replace all Larva in your hand with Servant Wasps.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_HAND",
+      "card": "minion_servant_wasp",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

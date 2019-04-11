@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -138,12 +138,7 @@ public class ReceiveCardSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
 		if (count == 0) {
-			logger.warn("onCast {} {}: Suspicious call that was receive a VALUE computed to be 0, which is not the default. The VALUE arg is {}", context.getGameId(), source, desc.get(SpellArg.VALUE));
-		}
-
-		if (count < -1) {
-			logger.error("onCast {} {}: A negative number of cards was specified by the VALUE.", context.getGameId(), source);
-			return;
+			logger.debug("onCast {} {}: Suspicious call that was receive a VALUE computed to be 0, which is not the default. The VALUE arg is {}", context.getGameId(), source, desc.get(SpellArg.VALUE));
 		}
 
 		// If a card is being received from a filter, we're creating new cards
@@ -158,6 +153,9 @@ public class ReceiveCardSpell extends Spell {
 
 			CardList cards = desc.getFilteredCards(context, player, source).getCopy();
 			String replacementCard = (String) desc.get(SpellArg.CARD);
+			if (count == -1) {
+				count = cards.getCount();
+			}
 			for (int i = 0; i < count; i++) {
 				Card card = null;
 				if (!cards.isEmpty()) {
@@ -175,6 +173,10 @@ public class ReceiveCardSpell extends Spell {
 				}
 			}
 		} else if (desc.containsKey(SpellArg.CARD) || desc.containsKey(SpellArg.CARDS)) {
+			if (count < -1) {
+				logger.error("onCast {} {}: A negative number of cards was specified by the VALUE.", context.getGameId(), source);
+				return;
+			}
 			// If a card isn't received from a filter, it's coming from a description
 			// These cards should always be copies
 			boolean chooseRandomly = (boolean) desc.getOrDefault(SpellArg.RANDOM_TARGET, false);

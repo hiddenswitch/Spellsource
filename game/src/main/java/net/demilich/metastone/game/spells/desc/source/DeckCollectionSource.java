@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardArrayList;
@@ -10,6 +10,13 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
 
+/**
+ * Returns the list of cards from the deck in the user's collection named {@link CardSourceArg#COLLECTION_NAME}. The
+ * name must be <b>exact</b> (case-sensitive).
+ * <p>
+ * Uses the {@link GameContext#getDeck(Player, String)} method, which provides an implementation in server game
+ * contexts.
+ */
 public class DeckCollectionSource extends CardSource implements Serializable, HasCardCreationSideEffects, HasWeights {
 
 	public DeckCollectionSource(CardSourceDesc desc) {

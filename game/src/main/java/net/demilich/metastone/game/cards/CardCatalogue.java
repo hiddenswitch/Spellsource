@@ -1,11 +1,12 @@
 package net.demilich.metastone.game.cards;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.vertx.core.json.Json;
 import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.shared.utils.ResourceInputStream;
-import net.demilich.metastone.game.shared.utils.ResourceLoader;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.utils.ResourceInputStream;
+import net.demilich.metastone.game.utils.ResourceLoader;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.*;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -90,6 +92,22 @@ public class CardCatalogue {
 		return null;
 	}
 
+	public static Card getCardByName(String name, HeroClass heroClass) {
+		List<CardCatalogueRecord> namedCards = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).collect(Collectors.toList());
+		if (!namedCards.isEmpty()) {
+			if (namedCards.size() > 1) {
+				for (CardCatalogueRecord namedCard : namedCards) {
+					Card card = getCardById(namedCard.getId());
+					if (card.hasHeroClass(heroClass)) {
+						return card;
+					}
+				}
+			}
+			return getCardById(namedCards.get(0).getId());
+		}
+		return getCardById(recordsByName.get(name).get(0).getDesc().getId());
+	}
+
 	public static CardList getHeroes() {
 		return query(null, card -> card.getCardSet() == CardSet.BASIC && card.getCardType() == CardType.HERO);
 	}
@@ -158,6 +176,8 @@ public class CardCatalogue {
 	 * cards} module. This can be called multiple times, but will not "refresh" the catalogue file.
 	 */
 	public static void loadCardsFromPackage()  /*IOException, URISyntaxException*/ /*, CardParseException*/ {
+		// TODO: Set this somewhere better
+		Json.mapper.setSerializationInclusion(JsonInclude.Include.NON_DEFAULT);
 		synchronized (cards) {
 			if (!cards.isEmpty()) {
 				return;

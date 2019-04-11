@@ -1,21 +1,55 @@
 package net.demilich.metastone.game.spells;
 
-import java.util.List;
-
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.util.Map;
 
 /**
- * A class that defines a collection of spells that should be executed one after another. Includes information useful to
- * the subspells in the {@link SpellArg#VALUE} property.
+ * A class that defines a collection of spells that should be executed one after another in the {@link SpellArg#SPELLS}
+ * argument.
+ * <p>
+ * If a {@link SpellArg#VALUE} is provided, its value will be calculated before the sub spells are evaluated and that
+ * value will be stored as the result of a {@link net.demilich.metastone.game.spells.desc.valueprovider.GameValueProvider}
+ * set to provide the {@link net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderArg#GAME_VALUE} of
+ * {@link GameValue#SPELL_VALUE}. This is useful for calculating a value before effects occur.
+ * <p>
+ * For <b>example</b>, to implement the text, "Destroy all minions. Draw a card for each," it's important to destroy the
+ * minions first and then draw cards, because a deathrattle may have shuffled cards into your deck. A naive
+ * implementation would draw the card first based on how many minions are on the board. But by using the {@code
+ * GameValueProvider}, we can do things in the right order:
+ * <pre>
+ *   {
+ *     "class": "MetaSpell",
+ *     "value": {
+ *       "class": "EntityCounter",
+ *       "target": "ALL_MINIONS",
+ *       "filter": {
+ *         "class": "AttributeFilter",
+ *         "attribute": "IMMUNE",
+ *         "invert": true
+ *       }
+ *     },
+ *     "spells": [
+ *       {
+ *         "class": "DestroySpell",
+ *         "target": "ALL_MINIONS"
+ *       },
+ *       {
+ *         "class": "DrawCardSpell",
+ *         "value": {
+ *           "class": "GameValueProvider",
+ *           "gameValue": "SPELL_VALUE"
+ *         }
+ *       }
+ *     ]
+ *   }
+ * </pre>
  *
  * @see GameContext#getSpellValueStack() for more about the spell value stack.
  */
@@ -37,7 +71,9 @@ public class MetaSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
+		if (desc.containsKey(SpellArg.VALUE)) {
+			context.getSpellValueStack().addLast(desc.getValue(SpellArg.VALUE, context, player, target, source, 0));
+		}
 		// Manually obtain sub spells for performance reasons, this is accessed very often
 		SpellDesc spell = (SpellDesc) desc.get(SpellArg.SPELL);
 		SpellDesc[] spells = (SpellDesc[]) desc.get(SpellArg.SPELLS);
@@ -77,7 +113,9 @@ public class MetaSpell extends Spell {
 				SpellUtils.castChildSpell(context, player, spell2, source, target);
 			}
 		}
-		context.getSpellValueStack().pollLast();
+		if (desc.containsKey(SpellArg.VALUE)) {
+			context.getSpellValueStack().pollLast();
+		}
 	}
 
 }

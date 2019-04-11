@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.LinkedHashMultiset;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
@@ -16,12 +16,17 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.*;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.stream.Stream;
 
 import static java.util.stream.Collectors.toList;
@@ -33,8 +38,8 @@ import static java.util.stream.Collectors.toList;
  * Discover actions prompt the user to select from {@code count=}{@link SpellArg#HOW_MANY} cards, with a default of 3.
  * <p>
  * If an {@link SpellArg#ATTRIBUTE} is specified, it is added to the cards in the {@link Zones#DISCOVER}, and removed
- * when they leave. This is used with the {@link net.demilich.metastone.game.utils.Attribute#UNCENSORED} attribute to
- * indicate that these cards should be visible to the opponent.
+ * when they leave. This is used with the {@link Attribute#UNCENSORED} attribute to indicate that these cards should be
+ * visible to the opponent.
  * <p>
  * The cards to prompt the user with are gathered from the {@link SpellArg#CARDS} attribute and the specified {@link
  * CardSource} and {@link CardFilter} in {@link SpellArg#CARD_SOURCE} and {@link SpellArg#CARD_FILTER}. When the number
@@ -303,7 +308,6 @@ public class DiscoverSpell extends Spell {
 		// Apply the weights
 		final boolean isWeighted = (cardSource instanceof HasWeights)
 				|| (specificCards.size() == 0 && cardSource == null && hasFilter);
-
 		// Compute weights if weighting is implied
 		if (isWeighted) {
 			if (cardSource == null) {
@@ -344,12 +348,18 @@ public class DiscoverSpell extends Spell {
 			}
 
 			for (int i = 0; i < count; i++) {
-				choices.add(context.getLogic().removeRandom(weightedOptions));
+				if (weightedOptions.isEmpty()) {
+					break;
+				}
+				Card chosen = context.getLogic().removeRandom(weightedOptions);
+				// Remove all appearances of the option, because weighted discovers are always supposed to show distinct choices
+				weightedOptions.remove(chosen, Integer.MAX_VALUE);
+				choices.add(chosen);
 			}
 		} else {
 			// If the number of cards is greater than can be fit, do a random pick. Otherwise, keep it in the order
 			// that was specified
-			if (count == allCards.size()) {
+			if (count >= allCards.size()) {
 				choices.addAll(allCards);
 			} else {
 				for (int i = 0; i < count; i++) {
@@ -364,27 +374,26 @@ public class DiscoverSpell extends Spell {
 			return;
 		}
 
-		// Always copy the choices.
-		choices = choices.getCopy();
-
 		List<GameAction> discoverActions = new ArrayList<>();
+		Card[] cardsInDiscover = new Card[choices.size()];
 		for (int i = 0; i < choices.size(); i++) {
-			Card card = choices.get(i);
-			card.setId(context.getLogic().generateId());
-			card.setOwner(player.getId());
-			card.moveOrAddTo(context, Zones.DISCOVER);
+			Card originalCard = choices.get(i);
+			Card copy = originalCard.getCopy();
+			copy.setId(context.getLogic().generateId());
+			copy.setOwner(player.getId());
+			copy.moveOrAddTo(context, Zones.DISCOVER);
 
 			// For each discover, it calls the chosenSpell on its card and notChosenSpell on the other cards
 			List<SpellDesc> notChosenSpells;
 			SpellDesc chosenSpell;
 			final Stream<Card> otherCards = Stream.concat(choices.subList(0, i).stream(), choices.subList(i + 1, choices.size()).stream());
 			if (exclusive) {
-				chosenSpell = chosenSpellTemplate.addArg(SpellArg.TARGET, card.getCopySource());
+				chosenSpell = chosenSpellTemplate.addArg(SpellArg.TARGET, originalCard.getReference());
 				notChosenSpells = otherCards
-						.map(Card::getCopySource)
+						.map(Card::getReference)
 						.map(cid -> otherSpell.addArg(SpellArg.TARGET, cid)).collect(toList());
 			} else {
-				chosenSpell = chosenSpellTemplate.addArg(SpellArg.CARD, card.getCardId());
+				chosenSpell = chosenSpellTemplate.addArg(SpellArg.CARD, originalCard.getCardId());
 				notChosenSpells = otherCards
 						.map(Card::getCardId)
 						.map(cid -> otherSpell.addArg(SpellArg.CARD, cid)).collect(toList());
@@ -397,25 +406,26 @@ public class DiscoverSpell extends Spell {
 			final SpellDesc spell = SpellDesc.join(chosenSpell, notChosenSpellsArray);
 
 			DiscoverAction discover = DiscoverAction.createDiscover(spell);
-			discover.setCard(card);
+			discover.setCard(copy);
 			discover.setId(i);
-			discover.setSource(source != null ? source.getReference() : null);
+			discover.setSourceReference(source != null ? source.getReference() : null);
 			discoverActions.add(discover);
+			cardsInDiscover[i] = copy;
 		}
 
 		Attribute attribute = desc.getAttribute();
 		if (attribute != null) {
-			for (Card choice : choices) {
+			for (Card choice : cardsInDiscover) {
 				choice.setAttribute(attribute);
 			}
 		}
 
 		// Execute the discovery (the target is the both the output and the discovery)
-		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, choices, discoverActions);
+		final DiscoverAction chosenAction = SpellUtils.postDiscover(context, player, Arrays.asList(cardsInDiscover), discoverActions);
 		SpellUtils.castChildSpell(context, player, chosenAction.getSpell(), source, target);
 		// Remove the attribute that was set on all the cards
 		if (attribute != null) {
-			for (Card choice : choices) {
+			for (Card choice : cardsInDiscover) {
 				choice.getAttributes().remove(attribute);
 			}
 		}

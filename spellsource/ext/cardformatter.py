@@ -9,6 +9,7 @@ end in alphabetical order.
 This script requires the objdict package to help it serialize to JSON  in the appropriate key order.
 """
 import os
+from typing import Optional
 
 from objdict import ObjDict as OrderedDict
 
@@ -65,9 +66,10 @@ _ORDER = [
 ]
 
 
-def fix_cards():
-    for (card, filepath) in iter_card_and_file_path(
-            os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')):
+def fix_cards(path: Optional[str] = None):
+    if path is None:
+        path = os.path.join(os.getcwd(), 'cards', 'src', 'main', 'resources', 'cards')
+    for (card, filepath) in iter_card_and_file_path(start_path=path):
         if 'set' not in card:
             if 'witchwood' in filepath:
                 card['set'] = 'WITCHWOOD'
@@ -118,7 +120,3 @@ def fix_value(v):
         return fix_list(v)
     else:
         return v
-
-
-if __name__ == '__main__':
-    fix_cards()

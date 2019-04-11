@@ -3,22 +3,26 @@ package net.demilich.metastone.game.entities;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.CardSet;
+import net.demilich.metastone.game.cards.desc.CardDesc;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.IdFactory;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.Serializable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * An in-game entity.
@@ -43,6 +47,8 @@ import java.io.Serializable;
  * to their opponents.
  */
 public abstract class Entity extends CustomCloneable implements Serializable, HasCard, Comparable<Entity> {
+	private static Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
+	private static Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
 	private static final long serialVersionUID = 1L;
 	/**
 	 * The value for the {@link #ownerIndex} when no owner has been assigned.
@@ -83,13 +89,17 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	@Override
 	public Entity clone() {
 		Entity clone = (Entity) super.clone();
+		// The attributes need to be cloned
+		if (attributes != null) {
+			clone.attributes = attributes.clone();
+		}
 		return clone;
 	}
 
 	/**
 	 * Gets the specified attribute.
 	 * <p>
-	 * Attributes are {@link Integer}, {@link String}, {@link String[]} or {@link Enum} types.
+	 * Attributes are {@link Integer}, {@link String}, {@link String} array or {@link Enum} types.
 	 *
 	 * @param attribute The attribute to look up.
 	 * @return The value of the attribute.
@@ -110,14 +120,25 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	}
 
 	/**
-	 * Gets the specified attribute as an {@link Integer} value or fails with an exception.
+	 * Gets the specified attribute as an {@link Integer} value or {@code 0} if the specified attribute is of the wrong
+	 * type or is not found.
 	 *
 	 * @param attribute The {@link Attribute} to look up.
 	 * @return The attribute's value or 0 if it isn't set.
-	 * @throws ClassCastException if the {@link Attribute} is not an {@link Integer}
 	 */
-	public int getAttributeValue(Attribute attribute) throws ClassCastException {
+	public int getAttributeValue(Attribute attribute) {
 		return (int) getAttributes().getOrDefault(attribute, 0);
+	}
+
+	/**
+	 * Gets the specified attribute as an {@link Integer} value, defaulting to the specified value if the value is not an
+	 * integer.
+	 *
+	 * @param attribute The {@link Attribute} to look up.
+	 * @return The attribute's value or 0 if it isn't set.
+	 */
+	public int getAttributeValue(Attribute attribute, int defaultValue) {
+		return (int) getAttributes().getOrDefault(attribute, defaultValue);
 	}
 
 	/**
@@ -137,7 +158,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 *
 	 * @return The entity's ID, or {@link IdFactoryImpl#UNASSIGNED} if it is unassigned.
 	 * @see IdFactoryImpl for the class that generates IDs.
-	 * @see GameLogic#summon(int, Minion, Card, int, boolean) for the place where minion IDs are set.
+	 * @see GameLogic#summon(int, Minion, Entity, int, boolean) for the place where minion IDs are set.
 	 * @see GameLogic#assignEntityIds(Iterable, int) for the place where IDs are set for all the cards that start in the
 	 * 		game.
 	 * @see EntityReference for a class used to store the notion of a "target."
@@ -482,11 +503,25 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		return (EnchantmentDesc[]) getAttributes().getOrDefault(Attribute.GAME_TRIGGERS, new EnchantmentDesc[0]);
 	}
 
-	@Override
-	public int compareTo(Entity o) {
-		if (o == null) {
-			return 1;
+	public DynamicDescriptionDesc[] getDynamicDescription() {
+		if (getAttributes().containsKey(Attribute.DYNAMIC_DESCRIPTION)) {
+			return (DynamicDescriptionDesc[]) getAttribute(Attribute.DYNAMIC_DESCRIPTION);
 		}
+		return getSourceCard() != null ? getSourceCard().getDesc().getDynamicDescription() : null;
+	}
+
+	public String[] evaluateDescriptions(GameContext context, Player player) {
+		DynamicDescriptionDesc[] dynamicDescriptionDescs = getDynamicDescription();
+		String[] strings = new String[dynamicDescriptionDescs.length];
+
+		for (int i = 0; i < dynamicDescriptionDescs.length; i++) {
+			strings[i] = dynamicDescriptionDescs[i].create().resolveFinalString(context, player, this);
+		}
+		return strings;
+	}
+
+	@Override
+	public int compareTo(@NotNull Entity o) {
 		return Integer.compare(this.getId(), o.getId());
 	}
 
@@ -523,5 +558,114 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 	 */
 	public int getIndex() {
 		return getEntityLocation().getIndex();
+	}
+
+	/**
+	 * Is this entity removed peacefully?
+	 *
+	 * @return {@code true} if it's in the graveyard and didn't die violently, otherwise false.
+	 */
+	public boolean isRemovedPeacefully() {
+		return getZone() == Zones.GRAVEYARD && !hasAttribute(Attribute.DIED_ON_TURN);
+	}
+
+	/**
+	 * Gets an entity's description applying its {@link CardDesc#getDynamicDescription()} fields and parsing spell damage
+	 * and health restoration.
+	 *
+	 * @param context The context
+	 * @param player  The player whose POV this description should be evaluated
+	 * @return The dynamic description if this entity is a card, otherwise the {@link #getDescription()}.
+	 */
+	public String getDescription(GameContext context, Player player) {
+		String description = getDescription();
+		Card card = getSourceCard();
+
+		if (getDynamicDescription() != null
+				&& getDynamicDescription().length > 0
+				&& (isInPlay() || getZone() == Zones.HAND || getZone() == Zones.DECK)) {
+			// First parse dynamic descriptions
+			if (description.contains("[") && getDynamicDescription() != null) {
+				int i = 0;
+				String[] descriptions = evaluateDescriptions(context, player);
+				while (description.contains("[")) {
+					int start = description.indexOf("[");
+					int end = description.indexOf("]");
+					description = description.substring(0, start) + descriptions[i] + description.substring(end + 1, description.length());
+					i++;
+				}
+			}
+		} else {
+			description = description.replace("[", "").replace("]", "");
+		}
+
+		// Handle spell damage
+		if (card.isSpell() || card.isHeroPower()) {
+			// Find the $ damages
+			Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
+			StringBuffer newDescription = new StringBuffer();
+
+			boolean matchedAtLeastOnce = false;
+			while (matcher.find()) {
+				// Skip the dollar sign in the beginning
+				int damage = Integer.parseInt(matcher.group(1));
+				int modifiedDamage;
+				if (card.getId() != GameLogic.UNASSIGNED) {
+					ValueProviderDesc desc = new ValueProviderDesc();
+					desc.put(ValueProviderArg.VALUE, damage);
+					desc.put(ValueProviderArg.CLASS, card.isSpell()
+							? SpellDamageValueProvider.class
+							: HeroPowerDamageValueProvider.class);
+					ValueProvider provider = desc.create();
+					modifiedDamage = provider.getValue(context, player, player.getHero(), card);
+				} else {
+					modifiedDamage = damage;
+				}
+				modifyDescription(matcher, newDescription, damage, modifiedDamage);
+				matchedAtLeastOnce = true;
+			}
+			if (matchedAtLeastOnce) {
+				matcher.appendTail(newDescription);
+				description = newDescription.toString();
+			}
+		}
+
+		// Healing
+		if (true) {
+			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
+			StringBuffer newDescription = new StringBuffer();
+
+			boolean matchedAtLeastOnce = false;
+			while (matcher.find()) {
+				// Skip the # in the beginning
+				int healing = Integer.parseInt(matcher.group(1));
+				int modifiedHealing = healing;
+				if (card.getId() != GameLogic.UNASSIGNED) {
+					modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
+					if (card.isSpell()) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
+					}
+					if (card.isHeroPower()) {
+						modifiedHealing = context.getLogic().applyAmplify(player, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
+					}
+				}
+				modifyDescription(matcher, newDescription, healing, modifiedHealing);
+				matchedAtLeastOnce = true;
+			}
+			if (matchedAtLeastOnce) {
+				matcher.appendTail(newDescription);
+				description = newDescription.toString();
+			}
+		}
+
+		return description;
+	}
+
+	private void modifyDescription(Matcher matcher, StringBuffer newDescription, int originalValue, int newValue) {
+		if (newValue != originalValue) {
+			matcher.appendReplacement(newDescription, String.format("*%d*", newValue));
+		} else {
+			matcher.appendReplacement(newDescription, Integer.toString(newValue));
+		}
 	}
 }

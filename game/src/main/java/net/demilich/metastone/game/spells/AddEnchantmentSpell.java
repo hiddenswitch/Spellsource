@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -9,12 +9,14 @@ import net.demilich.metastone.game.spells.aura.Aura;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -28,6 +30,11 @@ import java.util.Map;
  * net.demilich.metastone.game.targeting.TargetType} is {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}.
  * If no triggers are present on the card, a dummy enchantment is created for later use in the {@link
  * RemoveEnchantmentSpell} and {@link net.demilich.metastone.game.spells.desc.filter.HasEnchantmentFilter}.
+ * <p>
+ * If a {@link SpellArg#REVERT_TRIGGER} is specified, creates an enchantment on the casting player's {@link Player}
+ * entity that triggers with the specified {@link net.demilich.metastone.game.spells.trigger.EventTrigger} and removes
+ * trigger, aura and enchantment cards added by this spell. To model more sophisticated effects, consider creating a
+ * dedicate trigger with a card ID corresponding to the enchantment card with the core effects.
  * <p>
  * Enchantments and auras are only in play if their {@link Enchantment#getHostReference()} is {@link Entity#isInPlay()}.
  * Currently, auras and enchantments are immediately active and listening to events. However, auras only evaluate which
@@ -58,6 +65,29 @@ import java.util.Map;
  *         ]
  *       },
  *       "oneTurn": true
+ *     }
+ *   }
+ * </pre>
+ * This example shows an easy way to remove the trigger added this way. This implements the text, "Give +1/+1 to all
+ * minions summoned until the start of your next turn."
+ * <pre>
+ *   {
+ *     "class": "AddEnchantmentSpell",
+ *     "target": "FRIENDLY_PLAYER",
+ *     "trigger": {
+ *       "eventTrigger": {
+ *         "class": "MinionSummonedTrigger",
+ *         "targetPlayer": "BOTH"
+ *       },
+ *       "spell": {
+ *         "class": "BuffSpell",
+ *         "value": 1,
+ *         "target": "EVENT_TARGET"
+ *       }
+ *     },
+ *     "revertTrigger": {
+ *       "class": "TurnStartTrigger",
+ *       "targetPlayer": "SELF"
  *     }
  *   }
  * </pre>
@@ -106,12 +136,14 @@ public class AddEnchantmentSpell extends Spell {
 		EnchantmentDesc enchantmentDesc = (EnchantmentDesc) desc.get(SpellArg.TRIGGER);
 		Aura aura = (Aura) desc.get(SpellArg.AURA);
 		Card enchantmentCard = SpellUtils.getCard(context, desc);
+		List<Enchantment> added = new ArrayList<>();
 
 		if (enchantmentDesc != null) {
 			Enchantment enchantment = enchantmentDesc.create();
 			enchantment.setOwner(player.getId());
 			enchantment.setSourceCard(source.getSourceCard());
 			context.getLogic().addGameEventListener(player, enchantment, target);
+			added.add(enchantment);
 		}
 
 		if (aura != null) {
@@ -121,6 +153,7 @@ public class AddEnchantmentSpell extends Spell {
 			// Enchantments added this way don't trigger a board changed event. They come into play immediately if the owning
 			// entity is Entity#isInPlay().
 			context.getLogic().addGameEventListener(player, aura, target);
+			added.add(aura);
 		}
 
 		if (enchantmentCard != null) {
@@ -128,7 +161,17 @@ public class AddEnchantmentSpell extends Spell {
 			for (Enchantment enchantment : enchantmentList) {
 				enchantment.setOwner(player.getId());
 				context.getLogic().addGameEventListener(player, enchantment, target);
+				added.add(enchantment);
 			}
+		}
+
+		if (desc.containsKey(SpellArg.REVERT_TRIGGER) && added.size() > 0) {
+			// Convenience method for removing the enchantments added this way
+			EnchantmentDesc revertDesc = new EnchantmentDesc();
+			revertDesc.eventTrigger = (EventTriggerDesc) desc.get(SpellArg.REVERT_TRIGGER);
+			revertDesc.spell = MetaSpell.create(added.stream().map(RemoveEnchantmentSpell::create).toArray(SpellDesc[]::new));
+			revertDesc.maxFires = 1;
+			context.getLogic().addGameEventListener(player, revertDesc.create(), player);
 		}
 	}
 }

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -10,6 +10,9 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Modifies the durability of a weapon regardless of which weapon is equipped.
+ */
 public class ModifyDurabilitySpell extends Spell {
 
 	public static SpellDesc create(EntityReference target, int durability) {

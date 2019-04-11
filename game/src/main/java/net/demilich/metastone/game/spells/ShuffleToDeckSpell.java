@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -9,18 +9,38 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.AttributeMap;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} & {@link SpellArg#CARD_FILTER} cards
- * into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
+ * Shuffles copies of the specified {@code target} or {@link SpellArg#CARD_SOURCE} &amp; {@link SpellArg#CARD_FILTER}
+ * cards into the deck. Creates {@link SpellArg#HOW_MANY} copies (default is 1).
  * <p>
  * When {@link SpellArg#EXCLUSIVE} is {@code true}, doesn't trigger a {@link net.demilich.metastone.game.events.CardShuffledEvent}.
+ * <p>
+ * For <b>example,</b> this shuffles 3 Mur'Ghouls into the caster's deck:
+ * <pre>
+ *   {
+ *     "class": "ShuffleToDeckSpell",
+ *     "card": "token_mur'ghoul",
+ *     "howMany": 3,
+ *     "targetPlayer": "SELF"
+ *   }
+ * </pre>
  */
 public class ShuffleToDeckSpell extends Spell {
+
+	public static SpellDesc create(String card) {
+		SpellDesc desc = new SpellDesc(ShuffleToDeckSpell.class);
+		desc.put(SpellArg.CARD, card);
+		return desc;
+	}
+
+	public static SpellDesc create() {
+		return new SpellDesc(ShuffleToDeckSpell.class);
+	}
 
 	@Override
 	@Suspendable
@@ -29,7 +49,11 @@ public class ShuffleToDeckSpell extends Spell {
 		SpellDesc subSpell = (SpellDesc) (desc.getOrDefault(SpellArg.SPELL, NullSpell.create()));
 		boolean quiet = desc.getBool(SpellArg.EXCLUSIVE);
 
-		if (target != null) {
+		if (target != null
+				&& !desc.containsKey(SpellArg.CARD)
+				&& !desc.containsKey(SpellArg.CARDS)
+				&& !desc.containsKey(SpellArg.CARD_SOURCE)
+				&& !desc.containsKey(SpellArg.CARD_FILTER)) {
 			// Implements Kingsbane in a very basic way, since weapons pretty much only get enchanted for attack,
 			// durability, windfury, lifesteal and poisonous bonuses.
 			AttributeMap map = SpellUtils.processKeptEnchantments(target, new AttributeMap());

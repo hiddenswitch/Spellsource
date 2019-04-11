@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Discover a Murloc.",
+  "description": "Opener: Discover a Fae.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -18,7 +18,7 @@
       },
       "cardFilter": {
         "class": "CardFilter",
-        "race": "MURLOC",
+        "race": "FAE",
         "cardType": "MINION"
       }
     }

@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.concurrent.impl.SuspendableArrayQueue;
 import org.jetbrains.annotations.NotNull;
 
@@ -22,6 +22,7 @@ public interface SuspendableQueue<V> {
 	 * cluster may not be created.
 	 * @see #get(String) for an unbounded version of this method.
 	 */
+	@Suspendable
 	static <V> SuspendableQueue<V> get(String name, int capacity) throws SuspendExecution {
 //		return SuspendableLinkedQueue.getOrCreate(name, capacity <= 0 ? Integer.MAX_VALUE : capacity);
 		return new SuspendableArrayQueue<>(name, capacity);
@@ -35,7 +36,7 @@ public interface SuspendableQueue<V> {
 	 * @return
 	 * @see #get(String, int) for more options.
 	 */
-
+	@Suspendable
 	static <V> SuspendableQueue<V> get(String name) throws SuspendExecution {
 		return new SuspendableArrayQueue<>(name);
 //		return SuspendableLinkedQueue.getOrCreate(name);
@@ -54,6 +55,7 @@ public interface SuspendableQueue<V> {
 	 * @throws InterruptedException
 	 * @throws SuspendExecution
 	 */
+	@Suspendable
 	V poll(long timeout) throws InterruptedException, SuspendExecution;
 
 	/**
@@ -87,5 +89,16 @@ public interface SuspendableQueue<V> {
 	 */
 	@Suspendable
 	default void destroy() {
+	}
+
+	/**
+	 * To the best of the cluster's knowledge, does the specified queue exist?
+	 *
+	 * @param name
+	 * @return {@code true} if it does
+	 */
+	@Suspendable
+	static boolean exists(String name) {
+		return SuspendableArrayQueue.getArrayQueues().containsKey(name);
 	}
 }

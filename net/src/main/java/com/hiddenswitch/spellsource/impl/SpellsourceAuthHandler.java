@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource.impl;
 
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.impl.util.UserRecord;
 import com.hiddenswitch.spellsource.util.Rpc;
@@ -19,6 +19,9 @@ import java.util.Set;
 
 import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
 
+/**
+ * A HTTP header based authentication method that uses login tokens to authorize users.
+ */
 public class SpellsourceAuthHandler implements AuthHandler {
 	private SpellsourceAuthHandler() {
 	}

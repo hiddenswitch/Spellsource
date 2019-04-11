@@ -9,13 +9,14 @@
   "description": "Whenever a friendly minion attacks, give it +1/+1.",
   "trigger": {
     "eventTrigger": {
-      "class": "AfterPhysicalAttackTrigger",
+      "class": "TargetAcquisitionTrigger",
+      "actionType": "PHYSICAL_ATTACK",
       "sourceEntityType": "MINION",
       "sourcePlayer": "SELF"
     },
     "spell": {
       "class": "BuffSpell",
-      "target": "EVENT_TARGET",
+      "target": "ATTACKER",
       "attackBonus": 1,
       "hpBonus": 1
     }

@@ -1,0 +1,5 @@
+*
+!Docker*
+!bundle/
+!settings.json
+!server.sh

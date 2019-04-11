@@ -5,6 +5,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
@@ -75,7 +76,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  * 		how the battlecry action is processed.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class BattlecryDesc /*extends AbstractMap<BattlecryDescArg, Object>*/ implements Serializable {
+public final class BattlecryDesc implements Serializable, HasEntrySet<BattlecryDescArg, Object> {
 	public SpellDesc spell;
 	public TargetSelection targetSelection;
 	public ConditionDesc condition;

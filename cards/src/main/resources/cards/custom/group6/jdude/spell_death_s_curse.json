@@ -1,0 +1,27 @@
+{
+  "name": "Death's Curse",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Destroy your deck, but you don't Fatigue anymore.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "DISABLE_FATIGUE"
+      },
+      {
+        "class": "RemoveCardSpell",
+        "target": "FRIENDLY_DECK"
+      }
+    ]
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

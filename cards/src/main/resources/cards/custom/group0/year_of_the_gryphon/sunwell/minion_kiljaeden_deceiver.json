@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Deathrattle: Summon a random minion as a 0/2 and give it, \"Deathrattle: Summon Kil'jaeden.\"",
+  "description": "Aftermath: Summon a random minion as a 0/2 and give it, \"Aftermath: Summon Kil'jaeden.\"",
   "deathrattle": {
     "class": "SummonSpell",
     "spell": {
@@ -25,8 +25,11 @@
         {
           "class": "AddDeathrattleSpell",
           "spell": {
-            "class": "SummonSpell",
-            "card": "minion_kiljaeden_deceiver"
+            "class": "CastAfterSequenceSpell",
+            "spell": {
+              "class": "SummonSpell",
+              "card": "minion_kiljaeden_deceiver"
+            }
           }
         }
       ]

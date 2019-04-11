@@ -4,15 +4,22 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.logic.GameLogic;
 
 import java.util.*;
 
+/**
+ * This behaviour chooses actions randomly.
+ * <p>
+ * It relies on its own internal {@link Random} instance as the state of its random choice generator and does not use
+ * the {@link GameLogic#getRandom()} facilities at all.
+ */
 public class PlayRandomBehaviour extends IntelligentBehaviour {
+
+	private Random random = new Random();
 
 	public PlayRandomBehaviour() {
 	}
-
-	private Random random = new Random();
 
 	@Override
 	public String getName() {

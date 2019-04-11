@@ -6,7 +6,8 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: If you're holding a Dragon, gain +2 Health.",
+  "race": "DRAGON",
+  "description": "Opener: If you're holding a Dragon, gain +2 Health.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

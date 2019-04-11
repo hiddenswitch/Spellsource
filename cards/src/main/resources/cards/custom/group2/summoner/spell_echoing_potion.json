@@ -12,11 +12,11 @@
     "trigger": {
       "eventTrigger": {
         "class": "MinionSummonedTrigger",
-        "targetPlayer": "SELF"
+        "sourcePlayer": "SELF"
       },
       "spell": {
         "class": "SummonSpell",
-        "target": "EVENT_SOURCE",
+        "target": "EVENT_TARGET",
         "spell": {
           "class": "MetaSpell",
           "target": "OUTPUT",

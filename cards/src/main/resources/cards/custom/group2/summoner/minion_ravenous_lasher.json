@@ -14,7 +14,7 @@
     },
     "spell": {
       "class": "DestroySpell",
-      "target": "MINIONS",
+      "target": "ALL_MINIONS",
       "filter": {
         "class": "ManaCostFilter",
         "value": 3,

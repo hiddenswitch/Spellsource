@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -9,6 +9,12 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
+/**
+ * Deals {@link SpellArg#VALUE} damage to the {@code target} and {@link SpellArg#SECONDARY_VALUE} damage to the {@link
+ * SpellArg#SECONDARY_TARGET} actors.
+ * <p>
+ * Implements Swipe.
+ */
 public class SwipeSpell extends Spell {
 
 	@Suspendable

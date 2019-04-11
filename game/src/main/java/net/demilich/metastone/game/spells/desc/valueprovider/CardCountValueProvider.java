@@ -1,15 +1,24 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.AndFilter;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CardSourceDesc;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
+import net.demilich.metastone.game.cards.Attribute;
 
+/**
+ * Returns the number of cards in the {@link ValueProviderArg#CARD_SOURCE} and {@link ValueProviderArg#CARD_FILTER} when
+ * specified, or {@link net.demilich.metastone.game.targeting.Zones#HAND} when not specified.
+ * <p>
+ * If an {@link ValueProviderArg#ATTRIBUTE} is specified, sums the values stored in the attribute or returns the count
+ * of cards with that attribute.
+ */
 public class CardCountValueProvider extends ValueProvider {
 
 	public CardCountValueProvider(ValueProviderDesc desc) {
@@ -31,9 +40,18 @@ public class CardCountValueProvider extends ValueProvider {
 			cardFilter = AndFilter.create();
 		}
 
-		return cardSource.getCards(context, source, player)
-				.filtered(cardFilter.matcher(context, player, source))
-				.getCount();
+		CardList cards = cardSource.getCards(context, source, player)
+				.filtered(cardFilter.matcher(context, player, source));
+		if (getDesc().containsKey(ValueProviderArg.ATTRIBUTE)) {
+			Attribute attribute = (Attribute) getDesc().get(ValueProviderArg.ATTRIBUTE);
+			return cards
+					.stream()
+					.mapToInt(card -> card.getAttributeValue(attribute))
+					.sum();
+		} else {
+			return cards
+					.getCount();
+		}
 	}
 
 }

@@ -30,4 +30,14 @@ public class DiscardEvent extends GameEvent implements HasCard {
 	public boolean isClientInterested() {
 		return true;
 	}
+
+	@Override
+	public boolean isPowerHistory() {
+		return true;
+	}
+
+	@Override
+	public String getDescription(GameContext context, int playerId) {
+		return String.format("%s discarded %s", context.getPlayer(playerId).getName(), getCard().getName());
+	}
 }

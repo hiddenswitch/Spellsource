@@ -1,5 +1,5 @@
 {
-  "name": "Bee Soldier",
+  "name": "Wasp Soldier",
   "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "BEAST",
-  "description": "Charge. Poisonous",
+  "description": "Charge. Toxic",
   "attributes": {
     "CHARGE": true,
     "POISONOUS": true

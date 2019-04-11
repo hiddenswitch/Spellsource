@@ -96,6 +96,12 @@
                     "class": "SpecificCardFilter",
                     "card": "minion_prince_malchezaar",
                     "invert": true
+                  },
+                  {
+                    "class": "AttributeFilter",
+                    "attribute": "PERMANENT",
+                    "invert": true,
+                    "operation": "HAS"
                   }
                 ]
               },
@@ -136,6 +142,12 @@
                     "class": "SpecificCardFilter",
                     "card": "minion_prince_malchezaar",
                     "invert": true
+                  },
+                  {
+                    "class": "AttributeFilter",
+                    "attribute": "PERMANENT",
+                    "invert": true,
+                    "operation": "HAS"
                   }
                 ]
               },

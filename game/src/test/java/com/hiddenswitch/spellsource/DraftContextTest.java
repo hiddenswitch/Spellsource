@@ -1,6 +1,6 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.SuspendExecution;
 import com.hiddenswitch.spellsource.draft.*;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;
@@ -15,9 +15,6 @@ import java.io.IOException;
 import java.net.URISyntaxException;
 import java.util.List;
 
-/**
- * Created by bberman on 12/14/16.
- */
 public class DraftContextTest {
 	@Test
 	public void testDraftComplete() throws SuspendExecution, CardParseException, IOException, URISyntaxException {

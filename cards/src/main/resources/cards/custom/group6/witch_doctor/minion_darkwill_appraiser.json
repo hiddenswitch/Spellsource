@@ -1,0 +1,23 @@
+{
+  "name": "Darkwill Appraiser",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 5,
+  "baseHp": 6,
+  "rarity": "EPIC",
+  "description": "At the start of your turn, add a copy of your hand to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "FRIENDLY_HAND"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

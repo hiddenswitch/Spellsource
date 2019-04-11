@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "EPIC",
-  "description": "Costs (1) less for each damage your hero has taken.",
+  "description": "Costs (1) less for each damage your champion has taken.",
   "collectible": true,
   "set": "UNNERFED",
   "fileFormatVersion": 1,

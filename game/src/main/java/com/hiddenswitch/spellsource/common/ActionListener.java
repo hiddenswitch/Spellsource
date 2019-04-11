@@ -1,21 +1,39 @@
 package com.hiddenswitch.spellsource.common;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 
 import java.util.List;
 
+/**
+ * Represents a handler that should listen for game requests.
+ */
 public interface ActionListener {
+	/**
+	 * Elapses all awaiting requests, typically due to a timer running out.
+	 */
 	@Suspendable
-	void elapseTurn();
+	void elapseAwaitingRequests();
 
-	@Suspendable
-	void elapseMulligan();
-
+	/**
+	 * Requests a game action.
+	 *
+	 * @param messageId The message ID
+	 * @param state     The game state
+	 * @param actions   The possible actions
+	 */
 	@Suspendable
 	void onRequestAction(String messageId, GameState state, List<GameAction> actions);
 
+	/**
+	 * Requests a mulligan
+	 *
+	 * @param messageId The message ID
+	 * @param state     The game state
+	 * @param cards     The cards that can be discarded
+	 * @param playerId  The player doing the discards
+	 */
 	@Suspendable
 	void onMulligan(String messageId, GameState state, List<Card> cards, int playerId);
 }

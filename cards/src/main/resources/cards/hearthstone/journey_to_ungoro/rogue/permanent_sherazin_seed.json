@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "FREE",
-  "description": "Permanent. When you play 4 cards in a turn, revive this minion.",
+  "description": "When you play [4 cards in a turn], revive this minion.",
   "trigger": {
     "eventTrigger": {
       "class": "CardPlayedTrigger",
@@ -30,5 +30,19 @@
   },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "PluralDescription",
+      "value": {
+        "class": "AttributeValueProvider",
+        "target": "FRIENDLY_PLAYER",
+        "attribute": "COMBO",
+        "multiplier": -1,
+        "offset": 4
+      },
+      "description1": " more cards this turn",
+      "description2": " more card this turn"
+    }
+  ]
 }

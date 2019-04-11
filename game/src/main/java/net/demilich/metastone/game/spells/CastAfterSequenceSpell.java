@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -9,6 +9,9 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
+import net.demilich.metastone.game.targeting.EntityReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Casts the subspell after the sequence has ended.
@@ -33,6 +36,15 @@ import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
  * @see ForceDeathPhaseSpell for an alternative way to "clean up" the board during a spell's execution.
  */
 public final class CastAfterSequenceSpell extends Spell {
+
+	private static Logger LOGGER = LoggerFactory.getLogger(CastAfterSequenceSpell.class);
+
+	public static SpellDesc create(SpellDesc spell) {
+		SpellDesc desc = new SpellDesc(CastAfterSequenceSpell.class);
+		desc.put(SpellArg.SPELL, spell);
+		return desc;
+	}
+
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
@@ -42,6 +54,28 @@ public final class CastAfterSequenceSpell extends Spell {
 		if (desc.containsKey(SpellArg.CARD) && !spell.containsKey(SpellArg.CARD)) {
 			spell = spell.clone();
 			spell.put(SpellArg.CARD, desc.get(SpellArg.CARD));
+		}
+
+		// Special casing spell target
+		for (SpellArg targetAttribute : new SpellArg[]{SpellArg.TARGET, SpellArg.SECONDARY_TARGET}) {
+			if (spell.containsKey(targetAttribute)
+					&& spell.get(targetAttribute).equals(EntityReference.SPELL_TARGET)
+					&& target != null) {
+				spell = spell.addArg(targetAttribute, target.getReference());
+			} else if (spell.containsKey(targetAttribute) && spell.getTarget().isTargetGroup()) {
+				// If the subspell contains a group target that resolves to a single target, resolve it now.
+				try {
+					spell = spell.addArg(targetAttribute, context.resolveSingleTarget(player, source, spell.getTarget()).getReference());
+				} catch (ArrayStoreException notSingleTarget) {
+					LOGGER.warn("onCast {} {}: Passed a non-single-target target group {}, not resolving", context.getGameId(), source, spell.getTarget());
+				}
+			}
+		}
+
+		// Special casing a summon in a deathrattle context so that it has the appropriate board position
+		if (SummonSpell.class.isAssignableFrom(spell.getDescClass())
+				&& desc.containsKey(SpellArg.BOARD_POSITION_ABSOLUTE)) {
+			spell = spell.addArg(SpellArg.BOARD_POSITION_ABSOLUTE, desc.getInt(SpellArg.BOARD_POSITION_ABSOLUTE));
 		}
 
 		EnchantmentDesc enchantmentDesc = new EnchantmentDesc();

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -13,7 +13,14 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
-public class ReviveMinionSpell extends Spell {
+/**
+ * Reviving a minion, unlike resurrecting it, puts a minion back into the position on the board where it died. The
+ * {@link SpellArg#HP_BONUS} field must be specified, and this amount of hitpoints is what the target minion's health is
+ * set to. The minion is summoned from the base card.
+ * <p>
+ * If a {@link SpellArg#SPELL} is specified, cast it on the newly revived minion as {@link EntityReference#OUTPUT}.
+ */
+public final class ReviveMinionSpell extends Spell {
 
 	public static SpellDesc create(EntityReference target) {
 		return create(target, 0);
@@ -38,7 +45,9 @@ public class ReviveMinionSpell extends Spell {
 		if (hpAdjustment != 0) {
 			minion.setHp(hpAdjustment);
 		}
-		context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
+		context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
+		if (desc.containsKey(SpellArg.SPELL)) {
+			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, minion);
+		}
 	}
-
 }

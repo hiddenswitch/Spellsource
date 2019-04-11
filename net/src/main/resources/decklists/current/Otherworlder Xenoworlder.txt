@@ -1,0 +1,21 @@
+### Otherworlder: Xenoworlder
+# Class: NEONGREEN
+# Format: Spellsource
+#
+# 2x (0) Chaos Bolts
+# 2x (1) Call of the Crusade
+# 2x (1) Warp
+# 2x (1) Xenobulwark
+# 2x (2) Cannibalize
+# 2x (2) Mind Harvester
+# 2x (3) Malignancy
+# 2x (3) Observer
+# 2x (3) Primordial Supremacy
+# 2x (3) Reconnoitre
+# 2x (4) Cellular Overdrive
+# 2x (4) Formless Wormhole
+# 2x (5) Nebulous Entity
+# 2x (6) Hope Eater
+# 1x (7) Asteroid Impact
+# 1x (7) Grandmother Vratta
+#

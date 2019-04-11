@@ -1,0 +1,28 @@
+{
+  "name": "Hypnomental",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 4,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener and Aftermath: Summon a 0/2 Defender with Guard.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_baron_defender"
+    }
+  },
+  "deathrattle": {
+    "class": "SummonSpell",
+    "card": "token_baron_defender"
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

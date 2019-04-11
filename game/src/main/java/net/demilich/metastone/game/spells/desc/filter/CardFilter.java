@@ -10,7 +10,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
 
@@ -81,6 +81,11 @@ public final class CardFilter extends EntityFilter {
 			return false;
 		}
 
+		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
+		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
+			return false;
+		}
+
 		if (getDesc().containsKey(EntityFilterArg.ATTRIBUTE)) {
 			Attribute attribute = (Attribute) getDesc().get(EntityFilterArg.ATTRIBUTE);
 			ComparisonOperation operation = null;
@@ -97,18 +102,13 @@ public final class CardFilter extends EntityFilter {
 
 			int targetValue;
 			if (entities == null) {
-				targetValue = getDesc().getInt(EntityFilterArg.VALUE);
+				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, null, null, 0);
 			} else {
 				targetValue = getDesc().getValue(EntityFilterArg.VALUE, context, player, entities.get(0), null, 0);
 			}
 
 			int actualValue = card.getAttributeValue(attribute);
 			return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
-		}
-
-		CardSet cardSet = (CardSet) getDesc().get(EntityFilterArg.CARD_SET);
-		if (cardSet != null && cardSet != CardSet.ANY && card.getCardSet() != cardSet) {
-			return false;
 		}
 
 		return true;

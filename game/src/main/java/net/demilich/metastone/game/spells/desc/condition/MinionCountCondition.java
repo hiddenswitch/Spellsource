@@ -43,7 +43,7 @@ public class MinionCountCondition extends Condition {
 		if (filter != null) {
 			minions = minions.filter(filter.matcher(context, player, source));
 		}
-		int targetValue = desc.getInt(ConditionArg.VALUE);
+		int targetValue = desc.getValue(ConditionArg.VALUE, context, player, target, source, 0);
 		ComparisonOperation operation = (ComparisonOperation) desc.get(ConditionArg.OPERATION);
 		return SpellUtils.evaluateOperation(operation, (int) minions.count(), targetValue);
 	}

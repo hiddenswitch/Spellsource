@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.actions;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.targeting.EntityReference;
@@ -26,14 +26,14 @@ public class EndTurnAction extends GameAction {
 	}
 
 	@Override
-	@Suspendable
-	public void execute(GameContext context, int playerId) {
-		context.endTurn();
+	public EndTurnAction clone() {
+		return (EndTurnAction) super.clone();
 	}
 
 	@Override
-	public String toString() {
-		return String.format("[%s]", getActionType());
+	@Suspendable
+	public void execute(GameContext context, int playerId) {
+		context.endTurn();
 	}
 
 	@Override

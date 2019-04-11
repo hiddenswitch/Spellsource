@@ -2,42 +2,51 @@ package com.hiddenswitch.spellsource.applications;
 
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
 import com.hiddenswitch.spellsource.util.Simulation;
+import io.vertx.core.Future;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
+import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.decks.Deck;
 import net.demilich.metastone.game.decks.GameDeck;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import py4j.GatewayServer;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
+import static io.vertx.core.json.JsonObject.mapFrom;
+
+/**
+ * The main entry point fo the {@code spellsource} python package's interface with the Java code.
+ */
 public class PythonBridge {
 	private static final Logger logger = LoggerFactory.getLogger(PythonBridge.class);
 	private static final Map<String, Class<? extends Behaviour>> BEHAVIOURS = Simulation.getAllBehaviours();
 	private static final Map<Long, Thread> JOBS = new ConcurrentHashMap<>();
 
-	/*
-	public static void main(String[] args) {
-		Logging.setLoggingLevel(Level.OFF);
-		GatewayServer gatewayServer = new GatewayServer();
-		try {
-			gatewayServer.start();
-			System.out.println("{\"status\":\"ready\"}");
-			Runtime.getRuntime().addShutdownHook(new Thread(() -> gatewayServer.shutdown(true)));
-		} catch (Py4JNetworkException ex) {
-			System.out.println(String.format("{\"status\":\"failed\", \"message\": \"%s\"}", ex.getCause().getMessage()));
-		}
+	public static void startServer() {
+		CompletableFuture<String> cf = new CompletableFuture<>();
+		Future<String> fut = Future.future();
+		fut.setHandler(res -> {
+			if (res.succeeded()) {
+				cf.complete(res.result());
+			} else {
+				cf.completeExceptionally(res.cause());
+			}
+		});
+		LocalClustered.startServer(fut);
+		cf.join();
 	}
-	*/
 
 	public static Supplier<Behaviour> getBehaviourByName(String behaviourName) {
 		List<Supplier<Behaviour>> behaviours = Simulation.getBehaviourSuppliers(BEHAVIOURS, Collections.singletonList(behaviourName));
@@ -47,6 +56,17 @@ public class PythonBridge {
 		return behaviours.get(0);
 	}
 
+	/**
+	 * Used by the python package to actually start a simulation and receive callbacks about the simulation's progress.
+	 *
+	 * @param generator
+	 * @param deckLists
+	 * @param gamesPerBatch
+	 * @param behaviours
+	 * @param mirrors
+	 * @param reduce
+	 * @return
+	 */
 	public static long simulate(SimulationResultGenerator generator, List<String> deckLists, int gamesPerBatch, List<Supplier<Behaviour>> behaviours, boolean mirrors, boolean reduce) {
 		final Map<String, GameDeck> decks = Simulation.getDecks(deckLists);
 		final List<String[]> combinations = Simulation.getCombinations(mirrors, decks, behaviours.size() > 2
@@ -67,8 +87,8 @@ public class PythonBridge {
 											deckKeyPair[1])))
 									.put("numberOfGames", simulationResult.getNumberOfGames())
 									.put("results", new JsonArray(Arrays.asList(
-											JsonObject.mapFrom(simulationResult.getPlayer1Stats().getStats()),
-											JsonObject.mapFrom(simulationResult.getPlayer2Stats().getStats()))))
+											mapFrom(simulationResult.getPlayer1Stats().getStats()),
+											mapFrom(simulationResult.getPlayer2Stats().getStats()))))
 									.encode());
 						});
 					} catch (InterruptedException e) {

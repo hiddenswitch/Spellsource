@@ -1,7 +1,7 @@
 package io.vertx.ext.sync;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.channels.ReceivePort;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.channels.ReceivePort;
 
 /**
  * Represents a synchronous receiver of events.

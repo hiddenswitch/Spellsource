@@ -1,0 +1,70 @@
+{
+  "name": "One on One",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "COMMON",
+  "description": "Choose a minion. Force a random enemy minion to attack it.",
+  "condition": {
+    "class": "AndCondition",
+    "conditions": [
+      {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "ENEMY_MINIONS"
+        },
+        "value2": 1
+      },
+      {
+        "class": "ComparisonCondition",
+        "operation": "GREATER_OR_EQUAL",
+        "value1": {
+          "class": "EntityCounter",
+          "target": "ALL_MINIONS"
+        },
+        "value2": 2
+      }
+    ]
+  },
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "custom.DuelRandomSecondarySpell",
+    "filter": {
+      "class": "OrFilter",
+      "filters": [
+        {
+          "class": "OwnedByPlayerFilter",
+          "andCondition": {
+            "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
+            "value1": {
+              "class": "EntityCounter",
+              "target": "ENEMY_MINIONS"
+            },
+            "value2": 2
+          },
+          "targetPlayer": "OPPONENT"
+        },
+        {
+          "class": "OwnedByPlayerFilter",
+          "andCondition": {
+            "class": "ComparisonCondition",
+            "operation": "GREATER_OR_EQUAL",
+            "value1": {
+              "class": "EntityCounter",
+              "target": "ENEMY_MINIONS"
+            },
+            "value2": 1
+          },
+          "targetPlayer": "SELF"
+        }
+      ]
+    },
+    "secondaryTarget": "ENEMY_MINIONS"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -1,11 +1,16 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
+/**
+ * @deprecated Has no implementation.
+ * 		<p>
+ * 		Renounce Darkness is now implemented as a combination of other spells and effects.
+ */
 @Deprecated
 public class RenounceClassSpell extends Spell {
 

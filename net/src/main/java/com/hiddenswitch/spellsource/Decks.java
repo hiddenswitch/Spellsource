@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.models.DecksUpdateCommand;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.util.DeckType;
@@ -87,6 +87,7 @@ public interface Decks {
 		final String userId = request.getUserId();
 		CreateCollectionResponse createCollectionResponse = Inventory
 				.createCollection(CreateCollectionRequest.deck(userId, request.getName(), request.getHeroClass(), inventoryIds, request.isDraft())
+						.setStandard(request.isStandardDeck())
 						.withHeroCardId(request.getHeroCardId())
 						.withFormat(request.getFormat()));
 

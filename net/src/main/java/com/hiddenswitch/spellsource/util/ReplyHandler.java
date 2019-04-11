@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.fasterxml.jackson.core.JsonParseException;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Future;

@@ -6,7 +6,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.statistics.Statistic;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 public class PlayerAttributeValueProvider extends ValueProvider {
 
@@ -32,6 +32,8 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return player.getMaxMana();
 			case SECRET_COUNT:
 				return player.getSecrets().size();
+			case CARDS_DRAWN:
+				return (int) player.getStatistics().getLong(Statistic.CARDS_DRAWN);
 			case SPELLS_CAST:
 				return (int) player.getStatistics().getLong(Statistic.SPELLS_CAST);
 			case CARDS_DISCARDED:
@@ -46,6 +48,10 @@ public class PlayerAttributeValueProvider extends ValueProvider {
 				return (int) player.getAttributeValue(Attribute.SUPREMACIES_THIS_GAME);
 			case LOCKED_MANA:
 				return player.getLockedMana();
+			case HERO_POWER_DAMAGE_DEALT:
+				return (int) player.getStatistics().getLong(Statistic.HERO_POWER_DAMAGE_DEALT);
+			case HEALING_DONE:
+				return (int) player.getStatistics().getLong(Statistic.HEALING_DONE);
 			default:
 				break;
 		}

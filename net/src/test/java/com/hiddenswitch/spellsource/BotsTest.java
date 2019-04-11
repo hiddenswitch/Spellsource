@@ -27,9 +27,6 @@ import java.util.List;
 import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static org.junit.Assert.*;
 
-/**
- * Created by bberman on 12/7/16.
- */
 public class BotsTest extends SpellsourceTestBase {
 
 	@Test
@@ -62,23 +59,9 @@ public class BotsTest extends SpellsourceTestBase {
 				RequestActionResponse response = Bots.requestAction(requestActionRequest);
 				gameAction = response.gameAction;
 				assertNotNull(gameAction);
-				context1.getLogic().performGameAction(context1.getActivePlayerId(), gameAction);
+				context1.performAction(context1.getActivePlayerId(), gameAction);
 			}
 			assertTrue(context1.getTurn() > startTurn);
-		});
-	}
-
-	@Test
-	public void testBroker(TestContext context) throws CardParseException {
-		sync(() -> {
-			final RpcClient<Bots> bots = Rpc.connect(Bots.class);
-			final MulliganRequest request = new MulliganRequest(
-					Arrays.asList(
-							CardCatalogue.getCardById("spell_fireball"),
-							CardCatalogue.getCardById("spell_arcane_missiles"),
-							CardCatalogue.getCardById("spell_assassinate")));
-			MulliganResponse r = Bots.mulligan(request);
-			assertEquals(2, r.discardedCards.size());
 		});
 	}
 
@@ -90,7 +73,7 @@ public class BotsTest extends SpellsourceTestBase {
 			FiberBehaviour fb2 = new FiberBehaviour();
 			gc.setBehaviour(0, fb1);
 			gc.setBehaviour(1, fb2);
-			gc.play();
+			gc.play(true);
 			while (!fb1.getMulliganCards().isEmpty() || !fb2.getMulliganCards().isEmpty()) {
 				fb1.setMulligan(Collections.emptyList());
 				fb2.setMulligan(Collections.emptyList());
@@ -108,7 +91,8 @@ public class BotsTest extends SpellsourceTestBase {
 		NoArgs playAndWait = () -> {
 			client.matchmakeQuickPlay(null);
 			client.waitUntilDone();
-			assertTrue(client.isGameOver());
+			context.assertTrue(client.isGameOver());
+			context.assertTrue(client.getTurnsPlayed() > 0);
 			try {
 				assertFalse(client.getApi().getAccount(client.getAccount().getId()).getAccounts().get(0).isInMatch());
 			} catch (ApiException e) {
@@ -120,7 +104,7 @@ public class BotsTest extends SpellsourceTestBase {
 			Sync.invoke0(playAndWait);
 			List<String> botIds = Bots.getBotIds();
 			assertEquals("Only one bot document should have been created", botIds.size(), 1);
-			SuspendableMap<UserId, GameId> games = Games.getGames();
+			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
 			for (String id : botIds) {
 				assertFalse(games.containsKey(new UserId(id)));

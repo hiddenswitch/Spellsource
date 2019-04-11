@@ -6,7 +6,8 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a 5/5 Bounty Hunter with Taunt for your opponent.",
+  "race": "BEAST",
+  "description": "Opener: Summon a 5/5 Bounty Hunter with Guard for your opponent.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

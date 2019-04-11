@@ -1,8 +1,8 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.google.common.io.Resources;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.Trigger;
@@ -11,12 +11,13 @@ import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.*;
 import com.hiddenswitch.spellsource.util.*;
 import io.vertx.core.*;
+import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.sync.Sync;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
@@ -47,9 +48,11 @@ import static java.util.stream.Collectors.toSet;
  * The Spellsource Server API. Access it with {@link Spellsource#spellsource()}.
  * <p>
  * This class provides an easy way to provide a new persist attribute with {@link #persistAttribute(String,
- * GameEventType, Attribute, Handler)}.
+ * GameEventType, Attribute, SuspendableAction1)}.
  * <p>
  * It will provide more APIs for features in the future.
+ * <p>
+ * When adding new collections, this class stores the migrations where index creation is appropriate.
  *
  * @see com.hiddenswitch.spellsource.applications.LocalClustered for the entry point of the executable.
  */
@@ -391,7 +394,70 @@ public class Spellsource {
 						.withUp(thisVertx -> {
 							Bots.updateBotDeckList();
 						}))
-				.migrateTo(21, then2 ->
+				.add(new MigrationRequest()
+						.withVersion(22)
+						.withUp(thisVertx -> {
+							// Needs to include the fromUserId too
+							mongo().createIndex(Invites.INVITES, json("fromUserId", 1));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(23)
+						.withUp(thisVertx -> {
+							// Remove all cards that don't exist
+							CardCatalogue.loadCardsFromPackage();
+							JsonArray allCardIds = array(CardCatalogue.getRecords().keySet().toArray());
+							MongoClientDeleteResult removed = Mongo.mongo().removeDocuments(INVENTORY, json("cardDesc.id",
+									json("$nin", allCardIds)));
+							logger.info("add MigrationRequest 23: Removed {} cards that no longer exist", removed.getRemovedCount());
+						}))
+				.add(new MigrationRequest()
+						.withVersion(24)
+						.withUp(thisVertx -> {
+							mongo().createCollection(Games.GAMES);
+							mongo().createIndex(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, 1));
+						}))
+				.add(new MigrationRequest()
+						.withVersion(25)
+						.withUp(thisVertx -> {
+							CardCatalogue.loadCardsFromPackage();
+							changeCardId("spell_lesser_oynx_spellstone", "spell_lesser_onyx_spellstone");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(26)
+						.withUp(thisVertx -> {
+							// DoctorPangloss is the first and only admin user
+							mongo().updateCollectionWithOptions(Accounts.USERS, json(), json("$set", json(UserRecord.ROLES, array())), new UpdateOptions().setMulti(true));
+							MongoClientUpdateResult res = mongo().updateCollection(Accounts.USERS, json(UserRecord.EMAILS_ADDRESS, "benjamin.s.berman@gmail.com"), json("$addToSet", json(UserRecord.ROLES, Accounts.Authorities.ADMINISTRATIVE.name())));
+							logger.info("add MigrationRequest 26: {} users made administrators", res.getDocModified());
+						}))
+				.add(new MigrationRequest()
+						.withVersion(27)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(28)
+						.withUp(thisVertx -> {
+							Bots.updateBotDeckList();
+						}))
+				.add(new MigrationRequest()
+						.withVersion(29)
+						.withUp(thisVertx -> {
+							changeCardId("minon_treeleach", "minion_treeleach");
+						}))
+				.add(new MigrationRequest()
+						.withVersion(30)
+						.withUp(thisVertx -> {
+							changeCardId("minion_anub'rekhan", "minion_anobii");
+							changeCardId("minion_azjol_visionary", "minion_visionary");
+							changeCardId("minion_nerubian_vizier", "minion_vizier");
+							changeCardId("weapon_maexxnas_femur", "weapon_scepter_of_bees");
+							changeCardId("minion_qiraji_guardian", "minion_grand_guardian");
+							changeCardId("minion_prophet_skeram", "minion_vermancer_prophet");
+							changeCardId("minion_silithid_wasp", "minion_servant_wasp");
+							changeCardId("spell_elementium_shell", "spell_reinforced_shell");
+						}))
+				.migrateTo(30, then2 ->
 						then.handle(then2.succeeded() ? Future.succeededFuture() : Future.failedFuture(then2.cause())));
 		return this;
 	}
@@ -399,7 +465,7 @@ public class Spellsource {
 	/**
 	 * Gets the current deck lists specified in the decklists.current resources directory.
 	 *
-	 * @return A list of deck create requests without a {@link DeckCreateRequest#userId} specified.
+	 * @return A list of deck create requests without a {@link DeckCreateRequest#getUserId()} specified.
 	 */
 	public synchronized List<DeckCreateRequest> getStandardDecks() {
 		if (cachedStandardDecks == null) {
@@ -416,7 +482,7 @@ public class Spellsource {
 				return null;
 			}).map((deckList) -> {
 				try {
-					return DeckCreateRequest.fromDeckList(deckList);
+					return DeckCreateRequest.fromDeckList(deckList).setStandardDeck(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 					return null;
@@ -483,15 +549,16 @@ public class Spellsource {
 	 * @param vertx       A vertx instance.
 	 * @param deployments A handler for the successful deployments. If any deployment fails, the entire handler fails.
 	 */
+	@Suspendable
 	public void deployAll(Vertx vertx, Handler<AsyncResult<CompositeFuture>> deployments) {
-		final Verticle[] verticles = services();
-
 		List<Future> futures = new ArrayList<>();
-		for (Verticle verticle : verticles) {
-			final Future<String> future = Future.future();
-			vertx.deployVerticle(verticle, future);
-			futures.add(future);
-		}
+		// Use up all the event loops
+		for (int i = 0; i < Runtime.getRuntime().availableProcessors(); i++)
+			for (Verticle verticle : services()) {
+				final Future<String> future = Future.future();
+				vertx.deployVerticle(verticle, future);
+				futures.add(future);
+			}
 
 		CompositeFuture.all(futures).setHandler(deployments);
 	}
@@ -541,7 +608,9 @@ public class Spellsource {
 
 	@Suspendable
 	protected static MongoClientUpdateResult changeCardId(String oldId, String newId) {
-		if (CardCatalogue.getCardById(newId) == null) {
+		try {
+			CardCatalogue.getCardById(newId);
+		} catch (Throwable any) {
 			logger.error("changeCardId: Cannot change {} to {} because the new ID does not exist", oldId, newId);
 			return new MongoClientUpdateResult();
 		}

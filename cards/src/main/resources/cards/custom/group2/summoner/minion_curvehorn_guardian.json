@@ -6,8 +6,8 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "EPIC",
-  "race": "BEAST",
-  "description": "Battlecry: Summon a 3/3 copy of the next Beast you summon.",
+  "race": "DRAGON",
+  "description": "Opener: Summon a 3/3 copy of the next Beast you summon.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -21,7 +21,7 @@
         },
         "spell": {
           "class": "SummonSpell",
-          "target": "EVENT_SOURCE",
+          "target": "EVENT_TARGET",
           "spell": {
             "class": "MetaSpell",
             "target": "OUTPUT",

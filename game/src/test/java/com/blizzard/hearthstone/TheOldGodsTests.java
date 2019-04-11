@@ -1,7 +1,7 @@
 package com.blizzard.hearthstone;
 
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
@@ -30,10 +30,11 @@ import net.demilich.metastone.game.spells.trigger.CardRevealedTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
+import org.mockito.stubbing.Answer;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
@@ -74,7 +75,7 @@ public class TheOldGodsTests extends TestBase {
 			Minion mini = playMinionCard(context, player, miniCopy);
 			Assert.assertEquals(mini.getAttack(), 1);
 			Assert.assertEquals(mini.getHp(), 1);
-			playCardWithTarget(context, player, "spell_silence", mini);
+			playCard(context, player, "spell_silence", mini);
 			Assert.assertEquals(mini.getAttack(), 3);
 			Assert.assertEquals(mini.getHp(), 2);
 		});
@@ -110,7 +111,7 @@ public class TheOldGodsTests extends TestBase {
 			context.setLogic(spyLogic);
 			AtomicInteger invocationCount = new AtomicInteger(0);
 			AtomicReference<HeroClass> chosenHeroClass = new AtomicReference<>(HeroClass.VIOLET);
-			Mockito.doAnswer(invocation -> {
+			Answer answer = invocation -> {
 				if (invocationCount.getAndIncrement() == 0) {
 					// We're choosing the hero power
 					Card chosen = (Card) invocation.callRealMethod();
@@ -123,7 +124,9 @@ public class TheOldGodsTests extends TestBase {
 				// Return a test card with the appropriate hero class to validate the card cost modification
 				return testCard.get(chosenHeroClass.get()).clone();
 
-			}).when(spyLogic).getRandom(Mockito.anyList());
+			};
+			Mockito.doAnswer(answer).when(spyLogic).getRandom(Mockito.anyList());
+			Mockito.doAnswer(answer).when(spyLogic).removeRandom(Mockito.anyList());
 			playCard(context, player, "spell_renounce_darkness");
 
 			Assert.assertTrue(player.getDeck().containsCard("minion_bloodfen_raptor"));
@@ -143,7 +146,7 @@ public class TheOldGodsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_mirror_image");
 			Minion raven = playMinionCard(context, player, "minion_enchanted_raven");
-			playCardWithTarget(context, player, "spell_mark_of_yshaarj", raven);
+			playCard(context, player, "spell_mark_of_yshaarj", raven);
 			Assert.assertEquals(raven.getAttack(), 4);
 			Assert.assertEquals(raven.getHp(), 4);
 			Assert.assertEquals(player.getHand().get(0).getCardId(), "spell_mirror_image");
@@ -153,7 +156,7 @@ public class TheOldGodsTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "spell_mirror_image");
 			Minion notBeast = playMinionCard(context, player, "token_steward");
-			playCardWithTarget(context, player, "spell_mark_of_yshaarj", notBeast);
+			playCard(context, player, "spell_mark_of_yshaarj", notBeast);
 			Assert.assertEquals(notBeast.getAttack(), 3);
 			Assert.assertEquals(notBeast.getHp(), 3);
 			Assert.assertEquals(player.getHand().size(), 0);
@@ -375,7 +378,7 @@ public class TheOldGodsTests extends TestBase {
 		Assert.assertEquals(player.getHand().size(), handSize[0] + 1);
 		Card cardInHand = player.getHand().get(player.getHand().size() - 1);
 		Assert.assertEquals(cardInHand.getCardId(), originalMinion[0].getSourceCard().getCardId());
-		context.getLogic().performGameAction(player.getId(), cardInHand.play());
+		context.performAction(player.getId(), cardInHand.play());
 		int buff = light.getSpell().subSpells().stream().filter(sd -> sd.getDescClass().equals(BuffSpell.class)).findFirst().orElseThrow(AssertionError::new).getInt(SpellArg.VALUE, -999);
 		// Find the minion that was created with the specified card, because minions like Dr. Boom put unexpected cards into play into the first position.
 		Minion targetMinion = player.getMinions().stream().filter(m -> m.getSourceCard().getCardId().equals(cardInHand.getCardId())).findFirst().orElseThrow(AssertionError::new);

@@ -1,7 +1,9 @@
 package net.demilich.metastone.game.entities;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.BattlecryAction;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.HasDeathrattleEnchantments;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -9,12 +11,13 @@ import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.IdFactory;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * An actor hosts common functionality between minions, weapons and heroes. Actors have hitpoints; they can be
@@ -24,7 +27,7 @@ import java.util.List;
  * net.demilich.metastone.game.targeting.Zones#BATTLEFIELD}, {@link net.demilich.metastone.game.targeting.Zones#WEAPON}),
  * {@link net.demilich.metastone.game.events.BoardChangedEvent} will be raised.
  */
-public abstract class Actor extends Entity implements HasEnchantments {
+public abstract class Actor extends Entity implements HasEnchantments, HasDeathrattleEnchantments {
 
 	private Card sourceCard;
 	private List<Enchantment> enchantments = new ArrayList<Enchantment>();
@@ -130,7 +133,7 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	BattlecryAction getBattlecry() {
 		BattlecryAction action = (BattlecryAction) getAttribute(Attribute.BATTLECRY);
 		if (action != null) {
-			action.setSource(getReference());
+			action.setSourceReference(getReference());
 		}
 		return action;
 	}
@@ -195,6 +198,16 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	}
 
 
+	/**
+	 * Indicates whether or not the actor is mortally wounded.
+	 * <p>
+	 * A mortally wounded actor hasn't necessarily been taken off the board and put into the {@link
+	 * net.demilich.metastone.game.targeting.Zones#GRAVEYARD} yet. This is useful for preventing effects from impacting
+	 * already dead minions before a {@link GameLogic#endOfSequence()} has been called.
+	 *
+	 * @return {@code true} if the minion's health is less than 1 or if the minion has the {@link Attribute#DESTROYED}
+	 * 		attribute.
+	 */
 	@Override
 	public boolean isDestroyed() {
 		if (hasAttribute(Attribute.PERMANENT)) {
@@ -317,12 +330,18 @@ public abstract class Actor extends Entity implements HasEnchantments {
 	}
 
 	@Override
+	public List<SpellDesc> getDeathrattleEnchantments() {
+		return getDeathrattles();
+	}
+
+	@Override
 	public Actor getCopy() {
 		Actor clone = this.clone();
 		clone.setEntityLocation(EntityLocation.UNASSIGNED);
 		clone.setId(IdFactory.UNASSIGNED);
 		clone.setOwner(IdFactory.UNASSIGNED);
 		clone.getAttributes().put(Attribute.COPIED_FROM, this.getReference());
+		clone.getAttributes().remove(Attribute.TRANSFORM_REFERENCE);
 		// Clear aura buffs when copying an actor
 		clone.getAttributes().remove(Attribute.AURA_ATTACK_BONUS);
 		clone.getAttributes().remove(Attribute.AURA_HP_BONUS);

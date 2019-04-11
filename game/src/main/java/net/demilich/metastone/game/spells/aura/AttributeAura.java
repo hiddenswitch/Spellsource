@@ -7,7 +7,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.trigger.WillEndSequenceTrigger;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 /**
  * Grants an {@link AuraArg#ATTRIBUTE} to the specified targets.
@@ -39,5 +39,7 @@ public final class AttributeAura extends Aura {
 				(EntityFilter) desc.get(AuraArg.FILTER),
 				desc.getCondition());
 		setDesc(desc);
+		includeExtraTriggers(desc);
 	}
 }
+

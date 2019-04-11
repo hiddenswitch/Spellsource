@@ -4,18 +4,18 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Give your minions \"Deathrattle: Recruit a minion.\"",
+  "description": "Give your minions \"Aftermath: Recruit a minion.\"",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddDeathrattleSpell",
     "target": "FRIENDLY_MINIONS",
     "spell": {
       "class": "RecruitSpell",
-      "cardLocation": "DECK",
       "cardFilter": {
         "class": "CardFilter",
         "cardType": "MINION"
-      }
+      },
+      "cardLocation": "DECK"
     }
   },
   "collectible": true,

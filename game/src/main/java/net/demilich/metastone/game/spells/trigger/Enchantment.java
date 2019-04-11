@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -19,7 +19,6 @@ import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -63,20 +62,24 @@ import static net.demilich.metastone.game.GameContext.PLAYER_2;
 public class Enchantment extends Entity implements Trigger {
 	private final static Logger logger = LoggerFactory.getLogger(Enchantment.class);
 	protected List<EventTrigger> triggers = new ArrayList<>();
-	private SpellDesc spell;
-	private EntityReference hostReference;
-	private boolean oneTurn;
-	private boolean expired;
-	private boolean persistentOwner;
-	private Integer maxFires;
-	private int fires;
-	private boolean keepAfterTransform;
-	private Card sourceCard;
-	private Integer countUntilCast;
-	private boolean countByValue;
+	protected SpellDesc spell;
+	protected EntityReference hostReference;
+	protected boolean oneTurn;
+	protected boolean expired;
+	protected boolean persistentOwner;
+	protected Integer maxFires;
+	protected int fires;
+	protected boolean keepAfterTransform;
+	protected Card sourceCard;
+	protected Integer countUntilCast;
+	protected boolean countByValue;
+	protected boolean usesSpellTrigger = true;
+	protected Integer maxFiresPerSequence;
+	protected int firesThisSequence;
 
 
 	public Enchantment(EventTrigger primaryTrigger, EventTrigger secondaryTrigger, SpellDesc spell, boolean oneTurn) {
+		usesSpellTrigger = true;
 		if (primaryTrigger != null) {
 			this.triggers.add(primaryTrigger);
 		}
@@ -88,6 +91,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public Enchantment(List<EventTrigger> triggers, SpellDesc spell) {
+		usesSpellTrigger = true;
 		this.triggers.addAll(triggers);
 		this.spell = spell;
 	}
@@ -98,6 +102,9 @@ public class Enchantment extends Entity implements Trigger {
 
 	public Enchantment(EventTrigger trigger, SpellDesc spell, boolean oneTime) {
 		this(trigger, null, spell, oneTime);
+	}
+
+	public Enchantment() {
 	}
 
 	@Override
@@ -141,6 +148,9 @@ public class Enchantment extends Entity implements Trigger {
 
 	@Override
 	public boolean interestedIn(GameEventType eventType) {
+		if (!usesSpellTrigger) {
+			return false;
+		}
 		for (EventTrigger trigger : triggers) {
 			if (trigger.interestedIn() == eventType || trigger.interestedIn() == GameEventType.ALL) {
 				return true;
@@ -155,6 +165,7 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	@Override
+	@Suspendable
 	public void onAdd(GameContext context) {
 	}
 
@@ -168,15 +179,26 @@ public class Enchantment extends Entity implements Trigger {
 	 */
 	@Suspendable
 	protected boolean onFire(int ownerId, SpellDesc spell, GameEvent event) {
+		if (!usesSpellTrigger) {
+			return false;
+		}
 		if (countByValue && event instanceof HasValue) {
-			fires += ((HasValue) event).getValue();
+			int value = ((HasValue) event).getValue();
+			fires += value;
+			firesThisSequence += value;
 		} else {
 			fires++;
+			firesThisSequence++;
 		}
 
 		boolean spellCasts = true;
 
 		// Prevents infinite looping
+		if (maxFiresPerSequence != null && firesThisSequence > maxFiresPerSequence) {
+			spellCasts = false;
+		}
+
+		// Max fires can expire the enchantment, while max fires per sequence does not.
 		if (maxFires != null
 				&& fires > maxFires) {
 			spellCasts = false;
@@ -202,7 +224,7 @@ public class Enchantment extends Entity implements Trigger {
 	@Override
 	@Suspendable
 	public void onGameEvent(GameEvent event) {
-		if (expired) {
+		if (expired || !usesSpellTrigger) {
 			return;
 		}
 
@@ -371,5 +393,20 @@ public class Enchantment extends Entity implements Trigger {
 	 */
 	public List<EventTrigger> getTriggers() {
 		return Collections.unmodifiableList(triggers);
+	}
+
+	public void setMaxFiresPerSequence(Integer maxFiresPerSequence) {
+		this.maxFiresPerSequence = maxFiresPerSequence;
+	}
+
+	public Integer getMaxFiresPerSequence() {
+		return maxFiresPerSequence;
+	}
+
+	/**
+	 * Signals to the enchantment that the currently processing sequence is over.
+	 */
+	public void endOfSequence() {
+		firesThisSequence = 0;
 	}
 }

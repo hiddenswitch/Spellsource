@@ -20,7 +20,8 @@ import java.util.*;
  * 		like the {@link Zones#HAND} and the {@link Zones#DECK}.
  */
 public class EntityZone<E extends Entity> extends AbstractList<E> implements
-		List<E>, Iterable<E>, Cloneable, Serializable {
+		List<E>, Iterable<E>, Cloneable, Serializable, Comparable<EntityZone<? extends Entity>> {
+
 	protected final Zones zone;
 	protected int player = -1;
 	protected List<E> internal = new ArrayList<>();
@@ -212,6 +213,20 @@ public class EntityZone<E extends Entity> extends AbstractList<E> implements
 		}
 		sourceZone.move(sourceIndex, targetZone, targetIndex);
 		targetZone.move(targetIndex + 1, sourceZone, sourceIndex);
+	}
+
+	@Override
+	public int compareTo(@NotNull EntityZone<? extends Entity> o) {
+		for (int i = 0; i < Math.min(this.size(), o.size()); i++) {
+			E e1 = this.get(i);
+			Entity e2 = o.get(i);
+			int comparison = Objects.requireNonNull(e1) == Objects.requireNonNull(e2) ? 0 : e1.compareTo(e2);
+			if (comparison != 0) {
+				return comparison;
+			}
+		}
+
+		return this.size() - o.size();
 	}
 }
 

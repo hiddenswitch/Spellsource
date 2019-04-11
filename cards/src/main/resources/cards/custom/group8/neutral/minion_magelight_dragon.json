@@ -1,0 +1,29 @@
+{
+  "name": "Magelight Dragon",
+  "baseManaCost": 7,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "race": "DRAGON",
+  "description": "Opener: Add three random 1-Cost spells to your hand.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "value": 3,
+      "cardFilter": {
+        "class": "CardFilter",
+        "cardType": "SPELL",
+        "manaCost": 1
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.DiscoverAction;
@@ -17,7 +17,7 @@ import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.HandSource;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
@@ -31,7 +31,6 @@ import java.util.Map;
 public final class DiscoverDiscardSpell extends Spell {
 
 	public static final int ALL_CARDS = -1;
-
 	public static SpellDesc create() {
 		return create(1);
 	}

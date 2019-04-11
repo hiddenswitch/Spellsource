@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.trigger;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.GameEvent;
@@ -10,6 +10,7 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * Triggers respond to {@link GameEvent} objects that are raised by various {@link GameLogic} methods, implementing
@@ -17,6 +18,7 @@ import java.io.Serializable;
  *
  * @see Enchantment for an implementation that casts a spell when an event is raised. Most trigger effects behave like
  * 		this.
+ * @see TriggerManager#fireGameEvent(GameEvent, List) for how the fields in this interface are used.
  */
 public interface Trigger extends Serializable {
 	/**

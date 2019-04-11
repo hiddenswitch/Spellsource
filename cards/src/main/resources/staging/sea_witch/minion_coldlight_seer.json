@@ -1,0 +1,26 @@
+{
+  "name": "Coldlight Seer",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "TEAL",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "FREE",
+  "race": "MURLOC",
+  "description": "Battlecry: Give your other Murlocs +2 Health.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "BuffSpell",
+      "target": "FRIENDLY_CHARACTERS",
+      "attackBonus": 0,
+      "hpBonus": 0
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

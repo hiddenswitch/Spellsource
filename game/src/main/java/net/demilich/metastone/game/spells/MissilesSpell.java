@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -12,12 +12,25 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
+/**
+ * This spell casts {@link SpellArg#HOW_MANY} missiles, each dealing {@link SpellArg#VALUE} damage (with spell damage)
+ * to random targets.
+ * <p>
+ * When a target becomes mortally wounded ({@link Actor#isDestroyed()} resolves to {@code true}), it is no longer
+ * eligible to receive missiles.
+ * <p>
+ * When the amount of damage a missile deals is 1, the spell damage modifier is interpreted to increase the number of
+ * missiles. In all other instances, spell damage increases the damage <b>per missile.</b>
+ * <p>
+ * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, applies spell damage to the number of missiles (the {@link
+ * SpellArg#HOW_MANY} value).
+ */
 public class MissilesSpell extends DamageSpell {
 
 	private static Logger logger = LoggerFactory.getLogger(MissilesSpell.class);
@@ -32,7 +45,7 @@ public class MissilesSpell extends DamageSpell {
 		int missiles = desc.getValue(SpellArg.HOW_MANY, context, player, null, source, 2);
 		int damage = desc.getValue(SpellArg.VALUE, context, player, null, source, 1);
 
-		if (damage == 1 && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
+		if ((damage == 1 || desc.getBool(SpellArg.EXCLUSIVE)) && source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {
 			missiles = context.getLogic().applySpellpower(player, source, missiles);
 			missiles = context.getLogic().applyAmplify(player, missiles, Attribute.SPELL_DAMAGE_AMPLIFY_MULTIPLIER);
 		} else if (source.getEntityType() == EntityType.CARD && ((Card) source).getCardType().isCardType(CardType.SPELL)) {

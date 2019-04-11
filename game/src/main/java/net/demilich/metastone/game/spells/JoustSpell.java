@@ -1,13 +1,23 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.JoustEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 
+/**
+ * A joust causes both players to show a random card satisfying the {@link SpellArg#CARD_FILTER} and performs an action
+ * if the mana cost of the caster's card is higher than the opponent's card's cost.
+ * <p>
+ * If the casting player wins, {@link SpellArg#SPELL1} or {@link SpellArg#SPELL} is cast. If the player loses, {@link
+ * SpellArg#SPELL2} (if defined) is cast.
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#joust(Player, EntityFilter, Entity) for a full description of joust.
+ */
 public class JoustSpell extends Spell {
 
 	@Override

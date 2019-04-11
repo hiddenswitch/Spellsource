@@ -3,7 +3,7 @@ package com.hiddenswitch.spellsource.models;
 import java.io.Serializable;
 
 /**
- * Created by bberman on 12/6/16.
+ * Indicates a request to end a specific game.
  */
 public final class EndGameSessionRequest implements Serializable {
 	private static final long serialVersionUID = 1L;

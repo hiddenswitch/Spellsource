@@ -7,6 +7,9 @@ import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.TurnStartTrigger;
 
+/**
+ * A card cost modifier that lasts only one turn.
+ */
 public final class OneTurnCostModifier extends CardCostModifier {
 
 	private EventTrigger turnStartTrigger = new TurnStartTrigger();

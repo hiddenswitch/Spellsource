@@ -6,7 +6,8 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "Battlecry: Summon a copy of this minion.",
+  "race": "BEAST",
+  "description": "Opener: Summon a copy of this minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

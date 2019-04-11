@@ -8,6 +8,10 @@ import org.slf4j.LoggerFactory;
 import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Test;
 
+import java.io.IOException;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.time.Instant;
 import java.util.stream.IntStream;
 
 public class MassTest extends TestBase {
@@ -27,6 +31,15 @@ public class MassTest extends TestBase {
 
 	private void oneGame() {
 		GameContext context = GameContext.fromTwoRandomDecks();
-		context.play();
+		try {
+			context.play();
+		} catch (RuntimeException any) {
+			try {
+				Files.writeString(FileSystems.getDefault().getPath("masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump());
+			} catch (IOException e) {
+				return;
+			}
+			throw any;
+		}
 	}
 }

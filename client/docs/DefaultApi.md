@@ -1,6 +1,6 @@
 # DefaultApi
 
-All URIs are relative to *https://api-3.hiddenswitch.com*
+All URIs are relative to *https://api.hiddenswitch.com/api/v3*
 
 Method | HTTP request | Description
 ------------- | ------------- | -------------
@@ -22,8 +22,11 @@ Method | HTTP request | Description
 [**getAccount**](DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 [**getAccounts**](DefaultApi.md#getAccounts) | **GET** /accounts | 
 [**getCards**](DefaultApi.md#getCards) | **GET** /cards | 
+[**getGameRecord**](DefaultApi.md#getGameRecord) | **GET** /games/{gameId} | 
+[**getGameRecordIds**](DefaultApi.md#getGameRecordIds) | **GET** /games | 
 [**getInvite**](DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 [**getInvites**](DefaultApi.md#getInvites) | **GET** /invites | 
+[**getVersion**](DefaultApi.md#getVersion) | **GET** /version | 
 [**healthCheck**](DefaultApi.md#healthCheck) | **GET** / | 
 [**login**](DefaultApi.md#login) | **POST** /accounts | 
 [**matchmakingDelete**](DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
@@ -33,7 +36,7 @@ Method | HTTP request | Description
 
 <a name="acceptInvite"></a>
 # **acceptInvite**
-> AcceptInviteResponse acceptInvite(request)
+> AcceptInviteResponse acceptInvite(inviteId, request)
 
 
 
@@ -57,9 +60,10 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String inviteId = "inviteId_example"; // String | 
 AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
 try {
-    AcceptInviteResponse result = apiInstance.acceptInvite(request);
+    AcceptInviteResponse result = apiInstance.acceptInvite(inviteId, request);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#acceptInvite");
@@ -71,6 +75,7 @@ try {
 
 Name | Type | Description  | Notes
 ------------- | ------------- | ------------- | -------------
+ **inviteId** | **String**|  |
  **request** | [**AcceptInviteRequest**](AcceptInviteRequest.md)|  |
 
 ### Return type
@@ -460,7 +465,7 @@ Name | Type | Description  | Notes
 
 <a name="deleteInvite"></a>
 # **deleteInvite**
-> InviteResponse deleteInvite()
+> InviteResponse deleteInvite(inviteId)
 
 
 
@@ -484,8 +489,9 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String inviteId = "inviteId_example"; // String | 
 try {
-    InviteResponse result = apiInstance.deleteInvite();
+    InviteResponse result = apiInstance.deleteInvite(inviteId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#deleteInvite");
@@ -494,7 +500,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **inviteId** | **String**|  |
 
 ### Return type
 
@@ -990,9 +999,115 @@ No authorization required
  - **Content-Type**: application/json
  - **Accept**: application/json
 
+<a name="getGameRecord"></a>
+# **getGameRecord**
+> GetGameRecordResponse getGameRecord(gameId)
+
+
+
+Retrieves a record of a game this player played. Games against bots retrieve a complete game record, while games against other players only receive this player&#39;s point of view. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+String gameId = "gameId_example"; // String | 
+try {
+    GetGameRecordResponse result = apiInstance.getGameRecord(gameId);
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getGameRecord");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **gameId** | **String**|  |
+
+### Return type
+
+[**GetGameRecordResponse**](GetGameRecordResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getGameRecordIds"></a>
+# **getGameRecordIds**
+> GetGameRecordIdsResponse getGameRecordIds()
+
+
+
+Retrieves a list of game IDs corresponding to all the games this player played. 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiClient;
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.Configuration;
+//import com.hiddenswitch.spellsource.client.auth.*;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+ApiClient defaultClient = Configuration.getDefaultApiClient();
+
+// Configure API key authorization: TokenSecurity
+ApiKeyAuth TokenSecurity = (ApiKeyAuth) defaultClient.getAuthentication("TokenSecurity");
+TokenSecurity.setApiKey("YOUR API KEY");
+// Uncomment the following line to set a prefix for the API key, e.g. "Token" (defaults to null)
+//TokenSecurity.setApiKeyPrefix("Token");
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    GetGameRecordIdsResponse result = apiInstance.getGameRecordIds();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getGameRecordIds");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+[**GetGameRecordIdsResponse**](GetGameRecordIdsResponse.md)
+
+### Authorization
+
+[TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
 <a name="getInvite"></a>
 # **getInvite**
-> InviteResponse getInvite()
+> InviteResponse getInvite(inviteId)
 
 
 
@@ -1016,8 +1131,9 @@ TokenSecurity.setApiKey("YOUR API KEY");
 //TokenSecurity.setApiKeyPrefix("Token");
 
 DefaultApi apiInstance = new DefaultApi();
+String inviteId = "inviteId_example"; // String | 
 try {
-    InviteResponse result = apiInstance.getInvite();
+    InviteResponse result = apiInstance.getInvite(inviteId);
     System.out.println(result);
 } catch (ApiException e) {
     System.err.println("Exception when calling DefaultApi#getInvite");
@@ -1026,7 +1142,10 @@ try {
 ```
 
 ### Parameters
-This endpoint does not need any parameter.
+
+Name | Type | Description  | Notes
+------------- | ------------- | ------------- | -------------
+ **inviteId** | **String**|  |
 
 ### Return type
 
@@ -1086,6 +1205,47 @@ This endpoint does not need any parameter.
 ### Authorization
 
 [TokenSecurity](../README.md#TokenSecurity)
+
+### HTTP request headers
+
+ - **Content-Type**: application/json
+ - **Accept**: application/json
+
+<a name="getVersion"></a>
+# **getVersion**
+> String getVersion()
+
+
+
+Retrieves the semver server version 
+
+### Example
+```java
+// Import classes:
+//import com.hiddenswitch.spellsource.client.ApiException;
+//import com.hiddenswitch.spellsource.client.api.DefaultApi;
+
+
+DefaultApi apiInstance = new DefaultApi();
+try {
+    String result = apiInstance.getVersion();
+    System.out.println(result);
+} catch (ApiException e) {
+    System.err.println("Exception when calling DefaultApi#getVersion");
+    e.printStackTrace();
+}
+```
+
+### Parameters
+This endpoint does not need any parameter.
+
+### Return type
+
+**String**
+
+### Authorization
+
+No authorization required
 
 ### HTTP request headers
 

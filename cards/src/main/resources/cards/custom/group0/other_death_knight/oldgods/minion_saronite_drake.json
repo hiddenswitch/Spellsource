@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry and Deathrattle: Duplicate the top card of your deck.",
+  "description": "Opener and Aftermath: Duplicate the top card of your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

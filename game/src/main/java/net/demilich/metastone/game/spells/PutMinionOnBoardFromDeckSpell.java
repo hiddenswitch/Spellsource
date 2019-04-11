@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -9,7 +9,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,14 +67,14 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 
 		Card card = (Card) target;
 		if (!player.getDeck().contains(card)) {
-			logger.warn("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, card, player);
+			logger.debug("onCast {} {}: The specified minion card {} was not present in {}'s deck. Exiting.", context.getGameId(), source, card, player);
 			return;
 		}
 
 		player.getDeck().move(card, player.getSetAsideZone());
 
 		final Minion summoned = card.summon();
-		boolean summonSuccess = context.getLogic().summon(player.getId(), summoned, null, -1, false);
+		boolean summonSuccess = context.getLogic().summon(player.getId(), summoned, source, -1, false);
 
 		player.getSetAsideZone().move(card, player.getDeck());
 

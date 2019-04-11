@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,6 +11,19 @@ import net.demilich.metastone.game.targeting.EntityReference;
 
 import java.util.Map;
 
+/**
+ * Makes {@link SpellArg#HOW_MANY} copies of the base card of the {@code target}.
+ * <p>
+ * For <b>example</b>, to copy your hand (as a base card):
+ * <pre>
+ *   {
+ *     "class": "PutCopyInHandSpell",
+ *     "target": "FRIENDLY_HAND"
+ *   }
+ * </pre>
+ *
+ * @see CopyCardSpell for an effect that copies the actual card, with its card cost modifiers, instead of the base card.
+ */
 public class PutCopyInHandSpell extends Spell {
 
 	public static SpellDesc create() {

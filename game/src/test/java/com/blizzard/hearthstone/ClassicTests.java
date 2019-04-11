@@ -1,6 +1,7 @@
 package com.blizzard.hearthstone;
 
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
@@ -21,7 +22,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -39,15 +40,28 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doAnswer;
 import static org.mockito.Mockito.spy;
 import static org.testng.Assert.assertEquals;
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
 
 public class ClassicTests extends TestBase {
+
+	@Test
+	public void testForceCastDoesntTriggerWildPyromancer() {
+		runGym((context, player, opponent) -> {
+			Minion pyromancer = playMinionCard(context, player, "minion_wild_pyromancer");
+			playCard(context, player, "minion_force_cast_test");
+			assertEquals(pyromancer.getHp(), pyromancer.getMaxHp(), "Should not have triggered Pyromancer");
+			playCard(context, player, "spell_the_coin");
+			assertEquals(pyromancer.getHp(), pyromancer.getMaxHp() - 1, "Should have triggered Pyromancer");
+		});
+	}
 
 	@Test
 	public void testGadgetzanAuctioneer() {
 		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
-			playCardWithTarget(context, player, "spell_polymorph", auctioneer);
+			playCard(context, player, "spell_polymorph", auctioneer);
 			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 			Card shouldNotBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_mirror_image");
@@ -67,7 +81,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Card shouldBeDrawn = putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
 			Minion auctioneer = playMinionCard(context, player, "minion_gadgetzan_auctioneer");
-			playCardWithTarget(context, player, "spell_assassinate", auctioneer);
+			playCard(context, player, "spell_assassinate", auctioneer);
 			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
 		});
 	}
@@ -134,7 +148,7 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getSecrets().size(), 1);
 
 			playCard(context, opponent, "weapon_wicked_knife");
-			playCardWithTarget(context, opponent, "spell_sap", taunt);
+			playCard(context, opponent, "spell_sap", taunt);
 			attack(context, opponent, opponent.getHero(), player.getHero());
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(opponent.getHero().getHp(), opponentHpBefore - 2);
@@ -179,7 +193,7 @@ public class ClassicTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_spellbender");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			playCard(context, opponent, "spell_fireball", player.getHero());
 			assertEquals(player.getSecrets().size(), 1);
 		});
 
@@ -187,7 +201,7 @@ public class ClassicTests extends TestBase {
 			playCard(context, player, "secret_spellbender");
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", bloodfen);
+			playCard(context, opponent, "spell_fireball", bloodfen);
 			assertEquals(player.getSecrets().size(), 0);
 			assertEquals(player.getMinions().size(), 1);
 			Assert.assertFalse(bloodfen.isDestroyed());
@@ -219,7 +233,7 @@ public class ClassicTests extends TestBase {
 	public void testShadowstep() {
 		runGym((context, player, opponent) -> {
 			Minion bloodfen = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playCardWithTarget(context, player, "spell_shadowstep", bloodfen);
+			playCard(context, player, "spell_shadowstep", bloodfen);
 			assertEquals(costOf(context, player, player.getHand().get(0)), 0);
 		});
 	}
@@ -232,7 +246,7 @@ public class ClassicTests extends TestBase {
 			playCard(context, player, "spell_preparation");
 			assertEquals(costOf(context, player, inHand1), 1);
 			assertEquals(costOf(context, player, inHand2), 1);
-			playCardWithTarget(context, player, inHand1, opponent.getHero());
+			playCard(context, player, inHand1, opponent.getHero());
 			assertEquals(costOf(context, player, inHand2), 4);
 		});
 	}
@@ -280,31 +294,25 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), death);
 			player.setMaxMana(5);
 			player.setMana(5);
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(pain.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(death.getReference())));
 
 			context.endTurn();
 			playCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
-			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(pain.getReference())));
+			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(death.getReference())));
 			context.endTurn();
 			playCard(context, opponent, "minion_sea_giant");
 			context.endTurn();
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(pain.getReference())));
-			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
-					ga instanceof PlaySpellCardAction
-							&& ((PlaySpellCardAction) ga).getSourceCardEntityId().equals(death.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(pain.getReference())));
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga -> ga instanceof PlaySpellCardAction
+					&& ((PlaySpellCardAction) ga).getSourceReference().equals(death.getReference())));
 		});
 	}
 
@@ -341,6 +349,32 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getMaxMana(), 7);
 			assertEquals(player.getMana(), 2);
 			assertEquals(player.getHand().size(), 3);
+		});
+	}
+
+	public void testTrackingTopOfDeck() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 3; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			putOnTopOfDeck(context, player, "minion_bloodfen_raptor");
+			overrideDiscover(context, player, discoverActions -> {
+				assertFalse(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).allMatch(c -> c.equals("spell_the_coin")));
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_tracking");
+		});
+
+		// Make sure that tracking works with two or fewer cards
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 2; i++) {
+				putOnTopOfDeck(context, player, "spell_the_coin");
+			}
+			overrideDiscover(context, player, discoverActions -> {
+				assertTrue(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).allMatch(c -> c.equals("spell_the_coin")));
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_tracking");
 		});
 	}
 
@@ -440,7 +474,7 @@ public class ClassicTests extends TestBase {
 	public void testElvenArcher() {
 		runGym((context, player, opponent) -> {
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
-			playCardWithTarget(context, player, "minion_elven_archer", opponent.getHero());
+			playCard(context, player, "minion_elven_archer", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 1);
 		}, HeroClass.RED, HeroClass.SILVER);
 	}
@@ -462,14 +496,14 @@ public class ClassicTests extends TestBase {
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP);
 			playCard(context, player, "spell_arcane_missiles");
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3);
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6);
 
 			playCard(context, player, "minion_kobold_geomancer");
 
 			playCard(context, player, "spell_arcane_missiles");
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4);
-			playCardWithTarget(context, player, "spell_fireball", opponent.getHero());
+			playCard(context, player, "spell_fireball", opponent.getHero());
 			assertEquals(opponent.getHero().getHp(), GameLogic.MAX_HERO_HP - 3 - 6 - 4 - 7);
 		}, HeroClass.BLUE, HeroClass.RED);
 	}
@@ -526,7 +560,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(rogue.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(rogue.getId(), action);
+			context.performAction(rogue.getId(), action);
 			assertEquals(targetMinion.getAttack(), 3);
 			assertEquals(targetMinion.getHp(), 1);
 
@@ -561,7 +595,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(rogue.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(rogue.getId(), action);
+			context.performAction(rogue.getId(), action);
 
 			assertEquals(player.getMinions().size(), 1);
 		}, HeroClass.GOLD, HeroClass.BLACK);
@@ -592,7 +626,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(rogue.getId(), betrayal);
 			GameAction action = betrayal.play();
 			action.setTarget(targetMinion);
-			context.getLogic().performGameAction(rogue.getId(), action);
+			context.performAction(rogue.getId(), action);
 			assertEquals(targetMinion.getAttack(), 3);
 			assertEquals(targetMinion.getHp(), 1);
 
@@ -616,16 +650,16 @@ public class ClassicTests extends TestBase {
 			assertEquals(player.getMana(), 10);
 
 			// first summoning portal costs full 4 mana
-			context.getLogic().performGameAction(player.getId(), summoningPortal1.play());
+			context.performAction(player.getId(), summoningPortal1.play());
 			assertEquals(player.getMana(), 6);
 
 			// second summoning portal affected by first one, costs only 2 mana
-			context.getLogic().performGameAction(player.getId(), summoningPortal2.play());
+			context.performAction(player.getId(), summoningPortal2.play());
 			assertEquals(player.getMana(), 4);
 
 			// base cost of minion card is 4, reduced by both summoning portals, but
 			// not below 1
-			context.getLogic().performGameAction(player.getId(), testCard.play());
+			context.performAction(player.getId(), testCard.play());
 			assertEquals(player.getMana(), 3);
 		}, HeroClass.VIOLET, HeroClass.RED);
 	}
@@ -652,7 +686,7 @@ public class ClassicTests extends TestBase {
 			context.getLogic().receiveCard(player.getId(), damageSpell);
 			GameAction spellAction = damageSpell.play();
 			spellAction.setTarget(spitefulSmith);
-			context.getLogic().performGameAction(player.getId(), spellAction);
+			context.performAction(player.getId(), spellAction);
 
 			// Smith is damaged now, so weapon should be buffed
 			assertEquals(player.getHero().getWeapon().getWeaponDamage(), 5);
@@ -681,11 +715,11 @@ public class ClassicTests extends TestBase {
 
 			Card faerieDragonCard = CardCatalogue.getCardById("minion_faerie_dragon");
 			context.getLogic().receiveCard(opponent.getId(), faerieDragonCard);
-			context.getLogic().performGameAction(opponent.getId(), faerieDragonCard.play());
+			context.performAction(opponent.getId(), faerieDragonCard.play());
 
 			Card devMonsterCard = new TestMinionCard(1, 1);
 			context.getLogic().receiveCard(player.getId(), devMonsterCard);
-			context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
+			context.performAction(player.getId(), devMonsterCard.play());
 
 			Entity attacker = getSingleMinion(player.getMinions());
 			Actor elusiveOne = getSingleMinion(opponent.getMinions());
@@ -705,7 +739,7 @@ public class ClassicTests extends TestBase {
 			Card arcaneExplosionCard = CardCatalogue.getCardById("spell_arcane_explosion");
 			context.getLogic().receiveCard(player.getId(), arcaneExplosionCard);
 			int faerieDragonHp = elusiveOne.getHp();
-			context.getLogic().performGameAction(player.getId(), arcaneExplosionCard.play());
+			context.performAction(player.getId(), arcaneExplosionCard.play());
 			// hp should been affected after playing area of effect spell
 			Assert.assertNotEquals(faerieDragonHp, elusiveOne.getHp());
 		}, HeroClass.BLUE, HeroClass.RED);
@@ -734,14 +768,14 @@ public class ClassicTests extends TestBase {
 			// first attack, Gurubashi Berserker should have increased attack
 			GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
 			attackAction.setTarget(defender);
-			context.getLogic().performGameAction(player.getId(), attackAction);
+			context.performAction(player.getId(), attackAction);
 
 			assertEquals(attacker.getHp(), attacker.getMaxHp() - BASE_ATTACK);
 			assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
 			assertEquals(defender.getAttack(), BASE_ATTACK + ATTACK_BONUS);
 
 			// second attack, Gurubashi Berserker should become even stronger
-			context.getLogic().performGameAction(player.getId(), attackAction);
+			context.performAction(player.getId(), attackAction);
 			assertEquals(attacker.getHp(), attacker.getMaxHp() - 2 * BASE_ATTACK - ATTACK_BONUS);
 			assertEquals(defender.getHp(), defender.getMaxHp() - 2 * attacker.getAttack());
 			assertEquals(defender.getAttack(), BASE_ATTACK + 2 * ATTACK_BONUS);
@@ -760,17 +794,17 @@ public class ClassicTests extends TestBase {
 
 			Card devMonsterCard = new TestMinionCard(1, 1);
 			context.getLogic().receiveCard(player.getId(), devMonsterCard);
-			context.getLogic().performGameAction(player.getId(), devMonsterCard.play());
+			context.performAction(player.getId(), devMonsterCard.play());
 
 			Actor minion = getSingleMinion(player.getMinions());
 
-			context.getLogic().performGameAction(player.getId(), druid.getHeroPower().play());
+			context.performAction(player.getId(), druid.getHeroPower().play());
 			assertEquals(druid.getAttack(), 1);
 			assertEquals(minion.getAttack(), 1);
 
 			Card savageRoar = CardCatalogue.getCardById("spell_savage_roar");
 			context.getLogic().receiveCard(player.getId(), savageRoar);
-			context.getLogic().performGameAction(player.getId(), savageRoar.play());
+			context.performAction(player.getId(), savageRoar.play());
 			assertEquals(druid.getAttack(), 3);
 			assertEquals(minion.getAttack(), 3);
 

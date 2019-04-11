@@ -1,9 +1,8 @@
 package net.demilich.metastone.game.spells.aura;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
@@ -16,6 +15,7 @@ import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
+import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.trigger.BoardChangedTrigger;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
@@ -32,7 +32,7 @@ import java.util.*;
  * Because auras evaluate which entities they affect on board changes and sequence endings, they aren't affecting
  * entities the moment they "come into play" (are attached to a host that is {@link Entity#isInPlay()}). However, since
  * a {@link BoardChangedEvent} is fired right after a minion is put on the {@link Zones#BATTLEFIELD} during a {@link
- * net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Card, int, boolean)} call, in practice auras come
+ * net.demilich.metastone.game.logic.GameLogic#summon(int, Minion, Entity, int, boolean)} call, in practice auras come
  * into play immediately. Specifically, a minion with an aura written on it will not be affecting entities by the {@link
  * net.demilich.metastone.game.events.BeforeSummonEvent} event, but only by the first {@link BoardChangedEvent} (which
  * comes before any battlecries are resolved or before control is given back to the player).
@@ -120,6 +120,18 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 		super(primaryTrigger, secondaryTrigger, spell, false);
 	}
 
+	protected void includeExtraTriggers(AuraDesc desc) {
+		if (desc == null) {
+			return;
+		}
+		if (desc.containsKey(AuraArg.TRIGGERS)) {
+			EventTriggerDesc[] moreTriggers = (EventTriggerDesc[]) desc.get(AuraArg.TRIGGERS);
+			for (EventTriggerDesc trigger : moreTriggers) {
+				triggers.add(trigger.create());
+			}
+		}
+	}
+
 	protected boolean affects(GameContext context, Player player, Entity target, List<Entity> resolvedTargets) {
 		Entity source = context.resolveSingleTarget(getHostReference());
 		if (getEntityFilter() != null && !getEntityFilter().matches(context, player, target, source)) {
@@ -153,6 +165,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 	}
 
 	@Suspendable
+	@Override
 	public void onGameEvent(GameEvent event) {
 		GameContext context = event.getGameContext();
 		Player owner = context.getPlayer(getOwner());
@@ -172,21 +185,35 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			}
 		}
 
-		boolean alwaysApply = getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+		boolean alwaysApply = alwaysApply();
 
 		for (Entity target : relevantTargets) {
 			if (affects(context, owner, target, resolvedTargets) && (!affectedEntities.contains(target.getId()) || alwaysApply)) {
 				affectedEntities.add(target.getId());
-				context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
+				applyAuraEffect(context, target);
 				// target is not affected anymore, remove effect
 			} else if (!affects(context, owner, target, resolvedTargets) && affectedEntities.contains(target.getId())) {
 				affectedEntities.remove(target.getId());
 				if (target.getZone().equals(Zones.REMOVED_FROM_PLAY)) {
 					continue;
 				}
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+				removeAuraEffect(context, target);
 			}
 		}
+	}
+
+	protected boolean alwaysApply() {
+		return getDesc() != null && getDesc().getBool(AuraArg.ALWAYS_APPLY);
+	}
+
+	@Suspendable
+	protected void removeAuraEffect(GameContext context, Entity target) {
+		context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+	}
+
+	@Suspendable
+	protected void applyAuraEffect(GameContext context, Entity target) {
+		context.getLogic().castSpell(getOwner(), applyAuraEffect, getHostReference(), target.getReference(), true);
 	}
 
 	@Override
@@ -196,7 +223,7 @@ public class Aura extends Enchantment implements HasDesc<AuraDesc> {
 			EntityReference targetKey = new EntityReference(targetId);
 			Entity target = context.tryFind(targetKey);
 			if (target != null) {
-				context.getLogic().castSpell(getOwner(), removeAuraEffect, getHostReference(), target.getReference(), true);
+				removeAuraEffect(context, target);
 			}
 		}
 		affectedEntities.clear();

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "DRAGON",
-  "description": "Invoke (8): Summon a copy of this for each Dragon you're holding.",
+  "description": "Invoke (7): Summon a copy of this for each Dragon you're holding.",
   "battlecry": {
     "condition": {
       "class": "InvokeCondition"
@@ -28,7 +28,7 @@
     }
   },
   "attributes": {
-    "INVOKE": 8
+    "INVOKE": 7
   },
   "collectible": true,
   "set": "CUSTOM",

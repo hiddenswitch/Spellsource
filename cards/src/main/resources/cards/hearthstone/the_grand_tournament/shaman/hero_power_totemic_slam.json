@@ -17,6 +17,7 @@
     "spell_summon_wrath_of_air_totem",
     "spell_summon_stoneclaw_totem"
   ],
+  "chooseBothCardId": "spell_summon_all_totems",
   "collectible": false,
   "set": "THE_GRAND_TOURNAMENT",
   "fileFormatVersion": 1

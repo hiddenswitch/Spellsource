@@ -1,9 +1,10 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
@@ -24,6 +25,9 @@ import java.util.List;
  * After the attack occurs, casts the {@link SpellArg#SPELL} sub-spell with the {@code source} as the source of this
  * spell cast, the {@code target} as the defender, and the {@link EntityReference#OUTPUT} set to the attacker.
  * <p>
+ * When {@link SpellArg#EXCLUSIVE} is set to {@code true}, this effect does not use up one of the attacker's attack
+ * counts.
+ * <p>
  * For example, consider the text from Birb's You from the Future, "Summon a copy of a friendly minion. Then, it attacks
  * the original":
  * <pre>
@@ -38,6 +42,7 @@ import java.util.List;
  * Note that the {@link EntityReference#OUTPUT} refers to the newly copied minion. Since the copied minion is in the
  * {@link SpellArg#SECONDARY_TARGET} specifier, the copied minion is the attacker. The {@code target} is implied to be
  * the selected target of the spell, i.e., the original minion.
+ * <p>
  */
 public class FightSpell extends Spell {
 
@@ -54,9 +59,13 @@ public class FightSpell extends Spell {
 			return;
 		}
 
+		if (target == null) {
+			return;
+		}
+
 		// Only attack sources that aren't destroyed
 		if (!target.isInPlay() || target.isDestroyed()) {
-			logger.warn("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
+			logger.debug("onCast {} {}: Target {} is not in play or is destroyed and thus cannot defend itself anymore", context.getGameId(), source, target);
 			return;
 		}
 
@@ -72,12 +81,12 @@ public class FightSpell extends Spell {
 			}
 
 			if (!resolvedSource.isInPlay() || resolvedSource.isDestroyed()) {
-				logger.warn("onCast {} {}: Source {} is no longer in play or is destroyed and will not initiate a fight.", context.getGameId(), source, resolvedSource);
+				logger.debug("onCast {} {}: Source {} is no longer in play or is destroyed and will not initiate a fight.", context.getGameId(), source, resolvedSource);
 				continue;
 			}
 
 			if (resolvedSource.equals(target)) {
-				logger.warn("onCast {} {}: Source {} is trying to attack itself, which is not allowed. Skipping.", context.getGameId(), source, resolvedSource);
+				logger.debug("onCast {} {}: Source {} is trying to attack itself, which is not allowed. Skipping.", context.getGameId(), source, resolvedSource);
 				continue;
 			}
 
@@ -86,9 +95,14 @@ public class FightSpell extends Spell {
 				((Hero) resolvedSource).activateWeapon(true);
 			}
 
+			int numberOfAttacksBefore = resolvedSource.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
+
 			context.getLogic().fight(player, (Actor) resolvedSource, (Actor) target, null);
 			for (SpellDesc subSpell : desc.subSpells(0)) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, resolvedSource);
+			}
+			if (desc.containsKey(SpellArg.EXCLUSIVE)) {
+				resolvedSource.setAttribute(Attribute.NUMBER_OF_ATTACKS, numberOfAttacksBefore);
 			}
 
 			if (resolvedSource instanceof Hero) {

@@ -2,6 +2,7 @@ package net.demilich.metastone.game.cards.desc;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
@@ -9,6 +10,7 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.Rarity;
+import net.demilich.metastone.game.cards.dynamicdescription.DynamicDescriptionDesc;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -16,6 +18,7 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.ComboSpell;
+import net.demilich.metastone.game.spells.RevealCardSpell;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
@@ -29,10 +32,11 @@ import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProviderDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
+import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 
 import java.io.Serializable;
 import java.util.*;
@@ -60,16 +64,16 @@ import static com.google.common.collect.Maps.immutableEntry;
  *             "rarity": "COMMON",
  *             "race": "BEAST",
  *             "description": "Battlecry: Add a Banana to your hand.",
- *  line 56:   "battlecry": {
+ *  line 63:   "battlecry": {
  *               "targetSelection": "NONE",
  *               "spell": {
  *                 "class": "ReceiveCardSpell",
- *  line 60:       "cards": [
+ *  line 67:       "cards": [
  *                   "spell_bananas"
  *                 ]
  *               }
  *             },
- *  line 65:   "attributes": {
+ *  line 72:   "attributes": {
  *               "BATTLECRY": true
  *             },
  *             "collectible": true,
@@ -81,75 +85,79 @@ import static com.google.common.collect.Maps.immutableEntry;
  * So {@code "name"} corresponds to the {@link #name} field, {@code "battlecry"} corresponds to the {@link #battlecry}
  * field, etc.
  * <p>
- * To figure out the format of the value of complex objects like "battlecry" on line 56 in the example above, look at
+ * To figure out the format of the value of complex objects like "battlecry" on line 63 in the example above, look at
  * the <b>type</b> of the field in this class. In the case of battlecry, the type is a {@link BattlecryDesc}, and it
  * appears to also have fields that exactly correspond to the keys that appear in the JSON object that is the value of
  * "battlecry."
  * <p>
  * Some objects, like {@code "spell"}, are {@link Desc} classes: these use a corresponding "argument" enumeration to
  * determine the names and types of the fields. In the case of {@link SpellDesc}, the keys are {@link SpellArg} names,
- * except written in camelcase. In the example of Angry Primate above, the {@code "cards"} key on line 60 inside the
- * {@link SpellDesc} corresponds to the {@link SpellArg#CARDS} enum name. Observe that {@code "cards"} is just {@link
- * SpellArg#CARDS} except lowercase.
+ * except written in {@code camelCase}. In the example of Angry Primate above, the {@code "cards"} key on line 67 inside
+ * the {@link SpellDesc} corresponds to the {@link SpellArg#CARDS} enum name. Observe that {@code "cards"} is just
+ * {@link SpellArg#CARDS} except lowercase.
  * <p>
- * The only exception to this rule is the {@link AttributeMap} object located on line 65 in the example above. The keys
+ * The only exception to this rule is the {@link AttributeMap} object located on line 72 in the example above. The keys
  * (left hand part in quotation marks of the JSON object) should always be capitalized, and correspond exactly to the
  * names in {@link Attribute}.
  *
  * @see Card for the gameplay functionality of a card that consults data stored in a {@link CardDesc}.
+ * @see DescDeserializer for a walk through on how deserialization of card JSON works on complex types like spells,
+ * 		value providers, etc.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable {
+public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ implements Serializable, Cloneable, HasEntrySet<CardDescArg, Object> {
 	public String id;
 	public String name;
-	public String description;
-	public Boolean legacy;
+	public String heroPower;
+	public int baseManaCost;
 	public CardType type;
 	public HeroClass heroClass;
 	public HeroClass[] heroClasses;
+	public int baseAttack;
+	public int baseHp;
+	public int damage;
+	public int durability;
 	public Rarity rarity;
-	public CardSet set;
-	public int baseManaCost;
-	public boolean collectible = true;
-	public AttributeMap attributes;
-	public int fileFormatVersion = 1;
-	public ValueProviderDesc manaCostModifier;
-	public EnchantmentDesc passiveTrigger;
-	public EnchantmentDesc[] passiveTriggers;
-	public EnchantmentDesc deckTrigger;
-	public EnchantmentDesc[] deckTriggers;
-	public EnchantmentDesc[] gameTriggers;
-	public String author;
-	public String flavor;
-	public String wiki;
+	public Race race;
+	public String description;
+	public TargetSelection targetSelection;
+	public EventTriggerDesc secret;
+	public EventTriggerDesc quest;
+	public int countUntilCast;
+	public boolean countByValue;
 	public BattlecryDesc battlecry;
 	public SpellDesc deathrattle;
 	public EnchantmentDesc trigger;
 	public EnchantmentDesc[] triggers;
 	public AuraDesc aura;
 	public AuraDesc[] auras;
-	public Race race;
 	public CardCostModifierDesc cardCostModifier;
-	public int baseAttack;
-	public int baseHp;
 	public BattlecryDesc[] chooseOneBattlecries;
 	public BattlecryDesc chooseBothBattlecry;
 	public String[] chooseOneCardIds;
 	public String chooseBothCardId;
-	public int damage;
-	public int durability;
 	public SpellDesc onEquip;
 	public SpellDesc onUnequip;
-	public String heroPower;
-	public TargetSelection targetSelection;
 	public SpellDesc spell;
 	public ConditionDesc condition;
 	public SpellDesc[] group;
-	public EventTriggerDesc secret;
-	public EventTriggerDesc quest;
-	public int countUntilCast;
-	public boolean countByValue;
-
+	public EnchantmentDesc passiveTrigger;
+	public EnchantmentDesc[] passiveTriggers;
+	public EnchantmentDesc deckTrigger;
+	public EnchantmentDesc[] deckTriggers;
+	public EnchantmentDesc[] gameTriggers;
+	public ValueProviderDesc manaCostModifier;
+	public AttributeMap attributes;
+	public String author;
+	public String flavor;
+	public String wiki;
+	public boolean collectible = true;
+	@JsonProperty
+	public CardSet set;
+	public CardSet[] sets;
+	public int fileFormatVersion = 1;
+	public DynamicDescriptionDesc[] dynamicDescription;
+	public Boolean legacy;
 
 	public CardDesc() {
 		super();
@@ -315,7 +323,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	 * Eventually, a set will be immutable and represent a particular release or expansion, while a {@link
 	 * net.demilich.metastone.game.decks.DeckFormat} will represent a certain set of rules of play.
 	 */
+	@JsonIgnore
 	public CardSet getSet() {
+		if (sets != null && sets.length > 0) {
+			return sets[0];
+		}
 		return set;
 	}
 
@@ -489,7 +501,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Indicates an {@link Enchantment} that is active as soon as the game begins (just after {@link
-	 * GameLogic#handleMulligan(Player, boolean, GameLogic.FirstHand, List)}, in the {@link
+	 * GameLogic#handleMulligan(Player, boolean, List)}, in the {@link
 	 * GameLogic#startGameForPlayer(Player)} phase.
 	 * <p>
 	 * Note that the {@link net.demilich.metastone.game.events.GameStartEvent} is raised twice, once for each player, so
@@ -555,7 +567,7 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 
 	/**
 	 * Stores notes about the card's implementation or behaviour. Use this field to explain surprising rules or to do a
-	 * Q&A.
+	 * FAQ.
 	 * <p>
 	 * This field will be migrated to support Markdown syntax in the future for better rendering controls in the client.
 	 */
@@ -951,6 +963,11 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 	}
 
 
+	/**
+	 * This makes it possible to iterate through a CardDesc.
+	 *
+	 * @return An entry set for this instance.
+	 */
 	@JsonIgnore
 	public Set<Map.Entry<CardDescArg, Object>> entrySet() {
 		@SuppressWarnings("unchecked")
@@ -968,18 +985,26 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 				immutableEntry(CardDescArg.COLLECTIBLE, collectible),
 				immutableEntry(CardDescArg.ATTRIBUTES, attributes),
 				immutableEntry(CardDescArg.MANA_COST_MODIFIER, manaCostModifier),
-				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, getPassiveTriggers()),
-				immutableEntry(CardDescArg.DECK_TRIGGERS, getDeckTriggers()),
-				immutableEntry(CardDescArg.GAME_TRIGGERS, getGameTriggers()),
+				immutableEntry(CardDescArg.PASSIVE_TRIGGERS, HasEntrySet.link(passiveTrigger, passiveTriggers, EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.DECK_TRIGGERS, HasEntrySet.link(deckTrigger, deckTriggers, EnchantmentDesc.class)),
+				immutableEntry(CardDescArg.GAME_TRIGGERS, HasEntrySet.link(null, gameTriggers, EnchantmentDesc.class)),
 				immutableEntry(CardDescArg.BATTLECRY, battlecry),
 				immutableEntry(CardDescArg.DEATHRATTLE, deathrattle),
-				immutableEntry(CardDescArg.TRIGGERS, triggers),
+				immutableEntry(CardDescArg.TRIGGERS, HasEntrySet.link(trigger, triggers, EnchantmentDesc.class)),
 				immutableEntry(CardDescArg.AURAS, auras),
 				immutableEntry(CardDescArg.BASE_ATTACK, baseAttack),
 				immutableEntry(CardDescArg.BASE_HP, baseHp),
+				immutableEntry(CardDescArg.DAMAGE, damage),
+				immutableEntry(CardDescArg.DURABILITY, durability),
 				immutableEntry(CardDescArg.TARGET_SELECTION, targetSelection),
+				immutableEntry(CardDescArg.GROUP, group),
 				immutableEntry(CardDescArg.SPELL, spell),
-				immutableEntry(CardDescArg.CONDITION, condition)
+				immutableEntry(CardDescArg.CONDITION, condition),
+				immutableEntry(CardDescArg.SECRET, secret),
+				immutableEntry(CardDescArg.COUNT_UNTIL_CAST, countUntilCast),
+				immutableEntry(CardDescArg.COUNT_BY_VALUE, countByValue),
+				immutableEntry(CardDescArg.QUEST, quest),
+				immutableEntry(CardDescArg.DYNAMIC_DESCRIPTION, dynamicDescription)
 		);
 		return entries;
 	}
@@ -1034,5 +1059,28 @@ public final class CardDesc /*extends AbstractMap<CardDescArg, Object>*/ impleme
 		}));
 
 		return stream;
+	}
+
+	/**
+	 * Indicates whether, based on the code written on this card, this card ever reveals itself.
+	 *
+	 * @return {@code true} if any spell written on the card is a {@link net.demilich.metastone.game.spells.RevealCardSpell}
+	 * 		with target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}
+	 */
+	public boolean revealsSelf() {
+		return bfs().build().anyMatch(node -> {
+			Object val = node.getValue();
+			if (val instanceof SpellDesc) {
+				SpellDesc spell = (SpellDesc) val;
+				return RevealCardSpell.class.isAssignableFrom(spell.getDescClass())
+						&& spell.getTarget() != null
+						&& spell.getTarget().equals(EntityReference.SELF);
+			}
+			return false;
+		});
+	}
+
+	public DynamicDescriptionDesc[] getDynamicDescription() {
+		return dynamicDescription;
 	}
 }

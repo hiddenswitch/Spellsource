@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -8,7 +8,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,7 +43,7 @@ import java.util.Map;
  */
 public class AddAttributeSpell extends RevertableSpell {
 
-	private static Logger logger = LoggerFactory.getLogger(AddAttributeSpell.class);
+	private static Logger LOGGER = LoggerFactory.getLogger(AddAttributeSpell.class);
 
 	/**
 	 * Creates an instance of this spell without a target specified.
@@ -105,7 +105,11 @@ public class AddAttributeSpell extends RevertableSpell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
+		checkArguments(LOGGER, context, source, desc, SpellArg.ATTRIBUTE, SpellArg.REVERT_TRIGGER, SpellArg.SECOND_REVERT_TRIGGER);
+		if (desc.containsKey(SpellArg.VALUE)) {
+			LOGGER.error("onCast {} {}: Cannot use an integer value in an AddAttributeSpell. Use ModifyAttributeSpell instead.", context.getGameId(), source);
+			throw new IllegalArgumentException("VALUE");
+		}
 		Attribute tag = (Attribute) desc.get(SpellArg.ATTRIBUTE);
 		context.getLogic().applyAttribute(target, tag, source);
 		super.onCast(context, player, desc, source, target);

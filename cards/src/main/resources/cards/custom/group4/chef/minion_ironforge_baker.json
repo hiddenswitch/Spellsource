@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Shuffle the left-most card in your hand into your deck. Set its Cost to (0).",
+  "description": "Opener: Shuffle the left-most card in your hand into your deck. Set its Cost to (0).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

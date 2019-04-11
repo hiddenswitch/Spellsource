@@ -6,7 +6,8 @@
   "baseAttack": 4,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "Battlecry: Double the next amount of damage you deal this turn.",
+  "race": "MECH",
+  "description": "Opener: Double the next amount of damage you deal this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

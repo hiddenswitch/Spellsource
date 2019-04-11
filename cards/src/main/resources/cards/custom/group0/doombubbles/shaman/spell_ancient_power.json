@@ -19,7 +19,7 @@
     },
     "cardFilter": {
       "class": "CardFilter",
-      "heroClass": "ANY",
+      "heroClass": "SILVER",
       "attribute": "OVERLOAD",
       "operation": "HAS"
     }

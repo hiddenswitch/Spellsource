@@ -6,7 +6,7 @@
   "baseAttack": 8,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Destroy your Mana Crystals. Your cards cost (1) this game.",
+  "description": "Opener: Destroy your Mana Crystals. Your cards cost (1) this game.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

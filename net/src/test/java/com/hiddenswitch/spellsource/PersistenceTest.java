@@ -10,7 +10,8 @@ import com.hiddenswitch.spellsource.util.UnityClient;
 import io.vertx.ext.unit.TestContext;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -21,6 +22,7 @@ import static org.junit.Assert.fail;
 public class PersistenceTest extends SpellsourceTestBase {
 
 	@Test
+	@Ignore
 	public void testMinionatePersistenceApi(TestContext context) {
 		ConcurrentLinkedQueue<Long> queue = new ConcurrentLinkedQueue<Long>();
 
@@ -52,6 +54,7 @@ public class PersistenceTest extends SpellsourceTestBase {
 			}
 			client.matchmakeQuickPlay(decksPutResponse.getDeckId());
 			client.waitUntilDone();
+			assertTrue(client.getTurnsPlayed() > 0);
 			assertTrue(client.isGameOver());
 			done.complete();
 		}, context.asyncAssertSuccess(also -> {

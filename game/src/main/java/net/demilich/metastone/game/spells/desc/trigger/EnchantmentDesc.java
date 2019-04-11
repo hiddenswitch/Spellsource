@@ -6,11 +6,13 @@ import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.cards.desc.HasEntrySet;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
+import net.demilich.metastone.game.targeting.Zones;
 
 import java.io.Serializable;
 import java.util.HashSet;
@@ -61,7 +63,7 @@ import static com.google.common.collect.Maps.immutableEntry;
  * @see net.demilich.metastone.game.cards.desc.CardDesc to see where {@link EnchantmentDesc} can typically go.
  */
 @JsonInclude(value = JsonInclude.Include.NON_DEFAULT)
-public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Object>*/ implements Serializable, Cloneable {
+public final class EnchantmentDesc implements Serializable, Cloneable, HasEntrySet<EnchantmentDescArg, Object> {
 
 	public EnchantmentDesc() {
 	}
@@ -104,6 +106,13 @@ public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Obj
 	 */
 	public Integer maxFires;
 	/**
+	 * The maximum number of times this trigger can fire per sequence. This counter is reset at the beginning of the
+	 * sequence. Does <b>not</b> expire the trigger when exceeded.
+	 * <p>
+	 * When {@code null} (the default), the trigger can fire an unlimited number of times per sequence.
+	 */
+	public Integer maxFiresPerSequence;
+	/**
 	 * The number of times an {@link Enchantment} fires until it actually casts its spell.
 	 * <p>
 	 * Implements Quests and many other counting behaviours in triggers.
@@ -129,7 +138,8 @@ public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Obj
 				immutableEntry(EnchantmentDescArg.PERSISTENT_OWNER, persistentOwner),
 				immutableEntry(EnchantmentDescArg.MAX_FIRES, maxFires),
 				immutableEntry(EnchantmentDescArg.COUNT_UNTIL_CAST, countUntilCast),
-				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue)
+				immutableEntry(EnchantmentDescArg.COUNT_BY_VALUE, countByValue),
+				immutableEntry(EnchantmentDescArg.MAX_FIRES_PER_SEQUENCE, maxFiresPerSequence)
 		);
 
 		return entries;
@@ -153,6 +163,7 @@ public final class EnchantmentDesc /*extends AbstractMap<EnchantmentDescArg, Obj
 		enchantment.setKeepAfterTransform(keepAfterTransform);
 		enchantment.setCountUntilCast(countUntilCast);
 		enchantment.setCountByValue(countByValue);
+		enchantment.setMaxFiresPerSequence(maxFiresPerSequence);
 		return enchantment;
 	}
 

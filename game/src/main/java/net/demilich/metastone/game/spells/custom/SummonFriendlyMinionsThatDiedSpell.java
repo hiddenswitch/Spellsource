@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -10,7 +10,8 @@ import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.Spell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,7 +22,7 @@ import java.util.Map;
 /**
  * Summons all the friendly minions that died this turn.
  * <p>
- * Implements Kel'Thuzad.
+ * Implements Kel'Thuzad, Altered Fate and others.
  */
 public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 
@@ -39,16 +40,21 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 		int currentTurn = context.getTurn();
 		List<Entity> graveyardSnapshot = new ArrayList<>(player.getGraveyard());
 		for (Entity deadEntity : graveyardSnapshot) {
-			if (deadEntity.getEntityType() != EntityType.MINION) {
+			if (deadEntity.getEntityType() != EntityType.MINION || deadEntity.isRemovedPeacefully()) {
 				continue;
+			}
+			if (desc.containsKey(SpellArg.FILTER)) {
+				EntityFilter filter = (EntityFilter) desc.get(SpellArg.FILTER);
+				if (!filter.matches(context, player, deadEntity, source)) {
+					continue;
+				}
 			}
 			Minion deadMinion = (Minion) deadEntity;
 			if (deadMinion.getAttributeValue(Attribute.DIED_ON_TURN) == currentTurn) {
 				Card card = deadMinion.getSourceCard();
-				context.getLogic().summon(player.getId(), card.summon(), null, -1, false);
+				context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
 			}
 		}
 	}
-
 }
 

@@ -1,7 +1,7 @@
 package io.vertx.ext.sync.impl;
 
-import com.github.fromage.quasi.fibers.FiberAsync;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.FiberAsync;
+import co.paralleluniverse.fibers.Suspendable;
 import io.vertx.core.AsyncResult;
 import io.vertx.core.Handler;
 

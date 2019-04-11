@@ -5,8 +5,7 @@ bin
 .gradle
 .idea
 .vertx
-.mongo
-.mongo-backup
+.mongo*
 test-output
 report.log
 /~$card_checklist.xlsx
@@ -36,4 +35,4 @@ dist/
 
 .ipynb_checkpoints/
 dump/
-.java-version
+

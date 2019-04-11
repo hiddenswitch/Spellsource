@@ -71,7 +71,7 @@ public class TestBase {
 	protected static void attack(GameContext context, Player player, Entity attacker, Entity target) {
 		PhysicalAttackAction physicalAttackAction = new PhysicalAttackAction(attacker.getReference());
 		physicalAttackAction.setTarget(target);
-		context.getLogic().performGameAction(player.getId(), physicalAttackAction);
+		context.performAction(player.getId(), physicalAttackAction);
 	}
 
 	public static DebugContext createContext(HeroClass hero1, HeroClass hero2) {
@@ -79,8 +79,8 @@ public class TestBase {
 		for (CardSet set : CardSet.values()) {
 			deckFormat.addSet(set);
 		}
-		Player player1 = new Player(Deck.getRandomDeck(hero1, DeckFormat.WILD),"Player 1");
-		Player player2 = new Player(Deck.getRandomDeck(hero2, DeckFormat.WILD),"Player 2");
+		Player player1 = new Player(Deck.randomDeck(hero1, DeckFormat.WILD),"Player 1");
+		Player player2 = new Player(Deck.randomDeck(hero2, DeckFormat.WILD),"Player 2");
 		GameLogic logic = new GameLogic();
 		DebugContext context = new DebugContext(player1, player2, logic, deckFormat);
 		logic.setContext(context);
@@ -117,19 +117,19 @@ public class TestBase {
 
 	protected static void playCard(GameContext context, Player player, Card card) {
 		context.getLogic().receiveCard(player.getId(), card);
-		context.getLogic().performGameAction(player.getId(), card.play());
+		context.performAction(player.getId(), card.play());
 	}
 
 	protected static void playCardWithTarget(GameContext context, Player player, Card card, Entity target) {
 		context.getLogic().receiveCard(player.getId(), card);
 		GameAction action = card.play();
 		action.setTarget(target);
-		context.getLogic().performGameAction(player.getId(), action);
+		context.performAction(player.getId(), action);
 	}
 
 	protected static Minion playMinionCard(GameContext context, Player player, Card card) {
 		context.getLogic().receiveCard(player.getId(), card);
-		context.getLogic().performGameAction(player.getId(), card.play());
+		context.performAction(player.getId(), card.play());
 		return getSummonedMinion(player.getMinions());
 	}
 

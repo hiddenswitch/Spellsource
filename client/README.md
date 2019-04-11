@@ -28,7 +28,7 @@ Add this dependency to your project's POM:
 <dependency>
     <groupId>com.hiddenswitch</groupId>
     <artifactId>spellsource-client</artifactId>
-    <version>1.0.0</version>
+    <version>0.8.7</version>
     <scope>compile</scope>
 </dependency>
 ```
@@ -38,7 +38,7 @@ Add this dependency to your project's POM:
 Add this dependency to your project's build file:
 
 ```groovy
-compile "com.hiddenswitch:spellsource-client:1.0.0"
+compile "com.hiddenswitch:spellsource-client:0.8.7"
 ```
 
 ### Others
@@ -49,7 +49,7 @@ At first generate the JAR by executing:
 
 Then manually install the following JARs:
 
-* target/spellsource-client-1.0.0.jar
+* target/spellsource-client-0.8.7.jar
 * target/lib/*.jar
 
 ## Getting Started
@@ -78,9 +78,10 @@ public class DefaultApiExample {
         //TokenSecurity.setApiKeyPrefix("Token");
 
         DefaultApi apiInstance = new DefaultApi();
+        String inviteId = "inviteId_example"; // String | 
         AcceptInviteRequest request = new AcceptInviteRequest(); // AcceptInviteRequest | 
         try {
-            AcceptInviteResponse result = apiInstance.acceptInvite(request);
+            AcceptInviteResponse result = apiInstance.acceptInvite(inviteId, request);
             System.out.println(result);
         } catch (ApiException e) {
             System.err.println("Exception when calling DefaultApi#acceptInvite");
@@ -93,7 +94,7 @@ public class DefaultApiExample {
 
 ## Documentation for API Endpoints
 
-All URIs are relative to *http://api-3.hiddenswitch.com*
+All URIs are relative to *https://api.hiddenswitch.com/api/v3*
 
 Class | Method | HTTP request | Description
 ------------ | ------------- | ------------- | -------------
@@ -115,8 +116,11 @@ Class | Method | HTTP request | Description
 *DefaultApi* | [**getAccount**](docs/DefaultApi.md#getAccount) | **GET** /accounts/{targetUserId} | 
 *DefaultApi* | [**getAccounts**](docs/DefaultApi.md#getAccounts) | **GET** /accounts | 
 *DefaultApi* | [**getCards**](docs/DefaultApi.md#getCards) | **GET** /cards | 
+*DefaultApi* | [**getGameRecord**](docs/DefaultApi.md#getGameRecord) | **GET** /games/{gameId} | 
+*DefaultApi* | [**getGameRecordIds**](docs/DefaultApi.md#getGameRecordIds) | **GET** /games | 
 *DefaultApi* | [**getInvite**](docs/DefaultApi.md#getInvite) | **GET** /invites/{inviteId} | 
 *DefaultApi* | [**getInvites**](docs/DefaultApi.md#getInvites) | **GET** /invites | 
+*DefaultApi* | [**getVersion**](docs/DefaultApi.md#getVersion) | **GET** /version | 
 *DefaultApi* | [**healthCheck**](docs/DefaultApi.md#healthCheck) | **GET** / | 
 *DefaultApi* | [**login**](docs/DefaultApi.md#login) | **POST** /accounts | 
 *DefaultApi* | [**matchmakingDelete**](docs/DefaultApi.md#matchmakingDelete) | **DELETE** /matchmaking | 
@@ -162,6 +166,7 @@ Class | Method | HTTP request | Description
  - [Envelope](docs/Envelope.md)
  - [EnvelopeAdded](docs/EnvelopeAdded.md)
  - [EnvelopeChanged](docs/EnvelopeChanged.md)
+ - [EnvelopeGame](docs/EnvelopeGame.md)
  - [EnvelopeMethod](docs/EnvelopeMethod.md)
  - [EnvelopeMethodDequeue](docs/EnvelopeMethodDequeue.md)
  - [EnvelopeMethodSendMessage](docs/EnvelopeMethodSendMessage.md)
@@ -203,6 +208,8 @@ Class | Method | HTTP request | Description
  - [GetAccountsRequest](docs/GetAccountsRequest.md)
  - [GetAccountsResponse](docs/GetAccountsResponse.md)
  - [GetCardsResponse](docs/GetCardsResponse.md)
+ - [GetGameRecordIdsResponse](docs/GetGameRecordIdsResponse.md)
+ - [GetGameRecordResponse](docs/GetGameRecordResponse.md)
  - [InventoryCollection](docs/InventoryCollection.md)
  - [Invite](docs/Invite.md)
  - [InviteGetResponse](docs/InviteGetResponse.md)
@@ -222,6 +229,9 @@ Class | Method | HTTP request | Description
  - [MessageType](docs/MessageType.md)
  - [PhysicalAttackEvent](docs/PhysicalAttackEvent.md)
  - [PresenceEnum](docs/PresenceEnum.md)
+ - [Replay](docs/Replay.md)
+ - [ReplayDeltas](docs/ReplayDeltas.md)
+ - [ReplayGameStates](docs/ReplayGameStates.md)
  - [ServerToClientMessage](docs/ServerToClientMessage.md)
  - [SpellAction](docs/SpellAction.md)
  - [SpellsourceException](docs/SpellsourceException.md)

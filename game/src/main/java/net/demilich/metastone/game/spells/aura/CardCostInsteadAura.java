@@ -4,13 +4,12 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.NullSpell;
-import net.demilich.metastone.game.spells.desc.ISpellConditionChecker;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraArg;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
 import net.demilich.metastone.game.spells.trigger.CardReceivedTrigger;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 /**
  * When this is in play, the player can only afford to play a card if {@link AuraArg#CAN_AFFORD_CONDITION} is met. If it
@@ -18,7 +17,7 @@ import net.demilich.metastone.game.utils.Attribute;
  * <p>
  * To use the mana cost in the pay affect, use a {@link net.demilich.metastone.game.spells.desc.valueprovider.ManaCostProvider}.
  * <p>
- * Some effects like {@link Attribute.INVOKE} need to know how much "currency" (mana or whatever) you have to spend is.
+ * Some effects like {@link Attribute#INVOKE} need to know how much "currency" (mana or whatever) you have to spend is.
  * Specify the current amount of currency using {@link AuraArg#AMOUNT_OF_CURRENCY}.
  * <p>
  * Currently, legacy card cost substitution effects like paying for spells or murlocs using health ({@link
@@ -55,7 +54,7 @@ import net.demilich.metastone.game.utils.Attribute;
  *   }
  * </pre>
  * Observe {@code "amountOfCurrency"} returns the number of cards in the deck, because that's the amount of cards
- * available to mill.
+ * available to roast.
  * <p>
  * To put this aura into "play" while the host card is ordinarily in the hand, use a passive trigger to put the aura
  * onto the player entity. For example, suppose we had a card "spell_cheap_damage", a cost 2 that reads: "Deal $6

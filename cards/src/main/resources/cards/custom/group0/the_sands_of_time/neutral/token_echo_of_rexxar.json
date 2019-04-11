@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry and Deathrattle: Summon two random Animal Companions.",
+  "description": "Opener and Aftermath: Summon two random Animal Companions.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

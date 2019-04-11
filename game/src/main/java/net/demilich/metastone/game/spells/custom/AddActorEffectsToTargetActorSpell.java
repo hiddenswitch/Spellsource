@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -13,8 +13,8 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -67,7 +67,7 @@ public final class AddActorEffectsToTargetActorSpell extends Spell {
 		Actor targetActor = (Actor) target;
 		if (targetActor.hasAttribute(Attribute.BATTLECRY)
 				&& sourceCard.hasBattlecry()) {
-			logger.warn("onCast {} {}: The source card {} is going to overwrite the target {} battlecry.", context.getGameId(), source, sourceCard, targetActor);
+			logger.debug("onCast {} {}: The source card {} is going to overwrite the target {} battlecry.", context.getGameId(), source, sourceCard, targetActor);
 		}
 
 		Race originalRace = targetActor.getRace();

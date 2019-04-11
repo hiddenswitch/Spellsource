@@ -2,9 +2,10 @@ package net.demilich.metastone.tests;
 
 import net.demilich.metastone.game.cards.CardCatalogueRecord;
 import net.demilich.metastone.game.cards.CardParser;
-import net.demilich.metastone.game.shared.utils.ResourceInputStream;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.AttributeMap;
+import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.utils.ResourceInputStream;
+import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.cards.AttributeMap;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.DirectoryFileFilter;
 import org.apache.commons.io.filefilter.RegexFileFilter;
@@ -64,13 +65,19 @@ public class CardValidationTests {
 			if (description != null) {
 				AttributeMap attributes = record.getDesc().getAttributes();
 				if (description.startsWith("Battlecry:")) {
-					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY), "A Battlecry card is missing a battlecry attribute.");
+					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY),
+							"A Battlecry card is missing the BATTLECRY attribute.");
 				}
 
 				if (description.startsWith("Deathrattle:")) {
-					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES));
+					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES),
+							"A Deathrattle card is missing the DEATHRATTLES attribute.");
 				}
 
+				if (record.getDesc().deathrattle != null) {
+					Assert.assertNotEquals(record.getDesc().deathrattle.getTarget(), EntityReference.ADJACENT_MINIONS,
+							"Deathrattles trigger from the graveyard, so they cannot contain a reference to ADJACENT_MINIONS. Use a custom.AdjacentDeathrattleSpell instead.");
+				}
 			}
 		} catch (Exception ex) {
 			System.err.println(ex);

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.actions;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.behaviour.Behaviour;
@@ -11,6 +11,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -29,6 +30,10 @@ import java.util.List;
  * Behaviour}.
  */
 public class DiscoverAction extends GameAction {
+
+	private SpellDesc spell;
+	private Card card;
+
 	private static final String DISCOVERED_NAME = "discovered";
 
 	/**
@@ -43,9 +48,6 @@ public class DiscoverAction extends GameAction {
 		return discover;
 	}
 
-	private SpellDesc spell;
-	private Card card;
-
 	private DiscoverAction() {
 		setActionType(ActionType.DISCOVER);
 	}
@@ -53,6 +55,11 @@ public class DiscoverAction extends GameAction {
 	protected DiscoverAction(SpellDesc spell) {
 		this.spell = spell;
 		setActionType(ActionType.DISCOVER);
+	}
+
+	@Override
+	public DiscoverAction clone() {
+		return (DiscoverAction) super.clone();
 	}
 
 	/**
@@ -70,19 +77,20 @@ public class DiscoverAction extends GameAction {
 		throw new UnsupportedOperationException("Discover actions should never be unrolled.");
 	}
 
+	/*
 	@Override
 	public DiscoverAction clone() {
 		DiscoverAction clone = DiscoverAction.createDiscover(getSpell().clone());
-		clone.setSource(getSourceReference());
+		clone.setSourceReference(getSourceReference());
 		clone.setCard(card);
 		return clone;
 	}
+	*/
 
 	@Override
 	@Suspendable
 	public void execute(GameContext context, int playerId) {
-		// Discover actions should never be executed, we only use them nowadays to store a card
-		throw new UnsupportedOperationException("Discover actions should never be executed.");
+		// Resume the appropriate fiber
 	}
 
 	/**
@@ -129,7 +137,10 @@ public class DiscoverAction extends GameAction {
 
 	@Override
 	public String toString() {
-		return String.format("[%s '%s' %s]", getActionType(), getSpell().getDescClass().getSimpleName(), card.getCardId());
+		return new ToStringBuilder(this)
+				.appendSuper(super.toString())
+				.append("card", getCard() != null ? getCard().getCardId() : "(none)")
+				.toString();
 	}
 
 	@Override

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -105,12 +105,17 @@ public class CardCostModifierSpell extends Spell {
 
 		if (manaModifierDesc.containsKey(CardCostModifierArg.TARGET)
 				&& target != null
-				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))) {
+				&& !target.getReference().equals(manaModifierDesc.get(CardCostModifierArg.TARGET))
+				&& !manaModifierDesc.get(CardCostModifierArg.TARGET).equals(EntityReference.SELF)) {
 			logger.debug("onCast {} {}: The target of this spell, {}, and the mana cost modifier's target, {}, do not match.",
 					context.getGameId(), source, target, manaModifierDesc.get(CardCostModifierArg.TARGET));
 		}
 		// The target is the host of the mana cost modifier.
-		context.getLogic().addGameEventListener(player, manaModifierDesc.create(), target == null ? player : target);
+		CardCostModifier cardCostModifier = manaModifierDesc.create();
+		if (source != null && source.getSourceCard() != null) {
+			cardCostModifier.setSourceCardId(source.getSourceCard().getCardId());
+		}
+		context.getLogic().addGameEventListener(player, cardCostModifier, target == null ? player : target);
 	}
 
 }

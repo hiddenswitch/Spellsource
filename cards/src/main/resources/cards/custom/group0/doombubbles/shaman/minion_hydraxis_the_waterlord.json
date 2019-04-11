@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Transform your Totems into Water Elementals. Overload: (1).",
+  "description": "Opener: Transform your Totems into Water Elementals. Overload: (1).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

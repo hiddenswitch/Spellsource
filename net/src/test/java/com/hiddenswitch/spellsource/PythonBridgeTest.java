@@ -4,7 +4,7 @@ import com.hiddenswitch.spellsource.applications.PythonBridge;
 import com.hiddenswitch.spellsource.impl.util.SimulationResultGenerator;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import org.junit.Assert;
 import org.junit.Test;
 

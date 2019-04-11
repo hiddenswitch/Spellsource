@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -241,7 +241,7 @@ public class SummonSpell extends Spell {
 		int count = desc.getValue(SpellArg.VALUE, context, player, target, source, 1);
 
 		if (count <= 0) {
-			logger.warn("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
+			logger.debug("onCast {} {}: A summon count of {} was specified. The VALUE argument was {}", context.getGameId(), source, count, desc.get(SpellArg.VALUE));
 			return;
 		}
 
@@ -282,7 +282,7 @@ public class SummonSpell extends Spell {
 					}
 					final Minion minion = card.summon();
 
-					if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
+					if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 						summonedMinions.add(minion);
 						cards.remove(card);
 					}
@@ -293,7 +293,7 @@ public class SummonSpell extends Spell {
 						card = count == 1 ? card : card.clone();
 						final Minion minion = card.summon();
 
-						if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false)) {
+						if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false)) {
 							summonedMinions.add(minion);
 						}
 					}
@@ -303,6 +303,8 @@ public class SummonSpell extends Spell {
 				&& !(target.getReference().equals(EntityReference.NONE))) {
 			for (int i = 0; i < count; i++) {
 				Minion minion;
+				// Keep track if we ultimately summoned from the base card, because we shouldn't copy triggers in that case.
+				boolean fromBase = false;
 				// Is this a card? Summon it. Is this a non-battlefield minion? If so, summon from the base card too
 				if (target.getEntityType() == EntityType.CARD
 						|| (target.getEntityType() == EntityType.MINION && !target.isInPlay())) {
@@ -310,6 +312,7 @@ public class SummonSpell extends Spell {
 						logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
 						return;
 					}
+					fromBase = true;
 					minion = target.getSourceCard().summon();
 				} else if (target.getEntityType() != EntityType.MINION) {
 					logger.error("onCast {} {}: Cannot summon {} because it is not a minion", context.getGameId(), source, target);
@@ -319,26 +322,25 @@ public class SummonSpell extends Spell {
 					minion.clearEnchantments();
 				}
 
-				boolean summoned = context.getLogic().summon(player.getId(), minion, null, boardPosition, false);
+				boolean summoned = context.getLogic().summon(player.getId(), minion, source, boardPosition, false);
 				if (!summoned) {
 					// It's still possible that, even if a minion was successfully summoned, a subspell later destroys it
 					return;
 				}
 				summonedMinions.add(minion);
-				if (target instanceof Actor) {
+				if (!fromBase) {
 					List<Trigger> triggers = context.getTriggersAssociatedWith(target.getReference());
 					for (Trigger trigger : triggers) {
 						Trigger triggerClone = trigger.clone();
 						context.getLogic().addGameEventListener(player, triggerClone, minion);
 					}
-				}
 
-				//copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
-				final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-				for (Card card : list.getCards(context, target)) {
-					list.add(minion, card);
+					// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
+					final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
+					for (Card card : list.getCards(context, target)) {
+						list.add(minion, card);
+					}
 				}
-
 			}
 		}
 

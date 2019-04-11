@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Taunt Battlecry: Summon a 4/4 Dragon for your opponent.",
+  "description": "Guard Opener: Summon a 4/4 Dragon for your opponent.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -1,9 +1,10 @@
 package net.demilich.metastone.game.spells.desc;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.SpellDescDeserializer;
@@ -18,7 +19,6 @@ import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.spells.desc.source.UnweightedCatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -53,6 +53,7 @@ import static java.util.stream.Collectors.toList;
  * This JSON would deserialize into a {@link SpellDesc} instance that would equal the following code:
  *
  * <pre>
+ *   {@code
  *      final Map<SpellArg, Object> arguments = SpellDesc.build(SummonSpell.class);
  *      arguments.put(SpellArg.CARD, "minion_bloodfen_raptor");
  *      final Map<ValueProviderArg, Object> valueProvider = ValueProviderDesc.build(AttributeValueProvider.class);
@@ -61,6 +62,7 @@ import static java.util.stream.Collectors.toList;
  *      valueProvider.put(ValueProviderArg.OFFSET, 1);
  *      arguments.put(SpellArg.VALUE, new ValueProviderDesc(valueProvider).createInstance());
  *      SpellDesc spellDesc = new SpellDesc(arguments);
+ *   }
  * </pre>
  * Notice that the keys of the objects in the JSON are transformed, "camelCase", from the names in the {@code enum} in
  * {@link SpellArg}.
@@ -87,6 +89,17 @@ public class SpellDesc extends Desc<SpellArg, Spell> {
 
 	public SpellDesc(Map<SpellArg, Object> arguments) {
 		super(arguments, SpellArg.class);
+	}
+
+	public SpellDesc(Class<? extends Spell> spellClass, EntityReference target, EntityFilter filter, boolean randomTarget) {
+		super(spellClass, SpellArg.class);
+		put(SpellArg.TARGET, target);
+		if (filter != null) {
+			put(SpellArg.FILTER, filter);
+		}
+		if (randomTarget) {
+			put(SpellArg.RANDOM_TARGET, randomTarget);
+		}
 	}
 
 	@Override

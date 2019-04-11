@@ -5,6 +5,10 @@ import io.vertx.core.Vertx;
 import io.vertx.core.impl.VertxInternal;
 import io.vertx.spi.cluster.hazelcast.HazelcastClusterManager;
 
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+
 public class Hazelcast {
 
 	public static HazelcastInstance getHazelcastInstance() {
@@ -14,6 +18,5 @@ public class Hazelcast {
 	public static HazelcastClusterManager getClusterManager() {
 		return (HazelcastClusterManager) ((VertxInternal) (Vertx.currentContext().owner())).getClusterManager();
 	}
-
 }
 

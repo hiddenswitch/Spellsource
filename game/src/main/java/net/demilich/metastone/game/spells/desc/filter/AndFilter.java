@@ -6,6 +6,12 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.util.Map;
 
+/**
+ * Evaluates to {@code true} for every {@code target} if all of the filters in {@link EntityFilterArg#FILTERS} also
+ * evaluate to true for the target.
+ * <p>
+ * If {@link EntityFilterArg#FILTERS} is empty, evaluates to {@code true}.
+ */
 public class AndFilter extends EntityFilter {
 
 	public static AndFilter create() {
@@ -35,5 +41,4 @@ public class AndFilter extends EntityFilter {
 		}
 		return true;
 	}
-
 }

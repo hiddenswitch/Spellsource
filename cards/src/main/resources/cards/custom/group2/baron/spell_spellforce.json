@@ -1,10 +1,10 @@
 {
   "name": "Spellforce",
-  "baseManaCost": 2,
+  "baseManaCost": 1,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Choose a minion. It cannot be targeted by spells or Hero Powers.",
+  "description": "Choose a minion. It cannot be targeted by spells or Skills.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddAttributeSpell",

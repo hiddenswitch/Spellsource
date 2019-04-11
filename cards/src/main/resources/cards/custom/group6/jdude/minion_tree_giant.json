@@ -1,0 +1,22 @@
+{
+  "name": "Tree Giant",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "race": "ELEMENTAL",
+  "description": "Costs (1) less for each Guard minion you've played this game.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "CardsPlayedValueProvider",
+    "filter": {
+      "class": "CardFilter",
+      "attribute": "TAUNT",
+      "cardType": "MINION"
+    }
+  }
+}

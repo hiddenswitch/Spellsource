@@ -1,0 +1,15 @@
+{
+  "name": "Seance",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "COMMON",
+  "description": "Choose a minion. Add a copy of it to your hand.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "CopyCardSpell"
+  },
+  "collectible": true,
+  "set": "RASTAKHANS_RUMBLE",
+  "fileFormatVersion": 1
+}

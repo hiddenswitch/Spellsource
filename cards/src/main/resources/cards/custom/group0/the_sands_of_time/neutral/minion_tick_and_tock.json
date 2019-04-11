@@ -6,7 +6,8 @@
   "baseAttack": 5,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If you're holding two Dragons, deal 5 damage to two random enemy minions.",
+  "race": "DRAGON",
+  "description": "Opener: If you're holding two Dragons, deal 5 damage to two random enemy minions.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

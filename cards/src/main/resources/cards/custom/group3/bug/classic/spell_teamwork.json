@@ -1,18 +1,16 @@
 {
   "name": "Teamwork",
-  "baseManaCost": 5,
+  "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Give all friendly minions +1/+1 for each friendly minion.",
+  "description": "Give all friendly minions +3/+3.",
   "targetSelection": "NONE",
   "spell": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",
-    "value": {
-      "class": "EntityCounter",
-      "target": "FRIENDLY_MINIONS"
-    }
+    "attackBonus": 3,
+    "hpBonus": 3
   },
   "collectible": true,
   "set": "CUSTOM",

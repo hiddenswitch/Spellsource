@@ -7,7 +7,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.DamageSpell;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -17,6 +17,17 @@ import static org.testng.Assert.*;
 
 
 public class BlackrockMountainTests extends TestBase {
+
+	@Test
+	public void testForceCastDoesntTriggerFlamewaker() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_flamewaker");
+			playCard(context, player, "minion_force_cast_test");
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp(), "Should not have triggered Flamewaker");
+			playCard(context, player, "spell_the_coin");
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2, "Should have triggered Flamewaker");
+		});
+	}
 
 	@Test
 	public void testEmperorThaurissen() {
@@ -67,7 +78,7 @@ public class BlackrockMountainTests extends TestBase {
 			PhysicalAttackAction attack = new PhysicalAttackAction(grimPatron.getReference());
 			attack.setTargetReference(impGangBoss.getReference());
 			overrideMissilesTrigger(context, knifeJuggler, grimPatron);
-			context.getLogic().performGameAction(player.getId(), attack);
+			context.performAction(player.getId(), attack);
 			assertEquals(player.getMinions().size(), 0);
 		});
 	}
@@ -204,7 +215,7 @@ public class BlackrockMountainTests extends TestBase {
 			Minion dragonEgg = playMinionCard(context, player, "minion_dragon_egg");
 			assertEquals(getSummonedMinion(player.getMinions()), dragonEgg);
 
-			playCardWithTarget(context, player, "spell_fireball", dragonEgg);
+			playCard(context, player, "spell_fireball", dragonEgg);
 			assertEquals(getSummonedMinion(player.getMinions()).getSourceCard().getCardId(), TOKEN);
 		});
 	}
@@ -221,7 +232,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertEquals(dragonkin1.getAttack(), dragonkin2.getAttack());
 			assertEquals(dragonkin1.getHp(), dragonkin2.getHp());
 
-			playCardWithTarget(context, player, "spell_gang_up", dragonkin1);
+			playCard(context, player, "spell_gang_up", dragonkin1);
 			assertEquals(dragonkin1.getAttack(), dragonkin2.getAttack() + ATTACK_BONUS);
 			assertEquals(dragonkin1.getHp(), dragonkin2.getHp() + HP_BONUS);
 		});
@@ -255,7 +266,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertEquals(opponent.getMinions().size(), 3);
 			context.endTurn();
 
-			playCardWithTarget(context, player, "spell_cone_of_cold", impGangBoss);
+			playCard(context, player, "spell_cone_of_cold", impGangBoss);
 			assertEquals(opponent.getMinions().size(), 4);
 			assertTrue(firstYeti.hasAttribute(Attribute.FROZEN));
 			assertTrue(impGangBoss.hasAttribute(Attribute.FROZEN));
@@ -272,7 +283,7 @@ public class BlackrockMountainTests extends TestBase {
 			assertTrue(player.getHand().isEmpty());
 			context.endTurn();
 
-			playCardWithTarget(context, opponent, "spell_assassinate", emperorThaurissan);
+			playCard(context, opponent, "spell_assassinate", emperorThaurissan);
 			receiveCard(context, player, "minion_chillwind_yeti");
 			context.endTurn();
 

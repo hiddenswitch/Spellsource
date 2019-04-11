@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "NONE",
-  "description": "Battlecry: Gain attack equal to the highest Cost in your hand.",
+  "description": "Opener: Gain attack equal to the highest Cost in your hand.",
   "battlecry": {
     "condition": {
       "class": "CardCountCondition",

@@ -9,7 +9,3 @@ def write_dbf_json():
     f = open(path.join(path.dirname(__file__), '..', '..', 'game', 'src', 'main', 'resources', 'dbf.json'), 'w')
     dump(new_json, f, indent=2)
     f.close()
-
-
-if __name__ == '__main__':
-    write_dbf_json()

@@ -1,0 +1,23 @@
+{
+  "name": "Spectral Steed",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DEMON",
+  "description": "Dash. Aftermath: Deal 3 damage to your champion.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 3
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

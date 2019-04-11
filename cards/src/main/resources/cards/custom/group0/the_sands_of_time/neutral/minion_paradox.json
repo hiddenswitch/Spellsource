@@ -9,8 +9,8 @@
   "description": "After you play a card, return this minion to your hand.",
   "trigger": {
     "eventTrigger": {
-      "class": "CardPlayedTrigger",
-      "hostTargetType": "IGNORE_AS_TARGET",
+      "class": "AfterCardPlayedTrigger",
+      "hostTargetType": "IGNORE_AS_SOURCE_CARD",
       "sourcePlayer": "SELF"
     },
     "spell": {

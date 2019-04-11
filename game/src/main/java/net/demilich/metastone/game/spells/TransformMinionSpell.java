@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -15,6 +15,13 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Map;
 
+/**
+ * Transforms the {@code target} minion into the {@link SpellArg#CARD} or the <b>source card</b> of the entity pointed
+ * to by {@link SpellArg#SECONDARY_TARGET}.
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for the complete rules on
+ * 		transformations.
+ */
 public class TransformMinionSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TransformMinionSpell.class);

@@ -1,10 +1,10 @@
 {
-  "name": "Spider Surveillance",
+  "name": "Larva Lookout",
   "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "COMMON",
-  "description": "Draw a card. Summon a 1/1 Spiderling.",
+  "description": "Draw a card. Add two 1/1 Larva to your hand.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
@@ -14,7 +14,8 @@
         "value": 1
       },
       {
-        "class": "SummonSpell",
+        "class": "ReceiveCardSpell",
+        "value": 2,
         "card": "token_spiderling"
       }
     ]

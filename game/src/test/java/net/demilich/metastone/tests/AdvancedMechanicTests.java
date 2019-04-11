@@ -3,6 +3,7 @@ package net.demilich.metastone.tests;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
+import net.demilich.metastone.game.actions.DiscoverAction;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PhysicalAttackAction;
 import net.demilich.metastone.game.behaviour.UtilityBehaviour;
@@ -10,6 +11,8 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.HasChooseOneActions;
+import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
@@ -22,7 +25,7 @@ import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -32,6 +35,7 @@ import org.testng.annotations.Test;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyList;
@@ -40,6 +44,109 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testSilencingMinionWithSelfTargetingBuffAuraResultsInCorrectStats() {
+
+	}
+
+	@Test
+	public void testWitherShouldNotTriggerOnDivineShield() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_divine_shield_test");
+			playCard(context, player, "spell_wither_test", target);
+			assertEquals(target.getAttack(), target.getBaseAttack());
+			assertEquals(target.getHp(), target.getMaxHp());
+			assertEquals(target.getHp(), target.getBaseHp());
+			assertFalse(target.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+	}
+
+	@Test
+	public void testCopyingEnchantments() {
+		runGym((context, player, opponent) -> {
+			// Should give us exactly two auras
+			Minion auraMinion = playMinionCard(context, player, "minion_test_aura");
+			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", auraMinion);
+			assertEquals(copy.getSourceCard().getCardId(), "minion_test_aura");
+			assertEquals(player.getMinions().size(), 2);
+			assertEquals(auraMinion.getAttack(), 4);
+			assertEquals(copy.getAttack(), 4);
+			assertEquals(context.getTriggerManager().getTriggers().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Should give us exactly two card cost modifiers
+			Minion radiant = playMinionCard(context, player, "minion_radiant_elemental");
+			Minion princeTaldaramTransformed = playMinionCardWithBattlecry(context, player, "minion_prince_taldaram", radiant);
+			assertEquals(princeTaldaramTransformed.getSourceCard().getCardId(), "minion_radiant_elemental");
+			Card costThreeSpell = receiveCard(context, player, "spell_blood_warriors");
+			assertEquals(costOf(context, player, costThreeSpell), costThreeSpell.getBaseManaCost() - 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Should correctly copy enchantments granted after the fact
+			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_blessing_of_wisdom", blessed);
+			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
+			context.endTurn();
+			context.endTurn();
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, player, "spell_the_coin");
+			}
+			attack(context, player, blessed, opponent.getHero());
+			assertEquals(player.getHand().size(), 1);
+			attack(context, player, copy, opponent.getHero());
+			assertEquals(player.getHand().size(), 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			// Copies with persistent owner should work
+			Minion blessed = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, opponent, "spell_blessing_of_wisdom", blessed);
+			context.endTurn();
+			Minion copy = playMinionCardWithBattlecry(context, player, "minion_test_copy", blessed);
+			context.endTurn();
+			context.endTurn();
+			for (int i = 0; i < 10; i++) {
+				shuffleToDeck(context, opponent, "spell_the_coin");
+			}
+			attack(context, player, blessed, opponent.getHero());
+			assertEquals(opponent.getHand().size(), 1);
+			attack(context, player, copy, opponent.getHero());
+			assertEquals(opponent.getHand().size(), 2);
+		});
+	}
+
+	@Test
+	public void testSplashDamageAppliesPoisonousAndLifesteal() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "weapon_splash_damage_weapon");
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target3 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			player.getHero().setHp(27);
+			attack(context, player, player.getHero(), target2);
+			assertTrue(target1.isDestroyed());
+			assertTrue(target2.isDestroyed());
+			assertTrue(target3.isDestroyed());
+			assertEquals(player.getHero().getHp(), 30 - target2.getAttack());
+		});
+	}
+
+	@Test
+	public void testPermanentDoesntTriggerSummons() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_test_permanents_dont_trigger_summons");
+			playCard(context, player, "permanent_test");
+			assertEquals(minion.getAttack(), minion.getBaseAttack(), "Should not have buffed");
+			playCard(context, player, "minion_neutral_test");
+			assertEquals(minion.getAttack(), minion.getBaseAttack() + 1, "Should have buffed");
+		});
+	}
 
 	@Test
 	public void testSecrets() {
@@ -59,7 +166,7 @@ public class AdvancedMechanicTests extends TestBase {
 			int hp = player.getHero().getHp();
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
-			playCardWithTarget(context, player, "spell_fireball", deflect);
+			playCard(context, player, "spell_fireball", deflect);
 			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
 			assertFalse(deflect.isDestroyed());
 			assertEquals(player.getHero().getHp(), hp - 6);
@@ -158,6 +265,19 @@ public class AdvancedMechanicTests extends TestBase {
 			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
 					&& c.getTargetReference().equals(opponentMinion.getReference())));
 		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion opponentMinion = playMinionCard(context, opponent, "minion_black_test");
+			context.endTurn();
+			Minion rushMinion = playMinionCard(context, player, "minion_test_rush");
+			rushMinion.setAttribute(Attribute.CHARGE);
+			assertTrue(rushMinion.canAttackThisTurn());
+			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponent.getHero().getReference())));
+			assertTrue(context.getValidActions().stream().anyMatch(c -> c.getActionType() == ActionType.PHYSICAL_ATTACK
+					&& c.getTargetReference().equals(opponentMinion.getReference())));
+		});
 	}
 
 	@Test
@@ -222,6 +342,17 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(player.getDiscoverZone().size(), 0);
 			assertEquals(player.getRemovedFromPlay().size(), 3, "Only generated cards should have been removed from play.");
 		});
+
+		// Doesn't show duplicates due to class card weighting
+		factory.run((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_blue_test", "minion_neutral_test"));
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.stream().map(DiscoverAction::getCard).map(Card::getCardId).distinct().count(), 2L);
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "spell_test_discover3");
+			assertEquals(player.getHand().size(), 1);
+		});
 	}
 
 	@Test
@@ -250,7 +381,7 @@ public class AdvancedMechanicTests extends TestBase {
 
 		GameAction playWrath = wrathChooseOne.playOptions()[0];
 		playWrath.setTarget(getSingleMinion(opponent.getMinions()));
-		context.getLogic().performGameAction(player.getId(), playWrath);
+		context.performAction(player.getId(), playWrath);
 
 		validActions = context.getLogic().getValidActions(player.getId());
 		// This time it should just be the 'End Turn'
@@ -269,7 +400,7 @@ public class AdvancedMechanicTests extends TestBase {
 		int cardsInOpponentsDeck = opponent.getDeck().getCount();
 		Card thoughtsteal = CardCatalogue.getCardById("spell_test_copy_cards");
 		context.getLogic().receiveCard(player.getId(), thoughtsteal);
-		context.getLogic().performGameAction(player.getId(), thoughtsteal.play());
+		context.performAction(player.getId(), thoughtsteal.play());
 		assertEquals(opponent.getDeck().getCount(), cardsInOpponentsDeck);
 		assertEquals(player.getHand().getCount(), cardsInHand + 2);
 	}
@@ -284,11 +415,11 @@ public class AdvancedMechanicTests extends TestBase {
 
 		Card card1 = new TestMinionCard(2, 2, Attribute.DIVINE_SHIELD);
 		context.getLogic().receiveCard(mage.getId(), card1);
-		context.getLogic().performGameAction(mage.getId(), card1.play());
+		context.performAction(mage.getId(), card1.play());
 
 		Card card2 = new TestMinionCard(5, 5);
 		context.getLogic().receiveCard(warrior.getId(), card2);
-		context.getLogic().performGameAction(warrior.getId(), card2.play());
+		context.performAction(warrior.getId(), card2.play());
 
 		Actor attacker = getSingleMinion(mage.getMinions());
 		Actor defender = getSingleMinion(warrior.getMinions());
@@ -296,12 +427,12 @@ public class AdvancedMechanicTests extends TestBase {
 		GameAction attackAction = new PhysicalAttackAction(attacker.getReference());
 		attackAction.setTarget(defender);
 
-		context.getLogic().performGameAction(mage.getId(), attackAction);
+		context.performAction(mage.getId(), attackAction);
 		assertEquals(attacker.getHp(), attacker.getMaxHp());
 		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack());
 		assertEquals(attacker.isDestroyed(), false);
 
-		context.getLogic().performGameAction(mage.getId(), attackAction);
+		context.performAction(mage.getId(), attackAction);
 		assertEquals(attacker.getHp(), attacker.getMaxHp() - defender.getAttack());
 		assertEquals(defender.getHp(), defender.getMaxHp() - attacker.getAttack() * 2);
 		assertEquals(attacker.isDestroyed(), true);
@@ -329,7 +460,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertEquals(attacker.getAttack(), BASE_ATTACK + ENRAGE_ATTACK_BONUS);
 
 			// heal - enrage attack bonus should be gone
-			playCardWithTarget(context, player, "spell_greater_healing_potion", attacker);
+			playCard(context, player, "spell_greater_healing_potion", attacker);
 			assertEquals(attacker.getAttack(), BASE_ATTACK);
 			assertFalse(attacker.hasAttribute(Attribute.ENRAGED));
 
@@ -339,7 +470,7 @@ public class AdvancedMechanicTests extends TestBase {
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 
 			// attack should be set to 1
-			playCardWithTarget(context, player, "spell_humility", attacker);
+			playCard(context, player, "spell_humility", attacker);
 			assertEquals(attacker.getAttack(), 1);
 			assertTrue(attacker.hasAttribute(Attribute.ENRAGED));
 		});
@@ -356,7 +487,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Card overloadCard = new TestMinionCard(1, 1);
 			overloadCard.setAttribute(Attribute.OVERLOAD, 2);
 			context.getLogic().receiveCard(player.getId(), overloadCard);
-			context.getLogic().performGameAction(player.getId(), overloadCard.play());
+			context.performAction(player.getId(), overloadCard.play());
 			context.endTurn();
 			context.endTurn();
 			assertEquals(player.getMana(), 1);
@@ -388,7 +519,7 @@ public class AdvancedMechanicTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), card);
 		GameAction playSpellCard = card.play();
 		playSpellCard.setTarget(minion);
-		context.getLogic().performGameAction(player.getId(), playSpellCard);
+		context.performAction(player.getId(), playSpellCard);
 		assertEquals(minion.getHp(), modifiedHp);
 		assertEquals(minion.getMaxHp(), modifiedHp);
 
@@ -399,7 +530,7 @@ public class AdvancedMechanicTests extends TestBase {
 		context.getLogic().receiveCard(player.getId(), card);
 		playSpellCard = card.play();
 		playSpellCard.setTarget(minion);
-		context.getLogic().performGameAction(player.getId(), playSpellCard);
+		context.performAction(player.getId(), playSpellCard);
 		assertEquals(minion.getHp(), baseHp);
 	}
 
@@ -452,22 +583,22 @@ public class AdvancedMechanicTests extends TestBase {
 			int expectedDamage = 5;
 			context.getLogic().receiveCard(player.getId(), damageSpell);
 
-			context.getLogic().performGameAction(player.getId(), damageSpell.play());
+			context.performAction(player.getId(), damageSpell.play());
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - expectedDamage);
 
 			Card spellPowerCard = CardCatalogue.getCardById("minion_test_spellpower");
 			context.getLogic().receiveCard(player.getId(), spellPowerCard);
-			context.getLogic().performGameAction(player.getId(), spellPowerCard.play());
+			context.performAction(player.getId(), spellPowerCard.play());
 			damageSpell = damageSpell.getCopy();
 			context.getLogic().receiveCard(player.getId(), damageSpell);
-			context.getLogic().performGameAction(player.getId(), damageSpell.play());
+			context.performAction(player.getId(), damageSpell.play());
 			int spellPower = getSingleMinion(player.getMinions()).getAttributeValue(Attribute.SPELL_DAMAGE);
 			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2 * expectedDamage - spellPower);
 
 			int opponentHp = opponent.getHero().getHp();
 			GameAction useHeroPower = player.getHero().getHeroPower().play();
 			useHeroPower.setTarget(opponent.getHero());
-			context.getLogic().performGameAction(player.getId(), useHeroPower);
+			context.performAction(player.getId(), useHeroPower);
 
 			// hero power should not be affected by SPELL_DAMAGE, and thus deal 1 damage
 			assertEquals(opponent.getHero().getHp(), opponentHp - 1);

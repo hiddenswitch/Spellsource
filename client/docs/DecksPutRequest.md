@@ -31,8 +31,16 @@ RUST | &quot;RUST&quot;
 EGGPLANT | &quot;EGGPLANT&quot;
 ICE | &quot;ICE&quot;
 OBSIDIAN | &quot;OBSIDIAN&quot;
+ICECREAM | &quot;ICECREAM&quot;
 AMBER | &quot;AMBER&quot;
 TOAST | &quot;TOAST&quot;
+ROSE | &quot;ROSE&quot;
+BLOOD | &quot;BLOOD&quot;
+NEONGREEN | &quot;NEONGREEN&quot;
+TEAL | &quot;TEAL&quot;
+DARKGREEN | &quot;DARKGREEN&quot;
+PURPLE | &quot;PURPLE&quot;
+TIME | &quot;TIME&quot;
 
 
 <a name="FormatEnum"></a>

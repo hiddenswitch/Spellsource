@@ -11,6 +11,12 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * This class collects a player's actions in a game.
+ *
+ * @see #merge(GameStatistics) to collect the statistics across multiple games correctly.
+ * @see SimulationResult for
+ */
 public class GameStatistics implements Cloneable, Serializable {
 	private final Map<Statistic, Object> stats = new EnumMap<Statistic, Object>(Statistic.class);
 	private final Map<String, Map<Integer, Integer>> cardsPlayed = new HashMap<>();
@@ -26,6 +32,10 @@ public class GameStatistics implements Cloneable, Serializable {
 
 	public void armorGained(int armor) {
 		add(Statistic.ARMOR_GAINED, armor);
+	}
+
+	public void heroPowerDamage(int damage) {
+		add(Statistic.HERO_POWER_DAMAGE_DEALT, damage);
 	}
 
 	public void cardDrawn() {
@@ -64,6 +74,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		GameStatistics clone = new GameStatistics();
 		clone.stats.putAll(stats);
 		clone.getCardsPlayed().putAll(getCardsPlayed());
+		for (Map.Entry<String, Map<Integer, Integer>> item : cardsPlayed.entrySet()) {
+			HashMap<Integer, Integer> value = new HashMap<>(item.getValue());
+			clone.getCardsPlayed().put(item.getKey(), value);
+		}
 		clone.getMinionsSummoned().putAll(getMinionsSummoned());
 		return clone;
 	}
@@ -174,6 +188,10 @@ public class GameStatistics implements Cloneable, Serializable {
 		add(Statistic.MINIONS_PLAYED, 1);
 
 		increaseMinionCount(minion);
+	}
+
+	public long getTurnsTaken() {
+		return getLong(Statistic.TURNS_TAKEN);
 	}
 
 	public void set(Statistic key, Object value) {

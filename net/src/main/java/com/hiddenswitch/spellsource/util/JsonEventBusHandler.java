@@ -1,13 +1,14 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import io.vertx.core.Handler;
 import io.vertx.core.eventbus.Message;
+import io.vertx.core.json.JsonObject;
 
-class JsonEventBusHandler<T, R> implements SuspendableAction1<Message<String>> {
+class JsonEventBusHandler<T, R> implements SuspendableAction1<Message<JsonObject>> {
 	private final SuspendableFunction<T, R> method;
 	private final Class<? extends T> requestClass;
 
@@ -18,8 +19,8 @@ class JsonEventBusHandler<T, R> implements SuspendableAction1<Message<String>> {
 
 	@Override
 	@Suspendable
-	public void call(Message<String> message) {
-		T request = Serialization.deserialize(message.body(), requestClass);
+	public void call(Message<JsonObject> message) {
+		T request = message.body().mapTo(requestClass);
 		R response = null;
 
 		try {
@@ -30,7 +31,7 @@ class JsonEventBusHandler<T, R> implements SuspendableAction1<Message<String>> {
 			message.fail(-1, BufferEventBusHandler.getMessage(e));
 		}
 
-		message.reply(Serialization.serialize(response));
+		message.reply(JsonObject.mapFrom(response));
 	}
 
 }

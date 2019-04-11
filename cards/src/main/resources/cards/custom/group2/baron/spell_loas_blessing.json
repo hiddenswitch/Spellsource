@@ -1,0 +1,41 @@
+{
+  "name": "Fury of Ryal",
+  "baseManaCost": 7,
+  "type": "SPELL",
+  "heroClass": "NAVY",
+  "rarity": "EPIC",
+  "description": "Give a minion Guard, Toxic, Windfury, Dash, Lifesteal, and Dodge.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "TAUNT"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "LIFESTEAL"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "WINDFURY"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "RUSH"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "DIVINE_SHIELD"
+      },
+      {
+        "class": "AddAttributeSpell",
+        "attribute": "POISONOUS"
+      }
+    ]
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

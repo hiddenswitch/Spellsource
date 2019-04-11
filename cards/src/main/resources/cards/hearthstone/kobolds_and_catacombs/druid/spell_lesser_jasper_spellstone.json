@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Deal $2 damage to a minion. (Gain 3 Armor to upgrade.)",
+  "description": "Deal $2 damage to a minion. (Gain [3] Armor to upgrade.)",
   "passiveTrigger": {
     "countUntilCast": 3,
     "eventTrigger": {
@@ -34,5 +34,19 @@
   },
   "collectible": true,
   "set": "KOBOLDS_AND_CATACOMBS",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "SpellstoneValueProvider"
+          }
+        },
+        " more"
+      ]
+    }
+  ]
 }

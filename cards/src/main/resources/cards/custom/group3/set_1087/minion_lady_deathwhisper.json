@@ -1,12 +1,13 @@
 {
-  "name": "Lady Deathwhisper",
+  "name": "Sapphiron",
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Damage all enemy minions until they have 1 Health.",
+  "race": "DRAGON",
+  "description": "Opener: Damage all enemy minions until they have 1 Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

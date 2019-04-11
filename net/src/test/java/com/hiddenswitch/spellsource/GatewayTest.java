@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.strands.Strand;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.client.ApiClient;
 import com.hiddenswitch.spellsource.client.ApiException;
 import com.hiddenswitch.spellsource.client.api.DefaultApi;
@@ -11,14 +11,10 @@ import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.SpellsourceTestBase;
 import com.hiddenswitch.spellsource.impl.UserId;
-import com.hiddenswitch.spellsource.models.ConfigurationRequest;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.hiddenswitch.spellsource.util.UnityClient;
-import io.vertx.core.CompositeFuture;
-import io.vertx.core.Future;
 import io.vertx.ext.unit.Async;
 import io.vertx.ext.unit.TestContext;
-import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.decks.DeckFormat;
@@ -27,17 +23,13 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Deque;
-import java.util.List;
 import java.util.Set;
 import java.util.concurrent.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicLong;
-import java.util.function.Supplier;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static org.junit.Assert.*;
 
@@ -58,7 +50,7 @@ public class GatewayTest extends SpellsourceTestBase {
 			final int j = i;
 
 			Thread t = new Thread(() -> {
-				ApiClient client = new ApiClient().setBasePath(UnityClient.basePath);
+				ApiClient client = new ApiClient().setBasePath(UnityClient.BASE_PATH);
 				DefaultApi api = new DefaultApi(client);
 				String random = RandomStringUtils.randomAlphanumeric(36) + Integer.toString(j);
 				try {
@@ -103,7 +95,7 @@ public class GatewayTest extends SpellsourceTestBase {
 
 		vertx.runOnContext(v -> {
 			vertx.executeBlocking(fut -> {
-				DefaultApi api = new DefaultApi(new ApiClient().setBasePath(UnityClient.basePath));
+				DefaultApi api = new DefaultApi(new ApiClient().setBasePath(UnityClient.BASE_PATH));
 				CreateAccountResponse car = null;
 				try {
 					car = api.createAccount(new CreateAccountRequest()
@@ -150,79 +142,19 @@ public class GatewayTest extends SpellsourceTestBase {
 
 	}
 
-	@Test(timeout = 15000L)
+	@Test(timeout = 32000L)
 	public void testUnityClient(TestContext context) throws InterruptedException, SuspendExecution {
-		// Just run once
+		// Play twice
 		UnityClient client = new UnityClient(context);
 		client.createUserAccount(null);
 		client.matchmakeQuickPlay(null);
 		client.waitUntilDone();
+		assertTrue(client.getTurnsPlayed() > 0);
 		assertTrue(client.isGameOver());
-	}
-
-	@Test(timeout = 165000L)
-	public void testSimultaneousGames(TestContext context) throws InterruptedException, SuspendExecution {
-		final int processorCount = Runtime.getRuntime().availableProcessors();
-		final int count = processorCount * 2;
-		final int checkpointTotal = count * 6;
-
-		CountDownLatch latch = new CountDownLatch(count);
-		ExecutorService testExecutor = Executors.newFixedThreadPool(count);
-
-		Deque<String> verticles = new ConcurrentLinkedDeque<>();
-		// Deploy processorCount-1 more gateways
-		CompositeFuture.all(Stream.generate(() -> {
-			Future<String> fut = Future.future();
-			vertx.deployVerticle(Gateway.create(), v1 -> {
-				verticles.add(v1.result());
-				fut.complete();
-			});
-			return fut;
-		}).limit(processorCount - 1).collect(Collectors.toList())).setHandler(v1 -> {
-			AtomicInteger checkpoints = new AtomicInteger(0);
-			for (int i = 0; i < count; i++) {
-				testExecutor.submit(() -> {
-					try {
-						UnityClient client = new UnityClient(context);
-						client.createUserAccount(null);
-						String userId = client.getAccount().getId();
-						logger.trace("testSimultaneousGames: {} 1st Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.matchmakeConstructedPlay(null);
-						logger.trace("testSimultaneousGames: {} 1st Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.waitUntilDone();
-						assertTrue(client.isGameOver());
-						assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
-						logger.trace("testSimultaneousGames: {} 1st Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-
-						// Try two games in a row
-						logger.trace("testSimultaneousGames: {} 2nd Matchmaking on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.matchmakeConstructedPlay(null);
-						logger.trace("testSimultaneousGames: {} 2nd Starts on {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-						client.waitUntilDone();
-						assertTrue(client.isGameOver());
-						assertFalse(client.getApi().getAccount(userId).getAccounts().get(0).isInMatch());
-						logger.trace("testSimultaneousGames: {} 2nd Finished {}/{} checkpoints", userId, checkpoints.incrementAndGet(), checkpointTotal);
-
-						latch.countDown();
-					} catch (ApiException t) {
-						context.exceptionHandler().handle(t);
-					}
-				});
-			}
-		});
-
-		// Random games can take quite a long time to finish so be patient...
-		latch.await(165L, TimeUnit.SECONDS);
-		assertEquals(0L, latch.getCount());
-		testExecutor.shutdown();
-
-
-		CompositeFuture.all(verticles.stream().map(deploymentId -> {
-			Future<Void> fut = Future.future();
-			vertx.undeploy(deploymentId, fut);
-			return fut;
-		}).collect(Collectors.toList())).setHandler(context.asyncAssertSuccess());
-
+		client.matchmakeQuickPlay(null);
+		client.waitUntilDone();
+		assertTrue(client.getTurnsPlayed() > 0);
+		assertTrue(client.isGameOver());
 	}
 
 
@@ -238,28 +170,17 @@ public class GatewayTest extends SpellsourceTestBase {
 
 			Strand.sleep(3000L);
 			// 1 turn was played, concede
-
-			Future<Void> gameOver = Future.future();
-			client.gameOverHandler(ignored -> gameOver.complete());
-			Sync.invoke0(client::concede);
+			client.concede();
 			// You must wait until you receive the end game message to be confident you can requeue
-			awaitResult(gameOver::setHandler);
-			client.gameOverHandler(null);
-			GetAccountsResponse account = Sync.invoke(targetUserId -> {
-				try {
-					return client.getApi().getAccount(targetUserId);
-				} catch (ApiException e) {
-					throw new AssertionError(e);
-				}
-			}, client.getAccount().getId());
+			client.waitUntilDone();
+			GetAccountsResponse account = invoke(client.getApi()::getAccount, client.getAccount().getId());
 			assertFalse(account.getAccounts().get(0).isInMatch());
-			SuspendableMap<UserId, GameId> games = Games.getGames();
+			SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 			boolean hasUser = games.containsKey(new UserId(client.getAccount().getId()));
 			context.assertFalse(hasUser);
 
 			// Can go into another game
 			Sync.invoke0(() -> {
-				client.disconnect();
 				try {
 					Strand.sleep(200L);
 				} catch (SuspendExecution | InterruptedException execution) {
@@ -270,6 +191,7 @@ public class GatewayTest extends SpellsourceTestBase {
 				client.getTurnsToPlay().set(999);
 				client.matchmakeQuickPlay(null);
 				client.waitUntilDone();
+				context.assertTrue(client.getTurnsPlayed() > 0);
 				context.assertTrue(client.isGameOver());
 			});
 		});
@@ -292,9 +214,9 @@ public class GatewayTest extends SpellsourceTestBase {
 		sync(() -> {
 			// wait 10 seconds
 			Strand.sleep(10000L);
-			assertNull(Games.getGames().get(new UserId(userId)));
+			assertNull(Games.getUsersInGames().get(new UserId(userId)));
 
-			Boolean done = Sync.invoke(() -> {
+			Boolean done = invoke(() -> {
 				UnityClient client2 = new UnityClient(context, token);
 				try {
 					return client2.getApi().getAccount(userId).getAccounts().get(0).isInMatch();
@@ -307,7 +229,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		});
 
 		// Should not have received end game message
-		assertFalse(client.isGameOver());
+		assertFalse(client.receivedGameOverMessage());
 	}
 
 	@Test(timeout = 45000L)
@@ -317,6 +239,14 @@ public class GatewayTest extends SpellsourceTestBase {
 		AtomicInteger counter = new AtomicInteger();
 		AtomicLong startTime = new AtomicLong();
 		UnityClient client = new UnityClient(context) {
+			@Override
+			protected int getActionIndex(ServerToClientMessage message) {
+				if (message.getActions().getEndTurn() != null) {
+					return message.getActions().getEndTurn();
+				}
+				return super.getActionIndex(message);
+			}
+
 			@Override
 			protected boolean onRequestAction(ServerToClientMessage message) {
 				logger.trace("testGameDoesntCloseAfterActivity: Sending request {}", counter.get());
@@ -341,6 +271,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		client.matchmakeQuickPlay(null);
 		client.waitUntilDone();
 		assertTrue(System.currentTimeMillis() - startTime.get() > 8000L);
+		assertTrue(client.getTurnsPlayed() > 0);
 		assertTrue(client.isGameOver());
 	}
 
@@ -353,8 +284,9 @@ public class GatewayTest extends SpellsourceTestBase {
 		final long count = CardCatalogue.getRecords().values().stream().filter(
 				cd -> DeckFormat.GREATER_CUSTOM.isInFormat(cd.getDesc().getSet()) && cd.getDesc().type != CardType.GROUP && cd.getDesc().type != CardType.HERO_POWER && cd.getDesc().type != CardType.ENCHANTMENT).count();
 		context.assertEquals((long) response1.getCards().size(), count);
+		String etag = defaultApi.getApiClient().getResponseHeaders().get("ETag").get(0);
 		try {
-			GetCardsResponse response2 = defaultApi.getCards(response1.getVersion());
+			GetCardsResponse response2 = defaultApi.getCards(etag);
 			context.fail();
 		} catch (ApiException ex) {
 			context.assertEquals(ex.getCode(), 304);
@@ -362,7 +294,8 @@ public class GatewayTest extends SpellsourceTestBase {
 
 		GetCardsResponse response3 = defaultApi.getCards("invalid token");
 		context.assertNotNull(response3);
-		context.assertEquals(response3.getVersion(), response1.getVersion());
+		String newETag = defaultApi.getApiClient().getResponseHeaders().get("ETag").get(0);
+		context.assertEquals(newETag, etag);
 	}
 
 	@Test
@@ -376,7 +309,7 @@ public class GatewayTest extends SpellsourceTestBase {
 		client2.createUserAccount();
 		java.util.concurrent.Future<Void> other = client2.matchmake(null, "constructed");
 		Thread.sleep(2000L);
-		sync(() -> context.assertFalse(Games.getGames().containsKey(new UserId(client1.getAccount().getId()))));
+		sync(() -> context.assertFalse(Games.getUsersInGames().containsKey(new UserId(client1.getAccount().getId()))));
 		other.cancel(true);
 		Thread.sleep(2000L);
 	}

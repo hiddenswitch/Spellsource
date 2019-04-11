@@ -1,0 +1,25 @@
+{
+  "name": "False Promise",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Restore #3 Health to a minion. If it's still damaged, destroy it.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "condition": {
+      "class": "IsDamagedCondition"
+    },
+    "spell1": {
+      "class": "HealSpell",
+      "value": 3
+    },
+    "spell2": {
+      "class": "DestroySpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

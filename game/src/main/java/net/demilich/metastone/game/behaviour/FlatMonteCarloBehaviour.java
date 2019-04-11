@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.behaviour;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.GameAction;
@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * A behaviour which randomly samples the game tree seeking sequences of actions that terminate in wins.
+ */
 public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 	private static class ScoredAction {
 		protected GameAction action;
@@ -94,7 +97,7 @@ public class FlatMonteCarloBehaviour extends IntelligentBehaviour {
 	@Suspendable
 	private double simulate(GameContext context, int playerId, GameAction action, long startMillis) {
 		GameContext simulation = context.clone();
-		simulation.getLogic().performGameAction(simulation.getActivePlayerId(), action);
+		simulation.performAction(simulation.getActivePlayerId(), action);
 		if (simulation.updateAndGetGameOver()) {
 			// Action leads to lethal
 			return simulation.getWinningPlayerId() == playerId ? Double.POSITIVE_INFINITY : Double.NEGATIVE_INFINITY;

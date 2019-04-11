@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -76,7 +76,7 @@ public interface Inventory {
 				Long count = mongo().count(COLLECTIONS, json("_id", userId));
 
 				if (count.equals(0L)) {
-					String ignore = mongo().insert(COLLECTIONS, QuickJson.toJson(CollectionRecord.user(userId)));
+					String ignore = mongo().insert(COLLECTIONS, JsonObject.mapFrom(CollectionRecord.user(userId)));
 				}
 				List<String> newInventoryIds = new ArrayList<>();
 				if (request.getQueryCardsRequest() != null) {
@@ -99,7 +99,8 @@ public interface Inventory {
 				CollectionRecord record1 = CollectionRecord.deck(userId, request.getName(), request.getHeroClass(), request.isDraft());
 				record1.setHeroCardId(request.getHeroCardId());
 				record1.setFormat(request.getFormat());
-				final String deckId = mongo().insert(COLLECTIONS, QuickJson.toJson(record1));
+				record1.setStandardDeck(request.isStandard());
+				final String deckId = mongo().insert(COLLECTIONS, JsonObject.mapFrom(record1));
 
 				if (request.getInventoryIds() != null
 						&& request.getInventoryIds().size() > 0) {
@@ -113,7 +114,7 @@ public interface Inventory {
 				return CreateCollectionResponse.deck(deckId);
 			case ALLIANCE:
 				CollectionRecord record2 = CollectionRecord.alliance(request.getAllianceId(), userId);
-				final String allianceId = awaitResult(h -> mongo().client().insert(COLLECTIONS, QuickJson.toJson(record2), h));
+				final String allianceId = awaitResult(h -> mongo().client().insert(COLLECTIONS, JsonObject.mapFrom(record2), h));
 
 				return CreateCollectionResponse.alliance(allianceId);
 			default:
@@ -133,7 +134,7 @@ public interface Inventory {
 				.map(card -> new InventoryRecord(RandomStringUtils.randomAlphanumeric(36), new JsonObject().put("id", card.getId()))
 						.withUserId(userId)
 						.withCollectionIds(userIdCollection))
-				.map(QuickJson::toJson)
+				.map(arg -> JsonObject.mapFrom(arg))
 				.collect(toList());
 
 		mongo().insertManyWithOptions(INVENTORY, documents, new BulkWriteOptions().setOrdered(false).setWriteOption(WriteOption.ACKNOWLEDGED));
@@ -261,13 +262,17 @@ public interface Inventory {
 
 	@Suspendable
 	static BorrowFromCollectionResponse borrowFromCollection(BorrowFromCollectionRequest request) throws SuspendExecution, InterruptedException {
+		if (request.getUserId() == null) {
+			throw new IllegalArgumentException("Must specify a userId");
+		}
+
 		List<String> collectionIds;
 		if (request.getCollectionId() != null) {
 			collectionIds = Collections.singletonList(request.getCollectionId());
 		} else if (request.getCollectionIds() != null) {
 			collectionIds = request.getCollectionIds();
 		} else {
-			throw new RuntimeException();
+			throw new IllegalArgumentException("Must specify collectionIds");
 		}
 
 		MongoClientUpdateResult update = mongo().updateCollectionWithOptions(INVENTORY,
@@ -300,8 +305,6 @@ public interface Inventory {
 	 * @param request Use the static methods in GetCollectionRequest for the right arguments of different collection
 	 *                queries.
 	 * @return The complete information about a collection (user, alliance or deck).
-	 * @throws SuspendExecution
-	 * @throws InterruptedException
 	 */
 	@Suspendable
 	static GetCollectionResponse getCollection(GetCollectionRequest request) {
@@ -341,7 +344,8 @@ public interface Inventory {
 
 			deckIds.forEach(deckId -> {
 				CollectionRecord record = deckRecords.get(deckId);
-				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed()));
+				responses.add(GetCollectionResponse.deck(record.getUserId(), deckId, record.getName(), record.getHeroClass(), record.getHeroCardId(), record.getFormat(), record.getDeckType(), deckInventories.get(deckId), record.isTrashed())
+						.setStandard(record.isStandardDeck()));
 			});
 
 			return GetCollectionResponse.batch(responses);
@@ -371,7 +375,8 @@ public interface Inventory {
 
 		if (type == CollectionTypes.DECK) {
 			CollectionRecord deck = mongo().findOne(COLLECTIONS, json("_id", collectionId), CollectionRecord.class);
-			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed());
+			return GetCollectionResponse.deck(deck.getUserId(), request.getDeckId(), deck.getName(), deck.getHeroClass(), deck.getHeroCardId(), deck.getFormat(), deck.getDeckType(), inventoryRecords, deck.isTrashed())
+					.setStandard(deck.isStandardDeck());
 		} else /* if (type == CollectionTypes.USER) */ {
 			return GetCollectionResponse.user(userId, inventoryRecords);
 		} /*  else {

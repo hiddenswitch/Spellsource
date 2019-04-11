@@ -16,7 +16,7 @@ public class ConditionDescDeserializer extends DescDeserializer<ConditionDesc, C
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(ConditionArg.RACE, ParseValueType.RACE);
 		ctx.add(ConditionArg.VALUE, ParseValueType.VALUE);
 		ctx.add(ConditionArg.VALUE1, ParseValueType.VALUE);

@@ -14,11 +14,11 @@
         "attribute": "KEEPS_ENCHANTMENTS"
       },
       {
-        "class": "ReturnTargetToHandSpell"
+        "class": "ReturnToHandWithEnchantments"
       }
     ]
   },
   "collectible": true,
-  "set": "CLASSIC",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

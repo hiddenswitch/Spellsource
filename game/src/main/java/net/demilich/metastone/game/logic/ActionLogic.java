@@ -1,27 +1,30 @@
 package net.demilich.metastone.game.logic;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.*;
 import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.ChooseOneOverride;
-import net.demilich.metastone.game.cards.HasChooseOneActions;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.aura.PhysicalAttackTargetOverrideAura;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
-import net.demilich.metastone.game.utils.TurnState;
 
 import java.io.Serializable;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * This class turns game actions into a list of possible actions for the player.
+ *
+ * @see GameContext#getValidActions() for the entry point into the action logic.
+ * @see #rollout(GameAction, GameContext, Player, Collection) for the meat-and-bones of turning a {@link GameAction}
+ * 		instance into multiple game actions, one for each target.
+ */
 public class ActionLogic implements Serializable {
 	private final TargetLogic targetLogic = new TargetLogic();
 
@@ -110,9 +113,6 @@ public class ActionLogic implements Serializable {
 			if (card.isChooseOne()) {
 				rolloutChooseOnesWithOverrides(context, player, playCardActions, card);
 			} else {
-				if (card.getCardType().isCardType(CardType.ENCHANTMENT)) {
-					System.out.println(context.getTrace().dump());
-				}
 				rollout(card.play(), context, player, playCardActions);
 			}
 
@@ -148,7 +148,7 @@ public class ActionLogic implements Serializable {
 		validActions.addAll(getPlayCardActions(context, player));
 		if (context.getTurnState() != TurnState.TURN_ENDED) {
 			final EndTurnAction endTurnAction = new EndTurnAction(player.getId());
-			endTurnAction.setSource(player.getReference());
+			endTurnAction.setSourceReference(player.getReference());
 			validActions.add(endTurnAction);
 		}
 

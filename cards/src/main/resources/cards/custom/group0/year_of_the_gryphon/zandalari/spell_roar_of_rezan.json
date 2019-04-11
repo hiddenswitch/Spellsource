@@ -1,6 +1,6 @@
 {
   "name": "Roar of Rezan",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Cast all other Deathrattles in your hand and deck.",
+  "description": "Aftermath: Cast all other Aftermaths in your hand and deck.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

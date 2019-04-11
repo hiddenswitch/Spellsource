@@ -6,14 +6,19 @@ import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.desc.source.CardSource;
 import net.demilich.metastone.game.spells.desc.valueprovider.ValueProvider;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class AttributeFilter extends EntityFilter {
+/**
+ * Filters entities according to their {@link Attribute} set on {@link EntityFilterArg#ATTRIBUTE}.
+ * <p>
+ * If a {@link EntityFilterArg#OPERATION} and {@link EntityFilterArg#VALUE} are specified, uses it to evaluate the
+ * attribute. Otherwise, the operation defaults to {@link ComparisonOperation#HAS}.
+ */
+public final class AttributeFilter extends EntityFilter {
 
 	public AttributeFilter(EntityFilterDesc desc) {
 		super(desc);
@@ -86,5 +91,4 @@ public class AttributeFilter extends EntityFilter {
 
 		return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 	}
-
 }

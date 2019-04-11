@@ -16,7 +16,7 @@ public class CardCostModifierDescDeserializer extends DescDeserializer<CardCostM
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(CardCostModifierArg.TARGET_PLAYER, ParseValueType.TARGET_PLAYER);
 		ctx.add(CardCostModifierArg.RACE, ParseValueType.RACE);
 		ctx.add(CardCostModifierArg.VALUE, ParseValueType.VALUE);
@@ -29,6 +29,7 @@ public class CardCostModifierDescDeserializer extends DescDeserializer<CardCostM
 		ctx.add(CardCostModifierArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(CardCostModifierArg.OPERATION, ParseValueType.ALGEBRAIC_OPERATION);
 		ctx.add(CardCostModifierArg.FILTER, ParseValueType.ENTITY_FILTER);
+		ctx.add(CardCostModifierArg.CONDITION, ParseValueType.CONDITION);
 	}
 
 	@Override

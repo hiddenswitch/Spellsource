@@ -1,12 +1,12 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +17,9 @@ import java.util.Map;
 /**
  * Performs {@link ValueProviderArg#OPERATION} on the values returned by {@link ValueProviderArg#VALUE1} applied to each
  * entity resolved by {@link ValueProviderArg#TARGET}.
+ * <p>
+ * Specifying an attribute {@link ValueProviderArg#ATTRIBUTE} is a shorthand for a {@code "value1"} set to an {@link
+ * AttributeValueProvider} with the specified attribute.
  */
 public class ReduceValueProvider extends ValueProvider {
 

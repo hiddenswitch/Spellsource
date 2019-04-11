@@ -10,11 +10,15 @@ import org.apache.commons.lang3.builder.ReflectionToStringBuilder;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * Represents a request to create a game with the specified deck list.
+ */
 public class DeckCreateRequest implements Serializable, Cloneable {
 	private String userId;
 	private String name;
@@ -22,6 +26,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 	private String heroCardId;
 	private boolean draft;
 	private String format;
+	private boolean isStandardDeck;
 	private List<String> inventoryIds = new ArrayList<>();
 	private List<String> cardIds = new ArrayList<>();
 
@@ -119,7 +124,7 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				int count = Integer.parseInt(matcher.group("count"));
 				String cardId;
 				try {
-					cardId = CardCatalogue.getCardByName(cardName).getCardId();
+					cardId = CardCatalogue.getCardByName(cardName, request.getHeroClass()).getCardId();
 				} catch (NullPointerException ex) {
 					String message = String.format("Could not find a card named %s%s", cardName, request.getName() == null ? "" : " while reading deck list " + request.getName());
 					errors.add(new NullPointerException(message));
@@ -149,6 +154,12 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 		}
 
 		return request;
+	}
+
+	public static DeckCreateRequest fromCardIds(HeroClass heroClass, String... cardIds) {
+		return new DeckCreateRequest()
+				.withCardIds(Arrays.asList(cardIds))
+				.withHeroClass(heroClass);
 	}
 
 	public String getUserId() {
@@ -296,5 +307,14 @@ public class DeckCreateRequest implements Serializable, Cloneable {
 				.withHeroClass(heroClass)
 				.withName(name)
 				.withUserId(userId);
+	}
+
+	public boolean isStandardDeck() {
+		return isStandardDeck;
+	}
+
+	public DeckCreateRequest setStandardDeck(boolean standardDeck) {
+		isStandardDeck = standardDeck;
+		return this;
 	}
 }

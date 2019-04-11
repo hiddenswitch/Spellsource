@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.desc.condition;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -9,7 +9,14 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.io.Serializable;
 
+/**
+ * A condition is used for true or false comparisons in the {@link net.demilich.metastone.game.cards.desc.CardDesc} card
+ * JSON.
+ * <p>
+ * The core function is {@link #isFulfilled(GameContext, Player, Entity, Entity)}.
+ */
 public abstract class Condition implements Serializable, HasDesc<ConditionDesc> {
+
 	private ConditionDesc desc;
 
 	public Condition(ConditionDesc desc) {
@@ -49,3 +56,4 @@ public abstract class Condition implements Serializable, HasDesc<ConditionDesc> 
 		return desc.hashCode();
 	}
 }
+

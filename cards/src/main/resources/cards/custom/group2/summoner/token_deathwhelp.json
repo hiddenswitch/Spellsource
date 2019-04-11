@@ -7,10 +7,7 @@
   "baseHp": 1,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Charge",
-  "attributes": {
-    "CHARGE": true
-  },
+  "description": "",
   "collectible": false,
   "set": "CUSTOM",
   "fileFormatVersion": 1

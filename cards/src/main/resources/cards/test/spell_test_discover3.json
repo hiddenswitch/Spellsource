@@ -1,0 +1,15 @@
+{
+  "name": "",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell"
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

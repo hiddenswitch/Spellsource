@@ -1,10 +1,11 @@
 package com.hiddenswitch.spellsource.concurrent;
 
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.concurrent.ReentrantLock;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.concurrent.Semaphore;
 import com.hazelcast.concurrent.semaphore.SemaphoreProxy;
 import com.hazelcast.concurrent.semaphore.SemaphoreService;
 import com.hazelcast.concurrent.semaphore.operations.AcquireOperation;
+import com.hazelcast.concurrent.semaphore.operations.ReleaseOperation;
 import com.hazelcast.core.ExecutionCallback;
 import com.hazelcast.core.HazelcastInstance;
 import com.hazelcast.core.ISemaphore;
@@ -16,12 +17,17 @@ import com.hiddenswitch.spellsource.util.Hazelcast;
 import io.vertx.core.Future;
 import io.vertx.core.Vertx;
 import io.vertx.core.VertxException;
+import io.vertx.core.shareddata.Lock;
+import org.jetbrains.annotations.NotNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.Field;
 import java.util.concurrent.TimeoutException;
 
 import static com.hiddenswitch.spellsource.util.Sync.invoke;
 import static io.vertx.ext.sync.Sync.awaitFiber;
+import static io.vertx.ext.sync.Sync.awaitResult;
 
 /**
  * A suspendable, cluster-wide lock.
@@ -35,39 +41,188 @@ import static io.vertx.ext.sync.Sync.awaitFiber;
  * with its fibers implementation.
  */
 public interface SuspendableLock {
-	ReentrantLock LOCK_SERIALIZATION = new ReentrantLock();
+	Semaphore LOCK_SERIALIZATION = new Semaphore(1);
 	String LOCK_SEMAPHORE_PREFIX = "__vertx.";
+	Logger LOGGER = LoggerFactory.getLogger(SuspendableLock.class);
+
+
+	/**
+	 * Obtains a lock that doesn't do anything.
+	 *
+	 * @return
+	 */
+	@NotNull
+	static SuspendableLock noOpLock() {
+		return new NoOpLock();
+	}
+
+	/**
+	 * Obtains a lock using a Hazelcast cluster.
+	 *
+	 * @param name    The unique identifier of this lock
+	 * @param timeout How long to wait for the lock. If the timeout is 0, the method waits indefinitely
+	 * @return A lock that has been acquired.
+	 * @throws VertxException with an inner cause of {@link TimeoutException} if the lock acquisition has timed out,
+	 *                        otherwise the Hazelcast cluster experienced an error.
+	 */
+	@Suspendable
+	@NotNull
+	static SuspendableLock lock(@NotNull String name, long timeout) {
+		return VertxLock.lock(name, timeout);
+	}
 
 	@Suspendable
-	static SuspendableLock lock(String name, long timeout) {
-		HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
+	@NotNull
+	static SuspendableLock lock(String name) {
+		return VertxLock.lock(name);
+	}
 
-		// Lock accesses to getSemaphore
-		ReentrantLock lock = LOCK_SERIALIZATION;
-		ISemaphore iSemaphore;
-		lock.lock();
-		try {
-			// This will typically happen pretty fast, so it's okay to use a blocking thread for this.
-			iSemaphore = invoke(hazelcastInstance::getSemaphore, LOCK_SEMAPHORE_PREFIX + name);
-		} finally {
-			lock.unlock();
+	static HazelcastInstanceImpl getHazelcastInstance(HazelcastInstance hazelcastInstance) {
+		if (hazelcastInstance instanceof HazelcastInstanceProxy) {
+			hazelcastInstance = ((HazelcastInstanceProxy) hazelcastInstance).getOriginal();
 		}
 
-		HazelcastInstanceImpl finalInstance = getHazelcastInstance(hazelcastInstance);
+		return (HazelcastInstanceImpl) hazelcastInstance;
+	}
 
-		return awaitFiber(fut1 -> {
-			GetPartitionAndService getPartitionAndService = new GetPartitionAndService(iSemaphore, finalInstance).invoke();
+	@Suspendable
+	void release();
+
+
+	/**
+	 * Destroys the lock, freeing up the resources it used in the cluster.
+	 */
+	@Suspendable
+	void destroy();
+
+	class VertxLock implements SuspendableLock {
+		private final Lock lock;
+
+		public VertxLock(Lock lock) {
+			this.lock = lock;
+		}
+
+		@Suspendable
+		@NotNull
+		static VertxLock lock(String name, long timeout) {
+			Lock lock = awaitResult(h -> Vertx.currentContext().owner().sharedData().getLockWithTimeout(name, timeout, h));
+			return new VertxLock(lock);
+		}
+
+		@Suspendable
+		@NotNull
+		static VertxLock lock(String name) {
+			Lock lock = awaitResult(h -> Vertx.currentContext().owner().sharedData().getLock(name, h));
+			return new VertxLock(lock);
+		}
+
+		@Override
+		@Suspendable
+		public void release() {
+			lock.release();
+		}
+
+		@Override
+		@Suspendable
+		public void destroy() {
+		}
+	}
+
+	class HazelcastLock implements SuspendableLock {
+		private final ISemaphore semaphore;
+
+		private HazelcastLock(ISemaphore semaphore) {
+			this.semaphore = semaphore;
+		}
+
+		@Override
+		@Suspendable
+		public void release() {
+
+			/*
+			Vertx.currentContext().executeBlocking(fut -> {
+				try {
+					semaphore.release();
+				} finally {
+					fut.complete();
+				}
+			}, false, null);
+
+			// Releasing a semaphore instance will go fast, but below is the asynchronous implementation
+*/
+
+			HazelcastInstanceImpl hazelcastInstance = getHazelcastInstance(Hazelcast.getHazelcastInstance());
+			GetPartitionAndService getPartitionAndService = new GetPartitionAndService(semaphore, hazelcastInstance).invoke();
 			int partitionId = getPartitionAndService.getPartitionId();
 			InternalOperationService operationService = getPartitionAndService.getOperationService();
+			ReleaseOperation operation = new ReleaseOperation(semaphore.getName(), 1);
+			operation.setPartitionId(partitionId);
+			operation.setServiceName(SemaphoreService.SERVICE_NAME);
 
-			Operation acquireOperation = new AcquireOperation(LOCK_SEMAPHORE_PREFIX + name, 1, timeout)
-					.setPartitionId(partitionId)
-					.setServiceName(SemaphoreService.SERVICE_NAME);
+			operationService.asyncInvokeOnPartition(operation.getServiceName(),
+					operation, operation.getPartitionId(), new ExecutionCallback<Boolean>() {
+						@Override
+						public void onResponse(Boolean response) {
+							if (response != null && !response) {
+								LOGGER.error("asyncInvokeOnPartition: Failed to unlock {}", semaphore.getName());
+							}
+						}
 
+						@Override
+						public void onFailure(Throwable t) {
+							LOGGER.error("asyncInvokeOnPartition: ", t);
+						}
+					});
+		}
 
-			ReentrantLock lockA = LOCK_SERIALIZATION;
-			lockA.lock();
+		@Override
+		@Suspendable
+		public void destroy() {
+			Vertx.currentContext().executeBlocking(fut -> {
+				try {
+					semaphore.destroy();
+				} finally {
+					fut.complete();
+				}
+			}, false, null);
+		}
+
+		/**
+		 * Obtains a lock using a Hazelcast cluster.
+		 *
+		 * @param name    The unique identifier of this lock
+		 * @param timeout How long to wait for the lock. If the timeout is 0, the method waits indefinitely
+		 * @return A lock that has been acquired.
+		 * @throws VertxException with an inner cause of {@link TimeoutException} if the lock acquisition has timed out,
+		 *                        otherwise the Hazelcast cluster experienced an error.
+		 */
+		@Suspendable
+		@NotNull
+		static SuspendableLock lock(@NotNull String name, long timeout) {
+			HazelcastInstance hazelcastInstance = Hazelcast.getHazelcastInstance();
+
+			// Lock accesses to getSemaphore
+			Semaphore lock = LOCK_SERIALIZATION;
+			ISemaphore iSemaphore;
+			lock.acquireUninterruptibly();
 			try {
+				// This will typically happen pretty fast, so it's okay to use a blocking thread for this.
+				iSemaphore = invoke(hazelcastInstance::getSemaphore, LOCK_SEMAPHORE_PREFIX + name);
+			} finally {
+				lock.release();
+			}
+
+			HazelcastInstanceImpl finalInstance = getHazelcastInstance(hazelcastInstance);
+
+			return awaitFiber(fut1 -> {
+				GetPartitionAndService getPartitionAndService = new GetPartitionAndService(iSemaphore, finalInstance).invoke();
+				int partitionId = getPartitionAndService.getPartitionId();
+				InternalOperationService operationService = getPartitionAndService.getOperationService();
+
+				Operation acquireOperation = new AcquireOperation(LOCK_SEMAPHORE_PREFIX + name, 1, timeout)
+						.setPartitionId(partitionId)
+						.setServiceName(SemaphoreService.SERVICE_NAME);
+
 				operationService.asyncInvokeOnPartition(acquireOperation.getServiceName(),
 						acquireOperation, acquireOperation.getPartitionId(), new ExecutionCallback<Boolean>() {
 							@Override
@@ -84,73 +239,25 @@ public interface SuspendableLock {
 								fut1.handle(Future.failedFuture(new VertxException(name, t)));
 							}
 						});
-			} finally {
-				lockA.unlock();
-			}
-		});
+			});
 
-	}
-
-	static HazelcastInstanceImpl getHazelcastInstance(HazelcastInstance hazelcastInstance) {
-		if (hazelcastInstance instanceof HazelcastInstanceProxy) {
-			hazelcastInstance = ((HazelcastInstanceProxy) hazelcastInstance).getOriginal();
 		}
 
-		return (HazelcastInstanceImpl) hazelcastInstance;
+		@Suspendable
+		static SuspendableLock lock(String name) {
+			return lock(name, -1);
+		}
 	}
 
-	@Suspendable
-	void release();
+	class NoOpLock implements SuspendableLock {
 
-	@Suspendable
-	static SuspendableLock lock(String name) {
-		return lock(name, -1);
-	}
-
-	class HazelcastLock implements SuspendableLock {
-		private final ISemaphore semaphore;
-
-		private HazelcastLock(ISemaphore semaphore) {
-			this.semaphore = semaphore;
+		@Override
+		public void release() {
 		}
 
 		@Override
-		@Suspendable
-		public void release() {
+		public void destroy() {
 
-			Vertx.currentContext().executeBlocking(fut -> {
-				semaphore.release();
-				fut.complete();
-			}, false, null);
-
-			// Releasing a semaphore instance will go fast, but below is the asynchronous implementation
-
-			/*
-			HazelcastInstanceImpl hazelcastInstance = getHazelcastInstance(Hazelcast.getHazelcastInstance());
-			GetPartitionAndService getPartitionAndService = new GetPartitionAndService(semaphore, hazelcastInstance).invoke();
-			int partitionId = getPartitionAndService.getPartitionId();
-			InternalOperationService operationService = getPartitionAndService.getOperationService();
-			ComparisonOperation operation = new ReleaseOperation(semaphore.getName(), 1)
-					.setPartitionId(partitionId)
-					.setServiceName(SemaphoreService.SERVICE_NAME);
-
-			ReentrantLock lock = LOCK_SERIALIZATION.computeIfAbsent(hazelcastInstance, (ignored) -> new ReentrantLock());
-			lock.lock();
-			try {
-				operationService.asyncInvokeOnPartition(operation.getServiceName(),
-						operation, operation.getPartitionId(), new ExecutionCallback<Boolean>() {
-							@Override
-							public void onResponse(Boolean response) {
-							}
-
-							@Override
-							public void onFailure(Throwable t) {
-							}
-						});
-			} finally {
-				lock.unlock();
-			}
-			*/
 		}
 	}
 

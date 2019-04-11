@@ -1,0 +1,26 @@
+{
+  "name": "Refracting Golem",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "description": "When you draw this, summon a Refracting Golem for your opponent.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "cards": [
+        "minion_refracting_golem"
+      ],
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

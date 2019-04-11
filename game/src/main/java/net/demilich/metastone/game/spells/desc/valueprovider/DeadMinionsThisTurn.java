@@ -1,11 +1,11 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 @Deprecated
 public class DeadMinionsThisTurn extends ValueProvider {
@@ -20,7 +20,7 @@ public class DeadMinionsThisTurn extends ValueProvider {
 		int currentTurn = context.getTurn();
 		int count = 0;
 		for (Entity deadEntity : player.getGraveyard()) {
-			if (deadEntity.getEntityType() != EntityType.MINION) {
+			if (deadEntity.getEntityType() != EntityType.MINION || deadEntity.isRemovedPeacefully()) {
 				continue;
 			}
 

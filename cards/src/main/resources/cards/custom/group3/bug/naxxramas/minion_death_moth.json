@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Whenever you summon a Deathrattle minion, summon a Death Moth.",
+  "description": "Whenever you summon a Aftermath minion, summon a Death Moth.",
   "trigger": {
     "eventTrigger": {
       "class": "MinionSummonedTrigger",

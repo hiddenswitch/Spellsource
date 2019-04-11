@@ -1,0 +1,52 @@
+{
+  "name": "Light of Chi-Ji",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "JADE",
+  "rarity": "FREE",
+  "description": "Passive Skill. Whenever a friendly minion returns to your hand, set its cost to 0.",
+  "passiveTriggers": [
+    {
+      "eventTrigger": {
+        "class": "ReturnToHandTrigger",
+        "targetEntityType": "MINION",
+        "targetPlayer": "SELF"
+      },
+      "spell": {
+        "class": "CardCostModifierSpell",
+        "target": "EVENT_SOURCE",
+        "cardCostModifier": {
+          "class": "CardCostModifier",
+          "target": "SELF",
+          "value": 0,
+          "operation": "SET"
+        }
+      }
+    }
+  ],
+  "condition": {
+    "class": "OrCondition"
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_HAND",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 0,
+        "operation": "SET"
+      },
+      "filter": {
+        "class": "CardFilter",
+        "cardType": "MINION"
+      },
+      "randomTarget": true
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

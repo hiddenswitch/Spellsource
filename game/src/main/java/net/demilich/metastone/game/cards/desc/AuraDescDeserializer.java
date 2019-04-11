@@ -16,7 +16,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 	}
 
 	@Override
-	protected void init(SerializationContext ctx) {
+	public void init(SerializationContext ctx) {
 		ctx.add(AuraArg.FILTER, ParseValueType.ENTITY_FILTER);
 		ctx.add(AuraArg.TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(AuraArg.ATTRIBUTE, ParseValueType.ATTRIBUTE);
@@ -25,6 +25,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.ATTACK_BONUS, ParseValueType.VALUE);
 		ctx.add(AuraArg.HP_BONUS, ParseValueType.VALUE);
 		ctx.add(AuraArg.SECONDARY_TRIGGER, ParseValueType.EVENT_TRIGGER);
+		ctx.add(AuraArg.TRIGGERS, ParseValueType.EVENT_TRIGGER_ARRAY);
 		ctx.add(AuraArg.REVERT_TRIGGER, ParseValueType.EVENT_TRIGGER);
 		ctx.add(AuraArg.CONDITION, ParseValueType.CONDITION);
 		ctx.add(AuraArg.CARD, ParseValueType.STRING);
@@ -34,6 +35,7 @@ public class AuraDescDeserializer extends DescDeserializer<AuraDesc, AuraArg, Au
 		ctx.add(AuraArg.PAY_EFFECT, ParseValueType.SPELL);
 		ctx.add(AuraArg.TARGET_SELECTION, ParseValueType.TARGET_SELECTION);
 		ctx.add(AuraArg.CHOOSE_ONE_OVERRIDE, ParseValueType.CHOOSE_ONE_OVERRIDE);
+		ctx.add(AuraArg.VALUE, ParseValueType.VALUE);
 	}
 
 	@Override

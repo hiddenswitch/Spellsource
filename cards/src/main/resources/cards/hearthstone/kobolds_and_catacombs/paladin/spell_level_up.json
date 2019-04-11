@@ -1,6 +1,6 @@
 {
   "name": "Level Up!",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "EPIC",

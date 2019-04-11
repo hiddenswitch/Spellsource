@@ -1,0 +1,19 @@
+{
+  "name": "Holy Giant",
+  "baseManaCost": 12,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Cost (1) less each time a friendly character is healed.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "AttributeValueProvider",
+    "target": "FRIENDLY_PLAYER",
+    "attribute": "TIMES_HEALED"
+  }
+}

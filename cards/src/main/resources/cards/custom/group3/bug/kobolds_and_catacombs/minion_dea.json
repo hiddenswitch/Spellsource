@@ -6,12 +6,12 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Set all the numbers in the next card you play to 1.",
+  "description": "Opener: Set all the numbers in the next card you play to 1.",
   "battlecry": {
+    "targetSelection": "NONE",
     "spell": {
       "class": "NullSpell"
-    },
-    "targetSelection": "NONE"
+    }
   },
   "attributes": {
     "BATTLECRY": true

@@ -1,6 +1,6 @@
 package io.vertx.ext.sync;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.SuspendExecution;
 
 /**
  * @author <a href="http://tfox.org">Tim Fox</a>

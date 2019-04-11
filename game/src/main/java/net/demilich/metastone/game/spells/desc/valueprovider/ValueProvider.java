@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.desc.valueprovider;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.desc.Desc;
@@ -78,6 +78,12 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 				break;
 			case OWNER:
 				providingPlayer = context.getPlayer(host.getOwner());
+				break;
+			case PLAYER_1:
+				providingPlayer = context.getPlayer1();
+				break;
+			case PLAYER_2:
+				providingPlayer = context.getPlayer2();
 				break;
 			case SELF:
 			default:

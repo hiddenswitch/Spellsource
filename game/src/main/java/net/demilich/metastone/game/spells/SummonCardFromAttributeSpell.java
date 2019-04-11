@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -8,7 +8,7 @@ import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.Map;
 
@@ -53,7 +53,7 @@ public class SummonCardFromAttributeSpell extends Spell {
 		}
 		for (int i = 0; i < count; i++) {
 			card = count == 1 ? card : card.clone();
-			context.getLogic().summon(player.getId(), card.summon(), null, boardPosition, false);
+			context.getLogic().summon(player.getId(), card.summon(), source, boardPosition, false);
 		}
 	}
 }

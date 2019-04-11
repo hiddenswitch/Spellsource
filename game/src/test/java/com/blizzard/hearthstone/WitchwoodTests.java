@@ -2,23 +2,22 @@ package com.blizzard.hearthstone;
 
 import com.google.common.collect.Sets;
 import net.demilich.metastone.game.Player;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardType;
-import net.demilich.metastone.game.cards.CardZone;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.decks.DeckFormat;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
 import net.demilich.metastone.tests.util.DebugContext;
 import net.demilich.metastone.tests.util.TestBase;
 import org.mockito.Mockito;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import java.util.Random;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -27,6 +26,90 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class WitchwoodTests extends TestBase {
+
+	@Test
+	public void testTessGreymaneFlamewakerInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_mind_blast");
+			playCard(context, player, "minion_flamewaker");
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "minion_tess_greymane");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 5, "Only mindblast should have been played, Flamewaker should not have been triggered");
+		});
+	}
+
+	@Test
+	public void testTheGlassKnight() {
+		runGym((context, player, opponent) -> {
+			Minion glassKnight = playMinionCard(context, player, "minion_the_glass_knight");
+			playCard(context, player, "spell_fireball", glassKnight);
+			player.getHero().setHp(29);
+			playCard(context, player, "spell_healing_touch", player.getHero());
+			assertTrue(glassKnight.hasAttribute(Attribute.DIVINE_SHIELD));
+		});
+	}
+
+	@Test
+	public void testBewitchPermanentsInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "hero_hagatha_the_witch");
+			assertEquals(player.getHero().getHeroPower().getCardId(), "hero_power_bewitch");
+			playCard(context, player, "permanent_test");
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
+	public void testDariusCrowley() {
+		runGym((context, player, opponent) -> {
+			Minion darius = playMinionCard(context, player, "minion_darius_crowley");
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_wisp");
+			context.endTurn();
+			attack(context, player, darius, target);
+			assertFalse(darius.isDestroyed());
+			assertTrue(target.isDestroyed());
+			assertEquals(darius.getAttack(), darius.getBaseAttack() + 2);
+			assertEquals(darius.getMaxHp(), darius.getBaseHp() + 2);
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion darius = playMinionCard(context, player, "minion_darius_crowley");
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_wisp");
+			target.setAttack(4);
+			context.endTurn();
+			attack(context, player, darius, target);
+			assertTrue(darius.isDestroyed(), "Darius Crowley should not be able to survive lethal damage with its effect of gaining +2/+2");
+		});
+	}
+
+	@Test
+	public void testArcaneKeysmith() {
+		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("secret_duplicate", "secret_counterspell"));
+			playCard(context, player, "secret_duplicate");
+			overrideDiscover(context, player, discoverActions -> {
+				assertEquals(discoverActions.size(), 1, "The discover should not show Duplicate, because it's already in play");
+				assertEquals(discoverActions.get(0).getCard().getCardId(), "secret_counterspell");
+				return discoverActions.get(0);
+			});
+			playCard(context, player, "minion_arcane_keysmith");
+			assertEquals(player.getSecrets().size(), 2, "Both Counterspell and Duplicate should be in play now.");
+		}, HeroClass.BLUE, HeroClass.BLUE);
+	}
+
+	@Test
+	public void testCoffinCrasher() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_loot_hoarder");
+			receiveCard(context, player, "minion_runic_egg");
+			Minion coffinCrasher = playMinionCard(context, player, "minion_coffin_crasher");
+			destroy(context, coffinCrasher);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getMinions().get(0).getSourceCard().getCardId(), "minion_runic_egg");
+		});
+	}
 
 	@Test
 	public void testVoodooDoll() {
@@ -42,7 +125,7 @@ public class WitchwoodTests extends TestBase {
 	public void testGentlemansTopHat() {
 		runGym((context, player, opponent) -> {
 			Minion target1 = playMinionCard(context, player, "minion_wisp");
-			playCardWithTarget(context, player, "spell_gentleman_s_top_hat", target1);
+			playCard(context, player, "spell_gentleman_s_top_hat", target1);
 			assertEquals(target1.getAttack(), target1.getBaseAttack() + 2);
 			Minion target2 = playMinionCard(context, player, "minion_wisp");
 			assertEquals(target2.getAttack(), target2.getBaseAttack());
@@ -83,7 +166,7 @@ public class WitchwoodTests extends TestBase {
 
 		runGym((context, player, opponent) -> {
 			Minion paragon = playMinionCard(context, player, "minion_paragon_of_light");
-			playCardWithTarget(context, player, "spell_dragon_s_strength", paragon);
+			playCard(context, player, "spell_dragon_s_strength", paragon);
 			context.endTurn();
 			context.endTurn();
 			player.getHero().setHp(10);
@@ -100,7 +183,7 @@ public class WitchwoodTests extends TestBase {
 			receiveCard(context, opponent, "minion_bloodfen_raptor");
 			Minion grizzly = playMinionCard(context, player, "minion_witchwood_grizzly");
 			assertEquals(grizzly.getHp(), grizzly.getBaseHp() - 1);
-			playCardWithTarget(context, player, "spell_silence", grizzly);
+			playCard(context, player, "spell_silence", grizzly);
 			assertEquals(grizzly.getHp(), grizzly.getBaseHp());
 		});
 	}
@@ -131,12 +214,32 @@ public class WitchwoodTests extends TestBase {
 	}
 
 	@Test
+	public void testShudderwockEvolutionInteraction() {
+		runGym((context, player, opponent) -> {
+			// Make sure there are minions for novice and shudderwock to transform into
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_cost_4_test", "minion_cost_11_test"));
+			playMinionCard(context, player, "minion_novice_engineer");
+			playCard(context, player, "hero_thrall_deathseer");
+			Card shouldNotBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
+			context.getLogic().setRandom(new XORShiftRandom(0L) {
+				@Override
+				protected int next(int bits) {
+					return 1;
+				}
+			});
+			playCard(context, player, "minion_shudderwock");
+			assertEquals(player.getHand().size(), 0);
+			assertEquals(shouldNotBeDrawn.getZone(), Zones.DECK);
+		});
+	}
+
+	@Test
 	public void testShudderwockZolaInteraction() {
 		runGym((context, player, opponent) -> {
 			Minion remove = playMinionCard(context, player, "minion_zola_the_gorgon");
 			destroy(context, remove);
 			playMinionCard(context, player, "minion_shudderwock");
-			assertEquals(player.getHand().get(0).getCardId(), "minion_shudderwock", "Should copy Shudderwock");
+			assertEquals(player.getHand().size(), 0, "Should NOT copy Shudderwock");
 		});
 	}
 
@@ -172,13 +275,33 @@ public class WitchwoodTests extends TestBase {
 	}
 
 	@Test
+	public void testShudderwockHagathaTheWitchInteraction() {
+		runGym((context, player, opponent) -> {
+			Minion minion = playMinionCard(context, player, "minion_boulderfist_ogre");
+			playCard(context, player, "hero_hagatha_the_witch");
+			assertEquals(minion.getHp(), minion.getMaxHp() - 3);
+			playCard(context, player, "minion_shudderwock");
+			assertEquals(minion.getHp(), minion.getMaxHp() - 6);
+		});
+	}
+
+	@Test
+	public void testShudderwockConditionalBattlecriesInteraction() {
+		runGym((context, player, opponent) -> {
+			playMinionCard(context, player, "minion_hooked_reaver");
+			Minion shudderwock = playMinionCard(context, player, "minion_shudderwock");
+			assertEquals(shudderwock.getAttack(), 6);
+		});
+	}
+
+	@Test
 	public void testTessGreymane() {
 		runGym((context, player, opponent) -> {
 			Set<String> willReplay = Sets.newHashSet("spell_never_valid_targets_black_test", "minion_black_test", "minion_play_randomly_battlecry");
 			// Fireball should not be revealed
-			playCardWithTarget(context, player, "spell_any_blue_test", opponent.getHero());
+			playCard(context, player, "spell_any_blue_test", opponent.getHero());
 			// No valid targets should not be replayed, even if there were valid targets at the time
-			playCardWithTarget(context, player, "spell_never_valid_targets_black_test", opponent.getHero());
+			playCard(context, player, "spell_never_valid_targets_black_test", opponent.getHero());
 			Assert.assertTrue(opponent.getHero().hasAttribute(Attribute.RESERVED_BOOLEAN_3));
 			opponent.getHero().getAttributes().remove(Attribute.RESERVED_BOOLEAN_3);
 			// Don't replay same color
@@ -200,6 +323,18 @@ public class WitchwoodTests extends TestBase {
 			assertEquals(willReplay.size(), 0);
 			Assert.assertFalse(battlecryTarget.hasAttribute(Attribute.RESERVED_BOOLEAN_2), "The battlecries should not have been resolved.");
 			Assert.assertFalse(context.getEntities().anyMatch(e -> e.hasAttribute(Attribute.RESERVED_BOOLEAN_3)), "There should have never been a valid target for the spell that adds this attribute.");
+		}, HeroClass.BLUE, HeroClass.BLUE);
+	}
+
+	@Test
+	public void testTessGreymaneDoesntTriggerFlamewaker() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_any_black_test", opponent.getHero());
+			playMinionCard(context, player, "minion_flamewaker");
+			playMinionCard(context, player, "minion_tess_greymane");
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp(), "Should not have triggered Flamewaker");
+			playCard(context, player, "spell_any_black_test", opponent.getHero());
+			assertEquals(opponent.getHero().getHp(), opponent.getHero().getMaxHp() - 2, "Should have triggered Flamewaker");
 		}, HeroClass.BLUE, HeroClass.BLUE);
 	}
 

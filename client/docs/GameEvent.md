@@ -37,7 +37,7 @@ Name | Type | Description | Notes
 **summon** | [**GameEventBeforeSummon**](GameEventBeforeSummon.md) |  |  [optional]
 **afterSpellCasted** | [**GameEventAfterSpellCasted**](GameEventAfterSpellCasted.md) |  |  [optional]
 **discard** | [**CardEvent**](CardEvent.md) |  |  [optional]
-**mill** | [**CardEvent**](CardEvent.md) |  |  [optional]
+**roasted** | [**CardEvent**](CardEvent.md) |  |  [optional]
 **kill** | [**GameEventKill**](GameEventKill.md) |  |  [optional]
 **fatigue** | [**GameEventFatigue**](GameEventFatigue.md) |  |  [optional]
 **triggerFired** | [**GameEventTriggerFired**](GameEventTriggerFired.md) |  |  [optional]
@@ -56,9 +56,11 @@ ATTRIBUTE_APPLIED | &quot;ATTRIBUTE_APPLIED&quot;
 ARMOR_GAINED | &quot;ARMOR_GAINED&quot;
 BEFORE_SUMMON | &quot;BEFORE_SUMMON&quot;
 BOARD_CHANGED | &quot;BOARD_CHANGED&quot;
+CARD_ADDED_TO_DECK | &quot;CARD_ADDED_TO_DECK&quot;
 CARD_SHUFFLED | &quot;CARD_SHUFFLED&quot;
 DAMAGE | &quot;DAMAGE&quot;
 DISCARD | &quot;DISCARD&quot;
+DRAIN | &quot;DRAIN&quot;
 DRAW_CARD | &quot;DRAW_CARD&quot;
 ENRAGE_CHANGED | &quot;ENRAGE_CHANGED&quot;
 ENTITY_TOUCHED | &quot;ENTITY_TOUCHED&quot;
@@ -72,7 +74,7 @@ JOUST | &quot;JOUST&quot;
 KILL | &quot;KILL&quot;
 LOSE_DIVINE_SHIELD | &quot;LOSE_DIVINE_SHIELD&quot;
 LOSE_DEFLECT | &quot;LOSE_DEFLECT&quot;
-MILL | &quot;MILL&quot;
+MAX_HP_INCREASED | &quot;MAX_HP_INCREASED&quot;
 MAX_MANA | &quot;MAX_MANA&quot;
 MANA_MODIFIED | &quot;MANA_MODIFIED&quot;
 OVERLOAD | &quot;OVERLOAD&quot;
@@ -83,6 +85,7 @@ PRE_DAMAGE | &quot;PRE_DAMAGE&quot;
 PRE_GAME_START | &quot;PRE_GAME_START&quot;
 QUEST_PLAYED | &quot;QUEST_PLAYED&quot;
 QUEST_SUCCESSFUL | &quot;QUEST_SUCCESSFUL&quot;
+RETURNED_TO_HAND | &quot;RETURNED_TO_HAND&quot;
 ROASTED | &quot;ROASTED&quot;
 REVEAL_CARD | &quot;REVEAL_CARD&quot;
 SECRET_PLAYED | &quot;SECRET_PLAYED&quot;

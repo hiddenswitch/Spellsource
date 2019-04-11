@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,10 +11,11 @@ import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
+import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.spells.custom.CreateCardFromChoicesSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -34,6 +35,9 @@ public class CreateSummonSpell extends Spell {
 		CardDesc cardDesc = new CardDesc();
 		cardDesc.setId(context.getLogic().generateCardId());
 		cardDesc.setName(desc.getString(SpellArg.NAME));
+		if (desc.containsKey(SpellArg.RACE)) {
+			cardDesc.setRace((Race) desc.get(SpellArg.RACE));
+		}
 		cardDesc.setBaseAttack(desc.getValue(SpellArg.ATTACK_BONUS, context, player, target, source, 0));
 		cardDesc.setBaseHp(desc.getValue(SpellArg.HP_BONUS, context, player, target, source, 0));
 		cardDesc.setHeroClass(HeroClass.ANY);
@@ -57,7 +61,7 @@ public class CreateSummonSpell extends Spell {
 		for (int i = 0; i < count; i++) {
 			Card card = newCard.clone();
 			Minion minion = card.summon();
-			if (context.getLogic().summon(player.getId(), minion, null, boardPosition, false) && successfulSummonSpell != null) {
+			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
 				SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, minion, minion);
 			}
 			SpellUtils.castChildSpell(context, player, spell, source, target, minion);

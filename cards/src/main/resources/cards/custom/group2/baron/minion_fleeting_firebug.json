@@ -1,0 +1,25 @@
+{
+  "name": "Fleeting Firebug",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "race": "BEAST",
+  "description": "Aftermath: Summon a Firebug for your opponent.",
+  "deathrattle": {
+    "class": "CastAfterSequenceSpell",
+    "spell": {
+      "class": "SummonSpell",
+      "card": "minion_fleeting_firebug",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

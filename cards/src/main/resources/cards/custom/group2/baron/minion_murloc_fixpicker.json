@@ -1,0 +1,53 @@
+{
+  "name": "Fairy Fixpicker",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 3,
+  "rarity": "EPIC",
+  "race": "FAE",
+  "description": "Whenever you draw a minion, transform it into two random Fae.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "CardDrawnTrigger",
+      "fireCondition": {
+        "class": "CardPropertyCondition",
+        "cardType": "MINION"
+      },
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "ReplaceCardsSpell",
+          "target": "EVENT_TARGET",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "FAE",
+            "cardType": "MINION"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        },
+        {
+          "class": "ReceiveCardSpell",
+          "cardFilter": {
+            "class": "CardFilter",
+            "race": "FAE",
+            "cardType": "MINION"
+          },
+          "cardSource": {
+            "class": "UnweightedCatalogueSource"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

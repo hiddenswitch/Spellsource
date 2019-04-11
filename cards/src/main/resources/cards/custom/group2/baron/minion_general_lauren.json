@@ -6,7 +6,8 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon two Southsea Captains.",
+  "race": "PIRATE",
+  "description": "Opener: Summon two Southsea Captains.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

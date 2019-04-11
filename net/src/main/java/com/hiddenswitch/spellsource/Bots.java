@@ -1,9 +1,9 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.github.fromage.quasi.strands.Strand;
+import co.paralleluniverse.strands.Strand;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.impl.GameId;
 import com.hiddenswitch.spellsource.impl.UserId;
@@ -20,7 +20,7 @@ import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.behaviour.Behaviour;
 import net.demilich.metastone.game.logic.GameLogic;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.slf4j.Logger;
@@ -41,6 +41,8 @@ import static io.vertx.ext.sync.Sync.awaitResult;
 public interface Bots {
 	Logger LOGGER = LoggerFactory.getLogger(Bots.class);
 	AtomicReference<Supplier<? extends Behaviour>> BEHAVIOUR = new AtomicReference<>(GameStateValueBehaviour::new);
+	TypeReference<List<Integer>> LIST_INTEGER_TYPE = new TypeReference<List<Integer>>() {
+	};
 
 	/**
 	 * Decide which cards to mulligan given a starting hand.
@@ -64,7 +66,7 @@ public interface Bots {
 	 */
 	@Suspendable
 	static RequestActionResponse requestAction(RequestActionRequest request) {
-		RequestActionResponse response = new RequestActionResponse();
+		RequestActionResponse response;
 		// Use execute blocking to yield here
 		LOGGER.debug("requestAction: Requesting action from behaviour.");
 		final Behaviour behaviour = getBehaviour().get();
@@ -75,12 +77,11 @@ public interface Bots {
 			GameId gameId = request.gameId;
 			Buffer buf = map.get(gameId);
 			if (buf != null) {
-				List<Integer> indexPlan = Json.decodeValue(buf, new TypeReference<List<Integer>>() {
-				});
+				List<Integer> indexPlan = Json.decodeValue(buf, LIST_INTEGER_TYPE);
 				gsvb.setIndexPlan(new ArrayDeque<>(indexPlan));
 			}
 
-			delegateRequestAction(request, response, gsvb);
+			response = delegateRequestAction(request, gsvb);
 
 			// Save the new index plan
 			Deque<Integer> indexPlan = gsvb.getIndexPlan();
@@ -90,14 +91,15 @@ public interface Bots {
 				map.remove(gameId);
 			}
 		} else {
-			delegateRequestAction(request, response, behaviour);
+			response = delegateRequestAction(request, behaviour);
 		}
 
 		return response;
 	}
 
 	@Suspendable
-	static void delegateRequestAction(RequestActionRequest request, RequestActionResponse response, Behaviour behaviour) {
+	static RequestActionResponse delegateRequestAction(RequestActionRequest request, Behaviour behaviour) {
+		RequestActionResponse response = new RequestActionResponse();
 		final GameContext context = new GameContext();
 		context.setLogic(new GameLogic());
 		context.setDeckFormat(request.format);
@@ -124,11 +126,11 @@ public interface Bots {
 
 			LOGGER.debug("requestAction: Bot successfully chose action");
 			response.gameAction = result;
-
 		} catch (Throwable t) {
 			LOGGER.error("requestAction: Bot failed to choose an action due to an exception", t);
-			throw t;
+			response.gameAction = request.validActions.get(0);
 		}
+		return response;
 	}
 
 	static UserId pollBotId() throws SuspendExecution, InterruptedException {
@@ -136,7 +138,7 @@ public interface Bots {
 		List<String> bots = getBotIds();
 
 		Collections.shuffle(bots);
-		SuspendableMap<UserId, GameId> games = Games.getGames();
+		SuspendableMap<UserId, GameId> games = Games.getUsersInGames();
 
 		for (String id : bots) {
 			UserId key = new UserId(id);
@@ -198,9 +200,7 @@ public interface Bots {
 				Decks.deleteDeck(DeckDeleteRequest.create(deckId));
 			}
 			for (DeckCreateRequest req : Spellsource.spellsource().getStandardDecks()) {
-				if (req.getFormat().equals("Standard")) {
-					Decks.createDeck(req.withUserId(bot.getString("_id")));
-				}
+				Decks.createDeck(req.withUserId(bot.getString("_id")));
 			}
 		}
 	}

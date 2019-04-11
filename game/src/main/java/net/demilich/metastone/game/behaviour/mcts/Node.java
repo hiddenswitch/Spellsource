@@ -7,7 +7,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-class Node {
+/**
+ * A node in the Monte Carlo Tree Search tree.
+ */
+public class Node {
 
 	private GameContext state;
 	private List<GameAction> validTransitions;
@@ -31,7 +34,7 @@ class Node {
 		GameContext newState = state.clone();
 
 		try {
-			newState.getLogic().performGameAction(newState.getActivePlayerId(), action);
+			newState.performAction(newState.getActivePlayerId(), action);
 		} catch (Exception e) {
 			System.err.println("Exception on action: " + action + " state decided: " + state.updateAndGetGameOver());
 			e.printStackTrace();
@@ -99,7 +102,7 @@ class Node {
 		return state.updateAndGetGameOver();
 	}
 
-	public void process(ITreePolicy treePolicy) {
+	public void process(TreePolicy treePolicy) {
 		List<Node> visited = new LinkedList<Node>();
 		Node current = this;
 		visited.add(this);

@@ -1,8 +1,9 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.cards.costmodifier.CardCostModifier;
@@ -20,8 +21,8 @@ import java.util.Map;
 import java.util.function.BiConsumer;
 
 /**
- * Copies a {@code target} card. Includes card cost modifiers that are hosted by the card (typically ones that target
- * {@link net.demilich.metastone.game.targeting.EntityReference#SELF}.
+ * Copies a {@code target}'s source card. Includes card cost modifiers that are hosted by the card (typically ones that
+ * target {@link net.demilich.metastone.game.targeting.EntityReference#SELF}.
  * <p>
  * Casts the {@link SpellArg#SPELL} sub-spell on each newly generated card as the {@link
  * net.demilich.metastone.game.targeting.EntityReference#OUTPUT}. To copy a card in your opponent's hand:
@@ -93,6 +94,10 @@ public class CopyCardSpell extends Spell {
 			Card random = context.getLogic().getRandom(sourceCollection);
 			peek(random, context, player);
 			Card output = copyCard(context, player, random, (playerId, card) -> context.getLogic().receiveCard(playerId, card));
+			// Only cast the subspells if they actually made it into the player's hand
+			if (output == null || output.getZone() != Zones.HAND) {
+				continue;
+			}
 			for (SpellDesc subSpell : subSpells) {
 				SpellUtils.castChildSpell(context, player, subSpell, source, target, output);
 			}
@@ -113,7 +118,15 @@ public class CopyCardSpell extends Spell {
 				.map(CardCostModifier::clone)
 				.peek(c -> c.setHost(clone))
 				.forEach(c -> context.getLogic().addGameEventListener(player, c, clone));
-
+		if (inCard.hasAttribute(Attribute.ATTACK_BONUS)) {
+			clone.modifyAttribute(Attribute.ATTACK_BONUS, (int) inCard.getAttribute(Attribute.ATTACK_BONUS));
+		}
+		if (inCard.hasAttribute(Attribute.HP_BONUS)) {
+			clone.modifyAttribute(Attribute.HP_BONUS, (int) inCard.getAttribute(Attribute.HP_BONUS));
+		}
+		if (inCard.hasAttribute(Attribute.DEATHRATTLES)) {
+			clone.setAttribute(Attribute.DEATHRATTLES, inCard.getAttribute(Attribute.DEATHRATTLES));
+		}
 		return clone;
 	}
 

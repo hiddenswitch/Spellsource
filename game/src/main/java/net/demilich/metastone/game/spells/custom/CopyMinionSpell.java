@@ -1,18 +1,15 @@
 package net.demilich.metastone.game.spells.custom;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.spells.Spell;
-import net.demilich.metastone.game.spells.SpellUtils;
-import net.demilich.metastone.game.spells.TransformMinionSpell;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.trigger.Trigger;
-import net.demilich.metastone.game.utils.Attribute;
 
 import java.util.Map;
 
@@ -63,16 +60,16 @@ public final class CopyMinionSpell extends Spell {
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
 		Minion clone = ((Minion) target).getCopy();
 		clone.clearEnchantments();
-
-		boolean hadTransformReference = context.getEnvironment().get(Environment.TRANSFORM_REFERENCE) != null;
+		clone.setCardCostModifier(null);
 		context.getLogic().transformMinion((Minion) source, clone);
-		if (hadTransformReference) {
-			return;
-		}
 
-		for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
-			Trigger triggerClone = trigger.clone();
-			context.getLogic().addGameEventListener(player, triggerClone, clone);
+		boolean didTransform = context.getEnvironment().containsKey(Environment.TRANSFORM_REFERENCE);
+
+		if (didTransform) {
+			for (Trigger trigger : context.getTriggersAssociatedWith(target.getReference())) {
+				Trigger triggerClone = trigger.clone();
+				context.getLogic().addGameEventListener(player, triggerClone, clone);
+			}
 		}
 	}
 }

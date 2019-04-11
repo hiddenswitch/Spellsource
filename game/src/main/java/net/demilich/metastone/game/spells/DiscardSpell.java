@@ -1,13 +1,13 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.events.DiscardEvent;
-import net.demilich.metastone.game.events.MillEvent;
+import net.demilich.metastone.game.events.RoastEvent;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.AndFilter;
@@ -25,7 +25,7 @@ import java.util.Map;
  * net.demilich.metastone.game.spells.desc.source.HasCardCreationSideEffects}), like {@link DeckSource}.
  * <p>
  * Discarding from the hand generates a {@link DiscardEvent}, while discarding from the deck generates a {@link
- * MillEvent}.
+ * RoastEvent}. Use {@link RoastSpell} to remove cards from the deck when using the <b>Roast</b> keyword.
  * <p>
  * To discard all cards, use a {@link SpellArg#VALUE} of {@code -1}.
  * <p>
@@ -66,7 +66,6 @@ import java.util.Map;
 public class DiscardSpell extends Spell {
 
 	public static final int ALL_CARDS = -1;
-
 	public static SpellDesc create() {
 		return create(1);
 	}
@@ -103,7 +102,5 @@ public class DiscardSpell extends Spell {
 				discardableCards.remove(randomCard);
 			}
 		}
-
 	}
-
 }

@@ -1,0 +1,25 @@
+{
+  "name": "Guardian Kirin",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "COMMON",
+  "description": "Guard. Aftermath: Give adjacent minions Guard.",
+  "deathrattle": {
+    "class": "custom.AdjacentDeathrattleSpell",
+    "target": "SELF",
+    "spell2": {
+      "class": "AddAttributeSpell",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Battlecry: Deal 1 damage to all other characters.",
+  "description": "Opener: Deal 1 damage to all other characters.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -13,7 +13,8 @@ import net.demilich.metastone.game.spells.desc.condition.Condition;
  * Recasts the {@link SpellArg#SPELL} {@link SpellArg#HOW_MANY} times or up to 60 (14 if this is Grim Patron) by
  * default.
  * <p>
- * Stops casting if the {@link SpellArg#CONDITION} is not met.
+ * Continues casting as long as the {@link SpellArg#CONDITION} is met. Stops casting if the {@link SpellArg#CONDITION}
+ * is not met. Always casts <b>at least once.</b>
  */
 public class RecastWhileSpell extends Spell {
 	@Override

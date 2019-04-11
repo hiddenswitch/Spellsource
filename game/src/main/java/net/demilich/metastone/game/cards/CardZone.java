@@ -14,7 +14,8 @@ import java.util.stream.Stream;
  * @see CardArrayList for a {@link List} that implements {@link CardList} that does not represent a zone in the game and
  * 		can be used for all sorts of game logic that needs to deal with lists of cards.
  */
-public class CardZone extends EntityZone<Card> implements CardList {
+public final class CardZone extends EntityZone<Card> implements CardList {
+
 	public CardZone(int player, Zones zone) {
 		super(player, zone);
 	}

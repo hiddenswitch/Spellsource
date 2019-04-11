@@ -1,0 +1,27 @@
+{
+  "name": "Mossy Giant",
+  "baseManaCost": 20,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "EPIC",
+  "description": "Cost (1) less for each friendly minion that has died this game.",
+  "attributes": {},
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "EntityCounter",
+    "target": "FRIENDLY_GRAVEYARD",
+    "filter": {
+      "class": "AndFilter",
+      "filters": [
+        {
+          "class": "EntityTypeFilter",
+          "entityType": "MINION"
+        }
+      ]
+    }
+  }
+}

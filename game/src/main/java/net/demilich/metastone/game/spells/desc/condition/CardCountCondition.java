@@ -7,6 +7,10 @@ import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
 
+/**
+ * Evaluates to {@code true} if the {@link ConditionArg#TARGET_PLAYER} has card-count [ {@link ConditionArg#OPERATION} ]
+ * {@link ConditionArg#VALUE} cards in their hand.
+ */
 public class CardCountCondition extends Condition {
 
 	public CardCountCondition(ConditionDesc desc) {
@@ -19,6 +23,12 @@ public class CardCountCondition extends Condition {
 				: TargetPlayer.SELF;
 		int cardCount = 0;
 		switch (targetPlayer) {
+			case EITHER:
+				ConditionDesc playerDesc = desc.clone();
+				playerDesc.put(ConditionArg.TARGET_PLAYER, TargetPlayer.SELF);
+				ConditionDesc opponentDesc = desc.clone();
+				opponentDesc.put(ConditionArg.TARGET_PLAYER, TargetPlayer.OPPONENT);
+				return isFulfilled(context, player, playerDesc, source, target) || isFulfilled(context, player, opponentDesc, source, target);
 			case BOTH:
 				cardCount = player.getHand().getCount() + context.getOpponent(player).getHand().getCount();
 				break;
@@ -37,6 +47,11 @@ public class CardCountCondition extends Condition {
 			case OWNER:
 				cardCount = context.getPlayer(source.getOwner()).getHand().getCount();
 				break;
+			case PLAYER_1:
+				cardCount = context.getPlayer1().getHand().getCount();
+				break;
+			case PLAYER_2:
+				cardCount = context.getPlayer2().getHand().getCount();
 			default:
 				break;
 

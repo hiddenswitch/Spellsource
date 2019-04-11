@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Taunt. Whenever you restore Health, give your weapon +1 Attack.",
+  "description": "Guard. Whenever you restore Health, give your weapon +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",

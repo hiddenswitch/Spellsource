@@ -14,6 +14,8 @@ import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.condition.Condition;
+import net.demilich.metastone.game.spells.desc.condition.ConditionDesc;
 import net.demilich.metastone.game.spells.desc.filter.EntityFilter;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg;
 import net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierDesc;
@@ -22,7 +24,7 @@ import net.demilich.metastone.game.spells.desc.valueprovider.AlgebraicOperation;
 import net.demilich.metastone.game.spells.trigger.EventTrigger;
 import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.targeting.EntityReference;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 
 import java.io.Serializable;
 
@@ -38,6 +40,9 @@ import java.io.Serializable;
  *         "value": 1
  *     }
  * </pre>
+ * <p>
+ * When a target isn't specified, the card cost modification applies to the hand of the owner of this card cost modifier
+ * (i.e. {@link EntityReference#FRIENDLY_HAND}.
  *
  * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
  * 		effects into play.
@@ -48,11 +53,13 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	private boolean expired;
 	private int owner;
 	private EntityReference hostReference;
+	private String sourceCardId;
 	/**
 	 * The default target reference is the {@link EntityReference#FRIENDLY_HAND}.
 	 */
 	private EntityReference targetReference = EntityReference.FRIENDLY_HAND;
 	private EventTrigger expirationTrigger;
+	private Condition condition;
 	private CardCostModifierDesc desc;
 
 	public CardCostModifier(CardCostModifierDesc desc) {
@@ -63,6 +70,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		}
 		if (desc.containsKey(CardCostModifierArg.TARGET)) {
 			targetReference = (EntityReference) desc.get(CardCostModifierArg.TARGET);
+		}
+		if (desc.containsKey(CardCostModifierArg.CONDITION)) {
+			condition = (Condition) desc.get(CardCostModifierArg.CONDITION);
 		}
 	}
 
@@ -103,6 +113,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		if (!applies) {
 			return false;
 		}
+		if (condition != null && !condition.isFulfilled(context, player, context.resolveSingleTarget(this.getHostReference()), card)) {
+			return false;
+		}
 
 		// If a target reference is specified, does the target match?
 		applies &= !(targetReference != null
@@ -114,9 +127,9 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 		try {
 			host = context.resolveSingleTarget(hostReference);
 		} catch (NullPointerException notFound) {
-			logger.error("The card cost modifier's reference is not found.", hostReference);
+			logger.error(String.format("appliesTo: The card cost modifier from %s with desc %s has a host reference %s which could not be found", getSourceCardId(), getDesc().toString(), hostReference == null ? "(null)" : hostReference.toString()));
 			expire();
-			throw notFound;
+			return false;
 		}
 
 		applies &= !(targetReference != null
@@ -338,5 +351,15 @@ public class CardCostModifier extends CustomCloneable implements Trigger, Serial
 	@Override
 	public void setDesc(Desc<?, ?> desc) {
 		this.desc = (CardCostModifierDesc) desc;
+	}
+
+
+	public String getSourceCardId() {
+		return sourceCardId;
+	}
+
+	public CardCostModifier setSourceCardId(String sourceCardId) {
+		this.sourceCardId = sourceCardId;
+		return this;
 	}
 }

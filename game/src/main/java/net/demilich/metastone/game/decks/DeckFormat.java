@@ -1,5 +1,6 @@
 package net.demilich.metastone.game.decks;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardSet;
 
@@ -11,6 +12,17 @@ import java.util.stream.Stream;
 
 import static net.demilich.metastone.game.cards.CardSet.*;
 
+/**
+ * The sets that are available to build decks from and generate cards from.
+ * <p>
+ * The list of formats currently are {@link #STANDARD}, {@link #WILD}, {@link #PAST}, {@link #CUSTOM}, {@link
+ * #GREATER_CUSTOM}, {@link #SPELLSOURCE}. {@link #SPELLSOURCE} is the default format for community games, while {@link
+ * #STANDARD} is the default format for testing bots.
+ *
+ * @see GameContext#getDeckFormat() for the property on the game context where the deck format is set
+ * @see #getSmallestSupersetFormat(GameDeck...) to determine the smallest format that can be used for the specified
+ * 		decks
+ */
 public class DeckFormat implements Serializable, Cloneable {
 	private String name = "";
 	private Set<CardSet> sets;
@@ -25,7 +37,8 @@ public class DeckFormat implements Serializable, Cloneable {
 							KNIGHTS_OF_THE_FROZEN_THRONE,
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
-							BOOMSDAY_PROJECT
+							BOOMSDAY_PROJECT,
+							RASTAKHANS_RUMBLE
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -49,6 +62,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
+							RASTAKHANS_RUMBLE,
 							HALL_OF_FAME
 					))
 			);
@@ -92,9 +106,12 @@ public class DeckFormat implements Serializable, Cloneable {
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
+							RASTAKHANS_RUMBLE,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
+							VERDANT_DREAMS,
 							HALL_OF_FAME,
+							SPELLSOURCE_BASIC,
 							CardSet.CUSTOM
 					))
 			);
@@ -120,12 +137,15 @@ public class DeckFormat implements Serializable, Cloneable {
 							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
+							RASTAKHANS_RUMBLE,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
+							VERDANT_DREAMS,
 							HALL_OF_FAME,
 							ALTERNATIVE,
 							UNNERFED,
 							BLIZZARD_ADVENTURE,
+							SPELLSOURCE_BASIC,
 							CardSet.CUSTOM
 					))
 			);
@@ -134,24 +154,10 @@ public class DeckFormat implements Serializable, Cloneable {
 			.withName("Spellsource")
 			.withCardSets(
 					Collections.unmodifiableSet(EnumSet.of(
-							BASIC,
-							CLASSIC,
-							REWARD,
-							PROMO,
-							NAXXRAMAS,
-							GOBLINS_VS_GNOMES,
-							BLACKROCK_MOUNTAIN,
-							THE_GRAND_TOURNAMENT,
-							LEAGUE_OF_EXPLORERS,
-							THE_OLD_GODS,
-							ONE_NIGHT_IN_KARAZHAN,
-							MEAN_STREETS_OF_GADGETZAN,
-							JOURNEY_TO_UNGORO,
-							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS,
-							WITCHWOOD,
-							BOOMSDAY_PROJECT,
-							HALL_OF_FAME,
+							SPELLSOURCE_BASIC,
+							VERDANT_DREAMS,
+							SANDS_OF_TIME,
+							BATTLE_FOR_ASHENVALE,
 							CardSet.CUSTOM
 					))
 			);
@@ -224,6 +230,10 @@ public class DeckFormat implements Serializable, Cloneable {
 				.map(Card::getCardSet).collect(Collectors.toSet()));
 	}
 
+	public static DeckFormat getSmallestSupersetFormat(GameDeck... decks) {
+		return getSmallestSupersetFormat(Arrays.asList(decks));
+	}
+
 	public DeckFormat() {
 		sets = new HashSet<>();
 	}
@@ -289,3 +299,4 @@ public class DeckFormat implements Serializable, Cloneable {
 		return (DeckFormat) super.clone();
 	}
 }
+

@@ -25,13 +25,13 @@
           "class": "BuffSpell",
           "attackBonus": {
             "class": "AttributeValueProvider",
-            "attribute": "ATTACK",
-            "target": "EVENT_TARGET"
+            "target": "EVENT_TARGET",
+            "attribute": "ATTACK"
           },
           "hpBonus": {
             "class": "AttributeValueProvider",
-            "attribute": "HP",
-            "target": "EVENT_TARGET"
+            "target": "EVENT_TARGET",
+            "attribute": "HP"
           }
         },
         {

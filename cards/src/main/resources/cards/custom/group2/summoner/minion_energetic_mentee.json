@@ -3,23 +3,51 @@
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "EGGPLANT",
-  "baseAttack": 2,
+  "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Charge. Invoke (3): Summon a 1/1 Whelp with Charge.",
+  "description": "Summon two 1/1 Whelps. Invoke (3): Give them Charge.",
   "battlecry": {
-    "condition": {
-      "class": "InvokeCondition"
-    },
     "targetSelection": "NONE",
     "spell": {
-      "class": "SummonSpell",
-      "boardPositionRelative": "RIGHT",
-      "card": "token_deathwhelp"
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SummonSpell",
+          "spell": {
+            "class": "ConditionalSpell",
+            "condition": {
+              "class": "InvokeCondition"
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "CHARGE"
+            }
+          },
+          "boardPositionRelative": "RIGHT",
+          "card": "token_deathwhelp"
+        },
+        {
+          "class": "SummonSpell",
+          "spell": {
+            "class": "ConditionalSpell",
+            "condition": {
+              "class": "InvokeCondition"
+            },
+            "spell": {
+              "class": "AddAttributeSpell",
+              "target": "OUTPUT",
+              "attribute": "CHARGE"
+            }
+          },
+          "boardPositionRelative": "LEFT",
+          "card": "token_deathwhelp"
+        }
+      ]
     }
   },
   "attributes": {
-    "CHARGE": true,
     "INVOKE": 3
   },
   "collectible": true,

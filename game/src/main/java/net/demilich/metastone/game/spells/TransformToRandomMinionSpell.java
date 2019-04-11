@@ -1,16 +1,24 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 
 import java.util.Map;
 
+/**
+ * Transforms the {@code target} into a random <b>base</b> minion from {@link SpellUtils#getCards(GameContext, Player,
+ * Entity, Entity, SpellDesc, int)}.
+ *
+ * @see net.demilich.metastone.game.logic.GameLogic#transformMinion(Minion, Minion) for the complete rules of
+ * 		transforming minions.
+ */
 public class TransformToRandomMinionSpell extends TransformMinionSpell {
 
 	public static SpellDesc create() {

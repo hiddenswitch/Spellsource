@@ -22,7 +22,7 @@ public class WeaponTests extends TestBase {
 			context.getLogic().startTurn(player.getId());
 			Assert.assertEquals(warrior.getAttack(), 0);
 			context.getLogic().receiveCard(player.getId(), weaponCard);
-			context.getLogic().performGameAction(player.getId(), weaponCard.play());
+			context.performAction(player.getId(), weaponCard.play());
 			Assert.assertEquals(warrior.getAttack(), 3);
 			Assert.assertEquals(warrior.getWeapon().getDurability(), 2);
 

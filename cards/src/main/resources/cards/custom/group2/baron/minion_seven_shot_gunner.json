@@ -1,0 +1,40 @@
+{
+  "name": "Seven-Shot Gunner",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 7,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Opener: Destroy all enemy minions you summoned this turn.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_MINIONS",
+      "filter": {
+        "class": "AndFilter",
+        "filters": [
+          {
+            "class": "AttributeFilter",
+            "value": {
+              "class": "CurrentTurnValueProvider"
+            },
+            "attribute": "SUMMONED_ON_TURN",
+            "operation": "EQUAL"
+          },
+          {
+            "class": "SummonedByPlayerFilter",
+            "targetPlayer": "SELF"
+          }
+        ]
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

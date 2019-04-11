@@ -3,13 +3,12 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 10,
-  "baseHp": 4,
+  "baseAttack": 11,
+  "baseHp": 3,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Charge. Deflect. Can't attack heroes.",
+  "description": "Charge. Deflect.",
   "attributes": {
-    "CANNOT_ATTACK_HEROES": true,
     "CHARGE": true,
     "DEFLECT": true
   },

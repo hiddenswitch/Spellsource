@@ -11,8 +11,6 @@ include game/README.md
 include net/build.gradle
 include net/LICENSE
 include build.gradle
-include build.sh
-include client.sh
 include gradlew
 include gradlew.bat
 include swagger-api.yaml

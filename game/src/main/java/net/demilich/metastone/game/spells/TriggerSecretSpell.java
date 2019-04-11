@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -13,6 +13,9 @@ import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Triggers a specific secret, either from the {@link SpellArg#CARD} if specified or the {@code target} card.
+ */
 public class TriggerSecretSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(TriggerSecretSpell.class);

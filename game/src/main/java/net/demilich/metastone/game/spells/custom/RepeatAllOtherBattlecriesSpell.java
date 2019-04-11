@@ -1,28 +1,29 @@
 package net.demilich.metastone.game.spells.custom;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.BattlecryAction;
+import net.demilich.metastone.game.actions.BattlecryAsPlaySpellCardAction;
 import net.demilich.metastone.game.actions.PlaySpellCardAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.environment.Environment;
-import net.demilich.metastone.game.spells.CastRandomSpellSpell;
 import net.demilich.metastone.game.spells.Spell;
+import net.demilich.metastone.game.spells.SpellUtils;
 import net.demilich.metastone.game.spells.TargetPlayer;
 import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.List;
 
-import static net.demilich.metastone.game.spells.CastRandomSpellSpell.determineCastingPlayer;
+import static net.demilich.metastone.game.spells.SpellUtils.determineCastingPlayer;
 
 public class RepeatAllOtherBattlecriesSpell extends Spell {
 
@@ -47,7 +48,7 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				continue;
 			}
 
-			CastRandomSpellSpell.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
+			SpellUtils.DetermineCastingPlayer determineCastingPlayer = determineCastingPlayer(context, player, source, TargetPlayer.SELF);
 			// Stop casting battlecries if Shudderwock is transformed or destroyed
 			if (!determineCastingPlayer.isSourceInPlay()) {
 				break;
@@ -58,6 +59,10 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 			// Skip calls to this specific battlecry
 			if (battlecryDesc.getSpell() != null && battlecryDesc.getSpell().getDescClass().equals(RepeatAllOtherBattlecriesSpell.class)) {
 				logger.debug("onCast {} {}: Matched a card {} that has RepeatAllOtherBattlecriesSpell, so it was skipped.", context.getGameId(), source, card);
+				continue;
+			}
+
+			if (battlecryDesc.getCondition() != null && !battlecryDesc.getCondition().create().isFulfilled(context, player, source, target)) {
 				continue;
 			}
 
@@ -78,13 +83,16 @@ public class RepeatAllOtherBattlecriesSpell extends Spell {
 				continue;
 			}
 			action = action.clone();
-			action.setSource(source.getReference());
+			action.setSourceReference(source.getReference());
 			EntityReference battlecryTarget;
 			if (action.getTargetRequirement() != TargetSelection.NONE) {
 				// Compute the battlecry's valid targets as though it was a spell, so that the battlecry can target Shudderwock
-				PlaySpellCardAction spellCardAction = new PlaySpellCardAction(battlecryDesc.spell, card, battlecryDesc.targetSelection);
-				spellCardAction.setSource(action.getSourceReference());
+				PlaySpellCardAction spellCardAction = new BattlecryAsPlaySpellCardAction(action.getSourceReference(), battlecryDesc.spell, card, battlecryDesc.targetSelection);
 				List<Entity> targets = context.getLogic().getValidTargets(castingPlayer.getId(), spellCardAction);
+				if (targets != null && !targets.isEmpty() && targets.contains(source)) {
+					// They shouldn't actually be able to target Shudderwock
+					targets.remove(source);
+				}
 				if (targets.isEmpty()) {
 					context.getLogic().revealCard(player, card);
 					context.getLogic().endOfSequence();

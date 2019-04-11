@@ -1,0 +1,26 @@
+{
+  "name": "Kodama Bulwark",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 6,
+  "rarity": "COMMON",
+  "race": "ELEMENTAL",
+  "description": "Guard. Has +1 Attack for each other friendly minion on the battlefield.",
+  "aura": {
+    "class": "StatefulAttributeValueAura",
+    "target": "SELF",
+    "value": {
+      "class": "EntityCounter",
+      "target": "OTHER_FRIENDLY_MINIONS"
+    },
+    "attribute": "AURA_ATTACK_BONUS"
+  },
+  "attributes": {
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

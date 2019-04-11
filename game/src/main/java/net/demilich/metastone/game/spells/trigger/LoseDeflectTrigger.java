@@ -15,18 +15,6 @@ public class LoseDeflectTrigger extends EventTrigger {
 
 	@Override
 	protected boolean fire(GameEvent event, Entity host) {
-		LoseDeflectEvent loseDeflectEvent = (LoseDeflectEvent) event;
-
-		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
-		if (sourceEntityType != null && loseDeflectEvent.getSource().getEntityType() != sourceEntityType) {
-			return false;
-		}
-
-		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
-		if (targetEntityType != null && loseDeflectEvent.getVictim().getEntityType() != targetEntityType) {
-			return false;
-		}
-
 		return true;
 	}
 

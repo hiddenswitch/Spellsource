@@ -1,0 +1,29 @@
+{
+  "name": "Little Lieutenant",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "NAVY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "FAE",
+  "description": "Whenever a friendly Fae attacks, draw a card.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "PhysicalAttackTrigger",
+      "fireCondition": {
+        "class": "RaceCondition",
+        "target": "EVENT_SOURCE",
+        "race": "FAE"
+      },
+      "sourceEntityType": "MINION",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "DrawCardSpell"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

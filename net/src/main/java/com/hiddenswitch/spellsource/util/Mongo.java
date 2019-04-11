@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.util;
 
 import ch.qos.logback.classic.Level;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.impl.util.MongoRecord;
 import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
@@ -10,6 +10,7 @@ import io.vertx.core.logging.Logger;
 import io.vertx.core.logging.LoggerFactory;
 import io.vertx.ext.mongo.*;
 
+import static com.hiddenswitch.spellsource.util.QuickJson.fromJson;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 import java.util.List;
@@ -103,13 +104,8 @@ public class Mongo {
 			return this;
 		}
 
-		if (System.getProperties().containsKey("mongo.url")
-				|| System.getenv("MONGO_URL") != null) {
-			String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv("MONGO_URL"));
-			return connect(vertx, mongoUrl);
-		} else {
-			return startEmbedded().connect(vertx);
-		}
+		String mongoUrl = System.getProperties().getProperty("mongo.url", System.getenv().getOrDefault("MONGO_URL", "mongodb://localhost:27017"));
+		return connect(vertx, mongoUrl);
 	}
 
 	public MongoClient client() {
@@ -151,13 +147,13 @@ public class Mongo {
 	@Suspendable
 	public <T> List<T> find(String collection, JsonObject query, Class<T> returnClass) {
 		final List<JsonObject> objs = awaitResult(h -> getClient().find(collection, query, h));
-		return QuickJson.fromJson(objs, returnClass);
+		return fromJson(objs, returnClass);
 	}
 
 	@Suspendable
 	public <T> List<T> findWithOptions(String collection, JsonObject query, FindOptions options, Class<T> returnClass) {
 		final List<JsonObject> objs = awaitResult(h -> getClient().findWithOptions(collection, query, options, h));
-		return QuickJson.fromJson(objs, returnClass);
+		return fromJson(objs, returnClass);
 	}
 
 	@Suspendable
@@ -182,7 +178,7 @@ public class Mongo {
 		if (obj == null) {
 			return null;
 		}
-		return QuickJson.fromJson(obj, returnClass);
+		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable
@@ -191,7 +187,7 @@ public class Mongo {
 		if (obj == null) {
 			return null;
 		}
-		return QuickJson.fromJson(obj, returnClass);
+		return fromJson(obj, returnClass);
 	}
 
 	@Suspendable
@@ -289,7 +285,7 @@ public class Mongo {
 	@Suspendable
 	public <T extends MongoRecord> T findOneAndUpdate(String collection, JsonObject query, JsonObject update, Class<? extends T> returnClass) {
 		final JsonObject obj = awaitResult(h -> getClient().findOneAndUpdate(collection, query, update, then -> h.handle(then.otherwiseEmpty())));
-		return QuickJson.fromJson(obj, returnClass);
+		return fromJson(obj, returnClass);
 	}
 
 
@@ -342,7 +338,7 @@ public class Mongo {
 		return bulkWriteWithOptions(collection, documents.stream().map(BulkOperation::createInsert).collect(Collectors.toList()), options);
 	}
 
-	/**
+	/*
 	 * Subscribes to the change stream specified by the given aggregation pipeline.
 	 * <p>
 	 * {@code pipeline} describes a Mongo "aggregation" pipeline object limited to {@code $match}, {@code $project},
@@ -385,10 +381,9 @@ public class Mongo {
 	 * @param collection   the collection
 	 * @param pipeline     the Mongo aggregation pipeline
 	 * @param watchOptions the options
-	 * @Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
-	 * WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
-	 */
-
+	@Suspendable public MongoClientChangeStream<MongoClientChange> watch(String collection, JsonArray pipeline,
+	                                                                     WatchOptions watchOptions) { return awaitResult(h -> client().watch(collection, pipeline, watchOptions, h)); }
+	*/
 	public void close() {
 		if (getClient() == null) {
 			return;

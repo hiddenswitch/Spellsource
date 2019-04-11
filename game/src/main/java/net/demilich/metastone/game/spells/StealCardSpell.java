@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -11,6 +11,20 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Steals the {@code target} card and moves it to the caster's zone from {@link SpellArg#CARD_LOCATION}. Keeps card cost
+ * modifiers.
+ * <p>
+ * For example, to steal a card from the opponent's deck and put it into the caster's deck:
+ * <pre>
+ *   {
+ *     "class": "StealCardSpell",
+ *     "target": "ENEMY_DECK",
+ *     "randomTarget": true,
+ *     "cardLocation": "DECK"
+ *   }
+ * </pre>
+ */
 public class StealCardSpell extends Spell {
 	private static Logger logger = LoggerFactory.getLogger(StealCardSpell.class);
 

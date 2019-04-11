@@ -9,14 +9,14 @@ import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
-import net.demilich.metastone.game.cards.desc.CardDesc;
 import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
+import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.OverrideDiscoverBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
 import org.testng.Assert;
@@ -104,10 +104,10 @@ public class JourneyToUngoroTests extends TestBase {
 			// Ensure that cards that merely died don't get summoned
 			Minion target = playMinionCard(context, player, "minion_doomguard");
 			Assert.assertTrue(bloodfen.hasAttribute(Attribute.DISCARDED));
-			playCardWithTarget(context, player, "spell_pyroblast", target);
+			playCard(context, player, "spell_pyroblast", target);
 			Assert.assertTrue(target.isDestroyed());
 			Minion dinomancer = playMinionCard(context, player, "minion_cruel_dinomancer");
-			playCardWithTarget(context, player, "spell_fireball", dinomancer);
+			playCard(context, player, "spell_fireball", dinomancer);
 			Assert.assertTrue(player.getMinions().stream().anyMatch(m -> m.getSourceCard().getCardId().equals("minion_bloodfen_raptor")));
 		});
 	}
@@ -130,6 +130,16 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion devilsaur = playMinionCard(context, player, "minion_charged_devilsaur");
 			Assert.assertFalse(context.getValidActions().stream().anyMatch(ga ->
+					ga.getActionType() == ActionType.PHYSICAL_ATTACK
+							&& ga.getSourceReference().equals(devilsaur.getReference())
+							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
+		});
+
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "minion_charged_devilsaur");
+			playCard(context, player, "spell_gather_your_party");
+			Minion devilsaur = player.getMinions().get(0);
+			Assert.assertTrue(context.getValidActions().stream().anyMatch(ga ->
 					ga.getActionType() == ActionType.PHYSICAL_ATTACK
 							&& ga.getSourceReference().equals(devilsaur.getReference())
 							&& ga.getTargetReference().equals(opponent.getHero().getReference())));
@@ -169,7 +179,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			Minion minion2 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			Minion minion3 = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playCardWithTarget(context, player, "spell_meteor", minion2);
+			playCard(context, player, "spell_meteor", minion2);
 			Assert.assertTrue(minion1.isDestroyed());
 			Assert.assertTrue(minion2.isDestroyed());
 			Assert.assertTrue(minion3.isDestroyed());
@@ -181,7 +191,7 @@ public class JourneyToUngoroTests extends TestBase {
 				context.endTurn();
 				List<Minion> minions = IntStream.range(0, 3).mapToObj(i -> playMinionCard(context, opponent, "minion_argent_squire")).collect(toList());
 				context.endTurn();
-				playCardWithTarget(context, player, "spell_meteor", minions.get(j));
+				playCard(context, player, "spell_meteor", minions.get(j));
 				for (int k = 0; k < 3; k++) {
 					Assert.assertFalse(opponent.getMinions().get(k).isDestroyed());
 					assertEquals(opponent.getMinions().get(k).hasAttribute(Attribute.DIVINE_SHIELD), k < j - 1 || k > j + 1);
@@ -205,7 +215,7 @@ public class JourneyToUngoroTests extends TestBase {
 			context.endTurn();
 			Minion minion2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
 			context.endTurn();
-			playCardWithTarget(context, player, "spell_mind_control", minion2);
+			playCard(context, player, "spell_mind_control", minion2);
 			checkMinion.accept(minion2);
 		});
 
@@ -213,7 +223,7 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", minion1);
+			playCard(context, opponent, "spell_fireball", minion1);
 			context.endTurn();
 			playCard(context, player, "spell_crystal_core");
 			playCard(context, player, "spell_diamond_spellstone");
@@ -226,7 +236,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			checkMinion.accept(minion1);
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_silence", minion1);
+			playCard(context, opponent, "spell_silence", minion1);
 			context.endTurn();
 			checkMinion.accept(minion1);
 		});
@@ -244,6 +254,28 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion minion1 = playMinionCard(context, player, "minion_bloodfen_raptor");
 			playCard(context, player, "spell_crystal_core");
 			checkMinion.accept(minion1);
+		});
+	}
+
+	@Test
+	public void testTheCavernsBelowReturnTargetToHandInteraction() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "quest_the_caverns_below");
+			Minion returnTarget = playMinionCard(context, player, "minion_neutral_test");
+			Quest caverns = player.getQuests().get(0);
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 1);
+			assertEquals(player.getHand().size(), 0);
+			playMinionCardWithBattlecry(context, player, "minion_ancient_brewmaster", returnTarget);
+			assertEquals(player.getMinions().size(), 1);
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 1);
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 2, "Two neutral tests played.");
+			// Bounce again
+			playMinionCardWithBattlecry(context, player, "minion_ancient_brewmaster", player.getMinions().get(1));
+			playCard(context, player, player.getHand().get(0));
+			assertEquals(caverns.getAttributeValue(Attribute.RESERVED_INTEGER_1), 3, "Three neutral tests played.");
+			assertEquals(caverns.getFires(), 3, "Fires should be reported accurately.");
 		});
 	}
 
@@ -356,7 +388,7 @@ public class JourneyToUngoroTests extends TestBase {
 			stubbornGastropod.setAttack(10);
 			tirionFordring.setAttack(10);
 			// Clear Tirion's divine shield and equip a weapon with deathrattle
-			playCardWithTarget(context, player, "spell_fireball", tirionFordring);
+			playCard(context, player, "spell_fireball", tirionFordring);
 			Assert.assertFalse(tirionFordring.hasAttribute(Attribute.DIVINE_SHIELD));
 			playCard(context, player, "weapon_tentacles_for_arms");
 			attack(context, player, tirionFordring, stubbornGastropod);
@@ -372,7 +404,7 @@ public class JourneyToUngoroTests extends TestBase {
 			playCard(context, opponent, "weapon_tentacles_for_arms");
 			context.endTurn();
 			// Clear Tirion's divine shield and equip a weapon with deathrattle
-			playCardWithTarget(context, player, "spell_fireball", tirionFordring);
+			playCard(context, player, "spell_fireball", tirionFordring);
 			Assert.assertFalse(tirionFordring.hasAttribute(Attribute.DIVINE_SHIELD));
 			attack(context, player, stubbornGastropod, tirionFordring);
 		});
@@ -497,7 +529,6 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion clutchmother = playMinionCard(context, player, clutchmotherBase);
 			assertEquals(clutchmother.getAttack(), 6);
 			assertEquals(clutchmother.getHp(), 6);
-
 		});
 	}
 
@@ -506,7 +537,7 @@ public class JourneyToUngoroTests extends TestBase {
 		GymFactory factory = getGymFactory((context, player, opponent) -> {
 			Minion flower = playMinionCard(context, player, "minion_sherazin_corpse_flower");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_assassinate", flower);
+			playCard(context, opponent, "spell_assassinate", flower);
 			// Permanents can be affected by their own effects. For example, Sherazin, Seed is immune to all
 			// outside effects, but can transform itself into Sherazin, Corpse Flower.
 			assertEquals(player.getMinions().size(), 1);
@@ -583,7 +614,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion flower = playMinionCard(c, p, "minion_sherazin_corpse_flower");
 			Minion darkshireCouncilman = playMinionCard(c, p, "minion_darkshire_councilman");
 			c.endTurn();
-			playCardWithTarget(c, o, "spell_assassinate", flower);
+			playCard(c, o, "spell_assassinate", flower);
 			assertEquals(darkshireCouncilman.getAttributeValue(Attribute.ATTACK_BONUS), 0);
 		});
 
@@ -608,10 +639,10 @@ public class JourneyToUngoroTests extends TestBase {
 			// up a spot for the purposes of determining adjacent minions, effectively blocking their effects without consequence.
 
 			// Play flametongue to the left of the corpse
-			playCardWithTarget(c, p, "minion_flametongue_totem", corpse);
+			playCard(c, p, "minion_flametongue_totem", corpse);
 			assertEquals(raptor2.getAttributeValue(Attribute.AURA_ATTACK_BONUS), 0, "Flametongue is to the left of the corpse, so there should be no buff.");
 			assertEquals(corpse.getAttributeValue(Attribute.AURA_ATTACK_BONUS), 0, "Flametongue is to the left of the corpse, so there should be no buff.");
-			playCardWithTarget(c, p, "minion_flametongue_totem", raptor2);
+			playCard(c, p, "minion_flametongue_totem", raptor2);
 			assertEquals(raptor2.getAttributeValue(Attribute.AURA_ATTACK_BONUS), 2, "Flametongue is to the left of the Raptor, so there a buff.");
 			assertEquals(corpse.getAttributeValue(Attribute.AURA_ATTACK_BONUS), 0, "Flametongue shouldn't buff a corpse.");
 		});
@@ -684,7 +715,7 @@ public class JourneyToUngoroTests extends TestBase {
 			Minion target = playMinionCard(context, player, "minion_bloodfen_raptor");
 
 			for (int i = 0; i < 5; i++) {
-				playCardWithTarget(context, player, "spell_adaptation", target);
+				playCard(context, player, "spell_adaptation", target);
 			}
 
 			// Only spells that target a specific friendly minion will count towards the quest, meaning that randomly
@@ -695,12 +726,12 @@ public class JourneyToUngoroTests extends TestBase {
 
 			context.endTurn();
 			Minion opponentTarget = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			playCardWithTarget(context, opponent, "spell_adaptation", opponentTarget);
+			playCard(context, opponent, "spell_adaptation", opponentTarget);
 			Assert.assertFalse(player.getHand().containsCard("token_galvadon"));
 			context.endTurn();
-			playCardWithTarget(context, player, "spell_adaptation", opponentTarget);
+			playCard(context, player, "spell_adaptation", opponentTarget);
 			Assert.assertFalse(player.getHand().containsCard("token_galvadon"));
-			playCardWithTarget(context, player, "spell_adaptation", target);
+			playCard(context, player, "spell_adaptation", target);
 			Assert.assertTrue(player.getHand().containsCard("token_galvadon"));
 		});
 	}
@@ -736,13 +767,13 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			Minion primalfinChampion = playMinionCard(context, player, "minion_primalfin_champion");
 			Minion bloodfenRaptor = playMinionCard(context, player, "minion_bloodfen_raptor");
-			playCardWithTarget(context, player, "spell_adaptation", primalfinChampion);
-			playCardWithTarget(context, player, "spell_adaptation", primalfinChampion);
-			playCardWithTarget(context, player, "spell_bananas", bloodfenRaptor);
+			playCard(context, player, "spell_adaptation", primalfinChampion);
+			playCard(context, player, "spell_adaptation", primalfinChampion);
+			playCard(context, player, "spell_bananas", bloodfenRaptor);
 			context.endTurn();
 			Minion bloodfenRaptor2 = playMinionCard(context, opponent, "minion_bloodfen_raptor");
-			playCardWithTarget(context, opponent, "spell_bananas", bloodfenRaptor2);
-			playCardWithTarget(context, opponent, "spell_assassinate", primalfinChampion);
+			playCard(context, opponent, "spell_bananas", bloodfenRaptor2);
+			playCard(context, opponent, "spell_assassinate", primalfinChampion);
 			assertEquals(player.getHand().size(), 2);
 			Assert.assertTrue(player.getHand().containsCard("spell_adaptation"));
 			Assert.assertFalse(player.getHand().containsCard("spell_bananas"));
@@ -754,7 +785,7 @@ public class JourneyToUngoroTests extends TestBase {
 	public void testTheVoraxx() {
 		runGym((context, player, opponent) -> {
 			Minion voraxx = playMinionCard(context, player, "minion_the_voraxx");
-			playCardWithTarget(context, player, "spell_bananas", voraxx);
+			playCard(context, player, "spell_bananas", voraxx);
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(voraxx.getAttack(), 4, "The Voraxx should have been buffed by 1. ");
 			assertEquals(player.getMinions().get(1).getAttack(), 2, "The plant should be buffed");
@@ -770,7 +801,7 @@ public class JourneyToUngoroTests extends TestBase {
 				return discoverActions.get(0);
 			});
 			context.setBehaviour(player.getId(), behaviour);
-			playCardWithTarget(context, player, "spell_adaptation", voraxx);
+			playCard(context, player, "spell_adaptation", voraxx);
 			Card card = discoverAction[0].getCard();
 			assertEquals(player.getMinions().size(), 2);
 			assertEquals(count.get(), 1, "Should only prompt for an Adaptation once");
@@ -872,9 +903,9 @@ public class JourneyToUngoroTests extends TestBase {
 				Assert.assertNotEquals(oldId2, oldId1);
 				Card card = player.getHand().get(0);
 				if (card.isChooseOne()) {
-					context.getLogic().performGameAction(player.getId(), card.playOptions()[0]);
+					context.performAction(player.getId(), card.playOptions()[0]);
 				} else {
-					context.getLogic().performGameAction(player.getId(), card.play());
+					context.performAction(player.getId(), card.play());
 				}
 				// I suppose there might be a situation where a card gets shuffled into a deck and things glitch out,
 				// or the battlecry puts a card into the hand. So we're just testing to see there was no exception for
@@ -890,7 +921,7 @@ public class JourneyToUngoroTests extends TestBase {
 			playCard(context, player, "token_sapling");
 			Minion sapling = player.getMinions().get(0);
 			assertEquals(sapling.getAttack(), 1);
-			playCardWithTarget(context, player, CardCatalogue.getCardById("spell_earthen_scales"), sapling);
+			playCard(context, player, CardCatalogue.getCardById("spell_earthen_scales"), sapling);
 			assertEquals(player.getHero().getArmor(), 2);
 		});
 	}
@@ -923,7 +954,7 @@ public class JourneyToUngoroTests extends TestBase {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "secret_mana_bind");
 			context.endTurn();
-			playCardWithTarget(context, opponent, "spell_fireball", player.getHero());
+			playCard(context, opponent, "spell_fireball", player.getHero());
 			Card copiedFireball = player.getHand().get(0);
 			assertEquals(copiedFireball.getCardId(), "spell_fireball");
 			Card graveyardFireball = (Card) opponent.getGraveyard().get(opponent.getGraveyard().size() - 1);

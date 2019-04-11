@@ -41,6 +41,10 @@ public interface WebResult<T> extends AsyncResult<T> {
 		return WebResult.failed(501, new UnsupportedOperationException(String.format(message, objs)));
 	}
 
+	static <T> WebResult<T> illegalState(String message, Object... objs) {
+		return WebResult.failed(418, new IllegalStateException(String.format(message, objs)));
+	}
+
 	static <T> WebResult<T> invalidArgument(String message, Object... objs) {
 		return WebResult.failed(400, new IllegalArgumentException(String.format(message, objs)));
 	}

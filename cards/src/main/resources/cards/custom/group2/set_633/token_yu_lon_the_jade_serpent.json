@@ -3,21 +3,23 @@
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
-  "baseAttack": 9,
-  "baseHp": 5,
+  "baseAttack": 8,
+  "baseHp": 6,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Deflect. Deathrattle: Summon three Jade Serpent Statues.",
-  "deathrattle": {
-    "class": "SummonSpell",
-    "cards": [
-      "minion_jade_serpent_statue",
-      "minion_jade_serpent_statue",
-      "minion_jade_serpent_statue"
-    ]
+  "description": "Deflect. At the start of your turn, summon two Jade Serpent Statues.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "TurnStartTrigger",
+      "targetPlayer": "SELF"
+    },
+    "spell": {
+      "class": "SummonSpell",
+      "value": 2,
+      "card": "minion_jade_serpent_statue"
+    }
   },
   "attributes": {
-    "DEATHRATTLES": true,
     "DEFLECT": true
   },
   "collectible": false,

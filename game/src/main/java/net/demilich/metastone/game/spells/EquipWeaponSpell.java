@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -14,6 +14,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.CardFilter;
 import net.demilich.metastone.game.spells.desc.source.CatalogueSource;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -89,7 +90,7 @@ public class EquipWeaponSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.TARGET_PLAYER);
+		checkArguments(logger, context, source, desc, SpellArg.CARD, SpellArg.CARD_FILTER, SpellArg.CARD_SOURCE, SpellArg.TARGET_PLAYER, SpellArg.SPELL, SpellArg.SPELLS);
 		String cardId = (String) desc.get(SpellArg.CARD);
 		CardList results = new CardArrayList();
 		if (cardId != null) {
@@ -123,16 +124,17 @@ public class EquipWeaponSpell extends Spell {
 
 		Weapon weapon = context.getLogic().getRandom(results).createWeapon();
 		context.getLogic().equipWeapon(player.getId(), weapon, null, false);
-		for (SpellDesc spellDesc : desc.subSpells(0)) {
-			if (weapon.isDestroyed()) {
-				logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
-				continue;
+		weapon = player.getHero().getWeapon();
+		if (weapon != null && weapon.getZone() == Zones.WEAPON) {
+			for (SpellDesc spellDesc : desc.subSpells(0)) {
+				if (weapon.isDestroyed()) {
+					logger.error("onCast {} {}: Something destroyed the weapon {} before the subspell {} could be cast on it", context.getGameId(), source, weapon, spellDesc);
+					continue;
+				}
+
+				SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
 			}
-
-			SpellUtils.castChildSpell(context, player, spellDesc, source, target, weapon);
 		}
-
-
 	}
 
 

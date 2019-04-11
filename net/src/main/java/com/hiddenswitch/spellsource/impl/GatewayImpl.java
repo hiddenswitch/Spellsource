@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource.impl;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Sets;
 import com.hiddenswitch.spellsource.*;
 import com.hiddenswitch.spellsource.client.models.*;
@@ -11,10 +11,7 @@ import com.hiddenswitch.spellsource.client.models.LoginRequest;
 import com.hiddenswitch.spellsource.client.models.LoginResponse;
 import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
-import com.hiddenswitch.spellsource.impl.util.DraftRecord;
-import com.hiddenswitch.spellsource.impl.util.HandlerFactory;
-import com.hiddenswitch.spellsource.impl.util.ServerGameContext;
-import com.hiddenswitch.spellsource.impl.util.UserRecord;
+import com.hiddenswitch.spellsource.impl.util.*;
 import com.hiddenswitch.spellsource.models.ChangePasswordRequest;
 import com.hiddenswitch.spellsource.models.ChangePasswordResponse;
 import com.hiddenswitch.spellsource.models.*;
@@ -24,22 +21,28 @@ import io.vertx.core.Closeable;
 import io.vertx.core.http.HttpMethod;
 import io.vertx.core.http.HttpServer;
 import io.vertx.core.http.HttpServerOptions;
+import io.vertx.core.json.JsonObject;
+import io.vertx.ext.mongo.FindOptions;
 import io.vertx.ext.sync.SyncVerticle;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
 import io.vertx.ext.web.handler.*;
-import io.vertx.ext.web.impl.Utils;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.text.DateFormat;
+import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
+import java.time.format.FormatStyle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import static com.hiddenswitch.spellsource.util.Mongo.mongo;
+import static com.hiddenswitch.spellsource.util.QuickJson.array;
+import static com.hiddenswitch.spellsource.util.QuickJson.json;
 import static io.vertx.ext.sync.Sync.awaitResult;
 import static java.util.stream.Collectors.toList;
 
@@ -51,7 +54,6 @@ import static java.util.stream.Collectors.toList;
  */
 public class GatewayImpl extends SyncVerticle implements Gateway {
 	private static Logger logger = LoggerFactory.getLogger(Gateway.class);
-	private static final DateFormat dateTimeFormatter = Utils.createRFC1123DateTimeFormatter();
 	private final int port;
 	private HttpServer server;
 	private Closeable queues;
@@ -67,26 +69,20 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 	public void start() throws RuntimeException, SuspendExecution {
 		System.setProperty("vertx.logger-delegate-factory-class-name", "io.vertx.core.logging.SLF4JLogDelegateFactory");
 		io.vertx.core.logging.LoggerFactory.initialise();
-		server = vertx.createHttpServer(new HttpServerOptions().setHost("0.0.0.0").setPort(port));
+		server = vertx.createHttpServer(new HttpServerOptions()
+				.setHost("0.0.0.0")
+				.setPort(port)
+				.setMaxWebsocketFrameSize(65536)
+				.setMaxWebsocketMessageSize(100 * 65536)
+				.setPerFrameWebsocketCompressionSupported(true)
+				.setPerMessageWebsocketCompressionSupported(true)
+				.setCompressionSupported(true));
 		Router router = Router.router(vertx);
 
 		logger.info("start: Configuring router on instance {}", this.deploymentID());
 
 		final AuthHandler authHandler = SpellsourceAuthHandler.create();
 		final BodyHandler bodyHandler = BodyHandler.create();
-
-		// Handle game messaging here
-		final String websocketPath = "/" + Games.WEBSOCKET_PATH + "-clustered";
-
-		router.route(websocketPath)
-				.method(HttpMethod.GET)
-				.handler(authHandler);
-
-		// Enables the gateway to handle incoming game sockets.
-		// TODO: This is now a legacy connectivity channel.
-		router.route(websocketPath)
-				.method(HttpMethod.GET)
-				.handler(ServerGameContext.createWebSocketHandler());
 
 		// Handle all realtime messaging here
 		router.route("/realtime")
@@ -99,6 +95,9 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		// Send game traffic over the Connection nowadays.
 		serverMessaging = ServerGameContext.handleConnections();
+
+		// Enable friend list updates via envelope messaging channel
+		Friends.handleConnections();
 
 		// Enable presence
 		Presence.handleConnections();
@@ -139,15 +138,23 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 					routingContext.response().end("OK");
 				});
 
+
+		// Version
+		router.route("/version")
+				.method(HttpMethod.GET)
+				.handler(routingContext -> routingContext.response().end(Version.version()));
+
 		// All routes need logging of URLs. URLs never leak private information
-		router.route().handler(LoggerHandler.create(true, LoggerFormat.DEFAULT));
+		router.route().handler(LoggerHandler.create(false, LoggerFormat.DEFAULT));
 
 		// CORS
 		router.route().handler(CorsHandler.create(".*")
 				.allowedHeader("Content-Type")
 				.allowedHeader("X-Auth-Token")
 				.allowedHeader("If-None-Match")
+				.allowedHeader("Accept-Encoding")
 				.exposedHeader("Content-Type")
+				.exposedHeader("Content-Encoding")
 				.exposedHeader("ETag")
 				.exposedHeader("Cache-Control")
 				.exposedHeader("Last-Modified")
@@ -162,9 +169,12 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// TODO: This obviously isn't working for the load balancer / cookies coming from the client
 		router.route().handler(CookieHandler.create());
 
+		// Add body handling to all routes
+		router.route().handler(bodyHandler);
+
 		// Add "content-type=application/json" to all responses
 		router.route().handler(context -> {
-			if (!context.request().uri().contains(websocketPath)) {
+			if (!context.request().uri().contains("/realtime")) {
 				context.response().putHeader("Content-Type", "application/json");
 			}
 			context.next();
@@ -206,8 +216,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler("targetUserId", this::getAccount));
 
 		router.route("/accounts")
-				.handler(bodyHandler);
-		router.route("/accounts")
 				.method(HttpMethod.POST)
 				.handler(HandlerFactory.handler(LoginRequest.class, this::login));
 		router.route("/accounts")
@@ -220,8 +228,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(GetAccountsRequest.class, this::getAccounts));
 
-		router.route("/accounts-password")
-				.handler(bodyHandler);
 		router.route("/accounts-password")
 				.handler(authHandler);
 		router.route("/accounts-password")
@@ -237,8 +243,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(this::getCards));
 
 		router.route("/decks")
-				.handler(bodyHandler);
-		router.route("/decks")
 				.handler(authHandler);
 		router.route("/decks")
 				.method(HttpMethod.PUT)
@@ -247,8 +251,6 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.method(HttpMethod.GET)
 				.handler(HandlerFactory.handler(this::decksGetAll));
 
-		router.route("/decks/:deckId")
-				.handler(bodyHandler);
 		router.route("/decks/:deckId")
 				.handler(authHandler);
 		router.route("/decks/:deckId")
@@ -276,23 +278,54 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(this::matchmakingDelete));
 
 		router.route("/friends")
-				.handler(bodyHandler);
-		router.route("/friends")
 				.handler(authHandler);
 		router.route("/friends")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(FriendPutRequest.class, this::friendPut));
 
 		router.route("/friends/:friendId")
-				.handler(bodyHandler);
-		router.route("/friends/:friendId")
 				.handler(authHandler);
 		router.route("/friends/:friendId")
 				.method(HttpMethod.DELETE)
 				.handler(HandlerFactory.handler("friendId", this::unFriend));
 
-		router.route("/drafts")
-				.handler(bodyHandler);
+		router.route("/games/:gameId")
+				.handler(authHandler);
+		router.route("/games/:gameId")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("gameId", this::getGameRecord));
+
+		router.route("/games")
+				.handler(authHandler);
+		router.route("/games")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::getGameRecordIds));
+
+		router.route("/invites")
+				.handler(authHandler);
+		router.route("/invites")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler(this::getInvites));
+
+		router.route("/invites")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(InvitePostRequest.class, this::postInvite));
+
+		router.route("/invites/:inviteId")
+				.handler(authHandler);
+
+		router.route("/invites/:inviteId")
+				.method(HttpMethod.POST)
+				.handler(HandlerFactory.handler(AcceptInviteRequest.class, "inviteId", this::acceptInvite));
+
+		router.route("/invites/:inviteId")
+				.method(HttpMethod.GET)
+				.handler(HandlerFactory.handler("inviteId", this::getInvite));
+
+		router.route("/invites/:inviteId")
+				.method(HttpMethod.DELETE)
+				.handler(HandlerFactory.handler("inviteId", this::deleteInvite));
+
 		router.route("/drafts")
 				.handler(authHandler);
 		router.route("/drafts")
@@ -304,15 +337,11 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(DraftsPostRequest.class, this::draftsPost));
 
 		router.route("/drafts/hero")
-				.handler(bodyHandler);
-		router.route("/drafts/hero")
 				.handler(authHandler);
 		router.route("/drafts/hero")
 				.method(HttpMethod.PUT)
 				.handler(HandlerFactory.handler(DraftsChooseHeroRequest.class, this::draftsChooseHero));
 
-		router.route("/drafts/cards")
-				.handler(bodyHandler);
 		router.route("/drafts/cards")
 				.handler(authHandler);
 		router.route("/drafts/cards")
@@ -320,13 +349,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 				.handler(HandlerFactory.handler(DraftsChooseCardRequest.class, this::draftsChooseCard));
 
 		router.route("/invites")
-				.handler(bodyHandler);
-		router.route("/invites")
 				.handler(authHandler);
 		router.route("/invites")
 				.method(HttpMethod.POST);
 
-		server.requestHandler(router::accept);
+		Cards.invalidateCardCache();
+
+		server.requestHandler(router);
 		HttpServer listening = awaitResult(server::listen);
 
 		logger.info("start: Router configured.");
@@ -613,13 +642,44 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 			DraftRecord record = Draft.doDraftAction(new DraftActionRequest()
 					.withUserId(userId)
 					.withCardIndex(request.getCardIndex()));
-
 			return WebResult.succeeded(Draft.toDraftState(record.getPublicDraftState()));
 		} catch (NullPointerException unexpectedRequest) {
 			return WebResult.failed(400, unexpectedRequest);
 		} catch (Exception ignored) {
 			return WebResult.failed(400, new UnsupportedOperationException("You must choose a card index, or the draft has been completed."));
 		}
+	}
+
+	@Override
+	public WebResult<AcceptInviteResponse> acceptInvite(RoutingContext context, String userId, String inviteId, AcceptInviteRequest request) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(Invites.accept(new InviteId(inviteId), request, (UserRecord) context.user()));
+	}
+
+	@Override
+	public WebResult<InviteResponse> getInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
+		Invite invite = mongo().findOne(Invites.INVITES, json("_id", inviteId), Invite.class);
+		if (invite == null) {
+			return WebResult.notFound("This invite was not found");
+		}
+		return WebResult.succeeded(new InviteResponse().invite(invite));
+	}
+
+	@Override
+	public WebResult<InviteResponse> deleteInvite(RoutingContext context, String userId, String inviteId) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(Invites.deleteInvite(new InviteId(inviteId), new UserId(userId)));
+	}
+
+	@Override
+	public WebResult<InviteResponse> postInvite(RoutingContext context, String userId, InvitePostRequest request) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(Invites.invite(request, (UserRecord) context.user()));
+	}
+
+	@Override
+	public WebResult<InviteGetResponse> getInvites(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		return WebResult.succeeded(new InviteGetResponse()
+				.invites(mongo().find(Invites.INVITES,
+						json("$or", array(json("toUserId", userId), json("fromUserId", userId))),
+						Invite.class)));
 	}
 
 	@Override
@@ -635,21 +695,13 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 	@Override
 	public WebResult<GetCardsResponse> getCards(RoutingContext context) throws SuspendExecution, InterruptedException {
-		SuspendableMap<String, Object> cache = SuspendableMap.getOrCreate("Cards::cards");
-		// Our objective is to create a cards version ONCE for the entire cluster
-		final String thisCardsVersionId = deploymentID();
-		final String thisDate = dateTimeFormatter.format(new Date());
-		String cardsVersion = (String) cache.putIfAbsent("cards-version", thisCardsVersionId);
-		String lastModified = (String) cache.putIfAbsent("cards-last-modified", thisDate);
-		if (cardsVersion == null) {
-			cardsVersion = thisCardsVersionId;
-		}
-		if (lastModified == null) {
-			lastModified = thisDate;
-		}
+		SuspendableMap<String, String> cache = SuspendableMap.getOrCreate("Cards::cards");
+
+		String cardsVersion = cache.get("cards-version");
+		String lastModified = cache.get("cards-last-modified");
 
 		context.response().putHeader("ETag", cardsVersion);
-		final String userVersion = context.request().getHeader("If-None-Match");
+		String userVersion = context.request().getHeader("If-None-Match");
 		if (userVersion != null &&
 				userVersion.equals(cardsVersion)) {
 			return WebResult.succeeded(304, new GetCardsResponse().version(cardsVersion));
@@ -657,7 +709,7 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 
 		context.response().putHeader("Cache-Control", "public, max-age=31536000");
 		context.response().putHeader("Last-Modified", lastModified);
-		context.response().putHeader("Date", thisDate);
+		context.response().putHeader("Date", DATE_TIME_FORMATTER.format(new Date()));
 
 		if (context.request().method() == HttpMethod.HEAD) {
 			return WebResult.succeeded(new GetCardsResponse().version(cardsVersion));
@@ -666,8 +718,56 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		// We created the cache for the first time
 		// TODO: It's possible that there are multiple versions of Spellsource sharing a cluster, so version should be a hash
 		return WebResult.succeeded(new GetCardsResponse()
-				.cards(Cards.getCards())
-				.version(cardsVersion));
+				.cards(Cards.getCards()));
+	}
+
+	@Override
+	public WebResult<GetGameRecordResponse> getGameRecord(RoutingContext context, String userId, String gameId) throws SuspendExecution, InterruptedException {
+		GameRecord record = mongo().findOne(Games.GAMES, json("_id", gameId), GameRecord.class);
+		if (record == null) {
+			return WebResult.notFound("No game with the specified ID was found.");
+		}
+
+		if (record.getPlayerUserIds().stream().noneMatch(s -> s.equals(userId))) {
+			return WebResult.forbidden("Cannot view a game you didn't participate in.");
+		}
+
+		// TODO: Use the user's actual localized time zone, maybe as for it as a parameter?
+		String createdAtLocalized = record.getCreatedAt()
+				.toInstant()
+				.atZone(ZoneId.systemDefault())
+				.format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM));
+
+		Replay replay = record.getReplay();
+
+		// Censor non-bot games
+		if (!record.isBotGame()) {
+			int opponentId = userId.equals(record.getPlayerUserIds().get(0)) ? 1 : 0;
+			for (int i = 0; i < replay.getGameStates().size(); i++) {
+				ReplayGameStates pair = replay.getGameStates().get(i);
+				if (opponentId == 0) {
+					pair.first(null);
+				} else {
+					pair.second(null);
+				}
+			}
+		}
+
+		return WebResult.succeeded(new GetGameRecordResponse()
+				.playerNames(record.getPlayerNames())
+				.replay(replay)
+				.isBotGame(record.isBotGame())
+				.completedAt(record.getCreatedAt().getTime())
+				.completedAtLocalized(createdAtLocalized));
+	}
+
+	@Override
+	public WebResult<GetGameRecordIdsResponse> getGameRecordIds(RoutingContext context, String userId) throws SuspendExecution, InterruptedException {
+		List<JsonObject> ids = mongo().findWithOptions(Games.GAMES, json(GameRecord.PLAYER_USER_IDS, userId), new FindOptions().setFields(json(MongoRecord.ID, 1)));
+		return WebResult.succeeded(
+				new GetGameRecordIdsResponse()
+						.gameIds(ids.stream().map(j -> j.getString(MongoRecord.ID))
+								.collect(toList())));
 	}
 
 	private Account getAccount(String userId) throws SuspendExecution, InterruptedException {
@@ -682,12 +782,14 @@ public class GatewayImpl extends SyncVerticle implements Gateway {
 		final List<GetCollectionResponse> responses = deckCollections.getResponses();
 		return new Account()
 				.id(record.getId())
+				.friends(record.getFriends().stream().map(FriendRecord::toFriendDto).collect(toList()))
 				.decks((responses != null && responses.size() > 0) ? responses.stream()
 						.filter(response -> !response.getTrashed()).map(GetCollectionResponse::asInventoryCollection).collect(toList()) : Collections.emptyList())
 				.personalCollection(personalCollection.asInventoryCollection())
 				.email(record.getEmails().get(0).getAddress())
-				.inMatch(Matchmaking.getCurrentMatch(CurrentMatchRequest.request(userId)).getGameId() != null)
-				.name(displayName + "#" + record.getPrivacyToken());
+				.inMatch(Games.getUsersInGames().containsKey(new UserId(userId)))
+				.name(displayName + "#" + record.getPrivacyToken())
+				.privacyToken(record.getPrivacyToken());
 	}
 
 

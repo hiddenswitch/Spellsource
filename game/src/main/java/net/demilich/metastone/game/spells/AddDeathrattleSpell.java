@@ -1,14 +1,19 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
+import net.demilich.metastone.game.spells.trigger.DiscardTrigger;
+import net.demilich.metastone.game.spells.trigger.MinionDeathTrigger;
 import net.demilich.metastone.game.targeting.EntityReference;
+import net.demilich.metastone.game.targeting.TargetType;
+import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,18 +25,17 @@ import java.util.Map;
  * <p>
  * If the target is a {@link Card}, the deathrattle will be added to the resulting actor when the minion is brought into
  * play. To add an effect that occurs when a card is removed from the hand, use an {@link AddEnchantmentSpell} with a
- * {@link net.demilich.metastone.game.spells.trigger.DiscardTrigger}.
+ * {@link DiscardTrigger}.
  * <p>
- * Deathrattles are equivalent to an {@link AddEnchantmentSpell} with a {@link net.demilich.metastone.game.spells.trigger.MinionDeathTrigger},
- * {@link net.demilich.metastone.game.targeting.TargetType#IGNORE_OTHER_TARGETS}.
+ * Deathrattles are equivalent to an {@link AddEnchantmentSpell} with a {@link MinionDeathTrigger}, {@link
+ * TargetType#IGNORE_OTHER_TARGETS}.
  * <p>
- * Minions removed peacefully with {@link net.demilich.metastone.game.logic.GameLogic#removePeacefully(Entity)} do not
- * trigger deathrattles.
+ * Minions removed peacefully with {@link GameLogic#removePeacefully(Entity)} do not trigger deathrattles.
  * <p>
  * All weapon removals trigger deathrattles, whether by replacement, destruction or by depleting their durability.
  * <p>
- * Deathrattles resolve from the {@link net.demilich.metastone.game.targeting.Zones#GRAVEYARD}. However, the {@link
- * SpellArg#BOARD_POSITION_ABSOLUTE} argument is set to where the minion used to be.
+ * Deathrattles resolve from the {@link Zones#GRAVEYARD}. However, the {@link SpellArg#BOARD_POSITION_ABSOLUTE} argument
+ * is set to where the minion used to be.
  * <p>
  * For example, to give a minion a the deathrattle, "Resummon this minion,":
  * <pre>
@@ -88,7 +92,7 @@ public class AddDeathrattleSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.CARD);
 		List<SpellDesc> deathrattles = desc.subSpells(0);
 		Card[] cards = SpellUtils.getCards(context, desc);
 		if (cards.length != 0) {

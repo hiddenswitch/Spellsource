@@ -1,7 +1,7 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
 import com.hiddenswitch.spellsource.client.Configuration;
 import com.hiddenswitch.spellsource.impl.UserId;
 import com.hiddenswitch.spellsource.impl.util.*;
@@ -10,10 +10,9 @@ import com.hiddenswitch.spellsource.util.PasswordResetRecord;
 import com.hiddenswitch.spellsource.util.QuickJson;
 import com.hiddenswitch.spellsource.util.Sync;
 import com.lambdaworks.crypto.SCryptUtil;
+import io.vertx.core.Handler;
 import io.vertx.core.Vertx;
-import io.vertx.core.http.HttpClient;
 import io.vertx.core.http.HttpMethod;
-import io.vertx.core.http.WebSocket;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
 import io.vertx.ext.mail.MailClient;
@@ -22,12 +21,9 @@ import io.vertx.ext.mail.MailMessage;
 import io.vertx.ext.mail.MailResult;
 import io.vertx.ext.mongo.*;
 import io.vertx.ext.web.Cookie;
-import io.vertx.ext.web.Route;
 import io.vertx.ext.web.Router;
 import io.vertx.ext.web.RoutingContext;
-import io.vertx.ext.web.client.WebClient;
 import io.vertx.ext.web.handler.BodyHandler;
-import io.vertx.ext.web.handler.CookieHandler;
 import io.vertx.ext.web.handler.StaticHandler;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.validator.routines.EmailValidator;
@@ -44,11 +40,14 @@ import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import static com.hiddenswitch.spellsource.util.Mongo.mongo;
 import static com.hiddenswitch.spellsource.util.QuickJson.*;
+import static io.vertx.core.json.JsonObject.mapFrom;
 import static io.vertx.ext.sync.Sync.awaitResult;
 
 
@@ -104,7 +103,6 @@ public interface Accounts {
 	 * @param updateCommand A JSON object that corresponds to a Mongo update command.
 	 * @return The mongo client update result
 	 * @throws SuspendExecution
-	 * @throws InterruptedException
 	 */
 	static MongoClientUpdateResult update(JsonObject query, JsonObject updateCommand) throws SuspendExecution {
 		return mongo().updateCollectionWithOptions(Accounts.USERS, query, updateCommand, new UpdateOptions().setMulti(true));
@@ -185,6 +183,8 @@ public interface Accounts {
 
 	/**
 	 * Creates an account.
+	 * <p>
+	 * The first user created on the database will gain the {@link Authorities#ADMINISTRATIVE} authority.
 	 *
 	 * @param request A username, password and e-mail needed to create the account.
 	 * @return The result of creating the account. If the field contains bad username, bad e-mail or bad password flags
@@ -239,7 +239,12 @@ public interface Accounts {
 		passwordRecord.setScrypt(scrypt);
 		record.getServices().setPassword(passwordRecord);
 
-		mongo().insert(USERS, toJson(record));
+		// The first user on the server is automatically the administrator
+		if (mongo().count(USERS, json()) == 0L) {
+			record.getRoles().add(Authorities.ADMINISTRATIVE.name());
+		}
+
+		mongo().insert(USERS, mapFrom(record));
 
 		response.setUserId(userId);
 		response.setLoginToken(forUser);
@@ -417,7 +422,7 @@ public interface Accounts {
 				json("$push",
 						json(UserRecord.SERVICES_RESUME_LOGIN_TOKENS,
 								json("$each",
-										Collections.singletonList(toJson(hashedLoginTokenRecord)),
+										Collections.singletonList(mapFrom(hashedLoginTokenRecord)),
 										"$slice",
 										sliceLastFiveElements))));
 
@@ -512,8 +517,6 @@ public interface Accounts {
 
 	/**
 	 * Configures handlers for password resetting (web URLs)
-	 *
-	 * @return
 	 */
 	static void passwordReset(Router router) {
 		String requestUrl = "/reset/passwords/request";
@@ -530,7 +533,7 @@ public interface Accounts {
 				.method(HttpMethod.GET)
 				.handler(routingContext -> {
 					routingContext.response().setStatusCode(303);
-					routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequest.html");
+					routingContext.response().putHeader("Location", "passwordresetrequest.html");
 					routingContext.response().end();
 				});
 
@@ -540,20 +543,20 @@ public interface Accounts {
 					routingContext.response().setStatusCode(303);
 
 					if (routingContext.queryParam("token").size() != 1) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
 					String token = routingContext.queryParam("token").get(0);
 					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
 					if (System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
 
 					routingContext.addCookie(Cookie.cookie("token", token));
-					routingContext.response().putHeader("Location", "/reset/passwords/passwordreset.html");
+					routingContext.response().putHeader("Location", "passwordreset.html");
 					routingContext.response().end();
 				}));
 
@@ -570,14 +573,14 @@ public interface Accounts {
 					String password2 = routingContext.request().getFormAttribute("password2");
 
 					if (!password1.equals(password2) || !Accounts.isValidPassword(password1)) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordsdidnotmatch.html");
+						routingContext.response().putHeader("Location", "passwordsdidnotmatch.html");
 						routingContext.response().end();
 						return;
 					}
 
 					Cookie cookie = routingContext.getCookie("token");
 					if (cookie == null) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
@@ -585,7 +588,7 @@ public interface Accounts {
 					String token = cookie.getValue();
 					PasswordResetRecord passwordResetRecord = mongo().findOne(RESET_TOKENS, json("_id", token), PasswordResetRecord.class);
 					if (passwordResetRecord == null || System.currentTimeMillis() > passwordResetRecord.getExpiresAt()) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 						routingContext.response().end();
 						return;
 					}
@@ -593,9 +596,9 @@ public interface Accounts {
 					try {
 						Accounts.changePassword(ChangePasswordRequest.request(new UserId(passwordResetRecord.getUserId()), password1));
 						mongo().removeDocument(RESET_TOKENS, json("_id", token));
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetted.html");
-					} catch (Throwable throwable) {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetexpired.html");
+						routingContext.response().putHeader("Location", "passwordresetted.html");
+					} catch (RuntimeException any) {
+						routingContext.response().putHeader("Location", "passwordresetexpired.html");
 					} finally {
 						routingContext.removeCookie("token");
 						routingContext.response().end();
@@ -617,14 +620,14 @@ public interface Accounts {
 						UserRecord userRecord = mongo().findOne(USERS, json(UserRecord.EMAILS_ADDRESS, email), UserRecord.class);
 
 						// End the request first to prevent the timing of the function from leaking whether or not an account exists.
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequestsent.html");
+						routingContext.response().putHeader("Location", "passwordresetrequestsent.html");
 						routingContext.response().end();
 
 						if (userRecord != null) {
 							String token = RandomStringUtils.randomAlphanumeric(64).toLowerCase();
 							PasswordResetRecord record = new PasswordResetRecord(token);
 							record.setUserId(userRecord.getId());
-							mongo().insert(RESET_TOKENS, JsonObject.mapFrom(record));
+							mongo().insert(RESET_TOKENS, mapFrom(record));
 							MailClient mailClient = MailClient.createShared(Vertx.currentContext().owner(),
 									new MailConfig()
 											.setHostname(System.getenv().getOrDefault("SMTP_HOST", "smtp.mailgun.org"))
@@ -643,9 +646,32 @@ public interface Accounts {
 							}
 						}
 					} else {
-						routingContext.response().putHeader("Location", "/reset/passwords/passwordresetrequestinvalid.html");
+						routingContext.response().putHeader("Location", "passwordresetrequestinvalid.html");
 						routingContext.response().end();
 					}
 				}));
+	}
+
+	/**
+	 * Represents authorities and ways to add and remove them from {@link UserRecord} instances.
+	 * <p>
+	 * Used with {@link com.hiddenswitch.spellsource.impl.SpellsourceAuthHandler#addAuthority(String)} and {@link
+	 * io.vertx.ext.auth.User#isAuthorized(String, Handler)}.
+	 */
+	enum Authorities {
+		/**
+		 * Indicates this user is administative
+		 */
+		ADMINISTRATIVE((user) -> user.getRoles() != null && user.getRoles().contains("ADMINISTRATIVE"));
+
+		private final Function<UserRecord, Boolean> has;
+
+		Authorities(Function<UserRecord, Boolean> has) {
+			this.has = has;
+		}
+
+		public boolean has(UserRecord record) {
+			return this.has.apply(record);
+		}
 	}
 }

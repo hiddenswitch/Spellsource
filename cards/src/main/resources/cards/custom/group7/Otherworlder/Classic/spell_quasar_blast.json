@@ -1,0 +1,27 @@
+{
+  "name": "Quasar Blast",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "COMMON",
+  "description": "<b>Wither (3)</b>. Deal $2 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "WitherSpell"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 2
+      }
+    ]
+  },
+  "attributes": {
+    "WITHER": 3
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

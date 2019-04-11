@@ -67,6 +67,11 @@ public class CardArrayList extends AbstractList<Card> implements Cloneable, Seri
 	}
 
 	@Override
+	public Card set(int index, Card element) {
+		return cards.set(index, element);
+	}
+
+	@Override
 	public boolean contains(Card card) {
 		return cards.contains(card);
 	}

@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Summon a Jade Golem. Overload: (1)",
+  "description": "Battlecry: Summon a []Jade Golem. Overload: (1)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -49,5 +49,32 @@
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "JADE_BUFF",
+            "offset": 1
+          }
+        },
+        "/",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "JADE_BUFF",
+            "offset": 1
+          }
+        },
+        " "
+      ]
+    }
+  ]
 }

@@ -8,6 +8,7 @@ import com.google.common.base.CaseFormat;
 import io.vertx.core.json.Json;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.cards.*;
+import net.demilich.metastone.game.cards.dynamicdescription.*;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Race;
@@ -15,6 +16,7 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.spells.GameValue;
 import net.demilich.metastone.game.spells.PlayerAttribute;
 import net.demilich.metastone.game.spells.TargetPlayer;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.aura.AuraDesc;
 import net.demilich.metastone.game.spells.desc.condition.Condition;
@@ -35,7 +37,6 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.targeting.TargetType;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
 
 import java.io.IOException;
 
@@ -46,7 +47,8 @@ public class ParseUtils {
 	private static DescDeserializer<AuraDesc, ?, ?> auraParser = new AuraDescDeserializer();
 	private static DescDeserializer<CardSourceDesc, ?, ?> sourceParser = new CardSourceDescDeserializer();
 	private static DescDeserializer<ConditionDesc, ?, ?> conditionParser = new ConditionDescDeserializer();
-	private static DescDeserializer<EventTriggerDesc, ?, ?> triggerParser = new EventTriggerDescDeserializer();
+	private static DescDeserializer<EventTriggerDesc, ?, ?> eventTriggerParser = new EventTriggerDescDeserializer();
+	private static DescDeserializer<DynamicDescriptionDesc, ?, ?> dynamicDescriptionParser = new DynamicDescriptionDeserializer();
 	private static DescDeserializer<CardCostModifierDesc, ?, ?> manaModifierParser = new CardCostModifierDescDeserializer();
 
 	@SuppressWarnings("deprecation")
@@ -187,8 +189,20 @@ public class ParseUtils {
 				return EntityReference.LEFT_ADJACENT_MINION;
 			case "right_adjacent_minion":
 				return EntityReference.RIGHT_ADJACENT_MINION;
+			case "friendly_cards":
+				return EntityReference.FRIENDLY_CARDS;
+			case "enemy_cards":
+				return EntityReference.ENEMY_CARDS;
+			case "current_summoning_minion":
+				return EntityReference.CURRENT_SUMMONING_MINION;
+			case "enemy_middle_minions":
+				return EntityReference.ENEMY_MIDDLE_MINIONS;
+			case "friendly_last_minion_played":
+				return EntityReference.FRIENDLY_LAST_MINION_PLAYED;
+			case "other_friendly_characters":
+				return EntityReference.OTHER_FRIENDLY_CHARACTERS;
 			default:
-				return null;
+				throw new NullPointerException(str);
 		}
 	}
 
@@ -326,6 +340,12 @@ public class ParseUtils {
 				}
 				return array;
 			}
+			case BATTLECRY:
+				try {
+					return Json.mapper.readerFor(BattlecryDesc.class).readValue(jsonData);
+				} catch (IOException e) {
+					throw new RuntimeException(e);
+				}
 			case TRIGGER:
 				return getTriggerDesc(jsonData);
 			case TRIGGERS:
@@ -337,7 +357,15 @@ public class ParseUtils {
 				return enchantmentDescs;
 			case EVENT_TRIGGER:
 				// Does not expect a concrete instance!
-				return triggerParser.innerDeserialize(ctxt, jsonData);
+				return eventTriggerParser.innerDeserialize(ctxt, jsonData);
+			case EVENT_TRIGGER_ARRAY:
+				ArrayNode eventTriggerArray = (ArrayNode) jsonData;
+				EventTriggerDesc[] eventTriggerDescs = new EventTriggerDesc[eventTriggerArray.size()];
+				// Does not expect a concrete instance!
+				for (int i = 0; i < eventTriggerArray.size(); i++) {
+					eventTriggerDescs[i] = eventTriggerParser.innerDeserialize(ctxt, eventTriggerArray.get(i));
+				}
+				return eventTriggerDescs;
 			case QUEST:
 				EnchantmentDesc questEnchantmentDesc = getTriggerDesc(jsonData);
 				return new Quest(questEnchantmentDesc, null);
@@ -348,6 +376,33 @@ public class ParseUtils {
 				return manaModifierParser.innerDeserialize(ctxt, jsonData);
 			case CHOOSE_ONE_OVERRIDE:
 				return Enum.valueOf(ChooseOneOverride.class, jsonData.asText());
+			case DYNAMIC_DESCRIPTION:
+				if (jsonData.isTextual()) {
+					DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
+					descriptionDesc.put(DynamicDescriptionArg.STRING, jsonData.asText());
+					return descriptionDesc.create();
+				}
+				return dynamicDescriptionParser.innerDeserialize(ctxt, jsonData).create();
+			case DYNAMIC_DESCRIPTION_ARRAY:
+				ArrayNode jsonArray = (ArrayNode) jsonData;
+				DynamicDescription[] dynamicDescriptions = new DynamicDescription[jsonArray.size()];
+				for (int i = 0; i < dynamicDescriptions.length; i++) {
+					if (jsonArray.get(i).isTextual()) {
+						DynamicDescriptionDesc descriptionDesc = new DynamicDescriptionDesc(StringDescription.class);
+						descriptionDesc.put(DynamicDescriptionArg.STRING, jsonArray.get(i).asText());
+						dynamicDescriptions[i] = descriptionDesc.create();
+					} else {
+						dynamicDescriptions[i] = dynamicDescriptionParser.innerDeserialize(ctxt, jsonArray.get(i)).create();
+					}
+				}
+				return dynamicDescriptions;
+			case ZONES:
+				ArrayNode zoneArray = (ArrayNode) jsonData;
+				Zones[] zones = new Zones[zoneArray.size()];
+				for (int i = 0; i < zoneArray.size(); i++) {
+					zones[i] = Enum.valueOf(Zones.class, jsonData.get(i).asText());
+				}
+				return zones;
 			default:
 				break;
 		}

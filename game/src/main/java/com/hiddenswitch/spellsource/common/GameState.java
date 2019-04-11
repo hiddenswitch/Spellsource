@@ -15,7 +15,7 @@ import net.demilich.metastone.game.spells.trigger.Trigger;
 import net.demilich.metastone.game.spells.trigger.TriggerManager;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.TurnState;
+import net.demilich.metastone.game.logic.TurnState;
 
 import java.io.Serializable;
 import java.util.Collections;

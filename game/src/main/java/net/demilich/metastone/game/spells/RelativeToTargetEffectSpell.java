@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Actor;
@@ -18,7 +18,7 @@ import java.util.List;
  *
  * <ul>
  * <li>{@link SpellArg#SPELL1} is cast on {@code target}.</li>
- * <li>{@link SpellArg#SPELL2} is cast on the result of {@link #getActors(GameContext, Entity)} of that {@code
+ * <li>{@link SpellArg#SPELL2} is cast on the result of {@link #getActors(GameContext, SpellDesc, Entity, Entity)} of that {@code
  * target}.</li>
  * <li>{@link SpellArg#SPELL} is cast on both, only if neither of the above were specified.</li>
  * </ul>
@@ -29,9 +29,9 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL, SpellArg.SPELL1, SpellArg.SPELL2);
 		EntityReference sourceReference = source != null ? source.getReference() : null;
-		List<Actor> adjacentMinions = getActors(context, target);
+		List<Actor> adjacentMinions = getActors(context, desc, source, target);
 		SpellDesc primary;
 		SpellDesc secondary;
 		if (desc.containsKey(SpellArg.SPELL) &&
@@ -41,14 +41,14 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 			secondary = primary;
 		} else {
 			primary = (SpellDesc) desc.get(SpellArg.SPELL1);
-			if (primary != null) {
-				context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
-			}
-
 			secondary = (SpellDesc) desc.get(SpellArg.SPELL2);
 			if (secondary == null) {
 				secondary = primary;
 			}
+		}
+
+		if (primary != null) {
+			context.getLogic().castSpell(player.getId(), primary, sourceReference, target.getReference(), true);
 		}
 
 		for (Entity adjacent : adjacentMinions) {
@@ -56,5 +56,5 @@ public abstract class RelativeToTargetEffectSpell extends Spell {
 		}
 	}
 
-	protected abstract List<Actor> getActors(GameContext context, Entity target);
+	protected abstract List<Actor> getActors(GameContext context, SpellDesc desc, Entity source, Entity target);
 }

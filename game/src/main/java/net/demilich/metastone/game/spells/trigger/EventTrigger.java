@@ -1,10 +1,12 @@
 package net.demilich.metastone.game.spells.trigger;
 
+import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardType;
 import net.demilich.metastone.game.cards.desc.Desc;
 import net.demilich.metastone.game.cards.desc.HasDesc;
 import net.demilich.metastone.game.entities.Entity;
+import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.events.GameEvent;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.logic.CustomCloneable;
@@ -16,7 +18,24 @@ import net.demilich.metastone.game.targeting.TargetType;
 
 import java.io.Serializable;
 
+/**
+ * This is the base class of all effects that react to events in the game.
+ * <p>
+ * These subclasses correspond to the {@code "class"} field on the {@code "eventTrigger"} property of the {@link
+ * net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc}. For example, {@link TurnEndTrigger} corresponds to
+ * the {@code "TurnEndTrigger"} string found in this {@link net.demilich.metastone.game.spells.desc.trigger.EnchantmentDesc}
+ * written on a card:
+ * <pre>
+ *   "trigger": {
+ *     "eventTrigger": {
+ *       "class": "TurnEndTrigger"
+ *     },
+ *     "spell": ...
+ *   }
+ * </pre>
+ */
 public abstract class EventTrigger extends CustomCloneable implements Serializable, HasDesc<EventTriggerDesc> {
+
 	private int owner = -1;
 	private EventTriggerDesc desc;
 
@@ -46,6 +65,10 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 				return host.getOwner() == targetPlayerId;
 			case SELF:
 				return getOwner() == targetPlayerId;
+			case PLAYER_1:
+				return targetPlayerId == GameContext.PLAYER_1;
+			case PLAYER_2:
+				return targetPlayerId == GameContext.PLAYER_2;
 			default:
 				break;
 		}
@@ -59,13 +82,25 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		if (targetPlayer != null && !determineTargetPlayer(event, targetPlayer, host, event.getTargetPlayerId())) {
 			return false;
 		}
+
 		TargetPlayer sourcePlayer = getDesc().getSourcePlayer();
 		if (sourcePlayer != null && !determineTargetPlayer(event, sourcePlayer, host, event.getSourcePlayerId())) {
 			return false;
 		}
 
-
 		if (!hostConditionMet(event, host)) {
+			return false;
+		}
+
+		EntityType sourceEntityType = (EntityType) getDesc().get(EventTriggerArg.SOURCE_ENTITY_TYPE);
+		if (event.getSource() != null && sourceEntityType != null && sourceEntityType != event.getSource().getEntityType()
+				|| (event.getSource() == null && sourceEntityType != null)) {
+			return false;
+		}
+
+		EntityType targetEntityType = (EntityType) getDesc().get(EventTriggerArg.TARGET_ENTITY_TYPE);
+		if ((event.getTarget() != null && targetEntityType != null && targetEntityType != event.getTarget().getEntityType())
+				|| (event.getTarget() == null && targetEntityType != null)) {
 			return false;
 		}
 
@@ -90,6 +125,10 @@ public abstract class EventTrigger extends CustomCloneable implements Serializab
 		if (hostTargetType == TargetType.IGNORE_AS_TARGET && event.getEventTarget() == host) {
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE && event.getEventSource() == host) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_SOURCE_CARD && event.getEventSource() == host.getSourceCard()) {
+			return false;
+		} else if (hostTargetType == TargetType.IGNORE_AS_TARGET_CARD && event.getEventTarget() == host.getSourceCard()) {
 			return false;
 		} else if (hostTargetType == TargetType.IGNORE_OTHER_TARGETS && event.getEventTarget() != host) {
 			return false;

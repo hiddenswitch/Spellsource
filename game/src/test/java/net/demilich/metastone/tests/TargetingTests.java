@@ -9,7 +9,7 @@ import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.EntityType;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
@@ -31,8 +31,8 @@ public class TargetingTests extends TestBase {
 		Card attackerCard = new TestMinionCard(1, 1, 0);
 		context.getLogic().receiveCard(mage.getId(), attackerCard);
 
-		context.getLogic().performGameAction(victim.getId(), tauntCard.play());
-		context.getLogic().performGameAction(mage.getId(), attackerCard.play());
+		context.performAction(victim.getId(), tauntCard.play());
+		context.performAction(mage.getId(), attackerCard.play());
 
 		Entity attacker = getSingleMinion(mage.getMinions());
 		Entity defender = getSingleMinion(victim.getMinions());

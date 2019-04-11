@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.custom;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -13,6 +13,16 @@ import net.demilich.metastone.game.targeting.Zones;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Resurrects and clears the entities stored on the {@code source}.
+ * <p>
+ * Implements Frostmourne. However, Frostmourne's effect should really be adding deathrattles to it.
+ *
+ * @see CastOnCardsInStorageSpell for a more general way of performing actions on stored cards, including the base cards
+ * 		of targeted minions.
+ * @see CastOnEntitiesInStorageSpell for a more general way of performing actions on stored entities, which may be cards
+ * 		or minions in the graveyard.
+ */
 public class ResurrectFromEntityStorageSpell extends Spell {
 
 	private static Logger logger = LoggerFactory.getLogger(ResurrectFromEntityStorageSpell.class);
@@ -30,7 +40,7 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 			card.setOwner(player.getId());
 			card.moveOrAddTo(context, Zones.SET_ASIDE_ZONE);
 			if (card.getCardType() == CardType.MINION) {
-				context.getLogic().summon(player.getId(), card.summon(), card, -1, false);
+				context.getLogic().summon(player.getId(), card.summon(), source, -1, false);
 			} else {
 				logger.warn("onCast {} {}: Trying to resurrect {} from entity storage, which is not a minion", context.getGameId(), source, card);
 			}
@@ -38,9 +48,5 @@ public class ResurrectFromEntityStorageSpell extends Spell {
 			context.getLogic().removeCard(card);
 			i++;
 		}
-
-		EnvironmentEntityList.getList(context).clear(source);
 	}
 }
-
-

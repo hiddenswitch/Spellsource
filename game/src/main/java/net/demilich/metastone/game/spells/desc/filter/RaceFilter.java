@@ -16,5 +16,4 @@ public class RaceFilter extends EntityFilter {
 		Race race = (Race) getDesc().get(EntityFilterArg.RACE);
 		return entity.getRace().hasRace(race);
 	}
-
 }

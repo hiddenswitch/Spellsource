@@ -1,10 +1,10 @@
 {
   "name": "Battlefield",
-  "baseManaCost": 1,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "RARE",
-  "description": "Give all minions Taunt.",
+  "description": "Give all minions Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

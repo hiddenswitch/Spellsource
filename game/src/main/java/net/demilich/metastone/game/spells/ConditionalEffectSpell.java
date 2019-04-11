@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.entities.Entity;
@@ -11,7 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Casts {@link SpellArg#SPELL1}. Evaluates the {@link SpellArg#CONDITION}: if it is fulfilled, casts {@link
+ * Casts {@link SpellArg#SPELL1} and evaluates the {@link SpellArg#CONDITION}: if it is fulfilled, casts {@link
  * SpellArg#SPELL2}. When {@link SpellArg#EXCLUSIVE} is {@code true}, behaves like an {@link EitherOrSpell}.
  * <p>
  * Use this spell to evaluate a condition after {@link SpellArg#SPELL1} is evaluated.
@@ -48,7 +48,7 @@ public class ConditionalEffectSpell extends Spell {
 	@Override
 	@Suspendable
 	protected void onCast(GameContext context, Player player, SpellDesc desc, Entity source, Entity target) {
-		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.CONDITION, SpellArg.EXCLUSIVE);
+		checkArguments(logger, context, source, desc, SpellArg.SPELL1, SpellArg.SPELL2, SpellArg.CONDITION, SpellArg.EXCLUSIVE, SpellArg.VALUE, SpellArg.SECONDARY_VALUE);
 
 		boolean exclusive = desc.getBool(SpellArg.EXCLUSIVE);
 		SpellDesc primarySpell = (SpellDesc) desc.get(SpellArg.SPELL1);

@@ -1,12 +1,9 @@
 package com.hiddenswitch.spellsource.models;
 
 import com.hiddenswitch.spellsource.impl.server.Configuration;
-import net.demilich.metastone.game.decks.Deck;
-import net.demilich.metastone.game.utils.AttributeMap;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

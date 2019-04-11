@@ -62,7 +62,7 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 
 	/**
 	 * Checks if the list has the specific reference to a card. Does not use the card's {@link
-	 * net.demilich.metastone.game.entities.Entity#id} or its {@link Card#cardId}, which may be more helpful.
+	 * net.demilich.metastone.game.entities.Entity#id} or its {@link Card#getCardId()}, which may be more helpful.
 	 *
 	 * @param card The card instance to check.
 	 * @return {@code true} if the specific instance is inside this list.
@@ -71,10 +71,10 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	boolean contains(Card card);
 
 	/**
-	 * Checks if there is a card in this list whose {@link Card#cardId} matches the specified instance of a card.
+	 * Checks if there is a card in this list whose {@link Card#getCardId()} matches the specified instance of a card.
 	 *
 	 * @param card The card instance to compare.
-	 * @return {@code true} if the there is a card with a matching {@link Card#cardId}.
+	 * @return {@code true} if the there is a card with a matching {@link Card#getCardId()}.
 	 */
 	default boolean containsCard(Card card) {
 		if (card == null) {
@@ -84,10 +84,10 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	}
 
 	/**
-	 * Checks if there is a card in this list whose {@link Card#cardId} matches the specified card ID.
+	 * Checks if there is a card in this list whose {@link Card#getCardId()} matches the specified card ID.
 	 *
 	 * @param cardId The card ID
-	 * @return {@code true} if the there is a card with a matching {@link Card#cardId}.
+	 * @return {@code true} if the there is a card with a matching {@link Card#getCardId()}.
 	 */
 	default boolean containsCard(String cardId) {
 		if (cardId == null) {
@@ -224,7 +224,7 @@ public interface CardList extends Iterable<Card>, List<Card>, Serializable {
 	}
 
 	/**
-	 * Gets the {@link Stream<Card>} API representation of this card list.
+	 * Gets the {@link Stream} API representation of this card list.
 	 *
 	 * @return The backing list's {@link List#stream()}.
 	 */

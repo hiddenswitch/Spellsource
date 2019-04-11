@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Discover a copy of a 1-Attack minion in your deck.",
+  "description": "Opener: Discover a copy of a 1-Attack minion in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -20,7 +20,7 @@
         "value": 1,
         "attribute": "ATTACK",
         "cardType": "MINION",
-		"operation": "EQUAL"
+        "operation": "EQUAL"
       },
       "cardSource": {
         "class": "DeckSource",

@@ -1,0 +1,23 @@
+{
+  "name": "Prismatic Aspect",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "GOLD",
+  "rarity": "COMMON",
+  "description": "Discover a Dragon.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "DiscoverSpell",
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
+    },
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "DRAGON"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

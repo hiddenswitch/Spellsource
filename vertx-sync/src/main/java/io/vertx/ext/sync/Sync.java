@@ -1,10 +1,10 @@
 package io.vertx.ext.sync;
 
-import com.github.fromage.quasi.fibers.Fiber;
-import com.github.fromage.quasi.fibers.FiberExecutorScheduler;
-import com.github.fromage.quasi.fibers.FiberScheduler;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.channels.Channel;
+import co.paralleluniverse.fibers.Fiber;
+import co.paralleluniverse.fibers.FiberExecutorScheduler;
+import co.paralleluniverse.fibers.FiberScheduler;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.channels.Channel;
 import io.vertx.core.*;
 import io.vertx.ext.sync.impl.AsyncAdaptor;
 import io.vertx.ext.sync.impl.HandlerAdaptor;

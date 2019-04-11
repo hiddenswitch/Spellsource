@@ -52,7 +52,7 @@ public class NoggenfoggerAura extends Aura {
 	 *
 	 * @param context The context
 	 * @param event   The event
-	 * @return A {@link List<Entity>} of entities to choose randomly from, or an empty list if there are no valid targets
+	 * @return A {@link List} of entities to choose randomly from, or an empty list if there are no valid targets
 	 * 		/ an override should not occur.
 	 */
 	protected List<Entity> getValidTargets(GameContext context, TargetAcquisitionEvent event) {

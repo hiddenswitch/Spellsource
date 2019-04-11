@@ -1,0 +1,27 @@
+{
+  "name": "Warp",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "NEONGREEN",
+  "rarity": "COMMON",
+  "description": "<b>Wither (1).</b> Deal $1 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "WitherSpell"
+      },
+      {
+        "class": "DamageSpell",
+        "value": 1
+      }
+    ]
+  },
+  "attributes": {
+    "WITHER": 1
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

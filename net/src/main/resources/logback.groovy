@@ -15,7 +15,7 @@ import ch.qos.logback.classic.filter.ThresholdFilter
 import static ch.qos.logback.classic.Level.*
 
 def date = timestamp("yyyyMMdd")
-def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null
+def isAWS = System.getenv("SPELLSOURCE_APPLICATION") != null || System.getenv("AWS_ACCESS_KEY_ID") != null
 Level defaultLevel = null;
 
 if (System.getenv().containsKey("SPELLSOURCE_LOGGING_LEVEL")) {
@@ -58,13 +58,23 @@ root(DEBUG, isAWS ? ["STDOUT", "ASYNC_AWS_LOGS"] : ["STDOUT"])
 logger("io.netty", ERROR)
 logger("com.hazelcast", ERROR)
 logger("org.reflections", ERROR)
-logger("com.github.fromage.quasi", ERROR)
-logger("net.demilich", defaultLevel)
+logger("co.paralleluniverse", ERROR)
+logger("net.demilich", WARN)
 logger("io.vertx", INFO)
+
+// Production group
 logger("com.hiddenswitch", INFO)
-logger("org.asynchttpclient", defaultLevel)
-logger("com.hiddenswitch.spellsource.Matchmaking", DEBUG)
-logger("com.hiddenswitch.spellsource.Games", DEBUG)
-logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", DEBUG)
+logger("com.hiddenswitch.spellsource.util", ERROR)
+logger("com.hiddenswitch.spellsource.concurrent", ERROR)
+logger("com.hiddenswitch.spellsource.Connection", defaultLevel)
+logger("com.hiddenswitch.spellsource.Matchmaking", defaultLevel)
+logger("com.hiddenswitch.spellsource.Games", defaultLevel)
+logger("com.hiddenswitch.spellsource.impl.util.ServerGameContext", defaultLevel)
+logger("com.hiddenswitch.spellsource.common.UnityClientBehaviour", defaultLevel)
 logger("com.hiddenswitch.spellsource.Gateway", INFO)
-logger("com.hiddenswitch.spellsource.GatewayTest", TRACE)
+
+// Test group
+logger("com.hiddenswitch.spellsource.util.UnityClient", defaultLevel)
+logger("com.hiddenswitch.spellsource.SimultaneousGamesTest", TRACE)
+logger("com.neovisionaries.ws.client", WARN)
+logger("org.asynchttpclient", WARN)

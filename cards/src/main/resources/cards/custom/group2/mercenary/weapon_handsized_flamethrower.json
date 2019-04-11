@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Deathrattle: Give minions in your hand +2/+2.'",
+  "description": "Aftermath: Give minions in your hand +2/+2.'",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_HAND",
@@ -21,6 +21,6 @@
     "DEATHRATTLES": true
   },
   "collectible": true,
-  "set": "MEAN_STREETS_OF_GADGETZAN",
+  "set": "CUSTOM",
   "fileFormatVersion": 1
 }

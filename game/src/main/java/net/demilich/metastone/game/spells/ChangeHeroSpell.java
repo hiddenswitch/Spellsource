@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.Card;
@@ -60,6 +60,22 @@ public class ChangeHeroSpell extends Spell {
 		Map<SpellArg, Object> arguments = new SpellDesc(ChangeHeroSpell.class);
 		arguments.put(SpellArg.TARGET_PLAYER, player);
 		arguments.put(SpellArg.CARD, heroCardId);
+		return new SpellDesc(arguments);
+	}
+
+	/**
+	 * Changes the specified player's hero with the specified card ID, resolving the battlecry if specified.
+	 *
+	 * @param player           the player
+	 * @param heroCardId       the hero card
+	 * @param resolveBattlecry {@code true} if the hero card should have its battlecry resolved
+	 * @return the spell
+	 */
+	public static SpellDesc create(TargetPlayer player, String heroCardId, boolean resolveBattlecry) {
+		Map<SpellArg, Object> arguments = new SpellDesc(ChangeHeroSpell.class);
+		arguments.put(SpellArg.TARGET_PLAYER, player);
+		arguments.put(SpellArg.CARD, heroCardId);
+		arguments.put(SpellArg.EXCLUSIVE, !resolveBattlecry);
 		return new SpellDesc(arguments);
 	}
 

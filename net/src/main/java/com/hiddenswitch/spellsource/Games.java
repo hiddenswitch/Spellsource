@@ -1,8 +1,10 @@
 package com.hiddenswitch.spellsource;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import com.google.common.collect.MapDifference;
 import com.hiddenswitch.spellsource.client.models.*;
+import com.hiddenswitch.spellsource.client.models.GameEvent;
 import com.hiddenswitch.spellsource.concurrent.SuspendableMap;
 import com.hiddenswitch.spellsource.impl.ClusteredGames;
 import com.hiddenswitch.spellsource.impl.GameId;
@@ -27,23 +29,32 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.spells.AddAttributeSpell;
+import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
-import net.demilich.metastone.game.utils.Attribute;
+import net.demilich.metastone.game.cards.Attribute;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -54,14 +65,20 @@ import static java.util.stream.Collectors.toList;
 
 /**
  * A service that starts a game session, accepts connections from players and manages the state of the game.
+ * <p>
+ * Various static methods convert game data into a format the Unity3D client can understand.
  */
 public interface Games extends Verticle {
 	Logger LOGGER = LoggerFactory.getLogger(Games.class);
-	String WEBSOCKET_PATH = "games";
 	long DEFAULT_NO_ACTIVITY_TIMEOUT = 225000L;
-	Pattern BONUS_DAMAGE_IN_DESCRIPTION = Pattern.compile("\\$(\\d+)");
-	Pattern BONUS_HEALING_IN_DESCRIPTION = Pattern.compile("#(\\d+)");
+	String GAMES_PLAYERS_MAP = "Games::players";
+	String GAMES = "games";
 
+	/**
+	 * Creates a new instance of the service that maintains a list of running games.
+	 *
+	 * @return A games instance.
+	 */
 	static Games create() {
 		return new ClusteredGames();
 	}
@@ -142,7 +159,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& !(ga instanceof PlayChooseOneCardAction))
 				.map(ga -> (PlaySpellCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getSourceCardEntityId().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> {
@@ -159,7 +176,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.SPELL
 						&& ga instanceof PlayChooseOneCardAction)
 				.map(ga -> (PlayChooseOneCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addSpellsItem))
@@ -171,7 +188,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
@@ -217,7 +234,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.SUMMON)
 				.map(ga -> (PlayMinionCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
@@ -227,7 +244,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO)
 				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().allMatch(kv2 -> kv2.getChooseOneOptionIndex() == null))
@@ -238,7 +255,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.HERO)
 				.map(ga -> (PlayHeroCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.filter(kv -> kv.getValue().stream().anyMatch(kv2 -> kv2.getChooseOneOptionIndex() != null))
@@ -290,7 +307,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
 				.filter(ga -> ga.getChooseOneOptionIndex() == null)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSpellAction(kv.getKey(), kv.getValue())).findFirst();
@@ -302,7 +319,7 @@ public interface Games extends Verticle {
 				.filter(ga -> ga.getActionType() == ActionType.HERO_POWER)
 				.map(ga -> (HeroPowerAction) ga)
 				.filter(ga -> ga.getChooseOneOptionIndex() != null)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> buildChooseOneOptions(workingContext, playerId, chooseOneVirtualEntitiesId, kv.getKey(), kv.getValue(), ChooseOneOptions::addHeroPowersItem))
@@ -312,7 +329,7 @@ public interface Games extends Verticle {
 		actions.stream()
 				.filter(ga -> ga.getActionType() == ActionType.EQUIP_WEAPON)
 				.map(ga -> (PlayWeaponCardAction) ga)
-				.collect(Collectors.groupingBy(ga -> ga.getEntityReference().getId()))
+				.collect(Collectors.groupingBy(ga -> ga.getSourceReference().getId()))
 				.entrySet()
 				.stream()
 				.map(kv -> getSummonAction(workingContext, kv.getKey(), minionsOrWeapons, kv.getValue(), playerId))
@@ -379,7 +396,7 @@ public interface Games extends Verticle {
 	 */
 	static <T extends PlayCardAction & HasChoiceCard> ChooseOneOptions buildChooseOneOptions(GameContext workingContext, int playerId, int[] chooseOneVirtualEntitiesId, int sourceId, List<T> choices, BiConsumer<ChooseOneOptions, SpellAction> adder) {
 		ChooseOneOptions spell = new ChooseOneOptions();
-		EntityLocation sourceCardLocation = ((Card) workingContext.resolveSingleTarget(choices.get(0).getEntityReference())).getEntityLocation();
+		EntityLocation sourceCardLocation = workingContext.resolveSingleTarget(choices.get(0).getSourceReference()).getEntityLocation();
 		spell.cardInHandId(sourceId);
 
 		Map<String, List<T>> intermediate = choices.stream()
@@ -408,6 +425,16 @@ public interface Games extends Verticle {
 		return spell;
 	}
 
+	/**
+	 * Builds a summon action from a minion card.
+	 *
+	 * @param workingContext
+	 * @param sourceCardId
+	 * @param minionEntityIdToLocation
+	 * @param summonActions
+	 * @param playerId
+	 * @return
+	 */
 	static SummonAction getSummonAction(GameContext workingContext, Integer sourceCardId, Map<Integer, Integer> minionEntityIdToLocation, List<? extends PlayCardAction> summonActions, int playerId) {
 		SummonAction summonAction = new SummonAction()
 				.sourceId(sourceCardId)
@@ -430,6 +457,14 @@ public interface Games extends Verticle {
 		return summonAction;
 	}
 
+	/**
+	 * Builds a spell action from a spell card or a hero power card. Any play card action that accepts targets can work
+	 * for this function.
+	 *
+	 * @param sourceCardId
+	 * @param playCardActions
+	 * @return
+	 */
 	@Suspendable
 	static SpellAction getSpellAction(Integer sourceCardId, List<? extends PlayCardAction> playCardActions) {
 		SpellAction spellAction = new SpellAction()
@@ -470,32 +505,29 @@ public interface Games extends Verticle {
 
 		GameContext workingContext = event.getGameContext().clone();
 		// Handle the event types here.
-		if (event instanceof net.demilich.metastone.game.events.PhysicalAttackEvent) {
+		if (event instanceof PhysicalAttackEvent) {
 			net.demilich.metastone.game.events.PhysicalAttackEvent physicalAttackEvent
 					= (net.demilich.metastone.game.events.PhysicalAttackEvent) event;
 			Actor attacker = physicalAttackEvent.getAttacker();
 			Actor defender = physicalAttackEvent.getDefender();
 			int damageDealt = physicalAttackEvent.getDamageDealt();
 			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
-			clientEvent.physicalAttack(physicalAttack);
+			if (event.getEventType() == GameEventType.PHYSICAL_ATTACK) {
+				clientEvent.physicalAttack(physicalAttack);
+			} else if (event.getEventType() == GameEventType.AFTER_PHYSICAL_ATTACK) {
+				clientEvent.afterPhysicalAttack(physicalAttack);
+			}
 		} else if (event instanceof DiscardEvent) {
-			// Handles both discard and mill events
+			// Handles discard and roast events
 			DiscardEvent discardEvent = (DiscardEvent) event;
 			// You always see which cards get discarded
 			CardEvent cardEvent = new CardEvent()
 					.card(getEntity(workingContext, discardEvent.getCard(), playerId));
 			if (discardEvent.getEventType() == GameEventType.DISCARD) {
 				clientEvent.discard(cardEvent);
-			} else if (discardEvent.getEventType() == GameEventType.MILL) {
-				clientEvent.mill(cardEvent);
+			} else if (discardEvent.getEventType() == GameEventType.ROASTED) {
+				clientEvent.roasted(cardEvent);
 			}
-		} else if (event instanceof AfterPhysicalAttackEvent) {
-			AfterPhysicalAttackEvent physicalAttackEvent = (AfterPhysicalAttackEvent) event;
-			Actor attacker = physicalAttackEvent.getAttacker();
-			Actor defender = physicalAttackEvent.getDefender();
-			int damageDealt = physicalAttackEvent.getDamageDealt();
-			com.hiddenswitch.spellsource.client.models.PhysicalAttackEvent physicalAttack = getPhysicalAttack(workingContext, attacker, defender, damageDealt, playerId);
-			clientEvent.afterPhysicalAttack(physicalAttack);
 		} else if (event instanceof DrawCardEvent) {
 			DrawCardEvent drawCardEvent = (DrawCardEvent) event;
 			Card card = drawCardEvent.getCard();
@@ -533,7 +565,8 @@ public interface Games extends Verticle {
 			Card card = heroPowerUsedEvent.getHeroPower();
 			clientEvent.heroPowerUsed(new GameEventHeroPowerUsed()
 					.heroPower(getEntity(workingContext, card, playerId)));
-		} else if (event instanceof SummonEvent) {
+			// Only send exactly the before summon event data
+		} else if (event.getClass().equals(BeforeSummonEvent.class)) {
 			SummonEvent summonEvent = (SummonEvent) event;
 
 			clientEvent.summon(new GameEventBeforeSummon()
@@ -601,10 +634,25 @@ public interface Games extends Verticle {
 		return SuspendableMap.getOrCreate("Games::connections");
 	}
 
-	static SuspendableMap<UserId, GameId> getGames() throws SuspendExecution {
-		return SuspendableMap.getOrCreate("Games::players");
+	/**
+	 * Retrieves the current game a player is part of.
+	 *
+	 * @return
+	 * @throws SuspendExecution
+	 */
+	static SuspendableMap<UserId, GameId> getUsersInGames() throws SuspendExecution {
+		return SuspendableMap.getOrCreate(GAMES_PLAYERS_MAP);
 	}
 
+	/**
+	 * Immediately ends the given game, causing both players to concede.
+	 * <p>
+	 * All games ended this way end in a draw.
+	 *
+	 * @param game
+	 * @throws SuspendExecution
+	 * @throws InterruptedException
+	 */
 	static void endGame(GameId game) throws SuspendExecution, InterruptedException {
 		try {
 			String deploymentId = getConnections().get(game).deploymentId;
@@ -632,7 +680,7 @@ public interface Games extends Verticle {
 	}
 
 	/**
-	 * Creates a game session on this instance.
+	 * Creates a game session on this instance. Returns once the game is ready to receive first messages
 	 *
 	 * @param request Information needed to start a game.
 	 * @return Information for the users to connect to the game.
@@ -641,15 +689,6 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	CreateGameSessionResponse createGameSession(ConfigurationRequest request) throws SuspendExecution, InterruptedException;
-
-	/**
-	 * Gets the current game state of a requested game ID. In the future, this method should punt the request to the next
-	 * Games service instance if it can't find the given session.
-	 *
-	 * @param request The game ID to describe.
-	 * @return The game state of the requested game.
-	 */
-	DescribeGameSessionResponse describeGameSession(DescribeGameSessionRequest request);
 
 	/**
 	 * Possibly prematurely ends the game session. Typically this is done due to timeouts or some external action that
@@ -697,32 +736,6 @@ public interface Games extends Verticle {
 	 */
 	@Suspendable
 	ConcedeGameSessionResponse concedeGameSession(ConcedeGameSessionRequest request) throws InterruptedException, SuspendExecution;
-
-	/**
-	 * Gets a complete view of the game for the specified user, respecting security (i.e., information about the user's
-	 * opponent's deck, hand and secrets is not leaked).
-	 *
-	 * @param gameId The game to get client state for.
-	 * @param userId The user ID whose point of view this state should be generated for.
-	 * @return A client view game state.
-	 */
-	default GameState getClientGameState(String gameId, String userId) {
-		DescribeGameSessionResponse gameSession = describeGameSession(DescribeGameSessionRequest.create(gameId));
-		com.hiddenswitch.spellsource.common.GameState state = gameSession.getState();
-		GameContext workingContext = new GameContext();
-		workingContext.setGameState(state);
-		Player local;
-		Player opponent;
-		if (state.player1.getUserId().equals(userId)) {
-			local = state.player1;
-			opponent = state.player2;
-		} else {
-			local = state.player2;
-			opponent = state.player1;
-		}
-
-		return getGameState(workingContext, local, opponent);
-	}
 
 	/**
 	 * Given a context and a specification of who the local and opposing players are, generate a client game state view.
@@ -929,7 +942,7 @@ public interface Games extends Verticle {
 		Card card = actor.getSourceCard();
 		EntityState entityState = new EntityState();
 		com.hiddenswitch.spellsource.client.models.Entity entity = new com.hiddenswitch.spellsource.client.models.Entity()
-				.description(actor.getDescription().replace("#", ""))
+				.description(actor.getDescription(workingContext, workingContext.getPlayer(actor.getOwner())))
 				.name(actor.getName())
 				.id(actor.getId())
 				.cardId(card.getCardId());
@@ -974,7 +987,7 @@ public interface Games extends Verticle {
 				|| actor.hasAttribute(Attribute.CONDITIONAL_ATTACK_BONUS)
 				|| actor.hasAttribute(Attribute.TEMPORARY_ATTACK_BONUS));
 		entityState.frozen(actor.hasAttribute(Attribute.FROZEN));
-		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE) || actor.hasAttribute(Attribute.RUSH) || actor.hasAttribute(Attribute.AURA_RUSH));
+		entityState.charge(actor.hasAttribute(Attribute.CHARGE) || actor.hasAttribute(Attribute.AURA_CHARGE));
 		entityState.immune(actor.hasAttribute(Attribute.IMMUNE) || actor.hasAttribute(Attribute.AURA_IMMUNE));
 		entityState.stealth(actor.hasAttribute(Attribute.STEALTH) || actor.hasAttribute(Attribute.AURA_STEALTH));
 		entityState.taunt(actor.hasAttribute(Attribute.TAUNT) || actor.hasAttribute(Attribute.AURA_TAUNT));
@@ -1020,9 +1033,13 @@ public interface Games extends Verticle {
 					.description("Secret")
 					.cardId("hidden");
 		}
-		Entity.EntityTypeEnum entityType = Entity.EntityTypeEnum.SECRET;
-		if (enchantment instanceof Quest) {
+		Entity.EntityTypeEnum entityType;
+		if (enchantment instanceof Secret) {
+			entityType = Entity.EntityTypeEnum.SECRET;
+		} else if (enchantment instanceof Quest) {
 			entityType = Entity.EntityTypeEnum.QUEST;
+		} else {
+			entityType = Entity.EntityTypeEnum.ENCHANTMENT;
 		}
 
 		entity.getState()
@@ -1079,106 +1096,15 @@ public interface Games extends Verticle {
 			}
 			owningPlayer = workingContext.getPlayer(card.getOwner());
 
-			// Handle spell damage
-			if (card.isSpell()) {
-				// Find the $ damages
-				Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the dollar sign in the beginning
-					int damage = Integer.parseInt(matcher.group(1));
-					int modifiedDamage;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						ValueProviderDesc desc = new ValueProviderDesc();
-						desc.put(ValueProviderArg.VALUE, damage);
-						desc.put(ValueProviderArg.CLASS, SpellDamageValueProvider.class);
-						ValueProvider provider = desc.create();
-						modifiedDamage = provider.getValue(workingContext, owningPlayer, owningPlayer.getHero(), card);
-					} else {
-						modifiedDamage = damage;
-					}
-					if (modifiedDamage != damage) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			} else if (card.isHeroPower()) { //Handles hero power damage
-				// Find the $ damages
-				Matcher matcher = BONUS_DAMAGE_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the dollar sign in the beginning
-					int damage = Integer.parseInt(matcher.group(1));
-					int modifiedDamage;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						ValueProviderDesc desc = new ValueProviderDesc();
-						desc.put(ValueProviderArg.VALUE, damage);
-						desc.put(ValueProviderArg.CLASS, HeroPowerDamageValueProvider.class);
-						ValueProvider provider = desc.create();
-						modifiedDamage = provider.getValue(workingContext, owningPlayer, owningPlayer.getHero(), card);
-					} else {
-						modifiedDamage = damage;
-					}
-					if (modifiedDamage != damage) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedDamage));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedDamage));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			}
-			if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
-				Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
-				StringBuffer newDescription = new StringBuffer();
-
-				boolean didChange = false;
-				while (matcher.find()) {
-					// Skip the # in the beginning
-					int healing = Integer.parseInt(matcher.group(1));
-					int modifiedHealing = healing;
-					if (card.getId() != GameLogic.UNASSIGNED) {
-						modifiedHealing = workingContext.getLogic().applyAmplify(owningPlayer, modifiedHealing, Attribute.HEAL_AMPLIFY_MULTIPLIER);
-						if (card.isSpell()) {
-							modifiedHealing = workingContext.getLogic().applyAmplify(owningPlayer, modifiedHealing, Attribute.SPELL_HEAL_AMPLIFY_MULTIPLIER);
-						}
-						if (card.isHeroPower()) {
-							modifiedHealing = workingContext.getLogic().applyAmplify(owningPlayer, modifiedHealing, Attribute.HERO_POWER_HEAL_AMPLIFY_MULTIPLIER);
-						}
-					}
-					if (modifiedHealing != healing) {
-						matcher.appendReplacement(newDescription, String.format("*%d*", modifiedHealing));
-					} else {
-						matcher.appendReplacement(newDescription, Integer.toString(modifiedHealing));
-					}
-					didChange = true;
-				}
-				if (didChange) {
-					matcher.appendTail(newDescription);
-					description = newDescription.toString();
-				}
-			}
-
+			description = card.getDescription(workingContext, owningPlayer);
 		} else {
 			entityState.playable(false);
 			entityState.manaCost(card.getBaseManaCost());
 			owningPlayer = Player.empty();
 		}
 
-		entity.description(description.replace("$", "").replace("#", ""));
+		entity.description(description.replace("$", "").replace("#", "")
+				.replace("[", "").replace("]", ""));
 
 		entityState.owner(card.getOwner());
 		entityState.cardSet(Objects.toString(card.getCardSet()));
@@ -1214,16 +1140,18 @@ public interface Games extends Verticle {
 				entityState.armor(card.getArmor());
 				break;
 			case MINION:
-				entityState.attack(card.getAttack() + card.getBonusAttack());
+				entityState.attack(card.getAttack() + card.getBonusAttack() + card.getAttributeValue(Attribute.AURA_ATTACK_BONUS));
 				entityState.baseAttack(card.getBaseAttack());
 				entityState.baseManaCost(card.getBaseManaCost());
-				entityState.hp(card.getHp());
+				entityState.hp(card.getHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
 				entityState.baseHp(card.getBaseHp());
-				entityState.maxHp(card.getBaseHp() + card.getBonusHp());
+				entityState.maxHp(card.getBaseHp() + card.getBonusHp() + card.getAttributeValue(Attribute.AURA_HP_BONUS));
 				entityState.underAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
-				entityState.tribe(card.getRace() != null ? card.getRace().name() : null);
+				entityState.tribe(card.getRace().name());
+				// Include handbuffs from WhereverTheyAre enchantments. Also use this for other effects!
+				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entityState);
 				break;
 			case WEAPON:
 				entityState.durability(card.getDurability());
@@ -1290,4 +1218,151 @@ public interface Games extends Verticle {
 		return Long.parseLong(System.getProperties().getProperty("games.defaultNoActivityTimeout", Long.toString(Games.DEFAULT_NO_ACTIVITY_TIMEOUT)));
 	}
 
+	/**
+	 * Compute the {@link EntityChangeSet} between two {@link GameState}s.
+	 *
+	 * @param gameStateOld
+	 * @param gameStateNew
+	 * @return
+	 */
+	static EntityChangeSet computeChangeSet(
+			com.hiddenswitch.spellsource.common.GameState gameStateOld,
+			com.hiddenswitch.spellsource.common.GameState gameStateNew) {
+		MapDifference<Integer, EntityLocation> difference;
+		if (gameStateOld == null) {
+			difference = gameStateNew.start();
+		} else {
+			difference = gameStateOld.to(gameStateNew);
+		}
+
+		EntityChangeSet changes = new EntityChangeSet();
+		difference.entriesDiffering().entrySet().stream().map(i -> new EntityChangeSetInner()
+				.id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.C)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue().rightValue())))
+				.p0(new EntityState()
+						.location(Games.toClientLocation(i.getValue().leftValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnRight().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.A)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		difference.entriesOnlyOnLeft().entrySet().stream().map(i -> new EntityChangeSetInner().id(i.getKey())
+				.op(EntityChangeSetInner.OpEnum.R)
+				.p1(new EntityState()
+						.location(Games.toClientLocation(i.getValue()))))
+				.forEach(changes::add);
+
+		return changes;
+	}
+
+	/**
+	 * Generates a client-readable {@link Replay} object (for use with the client replay functionality).
+	 *
+	 * @param originalCtx The context for which to generate a replay.
+	 * @return
+	 */
+	static Replay replayFromGameContext(GameContext originalCtx) {
+		Replay replay = new Replay();
+		AtomicReference<com.hiddenswitch.spellsource.common.GameState> gameStateOld = new AtomicReference<>();
+		Consumer<GameContext> augmentReplayWithCtx = (GameContext ctx) -> {
+			// We record each game state by dumping the {@link GameState} objects from each player's point of
+			// view and any state transitions into the replay.
+			ReplayGameStates gameStates = new ReplayGameStates();
+			GameState gameStateFirst = getGameState(ctx, ctx.getPlayer1(), ctx.getPlayer2());
+			// NOTE: It seems difficult to get Swagger codegen to actually respect a default empty array so instead we
+			// set one manually.
+			gameStateFirst.setPowerHistory(new ArrayList<>());
+			GameState gameStateSecond = getGameState(ctx, ctx.getPlayer2(), ctx.getPlayer1());
+			gameStateSecond.setPowerHistory(new ArrayList<>());
+			gameStates.first(gameStateFirst);
+			gameStates.second(gameStateSecond);
+			replay.addGameStatesItem(gameStates);
+
+			com.hiddenswitch.spellsource.common.GameState gameStateNew = ctx.getGameState();
+			ReplayDeltas delta = new ReplayDeltas();
+			delta.forward(computeChangeSet(gameStateOld.get(), gameStateNew));
+			if (gameStateOld.get() != null) {
+				// NOTE: It is illegal to rewind past the beginning of the game, so the very first delta need not have
+				// backward populated.
+				delta.backward(computeChangeSet(gameStateNew, gameStateOld.get()));
+			}
+			replay.addDeltasItem(delta);
+
+			gameStateOld.set(ctx.getGameStateCopy());
+		};
+
+		try {
+			// Replay the game from a trace while capturing the {@link Replay} object.
+			GameContext replayCtx = originalCtx.getTrace().replayContext(
+					false,
+					augmentReplayWithCtx
+			);
+
+			// Append the final game states / deltas.
+			augmentReplayWithCtx.accept(replayCtx);
+		} catch (Throwable any) {
+			LOGGER.error("replayFromGameContext {}:", originalCtx.getGameId(), any);
+		}
+
+		return replay;
+	}
+
+	/**
+	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and {@link
+	 * net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @param entity
+	 * @param state
+	 */
+	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId, @NotNull net.demilich.metastone.game.entities.Entity entity, @NotNull EntityState state) {
+		int attackBonus = 0;
+		int hpBonus = 0;
+		boolean hasTaunt = false;
+		for (WhereverTheyAreEnchantment e : context.getTriggerManager().getTriggers()
+				.stream()
+				.filter(e -> e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
+				.map(WhereverTheyAreEnchantment.class::cast)
+				.collect(Collectors.toList())) {
+			List<SpellDesc> spells;
+			if (e.getSpell() == null) {
+				return;
+			}
+			if (MetaSpell.class.isAssignableFrom(e.getSpell().getDescClass())) {
+				spells = e.getSpell().subSpells();
+			} else {
+				spells = Collections.singletonList(e.getSpell());
+			}
+			for (SpellDesc desc : spells) {
+				if (BuffSpell.class.isAssignableFrom(desc.getDescClass())) {
+					attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					hpBonus += desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					int value = desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					attackBonus += value;
+					hpBonus += value;
+				}
+				if (AddAttributeSpell.class.isAssignableFrom(desc.getDescClass())) {
+					// TODO: Add support for stuff other than Taunt
+					if (desc.getAttribute() == Attribute.TAUNT) {
+						hasTaunt = true;
+					}
+				}
+			}
+		}
+		if (hasTaunt) {
+			state.taunt(true);
+		}
+		if (attackBonus != 0) {
+			state.setAttack(state.getAttack() + attackBonus);
+		}
+		if (hpBonus != 0) {
+			state.setHp(state.getHp() + hpBonus);
+		}
+	}
 }

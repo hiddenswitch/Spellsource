@@ -11,11 +11,8 @@
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",
-      "fireCondition": {
-        "class": "OwnedByPlayerCondition",
-        "targetPlayer": "SELF"
-      },
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINION",
+      "targetPlayer": "SELF"
     },
     "spell": {
       "class": "SummonSpell",

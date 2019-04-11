@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Discover a card you discarded this game.",
+  "description": "Opener: Discover a card you discarded this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

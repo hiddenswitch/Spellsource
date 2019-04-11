@@ -1,6 +1,5 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import com.google.common.collect.Sets;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.cards.CardCatalogue;
@@ -8,6 +7,10 @@ import net.demilich.metastone.game.cards.CardList;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 
+/**
+ * Returns a list of {@link net.demilich.metastone.game.spells.trigger.secrets.Secret} cards from the controller's hero
+ * class or the {@link CardSourceArg#HERO_CLASS} if this controller ordinarily does not have secrets.
+ */
 public class SecretSource extends CardSource implements HasCardCreationSideEffects {
 
 	public SecretSource(CardSourceDesc desc) {
@@ -16,17 +19,14 @@ public class SecretSource extends CardSource implements HasCardCreationSideEffec
 
 	@Override
 	protected CardList match(GameContext context, Entity source, Player player) {
-		// If the player doesn't ordinarily have secrets, return GOLD secrets
-		final HeroClass playerClass = player.getHero().getHeroClass();
-		final HeroClass heroClass =
-				Sets.newHashSet(HeroClass.BLACK,
-						HeroClass.BLUE,
-						HeroClass.GOLD,
-						HeroClass.GREEN)
-						.contains(playerClass) ?
-						playerClass :
-						HeroClass.GOLD;
-		return CardCatalogue.query(context.getDeckFormat())
-				.filtered(c -> c.getHeroClass() == heroClass && c.isSecret());
+		HeroClass defaultHeroClass = (HeroClass) getDesc().getOrDefault(CardSourceArg.HERO_CLASS, HeroClass.GOLD);
+		// If the player doesn't ordinarily have secrets, return GOLD or otherwise specified secrets
+		CardList secretCards = CardCatalogue.query(context.getDeckFormat())
+				.filtered(c -> c.getHeroClass() == player.getHero().getHeroClass() && c.isSecret() && c.isCollectible());
+		if (secretCards.isEmpty()) {
+			secretCards = CardCatalogue.query(context.getDeckFormat())
+					.filtered(c -> c.getHeroClass() == defaultHeroClass && c.isSecret() && c.isCollectible());
+		}
+		return secretCards;
 	}
 }

@@ -52,9 +52,9 @@ def _get_snapshot_url(snap_num=61):
     return _TEMPOSTORM_URL + filter_str
 
 
-def _write_decklists():
+def write_decklists(snap_num=61):
     print('Updating the deck lists...')
-    for deck in TempostormDecklists():
+    for deck in TempostormDecklists(snap_num=61):
         filename = deck['name'] + '.txt'
         with open(
                 path.join(path.dirname(__file__), '..', '..', 'net', 'src', 'main', 'resources', 'decklists', 'current',
@@ -71,8 +71,8 @@ def _to_deck_list(deck):
 
 
 class TempostormDecklists(object):
-    def __init__(self):
-        self.request = urllib.request.Request(url=_get_snapshot_url(),
+    def __init__(self, snap_num=61):
+        self.request = urllib.request.Request(url=_get_snapshot_url(snap_num),
                                               headers={
                                                   'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) '
                                                                 'AppleWebKit/604.4.7 (KHTML, like Gecko) '
@@ -95,7 +95,3 @@ class TempostormDecklists(object):
     @staticmethod
     def to_deck_list(deck):
         return _to_deck_list(deck)
-
-
-if __name__ == '__main__':
-    _write_decklists()

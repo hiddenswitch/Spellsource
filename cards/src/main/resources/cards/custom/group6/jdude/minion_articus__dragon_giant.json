@@ -1,0 +1,19 @@
+{
+  "name": "Articus, Dragon Giant",
+  "baseManaCost": 20,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "rarity": "LEGENDARY",
+  "race": "DRAGON",
+  "description": "Costs (1) less for each card in both players hands.",
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "PlayerAttributeValueProvider",
+    "playerAttribute": "HAND_COUNT",
+    "targetPlayer": "BOTH"
+  }
+}

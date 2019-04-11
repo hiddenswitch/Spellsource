@@ -1,14 +1,13 @@
 package com.blizzard.hearthstone;
 
+import com.hiddenswitch.spellsource.client.models.CardRecord;
 import io.vertx.core.json.JsonArray;
 import io.vertx.core.json.JsonObject;
-import net.demilich.metastone.game.cards.Card;
-import net.demilich.metastone.game.cards.CardCatalogue;
-import net.demilich.metastone.game.cards.CardParseException;
-import net.demilich.metastone.game.cards.CardType;
+import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.minions.Race;
-import net.demilich.metastone.game.utils.Attribute;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -22,8 +21,10 @@ import java.util.List;
 
 public class CatalogueTests {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(CatalogueTests.class);
+
 	private static String getCurrentCards() {
-		String testedUrl = "https://api.hearthstonejson.com/v1/27358/enUS/cards.json";
+		String testedUrl = "https://api.hearthstonejson.com/v1/28329/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
 		if (overrideUrl != null && !overrideUrl.equals("")) {
 			testedUrl = overrideUrl;
@@ -34,9 +35,14 @@ public class CatalogueTests {
 	@DataProvider(name = "HearthstoneCards")
 	public static Object[][] getHearthstoneCards() throws IOException, URISyntaxException, CardParseException {
 		CardCatalogue.loadCardsFromPackage();
-		URL url = new URL(getCurrentCards());
+		String currentCards = getCurrentCards();
+		if (currentCards == null || currentCards.equals("") || !currentCards.startsWith("http") || !currentCards.startsWith("file")) {
+			LOGGER.warn("getHearthstoneCards: Url {} was invalid, skipping", currentCards);
+			return new Object[0][0];
+		}
+		URL url = new URL(currentCards);
 		URLConnection connection = url.openConnection();
-		connection.addRequestProperty("User-Agent", "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.0)");
+		connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15");
 		String cards = IOUtils.toString(connection.getInputStream());
 
 
@@ -62,15 +68,24 @@ public class CatalogueTests {
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testHasCard(JsonObject cardObject) {
-		final Card card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±", "\\u00f1"));
+		Card card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±", "\\u00f1"));
 		Assert.assertNotNull(card);
 	}
 
 	@Test(dataProvider = "HearthstoneCards")
 	public void testAttributes(JsonObject cardObject) {
-		Card card;
+		Card card = null;
 		try {
-			card = CardCatalogue.getCardByName(cardObject.getString("name").replace("Ã±", "\\u00f1"));
+			for (CardCatalogueRecord record : CardCatalogue.getRecords().values()) {
+				if (record.getDesc().getSet().isHearthstoneSet()
+						&& record.getDesc().isCollectible()
+						&& record.getDesc().getName().equals(cardObject.getString("name").replace("Ã±", "\\u00f1"))) {
+					card = record.getDesc().create();
+				}
+			}
+			if (card == null) {
+				throw new NullPointerException("not found");
+			}
 		} catch (NullPointerException ex) {
 			Assert.fail(String.format("Could not find card with name %s", cardObject.getString("name")));
 			return;

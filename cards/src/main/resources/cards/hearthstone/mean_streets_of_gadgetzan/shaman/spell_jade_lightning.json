@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "SILVER",
   "rarity": "COMMON",
-  "description": "Deal $4 damage. Summon a Jade Golem.",
+  "description": "Deal $4 damage. Summon a []Jade Golem.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",
@@ -53,5 +53,32 @@
   },
   "collectible": true,
   "set": "MEAN_STREETS_OF_GADGETZAN",
-  "fileFormatVersion": 1
+  "fileFormatVersion": 1,
+  "dynamicDescription": [
+    {
+      "class": "MetaDescription",
+      "descriptions": [
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "JADE_BUFF",
+            "offset": 1
+          }
+        },
+        "/",
+        {
+          "class": "ValueDescription",
+          "value": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_PLAYER",
+            "attribute": "JADE_BUFF",
+            "offset": 1
+          }
+        },
+        " "
+      ]
+    }
+  ]
 }

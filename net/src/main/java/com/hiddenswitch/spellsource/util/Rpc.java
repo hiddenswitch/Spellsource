@@ -1,18 +1,20 @@
 package com.hiddenswitch.spellsource.util;
 
-import com.github.fromage.quasi.fibers.SuspendExecution;
-import com.github.fromage.quasi.fibers.Suspendable;
-import com.github.fromage.quasi.strands.SuspendableAction1;
+import co.paralleluniverse.fibers.SuspendExecution;
+import co.paralleluniverse.fibers.Suspendable;
+import co.paralleluniverse.strands.SuspendableAction1;
 import com.hiddenswitch.spellsource.Accounts;
 import com.hiddenswitch.spellsource.concurrent.SuspendableFunction;
 import com.hiddenswitch.spellsource.models.CreateAccountRequest;
 import io.vertx.core.*;
 import io.vertx.core.eventbus.EventBus;
 import io.vertx.core.eventbus.MessageConsumer;
+import io.vertx.core.json.JsonObject;
 import io.vertx.ext.sync.Sync;
 
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Proxy;
+import java.nio.Buffer;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -23,8 +25,8 @@ import static com.hiddenswitch.spellsource.util.Sync.suspendableHandler;
  * This class provides a way to register and connect to verticles advertised on the Vert.x {@link EventBus}. Its
  * functionality is similar to a simple remoting or RPC framework.
  *
- * @see #register(Object, Class,) for the method to register your service on the {@link EventBus}.
- * @see #connect(Class to connect to a service available on the {@link EventBus}.
+ * @see #register(Object, Class) for the method to register your service on the {@link EventBus}.
+ * @see #connect(Class) to connect to a service available on the {@link EventBus}.
  */
 public class Rpc {
 
@@ -110,7 +112,7 @@ public class Rpc {
 
 			final String address = name + "::" + method.getName();
 
-			SuspendableFunction<Object, Object> method1 = arg -> method.invoke(instance, arg);
+			SuspendableFunction<Object, Object> finalMethod = arg -> method.invoke(instance, arg);
 
 			// Get the context at the time of calling this function
 			RpcOptions.Serialization serialization = defaultSerialization();
@@ -119,21 +121,24 @@ public class Rpc {
 				serialization = rpcOptions.serialization();
 			}
 			SuspendableAction1 eventBusHandler;
+			MessageConsumer consumer;
 			if (serialization == RpcOptions.Serialization.JAVA) {
-				eventBusHandler = new BufferEventBusHandler<>(method1);
+				eventBusHandler = new BufferEventBusHandler<>(finalMethod);
+				consumer = eb.consumer(address, suspendableHandler(eventBusHandler));
 			} else if (serialization == RpcOptions.Serialization.JSON) {
-				eventBusHandler = new JsonEventBusHandler<>(method1, method.getParameterTypes()[0]);
+				eventBusHandler = new JsonEventBusHandler<>(finalMethod, method.getParameterTypes()[0]);
+				consumer = eb.<JsonObject>consumer(address, suspendableHandler(eventBusHandler));
 			} else {
 				throw new RuntimeException("Unexpected serialization option for this event bus handler.");
 			}
 
-			MessageConsumer consumer = eb.consumer(address, suspendableHandler(eventBusHandler));
+
 			// If the instance we are consuming supports deployment IDs, register a function prefixed with the
 			// deployment ID in order to support stateful message consumers.
 			if (instance instanceof AbstractVerticle) {
 				AbstractVerticle deployedInstance = (AbstractVerticle) instance;
 				// Specific deployment instance ID consumer.
-				final String specificInstanceAddress = deployedInstance + "::" + address;
+				final String specificInstanceAddress = deployedInstance.deploymentID() + "::" + address;
 				MessageConsumer consumerSpecific = eb.consumer(specificInstanceAddress, suspendableHandler(eventBusHandler));
 				return Stream.of(consumer, consumerSpecific);
 			}
@@ -141,7 +146,7 @@ public class Rpc {
 			return Stream.of(consumer);
 		}).collect(Collectors.toList()));
 
-		CompositeFuture.all(registration.getMessageConsumers()
+		CompositeFuture.join(registration.getMessageConsumers()
 				.stream().map(consumer -> {
 					Future<Void> future = Future.future();
 					consumer.completionHandler(future);
@@ -247,13 +252,12 @@ public class Rpc {
 	 * @param registration A registration entry return by {@link #register(Object, Class)}
 	 * @return A succeeded future when all of the registration entries have been removed.
 	 * @throws SuspendExecution
-	 * @throws InterruptedException
 	 */
 	public static CompositeFuture unregister(Registration registration) throws SuspendExecution {
 		return Sync.awaitResult(h -> unregister(registration, h));
 	}
 
 	public static RpcOptions.Serialization defaultSerialization() {
-		return RpcOptions.Serialization.JAVA;
+		return RpcOptions.Serialization.JSON;
 	}
 }

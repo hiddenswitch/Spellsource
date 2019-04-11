@@ -1,6 +1,6 @@
 package net.demilich.metastone.game.spells.desc.source;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import com.google.common.collect.Lists;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -21,6 +21,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.toMap;
 
 public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc> {
+
 	private CardSourceDesc desc;
 
 	public CardSource(CardSourceDesc desc) {
@@ -59,6 +60,12 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 				case OPPONENT:
 					providingPlayer = context.getOpponent(player);
 					break;
+				case PLAYER_1:
+					providingPlayer = context.getPlayer1();
+					break;
+				case PLAYER_2:
+					providingPlayer = context.getPlayer2();
+					break;
 				case OWNER:
 				case SELF:
 				default:
@@ -82,6 +89,18 @@ public abstract class CardSource implements Serializable, HasDesc<CardSourceDesc
 		return cards;
 	}
 
+	/**
+	 * Overridden by card source implementations to return a list of cards that usually get filtered in an {@link
+	 * net.demilich.metastone.game.spells.desc.filter.EntityFilter}.
+	 * <p>
+	 * See the implementations for examples of how, e.g. the graveyard is turned into a {@link CardList} instance by
+	 * iterating through all the actors in the graveyard and retrieving their {@link Entity#getSourceCard()}.
+	 *
+	 * @param context The game context
+	 * @param source  The entity that is the origin of this matching operation
+	 * @param player  The casting player
+	 * @return A list of cards pre-filter.
+	 */
 	@Suspendable
 	protected abstract CardList match(GameContext context, Entity source, Player player);
 

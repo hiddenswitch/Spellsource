@@ -1,17 +1,23 @@
 package com.hiddenswitch.spellsource;
 
 import ch.qos.logback.classic.Level;
+import com.hiddenswitch.spellsource.common.DeckCreateRequest;
 import com.hiddenswitch.spellsource.util.Logging;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.Player;
 import net.demilich.metastone.game.actions.ActionType;
 import net.demilich.metastone.game.actions.GameAction;
 import net.demilich.metastone.game.actions.PlayCardAction;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
+import net.demilich.metastone.game.decks.FixedCardsDeckFormat;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.events.GameStartEvent;
-import net.demilich.metastone.game.shared.threat.GameStateValueBehaviour;
+import net.demilich.metastone.game.behaviour.GameStateValueBehaviour;
 import net.demilich.metastone.tests.util.TestBase;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 import org.testng.Assert;
 import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
@@ -25,163 +31,165 @@ import static org.testng.Assert.assertTrue;
 
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
-	@Test(invocationCount = 10)
-	@Ignore("gc behaviour not consistent")
-	public void testNoDisposalSameMemory() throws InterruptedException {
-		Logging.setLoggingLevel(Level.OFF);
-		System.gc();
-		GameContext context1 = GameContext.fromTwoRandomDecks();
-		GameContext context2 = context1.clone();
-		assertEquals(context1.getLogic().getSeed(), context2.getLogic().getSeed());
+	@Test
+	public void testAIMakesOpponentMillCards() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion felReaver = playMinionCard(context, opponent, "minion_fel_reaver");
+			context.endTurn();
+			for (int i = 0; i < 60; i++) {
+				shuffleToDeck(context, opponent, "spell_the_coin");
+			}
+			for (int i = 0; i < 10; i++) {
+				receiveCard(context, player, "spell_a_f_kupcake");
+			}
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			context.setBehaviour(player.getId(), behaviour);
 
-		GameStateValueBehaviour behaviour1 = new GameStateValueBehaviour();
-		GameStateValueBehaviour behaviour2 = new GameStateValueBehaviour();
-		context1.setBehaviour(0, behaviour1);
-		context1.setBehaviour(1, behaviour2);
-		behaviour1.setMaxDepth(2);
-		behaviour2.setMaxDepth(2);
-		behaviour1.setForceGarbageCollection(true);
-		behaviour2.setForceGarbageCollection(true);
-		behaviour1.setTimeout(75000);
-		behaviour2.setTimeout(75000);
-		behaviour1.setParallel(false);
-		behaviour2.setParallel(false);
-		behaviour1.setDisposeNodes(false);
-		behaviour2.setDisposeNodes(false);
+			while (context.takeActionInTurn()) {
+			}
 
-		context1.play();
-		System.gc();
-		Thread.sleep(10000);
-		System.gc();
-		Thread.sleep(10000);
-
-		GameStateValueBehaviour behaviour3 = new GameStateValueBehaviour();
-		GameStateValueBehaviour behaviour4 = new GameStateValueBehaviour();
-		context2.setBehaviour(0, behaviour3);
-		context2.setBehaviour(1, behaviour4);
-		behaviour3.setMaxDepth(2);
-		behaviour4.setMaxDepth(2);
-		behaviour3.setForceGarbageCollection(true);
-		behaviour4.setForceGarbageCollection(true);
-		behaviour3.setTimeout(75000);
-		behaviour4.setTimeout(75000);
-		behaviour3.setParallel(false);
-		behaviour4.setParallel(false);
-		behaviour3.setDisposeNodes(false);
-		behaviour4.setDisposeNodes(false);
-
-		context2.play();
-		System.gc();
-		Thread.sleep(10000);
-		System.gc();
-		Thread.sleep(10000);
-
-		Logging.setLoggingLevel(Level.DEBUG);
-		assertEquals(context1.getTrace().getActions().toArray(new Integer[0]), context2.getTrace().getActions().toArray(new Integer[0]), "The two games should have played out identically. s");
-		long diff = Math.abs(behaviour3.getMinFreeMemory() - behaviour1.getMinFreeMemory());
-		assertTrue(diff < 1024 * 1024, String.format("When we don't dispose nodes, we should observe only a small difference in free memory. Instead the difference was %f MB", diff / (1024.0 * 1024.0)));
+			assertEquals(player.getHand().size(), 0);
+		});
 	}
 
-	@Test(invocationCount = 10)
-	@Ignore("gc behaviour not consistent")
-	public void testReduceMemoryUsage() {
-		Logging.setLoggingLevel(Level.OFF);
-		System.gc();
-		GameContext context1 = GameContext.fromTwoRandomDecks();
-		GameContext context2 = context1.clone();
-		assertEquals(context1.getLogic().getSeed(), context2.getLogic().getSeed());
+	@Test
+	public void testAIFindsPhysicalAttackLethal() {
+		runGym((context, player, opponent) -> {
+			for (int i = 0; i < 7; i++) {
+				playMinionCard(context, player, "minion_stonetusk_boar");
+			}
+			opponent.getHero().setHp(7);
+			Minion highValueTarget = playMinionCard(context, opponent, "minion_neutral_test");
+			highValueTarget.setAttack(1000);
+			highValueTarget.setAttribute(Attribute.SPELL_DAMAGE, 1000);
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setExpandDepthForLethal(true);
+			behaviour.setParallel(true);
+			behaviour.setPruneContextStack(true);
+			context.setBehaviour(player.getId(), behaviour);
 
-		GameStateValueBehaviour behaviour1 = new GameStateValueBehaviour();
-		GameStateValueBehaviour behaviour2 = new GameStateValueBehaviour();
-		context1.setBehaviour(0, behaviour1);
-		context1.setBehaviour(1, behaviour2);
-		behaviour1.setMaxDepth(2);
-		behaviour2.setMaxDepth(2);
-		behaviour1.setForceGarbageCollection(true);
-		behaviour2.setForceGarbageCollection(true);
-		behaviour1.setTimeout(75000);
-		behaviour2.setTimeout(75000);
-		behaviour1.setParallel(false);
-		behaviour2.setParallel(false);
-		behaviour1.setDisposeNodes(false);
-		behaviour2.setDisposeNodes(false);
+			while (context.takeActionInTurn()) {
+			}
 
-		context1.play();
-		System.gc();
-
-		GameStateValueBehaviour behaviour3 = new GameStateValueBehaviour();
-		GameStateValueBehaviour behaviour4 = new GameStateValueBehaviour();
-		context2.setBehaviour(0, behaviour3);
-		context2.setBehaviour(1, behaviour4);
-		behaviour3.setMaxDepth(2);
-		behaviour4.setMaxDepth(2);
-		behaviour3.setForceGarbageCollection(true);
-		behaviour4.setForceGarbageCollection(true);
-		behaviour3.setTimeout(75000);
-		behaviour4.setTimeout(75000);
-		behaviour3.setParallel(false);
-		behaviour4.setParallel(false);
-		behaviour3.setDisposeNodes(true);
-		behaviour4.setDisposeNodes(true);
-
-		context2.play();
-		System.gc();
-
-		Logging.setLoggingLevel(Level.DEBUG);
-		assertEquals(context1.getTrace().getActions().toArray(new Integer[0]), context2.getTrace().getActions().toArray(new Integer[0]), "The two games should have played out identically. s");
-		assertTrue(behaviour3.getMinFreeMemory() > behaviour1.getMinFreeMemory(), "Disposing nodes should increase free memory.");
+			assertTrue(context.updateAndGetGameOver());
+		});
 	}
 
-	@Test(invocationCount = 10)
-	@Ignore("gc behaviour not consistent")
-	public void testReduceMemoryUsageDifferentOrder() {
-		Logging.setLoggingLevel(Level.OFF);
-		System.gc();
-		GameContext context1 = GameContext.fromTwoRandomDecks();
-		GameContext context2 = context1.clone();
-		assertEquals(context1.getLogic().getSeed(), context2.getLogic().getSeed());
+	@Test
+	public void testShadowVisionsInPlan() {
+		Logging.setLoggingLevel(Level.ERROR);
+		String comboPriest = "Name: Combo Priest\n" +
+				"Class: Priest\n" +
+				"Format: Standard\n" +
+				"2x Circle of Healing\n" +
+				"2x Silence\n" +
+				"2x Inner Fire\n" +
+				"2x Northshire Cleric\n" +
+				"2x Power Word: Shield\n" +
+				"2x Divine Spirit\n" +
+				"2x Radiant Elemental\n" +
+				"2x Shadow Ascendant\n" +
+				"2x Shadow Visions\n" +
+				"2x Upgradeable Framebot\n" +
+				"2x Wild Pyromancer\n" +
+				"2x Acolyte of Pain\n" +
+				"2x Bronze Gatekeeper\n" +
+				"1x Mass Dispel\n" +
+				"2x Unpowered Steambot\n" +
+				"1x Lyra the Sunshard";
+		String apmPriest = "Name: APM Priest\n" +
+				"Class: Priest\n" +
+				"Format: Standard\n" +
+				"2x Topsy Turvy\n" +
+				"2x Binding Heal\n" +
+				"2x Power Word: Shield\n" +
+				"1x Stonetusk Boar\n" +
+				"2x Test Subject\n" +
+				"1x Bloodmage Thalnos\n" +
+				"2x Dead Ringer\n" +
+				"1x Divine Spirit\n" +
+				"1x Doomsayer\n" +
+				"2x Loot Hoarder\n" +
+				"2x Radiant Elemental\n" +
+				"2x Shadow Visions\n" +
+				"2x Spirit Lash\n" +
+				"2x Twilight's Call\n" +
+				"2x Vivid Nightmare\n" +
+				"2x Witchwood Piper\n" +
+				"2x Psychic Scream";
+		String mecathunPriest = "Name: Mecha'thun Priest\n" +
+				"Class: Priest\n" +
+				"Format: Standard\n" +
+				"2x Circle of Healing\n" +
+				"2x Northshire Cleric\n" +
+				"2x Power Word: Shield\n" +
+				"1x Bloodmage Thalnos\n" +
+				"2x Dead Ringer\n" +
+				"2x Loot Hoarder\n" +
+				"1x Plated Beetle\n" +
+				"2x Radiant Elemental\n" +
+				"2x Shadow Visions\n" +
+				"2x Spirit Lash\n" +
+				"2x Wild Pyromancer\n" +
+				"2x Twilight's Call\n" +
+				"2x Ticking Abomination\n" +
+				"1x Reckless Experimenter\n" +
+				"1x Coffin Crasher\n" +
+				"1x Hemet, Jungle Hunter\n" +
+				"2x Psychic Scream\n" +
+				"1x Mecha'thun";
+		String resurrectPriest = "Name: Resurrect Priest\n" +
+				"Class: Priest\n" +
+				"Format: Standard\n" +
+				"2x Holy Smite\n" +
+				"1x Bloodmage Thalnos\n" +
+				"2x Mind Blast\n" +
+				"2x Radiant Elemental\n" +
+				"2x Shadow Visions\n" +
+				"1x Shadow Word: Pain\n" +
+				"2x Spirit Lash\n" +
+				"2x Gilded Gargoyle\n" +
+				"1x Shadow Word: Death\n" +
+				"2x Eternal Servitude\n" +
+				"1x Lyra the Sunshard\n" +
+				"1x Zilliax\n" +
+				"2x Shadow Essence\n" +
+				"2x Lesser Diamond Spellstone\n" +
+				"1x Prophet Velen\n" +
+				"2x Psychic Scream\n" +
+				"1x The Lich King\n" +
+				"1x Malygos\n" +
+				"1x Obsidian Statue\n" +
+				"1x Zerek's Cloning Gallery";
+		for (String deck : new String[]{comboPriest, apmPriest, resurrectPriest, mecathunPriest}) {
+			runGym((context, player, opponent) -> {
+				GameStateValueBehaviour behaviour1 = new InvalidPlanTest();
+				GameStateValueBehaviour behaviour2 = new InvalidPlanTest();
+				context.setBehaviour(0, behaviour1);
+				context.setBehaviour(1, behaviour2);
+				context.resume();
+			}, DeckCreateRequest.fromDeckList(deck).toGameDeck(), DeckCreateRequest.fromDeckList(deck).toGameDeck());
+		}
+	}
 
+	private static class InvalidPlanTest extends GameStateValueBehaviour {
 
-		GameStateValueBehaviour behaviour3 = new GameStateValueBehaviour();
-		GameStateValueBehaviour behaviour4 = new GameStateValueBehaviour();
-		context2.setBehaviour(0, behaviour3);
-		context2.setBehaviour(1, behaviour4);
-		behaviour3.setMaxDepth(2);
-		behaviour4.setMaxDepth(2);
-		behaviour3.setTimeout(75000);
-		behaviour4.setTimeout(75000);
-		behaviour3.setForceGarbageCollection(true);
-		behaviour4.setForceGarbageCollection(true);
-		behaviour3.setParallel(false);
-		behaviour4.setParallel(false);
-		behaviour3.setDisposeNodes(true);
-		behaviour4.setDisposeNodes(true);
+		InvalidPlanTest() {
+			super();
+			setThrowOnInvalidPlan(true);
+		}
 
-		context2.play();
-
-		System.gc();
-
-		GameStateValueBehaviour behaviour1 = new GameStateValueBehaviour();
-		GameStateValueBehaviour behaviour2 = new GameStateValueBehaviour();
-		context1.setBehaviour(0, behaviour1);
-		context1.setBehaviour(1, behaviour2);
-		behaviour1.setMaxDepth(2);
-		behaviour2.setMaxDepth(2);
-		behaviour1.setTimeout(75000);
-		behaviour2.setTimeout(75000);
-		behaviour1.setParallel(false);
-		behaviour2.setParallel(false);
-		behaviour1.setForceGarbageCollection(true);
-		behaviour2.setForceGarbageCollection(true);
-		behaviour1.setDisposeNodes(false);
-		behaviour2.setDisposeNodes(false);
-
-		context1.play();
-		System.gc();
-
-		Logging.setLoggingLevel(Level.DEBUG);
-		assertEquals(context1.getTrace().getActions().toArray(new Integer[0]), context2.getTrace().getActions().toArray(new Integer[0]), "The two games should have played out identically. s");
-		assertTrue(behaviour3.getMinFreeMemory() > behaviour1.getMinFreeMemory(), "Disposing nodes should increase free memory.");
+		@Nullable
+		@Override
+		public GameAction requestAction(@NotNull GameContext context, @NotNull Player player, @NotNull List<GameAction> validActions) {
+			try {
+				return super.requestAction(context, player, validActions);
+			} catch (IllegalStateException invalidPlan) {
+				Assert.fail("Plan was invalid");
+				throw invalidPlan;
+			}
+		}
 	}
 
 	@Test
@@ -208,7 +216,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// Should play wild growth
 			receiveCard(context, player, "spell_wild_growth");
 			receiveCard(context, player, "minion_pompous_thespian");
-			player.setMana(2);
+			player.setMana(3);
 			context.setBehaviour(player.getId(), new GameStateValueBehaviour());
 
 			while (context.takeActionInTurn()) {
@@ -241,6 +249,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	@Test
 	public void testBrannSpiteful() {
 		runGym((context, player, opponent) -> {
+			context.setDeckFormat(new FixedCardsDeckFormat("minion_faceless_behemoth"));
 			Card brann = receiveCard(context, player, "minion_brann_bronzebeard");
 			Card spiteful = receiveCard(context, player, "minion_spiteful_summoner");
 			putOnTopOfDeck(context, player, "spell_ultimate_infestation");
@@ -250,7 +259,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			for (int i = 0; i < 2; i++) {
 				GameAction chosen = behaviour.requestAction(context, player, context.getValidActions());
 				actions.add(chosen);
-				context.getLogic().performGameAction(player.getId(), chosen);
+				context.performAction(player.getId(), chosen);
 			}
 			Assert.assertEquals(actions.get(0).getSourceReference(), brann.getReference());
 			Assert.assertEquals(actions.get(1).getSourceReference(), spiteful.getReference());
@@ -276,8 +285,9 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 	public void testCorrectOrder() {
 		runGym((context, player, opponent) -> {
 			GameStateValueBehaviour checkDepth = new GameStateValueBehaviour();
-			checkDepth.setMaxDepth(5);
-			checkDepth.setTimeout(9000L);
+			checkDepth.setMaxDepth(6);
+			checkDepth.setTimeout(24000L);
+			checkDepth.setParallel(false);
 			putOnTopOfDeck(context, opponent, "minion_bloodfen_raptor");
 			opponent.getHero().setHp(4);
 			// Your hero power is, Equip a 1/1 Weapon (costs 2)
@@ -298,7 +308,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			// southsea, then attack with hero
 			// Southsea MUST attack before weapon attacks
 			// Sun cleric MUST be played after southsea and should NOT buff a minion that gains a huge amount of hp
-			// This is a depth 5 puzzle.
+			// This is a depth 6 puzzle.
 			Assert.assertNull(player.getHero().getWeapon());
 			assertTrue(context.updateAndGetGameOver());
 		}, HeroClass.BLACK, HeroClass.BLACK);
@@ -334,7 +344,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, player, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
-			Assert.assertEquals(((PlayCardAction) action).getEntityReference(), powerTrip.getReference());
+			Assert.assertEquals(action.getSourceReference(), powerTrip.getReference());
 		});
 	}
 
@@ -358,9 +368,9 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			receiveCard(context, opponent, "spell_fireball");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
-			context.getLogic().performGameAction(opponent.getId(), action);
+			context.performAction(opponent.getId(), action);
 			action = behaviour.requestAction(context, opponent, context.getValidActions());
-			context.getLogic().performGameAction(opponent.getId(), action);
+			context.performAction(opponent.getId(), action);
 			Assert.assertFalse(opponent.getHand().contains(cursed));
 		});
 	}
@@ -372,6 +382,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			context.endTurn();
 			receiveCard(context, opponent, "minion_snowflipper_penguin");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.END_TURN);
 		});
@@ -383,6 +394,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 				playMinionCard(context, opponent, "minion_wolfrider");
 			}
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());
@@ -396,6 +408,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			opponent.setMaxMana(4);
 			opponent.setMana(4);
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			behaviour.setTriggerStartTurns(true);
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.SPELL);
 			Assert.assertEquals(action.getTargetReference(), doomsayer.getReference());

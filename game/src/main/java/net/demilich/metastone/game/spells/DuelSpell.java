@@ -1,8 +1,9 @@
 package net.demilich.metastone.game.spells;
 
-import com.github.fromage.quasi.fibers.Suspendable;
+import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.Entity;
 import net.demilich.metastone.game.spells.desc.SpellArg;
@@ -18,8 +19,10 @@ import java.util.stream.Collectors;
  * Makes each actor in {@link SpellArg#SECONDARY_TARGET} attack another random actor in {@link SpellArg#TARGET}.
  * <p>
  * No minion attacks more than once, but some minions make be attacked more than once.
+ * <p>
+ * Dueling does not consume attacks.
  */
-public final class DuelSpell extends FightSpell {
+public class DuelSpell extends FightSpell {
 
 	private static Logger logger = LoggerFactory.getLogger(DuelSpell.class);
 
@@ -30,11 +33,11 @@ public final class DuelSpell extends FightSpell {
 		List<Entity> validDefenders = SpellUtils.getValidTargets(context, player, targets, filter, source);
 		List<Entity> validAttackers = SpellUtils.getValidTargets(context, player, context.resolveTarget(player, source, desc.getSecondaryTarget()), filter, source);
 
-		if (validAttackers.size() == 1 && validDefenders.size() == 1) {
-			logger.debug("onCast {} {}: Only one attacker and defender, no dueling occurs", context.getGameId(), source);
-			return;
-		}
+		duel(context, player, source, validAttackers, validDefenders);
+	}
 
+	@Suspendable
+	protected void duel(GameContext context, Player player, Entity source, List<Entity> validAttackers, List<Entity> validDefenders) {
 		for (Entity attacker : validAttackers) {
 			if (!(attacker instanceof Actor)) {
 				logger.error("onCast {} {}: Tried to duel attacker {} which is not an actor.", context.getGameId(), source, attacker);
@@ -56,8 +59,14 @@ public final class DuelSpell extends FightSpell {
 			}
 
 			context.getSpellTargetStack().push(defender.getReference());
-			castForPlayer(context, player, desc, attacker, defender);
+			int attacksBefore = attacker.getAttributeValue(Attribute.NUMBER_OF_ATTACKS);
+			SpellDesc fight = new SpellDesc(FightSpell.class);
+			fight.put(SpellArg.TARGET, defender.getReference());
+			fight.put(SpellArg.SECONDARY_TARGET, attacker.getReference());
+			castForPlayer(context, player, fight, attacker, defender);
+			attacker.setAttribute(Attribute.NUMBER_OF_ATTACKS, attacksBefore);
 			context.getSpellTargetStack().pop();
 		}
 	}
+
 }
