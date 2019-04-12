@@ -14,6 +14,24 @@ import net.demilich.metastone.game.cards.Attribute;
 
 import java.util.List;
 
+/**
+ * Filters entities based on various properties of their source cards.
+ * <p>
+ * The supported properties are:
+ * <ul>
+ * <li>{@link EntityFilterArg#CARD_TYPE}.</li>
+ * <li>{@link EntityFilterArg#RACE}.</li>
+ * <li>{@link EntityFilterArg#HERO_CLASS}</li>, including the special hero classes {@link HeroClass#OPPONENT} and {@link
+ * HeroClass#SELF}.
+ * <li>{@link EntityFilterArg#HERO_CLASSES}</li> to check if the entity's hero class matches any in the list.
+ * <li>{@link EntityFilterArg#MANA_COST} for the entity's base mana cost. Use {@link ManaCostFilter} for its current
+ * cost instead.</li>
+ * <li>{@link EntityFilterArg#RARITY}.</li>
+ * <li>{@link EntityFilterArg#CARD_SET}.</li>
+ * <li>{@link EntityFilterArg#ATTRIBUTE}, including an {@link EntityFilterArg#OPERATION} against it. For attack and
+ * health, use {@link AttributeFilter}.</li>
+ * </ul>
+ */
 public final class CardFilter extends EntityFilter {
 
 	public CardFilter(EntityFilterDesc desc) {
@@ -134,4 +152,3 @@ public final class CardFilter extends EntityFilter {
 		return new CardFilter(arguments);
 	}
 }
-

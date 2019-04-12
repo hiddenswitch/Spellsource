@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Rush. Battlecry: Discard a Rune to gain +2/+2.",
+  "description": "Dash. Opener: Discard a Rune to gain +2/+2.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

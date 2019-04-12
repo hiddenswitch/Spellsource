@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "MURLOC",
-  "description": "Taunt. Battlecry: Summon a 3/2 Shark with Charge.",
+  "description": "Guard. Opener: Summon a 3/2 Shark with Blitz.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Discover a Divine Shield minion, a Secret, or a Hand of Protection.",
+  "description": "Opener: Discover a Dodge minion, a Secret, or a Hand of Protection.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
@@ -15,6 +15,18 @@
         "class": "ReceiveCardSpell",
         "targetPlayer": "SELF"
       },
+      "cardSources": [
+        {
+          "class": "CatalogueSource"
+        },
+        {
+          "class": "SecretSource",
+          "heroClass": "GOLD"
+        },
+        {
+          "class": "CatalogueSource"
+        }
+      ],
       "cardFilters": [
         {
           "class": "CardFilter",

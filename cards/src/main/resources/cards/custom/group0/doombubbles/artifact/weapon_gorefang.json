@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 1,
   "rarity": "LEGENDARY",
-  "description": "After your hero attacks, you gain Stealth until your next turn.",
+  "description": "After your champion attacks, you gain Hidden until your next turn.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

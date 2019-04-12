@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Passive Hero Power. Whenever a minion dies this turn, summon a 2/2 Ghoul.",
+  "description": "Passive Skill. Whenever a minion dies this turn, summon a 2/2 Ghoul.",
   "passiveTriggers": [
     {
       "eventTrigger": {

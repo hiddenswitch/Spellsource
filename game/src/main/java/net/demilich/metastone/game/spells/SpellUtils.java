@@ -46,7 +46,7 @@ public class SpellUtils {
 	private static Logger logger = LoggerFactory.getLogger(SpellUtils.class);
 
 	/**
-	 * Sets upu the source and target references for casting a child spell, typically an "effect" of a spell defined on a
+	 * Sets up the source and target references for casting a child spell, typically an "effect" of a spell defined on a
 	 * card.
 	 *
 	 * @param context The game context.
@@ -403,7 +403,7 @@ public class SpellUtils {
 	 * @return The {@link DiscoverAction} that corresponds to the card the player chose.
 	 * @see DiscoverCardSpell for the spell that typically calls this method.
 	 * @see ReceiveCardSpell for the spell that is typically the {@link SpellArg#SPELL} property of a {@link
-	 * 		DiscoverCardSpell}.
+	 *    DiscoverCardSpell}.
 	 */
 	@Suspendable
 	public static DiscoverAction discoverCard(GameContext context, Player player, Entity source, SpellDesc desc, CardList cards) {
@@ -632,25 +632,8 @@ public class SpellUtils {
 	 */
 	static AttributeMap processKeptEnchantments(Entity target, AttributeMap map) {
 		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			Stream.of(Attribute.POISONOUS, Attribute.LIFESTEAL, Attribute.WINDFURY, Attribute.ATTACK_BONUS, Attribute.HP_BONUS)
-					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
-
-			if (target instanceof Minion) {
-				Minion minion = (Minion) target;
-				if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
-					map.put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
-				}
-				map.put(Attribute.BASE_ATTACK, minion.getBaseAttack());
-				map.put(Attribute.BASE_HP, minion.getBaseHp());
-			}
-		}
-
-		return map;
-	}
-
-	static void processKeptEnchantments(Entity target, Card card) {
-		if (target.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-			Stream.of(Attribute.POISONOUS,
+			Stream.of(
+					Attribute.POISONOUS,
 					Attribute.DIVINE_SHIELD,
 					Attribute.STEALTH,
 					Attribute.TAUNT,
@@ -672,18 +655,31 @@ public class SpellUtils {
 					Attribute.LIFESTEAL,
 					Attribute.WINDFURY,
 					Attribute.ATTACK_BONUS,
-					Attribute.HP_BONUS)
-					.filter(target::hasAttribute).forEach(k -> card.getAttributes().put(k, target.getAttributes().get(k)));
+					Attribute.HP_BONUS
+			)
+					.filter(target::hasAttribute).forEach(k -> map.put(k, target.getAttributes().get(k)));
 
 			if (target instanceof Minion) {
 				Minion minion = (Minion) target;
 				if (minion.hasAttribute(Attribute.DEATHRATTLES)) {
-					card.getAttributes().put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
+					map.put(Attribute.DEATHRATTLES, minion.getAttribute(Attribute.DEATHRATTLES));
 				}
-				card.getAttributes().put(Attribute.BASE_ATTACK, minion.getBaseAttack());
-				card.getAttributes().put(Attribute.BASE_HP, minion.getBaseHp());
+				map.put(Attribute.BASE_ATTACK, minion.getBaseAttack());
+				map.put(Attribute.BASE_HP, minion.getBaseHp());
 			}
 		}
+		return map;
+	}
+
+	/**
+	 * Process the text "keeps enchantments" on a {@code target} and the card that the enchantments are being moved to,
+	 * typically for a shuffle-to-deck or return-to-hand effect.
+	 *
+	 * @param target
+	 * @param card
+	 */
+	static void processKeptEnchantments(Entity target, Card card) {
+		processKeptEnchantments(target, card.getAttributes());
 	}
 
 	/**

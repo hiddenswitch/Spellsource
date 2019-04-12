@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Battlecry: Summon a 2/2 Training Dummy for your opponent. Attack it.",
+  "description": "Opener: Summon a 2/2 Training Dummy for your opponent. Attack it.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

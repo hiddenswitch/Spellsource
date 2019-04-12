@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "PIRATE",
-  "description": "Battlecry: Discover a Pirate.",
+  "description": "Opener: Discover a Pirate.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Gain 6 Armor. Then double your armor.",
+  "description": "Opener: Gain 6 Armor. Then double your armor.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

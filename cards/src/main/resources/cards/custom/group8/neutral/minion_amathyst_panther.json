@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: If you control another Beast, gain Stealth.",
+  "description": "Opener: If you control another Beast, gain Hidden.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

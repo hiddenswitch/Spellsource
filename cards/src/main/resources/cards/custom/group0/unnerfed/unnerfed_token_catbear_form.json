@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Charge. Taunt",
+  "description": "Blitz. Guard",
   "attributes": {
     "CHARGE": true,
     "TAUNT": true

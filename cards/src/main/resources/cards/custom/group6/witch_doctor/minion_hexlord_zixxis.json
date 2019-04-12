@@ -1,0 +1,36 @@
+{
+  "name": "Hexlord Zixxis",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 7,
+  "baseHp": 5,
+  "rarity": "LEGENDARY",
+  "description": "<b>Opener:</b> Cast all spells your opponent cast last turn on random targets.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "CastRandomSpellSpell",
+      "value": 60,
+      "cardFilter": {
+        "class": "CardFilter",
+        "value": {
+		  "class": "LastTurnValueProvider"
+		},
+		"attribute": "PLAYED_FROM_HAND_OR_DECK",
+		"cardType": "SPELL",
+		"operation": "EQUAL"
+      },
+      "cardSource": {
+        "class": "GraveyardCardsSource",
+        "targetPlayer": "OPPONENT"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 8,
   "rarity": "COMMON",
-  "description": "Has Taunt while you have armor.",
+  "description": "Has Guard while you have armor.",
   "aura": {
     "class": "AttributeAura",
     "target": "SELF",

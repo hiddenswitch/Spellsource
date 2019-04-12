@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "TOAST",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Draw your deck. Deal 1 damage to a random enemy for each card you Roast this way.",
+  "description": "Opener: Draw your deck. Deal 1 damage to a random enemy for each card you Roast this way.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

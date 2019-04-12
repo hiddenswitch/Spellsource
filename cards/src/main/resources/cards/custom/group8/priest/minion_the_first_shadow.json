@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Copy all minions in your hand.",
+  "description": "Opener: Copy all minions in your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

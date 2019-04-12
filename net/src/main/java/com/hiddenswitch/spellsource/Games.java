@@ -32,16 +32,22 @@ import net.demilich.metastone.game.events.*;
 import net.demilich.metastone.game.events.PhysicalAttackEvent;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.logic.GameStatus;
+import net.demilich.metastone.game.spells.AddAttributeSpell;
+import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.MetaSpell;
+import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.valueprovider.*;
 import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.spells.trigger.Trigger;
+import net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment;
 import net.demilich.metastone.game.spells.trigger.secrets.Quest;
 import net.demilich.metastone.game.spells.trigger.secrets.Secret;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.game.cards.Attribute;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1143,7 +1149,9 @@ public interface Games extends Verticle {
 				entityState.underAura(card.getBonusAttack() > 0
 						|| card.getBonusAttack() > 0
 						|| hostsTrigger);
-				entityState.tribe(card.getRace() != null ? card.getRace().name() : null);
+				entityState.tribe(card.getRace().name());
+				// Include handbuffs from WhereverTheyAre enchantments. Also use this for other effects!
+				visualizeEffectsInHand(workingContext, owningPlayer.getId(), card, entityState);
 				break;
 			case WEAPON:
 				entityState.durability(card.getDurability());
@@ -1304,4 +1312,57 @@ public interface Games extends Verticle {
 		return replay;
 	}
 
+	/**
+	 * Uses information from enchantments like {@link net.demilich.metastone.game.spells.aura.BuffAura} and {@link
+	 * net.demilich.metastone.game.spells.trigger.WhereverTheyAreEnchantment} to add the appropriate hand buff stats.
+	 *
+	 * @param context
+	 * @param playerId
+	 * @param entity
+	 * @param state
+	 */
+	static void visualizeEffectsInHand(@NotNull GameContext context, int playerId, @NotNull net.demilich.metastone.game.entities.Entity entity, @NotNull EntityState state) {
+		int attackBonus = 0;
+		int hpBonus = 0;
+		boolean hasTaunt = false;
+		for (WhereverTheyAreEnchantment e : context.getTriggerManager().getTriggers()
+				.stream()
+				.filter(e -> e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)
+				.map(WhereverTheyAreEnchantment.class::cast)
+				.collect(Collectors.toList())) {
+			List<SpellDesc> spells;
+			if (e.getSpell() == null) {
+				return;
+			}
+			if (MetaSpell.class.isAssignableFrom(e.getSpell().getDescClass())) {
+				spells = e.getSpell().subSpells();
+			} else {
+				spells = Collections.singletonList(e.getSpell());
+			}
+			for (SpellDesc desc : spells) {
+				if (BuffSpell.class.isAssignableFrom(desc.getDescClass())) {
+					attackBonus += desc.getValue(SpellArg.ATTACK_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					hpBonus += desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					int value = desc.getValue(SpellArg.HP_BONUS, context, context.getPlayer(playerId), entity, context.getPlayer(playerId), 0);
+					attackBonus += value;
+					hpBonus += value;
+				}
+				if (AddAttributeSpell.class.isAssignableFrom(desc.getDescClass())) {
+					// TODO: Add support for stuff other than Taunt
+					if (desc.getAttribute() == Attribute.TAUNT) {
+						hasTaunt = true;
+					}
+				}
+			}
+		}
+		if (hasTaunt) {
+			state.taunt(true);
+		}
+		if (attackBonus != 0) {
+			state.setAttack(state.getAttack() + attackBonus);
+		}
+		if (hpBonus != 0) {
+			state.setHp(state.getHp() + hpBonus);
+		}
+	}
 }

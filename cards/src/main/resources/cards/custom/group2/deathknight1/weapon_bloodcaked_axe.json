@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "EPIC",
-  "description": "Whenever your hero attacks, gain 2 Armor.",
+  "description": "Whenever your champion attacks, gain 2 Armor.",
   "trigger": {
     "eventTrigger": {
       "class": "TargetAcquisitionTrigger",

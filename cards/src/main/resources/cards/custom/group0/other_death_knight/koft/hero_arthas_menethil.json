@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "OBSIDIAN",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Freeze all characters and decks. (Players can't draw cards this turn and next)",
+  "description": "Opener: Freeze all characters and decks. (Players can't draw cards this turn and next)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

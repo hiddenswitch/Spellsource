@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Battlecry: Destroy a minion with an Attack of 7 or more.",
+  "description": "Opener: Destroy a minion with an Attack of 7 or more.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

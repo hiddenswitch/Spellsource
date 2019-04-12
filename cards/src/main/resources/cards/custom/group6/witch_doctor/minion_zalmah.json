@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Spell Damage +2. Deathrattle: Give a random friendly minion +6/+6 and Spell Damage +2.",
+  "description": "Spellpower +2. Aftermath: Give a random friendly minion +6/+6 and Spellpower +2.",
   "deathrattle": {
     "class": "MetaSpell",
     "target": "FRIENDLY_MINIONS",

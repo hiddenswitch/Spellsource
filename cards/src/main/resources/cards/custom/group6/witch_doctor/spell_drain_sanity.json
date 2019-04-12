@@ -1,0 +1,19 @@
+{
+  "name": "Drain Sanity",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Force a friendly minion to attack a random enemy minion.",
+  "targetSelection": "FRIENDLY_MINIONS",
+  "spell": {
+    "class": "FightSpell",
+    "target": "ENEMY_MINIONS",
+    "exclusive": true,
+    "randomTarget": true,
+    "secondaryTarget": "TARGET"
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

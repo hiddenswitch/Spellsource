@@ -7,7 +7,7 @@
   "baseHp": 9,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Battlecry: Fill your hand with Coins.",
+  "description": "Opener: Fill your hand with Coins.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
