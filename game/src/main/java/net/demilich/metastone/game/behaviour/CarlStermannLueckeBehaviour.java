@@ -10,7 +10,10 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
-// https://dockhorn.antares.uberspace.de/wordpress/bot-downloads/
+/**
+ * https://dockhorn.antares.uberspace.de/wordpress/bot-downloads/
+ */
+
 public class CarlStermannLueckeBehaviour extends IntelligentBehaviour {
 
     private String name;
@@ -39,7 +42,7 @@ public class CarlStermannLueckeBehaviour extends IntelligentBehaviour {
     public GameAction requestAction(GameContext context, Player player, List<GameAction> validActions) {
         List<GameAction> options = new ArrayList<>();
         for (GameAction gameAction : validActions) {
-                if (!(gameAction.getTargetReference() == EntityReference.FRIENDLY_HERO)) options.add(gameAction);
+            if (!(gameAction.getTargetReference() == EntityReference.FRIENDLY_HERO)) options.add(gameAction);
 
         }
         return getBestMove(options);
@@ -56,11 +59,11 @@ public class CarlStermannLueckeBehaviour extends IntelligentBehaviour {
 
         LinkedList<GameAction> minionAttacks = new LinkedList<>();
         for (GameAction option : options) {
-            if (option.getActionType()==ActionType.PHYSICAL_ATTACK && option.getTargetReference() == EntityReference.ENEMY_HERO)
+            if (option.getActionType() == ActionType.PHYSICAL_ATTACK && option.getTargetReference() == EntityReference.ENEMY_HERO)
                 minionAttacks.add(option);
         }
-        if(minionAttacks.size()>0)return minionAttacks.remove(0);
-        if(options.size()>1&&options.get(0).getActionType()== ActionType.END_TURN)return options.remove(1);
+        if (minionAttacks.size() > 0) return minionAttacks.remove(0);
+        if (options.size() > 1 && options.get(0).getActionType() == ActionType.END_TURN) return options.remove(1);
         else return options.remove(0);
     }
 }
