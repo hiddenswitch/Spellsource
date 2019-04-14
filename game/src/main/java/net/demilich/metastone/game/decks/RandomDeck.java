@@ -13,7 +13,7 @@ import java.util.concurrent.ThreadLocalRandom;
 /**
  * A deck that was randomly created.
  */
-final class RandomDeck extends GameDeck {
+public final class RandomDeck extends GameDeck {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -22,7 +22,7 @@ final class RandomDeck extends GameDeck {
      * @param heroClass  The hero class
      * @param deckFormat The format
      */
-    RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
+    public RandomDeck(HeroClass heroClass, DeckFormat deckFormat) {
         super(heroClass);
         populate(deckFormat);
     }

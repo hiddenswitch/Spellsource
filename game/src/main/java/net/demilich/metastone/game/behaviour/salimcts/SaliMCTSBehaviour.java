@@ -43,6 +43,7 @@ public class SaliMCTSBehaviour extends IntelligentBehaviour {
             remainingSeconds = -seconds;
             actionCount++;
         }
+        if (t == null) return validActions.get(0);
         return t;
     }
 }

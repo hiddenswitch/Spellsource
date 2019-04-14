@@ -13,9 +13,9 @@ import static net.demilich.metastone.game.logic.GameStatus.RUNNING;
  * based on https://daim.idi.ntnu.no/masteroppgaver/014/14750/masteroppgave.pdf
  */
 public class MCTS {
-    public static GameAction getBestAction(GameContext context, int iteerations) {
+    public static GameAction getBestAction(GameContext context, int iterations) {
         TaskNode root = new TaskNode(null, null, context);
-        for (int i = 0; i < iteerations; i++) {
+        for (int i = 0; i < iterations; i++) {
             try {
                 TaskNode node = root.selectNode();
                 node = node.Expand();

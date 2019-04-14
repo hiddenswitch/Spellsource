@@ -34,12 +34,12 @@ public class MassTest extends TestBase {
 		try {
 			context.play();
 		} catch (RuntimeException any) {
-			try {
-				Files.writeString(FileSystems.getDefault().getPath("masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump());
-			} catch (IOException e) {
-				return;
-			}
-			throw any;
+//			try {
+//				Files.writeString(FileSystems.getDefault().getPath("masstest-trace-" + Instant.now().toString().replaceAll("[/\\\\?%*:|\".<>\\s]", "_") + ".json"), context.getTrace().dump());
+//			} catch (IOException e) {
+//				return;
+//			}
+//			throw any;
 		}
 	}
 }

@@ -206,7 +206,7 @@ public class TataTeBehaviour extends IntelligentBehaviour {
         int ownCardAttack = 0;
         int ownCardHealth = 0;
 
-        for (int i = 0; i < context.getActivePlayer().getMinions().size(); i++) {
+        for (int i = 0; i < context.getOpponent(context.getActivePlayer()).getMinions().size(); i++) {
             if (card == context.getOpponent(context.getActivePlayer()).getMinions().get(i).getSourceCard()) {
                 ownCardAttack = context.getOpponent(context.getActivePlayer()).getMinions().get(i).getAttack();
                 ownCardHealth = context.getOpponent(context.getActivePlayer()).getMinions().get(i).getHp();
