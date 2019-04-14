@@ -1,0 +1,27 @@
+{
+  "name": "Shuffling Horror",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "After you shuffle this into your deck, add two copies of it to your hand.",
+    "deckTrigger": {
+    "eventTrigger": {
+      "class": "CardShuffledTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+           "class": "ReceiveCardSpell",
+      "value": 2,
+	  "card": "minion_shuffling_horror"
+    }
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "JOURNEY_TO_UNGORO"
+  ],
+  "fileFormatVersion": 1
+}
