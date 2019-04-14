@@ -6,16 +6,18 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Deathrattle: Give your Tentacles +1/+1.",
+  "description": "Aftermath: Give your Tentacles +1/+1.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "OTHER_FRIENDLY_MINIONS",
     "attackBonus": 1,
     "hpBonus": 1,
-		"filter": {
+    "filter": {
           "class": "SpecificCardFilter",
-          "card": "token_tentacle"
-        }
+          "cards": [
+	  "token_tauntentacle",
+	  "token_tentacle"
+                   ]
   },
   "attributes": {
     "DEATHRATTLES": true
