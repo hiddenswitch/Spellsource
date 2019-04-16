@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### In Progress 0.8.24-2.0.29
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Omega Dragon is now a dragon.
+
 ### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
 
 Bug fixes.
