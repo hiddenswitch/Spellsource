@@ -35,6 +35,7 @@ Bug fixes.
  - Underminer is now a cost (2) 4/1.
  - Mountain Whelp is now a cost (3) 2/4 with Blitz.
  - Lava Saber now only summons one Whelp.
+ - Attempting to mind control Aysa Cloudsinger no longer crashes the game.
 
 ##### Content Additions:
  
