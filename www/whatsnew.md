@@ -27,6 +27,18 @@ Bug fixes.
  - Deepwood Barghest now behaves closer to Keleseth with regards to decks containing secrets (as opposed to cost-2 cards).
  - Light of Chi-Ji now sets costs to (1).
  - Sleight of Hand now costs (2).
+ - Crimson General is now a cost (2) 2/2.
+ - Fire Breath now says "Deal 3 damage to a minion and 2 damage to the enemy champion."
+ - Drakonid Bruiser is now a cost (5) 4/4 with Blitz.
+ - Dragon Treasurer is no longer collectible.
+ - Rheastrasza now summons a 4/4 Dragon with Blitz.
+ - Underminer is now a cost (2) 4/1.
+ - Mountain Whelp is now a cost (3) 2/4 with Blitz.
+ - Lava Saber now only summons one Whelp.
+
+##### Content Additions:
+ 
+ - Drakonid Commander: Cost (8) 6/6 Dragon, "Opener: Give a character +4 Attack this turn."
 
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
 
