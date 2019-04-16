@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Battlecry: Discard a random minion.",
+  "description": "Opener: Discard a random minion.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

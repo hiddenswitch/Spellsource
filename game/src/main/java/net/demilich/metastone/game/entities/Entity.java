@@ -631,7 +631,7 @@ public abstract class Entity extends CustomCloneable implements Serializable, Ha
 		}
 
 		// Healing
-		if (card.getZone() == Zones.HAND || card.getZone() == Zones.HERO_POWER) {
+		if (true) {
 			Matcher matcher = BONUS_HEALING_IN_DESCRIPTION.matcher(description);
 			StringBuffer newDescription = new StringBuffer();
 

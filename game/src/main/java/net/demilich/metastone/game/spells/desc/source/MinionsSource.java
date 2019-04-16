@@ -9,6 +9,9 @@ import net.demilich.metastone.game.entities.Entity;
 
 import java.util.stream.Collectors;
 
+/**
+ * Returns the list of source cards for the minions on the battlefield of the {@link CardSourceArg#TARGET_PLAYER}.
+ */
 public final class MinionsSource extends CardSource implements HasCardCreationSideEffects {
 
 	public MinionsSource(CardSourceDesc desc) {

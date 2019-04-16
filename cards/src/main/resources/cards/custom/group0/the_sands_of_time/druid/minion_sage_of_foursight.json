@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: The next minion you play costs (4) more and has +4/+4.",
+  "description": "Opener: The next minion you play costs (4) more and has +4/+4.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

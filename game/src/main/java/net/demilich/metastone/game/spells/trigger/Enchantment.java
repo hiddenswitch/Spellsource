@@ -107,7 +107,6 @@ public class Enchantment extends Entity implements Trigger {
 	}
 
 	public Enchantment() {
-
 	}
 
 	@Override

@@ -1,0 +1,45 @@
+{
+  "name": "Dinosoul",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Add up to 3 different friendly Beasts that died this turn to your hand.",
+  "targetSelection": "NONE",
+  "condition": {
+    "class": "AnyMatchFilterCondition",
+    "target": "FRIENDLY_GRAVEYARD",
+    "filter": {
+      "class": "CardFilter",
+      "race": "BEAST",
+      "cardType": "MINION",
+      "attribute": "DIED_ON_TURN",
+      "value": {
+        "class": "CurrentTurnValueProvider"
+      },
+      "operation": "EQUAL"
+    }
+  },
+  "spell": {
+    "class": "ReceiveCardSpell",
+    "value": 3,
+    "exclusive": true,
+    "cardFilter": {
+      "class": "CardFilter",
+      "race": "BEAST",
+      "cardType": "MINION",
+      "attribute": "DIED_ON_TURN",
+      "value": {
+        "class": "CurrentTurnValueProvider"
+      },
+      "operation": "EQUAL"
+    },
+    "cardSource": {
+      "class": "GraveyardActorsSource",
+      "targetPlayer": "SELF"
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

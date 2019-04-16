@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "FREE",
-  "description": "Give a minion Taunt, Divine Shield and Lifesteal.",
+  "description": "Give a minion Guard, Dodge and Lifesteal.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

@@ -1,12 +1,12 @@
 {
-  "name": "Faceless Duplicator",
+  "name": "Mirror Duplicator",
   "baseManaCost": 7,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 6,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a copy of a minion.",
+  "description": "Opener: Summon a copy of a minion.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

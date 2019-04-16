@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "MECH",
-  "description": "Taunt. Divine Shield. Deflect. Windfury.",
+  "description": "Guard. Dodge. Deflect. Windfury.",
   "attributes": {
     "DEFLECT": true,
     "DIVINE_SHIELD": true,

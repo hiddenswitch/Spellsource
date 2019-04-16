@@ -1,0 +1,60 @@
+{
+  "name": "Witching Traveler",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Opener: If you cast 3 spells this turn, your next card costs (1) this turn.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "CardCountValueProvider",
+        "cardFilter": {
+          "class": "AndFilter",
+          "filters": [
+            {
+              "class": "CardFilter",
+              "cardType": "SPELL"
+            },
+            {
+              "class": "AttributeFilter",
+              "value": {
+                "class": "CurrentTurnValueProvider"
+              },
+              "attribute": "PLAYED_FROM_HAND_OR_DECK",
+              "operation": "EQUAL"
+            }
+          ]
+        },
+        "cardSource": {
+          "class": "GraveyardCardsSource",
+          "targetPlayer": "SELF"
+        }
+      },
+      "value2": 3
+    },
+    "spell": {
+      "class": "CardCostModifierSpell",
+      "target": "FRIENDLY_PLAYER",
+      "cardCostModifier": {
+        "class": "OneTurnCostModifier",
+        "value": 1,
+        "expirationTrigger": {
+          "class": "CardPlayedTrigger",
+          "targetPlayer": "SELF"
+        },
+        "operation": "SET"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

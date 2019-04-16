@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "RED",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon all friendly Rush that died this game.",
+  "description": "Opener: Summon all friendly Dash that died this game.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -300,10 +300,10 @@ public class BoomsdayProjectTests extends TestBase {
 	}
 
 	@Test
-	public void testAutoDefenseMatric() {
+	public void testAutoDefenseMatrix() {
 		runGym((context, player, opponent) -> {
 			Minion attacker = playMinionCard(context, opponent, "minion_upgradeable_framebot");
-			Minion defender = playMinionCard(context, player, "token_defender"); //he lives!
+			Minion defender = playMinionCard(context, player, "token_defender");
 			Minion bolvar = playMinionCard(context, player, "minion_bolvar_fireblood");
 			playCard(context, player, "secret_autodefense_matrix");
 			if (context.getActivePlayerId() == player.getId()) {

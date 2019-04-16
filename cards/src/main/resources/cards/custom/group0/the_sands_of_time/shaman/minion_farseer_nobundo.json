@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Choose a friendly minion. Your totems now have that minion's effect. (For the rest of the game)",
+  "description": "Opener: Choose a friendly minion. Your totems now have that minion's effect. (For the rest of the game)",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {

@@ -1,0 +1,32 @@
+{
+  "name": "Shadow Distortion",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "EPIC",
+  "description": "Deal $2 damage to all minions. Swap the Attack and Health of the survivors.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MetaSpell",
+    "target": "ALL_MINIONS",
+    "spells": [
+      {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "IsDeadCondition",
+          "invert": true
+        },
+        "spell": {
+          "class": "SwapAttackAndHpSpell"
+        }
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

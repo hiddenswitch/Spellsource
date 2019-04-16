@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "This actor gains taunt. Once its Health drops below 25, its loses Taunt.",
+  "description": "This actor gains taunt. Once its Health drops below 25, its loses Guard.",
   "trigger": {
     "eventTrigger": {
       "class": "WillEndSequenceTrigger",

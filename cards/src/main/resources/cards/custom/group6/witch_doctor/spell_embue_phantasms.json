@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
-  "description": "Give a minion \"Deathrattle: Summon five 2/2 Spirits.\"",
+  "description": "Give a minion \"Aftermath: Summon five 2/2 Spirits.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",

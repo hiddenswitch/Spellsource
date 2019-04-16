@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "FREE",
-  "description": "Battlecry: Summon a 2/2 Spirit.",
+  "description": "Opener: Summon a 2/2 Spirit.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

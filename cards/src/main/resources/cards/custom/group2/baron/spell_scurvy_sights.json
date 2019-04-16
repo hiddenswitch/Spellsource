@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "EPIC",
-  "description": "Your Hero Power becomes 'Add a 2/2 Pirate with Rush to your hand.'",
+  "description": "Your Skill becomes 'Add a 2/2 Pirate with Dash to your hand.'",
   "targetSelection": "NONE",
   "spell": {
     "class": "ChangeHeroPowerSpell",

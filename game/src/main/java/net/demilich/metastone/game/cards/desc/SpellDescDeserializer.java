@@ -37,6 +37,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.CARD_FILTERS, ParseValueType.ENTITY_FILTER_ARRAY);
 		ctx.add(SpellArg.CARD_LOCATION, ParseValueType.CARD_LOCATION);
 		ctx.add(SpellArg.CARD_SOURCE, ParseValueType.CARD_SOURCE);
+		ctx.add(SpellArg.CARD_SOURCES, ParseValueType.CARD_SOURCE_ARRAY);
 		ctx.add(SpellArg.CARD_TYPE, ParseValueType.CARD_TYPE);
 		ctx.add(SpellArg.CARDS, ParseValueType.STRING_ARRAY);
 		ctx.add(SpellArg.CONDITION, ParseValueType.CONDITION);
@@ -72,6 +73,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.TRIGGERS, ParseValueType.TRIGGERS);
 		ctx.add(SpellArg.VALUE, ParseValueType.VALUE);
 		ctx.add(SpellArg.BATTLECRY, ParseValueType.BATTLECRY);
+		ctx.add(SpellArg.ZONES, ParseValueType.ZONES);
 	}
 
 	@Override

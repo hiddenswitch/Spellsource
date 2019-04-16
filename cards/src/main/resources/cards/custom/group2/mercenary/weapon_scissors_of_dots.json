@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 8,
   "rarity": "LEGENDARY",
-  "description": "Windfury, Battlecry: Your hero is Immune this turn.",
+  "description": "Windfury, Opener: Your champion is Immune this turn.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_HERO",

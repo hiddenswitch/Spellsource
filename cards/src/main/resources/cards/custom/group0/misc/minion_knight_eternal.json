@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Battlecry: Transform a random card in your hand into a Knight Eternal.",
+  "description": "Opener: Transform a random card in your hand into a Knight Eternal.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

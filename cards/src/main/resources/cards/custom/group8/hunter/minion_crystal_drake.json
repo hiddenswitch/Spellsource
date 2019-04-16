@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "EPIC",
-  "description": "Battlecry: Whenever you cast a spell this turn, add a 1/2 Crystal Whelp to your hand.",
+  "description": "Opener: Whenever you cast a spell this turn, add a 1/2 Crystal Whelp to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "damage": 5,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon your Animal Companions that died this game.",
+  "description": "Opener: Summon your Animal Companions that died this game.",
   "battlecry": {
     "spell": {
       "class": "ResurrectSpell",

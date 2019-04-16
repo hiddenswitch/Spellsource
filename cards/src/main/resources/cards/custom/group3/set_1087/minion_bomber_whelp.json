@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Deathrattle: Deal damage randomly split to enemy minions equal to this minion's Attack.",
+  "description": "Aftermath: Deal damage randomly split to enemy minions equal to this minion's Attack.",
   "deathrattle": {
     "class": "MissilesSpell",
     "target": "ENEMY_MINIONS",

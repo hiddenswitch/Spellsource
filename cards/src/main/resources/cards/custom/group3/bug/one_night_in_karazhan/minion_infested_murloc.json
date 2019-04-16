@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "COMMON",
   "race": "FAE",
-  "description": "Deathrattle: Summon a 1/1 Larva.",
+  "description": "Aftermath: Summon a 1/1 Larva.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "token_spiderling"

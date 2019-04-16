@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: If your deck has no duplicates, your Hero Power costs (0) this game.",
+  "description": "Opener: If your deck has no duplicates, your Skill costs (0) this game.",
   "battlecry": {
     "condition": {
       "class": "HighlanderDeckCondition"

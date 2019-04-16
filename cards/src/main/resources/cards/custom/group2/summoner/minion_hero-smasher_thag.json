@@ -6,7 +6,7 @@
   "baseAttack": 10,
   "baseHp": 10,
   "rarity": "LEGENDARY",
-  "description": "After this attacks the enemy hero, double its Attack and Health.",
+  "description": "After this attacks the enemy champion, double its Attack and Health.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

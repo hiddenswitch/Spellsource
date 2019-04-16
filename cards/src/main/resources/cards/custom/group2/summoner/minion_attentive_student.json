@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Taunt. Deathrattle: Add a copy of a card from your deck to your hand.",
+  "description": "Guard. Aftermath: Add a copy of a card from your deck to your hand.",
   "deathrattle": {
     "class": "CopyCardSpell",
     "target": "FRIENDLY_DECK",

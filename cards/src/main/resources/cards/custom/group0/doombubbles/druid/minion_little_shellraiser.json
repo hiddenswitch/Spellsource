@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "RARE",
-  "description": "Taunt. Battlecry: Draw a minion with 5 or more attack from your deck.",
+  "description": "Guard. Opener: Draw a minion with 5 or more attack from your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

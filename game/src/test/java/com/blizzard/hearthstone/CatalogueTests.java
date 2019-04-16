@@ -6,6 +6,8 @@ import io.vertx.core.json.JsonObject;
 import net.demilich.metastone.game.cards.*;
 import net.demilich.metastone.game.entities.minions.Race;
 import org.apache.commons.io.IOUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.testng.Assert;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
@@ -19,6 +21,8 @@ import java.util.List;
 
 public class CatalogueTests {
 
+	private static Logger LOGGER = LoggerFactory.getLogger(CatalogueTests.class);
+
 	private static String getCurrentCards() {
 		String testedUrl = "https://api.hearthstonejson.com/v1/29933/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
@@ -31,7 +35,12 @@ public class CatalogueTests {
 	@DataProvider(name = "HearthstoneCards")
 	public static Object[][] getHearthstoneCards() throws IOException, URISyntaxException, CardParseException {
 		CardCatalogue.loadCardsFromPackage();
-		URL url = new URL(getCurrentCards());
+		String currentCards = getCurrentCards();
+		if (currentCards == null || currentCards.equals("") || !currentCards.startsWith("http") || !currentCards.startsWith("file")) {
+			LOGGER.warn("getHearthstoneCards: Url {} was invalid, skipping", currentCards);
+			return new Object[0][0];
+		}
+		URL url = new URL(currentCards);
 		URLConnection connection = url.openConnection();
 		connection.addRequestProperty("User-Agent", "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15");
 		String cards = IOUtils.toString(connection.getInputStream());

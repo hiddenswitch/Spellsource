@@ -1,0 +1,22 @@
+{
+  "name": "Thelia Silentdreamer",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "LEGENDARY",
+  "description": "Spells that cost (5) or more that you cast on this are cast twice.",
+  "aura": {
+    "class": "TheliaSilentdreamerAura",
+    "target": "SELF",
+    "spellCondition": {
+      "class": "ManaCostCondition",
+      "value": 5,
+      "operation": "GREATER_OR_EQUAL"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

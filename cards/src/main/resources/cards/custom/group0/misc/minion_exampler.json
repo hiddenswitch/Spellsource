@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Summon a 5/5 Skeleton for your opponent",
+  "description": "Opener: Summon a 5/5 Skeleton for your opponent",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

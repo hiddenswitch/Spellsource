@@ -56,6 +56,10 @@ public enum Attribute {
 	 */
 	INDEX_FROM_END,
 	/**
+	 * Returns the index of the entity in its current zone at the start of the game.
+	 */
+	STARTING_INDEX,
+	/**
 	 * The attack value written on the {@link Card}. This is distinct from {@link #BASE_ATTACK}, which is the base attack
 	 * value of the {@link Minion} this card would summon.
 	 */
@@ -970,6 +974,9 @@ public enum Attribute {
 	RESERVED_BOOLEAN_3,
 	RESERVED_BOOLEAN_4,
 	RESERVED_BOOLEAN_5,
+	/**
+	 * Counts the number of supremacies (kills, but not overkills) that the {@link Actor} has achieved.
+	 */
 	SUPREMACIES_THIS_GAME,
 	/**
 	 * Records the {@link EntityReference} of this choose one spell card's source card.
@@ -1021,7 +1028,14 @@ public enum Attribute {
 	 * Indicates a minion is an official Treant, considered for Treant-related synergies
 	 */
 	TREANT,
-	DRAINED_THIS_TURN, TOTAL_DRAINED, DRAINED_LAST_TURN, DYNAMIC_DESCRIPTION;
+	DRAINED_THIS_TURN,
+    TOTAL_DRAINED,
+    DRAINED_LAST_TURN,
+    /**
+     * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+     */
+    SURGE,
+    DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

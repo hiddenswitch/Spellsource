@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "<b>Battlecry:</b> Play a Secret from your deck. <b>Deathrattle:</b> Shuffle that secret into your deck.",
+  "description": "<b>Opener:</b> Play a Secret from your deck. <b>Aftermath:</b> Shuffle that secret into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

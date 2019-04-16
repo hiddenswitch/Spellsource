@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Stealth. Deathrattle: At the end of the turn, resummon all friendly minions that died this turn, except Kuona.",
+  "description": "Hidden. Aftermath: At the end of the turn, resummon all friendly minions that died this turn, except Kuona.",
   "deathrattle": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",

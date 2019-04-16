@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "PURPLE",
   "rarity": "FREE",
-  "description": "Whenever your hero is attacked, deal 1 damage to all enemies.",
+  "description": "Whenever your champion is attacked, deal 1 damage to all enemies.",
   "triggers": [
     {
       "eventTrigger": {
