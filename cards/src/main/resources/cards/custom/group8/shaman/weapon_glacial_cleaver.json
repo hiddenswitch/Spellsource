@@ -1,6 +1,6 @@
 {
   "name": "Glacial Cleaver",
-  "baseManaCost": 5,
+  "baseManaCost": 7,
   "type": "WEAPON",
   "heroClass": "SILVER",
   "damage": 4,
