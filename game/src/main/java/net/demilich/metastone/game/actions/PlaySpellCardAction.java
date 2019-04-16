@@ -38,7 +38,8 @@ public class PlaySpellCardAction extends PlayCardAction {
 	@Override
 	@Suspendable
 	public void innerExecute(GameContext context, int playerId) {
-		if (context.getLogic().hasAttribute(context.getPlayer(playerId), Attribute.SPELLS_CAST_TWICE)) {
+		Entity source = getSource(context);
+		if (context.getLogic().spellsCastTwice(context.getPlayer(playerId), (Card) source, source, context.resolveSingleTarget(getTargetReference()))) {
 			context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
 		}
 		context.getLogic().castSpell(playerId, spell, getSourceReference(), getTargetReference(), getTargetRequirement(), false, this);
