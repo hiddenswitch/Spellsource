@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Divine Shield. After this loses Divine Shield, gain Divine Shield.",
+  "description": "Divine Shield. After this loses Dodge, gain Dodge.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDivineShieldTrigger",

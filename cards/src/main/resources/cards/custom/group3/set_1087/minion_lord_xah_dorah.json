@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Deathrattle: At the end of your next turn, resummon this.",
+  "description": "Aftermath: At the end of your next turn, resummon this.",
   "deathrattle": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",

@@ -1,0 +1,17 @@
+{
+  "name": "Pixie Knight",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "race": "FAE",
+  "description": "Elusive.",
+  "attributes": {
+    "UNTARGETABLE_BY_SPELLS": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "EGGPLANT",
   "rarity": "FREE",
-  "description": "Summon a 1/3 Rubble with Taunt.",
+  "description": "Summon a 1/3 Rubble with Guard.",
   "condition": {
     "class": "MinionCountCondition",
     "value": 7,

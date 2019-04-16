@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Taunt. Deathrattle: Discard a random card. Add 'Mystic Skull' to your hand.",
+  "description": "Guard. Aftermath: Discard a random card. Add 'Mystic Skull' to your hand.",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [

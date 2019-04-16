@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "ICE",
   "rarity": "FREE",
-  "description": "Passive Hero Power. At the start of your turn, activate a random Presence.",
+  "description": "Passive Skill. At the start of your turn, activate a random Presence.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "TurnStartTrigger",

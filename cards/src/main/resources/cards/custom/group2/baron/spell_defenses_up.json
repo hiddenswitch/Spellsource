@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "FREE",
-  "description": "Summon four 0/2 Defenders with Taunt.",
+  "description": "Summon four 0/2 Defenders with Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

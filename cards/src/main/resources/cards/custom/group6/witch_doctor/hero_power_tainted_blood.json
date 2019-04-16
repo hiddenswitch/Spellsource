@@ -1,0 +1,51 @@
+{
+  "name": "Tainted Blood",
+  "baseManaCost": 0,
+  "type": "HERO_POWER",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Passive Hero Power. During your turn, resurrect enemy minions that die. On your side.",
+  "passiveTrigger": {
+    "eventTrigger": {
+      "class": "MinionDeathTrigger",
+      "targetPlayer": "OPPONENT"
+    },
+    "spell": {
+      "class": "HeroPowerSpell",
+      "spell": {
+        "class": "ConditionalSpell",
+        "condition": {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "ACTIVE"
+        },
+        "spell": {
+          "class": "ResurrectFromBothSpell",
+          "cardFilter": {
+            "class": "AndFilter",
+            "filters": [
+              {
+                "class": "OwnedByPlayerFilter",
+                "targetPlayer": "OPPONENT"
+              },
+              {
+                "class": "SpecificCardFilter",
+                "secondaryTarget": "EVENT_TARGET"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  "condition": {
+    "class": "AndCondition",
+    "invert": true
+  },
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "NullSpell"
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

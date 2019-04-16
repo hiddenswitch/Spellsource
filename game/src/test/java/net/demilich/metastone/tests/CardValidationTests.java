@@ -64,14 +64,16 @@ public class CardValidationTests {
 			String description = record.getDesc().getDescription();
 			if (description != null) {
 				AttributeMap attributes = record.getDesc().getAttributes();
-				if (description.startsWith("Battlecry:")) {
+				if (description.startsWith("Battlecry:")
+						|| description.startsWith("Opener:")) {
 					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.BATTLECRY),
-							"A Battlecry card is missing the BATTLECRY attribute.");
+							"An Opener card is missing the BATTLECRY attribute.");
 				}
 
-				if (description.startsWith("Deathrattle:")) {
+				if (description.startsWith("Deathrattle:")
+						|| description.startsWith("Aftermath:")) {
 					Assert.assertTrue(attributes != null && attributes.containsKey(Attribute.DEATHRATTLES),
-							"A Deathrattle card is missing the DEATHRATTLES attribute.");
+							"An Aftermath card is missing the DEATHRATTLES attribute.");
 				}
 
 				if (record.getDesc().deathrattle != null) {

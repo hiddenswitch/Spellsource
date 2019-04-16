@@ -75,7 +75,6 @@ public abstract class PlayCardAction extends GameAction {
 	public void execute(GameContext context, int playerId) {
 		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
-		card.setAttribute(Attribute.BEING_PLAYED);
 		context.getLogic().playCard(playerId, getSourceReference(), getTargetReference());
 
 		// card was countered, do not actually resolve its effects
@@ -86,6 +85,7 @@ public abstract class PlayCardAction extends GameAction {
 			// Silencing a card here prevents its effects from being executed since they are being executed elsewhere.
 			// Unlike countering, it does deal with echo correctly.
 			if (!card.hasAttribute(Attribute.SILENCED)) {
+				// Actually executes the effects of the card here!
 				innerExecute(context, playerId);
 			}
 			// After playing the effects, make sure to use the right card in case it was transformed
@@ -96,6 +96,8 @@ public abstract class PlayCardAction extends GameAction {
 				context.getLogic().receiveCard(playerId, copy);
 			}
 		}
+
+		// This code used to be "afterCardPlayed" in GameLogic, but is now here because it's the only place it is called.
 		card.getAttributes().remove(Attribute.BEING_PLAYED);
 		player.modifyAttribute(Attribute.COMBO, 1);
 

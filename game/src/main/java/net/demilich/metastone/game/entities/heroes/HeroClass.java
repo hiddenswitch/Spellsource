@@ -46,6 +46,7 @@ public enum HeroClass {
 	NEONGREEN,
 	DARKGREEN,
 	PURPLE,
+	TIME,
 	TEAL,
     /**
 	 * The Hearthstone Death Knight card class.
@@ -125,6 +126,8 @@ public enum HeroClass {
 				return CardCatalogue.getCardById("hero_lady_vashj_sea_witch");
 			case PURPLE:
 				return CardCatalogue.getCardById("hero_illidan");
+			case TIME:
+				return CardCatalogue.getCardById("hero_atropos");
 			default:
 				return CardCatalogue.getCardById("hero_neutral");
 		}

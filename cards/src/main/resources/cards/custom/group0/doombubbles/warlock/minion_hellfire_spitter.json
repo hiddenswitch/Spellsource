@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Deal 3 damage. If your hero is the target, deal 3 damage to all characters instead.",
+  "description": "Opener: Deal 3 damage. If your champion is the target, deal 3 damage to all characters instead.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

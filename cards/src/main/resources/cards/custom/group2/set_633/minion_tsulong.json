@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "ELEMENTAL",
-  "description": "Deflect. Battlecry: If you're holding a Dragon, gain 'Deathrattle: Summon Tsulong, the Heavenly Serpent.'",
+  "description": "Deflect. Opener: If you're holding a Dragon, gain 'Aftermath: Summon Tsulong, the Heavenly Serpent.'",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

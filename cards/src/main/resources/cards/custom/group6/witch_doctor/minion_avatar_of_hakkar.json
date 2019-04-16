@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Your Hero Power costs Health instead of Mana this game.",
+  "description": "Opener: Your Skill costs Health instead of Mana this game.",
   "battlecry": {
     "spell": {
       "class": "AddEnchantmentSpell",

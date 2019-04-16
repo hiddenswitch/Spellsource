@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "DEMON",
-  "description": "Battlecry: Deal 2 damage to the enemy hero.",
+  "description": "Opener: Deal 2 damage to the enemy champion.",
   "battlecry": {
     "spell": {
       "class": "DamageSpell",

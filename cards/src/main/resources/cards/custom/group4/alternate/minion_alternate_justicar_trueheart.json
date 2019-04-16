@@ -6,7 +6,7 @@
   "baseAttack": 6,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replace your starting Hero Power with a better one (alternately).",
+  "description": "Opener: Replace your starting Skill with a better one (alternately).",
   "battlecry": {
     "spell": {
       "class": "custom.UpgradeHeroPowerSpell",

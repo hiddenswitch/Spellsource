@@ -303,6 +303,16 @@ public class TestBase {
 			public int determineBeginner(int... playerIds) {
 				return 0;
 			}
+
+			@Override
+			protected int getStarterCards() {
+				return 0;
+			}
+
+			@Override
+			protected int getSecondPlayerBonusStarterCards() {
+				return 0;
+			}
 		}, DeckFormat.getSmallestSupersetFormat(deck1, deck2));
 		context.setBehaviours(new Behaviour[]{new TestBehaviour(), new TestBehaviour()});
 		context.init();

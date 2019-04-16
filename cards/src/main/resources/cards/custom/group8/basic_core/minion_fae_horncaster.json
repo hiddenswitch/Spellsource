@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "FREE",
   "race": "FAE",
-  "description": "Battlecry: Summon a 2/2 Fae with <b>Guard</b>.",
+  "description": "Opener: Summon a 2/2 Fae with <b>Guard</b>.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

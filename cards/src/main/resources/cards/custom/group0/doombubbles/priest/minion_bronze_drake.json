@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Deathrattle: If you're holding a Dragon, draw a card.",
+  "description": "Aftermath: If you're holding a Dragon, draw a card.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

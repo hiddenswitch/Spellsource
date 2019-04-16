@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Poisonous. Battlecry: Deal 1 damage.",
+  "description": "Toxic. Opener: Deal 1 damage.",
   "battlecry": {
     "targetSelection": "ANY",
     "spell": {

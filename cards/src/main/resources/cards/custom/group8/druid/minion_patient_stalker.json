@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Stealth. Deathrattle: If you have 10 Mana Crystals, draw a card.",
+  "description": "Hidden. Aftermath: If you have 10 Mana Crystals, draw a card.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

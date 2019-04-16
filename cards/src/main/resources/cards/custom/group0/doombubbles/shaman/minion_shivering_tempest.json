@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Deathrattle: Add a random Shaman spell to your hand.",
+  "description": "Aftermath: Add a random Shaman spell to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "cardFilter": {

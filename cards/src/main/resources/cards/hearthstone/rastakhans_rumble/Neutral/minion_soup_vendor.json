@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Whenever you restore 3 or more Health to your hero, draw a card.",
+  "description": "Whenever you restore #3 or more Health to your hero, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",

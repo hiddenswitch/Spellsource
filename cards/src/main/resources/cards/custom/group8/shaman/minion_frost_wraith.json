@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Freeze your other minions and give them +1/+1 and Taunt.",
+  "description": "Opener: Freeze your other minions and give them +1/+1 and Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

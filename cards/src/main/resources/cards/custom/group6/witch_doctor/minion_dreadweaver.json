@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Battlecry: Choose a minion. Draw a minion of the same Cost from your deck.",
+  "description": "Opener: Choose a minion. Draw a minion of the same Cost from your deck.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

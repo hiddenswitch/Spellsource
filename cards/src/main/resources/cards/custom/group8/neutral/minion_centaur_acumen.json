@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Battlecry: Reduce the Cost of 1-Cost spells in your hand by (1).",
+  "description": "Opener: Reduce the Cost of 1-Cost spells in your hand by (1).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

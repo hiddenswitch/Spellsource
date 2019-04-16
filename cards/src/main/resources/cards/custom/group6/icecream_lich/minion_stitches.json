@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Destroy an enemy minion. Gain its Attack and Health.",
+  "description": "Opener: Destroy an enemy minion. Gain its Attack and Health.",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

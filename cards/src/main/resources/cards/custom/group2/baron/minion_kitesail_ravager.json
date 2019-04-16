@@ -7,7 +7,7 @@
   "baseHp": 10,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: Attack random minions until this dies.",
+  "description": "Opener: Attack random minions until this dies.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

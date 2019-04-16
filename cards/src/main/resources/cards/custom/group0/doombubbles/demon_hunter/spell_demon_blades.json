@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "PURPLE",
   "rarity": "RARE",
-  "description": "Your Hero Power becomes 'Passive. Your hero has +1 Attack during your turn.'",
+  "description": "Your Skill becomes 'Passive. Your champion has +1 Attack during your turn.'",
   "targetSelection": "NONE",
   "spell": {
     "class": "ChangeHeroPowerSpell",

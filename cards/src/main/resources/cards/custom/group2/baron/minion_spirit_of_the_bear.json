@@ -1,12 +1,12 @@
 {
-  "name": "Spirit of the Bear",
+  "name": "Ryal's Strength",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Stealth for 1 turn. After a friendly minion attacks, add a random Baron spell to your hand.",
+  "description": "Hidden for 1 turn. After a friendly minion attacks, add a random Baron spell to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

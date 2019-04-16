@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Start of Game: Discover a new basic Hero Power. Battlecry: Upgrade It.",
+  "description": "Start of Game: Discover a new basic Skill. Opener: Upgrade It.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

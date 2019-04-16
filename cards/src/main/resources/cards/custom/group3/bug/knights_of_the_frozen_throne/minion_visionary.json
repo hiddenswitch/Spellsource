@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 8,
   "rarity": "EPIC",
-  "description": "Health restored to your hero is also restored to all friendly minions.",
+  "description": "Health restored to your champion is also restored to all friendly minions.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",

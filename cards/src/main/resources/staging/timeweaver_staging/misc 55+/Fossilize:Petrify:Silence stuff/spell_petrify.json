@@ -1,0 +1,37 @@
+{
+  "name": "Petrify",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "TIME",
+  "rarity": "COMMON",
+  "description": "Silence a minion. Give it Taunt and 'Can't Attack,' then set its Attack to 0.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ConditionalEffectSpell",
+    "target": "ALL_MINIONS",
+    "condition": {
+      "class": "AndCondition",
+      "conditions": [
+        {
+          "class": "IsDeadCondition"
+        },
+        {
+          "class": "OwnedByPlayerCondition",
+          "targetPlayer": "SELF"
+        }
+      ]
+    },
+    "randomTarget": true,
+    "spell1": {
+      "class": "DestroySpell"
+    },
+    "spell2": {
+      "class": "CastCardsSpell",
+      "target": "NONE",
+      "card": "spell_mindless_slaughter",
+    }
+  },
+  "collectible": true,
+  "set": "CLASSIC",
+  "fileFormatVersion": 1
+}
