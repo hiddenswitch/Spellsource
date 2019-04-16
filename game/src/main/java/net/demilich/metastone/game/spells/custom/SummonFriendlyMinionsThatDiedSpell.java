@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * Summons all the friendly minions that died this turn.
  * <p>
- * Implements Kel'Thuzad.
+ * Implements Kel'Thuzad, Altered Fate and others.
  */
 public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 
@@ -56,6 +56,5 @@ public class SummonFriendlyMinionsThatDiedSpell extends Spell {
 			}
 		}
 	}
-
 }
 

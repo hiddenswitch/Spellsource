@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: If you control a Beast, deal 3 damage.",
+  "description": "Opener: If you control a Beast, deal 3 damage.",
   "battlecry": {
     "condition": {
       "class": "MinionOnBoardCondition",

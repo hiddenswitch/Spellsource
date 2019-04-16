@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Battlecry: Swap Health with the minion(s) opposite this one. (Splits its health for two)",
+  "description": "Opener: Swap Health with the minion(s) opposite this one. (Splits its health for two)",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

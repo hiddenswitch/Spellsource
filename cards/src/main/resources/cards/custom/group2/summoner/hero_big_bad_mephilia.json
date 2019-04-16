@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "EGGPLANT",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Fill your board with 1/1 Mooks with Taunt.",
+  "description": "Opener: Fill your board with 1/1 Mooks with Guard.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

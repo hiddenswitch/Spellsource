@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 7,
   "rarity": "EPIC",
-  "description": "Deathrattle: Summon a 7/14 Ultrasaur",
+  "description": "Aftermath: Summon a 7/14 Ultrasaur",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "minion_ultrasaur"

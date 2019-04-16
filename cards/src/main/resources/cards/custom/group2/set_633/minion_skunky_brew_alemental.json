@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Deflect. Battlecry: Summon two 1/2 Alementals.",
+  "description": "Deflect. Opener: Summon two 1/2 Alementals.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

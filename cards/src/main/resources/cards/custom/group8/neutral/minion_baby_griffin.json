@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Add a 2/2 Griffin Mother with Taunt to your hand.",
+  "description": "Opener: Add a 2/2 Griffin Mother with Guard to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

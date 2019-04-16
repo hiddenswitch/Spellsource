@@ -1,0 +1,23 @@
+{
+  "name": "Careless Clobber Ogre",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "TIME",
+  "baseAttack": 7,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Battlecry: Reshuffle 2 cards.",
+  "targetSelection": "NONE",
+  "battlecry":
+  "spell": {
+        "class": "ChooseAndReshuffleSpell",
+        "value": 2
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

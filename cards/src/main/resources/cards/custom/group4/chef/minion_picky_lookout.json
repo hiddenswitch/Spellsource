@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "PIRATE",
-  "description": "Battlecry: Look at 3 cards from your deck. Pick one to Roast it. Do this 5 times.",
+  "description": "Opener: Look at 3 cards from your deck. Pick one to Roast it. Do this 5 times.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

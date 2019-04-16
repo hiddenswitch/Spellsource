@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "ICECREAM",
   "rarity": "RARE",
-  "description": "Destroy a minion. Restore its Health to your hero.",
+  "description": "Destroy a minion. Restore its Health to your champion.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

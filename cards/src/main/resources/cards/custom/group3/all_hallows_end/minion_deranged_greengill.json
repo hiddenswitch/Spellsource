@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "MURLOC",
-  "description": "Battlecry: Take control of an enemy Murloc",
+  "description": "Opener: Take control of an enemy Murloc",
   "battlecry": {
     "targetSelection": "ENEMY_MINIONS",
     "spell": {

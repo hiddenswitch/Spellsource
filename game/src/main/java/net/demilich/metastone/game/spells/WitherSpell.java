@@ -22,7 +22,7 @@ import net.demilich.metastone.game.targeting.EntityReference;
  * SpellArg#VALUE} is specified, use that instead. At the start of the casting {@code player}'s next turn, restores
  * (without triggering healing) the health of the minion.
  * <p>
- * Wither is blocked by shield like {@link Attribute#DIVINE_SHIELD} and {@link Attribute#DEFLECT}.
+ * Wither is blocked by shields like {@link Attribute#DIVINE_SHIELD} and {@link Attribute#DEFLECT}.
  * <p>
  * Wither does <b>not</b> affect {@link EntityType#HERO} entities.
  * <p>

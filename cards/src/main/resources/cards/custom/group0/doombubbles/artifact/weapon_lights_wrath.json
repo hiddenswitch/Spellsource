@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "After your hero attacks, double the health of your minions.",
+  "description": "After your champion attacks, double the health of your minions.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

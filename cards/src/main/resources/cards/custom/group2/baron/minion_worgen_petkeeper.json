@@ -1,12 +1,12 @@
 {
-  "name": "Worgen Petkeeper",
+  "name": "Lost Petkeeper",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a random 0-Cost minion for your opponent.",
+  "description": "Opener: Summon a random 0-Cost minion for your opponent.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

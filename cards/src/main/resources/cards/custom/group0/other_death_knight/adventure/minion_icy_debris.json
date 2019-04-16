@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Taunt. Deathrattle: Recruit any copies of this.",
+  "description": "Guard. Aftermath: Recruit any copies of this.",
   "deathrattle": {
     "class": "RecruitSpell",
     "value": 7,

@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Add two copies of 'Arcane Explosion' to your hand.",
+  "description": "Opener: Add two copies of 'Arcane Explosion' to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -1,6 +1,6 @@
 {
   "name": "Sideline Coach",
-  "baseManaCost": 2,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "NAVY",
   "baseAttack": 1,

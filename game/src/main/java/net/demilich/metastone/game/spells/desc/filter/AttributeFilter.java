@@ -12,7 +12,13 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-public class AttributeFilter extends EntityFilter {
+/**
+ * Filters entities according to their {@link Attribute} set on {@link EntityFilterArg#ATTRIBUTE}.
+ * <p>
+ * If a {@link EntityFilterArg#OPERATION} and {@link EntityFilterArg#VALUE} are specified, uses it to evaluate the
+ * attribute. Otherwise, the operation defaults to {@link ComparisonOperation#HAS}.
+ */
+public final class AttributeFilter extends EntityFilter {
 
 	public AttributeFilter(EntityFilterDesc desc) {
 		super(desc);
@@ -85,5 +91,4 @@ public class AttributeFilter extends EntityFilter {
 
 		return SpellUtils.evaluateOperation(operation, actualValue, targetValue);
 	}
-
 }

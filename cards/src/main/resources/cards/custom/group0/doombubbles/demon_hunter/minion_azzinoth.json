@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DEMON",
-  "description": "Taunt. Deathrattle: Add the Warglaives of Azzinoth to your hand.",
+  "description": "Guard. Aftermath: Add the Warglaives of Azzinoth to your hand.",
   "deathrattle": {
     "class": "ReceiveCardSpell",
     "card": "weapon_warglaives_of_azzinoth"

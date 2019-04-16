@@ -1,0 +1,27 @@
+{
+  "name": "Mental Command",
+  "baseManaCost": 2,
+  "type": "HERO_POWER",
+  "heroClass": "ROSE",
+  "rarity": "FREE",
+  "description": "Choose a target. Your Mind Controlled Mechs attack it.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HeroPowerSpell",
+    "spell": {
+      "class": "TargetToSourceSecondaryToTargetSpell",
+      "secondaryTarget": "TARGET",
+      "target": "FRIENDLY_MINIONS",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "minion_mind_controlled_mech"
+      },
+      "spell": {
+        "class": "FightSpell"
+      }
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

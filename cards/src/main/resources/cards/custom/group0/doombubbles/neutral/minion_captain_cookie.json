@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "race": "MURLOC",
-  "description": "Battlecry: If you control a Pirate, give a random Murloc in your hand +1/+1 (and vice versa).",
+  "description": "Opener: If you control a Pirate, give a random Murloc in your hand +1/+1 (and vice versa).",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Add 5 2/2 Treants to your hand. Summon any that would not fit.",
+  "description": "Opener: Add 5 2/2 Treants to your hand. Summon any that would not fit.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

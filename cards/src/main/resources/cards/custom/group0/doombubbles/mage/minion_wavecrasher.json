@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "RARE",
   "race": "ELEMENTAL",
-  "description": "Battlecry: If you played an Elemental last turn, gain Taunt and Elusive.",
+  "description": "Opener: If you played an Elemental last turn, gain Guard and Elusive.",
   "battlecry": {
     "condition": {
       "class": "PlayedLastTurnCondition",

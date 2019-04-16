@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "Battlecry: Set this minion's Attack and Health to the highest among demons in your hand.",
+  "description": "Opener: Set this minion's Attack and Health to the highest among demons in your hand.",
   "battlecry": {
     "spell": {
       "class": "custom.FelfireDrakeSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "RARE",
-  "description": "Battlecry: If your C'Thun has at least 10 Attack, draw 10 cards.",
+  "description": "Opener: If your C'Thun has at least 10 Attack, draw 10 cards.",
   "battlecry": {
     "condition": {
       "class": "OrCondition",

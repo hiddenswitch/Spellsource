@@ -6,7 +6,7 @@
   "baseAttack": 7,
   "baseHp": 7,
   "rarity": "LEGENDARY",
-  "description": "Taunt. At the end of your turn, restore this minion to full Health.",
+  "description": "Guard. At the end of your turn, restore this minion to full Health.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",

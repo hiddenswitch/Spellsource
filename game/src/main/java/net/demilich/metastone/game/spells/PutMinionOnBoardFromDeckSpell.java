@@ -42,12 +42,12 @@ public class PutMinionOnBoardFromDeckSpell extends Spell {
 	/**
 	 * Creates this spell for the specified minion card.
 	 *
-	 * @param Card The {@link Card} to move from the deck to the battlefield.
+	 * @param card The {@link Card} to move from the deck to the battlefield.
 	 * @return The spell
 	 */
-	public static SpellDesc create(EntityReference Card) {
+	public static SpellDesc create(EntityReference card) {
 		Map<SpellArg, Object> arguments = new SpellDesc(PutMinionOnBoardFromDeckSpell.class);
-		arguments.put(SpellArg.TARGET, Card);
+		arguments.put(SpellArg.TARGET, card);
 		return new SpellDesc(arguments);
 	}
 

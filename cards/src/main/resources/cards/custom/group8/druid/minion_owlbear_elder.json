@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Taunt. Battlecry: Summon a 2/3 Owlbear Mother and a 0/1 Owlbear Baby.",
+  "description": "Guard. Opener: Summon a 2/3 Owlbear Mother and a 0/1 Owlbear Baby.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

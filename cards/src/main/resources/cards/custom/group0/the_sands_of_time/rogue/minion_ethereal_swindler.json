@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "EPIC",
-  "description": "Battlecry: Choose a rarity. Discover a card of that rarity from your opponent's class.",
+  "description": "Opener: Choose a rarity. Discover a card of that rarity from your opponent's class.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

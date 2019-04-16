@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "FREE",
   "race": "ELEMENTAL",
-  "description": "Taunt. Deathrattle: Summon Tsulong, the Dark Serpent.",
+  "description": "Guard. Aftermath: Summon Tsulong, the Dark Serpent.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "minion_tsulong"

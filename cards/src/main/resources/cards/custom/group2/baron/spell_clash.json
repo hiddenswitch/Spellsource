@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NAVY",
   "rarity": "COMMON",
-  "description": "Summon four 3/1 Duelers with Rush.",
+  "description": "Summon four 3/1 Duelers with Dash.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

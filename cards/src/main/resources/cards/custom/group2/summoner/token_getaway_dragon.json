@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "FREE",
   "race": "DRAGON",
-  "description": "Your hero is Immune.",
+  "description": "Your champion is Immune.",
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_HERO",

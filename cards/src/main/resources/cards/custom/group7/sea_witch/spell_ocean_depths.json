@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TEAL",
   "rarity": "FREE",
-  "description": "Restore #2 Health to your hero and draw a card. Cast this when drawn.",
+  "description": "Restore #2 Health to your champion and draw a card. Cast this when drawn.",
   "passiveTrigger": {
     "eventTrigger": {
       "class": "CardDrawnTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "COMMON",
-  "description": "Taunt. Battlecry: Shuffle your other minions into your deck.",
+  "description": "Guard. Opener: Shuffle your other minions into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

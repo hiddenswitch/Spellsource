@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",
-  "description": "All minions lose Stealth. Destroy all enemy Secrets. Draw a card.",
+  "description": "All minions lose Hidden. Destroy all enemy Secrets. Draw a card.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

@@ -1,8 +1,6 @@
 package net.demilich.metastone.game.logic;
 
-import co.paralleluniverse.fibers.Fiber;
 import co.paralleluniverse.fibers.Suspendable;
-import co.paralleluniverse.strands.Strand;
 import com.google.common.collect.Multiset;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.Player;
@@ -697,11 +695,11 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                        and deathrattles are, unusually, {@code false} (not) child spells.
 	 * @param sourceAction    The {@link GameAction}, usually a {@link }
 	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for the code that interprets the {@link
-	 * 		SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
+	 *    SpellArg#FILTER}, and {@link SpellArg#RANDOM_TARGET} arguments.
 	 * @see Spell#onCast(GameContext, Player, SpellDesc, Entity, Entity) for the function that typically has the
 	 * 		spell-specific code (e.g., {@link DamageSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity)} actually
 	 * 		implements the logic of a damage spell and interprets the {@link SpellArg#VALUE} attribute of the {@link
-	 * 		SpellDesc} as damage.
+	 *    SpellDesc} as damage.
 	 * @see MetaSpell for the mechanism that multiple spells as children are chained together to create an effect.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) for the code that turns a target selection
 	 * 		into actions the player can take.
@@ -1684,7 +1682,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @see net.demilich.metastone.game.spells.MisdirectSpell for an example of a spell that causes actors to fight each
 	 * 		other without a player initiatied action.
 	 * @see ActionLogic#rollout(GameAction, GameContext, Player, Collection) to see how to enumerate all the possible
-	 * 		{@link PhysicalAttackAction} that determine what can fight what.
+	 *    {@link PhysicalAttackAction} that determine what can fight what.
 	 * @see TargetLogic#getValidTargets(GameContext, Player, GameAction) to see how minions with {@link Attribute#TAUNT}
 	 * 		affect what can and cannot be fought by a player.
 	 */
@@ -1800,7 +1798,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player The player whose {@link Hero} should gain armor.
 	 * @param armor  The amount of armor to gain.
 	 * @see #damage(Player, Actor, int, Entity, boolean) for a description of how armor protects an {@link Actor} like a
-	 * 		{@link Hero}.
+	 *    {@link Hero}.
 	 */
 	@Suspendable
 	public void gainArmor(Player player, int armor) {
@@ -2342,8 +2340,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Stream.concat(player.getDeck().stream(),
 				player.getHand().stream()).forEach(c -> c.getAttributes().put(Attribute.STARTED_IN_DECK, true));
 
-		// Deck is now shuffled
+		// The deck is shuffled TWICE. Once before the mulligan, here, and once after.
 		player.getDeck().shuffle(getRandom());
+
 		// TODO: Should we really be doing this here?
 		if (player.getHero().hasEnchantment()) {
 			for (Enchantment trigger : player.getHero().getEnchantments()) {
@@ -2354,7 +2353,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		processPassiveTriggers(player, hero.getHeroPower());
 
 		// Populate both player's hands here first to prevent consuming random resources
-		int numberOfStarterCards = begins ? STARTER_CARDS : STARTER_CARDS + 1;
+		int numberOfStarterCards = begins ? getStarterCards() : getStarterCards() + getSecondPlayerBonusStarterCards();
 
 		// The player's starting hand should always contain the quest.
 		// Since our server could theoretically allow you to have a deck with multiple quests, they will
@@ -2377,6 +2376,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		return player;
+	}
+
+	protected int getStarterCards() {
+		return STARTER_CARDS;
 	}
 
 	/**
@@ -2666,7 +2669,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// The starter cards have been put into the setAsideZone
 		List<Card> starterCards = player.getSetAsideZone().stream().map(Entity::getSourceCard).collect(toList());
-		int numberOfStarterCards = begins ? STARTER_CARDS : STARTER_CARDS + 1;
+		int numberOfStarterCards = begins ? getStarterCards() : getStarterCards() + getSecondPlayerBonusStarterCards();
 
 		// remove player selected cards from starter cards
 		for (Card discardedCard : discardedCards) {
@@ -2696,16 +2699,25 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			}
 		}
 
+		// This is the SECOND time the deck gets shuffled. It is first shuffled before the mulligan.
 		if (!player.getDeck().isEmpty()) {
 			player.getDeck().shuffle(getRandom());
 		}
 
+		// Assign the attribute indicating the starting index of these cards AFTER the second shuffle
+		for (int i = 0; i < player.getDeck().size(); i++) {
+			player.getDeck().get(i).setAttribute(Attribute.STARTING_INDEX, i);
+		}
 
 		// second player gets the coin additionally
 		if (!begins) {
 			Card theCoin = CardCatalogue.getCardById("spell_the_coin");
 			receiveCard(player.getId(), theCoin);
 		}
+	}
+
+	protected int getSecondPlayerBonusStarterCards() {
+		return 1;
 	}
 
 	/**
@@ -2781,12 +2793,18 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Playing a card from the hand moves it to the graveyard before its effects are resolved. This means its enchantments
 	 * are removed.
 	 * <p>
+	 * A card is marked as played (by setting its turn played as {@link Attribute#PLAYED_FROM_HAND_OR_DECK} before its
+	 * effects are resolved. The card is given {@link Attribute#BEING_PLAYED}, then its effects are evaluated, then the
+	 * attribute is removed.
+	 * <p>
 	 * {@link #playCard(int, EntityReference, EntityReference)} is always initiated by an action, like a {@link
 	 * PlayCardAction}. It represents playing a card from the hand. This method then deducts the appropriate amount of
 	 * mana (or health, depending on the card). Then, it will check if the {@link Card} was countered by Counter Spell (a
 	 * {@link Secret} which adds a {@link Attribute#COUNTERED} attribute to the card that was raised in the {@link
 	 * CardPlayedEvent}). It applies the {@link Attribute#OVERLOAD} amount to the mana the player has locked next turn.
 	 * Finally, it removes the card from the player's {@link Zones#HAND} and puts it in the {@link Zones#GRAVEYARD}.
+	 * <p>
+	 * The actual effects of the card are evaluated in {@link PlayCardAction#innerExecute(GameContext, int)} overloads.
 	 *
 	 * @param playerId        The player that is playing the card.
 	 * @param cardReference   The card that got played.
@@ -2797,7 +2815,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(cardReference);
 		Entity target = targetReference != null ? context.resolveSingleTarget(targetReference) : null;
-
+		card.setAttribute(Attribute.BEING_PLAYED);
 		int modifiedManaCost = getModifiedManaCost(player, card);
 		boolean cardCostsHealth = doesCardCostHealth(player, card);
 		List<CardCostInsteadAura> costAuras = SpellUtils.getAuras(context, playerId, CardCostInsteadAura.class);
@@ -2846,7 +2864,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
+			if (spellsCastTwice(player, card, card, target)) {
 				context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
 			}
 			context.fireGameEvent(new OverloadEvent(context, playerId, card, card.getAttributeValue(Attribute.OVERLOAD)));
@@ -2867,7 +2885,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
 			// Implements Electra Stormsurge w/ Overload spells
-			if (context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE)) {
+			if (spellsCastTwice(player, card, card, target)) {
 				player.modifyAttribute(Attribute.OVERLOAD, card.getAttributeValue(Attribute.OVERLOAD));
 				player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 			}
@@ -2875,6 +2893,30 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			// Implements Snowfury Giant
 			player.modifyAttribute(Attribute.OVERLOADED_THIS_GAME, card.getAttributeValue(Attribute.OVERLOAD));
 		}
+	}
+
+	/**
+	 * Determines if spells should be casting twice. Allows auras to control double spell casting.
+	 *
+	 * @param player
+	 * @param card
+	 * @param source
+	 * @param target
+	 * @return
+	 */
+	public boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
+		boolean playerHasAttribute = context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE);
+		boolean playerHasSilentDreamer = false;
+		if (target != null && source != null) {
+			for (TheliaSilentdreamerAura aura : SpellUtils.getAuras(context, TheliaSilentdreamerAura.class, target)) {
+				if (aura.getSpellCondition().isFulfilled(context, player, source, card)) {
+					playerHasSilentDreamer = true;
+					break;
+				}
+			}
+		}
+
+		return playerHasAttribute || playerHasSilentDreamer;
 	}
 
 	/**
@@ -3273,7 +3315,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *                   due to a destruction of the minion. Otherwise, move the {@link Minion} to the {@link
 	 *                   Zones#SET_ASIDE_ZONE} where it will be found by {@link #endOfSequence()}.
 	 * @see ReturnTargetToHandSpell for usage of {@link #removeActor(Actor, boolean)}. Note, this and {@link
-	 * 		net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
+	 *    net.demilich.metastone.game.spells.ShuffleMinionToDeckSpell} appear to be the only two users of this function.
 	 */
 	@Suspendable
 	public void removeActor(Actor actor, boolean peacefully) {
@@ -3631,10 +3673,26 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param card
 	 * @param index
 	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link
-	 * 		#MAX_DECK_SIZE}).
+	 *    #MAX_DECK_SIZE}).
 	 */
 	@Suspendable
 	public boolean insertIntoDeck(Player player, Card card, int index) {
+		return insertIntoDeck(player, card, index, false);
+	}
+
+	/**
+	 * Inserts a card into the specified location in the player's deck. Use {@link CardZone#size()} as the index for the
+	 * top of the deck, and {@code 0} for the bottom.
+	 *
+	 * @param player
+	 * @param card
+	 * @param index
+	 * @param quiet  If {@code true}, does not fire the {@link CardAddedToDeckEvent}.
+	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link *
+	 * 		#MAX_DECK_SIZE}).
+	 */
+	@Suspendable
+	public boolean insertIntoDeck(Player player, Card card, int index, boolean quiet) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3654,7 +3712,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			processGameTriggers(player, card);
 			processDeckTriggers(player, card);
 
-			context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
+			if (!quiet) {
+				context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
+			}
 			return true;
 		}
 		return false;
@@ -3886,7 +3946,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 
 		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, true);
-		//drawCard(playerId, null);
 
 		endOfSequence();
 	}
