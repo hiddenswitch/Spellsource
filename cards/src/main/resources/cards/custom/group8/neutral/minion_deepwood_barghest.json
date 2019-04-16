@@ -9,35 +9,27 @@
   "race": "BEAST",
   "description": "Opener: If your deck has no Secrets, add two Emerald Secrets to your hand.",
   "battlecry": {
+    "condition": {
+      "class": "DeckContainsCondition",
+      "cardFilter": {
+        "class": "CardFilter",
+        "attribute": "SECRET",
+        "operation": "HAS"
+      },
+      "invert": true
+    },
     "targetSelection": "NONE",
     "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
-        "class": "ComparisonCondition",
-        "operation": "EQUAL",
-        "value1": {
-          "class": "EntityCounter",
-          "target": "FRIENDLY_DECK",
-          "cardFilter": {
-            "class": "CardFilter",
-            "attribute": "SECRET",
-            "operation": "HAS"
-          }
-        },
-        "value2": 0
-      },
-      "spell": {
-        "class": "ReceiveCardSpell",
-        "value": 2,
-        "cards": [
-          "secret_secret_of_winter",
-          "secret_secret_of_spring",
-          "secret_secret_of_summer",
-          "secret_secret_of_autumn",
-          "secret_secret_of_twilight"
-        ],
-        "randomTarget": true
-      }
+      "class": "ReceiveCardSpell",
+      "value": 2,
+      "cards": [
+        "secret_secret_of_winter",
+        "secret_secret_of_spring",
+        "secret_secret_of_summer",
+        "secret_secret_of_autumn",
+        "secret_secret_of_twilight"
+      ],
+      "randomTarget": true
     }
   },
   "attributes": {
