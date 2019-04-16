@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Opener and Supremacy: Summon a 5/5 Dragon with Blitz.",
+  "description": "Opener and Supremacy: Summon a 4/4 Dragon with Blitz.",
   "trigger": {
     "eventTrigger": {
       "class": "SupremacyTrigger"

@@ -1,10 +1,10 @@
 {
   "name": "Underminer",
-  "baseManaCost": 3,
+  "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 2,
-  "baseHp": 5,
+  "baseAttack": 4,
+  "baseHp": 1,
   "rarity": "COMMON",
   "race": "MECH",
   "description": "Can't be targeted by spells or Skills.",
