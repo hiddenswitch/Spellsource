@@ -18,6 +18,23 @@ import static org.testng.Assert.*;
 public class TimeweaverTests extends TestBase {
 
 	@Test
+	public void testShadowPuppetry() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion test1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion test2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion test3 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			test1.setAttack(0);
+			test3.setAttack(0);
+			playCard(context, player, "spell_shadow_puppetry", test2);
+			assertTrue(test1.isDestroyed());
+			assertTrue(test3.isDestroyed());
+			assertFalse(test2.isDestroyed());
+		});
+	}
+
+	@Test
 	public void testTemporalEchoes() {
 		runGym((context, player, opponent) -> {
 			String CHOSEN = "minion_black_test";
