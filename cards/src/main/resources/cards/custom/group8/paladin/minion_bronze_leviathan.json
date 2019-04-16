@@ -7,7 +7,7 @@
   "baseHp": 3,
   "rarity": "RARE",
   "race": "DRAGON",
-  "description": "<b>Battlecry:</b> Destroy all other minions with 3 or less Health.",
+  "description": "<b>Opener:</b> Destroy all other minions with 3 or less Health.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

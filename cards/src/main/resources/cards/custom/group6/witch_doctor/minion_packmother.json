@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Battlecry: Choose a Beast. Recruit one of the same Cost from your deck.",
+  "description": "Opener: Choose a Beast. Recruit one of the same Cost from your deck.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

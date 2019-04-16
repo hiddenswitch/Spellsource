@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "PURPLE",
   "rarity": "FREE",
-  "description": "Your hero power is Demonic Form. Lasts a certain number of turns",
+  "description": "Your skill is Demonic Form. Lasts a certain number of turns",
   "triggers": [
     {
       "eventTrigger": {

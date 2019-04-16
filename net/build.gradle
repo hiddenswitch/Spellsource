@@ -30,9 +30,9 @@ configurations.all {
     resolutionStrategy {
         force 'com.hazelcast:hazelcast:3.11'
         force 'org.apache.commons:commons-lang3:3.5'
-        force 'com.fasterxml.jackson.core:jackson-core:2.9.7'
+        force 'com.fasterxml.jackson.core:jackson-core:2.9.8'
         force 'com.fasterxml.jackson.core:annotations:2.9.0'
-        force 'com.fasterxml.jackson.core:databind:2.9.7'
+        force 'com.fasterxml.jackson.core:databind:2.9.8'
     }
 }
 

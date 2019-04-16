@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Deathrattle: Give your minions +2/+2.",
+  "description": "Aftermath: Give your minions +2/+2.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

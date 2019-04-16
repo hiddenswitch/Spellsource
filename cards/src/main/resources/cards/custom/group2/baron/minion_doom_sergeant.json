@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Add a 2/2 Knight to your hand.",
+  "description": "Opener: Add a 2/2 Knight to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

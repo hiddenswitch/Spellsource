@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Taunt. Enrage: +1 Attack",
+  "description": "Guard. Enrage: +1 Attack",
   "trigger": {
     "eventTrigger": {
       "class": "EnrageChangedTrigger"

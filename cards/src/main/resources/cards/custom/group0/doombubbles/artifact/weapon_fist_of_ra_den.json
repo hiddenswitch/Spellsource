@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Add 3 copies of 'Lightning Bolt' to the top of your deck.",
+  "description": "Opener: Add 3 copies of 'Lightning Bolt' to the top of your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

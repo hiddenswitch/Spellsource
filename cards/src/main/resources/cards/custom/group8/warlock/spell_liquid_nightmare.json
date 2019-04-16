@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "VIOLET",
   "rarity": "COMMON",
-  "description": "Give a minion +2/+2. If it's a Demon, give it Rush.",
+  "description": "Give a minion +2/+2. If it's a Demon, give it Dash.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "ConditionalEffectSpell",

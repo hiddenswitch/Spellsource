@@ -6,7 +6,7 @@
   "damage": 3,
   "durability": 3,
   "rarity": "EPIC",
-  "description": "Battlecry: Your spells cost (2) less this turn.",
+  "description": "Opener: Your spells cost (2) less this turn.",
   "battlecry": {
     "spell": {
       "class": "CardCostModifierSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Taunt. Your other Common minions have +1 Attack.",
+  "description": "Guard. Your other Common minions have +1 Attack.",
   "aura": {
     "class": "BuffAura",
     "target": "OTHER_FRIENDLY_MINIONS",

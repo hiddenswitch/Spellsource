@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Battlecry and Deathrattle: Summon a 0/4 Caravan.",
+  "description": "Opener and Aftermath: Summon a 0/4 Caravan.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

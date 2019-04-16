@@ -3,7 +3,7 @@
   "type": "ENCHANTMENT",
   "heroClass": "BLOOD",
   "rarity": "FREE",
-  "description": "All damage you deal this turn is Drained to your hero instead.",
+  "description": "All damage you deal this turn is Drained to your champion instead.",
   "triggers": [
     {
       "eventTrigger": {

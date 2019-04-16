@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 6,
   "rarity": "EPIC",
-  "description": "After your hero attacks, attack another random enemy.",
+  "description": "After your champion attacks, attack another random enemy.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

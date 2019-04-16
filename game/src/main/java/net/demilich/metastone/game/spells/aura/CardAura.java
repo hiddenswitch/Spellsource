@@ -34,5 +34,10 @@ public class CardAura extends Aura {
 				desc.getCondition());
 		setDesc(desc);
 	}
+
+	@Override
+	protected boolean alwaysApply() {
+		return true;
+	}
 }
 

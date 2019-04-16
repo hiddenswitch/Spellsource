@@ -1,0 +1,25 @@
+{
+  "name": "Swift Stinger",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "description": "Toxic during your turn.",
+  "aura": {
+    "class": "AttributeAura",
+    "target": "SELF",
+    "condition": {
+      "class": "OwnedByPlayerCondition",
+      "targetPlayer": "ACTIVE"
+    },
+    "attribute": "AURA_POISONOUS",
+    "secondaryTrigger": {
+      "class": "TurnStartTrigger"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

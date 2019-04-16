@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Restore Health to your hero equal to the number of missing cards in your deck.",
+  "description": "Opener: Restore Health to your champion equal to the number of missing cards in your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Silence the enemy weapon.",
+  "description": "Opener: Silence the enemy weapon.",
   "battlecry": {
     "spell": {
       "class": "SilenceSpell",

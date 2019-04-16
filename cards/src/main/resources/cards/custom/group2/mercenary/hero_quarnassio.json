@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "LEATHER",
   "rarity": "FREE",
-  "description": "Hero Power: Deal 2 damage randomly split among all enemies",
+  "description": "Skill: Deal 2 damage randomly split among all enemies",
   "attributes": {
     "HP": 30,
     "MAX_HP": 30

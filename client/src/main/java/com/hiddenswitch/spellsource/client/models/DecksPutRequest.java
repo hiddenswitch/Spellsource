@@ -85,7 +85,9 @@ public class DecksPutRequest implements Serializable {
     
     DARKGREEN("DARKGREEN"),
     
-    PURPLE("PURPLE");
+    PURPLE("PURPLE"),
+    
+    TIME("TIME");
 
     private String value;
 

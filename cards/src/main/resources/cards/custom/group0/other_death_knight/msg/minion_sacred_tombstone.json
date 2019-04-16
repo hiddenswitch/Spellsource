@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Deathrattle: Summon a Sacred Tombstone.",
+  "description": "Aftermath: Summon a Sacred Tombstone.",
   "deathrattle": {
     "class": "CastAfterSequenceSpell",
     "spell": {

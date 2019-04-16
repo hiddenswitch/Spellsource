@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Has Spell Damage +2 while your opponent has 6 or more cards in hand.",
+  "description": "Has Spellpower +2 while your opponent has 6 or more cards in hand.",
   "aura": {
     "class": "AttributeValueAura",
     "target": "SELF",

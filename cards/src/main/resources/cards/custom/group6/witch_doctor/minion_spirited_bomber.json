@@ -1,0 +1,23 @@
+{
+  "name": "Spirited Bomber",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ROSE",
+  "baseAttack": 3,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "race": "MECH",
+  "description": "Dash. Aftermath: Deal 3 damage to your champion.",
+  "deathrattle": {
+    "class": "DamageSpell",
+    "target": "FRIENDLY_HERO",
+    "value": 3
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "RUSH": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

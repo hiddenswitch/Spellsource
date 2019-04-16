@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "After your hero attacks, cast 'Swipe' on the target.",
+  "description": "After your champion attacks, cast 'Swipe' on the target.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

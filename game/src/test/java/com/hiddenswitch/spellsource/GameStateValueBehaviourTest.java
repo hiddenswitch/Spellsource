@@ -391,7 +391,7 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			Minion doomsayer = playMinionCard(context, player, "minion_doomsayer");
 			context.endTurn();
 			for (int i = 0; i < 3; i++) {
-				playMinionCard(context, opponent, "minion_wolfrider");
+				playMinionCard(context, opponent, "minion_charge_test");
 			}
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			behaviour.setTriggerStartTurns(true);
@@ -421,12 +421,12 @@ public class GameStateValueBehaviourTest extends TestBase implements Serializabl
 			playCard(context, player, "secret_snake_trap");
 			Minion targetDummy = playMinionCard(context, player, "minion_target_dummy");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
 			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
 			GameAction action = behaviour.requestAction(context, opponent, context.getValidActions());
 			Assert.assertEquals(action.getActionType(), ActionType.PHYSICAL_ATTACK);
 			Assert.assertEquals(action.getTargetReference(), targetDummy.getReference());
-			Assert.assertEquals(action.getSourceReference(), wolfrider.getReference());
+			Assert.assertEquals(action.getSourceReference(), charger.getReference());
 		});
 	}
 }

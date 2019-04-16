@@ -6,7 +6,7 @@
   "baseAttack": 9,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Fill your hand with 2/2 Knights.",
+  "description": "Opener: Fill your hand with 2/2 Knights.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

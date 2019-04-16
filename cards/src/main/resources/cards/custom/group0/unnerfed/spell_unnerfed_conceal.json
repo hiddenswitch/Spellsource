@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Give your minions Stealth until your next turn.",
+  "description": "Give your minions Hidden until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

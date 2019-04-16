@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon all minions from your hand of the same Cost as the last minion you played.",
+  "description": "Opener: Summon all minions from your hand of the same Cost as the last minion you played.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 2,
   "rarity": "FREE",
-  "description": "After your Hero attacks, gain +1 Attack.",
+  "description": "After your Champion attacks, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

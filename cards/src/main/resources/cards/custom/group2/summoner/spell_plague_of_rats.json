@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "EGGPLANT",
   "rarity": "EPIC",
-  "description": "Summon two 2/2 Poisonous Rats with Charge.",
+  "description": "Summon two 2/2 Toxic Rats with Blitz.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",

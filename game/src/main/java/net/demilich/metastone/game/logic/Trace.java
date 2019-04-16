@@ -15,6 +15,7 @@ import net.demilich.metastone.game.decks.DeckFormat;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.targeting.IdFactoryImpl;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -39,7 +40,7 @@ import java.util.function.Consumer;
  * 		recorder} is useful if you'd like to process each {@link GameContext} (useful for recording replays).
  */
 public class Trace implements Serializable, Cloneable {
-	private static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 3L;
 	private long seed;
 	private int catalogueVersion;
 	private HeroClass[] heroClasses;
@@ -49,6 +50,7 @@ public class Trace implements Serializable, Cloneable {
 	private int[][] mulligans;
 	private List<Integer> actions = new ArrayList<>();
 	private transient List<String> log = new ArrayList<>();
+	private String id;
 
 	public Trace() {
 	}
@@ -249,5 +251,21 @@ public class Trace implements Serializable, Cloneable {
 	public Trace setActions(List<Integer> actions) {
 		this.actions = actions;
 		return this;
+	}
+
+	public String getId() {
+		return id;
+	}
+
+	public Trace setId(String id) {
+		this.id = id;
+		return this;
+	}
+
+	@Override
+	public String toString() {
+		return new ToStringBuilder(this)
+				.append("id", getId())
+				.toString();
 	}
 }
