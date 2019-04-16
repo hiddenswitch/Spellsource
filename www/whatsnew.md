@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Choose and reshuffle effects shuffle in the original card, rather than a copy, as intended.
+
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
 
 Thanks to a contribution from @Logovaz, there are new cards for Senzaku!

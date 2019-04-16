@@ -26,6 +26,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -46,8 +47,13 @@ import static org.testng.Assert.*;
 public class AdvancedMechanicTests extends TestBase {
 
 	@Test
-	public void testSilencingMinionWithSelfTargetingBuffAuraResultsInCorrectStats() {
-
+	public void testReshuffle() {
+		runGym((context, player, opponent) -> {
+			Card inHand = receiveCard(context, player, "spell_empty_card_1");
+			playCard(context, player, "spell_test_reshuffle");
+			assertEquals(inHand.getZone(), Zones.DECK);
+			assertEquals(player.getHand().size(), 0);
+		});
 	}
 
 	@Test
