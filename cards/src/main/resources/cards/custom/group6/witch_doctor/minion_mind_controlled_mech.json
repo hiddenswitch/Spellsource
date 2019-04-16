@@ -13,6 +13,9 @@
     "target": "FRIENDLY_HERO_POWER",
     "card": "hero_power_mental_command"
   },
+  "attributes": {
+    "CANNOT_ATTACK": true
+  },
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1
