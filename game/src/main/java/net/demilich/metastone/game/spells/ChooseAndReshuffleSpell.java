@@ -11,6 +11,8 @@ import net.demilich.metastone.game.spells.desc.valueprovider.PlayerAttributeValu
 
 /**
  * Prompts the player to choose among cards in their hand. Then, the choice is shuffled into their deck.
+ * <p>
+ * Implements Timeweaver's Reshuffle keyword.
  */
 public final class ChooseAndReshuffleSpell extends Spell {
 
@@ -22,7 +24,7 @@ public final class ChooseAndReshuffleSpell extends Spell {
 		discover.put(SpellArg.EXCLUSIVE, true);
 		discover.put(SpellArg.CARD_SOURCE, HandSource.create());
 		discover.put(SpellArg.HOW_MANY, PlayerAttributeValueProvider.create(PlayerAttribute.HAND_COUNT));
-		discover.put(SpellArg.SPELL, ShuffleToDeckSpell.create());
+		discover.put(SpellArg.SPELL, new SpellDesc(ShuffleOriginalToDeckSpell.class));
 		for (int i = 0; i < times; i++) {
 			SpellUtils.castChildSpell(context, player, discover, source, target);
 		}
