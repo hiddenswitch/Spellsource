@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Choose and reshuffle effects shuffle in the original card, rather than a copy, as intended.
+ - Mind Controlled Mech now correctly cannot attack.
 
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
 
