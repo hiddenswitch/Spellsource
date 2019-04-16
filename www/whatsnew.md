@@ -16,6 +16,17 @@ Bug fixes.
  - Thelia Silentdreamer now correctly causes spells to be cast twice on her.
  - Doby Mick's effect is now an Opener.
  - Shadow Puppetry now works.
+ - Sideline Coach now costs (5).
+ - Frostfeather now has 5 health.
+ - Noth the Plaguebringer now correctly shuffles in cards.
+ - Glaciar Cleaver now costs (7).
+ - Frost Wraith is now 3/3.
+ - Pond Lord now summons two frogs instead of three as its aftermath.
+ - Baleful Totem is now a Shaman card and is 3/3.
+ - Rallying Cry now costs (2).
+ - Deepwood Barghest now behaves closer to Keleseth with regards to decks containing secrets (as opposed to cost-2 cards).
+ - Light of Chi-Ji now sets costs to (1).
+ - Sleight of Hand now costs (2).
 
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
 
