@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
@@ -10,10 +11,57 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.testng.Assert.*;
 
 public class TimeweaverTests extends TestBase {
+
+	@Test
+	public void testTheliaSilentdreamer() {
+		runGym((context, player, opponent) -> {
+			Minion thelia = playMinionCard(context, player, "minion_thelia_silentdreamer");
+			playCard(context, player, "spell_test_cost_3_buff", thelia);
+			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 1);
+			playCard(context, player, "spell_test_cost_6_buff", thelia);
+			assertEquals(thelia.getAttack(), thelia.getBaseAttack() + 3);
+		});
+	}
+
+	@Test
+	public void testSpiritualDiffusion() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target3 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target4 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			Minion shouldNotBeDestroyed = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_spiritual_diffusion");
+
+			assertEquals(opponent.getMinions().size(), 4);
+			assertEquals(opponent.getMinions().stream().filter(c -> c.getSourceCard().getCardId().equals("token_voodoo_spirit")).count(), 3L);
+			assertFalse(shouldNotBeDestroyed.isDestroyed());
+			assertEquals(shouldNotBeDestroyed.getSourceCard().getCardId(), "minion_neutral_test");
+			assertEquals(Stream.of(target1, target2, target3, target4).filter(Actor::isDestroyed).count(), 3L);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion target2 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			Minion shouldNotBeDestroyed = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_spiritual_diffusion");
+			assertEquals(opponent.getMinions().size(), 2);
+			assertEquals(opponent.getMinions().stream()
+					.filter(c -> c.getSourceCard().getCardId().equals("token_voodoo_spirit")).count(), 2L);
+			assertFalse(shouldNotBeDestroyed.isDestroyed());
+			assertEquals(shouldNotBeDestroyed.getSourceCard().getCardId(), "minion_neutral_test");
+			assertEquals(Stream.of(target1, target2).filter(Actor::isDestroyed).count(), 2L);
+		});
+	}
 
 	@Test
 	public void testTemporalEchoes() {

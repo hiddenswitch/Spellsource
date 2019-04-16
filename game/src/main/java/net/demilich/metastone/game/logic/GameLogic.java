@@ -2904,7 +2904,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param target
 	 * @return
 	 */
-	protected boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
+	public boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
 		boolean playerHasAttribute = context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE);
 		boolean playerHasSilentDreamer = false;
 		if (target != null && source != null) {

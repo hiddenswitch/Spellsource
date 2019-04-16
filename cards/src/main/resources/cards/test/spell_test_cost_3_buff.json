@@ -1,0 +1,16 @@
+{
+  "name": "Cost 3 Buff",
+  "baseManaCost": 3,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "Give a minion +1/+1",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "BuffSpell",
+    "value": 1
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
