@@ -1,7 +1,7 @@
 {
   "name": "Dinosoul",
   "baseManaCost": 1,
-  "type": "MINION",
+  "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "RARE",
   "description": "Add up to 3 different friendly Beasts that died this turn to your hand.",
