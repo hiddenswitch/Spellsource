@@ -15,6 +15,7 @@ Bug fixes.
  - Spiritual Diffusion now correctly destroys three random enemy minions and replaces them with 2/2 Spirits.
  - Thelia Silentdreamer now correctly causes spells to be cast twice on her.
  - Doby Mick's effect is now an Opener.
+ - Shadow Puppetry now works.
 
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
 
