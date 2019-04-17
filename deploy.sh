@@ -16,6 +16,7 @@ where:
     -p  deploy for Python (optionally TWINE_USERNAME, TWINE_PASSWORD)
     -w  deploy playspellsource.com (requires spellsource on the command line)
     -W  deploy wiki.hiddenswitch.com
+    -j  deploy JARs to Maven Central (requires signing assets)
     -v  bump the version (requires SPELLSOURCE_VERSION indicating
         the current version)
     -D  installs or updates a virtualenv at VIRTUALENV_PATH=./.venv and other
@@ -41,8 +42,9 @@ deploy_launcher=false
 deploy_wiki=false
 bump_version=false
 install_dependencies=false
+deploy_java=false
 build_client=false
-while getopts "hcedwpvlWDA" opt; do
+while getopts "hcedwpjvlWDA" opt; do
   case "$opt" in
   h) echo "$usage"
      exit
@@ -58,6 +60,9 @@ while getopts "hcedwpvlWDA" opt; do
      ;;
   W) deploy_wiki=true
      echo "Deploying mediawiki"
+     ;;
+  j) deploy_java=true
+     echo "Deploying to Maven"
      ;;
   l) deploy_launcher=true
      echo "Deploying launcher"
@@ -85,7 +90,8 @@ shift $((OPTIND-1))
 function update_portainer() {
   service_name=$1
   portainer_image_name=$2
-  sleep 4
+  # It takes a while for docker hub to process all the metadata for an image, unfortunately.
+  sleep 20
   service=$(curl -s -H "Authorization: Bearer ${PORTAINER_BEARER_TOKEN}" "${PORTAINER_URL}api/endpoints/1/docker/services" | jq -c ".[] | select( .Spec.Name==(\"$service_name\"))")
   service_id=$(echo $service | jq  -r .ID)
   service_specification=$(echo $service | jq .Spec)
@@ -198,7 +204,8 @@ if [[ "$bump_version" = true ]] ; then
     spellsource/context.py \
     cluster/runsims.sh \
     client/build.gradle \
-    net/src/main/java/com/hiddenswitch/spellsource/Version.java
+    net/src/main/java/com/hiddenswitch/spellsource/Version.java \
+    gradle.properties
 fi
 
 # Configure the gradle command
@@ -240,6 +247,14 @@ if [[ "$build_client" = true ]] ; then
     rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/GlobalConfiguration.cs
     rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IApiAccessor.cs
     rm -f ${OUTPUT_DIR}/Scripts/Spellsource.Client/Client/IReadableConfiguration.cs
+  fi
+fi
+
+if [[ "$deploy_java" = true ]] ; then
+  ${GRADLE_CMD} uploadArchives  --no-daemon --no-parallel >/dev/null \
+    && echo "Successfully uploaded to maven. Navigating you to Sonatype if your platform supports it..."
+  if [[ -x "$(command -v open)" ]] ; then
+    open "https://oss.sonatype.org/#stagingRepositories"
   fi
 fi
 
