@@ -58,6 +58,17 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testMutamiteTerror() {
+		runGym((context, player, opponent) -> {
+			Card leftCard = receiveCard(context, player, "minion_neutral_test");
+			Card rightCard = receiveCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_mutamite_terror");
+			assertFalse(leftCard.hasAttribute(Attribute.DISCARDED));
+			assertTrue(rightCard.hasAttribute(Attribute.DISCARDED));
+		});
+	}
+
+	@Test
 	public void testAberaSwarmEvolver() {
 		runGym((context, player, opponent) -> {
 			AtomicReference<String> name = new AtomicReference<>();
@@ -72,9 +83,9 @@ public class CustomCardsTests extends TestBase {
 
 			assertAdapted(name.get(), larva);
 			assertEquals(player.getMinions().size(), 2);
-			assertEquals(counter.get(),1);
+			assertEquals(counter.get(), 1);
 			playCard(context, player, "spell_spider_swarm");
-			assertEquals(counter.get(),1);
+			assertEquals(counter.get(), 1);
 			assertEquals(player.getMinions().size(), 4);
 			assertAdapted(name.get(), player.getMinions().get(2));
 			assertAdapted(name.get(), player.getMinions().get(3));

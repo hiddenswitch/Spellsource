@@ -14,6 +14,7 @@ Bug fixes.
  - Lush Restoration now shows the correct amount of health that needs to be restored.
  - Raid Boss Gnaxx now correctly says +2 attack buffs.
  - Hexlord Zixxis now works.
+ - Mutamite Terror now discards your rightmost card.
 
 ### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
 
