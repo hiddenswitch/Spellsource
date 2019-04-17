@@ -3,10 +3,10 @@
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 1,
-  "baseHp": 4,
+  "baseAttack": 2,
+  "baseHp": 5,
   "rarity": "RARE",
-  "description": "After this minion survives damage, summon a copy of it.",
+  "description": "After this minion survives damage, summon copy of it with 1 Health remaining.",
    "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
@@ -18,10 +18,14 @@
     },
     "spell": {
       "class": "SummonSpell",
-      "target": "SELF",
-      "boardPositionRelative": "RIGHT"
-    }
-  },
+    "spell": {
+      "class": "SetAttributeSpell",
+      "target": "OUTPUT",
+      "value": 1,
+      "attribute": "HP"
+	  }
+	 }
+    },
   "collectible": true,
   "set": "THE_OLD_GODS",
   "fileFormatVersion": 1
