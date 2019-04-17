@@ -493,6 +493,12 @@ public final class EntityReference implements Serializable {
 	 * References a combination of {@link #OTHER_FRIENDLY_MINIONS} and the {@link #FRIENDLY_HERO}.
 	 */
 	public static final EntityReference OTHER_FRIENDLY_CHARACTERS = new EntityReference(-73);
+	/**
+	 * References the card in the friendly player's hand with the highest index.
+	 *
+	 * Implements Mutamite Terror.
+	 */
+	public static final EntityReference RIGHTMOST_FRIENDLY_CARD_HAND = new EntityReference(-74);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {
