@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Omega Dragon is now a dragon.
+ - Lush Restoration now shows the correct amount of health that needs to be restored.
 
 ### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
 
