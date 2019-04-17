@@ -13,6 +13,7 @@ Bug fixes.
  - Omega Dragon is now a dragon.
  - Lush Restoration now shows the correct amount of health that needs to be restored.
  - Raid Boss Gnaxx now correctly says +2 attack buffs.
+ - Hexlord Zixxis now works.
 
 ### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
 

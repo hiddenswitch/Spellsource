@@ -15,6 +15,23 @@ import static org.testng.Assert.*;
 public class WitchDoctorTests extends TestBase {
 
 	@Test
+	public void testHexlordZixxis() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "spell_mirror_image");
+			context.endTurn();
+			context.endTurn();
+			playCard(context, opponent, "spell_mind_blast");
+			context.endTurn();
+			player.getHero().setAttribute(Attribute.IMMUNE);
+			int opponentHp = opponent.getHero().getHp();
+			playCard(context, player, "minion_hexlord_zixxis");
+			assertEquals(opponent.getHero().getHp(), opponentHp - 5);
+			assertEquals(player.getMinions().size(), 1, "No Mirror Images");
+		});
+	}
+
+	@Test
 	public void testTheliaSilentdreamer() {
 		runGym((context, player, opponent) -> {
 			Minion thelia = playMinionCard(context, player, "minion_thelia_silentdreamer");
