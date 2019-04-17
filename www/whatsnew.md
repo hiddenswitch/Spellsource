@@ -6,7 +6,7 @@ permalink: /whats-new/
 
 ### In Progress 0.8.24-2.0.29
 
-Bug fixes.
+Bug fixes. Additionally, new Witch Doctor decks are in the bot rotation.
 
 ##### Content Fixes:
 
