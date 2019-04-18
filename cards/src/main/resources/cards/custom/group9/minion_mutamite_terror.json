@@ -12,27 +12,12 @@
     "targetSelection": "NONE",
     "condition": {
       "class": "CardCountCondition",
-      "value": 1,
-      "operation": "GREATER"
+      "operation": "GREATER",
+      "value": 1
     },
     "spell": {
       "class": "DiscardSpell",
-      "cardSource": {
-        "class": "HandSource"
-      },
-      "targetPlayer": "SELF",
-      "cardFilter": {
-        "class": "AttributeFilter",
-        "value": {
-          "class": "PlayerAttributeValueProvider",
-          "target": "FRIENDLY_HAND",
-          "offset": -1,
-          "playerAttribute": "HAND_COUNT",
-          "targetPlayer": "SELF"
-        },
-        "attribute": "HAND_INDEX",
-        "operation": "EQUAL"
-      }
+      "target": "RIGHTMOST_FRIENDLY_CARD_HAND"
     }
   },
   "attributes": {

@@ -1,0 +1,22 @@
+### Witch Doctor: Aftermath Doctor
+# Class: ROSE
+# Format: Spellsource
+#
+# 2x (1) Frightful Vision
+# 2x (1) Marked for Sacrifice
+# 2x (1) Nostalgia
+# 2x (1) Tunnel Soulfinder
+# 2x (2) Blood Transfuser
+# 2x (2) Morbid Mockery
+# 2x (2) Ritual Dagger
+# 1x (3) Berserk
+# 2x (3) Grim Clairvoyant
+# 2x (4) Dragon Pod
+# 2x (5) Draining Ooze
+# 1x (5) Pandora's Box
+# 2x (6) Evocation
+# 2x (6) Spiritual Diffusion
+# 2x (7) Giant's Toad
+# 1x (8) Doctor Rigo Morti
+# 1x (8) Puppeteer Senzaku
+#

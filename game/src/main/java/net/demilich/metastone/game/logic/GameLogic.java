@@ -1431,7 +1431,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		// only a 'real' discard should fire a DiscardEvent
 		if (card.getZone() == Zones.HAND) {
 			logger.debug("discardCard {}: {} discards {}", context.getGameId(), player.getName(), card);
-			card.getAttributes().put(Attribute.DISCARDED, true);
+			card.getAttributes().put(Attribute.DISCARDED, context.getTurn());
 			context.fireGameEvent(new DiscardEvent(context, player.getId(), card));
 			if (!card.hasAttribute(Attribute.DISCARDED)) {
 				logger.debug("discardCard {}: Discard of {} has been cancelled by a trigger.", context.getGameId(), card);
@@ -2906,7 +2906,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param target
 	 * @return
 	 */
-	protected boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
+	public boolean spellsCastTwice(Player player, Card card, Entity source, Entity target) {
 		boolean playerHasAttribute = context.getLogic().hasAttribute(player, Attribute.SPELLS_CAST_TWICE);
 		boolean playerHasSilentDreamer = false;
 		if (target != null && source != null) {

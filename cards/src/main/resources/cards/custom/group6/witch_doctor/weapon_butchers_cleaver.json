@@ -1,7 +1,7 @@
 {
   "name": "Butcher's Cleaver",
   "baseManaCost": 3,
-  "type": "MINION",
+  "type": "WEAPON",
   "heroClass": "ROSE",
   "damage": 3,
   "durability": 2,

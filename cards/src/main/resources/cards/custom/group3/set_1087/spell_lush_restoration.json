@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "RUST",
   "rarity": "LEGENDARY",
-  "description": "Quest: Restore #0 Health to your characters. Reward: Zaevanicus.",
+  "description": "Quest: Restore #20 Health to your characters. Reward: Zaevanicus.",
   "quest": {
     "class": "HealingTrigger",
     "sourcePlayer": "SELF",
