@@ -17,6 +17,9 @@
         "class": "DestroySpell"
       },
       {
+        "class": "ForceDeathPhaseSpell"
+      },
+      {
         "class": "SummonSpell",
         "targetPlayer": "OWNER",
         "value": 2,
