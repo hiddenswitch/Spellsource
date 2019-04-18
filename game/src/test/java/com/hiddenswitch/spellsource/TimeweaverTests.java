@@ -3,6 +3,7 @@ package com.hiddenswitch.spellsource;
 import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
+import net.demilich.metastone.game.entities.Actor;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.targeting.Zones;
@@ -10,10 +11,28 @@ import net.demilich.metastone.tests.util.TestBase;
 import org.testng.annotations.Test;
 
 import java.util.Arrays;
+import java.util.stream.Stream;
 
 import static org.testng.Assert.*;
 
 public class TimeweaverTests extends TestBase {
+
+	@Test
+	public void testShadowPuppetry() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion test1 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion test2 = playMinionCard(context, opponent, "minion_neutral_test");
+			Minion test3 = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			test1.setAttack(0);
+			test3.setAttack(0);
+			playCard(context, player, "spell_shadow_puppetry", test2);
+			assertTrue(test1.isDestroyed());
+			assertTrue(test3.isDestroyed());
+			assertFalse(test2.isDestroyed());
+		});
+	}
 
 	@Test
 	public void testTemporalEchoes() {

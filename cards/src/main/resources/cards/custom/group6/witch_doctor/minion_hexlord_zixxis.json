@@ -10,12 +10,13 @@
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
-      "class": "CastRandomSpellSpell",
+      "class": "PlayCardsRandomlySpell",
       "value": 60,
       "cardFilter": {
         "class": "CardFilter",
         "value": {
-		  "class": "LastTurnValueProvider"
+		  "class": "LastTurnValueProvider",
+          "targetPlayer": "OPPONENT"
 		},
 		"attribute": "PLAYED_FROM_HAND_OR_DECK",
 		"cardType": "SPELL",

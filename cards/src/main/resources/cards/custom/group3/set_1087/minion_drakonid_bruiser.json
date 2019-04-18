@@ -1,10 +1,10 @@
 {
   "name": "Drakonid Bruiser",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "RUST",
-  "baseAttack": 5,
-  "baseHp": 5,
+  "baseAttack": 4,
+  "baseHp": 4,
   "rarity": "FREE",
   "race": "DRAGON",
   "description": "Blitz",
