@@ -1,10 +1,10 @@
 {
   "name": "Worker Queen",
-  "baseManaCost": 3,
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,
-  "baseHp": 5,
+  "baseHp": 7,
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Battlecry: Transform all Larva you control and in your hand into Workers.",
