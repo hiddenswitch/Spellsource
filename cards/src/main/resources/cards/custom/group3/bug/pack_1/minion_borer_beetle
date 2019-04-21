@@ -1,13 +1,13 @@
 {
   "name": "Borer Beetle",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 2,
-  "baseHp": 1,
+  "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Gain 5 Armor. If you have Armor, draw a card instead.",
+  "description": "Battlecry: Gain 5 Armor. If you have Armor, draw two cards instead.",
   "battlecry": {
     "spell": {
       "class": "EitherOrSpell",
@@ -20,7 +20,7 @@
      },
      "spell1": {
        "class": "DrawCardSpell",
-       "value": 1
+       "value": 2
      },
      "spell2": {
        "class": "BuffSpell",
