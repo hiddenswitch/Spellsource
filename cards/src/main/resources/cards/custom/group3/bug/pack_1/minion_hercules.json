@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Dash, Guard. Opener: Gain +1 Health for each card in your hand.",
+  "description": "Dash, Guard. Opener: Gain Health equal to your Armor.",
   "battlecry": {
     "spell": {
       "class": "BuffSpell",
