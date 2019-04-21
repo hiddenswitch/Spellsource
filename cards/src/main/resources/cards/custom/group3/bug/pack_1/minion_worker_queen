@@ -7,12 +7,21 @@
   "baseHp": 5,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Battlecry: Transform all Larva in your hand into Workers.",
+  "description": "Battlecry: Transform all Larva you control and in your hand into Workers.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
+      "card": "minion_worker",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      }
+    }
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_MINIONS",
       "card": "minion_worker",
       "filter": {
         "class": "SpecificCardFilter",
