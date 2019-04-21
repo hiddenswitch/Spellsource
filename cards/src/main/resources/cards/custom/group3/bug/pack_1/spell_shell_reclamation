@@ -1,6 +1,6 @@
 {
   "name": "Shell Reclamation",
-  "baseManaCost": 5,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
