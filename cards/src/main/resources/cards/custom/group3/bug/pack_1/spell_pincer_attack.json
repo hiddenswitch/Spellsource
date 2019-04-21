@@ -3,7 +3,7 @@
   "baseManaCost": 7,
   "type": "SPELL",
   "heroClass": "AMBER",
-  "rarity": "EPIC",
+  "rarity": "RARE",
   "description": "Destroy your opponent's left and right-most minions.",
   "targetSelection": "NONE",
   "spell": {
