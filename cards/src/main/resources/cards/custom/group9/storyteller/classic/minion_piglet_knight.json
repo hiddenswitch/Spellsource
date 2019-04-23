@@ -1,0 +1,31 @@
+{
+  "name": "Piglet Knight",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "description": "Battlecry: If you control a Fae, summon a copy of this minion.",
+  "battlecry": {
+    "condition": {
+      "class": "MinionOnBoardCondition",
+      "cardFilter": {
+        "class": "RaceFilter",
+        "race": "FAE"
+      }
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "SummonSpell",
+      "target": "SELF",
+      "boardPositionRelative": "RIGHT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

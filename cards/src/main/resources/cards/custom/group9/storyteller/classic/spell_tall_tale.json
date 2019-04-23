@@ -1,0 +1,26 @@
+{
+  "name": "Tall Tale",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "OLIVE",
+  "rarity": "EPIC",
+  "description": "Secret: When your opponent casts a spell that costs (3) or more, summon a 3/3 Skeptic.",
+  "secret": {
+    "class": "SpellCastedTrigger",
+    "sourcePlayer": "OPPONENT"
+    "cardFilter": {
+        "class": "CardFilter",
+        "value": 3,
+        "attribute": "BASE_MANA_COST",
+        "cardType": "SPELL",
+        "operation": "GREATER_OR_EQUAL"
+        }
+      },
+    "spell": {
+    "class": "SummonSpell",
+    "card": "token_skeptic"
+    },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
