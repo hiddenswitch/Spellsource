@@ -1,0 +1,27 @@
+{
+  "name": "Timeworn Archivist",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 2,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "Opener and Aftermath: Draw a card.",
+  "battlecry": {
+    "targetSelection": "NONE",
+	  "spell": {
+		"class": "DrawCardSpell",
+		"value": 1
+	  },
+  "deathrattle": {
+    "class": "DrawCardSpell",
+    "value": 1
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

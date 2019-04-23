@@ -1,0 +1,24 @@
+{
+  "name": "Experiment Recorder",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "OLIVE",
+  "baseAttack": 3,
+  "baseHp": 4,
+  "rarity": "COMMON",
+  "description": "Deathrattle: Add a random Storyteller spell to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "cardFilter": {
+      "class": "CardFilter",
+      "heroClass": "OLIVE",
+      "cardType": "SPELL"
+    }
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}
