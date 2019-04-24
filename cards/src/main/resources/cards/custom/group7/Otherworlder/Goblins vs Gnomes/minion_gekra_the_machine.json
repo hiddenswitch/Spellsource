@@ -17,23 +17,74 @@
         "target": "SELF",
         "spells": [
         {
-          "class": "AddAttributeSpell",
-          "attribute": "TAUNT"
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "SELF",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "TAUNT",
+              "operation": "HAS"
+            },
+            "invert": true
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "TAUNT"
+          }
         },
         {
-          "class": "AddAttributeSpell",
-          "attribute": "DIVINE_SHIELD"
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "SELF",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "DIVINE_SHIELD",
+              "operation": "HAS"
+            },
+            "invert": true
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "DIVINE_SHIELD"
+          }
         },
         {
-          "class": "AddAttributeSpell",
-          "attribute": "STEALTH"
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "SELF",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "STEALTH",
+              "operation": "HAS"
+            },
+            "invert": true
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "STEALTH"
+          }
         },
         {
-          "class": "AddAttributeSpell",
-          "attribute": "WINDFURY"
+          "class": "ConditionalSpell",
+          "condition": {
+            "class": "AnyMatchFilterCondition",
+            "target": "SELF",
+            "filter": {
+              "class": "AttributeFilter",
+              "attribute": "WINDFURY",
+              "operation": "HAS"
+            },
+            "invert": true
+          },
+          "spell": {
+            "class": "AddAttributeSpell",
+            "attribute": "WINDFURY"
+          }
         }
-        //I DON'T KNOW HOW TO MAKE THE BUFFS PERMANENT
-        //NOTES: IT CANNOT GAIN THE SAME BUFF TWICE AND IT WOULD JUST STOP BUFFING ITSELF IF IT HAS ALL THE KEYWORDS (THOUGH IT'LL STILL SHUFFLE ITSELF BACK INTO YOUR DECK)
+        //I DON'T KNOW HOW TO MAKE THE BUFFS PERMANENT HELP MY SORRY SOUL
       ]
       },
       {
