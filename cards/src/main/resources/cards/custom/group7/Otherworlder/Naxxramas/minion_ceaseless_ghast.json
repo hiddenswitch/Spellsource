@@ -3,19 +3,40 @@
   "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "NEONGREEN",
-  "baseAttack": 5,
+  "baseAttack": 4,
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "TITAN",
-  "description": "Deathrattle: If this has more than 1 Attack, resummon it with permanent -1 Attack.",
+  "description": "Deathrattle: If this has more than 1 Attack, resummon it with -1 Attack.",
   "deathrattle": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    /////////i just copied dreadsteed's code help
-      "spell": {
-        "class": "SummonSpell",
-        "card": "minion_ceaseless_ghast"
-      }
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "condition": {
+          "class": "AnyMatchFilterCondition",
+          "target": "SELF",
+          "filter": {
+            "class": "AttributeFilter",
+            "value": 1,
+            "attribute": "ATTACK",
+            "operation": "GREATER"
+          }
+        },
+        "spell": {
+          "class": "SummonSpell",
+          "card": "minion_ceaseless_ghast"
+        }
+      },
+      {
+        "class": "SetAttackSpell",
+        "offset": -1,
+        "value": {
+          "class": "AttributeValueProvider",
+          "target": "OUTPUT",
+          "attribute": "ATTACK"
+        },
+      }    
+    ]
   },
   "attributes": {
     "DEATHRATTLES": true
