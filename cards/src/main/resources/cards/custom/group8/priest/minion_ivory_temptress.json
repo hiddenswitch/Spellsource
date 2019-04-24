@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "RARE",
-  "description": "Battlecry: Reduce the Cost of minions in your hand by (1).",
+  "description": "Opener: Reduce the Cost of minions in your hand by (1).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

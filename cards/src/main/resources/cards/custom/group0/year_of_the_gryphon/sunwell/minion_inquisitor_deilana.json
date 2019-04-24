@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Whenever your hero is healed, resurrect a friendly minion with that Cost.",
+  "description": "Whenever your champion is healed, resurrect a friendly minion with that Cost.",
   "trigger": {
     "eventTrigger": {
       "class": "HealingTrigger",

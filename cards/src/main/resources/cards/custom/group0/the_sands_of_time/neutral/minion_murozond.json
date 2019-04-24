@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Battlecry: Add an Echo of your hero and the enemy hero to your hand.",
+  "description": "Opener: Add an Echo of your hero and the enemy champion to your hand.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",

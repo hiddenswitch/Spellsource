@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Give two random Dragons in your hand +2 Attack.",
+  "description": "Opener: Give two random Dragons in your hand +2 Attack.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

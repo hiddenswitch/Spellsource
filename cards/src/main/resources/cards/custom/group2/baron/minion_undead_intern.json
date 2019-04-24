@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: If you're holding a Knight, gain +1/+1.",
+  "description": "Opener: If you're holding a Knight, gain +1/+1.",
   "battlecry": {
     "condition": {
       "class": "HoldsCardCondition",

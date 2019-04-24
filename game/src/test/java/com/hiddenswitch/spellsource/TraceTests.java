@@ -46,7 +46,9 @@ public class TraceTests {
 				.sorted(Comparator.comparing(URL::getFile).reversed())
 				.map(c -> {
 					try {
-						return Trace.load(Resources.toString(c, Charset.defaultCharset()));
+						Trace trace = Trace.load(Resources.toString(c, Charset.defaultCharset()));
+						trace.setId(c.toString());
+						return trace;
 					} catch (IOException e) {
 						throw new RuntimeException(e);
 					}

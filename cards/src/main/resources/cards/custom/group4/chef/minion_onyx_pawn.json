@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Battlecry: If your deck contains 15 or fewer cards, transform into a 6/6 6 Onyx Queen with Taunt.",
+  "description": "Opener: If your deck contains 15 or fewer cards, transform into a 6/6 6 Onyx Queen with Guard.",
   "battlecry": {
     "condition": {
       "class": "ComparisonCondition",

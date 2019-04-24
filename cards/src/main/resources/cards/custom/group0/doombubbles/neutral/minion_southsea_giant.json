@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "EPIC",
   "race": "PIRATE",
-  "description": "Costs (1) less for each time your hero has attacked this game.",
+  "description": "Costs (1) less for each time your champion has attacked this game.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,

@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "WHITE",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Replace your deck with a copy of your opponent's.",
+  "description": "Opener: Replace your deck with a copy of your opponent's.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

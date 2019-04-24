@@ -438,6 +438,7 @@ definitions:
           - 'TEAL'
           - 'DARKGREEN'
           - 'PURPLE'
+          - 'TIME'
       name:
         description: |
           The name of the deck as it will appear in the collections view. Typically, your opponent will not be able to

@@ -1,0 +1,21 @@
+{
+  "name": "Mass Production",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "COMMON",
+  "description": "Summon a 4/4 Mech. Shuffle 3 copies of it into your deck.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "SummonSpell",
+    "card": "token_spiritfused_machine",
+    "spell": {
+      "class": "ShuffleToDeckSpell",
+      "target": "OUTPUT",
+      "howMany": 3
+    }
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

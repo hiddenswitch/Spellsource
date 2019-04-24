@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "COMMON",
-  "description": "Set a minion's Health to 1 and give it Divine Shield.",
+  "description": "Set a minion's Health to 1 and give it Dodge.",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

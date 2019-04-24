@@ -1,13 +1,13 @@
 {
   "name": "Mountain Whelp",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "RUST",
   "baseAttack": 2,
-  "baseHp": 3,
+  "baseHp": 4,
   "rarity": "COMMON",
   "race": "DRAGON",
-  "description": "Charge",
+  "description": "Blitz",
   "attributes": {
     "CHARGE": true
   },

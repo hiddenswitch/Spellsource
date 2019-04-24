@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "DARKGREEN",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Shuffle a copy of your deck into your deck.",
+  "description": "Opener: Shuffle a copy of your deck into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 6,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Your Hero Power becomes 'Add an Emerald Secret to your hand' and costs (1)",
+  "description": "Opener: Your Skill becomes 'Add an Emerald Secret to your hand' and costs (1)",
   "battlecry": {
     "spell": {
       "class": "ChangeHeroPowerSpell",

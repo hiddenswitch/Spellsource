@@ -6,7 +6,7 @@
   "damage": 1,
   "durability": 2,
   "rarity": "RARE",
-  "description": "After your Hero attacks, add a Banana to your hand.",
+  "description": "After your Champion attacks, add a Banana to your hand.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 3,
   "rarity": "RARE",
-  "description": "Battlecry: Roast a card. If it costs (2) or less, return this to your hand.",
+  "description": "Opener: Roast a card. If it costs (2) or less, return this to your hand.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

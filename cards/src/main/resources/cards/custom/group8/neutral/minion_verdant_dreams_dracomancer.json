@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "COMMON",
-  "description": "Battlecry: Add a random Dragon to your hand.",
+  "description": "Opener: Add a random Dragon to your hand.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

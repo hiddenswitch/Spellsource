@@ -50,5 +50,4 @@ public final class ReviveMinionSpell extends Spell {
 			SpellUtils.castChildSpell(context, player, desc.getSpell(), source, target, minion);
 		}
 	}
-
 }

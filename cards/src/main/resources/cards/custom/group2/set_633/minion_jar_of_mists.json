@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Taunt. Deathrattle: If it's your opponent's turn, summon a 6/6 Mistlurker.",
+  "description": "Guard. Aftermath: If it's your opponent's turn, summon a 6/6 Mistlurker.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Summon a permanent Magic Keg. It can't be removed.",
+  "description": "Aftermath: Summon a permanent Magic Keg. It can't be removed.",
   "deathrattle": {
     "class": "SummonSpell",
     "card": "permanent_magic_keg"

@@ -28,19 +28,16 @@
       {
         "class": "ConditionalSpell",
         "condition": {
-          "class": "AttributeCondition",
-          "target": "SELF",
-          "value": {
-            "class": "CurrentTurnValueProvider"
-          },
-          "attribute": "RECEIVED_ON_TURN",
-          "operation": "EQUAL"
+          "class": "SurgeCondition"
         },
         "spell": {
           "class": "DestroySpell"
         }
       }
     ]
+  },
+  "attributes": {
+    "SURGE": true
   },
   "collectible": true,
   "set": "CUSTOM",

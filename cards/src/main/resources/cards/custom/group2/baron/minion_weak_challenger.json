@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Battlecry: Summon a 1/1 Whelp for your opponent.",
+  "description": "Opener: Summon a 1/1 Whelp for your opponent.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",

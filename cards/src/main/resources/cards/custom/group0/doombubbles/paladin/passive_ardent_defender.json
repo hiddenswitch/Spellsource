@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "FREE",
-  "description": "Passive: Your starting Hero Power is 'Restore 1 Health. Gain 1 Armor.'",
+  "description": "Passive: Your starting Skill is 'Restore #1 Health. Gain 1 Armor.'",
   "targetSelection": "NONE",
   "spell": {
     "class": "NullSpell"

@@ -39,7 +39,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 			Minion footman = playMinionCard(context, player, "minion_goldshire_footman");
 			Minion stealth = playMinionCard(context, player, "minion_worgen_infiltrator");
 			context.endTurn();
-			Minion wolfrider = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion charger = playMinionCard(context, opponent, "minion_charge_test");
 			GameLogic spyLogic = Mockito.spy(context.getLogic());
 			context.setLogic(spyLogic);
 			CountDownLatch latch = new CountDownLatch(1);
@@ -51,7 +51,7 @@ public class MeanStreetsOfGadgetzanTests extends TestBase {
 				latch.countDown();
 				return invocation.callRealMethod();
 			}).when(spyLogic).getRandom(Mockito.anyList());
-			attack(context, opponent, wolfrider, noggen);
+			attack(context, opponent, charger, noggen);
 			Assert.assertEquals(latch.getCount(), 0L);
 		});
 

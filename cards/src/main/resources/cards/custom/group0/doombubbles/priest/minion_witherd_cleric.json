@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Deathrattle: Deal fatigue damage to your opponent.",
+  "description": "Aftermath: Deal fatigue damage to your opponent.",
   "deathrattle": {
     "class": "FatigueSpell",
     "targetPlayer": "OPPONENT"

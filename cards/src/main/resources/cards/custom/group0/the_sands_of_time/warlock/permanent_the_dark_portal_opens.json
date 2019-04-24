@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Whenever your hero takes damage on your turn, summon a random Demon costing that much. Lasts [6 turns].",
+  "description": "Whenever your champion takes damage on your turn, summon a random Demon costing that much. Lasts [6 turns].",
   "triggers": [
     {
       "countUntilCast": 6,

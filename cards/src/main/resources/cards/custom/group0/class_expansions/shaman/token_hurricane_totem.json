@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "FREE",
   "race": "TOTEM",
-  "description": "Spell Damage +2",
+  "description": "Spellpower +2",
   "attributes": {
     "SPELL_DAMAGE": 2
   },

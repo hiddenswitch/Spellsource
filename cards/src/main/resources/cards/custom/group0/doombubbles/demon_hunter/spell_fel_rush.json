@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "PURPLE",
   "rarity": "FREE",
-  "description": "Draw a card. Each time your hero attacks this turn, draw another.",
+  "description": "Draw a card. Each time your champion attacks this turn, draw another.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

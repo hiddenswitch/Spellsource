@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BROWN",
   "rarity": "RARE",
-  "description": "Summon a 1/5 Scarab with Taunt. If your opponent has more minions, cast this again.",
+  "description": "Summon a 1/5 Scarab with Guard. If your opponent has more minions, cast this again.",
   "targetSelection": "NONE",
   "spell": {
     "class": "RecastWhileSpell",

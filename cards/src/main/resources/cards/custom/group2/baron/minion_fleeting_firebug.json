@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Deathrattle: Summon a Firebug for your opponent.",
+  "description": "Aftermath: Summon a Firebug for your opponent.",
   "deathrattle": {
     "class": "CastAfterSequenceSpell",
     "spell": {

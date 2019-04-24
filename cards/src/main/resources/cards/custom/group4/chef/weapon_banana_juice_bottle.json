@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 3,
   "rarity": "RARE",
-  "description": "Battlecry: If you played a 1-Cost spell this turn, gain +1/+1.",
+  "description": "Opener: If you played a 1-Cost spell this turn, gain +1/+1.",
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",

@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
-  "description": "Taunt. Battlecry: Fill your hand with Runes.",
+  "description": "Guard. Opener: Fill your hand with Runes.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

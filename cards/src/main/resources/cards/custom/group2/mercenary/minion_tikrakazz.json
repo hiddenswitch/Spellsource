@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: For the rest of the game, whenever a minion is played, Adapt it randomly.",
+  "description": "Opener: For the rest of the game, whenever a minion is played, Adapt it randomly.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

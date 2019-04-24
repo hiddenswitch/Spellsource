@@ -4,18 +4,12 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "RARE",
-  "description": "Give a random friendly minion +1/+2. Twice. Surge: Also give it Taunt and Divine Shield.",
+  "description": "Give a random friendly minion +1/+2. Twice. Surge: Also give it Guard and Dodge.",
   "targetSelection": "NONE",
   "spell": {
     "class": "EitherOrSpell",
     "condition": {
-      "class": "AttributeCondition",
-      "target": "SELF",
-      "value": {
-        "class": "CurrentTurnValueProvider"
-      },
-      "attribute": "RECEIVED_ON_TURN",
-      "operation": "EQUAL"
+      "class": "SurgeCondition"
     },
     "spell1": {
       "class": "MetaSpell",
@@ -54,6 +48,9 @@
       "howMany": 2,
       "randomTarget": true
     }
+  },
+  "attributes":  {
+    "SURGE": true
   },
   "collectible": true,
   "set": "CUSTOM",

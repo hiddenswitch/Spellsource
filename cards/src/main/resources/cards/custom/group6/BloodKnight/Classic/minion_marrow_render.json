@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 2,
   "rarity": "COMMON",
-  "description": "Taunt. Battlecry: Drain 3 Health from your hero.",
+  "description": "Guard. Opener: Drain 3 Health from your champion.",
   "battlecry": {
     "spell": {
       "class": "DrainSpell",

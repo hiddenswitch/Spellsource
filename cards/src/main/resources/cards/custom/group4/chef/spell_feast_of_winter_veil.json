@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "TOAST",
   "rarity": "FREE",
-  "description": "Restore #15 Health to your hero.",
+  "description": "Restore #15 Health to your champion.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HealSpell",

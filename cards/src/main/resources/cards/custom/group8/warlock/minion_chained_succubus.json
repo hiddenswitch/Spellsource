@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "COMMON",
   "race": "DEMON",
-  "description": "Lifesteal. Whenever this takes damage, restore that much health to your hero.",
+  "description": "Lifesteal. Whenever this takes damage, restore that much health to your champion.",
   "trigger": {
     "eventTrigger": {
       "class": "DamageReceivedTrigger",
