@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "NEONGREEN",
   "rarity": "COMMON",
-  "description": "Give a minion +1/+1, <b>Wither (1)</b>, and \"At the end of your turn, deal 3 damage randomly split among all characters\".",
+  "description": "Give a minion +1/+1, <b>Wither (1)</b>, and \"At the end of your turn, deal 3 damage randomly split among all other characters\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -19,7 +19,19 @@
         "value": 1
       },
       {
-        //AT THE END OF TURN, DEAL 3 DAMAGE RANDOMLY SPLIT AMONG ALL CHARACTERS
+        "class": "AddEnchantmentSpell",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "spell": {
+            "class": "MissilesSpell",
+            "target": "ALL_OTHER_CHARACTERS",
+            "value": 1,
+            "howMany": 3
+          },
+        }
       }
     ]
   },
