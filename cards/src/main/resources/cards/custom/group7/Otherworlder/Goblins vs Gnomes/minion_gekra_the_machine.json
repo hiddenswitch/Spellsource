@@ -10,88 +10,87 @@
   "description": "Deathrattle: Permanently give this minion <b>Taunt</b>, <b>Divine Shield</b>, <b>Stealth</b>, or <b>Windfury</b> at random and shuffle it into your deck.",
   "deathrattle": {
     "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "RandomlyCastSpell",
-        "target": "SELF",
-        "spells": [
+      "class": "MetaSpell",
+      "spells": [
         {
-          "class": "ConditionalSpell",
-          "condition": {
-            "class": "AnyMatchFilterCondition",
-            "target": "SELF",
-            "filter": {
-              "class": "AttributeFilter",
-              "attribute": "TAUNT",
-              "operation": "HAS"
-            },
-            "invert": true
-          },
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "TAUNT"
-          }
-        },
+          "class": "RandomlyCastSpell",
+          "target": "SELF",
+          "spells": [
+            {
+              "class": "ConditionalSpell",
+	          "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "SELF",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "TAUNT",
+		          "operation": "HAS"
+                },
+                "invert": true
+		      },
+		      "spell": {
+		        "class": "AddAttributeSpell",
+			    "attribute": "TAUNT"
+		      }
+		    },
+            {
+              "class": "ConditionalSpell",
+	          "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "SELF",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "DIVINE SHIELD",
+		          "operation": "HAS"
+                },
+                "invert": true
+		      },
+		      "spell": {
+		        "class": "AddAttributeSpell",
+			    "attribute": "DIVINE SHIELD"
+		      }
+		    },
+		    {
+              "class": "ConditionalSpell",
+	          "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "SELF",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "STEALTH",
+		          "operation": "HAS"
+                },
+                "invert": true
+		      },
+		      "spell": {
+		        "class": "AddAttributeSpell",
+			    "attribute": "STEALTH"
+		      }
+		    },
+		    {
+              "class": "ConditionalSpell",
+	          "condition": {
+                "class": "AnyMatchFilterCondition",
+                "target": "SELF",
+                "filter": {
+                  "class": "AttributeFilter",
+                  "attribute": "WINDFURY",
+		          "operation": "HAS"
+                },
+                "invert": true
+		      },
+		      "spell": {
+		        "class": "AddAttributeSpell",
+			    "attribute": "WINDFURY"
+		      }
+		    }
+		  ]
+	    },
         {
-          "class": "ConditionalSpell",
-          "condition": {
-            "class": "AnyMatchFilterCondition",
-            "target": "SELF",
-            "filter": {
-              "class": "AttributeFilter",
-              "attribute": "DIVINE_SHIELD",
-              "operation": "HAS"
-            },
-            "invert": true
-          },
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "DIVINE_SHIELD"
-          }
-        },
-        {
-          "class": "ConditionalSpell",
-          "condition": {
-            "class": "AnyMatchFilterCondition",
-            "target": "SELF",
-            "filter": {
-              "class": "AttributeFilter",
-              "attribute": "STEALTH",
-              "operation": "HAS"
-            },
-            "invert": true
-          },
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "STEALTH"
-          }
-        },
-        {
-          "class": "ConditionalSpell",
-          "condition": {
-            "class": "AnyMatchFilterCondition",
-            "target": "SELF",
-            "filter": {
-              "class": "AttributeFilter",
-              "attribute": "WINDFURY",
-              "operation": "HAS"
-            },
-            "invert": true
-          },
-          "spell": {
-            "class": "AddAttributeSpell",
-            "attribute": "WINDFURY"
-          }
+          "class": "ShuffleToDeckSpell",
+          "target": "SELF"
         }
-        //I DON'T KNOW HOW TO MAKE THE BUFFS PERMANENT HELP MY SORRY SOUL
       ]
-      },
-      {
-        "class": "ShuffleToDeckSpell",
-        "target": "SELF"
-      }
-    ]
     }
   },
   "attributes": {
