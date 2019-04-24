@@ -10,18 +10,36 @@
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
-    "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "DestroySpell"
+      "class": "MetaSpell",
+      "filter": {
+        "class": "RaceFilter",
+        "race": "MECH"
       },
-      {
-      //DEAL ITS COMBINED STATS AS DAMAGE RANDOMLY SPLIT AMONG ALL ENEMIES
-      }
-    ]
+      "spells": [
+        {
+          "class": "DestroySpell"
+        },
+        {
+          "class": "MissilesSpell",
+          "target": "ENEMY_CHARACTERS",
+          "howMany": {
+            "class": "AttributeValueProvider",
+            "target": "OUTPUT",
+            "attribute": "ATTACK"
+          }
+        },
+        {
+          "class": "MissilesSpell",
+          "target": "ENEMY_CHARACTERS",
+          "howMany": {
+            "class": "AttributeValueProvider",
+            "target": "OUTPUT",
+            "attribute": "HP"
+          }
+        }
+      ]
     }
   },
-  
   "attributes": {
     "BATTLECRY": true
   },
