@@ -20,7 +20,40 @@ import net.demilich.metastone.tests.util.TestMinionCard;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 
+import static org.testng.Assert.assertFalse;
+import static org.testng.Assert.assertTrue;
+
 public class BasicTests extends TestBase {
+
+	@Test
+	public void testCorruptionCopyInteraction() {
+		// Test copying using Faceless manipulator
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "spell_corruption", target);
+			Minion manipulator = playMinionCardWithBattlecry(context, player, "minion_faceless_manipulator", target);
+			context.endTurn();
+			context.endTurn();
+			assertTrue(target.isDestroyed());
+			assertTrue(manipulator.isDestroyed());
+		});
+
+		// Test copying using Elixir of Shadows
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "spell_corruption", target);
+			playCard(context, player, "spell_elixir_of_shadows", target);
+			Minion clone = player.getMinions().get(0);
+			context.endTurn();
+			context.endTurn();
+			assertTrue(target.isDestroyed());
+			assertTrue(clone.isDestroyed());
+		});
+	}
 
 	@Test
 	public void testRaidLeader() {

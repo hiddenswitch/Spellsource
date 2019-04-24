@@ -1,0 +1,21 @@
+{
+  "name": "Pandora's Box",
+  "baseManaCost": 5,
+  "type": "SPELL",
+  "heroClass": "ROSE",
+  "rarity": "RARE",
+  "description": "Return a minion to its owner's hand. Transform it into this spell.",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "ReturnTargetToHandSpell",
+    "targetPlayer": "OWNER",
+    "spell": {
+      "class": "TransformInHandSpell",
+      "target": "OUTPUT",
+      "card": "spell_pandoras_box"
+    }
+  },
+  "collectible": true,
+  "set": "VERDANT_DREAMS",
+  "fileFormatVersion": 1
+}

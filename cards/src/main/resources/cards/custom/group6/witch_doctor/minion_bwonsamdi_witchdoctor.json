@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 8,
   "rarity": "LEGENDARY",
-  "description": "Whenever your hero would take damage, deal it to the enemy hero instead.",
+  "description": "Whenever your hero would take damage, deal it to the enemy champion instead.",
   "trigger": {
     "eventTrigger": {
       "class": "PreDamageTrigger",

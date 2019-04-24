@@ -1,0 +1,34 @@
+{
+  "name": "Flingin' Alchemist",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 5,
+  "baseHp": 3,
+  "rarity": "COMMON",
+  "description": "Opener: Deal 2 damage to a minion. If that kills it, gain Hidden.",
+  "battlecry": {
+    "targetSelection": "MINIONS",
+    "spell": {
+      "class": "ConditionalEffectSpell",
+      "condition": {
+        "class": "IsDeadCondition"
+      },
+      "spell1": {
+        "class": "DamageSpell",
+        "value": 2
+      },
+      "spell2": {
+        "class": "AddAttributeSpell",
+        "target": "SELF",
+        "attribute": "STEALTH"
+      }
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

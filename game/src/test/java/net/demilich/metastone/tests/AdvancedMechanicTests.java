@@ -26,6 +26,7 @@ import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.*;
 import net.demilich.metastone.game.targeting.TargetSelection;
 import net.demilich.metastone.game.cards.Attribute;
+import net.demilich.metastone.game.targeting.Zones;
 import net.demilich.metastone.tests.util.TestBase;
 import net.demilich.metastone.tests.util.TestMinionCard;
 import net.demilich.metastone.tests.util.TestSpellCard;
@@ -44,6 +45,16 @@ import static org.mockito.Mockito.spy;
 import static org.testng.Assert.*;
 
 public class AdvancedMechanicTests extends TestBase {
+
+	@Test
+	public void testReshuffle() {
+		runGym((context, player, opponent) -> {
+			Card inHand = receiveCard(context, player, "spell_empty_card_1");
+			playCard(context, player, "spell_test_reshuffle");
+			assertEquals(inHand.getZone(), Zones.DECK);
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
 
 	@Test
 	public void testWitherShouldNotTriggerOnDivineShield() {
@@ -171,7 +182,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
 			context.endTurn();
-			Minion attacker = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion attacker = playMinionCard(context, opponent, "minion_charge_test");
 			int hp = player.getHero().getHp();
 			attack(context, opponent, attacker, deflect);
 			assertFalse(deflect.hasAttribute(Attribute.DEFLECT));
@@ -183,7 +194,7 @@ public class AdvancedMechanicTests extends TestBase {
 			Minion deflect = playMinionCard(context, player, "minion_test_deflect");
 			assertTrue(deflect.hasAttribute(Attribute.DEFLECT));
 			context.endTurn();
-			Minion defender = playMinionCard(context, opponent, "minion_wolfrider");
+			Minion defender = playMinionCard(context, opponent, "minion_charge_test");
 			context.endTurn();
 
 			int hp = player.getHero().getHp();

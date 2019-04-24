@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "PURPLE",
   "rarity": "FREE",
-  "description": "Passive Hero Power. Your hero has +1 Attack during your turn.",
+  "description": "Passive Skill. Your champion has +1 Attack during your turn.",
   "aura": {
     "class": "BuffAura",
     "target": "FRIENDLY_HERO",

@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Roast 3 cards.",
+  "description": "Opener: Roast 3 cards.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

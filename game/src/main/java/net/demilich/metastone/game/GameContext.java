@@ -186,10 +186,10 @@ import static java.util.stream.Collectors.toList;
  * @see Behaviour for the interface that the {@link GameContext} delegates player actions and notifications to. This is
  * 		both the "event handler" specification for which events a player may be interested in; and also a "delegate" in the
  * 		sense that the object implementing this interface makes decisions about what actions in the game to take (with e.g.
- * 		{@link Behaviour#requestAction(GameContext, Player, List)}.
+ *    {@link Behaviour#requestAction(GameContext, Player, List)}.
  * @see PlayRandomBehaviour for an example behaviour that just makes random decisions when requested.
  * @see GameLogic for the class that actually implements the Spellsource game rules. This class requires a {@link
- * 		GameContext} because it manipulates the state stored in it.
+ *    GameContext} because it manipulates the state stored in it.
  * @see GameState for a class that encapsulates all of the state of a game of Spellsource.
  * @see #getGameState() to access and modify the game state.
  * @see #getGameStateCopy() to get a copy of the state that can be stored and diffed.

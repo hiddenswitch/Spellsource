@@ -6,7 +6,7 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "COMMON",
-  "description": "Battlecry: Add a random Deathrattle minion to your hand.",
+  "description": "Opener: Add a random Aftermath minion to your hand.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

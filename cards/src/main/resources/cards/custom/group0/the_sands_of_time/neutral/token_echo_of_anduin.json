@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon 3 random friendly minions that died this game",
+  "description": "Opener: Summon 3 random friendly minions that died this game",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

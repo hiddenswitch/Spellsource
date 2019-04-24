@@ -7,7 +7,7 @@
   "baseHp": 7,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Lifesteal, Poisonous.",
+  "description": "Lifesteal, Toxic.",
   "attributes": {
     "LIFESTEAL": true,
     "POISONOUS": true

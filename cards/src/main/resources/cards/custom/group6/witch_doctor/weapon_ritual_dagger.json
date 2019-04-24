@@ -6,7 +6,7 @@
   "damage": 2,
   "durability": 2,
   "rarity": "FREE",
-  "description": "Battlecry: Add a random Voodoo spell to your hand.",
+  "description": "Opener: Add a random Voodoo spell to your hand.",
   "battlecry": {
     "spell": {
       "class": "ReceiveCardSpell",

@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
-  "description": "Battlecry: Roast a card. Add its Cost to your C'Thun's stats. (wherever it is).",
+  "description": "Opener: Roast a card. Add its Cost to your C'Thun's stats. (wherever it is).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

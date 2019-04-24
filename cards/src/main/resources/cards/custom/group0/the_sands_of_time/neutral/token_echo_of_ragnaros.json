@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Shoot three fireballs at random enemies that deal 8 damage each.",
+  "description": "Opener: Shoot three fireballs at random enemies that deal 8 damage each.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

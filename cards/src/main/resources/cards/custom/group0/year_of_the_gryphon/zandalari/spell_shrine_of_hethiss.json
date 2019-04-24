@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",
-  "description": "Give your minions Poisonous.",
+  "description": "Give your minions Toxic.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddAttributeSpell",

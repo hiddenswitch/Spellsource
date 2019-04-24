@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "COMMON",
-  "description": "Restore 4 Health. Draw a card.",
+  "description": "Restore #4 Health. Draw a card.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

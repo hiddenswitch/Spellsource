@@ -1,0 +1,21 @@
+{
+  "name": "Ankylo Devotee",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 2,
+  "baseHp": 2,
+  "rarity": "COMMON",
+  "race": "DRAGON",
+  "description": "Aftermath: Add a 1/1 Whelp to your hand.",
+  "deathrattle": {
+    "class": "ReceiveCardSpell",
+    "card": "token_spellsource_whelp"
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

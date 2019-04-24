@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Your Hero Power costs (1) less.",
+  "description": "Your Skill costs (1) less.",
   "cardCostModifier": {
     "class": "CardCostModifier",
     "target": "FRIENDLY_HERO_POWER",

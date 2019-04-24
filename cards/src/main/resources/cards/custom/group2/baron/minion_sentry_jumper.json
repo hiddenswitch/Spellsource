@@ -7,7 +7,7 @@
   "baseHp": 5,
   "rarity": "COMMON",
   "race": "MECH",
-  "description": "Battlecry: Choose a minion. Attack it.",
+  "description": "Opener: Choose a minion. Attack it.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {

@@ -6,7 +6,7 @@
   "damage": 4,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "After your hero attacks, draw [0 cards]. (Increases for every spell you've cast this turn)",
+  "description": "After your champion attacks, draw [0 cards]. (Increases for every spell you've cast this turn)",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

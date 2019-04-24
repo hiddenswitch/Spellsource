@@ -79,6 +79,8 @@ public class ParseUtils {
 				return EntityReference.OTHER_ENEMY_MINIONS;
 			case "leftmost_friendly_card_hand":
 				return EntityReference.LEFTMOST_FRIENDLY_CARD_HAND;
+			case "rightmost_friendly_card_hand":
+				return EntityReference.RIGHTMOST_FRIENDLY_CARD_HAND;
 			case "last_card_played":
 				return EntityReference.LAST_CARD_PLAYED;
 			case "friendly_last_card_played":
@@ -396,6 +398,13 @@ public class ParseUtils {
 					}
 				}
 				return dynamicDescriptions;
+			case ZONES:
+				ArrayNode zoneArray = (ArrayNode) jsonData;
+				Zones[] zones = new Zones[zoneArray.size()];
+				for (int i = 0; i < zoneArray.size(); i++) {
+					zones[i] = Enum.valueOf(Zones.class, jsonData.get(i).asText());
+				}
+				return zones;
 			default:
 				break;
 		}

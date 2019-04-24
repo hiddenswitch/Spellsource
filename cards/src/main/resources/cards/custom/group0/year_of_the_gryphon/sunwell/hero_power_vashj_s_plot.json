@@ -4,7 +4,7 @@
   "type": "HERO_POWER",
   "heroClass": "GREEN",
   "rarity": "FREE",
-  "description": "Hero Power: Discover a Secretive ability and cast it.",
+  "description": "Skill: Discover a Secretive ability and cast it.",
   "targetSelection": "NONE",
   "spell": {
     "class": "HeroPowerSpell",

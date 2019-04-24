@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "BLOOD",
   "rarity": "EPIC",
-  "description": "Give your hero +5 Health and Taunt. Once their Health drops below 25, they lose Taunt.",
+  "description": "Give your champion +5 Health and Guard. Once their Health drops below 25, they lose Guard.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",

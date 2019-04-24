@@ -6,7 +6,7 @@
   "baseAttack": 4,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Shuffle 'Deaths Curse' into your deck.",
+  "description": "Aftermath: Shuffle 'Deaths Curse' into your deck.",
   "deathrattle": {
     "class": "ShuffleToDeckSpell",
     "card": "spell_death_s_curse"

@@ -6,7 +6,7 @@
   "baseAttack": 2,
   "baseHp": 4,
   "rarity": "EPIC",
-  "description": "Whenever a minion is added to your hand, give it +2/+2 and \"Surge: Rush.\"",
+  "description": "Whenever a minion is added to your hand, give it +2/+2 and \"Surge: Dash.\"",
   "trigger": {
     "eventTrigger": {
       "class": "CardReceivedTrigger",
@@ -30,13 +30,7 @@
           "target": "EVENT_TARGET",
           "battlecry": {
             "condition": {
-              "class": "AttributeCondition",
-              "target": "SELF",
-              "value": {
-                "class": "CurrentTurnValueProvider"
-              },
-              "attribute": "RECEIVED_ON_TURN",
-              "operation": "EQUAL"
+              "class": "SurgeCondition"
             },
             "targetSelection": "NONE",
             "spell": {

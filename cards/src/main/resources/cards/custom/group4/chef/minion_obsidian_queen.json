@@ -6,7 +6,7 @@
   "baseAttack": 3,
   "baseHp": 6,
   "rarity": "COMMON",
-  "description": "Charge. Unlimited attacks each turn. Can't attack heroes.",
+  "description": "Blitz. Unlimited attacks each turn. Can't attack championes.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",

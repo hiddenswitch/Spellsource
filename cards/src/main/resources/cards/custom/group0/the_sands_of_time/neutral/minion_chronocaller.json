@@ -7,7 +7,7 @@
   "baseHp": 6,
   "rarity": "RARE",
   "race": "NONE",
-  "description": "Battlecry: Recruit two minions that costs (2).",
+  "description": "Opener: Recruit two minions that costs (2).",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.toList;
  * Shuffles the {@code target} {@link net.demilich.metastone.game.entities.EntityType#MINION} into the player's deck
  * with the enchantments
  */
-public final class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDeckSpell {
+public class ShuffleToDeckWithEnchantmentsSpell extends Spell {
 
 	@Override
 	@Suspendable
@@ -41,11 +41,12 @@ public final class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDec
 		List<Enchantment> enchantments = context.getTriggersAssociatedWith(actor.getReference()).stream()
 				.filter(Enchantment.class::isInstance)
 				.map(Enchantment.class::cast)
-				.filter(Predicate.not(Enchantment::isExpired))
+				.filter(e -> !e.isExpired())
 				.collect(toList());
 
+		Card sourceCard = target.getSourceCard();
 		List<EnchantmentDesc> copies = enchantments.stream()
-				.filter(e -> e.getSourceCard().getId() != target.getSourceCard().getId())
+				.filter(e -> e.getSourceCard().getId() != sourceCard.getId())
 				.map(enchantment -> {
 					EnchantmentDesc enchantmentDesc = new EnchantmentDesc();
 					enchantmentDesc.eventTrigger = enchantment.getTriggers().get(0).getDesc().clone();
@@ -66,14 +67,12 @@ public final class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDec
 			context.getLogic().removeActor(actor, true);
 		}
 
+		// Remove the attack and HP bonuses from the source card, if they exist
+		sourceCard.getAttributes().remove(Attribute.ATTACK_BONUS);
+		sourceCard.getAttributes().remove(Attribute.HP_BONUS);
 		// Shuffles a copy of Immortal Prelate back into the deck
-		Card card = CopyCardSpell.copyCard(context, player, target.getSourceCard(), (playerId, copiedCard) -> {
-			// Da Undatakah interaction
-			if (!copiedCard.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
-				copiedCard.setAttribute(Attribute.KEEPS_ENCHANTMENTS);
-			}
-			context.getLogic().shuffleToDeck(player, copiedCard, false);
-			SpellUtils.processKeptEnchantments(target, copiedCard);
+		Card card = CopyCardSpell.copyCard(context, player, sourceCard, (playerId, copiedCard) -> {
+			moveCopyToDestination(context, player, target, copiedCard);
 		});
 
 
@@ -90,6 +89,16 @@ public final class ShuffleToDeckWithEnchantmentsSpell extends ShuffleMinionToDec
 			}
 			SpellUtils.castChildSpell(context, player, AddDeathrattleSpell.create(card.getReference(), deathrattle), source, card);
 		}
+	}
+
+	@Suspendable
+	protected void moveCopyToDestination(GameContext context, Player player, Entity target, Card copiedCard) {
+		// Da Undatakah interaction
+		if (!copiedCard.hasAttribute(Attribute.KEEPS_ENCHANTMENTS)) {
+			copiedCard.setAttribute(Attribute.KEEPS_ENCHANTMENTS);
+		}
+		context.getLogic().shuffleToDeck(player, copiedCard, false);
+		SpellUtils.processKeptEnchantments(target, copiedCard);
 	}
 }
 

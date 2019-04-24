@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 2,
   "rarity": "LEGENDARY",
-  "description": "Start of Your Turn: Gain +1 Durability. Instead of dying, set your Hero's Health to this Durability and destroy this weapon.",
+  "description": "Start of Your Turn: Gain +1 Durability. Instead of dying, set your Champion's Health to this Durability and destroy this weapon.",
   "triggers": [
     {
       "eventTrigger": {

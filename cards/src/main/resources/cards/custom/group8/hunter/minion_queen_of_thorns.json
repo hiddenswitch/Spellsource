@@ -6,7 +6,7 @@
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Swap this with a minion from your deck.",
+  "description": "Aftermath: Swap this with a minion from your deck.",
   "deathrattle": {
     "class": "ConditionalSpell",
     "condition": {

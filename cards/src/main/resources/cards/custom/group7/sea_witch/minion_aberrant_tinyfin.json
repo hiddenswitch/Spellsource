@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "MURLOC",
-  "description": "Deathrattle: Give your Murlocs +1/+1.",
+  "description": "Aftermath: Give your Murlocs +1/+1.",
   "deathrattle": {
     "class": "BuffSpell",
     "target": "FRIENDLY_MINIONS",

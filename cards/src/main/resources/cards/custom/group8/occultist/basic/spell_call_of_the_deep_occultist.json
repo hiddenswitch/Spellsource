@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
-  "description": "Deal $4 damage to your hero. Summon four 1/1 Tentacles with Taunt.",
+  "description": "Deal $4 damage to your champion. Summon four 1/1 Tentacles with Guard.",
   "spell": {
     "class": "MetaSpell",
     "spells": [

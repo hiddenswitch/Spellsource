@@ -40,6 +40,9 @@ import java.io.Serializable;
  *         "value": 1
  *     }
  * </pre>
+ * <p>
+ * When a target isn't specified, the card cost modification applies to the hand of the owner of this card cost modifier
+ * (i.e. {@link EntityReference#FRIENDLY_HAND}.
  *
  * @see net.demilich.metastone.game.spells.CardCostModifierSpell for a spell that can put {@link CardCostModifier}
  * 		effects into play.

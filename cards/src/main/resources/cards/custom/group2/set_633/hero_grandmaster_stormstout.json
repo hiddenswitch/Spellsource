@@ -5,7 +5,7 @@
   "type": "HERO",
   "heroClass": "JADE",
   "rarity": "LEGENDARY",
-  "description": "Battlecry: Summon all Students to the field.",
+  "description": "Opener: Summon all Students to the field.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {

@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "EPIC",
   "race": "ELEMENTAL",
-  "description": "Battlecry: Destroy your deck and gain +3/+3.",
+  "description": "Opener: Destroy your deck and gain +3/+3.",
   "battlecry": {
     "spell": {
       "class": "MetaSpell",
