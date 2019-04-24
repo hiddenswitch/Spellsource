@@ -7,7 +7,7 @@
   "baseHp": 1,
   "rarity": "COMMON",
   "race": "TITAN",
-  "description": "Deathrattle: If this has more than 1 Attack, resummon it and give it -1 Attack.",
+  "description": "Deathrattle: If this has more than 1 Attack, resummon it with permanent -1 Attack.",
   "deathrattle": {
     "class": "AddEnchantmentSpell",
     "target": "FRIENDLY_PLAYER",
