@@ -3,7 +3,7 @@
   "baseManaCost": 1,
   "type": "MINION",
   "heroClass": "ANY",
-  "baseAttack": 1,
+  "baseAttack": 2,
   "baseHp": 2,
   "rarity": "LEGENDARY",
   "race": "DRAGON",
