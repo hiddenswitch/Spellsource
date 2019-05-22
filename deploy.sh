@@ -370,7 +370,8 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_
   echo "Building Spellsource JAR file"
   { # try
     # Build the server
-    ${GRADLE_CMD} net:shadowJar 2>&1 > /dev/null
+    # ${GRADLE_CMD} net:shadowJar 2>&1 > /dev/null
+    gradle net:shadowJar
   } || { # catch
     echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
     exit 1
