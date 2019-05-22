@@ -79,6 +79,10 @@ public class ParseUtils {
 				return EntityReference.OTHER_ENEMY_MINIONS;
 			case "leftmost_friendly_card_hand":
 				return EntityReference.LEFTMOST_FRIENDLY_CARD_HAND;
+			case "leftmost_enemy_card_hand":
+				return EntityReference.LEFTMOST_ENEMY_CARD_HAND;
+			case "friendly_last_spell_played_this_turn":
+				return EntityReference.FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN;
 			case "rightmost_friendly_card_hand":
 				return EntityReference.RIGHTMOST_FRIENDLY_CARD_HAND;
 			case "last_card_played":

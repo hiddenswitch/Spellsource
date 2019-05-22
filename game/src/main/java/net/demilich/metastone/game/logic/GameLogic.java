@@ -419,7 +419,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Assigns an {@link Entity#id} and {@link Entity#ownerIndex} to each {@link Card} in a given {@link GameDeck}.
+	 * Assigns an {@link Entity#getId()} and {@link Entity#getOwner()} to each {@link Card} in a given {@link GameDeck}.
 	 *
 	 * @param cardList   The {@link GameDeck} whose cards should have IDs and owners assigned.
 	 * @param ownerIndex The owner to assign to this {@link CardList}
@@ -715,6 +715,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Entity source = null;
 		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
 			source = context.resolveSingleTarget(sourceReference);
+		}
+		// Check if the source is overridden for this effect.
+		if (spellDesc.containsKey(SpellArg.SOURCE)) {
+			// Try to resolve it as a single target. This will correctly fail if it resolves to multiple targets.
+			Entity originalSource = source;
+			source = context.resolveSingleTarget(player, source, (EntityReference) spellDesc.get(SpellArg.SOURCE));
+			if (source == null) {
+				logger.warn("castSpell {} {}: Casting with a SpellArg.SOURCE changed source to null", context.getGameId(), originalSource);
+			}
 		}
 
 		// Implement SpellOverrideAura
@@ -1586,6 +1595,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		endOfSequence();
+
+		context.setLastSpellPlayedThisTurn(playerId, null);
 
 		player.setAttribute(Attribute.LAST_TURN, context.getTurn());
 	}
@@ -2860,6 +2871,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		card.setAttribute(Attribute.HAND_INDEX, card.getEntityLocation().getIndex());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
+		if (card.getCardType() == CardType.SPELL) {
+			context.setLastSpellPlayedThisTurn(playerId, card.getReference());
+		}
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {

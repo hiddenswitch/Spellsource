@@ -1,0 +1,16 @@
+{
+  "name": "Berry",
+  "baseManaCost": 1,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Restore #3 Health.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "HealSpell",
+    "value": 3
+  },
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,33 @@
+{
+  "name": "Lava Manticore",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 6,
+  "baseHp": 6,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Opener: If 4 or more minions died this turn, gain Blitz.",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH"
+      },
+      "value2": 4
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "SELF",
+      "attribute": "CHARGE"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -445,6 +445,16 @@ public enum SpellArg {
 	 */
 	TARGET,
 	/**
+	 * Overrides the source of an effect with the specified {@link EntityReference}, which must resolve to zero to one
+	 * targets.
+	 * <p>
+	 * Some references are still "group references" that typically refer to exactly one entity if it exists, or zero if it
+	 * does not. For example, {@link EntityReference#FRIENDLY_WEAPON}. This is an appropriate specifier for source.
+	 *
+	 * @see Spell#cast(GameContext, Player, SpellDesc, Entity, List) for more about how this argument is used.
+	 */
+	SOURCE,
+	/**
 	 * Indicates whose point of view this spell should be cast from. Typically becomes the {@code player} object in the
 	 * spell's Spell#cast(GameContext, Player, SpellDesc, Entity, List) implementation {@code onCast}.
 	 */

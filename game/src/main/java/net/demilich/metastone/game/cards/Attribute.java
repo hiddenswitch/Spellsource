@@ -925,14 +925,22 @@ public enum Attribute {
 	 */
 	SPELLS_CAST_TWICE,
 	/**
-	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 * Applies a multiplier to the base attack plus bonus attack on an {@link Actor}.
 	 */
 	ATTACK_MULTIPLIER,
 	/**
+	 * The aura version of {@link #ATTACK_MULTIPLIER}.
+	 */
+	AURA_ATTACK_MULTIPLIER,
+	/**
 	 * When non-zero, multiplies the {@link #ATTACK_BONUS}, {@link #TEMPORARY_ATTACK_BONUS}, {@link #AURA_ATTACK_BONUS}
-	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount.
+	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount. In other words, a multiplier that only affects bonuses.
 	 */
 	ATTACK_BONUS_MULTIPLIER,
+	/**
+	 * The aura version of {@link #ATTACK_BONUS_MULTIPLIER}.
+	 */
+	AURA_ATTACK_BONUS_MULTIPLIER,
 	/**
 	 * Will block an entity from receiving game event triggers
 	 */
