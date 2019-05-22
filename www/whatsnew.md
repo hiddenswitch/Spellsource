@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.27-2.0.30 (Wednesday, May 22nd, 2019)
+
+Bug fixes.
+
+##### Usability Fixes:
+
+ - It is no longer possible to select a neutral champion in the deck creation screen.
+
 ### 0.8.26-2.0.29 (Tuesday, May 21st, 2019)
 
 Bullet Bull is now correctly named.
