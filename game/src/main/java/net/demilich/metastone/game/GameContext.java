@@ -1431,6 +1431,18 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return getLastCardPlayedMap().get(IdFactory.UNASSIGNED);
 	}
 
+	@SuppressWarnings("unchecked")
+	public Map<Integer, EntityReference> getLastSpellPlayedThisTurnMap() {
+		if (!getEnvironment().containsKey(Environment.LAST_SPELL_PLAYED_THIS_TURN)) {
+			getEnvironment().put(Environment.LAST_SPELL_PLAYED_THIS_TURN, new EnvironmentMap<>());
+		}
+		return (Map<Integer, EntityReference>) getEnvironment().get(Environment.LAST_SPELL_PLAYED_THIS_TURN);
+	}
+
+	public void setLastSpellPlayedThisTurn(int playerId, EntityReference cardReference) {
+		getLastSpellPlayedThisTurnMap().put(IdFactory.UNASSIGNED, cardReference);
+		getLastSpellPlayedThisTurnMap().put(playerId, cardReference);
+	}
 
 	public EntityReference getLastCardPlayedBeforeCurrentSequence() {
 		return getLastCardPlayedBeforeCurrentSequenceMap().get(IdFactory.UNASSIGNED);

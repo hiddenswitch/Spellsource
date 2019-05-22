@@ -27,6 +27,8 @@ public class HighestAttributeFilter extends EntityFilter {
 	private static int getAttributeValue(Entity entity, Attribute attribute) {
 		if (attribute == Attribute.ATTACK) {
 			return ((Actor) entity).getAttack();
+		} else if (attribute == Attribute.HP) {
+			return ((Actor) entity).getHp();
 		}
 		return entity.getAttributeValue(attribute);
 	}

@@ -6,7 +6,7 @@
   "baseAttack": 0,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Whenever a minion is played, give it [+1/+1] & increase this bonus. Lasts [4 turns].",
+  "description": "Whenever a minion is played, give it [+1/+1] and increase this bonus. Lasts [4 turns].",
   "triggers": [
     {
       "countUntilCast": 4,

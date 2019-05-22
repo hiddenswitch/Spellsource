@@ -6,7 +6,7 @@
   "damage": 0,
   "durability": 3,
   "rarity": "LEGENDARY",
-  "description": "Your hero's attack is doubled. Can't attack championes.",
+  "description": "Your champion's attack is doubled. Can't attack champions.",
   "collectible": true,
   "set": "CUSTOM",
   "fileFormatVersion": 1,
@@ -23,11 +23,11 @@
       "applyEffect": {
         "class": "SetAttributeSpell",
         "value": 2,
-        "attribute": "ATTACK_MULTIPLIER"
+        "attribute": "AURA_ATTACK_MULTIPLIER"
       },
       "removeEffect": {
         "class": "RemoveAttributeSpell",
-        "attribute": "ATTACK_MULTIPLIER"
+        "attribute": "AURA_ATTACK_MULTIPLIER"
       }
     }
   ]

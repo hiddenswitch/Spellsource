@@ -3,7 +3,18 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+### In progress 0.8.25-2.0.29 ()
 
+Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg and others for the fantastic contribution.
+
+##### Content Additions:
+
+ - All the new Spellsource core Rare and Epic cards.
+ 
+##### Content Fixes:
+
+ - "Championes" has now been corrected to "Champions" everywhere.
+ 
 ### 0.8.24-2.0.29 (Wednesday, April 17th, 2019)
 
 Bug fixes. Additionally, new Witch Doctor decks are in the bot rotation.
