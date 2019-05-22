@@ -3,6 +3,11 @@ layout: page
 title: What's New
 permalink: /whats-new/
 ---
+
+### 0.8.26-2.0.29 (Tuesday, May 21st, 2019)
+
+Bullet Bull is now correctly named.
+
 ### 0.8.25-2.0.29 (Tuesday, May 21st, 2019)
 
 Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg, @Samswize and others for the fantastic contribution.
