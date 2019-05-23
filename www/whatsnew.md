@@ -12,6 +12,7 @@ Bug fixes.
 
  - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
  - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
+ - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
 
 ##### Usability Fixes:
 
