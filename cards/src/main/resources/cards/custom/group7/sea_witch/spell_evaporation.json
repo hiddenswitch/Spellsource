@@ -12,7 +12,7 @@
     "spell1": {
       "class": "DamageSpell",
       "target": "ENEMY_MINIONS",
-      "value": 1
+      "value": 3
     },
     "spell2": {
       "class": "HealSpell",

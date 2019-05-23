@@ -15,6 +15,7 @@ Bug fixes.
  - Kraken's Call, Gilblin Plunderer, Calm Currents, Condensation, Finding Mobus, Three Fathoms Below and Water Blast all shuffle the correct number of Ocean Depths into the deck now.
  - Gilblin Plunderer's text is now correct.
  - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
+ - Evaporation now deals 3 damage to all enemy minions.
 
 ##### Usability Fixes:
 
