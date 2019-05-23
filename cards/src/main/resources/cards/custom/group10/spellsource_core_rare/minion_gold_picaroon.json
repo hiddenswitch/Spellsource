@@ -1,0 +1,24 @@
+{
+  "name": "Gold Picaroon",
+  "baseManaCost": 3,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "race": "PIRATE",
+  "description": "After this minion attacks, add a Coin to your hand.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "card": "spell_the_coin"
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

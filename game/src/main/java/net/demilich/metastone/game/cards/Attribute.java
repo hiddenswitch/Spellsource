@@ -15,6 +15,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -207,6 +209,11 @@ public enum Attribute {
 	 * @see #TAUNT for more about taunt.
 	 */
 	AURA_TAUNT,
+	/**
+	 * Like taunt, but only applies while in hand or in the deck. Affects the summoned minion and goes away when this card
+	 * is moved to the graveyard.
+	 */
+	CARD_TAUNT,
 	/**
 	 * The total amount of spell damage that an {@link Entity} contributes.
 	 */
@@ -432,6 +439,10 @@ public enum Attribute {
 	 * An attribute that specifies that the attack of this {@link Minion} is equal to its hitpoints.
 	 */
 	ATTACK_EQUALS_HP,
+	/**
+	 * The aura version of {@link #ATTACK_EQUALS_HP}.
+	 */
+	AURA_ATTACK_EQUALS_HP,
 	/**
 	 * When set, this {@link Minion} cannot attack.
 	 */
@@ -925,14 +936,22 @@ public enum Attribute {
 	 */
 	SPELLS_CAST_TWICE,
 	/**
-	 * The simplest and least buggy way to implement Fangs of Ashmane
+	 * Applies a multiplier to the base attack plus bonus attack on an {@link Actor}.
 	 */
 	ATTACK_MULTIPLIER,
 	/**
+	 * The aura version of {@link #ATTACK_MULTIPLIER}.
+	 */
+	AURA_ATTACK_MULTIPLIER,
+	/**
 	 * When non-zero, multiplies the {@link #ATTACK_BONUS}, {@link #TEMPORARY_ATTACK_BONUS}, {@link #AURA_ATTACK_BONUS}
-	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount.
+	 * and {@link #CONDITIONAL_ATTACK_BONUS} by this amount. In other words, a multiplier that only affects bonuses.
 	 */
 	ATTACK_BONUS_MULTIPLIER,
+	/**
+	 * The aura version of {@link #ATTACK_BONUS_MULTIPLIER}.
+	 */
+	AURA_ATTACK_BONUS_MULTIPLIER,
 	/**
 	 * Will block an entity from receiving game event triggers
 	 */
@@ -1039,5 +1058,11 @@ public enum Attribute {
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
+	}
+
+	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+
+	public static List<Attribute> getCardEnchantmentAttributes() {
+		return cardEnchantmentAttributes;
 	}
 }

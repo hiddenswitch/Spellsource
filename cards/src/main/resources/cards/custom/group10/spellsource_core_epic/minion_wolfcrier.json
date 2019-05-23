@@ -1,0 +1,25 @@
+{
+  "name": "Wolfcrier",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "EPIC",
+  "description": "Guard. Opener: Summon a 2/3 Wolf for your opponent.",
+  "targetSelection": "NONE",
+  "battlecry": {
+    "spell": {
+      "class": "SummonSpell",
+      "card": "token_actual_wolf",
+      "targetPlayer": "OPPONENT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

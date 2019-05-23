@@ -13,6 +13,8 @@ import net.demilich.metastone.game.targeting.EntityReference;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.List;
+
 /**
  * Casts the subspell after the sequence has ended.
  * <p>
@@ -64,11 +66,12 @@ public final class CastAfterSequenceSpell extends Spell {
 				spell = spell.addArg(targetAttribute, target.getReference());
 			} else if (spell.containsKey(targetAttribute) && spell.getTarget().isTargetGroup()) {
 				// If the subspell contains a group target that resolves to a single target, resolve it now.
-				try {
-					spell = spell.addArg(targetAttribute, context.resolveSingleTarget(player, source, spell.getTarget()).getReference());
-				} catch (ArrayStoreException notSingleTarget) {
-					LOGGER.warn("onCast {} {}: Passed a non-single-target target group {}, not resolving", context.getGameId(), source, spell.getTarget());
-				}
+				List<Entity> targets = context.resolveTarget(player, source, (EntityReference) spell.get(targetAttribute));
+				// The targets may not be on the board at the end of the sequence!
+				final SpellDesc finalSpell = spell;
+				spell = MetaSpell.create(targets.stream()
+						.map(t -> finalSpell.addArg(targetAttribute, t.getReference()))
+						.toArray(SpellDesc[]::new));
 			}
 		}
 

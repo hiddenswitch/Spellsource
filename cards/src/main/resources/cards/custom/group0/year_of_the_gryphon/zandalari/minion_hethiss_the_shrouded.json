@@ -7,7 +7,7 @@
   "baseHp": 8,
   "rarity": "LEGENDARY",
   "race": "BEAST",
-  "description": "Both championes have Hidden. Combo: Destroy all other minions.",
+  "description": "Both champions have Hidden. Combo: Destroy all other minions.",
   "battlecry": {
     "condition": {
       "class": "ComboCondition"

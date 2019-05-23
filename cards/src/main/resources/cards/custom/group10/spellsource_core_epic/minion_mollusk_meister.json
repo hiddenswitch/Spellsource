@@ -1,0 +1,37 @@
+{
+  "name": "Mollusk Meister",
+  "baseManaCost": 10,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "rarity": "EPIC",
+  "baseAttack": 8,
+  "baseHp": 8,
+  "description": "Opener: Gain 8 Armor. Give a friendly minion Health equal to your Armor.",
+  "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "BuffSpell",
+          "target": "FRIENDLY_HERO",
+          "armorBonus": 8
+        },
+        {
+          "class": "BuffSpell",
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "target": "FRIENDLY_HERO",
+            "attribute": "ARMOR"
+          }
+        }
+      ]
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

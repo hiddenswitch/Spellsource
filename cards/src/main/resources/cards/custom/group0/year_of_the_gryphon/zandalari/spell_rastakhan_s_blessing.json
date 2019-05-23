@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "GOLD",
   "rarity": "COMMON",
-  "description": "Give a minion +6 Attack, Guard, and \"Can't attack championes\".",
+  "description": "Give a minion +6 Attack, Guard, and \"Can't attack champions\".",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",

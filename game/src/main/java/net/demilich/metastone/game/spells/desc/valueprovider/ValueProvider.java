@@ -109,3 +109,4 @@ public abstract class ValueProvider implements Serializable, HasDesc<ValueProvid
 		this.desc = (ValueProviderDesc) desc;
 	}
 }
+

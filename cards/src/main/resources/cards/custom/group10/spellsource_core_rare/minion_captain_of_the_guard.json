@@ -1,0 +1,25 @@
+{
+  "name": "Captain of the Guard",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 3,
+  "rarity": "RARE",
+  "description": "Guard. Opener: Give adjacent minions Guard.",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "ADJACENT_MINIONS",
+      "attribute": "TAUNT"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

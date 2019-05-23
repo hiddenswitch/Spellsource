@@ -421,7 +421,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	}
 
 	/**
-	 * Assigns an {@link Entity#id} and {@link Entity#ownerIndex} to each {@link Card} in a given {@link GameDeck}.
+	 * Assigns an {@link Entity#getId()} and {@link Entity#getOwner()} to each {@link Card} in a given {@link GameDeck}.
 	 *
 	 * @param cardList   The {@link GameDeck} whose cards should have IDs and owners assigned.
 	 * @param ownerIndex The owner to assign to this {@link CardList}
@@ -717,6 +717,15 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Entity source = null;
 		if (sourceReference != null && !sourceReference.equals(EntityReference.NONE)) {
 			source = context.resolveSingleTarget(sourceReference);
+		}
+		// Check if the source is overridden for this effect.
+		if (spellDesc.containsKey(SpellArg.SOURCE)) {
+			// Try to resolve it as a single target. This will correctly fail if it resolves to multiple targets.
+			Entity originalSource = source;
+			source = context.resolveSingleTarget(player, source, (EntityReference) spellDesc.get(SpellArg.SOURCE));
+			if (source == null) {
+				logger.warn("castSpell {} {}: Casting with a SpellArg.SOURCE changed source to null", context.getGameId(), originalSource);
+			}
 		}
 
 		// Implement SpellOverrideAura
@@ -1588,6 +1597,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		}
 
 		endOfSequence();
+
+		context.setLastSpellPlayedThisTurn(playerId, null);
 
 		player.setAttribute(Attribute.LAST_TURN, context.getTurn());
 	}
@@ -2862,6 +2873,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		card.setAttribute(Attribute.HAND_INDEX, card.getEntityLocation().getIndex());
 		CardPlayedEvent cardPlayedEvent = new CardPlayedEvent(context, playerId, card);
 		context.setLastCardPlayed(playerId, card.getReference());
+		if (card.getCardType() == CardType.SPELL) {
+			context.setLastSpellPlayedThisTurn(playerId, card.getReference());
+		}
 		context.fireGameEvent(cardPlayedEvent);
 
 		if (card.hasAttribute(Attribute.OVERLOAD)) {
@@ -3287,6 +3301,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Moves a card to the {@link Zones#GRAVEYARD}. Removes each {@link Enchantment} associated with the card, if any.
 	 * <p>
 	 * No events are raised.
+	 * <p>
+	 * Also removes all attributes added to the card that did not appear on the text.
 	 *
 	 * @param card The card to move to the graveyard.
 	 * @see #discardCard(Player, Card) for when cards are discarded from the hand or should otherwise raise events.
@@ -3299,7 +3315,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.getEntityLocation().getZone() == Zones.REMOVED_FROM_PLAY) {
 			return;
 		}
-		// TODO: It's not necessarily in the hand when it's removed!
 		card.moveOrAddTo(context, Zones.GRAVEYARD);
 	}
 
@@ -3355,6 +3370,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	private void removeEnchantments(Entity entity, boolean removeAuras, boolean keepSelfCardCostModifiers) {
 		EntityReference entityReference = entity.getReference();
+		// Remove all card enchantments
+		if (entity.getEntityType() == EntityType.CARD) {
+			for (Attribute cardEnchantmentAttribute : Attribute.getCardEnchantmentAttributes()) {
+				entity.getAttributes().remove(cardEnchantmentAttribute);
+			}
+		}
+
 		for (Trigger trigger : context.getTriggersAssociatedWith(entityReference)) {
 			if (!removeAuras && trigger instanceof Aura) {
 				continue;
