@@ -8,7 +8,7 @@
   "rarity": "LEGENDARY",
   "description": "Start of Game: If your deck has only even-Cost cards, your starting Hero Power costs (1).",
   "collectible": true,
-  "set": "WITCHWOOD",
+  "set": "HALL_OF_FAME",
   "fileFormatVersion": 1,
   "gameTriggers": [
     {

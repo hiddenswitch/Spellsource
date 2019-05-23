@@ -76,6 +76,7 @@ public abstract class PlayCardAction extends GameAction {
 		Player player = context.getPlayer(playerId);
 		Card card = (Card) context.resolveSingleTarget(getSourceReference());
 		context.getLogic().playCard(playerId, getSourceReference(), getTargetReference());
+
 		// card was countered, do not actually resolve its effects
 		if (!card.hasAttribute(Attribute.COUNTERED)) {
 			// Fixes Glinda Crowskin, whose aura stopped being applied once the card was played and moved to the graveyard

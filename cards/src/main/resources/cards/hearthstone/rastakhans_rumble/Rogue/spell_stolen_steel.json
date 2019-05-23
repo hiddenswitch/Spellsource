@@ -19,8 +19,20 @@
           "class": "CardFilter",
           "heroClass": "SELF",
           "invert": true
+        },
+        {
+          "class": "CardFilter",
+          "heroClass": "ANY",
+          "invert": true
         }
       ]
+    },
+    "cardSource": {
+      "class": "UnweightedCatalogueSource"
+    },
+    "spell": {
+      "class": "ReceiveCardSpell",
+      "targetPlayer": "SELF"
     }
   },
   "collectible": true,

@@ -1,6 +1,6 @@
 {
   "name": "Flametongue Totem",
-  "baseManaCost": 2,
+  "baseManaCost": 3,
   "type": "MINION",
   "heroClass": "SILVER",
   "baseAttack": 0,
