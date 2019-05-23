@@ -33,7 +33,7 @@ Notes for successful deployment:
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=${SPELLSOURCE_VERSION} ./deploy.sh -cpdwv
+  ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -196,6 +196,7 @@ if [[ "$bump_version" = true ]] ; then
     exit 1
   fi
 
+  new_version=$(bump2version --allow-dirty --current-version ${SPELLSOURCE_VERSION} --dry-run --list patch | grep new_version  | sed s,"^.*=",,)
   bump2version --allow-dirty --current-version "${SPELLSOURCE_VERSION}" patch \
     build.gradle \
     setup.py \
@@ -207,6 +208,7 @@ if [[ "$bump_version" = true ]] ; then
     client/build.gradle \
     net/src/main/java/com/hiddenswitch/spellsource/Version.java \
     gradle.properties
+  SPELLSOURCE_VERSION=new_version
 fi
 
 # Configure the gradle command
