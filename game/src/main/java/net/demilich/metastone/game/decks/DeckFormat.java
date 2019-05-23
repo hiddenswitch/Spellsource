@@ -33,12 +33,10 @@ public class DeckFormat implements Serializable, Cloneable {
 					Collections.unmodifiableSet(EnumSet.of(
 							BASIC,
 							CLASSIC,
-							JOURNEY_TO_UNGORO,
-							KNIGHTS_OF_THE_FROZEN_THRONE,
-							KOBOLDS_AND_CATACOMBS,
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
-							RASTAKHANS_RUMBLE
+							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS
 					)));
 
 	public static final DeckFormat WILD = new DeckFormat()
@@ -63,6 +61,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS,
 							HALL_OF_FAME
 					))
 			);
@@ -107,6 +106,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							VERDANT_DREAMS,
@@ -138,6 +138,7 @@ public class DeckFormat implements Serializable, Cloneable {
 							WITCHWOOD,
 							BOOMSDAY_PROJECT,
 							RASTAKHANS_RUMBLE,
+							RISE_OF_SHADOWS,
 							BATTLE_FOR_ASHENVALE,
 							SANDS_OF_TIME,
 							VERDANT_DREAMS,

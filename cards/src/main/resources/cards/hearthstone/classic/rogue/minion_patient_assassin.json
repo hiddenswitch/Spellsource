@@ -6,20 +6,10 @@
   "baseAttack": 1,
   "baseHp": 1,
   "rarity": "EPIC",
-  "description": "Stealth. Destroy any minion damaged by this minion.",
-  "trigger": {
-    "eventTrigger": {
-      "class": "DamageCausedTrigger",
-      "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
-    },
-    "spell": {
-      "class": "DestroySpell",
-      "target": "EVENT_TARGET"
-    }
-  },
+  "description": "Stealth. Poisonous.",
   "attributes": {
-    "STEALTH": true
+    "STEALTH": true,
+    "POISONOUS": true
   },
   "collectible": true,
   "set": "CLASSIC",

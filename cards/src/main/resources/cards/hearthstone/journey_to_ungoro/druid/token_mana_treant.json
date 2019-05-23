@@ -12,7 +12,8 @@
     "value": 1
   },
   "attributes": {
-    "DEATHRATTLES": true
+    "DEATHRATTLES": true,
+    "TREANT": true
   },
   "collectible": false,
   "set": "JOURNEY_TO_UNGORO",

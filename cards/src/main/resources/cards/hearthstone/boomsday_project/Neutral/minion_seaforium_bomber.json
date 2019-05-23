@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "card": "spell_seaforium_bomb",
+      "card": "spell_bomb",
       "targetPlayer": "OPPONENT"
     }
   },
