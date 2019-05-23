@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
+ - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
 
 ##### Usability Fixes:
 
