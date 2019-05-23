@@ -7,7 +7,7 @@
   "baseHp": 2,
   "rarity": "COMMON",
   "race": "BEAST",
-  "description": "Battlecry: Gain 5 Armor. If you have Armor, draw two cards instead.",
+  "description": "Opener: Gain 5 Armor. If you have Armor, draw two cards instead.",
   "battlecry": {
     "spell": {
       "class": "EitherOrSpell",
@@ -16,17 +16,18 @@
         "target": "FRIENDLY_HERO",
         "value": 0,
         "attribute": "ARMOR",
-        "operation": "MORE"
-     },
-     "spell1": {
-       "class": "DrawCardSpell",
-       "value": 2
-     },
-     "spell2": {
-       "class": "BuffSpell",
-       "target": "FRIENDLY_HERO",
-       "armorBonus": 5
-     }
+        "operation": "GREATER"
+      },
+      "spell1": {
+        "class": "DrawCardSpell",
+        "value": 2
+      },
+      "spell2": {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 5
+      }
+    }
   },
   "attributes": {
     "BATTLECRY": true

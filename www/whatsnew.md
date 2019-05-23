@@ -6,10 +6,17 @@ permalink: /whats-new/
 
 ### 0.8.27-2.0.30 (Wednesday, May 22nd, 2019)
 
+Thanks to @Phyley for contributing new fixes to Vermancer!
+
 Bug fixes.
+
+##### Content Additions:
+
+ - 9 new cards in the Vermancer class.
 
 ##### Content Fixes:
 
+ - Various changes to Vermancer cards.
  - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
  - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
  - Kraken's Call, Gilblin Plunderer, Calm Currents, Condensation, Finding Mobus, Three Fathoms Below and Water Blast all shuffle the correct number of Ocean Depths into the deck now.
