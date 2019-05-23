@@ -15,7 +15,7 @@
     "spell": {
       "class": "MissilesSpell",
       "target": "ENEMY_CHARACTERS",
-      "value": 2
+      "value": 1
     }
   },
   "collectible": true,
