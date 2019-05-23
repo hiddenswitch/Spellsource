@@ -16,6 +16,7 @@ Bug fixes.
  - Gilblin Plunderer's text is now correct.
  - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
  - Evaporation now deals 3 damage to all enemy minions.
+ - Wrath of the Occult no longer requires targeting.
 
 ##### Usability Fixes:
 
