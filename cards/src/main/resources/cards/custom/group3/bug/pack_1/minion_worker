@@ -1,21 +1,21 @@
 {
-  "name": "Broodspawn",
+  "name": "Worker",
   "baseManaCost": 2,
   "type": "MINION",
   "heroClass": "AMBER",
   "baseAttack": 1,
   "baseHp": 2,
-  "rarity": "FREE",
+  "rarity": "COMMON",
   "race": "BEAST",
-  "description": "At the end of your turn, summon a 1/1 Larva.",
+  "description": "At the end of your turn, draw a card.",
   "trigger": {
     "eventTrigger": {
       "class": "TurnEndTrigger",
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "SummonSpell",
-      "card": "token_spiderling"
+      "class": "DrawCardSpell",
+      "value": 1
     }
   },
   "collectible": true,

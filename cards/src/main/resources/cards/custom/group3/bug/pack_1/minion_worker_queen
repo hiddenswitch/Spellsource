@@ -1,19 +1,28 @@
 {
-  "name": "Nursery Overseer",
-  "baseManaCost": 4,
+  "name": "Worker Queen",
+  "baseManaCost": 6,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 3,
-  "baseHp": 6,
+  "baseAttack": 2,
+  "baseHp": 7,
   "rarity": "EPIC",
   "race": "BEAST",
-  "description": "Opener: Transform all Larva in your hand into Hive Guardian.",
+  "description": "Battlecry: Transform all Larva you control and in your hand into Workers.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ReplaceCardsSpell",
       "target": "FRIENDLY_HAND",
-      "card": "token_bug_giant_spider",
+      "card": "minion_worker",
+      "filter": {
+        "class": "SpecificCardFilter",
+        "card": "token_spiderling"
+      }
+    }
+    "spell": {
+      "class": "ReplaceCardsSpell",
+      "target": "FRIENDLY_MINIONS",
+      "card": "minion_worker",
       "filter": {
         "class": "SpecificCardFilter",
         "card": "token_spiderling"
