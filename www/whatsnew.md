@@ -8,6 +8,10 @@ permalink: /whats-new/
 
 Bug fixes.
 
+##### Content Fixes:
+
+ - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
+
 ##### Usability Fixes:
 
  - It is no longer possible to select a neutral champion in the deck creation screen.

@@ -71,7 +71,8 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 					Attribute.BEING_PLAYED,
 					Attribute.INDEX,
 					Attribute.INDEX_FROM_END,
-					Attribute.HAND_INDEX
+					Attribute.HAND_INDEX,
+					Attribute.CARD_TAUNT
 			));
 
 	protected static final Set<Attribute> HERO_ATTRIBUTES = new HashSet<>(
@@ -123,6 +124,11 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			if (!IGNORED_MINION_ATTRIBUTES.contains(gameTag)) {
 				minion.getAttributes().put(gameTag, getAttributes().get(gameTag));
 			}
+		}
+
+		// Card buffs
+		if (hasAttribute(Attribute.CARD_TAUNT)) {
+			minion.setAttribute(Attribute.TAUNT);
 		}
 
 		minion.getAttributes().remove(Attribute.REMOVES_SELF_AT_END_OF_TURN);

@@ -3299,6 +3299,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Moves a card to the {@link Zones#GRAVEYARD}. Removes each {@link Enchantment} associated with the card, if any.
 	 * <p>
 	 * No events are raised.
+	 * <p>
+	 * Also removes all attributes added to the card that did not appear on the text.
 	 *
 	 * @param card The card to move to the graveyard.
 	 * @see #discardCard(Player, Card) for when cards are discarded from the hand or should otherwise raise events.
@@ -3311,7 +3313,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				|| card.getEntityLocation().getZone() == Zones.REMOVED_FROM_PLAY) {
 			return;
 		}
-		// TODO: It's not necessarily in the hand when it's removed!
 		card.moveOrAddTo(context, Zones.GRAVEYARD);
 	}
 
@@ -3367,6 +3368,13 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	private void removeEnchantments(Entity entity, boolean removeAuras, boolean keepSelfCardCostModifiers) {
 		EntityReference entityReference = entity.getReference();
+		// Remove all card enchantments
+		if (entity.getEntityType() == EntityType.CARD) {
+			for (Attribute cardEnchantmentAttribute : Attribute.getCardEnchantmentAttributes()) {
+				entity.getAttributes().remove(cardEnchantmentAttribute);
+			}
+		}
+
 		for (Trigger trigger : context.getTriggersAssociatedWith(entityReference)) {
 			if (!removeAuras && trigger instanceof Aura) {
 				continue;
