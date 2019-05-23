@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.27-2.0.30 (Wednesday, May 23rd, 2019)
+### 0.8.27-2.0.30 (Thursday, May 23rd, 2019)
 
 Thanks to @Phyley for contributing new fixes to Vermancer!
 
