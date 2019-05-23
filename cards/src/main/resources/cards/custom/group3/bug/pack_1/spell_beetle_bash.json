@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "RARE",
-  "description": "Gain 4 Armor. Summon a 1/4 Blue Beetle with Taunt.",
+  "description": "Gain 4 Armor. Summon a 1/4 Blue Beetle with Guard.",
   "targetSelection": "ANY",
   "spell": {
     "class": "MetaSpell",

@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "AMBER",
   "rarity": "EPIC",
-  "description": "Whenever a friendly Beast dies this game, gain 1 Armor.",
+  "description": "For the rest of the game, whenever a friendly Beast dies, gain 1 Armor.",
   "targetSelection": "NONE",
   "spell": {
     "class": "AddEnchantmentSpell",
