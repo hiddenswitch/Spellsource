@@ -12,9 +12,8 @@
     "target": "LEFTMOST_FRIENDLY_CARD_HAND"
   },
   "attributes": {
-    "DEATHRATTLES": true
     "STEALTH": true
-
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
