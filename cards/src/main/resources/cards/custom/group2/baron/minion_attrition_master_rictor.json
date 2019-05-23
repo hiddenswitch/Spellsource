@@ -1,4 +1,3 @@
-
 {
   "name": "Attrition Master Rictor",
   "baseManaCost": 6,
@@ -8,14 +7,14 @@
   "baseHp": 7,
   "rarity": "LEGENDARY",
   "description": "During your opponent's turn, your minions have Attack equal to their Health.",
-  "aura": {    
+  "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",
     "condition": {
       "class": "OwnedByPlayerCondition",
       "targetPlayer": "INACTIVE"
     },
-    "attribute": "ATTACK_EQUALS_HP"
+    "attribute": "AURA_ATTACK_EQUALS_HP",
     "secondaryTrigger": {
       "class": "TurnStartTrigger",
       "targetPlayer": "BOTH"
