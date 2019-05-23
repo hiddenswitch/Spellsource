@@ -8,6 +8,9 @@
   "rarity": "FREE",
   "description": "",
   "collectible": false,
+  "attributes": {
+    "TREANT": true
+  },
   "set": "CLASSIC",
   "fileFormatVersion": 1
 }

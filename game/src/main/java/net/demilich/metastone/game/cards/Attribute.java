@@ -1036,17 +1036,25 @@ public enum Attribute {
 	 */
 	WITHERED,
 	/**
-	 * Indicates the amount of health drained by the {@link net.demilich.metastone.game.spells.DrainSpell} effect this
-	 * turn.
+	 * Counter for each time a "XXXXX's Scheme" card has upgraded
 	 */
-	DRAINED_THIS_TURN,
-	TOTAL_DRAINED,
-	DRAINED_LAST_TURN,
+	SCHEME,
 	/**
-	 * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+	 * Indicates a minion is part of the "___ Lackey" subset of cards for the Year of the Dragon
 	 */
-	SURGE,
-	DYNAMIC_DESCRIPTION;
+	LACKEY,
+	/**
+	 * Indicates a minion is an official Treant, considered for Treant-related synergies
+	 */
+	TREANT,
+	DRAINED_THIS_TURN,
+    TOTAL_DRAINED,
+    DRAINED_LAST_TURN,
+    /**
+     * The keyword for cards with Surge (a bonus gained when the card is drawn that turn).
+     */
+    SURGE,
+    DYNAMIC_DESCRIPTION;
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());

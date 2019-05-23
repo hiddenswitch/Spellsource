@@ -1,0 +1,16 @@
+{
+  "name": "Mass Resurrection",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "WHITE",
+  "rarity": "RARE",
+  "description": "Summon 3 friendly minions that died this game.",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "ResurrectSpell",
+    "value": 3
+  },
+  "collectible": true,
+  "set": "RISE_OF_SHADOWS",
+  "fileFormatVersion": 1
+}
