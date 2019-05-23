@@ -440,6 +440,10 @@ public enum Attribute {
 	 */
 	ATTACK_EQUALS_HP,
 	/**
+	 * The aura version of {@link #ATTACK_EQUALS_HP}.
+	 */
+	AURA_ATTACK_EQUALS_HP,
+	/**
 	 * When set, this {@link Minion} cannot attack.
 	 */
 	CANNOT_ATTACK,
