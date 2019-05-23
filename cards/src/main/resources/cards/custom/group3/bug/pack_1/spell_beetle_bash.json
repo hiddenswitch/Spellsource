@@ -1,0 +1,26 @@
+{
+  "name": "Beetle Bash",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "AMBER",
+  "rarity": "RARE",
+  "description": "Gain 4 Armor. Summon a 1/4 Blue Beetle with Guard.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "BuffSpell",
+        "target": "FRIENDLY_HERO",
+        "armorBonus": 5
+      },
+      {
+        "class": "SummonSpell",
+        "card": "minion_blue_beetle"
+      }
+    ]
+  },
+  "collectible": true,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

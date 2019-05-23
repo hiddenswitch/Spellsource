@@ -1,0 +1,23 @@
+{
+  "name": "Recurring Torrent",
+  "baseManaCost": 5,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 5,
+  "rarity": "RARE",
+  "race": "ELEMENTAL",
+  "description": "Opener: Add a copy of the last spell you played this turn to your hand.",
+  "battlecry": {
+    "spell": {
+      "class": "CopyCardSpell",
+      "target": "FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN"
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

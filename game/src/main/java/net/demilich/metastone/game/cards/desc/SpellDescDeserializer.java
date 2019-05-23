@@ -62,6 +62,7 @@ public class SpellDescDeserializer extends DescDeserializer<SpellDesc, SpellArg,
 		ctx.add(SpellArg.SECONDARY_NAME, ParseValueType.STRING);
 		ctx.add(SpellArg.SECONDARY_TARGET, ParseValueType.TARGET_REFERENCE);
 		ctx.add(SpellArg.SECONDARY_VALUE, ParseValueType.VALUE);
+		ctx.add(SpellArg.SOURCE, ParseValueType.TARGET_REFERENCE);
 		ctx.add(SpellArg.SPELL, ParseValueType.SPELL);
 		ctx.add(SpellArg.SPELL1, ParseValueType.SPELL);
 		ctx.add(SpellArg.SPELL2, ParseValueType.SPELL);

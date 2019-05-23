@@ -1,0 +1,27 @@
+{
+  "name": "Oni's Eye",
+  "baseManaCost": 2,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 2,
+  "rarity": "EPIC",
+  "description": "Hidden. Whenever this attacks, deal 2 damage to all minions.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "AfterPhysicalAttackTrigger",
+      "hostTargetType": "IGNORE_OTHER_SOURCES"
+    },
+    "spell": {
+      "class": "DamageSpell",
+      "target": "ALL_MINIONS",
+      "value": 2
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

@@ -1,0 +1,24 @@
+{
+  "name": "Timebidding Magi",
+  "baseManaCost": 4,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 4,
+  "baseHp": 4,
+  "rarity": "RARE",
+  "description": "Costs (0) if this is the only card in your hand.",
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1,
+  "manaCostModifier": {
+    "class": "ConditionalValueProvider",
+    "condition": {
+      "class": "CardCountCondition",
+      "value": 1,
+      "operation": "LESS_OR_EQUAL",
+      "targetPlayer": "SELF"
+    },
+    "ifFalse": 0,
+    "ifTrue": 4
+  }
+}

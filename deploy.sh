@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
+SPELLSOURCE_VERSION=0.8.27
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -32,7 +33,7 @@ Notes for successful deployment:
 For example, to build the client library, bump the version and deploy to docker,
 python and playspellsource.com:
 
-  SPELLSOURCE_VERSION=0.8.24 ./deploy.sh -cpdwv
+  SPELLSOURCE_VERSION=${SPELLSOURCE_VERSION} ./deploy.sh -cpdwv
 "
 deploy_elastic_beanstalk=false
 deploy_docker=false
@@ -375,6 +376,11 @@ if [[ "$deploy_elastic_beanstalk" = true || "$deploy_docker" = true || "$deploy_
     echo "Failed to build. Try running ${GRADLE_CMD} net:shadowJar and check for errors."
     exit 1
   }
+
+  if [[ ! -e "net/build/libs/net-${SPELLSOURCE_VERSION}.jar" ]] ; then
+    echo "Failed to build. jar not found!"
+    exit 1
+  fi
 fi
 
 if [[ "$deploy_www" = true ]] ; then
@@ -397,15 +403,11 @@ fi
 if [[ "$deploy_docker" = true ]] ; then
 
   # Build image and upload to docker
-  { # try
-    echo "Building and uploading Docker image"
-    docker build -t spellsource . > /dev/null && \
-    docker tag spellsource doctorpangloss/spellsource > /dev/null && \
-    docker push doctorpangloss/spellsource:latest > /dev/null
-  } || { # catch
-    echo "Failed to build or upload Docker image. Make sure you're logged into docker hub"
-    exit 1
-  }
+  echo "Building and uploading Docker image"
+  docker build -t doctorpangloss/spellsource . && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:${SPELLSOURCE_VERSION} && \
+  docker tag doctorpangloss/spellsource doctorpangloss/spellsource:latest && \
+  docker push doctorpangloss/spellsource:latest
 
 
   # Update specific service for now instead of stack
@@ -455,7 +457,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.24-all.jar \
+      ./net/build/libs/net-0.8.27-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null

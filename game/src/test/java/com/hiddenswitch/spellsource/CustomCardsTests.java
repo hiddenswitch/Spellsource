@@ -58,6 +58,104 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testRecurringTorrent() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_the_coin");
+			playCard(context, player, "minion_recurring_torrent");
+			assertEquals(player.getHand().size(), 1);
+			assertEquals(player.getHand().get(0).getCardId(), "spell_the_coin");
+		});
+
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "spell_the_coin");
+			context.endTurn();
+			context.endTurn();
+			playCard(context, player, "minion_recurring_torrent");
+			assertEquals(player.getHand().size(), 0);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			playCard(context, opponent, "spell_the_coin");
+			context.endTurn();
+			playCard(context, player, "minion_recurring_torrent");
+			assertEquals(player.getHand().size(), 0);
+		});
+	}
+
+	@Test
+	public void testMindswapper() {
+		runGym((context, player, opponent) -> {
+			Card formerlyOpponentCard = receiveCard(context, opponent, "spell_test_overload");
+			Card formerlyPlayerCard = receiveCard(context, player, "spell_test_spellpower");
+			Card shouldNotSwapOpponent = receiveCard(context, opponent, "spell_the_coin");
+			Card shouldNotSwapPlayer = receiveCard(context, player, "spell_the_coin");
+			playCard(context, player, "minion_mindswapper");
+			assertEquals(formerlyOpponentCard.getOwner(), player.getId());
+			assertEquals(formerlyPlayerCard.getOwner(), opponent.getId());
+			assertEquals(shouldNotSwapOpponent.getOwner(), opponent.getId());
+			assertEquals(shouldNotSwapPlayer.getOwner(), player.getId());
+		});
+	}
+
+	@Test
+	public void testFassnuAvenger() {
+		runGym((context, player, opponent) -> {
+			Minion toDestroy = playMinionCard(context, player, "minion_test_deathrattle");
+			Minion fassnu = playMinionCard(context, player, "minion_fassnu_avenger");
+			destroy(context, toDestroy);
+			Card shouldBeDrawn = shuffleToDeck(context, player, "spell_the_coin");
+			destroy(context, fassnu);
+			assertEquals(shouldBeDrawn.getZone(), Zones.HAND);
+		});
+	}
+
+	@Test
+	public void testCursingChimp() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playMinionCardWithBattlecry(context, player, "minion_cursing_chimp", target);
+			assertEquals(target.transformResolved(context).getSourceCard().getCardId(), "minion_cursing_chimp");
+		});
+	}
+
+	@Test
+	public void testChromaticVohlok() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "minion_chromatic_vohlok");
+			assertEquals(target.transformResolved(context).getSourceCard().getCardId(), "minion_chromatic_vohlok");
+		});
+	}
+
+	@Test
+	public void testBulletBull() {
+		runGym((context, player, opponent) -> {
+			Minion bullet = playMinionCard(context, player, "minion_bullet_bull");
+			assertEquals(bullet.getAttack(), bullet.getBaseAttack() * 2);
+			context.endTurn();
+			assertEquals(bullet.getAttack(), bullet.getBaseAttack());
+			context.endTurn();
+			assertEquals(bullet.getAttack(), bullet.getBaseAttack() * 2);
+		});
+	}
+
+	@Test
+	public void testHoldoverLich() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_holdover_lich");
+			Minion target1 = playMinionCard(context, player, "minion_neutral_test");
+			playCard(context, player, "spell_test_deal_6", target1);
+			assertEquals(target1.getHp(), 1);
+			assertEquals(target1.getZone(), Zones.BATTLEFIELD);
+			assertTrue(target1.hasAttribute(Attribute.CANNOT_REDUCE_HP_BELOW_1));
+			context.endTurn();
+			assertTrue(target1.isDestroyed());
+			assertEquals(target1.getZone(), Zones.GRAVEYARD);
+		});
+	}
+
+	@Test
 	public void testMutamiteTerror() {
 		runGym((context, player, opponent) -> {
 			Card leftCard = receiveCard(context, player, "minion_neutral_test");
@@ -5657,7 +5755,7 @@ public class CustomCardsTests extends TestBase {
 	@Test
 	public void testFangsOfAshmane() {
 		runGym((context, player, opponent) -> {
-			playCard(context, player, "weapon_fangs_of_ashmane");
+			playCard(context, player, "weapon_fangs_of_ashmane_artifact");
 			playCard(context, player, "spell_bite");
 			assertEquals(player.getHero().getAttack(), 8);
 			destroy(context, player.getWeaponZone().get(0));

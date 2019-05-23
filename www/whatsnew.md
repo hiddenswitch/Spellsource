@@ -6,11 +6,54 @@ permalink: /whats-new/
 
 ### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
 
-Hearthstone updates.
+Hearthstone updates. Thanks to @doombubbles for the great contribution!
+
+The 0.8 series will be the last to receive Hearthstone updates.
 
 ##### Content Additions:
  - The Rise of Shadows set for Hearthstone
  - Standard rotation into Year of the Dragon
+
+### 0.8.27-2.0.30 (Thursday, May 23rd, 2019)
+
+Thanks to @Phyley for contributing new fixes to Vermancer!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - 9 new cards in the Vermancer class.
+
+##### Content Fixes:
+
+ - Various changes to Vermancer cards.
+ - Morbid Mockery's taunt buff no longer remains attached to the target card when it enters the graveyard.
+ - Warlord Kalithresh now shuffles 7 Ocean Depths into your deck instead of 1.
+ - Kraken's Call, Gilblin Plunderer, Calm Currents, Condensation, Finding Mobus, Three Fathoms Below and Water Blast all shuffle the correct number of Ocean Depths into the deck now.
+ - Gilblin Plunderer's text is now correct.
+ - Desert Maiden is now collectible again (it previously broke the bot, but does not anymore).
+ - Evaporation now deals 3 damage to all enemy minions.
+ - Wrath of the Occult no longer requires targeting.
+
+##### Usability Fixes:
+
+ - It is no longer possible to select a neutral champion in the deck creation screen.
+
+### 0.8.26-2.0.29 (Tuesday, May 21st, 2019)
+
+Bullet Bull is now correctly named.
+
+### 0.8.25-2.0.29 (Tuesday, May 21st, 2019)
+
+Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg, @Samswize and others for the fantastic contribution.
+
+##### Content Additions:
+
+ - All the new Spellsource core Rare and Epic cards.
+ 
+##### Content Fixes:
+
+ - "Championes" has now been corrected to "Champions" everywhere.
 
 ### 0.8.24-2.0.29 (Wednesday, April 17th, 2019)
 

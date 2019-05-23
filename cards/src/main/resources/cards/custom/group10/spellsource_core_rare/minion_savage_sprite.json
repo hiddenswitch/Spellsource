@@ -1,0 +1,26 @@
+{
+  "name": "Savage Sprite",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 2,
+  "rarity": "RARE",
+  "race": "FAE",
+  "description": "Whenever you summon a Fae, gain +2 Attack this turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "MinionSummonedTrigger",
+      "race": "FAE",
+      "sourcePlayer": "SELF"
+    },
+    "spell": {
+      "class": "TemporaryAttackSpell",
+      "target": "TRIGGER_HOST",
+      "value": 2
+    }
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

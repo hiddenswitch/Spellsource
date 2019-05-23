@@ -5,7 +5,7 @@
   "heroClass": "DARKGREEN",
   "rarity": "FREE",
   "description": "Deal $4 damage to all minions.",
-  "targetSelection": "ANY",
+  "targetSelection": "NONE",
   "spell": {
     "class": "DamageSpell",
     "target": "ALL_MINIONS",

@@ -1,10 +1,10 @@
 {
   "name": "Nursery Overseer",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "AMBER",
-  "baseAttack": 5,
-  "baseHp": 5,
+  "baseAttack": 3,
+  "baseHp": 6,
   "rarity": "EPIC",
   "race": "BEAST",
   "description": "Opener: Transform all Larva in your hand into Hive Guardian.",

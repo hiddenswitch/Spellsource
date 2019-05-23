@@ -32,6 +32,24 @@ import static org.testng.Assert.assertTrue;
 public class GameStateValueBehaviourTest extends TestBase implements Serializable {
 
 	@Test
+	public void testDesertMaiden() {
+		runGym((context, player, opponent) -> {
+			shuffleToDeck(context, player, "spell_the_coin");
+			shuffleToDeck(context, player, "minion_neutral_test");
+			shuffleToDeck(context, player, "minion_black_test");
+			playMinionCard(context, player, "minion_desert_maiden");
+			GameStateValueBehaviour behaviour = new GameStateValueBehaviour();
+			context.setBehaviour(player.getId(), behaviour);
+			context.endTurn();
+			while (context.takeActionInTurn()) {
+			}
+			context.endTurn();
+			while (context.takeActionInTurn()) {
+			}
+		});
+	}
+
+	@Test
 	public void testAIMakesOpponentMillCards() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();

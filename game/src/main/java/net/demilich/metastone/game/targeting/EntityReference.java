@@ -495,10 +495,22 @@ public final class EntityReference implements Serializable {
 	public static final EntityReference OTHER_FRIENDLY_CHARACTERS = new EntityReference(-73);
 	/**
 	 * References the card in the friendly player's hand with the highest index.
-	 *
+	 * <p>
 	 * Implements Mutamite Terror.
 	 */
 	public static final EntityReference RIGHTMOST_FRIENDLY_CARD_HAND = new EntityReference(-74);
+	/**
+	 * References the card in the enemy player's hand with the lowest index in the enemy player's hand.
+	 * <p>
+	 * Implements Mindswapper.
+	 */
+	public static final EntityReference LEFTMOST_ENEMY_CARD_HAND = new EntityReference(-75);
+	/**
+	 * References the last spell played by this player this turn only.
+	 *
+	 * Implements Recurring Torrent.
+	 */
+	public static final EntityReference FRIENDLY_LAST_SPELL_PLAYED_THIS_TURN = new EntityReference(-76);
 
 	public static EntityReference pointTo(Entity entity) {
 		if (entity == null) {

@@ -6,12 +6,12 @@
   "baseAttack": 1,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Shuffle two 3/4 Gilblins into deck. your",
+  "description": "Opener: Shuffle two 3/4 Gilblins into your deck.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "value": 2,
+      "howMany": 2,
       "card": "token_gilblin_marauder"
     }
   },

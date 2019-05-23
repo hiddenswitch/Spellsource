@@ -1,0 +1,17 @@
+{
+  "name": "Giant Serpent",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 3,
+  "baseHp": 7,
+  "rarity": "RARE",
+  "race": "BEAST",
+  "description": "Toxic.",
+  "attributes": {
+    "POISONOUS": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}
