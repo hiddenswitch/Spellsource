@@ -5,14 +5,16 @@
   "heroClass": "ANY",
   "baseAttack": 2,
   "baseHp": 4,
-  "rarity": "EPIC",
-  "description": "Aftermath: Discard the leftmost card in your hand.",
+  "rarity": "COMMON",
+  "description": "Hidden. Aftermath: Discard the leftmost card in your hand.",
   "deathrattle": {
     "class": "DiscardSpell",
     "target": "LEFTMOST_FRIENDLY_CARD_HAND"
   },
   "attributes": {
     "DEATHRATTLES": true
+    "STEALTH": true
+
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
