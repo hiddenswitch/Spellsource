@@ -1325,6 +1325,7 @@ public interface Games extends Verticle {
 		int attackBonus = 0;
 		int hpBonus = 0;
 		boolean hasTaunt = false;
+		hasTaunt |= entity.hasAttribute(Attribute.CARD_TAUNT);
 		for (WhereverTheyAreEnchantment e : context.getTriggerManager().getTriggers()
 				.stream()
 				.filter(e -> e.getOwner() == playerId && e instanceof WhereverTheyAreEnchantment)

@@ -16,7 +16,7 @@
     },
     "spell": {
       "class": "AddAttributeSpell",
-      "attribute": "TAUNT",
+      "attribute": "CARD_TAUNT",
       "target": "OUTPUT"
     }
   },

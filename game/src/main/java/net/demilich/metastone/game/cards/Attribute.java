@@ -15,6 +15,8 @@ import net.demilich.metastone.game.spells.trigger.Enchantment;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
 
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -207,6 +209,11 @@ public enum Attribute {
 	 * @see #TAUNT for more about taunt.
 	 */
 	AURA_TAUNT,
+	/**
+	 * Like taunt, but only applies while in hand or in the deck. Affects the summoned minion and goes away when this card
+	 * is moved to the graveyard.
+	 */
+	CARD_TAUNT,
 	/**
 	 * The total amount of spell damage that an {@link Entity} contributes.
 	 */
@@ -1039,5 +1046,11 @@ public enum Attribute {
 
 	public String toKeyCase() {
 		return ParseUtils.toCamelCase(this.toString());
+	}
+
+	private static final List<Attribute> cardEnchantmentAttributes = Collections.unmodifiableList(Arrays.asList(CARD_TAUNT));
+
+	public static List<Attribute> getCardEnchantmentAttributes() {
+		return cardEnchantmentAttributes;
 	}
 }
