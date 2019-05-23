@@ -24,7 +24,7 @@ public class CatalogueTests {
 	private static Logger LOGGER = LoggerFactory.getLogger(CatalogueTests.class);
 
 	private static String getCurrentCards() {
-		String testedUrl = "https://api.hearthstonejson.com/v1/28329/enUS/cards.json";
+		String testedUrl = "https://api.hearthstonejson.com/v1/29933/enUS/cards.json";
 		String overrideUrl = System.getProperty("spellsource.cards.url", System.getenv("SPELLSOURCE_CARDS_URL"));
 		if (overrideUrl != null && !overrideUrl.equals("")) {
 			testedUrl = overrideUrl;
@@ -101,6 +101,13 @@ public class CatalogueTests {
 				List<String> mechanics = new ArrayList<String>();
 				for (Object o : cardObject.getJsonArray("mechanics")) {
 					mechanics.add((String) o);
+				}
+
+				//for now, manually fix errors in the records
+				if (name.equals("Sparring Partner")) {
+					mechanics.add("TAUNT");
+				} else if (name.equals("Lotus Assassin")) {
+					mechanics.add("STEALTH");
 				}
 
 				final boolean battlecry = mechanics.stream().anyMatch(m -> m.equals("BATTLECRY"));

@@ -14,29 +14,9 @@
       "condition": {
         "class": "MinionOnBoardCondition",
         "cardFilter": {
-          "class": "OrFilter",
-          "filters": [
-            {
-              "class": "SpecificCardFilter",
-              "card": "minion_aging_treant"
-            },
-            {
-              "class": "SpecificCardFilter",
-              "card": "token_mana_treant"
-            },
-            {
-              "class": "SpecificCardFilter",
-              "card": "token_treant"
-            },
-            {
-              "class": "SpecificCardFilter",
-              "card": "token_treant_taunt"
-            },
-            {
-              "class": "SpecificCardFilter",
-              "card": "token_unnerfed_treant"
-            }
-          ]
+          "class": "AttributeFilter",
+          "attribute": "TREANT",
+          "operation": "HAS"
         },
         "targetPlayer": "SELF"
       },
