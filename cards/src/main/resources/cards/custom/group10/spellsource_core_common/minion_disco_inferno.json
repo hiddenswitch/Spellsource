@@ -10,8 +10,16 @@
   "description": "Opener: Swap stats with a friendly minion.",
   "battlecry": {
     "targetSelection": "FRIENDLY_MINIONS",
-    "spell": {
-      "class": "SwapAttackAndHpSpell"
+   "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "SwapAttackSpell"
+        },
+        {
+          "class": "SwapHpSpell"
+        }
+      ]
     }
   },
   "attributes": {
