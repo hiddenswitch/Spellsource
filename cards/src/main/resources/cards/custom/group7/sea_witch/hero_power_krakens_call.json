@@ -11,7 +11,7 @@
     "spells": [
       {
         "class": "HealSpell",
-        "value": 3
+        "value": 2
       },
       {
         "class": "ShuffleToDeckSpell",
