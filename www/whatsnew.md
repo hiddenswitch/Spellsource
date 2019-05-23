@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
+
+Hearthstone updates.
+
+##### Content Additions:
+ - The Rise of Shadows set for Hearthstone
+ - Standard rotation into Year of the Dragon
+
 ### 0.8.24-2.0.29 (Wednesday, April 17th, 2019)
 
 Bug fixes. Additionally, new Witch Doctor decks are in the bot rotation.
@@ -52,7 +60,7 @@ Bug fixes.
  - Attempting to mind control Aysa Cloudsinger no longer crashes the game.
 
 ##### Content Additions:
- 
+
  - Drakonid Commander: Cost (8) 6/6 Dragon, "Opener: Give a character +4 Attack this turn."
 
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
@@ -72,7 +80,7 @@ The following keywords have been consistently applied to Spellsource cards:
  - Spellpower (X): Your Spells deal this much more damage.
  - Toxic: This kills minions it damages.
  - Guard: This must be destroyed before minions can attack its champion.
- 
+
 Now clarifying the following additional keywords:
 
  - Armor: Instead of losing health, lose this instead.
