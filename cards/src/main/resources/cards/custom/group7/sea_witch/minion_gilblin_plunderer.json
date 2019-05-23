@@ -11,7 +11,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "ShuffleToDeckSpell",
-      "value": 2,
+      "howMany": 2,
       "card": "token_gilblin_marauder"
     }
   },
