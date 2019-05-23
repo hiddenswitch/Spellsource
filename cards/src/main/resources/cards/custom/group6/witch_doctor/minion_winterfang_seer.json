@@ -1,14 +1,14 @@
 {
-  "name": "Winterfang Seer",
+  "name": "Rallying Elder",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 4,
   "baseHp": 3,
   "rarity": "COMMON",
-  "description": "Opener: Give a minion +3 Attack this turn.",
+  "description": "Opener: Give a friendly character +3 Attack this turn.",
   "battlecry": {
-    "targetSelection": "MINIONS",
+    "targetSelection": "FRIENDLY_CHARACTERS",
     "spell": {
       "class": "TemporaryAttackSpell",
       "value": 3
