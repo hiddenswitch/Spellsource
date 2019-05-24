@@ -1,6 +1,6 @@
 {
   "name": "Recurring Nightmare",
-  "baseManaCost": 4,
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "EPIC",
