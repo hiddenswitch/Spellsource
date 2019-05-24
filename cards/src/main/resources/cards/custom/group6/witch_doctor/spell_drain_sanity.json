@@ -1,6 +1,6 @@
 {
   "name": "Drain Sanity",
-  "baseManaCost": 1,
+  "baseManaCost": 0,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
