@@ -10,8 +10,7 @@
   "aura": {
     "class": "AttributeAura",
     "target": "FRIENDLY_MINIONS",
-   },
-    "attribute": "AURA_ATTACK_EQUALS_HP",
+    "attribute": "AURA_ATTACK_EQUALS_HP"
   },
   "collectible": true,
   "set": "CUSTOM",

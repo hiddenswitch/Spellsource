@@ -58,6 +58,18 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDiscoInfero() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			Minion disco = playMinionCardWithBattlecry(context, player, "minion_disco_inferno", target);
+			assertEquals(disco.getAttack(), target.getBaseAttack());
+			assertEquals(disco.getHp(), target.getBaseHp());
+			assertEquals(target.getAttack(), disco.getBaseAttack());
+			assertEquals(target.getHp(), disco.getBaseHp());
+		});
+	}
+
+	@Test
 	public void testRecurringTorrent() {
 		runGym((context, player, opponent) -> {
 			playCard(context, player, "spell_the_coin");

@@ -4,6 +4,21 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.29-2.0.30 (In Progress)
+
+Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together the fixes flawlessly.
+
+##### Content Fixes:
+
+ - Disco Inferno now swaps stats with a friendly minion. (1109)
+ - Ninjarcher now deals 2 damage to a random enemy. (1101)
+ - Malicious Magpie now deals damage only when other minions attack. (1100)
+ - Bloody Blade is now a 3/2. (1102)
+ - Redhide Butcher now has the correct effect and rarity. (1104)
+ - Sly Conquistador now has Dodge. (1107)
+ - Terrified Tanooki now gains +1 attack. (1108)
+ - Attrition Master now affects minions during both player's turns.
+
 ### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
 
 Hearthstone updates. Thanks to @doombubbles for the great contribution!

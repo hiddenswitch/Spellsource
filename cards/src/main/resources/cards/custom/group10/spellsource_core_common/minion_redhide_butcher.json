@@ -12,7 +12,7 @@
     "target": "LEFTMOST_FRIENDLY_CARD_HAND"
   },
   "attributes": {
-    "STEALTH": true
+    "STEALTH": true,
     "DEATHRATTLES": true
   },
   "collectible": true,
