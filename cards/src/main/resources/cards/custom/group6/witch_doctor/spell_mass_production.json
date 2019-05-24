@@ -1,10 +1,10 @@
 {
   "name": "Mass Production",
-  "baseManaCost": 4,
+  "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "ROSE",
   "rarity": "COMMON",
-  "description": "Summon a 4/4 Mech. Shuffle 3 copies of it into your deck.",
+  "description": "Summon a 4/4 Beast with Dash. Shuffle 3 copies of it into your deck.",
   "targetSelection": "NONE",
   "spell": {
     "class": "SummonSpell",
