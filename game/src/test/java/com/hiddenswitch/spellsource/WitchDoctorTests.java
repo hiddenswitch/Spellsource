@@ -15,6 +15,19 @@ import static org.testng.Assert.*;
 public class WitchDoctorTests extends TestBase {
 
 	@Test
+	public void testGurubashiBloodletter() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, opponent, "minion_gurubashi_bloodletter");
+			context.endTurn();
+			playCard(context, player, "spell_2_missiles");
+			assertEquals(opponent.getMinions().size(), 1);
+			assertEquals(opponent.getMinions().get(0).getSourceCard().getCardId(), "token_rage_behemoth");
+			assertEquals(target.transformResolved(context), opponent.getMinions().get(0));
+		});
+	}
+
+	@Test
 	public void testHexlordZixxis() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
