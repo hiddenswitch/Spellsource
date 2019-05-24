@@ -58,6 +58,38 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDaringDuelist() {
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion source = playMinionCard(context, player, "minion_daring_duelist");
+			// Ensure Daring Duelist dies
+			source.setHp(2);
+			context.endTurn();
+			context.endTurn();
+			Card shouldBeInDeck = shuffleToDeck(context, player, "spell_the_coin");
+			attack(context, player, source, target);
+			assertTrue(source.isDestroyed());
+			assertEquals(shouldBeInDeck.getZone(), Zones.DECK);
+		});
+
+		runGym((context, player, opponent) -> {
+			context.endTurn();
+			Minion target = playMinionCard(context, player, "minion_neutral_test");
+			target.setAttack(0);
+			context.endTurn();
+			Minion source = playMinionCard(context, player, "minion_daring_duelist");
+			context.endTurn();
+			context.endTurn();
+			Card shouldBeInHand = shuffleToDeck(context, player, "spell_the_coin");
+			attack(context, player, source, target);
+			assertFalse(source.isDestroyed());
+			assertEquals(shouldBeInHand.getZone(), Zones.HAND);
+		});
+	}
+
+	@Test
 	public void testDoomerDiver() {
 		runGym((context, player, opponent) -> {
 			Card shouldDraw = shuffleToDeck(context, player, "spell_the_coin");
