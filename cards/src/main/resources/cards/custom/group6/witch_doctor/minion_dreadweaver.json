@@ -4,10 +4,10 @@
   "type": "MINION",
   "heroClass": "ROSE",
   "baseAttack": 3,
-  "baseHp": 8,
+  "baseHp": 6,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Opener: Choose a minion. Draw a minion of the same Cost from your deck.",
+  "description": "Opener: Choose a minion. Draw 2 minions of the same Cost from your deck.",
   "battlecry": {
     "targetSelection": "MINIONS",
     "spell": {
