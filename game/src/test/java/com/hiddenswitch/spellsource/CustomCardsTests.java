@@ -58,6 +58,24 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testDoomerDiver() {
+		runGym((context, player, opponent) -> {
+			Card shouldDraw = shuffleToDeck(context, player, "spell_the_coin");
+			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			attack(context, player, pirate, opponent.getHero());
+			playMinionCard(context, player, "minion_doomed_diver");
+			assertEquals(shouldDraw.getZone(), Zones.HAND);
+		});
+
+		runGym((context, player, opponent) -> {
+			Card shouldDraw = shuffleToDeck(context, player, "spell_the_coin");
+			Minion pirate = playMinionCard(context, player, "minion_charge_pirate");
+			playMinionCard(context, player, "minion_doomed_diver");
+			assertEquals(shouldDraw.getZone(), Zones.DECK);
+		});
+	}
+
+	@Test
 	public void testShapeseeper() {
 		runGym((context, player, opponent) -> {
 			Card shapeseeperCard = receiveCard(context, player, "minion_shapeseeper");
