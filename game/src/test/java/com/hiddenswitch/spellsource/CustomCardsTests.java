@@ -58,6 +58,18 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testShapeseeper() {
+		runGym((context, player, opponent) -> {
+			Card shapeseeperCard = receiveCard(context, player, "minion_shapeseeper");
+			playCard(context, player, "minion_neutral_test");
+			assertEquals(costOf(context, player, shapeseeperCard), shapeseeperCard.getBaseManaCost() + 1);
+			Minion shapeseeper = playMinionCard(context, player, shapeseeperCard);
+			assertEquals(shapeseeper.getAttack(), shapeseeper.getBaseAttack() + 1);
+			assertEquals(shapeseeper.getHp(), shapeseeper.getBaseHp() + 1);
+		});
+	}
+
+	@Test
 	public void testDiscoInfero() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_neutral_test");
