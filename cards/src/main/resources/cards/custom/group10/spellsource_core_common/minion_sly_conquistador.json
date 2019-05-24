@@ -25,6 +25,8 @@
   },
   "attributes": {
     "BATTLECRY": true
+    "DIVINE_SHIELD": true
+
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
