@@ -19,6 +19,7 @@ Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together
  - Terrified Tanooki now gains +1 attack. (1108)
  - Attrition Master now affects minions during both player's turns.
  - Gurubashi Berserker now transforms once into a Rage Behemoth without incorrectly summoning more tokens. (1110)
+ - Northot, Necromaster no longer has an infinite loop interaction with your Falling Crusader (for your troubles).
 
 ### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
 
