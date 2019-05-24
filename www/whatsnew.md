@@ -18,6 +18,7 @@ Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together
  - Sly Conquistador now has Dodge. (1107)
  - Terrified Tanooki now gains +1 attack. (1108)
  - Attrition Master now affects minions during both player's turns.
+ - Gurubashi Berserker now transforms once into a Rage Behemoth without incorrectly summoning more tokens. (1110)
 
 ### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
 
