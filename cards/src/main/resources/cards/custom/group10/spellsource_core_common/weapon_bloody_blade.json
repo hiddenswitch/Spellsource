@@ -4,7 +4,7 @@
   "type": "WEAPON",
   "heroClass": "ANY",
   "damage": 3,
-  "durability": 3,
+  "durability": 2,
   "rarity": "FREE",
   "description": "",
   "collectible": false,
