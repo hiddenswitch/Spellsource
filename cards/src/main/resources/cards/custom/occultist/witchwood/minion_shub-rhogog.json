@@ -7,6 +7,8 @@
   "baseHp": 9,
   "rarity": "LEGENDARY",
     "description": "Opener: Choose a minion. Fill both sides of the board with copies of it.",
+    "battlecry": {
+    "targetSelection": "FRIENDLY_MINIONS",
     "spell": {
 	  "class": "CastRepeatedlySpell",
 	  "spell": {
@@ -14,7 +16,8 @@
       "targetPlayer": "BOTH"
     },
 	"howMany": 7,
-  }
+    }
+  },
   "attributes": {
   "BATTLECRY": true
   },
