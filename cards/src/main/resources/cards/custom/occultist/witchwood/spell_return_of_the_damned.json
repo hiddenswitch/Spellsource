@@ -4,23 +4,11 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
-  "description": "Give all minions \"Aftermath: Shuffle this into your deck. It costs (1).\"",
-  "targetSelection": "NONE",
+  "description": "Shuffle 2 copies of a minion into your deck.",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "AddDeathrattleSpell",
-    "target": "ALL_MINIONS",
-    "spell": {
-      "class": "custom.ShuffleWithCardCostModifierSpell",
-      "target": "SELF",
-      "cardCostModifier": {
-        "class": "CardCostModifier",
-        "target": "SELF",
-        "value": 1,
-        "operation": "SET"
-      },
-      "targetPlayer": "SELF",
-	  "persistentOwner": true
-    }
+    "class": "ShuffleToDeckSpell",
+    "howMany": 2
   },
   "sets": [
     "CUSTOM",
