@@ -1,12 +1,12 @@
 {
   "name": "Kahl of the Deep",
-  "baseManaCost": 6,
+  "baseManaCost": 5,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 3,
   "baseHp": 5,
   "rarity": "LEGENDARY",
-  "description": "Deathrattle: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 5 cards\"",
+  "description": "Deathrattle: Shuffle this minion into your opponent's deck and give it \"When drawn, draw 3 cards\"",
   "deathrattle": {
     "class": "MetaSpell",
     "spells": [
@@ -25,7 +25,7 @@
       "spell": {
         "class": "DrawSpell",
         "target": "SELF",
-        "value": 8
+        "value": 3
       }
 	  }
 	 }
