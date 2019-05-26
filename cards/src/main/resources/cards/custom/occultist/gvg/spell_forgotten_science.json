@@ -4,7 +4,7 @@
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-   "description": "Your next spell this turn also targets adjacent minions.",
+   "description": "The next spell you cast on a minion this turn also targets adjacent minions.",
  "trigger": {
     "eventTrigger": {
       "class": "SpellCastedTrigger",
