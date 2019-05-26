@@ -1,17 +1,18 @@
 {
-  "name": "Chaotic Summoning",
+  "name": "Eldritch Bait",
   "baseManaCost": 4,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
-  "rarity": "COMMON",
- "description": "Give a minion \"Aftermath: Summon a random minion from its owner's deck.\"",
+  "rarity": "RARE",
+ "description": "Give a minion \"Aftermath: Summon a random minion from your deck deck.\"",
   "targetSelection": "MINIONS",
   "spell": {
     "class": "AddDeathrattleSpell",
     "spell": {
       "class": "RecruitSpell",
       "cardLocation": "HAND",
-      "targetPlayer": "SELF"
+      "targetPlayer": "SELF",
+      "persistentOwner": true
     }
   },
   "sets": [
