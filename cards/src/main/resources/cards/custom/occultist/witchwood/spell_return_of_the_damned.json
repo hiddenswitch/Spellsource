@@ -1,0 +1,30 @@
+{
+  "name": "Return of the Damned",
+  "baseManaCost": 2,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+  "description": "Give all minions \"Aftermath: Shuffle this into your deck. It costs (1).\"",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "target": "ALL_MINIONS",
+    "spell": {
+      "class": "custom.ShuffleWithCardCostModifierSpell",
+      "target": "SELF",
+      "cardCostModifier": {
+        "class": "CardCostModifier",
+        "target": "SELF",
+        "value": 1,
+        "operation": "SET"
+      },
+      "targetPlayer": "SELF",
+	  "persistentOwner": true
+    }
+  },
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
+  "fileFormatVersion": 1
+}

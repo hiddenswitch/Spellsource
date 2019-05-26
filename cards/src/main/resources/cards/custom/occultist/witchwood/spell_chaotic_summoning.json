@@ -1,0 +1,22 @@
+{
+  "name": "Chaotic Summoning",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "DARKGREEN",
+  "rarity": "COMMON",
+ "description": "Give a minion \"Aftermath: Summon a random minion from its owner's deck.\"",
+  "targetSelection": "MINIONS",
+  "spell": {
+    "class": "AddDeathrattleSpell",
+    "spell": {
+      "class": "RecruitSpell",
+      "cardLocation": "HAND",
+      "targetPlayer": "SELF"
+    }
+  },
+  "sets": [
+    "CUSTOM",
+    "WITCHWOOD"
+  ],
+  "fileFormatVersion": 1
+}
