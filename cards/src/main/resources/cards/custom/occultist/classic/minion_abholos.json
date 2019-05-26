@@ -1,0 +1,91 @@
+{
+  "name": "Abholos",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 9,
+  "baseHp": 7,
+  "rarity": "LEGENDARY",
+  "description": "Aftermath: Destroy all minions and resummon this with the combined stats.",
+   "deathrattle": {
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "TransformSpell",
+		"target": "SELF",
+		"card": "permanent_abholos"
+      },
+      {
+          "class": "BuffSpell",
+          "target": "SELF",
+          "attackBonus": {
+            "class": "AttributeValueProvider",
+            "target": "OTHER_FRIENDLY_MINIONS",
+            "attribute": "ATTACK"
+          },
+          "hpBonus": {
+            "class": "AttributeValueProvider",
+            "target": "OTHER_FRIENDLY_MINIONS",
+            "attribute": "HP"
+          }
+      },
+	  {
+          "class": "DestroySpell",
+          "target": "OTHER_FRIENDLY_MINIONS"
+      },
+	  {
+	  "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_HP"
+        },
+        "value2": 0,
+        "operation": "GREATER"
+		         },
+	      "spell": {
+          "class": "RemoveAttributeSpell",
+		  "target": "SELF",
+          "attribute": "PERMANENT"
+        }
+	   },
+	   {
+	  "class": "ConditionalSpell",
+      "condition": {
+        "class": "ComparisonCondition",
+        "value1": {
+          "class": "AttributeValueProvider",
+          "target": "EVENT_TARGET",
+          "attribute": "BASE_HP"
+        },
+        "value2": 0,
+        "operation": "LESS_OR_EQUAL"
+		         },
+	      "spell": {
+		  "class": "MetaSpell",
+		  "spells": [
+		  {
+          "class": "SilenceSpell",
+		  "target": "SELF"
+		  },
+		  {
+		  "class": "DestroySpell",
+		  "target": "SELF"
+		  }
+				   }
+	   }
+                   ]
+	]
+  },
+  "attributes": {
+    "DEATHRATTLES": true
+  },
+  "collectible": true,
+  "sets": [
+  "CUSTOM",
+  "CLASSIC"
+  ],
+  "fileFormatVersion": 1
+}
