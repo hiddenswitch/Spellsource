@@ -162,7 +162,7 @@ import static java.util.stream.Collectors.toList;
  * <li>{@link GameAction#execute(GameContext, int)},
  * which actually starts the chain of effects for playing a card.</li>
  * <li>{@link GameLogic#summon(int, Minion, Entity, int, boolean)}, which summons minions.</li>
- * <li>{@link GameLogic#resolveBattlecry(int, Actor)}},
+ * <li>{@link GameLogic#resolveBattlecries(int, Actor)}},
  * which resolves the battlecry written on Novice Engineer.</li>
  * <li>{@link GameLogic#castSpell(int, SpellDesc,
  * EntityReference, EntityReference, TargetSelection, boolean, GameAction)}, which actually evaluates <b>all

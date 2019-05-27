@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.DamageSpell;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 import net.demilich.metastone.game.targeting.Zones;
@@ -82,8 +83,10 @@ public class BasicTests extends TestBase {
 		runGym((context, mage, warrior) -> {
 			TestMinionCard devMonster = new TestMinionCard(3, 3);
 			SpellDesc damageSpell = DamageSpell.create(EntityReference.ENEMY_HERO, 3);
-			BattlecryAction testBattlecry = BattlecryAction.createBattlecry(damageSpell);
-			testBattlecry.setTarget(warrior.getHero());
+			BattlecryDesc testBattlecry = new BattlecryDesc();
+			testBattlecry.spell = damageSpell;
+			testBattlecry.spell.setTarget(warrior.getHero().getReference());
+			testBattlecry.spell = damageSpell;
 			devMonster.getMinion().setBattlecry(testBattlecry);
 			context.getLogic().receiveCard(mage.getId(), devMonster);
 			context.performAction(mage.getId(), devMonster.play());

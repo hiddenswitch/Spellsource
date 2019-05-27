@@ -16,6 +16,7 @@ import net.demilich.metastone.game.entities.minions.BoardPositionRelative;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.logic.GameLogic;
 import net.demilich.metastone.game.spells.aura.Aura;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.spells.desc.SpellArg;
 import net.demilich.metastone.game.spells.desc.SpellDesc;
 import net.demilich.metastone.game.spells.desc.filter.ComparisonOperation;
@@ -174,6 +175,7 @@ public class SpellUtils {
 			HasBattlecry actionWithBattlecry = ((HasBattlecry) action);
 			// Do we resolve battlecries?
 			if (resolveBattlecry) {
+				/*
 				// The action either already has a battlecry specified because it was a choose one, or we have to retrieve
 				// the action from the actor that would be summoned.
 				BattlecryAction specifiedAction;
@@ -184,7 +186,7 @@ public class SpellUtils {
 						logger.error("playCardRandom {} {}: The actor is missing from the card {}", context.getGameId(), source, card);
 						return false;
 					}
-					specifiedAction = actor.getBattlecry();
+					specifiedAction = actor.getBattlecries();
 				} else {
 					specifiedAction = actionWithBattlecry.getBattlecry();
 				}
@@ -209,10 +211,13 @@ public class SpellUtils {
 						actionWithBattlecry.setBattlecry(specifiedAction);
 					}
 				}
+				*/
 			} else {
 				// No matter what the battlecry, clear it. This way, when the action is executed, resolve battlecry can be
 				// true but this method's parameter to not resolve battlecries will be respected
-				actionWithBattlecry.setBattlecry(BattlecryAction.NONE);
+				BattlecryDesc action1 = new BattlecryDesc();
+				action1.spell = NullSpell.create();
+				actionWithBattlecry.setBattlecry(action1);
 			}
 		} else if (card.isSpell() || card.isHeroPower()) {
 			// This is some other kind of action that takes a target
@@ -476,7 +481,7 @@ public class SpellUtils {
 	 * @param desc    A {@link SpellDesc} to use as the "parent" of the discovered spells. The mana cost and targets are
 	 *                inherited from this spell.
 	 * @param spells  A list of spells from which to generate virtual cards.
-	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecry()} that initiated this
+	 * @param source  The source entity, typically the {@link Card} or {@link Minion#getBattlecries()} that initiated this
 	 *                call.
 	 * @return A {@link DiscoverAction} whose {@link DiscoverAction#getCard()} property corresponds to the selected card.
 	 * 		To retrieve the spell, get the card's spell with {@link Card#getSpell()}.

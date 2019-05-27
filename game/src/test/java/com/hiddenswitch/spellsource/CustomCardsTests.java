@@ -58,6 +58,44 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testHoffisTheDunewalker() {
+		// This has to test two effects:
+		//   1. The QueryTargetSpell effect
+		//   2. The AddBattlecrySpell effect
+		runGym((context, player, opponent) -> {
+			Card shouldNotSpawnSandpile2 = putOnTopOfDeck(context, player, "minion_neutral_test");
+			Card shouldSpawnSandpileDespiteSixth = putOnTopOfDeck(context, player, "minion_neutral_test");
+			Card shouldSpawnSandpile1 = putOnTopOfDeck(context, player, "minion_neutral_test");
+			Card shouldNotSpawnSandpile1 = putOnTopOfDeck(context, player, "spell_the_coin");
+			Card shouldSpawnSandpile2 = putOnTopOfDeck(context, player, "minion_test_untargeted_battlecry");
+			Card shouldSpawnSandpile3 = putOnTopOfDeck(context, player, "minion_neutral_test");
+			Card shouldSpawnSandpile4 = putOnTopOfDeck(context, player, "minion_neutral_test");
+			Minion hoffis = playMinionCard(context, player, "minion_hoffis_the_dunewalker");
+			for (int i = 0; i < 6; i++) {
+				context.getLogic().drawCard(player.getId(), player.getHero());
+			}
+			assertEquals(player.getHand().size(), 6);
+			destroy(context, hoffis);
+			int hp = player.getHero().getHp();
+			for (Card card : new Card[]{shouldSpawnSandpile1, shouldSpawnSandpile2, shouldSpawnSandpile3, shouldSpawnSandpile4, shouldSpawnSandpileDespiteSixth}) {
+				assertEquals(player.getMinions().size(), 0);
+				assertEquals(card.getZone(), Zones.HAND);
+				playCard(context, player, card);
+				assertEquals(player.getMinions().size(), 2);
+				assertEquals(player.getMinions().get(1).getSourceCard().getCardId(), "token_sandpile");
+				destroy(context, player.getMinions().get(1));
+				destroy(context, player.getMinions().get(0));
+			}
+			// Test that both battlecries were evaluated
+			assertEquals(player.getHero().getHp(), hp - 1);
+			for (Card card : new Card[]{shouldNotSpawnSandpile1, shouldNotSpawnSandpile2}) {
+				playCard(context, player, card);
+				assertTrue(player.getMinions().stream().noneMatch(c -> c.getSourceCard().getCardId().equals("token_sandpile")));
+			}
+		});
+	}
+
+	@Test
 	public void testDaringDuelist() {
 		runGym((context, player, opponent) -> {
 			context.endTurn();
