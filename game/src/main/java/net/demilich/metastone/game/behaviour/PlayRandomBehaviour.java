@@ -11,14 +11,20 @@ import java.util.*;
 /**
  * This behaviour chooses actions randomly.
  * <p>
- * It relies on its own internal {@link Random} instance as the state of its random choice generator and does not use
- * the {@link GameLogic#getRandom()} facilities at all.
+ * Optionally accepts a {@link Random} in its constructor. Otherwise, the default constructor creates a {@link Random}
+ * instance as the state of its random choice generator and does not use the {@link GameLogic#getRandom()} facilities at
+ * all.
  */
 public class PlayRandomBehaviour extends IntelligentBehaviour {
 
-	private Random random = new Random();
+	private final Random random;
 
 	public PlayRandomBehaviour() {
+		this(new Random());
+	}
+
+	public PlayRandomBehaviour(Random random) {
+		this.random = random;
 	}
 
 	@Override
@@ -28,7 +34,10 @@ public class PlayRandomBehaviour extends IntelligentBehaviour {
 
 	@Override
 	public List<Card> mulligan(GameContext context, Player player, List<Card> cards) {
-		return new ArrayList<>(randomSubset(cards, getRandom(context).nextInt(3) + 1, getRandom(context)));
+		if (cards.isEmpty()) {
+			return new ArrayList<>();
+		}
+		return new ArrayList<>(randomSubset(cards, getRandom(context).nextInt(cards.size()) + 1, getRandom(context)));
 	}
 
 	protected Random getRandom(GameContext context) {

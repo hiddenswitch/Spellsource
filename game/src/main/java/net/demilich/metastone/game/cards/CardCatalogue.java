@@ -39,6 +39,9 @@ public class CardCatalogue {
 	}
 
 	public static CardList getAll() {
+		if (records.isEmpty()) {
+			logger.error("getAll: Use CardCatalogue.loadCardsFromPackage() to actually load the cards!");
+		}
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			result.addCard(card.clone());
@@ -63,6 +66,9 @@ public class CardCatalogue {
 	 */
 	public @NotNull
 	static Card getCardById(@NotNull String id) {
+		if (records.isEmpty()) {
+			logger.error("getAll: Use CardCatalogue.loadCardsFromPackage() to actually load the cards!");
+		}
 		Card card = cards.getOrDefault(id.toLowerCase(), null);
 		if (card != null) {
 			card = card.getCopy();
@@ -85,6 +91,9 @@ public class CardCatalogue {
 	}
 
 	public static Card getCardByName(String name) {
+		if (records.isEmpty()) {
+			logger.error("getAll: Use CardCatalogue.loadCardsFromPackage() to actually load the cards!");
+		}
 		CardCatalogueRecord namedCard = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).findFirst().orElse(recordsByName.get(name).get(0));
 		if (namedCard != null) {
 			return getCardById(namedCard.getId());
@@ -93,6 +102,9 @@ public class CardCatalogue {
 	}
 
 	public static Card getCardByName(String name, HeroClass heroClass) {
+		if (records.isEmpty()) {
+			logger.error("getAll: Use CardCatalogue.loadCardsFromPackage() to actually load the cards!");
+		}
 		List<CardCatalogueRecord> namedCards = recordsByName.get(name).stream().filter(ccr -> ccr.getDesc().isCollectible()).collect(Collectors.toList());
 		if (!namedCards.isEmpty()) {
 			if (namedCards.size() > 1) {
@@ -137,6 +149,9 @@ public class CardCatalogue {
 	}
 
 	public static CardList query(DeckFormat deckFormat, CardType cardType, Rarity rarity, HeroClass heroClass, Attribute tag, HeroClass actualHeroClass) {
+		if (records.isEmpty()) {
+			logger.error("getAll: Use CardCatalogue.loadCardsFromPackage() to actually load the cards!");
+		}
 		CardList result = new CardArrayList();
 		for (Card card : cards.values()) {
 			if (card.getDesc().getFileFormatVersion() > version) {

@@ -1783,6 +1783,13 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 		return deckPairs;
 	}
 
+	/**
+	 * Creates all the possible combinations of decks given a list of decks
+	 *
+	 * @param decks
+	 * @param includeMirrors
+	 * @return
+	 */
 	public static List<GameDeck[]> getDeckCombinations(List<GameDeck> decks, boolean includeMirrors) {
 		List<GameDeck[]> deckPairs = new ArrayList<>();
 
