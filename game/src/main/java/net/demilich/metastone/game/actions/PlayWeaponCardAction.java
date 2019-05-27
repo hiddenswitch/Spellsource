@@ -4,13 +4,14 @@ import co.paralleluniverse.fibers.Suspendable;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.entities.weapons.Weapon;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.targeting.EntityReference;
 
 /**
  * An action that corresponds to playing a weapon card from the hand.
  */
 public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry {
-	private BattlecryAction battlecry;
+	private BattlecryDesc battlecry;
 
 	private PlayWeaponCardAction() {
 		setTargetReference(EntityReference.NONE);
@@ -22,7 +23,7 @@ public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry
 		setActionType(ActionType.EQUIP_WEAPON);
 	}
 
-	public PlayWeaponCardAction(EntityReference reference, BattlecryAction battlecry) {
+	public PlayWeaponCardAction(EntityReference reference, BattlecryDesc battlecry) {
 		super(reference);
 		setActionType(ActionType.EQUIP_WEAPON);
 		this.battlecry = battlecry;
@@ -48,12 +49,12 @@ public class PlayWeaponCardAction extends PlayCardAction implements HasBattlecry
 	}
 
 	@Override
-	public BattlecryAction getBattlecry() {
+	public BattlecryDesc getBattlecry() {
 		return battlecry;
 	}
 
 	@Override
-	public void setBattlecry(BattlecryAction action) {
+	public void setBattlecry(BattlecryDesc action) {
 		battlecry = action;
 	}
 }
