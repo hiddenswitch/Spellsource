@@ -6,11 +6,18 @@ permalink: /whats-new/
 
 ### 0.8.30-2.0.30 (In Progress)
 
+Introducing the Spellsource Legendaries!
+
 Bug fixes.
+
+##### Content Additions:
+
+ - New Spellsource Legendaries. (1074)
 
 ##### Content Fixes:
 
  - Daring Duelist now only draws a card when it survives damage. (1111)
+ - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
 
 ### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
 

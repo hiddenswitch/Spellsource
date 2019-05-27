@@ -15,6 +15,7 @@ import net.demilich.metastone.game.entities.heroes.Hero;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.entities.minions.Minion;
 import net.demilich.metastone.game.logic.GameLogic;
+import net.demilich.metastone.game.logic.XORShiftRandom;
 import net.demilich.metastone.game.spells.BuffSpell;
 import net.demilich.metastone.game.spells.CastFromGroupSpell;
 import net.demilich.metastone.game.spells.Spell;
@@ -346,6 +347,7 @@ public class TheOldGodsTests extends TestBase {
 	@Test
 	public void testALightInTheDarkness() {
 		GameContext context = createContext(HeroClass.SILVER, HeroClass.RED);
+		context.getLogic().setRandom(new XORShiftRandom(101010L));
 		Player player = context.getActivePlayer();
 		final DiscoverAction[] action = {null};
 		final Minion[] originalMinion = new Minion[1];
@@ -389,6 +391,7 @@ public class TheOldGodsTests extends TestBase {
 				"minion_injured_blademaster",
 				"minion_injured_kvaldir",
 				"minion_midnight_drake",
+				"minion_sly_conquistador",
 				"minion_twilight_drake").anyMatch(c -> {
 			return sourceCard.getCardId().equals(c);
 		});

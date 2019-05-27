@@ -124,7 +124,7 @@ public final class BattlecryAction extends GameAction {
 		return getSpell().hasPredefinedTarget() ? getSpell().getTarget() : getTargetReference();
 	}
 
-	private Condition getCondition() {
+	public Condition getCondition() {
 		return condition;
 	}
 

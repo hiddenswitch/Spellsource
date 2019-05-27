@@ -14,9 +14,12 @@
       "targetPlayer": "SELF"
     },
     "spell": {
-      "class": "SummonSpell",
-      "card": "token_lich_ghoul_taunt",
-      "targetPlayer": "SELF"
+      "class": "CastAfterSequenceSpell",
+      "spell": {
+        "class": "SummonSpell",
+        "card": "token_lich_ghoul_taunt",
+        "targetPlayer": "SELF"
+      }
     }
   },
   "attributes": {
