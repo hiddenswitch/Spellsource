@@ -1,10 +1,10 @@
 {
-  "name": "Dampen Harm",
+  "name": "Steadfast Defense",
   "baseManaCost": 5,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "FREE",
-  "description": "Your minions can only take 1 damage at a time until the start of your next turn.",
+  "description": "Your minions can only take 1 damage at a time until your next turn.",
   "targetSelection": "NONE",
   "spell": {
     "class": "MetaSpell",
