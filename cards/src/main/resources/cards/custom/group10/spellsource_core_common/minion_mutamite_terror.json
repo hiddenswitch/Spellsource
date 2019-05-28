@@ -13,7 +13,7 @@
     "condition": {
       "class": "CardCountCondition",
       "operation": "GREATER",
-      "value": 1
+      "value": 0
     },
     "spell": {
       "class": "DiscardSpell",
