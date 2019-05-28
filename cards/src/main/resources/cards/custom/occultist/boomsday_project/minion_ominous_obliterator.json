@@ -6,8 +6,7 @@
   "baseAttack": 6,
   "baseHp": 8,
   "rarity": "COMMON",
-  "race": "MECH",
-  "description": "Guard Opener: Attack a minion.",
+  "description": "Guard. Opener: Attack a minion.",
   "targetSelection": "MINIONS",
   "battlecry": {
     "spell": {
