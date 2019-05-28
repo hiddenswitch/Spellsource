@@ -1,8 +1,8 @@
 {
   "name": "Birdbrain",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
-  "heroClass": "ROSE",
+  "heroClass": "ANY",
   "baseAttack": 5,
   "baseHp": 4,
   "rarity": "RARE",
