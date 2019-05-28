@@ -13,6 +13,7 @@ Updates from @Logovaz for Witch Doctor.
  - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
  - Hatches the Dragon is no longer collectible. (1094)
  - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
+ - Nature Rager now gains +1 Health instead of +1/+1. (1077)
 
 ### 0.8.30-2.0.30 (Monday, May 28th, 2019)
 
