@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.31-2.0.30 (In Progress)
+
+Updates from @Logovaz for Witch Doctor.
+
+##### Content Fixes:
+
+ - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
+
 ### 0.8.30-2.0.30 (Monday, May 28th, 2019)
 
 Introducing the Spellsource Legendaries!
