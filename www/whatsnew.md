@@ -18,6 +18,7 @@ Bug fixes.
 
  - Daring Duelist now only draws a card when it survives damage. (1111)
  - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
+ - Copying minions that have jailed other minions no longer causes errors.
 
 ### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
 
