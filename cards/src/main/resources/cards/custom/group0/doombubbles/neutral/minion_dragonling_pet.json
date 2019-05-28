@@ -11,38 +11,34 @@
   "deckTrigger": {
     "eventTrigger": {
       "class": "GameStartTrigger",
-      "targetPlayer": "SELF"
-    },
-    "spell": {
-      "class": "ConditionalSpell",
-      "condition": {
+      "targetPlayer": "SELF",
+      "fireCondition": {
         "class": "ComparisonCondition",
         "operation": "EQUAL",
         "value1": {
           "class": "EntityCounter",
           "target": "FRIENDLY_DECK",
           "filter": {
-              "class": "RaceFilter",
-              "race": "DRAGON",
-
+            "class": "RaceFilter",
+            "race": "DRAGON"
           }
         },
         "value2": 30
-      },
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "RevealCardSpell",
-            "target": "SELF",
-            "targetPlayer": "SELF"
-          },
-          {
-            "class": "FromDeckToHandSpell",
-            "target": "SELF"
-          }
-        ]
       }
+    },
+    "spell": {
+      "class": "MetaSpell",
+      "spells": [
+        {
+          "class": "RevealCardSpell",
+          "target": "SELF",
+          "targetPlayer": "SELF"
+        },
+        {
+          "class": "FromDeckToHandSpell",
+          "target": "SELF"
+        }
+      ]
     }
   },
   "collectible": true,
