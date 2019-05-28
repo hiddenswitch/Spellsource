@@ -3814,8 +3814,8 @@ public class CustomCardsTests extends TestBase {
 			assertEquals(endTime.getAttributeValue(Attribute.RESERVED_INTEGER_1), 40);
 			endTime.setAttribute(Attribute.RESERVED_INTEGER_1, 1);
 			context.endTurn();
-			assertEquals(context.getStatus(), GameStatus.WON);
-			assertEquals(context.getWinningPlayerId(), player.getId());
+			assertEquals(context.getStatus(), GameStatus.RUNNING);
+			assertFalse(opponent.getHero().isDestroyed());
 		});
 	}
 
@@ -5349,15 +5349,26 @@ public class CustomCardsTests extends TestBase {
 	public void testDragonlingPet() {
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_dragonling_pet");
-			shuffleToDeck(context, player, "minion_murloc_raider");
+			for (int i = 0; i < 28; i++) {
+				shuffleToDeck(context, player, "minion_dragon_test");
+			}
+			shuffleToDeck(context, player, "minion_neutral_test");
+			assertEquals(player.getDeck().size(), 30);
+			assertEquals(player.getHand().size(), 0);
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
-			assertTrue(player.getDeck().size() > 1);
+			assertEquals(player.getDeck().size(), 30);
+			assertEquals(player.getHand().size(), 0);
 		});
 
 		runGym((context, player, opponent) -> {
 			shuffleToDeck(context, player, "minion_dragonling_pet");
+			for (int i = 0; i < 29; i++) {
+				shuffleToDeck(context, player, "minion_dragon_test");
+			}
+			assertEquals(player.getDeck().size(), 30);
+			assertEquals(player.getHand().size(), 0);
 			context.fireGameEvent(new GameStartEvent(context, player.getId()));
-			assertEquals(player.getDeck().size(), 0);
+			assertEquals(player.getDeck().size(), 29);
 			assertEquals(player.getHand().size(), 1);
 		});
 	}
@@ -5410,17 +5421,18 @@ public class CustomCardsTests extends TestBase {
 
 	@Test
 	public void testAegwynn() {
-		Map<String, Integer> spellMap = new HashMap<>();
-		spellMap.put("spell_fireball", 0);
-		spellMap.put("spell_arcane_explosion", 1);
-		spellMap.put("spell_flamestrike", 1);
-		spellMap.put("spell_frostbolt", 0);
-		for (String spell : spellMap.keySet()) {
+		Map<String, Integer> cardMap = new HashMap<>();
+		cardMap.put("minion_neutral_test", 2);
+		cardMap.put("spell_fireball", 0);
+		cardMap.put("spell_arcane_explosion", 0);
+		cardMap.put("spell_flamestrike", 0);
+		cardMap.put("spell_frostbolt", 0);
+		for (String spell : cardMap.keySet()) {
 			runGym((context, player, opponent) -> {
 				shuffleToDeck(context, player, spell);
 				shuffleToDeck(context, player, "minion_aegwynn");
 				context.fireGameEvent(new GameStartEvent(context, player.getId()));
-				assertEquals(player.hasAttribute(Attribute.SPELL_DAMAGE) ? player.getAttribute(Attribute.SPELL_DAMAGE) : 0, spellMap.get(spell));
+				assertEquals(player.hasAttribute(Attribute.SPELL_DAMAGE) ? player.getAttribute(Attribute.SPELL_DAMAGE) : 0, cardMap.get(spell));
 			});
 		}
 	}

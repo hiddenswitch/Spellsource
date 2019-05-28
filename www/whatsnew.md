@@ -11,6 +11,8 @@ Updates from @Logovaz for Witch Doctor.
 ##### Content Fixes:
 
  - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
+ - Hatches the Dragon is no longer collectible. (1094)
+ - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
 
 ### 0.8.30-2.0.30 (Monday, May 28th, 2019)
 

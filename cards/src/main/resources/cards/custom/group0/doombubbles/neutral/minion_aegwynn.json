@@ -14,34 +14,31 @@
     {
       "eventTrigger": {
         "class": "GameStartTrigger",
-        "targetPlayer": "SELF"
-      },
-      "spell": {
-    "condition": {
-      "class": "DeckContainsCondition",
-          "filter": {
+        "targetPlayer": "SELF",
+        "fireCondition": {
+          "class": "DeckContainsCondition",
+          "cardFilter": {
             "class": "CardFilter",
             "cardType": "SPELL"
-          }
-        },
-      "invert": true
-      },
-        "spell": {
-          "class": "MetaSpell",
-          "spells": [
-            {
-              "class": "ModifyAttributeSpell",
-              "target": "FRIENDLY_PLAYER",
-              "value": 2,
-              "attribute": "SPELL_DAMAGE"
-            },
-            {
-              "class": "RevealCardSpell",
-              "target": "SELF",
-              "targetPlayer": "SELF"
-            }
-          ]
+          },
+          "invert": true
         }
+      },
+      "spell": {
+        "class": "MetaSpell",
+        "spells": [
+          {
+            "class": "ModifyAttributeSpell",
+            "target": "FRIENDLY_PLAYER",
+            "value": 2,
+            "attribute": "SPELL_DAMAGE"
+          },
+          {
+            "class": "RevealCardSpell",
+            "target": "SELF",
+            "targetPlayer": "SELF"
+          }
+        ]
       }
     }
   ]
