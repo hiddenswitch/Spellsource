@@ -58,6 +58,53 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testMariAnette() {
+		runGym((context, player, opponent) -> {
+			Minion friendly = playMinionCard(context, player, "minion_neutral_test");
+			context.endTurn();
+			Minion enemy = playMinionCard(context, opponent, "minion_neutral_test");
+			context.endTurn();
+			playCard(context, player, "minion_mari_anette");
+			friendly = (Minion) friendly.transformResolved(context);
+			enemy = (Minion) enemy.transformResolved(context);
+			for (Minion minion : new Minion[]{friendly, enemy}) {
+				assertEquals(minion.getDescription(), "At the end of your next turn, transforms back into Neutral Test");
+				assertEquals(minion.getSourceCard().getCardId(), "token_mari_puppet");
+			}
+			context.endTurn();
+			for (Minion minion : new Minion[]{friendly, enemy}) {
+				assertEquals(minion.getDescription(), "At the end of your next turn, transforms back into Neutral Test");
+				assertEquals(minion.getSourceCard().getCardId(), "token_mari_puppet");
+			}
+			context.endTurn();
+			for (Minion minion : new Minion[]{friendly, enemy}) {
+				assertEquals(minion.getDescription(), "At the end of your next turn, transforms back into Neutral Test");
+				assertEquals(minion.getSourceCard().getCardId(), "token_mari_puppet");
+			}
+			context.endTurn();
+			friendly = (Minion) friendly.transformResolved(context);
+			enemy = (Minion) enemy.transformResolved(context);
+			for (Minion minion : new Minion[]{friendly, enemy}) {
+				assertEquals(minion.getSourceCard().getCardId(), "minion_neutral_test");
+				assertEquals(minion.getDescription(), "");
+			}
+		});
+	}
+
+	@Test
+	public void testDoodles() {
+		runGym((context, player, opponent) -> {
+			playCard(context, player, "minion_doodles");
+			String originalHeroPower = player.getHeroPowerZone().get(0).getCardId();
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
+			playCard(context, player, "spell_test_deal_6", player.getHero());
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), "hero_power_draw_a_card");
+			playCard(context, player, "spell_test_deal_6", player.getHero());
+			assertEquals(player.getHeroPowerZone().get(0).getCardId(), originalHeroPower);
+		});
+	}
+
+	@Test
 	public void testHoffisTheDunewalker() {
 		// This has to test two effects:
 		//   1. The QueryTargetSpell effect
