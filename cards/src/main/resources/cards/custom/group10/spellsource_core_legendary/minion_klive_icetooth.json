@@ -7,6 +7,7 @@
   "baseHp": 3,
   "rarity": "LEGENDARY",
   "description": "Spellpower +1. Opener: Freeze a minion and restore 5 Health to your champion.",
+    "battlecry": {
   "targetSelection": "MINIONS",
   "spell": {
     "class": "MetaSpell",
@@ -22,8 +23,10 @@
       }
     ]
   },
+    }
   "attributes": {
-    "SPELL_DAMAGE": 1
+    "SPELL_DAMAGE": 1,
+    "BATTLECRY": true
   },
   "collectible": true,
   "set": "SPELLSOURCE_BASIC",
