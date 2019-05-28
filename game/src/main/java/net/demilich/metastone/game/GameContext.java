@@ -1183,6 +1183,9 @@ public class GameContext implements Cloneable, Serializable, Inventory, EntityZo
 	}
 
 	public void setLogic(GameLogic logic) {
+		if (this.logic != null && logic.getInternalId() != this.logic.getInternalId()) {
+			throw new IllegalArgumentException("logic.getInternalId() != this.logic.getInternalId()");
+		}
 		this.logic = logic;
 		logic.setContext(this);
 	}

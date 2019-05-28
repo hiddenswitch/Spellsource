@@ -497,7 +497,6 @@ public class Card extends Entity implements HasChooseOneActions, HasDeathrattleE
 			case GROUP:
 				throw new UnsupportedOperationException("The method .play() should not be called for GroupCard");
 		}
-		System.out.println(getCardType() + " " + getName());
 		throw new UnsupportedOperationException();
 	}
 
