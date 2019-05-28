@@ -5,7 +5,7 @@
 # client/build.gradle file to have a syntax issue
 swagger: "2.0"
 info:
-  version: 3.0.3
+  version: 3.0.4
   title: Hidden Switch Spellsource API
   description: |
     The Spellsource API for matchmaking, user accounts, collections management and more.
@@ -923,6 +923,7 @@ definitions:
           - 'KILL'
           - 'LOSE_DIVINE_SHIELD'
           - 'LOSE_DEFLECT'
+          - 'LOSE_STEALTH'
           - 'MAX_HP_INCREASED'
           - 'MAX_MANA'
           - 'MANA_MODIFIED'

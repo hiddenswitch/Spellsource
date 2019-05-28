@@ -337,8 +337,10 @@ public class SummonSpell extends Spell {
 
 					// Copy over the stored entities, e.g. the Test Subject + Vivid Nightmare combo
 					final EnvironmentEntityList list = EnvironmentEntityList.getList(context);
-					for (Card card : list.getCards(context, target)) {
-						list.add(minion, card);
+					for (EntityReference reference : list.getReferences(context, target)) {
+						if (!reference.equals(EntityReference.NONE)) {
+							list.add(minion, context.resolveSingleTarget(reference));
+						}
 					}
 				}
 			}

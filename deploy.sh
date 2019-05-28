@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -e
 OPTIND=1
-SPELLSOURCE_VERSION=0.8.29
+SPELLSOURCE_VERSION=0.8.30
 
 usage="$(basename "$0") [-hcedwpvlWDA] -- build and deploy the Spellsource Server
 
@@ -205,7 +205,6 @@ if [[ "$bump_version" = true ]] ; then
     Dockerfile \
     spellsource/context.py \
     cluster/runsims.sh \
-    client/build.gradle \
     net/src/main/java/com/hiddenswitch/spellsource/Version.java \
     gradle.properties
   SPELLSOURCE_VERSION=new_version
@@ -459,7 +458,7 @@ if [[ "$deploy_elastic_beanstalk" = true ]] ; then
   zip artifact.zip \
       ./Dockerfile \
       ./Dockerrun.aws.json \
-      ./net/build/libs/net-0.8.29-all.jar \
+      ./net/build/libs/net-0.8.30-all.jar \
       ./server.sh >/dev/null
 
   eb use metastone-dev >/dev/null
