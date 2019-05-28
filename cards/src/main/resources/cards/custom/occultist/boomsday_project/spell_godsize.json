@@ -1,50 +1,17 @@
 {
   "name": "Godsize",
-  "baseManaCost": 4,
+  "baseManaCost": 10,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "Discover a copy of a minion in your deck. Set its Cost, Attack and Health to 10.",
-    "targetSelection": "NONE",
+   "description": "Give a minion +10/+10. Then, behold on despair!",
+  "targetSelection": "MINIONS",
   "spell": {
-    "class": "DiscoverSpell",
-    "spell": {
-      "class": "ReceiveCardSpell",
-      "spell": {
-         "class": "MetaSpell",
-    "spells": [
-      {
-        "class": "SetAttackSpell",
-        "value": 10
-      },
-      {
-        "class": "SetHpSpell",
-        "value": 10
-      },
-	  {
-	  "class": "CardCostModifierSpell",
-        "target": "OUTPUT",
-        "cardCostModifier": {
-          "class": "CardCostModifier",
-          "target": "SELF",
-          "value": 10,
-          "operation": "SET"
-        }
-	  }
-    ]
-      },
-      "targetPlayer": "SELF"
-	  },
-	  "cardFilter": {
-        "class": "CardFilter",
-        "cardType": "MINION"
-      },
-      "cardSource": {
-        "class": "DeckSource",
-        "distinct": true,
-        "targetPlayer": "SELF"
-      }
+    "class": "BuffSpell",
+    "attackBonus": 10,
+    "hpBonus": 10
   },
+
   "collectible": true,
    "sets": [
     "CUSTOM",
