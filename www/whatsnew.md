@@ -11,6 +11,7 @@ Bug fixes.
 ##### Content Fixes:
 
  - Klive Icetooth now correctly plays its Opener. (1124)
+ - The End now applies to both player's hands and the stats effect applies before the Opener is evaluated. (1126)
 
 ### 0.8.31-2.0.30 (Tuesday, May 28th, 2019)
 
