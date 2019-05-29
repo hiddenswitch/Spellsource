@@ -13,8 +13,7 @@
     "targetPlayer": "SELF"
   },
   "attributes": {
-    "DEATHRATTLES": true,
-    "TAUNT": true
+    "DEATHRATTLES": true
   },
   "collectible": true,
   "sets": [
