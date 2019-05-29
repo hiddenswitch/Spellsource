@@ -1,0 +1,19 @@
+{
+  "name": "The Forgotten Science",
+  "baseManaCost": 0,
+  "type": "ENCHANTMENT",
+  "heroClass": "DARKGREEN",
+  "rarity": "FREE",
+  "description": "Spells you cast on minions also target adjacent minions.",
+  "aura": {
+    "class": "SpellTargetsAdjacentAura",
+    "target": "FRIENDLY_CARDS",
+    "filter": {
+      "class": "CardFilter",
+      "cardType": "SPELL"
+    }
+  },
+  "collectible": false,
+  "set": "CUSTOM",
+  "fileFormatVersion": 1
+}

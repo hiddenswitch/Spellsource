@@ -1,0 +1,16 @@
+{
+  "name": "Card Factory",
+  "type": "ENCHANTMENT",
+  "heroClass": "ANY",
+  "rarity": "LEGENDARY",
+  "description": "Your skill is \"Draw a card\".",
+  "aura": {
+    "class": "CardAura",
+    "target": "FRIENDLY_HERO_POWER",
+    "card": "hero_power_draw_a_card"
+  },
+  "attributes": {},
+  "collectible": false,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

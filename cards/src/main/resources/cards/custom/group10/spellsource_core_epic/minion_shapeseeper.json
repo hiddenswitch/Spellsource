@@ -11,9 +11,15 @@
   "aura": {
     "class": "BuffAura",
     "target": "SELF",
-    "value": {
+    "attackBonus": {
       "class": "EntityCounter",
-      "target": "ALL_OTHER_MINIONS"
+      "target": "ALL_MINIONS",
+      "offset": -1
+    },
+    "hpBonus": {
+      "class": "EntityCounter",
+      "target": "ALL_MINIONS",
+      "offset": -1
     }
   },
   "collectible": true,
@@ -21,7 +27,7 @@
   "fileFormatVersion": 1,
   "manaCostModifier": {
     "class": "EntityCounter",
-	"multiplier": -1,
-    "target": "ALL_OTHER_MINIONS"
+    "multiplier": -1,
+    "target": "ALL_MINIONS"
   }
 }

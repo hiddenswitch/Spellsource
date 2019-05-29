@@ -3,9 +3,9 @@ package net.demilich.metastone.game.spells.trigger;
 import net.demilich.metastone.game.events.GameEventType;
 import net.demilich.metastone.game.spells.desc.trigger.EventTriggerDesc;
 
-public class CardShuffledTrigger extends AbstractCardTrigger {
+public class ShuffledTrigger extends AbstractCardTrigger {
 
-	public CardShuffledTrigger(EventTriggerDesc desc) {
+	public ShuffledTrigger(EventTriggerDesc desc) {
 		super(desc);
 	}
 

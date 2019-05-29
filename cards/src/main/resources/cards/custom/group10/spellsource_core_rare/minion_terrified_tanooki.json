@@ -7,7 +7,7 @@
   "baseHp": 4,
   "rarity": "RARE",
   "race": "BEAST",
-  "description": "Hidden. After this minion attacks, gain +2 Attack.",
+  "description": "Hidden. After this minion attacks, gain +1 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
@@ -16,7 +16,7 @@
     "spell": {
       "class": "BuffSpell",
       "target": "TRIGGER_HOST",
-      "attackBonus": 2
+      "attackBonus": 1
     }
   },
   "attributes": {

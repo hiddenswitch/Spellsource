@@ -1,6 +1,6 @@
 {
   "name": "Cold Blood",
-  "baseManaCost": 1,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "BLACK",
   "rarity": "COMMON",

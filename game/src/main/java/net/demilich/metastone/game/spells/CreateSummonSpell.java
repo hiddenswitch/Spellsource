@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @deprecated This spell is fairly brittle and you will be better off implementing the intended effects directly. See
- * 		{@link CreateCardFromChoicesSpell} for an example.
+ * This spell is fairly brittle and you will be better off implementing the intended effects directly. See {@link
+ * CreateCardFromChoicesSpell} for an example.
  */
 @Deprecated
 public class CreateSummonSpell extends Spell {
@@ -64,7 +64,9 @@ public class CreateSummonSpell extends Spell {
 			if (context.getLogic().summon(player.getId(), minion, source, boardPosition, false) && successfulSummonSpell != null) {
 				SpellUtils.castChildSpell(context, player, successfulSummonSpell, source, minion, minion);
 			}
-			SpellUtils.castChildSpell(context, player, spell, source, target, minion);
+			if (spell != null) {
+				SpellUtils.castChildSpell(context, player, spell, source, target, minion);
+			}
 		}
 	}
 }

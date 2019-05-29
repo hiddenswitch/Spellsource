@@ -3,6 +3,76 @@ layout: page
 title: History
 permalink: /history/
 ---
+### 0.8.26-2.0.29 (Tuesday, May 21st, 2019)
+
+Bullet Bull is now correctly named.
+
+### 0.8.25-2.0.29 (Tuesday, May 21st, 2019)
+
+Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg, @Samswize and others for the fantastic contribution.
+
+##### Content Additions:
+
+ - All the new Spellsource core Rare and Epic cards.
+ 
+##### Content Fixes:
+
+ - "Championes" has now been corrected to "Champions" everywhere.
+
+### 0.8.24-2.0.29 (Wednesday, April 17th, 2019)
+
+Bug fixes. Additionally, new Witch Doctor decks are in the bot rotation.
+
+Make sure to visit playspellsource.com for a full history of changes if you'd like to know more since you've last joined us!
+
+##### Content Fixes:
+
+ - Omega Dragon is now a dragon.
+ - Lush Restoration now shows the correct amount of health that needs to be restored.
+ - Raid Boss Gnaxx now correctly says +2 attack buffs.
+ - Hexlord Zixxis now works.
+ - Mutamite Terror now discards your rightmost card.
+
+### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Choose and reshuffle effects shuffle in the original card, rather than a copy, as intended.
+ - Mind Controlled Mech now correctly cannot attack.
+ - Spiritual Diffusion now correctly destroys three random enemy minions and replaces them with 2/2 Spirits.
+ - Thelia Silentdreamer now correctly causes spells to be cast twice on her.
+ - Doby Mick's effect is now an Opener.
+ - Shadow Puppetry now works.
+ - Sideline Coach now costs (5).
+ - Frostfeather now has 5 health.
+ - Noth the Plaguebringer now correctly shuffles in cards.
+ - Glaciar Cleaver now costs (7).
+ - Frost Wraith is now 3/3.
+ - Pond Lord now summons two frogs instead of three as its aftermath.
+ - Baleful Totem is now a Shaman card and is 3/3.
+ - Rallying Cry now costs (2).
+ - Deepwood Barghest now behaves closer to Keleseth with regards to decks containing secrets (as opposed to cost-2 cards).
+ - Light of Chi-Ji now sets costs to (1).
+ - Sleight of Hand now costs (2).
+ - Crimson General is now a cost (2) 2/2.
+ - Fire Breath now says "Deal 3 damage to a minion and 2 damage to the enemy champion."
+ - Drakonid Bruiser is now a cost (5) 4/4 with Blitz.
+ - Dragon Treasurer is no longer collectible.
+ - Rheastrasza now summons a 4/4 Dragon with Blitz.
+ - Underminer is now a cost (2) 4/1.
+ - Mountain Whelp is now a cost (3) 2/4 with Blitz.
+ - Lava Saber now only summons one Whelp.
+ - Attempting to mind control Aysa Cloudsinger no longer crashes the game.
+
+##### Content Additions:
+
+ - Drakonid Commander: Cost (8) 6/6 Dragon, "Opener: Give a character +4 Attack this turn."
+ 
+### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
+
+See the main release notes for more about this release.
 
 ##### Content Additions:
 
