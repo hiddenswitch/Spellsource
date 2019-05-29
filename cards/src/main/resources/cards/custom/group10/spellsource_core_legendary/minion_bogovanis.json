@@ -12,6 +12,7 @@
     "targetSelection": "NONE",
     "spell": {
       "class": "PutDeckTopSpell",
+      "targetPlayer": "OPPONENT",
       "secondaryValue": 1,
       "card": "spell_sourcestone"
     }
