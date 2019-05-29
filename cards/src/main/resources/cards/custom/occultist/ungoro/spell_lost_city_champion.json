@@ -1,6 +1,6 @@
 {
   "name": "Lost City's Champion",
-  "baseManaCost": 7,
+  "baseManaCost": 8,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "COMMON",
