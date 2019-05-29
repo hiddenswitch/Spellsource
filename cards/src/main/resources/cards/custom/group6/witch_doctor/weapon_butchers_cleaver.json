@@ -1,5 +1,5 @@
 {
-  "name": "Butcher's Cleaver",
+  "name": "Sacrificial Blade",
   "baseManaCost": 3,
   "type": "WEAPON",
   "heroClass": "ROSE",
@@ -10,7 +10,7 @@
   "battlecry": {
     "condition": {
       "class": "AnyMatchFilterCondition",
-      "target": "FRIENDLY_GRAVEYARD",
+      "target": "ALL_ENTITIES",
       "filter": {
         "class": "AndFilter",
         "filters": [
