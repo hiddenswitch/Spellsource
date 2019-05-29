@@ -4,6 +4,14 @@ title: What's New
 permalink: /whats-new/
 ---
 
+### 0.8.32-2.0.30 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Klive Icetooth now correctly plays its Opener. (1124)
+
 ### 0.8.31-2.0.30 (Tuesday, May 28th, 2019)
 
 Updates from @Logovaz for Witch Doctor.
