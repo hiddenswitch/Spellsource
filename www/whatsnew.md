@@ -4,7 +4,7 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.31-2.0.30 (In Progress)
+### 0.8.31-2.0.30 (Tuesday, May 28th, 2019)
 
 Updates from @Logovaz for Witch Doctor.
 
@@ -22,7 +22,7 @@ New cards from @Muhframos for Occultist too!
  - Nature Rager now gains +1 Health instead of +1/+1. (1077)
  - Ending the turn with an Infinite Warden on the board without an End Time on the board no longer crashes the game.
 
-### 0.8.30-2.0.30 (Monday, May 28th, 2019)
+### 0.8.30-2.0.30 (Monday, May 27th, 2019)
 
 Introducing the Spellsource Legendaries!
 
