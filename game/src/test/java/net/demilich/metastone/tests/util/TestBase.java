@@ -49,16 +49,24 @@ import static org.mockito.ArgumentMatchers.anyList;
 public class TestBase {
 
 	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId) {
+		return playChooseOneCard(context, player, baseCardId, chosenCardId, null);
+	}
+
+	protected static Card playChooseOneCard(GameContext context, Player player, String baseCardId, String chosenCardId, Entity target) {
 		Card baseCard = receiveCard(context, player, baseCardId);
 		int cost = CardCatalogue.getCardById(chosenCardId).getManaCost(context, player);
 		player.setMana(cost);
-		context.performAction(player.getId(), context.getValidActions()
+		GameAction action = context.getValidActions()
 				.stream()
 				.filter(ga -> ga instanceof PlayChooseOneCardAction)
 				.map(ga -> (PlayChooseOneCardAction) ga)
 				.filter(coca -> coca.getChoiceCardId().equals(chosenCardId))
 				.findFirst()
-				.orElseThrow(AssertionError::new));
+				.orElseThrow(AssertionError::new);
+		if (target != null) {
+			action.setTarget(target);
+		}
+		context.performAction(player.getId(), action);
 		return baseCard;
 	}
 

@@ -1,0 +1,31 @@
+{
+  "name": "Tanglefer of the Jungle",
+  "baseManaCost": 6,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 7,
+  "baseHp": 4,
+  "rarity": "LEGENDARY",
+  "description": "Hidden. After this loses Hidden, give your champion Hidden until your next turn.",
+  "trigger": {
+    "eventTrigger": {
+      "class": "LoseStealthTrigger",
+      "hostTargetType": "IGNORE_OTHER_TARGETS"
+    },
+    "spell": {
+      "class": "AddAttributeSpell",
+      "target": "FRIENDLY_HERO",
+      "attribute": "STEALTH",
+      "revertTrigger": {
+        "class": "TurnStartTrigger",
+        "targetPlayer": "SELF"
+      }
+    }
+  },
+  "attributes": {
+    "STEALTH": true
+  },
+  "collectible": true,
+  "set": "SPELLSOURCE_BASIC",
+  "fileFormatVersion": 1
+}

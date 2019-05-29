@@ -1,6 +1,6 @@
 {
   "name": "Emerald Spellstone",
-  "baseManaCost": 5,
+  "baseManaCost": 6,
   "type": "SPELL",
   "heroClass": "GREEN",
   "rarity": "RARE",

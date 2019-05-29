@@ -11,7 +11,7 @@
   "triggers": [
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "sourcePlayer": "SELF",
         "targetPlayer": "SELF"
       },
@@ -24,7 +24,7 @@
     },
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "sourcePlayer": "SELF",
         "targetPlayer": "OPPONENT"
       },

@@ -1,0 +1,26 @@
+{
+  "name": "Skytearer",
+  "baseManaCost": 9,
+  "type": "MINION",
+  "heroClass": "DARKGREEN",
+  "baseAttack": 7,
+  "baseHp": 9,
+  "rarity": "RARE",
+  "race": "MECH",
+  "description": "Aftermath: Summon a random minion from your deck.",
+  "deathrattle": {
+    "class": "RecruitSpell",
+    "cardLocation": "DECK",
+    "targetPlayer": "SELF"
+  },
+  "attributes": {
+    "DEATHRATTLES": true,
+    "TAUNT": true
+  },
+  "collectible": true,
+  "sets": [
+    "CUSTOM",
+    "BOOMSDAY_PROJECT"
+  ],
+  "fileFormatVersion": 1
+}

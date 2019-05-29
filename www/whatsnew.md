@@ -4,7 +4,78 @@ title: What's New
 permalink: /whats-new/
 ---
 
-### 0.8.27-2.0.30 (Wednesday, May 22nd, 2019)
+### 0.8.32-2.0.30 (In Progress)
+
+Bug fixes.
+
+##### Content Fixes:
+
+ - Klive Icetooth now correctly plays its Opener. (1124)
+
+### 0.8.31-2.0.30 (Tuesday, May 28th, 2019)
+
+Updates from @Logovaz for Witch Doctor.
+
+New cards from @Muhframos for Occultist too!
+
+##### Content Additions:
+
+ - Significant additions to Occultist. (1057)
+
+##### Content Fixes:
+
+ - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
+ - Hatches the Dragon is no longer collectible. (1094)
+ - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
+ - Nature Rager now gains +1 Health instead of +1/+1. (1077)
+ - Ending the turn with an Infinite Warden on the board without an End Time on the board no longer crashes the game.
+
+### 0.8.30-2.0.30 (Monday, May 27th, 2019)
+
+Introducing the Spellsource Legendaries!
+
+Bug fixes.
+
+##### Content Additions:
+
+ - New Spellsource Legendaries. (1074)
+
+##### Content Fixes:
+
+ - Daring Duelist now only draws a card when it survives damage. (1111)
+ - Icecrown Lich, Assimilator and Scarlet Thirst on the board no longer produces an infinite loop.
+ - Copying minions that have jailed other minions no longer causes errors.
+
+### 0.8.29-2.0.30 (Thursday, May 23rd, 2019)
+
+Bug fixes. Special thanks to @Bdg and @Pircival for testing and putting together the fixes flawlessly.
+
+##### Content Fixes:
+
+ - Disco Inferno now swaps stats with a friendly minion. (1109)
+ - Ninjarcher now deals 2 damage to a random enemy. (1101)
+ - Malicious Magpie now deals damage only when other minions attack. (1100)
+ - Bloody Blade is now a 3/2. (1102)
+ - Redhide Butcher now has the correct effect and rarity. (1104)
+ - Sly Conquistador now has Dodge. (1107)
+ - Terrified Tanooki now gains +1 attack. (1108)
+ - Attrition Master now affects minions during both player's turns.
+ - Gurubashi Berserker now transforms once into a Rage Behemoth without incorrectly summoning more tokens. (1110)
+ - Northot, Necromaster no longer has an infinite loop interaction with your Falling Crusader (for your troubles).
+ - Shapeseeper now correctly buffs its stats. (1106)
+ - Doomed Diver now triggers correctly. (1103)
+
+### 0.8.28-2.0.30 (Thursday, May 23rd, 2019)
+
+Hearthstone updates. Thanks to @doombubbles for the great contribution!
+
+The 0.8 series will be the last to receive Hearthstone updates.
+
+##### Content Additions:
+ - The Rise of Shadows set for Hearthstone
+ - Standard rotation into Year of the Dragon
+
+### 0.8.27-2.0.30 (Thursday, May 23rd, 2019)
 
 Thanks to @Phyley for contributing new fixes to Vermancer!
 
@@ -29,73 +100,6 @@ Bug fixes.
 
  - It is no longer possible to select a neutral champion in the deck creation screen.
 
-### 0.8.26-2.0.29 (Tuesday, May 21st, 2019)
-
-Bullet Bull is now correctly named.
-
-### 0.8.25-2.0.29 (Tuesday, May 21st, 2019)
-
-Introducing new Spellsource core cards. Thank you @Pircival, @Walrus, @Logovaz, @bdg, @Samswize and others for the fantastic contribution.
-
-##### Content Additions:
-
- - All the new Spellsource core Rare and Epic cards.
- 
-##### Content Fixes:
-
- - "Championes" has now been corrected to "Champions" everywhere.
- 
-### 0.8.24-2.0.29 (Wednesday, April 17th, 2019)
-
-Bug fixes. Additionally, new Witch Doctor decks are in the bot rotation.
-
-Make sure to visit playspellsource.com for a full history of changes if you'd like to know more since you've last joined us!
-
-##### Content Fixes:
-
- - Omega Dragon is now a dragon.
- - Lush Restoration now shows the correct amount of health that needs to be restored.
- - Raid Boss Gnaxx now correctly says +2 attack buffs.
- - Hexlord Zixxis now works.
- - Mutamite Terror now discards your rightmost card.
-
-### 0.8.23-2.0.29 (Tuesday, April 16th, 2019)
-
-Bug fixes.
-
-##### Content Fixes:
-
- - Choose and reshuffle effects shuffle in the original card, rather than a copy, as intended.
- - Mind Controlled Mech now correctly cannot attack.
- - Spiritual Diffusion now correctly destroys three random enemy minions and replaces them with 2/2 Spirits.
- - Thelia Silentdreamer now correctly causes spells to be cast twice on her.
- - Doby Mick's effect is now an Opener.
- - Shadow Puppetry now works.
- - Sideline Coach now costs (5).
- - Frostfeather now has 5 health.
- - Noth the Plaguebringer now correctly shuffles in cards.
- - Glaciar Cleaver now costs (7).
- - Frost Wraith is now 3/3.
- - Pond Lord now summons two frogs instead of three as its aftermath.
- - Baleful Totem is now a Shaman card and is 3/3.
- - Rallying Cry now costs (2).
- - Deepwood Barghest now behaves closer to Keleseth with regards to decks containing secrets (as opposed to cost-2 cards).
- - Light of Chi-Ji now sets costs to (1).
- - Sleight of Hand now costs (2).
- - Crimson General is now a cost (2) 2/2.
- - Fire Breath now says "Deal 3 damage to a minion and 2 damage to the enemy champion."
- - Drakonid Bruiser is now a cost (5) 4/4 with Blitz.
- - Dragon Treasurer is no longer collectible.
- - Rheastrasza now summons a 4/4 Dragon with Blitz.
- - Underminer is now a cost (2) 4/1.
- - Mountain Whelp is now a cost (3) 2/4 with Blitz.
- - Lava Saber now only summons one Whelp.
- - Attempting to mind control Aysa Cloudsinger no longer crashes the game.
-
-##### Content Additions:
- 
- - Drakonid Commander: Cost (8) 6/6 Dragon, "Opener: Give a character +4 Attack this turn."
-
 ### 0.8.22-2.0.29 (Thursday, April 11th, 2019)
 
 Thanks to a contribution from @Logovaz, there are new cards for Senzaku!
@@ -113,7 +117,7 @@ The following keywords have been consistently applied to Spellsource cards:
  - Spellpower (X): Your Spells deal this much more damage.
  - Toxic: This kills minions it damages.
  - Guard: This must be destroyed before minions can attack its champion.
- 
+
 Now clarifying the following additional keywords:
 
  - Armor: Instead of losing health, lose this instead.

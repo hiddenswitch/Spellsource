@@ -1,0 +1,24 @@
+{
+  "name": "Untargeted Battlecry 1 Damage to Hero",
+  "baseManaCost": 1,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 1,
+  "baseHp": 1,
+  "rarity": "COMMON",
+  "description": "",
+  "battlecry": {
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DamageSpell",
+      "target": "FRIENDLY_HERO",
+      "value": 1
+    }
+  },
+  "attributes": {
+    "BATTLECRY": true
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

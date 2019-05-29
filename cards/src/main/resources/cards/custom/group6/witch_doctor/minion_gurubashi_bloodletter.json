@@ -17,12 +17,9 @@
       "hostTargetType": "IGNORE_OTHER_TARGETS"
     },
     "spell": {
-      "class": "CastAfterSequenceSpell",
-      "spell": {
-        "class": "TransformMinionSpell",
-        "target": "SELF",
-        "card": "token_rage_behemoth"
-      }
+      "class": "TransformMinionSpell",
+      "target": "SELF",
+      "card": "token_rage_behemoth"
     }
   },
   "collectible": true,

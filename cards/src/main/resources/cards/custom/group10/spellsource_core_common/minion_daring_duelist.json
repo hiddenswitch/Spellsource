@@ -11,7 +11,12 @@
     "eventTrigger": {
       "class": "AfterPhysicalAttackTrigger",
       "hostTargetType": "IGNORE_OTHER_SOURCES",
-      "targetEntityType": "MINION"
+      "targetEntityType": "MINION",
+      "fireCondition": {
+        "class": "IsDeadCondition",
+        "target": "TRIGGER_HOST",
+        "invert": true
+      }
     },
     "spell": {
       "class": "DrawCardSpell",

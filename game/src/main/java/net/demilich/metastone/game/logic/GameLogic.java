@@ -17,6 +17,7 @@ import net.demilich.metastone.game.entities.minions.Race;
 import net.demilich.metastone.game.entities.weapons.Weapon;
 import net.demilich.metastone.game.environment.Environment;
 import net.demilich.metastone.game.events.*;
+import net.demilich.metastone.game.spells.desc.BattlecryDesc;
 import net.demilich.metastone.game.utils.MathUtils;
 import net.demilich.metastone.game.spells.*;
 import net.demilich.metastone.game.spells.aura.*;
@@ -231,6 +232,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_3);
 		IMMUNE_TO_SILENCE.add(Attribute.RESERVED_INTEGER_4);
 		IMMUNE_TO_SILENCE.add(Attribute.CARD_INVENTORY_ID);
+		IMMUNE_TO_SILENCE.add(Attribute.TREANT);
+		IMMUNE_TO_SILENCE.add(Attribute.LACKEY);
 	}
 
 	private int getId;
@@ -667,8 +670,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * <p>
 	 * This method uses the {@link SpellDesc} (a {@link Map} of {@link SpellArg}, {@link Object}) to figure out what the
 	 * spell should do. The {@link SpellDesc#create()} method creates an instance of the {@link Spell} class returned by
-	 * {@code spellDesc.getSpellClass()}, then calls its {@link Spell#onCast(GameContext, Player, SpellDesc, Entity,
-	 * Entity)} method to actually execute the code of the spell.
+	 * {@code spellDesc.getSpellClass()}, then calls its {@link Spell#cast(GameContext, Player, SpellDesc, Entity, List)}
+	 * method to actually execute the code of the spell.
 	 * <p>
 	 * For example, imagine a spell, "Deal 2 damage to all Murlocs." This would have a {@link SpellDesc} (1) whose {@link
 	 * SpellArg#CLASS} would be {@link DamageSpell}, (2) whose {@link SpellArg#FILTER} would be an instance of {@link
@@ -979,8 +982,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			hero.setHp(previousHp);
 		}
 
-		if (resolveBattlecry && hero.getBattlecry() != null && hero.getBattlecry() != BattlecryAction.NONE) {
-			resolveBattlecry(player.getId(), hero);
+		if (resolveBattlecry
+				&& !hero.getBattlecries().isEmpty()) {
+			resolveBattlecries(player.getId(), hero);
 			endOfSequence();
 		}
 
@@ -1233,7 +1237,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		context.fireGameEvent(new PreDamageEvent(context, target, source, damage));
 		damage = context.getDamageStack().pop();
 		if (damage > 0) {
-			source.getAttributes().remove(Attribute.STEALTH);
+			removeAttribute(source, null, Attribute.STEALTH);
 		}
 
 		int damageDealt = 0;
@@ -1263,8 +1267,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 		// Hero now supports having divine shield
 		if (hero.hasAttribute(Attribute.DIVINE_SHIELD)) {
-			removeAttribute(hero, Attribute.DIVINE_SHIELD);
-			context.fireGameEvent(new LoseDivineShieldEvent(context, hero, hero.getOwner(), source.getOwner()));
+			removeAttribute(hero, source, Attribute.DIVINE_SHIELD);
 			return 0;
 		}
 
@@ -1316,14 +1319,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	@Suspendable
 	public boolean hitShields(Player player, int damage, Entity source, Actor target) {
 		if (target.hasAttribute(Attribute.DIVINE_SHIELD)) {
-			removeAttribute(target, Attribute.DIVINE_SHIELD);
-			context.fireGameEvent(new LoseDivineShieldEvent(context, target, target.getOwner(), source.getOwner()));
+			removeAttribute(target, source, Attribute.DIVINE_SHIELD);
 			return true;
 		}
 		if (target.hasAttribute(Attribute.DEFLECT)
 				&& target.getHp() <= damage) {
-			removeAttribute(target, Attribute.DEFLECT);
-			context.fireGameEvent(new LoseDeflectEvent(context, target, player.getId(), source.getId()));
+			removeAttribute(target, source, Attribute.DEFLECT);
 			damage(player, context.getPlayer(target.getOwner()).getHero(), damage, source, true);
 			return true;
 		}
@@ -1638,9 +1639,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		Player player = preEquipWeapon.getPlayer();
 
 		if (resolveBattlecry
-				&& weapon.getBattlecry() != null
-				&& weapon.getBattlecry() != BattlecryAction.NONE) {
-			resolveBattlecry(playerId, weapon);
+				&& !weapon.getBattlecries().isEmpty()) {
+			resolveBattlecries(playerId, weapon);
 			endOfSequence();
 		}
 
@@ -1726,7 +1726,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			entityGrantedImmunity = attacker;
 		}
 
-		removeAttribute(attacker, Attribute.STEALTH);
+		removeAttribute(attacker, null, Attribute.STEALTH);
 		// Attacker should lose an attack as soon as it loses stealth
 		attacker.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, -1);
 
@@ -2133,7 +2133,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			return;
 		}
 		if (actor.getAttributeValue(Attribute.NUMBER_OF_ATTACKS) >= actor.getMaxNumberOfAttacks() && !actor.hasAttribute(Attribute.FREEZES_PERMANENTLY)) {
-			removeAttribute(actor, Attribute.FROZEN);
+			removeAttribute(actor, null, Attribute.FROZEN);
 		}
 	}
 
@@ -2746,7 +2746,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * 		this method.
 	 * @see SpellUtils#discoverCard(GameContext, Player, Entity, SpellDesc, CardList) for an example of how a discover
 	 * 		mechanic generates a {@link DiscoverAction} that gets sent to this method.
-	 * @see Minion#getBattlecry() for the method that creates battlecry actions. (Note: Deathrattles never involve a
+	 * @see Minion#getBattlecries() for the method that creates battlecry actions. (Note: Deathrattles never involve a
 	 * 		player decision, so deathrattles never generate a battlecry).
 	 */
 	@Suspendable
@@ -2958,8 +2958,8 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @param player   The player whose gaining the secret.
 	 * @param secret   The secret being played.
 	 * @param fromHand When {@code true}, a {@link SecretPlayedEvent} is fired; otherwise, the event is not fired.
-	 * @see net.demilich.metastone.game.spells.AddSecretSpell#onCast(GameContext, Player, SpellDesc, Entity, Entity) the
-	 * 		place where secret entities are created. A {@link Card} uses this spell to actually create a {@link Secret}.
+	 * @see net.demilich.metastone.game.spells.AddSecretSpell the place where secret entities are created. A {@link Card}
+	 * 		uses this spell to actually create a {@link Secret}.
 	 */
 	@Suspendable
 	public void playSecret(Player player, Secret secret, boolean fromHand) {
@@ -3278,12 +3278,27 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * attacks a minion can make.
 	 *
 	 * @param entity The entity to remove an attribute from.
+	 * @param source The source of this attribute removal effect
 	 * @param attr   The attribute to remove.
 	 */
-	public void removeAttribute(Entity entity, Attribute attr) {
+	public void removeAttribute(Entity entity, Entity source, Attribute attr) {
 		if (!entity.hasAttribute(attr)) {
 			return;
 		}
+
+		int sourcePlayerId = source == null ? -1 : source.getOwner();
+		if (attr == Attribute.STEALTH) {
+			context.fireGameEvent(new LoseStealthEvent(context, entity, sourcePlayerId));
+		}
+
+		if (attr == Attribute.DEFLECT) {
+			context.fireGameEvent(new LoseDeflectEvent(context, entity, entity.getId(), sourcePlayerId));
+		}
+
+		if (attr == Attribute.DIVINE_SHIELD) {
+			context.fireGameEvent(new LoseDivineShieldEvent(context, entity, entity.getOwner(), sourcePlayerId));
+		}
+
 		if (attr == Attribute.MEGA_WINDFURY && entity.hasAttribute(Attribute.WINDFURY)) {
 			entity.modifyAttribute(Attribute.NUMBER_OF_ATTACKS, WINDFURY_ATTACKS - MEGA_WINDFURY_ATTACKS);
 		}
@@ -3467,33 +3482,40 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * @return
 	 */
 	@Suspendable
-	public BattlecryAction resolveBattlecry(int playerId, Actor actor) {
-		BattlecryAction battlecry = actor.getBattlecry();
-
-		Player player = context.getPlayer(playerId);
-		processTargetModifiers(battlecry);
-		if (!battlecry.canBeExecuted(context, player)) {
-			return BattlecryAction.NONE;
-		}
-
-		battlecry.setSourceReference(actor.getReference());
-
-
-		if (battlecry.getTargetRequirement() != TargetSelection.NONE) {
-			List<GameAction> battlecryActions = getTargetedBattlecryGameActions(battlecry, player);
-
-			if (battlecryActions == null
-					|| battlecryActions.size() == 0) {
-				return BattlecryAction.NONE;
+	public BattlecryAction[] resolveBattlecries(int playerId, Actor actor) {
+		List<BattlecryDesc> battlecries = actor.getBattlecries();
+		BattlecryAction[] battlecryActions = new BattlecryAction[battlecries.size()];
+		for (int i = 0; i < battlecryActions.length; i++) {
+			BattlecryAction battlecry = battlecries.get(i).toBattlecryAction();
+			battlecry.setSourceReference(actor.getReference());
+			Player player = context.getPlayer(playerId);
+			processTargetModifiers(battlecry);
+			if (!battlecry.canBeExecuted(context, player)) {
+				battlecryActions[i] = BattlecryAction.NONE;
+				continue;
 			}
 
-			BattlecryAction targetedBattlecry = (BattlecryAction) requestAction(player, battlecryActions);
-			performBattlecryAction(playerId, actor, player, targetedBattlecry);
-			return targetedBattlecry;
-		} else {
-			performBattlecryAction(playerId, actor, player, battlecry);
-			return battlecry;
+			battlecry.setSourceReference(actor.getReference());
+
+			if (battlecry.getTargetRequirement() != TargetSelection.NONE) {
+				List<GameAction> battlecryActionChoices = getTargetedBattlecryGameActions(battlecry, player);
+
+				if (battlecryActionChoices == null
+						|| battlecryActionChoices.size() == 0) {
+					battlecryActions[i] = BattlecryAction.NONE;
+					continue;
+				}
+
+				BattlecryAction targetedBattlecry = (BattlecryAction) requestAction(player, battlecryActionChoices);
+				performBattlecryAction(playerId, actor, player, targetedBattlecry);
+				battlecryActions[i] = targetedBattlecry;
+			} else {
+				performBattlecryAction(playerId, actor, player, battlecry);
+				battlecryActions[i] = battlecry;
+			}
 		}
+
+		return battlecryActions;
 	}
 
 	/**
@@ -3670,7 +3692,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player that owns the secret.
 	 * @param secret The secret that got triggered.
-	 * @see Secret#onFire(int, SpellDesc, GameEvent) for the code that handles when a secret is fired.
+	 * @see Secret for the code that handles when a secret is fired.
 	 */
 	@Suspendable
 	public void secretTriggered(Player player, Secret secret) {
@@ -3691,9 +3713,6 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * Inserts a card into the specified location in the player's deck. Use {@link CardZone#size()} as the index for the
 	 * top of the deck, and {@code 0} for the bottom.
 	 *
-	 * @param player
-	 * @param card
-	 * @param index
 	 * @return {@code true} if the card was successfully inserted, {@code false} if the deck was full (size was {@link
 	 *    #MAX_DECK_SIZE}).
 	 */
@@ -3751,14 +3770,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
-	 * @param quiet  If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
 	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
-		return shuffleToDeck(player, card, quiet, false);
+		return shuffleToDeck(player, null, card, quiet, false);
 	}
 
 	/**
@@ -3769,8 +3788,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * true}, those enchantments will not be removed.
 	 *
 	 * @param player                The player whose deck this card is getting shuffled into.
+	 * @param relatedEntity         The entity related to the card that is getting shuffled. For example, when shuffling a
+	 *                              minion ({@link Actor}) to the deck, that minion should be this argument.
 	 * @param card                  The card to shuffle into that player's deck.
-	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
 	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
 	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
@@ -3780,7 +3801,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, Card card, boolean quiet, boolean keepCardCostModifiers) {
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3806,7 +3827,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				if (originalOwner == UNASSIGNED) {
 					originalOwner = player.getId();
 				}
-				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
+				if (relatedEntity != null) {
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, relatedEntity, card));
+				} else {
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, card));
+
+				}
 				if (card.getZone() == Zones.DECK) {
 					context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 				}
@@ -3882,7 +3908,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (IMMUNE_TO_SILENCE.contains(attr)) {
 				continue;
 			}
-			removeAttribute(target, attr);
+			removeAttribute(target, null, attr);
 		}
 
 		if (target instanceof Actor) {
@@ -3951,25 +3977,33 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 		player.getHero().getAttributes().remove(Attribute.DRAINED_THIS_TURN);
 		player.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
 		refreshAttacksPerRound(player.getHero());
-		for (Minion minion : player.getMinions()) {
+		stealthForTurns(player.getHero());
+		for (Actor minion : player.getMinions()) {
 			minion.getAttributes().remove(Attribute.SUMMONING_SICKNESS);
 			minion.getAttributes().remove(Attribute.ATTACKS_THIS_TURN);
 			minion.setAttribute(Attribute.DRAINED_LAST_TURN, minion.getAttributeValue(Attribute.DRAINED_THIS_TURN));
 			minion.getAttributes().remove(Attribute.DRAINED_THIS_TURN);
 			refreshAttacksPerRound(minion);
-			if (minion.hasAttribute(Attribute.STEALTH) && minion.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
-				int stealthForTurns = minion.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
-				if (stealthForTurns == 1) {
-					minion.getAttributes().remove(Attribute.STEALTH);
-					minion.getAttributes().remove(Attribute.STEALTH_FOR_TURNS);
-				} else minion.setAttribute(Attribute.STEALTH_FOR_TURNS, stealthForTurns - 1);
-			}
+			stealthForTurns(minion);
 		}
 		context.fireGameEvent(new TurnStartEvent(context, player.getId()));
 
 		castSpell(playerId, DrawCardSpell.create(), player.getReference(), null, true);
 
 		endOfSequence();
+	}
+
+	@Suspendable
+	protected void stealthForTurns(Actor actor) {
+		if (actor.hasAttribute(Attribute.STEALTH) && actor.hasAttribute(Attribute.STEALTH_FOR_TURNS)) {
+			int stealthForTurns = actor.getAttributeValue(Attribute.STEALTH_FOR_TURNS);
+			if (stealthForTurns == 1) {
+				removeAttribute(actor, null, Attribute.STEALTH);
+				removeAttribute(actor, null, Attribute.STEALTH_FOR_TURNS);
+			} else {
+				actor.setAttribute(Attribute.STEALTH_FOR_TURNS, stealthForTurns - 1);
+			}
+		}
 	}
 
 	/**
@@ -4044,9 +4078,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 
 			context.fireGameEvent(new BoardChangedEvent(context));
 			minion = summonTransformResolved(minion);
-			BattlecryAction battlecryAction = null;
-			if (resolveBattlecry && minion.getBattlecry() != null && minion.getBattlecry() != BattlecryAction.NONE) {
-				battlecryAction = resolveBattlecry(player.getId(), minion);
+			BattlecryAction[] battlecryActions = new BattlecryAction[0];
+			if (resolveBattlecry
+					&& !minion.getBattlecries().isEmpty()) {
+				battlecryActions = resolveBattlecries(player.getId(), minion);
 				minion = summonTransformResolved(minion);
 				// A battlecry may have transformed the minion
 				endOfSequence();
@@ -4064,9 +4099,9 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 			if (context.getEnvironment().get(Environment.TARGET_OVERRIDE) != null) {
 				Actor actor = (Actor) context.resolveTarget(player, source, (EntityReference) context.getEnvironment().get(Environment.TARGET_OVERRIDE)).get(0);
 				context.getEnvironment().remove(Environment.TARGET_OVERRIDE);
-				summonEvent = new SummonEvent(context, actor, source, resolveBattlecry, battlecryAction);
+				summonEvent = new SummonEvent(context, actor, source, resolveBattlecry, battlecryActions);
 			} else {
-				summonEvent = new SummonEvent(context, minion, source, resolveBattlecry, battlecryAction);
+				summonEvent = new SummonEvent(context, minion, source, resolveBattlecry, battlecryActions);
 			}
 
 			if (!summonEvent.getMinion().hasAttribute(Attribute.PERMANENT)) {
@@ -4083,7 +4118,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				player.modifyAttribute(Attribute.MINIONS_SUMMONED_THIS_TURN, 1);
 				player.modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
 				context.getOpponent(player).modifyAttribute(Attribute.TOTAL_MINIONS_SUMMONED_THIS_TURN, 1);
-				context.fireGameEvent(new AfterSummonEvent(context, minion, source, resolveBattlecry, battlecryAction));
+				context.fireGameEvent(new AfterSummonEvent(context, minion, source, resolveBattlecry, battlecryActions));
 			}
 			context.fireGameEvent(new BoardChangedEvent(context));
 			return true;

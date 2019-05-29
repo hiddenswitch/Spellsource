@@ -1,0 +1,18 @@
+{
+  "name": "Fire 2 Missiles",
+  "baseManaCost": 0,
+  "type": "SPELL",
+  "heroClass": "BLUE",
+  "rarity": "FREE",
+  "description": "",
+  "targetSelection": "NONE",
+  "spell": {
+    "class": "MissilesSpell",
+    "target": "ENEMY_MINIONS",
+    "howMany": 2,
+    "value": 1
+  },
+  "collectible": false,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}

@@ -35,8 +35,7 @@ public class HasAttackedCondition extends Condition {
 		}
 
 		if (!targets.isEmpty()) {
-			return targets.stream().anyMatch(t -> t instanceof Actor
-					&& ((Actor) t).getMaxNumberOfAttacks() > ((Actor) t).getAttributeValue(Attribute.NUMBER_OF_ATTACKS));
+			return targets.stream().anyMatch(t -> (int) t.getAttributes().getOrDefault(Attribute.ATTACKS_THIS_TURN, 0) > 0);
 		}
 		return false;
 	}
