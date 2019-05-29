@@ -43,6 +43,8 @@ import java.util.stream.Collectors;
  * target is copied with {@link Actor#getCopy()}, its enchantments are removed, it is summoned, and then the
  * enchantments are copied.
  * <p>
+ * This effect will summon {@link SpellArg#VALUE} copies of whatever is specified, defaulting to {@code 1}.
+ * <p>
  * All of the successfully summoned minions will get the {@link SpellArg#SPELL} subspell cast on each of them, where
  * {@link EntityReference#OUTPUT} will reference each summoned minion.
  * <p>

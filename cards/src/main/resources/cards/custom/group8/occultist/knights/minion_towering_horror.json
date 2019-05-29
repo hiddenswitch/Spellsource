@@ -1,20 +1,20 @@
 {
   "name": "Towering Horror",
-  "baseManaCost": 5,
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
   "baseAttack": 6,
   "baseHp": 2,
   "rarity": "RARE",
-  "description": "Opener: Gain +2 Health for each other friendly minion.",
+  "description": "Opener: Gain +2 Health for each minion that died this turn.",
   "battlecry": {
     "targetSelection": "NONE",
     "spell": {
       "class": "BuffSpell",
       "target": "SELF",
       "hpBonus": {
-        "class": "EntityCounter",
-        "target": "OTHER_FRIENDLY_MINIONS",
+        "class": "DiedThisTurnValueProvider",
+        "targetPlayer": "BOTH",
         "multiplier": 2
       }
     }

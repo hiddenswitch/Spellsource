@@ -8,12 +8,19 @@ permalink: /whats-new/
 
 Updates from @Logovaz for Witch Doctor.
 
+New cards from @Muhframos for Occultist too!
+
+##### Content Additions:
+
+ - Significant additions to Occultist. (1057)
+
 ##### Content Fixes:
 
  - Changes to Witch Doctor and its Verdant Dreams set cards. (1113)
  - Hatches the Dragon is no longer collectible. (1094)
  - Changes to Aegwynn, Dragonling Pet and The End Time to make them more balanced. (1094)
  - Nature Rager now gains +1 Health instead of +1/+1. (1077)
+ - Ending the turn with an Infinite Warden on the board without an End Time on the board no longer crashes the game.
 
 ### 0.8.30-2.0.30 (Monday, May 28th, 2019)
 

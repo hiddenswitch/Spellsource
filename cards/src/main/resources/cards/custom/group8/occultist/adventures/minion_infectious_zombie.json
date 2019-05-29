@@ -1,10 +1,10 @@
 {
-  "name": "Infectious Zombie",
-  "baseManaCost": 2,
+  "name": "Failed Experiment",
+  "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "DARKGREEN",
-  "baseAttack": 3,
-  "baseHp": 2,
+  "baseAttack": 4,
+  "baseHp": 5,
   "rarity": "COMMON",
   "description": "Aftermath: Transform a random friendly minion into an Infectious Zombie.",
   "deathrattle": {

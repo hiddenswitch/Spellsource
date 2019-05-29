@@ -114,8 +114,7 @@ public class SpellUtils {
 			return false;
 		}
 
-		Player castingPlayer = determineCastingPlayer.getCastingPlayer();
-
+		player = determineCastingPlayer.getCastingPlayer();
 		player.getAttributes().put(Attribute.RANDOM_CHOICES, true);
 
 		PlayCardAction action = null;
@@ -153,6 +152,7 @@ public class SpellUtils {
 
 		if (action == null) {
 			logger.error("playCardRandom {} {}: No action generated for card {}", context.getGameId(), source, card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
@@ -175,6 +175,7 @@ public class SpellUtils {
 			if (resolveBattlecry) {
 				// TODO: Doesn't quite do what it's supposed to
 				if (RepeatAllOtherBattlecriesSpell.castBattlecryRandomly(context, player, card, (Actor) source)) {
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 					return true;
 				}
 			} else {
@@ -195,6 +196,7 @@ public class SpellUtils {
 				} else {
 					// Card should be revealed, but there were no valid targets so the spell isn't cast
 					// TODO: It's not obvious if cards with no valid targets should be uncastable if their conditions permit it
+					player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 					return true;
 				}
 			}
@@ -202,6 +204,7 @@ public class SpellUtils {
 			// Target requirement may have been none, but the action is still valid.
 		} else {
 			logger.error("playCardRandomly {} {}: Unsupported card type {} for card {}", context.getGameId(), source, card.getCardType(), card);
+			player.getAttributes().remove(Attribute.RANDOM_CHOICES);
 			return false;
 		}
 
