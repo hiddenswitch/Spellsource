@@ -1,42 +1,54 @@
 {
   "name": "Forgotten Science",
-  "baseManaCost": 4,
+  "baseManaCost": 2,
   "type": "SPELL",
   "heroClass": "DARKGREEN",
   "rarity": "EPIC",
-  "description": "The next time you cast a spell on a minion, cast it on all other minions instead.",
+  "description": "The next spell you cast on a minion this turn also targets adjacent minions.",
   "targetSelection": "NONE",
   "spell": {
-    "class": "AddEnchantmentSpell",
-    "target": "FRIENDLY_PLAYER",
-    "trigger": {
-      "eventTrigger": {
-        "class": "SpellCastedTrigger",
-        "sourcePlayer": "SELF",
-        "targetEntityType": "MINION"
+    "class": "MetaSpell",
+    "spells": [
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "card": "enchantment_forgotten_science_aura"
       },
-      "spell": {
-        "class": "MetaSpell",
-        "spells": [
-          {
-            "class": "AddAttributeSpell",
-            "target": "EVENT_SOURCE",
-            "attribute": "SILENCED"
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "AfterSpellCastedTrigger",
+            "sourcePlayer": "SELF",
+            "targetEntityType": "MINION"
           },
-          {
-            "class": "CastCardsSpell",
-            "target": "ALL_MINIONS",
-            "filter": {
-              "class": "EntityEqualsFilter",
-              "invert": true,
-              "secondaryTarget": "EVENT_TARGET"
-            },
-            "secondaryTarget": "EVENT_SOURCE"
+          "oneTurn": true,
+          "maxFires": 1,
+          "spell": {
+            "class": "RemoveEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_forgotten_science_aura"
           }
-        ]
+        }
       },
-      "maxFires": 1
-    }
+      {
+        "class": "AddEnchantmentSpell",
+        "target": "FRIENDLY_PLAYER",
+        "trigger": {
+          "eventTrigger": {
+            "class": "TurnEndTrigger",
+            "targetPlayer": "SELF"
+          },
+          "maxFires": 1,
+          "spell": {
+            "class": "RemoveEnchantmentSpell",
+            "target": "FRIENDLY_PLAYER",
+            "card": "enchantment_forgotten_science_aura"
+          }
+        }
+      }
+    ]
   },
   "collectible": true,
   "fileFormatVersion": 1,

@@ -10,7 +10,7 @@
   "triggers": [
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "SELF",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
@@ -23,7 +23,7 @@
     },
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "OPPONENT",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
@@ -38,7 +38,7 @@
   "passiveTriggers": [
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "SELF",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },
@@ -51,7 +51,7 @@
     },
     {
       "eventTrigger": {
-        "class": "CardShuffledTrigger",
+        "class": "ShuffledTrigger",
         "targetPlayer": "OPPONENT",
         "hostTargetType": "IGNORE_OTHER_TARGETS"
       },

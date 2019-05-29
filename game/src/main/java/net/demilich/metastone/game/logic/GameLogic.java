@@ -3770,14 +3770,14 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 *
 	 * @param player The player whose deck this card is getting shuffled into.
 	 * @param card   The card to shuffle into that player's deck.
-	 * @param quiet  If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @param quiet  If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
 	 * @see ShuffleToDeckSpell for the spell that interacts with this function. When its {@link SpellArg#EXCLUSIVE} flag
 	 * 		is {@code true}, {@code quiet} here is {@code true}, making it possible to shuffle cards into the deck without
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
 	public boolean shuffleToDeck(Player player, Card card, boolean quiet) {
-		return shuffleToDeck(player, card, quiet, false);
+		return shuffleToDeck(player, null, card, quiet, false);
 	}
 
 	/**
@@ -3788,8 +3788,10 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * true}, those enchantments will not be removed.
 	 *
 	 * @param player                The player whose deck this card is getting shuffled into.
+	 * @param relatedEntity         The entity related to the card that is getting shuffled. For example, when shuffling a
+	 *                              minion ({@link Actor}) to the deck, that minion should be this argument.
 	 * @param card                  The card to shuffle into that player's deck.
-	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link CardShuffledEvent}.
+	 * @param quiet                 If {@code true}, this shuffle does not raise a {@link ShuffledEvent}.
 	 * @param keepCardCostModifiers If {@code true}, keeps card cost modifiers whose {@link Enchantment#getHostReference()}
 	 *                              is the targeted card and whose {@link net.demilich.metastone.game.spells.desc.manamodifier.CardCostModifierArg#TARGET}
 	 *                              is {@link EntityReference#SELF} or exactly the host entity's ID (i.e., self-targeting
@@ -3799,7 +3801,7 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 	 * 		triggering another shuffle event (e.g., with Augmented Elekk).
 	 */
 	@Suspendable
-	public boolean shuffleToDeck(Player player, Card card, boolean quiet, boolean keepCardCostModifiers) {
+	public boolean shuffleToDeck(Player player, @Nullable Entity relatedEntity, @NotNull Card card, boolean quiet, boolean keepCardCostModifiers) {
 		if (card.getId() == IdFactory.UNASSIGNED) {
 			card.setId(generateId());
 		}
@@ -3825,7 +3827,12 @@ public class GameLogic implements Cloneable, Serializable, IdFactory {
 				if (originalOwner == UNASSIGNED) {
 					originalOwner = player.getId();
 				}
-				context.fireGameEvent(new CardShuffledEvent(context, player.getId(), originalOwner, card));
+				if (relatedEntity != null) {
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, relatedEntity, card));
+				} else {
+					context.fireGameEvent(new ShuffledEvent(context, player.getId(), originalOwner, card));
+
+				}
 				if (card.getZone() == Zones.DECK) {
 					context.fireGameEvent(new CardAddedToDeckEvent(context, card.getOwner(), player.getId(), card));
 				}

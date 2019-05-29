@@ -58,6 +58,16 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testShufflingHorror() {
+		runGym((context, player, opponent) -> {
+			Minion target = playMinionCard(context, player, "minion_shuffling_horror");
+			playCard(context, player, "spell_shuffle_minion_to_deck", target);
+			assertEquals(player.getHand().size(), 2);
+			assertTrue(player.getHand().stream().allMatch(c -> c.getCardId().equals("minion_shuffling_horror")));
+		});
+	}
+
+	@Test
 	public void testMariAnette() {
 		runGym((context, player, opponent) -> {
 			Minion friendly = playMinionCard(context, player, "minion_neutral_test");
@@ -769,11 +779,17 @@ public class CustomCardsTests extends TestBase {
 			Minion target2 = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_forgotten_science");
 			playCard(context, player, "spell_fireball", intendedTarget);
-			assertFalse(intendedTarget.isDestroyed());
+			assertTrue(intendedTarget.isDestroyed());
 			assertTrue(target1.isDestroyed());
-			assertTrue(target2.isDestroyed());
+			// Not adjacent!
+			assertFalse(target2.isDestroyed());
+			target1 = playMinionCard(context, player, "minion_neutral_test");
+			intendedTarget = playMinionCard(context, player, "minion_neutral_test");
+			target2 = playMinionCard(context, player, "minion_neutral_test");
 			playCard(context, player, "spell_fireball", intendedTarget);
 			assertTrue(intendedTarget.isDestroyed());
+			assertFalse(target1.isDestroyed());
+			assertFalse(target2.isDestroyed());
 		});
 	}
 
