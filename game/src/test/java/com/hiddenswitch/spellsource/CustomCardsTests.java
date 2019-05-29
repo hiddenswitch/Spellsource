@@ -58,6 +58,24 @@ import static org.testng.Assert.*;
 public class CustomCardsTests extends TestBase {
 
 	@Test
+	public void testUccianHydra() {
+		runGym((context, player, opponent) -> {
+			Minion hydra = playMinionCard(context, player, "minion_uccian_hydra");
+			Minion dead = playMinionCard(context, player, "minion_neutral_test");
+			destroy(context, dead);
+			assertEquals(hydra.getAttack(), hydra.getBaseAttack());
+		});
+
+		runGym((context, player, opponent) -> {
+			Minion hydra = playMinionCard(context, player, "minion_uccian_hydra");
+			Minion dead = playMinionCard(context, player, "minion_neutral_test");
+			dead.setAttack(3);
+			destroy(context, dead);
+			assertEquals(hydra.getAttack(), hydra.getBaseAttack() * 2);
+		});
+	}
+
+	@Test
 	public void testShufflingHorror() {
 		runGym((context, player, opponent) -> {
 			Minion target = playMinionCard(context, player, "minion_shuffling_horror");
