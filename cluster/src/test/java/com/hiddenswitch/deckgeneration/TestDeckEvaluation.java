@@ -22,12 +22,13 @@ import static java.util.stream.Collectors.averagingDouble;
 import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
 
-public class DeckEvaluationTests {
+public class TestDeckEvaluation {
+
     int GAMES_PER_MATCH = 18;
 
     public List<Map.Entry<GameDeck, Double>> statsFromTournament(List<GameDeck> decks) throws InterruptedException {
         Map<GameDeck[], SimulationResult> resultList = new HashMap<>();
-        // Make two bots that make random decisions and play a match a few times
+        // Make two bots that make random decisions and play multiple games (GAMES_PER_MATCH)
         for (GameDeck[] deckPairArray : GameContext.getDeckCombinations(decks, false)) {
             AtomicReference<SimulationResult> resultRef = new AtomicReference<>();
             GameContext.simulate(Arrays.asList(deckPairArray), Arrays.asList(PlayRandomBehaviour::new, PlayRandomBehaviour::new), GAMES_PER_MATCH, true,
@@ -40,10 +41,10 @@ public class DeckEvaluationTests {
         // Order the decks by average win rate
         List<Map.Entry<GameDeck, Double>> results = resultList.entrySet().stream()
                 .flatMap(kv -> Stream.of(
-                        new DeckEvaluationTests.DeckWinrateTuple(kv.getKey()[0], kv.getValue().getPlayer1Stats().getDouble(Statistic.WIN_RATE)),
-                        new DeckEvaluationTests.DeckWinrateTuple(kv.getKey()[1], kv.getValue().getPlayer2Stats().getDouble(Statistic.WIN_RATE))
+                        new TestDeckEvaluation.DeckWinrateTuple(kv.getKey()[0], kv.getValue().getPlayer1Stats().getDouble(Statistic.WIN_RATE)),
+                        new TestDeckEvaluation.DeckWinrateTuple(kv.getKey()[1], kv.getValue().getPlayer2Stats().getDouble(Statistic.WIN_RATE))
                 ))
-                .collect(Collectors.groupingBy(DeckEvaluationTests.DeckWinrateTuple::getGameDeck, averagingDouble(DeckEvaluationTests.DeckWinrateTuple::getWinRate)))
+                .collect(Collectors.groupingBy(TestDeckEvaluation.DeckWinrateTuple::getGameDeck, averagingDouble(TestDeckEvaluation.DeckWinrateTuple::getWinRate)))
                 .entrySet()
                 .stream()
                 .collect(toList());
@@ -93,24 +94,6 @@ public class DeckEvaluationTests {
         for (Map.Entry<GameDeck, Double> kv : results) {
             System.out.println(kv.getKey().getDeckId() + " " + kv.getValue());
         }
-    }
-
-    @Test
-    public void testDeckComparisonRatesDecksThatWinTheGameHighest() throws InterruptedException {
-        // Objective: To generate competitive decks
-
-        // Steps to get there:
-        //   1. Somehow assemble decks
-        //   2. Compare them to one another and choose the best deck
-        //   3. Validate that the best deck is actually pretty decent
-
-        // What are some clever ways that we can test these pieces in isolation and make sure that
-        // all of our assumptions actually work?
-
-        // This is really an optimization problem where we're trying to find the best deck given an objective function which
-        // we're going to validate here.
-        CardCatalogue.loadCardsFromPackage();
-
     }
 
     public class DeckWinrateTuple {
