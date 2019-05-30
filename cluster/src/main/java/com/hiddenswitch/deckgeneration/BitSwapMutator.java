@@ -5,6 +5,7 @@ import io.jenetics.util.MSeq;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
+import java.util.stream.IntStream;
 
 /**
  * Swaps the order of only true bits.
@@ -12,9 +13,10 @@ import java.util.Random;
  * @param <C>
  */
 public class BitSwapMutator<
+		G extends Gene<Boolean, G>,
 		C extends Comparable<? super C>
 		>
-		extends SwapMutator<BitGene, C> {
+		extends SwapMutator<G, C> {
 	/**
 	 * Constructs an alterer that swaps a 1 and 0 in the BitChromosome
 	 * (in our case, swapping out a card in the deck for one
@@ -40,8 +42,8 @@ public class BitSwapMutator<
 	 * Calls the basic swapping function
 	 */
 	@Override
-	protected MutatorResult<Chromosome<BitGene>> mutate(
-			final Chromosome<BitGene> chromosome,
+	protected MutatorResult<Chromosome<G>> mutate(
+			final Chromosome<G> chromosome,
 			final double p,
 			final Random random
 	) {
@@ -58,37 +60,43 @@ public class BitSwapMutator<
 	 * @return The mutated Chromosome
 	 */
 	@NotNull
-	public static MutatorResult<Chromosome<BitGene>> getBitSwapMutatorResult(Chromosome<BitGene> chromosome, double p, Random random) {
-		final MutatorResult<Chromosome<BitGene>> result;
+	public MutatorResult<Chromosome<G>> getBitSwapMutatorResult(Chromosome<G> chromosome, double p, Random random) {
+		if (p < random.nextDouble()) {
+			return MutatorResult.of(chromosome);
+		}
+
+		final MutatorResult<Chromosome<G>> result;
 		// Calculates the number of cards in the deck
 		int numberOfOnes;
-		if (chromosome instanceof BitChromosome) {
-			numberOfOnes = ((BitChromosome) chromosome).bitCount();
-		} else {
-			numberOfOnes = (int) chromosome.stream().filter(BitGene::getBit).count();
-		}
+		numberOfOnes = getNumberOfOnes(chromosome);
+		int numberOfZeroes = getNumberOfZeroes(chromosome, numberOfOnes);
 		int length = chromosome.length();
-		if (length > 1
-				&& numberOfOnes != length
-				&& numberOfOnes != 0
-				&& random.nextDouble() <= p) {
-			MSeq<BitGene> genes = chromosome.toSeq().copy();
+
+		if (numberOfOnes == 0) {
+			return MutatorResult.of(chromosome);
+		}
+
+		if (numberOfZeroes == 0) {
+			return MutatorResult.of(chromosome);
+		}
+
+		if (length > 1 && numberOfOnes != length && random.nextDouble() <= p) {
+			MSeq<G> genes = chromosome.toSeq().copy();
 
 			int trueN = random.nextInt(numberOfOnes);
-			int falseN = random.nextInt(length - numberOfOnes);
+			int falseN = random.nextInt(numberOfZeroes);
 
 			int trueIndex = -1;
 			int falseIndex = -1;
 			int j = 0;
 			int k = 0;
 			for (int i = 0; i < length; i++) {
-				boolean bit = chromosome.getGene(i).booleanValue();
-				if (bit) {
+				if (isOne(chromosome, i)) {
 					if (j == trueN) {
 						trueIndex = i;
 					}
 					j++;
-				} else {
+				} else if (isZero(chromosome, i)) {
 					if (k == falseN) {
 						falseIndex = i;
 					}
@@ -97,6 +105,10 @@ public class BitSwapMutator<
 				if (trueIndex != -1 && falseIndex != -1) {
 					break;
 				}
+			}
+
+			if (trueIndex == -1 || falseIndex == -1) {
+				throw new IllegalStateException();
 			}
 
 			genes.swap(trueIndex, falseIndex);
@@ -108,5 +120,30 @@ public class BitSwapMutator<
 			result = MutatorResult.of(chromosome);
 		}
 		return result;
+	}
+
+
+	protected boolean isOne(Chromosome<G> chromosome, int i) {
+		return chromosome.getGene(i).getAllele();
+	}
+
+
+	protected boolean isZero(Chromosome<G> chromosome, int i) {
+		boolean bit = chromosome.getGene(i).getAllele();
+		return !bit;
+	}
+
+	protected int getNumberOfZeroes(Chromosome<G> chromosome, int numberOfOnes) {
+		return chromosome.length() - numberOfOnes;
+	}
+
+	protected int getNumberOfOnes(Chromosome<G> chromosome) {
+		int numberOfOnes;
+		if (chromosome instanceof BitChromosome) {
+			numberOfOnes = ((BitChromosome) chromosome).bitCount();
+		} else {
+			numberOfOnes = (int) IntStream.range(0, chromosome.length()).filter(i -> isOne(chromosome, i)).count();
+		}
+		return numberOfOnes;
 	}
 }
