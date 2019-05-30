@@ -13,6 +13,7 @@ import net.demilich.metastone.game.statistics.SimulationResult;
 import net.demilich.metastone.game.statistics.Statistic;
 import org.testng.annotations.Test;
 
+import java.lang.reflect.Array;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
@@ -23,7 +24,6 @@ import static java.util.stream.Collectors.toList;
 import static org.testng.Assert.assertEquals;
 
 public class TestDeckEvaluation {
-
     int GAMES_PER_MATCH = 18;
 
     public List<Map.Entry<GameDeck, Double>> statsFromTournament(List<GameDeck> decks) throws InterruptedException {
@@ -80,6 +80,44 @@ public class TestDeckEvaluation {
                 .collect(toList());
         assertEquals(results.get(0).getKey(), winningDeck);
     }
+
+    @Test
+    public void testComboWins() throws InterruptedException {
+        // Create one-card decks that each have a random card, plus a two-card deck that contains the win combo.
+        // We also add two one-card decks that contain the combo pieces individually
+        // We expect the win combo to be rated highest and the pieces to be rated near the bottom
+        Random random = new XORShiftRandom(101010L);
+        CardCatalogue.loadCardsFromPackage();
+        List<Card> cardCatalogueRecords = CardCatalogue.getAll()
+                .stream()
+                .filter(Card::isCollectible)
+                .filter(card -> !card.getCardId().equals("spell_win_the_game"))
+                .filter(card -> !card.getCardId().equals("minion_combo_win_1"))
+                .filter(card -> !card.getCardId().equals("minion_combo_win_2"))
+                .filter(card -> card.getBaseManaCost() == 1)
+                .filter(card -> card.getHeroClass() == HeroClass.ANY)
+                .collect(toList());
+
+        List<String> winningDeckList = new ArrayList<>();
+        winningDeckList.add("minion_combo_win_1");
+        winningDeckList.add("minion_combo_win_2");
+        GameDeck winningDeck = new GameDeck(HeroClass.ANY, winningDeckList);
+        List<GameDeck> losingDecks = Stream.generate(() ->
+                new GameDeck(HeroClass.ANY,
+                        Collections.singletonList(cardCatalogueRecords.get(random.nextInt(cardCatalogueRecords.size())).getCardId())
+                )).limit(20)
+                .collect(toList());
+        losingDecks.add(new GameDeck(HeroClass.ANY, Collections.singletonList("minion_combo_win_1")));
+        losingDecks.add(new GameDeck(HeroClass.ANY, Collections.singletonList("minion_combo_win_2")));
+        List<GameDeck> allDecks = new ArrayList<>(losingDecks);
+        allDecks.add(winningDeck);
+        final List<Map.Entry<GameDeck, Double>> unsortedResults = statsFromTournament(allDecks);
+        final List<Map.Entry<GameDeck, Double>> results = unsortedResults.stream()
+                .sorted(Comparator.comparingDouble(kv -> -kv.getValue()))
+                .collect(toList());
+        assertEquals(results.get(0).getKey(), winningDeck);
+    }
+
 
     @Test
     public void testFullRandomDecks() throws InterruptedException {
