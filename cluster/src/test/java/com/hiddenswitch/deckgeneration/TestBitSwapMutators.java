@@ -4,6 +4,7 @@ import io.jenetics.BitChromosome;
 import io.jenetics.BitGene;
 import io.jenetics.Chromosome;
 import io.jenetics.MutatorResult;
+import io.jenetics.util.MSeq;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.cards.CardCatalogue;
 import net.demilich.metastone.game.cards.CardSet;
@@ -230,5 +231,120 @@ public class TestBitSwapMutators {
 		bits.flip(1);
 		MutatorResult<Chromosome<BitGene>> value2 = mutator.getBitSwapMutatorResult(testChromosome, 1, random);
 		assertTrue(testChromosome.equals(value2.getResult()));
+	}
+
+	@Test
+	public void bitSwapBetweenTwoSequencesMutatorWithSingletonChromosomesTest() {
+		MSeq<BitGene> seq1 = MSeq.ofLength(2);
+		seq1.set(0, BitGene.TRUE);
+		seq1.set(1, BitGene.FALSE);
+		// seq1 = 01
+
+		MSeq<BitGene> seq2 = MSeq.ofLength(2);
+		seq2.set(0, BitGene.FALSE);
+		seq2.set(1, BitGene.TRUE);
+		// seq = 10
+
+		BitSwapBetweenTwoSequencesMutator mutator = new BitSwapBetweenTwoSequencesMutator(1);
+		assertTrue(mutator.crossover(seq1, seq2) == 2);
+		// We expect crossover to return 2, since we made
+		// successful mutations
+
+		// Now, we expect seq1 = 10 and seq2 = 01
+		assertTrue(!seq1.get(0).booleanValue());
+		assertTrue(seq1.get(1).booleanValue());
+		assertTrue(seq2.get(0).booleanValue());
+		assertTrue(!seq2.get(1).booleanValue());
+	}
+
+	@Test
+	public void bitSwapBetweenTwoSequencesMutatorWhenImpossibleTest() {
+		MSeq<BitGene> seq1 = MSeq.ofLength(2);
+		seq1.set(0, BitGene.TRUE);
+		seq1.set(1, BitGene.TRUE);
+		// seq1 = 11
+
+		MSeq<BitGene> seq2 = MSeq.ofLength(2);
+		seq2.set(0, BitGene.FALSE);
+		seq2.set(1, BitGene.TRUE);
+		// seq2 = 10
+
+		BitSwapBetweenTwoSequencesMutator mutator = new BitSwapBetweenTwoSequencesMutator(1);
+		assertTrue(mutator.crossover(seq1, seq2) == 0);
+		// We expect crossover to return 0, since no changes
+		// should be made
+
+		// Now, we still expect seq1 = 11 and seq2 = 10
+		assertTrue(seq1.get(0).booleanValue());
+		assertTrue(seq1.get(1).booleanValue());
+		assertTrue(!seq2.get(0).booleanValue());
+		assertTrue(seq2.get(1).booleanValue());
+
+		seq1.set(0, BitGene.FALSE);
+		seq1.set(1, BitGene.FALSE);
+		// seq1 = 00
+
+		assertTrue(mutator.crossover(seq1, seq2) == 0);
+		// We expect crossover to return 0 again
+
+		// Again, we still expect seq1 = 00 and seq2 = 10
+		assertTrue(!seq1.get(0).booleanValue());
+		assertTrue(!seq1.get(1).booleanValue());
+		assertTrue(!seq2.get(0).booleanValue());
+		assertTrue(seq2.get(1).booleanValue());
+	}
+
+	@Test
+	public void bitSwapBetweenTwoSequencesMutatorWithGeneralSequence() {
+		// Randomly generate two sequences of length TEST_LENGTH
+		final int TEST_LENGTH = 100;
+		Random random = new XORShiftRandom(101010L);
+
+		MSeq<BitGene> seq1 = MSeq.ofLength(TEST_LENGTH);
+		MSeq<BitGene> seq2 = MSeq.ofLength(TEST_LENGTH);
+
+		for (int i = 0; i < TEST_LENGTH; i++) {
+			if (random.nextDouble() < 0.5) {
+				seq1.set(i, BitGene.TRUE);
+			} else {
+				seq1.set(i, BitGene.FALSE);
+			}
+			if (random.nextDouble() < 0.5) {
+				seq2.set(i, BitGene.TRUE);
+			} else {
+				seq2.set(i, BitGene.FALSE);
+			}
+		}
+
+		// Store copies of the originals
+		MSeq<BitGene> originalSeq1 = MSeq.ofLength(TEST_LENGTH);
+		originalSeq1.setAll(seq1);
+
+		MSeq<BitGene> originalSeq2 = MSeq.ofLength(TEST_LENGTH);
+		originalSeq2.setAll(seq2);
+
+		BitSwapBetweenTwoSequencesMutator mutator = new BitSwapBetweenTwoSequencesMutator(1);
+		int res = mutator.crossover(seq1, seq2);
+		assertTrue(res == 2 || res == 0);
+
+		// A difference only occurs if a swap between the sequences occurred in two places
+		// In both places, the new sequences must differ from their respective old copies
+		int differenceCount = 0;
+		for (int i = 0; i < TEST_LENGTH; i++) {
+			boolean isDifference = (originalSeq1.get(i) != seq1.get(i) && originalSeq2.get(i) != seq2.get(i) && seq1.get(i) != seq2.get(i));
+			boolean isSame = (originalSeq1.get(i) == seq1.get(i) && originalSeq2.get(i) == seq2.get(i));
+			assertTrue(isSame || isDifference);
+			if (isDifference) {
+				differenceCount++;
+			}
+			// There should never be more than 2 differences
+			if (differenceCount > 2) {
+				assertTrue(false);
+			}
+		}
+
+		// The mutator should return the number of alterations made to each
+		// and should be reflected by our difference count
+		assertTrue(differenceCount == res);
 	}
 }
