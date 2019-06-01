@@ -12,7 +12,6 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
-import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -66,7 +65,7 @@ public class TestDeckGeneration {
 	 * will always be ranked at the bottom when sorted by whatever evaluated Jenetics actually uses.
 	 */
 	@Test
-	public void testJeneticsBasic() {
+	public void testDeckGeneratorForWinTheGameCardWithOnlyBitSwapMutator() {
 
 		// General outline:
 		// 1. Generate N decks
@@ -129,15 +128,13 @@ public class TestDeckGeneration {
 	/**
 	 * Now we will test to see if our algorithm finds "combos"
 	 */
-	@Test
-	@Ignore
-	public void testDeckGeneratorForCombo() {
-
-		maxCardsPerDeck = 7;
+	@Test(invocationCount = 14)
+	public void testDeckGeneratorForComboWithOnlyOneCostCards() {
+		maxCardsPerDeck = 2;
 		int GAMES_PER_MATCH = 18;
 		int STARTING_HP = 10;
-		int POPULATION_SIZE = 10;
-		int NUMBER_OF_GENERATIONS = 10;
+		int POPULATION_SIZE = 20;
+		int NUMBER_OF_GENERATIONS = 20;
 
 		XORShiftRandom random = new XORShiftRandom(101010L);
 
@@ -148,7 +145,7 @@ public class TestDeckGeneration {
 				.filter(card -> card.isCollectible()
 						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
 						&& card.getCardSet() == CardSet.BASIC
-						&& card.getBaseManaCost() == 1 || card.getBaseManaCost() == 2
+						&& card.getBaseManaCost() == 1
 				)
 				.collect(toList());
 
@@ -161,7 +158,7 @@ public class TestDeckGeneration {
 			basicTournamentDecks.add(tournamentDeck);
 		}
 
-		// Ensure that we do not begin with "win the game"
+		// Ensure that we do not begin with the win combo
 		// in any of our original population decks
 		indexInBitmap.add(CardCatalogue.getCardById("minion_combo_win_1"));
 		indexInBitmap.add(CardCatalogue.getCardById("minion_combo_win_2"));
@@ -180,8 +177,75 @@ public class TestDeckGeneration {
 
 		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(maxCardsPerDeck, indexInBitmap.size(), invalidCards);
 		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.mapping(EvolutionResult.toUniquePopulation())
 				.populationSize(POPULATION_SIZE)
 				.alterers(new BitSwapMutator<>(1), new BitSwapMutator<>(1))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(NUMBER_OF_GENERATIONS)
+				.collect(EvolutionResult.toBestGenotype());
+
+		assertTrue(result.getChromosome().getGene(winComboIndex1).booleanValue());
+		assertTrue(result.getChromosome().getGene(winComboIndex2).booleanValue());
+	}
+
+	/**
+	 * Our previous test uses a longer exhaustive approach to find combos
+	 * Let's see if utilizing swapping between decks helps at all
+	 */
+	@Test(invocationCount = 14)
+	public void testDeckGeneratorForComboWithOnlyOneCostCardsUsingBitSwapBetweenTwoSequences() {
+		maxCardsPerDeck = 2;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 10;
+		int POPULATION_SIZE = 20;
+		int NUMBER_OF_GENERATIONS = 15;
+
+		XORShiftRandom random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC
+						&& card.getBaseManaCost() == 1
+				)
+				.collect(toList());
+
+		// Create random decks for the tournament
+		for (int i = 0; i < 10; i++) {
+			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+			for (int j = 0; j < maxCardsPerDeck; j++) {
+				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+			}
+			basicTournamentDecks.add(tournamentDeck);
+		}
+
+		// Ensure that we do not begin with the win combo
+		// in any of our original population decks
+		indexInBitmap.add(CardCatalogue.getCardById("minion_combo_win_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_combo_win_2"));
+
+		// Set up our tournament playing environment
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(maxCardsPerDeck);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		int winComboIndex1 = indexInBitmap.size() - 2;
+		int winComboIndex2 = indexInBitmap.size() - 1;
+		List<Integer> invalidCards = new ArrayList<>(0);
+		invalidCards.add(winComboIndex1);
+		invalidCards.add(winComboIndex2);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(maxCardsPerDeck, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.mapping(EvolutionResult.toUniquePopulation())
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(1), new BitSwapMutator<>(1), new BitSwapBetweenTwoSequencesMutator<>(1))
 				.build();
 
 		Genotype<BitGene> result = engine.stream()

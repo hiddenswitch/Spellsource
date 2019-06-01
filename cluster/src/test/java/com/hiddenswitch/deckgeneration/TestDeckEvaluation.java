@@ -162,4 +162,5 @@ public class TestDeckEvaluation {
 			return this;
 		}
 	}
+
 }

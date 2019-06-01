@@ -3,6 +3,7 @@ package com.hiddenswitch.deckgeneration;
 import io.jenetics.BitGene;
 import io.jenetics.Genotype;
 import net.demilich.metastone.game.GameContext;
+import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
@@ -22,6 +23,8 @@ public class DeckGeneratorContext {
 	int gamesPerMatch = 18;
 	List<Card> indexInBitmap;
 	List<GameDeck> basicTournamentDecks;
+	IntelligentBehaviour enemyBehaviour = new PlayRandomBehaviour();
+	IntelligentBehaviour playerBehaviour = new PlayRandomBehaviour();
 
 	public DeckGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks) {
 		this.indexInBitmap = indexInBitmap;
@@ -46,6 +49,14 @@ public class DeckGeneratorContext {
 
 	public void setGamesPerMatch(int gamesPerMatch) {
 		this.gamesPerMatch = gamesPerMatch;
+	}
+
+	public void setEnemyBehaviour(IntelligentBehaviour enemyBehaviour) {
+		this.enemyBehaviour = enemyBehaviour;
+	}
+
+	public void setPlayerBehaviour(IntelligentBehaviour playerBehaviour) {
+		this.playerBehaviour = playerBehaviour;
 	}
 
 	/**
@@ -91,8 +102,8 @@ public class DeckGeneratorContext {
 		return basicTournamentDecks.stream()
 				.map(opposingDeck -> GameContext.simulate(
 						Arrays.asList(gameDeck, opposingDeck),
-						PlayRandomBehaviour::new,
-						PlayRandomBehaviour::new, gamesPerMatch,
+						() -> this.playerBehaviour,
+						() -> this.enemyBehaviour, gamesPerMatch,
 						true,
 						true,
 						null,

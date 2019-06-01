@@ -1,0 +1,16 @@
+{
+  "name": "Shock 9",
+  "baseManaCost": 9,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Deal $30 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 30
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
