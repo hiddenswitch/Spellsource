@@ -1,6 +1,6 @@
 {
-  "name": "Gift of the Mists",
-  "baseManaCost": 4,
+  "name": "Enlightenment",
+  "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "JADE",
   "rarity": "EPIC",
