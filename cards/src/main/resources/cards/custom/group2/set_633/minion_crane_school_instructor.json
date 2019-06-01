@@ -1,12 +1,12 @@
 {
-  "name": "Crane School Instructor",
+  "name": "Desciple of Shitakiri",
   "baseManaCost": 4,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 1,
   "baseHp": 7,
   "rarity": "RARE",
-  "description": "When a friendly minion's Deflect triggers, gain +2 Attack.",
+  "description": "When a friendly minion Deflects, gain +2 Attack.",
   "trigger": {
     "eventTrigger": {
       "class": "LoseDeflectTrigger",
