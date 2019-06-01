@@ -15,9 +15,9 @@ import java.util.Random;
  * Custom Factory class that creates a valid deck as a Genotype
  */
 public class DeckGeneFactory implements Factory<Genotype<BitGene>> {
-	private int deckSize = 30;
-	private int totalCardsInCollection;
-	private List<Integer> invalidCards = new ArrayList<>();
+	protected int deckSize = 30;
+	protected int totalCardsInCollection;
+	protected List<Integer> invalidCards = new ArrayList<>();
 
 	public DeckGeneFactory(int deckSize, int totalCardsInCollection) {
 		this.deckSize = deckSize;
