@@ -1,12 +1,12 @@
 {
-  "name": "Emperor Shaohao",
+  "name": "Master Jigen",
   "baseManaCost": 10,
   "type": "MINION",
   "heroClass": "JADE",
   "baseAttack": 3,
   "baseHp": 3,
   "rarity": "LEGENDARY",
-  "description": "Deflect. Opener: Summon a random August Celestial.",
+  "description": "Deflect. Opener: Summon one of the four Yokai Spirits.",
   "battlecry": {
     "spell": {
       "class": "SummonSpell",
