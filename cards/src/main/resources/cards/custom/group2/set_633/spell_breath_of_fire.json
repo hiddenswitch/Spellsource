@@ -1,9 +1,9 @@
 {
-  "name": "Breath of Fire",
+  "name": "Windswept Strike",
   "baseManaCost": 3,
   "type": "SPELL",
   "heroClass": "JADE",
-  "rarity": "RARE",
+  "rarity": "EPIC",
   "description": "Deal $1 damage to all enemy minions. Then deal $[0] damage to the enemy champion. (Increases for each enemy minion)",
   "targetSelection": "NONE",
   "spell": {
