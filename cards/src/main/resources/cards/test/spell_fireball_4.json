@@ -1,0 +1,16 @@
+{
+  "name": "Fireball 4",
+  "baseManaCost": 4,
+  "type": "SPELL",
+  "heroClass": "ANY",
+  "rarity": "FREE",
+  "description": "Deal $4 damage.",
+  "targetSelection": "ANY",
+  "spell": {
+    "class": "DamageSpell",
+    "value": 4
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
