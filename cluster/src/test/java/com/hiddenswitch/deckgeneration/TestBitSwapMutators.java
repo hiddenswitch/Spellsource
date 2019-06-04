@@ -12,6 +12,7 @@ import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
 import org.testng.annotations.Test;
 
+import java.util.ArrayList;
 import java.util.BitSet;
 import java.util.List;
 import java.util.Random;
@@ -347,4 +348,142 @@ public class TestBitSwapMutators {
 		// and should be reflected by our difference count
 		assertTrue(differenceCount == res);
 	}
+
+	/**
+	 * Tests that the smart swap method does indeed
+	 * swap the 1/0 bits representing two cards with
+	 * the same mana cost
+	 */
+	@Test
+	public void bitSwapByToAddDuplicateCardsWithSpecificDecksTest() {
+
+		// Create a card list with only 4 cards:
+		CardCatalogue.loadCardsFromPackage();
+		List<Card> indexInBitmap = new ArrayList<>();
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_0"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_0"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_1"));
+
+		int size = indexInBitmap.size();
+
+		BitSet bits = new BitSet(size);
+		bits.flip(0);
+		bits.flip(2);
+		// bits = 0101
+
+		Random random = new XORShiftRandom(101010L);
+		Chromosome<BitGene> testChromosome = BitChromosome.of(bits, size);
+		BitSwapToChangeCardCountMutator mutator = new BitSwapToChangeCardCountMutator(1, indexInBitmap);
+		MutatorResult<Chromosome<BitGene>> value = mutator.getChromosomeMutatorResult(testChromosome, 1, random);
+
+		// Tests that a card is swapped in to create a 2-set
+		// Does not matter whether fireball_0 or fireball_1 is swapped out
+		// i.e. We expect either 1100 or 0011
+		assertTrue(value.getResult().getGene(0).getAllele() == value.getResult().getGene(1).getAllele());
+		assertTrue(value.getResult().getGene(2).getAllele() == value.getResult().getGene(3).getAllele());
+		assertTrue(value.getResult().getGene(0).getAllele() != value.getResult().getGene(2).getAllele());
+
+		bits.flip(3);
+		// bits = 1101
+		// We will now do the same thing, but we want to ensure that
+		// our result is 0111 or 1011
+
+		testChromosome = BitChromosome.of(bits, size);
+		value = mutator.getChromosomeMutatorResult(testChromosome, 1, random);
+		assertTrue(value.getResult().getGene(0).getAllele() && value.getResult().getGene(1).getAllele());
+		assertTrue(value.getResult().getGene(2).getAllele() != value.getResult().getGene(3).getAllele());
+
+		bits.flip(0);
+		// bits = 1100
+		// Now we want to test removing a duplicate
+		// Our result should be 1001, 1010, 0101, or 0110
+
+		testChromosome = BitChromosome.of(bits, size);
+		value = mutator.getChromosomeMutatorResult(testChromosome, 1, random);
+		assertTrue(value.getResult().getGene(0).getAllele() != value.getResult().getGene(1).getAllele());
+		assertTrue(value.getResult().getGene(2).getAllele() != value.getResult().getGene(3).getAllele());
+	}
+
+	@Test
+	public void bitSwapToAddDuplicateCardMutatorWithUniqueCards() {
+		Random random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+		List<Card> indexInBitmap = new ArrayList<>();
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_0"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_2"));
+		indexInBitmap.add(CardCatalogue.getCardById("spell_fireball_3"));
+
+		int size = indexInBitmap.size();
+		BitSet bits = new BitSet(size);
+		bits.flip(0);
+		bits.flip(3);
+
+		Chromosome<BitGene> testChromosome = BitChromosome.of(bits, size);
+		BitSwapToChangeCardCountMutator mutator = new BitSwapToChangeCardCountMutator(1, indexInBitmap);
+		MutatorResult<Chromosome<BitGene>> value = mutator.getChromosomeMutatorResult(testChromosome, 1, random);
+
+		assertTrue(value.getResult().getGene(0).booleanValue() && value.getResult().getGene(3).booleanValue());
+		assertTrue(!value.getResult().getGene(1).booleanValue() && !value.getResult().getGene(2).booleanValue());
+	}
+
+	@Test
+	public void bitSwapToAddDuplicateCardMutatorWithGeneralRandomDecksTest() {
+		Random random = new XORShiftRandom(101010L);
+		CardCatalogue.loadCardsFromPackage();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 1).limit(10).collect(Collectors.toList());
+		indexInBitmap.addAll(CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC && card.getBaseManaCost() == 1).limit(10).collect(Collectors.toList()));
+		int size = indexInBitmap.size();
+
+		BitSet bits = new BitSet(size);
+		for (int i = 0; i < size / 2; i++) {
+			int toFlip = random.nextInt(size);
+			while (bits.get(toFlip)) {
+				toFlip = random.nextInt(size);
+			}
+			bits.flip(toFlip);
+		}
+
+		Chromosome<BitGene> testChromosome = BitChromosome.of(bits, size);
+		BitSwapToChangeCardCountMutator mutator = new BitSwapToChangeCardCountMutator(1, indexInBitmap);
+		MutatorResult<Chromosome<BitGene>> value = mutator.getChromosomeMutatorResult(testChromosome, 1, random);
+
+		// Tests that a card is swapped in with the same mana cost
+		int count1 = 0;
+		int count2 = 0;
+		int differences = 0;
+		int mutationForDuplicates = 0;
+
+		for (int i = 0; i < testChromosome.length(); i++) {
+			if (testChromosome.getGene(i) != value.getResult().getGene(i)) {
+				differences++;
+				for (int j = 0; j < indexInBitmap.size(); j++) {
+					if (indexInBitmap.get(i).getCardId() == indexInBitmap.get(j).getCardId() && i != j && value.getResult().getGene(j).getAllele()) {
+						mutationForDuplicates += 1;
+					}
+				}
+			}
+			if (testChromosome.getGene(i).booleanValue()) {
+				count1++;
+			}
+			if (value.getResult().getGene(i).booleanValue()) {
+				count2++;
+			}
+		}
+		assertTrue(differences == 2);
+		assertTrue(count1 == count2);
+		assertTrue(mutationForDuplicates >= 1);
+	}
+
+
 }

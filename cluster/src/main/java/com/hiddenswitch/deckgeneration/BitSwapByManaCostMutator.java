@@ -4,7 +4,6 @@ import io.jenetics.Chromosome;
 import io.jenetics.Gene;
 import io.jenetics.MutatorResult;
 import net.demilich.metastone.game.cards.Card;
-import org.apache.commons.math3.genetics.ChromosomePair;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -78,7 +77,7 @@ public class BitSwapByManaCostMutator<
 			}
 
 			selectedOne.set(gene);
-			return super.getBitSwapMutatorResult(chromosome, p, random);
+			return super.getBitSwapMutatorResult(chromosome, 1, random);
 		} finally {
 			manaCost.set(-1);
 		}
