@@ -3,6 +3,7 @@ package com.hiddenswitch.deckgeneration;
 import io.jenetics.BitChromosome;
 import io.jenetics.BitGene;
 import io.jenetics.Genotype;
+import io.jenetics.SwapMutator;
 import io.jenetics.engine.Engine;
 import io.jenetics.engine.EvolutionResult;
 import io.jenetics.util.Factory;
@@ -57,6 +58,35 @@ public class TestDeckGeneration {
 		assertTrue(testDeckIds.containsAll(comparisonDeckIds) && testDeckIds.size() == comparisonDeckIds.size());
 	}
 
+	/**
+	 * Tests the "invalid" card aspect of DeckGeneFactory, which asserts that
+	 * the card represented by any integer passed in cannot be used in the initial population
+	 * of decks
+	 */
+	@Test
+	public void invalidCardTest() {
+		int bitLength = 2;
+
+		List<Integer> invalidCards = new ArrayList<>();
+		invalidCards.add(0);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(1, bitLength, invalidCards);
+		Engine<BitGene, Integer> engine = Engine.builder((individual) -> 0, bitGeneFactory)
+				.mapping(r -> {
+					List<Genotype<BitGene>> genotypes = r.getGenotypes().stream().collect(toList());
+					for (int i =0; i<genotypes.size(); i++) {
+						assertTrue(!genotypes.get(i).getChromosome().getGene(0).booleanValue());
+					}
+					return r;
+				})
+				.populationSize(1000)
+				.alterers(new SwapMutator<>(0))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(2)
+				.collect(EvolutionResult.toBestGenotype());
+	}
 
 	/**
 	 * Generate decks under a simple encoding. A bitmap that corresponds to whether or not a card is in a deck.
