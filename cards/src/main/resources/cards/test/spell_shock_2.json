@@ -4,11 +4,11 @@
   "type": "SPELL",
   "heroClass": "ANY",
   "rarity": "FREE",
-  "description": "Deal $30 damage.",
+  "description": "Deal $15 damage.",
   "targetSelection": "ANY",
   "spell": {
     "class": "DamageSpell",
-    "value": 30
+    "value": 15
   },
   "collectible": true,
   "set": "TEST",

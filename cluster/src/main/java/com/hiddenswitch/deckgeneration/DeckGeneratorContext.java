@@ -105,7 +105,7 @@ public class DeckGeneratorContext {
 						() -> this.playerBehaviour,
 						() -> this.enemyBehaviour, gamesPerMatch,
 						true,
-						true,
+						false,
 						null,
 						this::handleContext)
 				)
@@ -119,7 +119,12 @@ public class DeckGeneratorContext {
 	 * @param ctx
 	 */
 	private void handleContext(GameContext ctx) {
+		ctx.getPlayer1().getHero().setMaxHp(startingHp);
+		ctx.getPlayer2().getHero().setMaxHp(startingHp);
+		ctx.getPlayer1().getHero().setBaseHp(startingHp);
+		ctx.getPlayer2().getHero().setBaseHp(startingHp);
 		ctx.getPlayer1().getHero().setHp(startingHp);
 		ctx.getPlayer2().getHero().setHp(startingHp);
+
 	}
 }

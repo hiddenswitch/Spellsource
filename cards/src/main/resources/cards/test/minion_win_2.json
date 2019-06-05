@@ -1,0 +1,32 @@
+{
+  "name": "Win 2",
+  "baseManaCost": 0,
+  "type": "MINION",
+  "heroClass": "ANY",
+  "baseAttack": 0,
+  "baseHp": 0,
+  "rarity": "FREE",
+  "description": "",
+  "battlecry": {
+    "condition": {
+      "class": "ComparisonCondition",
+      "operation": "GREATER_OR_EQUAL",
+      "value1": {
+        "class": "MinionSummonValueProvider",
+        "filter": {
+          "class": "SpecificCardFilter",
+          "card": "minion_win_2"
+        }
+      },
+      "value2": 1
+    },
+    "targetSelection": "NONE",
+    "spell": {
+      "class": "DestroySpell",
+      "target": "ENEMY_HERO"
+    }
+  },
+  "collectible": true,
+  "set": "TEST",
+  "fileFormatVersion": 1
+}
