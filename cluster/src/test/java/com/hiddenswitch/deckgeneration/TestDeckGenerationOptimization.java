@@ -16,6 +16,7 @@ import net.demilich.metastone.game.cards.CardSet;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
 import net.demilich.metastone.game.logic.XORShiftRandom;
+import org.testng.annotations.Ignore;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
@@ -464,5 +465,290 @@ public class TestDeckGenerationOptimization {
 
 		// Should not succeed more than a couple times
 		assertTrue(succeeds <= 2 * TRIALS / indexInBitmap.size());
+	}
+
+	/**
+	 * Tests if the genetic algorithm can find cards that are objectively better
+	 * than other similar cards (in this case, a 1 cost creature with variable stats)
+	 */
+	@Test
+	public void differentStatMinionsTest() {
+		int maxCardsPerDeck = 2;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 10;
+		long NUMBER_OF_GENERATIONS = 10;
+
+		CardCatalogue.loadCardsFromPackage();
+
+		List<Card> indexInBitmap = new ArrayList<>();
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_2"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_4"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_5"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_6"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_7"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_8"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_9"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_10"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_2"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_4"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_5"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_6"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_7"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_8"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_9"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_10"));
+
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+
+		// Create unique decks for each of the different stat versions of the card
+		for (int i = 0; i < indexInBitmap.size() / 2; i += 3) {
+			List<String> deckCardIds = new ArrayList<>();
+			deckCardIds.add(indexInBitmap.get(i).getCardId());
+			deckCardIds.add(indexInBitmap.get(i).getCardId());
+			basicTournamentDecks.add(new GameDeck(HeroClass.BLUE, deckCardIds));
+
+		}
+
+		int bestCardIndex1 = (indexInBitmap.size() / 2) - 1;
+		int bestCardIndex2 = indexInBitmap.size() - 1;
+
+		List<Integer> invalidCards = new ArrayList<>();
+		invalidCards.add(bestCardIndex1);
+		invalidCards.add(bestCardIndex2);
+
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(maxCardsPerDeck);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+		deckGeneratorContext.setEnemyBehaviour(new PlayRandomWithoutSelfDamageBehaviour());
+		deckGeneratorContext.setPlayerBehaviour(new PlayRandomWithoutSelfDamageBehaviour());
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(maxCardsPerDeck, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(1), new BitSwapToChangeCardCountMutator<>(1, indexInBitmap))
+				.build();
+
+		EvolutionStatistics<Double, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
+
+		Phenotype<BitGene, Double> result = engine.stream()
+				.limit(NUMBER_OF_GENERATIONS)
+				.peek(statistics)
+				.collect(EvolutionResult.toBestPhenotype());
+
+		assertTrue(result.getGenotype().getChromosome().getGene(bestCardIndex1).booleanValue());
+		assertTrue(result.getGenotype().getChromosome().getGene(bestCardIndex2).booleanValue());
+	}
+
+	/**
+	 * Tests if the genetic algorithm can find cards that are objectively better
+	 * than other similar cards
+	 * In this case, we want to see if it will find the 10/10 creature with
+	 * card draw as opposed to a 10/10 without card draw
+	 */
+	@Test
+	public void differentStatMinionsTestWithCardDraw() {
+		int maxCardsPerDeck = 8;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 30;
+		int POPULATION_SIZE = 15;
+		long NUMBER_OF_GENERATIONS = 20;
+
+		Random random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+
+		List<Card> indexInBitmap = new ArrayList<>();
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_2"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_4"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_5"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_6"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_7"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_8"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_9"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_10"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_1"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_2"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_3"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_4"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_5"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_6"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_7"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_8"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_9"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_draw_10"));
+
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+
+		// Create unique decks for each of the different stat versions of the card
+		for (int i = 0; i < 3; i++) {
+			List<String> deckCardIds = new ArrayList<>();
+			for (int j = 0; j < maxCardsPerDeck; j++) {
+				deckCardIds.add(indexInBitmap.get(random.nextInt(indexInBitmap.size())).getCardId());
+			}
+			basicTournamentDecks.add(new GameDeck(HeroClass.BLUE, deckCardIds));
+		}
+
+		int bestCardIndex1 = indexInBitmap.size() - 1;
+
+		List<Integer> invalidCards = new ArrayList<>();
+		invalidCards.add(bestCardIndex1);
+
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setFatigueEnabled(false);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(maxCardsPerDeck);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+		deckGeneratorContext.setEnemyBehaviour(new PlayRandomWithoutSelfDamageBehaviour());
+		deckGeneratorContext.setPlayerBehaviour(new PlayRandomWithoutSelfDamageBehaviour());
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(maxCardsPerDeck, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(1))
+				.build();
+
+		EvolutionStatistics<Double, DoubleMomentStatistics> statistics = EvolutionStatistics.ofNumber();
+
+		Phenotype<BitGene, Double> result = engine.stream()
+				.limit(NUMBER_OF_GENERATIONS)
+				.peek(statistics)
+				.collect(EvolutionResult.toBestPhenotype());
+
+		assertTrue(result.getGenotype().getChromosome().getGene(bestCardIndex1).booleanValue());
+	}
+
+	/**
+	 * Currently, damage spells can target our own minions, so even though minion_with_damage_3
+	 * really is the best card, coming bundled with a fireball as a battlecry, it is not necessarily added to the deck
+	 * Instead, the vanilla version might be added
+	 */
+	@Ignore
+	@Test
+	public void damageOwnMinionsTest() {
+		int MAX_CARDS_PER_DECK = 5;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 15;
+		int POPULATION_SIZE = 20;
+		int NUMBER_OF_GENERATIONS = 10;
+
+		XORShiftRandom random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_damage_3"));
+
+		// Create random decks for the tournament
+		for (int i = 0; i < 5; i++) {
+			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+			for (int j = 0; j < MAX_CARDS_PER_DECK; j++) {
+				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+			}
+			basicTournamentDecks.add(tournamentDeck);
+		}
+
+		// Set up our tournament playing environment
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(MAX_CARDS_PER_DECK);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+		deckGeneratorContext.setEnemyBehaviour(new PlayRandomWithoutSelfDamageBehaviour());
+		deckGeneratorContext.setPlayerBehaviour(new PlayRandomWithoutSelfDamageBehaviour());
+
+		int bestCardIndex2 = indexInBitmap.size() - 2;
+		List<Integer> invalidCards = new ArrayList<>(0);
+		invalidCards.add(indexInBitmap.size() - 1);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(MAX_CARDS_PER_DECK, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(.9), new BitSwapMutator<>(.9), new BitSwapBetweenTwoSequencesMutator<>(.9))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(NUMBER_OF_GENERATIONS)
+				.collect(EvolutionResult.toBestGenotype());
+
+		assertTrue(result.getChromosome().getGene(bestCardIndex2).getAllele());
+	}
+
+	/**
+	 * This test shows that forbidding damage abilities from targeting player minions
+	 * guarantees that the desired minion is used in the deck
+	 */
+	@Test
+	public void damageOwnMinionsForbiddenTest() {
+		int MAX_CARDS_PER_DECK = 1;
+		int GAMES_PER_MATCH = 18;
+		int STARTING_HP = 15;
+		int POPULATION_SIZE = 20;
+		int NUMBER_OF_GENERATIONS = 10;
+
+		XORShiftRandom random = new XORShiftRandom(101010L);
+
+		CardCatalogue.loadCardsFromPackage();
+		List<GameDeck> basicTournamentDecks = new ArrayList<>();
+		List<Card> indexInBitmap = CardCatalogue.getAll()
+				.stream()
+				.filter(card -> card.isCollectible()
+						&& (card.getHeroClass() == HeroClass.BLUE || card.getHeroClass() == HeroClass.ANY)
+						&& card.getCardSet() == CardSet.BASIC)
+				.collect(toList());
+
+		indexInBitmap.add(CardCatalogue.getCardById("minion_stat_3"));
+		indexInBitmap.add(CardCatalogue.getCardById("minion_with_damage_3"));
+
+		// Create random decks for the tournament
+		for (int i = 0; i < 5; i++) {
+			GameDeck tournamentDeck = new GameDeck(HeroClass.BLUE);
+			for (int j = 0; j < MAX_CARDS_PER_DECK; j++) {
+				tournamentDeck.getCards().add(indexInBitmap.get(random.nextInt(indexInBitmap.size())));
+			}
+			basicTournamentDecks.add(tournamentDeck);
+		}
+
+		// Set up our tournament playing environment
+		DeckGeneratorContext deckGeneratorContext = new DeckGeneratorContext(indexInBitmap, basicTournamentDecks);
+		deckGeneratorContext.setStartingHp(STARTING_HP);
+		deckGeneratorContext.setMaxCardsPerDeck(MAX_CARDS_PER_DECK);
+		deckGeneratorContext.setGamesPerMatch(GAMES_PER_MATCH);
+
+		PlayRandomWithoutSelfDamageBehaviour enemyBehavior = new PlayRandomWithoutSelfDamageBehaviour();
+		enemyBehavior.ownMinionTargetingIsEnabled(false);
+		deckGeneratorContext.setEnemyBehaviour(enemyBehavior);
+
+		PlayRandomWithoutSelfDamageBehaviour playerBehaviour = new PlayRandomWithoutSelfDamageBehaviour();
+		playerBehaviour.ownMinionTargetingIsEnabled(false);
+		deckGeneratorContext.setPlayerBehaviour(playerBehaviour);
+
+		int bestCardIndex1 = indexInBitmap.size() - 1;
+		List<Integer> invalidCards = new ArrayList<>(0);
+		invalidCards.add(indexInBitmap.size() - 1);
+
+		Factory<Genotype<BitGene>> bitGeneFactory = new DeckGeneFactory(MAX_CARDS_PER_DECK, indexInBitmap.size(), invalidCards);
+		Engine<BitGene, Double> engine = Engine.builder((individual) -> deckGeneratorContext.fitness(individual, HeroClass.BLUE), bitGeneFactory)
+				.populationSize(POPULATION_SIZE)
+				.alterers(new BitSwapMutator<>(.9), new BitSwapMutator<>(.9), new BitSwapBetweenTwoSequencesMutator<>(.9))
+				.build();
+
+		Genotype<BitGene> result = engine.stream()
+				.limit(NUMBER_OF_GENERATIONS)
+				.collect(EvolutionResult.toBestGenotype());
+		assertTrue(result.getChromosome().getGene(bestCardIndex1).getAllele());
 	}
 }

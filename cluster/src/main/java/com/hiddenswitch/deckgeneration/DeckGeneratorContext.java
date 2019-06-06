@@ -5,6 +5,7 @@ import io.jenetics.Genotype;
 import net.demilich.metastone.game.GameContext;
 import net.demilich.metastone.game.behaviour.IntelligentBehaviour;
 import net.demilich.metastone.game.behaviour.PlayRandomBehaviour;
+import net.demilich.metastone.game.cards.Attribute;
 import net.demilich.metastone.game.cards.Card;
 import net.demilich.metastone.game.decks.GameDeck;
 import net.demilich.metastone.game.entities.heroes.HeroClass;
@@ -25,6 +26,7 @@ public class DeckGeneratorContext {
 	List<GameDeck> basicTournamentDecks;
 	IntelligentBehaviour enemyBehaviour = new PlayRandomBehaviour();
 	IntelligentBehaviour playerBehaviour = new PlayRandomBehaviour();
+	private boolean fatigueEnabled = true;
 
 	public DeckGeneratorContext(List<Card> indexInBitmap, List<GameDeck> basicTournamentDecks) {
 		this.indexInBitmap = indexInBitmap;
@@ -125,6 +127,18 @@ public class DeckGeneratorContext {
 		ctx.getPlayer2().getHero().setBaseHp(startingHp);
 		ctx.getPlayer1().getHero().setHp(startingHp);
 		ctx.getPlayer2().getHero().setHp(startingHp);
+		if (!this.fatigueEnabled) {
+			ctx.getPlayer1().getAttributes().put(Attribute.DISABLE_FATIGUE, true);
+			ctx.getPlayer2().getAttributes().put(Attribute.DISABLE_FATIGUE, true);
+		}
 
+	}
+
+	public void setFatigueEnabled(boolean fatigueEnabled) {
+		this.fatigueEnabled = fatigueEnabled;
+	}
+
+	public boolean getFatigueEnabled() {
+		return fatigueEnabled;
 	}
 }
